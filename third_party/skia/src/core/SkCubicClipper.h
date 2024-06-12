@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2009 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkCubicClipper_DEFINED
 #define SkCubicClipper_DEFINED
@@ -25,10 +23,12 @@ public:
 
     void setClip(const SkIRect& clip);
 
-    bool clipCubic(const SkPoint src[4], SkPoint dst[4]);
+    bool SK_WARN_UNUSED_RESULT clipCubic(const SkPoint src[4], SkPoint dst[4]);
+
+    static bool SK_WARN_UNUSED_RESULT ChopMonoAtY(const SkPoint pts[4], SkScalar y, SkScalar* t);
 
 private:
-    SkRect      fClip;
+    SkRect fClip;
 };
 
-#endif  // SkCubicClipper_DEFINED
+#endif // SkCubicClipper_DEFINED

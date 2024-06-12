@@ -28,19 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebSelector.h"
 
 #include "public/platform/WebString.h"
-#include "public/platform/WebUnitTestSupport.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
 TEST(WebSelectorTest, Canonicalizes)
 {
-    EXPECT_EQ("h1, h2[style=\"foobar\"] span", canonicalizeSelector("h1,h2[style='foobar']    span").utf8());
-    EXPECT_EQ("h1, h2[style=\"foobar\"] span", canonicalizeSelector("h1, h2[style=\"foobar\"] span").utf8());
+    EXPECT_EQ("h1, h2[style=\"foobar\"] span",
+        canonicalizeSelector("h1,h2[style='foobar']    span").utf8());
+    EXPECT_EQ("h1, h2[style=\"foobar\"] span",
+        canonicalizeSelector("h1, h2[style=\"foobar\"] span").utf8());
 }
 
 TEST(WebSelectorTest, Checks)
@@ -51,8 +51,12 @@ TEST(WebSelectorTest, Checks)
 
 TEST(WebSelectorTest, Restricts)
 {
-    EXPECT_EQ("", canonicalizeSelector("h1 span,h2", WebSelectorTypeCompound).utf8());
-    EXPECT_EQ("h1, h2[style=\"foobar\"].cls", canonicalizeSelector("h1,h2[style=\"foobar\"].cls", WebSelectorTypeCompound).utf8());
+    EXPECT_EQ("",
+        canonicalizeSelector("h1 span,h2", WebSelectorTypeCompound).utf8());
+    EXPECT_EQ("h1, h2[style=\"foobar\"].cls",
+        canonicalizeSelector("h1,h2[style=\"foobar\"].cls",
+            WebSelectorTypeCompound)
+            .utf8());
 }
 
 } // namespace blink

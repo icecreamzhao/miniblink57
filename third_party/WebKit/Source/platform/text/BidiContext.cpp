@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2006, 2007, 2009, 2010 Apple Inc. All right reserved.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2009, 2010 Apple Inc.
+ * All right reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +20,6 @@
  *
  */
 
-#include "config.h"
 #include "platform/text/BidiContext.h"
 
 #include "wtf/StdLibExtras.h"
@@ -34,41 +34,60 @@ struct SameSizeAsBidiContext : public RefCounted<SameSizeAsBidiContext> {
     void* parent;
 };
 
-static_assert(sizeof(BidiContext) == sizeof(SameSizeAsBidiContext), "BidiContext should stay small");
+static_assert(sizeof(BidiContext) == sizeof(SameSizeAsBidiContext),
+    "BidiContext should stay small");
 
-inline PassRefPtr<BidiContext> BidiContext::createUncached(unsigned char level, Direction direction, bool override, BidiEmbeddingSource source, BidiContext* parent)
+inline PassRefPtr<BidiContext> BidiContext::createUncached(
+    unsigned char level,
+    CharDirection direction,
+    bool override,
+    BidiEmbeddingSource source,
+    BidiContext* parent)
 {
     return adoptRef(new BidiContext(level, direction, override, source, parent));
 }
 
-PassRefPtr<BidiContext> BidiContext::create(unsigned char level, Direction direction, bool override, BidiEmbeddingSource source, BidiContext* parent)
+PassRefPtr<BidiContext> BidiContext::create(unsigned char level,
+    CharDirection direction,
+    bool override,
+    BidiEmbeddingSource source,
+    BidiContext* parent)
 {
     ASSERT(direction == (level % 2 ? RightToLeft : LeftToRight));
 
-    if (parent)
+    if (parent || level >= 2)
         return createUncached(level, direction, override, source, parent);
 
     ASSERT(level <= 1);
     if (!level) {
         if (!override) {
-            DEFINE_STATIC_REF(BidiContext, ltrContext, (createUncached(0, LeftToRight, false, FromStyleOrDOM, 0)));
+            DEFINE_STATIC_REF(
+                BidiContext, ltrContext,
+                (createUncached(0, LeftToRight, false, FromStyleOrDOM, 0)));
             return ltrContext;
         }
 
-        DEFINE_STATIC_REF(BidiContext, ltrOverrideContext, (createUncached(0, LeftToRight, true, FromStyleOrDOM, 0)));
+        DEFINE_STATIC_REF(
+            BidiContext, ltrOverrideContext,
+            (createUncached(0, LeftToRight, true, FromStyleOrDOM, 0)));
         return ltrOverrideContext;
     }
 
     if (!override) {
-        DEFINE_STATIC_REF(BidiContext, rtlContext, (createUncached(1, RightToLeft, false, FromStyleOrDOM, 0)));
+        DEFINE_STATIC_REF(
+            BidiContext, rtlContext,
+            (createUncached(1, RightToLeft, false, FromStyleOrDOM, 0)));
         return rtlContext;
     }
 
-    DEFINE_STATIC_REF(BidiContext, rtlOverrideContext, (createUncached(1, RightToLeft, true, FromStyleOrDOM, 0)));
+    DEFINE_STATIC_REF(BidiContext, rtlOverrideContext,
+        (createUncached(1, RightToLeft, true, FromStyleOrDOM, 0)));
     return rtlOverrideContext;
 }
 
-static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(BidiContext* context, BidiContext* parent)
+static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(
+    BidiContext* context,
+    BidiContext* parent)
 {
     ASSERT(context);
     unsigned char newLevel = parent ? parent->level() : 0;
@@ -77,22 +96,24 @@ static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(BidiContext*
     else if (parent)
         newLevel = nextGreaterEvenLevel(newLevel);
 
-    return BidiContext::create(newLevel, context->dir(), context->override(), context->source(), parent);
+    return BidiContext::create(newLevel, context->dir(), context->override(),
+        context->source(), parent);
 }
 
-// The BidiContext stack must be immutable -- they're re-used for re-layout after
-// DOM modification/editing -- so we copy all the non-unicode contexts, and
-// recalculate their levels.
-PassRefPtr<BidiContext> BidiContext::copyStackRemovingUnicodeEmbeddingContexts()
+// The BidiContext stack must be immutable -- they're re-used for re-layout
+// after DOM modification/editing -- so we copy all the non-unicode contexts,
+// and recalculate their levels.
+PassRefPtr<BidiContext>
+BidiContext::copyStackRemovingUnicodeEmbeddingContexts()
 {
     Vector<BidiContext*, 64> contexts;
     for (BidiContext* iter = this; iter; iter = iter->parent()) {
         if (iter->source() != FromUnicode)
-            contexts.append(iter);
+            contexts.push_back(iter);
     }
     ASSERT(contexts.size());
 
-    RefPtr<BidiContext> topContext = copyContextAndRebaselineLevel(contexts.last(), 0);
+    RefPtr<BidiContext> topContext = copyContextAndRebaselineLevel(contexts.back(), 0);
     for (int i = contexts.size() - 1; i > 0; --i)
         topContext = copyContextAndRebaselineLevel(contexts[i - 1], topContext.get());
 

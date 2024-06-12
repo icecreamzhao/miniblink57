@@ -38,12 +38,16 @@ namespace blink {
 
 class ClassCollection final : public HTMLCollection {
 public:
-    // classNames argument is an AtomicString because it is common for Elements to share the same class names.
-    // It is also used to construct a SpaceSplitString (m_classNames) and its constructor requires an AtomicString.
-    static PassRefPtrWillBeRawPtr<ClassCollection> create(ContainerNode& rootNode, CollectionType type, const AtomicString& classNames)
+    // classNames argument is an AtomicString because it is common for Elements to
+    // share the same class names.  It is also used to construct a
+    // SpaceSplitString (m_classNames) and its constructor requires an
+    // AtomicString.
+    static ClassCollection* create(ContainerNode& rootNode,
+        CollectionType type,
+        const AtomicString& classNames)
     {
-        ASSERT_UNUSED(type, type == ClassCollectionType);
-        return adoptRefWillBeNoop(new ClassCollection(rootNode, classNames));
+        DCHECK_EQ(type, ClassCollectionType);
+        return new ClassCollection(rootNode, classNames);
     }
 
     ~ClassCollection() override;
@@ -57,7 +61,11 @@ private:
     AtomicString m_originalClassNames;
 };
 
-DEFINE_TYPE_CASTS(ClassCollection, LiveNodeListBase, collection, collection->type() == ClassCollectionType, collection.type() == ClassCollectionType);
+DEFINE_TYPE_CASTS(ClassCollection,
+    LiveNodeListBase,
+    collection,
+    collection->type() == ClassCollectionType,
+    collection.type() == ClassCollectionType);
 
 inline bool ClassCollection::elementMatches(const Element& testElement) const
 {

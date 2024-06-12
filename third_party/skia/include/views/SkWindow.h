@@ -8,19 +8,14 @@
 #ifndef SkWindow_DEFINED
 #define SkWindow_DEFINED
 
-#include "SkView.h"
+#include "../private/SkTDArray.h"
 #include "SkBitmap.h"
-#include "SkMatrix.h"
-#include "SkRegion.h"
 #include "SkEvent.h"
 #include "SkKey.h"
+#include "SkMatrix.h"
+#include "SkRegion.h"
 #include "SkSurfaceProps.h"
-#include "SkTDArray.h"
-
-#ifdef SK_BUILD_FOR_WINCEx
-    #define SHOW_FPS
-#endif
-//#define USE_GX_SCREEN
+#include "SkView.h"
 
 class SkSurface;
 class SkOSMenu;
@@ -33,52 +28,60 @@ class GrRenderTarget;
 
 class SkWindow : public SkView {
 public:
-            SkWindow();
+    SkWindow();
     virtual ~SkWindow();
 
     struct AttachmentInfo {
+        AttachmentInfo()
+            : fSampleCount(0)
+            , fStencilBits(0)
+            , fColorBits(0)
+        {
+        }
+
         int fSampleCount;
         int fStencilBits;
+        int fColorBits;
     };
 
     SkSurfaceProps getSurfaceProps() const { return fSurfaceProps; }
-    void setSurfaceProps(const SkSurfaceProps& props) {
+    void setSurfaceProps(const SkSurfaceProps& props)
+    {
         fSurfaceProps = props;
     }
 
+    SkImageInfo info() const { return fBitmap.info(); }
     const SkBitmap& getBitmap() const { return fBitmap; }
 
-    void    setColorType(SkColorType);
-    void    resize(int width, int height, SkColorType = kUnknown_SkColorType);
+    void resize(int width, int height);
+    void resize(const SkImageInfo&);
+    void setColorType(SkColorType, sk_sp<SkColorSpace>);
 
-    bool    isDirty() const { return !fDirtyRgn.isEmpty(); }
-    bool    update(SkIRect* updateArea);
+    bool isDirty() const { return !fDirtyRgn.isEmpty(); }
+    bool update(SkIRect* updateArea);
     // does not call through to onHandleInval(), but does force the fDirtyRgn
     // to be wide open. Call before update() to ensure we redraw everything.
-    void    forceInvalAll();
+    void forceInvalAll();
     // return the bounds of the dirty/inval rgn, or [0,0,0,0] if none
     const SkIRect& getDirtyBounds() const { return fDirtyRgn.getBounds(); }
 
-    bool    handleClick(int x, int y, Click::State, void* owner, unsigned modi = 0);
-    bool    handleChar(SkUnichar);
-    bool    handleKey(SkKey);
-    bool    handleKeyUp(SkKey);
+    bool handleClick(int x, int y, Click::State, void* owner, unsigned modi = 0);
+    bool handleChar(SkUnichar);
+    bool handleKey(SkKey);
+    bool handleKeyUp(SkKey);
 
-    void    addMenu(SkOSMenu*);
+    void addMenu(SkOSMenu*);
     const SkTDArray<SkOSMenu*>* getMenus() { return &fMenus; }
 
     const char* getTitle() const { return fTitle.c_str(); }
-    void    setTitle(const char title[]);
+    void setTitle(const char title[]);
 
     const SkMatrix& getMatrix() const { return fMatrix; }
-    void    setMatrix(const SkMatrix&);
-    void    preConcat(const SkMatrix&);
-    void    postConcat(const SkMatrix&);
+    void setMatrix(const SkMatrix&);
+    void preConcat(const SkMatrix&);
+    void postConcat(const SkMatrix&);
 
     virtual SkSurface* createSurface();
-
-    virtual void onPDFSaved(const char title[], const char desc[],
-        const char path[]) {}
 
 protected:
     virtual bool onEvent(const SkEvent&);
@@ -90,7 +93,7 @@ protected:
     virtual bool onHandleKeyUp(SkKey);
     virtual void onAddMenu(const SkOSMenu*) {};
     virtual void onUpdateMenu(const SkOSMenu*) {};
-    virtual void onSetTitle(const char title[]) {}
+    virtual void onSetTitle(const char title[]) { }
 
     // overrides from SkView
     virtual bool handleInval(const SkRect*);
@@ -99,42 +102,41 @@ protected:
 
 #if SK_SUPPORT_GPU
     GrRenderTarget* renderTarget(const AttachmentInfo& attachmentInfo,
-                                 const GrGLInterface* , GrContext* grContext);
+        const GrGLInterface*, GrContext* grContext);
 #endif
 
 private:
-    SkSurfaceProps  fSurfaceProps;
-    SkColorType fColorType;
-    SkBitmap    fBitmap;
-    SkRegion    fDirtyRgn;
+    SkSurfaceProps fSurfaceProps;
+    SkBitmap fBitmap;
+    SkRegion fDirtyRgn;
 
-    SkTDArray<Click*>       fClicks; // to track clicks
+    SkTDArray<Click*> fClicks; // to track clicks
 
-    SkTDArray<SkOSMenu*>    fMenus;
+    SkTDArray<SkOSMenu*> fMenus;
 
     SkView* fFocusView;
-    bool    fWaitingOnInval;
+    bool fWaitingOnInval;
 
-    SkString    fTitle;
-    SkMatrix    fMatrix;
+    SkString fTitle;
+    SkMatrix fMatrix;
 
     typedef SkView INHERITED;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#if defined(SK_BUILD_FOR_MAC)
-    #include "SkOSWindow_Mac.h"
+#if defined(SK_USE_SDL)
+#include "SkOSWindow_SDL.h"
+#elif defined(SK_BUILD_FOR_MAC)
+#include "SkOSWindow_Mac.h"
 #elif defined(SK_BUILD_FOR_WIN)
-    #include "SkOSWindow_Win.h"
+#include "SkOSWindow_Win.h"
 #elif defined(SK_BUILD_FOR_ANDROID)
-    #include "SkOSWindow_Android.h"
+#include "SkOSWindow_Android.h"
 #elif defined(SK_BUILD_FOR_UNIX)
-  #include "SkOSWindow_Unix.h"
-#elif defined(SK_BUILD_FOR_SDL)
-    #include "SkOSWindow_SDL.h"
+#include "SkOSWindow_Unix.h"
 #elif defined(SK_BUILD_FOR_IOS)
-    #include "SkOSWindow_iOS.h"
+#include "SkOSWindow_iOS.h"
 #endif
 
 #endif

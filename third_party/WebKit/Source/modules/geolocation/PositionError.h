@@ -32,16 +32,21 @@
 
 namespace blink {
 
-class PositionError : public GarbageCollectedFinalized<PositionError>, public ScriptWrappable {
+class PositionError final : public GarbageCollectedFinalized<PositionError>,
+                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     enum ErrorCode {
-        PERMISSION_DENIED = 1,
-        POSITION_UNAVAILABLE = 2,
-        TIMEOUT = 3
+        kPermissionDenied = 1,
+        kPositionUnavailable = 2,
+        kTimeout = 3
     };
 
-    static PositionError* create(ErrorCode code, const String& message) { return new PositionError(code, message); }
+    static PositionError* create(ErrorCode code, const String& message)
+    {
+        return new PositionError(code, message);
+    }
     DEFINE_INLINE_TRACE() { }
 
     ErrorCode code() const { return m_code; }
@@ -53,7 +58,9 @@ private:
     PositionError(ErrorCode code, const String& message)
         : m_code(code)
         , m_message(message)
-        , m_isFatal(false) { }
+        , m_isFatal(false)
+    {
+    }
 
     ErrorCode m_code;
     String m_message;

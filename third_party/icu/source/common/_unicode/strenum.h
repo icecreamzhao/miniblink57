@@ -10,14 +10,14 @@
 #ifndef STRENUM_H
 #define STRENUM_H
 
-#include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/uobject.h"
 
 /**
  * \file 
  * \brief C++ API: String Enumeration
  */
- 
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -52,7 +52,7 @@ U_NAMESPACE_BEGIN
  *
  * @stable ICU 2.4 
  */
-class U_COMMON_API StringEnumeration : public UObject { 
+class U_COMMON_API StringEnumeration : public UObject {
 public:
     /**
      * Destructor.
@@ -75,7 +75,7 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.8
      */
-    virtual StringEnumeration *clone() const;
+    virtual StringEnumeration* clone() const;
 
     /**
      * <p>Return the number of elements that the iterator traverses.  If
@@ -126,7 +126,7 @@ public:
      *
      * @stable ICU 2.4 
      */
-    virtual const char* next(int32_t *resultLength, UErrorCode& status);
+    virtual const char* next(int32_t* resultLength, UErrorCode& status);
 
     /**
      * <p>Returns the next element as a NUL-terminated UChar*.  If there
@@ -151,7 +151,7 @@ public:
      *
      * @stable ICU 2.4 
      */
-    virtual const UChar* unext(int32_t *resultLength, UErrorCode& status);
+    virtual const UChar* unext(int32_t* resultLength, UErrorCode& status);
 
     /**
      * <p>Returns the next element a UnicodeString*.  If there are no
@@ -196,7 +196,7 @@ public:
      * @return TRUE if the enumerations are equal. FALSE if not.
      * @stable ICU 3.6 
      */
-    virtual UBool operator==(const StringEnumeration& that)const;
+    virtual UBool operator==(const StringEnumeration& that) const;
     /**
      * Compares this enumeration to other to check if both are not equal
      *
@@ -204,7 +204,7 @@ public:
      * @return TRUE if the enumerations are equal. FALSE if not.
      * @stable ICU 3.6 
      */
-    virtual UBool operator!=(const StringEnumeration& that)const;
+    virtual UBool operator!=(const StringEnumeration& that) const;
 
 protected:
     /**
@@ -222,7 +222,7 @@ protected:
      * Allocated in constructor and in ensureCharsCapacity().
      * @stable ICU 2.8
      */
-    char *chars;
+    char* chars;
     /**
      * Capacity of chars, for use with default implementations and subclasses.
      * @stable ICU 2.8
@@ -243,7 +243,7 @@ protected:
      * @param status ICU in/out error code.
      * @stable ICU 2.8
      */
-    void ensureCharsCapacity(int32_t capacity, UErrorCode &status);
+    void ensureCharsCapacity(int32_t capacity, UErrorCode& status);
 
     /**
      * Converts s to Unicode and sets unistr to the result.
@@ -267,7 +267,7 @@ protected:
      * @return A pointer to unistr.
      * @stable ICU 2.8
      */
-    UnicodeString *setChars(const char *s, int32_t length, UErrorCode &status);
+    UnicodeString* setChars(const char* s, int32_t length, UErrorCode& status);
 };
 
 U_NAMESPACE_END

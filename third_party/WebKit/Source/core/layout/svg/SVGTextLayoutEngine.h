@@ -20,79 +20,82 @@
 #ifndef SVGTextLayoutEngine_h
 #define SVGTextLayoutEngine_h
 
+#include "core/layout/api/LineLayoutSVGInlineText.h"
 #include "core/layout/svg/LayoutSVGInlineText.h"
 #include "core/layout/svg/SVGTextFragment.h"
-#include "core/layout/svg/SVGTextLayoutAttributes.h"
-#include "core/layout/svg/SVGTextMetrics.h"
-#include "platform/graphics/Path.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
 class ComputedStyle;
 class InlineFlowBox;
-class LayoutObject;
+class PathPositionMapper;
 class SVGInlineFlowBox;
 class SVGInlineTextBox;
+class SVGTextMetrics;
 
 // SVGTextLayoutEngine performs the second layout phase for SVG text.
 //
-// The InlineBox tree was created, containing the text chunk information, necessary to apply
-// certain SVG specific text layout properties (text-length adjustments and text-anchor).
-// The second layout phase uses the SVGTextLayoutAttributes stored in the individual
-// LayoutSVGInlineText layoutObjects to compute the final positions for each character
-// which are stored in the SVGInlineTextBox objects.
+// The InlineBox tree was created, containing the text chunk information,
+// necessary to apply certain SVG specific text layout properties (text-length
+// adjustments and text-anchor).
+// The second layout phase uses the SVGTextLayoutAttributes stored in the
+// individual LayoutSVGInlineText layoutObjects to compute the final positions
+// for each character which are stored in the SVGInlineTextBox objects.
 
 class SVGTextLayoutEngine {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SVGTextLayoutEngine);
-public:
-    SVGTextLayoutEngine(Vector<SVGTextLayoutAttributes*>&);
 
-    Vector<SVGTextLayoutAttributes*>& layoutAttributes() { return m_layoutAttributes; }
+public:
+    SVGTextLayoutEngine(const Vector<LayoutSVGInlineText*>&);
+    ~SVGTextLayoutEngine();
 
     void layoutCharactersInTextBoxes(InlineFlowBox* start);
     void finishLayout();
 
 private:
-    void updateCharacterPositionIfNeeded(float& x, float& y);
-    void updateCurrentTextPosition(float x, float y, float glyphAdvance);
-    void updateRelativePositionAdjustmentsIfNeeded(float dx, float dy);
+    bool setCurrentTextPosition(const SVGCharacterData&);
+    void advanceCurrentTextPosition(float glyphAdvance);
+    bool applyRelativePositionAdjustmentsIfNeeded(const SVGCharacterData&);
 
+    void computeCurrentFragmentMetrics(SVGInlineTextBox*);
     void recordTextFragment(SVGInlineTextBox*);
 
     void beginTextPathLayout(SVGInlineFlowBox*);
     void endTextPathLayout();
 
     void layoutInlineTextBox(SVGInlineTextBox*);
-    void layoutTextOnLineOrPath(SVGInlineTextBox*, const LayoutSVGInlineText&, const ComputedStyle&);
+    void layoutTextOnLineOrPath(SVGInlineTextBox*,
+        LineLayoutSVGInlineText,
+        const ComputedStyle&);
 
-    bool currentLogicalCharacterAttributes(SVGTextLayoutAttributes*&);
-    bool currentLogicalCharacterMetrics(SVGTextLayoutAttributes*&, SVGTextMetrics&);
+    const LayoutSVGInlineText* nextLogicalTextNode();
+    const LayoutSVGInlineText* currentLogicalCharacterMetrics(SVGTextMetrics&);
     void advanceToNextLogicalCharacter(const SVGTextMetrics&);
 
-private:
-    Vector<SVGTextLayoutAttributes*>& m_layoutAttributes;
+    // Logical iteration state.
+    const Vector<LayoutSVGInlineText*>& m_descendantTextNodes;
+    unsigned m_currentLogicalTextNodeIndex;
+    unsigned m_logicalCharacterOffset;
+    unsigned m_logicalMetricsListOffset;
 
     Vector<SVGInlineTextBox*> m_lineLayoutBoxes;
 
     SVGTextFragment m_currentTextFragment;
-    unsigned m_layoutAttributesPosition;
-    unsigned m_logicalCharacterOffset;
-    unsigned m_logicalMetricsListOffset;
     SVGInlineTextMetricsIterator m_visualMetricsIterator;
-    float m_x;
-    float m_y;
-    float m_dx;
-    float m_dy;
+    FloatPoint m_textPosition;
     bool m_isVerticalText;
     bool m_inPathLayout;
     bool m_textLengthSpacingInEffect;
 
     // Text on path layout
-    Path::PositionCalculator* m_textPathCalculator;
-    float m_textPathLength;
+    std::unique_ptr<PathPositionMapper> m_textPath;
     float m_textPathStartOffset;
     float m_textPathCurrentOffset;
+    float m_textPathDisplacement;
     float m_textPathSpacing;
     float m_textPathScaling;
 };

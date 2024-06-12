@@ -23,13 +23,11 @@
  * SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/DateTimeFormat.h"
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuilder.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -88,54 +86,57 @@ public:
         {
         }
 
-        explicit Tokens(const String& string)
-        {
-            m_tokens.append(Token(string));
-        }
+        explicit Tokens(const String& string) { m_tokens.push_back(Token(string)); }
 
-        explicit Tokens(Token token1)
-        {
-            m_tokens.append(token1);
-        }
+        explicit Tokens(Token token1) { m_tokens.push_back(token1); }
 
         Tokens(Token token1, Token token2)
         {
-            m_tokens.append(token1);
-            m_tokens.append(token2);
+            m_tokens.push_back(token1);
+            m_tokens.push_back(token2);
         }
 
         Tokens(Token token1, Token token2, Token token3)
         {
-            m_tokens.append(token1);
-            m_tokens.append(token2);
-            m_tokens.append(token3);
+            m_tokens.push_back(token1);
+            m_tokens.push_back(token2);
+            m_tokens.push_back(token3);
         }
 
         Tokens(Token token1, Token token2, Token token3, Token token4)
         {
-            m_tokens.append(token1);
-            m_tokens.append(token2);
-            m_tokens.append(token3);
-            m_tokens.append(token4);
+            m_tokens.push_back(token1);
+            m_tokens.push_back(token2);
+            m_tokens.push_back(token3);
+            m_tokens.push_back(token4);
         }
 
-        Tokens(Token token1, Token token2, Token token3, Token token4, Token token5)
+        Tokens(Token token1,
+            Token token2,
+            Token token3,
+            Token token4,
+            Token token5)
         {
-            m_tokens.append(token1);
-            m_tokens.append(token2);
-            m_tokens.append(token3);
-            m_tokens.append(token4);
-            m_tokens.append(token5);
+            m_tokens.push_back(token1);
+            m_tokens.push_back(token2);
+            m_tokens.push_back(token3);
+            m_tokens.push_back(token4);
+            m_tokens.push_back(token5);
         }
 
-        Tokens(Token token1, Token token2, Token token3, Token token4, Token token5, Token token6)
+        Tokens(Token token1,
+            Token token2,
+            Token token3,
+            Token token4,
+            Token token5,
+            Token token6)
         {
-            m_tokens.append(token1);
-            m_tokens.append(token2);
-            m_tokens.append(token3);
-            m_tokens.append(token4);
-            m_tokens.append(token5);
-            m_tokens.append(token6);
+            m_tokens.push_back(token1);
+            m_tokens.push_back(token2);
+            m_tokens.push_back(token3);
+            m_tokens.push_back(token4);
+            m_tokens.push_back(token5);
+            m_tokens.push_back(token6);
         }
 
         bool operator==(const Tokens& other) const
@@ -149,10 +150,10 @@ public:
             builder.append("Tokens(");
             for (unsigned index = 0; index < m_tokens.size(); ++index) {
                 if (index)
-                    builder.append(",");
+                    builder.append(',');
                 builder.append(m_tokens[index].toString());
             }
-            builder.append(")");
+            builder.append(')');
             return builder.toString();
         }
 
@@ -166,7 +167,7 @@ protected:
         TokenHandler handler;
         if (!DateTimeFormat::parse(formatString, handler))
             return Tokens(Token("*failed*"));
-        return handler.tokens();
+        return handler.getTokens();
     }
 
     FieldType single(const char ch)
@@ -177,7 +178,7 @@ protected:
         TokenHandler handler;
         if (!DateTimeFormat::parse(formatString, handler))
             return DateTimeFormat::FieldTypeInvalid;
-        return handler.fieldType(0);
+        return handler.getFieldType(0);
     }
 
 private:
@@ -185,29 +186,32 @@ private:
     public:
         ~TokenHandler() override { }
 
-        FieldType fieldType(int index) const
+        FieldType getFieldType(int index) const
         {
-            return index >=0 && index < static_cast<int>(m_tokens.size()) ? m_tokens[index].fieldType : DateTimeFormat::FieldTypeInvalid;
+            return index >= 0 && index < static_cast<int>(m_tokens.size())
+                ? m_tokens[index].fieldType
+                : DateTimeFormat::FieldTypeInvalid;
         }
 
-        Tokens tokens() const { return Tokens(m_tokens); }
+        Tokens getTokens() const { return Tokens(m_tokens); }
 
     private:
         void visitField(FieldType fieldType, int count) override
         {
-            m_tokens.append(Token(fieldType, count));
+            m_tokens.push_back(Token(fieldType, count));
         }
 
         void visitLiteral(const String& string) override
         {
-            m_tokens.append(Token(string));
+            m_tokens.push_back(Token(string));
         }
 
         Vector<Token> m_tokens;
     };
 };
 
-std::ostream& operator<<(std::ostream& os, const DateTimeFormatTest::Tokens& tokens)
+std::ostream& operator<<(std::ostream& os,
+    const DateTimeFormatTest::Tokens& tokens)
 {
     return os << tokens.toString().ascii().data();
 }
@@ -216,32 +220,24 @@ TEST_F(DateTimeFormatTest, CommonPattern)
 {
     EXPECT_EQ(Tokens(), parse(""));
 
-    EXPECT_EQ(
-        Tokens(
-            Token(DateTimeFormat::FieldTypeYear, 4), Token("-"),
-            Token(DateTimeFormat::FieldTypeMonth, 2), Token("-"),
-            Token(DateTimeFormat::FieldTypeDayOfMonth, 2)),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeYear, 4), Token("-"),
+                  Token(DateTimeFormat::FieldTypeMonth, 2), Token("-"),
+                  Token(DateTimeFormat::FieldTypeDayOfMonth, 2)),
         parse("yyyy-MM-dd"));
 
-    EXPECT_EQ(
-        Tokens(
-            Token(DateTimeFormat::FieldTypeHour24, 2), Token(":"),
-            Token(DateTimeFormat::FieldTypeMinute, 2), Token(":"),
-            Token(DateTimeFormat::FieldTypeSecond, 2)),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeHour24, 2), Token(":"),
+                  Token(DateTimeFormat::FieldTypeMinute, 2), Token(":"),
+                  Token(DateTimeFormat::FieldTypeSecond, 2)),
         parse("kk:mm:ss"));
 
-    EXPECT_EQ(
-        Tokens(
-            Token(DateTimeFormat::FieldTypeHour12), Token(":"),
-            Token(DateTimeFormat::FieldTypeMinute), Token(" "),
-            Token(DateTimeFormat::FieldTypePeriod)),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeHour12), Token(":"),
+                  Token(DateTimeFormat::FieldTypeMinute), Token(" "),
+                  Token(DateTimeFormat::FieldTypePeriod)),
         parse("h:m a"));
 
-    EXPECT_EQ(
-        Tokens(
-            Token(DateTimeFormat::FieldTypeYear), Token("Nen "),
-            Token(DateTimeFormat::FieldTypeMonth), Token("Getsu "),
-            Token(DateTimeFormat::FieldTypeDayOfMonth), Token("Nichi")),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeYear), Token("Nen "),
+                  Token(DateTimeFormat::FieldTypeMonth), Token("Getsu "),
+                  Token(DateTimeFormat::FieldTypeDayOfMonth), Token("Nichi")),
         parse("y'Nen' M'Getsu' d'Nichi'"));
 }
 
@@ -258,11 +254,10 @@ TEST_F(DateTimeFormatTest, Quote)
     EXPECT_EQ(Tokens("'"), parse("''"));
     EXPECT_EQ(Tokens("'-'"), parse("''-''"));
     EXPECT_EQ(Tokens("Foo'Bar"), parse("'Foo''Bar'"));
-    EXPECT_EQ(
-        Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'s")),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'s")),
         parse("G'''s'"));
-    EXPECT_EQ(
-        Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'"), Token(DateTimeFormat::FieldTypeSecond)),
+    EXPECT_EQ(Tokens(Token(DateTimeFormat::FieldTypeEra), Token("'"),
+                  Token(DateTimeFormat::FieldTypeSecond)),
         parse("G''s"));
 }
 
@@ -335,5 +330,3 @@ TEST_F(DateTimeFormatTest, SingleUpperCaseInvalid)
 }
 
 } // namespace blink
-
-#endif

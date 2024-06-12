@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkSVGParser.h"
 #include "SkSVGCircle.h"
@@ -35,17 +33,22 @@
 
 static int gGeneratedMatrixID = 0;
 
-SkSVGParser::SkSVGParser(SkXMLParserError* errHandler) :
-    SkXMLParser(errHandler),
-    fHead(&fEmptyPaint), fIDs(256),
-        fXMLWriter(&fStream), fCurrElement(NULL), fInSVG(false), fSuppressPaint(false) {
+SkSVGParser::SkSVGParser(SkXMLParserError* errHandler)
+    : SkXMLParser(errHandler)
+    , fHead(&fEmptyPaint)
+    , fIDs(256)
+    , fXMLWriter(&fStream)
+    , fCurrElement(nullptr)
+    , fInSVG(false)
+    , fSuppressPaint(false)
+{
     fLastTransform.reset();
     fEmptyPaint.f_fill.set("black");
     fEmptyPaint.f_stroke.set("none");
     fEmptyPaint.f_strokeMiterlimit.set("4");
     fEmptyPaint.f_fillRule.set("winding");
     fEmptyPaint.f_opacity.set("1");
-    fEmptyPaint.fNext = NULL;
+    fEmptyPaint.fNext = nullptr;
     for (int index = SkSVGPaint::kInitial + 1; index < SkSVGPaint::kTerminal; index++) {
         SkString* initial = fEmptyPaint[index];
         if (initial->size() == 0)
@@ -54,10 +57,12 @@ SkSVGParser::SkSVGParser(SkXMLParserError* errHandler) :
     }
 }
 
-SkSVGParser::~SkSVGParser() {
+SkSVGParser::~SkSVGParser()
+{
 }
 
-void SkSVGParser::Delete(SkTDArray<SkSVGElement*>& fChildren) {
+void SkSVGParser::Delete(SkTDArray<SkSVGElement*>& fChildren)
+{
     SkSVGElement** ptr;
     for (ptr = fChildren.begin(); ptr < fChildren.end(); ptr++) {
         Delete((*ptr)->fChildren);
@@ -66,14 +71,14 @@ void SkSVGParser::Delete(SkTDArray<SkSVGElement*>& fChildren) {
 }
 
 int SkSVGParser::findAttribute(SkSVGBase* element, const char* attrValue,
-        size_t len, bool isPaint) {
+    size_t len, bool isPaint)
+{
     const SkSVGAttribute* attributes;
     size_t count = element->getAttributes(&attributes);
     size_t result = 0;
     while (result < count) {
         if (strncmp(attributes->fName, attrValue, len) == 0 && strlen(attributes->fName) == len) {
-            SkASSERT(result == (attributes->fOffset -
-                (isPaint ? sizeof(SkString) : sizeof(SkSVGElement))) / sizeof(SkString));
+            SkASSERT(result == (attributes->fOffset - (isPaint ? sizeof(SkString) : sizeof(SkSVGElement))) / sizeof(SkString));
             return result;
         }
         attributes++;
@@ -109,7 +114,8 @@ const char* SkSVGParser::getFinal() {
 }
 #endif
 
-SkString& SkSVGParser::getPaintLast(SkSVGPaint::Field field) {
+SkString& SkSVGParser::getPaintLast(SkSVGPaint::Field field)
+{
     SkSVGPaint* state = fHead;
     do {
         SkString* attr = (*state)[field];
@@ -123,13 +129,14 @@ SkString& SkSVGParser::getPaintLast(SkSVGPaint::Field field) {
     return *fEmptyPaint[field];
 }
 
-bool SkSVGParser::isStrokeAndFill(  SkSVGPaint** strokeState, SkSVGPaint** fillState) {
+bool SkSVGParser::isStrokeAndFill(SkSVGPaint** strokeState, SkSVGPaint** fillState)
+{
     SkSVGPaint* walking = fHead;
     bool stroke = false;
     bool fill = false;
     bool strokeSet = false;
     bool fillSet = false;
-    while (walking != NULL) {
+    while (walking != nullptr) {
         if (strokeSet == false && walking->f_stroke.size() > 0) {
             stroke = walking->f_stroke.equals("none") == false;
             *strokeState = walking;
@@ -145,12 +152,14 @@ bool SkSVGParser::isStrokeAndFill(  SkSVGPaint** strokeState, SkSVGPaint** fillS
     return stroke && fill;
 }
 
-bool SkSVGParser::onAddAttribute(const char name[], const char value[]) {
+bool SkSVGParser::onAddAttribute(const char name[], const char value[])
+{
     return onAddAttributeLen(name, value, strlen(value));
 }
 
-bool SkSVGParser::onAddAttributeLen(const char name[], const char value[], size_t len) {
-    if (fCurrElement == NULL)    // this signals we should ignore attributes for this element
+bool SkSVGParser::onAddAttributeLen(const char name[], const char value[], size_t len)
+{
+    if (fCurrElement == nullptr) // this signals we should ignore attributes for this element
         return true;
     if (fCurrElement->fIsDef == false && fCurrElement->fIsNotDef == false)
         return false; // also an ignored element
@@ -174,7 +183,8 @@ bool SkSVGParser::onAddAttributeLen(const char name[], const char value[], size_
     return false;
 }
 
-bool SkSVGParser::onEndElement(const char elem[]) {
+bool SkSVGParser::onEndElement(const char elem[])
+{
     int parentIndex = fParents.count() - 1;
     if (parentIndex >= 0) {
         SkSVGElement* element = fParents[parentIndex];
@@ -184,11 +194,13 @@ bool SkSVGParser::onEndElement(const char elem[]) {
     return false;
 }
 
-bool SkSVGParser::onStartElement(const char name[]) {
+bool SkSVGParser::onStartElement(const char name[])
+{
     return onStartElementLen(name, strlen(name));
 }
 
-bool SkSVGParser::onStartElementLen(const char name[], size_t len) {
+bool SkSVGParser::onStartElementLen(const char name[], size_t len)
+{
     if (strncmp(name, "svg", len) == 0) {
         fInSVG = true;
     } else if (fInSVG == false)
@@ -197,12 +209,12 @@ bool SkSVGParser::onStartElementLen(const char name[], size_t len) {
     if (nextColon && (size_t)(nextColon - name) < len)
         return false;
     SkSVGTypes type = GetType(name, len);
-//    SkASSERT(type >= 0);
+    //    SkASSERT(type >= 0);
     if (type < 0) {
         type = SkSVGType_G;
-//        return true;
+        //        return true;
     }
-    SkSVGElement* parent = fParents.count() > 0 ? fParents.top() : NULL;
+    SkSVGElement* parent = fParents.count() > 0 ? fParents.top() : nullptr;
     SkSVGElement* element = CreateElement(type, parent);
     bool result = false;
     if (parent) {
@@ -216,28 +228,28 @@ bool SkSVGParser::onStartElementLen(const char name[], size_t len) {
     return result;
 }
 
-bool SkSVGParser::onText(const char text[], int len) {
+bool SkSVGParser::onText(const char text[], int len)
+{
     if (fInSVG == false)
         return false;
     SkSVGTypes type = fCurrElement->getType();
     if (type != SkSVGType_Text && type != SkSVGType_Tspan)
         return false;
-    SkSVGText* textElement = (SkSVGText*) fCurrElement;
+    SkSVGText* textElement = (SkSVGText*)fCurrElement;
     textElement->f_text.set(text, len);
     return false;
 }
 
 static int32_t strokeFillID = 0;
 
-void SkSVGParser::translate(SkSVGElement* element, bool isDef) {
+void SkSVGParser::translate(SkSVGElement* element, bool isDef)
+{
     SkSVGPaint::Push(&fHead, &element->fPaintState);
     bool isFlushable = element->isFlushable();
-    if ((element->fIsDef == false && element->fIsNotDef == false) ||
-        (element->fIsDef && isDef == false && element->fIsNotDef == false) ||
-        (element->fIsDef == false && isDef && element->fIsNotDef)) {
+    if ((element->fIsDef == false && element->fIsNotDef == false) || (element->fIsDef && isDef == false && element->fIsNotDef == false) || (element->fIsDef == false && isDef && element->fIsNotDef)) {
         isFlushable = false;
     }
-    SkSVGPaint* strokeState = NULL, * fillState = NULL;
+    SkSVGPaint *strokeState = nullptr, *fillState = nullptr;
     if (isFlushable)
         element->fPaintState.setSave(*this);
     if (isFlushable && isStrokeAndFill(&strokeState, &fillState)) {
@@ -256,7 +268,7 @@ void SkSVGParser::translate(SkSVGElement* element, bool isDef) {
         if (element->fPaintState.flush(*this, isFlushable, isDef)) {
             _startElement("add");
             _addAttributeLen("use", elementID.c_str(), elementID.size());
-            _endElement();  // add
+            _endElement(); // add
         }
         fillState->f_fill.set(saveFill);
     } else {
@@ -267,7 +279,8 @@ void SkSVGParser::translate(SkSVGElement* element, bool isDef) {
     SkSVGPaint::Pop(&fHead);
 }
 
-void SkSVGParser::translateMatrix(SkString& string, SkString* stringID) {
+void SkSVGParser::translateMatrix(SkString& string, SkString* stringID)
+{
     if (string.size() == 0)
         return;
     if (stringID->size() > 0) {
@@ -288,40 +301,42 @@ void SkSVGParser::translateMatrix(SkString& string, SkString* stringID) {
     SkASSERT(strncmp(str, "matrix(", 7) == 0);
     str += 6;
     const char* strEnd = strrchr(str, ')');
-    SkASSERT(strEnd != NULL);
+    SkASSERT(strEnd != nullptr);
     SkString mat(str, strEnd - str);
     ConvertToArray(mat);
     const char* elems[6];
-    static const int order[] = {0, 3, 1, 4, 2, 5};
+    static const int order[] = { 0, 3, 1, 4, 2, 5 };
     const int* orderPtr = order;
     str = mat.c_str();
     strEnd = str + mat.size();
     while (str < strEnd) {
         elems[*orderPtr++] = str;
-        while (str < strEnd && *str != ',' )
+        while (str < strEnd && *str != ',')
             str++;
         str++;
     }
     string.reset();
     for (int index = 0; index < 6; index++) {
         const char* end = strchr(elems[index], ',');
-        if (end == NULL)
-            end= strchr(elems[index], ']');
+        if (end == nullptr)
+            end = strchr(elems[index], ']');
         string.append(elems[index], end - elems[index] + 1);
     }
     string.remove(string.size() - 1, 1);
     string.append(",0,0,1]");
     _addAttribute("matrix", string);
-    _endElement();  // matrix
+    _endElement(); // matrix
 }
 
-static bool is_whitespace(char ch) {
+static bool is_whitespace(char ch)
+{
     return ch > 0 && ch <= ' ';
 }
 
-void SkSVGParser::ConvertToArray(SkString& vals) {
+void SkSVGParser::ConvertToArray(SkString& vals)
+{
     vals.appendUnichar(']');
-    char* valCh = (char*) vals.c_str();
+    char* valCh = (char*)vals.c_str();
     valCh[0] = '[';
     int index = 1;
     while (valCh[index] != ']') {
@@ -353,10 +368,14 @@ undoLastComma:
         valCh[index] = ' ';
 }
 
-#define CASE_NEW(type) case SkSVGType_##type : created = new SkSVG##type(); break
+#define CASE_NEW(type)               \
+    case SkSVGType_##type:           \
+        created = new SkSVG##type(); \
+        break
 
-SkSVGElement* SkSVGParser::CreateElement(SkSVGTypes type, SkSVGElement* parent) {
-    SkSVGElement* created = NULL;
+SkSVGElement* SkSVGParser::CreateElement(SkSVGTypes type, SkSVGElement* parent)
+{
+    SkSVGElement* created = nullptr;
     switch (type) {
         CASE_NEW(Circle);
         CASE_NEW(ClipPath);
@@ -381,9 +400,9 @@ SkSVGElement* SkSVGParser::CreateElement(SkSVGTypes type, SkSVGElement* parent) 
         CASE_NEW(Text);
         CASE_NEW(Tspan);
         CASE_NEW(Use);
-        default:
-            SkASSERT(0);
-            return NULL;
+    default:
+        SkASSERT(0);
+        return nullptr;
     }
     created->fParent = parent;
     bool isDef = created->fIsDef = created->isDef();
@@ -406,36 +425,36 @@ SkSVGElement* SkSVGParser::CreateElement(SkSVGTypes type, SkSVGElement* parent) 
 }
 
 const SkSVGTypeName gSVGTypeNames[] = {
-    {"circle", SkSVGType_Circle},
-    {"clipPath", SkSVGType_ClipPath},
-    {"defs", SkSVGType_Defs},
-    {"ellipse", SkSVGType_Ellipse},
-    {"feColorMatrix", SkSVGType_FeColorMatrix},
-    {"filter", SkSVGType_Filter},
-    {"g", SkSVGType_G},
-    {"image", SkSVGType_Image},
-    {"line", SkSVGType_Line},
-    {"linearGradient", SkSVGType_LinearGradient},
-    {"mask", SkSVGType_Mask},
-    {"metadata", SkSVGType_Metadata},
-    {"path", SkSVGType_Path},
-    {"polygon", SkSVGType_Polygon},
-    {"polyline", SkSVGType_Polyline},
-    {"radialGradient", SkSVGType_RadialGradient},
-    {"rect", SkSVGType_Rect},
-    {"stop", SkSVGType_Stop},
-    {"svg", SkSVGType_SVG},
-    {"symbol", SkSVGType_Symbol},
-    {"text", SkSVGType_Text},
-    {"tspan", SkSVGType_Tspan},
-    {"use", SkSVGType_Use}
+    { "circle", SkSVGType_Circle },
+    { "clipPath", SkSVGType_ClipPath },
+    { "defs", SkSVGType_Defs },
+    { "ellipse", SkSVGType_Ellipse },
+    { "feColorMatrix", SkSVGType_FeColorMatrix },
+    { "filter", SkSVGType_Filter },
+    { "g", SkSVGType_G },
+    { "image", SkSVGType_Image },
+    { "line", SkSVGType_Line },
+    { "linearGradient", SkSVGType_LinearGradient },
+    { "mask", SkSVGType_Mask },
+    { "metadata", SkSVGType_Metadata },
+    { "path", SkSVGType_Path },
+    { "polygon", SkSVGType_Polygon },
+    { "polyline", SkSVGType_Polyline },
+    { "radialGradient", SkSVGType_RadialGradient },
+    { "rect", SkSVGType_Rect },
+    { "stop", SkSVGType_Stop },
+    { "svg", SkSVGType_SVG },
+    { "symbol", SkSVGType_Symbol },
+    { "text", SkSVGType_Text },
+    { "tspan", SkSVGType_Tspan },
+    { "use", SkSVGType_Use }
 };
 
 const int kSVGTypeNamesSize = SK_ARRAY_COUNT(gSVGTypeNames);
 
-SkSVGTypes SkSVGParser::GetType(const char match[], size_t len ) {
+SkSVGTypes SkSVGParser::GetType(const char match[], size_t len)
+{
     int index = SkStrSearch(&gSVGTypeNames[0].fName, kSVGTypeNamesSize, match,
         len, sizeof(gSVGTypeNames[0]));
-    return index >= 0 && index < kSVGTypeNamesSize ? gSVGTypeNames[index].fType :
-        (SkSVGTypes) -1;
+    return index >= 0 && index < kSVGTypeNamesSize ? gSVGTypeNames[index].fType : (SkSVGTypes)-1;
 }

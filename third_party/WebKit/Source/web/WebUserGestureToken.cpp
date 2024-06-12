@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebUserGestureToken.h"
 
 #include "platform/UserGestureIndicator.h"
@@ -42,12 +41,12 @@ bool WebUserGestureToken::hasGestures() const
 
 void WebUserGestureToken::setOutOfProcess()
 {
-    m_token->setOutOfProcess();
+    m_token->setTimeoutPolicy(UserGestureToken::OutOfProcess);
 }
 
 void WebUserGestureToken::setJavascriptPrompt()
 {
-    m_token->setJavascriptPrompt();
+    m_token->setTimeoutPolicy(UserGestureToken::HasPaused);
 }
 
 WebUserGestureToken::WebUserGestureToken(PassRefPtr<UserGestureToken> token)

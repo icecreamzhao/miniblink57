@@ -2,16 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/PushEvent.h"
+
+#include "modules/push_messaging/PushEventInit.h"
 
 namespace blink {
 
-PushEvent::PushEvent()
-{
-}
-
-PushEvent::PushEvent(const AtomicString& type, PushMessageData* data, WaitUntilObserver* observer)
+PushEvent::PushEvent(const AtomicString& type,
+    PushMessageData* data,
+    WaitUntilObserver* observer)
     : ExtendableEvent(type, ExtendableEventInit(), observer)
     , m_data(data)
 {
@@ -21,12 +20,10 @@ PushEvent::PushEvent(const AtomicString& type, const PushEventInit& initializer)
     : ExtendableEvent(type, initializer)
 {
     if (initializer.hasData())
-        m_data = initializer.data();
+        m_data = PushMessageData::create(initializer.data());
 }
 
-PushEvent::~PushEvent()
-{
-}
+PushEvent::~PushEvent() { }
 
 const AtomicString& PushEvent::interfaceName() const
 {
@@ -35,9 +32,6 @@ const AtomicString& PushEvent::interfaceName() const
 
 PushMessageData* PushEvent::data()
 {
-    if (!m_data)
-        m_data = PushMessageData::create();
-
     return m_data.get();
 }
 

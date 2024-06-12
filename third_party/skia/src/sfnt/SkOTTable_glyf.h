@@ -18,7 +18,7 @@
 
 struct SkOTTableGlyphData;
 
-extern uint8_t const * const SK_OT_GlyphData_NoOutline;
+extern uint8_t const* const SK_OT_GlyphData_NoOutline;
 
 struct SkOTTableGlyph {
     static const SK_OT_CHAR TAG0 = 'g';
@@ -30,29 +30,33 @@ struct SkOTTableGlyph {
     class Iterator {
     public:
         Iterator(const SkOTTableGlyph& glyf,
-                 const SkOTTableIndexToLocation& loca,
-                 SkOTTableHead::IndexToLocFormat locaFormat)
-        : fGlyf(glyf)
-        , fLocaFormat(SkOTTableHead::IndexToLocFormat::ShortOffsets == locaFormat.value ? 0 : 1)
-        , fCurrentGlyphOffset(0)
-        { fLocaPtr.shortOffset = reinterpret_cast<const SK_OT_USHORT*>(&loca); }
+            const SkOTTableIndexToLocation& loca,
+            SkOTTableHead::IndexToLocFormat locaFormat)
+            : fGlyf(glyf)
+            , fLocaFormat(SkOTTableHead::IndexToLocFormat::ShortOffsets == locaFormat.value ? 0 : 1)
+            , fCurrentGlyphOffset(0)
+        {
+            fLocaPtr.shortOffset = reinterpret_cast<const SK_OT_USHORT*>(&loca);
+        }
 
-        void advance(uint16_t num) {
+        void advance(uint16_t num)
+        {
             fLocaPtr.shortOffset += num << fLocaFormat;
             fCurrentGlyphOffset = fLocaFormat ? SkEndian_SwapBE32(*fLocaPtr.longOffset)
                                               : uint32_t(SkEndian_SwapBE16(*fLocaPtr.shortOffset) << 1);
         }
-        const SkOTTableGlyphData* next() {
+        const SkOTTableGlyphData* next()
+        {
             uint32_t previousGlyphOffset = fCurrentGlyphOffset;
             advance(1);
             if (previousGlyphOffset == fCurrentGlyphOffset) {
                 return reinterpret_cast<const SkOTTableGlyphData*>(&SK_OT_GlyphData_NoOutline);
             } else {
                 return reinterpret_cast<const SkOTTableGlyphData*>(
-                    reinterpret_cast<const SK_OT_BYTE*>(&fGlyf) + previousGlyphOffset
-                );
+                    reinterpret_cast<const SK_OT_BYTE*>(&fGlyf) + previousGlyphOffset);
             }
         }
+
     private:
         const SkOTTableGlyph& fGlyf;
         uint16_t fLocaFormat; //0 or 1
@@ -72,11 +76,11 @@ struct SkOTTableGlyphData {
     SK_OT_FWORD yMax;
 
     struct Simple {
-        SK_OT_USHORT endPtsOfContours[1/*numberOfContours*/];
+        SK_OT_USHORT endPtsOfContours[1 /*numberOfContours*/];
 
         struct Instructions {
             SK_OT_USHORT length;
-            SK_OT_BYTE data[1/*length*/];
+            SK_OT_BYTE data[1 /*length*/];
         };
 
         union Flags {
@@ -156,7 +160,8 @@ struct SkOTTableGlyphData {
             union Transform {
                 union Matrix {
                     /** !WE_HAVE_A_SCALE & !WE_HAVE_AN_X_AND_Y_SCALE & !WE_HAVE_A_TWO_BY_TWO */
-                    struct None { } none;
+                    struct None {
+                    } none;
                     /** WE_HAVE_A_SCALE */
                     struct Scale {
                         SK_OT_F2DOT14 a_d;
@@ -199,12 +204,12 @@ struct SkOTTableGlyphData {
                     SkOTTableGlyphData::Composite::Component::Transform::Matrix matrix;
                 } byteIndex;
             } transform;
-        } component;//[] last element does not set MORE_COMPONENTS
+        } component; //[] last element does not set MORE_COMPONENTS
 
         /** Comes after the last Component if the last component has WE_HAVE_INSTR. */
         struct Instructions {
             SK_OT_USHORT length;
-            SK_OT_BYTE data[1/*length*/];
+            SK_OT_BYTE data[1 /*length*/];
         };
     };
 };

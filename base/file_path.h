@@ -9,9 +9,9 @@
 #define PRFilePath "s"
 #define PRFilePathLiteral "%s"
 #elif defined(OS_WIN)
-#define FILE_PATH_LITERAL(x) L ## x
+#define FILE_PATH_LITERAL(x) L##x
 #define PRFilePath "ls"
 #define PRFilePathLiteral L"%ls"
-#endif  // OS_WIN
+#endif // OS_WIN
 
 #endif // base_file_path_h

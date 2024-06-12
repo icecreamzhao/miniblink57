@@ -15,9 +15,11 @@ class IDBAny;
 class IDBKey;
 class IDBKeyPath;
 
-inline v8::Local<v8::Value> toV8(const SQLValue& sqlValue, v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+inline v8::Local<v8::Value> ToV8(const SQLValue& sqlValue,
+    v8::Local<v8::Object> creationContext,
+    v8::Isolate* isolate)
 {
-    switch (sqlValue.type()) {
+    switch (sqlValue.getType()) {
     case SQLValue::NullValue:
         return v8::Null(isolate);
     case SQLValue::NumberValue:
@@ -29,11 +31,16 @@ inline v8::Local<v8::Value> toV8(const SQLValue& sqlValue, v8::Local<v8::Object>
     return v8::Local<v8::Value>();
 }
 
-v8::Local<v8::Value> toV8(const IDBKeyPath&, v8::Local<v8::Object> creationContext, v8::Isolate*);
-MODULES_EXPORT v8::Local<v8::Value> toV8(const IDBKey*, v8::Local<v8::Object> creationContext, v8::Isolate*);
-v8::Local<v8::Value> toV8(const IDBAny*, v8::Local<v8::Object> creationContext, v8::Isolate*);
+v8::Local<v8::Value> ToV8(const IDBKeyPath&,
+    v8::Local<v8::Object> creationContext,
+    v8::Isolate*);
+MODULES_EXPORT v8::Local<v8::Value> ToV8(const IDBKey*,
+    v8::Local<v8::Object> creationContext,
+    v8::Isolate*);
+v8::Local<v8::Value> ToV8(const IDBAny*,
+    v8::Local<v8::Object> creationContext,
+    v8::Isolate*);
 
 } // namespace blink
 
 #endif // ToV8ForModules_h
-

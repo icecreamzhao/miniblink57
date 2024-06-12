@@ -13,16 +13,16 @@
 namespace v8 {
 namespace base {
 
-// Function object which invokes 'free' on its parameter, which must be
-// a pointer. Can be used to store malloc-allocated pointers in std::unique_ptr:
-//
-// std::unique_ptr<int, base::FreeDeleter> foo_ptr(
-//     static_cast<int*>(malloc(sizeof(int))));
-struct FreeDeleter {
-  inline void operator()(void* ptr) const { free(ptr); }
-};
+    // Function object which invokes 'free' on its parameter, which must be
+    // a pointer. Can be used to store malloc-allocated pointers in std::unique_ptr:
+    //
+    // std::unique_ptr<int, base::FreeDeleter> foo_ptr(
+    //     static_cast<int*>(malloc(sizeof(int))));
+    struct FreeDeleter {
+        inline void operator()(void* ptr) const { free(ptr); }
+    };
 
-}  // namespace base
-}  // namespace v8
+} // namespace base
+} // namespace v8
 
-#endif  // V8_BASE_FREE_DELETER_H_
+#endif // V8_BASE_FREE_DELETER_H_

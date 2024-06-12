@@ -34,6 +34,7 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
+#include "core/dom/DOMHighResTimeStamp.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/WTFString.h"
 
@@ -41,40 +42,70 @@ namespace blink {
 
 class ScriptState;
 class ScriptValue;
+class V8ObjectBuilder;
 
-class CORE_EXPORT PerformanceEntry : public GarbageCollectedFinalized<PerformanceEntry>, public ScriptWrappable {
+using PerformanceEntryType = unsigned;
+using PerformanceEntryTypeMask = unsigned;
+
+class CORE_EXPORT PerformanceEntry
+    : public GarbageCollectedFinalized<PerformanceEntry>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     virtual ~PerformanceEntry();
 
+    enum EntryType : PerformanceEntryType {
+        Invalid = 0,
+        Navigation = 1 << 0,
+        Composite = 1 << 1,
+        Mark = 1 << 2,
+        Measure = 1 << 3,
+        Render = 1 << 4,
+        Resource = 1 << 5,
+        LongTask = 1 << 6,
+        TaskAttribution = 1 << 7,
+        Paint = 1 << 8
+    };
+
     String name() const;
     String entryType() const;
-    double startTime() const;
-    double duration() const;
+    DOMHighResTimeStamp startTime() const;
+    DOMHighResTimeStamp duration() const;
 
     ScriptValue toJSONForBinding(ScriptState*) const;
 
-    virtual bool isResource() { return false; }
-    virtual bool isRender() { return false; }
-    virtual bool isComposite() { return false; }
-    virtual bool isMark() { return false; }
-    virtual bool isMeasure() { return false; }
+    PerformanceEntryType entryTypeEnum() const { return m_entryTypeEnum; }
 
-    static bool startTimeCompareLessThan(PerformanceEntry* a, PerformanceEntry* b)
+    bool isResource() const { return m_entryTypeEnum == Resource; }
+    bool isRender() const { return m_entryTypeEnum == Render; }
+    bool isComposite() const { return m_entryTypeEnum == Composite; }
+    bool isMark() const { return m_entryTypeEnum == Mark; }
+    bool isMeasure() const { return m_entryTypeEnum == Measure; }
+
+    static bool startTimeCompareLessThan(PerformanceEntry* a,
+        PerformanceEntry* b)
     {
         return a->startTime() < b->startTime();
     }
 
+    static PerformanceEntry::EntryType toEntryTypeEnum(const String& entryType);
+
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 
 protected:
-    PerformanceEntry(const String& name, const String& entryType, double startTime, double finishTime);
+    PerformanceEntry(const String& name,
+        const String& entryType,
+        double startTime,
+        double finishTime);
+    virtual void buildJSONValue(V8ObjectBuilder&) const;
 
 private:
     const String m_name;
     const String m_entryType;
     const double m_startTime;
     const double m_duration;
+    const PerformanceEntryType m_entryTypeEnum;
 };
 
 } // namespace blink

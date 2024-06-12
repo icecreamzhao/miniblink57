@@ -9,7 +9,8 @@
 #include "SkRRect.h"
 #include "Test.h"
 
-static void test_tricky_radii(skiatest::Reporter* reporter) {
+static void test_tricky_radii(skiatest::Reporter* reporter)
+{
     {
         // crbug.com/458522
         SkRRect rr;
@@ -28,13 +29,12 @@ static void test_tricky_radii(skiatest::Reporter* reporter) {
         SkRRect rr;
         rr.setRectRadii(r, radii);
 
-        REPORTER_ASSERT(reporter, (double) rr.radii(SkRRect::kUpperRight_Corner).fY +
-                                  (double) rr.radii(SkRRect::kLowerRight_Corner).fY <=
-                                  rr.height());
+        REPORTER_ASSERT(reporter, (double)rr.radii(SkRRect::kUpperRight_Corner).fY + (double)rr.radii(SkRRect::kLowerRight_Corner).fY <= rr.height());
     }
 }
 
-static void test_empty_crbug_458524(skiatest::Reporter* reporter) {
+static void test_empty_crbug_458524(skiatest::Reporter* reporter)
+{
     SkRRect rr;
     const SkRect bounds = { 3709, 3709, 3709 + 7402, 3709 + 29825 };
     const SkScalar rad = 40;
@@ -47,10 +47,68 @@ static void test_empty_crbug_458524(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, SkRRect::kEmpty_Type == other.getType());
 }
 
+// Test that all the SkRRect entry points correctly handle un-sorted and
+// zero-sized input rects
+static void test_empty(skiatest::Reporter* reporter)
+{
+    static const SkRect oooRects[] = {
+        // out of order
+        { 100, 0, 0, 100 }, // ooo horizontal
+        { 0, 100, 100, 0 }, // ooo vertical
+        { 100, 100, 0, 0 }, // ooo both
+    };
+
+    static const SkRect emptyRects[] = {
+        { 100, 100, 100, 200 }, // empty horizontal
+        { 100, 100, 200, 100 }, // empty vertical
+        { 100, 100, 100, 100 }, // empty both
+        { 0, 0, 0, 0 } // setEmpty-empty
+    };
+
+    static const SkVector radii[4] = { { 0, 1 }, { 2, 3 }, { 4, 5 }, { 6, 7 } };
+
+    SkRRect r;
+
+    for (size_t i = 0; i < SK_ARRAY_COUNT(oooRects); ++i) {
+        r.setRect(oooRects[i]);
+        REPORTER_ASSERT(reporter, !r.isEmpty());
+
+        r.setOval(oooRects[i]);
+        REPORTER_ASSERT(reporter, !r.isEmpty());
+
+        r.setRectXY(oooRects[i], 1, 2);
+        REPORTER_ASSERT(reporter, !r.isEmpty());
+
+        r.setNinePatch(oooRects[i], 0, 1, 2, 3);
+        REPORTER_ASSERT(reporter, !r.isEmpty());
+
+        r.setRectRadii(oooRects[i], radii);
+        REPORTER_ASSERT(reporter, !r.isEmpty());
+    }
+
+    for (size_t i = 0; i < SK_ARRAY_COUNT(emptyRects); ++i) {
+        r.setRect(emptyRects[i]);
+        REPORTER_ASSERT(reporter, r.isEmpty());
+
+        r.setOval(emptyRects[i]);
+        REPORTER_ASSERT(reporter, r.isEmpty());
+
+        r.setRectXY(emptyRects[i], 1, 2);
+        REPORTER_ASSERT(reporter, r.isEmpty());
+
+        r.setNinePatch(emptyRects[i], 0, 1, 2, 3);
+        REPORTER_ASSERT(reporter, r.isEmpty());
+
+        r.setRectRadii(emptyRects[i], radii);
+        REPORTER_ASSERT(reporter, r.isEmpty());
+    }
+}
+
 static const SkScalar kWidth = 100.0f;
 static const SkScalar kHeight = 100.0f;
 
-static void test_inset(skiatest::Reporter* reporter) {
+static void test_inset(skiatest::Reporter* reporter)
+{
     SkRRect rr, rr2;
     SkRect r = { 0, 0, 100, 100 };
 
@@ -61,7 +119,7 @@ static void test_inset(skiatest::Reporter* reporter) {
     rr.inset(20, 20, &rr2);
     REPORTER_ASSERT(reporter, rr2.isRect());
 
-    rr.inset(r.width()/2, r.height()/2, &rr2);
+    rr.inset(r.width() / 2, r.height() / 2, &rr2);
     REPORTER_ASSERT(reporter, rr2.isEmpty());
 
     rr.setRectXY(r, 20, 20);
@@ -71,11 +129,11 @@ static void test_inset(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, rr2.isRect());
 }
 
-
 static void test_9patch_rrect(skiatest::Reporter* reporter,
-                              const SkRect& rect,
-                              SkScalar l, SkScalar t, SkScalar r, SkScalar b,
-                              bool checkRadii) {
+    const SkRect& rect,
+    SkScalar l, SkScalar t, SkScalar r, SkScalar b,
+    bool checkRadii)
+{
     SkRRect rr;
     rr.setNinePatch(rect, l, t, r, b);
 
@@ -88,7 +146,7 @@ static void test_9patch_rrect(skiatest::Reporter* reporter,
         SkPoint rquad[4];
         ninePatchRadii.toQuad(rquad);
         for (int i = 0; i < 4; ++i) {
-            REPORTER_ASSERT(reporter, rquad[i] == rr.radii((SkRRect::Corner) i));
+            REPORTER_ASSERT(reporter, rquad[i] == rr.radii((SkRRect::Corner)i));
         }
     }
     SkRRect rr2; // construct the same RR using the most general set function
@@ -98,7 +156,8 @@ static void test_9patch_rrect(skiatest::Reporter* reporter,
 }
 
 // Test out the basic API entry points
-static void test_round_rect_basic(skiatest::Reporter* reporter) {
+static void test_round_rect_basic(skiatest::Reporter* reporter)
+{
     // Test out initialization methods
     SkPoint zeroPt = { 0, 0 };
     SkRRect empty;
@@ -109,7 +168,7 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, empty.rect().isEmpty());
 
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, zeroPt == empty.radii((SkRRect::Corner) i));
+        REPORTER_ASSERT(reporter, zeroPt == empty.radii((SkRRect::Corner)i));
     }
 
     //----
@@ -122,13 +181,13 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, rr1.rect() == rect);
 
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, zeroPt == rr1.radii((SkRRect::Corner) i));
+        REPORTER_ASSERT(reporter, zeroPt == rr1.radii((SkRRect::Corner)i));
     }
     SkRRect rr1_2; // construct the same RR using the most general set function
     SkVector rr1_2_radii[4] = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
     rr1_2.setRectRadii(rect, rr1_2_radii);
     REPORTER_ASSERT(reporter, rr1_2 == rr1 && rr1_2.getType() == rr1.getType());
-    SkRRect rr1_3;  // construct the same RR using the nine patch set function
+    SkRRect rr1_3; // construct the same RR using the nine patch set function
     rr1_3.setNinePatch(rect, 0, 0, 0, 0);
     REPORTER_ASSERT(reporter, rr1_3 == rr1 && rr1_3.getType() == rr1.getType());
 
@@ -142,14 +201,14 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
 
     for (int i = 0; i < 4; ++i) {
         REPORTER_ASSERT(reporter,
-                        rr2.radii((SkRRect::Corner) i).equalsWithinTolerance(halfPoint));
+            rr2.radii((SkRRect::Corner)i).equalsWithinTolerance(halfPoint));
     }
-    SkRRect rr2_2;  // construct the same RR using the most general set function
+    SkRRect rr2_2; // construct the same RR using the most general set function
     SkVector rr2_2_radii[4] = { { halfPoint.fX, halfPoint.fY }, { halfPoint.fX, halfPoint.fY },
-                                { halfPoint.fX, halfPoint.fY }, { halfPoint.fX, halfPoint.fY } };
+        { halfPoint.fX, halfPoint.fY }, { halfPoint.fX, halfPoint.fY } };
     rr2_2.setRectRadii(rect, rr2_2_radii);
     REPORTER_ASSERT(reporter, rr2_2 == rr2 && rr2_2.getType() == rr2.getType());
-    SkRRect rr2_3;  // construct the same RR using the nine patch set function
+    SkRRect rr2_3; // construct the same RR using the nine patch set function
     rr2_3.setNinePatch(rect, halfPoint.fX, halfPoint.fY, halfPoint.fX, halfPoint.fY);
     REPORTER_ASSERT(reporter, rr2_3 == rr2 && rr2_3.getType() == rr2.getType());
 
@@ -162,13 +221,13 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, rr3.rect() == rect);
 
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, p == rr3.radii((SkRRect::Corner) i));
+        REPORTER_ASSERT(reporter, p == rr3.radii((SkRRect::Corner)i));
     }
     SkRRect rr3_2; // construct the same RR using the most general set function
     SkVector rr3_2_radii[4] = { { 5, 5 }, { 5, 5 }, { 5, 5 }, { 5, 5 } };
     rr3_2.setRectRadii(rect, rr3_2_radii);
     REPORTER_ASSERT(reporter, rr3_2 == rr3 && rr3_2.getType() == rr3.getType());
-    SkRRect rr3_3;  // construct the same RR using the nine patch set function
+    SkRRect rr3_3; // construct the same RR using the nine patch set function
     rr3_3.setNinePatch(rect, 5, 5, 5, 5);
     REPORTER_ASSERT(reporter, rr3_3 == rr3 && rr3_3.getType() == rr3.getType());
 
@@ -180,9 +239,9 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
         SkRect rect2 = SkRect::MakeLTRB(0.358211994f, 0.755430222f, 0.872866154f, 0.806214333f);
 
         test_9patch_rrect(reporter,
-                          rect2,
-                          0.926942348f, 0.642850280f, 0.529063463f, 0.587844372f,
-                          false);
+            rect2,
+            0.926942348f, 0.642850280f, 0.529063463f, 0.587844372f,
+            false);
     }
 
     //----
@@ -195,7 +254,7 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, rr5.rect() == rect);
 
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, radii2[i] == rr5.radii((SkRRect::Corner) i));
+        REPORTER_ASSERT(reporter, radii2[i] == rr5.radii((SkRRect::Corner)i));
     }
 
     // Test out == & !=
@@ -204,7 +263,8 @@ static void test_round_rect_basic(skiatest::Reporter* reporter) {
 }
 
 // Test out the cases when the RR degenerates to a rect
-static void test_round_rect_rects(skiatest::Reporter* reporter) {
+static void test_round_rect_rects(skiatest::Reporter* reporter)
+{
     SkRect r;
 
     //----
@@ -244,7 +304,8 @@ static void test_round_rect_rects(skiatest::Reporter* reporter) {
 }
 
 // Test out the cases when the RR degenerates to an oval
-static void test_round_rect_ovals(skiatest::Reporter* reporter) {
+static void test_round_rect_ovals(skiatest::Reporter* reporter)
+{
     //----
     SkRect oval;
     SkRect rect = SkRect::MakeLTRB(0, 0, kWidth, kHeight);
@@ -257,7 +318,8 @@ static void test_round_rect_ovals(skiatest::Reporter* reporter) {
 }
 
 // Test out the non-degenerate RR cases
-static void test_round_rect_general(skiatest::Reporter* reporter) {
+static void test_round_rect_general(skiatest::Reporter* reporter)
+{
     //----
     SkRect rect = SkRect::MakeLTRB(0, 0, kWidth, kHeight);
     SkRRect rr1;
@@ -275,7 +337,8 @@ static void test_round_rect_general(skiatest::Reporter* reporter) {
 }
 
 // Test out questionable-parameter handling
-static void test_round_rect_iffy_parameters(skiatest::Reporter* reporter) {
+static void test_round_rect_iffy_parameters(skiatest::Reporter* reporter)
+{
 
     // When the radii exceed the base rect they are proportionally scaled down
     // to fit
@@ -306,14 +369,15 @@ static void test_round_rect_iffy_parameters(skiatest::Reporter* reporter) {
 
 // Move a small box from the start position by (stepX, stepY) 'numSteps' times
 // testing for containment in 'rr' at each step.
-static void test_direction(skiatest::Reporter* reporter, const SkRRect &rr,
-                           SkScalar initX, int stepX, SkScalar initY, int stepY,
-                           int numSteps, const bool* contains) {
+static void test_direction(skiatest::Reporter* reporter, const SkRRect& rr,
+    SkScalar initX, int stepX, SkScalar initY, int stepY,
+    int numSteps, const bool* contains)
+{
     SkScalar x = initX, y = initY;
     for (int i = 0; i < numSteps; ++i) {
         SkRect test = SkRect::MakeXYWH(x, y,
-                                       stepX ? SkIntToScalar(stepX) : SK_Scalar1,
-                                       stepY ? SkIntToScalar(stepY) : SK_Scalar1);
+            stepX ? SkIntToScalar(stepX) : SK_Scalar1,
+            stepY ? SkIntToScalar(stepY) : SK_Scalar1);
         test.sort();
 
         REPORTER_ASSERT(reporter, contains[i] == rr.contains(test));
@@ -324,14 +388,15 @@ static void test_direction(skiatest::Reporter* reporter, const SkRRect &rr,
 }
 
 // Exercise the RR's contains rect method
-static void test_round_rect_contains_rect(skiatest::Reporter* reporter) {
+static void test_round_rect_contains_rect(skiatest::Reporter* reporter)
+{
 
     static const int kNumRRects = 4;
     static const SkVector gRadii[kNumRRects][4] = {
-        { {  0,  0 }, {  0,  0 }, {  0,  0 }, {  0,  0 } },  // rect
-        { { 20, 20 }, { 20, 20 }, { 20, 20 }, { 20, 20 } },  // circle
-        { { 10, 10 }, { 10, 10 }, { 10, 10 }, { 10, 10 } },  // simple
-        { {  0,  0 }, { 20, 20 }, { 10, 10 }, { 30, 30 } }   // complex
+        { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }, // rect
+        { { 20, 20 }, { 20, 20 }, { 20, 20 }, { 20, 20 } }, // circle
+        { { 10, 10 }, { 10, 10 }, { 10, 10 }, { 10, 10 } }, // simple
+        { { 0, 0 }, { 20, 20 }, { 10, 10 }, { 30, 30 } } // complex
     };
 
     SkRRect rrects[kNumRRects];
@@ -342,14 +407,14 @@ static void test_round_rect_contains_rect(skiatest::Reporter* reporter) {
     // First test easy outs - boxes that are obviously out on
     // each corner and edge
     static const SkRect easyOuts[] = {
-        { -5, -5,  5,  5 }, // NW
-        { 15, -5, 20,  5 }, // N
-        { 35, -5, 45,  5 }, // NE
+        { -5, -5, 5, 5 }, // NW
+        { 15, -5, 20, 5 }, // N
+        { 35, -5, 45, 5 }, // NE
         { 35, 15, 45, 20 }, // E
         { 35, 45, 35, 45 }, // SE
         { 15, 35, 20, 45 }, // S
-        { -5, 35,  5, 45 }, // SW
-        { -5, 15,  5, 20 }  // W
+        { -5, 35, 5, 45 }, // SW
+        { -5, 15, 5, 20 } // W
     };
 
     for (int i = 0; i < kNumRRects; ++i) {
@@ -423,24 +488,25 @@ static void test_round_rect_contains_rect(skiatest::Reporter* reporter) {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
             // first two blocks out for W (same as S)
             { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-         }
+        }
     };
 
     for (int i = 0; i < kNumRRects; ++i) {
-        test_direction(reporter, rrects[i],     0,  1,     0,  1, kNumSteps, answers[i][0]); // NW
-        test_direction(reporter, rrects[i], 19.5f,  0,     0,  1, kNumSteps, answers[i][1]); // N
-        test_direction(reporter, rrects[i],    40, -1,     0,  1, kNumSteps, answers[i][2]); // NE
-        test_direction(reporter, rrects[i],    40, -1, 19.5f,  0, kNumSteps, answers[i][3]); // E
-        test_direction(reporter, rrects[i],    40, -1,    40, -1, kNumSteps, answers[i][4]); // SE
-        test_direction(reporter, rrects[i], 19.5f,  0,    40, -1, kNumSteps, answers[i][5]); // S
-        test_direction(reporter, rrects[i],     0,  1,    40, -1, kNumSteps, answers[i][6]); // SW
-        test_direction(reporter, rrects[i],     0,  1, 19.5f,  0, kNumSteps, answers[i][7]); // W
+        test_direction(reporter, rrects[i], 0, 1, 0, 1, kNumSteps, answers[i][0]); // NW
+        test_direction(reporter, rrects[i], 19.5f, 0, 0, 1, kNumSteps, answers[i][1]); // N
+        test_direction(reporter, rrects[i], 40, -1, 0, 1, kNumSteps, answers[i][2]); // NE
+        test_direction(reporter, rrects[i], 40, -1, 19.5f, 0, kNumSteps, answers[i][3]); // E
+        test_direction(reporter, rrects[i], 40, -1, 40, -1, kNumSteps, answers[i][4]); // SE
+        test_direction(reporter, rrects[i], 19.5f, 0, 40, -1, kNumSteps, answers[i][5]); // S
+        test_direction(reporter, rrects[i], 0, 1, 40, -1, kNumSteps, answers[i][6]); // SW
+        test_direction(reporter, rrects[i], 0, 1, 19.5f, 0, kNumSteps, answers[i][7]); // W
     }
 }
 
 // Called for a matrix that should cause SkRRect::transform to fail.
 static void assert_transform_failure(skiatest::Reporter* reporter, const SkRRect& orig,
-                                     const SkMatrix& matrix) {
+    const SkMatrix& matrix)
+{
     // The test depends on the fact that the original is not empty.
     SkASSERT(!orig.isEmpty());
     SkRRect dst;
@@ -458,18 +524,19 @@ static void assert_transform_failure(skiatest::Reporter* reporter, const SkRRect
     REPORTER_ASSERT(reporter, orig != dst);
 }
 
-#define GET_RADII                                                       \
-    const SkVector& origUL = orig.radii(SkRRect::kUpperLeft_Corner);    \
-    const SkVector& origUR = orig.radii(SkRRect::kUpperRight_Corner);   \
-    const SkVector& origLR = orig.radii(SkRRect::kLowerRight_Corner);   \
-    const SkVector& origLL = orig.radii(SkRRect::kLowerLeft_Corner);    \
-    const SkVector& dstUL = dst.radii(SkRRect::kUpperLeft_Corner);      \
-    const SkVector& dstUR = dst.radii(SkRRect::kUpperRight_Corner);     \
-    const SkVector& dstLR = dst.radii(SkRRect::kLowerRight_Corner);     \
+#define GET_RADII                                                     \
+    const SkVector& origUL = orig.radii(SkRRect::kUpperLeft_Corner);  \
+    const SkVector& origUR = orig.radii(SkRRect::kUpperRight_Corner); \
+    const SkVector& origLR = orig.radii(SkRRect::kLowerRight_Corner); \
+    const SkVector& origLL = orig.radii(SkRRect::kLowerLeft_Corner);  \
+    const SkVector& dstUL = dst.radii(SkRRect::kUpperLeft_Corner);    \
+    const SkVector& dstUR = dst.radii(SkRRect::kUpperRight_Corner);   \
+    const SkVector& dstLR = dst.radii(SkRRect::kLowerRight_Corner);   \
     const SkVector& dstLL = dst.radii(SkRRect::kLowerLeft_Corner)
 
 // Called to test various transforms on a single SkRRect.
-static void test_transform_helper(skiatest::Reporter* reporter, const SkRRect& orig) {
+static void test_transform_helper(skiatest::Reporter* reporter, const SkRRect& orig)
+{
     SkRRect dst;
     dst.setEmpty();
 
@@ -514,7 +581,7 @@ static void test_transform_helper(skiatest::Reporter* reporter, const SkRRect& o
     REPORTER_ASSERT(reporter, success);
     for (int i = 0; i < 4; ++i) {
         REPORTER_ASSERT(reporter,
-                orig.radii((SkRRect::Corner) i) == dst.radii((SkRRect::Corner) i));
+            orig.radii((SkRRect::Corner)i) == dst.radii((SkRRect::Corner)i));
     }
     REPORTER_ASSERT(reporter, orig.rect().width() == dst.rect().width());
     REPORTER_ASSERT(reporter, orig.rect().height() == dst.rect().height());
@@ -604,22 +671,17 @@ static void test_transform_helper(skiatest::Reporter* reporter, const SkRRect& o
     REPORTER_ASSERT(reporter, success);
     // Radii are scaled.
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.radii((SkRRect::Corner) i).fX,
-                                    SkScalarMul(orig.radii((SkRRect::Corner) i).fX, xScale)));
-        REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.radii((SkRRect::Corner) i).fY,
-                                    SkScalarMul(orig.radii((SkRRect::Corner) i).fY, yScale)));
+        REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fX, SkScalarMul(orig.radii((SkRRect::Corner)i).fX, xScale)));
+        REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fY, SkScalarMul(orig.radii((SkRRect::Corner)i).fY, yScale)));
     }
-    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().width(),
-                                                  SkScalarMul(orig.rect().width(), xScale)));
-    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().height(),
-                                                  SkScalarMul(orig.rect().height(), yScale)));
-    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().left(),
-                                                  SkScalarMul(orig.rect().left(), xScale)));
-    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().top(),
-                                                  SkScalarMul(orig.rect().top(), yScale)));
+    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().width(), SkScalarMul(orig.rect().width(), xScale)));
+    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().height(), SkScalarMul(orig.rect().height(), yScale)));
+    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().left(), SkScalarMul(orig.rect().left(), xScale)));
+    REPORTER_ASSERT(reporter, SkScalarNearlyEqual(dst.rect().top(), SkScalarMul(orig.rect().top(), yScale)));
 }
 
-static void test_round_rect_transform(skiatest::Reporter* reporter) {
+static void test_round_rect_transform(skiatest::Reporter* reporter)
+{
     SkRRect rrect;
     {
         SkRect r = { 0, 0, kWidth, kHeight };
@@ -628,29 +690,30 @@ static void test_round_rect_transform(skiatest::Reporter* reporter) {
     }
     {
         SkRect r = { SkIntToScalar(5), SkIntToScalar(15),
-                     SkIntToScalar(27), SkIntToScalar(34) };
+            SkIntToScalar(27), SkIntToScalar(34) };
         SkVector radii[4] = { { 0, SkIntToScalar(1) },
-                              { SkIntToScalar(2), SkIntToScalar(3) },
-                              { SkIntToScalar(4), SkIntToScalar(5) },
-                              { SkIntToScalar(6), SkIntToScalar(7) } };
+            { SkIntToScalar(2), SkIntToScalar(3) },
+            { SkIntToScalar(4), SkIntToScalar(5) },
+            { SkIntToScalar(6), SkIntToScalar(7) } };
         rrect.setRectRadii(r, radii);
         test_transform_helper(reporter, rrect);
     }
 }
 
-// Test out the case where an oval already off in space is translated/scaled 
+// Test out the case where an oval already off in space is translated/scaled
 // further off into space - yielding numerical issues when the rect & radii
 // are transformed separatly
 // BUG=skia:2696
-static void test_issue_2696(skiatest::Reporter* reporter) {
+static void test_issue_2696(skiatest::Reporter* reporter)
+{
     SkRRect rrect;
     SkRect r = { 28443.8594f, 53.1428604f, 28446.7148f, 56.0000038f };
     rrect.setOval(r);
 
     SkMatrix xform;
-    xform.setAll(2.44f,  0.0f, 485411.7f,
-                 0.0f,  2.44f,   -438.7f,
-                 0.0f,   0.0f,      1.0f);
+    xform.setAll(2.44f, 0.0f, 485411.7f,
+        0.0f, 2.44f, -438.7f,
+        0.0f, 0.0f, 1.0f);
     SkRRect dst;
 
     bool success = rrect.transform(xform, &dst);
@@ -660,14 +723,15 @@ static void test_issue_2696(skiatest::Reporter* reporter) {
     SkScalar halfHeight = SkScalarHalf(dst.height());
 
     for (int i = 0; i < 4; ++i) {
-        REPORTER_ASSERT(reporter, 
-                        SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fX, halfWidth));
-        REPORTER_ASSERT(reporter, 
-                        SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fY, halfHeight));
+        REPORTER_ASSERT(reporter,
+            SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fX, halfWidth));
+        REPORTER_ASSERT(reporter,
+            SkScalarNearlyEqual(dst.radii((SkRRect::Corner)i).fY, halfHeight));
     }
 }
 
-DEF_TEST(RoundRect, reporter) {
+DEF_TEST(RoundRect, reporter)
+{
     test_round_rect_basic(reporter);
     test_round_rect_rects(reporter);
     test_round_rect_ovals(reporter);
@@ -679,4 +743,5 @@ DEF_TEST(RoundRect, reporter) {
     test_issue_2696(reporter);
     test_tricky_radii(reporter);
     test_empty_crbug_458524(reporter);
+    test_empty(reporter);
 }

@@ -123,7 +123,7 @@ static bool BrandCheck(Isolate* isolate, i::Handle<i::Object> value,
   return false;
 }
 
-void WebAssemblyCompile(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyCompile(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   ErrorThrower thrower(reinterpret_cast<i::Isolate*>(isolate),
@@ -148,7 +148,7 @@ void WebAssemblyCompile(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return_value.Set(resolver->GetPromise());
 }
 
-void WebAssemblyValidate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyValidate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   ErrorThrower thrower(reinterpret_cast<i::Isolate*>(isolate),
@@ -167,7 +167,7 @@ void WebAssemblyValidate(const v8::FunctionCallbackInfo<v8::Value>& args) {
   }
 }
 
-void WebAssemblyModule(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyModule(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   ErrorThrower thrower(reinterpret_cast<i::Isolate*>(isolate),
@@ -185,7 +185,7 @@ void WebAssemblyModule(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return_value.Set(Utils::ToLocal(module_obj.ToHandleChecked()));
 }
 
-void WebAssemblyInstance(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyInstance(const v8::FunctionCallbackInfo<v8::Value>& args) {
   HandleScope scope(args.GetIsolate());
   v8::Isolate* isolate = args.GetIsolate();
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
@@ -268,7 +268,7 @@ bool GetIntegerProperty(v8::Isolate* isolate, ErrorThrower* thrower,
 
 const int max_table_size = 1 << 26;
 
-void WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   ErrorThrower thrower(reinterpret_cast<i::Isolate*>(isolate),
@@ -327,7 +327,7 @@ void WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return_value.Set(Utils::ToLocal(table_obj));
 }
 
-void WebAssemblyMemory(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyMemory(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   HandleScope scope(isolate);
   ErrorThrower thrower(reinterpret_cast<i::Isolate*>(isolate),
@@ -373,7 +373,7 @@ void WebAssemblyMemory(const v8::FunctionCallbackInfo<v8::Value>& args) {
   args.GetReturnValue().Set(Utils::ToLocal(memory_obj));
 }
 
-void WebAssemblyTableGetLength(
+void V8CALL WebAssemblyTableGetLength(
     const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
@@ -389,7 +389,7 @@ void WebAssemblyTableGetLength(
       v8::Number::New(isolate, receiver->current_length()));
 }
 
-void WebAssemblyTableGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyTableGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   i::Handle<i::Context> i_context = Utils::OpenHandle(*context);
@@ -431,7 +431,7 @@ void WebAssemblyTableGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
   // TODO(titzer): update relevant instances.
 }
 
-void WebAssemblyTableGet(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyTableGet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   i::Handle<i::Context> i_context = Utils::OpenHandle(*context);
@@ -459,7 +459,7 @@ void WebAssemblyTableGet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return_value.Set(Utils::ToLocal(value));
 }
 
-void WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
   Local<Context> context = isolate->GetCurrentContext();
@@ -511,7 +511,7 @@ void WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   i::Handle<i::FixedArray>::cast(array)->set(i, *value);
 }
 
-void WebAssemblyMemoryGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void V8CALL WebAssemblyMemoryGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();
   i::Handle<i::Context> i_context = Utils::OpenHandle(*context);
@@ -542,7 +542,7 @@ void WebAssemblyMemoryGrow(const v8::FunctionCallbackInfo<v8::Value>& args) {
   return_value.Set(ret);
 }
 
-void WebAssemblyMemoryGetBuffer(
+void V8CALL WebAssemblyMemoryGetBuffer(
     const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Isolate* isolate = args.GetIsolate();
   Local<Context> context = isolate->GetCurrentContext();

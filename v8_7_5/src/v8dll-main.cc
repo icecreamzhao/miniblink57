@@ -12,10 +12,11 @@
 
 extern "C" {
 BOOL WINAPI DllMain(HANDLE hinstDLL,
-                    DWORD dwReason,
-                    LPVOID lpvReserved) {
-  // Do nothing.
-  return TRUE;
+    DWORD dwReason,
+    LPVOID lpvReserved)
+{
+    // Do nothing.
+    return TRUE;
 }
 }
-#endif  // V8_OS_WIN
+#endif // V8_OS_WIN

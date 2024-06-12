@@ -24,7 +24,6 @@
  *
  */
 
-#include "config.h"
 #include "core/dom/MessageChannel.h"
 
 #include "core/dom/MessagePort.h"
@@ -33,18 +32,17 @@
 
 namespace blink {
 
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(MessageChannel);
-
 static void createChannel(MessagePort* port1, MessagePort* port2)
 {
     WebMessagePortChannel* channel1;
     WebMessagePortChannel* channel2;
     Platform::current()->createMessageChannel(&channel1, &channel2);
-    ASSERT(channel1 && channel2);
+    DCHECK(channel1);
+    DCHECK(channel2);
 
     // Now entangle the proxies with the appropriate local ports.
-    port1->entangle(adoptPtr(channel2));
-    port2->entangle(adoptPtr(channel1));
+    port1->entangle(WebMessagePortChannelUniquePtr(channel2));
+    port2->entangle(WebMessagePortChannelUniquePtr(channel1));
 }
 
 MessageChannel::MessageChannel(ExecutionContext* context)
@@ -52,11 +50,6 @@ MessageChannel::MessageChannel(ExecutionContext* context)
     , m_port2(MessagePort::create(*context))
 {
     createChannel(m_port1.get(), m_port2.get());
-}
-
-MessageChannel::~MessageChannel()
-{
-
 }
 
 DEFINE_TRACE(MessageChannel)

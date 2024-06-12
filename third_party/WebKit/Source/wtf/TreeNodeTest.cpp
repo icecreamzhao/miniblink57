@@ -23,13 +23,12 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/TreeNode.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
-#include <gtest/gtest.h>
 
 namespace WTF {
 
@@ -87,7 +86,6 @@ TEST(TreeNodeTest, InsertBefore)
     EXPECT_EQ(middleChild->next(), lastChild.get());
     EXPECT_EQ(firstChild->next(), middleChild.get());
     EXPECT_EQ(lastChild->previous(), middleChild.get());
-
 }
 
 TEST(TreeNodeTest, RemoveSingle)
@@ -203,13 +201,13 @@ TEST(TreeNodeTest, TraverseNext)
     TrioWithGrandChild trio;
     trio.appendChildren();
 
-    TestTree* order[] = {
-        trio.root.get(), trio.firstChild.get(), trio.middleChild.get(),
-        trio.grandChild.get(), trio.lastChild.get()
-    };
+    TestTree* order[] = { trio.root.get(), trio.firstChild.get(),
+        trio.middleChild.get(), trio.grandChild.get(),
+        trio.lastChild.get() };
 
     unsigned orderIndex = 0;
-    for (TestTree* node = trio.root.get(); node; node = traverseNext(node), orderIndex++)
+    for (TestTree* node = trio.root.get(); node;
+         node = traverseNext(node), orderIndex++)
         EXPECT_EQ(node, order[orderIndex]);
     EXPECT_EQ(orderIndex, sizeof(order) / sizeof(TestTree*));
 }
@@ -219,17 +217,15 @@ TEST(TreeNodeTest, TraverseNextPostORder)
     TrioWithGrandChild trio;
     trio.appendChildren();
 
-
-    TestTree* order[] = {
-        trio.firstChild.get(),
-        trio.grandChild.get(), trio.middleChild.get(), trio.lastChild.get(), trio.root.get()
-    };
+    TestTree* order[] = { trio.firstChild.get(), trio.grandChild.get(),
+        trio.middleChild.get(), trio.lastChild.get(),
+        trio.root.get() };
 
     unsigned orderIndex = 0;
-    for (TestTree* node = traverseFirstPostOrder(trio.root.get()); node; node = traverseNextPostOrder(node), orderIndex++)
+    for (TestTree* node = traverseFirstPostOrder(trio.root.get()); node;
+         node = traverseNextPostOrder(node), orderIndex++)
         EXPECT_EQ(node, order[orderIndex]);
     EXPECT_EQ(orderIndex, sizeof(order) / sizeof(TestTree*));
-
 }
 
 } // namespace WTF

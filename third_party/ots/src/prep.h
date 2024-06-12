@@ -10,10 +10,10 @@
 namespace ots {
 
 struct OpenTypePREP {
-  const uint8_t *data;
-  uint32_t length;
+    const uint8_t* data;
+    uint32_t length;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_PREP_H_
+#endif // OTS_PREP_H_

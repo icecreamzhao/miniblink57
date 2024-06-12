@@ -7,20 +7,37 @@
 
 #include "core/CoreExport.h"
 #include "core/animation/EffectModel.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class EffectModel;
-class EffectModelOrDictionarySequence;
+class DictionarySequenceOrDictionary;
 class Dictionary;
 class Element;
 class ExceptionState;
+class ExecutionContext;
 
 class CORE_EXPORT EffectInput {
+    STATIC_ONLY(EffectInput);
+
 public:
-    static PassRefPtrWillBeRawPtr<EffectModel> convert(Element*, const Vector<Dictionary>& keyframeDictionaryVector, ExceptionState&);
-    static PassRefPtrWillBeRawPtr<EffectModel> convert(Element*, const EffectModelOrDictionarySequence&, ExceptionState&);
+    // TODO(alancutter): Replace Element* parameter with Document&.
+    static EffectModel* convert(Element*,
+        const DictionarySequenceOrDictionary&,
+        ExecutionContext*,
+        ExceptionState&);
+
+private:
+    static EffectModel* convertArrayForm(Element&,
+        const Vector<Dictionary>& keyframes,
+        ExecutionContext*,
+        ExceptionState&);
+    static EffectModel* convertObjectForm(Element&,
+        const Dictionary& keyframe,
+        ExecutionContext*,
+        ExceptionState&);
 };
 
 } // namespace blink

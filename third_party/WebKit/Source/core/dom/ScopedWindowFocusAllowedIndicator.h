@@ -5,52 +5,30 @@
 #ifndef ScopedWindowFocusAllowedIndicator_h
 #define ScopedWindowFocusAllowedIndicator_h
 
-#include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/ExecutionContext.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 class ScopedWindowFocusAllowedIndicator final {
+    USING_FAST_MALLOC(ScopedWindowFocusAllowedIndicator);
     WTF_MAKE_NONCOPYABLE(ScopedWindowFocusAllowedIndicator);
+
 public:
     explicit ScopedWindowFocusAllowedIndicator(ExecutionContext* executionContext)
-        : m_observer(adoptPtrWillBeNoop(new Observer(executionContext)))
+        : m_executionContext(executionContext)
     {
+        executionContext->allowWindowInteraction();
     }
     ~ScopedWindowFocusAllowedIndicator()
     {
-        m_observer->dispose();
+        m_executionContext->consumeWindowInteraction();
     }
 
 private:
-    class Observer final : public NoBaseWillBeGarbageCollectedFinalized<Observer>, public ContextLifecycleObserver {
-        WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Observer);
-    public:
-        explicit Observer(ExecutionContext* executionContext)
-            : ContextLifecycleObserver(executionContext)
-        {
-            if (executionContext)
-                executionContext->allowWindowInteraction();
-        }
-
-        void dispose()
-        {
-            if (executionContext())
-                executionContext()->consumeWindowInteraction();
-        }
-
-        DEFINE_INLINE_TRACE()
-        {
-            ContextLifecycleObserver::trace(visitor);
-        }
-    };
-
-    // In Oilpan, destructors are not allowed to touch other on-heap objects.
-    // The Observer indirection is needed to keep
-    // ScopedWindowFocusAllowedIndicator off-heap and thus allows its destructor
-    // to call executionContext()->consumeWindowInteraction().
-    OwnPtrWillBePersistent<Observer> m_observer;
+    // This doesn't create a cycle because ScopedWindowFocusAllowedIndicator
+    // is used only on a machine stack.
+    Persistent<ExecutionContext> m_executionContext;
 };
 
 } // namespace blink

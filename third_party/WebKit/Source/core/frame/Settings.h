@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003, 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All rights
+ * reserved.
  *           (C) 2006 Graham Dennis (graham.dennis@gmail.com)
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,49 +29,72 @@
 #define Settings_h
 
 #include "bindings/core/v8/V8CacheOptions.h"
+#include "bindings/core/v8/V8CacheStrategiesForCacheStorage.h"
 #include "core/CoreExport.h"
 #include "core/SettingsMacros.h"
-#include "core/css/PointerProperties.h"
 #include "core/editing/EditingBehaviorTypes.h"
 #include "core/editing/SelectionStrategy.h"
+#include "core/events/AddEventListenerOptionsDefaults.h"
 #include "core/frame/SettingsDelegate.h"
 #include "core/html/track/TextTrackKindUserPreference.h"
+#include "core/loader/FrameLoaderTypes.h"
 #include "platform/Timer.h"
 #include "platform/fonts/GenericFontFamilySettings.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/ImageAnimationPolicy.h"
 #include "platform/weborigin/KURL.h"
+#include "public/platform/PointerProperties.h"
 #include "public/platform/WebDisplayMode.h"
-#include "wtf/HashSet.h"
-#include "wtf/RefCounted.h"
+#include "public/platform/WebViewportStyle.h"
+#include <memory>
 
 namespace blink {
 
 class CORE_EXPORT Settings {
-    WTF_MAKE_NONCOPYABLE(Settings); WTF_MAKE_FAST_ALLOCATED(Settings);
-public:
-    static PassOwnPtr<Settings> create();
+    WTF_MAKE_NONCOPYABLE(Settings);
+    USING_FAST_MALLOC(Settings);
 
-    GenericFontFamilySettings& genericFontFamilySettings() { return m_genericFontFamilySettings; }
-    void notifyGenericFontFamilyChange() { invalidate(SettingsDelegate::FontFamilyChange); }
+public:
+    static std::unique_ptr<Settings> create();
+
+    GenericFontFamilySettings& genericFontFamilySettings()
+    {
+        return m_genericFontFamilySettings;
+    }
+    void notifyGenericFontFamilyChange()
+    {
+        invalidate(SettingsDelegate::FontFamilyChange);
+    }
+
+#ifdef TENCENT_FITSCREEN
+    bool getFitScreenEnabled() const
+    {
+        return m_fitScreenEnabled;
+    }
+    void setFitScreenEnabled(bool flag);
+    bool autoDetectToOpenFitScreenEnabled() { return m_autoDetectToOpenFitScreenEnabled; }
+    void setAutoDetectToOpenFitScreenEnabled(bool flag);
+
+    bool frameFlatteningEnabled() const { return m_frameFlatteningEnabled; }
+    void setFrameFlatteningEnabled(bool flag);
+#endif
 
     void setTextAutosizingEnabled(bool);
     bool textAutosizingEnabled() const { return m_textAutosizingEnabled; }
 
-    // Only set by Layout Tests, and only used if textAutosizingEnabled() returns true.
+    // Only set by Layout Tests, and only used if textAutosizingEnabled() returns
+    // true.
     void setTextAutosizingWindowSizeOverride(const IntSize&);
-    const IntSize& textAutosizingWindowSizeOverride() const { return m_textAutosizingWindowSizeOverride; }
+    const IntSize& textAutosizingWindowSizeOverride() const
+    {
+        return m_textAutosizingWindowSizeOverride;
+    }
 
     SETTINGS_GETTERS_AND_SETTERS
 
     // FIXME: This does not belong here.
     static void setMockScrollbarsEnabled(bool flag);
     static bool mockScrollbarsEnabled();
-
-    // FIXME: naming_utilities.py isn't smart enough to handle OpenGL yet.
-    // It could handle "GL", but that seems a bit overly broad.
-    void setOpenGLMultisamplingEnabled(bool flag);
-    bool openGLMultisamplingEnabled() { return m_openGLMultisamplingEnabled; }
 
     void setDelegate(SettingsDelegate*);
 
@@ -82,9 +106,14 @@ private:
     SettingsDelegate* m_delegate;
 
     GenericFontFamilySettings m_genericFontFamilySettings;
-    bool m_openGLMultisamplingEnabled : 1;
     IntSize m_textAutosizingWindowSizeOverride;
     bool m_textAutosizingEnabled : 1;
+
+#ifdef TENCENT_FITSCREEN
+    bool m_fitScreenEnabled = false;
+    bool m_autoDetectToOpenFitScreenEnabled = true;
+    bool m_frameFlatteningEnabled = false;
+#endif
 
     SETTINGS_MEMBER_VARIABLES
 };

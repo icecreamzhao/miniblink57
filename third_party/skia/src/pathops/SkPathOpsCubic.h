@@ -12,8 +12,8 @@
 #include "SkPathOpsPoint.h"
 
 struct SkDCubicPair {
-    const SkDCubic& first() const { return (const SkDCubic&) pts[0]; }
-    const SkDCubic& second() const { return (const SkDCubic&) pts[3]; }
+    const SkDCubic& first() const { return (const SkDCubic&)pts[0]; }
+    const SkDCubic& second() const { return (const SkDCubic&)pts[3]; }
     SkDPoint pts[7];
 };
 
@@ -27,19 +27,14 @@ struct SkDCubic {
         kYAxis
     };
 
-    enum CubicType {
-        kUnsplit_SkDCubicType,
-        kSplitAtLoop_SkDCubicType,
-        kSplitAtInflection_SkDCubicType,
-        kSplitAtMaxCurvature_SkDCubicType,
-    };
-
-    bool collapsed() const {
+    bool collapsed() const
+    {
         return fPts[0].approximatelyEqual(fPts[1]) && fPts[0].approximatelyEqual(fPts[2])
-                && fPts[0].approximatelyEqual(fPts[3]);
+            && fPts[0].approximatelyEqual(fPts[3]);
     }
 
-    bool controlsInside() const {
+    bool controlsInside() const
+    {
         SkDVector v01 = fPts[0] - fPts[1];
         SkDVector v02 = fPts[0] - fPts[2];
         SkDVector v03 = fPts[0] - fPts[3];
@@ -48,24 +43,33 @@ struct SkDCubic {
         return v03.dot(v01) > 0 && v03.dot(v02) > 0 && v03.dot(v13) > 0 && v03.dot(v23) > 0;
     }
 
-    static bool IsCubic() { return true; }
+    static bool IsConic() { return false; }
 
-    const SkDPoint& operator[](int n) const { SkASSERT(n >= 0 && n < kPointCount); return fPts[n]; }
-    SkDPoint& operator[](int n) { SkASSERT(n >= 0 && n < kPointCount); return fPts[n]; }
+    const SkDPoint& operator[](int n) const
+    {
+        SkASSERT(n >= 0 && n < kPointCount);
+        return fPts[n];
+    }
+    SkDPoint& operator[](int n)
+    {
+        SkASSERT(n >= 0 && n < kPointCount);
+        return fPts[n];
+    }
 
     void align(int endIndex, int ctrlIndex, SkDPoint* dstPt) const;
     double binarySearch(double min, double max, double axisIntercept, SearchAxis xAxis) const;
     double calcPrecision() const;
     SkDCubicPair chopAt(double t) const;
     static void Coefficients(const double* cubic, double* A, double* B, double* C, double* D);
-    static bool ComplexBreak(const SkPoint pts[4], SkScalar* t, CubicType* cubicType);
+    static bool ComplexBreak(const SkPoint pts[4], SkScalar* t);
     int convexHull(char order[kPointCount]) const;
 
-    void debugInit() {
+    void debugInit()
+    {
         sk_bzero(fPts, sizeof(fPts));
     }
 
-    void dump() const;  // callable from the debugger when the implementation code is linked in
+    void dump() const; // callable from the debugger when the implementation code is linked in
     void dumpID(int id) const;
     void dumpInner() const;
     SkDVector dxdyAtT(double t) const;
@@ -73,7 +77,8 @@ struct SkDCubic {
     static int FindExtrema(const double src[], double tValue[2]);
     int findInflections(double tValues[2]) const;
 
-    static int FindInflections(const SkPoint a[kPointCount], double tValues[2]) {
+    static int FindInflections(const SkPoint a[kPointCount], double tValues[2])
+    {
         SkDCubic cubic;
         return cubic.set(a).findInflections(tValues);
     }
@@ -92,7 +97,7 @@ struct SkDCubic {
     static int RootsValidT(const double A, const double B, const double C, double D, double s[3]);
 
     int searchRoots(double extremes[6], int extrema, double axisIntercept,
-                    SearchAxis xAxis, double* validRoots) const;
+        SearchAxis xAxis, double* validRoots) const;
 
     /**
      *  Return the number of valid roots (0 < root < 1) for this cubic intersecting the
@@ -105,7 +110,8 @@ struct SkDCubic {
      */
     int verticalIntersect(double xIntercept, double roots[3]) const;
 
-    const SkDCubic& set(const SkPoint pts[kPointCount]) {
+    const SkDCubic& set(const SkPoint pts[kPointCount])
+    {
         fPts[0] = pts[0];
         fPts[1] = pts[1];
         fPts[2] = pts[2];
@@ -115,7 +121,8 @@ struct SkDCubic {
 
     SkDCubic subDivide(double t1, double t2) const;
 
-    static SkDCubic SubDivide(const SkPoint a[kPointCount], double t1, double t2) {
+    static SkDCubic SubDivide(const SkPoint a[kPointCount], double t1, double t2)
+    {
         SkDCubic cubic;
         return cubic.set(a).subDivide(t1, t2);
     }
@@ -123,12 +130,13 @@ struct SkDCubic {
     void subDivide(const SkDPoint& a, const SkDPoint& d, double t1, double t2, SkDPoint p[2]) const;
 
     static void SubDivide(const SkPoint pts[kPointCount], const SkDPoint& a, const SkDPoint& d, double t1,
-                          double t2, SkDPoint p[2]) {
+        double t2, SkDPoint p[2])
+    {
         SkDCubic cubic;
         cubic.set(pts).subDivide(a, d, t1, t2, p);
     }
 
-    double top(const SkDCubic& dCurve, double startT, double endT, SkDPoint*topPt) const;
+    double top(const SkDCubic& dCurve, double startT, double endT, SkDPoint* topPt) const;
     SkDQuad toQuad() const;
 
     static const int gPrecisionUnit;
@@ -150,7 +158,8 @@ given that:
    (0, 3) ^ 2 -> (2, 1)  (1, 2) ^ 2 -> (3, 0)
    (0, 1) ^ 3 -> (3, 2)  (0, 2) ^ 3 -> (3, 1)  (1, 3) ^ 3 -> (2, 0)  (2, 3) ^ 3 -> (1, 0)
 */
-inline int other_two(int one, int two) {
+inline int other_two(int one, int two)
+{
     return 1 >> (3 - (one ^ two)) ^ 3;
 }
 

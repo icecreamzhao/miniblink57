@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\build\Release\gen\media\midi">
+      <UniqueIdentifier>{14284B49-E33E-9C04-EB99-26683FAD9D62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen\media">
+      <UniqueIdentifier>{52FE3314-F982-C3CB-9B14-7CA4A30E463D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release\gen">
+      <UniqueIdentifier>{29E660F0-E1CB-E947-C1D7-880A6332202B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build\Release">
+      <UniqueIdentifier>{89096691-F1A1-FA6F-B455-BDB155902957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\build">
+      <UniqueIdentifier>{BDA1F720-C781-E372-4272-6376E80329A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../../build/Release/gen/media/midi/midi_service.mojom-shared-internal.h">
+      <Filter>..\..\build\Release\gen\media\midi</Filter>
+    </None>
+    <CustomBuild Include="../../build/Release/gen/media/midi/midi_service.mojom-shared.cc">
+      <Filter>..\..\build\Release\gen\media\midi</Filter>
+    </CustomBuild>
+    <None Include="../../build/Release/gen/media/midi/midi_service.mojom-shared.h">
+      <Filter>..\..\build\Release\gen\media\midi</Filter>
+    </None>
+  </ItemGroup>
+</Project>

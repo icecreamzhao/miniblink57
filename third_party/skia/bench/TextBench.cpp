@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -22,7 +21,8 @@ enum FontQuality {
     kLCD,
 };
 
-static const char* fontQualityName(const SkPaint& paint) {
+static const char* fontQualityName(const SkPaint& paint)
+{
     if (!paint.isAntiAlias()) {
         return "BW";
     }
@@ -42,37 +42,41 @@ static const char* fontQualityName(const SkPaint& paint) {
         text -vs- postext - pathtext
  */
 class TextBench : public Benchmark {
-    SkPaint     fPaint;
-    SkString    fText;
-    SkString    fName;
+    SkPaint fPaint;
+    SkString fText;
+    SkString fName;
     FontQuality fFQ;
-    bool        fDoPos;
-    bool        fDoColorEmoji;
-    SkAutoTUnref<SkTypeface> fColorEmojiTypeface;
-    SkPoint*    fPos;
+    bool fDoPos;
+    bool fDoColorEmoji;
+    sk_sp<SkTypeface> fColorEmojiTypeface;
+    SkPoint* fPos;
+
 public:
     TextBench(const char text[], int ps,
-              SkColor color, FontQuality fq, bool doColorEmoji = false, bool doPos = false)
+        SkColor color, FontQuality fq, bool doColorEmoji = false, bool doPos = false)
         : fText(text)
         , fFQ(fq)
         , fDoPos(doPos)
         , fDoColorEmoji(doColorEmoji)
-        , fPos(NULL) {
+        , fPos(nullptr)
+    {
         fPaint.setAntiAlias(kBW != fq);
         fPaint.setLCDRenderText(kLCD == fq);
         fPaint.setTextSize(SkIntToScalar(ps));
         fPaint.setColor(color);
     }
 
-    virtual ~TextBench() {
+    virtual ~TextBench()
+    {
         delete[] fPos;
     }
 
 protected:
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         if (fDoColorEmoji) {
             SkASSERT(kBW == fFQ);
-            fColorEmojiTypeface.reset(GetResourceAsTypeface("/fonts/Funkster.ttf"));
+            fColorEmojiTypeface = MakeResourceAsTypeface("/fonts/Funkster.ttf");
         }
 
         if (fDoPos) {
@@ -89,17 +93,19 @@ protected:
         }
     }
 
-
-    virtual const char* onGetName() {
+    const char* onGetName() override
+    {
         fName.printf("text_%g", SkScalarToFloat(fPaint.getTextSize()));
         if (fDoPos) {
             fName.append("_pos");
         }
         fName.appendf("_%s", fontQualityName(fPaint));
-        if (SK_ColorBLACK != fPaint.getColor()) {
-            fName.appendf("_%02X", fPaint.getAlpha());
-        } else {
+        if (SK_ColorBLACK == fPaint.getColor()) {
             fName.append("_BK");
+        } else if (SK_ColorWHITE == fPaint.getColor()) {
+            fName.append("_WT");
+        } else {
+            fName.appendf("_%02X", fPaint.getAlpha());
         }
 
         if (fDoColorEmoji) {
@@ -109,7 +115,8 @@ protected:
         return fName.c_str();
     }
 
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         const SkIPoint dim = this->getSize();
         SkRandom rand;
 
@@ -150,23 +157,27 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-#define STR     "Hamburgefons"
+#define STR "Hamburgefons"
 
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW); )
-DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kBW); )
-DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kBW); )
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFFFFFF, kBW);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kBW);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFF0000, kBW);)
+DEF_BENCH(return new TextBench(STR, 16, 0x88FF0000, kBW);)
 
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kAA); )
-DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kAA); )
-DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kAA); )
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFFFFFF, kAA);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kAA);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFF0000, kAA);)
+DEF_BENCH(return new TextBench(STR, 16, 0x88FF0000, kAA);)
 
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kLCD); )
-DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kLCD); )
-DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kLCD); )
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFFFFFF, kLCD);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kLCD);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFF0000, kLCD);)
+DEF_BENCH(return new TextBench(STR, 16, 0x88FF0000, kLCD);)
 
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW, true); )
-DEF_BENCH( return new TextBench(STR, 16, 0xFFFF0000, kBW, true); )
-DEF_BENCH( return new TextBench(STR, 16, 0x88FF0000, kBW, true); )
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFFFFFF, kBW, true);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kBW, true);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFFFF0000, kBW, true);)
+DEF_BENCH(return new TextBench(STR, 16, 0x88FF0000, kBW, true);)
 
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kBW, true, true); )
-DEF_BENCH( return new TextBench(STR, 16, 0xFF000000, kAA, false, true); )
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kBW, true, true);)
+DEF_BENCH(return new TextBench(STR, 16, 0xFF000000, kAA, false, true);)

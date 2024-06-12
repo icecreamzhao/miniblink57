@@ -9,8 +9,9 @@
 
 #include "Test.h"
 
-DEF_TEST(ISize, reporter) {
-    SkISize  a, b;
+DEF_TEST(ISize, reporter)
+{
+    SkISize a, b;
 
     a.set(0, 0);
     REPORTER_ASSERT(reporter, a.isEmpty());
@@ -28,10 +29,11 @@ DEF_TEST(ISize, reporter) {
     REPORTER_ASSERT(reporter, a == b);
     REPORTER_ASSERT(reporter, !(a != b));
     REPORTER_ASSERT(reporter,
-                    a.fWidth == b.fWidth && a.fHeight == b.fHeight);
+        a.fWidth == b.fWidth && a.fHeight == b.fHeight);
 }
 
-DEF_TEST(Size, reporter) {
+DEF_TEST(Size, reporter)
+{
     SkSize a, b;
     int ix = 5;
     int iy = 3;
@@ -54,7 +56,7 @@ DEF_TEST(Size, reporter) {
     REPORTER_ASSERT(reporter, a == b);
     REPORTER_ASSERT(reporter, !(a != b));
     REPORTER_ASSERT(reporter,
-                    a.fWidth == b.fWidth && a.fHeight == b.fHeight);
+        a.fWidth == b.fWidth && a.fHeight == b.fHeight);
 
     SkISize ia;
     ia.set(ix, iy);

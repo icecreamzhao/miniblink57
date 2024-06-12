@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebSelectElement.h"
 
 #include "core/HTMLNames.h"
@@ -41,7 +40,7 @@ namespace blink {
 
 WebVector<WebElement> WebSelectElement::listItems() const
 {
-    const WillBeHeapVector<RawPtrWillBeMember<HTMLElement>>& sourceItems = constUnwrap<HTMLSelectElement>()->listItems();
+    const HeapVector<Member<HTMLElement>>& sourceItems = constUnwrap<HTMLSelectElement>()->listItems();
     WebVector<WebElement> items(sourceItems.size());
     for (size_t i = 0; i < sourceItems.size(); ++i)
         items[i] = WebElement(sourceItems[i].get());
@@ -49,18 +48,21 @@ WebVector<WebElement> WebSelectElement::listItems() const
     return items;
 }
 
-WebSelectElement::WebSelectElement(const PassRefPtrWillBeRawPtr<HTMLSelectElement>& element)
+WebSelectElement::WebSelectElement(HTMLSelectElement* element)
     : WebFormControlElement(element)
 {
 }
 
-WebSelectElement& WebSelectElement::operator=(const PassRefPtrWillBeRawPtr<HTMLSelectElement>& element)
+DEFINE_WEB_NODE_TYPE_CASTS(WebSelectElement,
+    isHTMLSelectElement(constUnwrap<Node>()));
+
+WebSelectElement& WebSelectElement::operator=(HTMLSelectElement* element)
 {
     m_private = element;
     return *this;
 }
 
-WebSelectElement::operator PassRefPtrWillBeRawPtr<HTMLSelectElement>() const
+WebSelectElement::operator HTMLSelectElement*() const
 {
     return toHTMLSelectElement(m_private.get());
 }

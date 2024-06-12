@@ -28,17 +28,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/page/PagePopupClient.h"
 
+#include "core/dom/NodeComputedStyle.h"
+#include "core/frame/LocalFrame.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
 
-#define addLiteral(literal, data)    data->append(literal, sizeof(literal) - 1)
+float PagePopupClient::zoomFactor()
+{
+    if (const ComputedStyle* style = ownerElement().computedStyle())
+        return style->effectiveZoom();
+    if (LocalFrame* frame = ownerElement().document().frame())
+        return frame->pageZoomFactor();
+    return 1;
+}
 
-void PagePopupClient::addJavaScriptString(const String& str, SharedBuffer* data)
+#define addLiteral(literal, data) data->append(literal, sizeof(literal) - 1)
+
+void PagePopupClient::addJavaScriptString(const String& str,
+    SharedBuffer* data)
 {
     addLiteral("\"", data);
     StringBuilder builder;
@@ -65,7 +76,9 @@ void PagePopupClient::addJavaScriptString(const String& str, SharedBuffer* data)
     addLiteral("\"", data);
 }
 
-void PagePopupClient::addProperty(const char* name, const String& value, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    const String& value,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": ", data);
@@ -73,7 +86,9 @@ void PagePopupClient::addProperty(const char* name, const String& value, SharedB
     addLiteral(",\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, int value, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    int value,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": ", data);
@@ -81,7 +96,9 @@ void PagePopupClient::addProperty(const char* name, int value, SharedBuffer* dat
     addLiteral(",\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, unsigned value, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    unsigned value,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": ", data);
@@ -89,7 +106,9 @@ void PagePopupClient::addProperty(const char* name, unsigned value, SharedBuffer
     addLiteral(",\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, bool value, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    bool value,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": ", data);
@@ -100,7 +119,9 @@ void PagePopupClient::addProperty(const char* name, bool value, SharedBuffer* da
     addLiteral(",\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, double value, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    double value,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": ", data);
@@ -108,7 +129,9 @@ void PagePopupClient::addProperty(const char* name, double value, SharedBuffer* 
     addLiteral(",\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, const Vector<String>& values, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    const Vector<String>& values,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": [", data);
@@ -120,7 +143,9 @@ void PagePopupClient::addProperty(const char* name, const Vector<String>& values
     addLiteral("],\n", data);
 }
 
-void PagePopupClient::addProperty(const char* name, const IntRect& rect, SharedBuffer* data)
+void PagePopupClient::addProperty(const char* name,
+    const IntRect& rect,
+    SharedBuffer* data)
 {
     data->append(name, strlen(name));
     addLiteral(": {", data);
@@ -132,4 +157,3 @@ void PagePopupClient::addProperty(const char* name, const IntRect& rect, SharedB
 }
 
 } // namespace blink
-

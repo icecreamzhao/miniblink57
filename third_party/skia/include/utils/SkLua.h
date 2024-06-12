@@ -24,15 +24,15 @@ struct SkRect;
 class SkRRect;
 class SkTextBlob;
 
-#define SkScalarToLua(x)    SkScalarToDouble(x)
-#define SkLuaToScalar(x)    SkDoubleToScalar(x)
+#define SkScalarToLua(x) SkScalarToDouble(x)
+#define SkLuaToScalar(x) SkDoubleToScalar(x)
 
 class SkLua {
 public:
     static void Load(lua_State*);
 
-    SkLua(const char termCode[] = NULL);    // creates a new L, will close it
-    SkLua(lua_State*);                      // uses L, will not close it
+    SkLua(const char termCode[] = NULL); // creates a new L, will close it
+    SkLua(lua_State*); // uses L, will not close it
     ~SkLua();
 
     lua_State* get() const { return fL; }
@@ -67,9 +67,9 @@ public:
     static int lcanvas_getReducedClipStack(lua_State* L);
 
 private:
-    lua_State*  fL;
-    SkString    fTermCode;
-    bool        fWeOwnL;
+    lua_State* fL;
+    SkString fTermCode;
+    bool fWeOwnL;
 };
 
 #endif

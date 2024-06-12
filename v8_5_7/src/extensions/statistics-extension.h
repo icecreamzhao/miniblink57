@@ -15,7 +15,7 @@ class StatisticsExtension : public v8::Extension {
   StatisticsExtension() : v8::Extension("v8/statistics", kSource) {}
   virtual v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
       v8::Isolate* isolate, v8::Local<v8::String> name);
-  static void GetCounters(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void V8CALL GetCounters(const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:
   static const char* const kSource;

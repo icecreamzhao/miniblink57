@@ -18,11 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGImageLoader.h"
 
 #include "core/events/Event.h"
-#include "core/fetch/ImageResource.h"
 #include "core/svg/SVGImageElement.h"
 
 namespace blink {
@@ -42,4 +40,4 @@ void SVGImageLoader::dispatchLoadEvent()
     }
 }
 
-}
+} // namespace blink

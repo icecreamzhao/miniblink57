@@ -30,14 +30,16 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT Matrix3DTransformOperation : public TransformOperation {
+class PLATFORM_EXPORT Matrix3DTransformOperation final
+    : public TransformOperation {
 public:
-    static PassRefPtr<Matrix3DTransformOperation> create(const TransformationMatrix& matrix)
+    static PassRefPtr<Matrix3DTransformOperation> create(
+        const TransformationMatrix& matrix)
     {
         return adoptRef(new Matrix3DTransformOperation(matrix));
     }
 
-    TransformationMatrix matrix() const {return m_matrix; }
+    TransformationMatrix matrix() const { return m_matrix; }
 
     virtual bool canBlendWith(const TransformOperation& other) const
     {
@@ -60,7 +62,10 @@ private:
         transform.multiply(TransformationMatrix(m_matrix));
     }
 
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from,
+        double progress,
+        bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> zoom(double factor) final;
 
     Matrix3DTransformOperation(const TransformationMatrix& mat)
     {

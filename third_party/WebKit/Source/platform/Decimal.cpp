@@ -28,9 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/Decimal.h"
 
+#include "wtf/Allocator.h"
 #include "wtf/MathExtras.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/text/StringBuilder.h"
@@ -42,189 +42,207 @@ namespace blink {
 
 namespace DecimalPrivate {
 
-static int const ExponentMax = 1023;
-static int const ExponentMin = -1023;
-static int const Precision = 18;
+    static int const ExponentMax = 1023;
+    static int const ExponentMin = -1023;
+    static int const Precision = 18;
 
-static const uint64_t MaxCoefficient = UINT64_C(0xDE0B6B3A763FFFF); // 999999999999999999 == 18 9's
+    static const uint64_t MaxCoefficient = UINT64_C(0xDE0B6B3A763FFFF); // 999999999999999999 == 18 9's
 
-// This class handles Decimal special values.
-class SpecialValueHandler {
-    WTF_MAKE_NONCOPYABLE(SpecialValueHandler);
-public:
-    enum HandleResult {
-        BothFinite,
-        BothInfinity,
-        EitherNaN,
-        LHSIsInfinity,
-        RHSIsInfinity,
+    // This class handles Decimal special values.
+    class SpecialValueHandler {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(SpecialValueHandler);
+
+    public:
+        enum HandleResult {
+            BothFinite,
+            BothInfinity,
+            EitherNaN,
+            LHSIsInfinity,
+            RHSIsInfinity,
+        };
+
+        SpecialValueHandler(const Decimal& lhs, const Decimal& rhs);
+        HandleResult handle();
+        Decimal value() const;
+
+    private:
+        enum Result {
+            ResultIsLHS,
+            ResultIsRHS,
+            ResultIsUnknown,
+        };
+
+        const Decimal& m_lhs;
+        const Decimal& m_rhs;
+        Result m_result;
     };
 
-    SpecialValueHandler(const Decimal& lhs, const Decimal& rhs);
-    HandleResult handle();
-    Decimal value() const;
-
-private:
-    enum Result {
-        ResultIsLHS,
-        ResultIsRHS,
-        ResultIsUnknown,
-    };
-
-    const Decimal& m_lhs;
-    const Decimal& m_rhs;
-    Result m_result;
-};
-
-SpecialValueHandler::SpecialValueHandler(const Decimal& lhs, const Decimal& rhs)
-    : m_lhs(lhs), m_rhs(rhs), m_result(ResultIsUnknown)
-{
-}
-
-SpecialValueHandler::HandleResult SpecialValueHandler::handle()
-{
-    if (m_lhs.isFinite() && m_rhs.isFinite())
-        return BothFinite;
-
-    const Decimal::EncodedData::FormatClass lhsClass = m_lhs.value().formatClass();
-    const Decimal::EncodedData::FormatClass rhsClass = m_rhs.value().formatClass();
-    if (lhsClass == Decimal::EncodedData::ClassNaN) {
-        m_result = ResultIsLHS;
-        return EitherNaN;
-    }
-
-    if (rhsClass == Decimal::EncodedData::ClassNaN) {
-        m_result = ResultIsRHS;
-        return EitherNaN;
-    }
-
-    if (lhsClass == Decimal::EncodedData::ClassInfinity)
-        return rhsClass == Decimal::EncodedData::ClassInfinity ? BothInfinity : LHSIsInfinity;
-
-    if (rhsClass == Decimal::EncodedData::ClassInfinity)
-        return RHSIsInfinity;
-
-    ASSERT_NOT_REACHED();
-    return BothFinite;
-}
-
-Decimal SpecialValueHandler::value() const
-{
-    switch (m_result) {
-    case ResultIsLHS:
-        return m_lhs;
-    case ResultIsRHS:
-        return m_rhs;
-    case ResultIsUnknown:
-    default:
-        ASSERT_NOT_REACHED();
-        return m_lhs;
-    }
-}
-
-// This class is used for 128 bit unsigned integer arithmetic.
-class UInt128 {
-public:
-    UInt128(uint64_t low, uint64_t high)
-        : m_high(high), m_low(low)
+    SpecialValueHandler::SpecialValueHandler(const Decimal& lhs, const Decimal& rhs)
+        : m_lhs(lhs)
+        , m_rhs(rhs)
+        , m_result(ResultIsUnknown)
     {
     }
 
-    UInt128& operator/=(uint32_t);
+    SpecialValueHandler::HandleResult SpecialValueHandler::handle()
+    {
+        if (m_lhs.isFinite() && m_rhs.isFinite())
+            return BothFinite;
 
-    uint64_t high() const { return m_high; }
-    uint64_t low() const { return m_low; }
+        const Decimal::EncodedData::FormatClass lhsClass = m_lhs.value().getFormatClass();
+        const Decimal::EncodedData::FormatClass rhsClass = m_rhs.value().getFormatClass();
+        if (lhsClass == Decimal::EncodedData::ClassNaN) {
+            m_result = ResultIsLHS;
+            return EitherNaN;
+        }
 
-    static UInt128 multiply(uint64_t u, uint64_t v) { return UInt128(u * v, multiplyHigh(u, v)); }
+        if (rhsClass == Decimal::EncodedData::ClassNaN) {
+            m_result = ResultIsRHS;
+            return EitherNaN;
+        }
 
-private:
-    static uint32_t highUInt32(uint64_t x) { return static_cast<uint32_t>(x >> 32); }
-    static uint32_t lowUInt32(uint64_t x) { return static_cast<uint32_t>(x & ((static_cast<uint64_t>(1) << 32) - 1)); }
-    static uint64_t makeUInt64(uint32_t low, uint32_t high) { return low | (static_cast<uint64_t>(high) << 32); }
+        if (lhsClass == Decimal::EncodedData::ClassInfinity)
+            return rhsClass == Decimal::EncodedData::ClassInfinity ? BothInfinity
+                                                                   : LHSIsInfinity;
 
-    static uint64_t multiplyHigh(uint64_t, uint64_t);
+        if (rhsClass == Decimal::EncodedData::ClassInfinity)
+            return RHSIsInfinity;
 
-    uint64_t m_high;
-    uint64_t m_low;
-};
+        ASSERT_NOT_REACHED();
+        return BothFinite;
+    }
 
-UInt128& UInt128::operator/=(const uint32_t divisor)
-{
-    ASSERT(divisor);
+    Decimal SpecialValueHandler::value() const
+    {
+        switch (m_result) {
+        case ResultIsLHS:
+            return m_lhs;
+        case ResultIsRHS:
+            return m_rhs;
+        case ResultIsUnknown:
+        default:
+            ASSERT_NOT_REACHED();
+            return m_lhs;
+        }
+    }
 
-    if (!m_high) {
-        m_low /= divisor;
+    // This class is used for 128 bit unsigned integer arithmetic.
+    class UInt128 {
+    public:
+        UInt128(uint64_t low, uint64_t high)
+            : m_high(high)
+            , m_low(low)
+        {
+        }
+
+        UInt128& operator/=(uint32_t);
+
+        uint64_t high() const { return m_high; }
+        uint64_t low() const { return m_low; }
+
+        static UInt128 multiply(uint64_t u, uint64_t v)
+        {
+            return UInt128(u * v, multiplyHigh(u, v));
+        }
+
+    private:
+        static uint32_t highUInt32(uint64_t x)
+        {
+            return static_cast<uint32_t>(x >> 32);
+        }
+        static uint32_t lowUInt32(uint64_t x)
+        {
+            return static_cast<uint32_t>(x & ((static_cast<uint64_t>(1) << 32) - 1));
+        }
+        static uint64_t makeUInt64(uint32_t low, uint32_t high)
+        {
+            return low | (static_cast<uint64_t>(high) << 32);
+        }
+
+        static uint64_t multiplyHigh(uint64_t, uint64_t);
+
+        uint64_t m_high;
+        uint64_t m_low;
+    };
+
+    UInt128& UInt128::operator/=(const uint32_t divisor)
+    {
+        ASSERT(divisor);
+
+        if (!m_high) {
+            m_low /= divisor;
+            return *this;
+        }
+
+        uint32_t dividend[4];
+        dividend[0] = lowUInt32(m_low);
+        dividend[1] = highUInt32(m_low);
+        dividend[2] = lowUInt32(m_high);
+        dividend[3] = highUInt32(m_high);
+
+        uint32_t quotient[4];
+        uint32_t remainder = 0;
+        for (int i = 3; i >= 0; --i) {
+            const uint64_t work = makeUInt64(dividend[i], remainder);
+            remainder = static_cast<uint32_t>(work % divisor);
+            quotient[i] = static_cast<uint32_t>(work / divisor);
+        }
+        m_low = makeUInt64(quotient[0], quotient[1]);
+        m_high = makeUInt64(quotient[2], quotient[3]);
         return *this;
     }
 
-    uint32_t dividend[4];
-    dividend[0] = lowUInt32(m_low);
-    dividend[1] = highUInt32(m_low);
-    dividend[2] = lowUInt32(m_high);
-    dividend[3] = highUInt32(m_high);
-
-    uint32_t quotient[4];
-    uint32_t remainder = 0;
-    for (int i = 3; i >= 0; --i) {
-        const uint64_t work = makeUInt64(dividend[i], remainder);
-        remainder = static_cast<uint32_t>(work % divisor);
-        quotient[i] = static_cast<uint32_t>(work / divisor);
+    // Returns high 64bit of 128bit product.
+    uint64_t UInt128::multiplyHigh(uint64_t u, uint64_t v)
+    {
+        const uint64_t uLow = lowUInt32(u);
+        const uint64_t uHigh = highUInt32(u);
+        const uint64_t vLow = lowUInt32(v);
+        const uint64_t vHigh = highUInt32(v);
+        const uint64_t partialProduct = uHigh * vLow + highUInt32(uLow * vLow);
+        return uHigh * vHigh + highUInt32(partialProduct) + highUInt32(uLow * vHigh + lowUInt32(partialProduct));
     }
-    m_low = makeUInt64(quotient[0], quotient[1]);
-    m_high = makeUInt64(quotient[2], quotient[3]);
-    return *this;
-}
 
-// Returns high 64bit of 128bit product.
-uint64_t UInt128::multiplyHigh(uint64_t u, uint64_t v)
-{
-    const uint64_t uLow = lowUInt32(u);
-    const uint64_t uHigh = highUInt32(u);
-    const uint64_t vLow = lowUInt32(v);
-    const uint64_t vHigh = highUInt32(v);
-    const uint64_t partialProduct = uHigh * vLow + highUInt32(uLow * vLow);
-    return uHigh * vHigh + highUInt32(partialProduct) + highUInt32(uLow * vHigh + lowUInt32(partialProduct));
-}
-
-static int countDigits(uint64_t x)
-{
-    int numberOfDigits = 0;
-    for (uint64_t powerOfTen = 1; x >= powerOfTen; powerOfTen *= 10) {
-        ++numberOfDigits;
-        if (powerOfTen >= std::numeric_limits<uint64_t>::max() / 10)
-            break;
+    static int countDigits(uint64_t x)
+    {
+        int numberOfDigits = 0;
+        for (uint64_t powerOfTen = 1; x >= powerOfTen; powerOfTen *= 10) {
+            ++numberOfDigits;
+            if (powerOfTen >= std::numeric_limits<uint64_t>::max() / 10)
+                break;
+        }
+        return numberOfDigits;
     }
-    return numberOfDigits;
-}
 
-static uint64_t scaleDown(uint64_t x, int n)
-{
-    ASSERT(n >= 0);
-    while (n > 0 && x) {
-        x /= 10;
-        --n;
+    static uint64_t scaleDown(uint64_t x, int n)
+    {
+        ASSERT(n >= 0);
+        while (n > 0 && x) {
+            x /= 10;
+            --n;
+        }
+        return x;
     }
-    return x;
-}
 
-static uint64_t scaleUp(uint64_t x, int n)
-{
-    ASSERT(n >= 0);
-    ASSERT(n < Precision);
+    static uint64_t scaleUp(uint64_t x, int n)
+    {
+        ASSERT(n >= 0);
+        ASSERT(n <= Precision);
 
-    uint64_t y = 1;
-    uint64_t z = 10;
-    for (;;) {
-        if (n & 1)
-            y = y * z;
+        uint64_t y = 1;
+        uint64_t z = 10;
+        for (;;) {
+            if (n & 1)
+                y = y * z;
 
-        n >>= 1;
-        if (!n)
-            return x * y;
+            n >>= 1;
+            if (!n)
+                return x * y;
 
-        z = z * z;
+            z = z * z;
+        }
     }
-}
 
 } // namespace DecimalPrivate
 
@@ -269,14 +287,14 @@ Decimal::EncodedData::EncodedData(Sign sign, int exponent, uint64_t coefficient)
 
 bool Decimal::EncodedData::operator==(const EncodedData& another) const
 {
-    return m_sign == another.m_sign
-        && m_formatClass == another.m_formatClass
-        && m_exponent == another.m_exponent
-        && m_coefficient == another.m_coefficient;
+    return m_sign == another.m_sign && m_formatClass == another.m_formatClass && m_exponent == another.m_exponent && m_coefficient == another.m_coefficient;
 }
 
 Decimal::Decimal(int32_t i32)
-    : m_data(i32 < 0 ? Negative : Positive, 0, i32 < 0 ? static_cast<uint64_t>(-static_cast<int64_t>(i32)) : static_cast<uint64_t>(i32))
+    : m_data(i32 < 0 ? Negative : Positive,
+        0,
+        i32 < 0 ? static_cast<uint64_t>(-static_cast<int64_t>(i32))
+                : static_cast<uint64_t>(i32))
 {
 }
 
@@ -331,15 +349,15 @@ Decimal Decimal::operator-() const
         return *this;
 
     Decimal result(*this);
-    result.m_data.setSign(invertSign(m_data.sign()));
+    result.m_data.setSign(invertSign(m_data.getSign()));
     return result;
 }
 
 Decimal Decimal::operator+(const Decimal& rhs) const
 {
     const Decimal& lhs = *this;
-    const Sign lhsSign = lhs.sign();
-    const Sign rhsSign = rhs.sign();
+    const Sign lhsSign = lhs.getSign();
+    const Sign rhsSign = rhs.getSign();
 
     SpecialValueHandler handler(lhs, rhs);
     switch (handler.handle()) {
@@ -370,14 +388,15 @@ Decimal Decimal::operator+(const Decimal& rhs) const
 
     return static_cast<int64_t>(result) >= 0
         ? Decimal(lhsSign, alignedOperands.exponent, result)
-        : Decimal(invertSign(lhsSign), alignedOperands.exponent, -static_cast<int64_t>(result));
+        : Decimal(invertSign(lhsSign), alignedOperands.exponent,
+            -static_cast<int64_t>(result));
 }
 
 Decimal Decimal::operator-(const Decimal& rhs) const
 {
     const Decimal& lhs = *this;
-    const Sign lhsSign = lhs.sign();
-    const Sign rhsSign = rhs.sign();
+    const Sign lhsSign = lhs.getSign();
+    const Sign rhsSign = rhs.getSign();
 
     SpecialValueHandler handler(lhs, rhs);
     switch (handler.handle()) {
@@ -408,14 +427,15 @@ Decimal Decimal::operator-(const Decimal& rhs) const
 
     return static_cast<int64_t>(result) >= 0
         ? Decimal(lhsSign, alignedOperands.exponent, result)
-        : Decimal(invertSign(lhsSign), alignedOperands.exponent, -static_cast<int64_t>(result));
+        : Decimal(invertSign(lhsSign), alignedOperands.exponent,
+            -static_cast<int64_t>(result));
 }
 
 Decimal Decimal::operator*(const Decimal& rhs) const
 {
     const Decimal& lhs = *this;
-    const Sign lhsSign = lhs.sign();
-    const Sign rhsSign = rhs.sign();
+    const Sign lhsSign = lhs.getSign();
+    const Sign rhsSign = rhs.getSign();
     const Sign resultSign = lhsSign == rhsSign ? Positive : Negative;
 
     SpecialValueHandler handler(lhs, rhs);
@@ -452,8 +472,8 @@ Decimal Decimal::operator*(const Decimal& rhs) const
 Decimal Decimal::operator/(const Decimal& rhs) const
 {
     const Decimal& lhs = *this;
-    const Sign lhsSign = lhs.sign();
-    const Sign rhsSign = rhs.sign();
+    const Sign lhsSign = lhs.getSign();
+    const Sign rhsSign = rhs.getSign();
     const Sign resultSign = lhsSign == rhsSign ? Positive : Negative;
 
     SpecialValueHandler handler(lhs, rhs);
@@ -569,7 +589,8 @@ Decimal Decimal::abs() const
     return result;
 }
 
-Decimal::AlignedOperands Decimal::alignOperands(const Decimal& lhs, const Decimal& rhs)
+Decimal::AlignedOperands Decimal::alignOperands(const Decimal& lhs,
+    const Decimal& rhs)
 {
     ASSERT(lhs.isFinite());
     ASSERT(rhs.isFinite());
@@ -639,13 +660,13 @@ Decimal Decimal::ceil() const
     result = scaleDown(result, numberOfDropDigits);
     if (isPositive() && !isMultiplePowersOfTen(m_data.coefficient(), numberOfDropDigits))
         ++result;
-    return Decimal(sign(), 0, result);
+    return Decimal(getSign(), 0, result);
 }
 
 Decimal Decimal::compareTo(const Decimal& rhs) const
 {
     const Decimal result(*this - rhs);
-    switch (result.m_data.formatClass()) {
+    switch (result.m_data.getFormatClass()) {
     case EncodedData::ClassInfinity:
         return result.isNegative() ? Decimal(-1) : Decimal(1);
 
@@ -680,15 +701,15 @@ Decimal Decimal::floor() const
     result = scaleDown(result, numberOfDropDigits);
     if (isNegative() && !isMultiplePowersOfTen(m_data.coefficient(), numberOfDropDigits))
         ++result;
-    return Decimal(sign(), 0, result);
+    return Decimal(getSign(), 0, result);
 }
 
 Decimal Decimal::fromDouble(double doubleValue)
 {
-    if (std::isfinite(doubleValue))
+    if (std_isfinite(doubleValue))
         return fromString(String::numberToStringECMAScript(doubleValue));
 
-    if (std::isinf(doubleValue))
+    if (std_isinf(doubleValue))
         return infinity(doubleValue < 0 ? Negative : Positive);
 
     return nan();
@@ -713,18 +734,19 @@ Decimal Decimal::fromString(const String& str)
         StateSign,
         StateStart,
         StateZero,
-    } state = StateStart;
+    } state
+        = StateStart;
 
 #define HandleCharAndBreak(expected, nextState) \
-    if (ch == expected) { \
-        state = nextState; \
-        break; \
+    if (ch == expected) {                       \
+        state = nextState;                      \
+        break;                                  \
     }
 
 #define HandleTwoCharsAndBreak(expected1, expected2, nextState) \
-    if (ch == expected1 || ch == expected2) { \
-        state = nextState; \
-        break; \
+    if (ch == expected1 || ch == expected2) {                   \
+        state = nextState;                                      \
+        break;                                                  \
     }
 
     uint64_t accumulator = 0;
@@ -899,7 +921,8 @@ Decimal Decimal::nan()
 Decimal Decimal::remainder(const Decimal& rhs) const
 {
     const Decimal quotient = *this / rhs;
-    return quotient.isSpecial() ? quotient : *this - (quotient.isNegative() ? quotient.ceil() : quotient.floor()) * rhs;
+    return quotient.isSpecial() ? quotient
+                                : *this - (quotient.isNegative() ? quotient.ceil() : quotient.floor()) * rhs;
 }
 
 Decimal Decimal::round() const
@@ -920,7 +943,7 @@ Decimal Decimal::round() const
     if (result % 10 >= 5)
         result += 10;
     result /= 10;
-    return Decimal(sign(), 0, result);
+    return Decimal(getSign(), 0, result);
 }
 
 double Decimal::toDouble() const
@@ -932,16 +955,17 @@ double Decimal::toDouble() const
     }
 
     if (isInfinity())
-        return isNegative() ? -std::numeric_limits<double>::infinity() : std::numeric_limits<double>::infinity();
+        return isNegative() ? -std::numeric_limits<double>::infinity()
+                            : std::numeric_limits<double>::infinity();
 
     return std::numeric_limits<double>::quiet_NaN();
 }
 
 String Decimal::toString() const
 {
-    switch (m_data.formatClass()) {
+    switch (m_data.getFormatClass()) {
     case EncodedData::ClassInfinity:
-        return sign() ? "-Infinity" : "Infinity";
+        return getSign() ? "-Infinity" : "Infinity";
 
     case EncodedData::ClassNaN:
         return "NaN";
@@ -956,7 +980,7 @@ String Decimal::toString() const
     }
 
     StringBuilder builder;
-    if (sign())
+    if (getSign())
         builder.append('-');
 
     int originalExponent = exponent();
@@ -998,7 +1022,7 @@ String Decimal::toString() const
             return builder.toString();
         }
 
-        builder.appendLiteral("0.");
+        builder.append("0.");
         for (int i = adjustedExponent + 1; i < 0; ++i)
             builder.append('0');
 
@@ -1025,6 +1049,17 @@ String Decimal::toString() const
 Decimal Decimal::zero(Sign sign)
 {
     return Decimal(EncodedData(sign, EncodedData::ClassZero));
+}
+
+std::ostream& operator<<(std::ostream& ostream, const Decimal& decimal)
+{
+    Decimal::EncodedData data = decimal.value();
+    return ostream << "encode("
+                   << String::number(data.coefficient()).ascii().data() << ", "
+                   << String::number(data.exponent()).ascii().data() << ", "
+                   << (data.getSign() == Decimal::Negative ? "Negative"
+                                                           : "Positive")
+                   << ")=" << decimal.toString().ascii().data();
 }
 
 } // namespace blink

@@ -32,14 +32,20 @@ class VertBench : public Benchmark {
     SkColor fColors[PTS];
     uint16_t fIdx[IDX];
 
-    static void load_2_tris(uint16_t idx[], int x, int y, int rb) {
+    static void load_2_tris(uint16_t idx[], int x, int y, int rb)
+    {
         int n = y * rb + x;
-        idx[0] = n; idx[1] = n + 1; idx[2] = rb + n + 1;
-        idx[3] = n; idx[4] = rb + n + 1; idx[5] = n + rb;
+        idx[0] = n;
+        idx[1] = n + 1;
+        idx[2] = rb + n + 1;
+        idx[3] = n;
+        idx[4] = rb + n + 1;
+        idx[5] = n + rb;
     }
 
 public:
-    VertBench() {
+    VertBench()
+    {
         const SkScalar dx = SkIntToScalar(W) / COL;
         const SkScalar dy = SkIntToScalar(H) / COL;
 
@@ -77,19 +83,21 @@ public:
 
 protected:
     virtual const char* onGetName() { return fName.c_str(); }
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    virtual void onDraw(int loops, SkCanvas* canvas)
+    {
         SkPaint paint;
         this->setupPaint(&paint);
 
         for (int i = 0; i < loops; i++) {
             canvas->drawVertices(SkCanvas::kTriangles_VertexMode, PTS,
-                                 fPts, NULL, fColors, NULL, fIdx, IDX, paint);
+                fPts, nullptr, fColors, nullptr, fIdx, IDX, paint);
         }
     }
+
 private:
     typedef Benchmark INHERITED;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return SkNEW_ARGS(VertBench, ()); )
+DEF_BENCH(return new VertBench();)

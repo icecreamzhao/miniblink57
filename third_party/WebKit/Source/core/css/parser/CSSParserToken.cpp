@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/parser/CSSParserToken.h"
 
 #include "core/css/CSSMarkup.h"
+#include "core/css/CSSPrimitiveValue.h"
 #include "core/css/parser/CSSPropertyParser.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/StringBuilder.h"
@@ -28,55 +28,63 @@ CSSParserToken::CSSParserToken(CSSParserTokenType type, UChar c)
     ASSERT(m_type == DelimiterToken);
 }
 
-CSSParserToken::CSSParserToken(CSSParserTokenType type, CSSParserString value, BlockType blockType)
+CSSParserToken::CSSParserToken(CSSParserTokenType type,
+    StringView value,
+    BlockType blockType)
     : m_type(type)
     , m_blockType(blockType)
 {
-    initValueFromCSSParserString(value);
-	m_id = -1;
+    initValueFromStringView(value);
+    m_id = -1;
 }
 
-CSSParserToken::CSSParserToken(CSSParserTokenType type, double numericValue, NumericValueType numericValueType, NumericSign sign)
+CSSParserToken::CSSParserToken(CSSParserTokenType type,
+    double numericValue,
+    NumericValueType numericValueType,
+    NumericSign sign)
     : m_type(type)
     , m_blockType(NotBlock)
     , m_numericValueType(numericValueType)
     , m_numericSign(sign)
-    , m_unit(CSSPrimitiveValue::CSS_NUMBER)
-    , m_numericValue(numericValue)
+    , m_unit(static_cast<unsigned>(CSSPrimitiveValue::UnitType::Number))
 {
     ASSERT(type == NumberToken);
+    m_numericValue = clampTo<double>(numericValue, -std::numeric_limits<float>::max(),
+        std::numeric_limits<float>::max());
 }
 
-CSSParserToken::CSSParserToken(CSSParserTokenType type, UChar32 start, UChar32 end)
+CSSParserToken::CSSParserToken(CSSParserTokenType type,
+    UChar32 start,
+    UChar32 end)
     : m_type(UnicodeRangeToken)
     , m_blockType(NotBlock)
 {
-    ASSERT_UNUSED(type, type == UnicodeRangeToken);
+    DCHECK_EQ(type, UnicodeRangeToken);
     m_unicodeRange.start = start;
     m_unicodeRange.end = end;
 }
 
-CSSParserToken::CSSParserToken(HashTokenType type, CSSParserString value)
+CSSParserToken::CSSParserToken(HashTokenType type, StringView value)
     : m_type(HashToken)
     , m_blockType(NotBlock)
     , m_hashTokenType(type)
 {
-    initValueFromCSSParserString(value);
+    initValueFromStringView(value);
 }
 
-void CSSParserToken::convertToDimensionWithUnit(CSSParserString unit)
+void CSSParserToken::convertToDimensionWithUnit(StringView unit)
 {
     ASSERT(m_type == NumberToken);
     m_type = DimensionToken;
-    initValueFromCSSParserString(unit);
-    m_unit = CSSPrimitiveValue::fromName(unit);
+    initValueFromStringView(unit);
+    m_unit = static_cast<unsigned>(CSSPrimitiveValue::stringToUnitType(unit));
 }
 
 void CSSParserToken::convertToPercentage()
 {
     ASSERT(m_type == NumberToken);
     m_type = PercentageToken;
-    m_unit = CSSPrimitiveValue::CSS_PERCENTAGE;
+    m_unit = static_cast<unsigned>(CSSPrimitiveValue::UnitType::Percentage);
 }
 
 UChar CSSParserToken::delimiter() const
@@ -113,20 +121,91 @@ CSSPropertyID CSSParserToken::parseAsUnresolvedCSSPropertyID() const
 
 CSSValueID CSSParserToken::id() const
 {
-	if (m_type != IdentToken)
-		return CSSValueInvalid;
-	if (m_id < 0)
-		m_id = cssValueKeywordID(value());
-	return static_cast<CSSValueID>(m_id);
+    if (m_type != IdentToken)
+        return CSSValueInvalid;
+    if (m_id < 0)
+        m_id = cssValueKeywordID(value());
+    return static_cast<CSSValueID>(m_id);
 }
 
 CSSValueID CSSParserToken::functionId() const
 {
-	if (m_type != FunctionToken)
-		return CSSValueInvalid;
-	if (m_id < 0)
-		m_id = cssValueKeywordID(value());
-	return static_cast<CSSValueID>(m_id);
+    if (m_type != FunctionToken)
+        return CSSValueInvalid;
+    if (m_id < 0)
+        m_id = cssValueKeywordID(value());
+    return static_cast<CSSValueID>(m_id);
+}
+
+bool CSSParserToken::hasStringBacking() const
+{
+    CSSParserTokenType tokenType = type();
+    return tokenType == IdentToken || tokenType == FunctionToken || tokenType == AtKeywordToken || tokenType == HashToken || tokenType == UrlToken || tokenType == DimensionToken || tokenType == StringToken;
+}
+
+CSSParserToken CSSParserToken::copyWithUpdatedString(
+    const StringView& string) const
+{
+    CSSParserToken copy(*this);
+    copy.initValueFromStringView(string);
+    return copy;
+}
+
+bool CSSParserToken::valueDataCharRawEqual(const CSSParserToken& other) const
+{
+    if (m_valueLength != other.m_valueLength)
+        return false;
+
+    if (m_valueDataCharRaw == other.m_valueDataCharRaw && m_valueIs8Bit == other.m_valueIs8Bit)
+        return true;
+
+    if (m_valueIs8Bit) {
+        return other.m_valueIs8Bit
+            ? equal(static_cast<const LChar*>(m_valueDataCharRaw),
+                static_cast<const LChar*>(other.m_valueDataCharRaw),
+                m_valueLength)
+            : equal(static_cast<const LChar*>(m_valueDataCharRaw),
+                static_cast<const UChar*>(other.m_valueDataCharRaw),
+                m_valueLength);
+    } else {
+        return other.m_valueIs8Bit
+            ? equal(static_cast<const UChar*>(m_valueDataCharRaw),
+                static_cast<const LChar*>(other.m_valueDataCharRaw),
+                m_valueLength)
+            : equal(static_cast<const UChar*>(m_valueDataCharRaw),
+                static_cast<const UChar*>(other.m_valueDataCharRaw),
+                m_valueLength);
+    }
+}
+
+bool CSSParserToken::operator==(const CSSParserToken& other) const
+{
+    if (m_type != other.m_type)
+        return false;
+    switch (m_type) {
+    case DelimiterToken:
+        return delimiter() == other.delimiter();
+    case HashToken:
+        if (m_hashTokenType != other.m_hashTokenType)
+            return false;
+    // fallthrough
+    case IdentToken:
+    case FunctionToken:
+    case StringToken:
+    case UrlToken:
+        return valueDataCharRawEqual(other);
+    case DimensionToken:
+        if (!valueDataCharRawEqual(other))
+            return false;
+    // fallthrough
+    case NumberToken:
+    case PercentageToken:
+        return m_numericSign == other.m_numericSign && m_numericValue == other.m_numericValue && m_numericValueType == other.m_numericValueType;
+    case UnicodeRangeToken:
+        return m_unicodeRange.start == other.m_unicodeRange.start && m_unicodeRange.end == other.m_unicodeRange.end;
+    default:
+        return true;
+    }
 }
 
 void CSSParserToken::serialize(StringBuilder& builder) const
@@ -135,22 +214,24 @@ void CSSParserToken::serialize(StringBuilder& builder) const
     // simple we handle some of the edge cases incorrectly (see comments below).
     switch (type()) {
     case IdentToken:
-        return serializeIdentifier(value(), builder);
+        serializeIdentifier(value().toString(), builder);
+        break;
     case FunctionToken:
-        serializeIdentifier(value(), builder);
+        serializeIdentifier(value().toString(), builder);
         return builder.append('(');
     case AtKeywordToken:
         builder.append('@');
-        return serializeIdentifier(value(), builder);
+        serializeIdentifier(value().toString(), builder);
+        break;
     case HashToken:
-        // This will always serialize as a hash-token with 'id' type instead of
-        // preserving the type of the input.
         builder.append('#');
-        return serializeIdentifier(value(), builder);
+        serializeIdentifier(value().toString(), builder,
+            (getHashTokenType() == HashTokenUnrestricted));
+        break;
     case UrlToken:
         builder.append("url(");
-        serializeIdentifier(value(), builder);
-        return builder.append(")");
+        serializeIdentifier(value().toString(), builder);
+        return builder.append(')');
     case DelimiterToken:
         if (delimiter() == '\\')
             return builder.append("\\\n");
@@ -164,11 +245,13 @@ void CSSParserToken::serialize(StringBuilder& builder) const
     case DimensionToken:
         // This will incorrectly serialize e.g. 4e3e2 as 4000e2
         builder.appendNumber(numericValue());
-        return serializeIdentifier(value(), builder);
+        serializeIdentifier(value().toString(), builder);
+        break;
     case UnicodeRangeToken:
-        return builder.append(String::format("U+%X-%X", unicodeRangeStart(), unicodeRangeEnd()));
+        return builder.append(
+            String::format("U+%X-%X", unicodeRangeStart(), unicodeRangeEnd()));
     case StringToken:
-        return serializeString(value(), builder);
+        return serializeString(value().toString(), builder);
 
     case IncludeMatchToken:
         return builder.append("~=");
@@ -217,25 +300,5 @@ void CSSParserToken::serialize(StringBuilder& builder) const
         return;
     }
 }
-
-bool CSSParserToken::hasStringBacking() const
-{
-	CSSParserTokenType tokenType = type();
-	return tokenType == IdentToken
-		|| tokenType == FunctionToken
-		|| tokenType == AtKeywordToken
-		|| tokenType == HashToken
-		|| tokenType == UrlToken
-		|| tokenType == DimensionToken
-		|| tokenType == StringToken;
-}
-
-CSSParserToken CSSParserToken::copyWithUpdatedString(const CSSParserString& parserString) const
-{
-	CSSParserToken copy(*this);
-	copy.initValueFromCSSParserString(parserString);
-	return copy;
-}
-
 
 } // namespace blink

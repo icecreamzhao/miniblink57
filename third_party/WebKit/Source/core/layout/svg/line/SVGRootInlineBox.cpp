@@ -21,19 +21,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/line/SVGRootInlineBox.h"
 
-#include "core/layout/svg/LayoutSVGInlineText.h"
+#include "core/layout/api/LineLayoutAPIShim.h"
+#include "core/layout/api/LineLayoutBlockFlow.h"
+#include "core/layout/api/LineLayoutSVGInlineText.h"
 #include "core/layout/svg/LayoutSVGText.h"
+#include "core/layout/svg/SVGTextLayoutEngine.h"
 #include "core/layout/svg/line/SVGInlineFlowBox.h"
 #include "core/layout/svg/line/SVGInlineTextBox.h"
 #include "core/paint/SVGRootInlineBoxPainter.h"
-#include "core/svg/SVGTextPathElement.h"
 
 namespace blink {
 
-void SVGRootInlineBox::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset, LayoutUnit, LayoutUnit)
+void SVGRootInlineBox::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset,
+    LayoutUnit,
+    LayoutUnit) const
 {
     SVGRootInlineBoxPainter(*this).paint(paintInfo, paintOffset);
 }
@@ -47,87 +51,67 @@ void SVGRootInlineBox::markDirty()
 
 void SVGRootInlineBox::computePerCharacterLayoutInformation()
 {
-    LayoutSVGText& textRoot = toLayoutSVGText(block());
+    LayoutSVGText& textRoot = toLayoutSVGText(*LineLayoutAPIShim::layoutObjectFrom(block()));
 
-    Vector<SVGTextLayoutAttributes*>& layoutAttributes = textRoot.layoutAttributes();
-    if (layoutAttributes.isEmpty())
+    const Vector<LayoutSVGInlineText*>& descendantTextNodes = textRoot.descendantTextNodes();
+    if (descendantTextNodes.isEmpty())
         return;
 
     if (textRoot.needsReordering())
-        reorderValueLists(layoutAttributes);
+        reorderValueLists();
 
     // Perform SVG text layout phase two (see SVGTextLayoutEngine for details).
-    SVGTextLayoutEngine characterLayout(layoutAttributes);
+    SVGTextLayoutEngine characterLayout(descendantTextNodes);
     characterLayout.layoutCharactersInTextBoxes(this);
 
     // Perform SVG text layout phase three (see SVGTextChunkBuilder for details).
     characterLayout.finishLayout();
 
     // Perform SVG text layout phase four
-    // Position & resize all SVGInlineText/FlowBoxes in the inline box tree, resize the root box as well as the LayoutSVGText parent block.
-    LayoutRect childRect;
-    layoutChildBoxes(this, &childRect);
-    layoutRootBox(childRect);
+    // Position & resize all SVGInlineText/FlowBoxes in the inline box tree,
+    // resize the root box as well as the LayoutSVGText parent block.
+    layoutInlineBoxes(*this);
+
+    // Let the HTML block space originate from the local SVG coordinate space.
+    LineLayoutBlockFlow parentBlock = block();
+    parentBlock.setLocation(LayoutPoint());
+    // The width could be any value, but set it so that a line box will mirror
+    // within the childRect when its coordinates are converted between physical
+    // block direction and flipped block direction, for ease of understanding of
+    // flipped coordinates. The height doesn't matter.
+    parentBlock.setSize(LayoutSize(x() * 2 + width(), LayoutUnit()));
+
+    setLineTopBottomPositions(logicalTop(), logicalBottom(), logicalTop(),
+        logicalBottom());
 }
 
-void SVGRootInlineBox::layoutChildBoxes(InlineFlowBox* start, LayoutRect* childRect)
+LayoutRect SVGRootInlineBox::layoutInlineBoxes(InlineBox& box)
 {
-    for (InlineBox* child = start->firstChild(); child; child = child->nextOnLine()) {
-        LayoutRect boxRect;
-        if (child->isSVGInlineTextBox()) {
-            ASSERT(child->layoutObject().isSVGInlineText());
-
-            SVGInlineTextBox* textBox = toSVGInlineTextBox(child);
-            boxRect = textBox->calculateBoundaries();
-            textBox->setX(boxRect.x());
-            textBox->setY(boxRect.y());
-            textBox->setLogicalWidth(boxRect.width());
-            textBox->setLogicalHeight(boxRect.height());
-        } else {
-            // Skip generated content.
-            if (!child->layoutObject().node())
-                continue;
-
-            SVGInlineFlowBox* flowBox = toSVGInlineFlowBox(child);
-            layoutChildBoxes(flowBox);
-
-            boxRect = flowBox->calculateBoundaries();
-            flowBox->setX(boxRect.x());
-            flowBox->setY(boxRect.y());
-            flowBox->setLogicalWidth(boxRect.width());
-            flowBox->setLogicalHeight(boxRect.height());
-        }
-        if (childRect)
-            childRect->unite(boxRect);
-    }
-}
-
-void SVGRootInlineBox::layoutRootBox(const LayoutRect& childRect)
-{
-    LayoutBlockFlow& parentBlock = block();
-
-    // Finally, assign the root block position, now that all content is laid out.
-    LayoutRect boundingRect = childRect;
-    parentBlock.setLocation(boundingRect.location());
-    parentBlock.setSize(boundingRect.size());
-
-    // Position all children relative to the parent block.
-    for (InlineBox* child = firstChild(); child; child = child->nextOnLine()) {
-        // Skip generated content.
-        if (!child->layoutObject().node())
-            continue;
-        child->move(LayoutSize(-childRect.x(), -childRect.y()));
+    LayoutRect rect;
+    if (box.isSVGInlineTextBox()) {
+        rect = toSVGInlineTextBox(box).calculateBoundaries();
+    } else {
+        for (InlineBox* child = toInlineFlowBox(box).firstChild(); child;
+             child = child->nextOnLine())
+            rect.unite(layoutInlineBoxes(*child));
     }
 
-    // Position ourselves.
-    setX(0);
-    setY(0);
-    setLogicalWidth(childRect.width());
-    setLogicalHeight(childRect.height());
-    setLineTopBottomPositions(0, boundingRect.height(), 0, boundingRect.height());
+    box.setX(rect.x());
+    box.setY(rect.y());
+    box.setLogicalWidth(box.isHorizontal() ? rect.width() : rect.height());
+    LayoutUnit logicalHeight = box.isHorizontal() ? rect.height() : rect.width();
+    if (box.isSVGInlineTextBox())
+        toSVGInlineTextBox(box).setLogicalHeight(logicalHeight);
+    else if (box.isSVGInlineFlowBox())
+        toSVGInlineFlowBox(box).setLogicalHeight(logicalHeight);
+    else
+        toSVGRootInlineBox(box).setLogicalHeight(logicalHeight);
+
+    return rect;
 }
 
-InlineBox* SVGRootInlineBox::closestLeafChildForPosition(const LayoutPoint& point)
+InlineBox* SVGRootInlineBox::closestLeafChildForPosition(
+    const LayoutPoint& point)
 {
     InlineBox* firstLeaf = firstLeafChild();
     InlineBox* lastLeaf = lastLeafChild();
@@ -145,90 +129,82 @@ InlineBox* SVGRootInlineBox::closestLeafChildForPosition(const LayoutPoint& poin
             continue;
 
         closestLeaf = leaf;
-        if (point.x() < leaf->left() + leaf->logicalWidth())
+        if (point.x() < leaf->x() + leaf->logicalWidth())
             return leaf;
     }
 
     return closestLeaf ? closestLeaf : lastLeaf;
 }
 
-static inline void swapItemsInLayoutAttributes(SVGTextLayoutAttributes* firstAttributes, SVGTextLayoutAttributes* lastAttributes, unsigned firstPosition, unsigned lastPosition)
+static inline void swapPositioningValuesInTextBoxes(
+    SVGInlineTextBox* firstTextBox,
+    SVGInlineTextBox* lastTextBox)
 {
-    SVGCharacterDataMap::iterator itFirst = firstAttributes->characterDataMap().find(firstPosition + 1);
-    SVGCharacterDataMap::iterator itLast = lastAttributes->characterDataMap().find(lastPosition + 1);
-    bool firstPresent = itFirst != firstAttributes->characterDataMap().end();
-    bool lastPresent = itLast != lastAttributes->characterDataMap().end();
+    LineLayoutSVGInlineText firstTextNode = LineLayoutSVGInlineText(firstTextBox->getLineLayoutItem());
+    SVGCharacterDataMap& firstCharacterDataMap = firstTextNode.characterDataMap();
+    SVGCharacterDataMap::iterator itFirst = firstCharacterDataMap.find(firstTextBox->start() + 1);
+    if (itFirst == firstCharacterDataMap.end())
+        return;
+    LineLayoutSVGInlineText lastTextNode = LineLayoutSVGInlineText(lastTextBox->getLineLayoutItem());
+    SVGCharacterDataMap& lastCharacterDataMap = lastTextNode.characterDataMap();
+    SVGCharacterDataMap::iterator itLast = lastCharacterDataMap.find(lastTextBox->start() + 1);
+    if (itLast == lastCharacterDataMap.end())
+        return;
     // We only want to perform the swap if both inline boxes are absolutely
     // positioned.
-    if (!firstPresent || !lastPresent)
-        return;
     std::swap(itFirst->value, itLast->value);
 }
 
-static inline void findFirstAndLastAttributesInVector(Vector<SVGTextLayoutAttributes*>& attributes, LayoutSVGInlineText* firstContext, LayoutSVGInlineText* lastContext, SVGTextLayoutAttributes*& first, SVGTextLayoutAttributes*& last)
+static inline void reverseInlineBoxRangeAndValueListsIfNeeded(
+    Vector<InlineBox*>::iterator first,
+    Vector<InlineBox*>::iterator last)
 {
-    first = 0;
-    last = 0;
-
-    unsigned attributesSize = attributes.size();
-    for (unsigned i = 0; i < attributesSize; ++i) {
-        SVGTextLayoutAttributes* current = attributes[i];
-        if (!first && firstContext == current->context())
-            first = current;
-        if (!last && lastContext == current->context())
-            last = current;
-        if (first && last)
-            break;
-    }
-
-    ASSERT(first);
-    ASSERT(last);
-}
-
-static inline void reverseInlineBoxRangeAndValueListsIfNeeded(void* userData, Vector<InlineBox*>::iterator first, Vector<InlineBox*>::iterator last)
-{
-    ASSERT(userData);
-    Vector<SVGTextLayoutAttributes*>& attributes = *reinterpret_cast<Vector<SVGTextLayoutAttributes*>*>(userData);
-
-    // This is a copy of std::reverse(first, last). It additionally assures that the metrics map within the layoutObjects belonging to the InlineBoxes are reordered as well.
-    while (true)  {
+    // This is a copy of std::reverse(first, last). It additionally assures
+    // that the metrics map within the layoutObjects belonging to the
+    // InlineBoxes are reordered as well.
+    while (true) {
         if (first == last || first == --last)
             return;
 
-        if (!(*last)->isSVGInlineTextBox() || !(*first)->isSVGInlineTextBox()) {
-            InlineBox* temp = *first;
-            *first = *last;
-            *last = temp;
-            ++first;
-            continue;
-        }
+        if ((*last)->isSVGInlineTextBox() && (*first)->isSVGInlineTextBox()) {
+            SVGInlineTextBox* firstTextBox = toSVGInlineTextBox(*first);
+            SVGInlineTextBox* lastTextBox = toSVGInlineTextBox(*last);
 
-        SVGInlineTextBox* firstTextBox = toSVGInlineTextBox(*first);
-        SVGInlineTextBox* lastTextBox = toSVGInlineTextBox(*last);
-
-        // Reordering is only necessary for BiDi text that is _absolutely_ positioned.
-        if (firstTextBox->len() == 1 && firstTextBox->len() == lastTextBox->len()) {
-            LayoutSVGInlineText& firstContext = toLayoutSVGInlineText(firstTextBox->layoutObject());
-            LayoutSVGInlineText& lastContext = toLayoutSVGInlineText(lastTextBox->layoutObject());
-
-            SVGTextLayoutAttributes* firstAttributes = nullptr;
-            SVGTextLayoutAttributes* lastAttributes = nullptr;
-            findFirstAndLastAttributesInVector(attributes, &firstContext, &lastContext, firstAttributes, lastAttributes);
-            swapItemsInLayoutAttributes(firstAttributes, lastAttributes, firstTextBox->start(), lastTextBox->start());
+            // Reordering is only necessary for BiDi text that is _absolutely_
+            // positioned.
+            if (firstTextBox->len() == 1 && firstTextBox->len() == lastTextBox->len())
+                swapPositioningValuesInTextBoxes(firstTextBox, lastTextBox);
         }
 
         InlineBox* temp = *first;
         *first = *last;
         *last = temp;
-
         ++first;
     }
 }
 
-void SVGRootInlineBox::reorderValueLists(Vector<SVGTextLayoutAttributes*>& attributes)
+void SVGRootInlineBox::reorderValueLists()
 {
     Vector<InlineBox*> leafBoxesInLogicalOrder;
-    collectLeafBoxesInLogicalOrder(leafBoxesInLogicalOrder, reverseInlineBoxRangeAndValueListsIfNeeded, &attributes);
+    collectLeafBoxesInLogicalOrder(leafBoxesInLogicalOrder,
+        reverseInlineBoxRangeAndValueListsIfNeeded);
+}
+
+bool SVGRootInlineBox::nodeAtPoint(HitTestResult& result,
+    const HitTestLocation& locationInContainer,
+    const LayoutPoint& accumulatedOffset,
+    LayoutUnit lineTop,
+    LayoutUnit lineBottom)
+{
+    for (InlineBox* leaf = firstLeafChild(); leaf; leaf = leaf->nextLeafChild()) {
+        if (!leaf->isSVGInlineTextBox())
+            continue;
+        if (leaf->nodeAtPoint(result, locationInContainer, accumulatedOffset,
+                lineTop, lineBottom))
+            return true;
+    }
+
+    return false;
 }
 
 } // namespace blink

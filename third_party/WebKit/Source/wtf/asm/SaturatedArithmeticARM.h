@@ -14,9 +14,9 @@ ALWAYS_INLINE int32_t saturatedAddition(int32_t a, int32_t b)
     int32_t result;
 
     asm("qadd %[output],%[first],%[second]"
-        :   [output]  "=r"  (result)
-        :   [first]   "r"   (a),
-            [second]  "r"   (b));
+        : [output] "=r"(result)
+        : [first] "r"(a),
+        [second] "r"(b));
 
     return result;
 }
@@ -26,9 +26,9 @@ ALWAYS_INLINE int32_t saturatedSubtraction(int32_t a, int32_t b)
     int32_t result;
 
     asm("qsub %[output],%[first],%[second]"
-        :   [output] "=r"  (result)
-        :   [first]  "r"   (a),
-            [second] "r"   (b));
+        : [output] "=r"(result)
+        : [first] "r"(a),
+        [second] "r"(b));
 
     return result;
 }
@@ -38,7 +38,7 @@ inline int getMaxSaturatedSetResultForTesting(int FractionalShift)
     // For ARM Asm version the set function maxes out to the biggest
     // possible integer part with the fractional part zero'd out.
     // e.g. 0x7fffffc0.
-    return std::numeric_limits<int>::max() & ~((1 << FractionalShift)-1);
+    return std::numeric_limits<int>::max() & ~((1 << FractionalShift) - 1);
 }
 
 inline int getMinSaturatedSetResultForTesting(int FractionalShift)
@@ -46,11 +46,12 @@ inline int getMinSaturatedSetResultForTesting(int FractionalShift)
     return std::numeric_limits<int>::min();
 }
 
-ALWAYS_INLINE int saturatedSet(int value, int FractionalShift)
+template <int FractionalShift>
+ALWAYS_INLINE int saturatedSet(int value)
 {
     // Figure out how many bits are left for storing the integer part of
     // the fixed point number, and saturate our input to that
-    const int saturate = 32 - FractionalShift;
+    enum { Saturate = 32 - FractionalShift };
 
     int result;
 
@@ -64,23 +65,23 @@ ALWAYS_INLINE int saturatedSet(int value, int FractionalShift)
 
     asm("ssat %[output],%[saturate],%[value]\n\t"
         "lsl  %[output],%[shift]"
-        :   [output]    "=r"  (result)
-        :   [value]     "r"   (value),
-            [saturate]  "n"   (saturate),
-            [shift]     "n"   (FractionalShift));
+        : [output] "=r"(result)
+        : [value] "r"(value),
+        [saturate] "n"(Saturate),
+        [shift] "n"(FractionalShift));
 
     return result;
 }
 
-
-ALWAYS_INLINE int saturatedSet(unsigned value, int FractionalShift)
+template <int FractionalShift>
+ALWAYS_INLINE int saturatedSet(unsigned value)
 {
     // Here we are being passed an unsigned value to saturate,
     // even though the result is returned as a signed integer. The ARM
     // instruction for unsigned saturation therefore needs to be given one
     // less bit (i.e. the sign bit) for the saturation to work correctly; hence
     // the '31' below.
-    const int saturate = 31 - FractionalShift;
+    enum { Saturate = 31 - FractionalShift };
 
     // The following ARM code will Saturate the passed value to the number of
     // bits used for the whole part of the fixed point representation, then
@@ -94,10 +95,10 @@ ALWAYS_INLINE int saturatedSet(unsigned value, int FractionalShift)
 
     asm("usat %[output],%[saturate],%[value]\n\t"
         "lsl  %[output],%[shift]"
-        :   [output]    "=r"  (result)
-        :   [value]     "r"   (value),
-            [saturate]  "n"   (saturate),
-            [shift]     "n"   (FractionalShift));
+        : [output] "=r"(result)
+        : [value] "r"(value),
+        [saturate] "n"(Saturate),
+        [shift] "n"(FractionalShift));
 
     return result;
 }

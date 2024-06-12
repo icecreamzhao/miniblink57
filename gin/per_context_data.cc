@@ -11,23 +11,26 @@
 namespace gin {
 
 PerContextData::PerContextData(ContextHolder* context_holder,
-                               v8::Local<v8::Context> context)
-    : context_holder_(context_holder),
-      runner_(NULL) {
-  context->SetAlignedPointerInEmbedderData(
-      kPerContextDataStartIndex + kEmbedderNativeGin, this);
+    v8::Local<v8::Context> context)
+    : context_holder_(context_holder)
+    , runner_(NULL)
+{
+    context->SetAlignedPointerInEmbedderData(
+        kPerContextDataStartIndex + kEmbedderNativeGin, this);
 }
 
-PerContextData::~PerContextData() {
-  v8::HandleScope handle_scope(context_holder_->isolate());
-  context_holder_->context()->SetAlignedPointerInEmbedderData(
-      kPerContextDataStartIndex + kEmbedderNativeGin, NULL);
+PerContextData::~PerContextData()
+{
+    v8::HandleScope handle_scope(context_holder_->isolate());
+    context_holder_->context()->SetAlignedPointerInEmbedderData(
+        kPerContextDataStartIndex + kEmbedderNativeGin, NULL);
 }
 
 // static
-PerContextData* PerContextData::From(v8::Local<v8::Context> context) {
-  return static_cast<PerContextData*>(
-      context->GetAlignedPointerFromEmbedderData(kEncodedValueIndex));
+PerContextData* PerContextData::From(v8::Local<v8::Context> context)
+{
+    return static_cast<PerContextData*>(
+        context->GetAlignedPointerFromEmbedderData(kEncodedValueIndex));
 }
 
-}  // namespace gin
+} // namespace gin

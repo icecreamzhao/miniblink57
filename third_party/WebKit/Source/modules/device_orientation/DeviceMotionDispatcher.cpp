@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/device_orientation/DeviceMotionDispatcher.h"
 
 #include "modules/device_orientation/DeviceMotionController.h"
@@ -39,17 +38,14 @@ namespace blink {
 
 DeviceMotionDispatcher& DeviceMotionDispatcher::instance()
 {
-    DEFINE_STATIC_LOCAL(Persistent<DeviceMotionDispatcher>, deviceMotionDispatcher, (new DeviceMotionDispatcher()));
-    return *deviceMotionDispatcher;
+    DEFINE_STATIC_LOCAL(DeviceMotionDispatcher, deviceMotionDispatcher,
+        (new DeviceMotionDispatcher));
+    return deviceMotionDispatcher;
 }
 
-DeviceMotionDispatcher::DeviceMotionDispatcher()
-{
-}
+DeviceMotionDispatcher::DeviceMotionDispatcher() { }
 
-DeviceMotionDispatcher::~DeviceMotionDispatcher()
-{
-}
+DeviceMotionDispatcher::~DeviceMotionDispatcher() { }
 
 DEFINE_TRACE(DeviceMotionDispatcher)
 {
@@ -59,16 +55,17 @@ DEFINE_TRACE(DeviceMotionDispatcher)
 
 void DeviceMotionDispatcher::startListening()
 {
-    Platform::current()->startListening(WebPlatformEventDeviceMotion, this);
+    Platform::current()->startListening(WebPlatformEventTypeDeviceMotion, this);
 }
 
 void DeviceMotionDispatcher::stopListening()
 {
-    Platform::current()->stopListening(WebPlatformEventDeviceMotion);
+    Platform::current()->stopListening(WebPlatformEventTypeDeviceMotion);
     m_lastDeviceMotionData.clear();
 }
 
-void DeviceMotionDispatcher::didChangeDeviceMotion(const WebDeviceMotionData& motion)
+void DeviceMotionDispatcher::didChangeDeviceMotion(
+    const WebDeviceMotionData& motion)
 {
     m_lastDeviceMotionData = DeviceMotionData::create(motion);
     notifyControllers();

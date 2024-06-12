@@ -5,46 +5,45 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkGraphics.h"
 #include "SkTypeface.h"
+#include "gm.h"
 
 // GM to stress the GPU font cache
 
 static SkScalar draw_string(SkCanvas* canvas, const SkString& text, SkScalar x,
-                           SkScalar y, const SkPaint& paint) {
+    SkScalar y, const SkPaint& paint)
+{
     canvas->drawText(text.c_str(), text.size(), x, y, paint);
     return x + paint.measureText(text.c_str(), text.size());
 }
 
 class FontCacheGM : public skiagm::GM {
 public:
-    FontCacheGM() {
-        fTypefaces[0] = NULL;
-        fTypefaces[1] = NULL;
-    }
-
-    virtual ~FontCacheGM() {
-        SkSafeUnref(fTypefaces[0]);
-        SkSafeUnref(fTypefaces[1]);
-    }
+    FontCacheGM() { }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("fontcache");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(1280, 640);
     }
 
-    void onOnceBeforeDraw() override {
-        fTypefaces[0] = sk_tool_utils::create_portable_typeface("serif", SkTypeface::kItalic);
-        fTypefaces[1] = sk_tool_utils::create_portable_typeface("sans-serif", SkTypeface::kItalic);
+    void onOnceBeforeDraw() override
+    {
+        fTypefaces[0] = sk_tool_utils::create_portable_typeface("serif",
+            SkFontStyle::FromOldStyle(SkTypeface::kItalic));
+        fTypefaces[1] = sk_tool_utils::create_portable_typeface("sans-serif",
+            SkFontStyle::FromOldStyle(SkTypeface::kItalic));
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setLCDRenderText(true);
@@ -76,11 +75,10 @@ protected:
     }
 
 private:
-    SkTypeface* fTypefaces[2];
+    sk_sp<SkTypeface> fTypefaces[2];
     typedef GM INHERITED;
 };
 
-
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(FontCacheGM); )
+DEF_GM(return new FontCacheGM;)

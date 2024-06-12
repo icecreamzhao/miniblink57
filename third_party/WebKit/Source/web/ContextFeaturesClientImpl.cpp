@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/ContextFeaturesClientImpl.h"
 
 #include "core/dom/Document.h"
@@ -39,25 +38,27 @@
 
 namespace blink {
 
-class ContextFeaturesCache final : public NoBaseWillBeGarbageCollectedFinalized<ContextFeaturesCache>, public WillBeHeapSupplement<Document> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ContextFeaturesCache);
+class ContextFeaturesCache final
+    : public GarbageCollectedFinalized<ContextFeaturesCache>,
+      public Supplement<Document> {
+    USING_GARBAGE_COLLECTED_MIXIN(ContextFeaturesCache);
+
 public:
     class Entry {
     public:
-        enum Value {
-            IsEnabled,
+        enum Value { IsEnabled,
             IsDisabled,
-            NeedsRefresh
-        };
+            NeedsRefresh };
 
         Entry()
             : m_value(NeedsRefresh)
             , m_defaultValue(false)
-        { }
+        {
+        }
 
         bool isEnabled() const
         {
-            ASSERT(m_value != NeedsRefresh);
+            DCHECK_NE(m_value, NeedsRefresh);
             return m_value == IsEnabled;
         }
 
@@ -74,7 +75,8 @@ public:
 
     private:
         Value m_value;
-        bool m_defaultValue; // Needs to be traked as a part of the signature since it can be changed dynamically.
+        bool m_defaultValue; // Needs to be traked as a part of the signature since
+            // it can be changed dynamically.
     };
 
     static const char* supplementName();
@@ -83,18 +85,20 @@ public:
     Entry& entryFor(ContextFeatures::FeatureType type)
     {
         size_t index = static_cast<size_t>(type);
-        ASSERT_WITH_SECURITY_IMPLICATION(index < ContextFeatures::FeatureTypeSize);
+        SECURITY_DCHECK(index < ContextFeatures::FeatureTypeSize);
         return m_entries[index];
     }
 
     void validateAgainst(Document*);
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        WillBeHeapSupplement<Document>::trace(visitor);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { Supplement<Document>::trace(visitor); }
 
 private:
+    explicit ContextFeaturesCache(Document& document)
+        : Supplement<Document>(document)
+    {
+    }
+
     String m_domain;
     Entry m_entries[ContextFeatures::FeatureTypeSize];
 };
@@ -106,10 +110,11 @@ const char* ContextFeaturesCache::supplementName()
 
 ContextFeaturesCache& ContextFeaturesCache::from(Document& document)
 {
-    ContextFeaturesCache* cache = static_cast<ContextFeaturesCache*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
+    ContextFeaturesCache* cache = static_cast<ContextFeaturesCache*>(
+        Supplement<Document>::from(document, supplementName()));
     if (!cache) {
-        cache = new ContextFeaturesCache();
-        WillBeHeapSupplement<Document>::provideTo(document, supplementName(), adoptPtrWillBeNoop(cache));
+        cache = new ContextFeaturesCache(document);
+        Supplement<Document>::provideTo(document, supplementName(), cache);
     }
 
     return *cache;
@@ -117,7 +122,7 @@ ContextFeaturesCache& ContextFeaturesCache::from(Document& document)
 
 void ContextFeaturesCache::validateAgainst(Document* document)
 {
-    String currentDomain = document->securityOrigin()->domain();
+    String currentDomain = document->getSecurityOrigin()->domain();
     if (currentDomain == m_domain)
         return;
     m_domain = currentDomain;
@@ -125,9 +130,11 @@ void ContextFeaturesCache::validateAgainst(Document* document)
         m_entries[i] = Entry();
 }
 
-bool ContextFeaturesClientImpl::isEnabled(Document* document, ContextFeatures::FeatureType type, bool defaultValue)
+bool ContextFeaturesClientImpl::isEnabled(Document* document,
+    ContextFeatures::FeatureType type,
+    bool defaultValue)
 {
-    ASSERT(document);
+    DCHECK(document);
     ContextFeaturesCache::Entry& cache = ContextFeaturesCache::from(*document).entryFor(type);
     if (cache.needsRefresh(defaultValue))
         cache.set(askIfIsEnabled(document, type, defaultValue), defaultValue);
@@ -136,11 +143,14 @@ bool ContextFeaturesClientImpl::isEnabled(Document* document, ContextFeatures::F
 
 void ContextFeaturesClientImpl::urlDidChange(Document* document)
 {
-    ASSERT(document);
+    DCHECK(document);
     ContextFeaturesCache::from(*document).validateAgainst(document);
 }
 
-bool ContextFeaturesClientImpl::askIfIsEnabled(Document* document, ContextFeatures::FeatureType type, bool defaultValue)
+bool ContextFeaturesClientImpl::askIfIsEnabled(
+    Document* document,
+    ContextFeatures::FeatureType type,
+    bool defaultValue)
 {
     WebLocalFrameImpl* frame = WebLocalFrameImpl::fromFrame(document->frame());
     if (!frame || !frame->contentSettingsClient())

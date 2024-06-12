@@ -13,39 +13,43 @@
 namespace v8 {
 namespace internal {
 
-CodeEventListener::LogEventsAndTags Logger::ToNativeByScript(
-    CodeEventListener::LogEventsAndTags tag, Script script) {
-  if (script->type() != Script::TYPE_NATIVE) return tag;
-  switch (tag) {
-    case CodeEventListener::FUNCTION_TAG:
-      return CodeEventListener::NATIVE_FUNCTION_TAG;
-    case CodeEventListener::LAZY_COMPILE_TAG:
-      return CodeEventListener::NATIVE_LAZY_COMPILE_TAG;
-    case CodeEventListener::SCRIPT_TAG:
-      return CodeEventListener::NATIVE_SCRIPT_TAG;
-    default:
-      return tag;
-  }
-}
-
-void Logger::CallEventLogger(Isolate* isolate, const char* name, StartEnd se,
-                             bool expose_to_api) {
-  if (isolate->event_logger()) {
-    if (isolate->event_logger() == DefaultEventLoggerSentinel) {
-      LOG(isolate, TimerEvent(se, name));
-    } else if (expose_to_api) {
-      isolate->event_logger()(name, se);
+    CodeEventListener::LogEventsAndTags Logger::ToNativeByScript(
+        CodeEventListener::LogEventsAndTags tag, Script script)
+    {
+        if (script->type() != Script::TYPE_NATIVE)
+            return tag;
+        switch (tag) {
+        case CodeEventListener::FUNCTION_TAG:
+            return CodeEventListener::NATIVE_FUNCTION_TAG;
+        case CodeEventListener::LAZY_COMPILE_TAG:
+            return CodeEventListener::NATIVE_LAZY_COMPILE_TAG;
+        case CodeEventListener::SCRIPT_TAG:
+            return CodeEventListener::NATIVE_SCRIPT_TAG;
+        default:
+            return tag;
+        }
     }
-  }
-}
 
-template <class TimerEvent>
-void TimerEventScope<TimerEvent>::LogTimerEvent(Logger::StartEnd se) {
-  Logger::CallEventLogger(isolate_, TimerEvent::name(), se,
-                          TimerEvent::expose_to_api());
-}
+    void Logger::CallEventLogger(Isolate* isolate, const char* name, StartEnd se,
+        bool expose_to_api)
+    {
+        if (isolate->event_logger()) {
+            if (isolate->event_logger() == DefaultEventLoggerSentinel) {
+                LOG(isolate, TimerEvent(se, name));
+            } else if (expose_to_api) {
+                isolate->event_logger()(name, se);
+            }
+        }
+    }
 
-}  // namespace internal
-}  // namespace v8
+    template <class TimerEvent>
+    void TimerEventScope<TimerEvent>::LogTimerEvent(Logger::StartEnd se)
+    {
+        Logger::CallEventLogger(isolate_, TimerEvent::name(), se,
+            TimerEvent::expose_to_api());
+    }
 
-#endif  // V8_LOG_INL_H_
+} // namespace internal
+} // namespace v8
+
+#endif // V8_LOG_INL_H_

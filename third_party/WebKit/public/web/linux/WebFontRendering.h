@@ -32,7 +32,8 @@
 #define WebFontRendering_h
 
 #include "../../platform/WebCommon.h"
-#include <SkFontHost.h>
+#include "../../platform/WebString.h"
+#include <SkFontMgr.h>
 #include <SkPaint.h>
 
 namespace blink {
@@ -41,15 +42,15 @@ class WebFontRendering {
 public:
     // Set global font renderering preferences.
 
+    BLINK_EXPORT static void setSkiaFontManager(sk_sp<SkFontMgr>);
     BLINK_EXPORT static void setHinting(SkPaint::Hinting);
     BLINK_EXPORT static void setAutoHint(bool);
     BLINK_EXPORT static void setUseBitmaps(bool);
     BLINK_EXPORT static void setAntiAlias(bool);
     BLINK_EXPORT static void setSubpixelRendering(bool);
     BLINK_EXPORT static void setSubpixelPositioning(bool);
-    BLINK_EXPORT static void setLCDOrder(SkFontHost::LCDOrder);
-    BLINK_EXPORT static void setLCDOrientation(SkFontHost::LCDOrientation);
     BLINK_EXPORT static void setDefaultFontSize(int);
+    BLINK_EXPORT static void setSystemFontFamily(const WebString&);
 };
 
 } // namespace blink

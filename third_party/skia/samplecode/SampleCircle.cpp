@@ -1,21 +1,22 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
-#include "SkDevice.h"
 #include "SkPaint.h"
+#include "SkPath.h"
+#include "SkView.h"
 
 // ensure that we don't accidentally screw up the bounds when the oval is
 // fractional, and the impl computes the center and radii, and uses them to
 // reconstruct the edges of the circle.
 // see bug# 1504910
-static void test_circlebounds(SkCanvas*) {
+static void test_circlebounds(SkCanvas*)
+{
     SkRect r = { 1.39999998f, 1, 21.3999996f, 21 };
     SkPath p;
     p.addOval(r);
@@ -29,14 +30,16 @@ public:
     static const SkScalar ANIM_RAD;
     SkScalar fDX, fDY, fRAD;
 
-    CircleView() {
+    CircleView()
+    {
         fDX = fDY = fRAD = 0;
         fN = 3;
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Circles");
             return true;
@@ -44,7 +47,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void circle(SkCanvas* canvas, int width, bool aa) {
+    void circle(SkCanvas* canvas, int width, bool aa)
+    {
         SkPaint paint;
 
         paint.setAntiAlias(aa);
@@ -60,7 +64,8 @@ protected:
         }
     }
 
-    void drawSix(SkCanvas* canvas, SkScalar dx, SkScalar dy) {
+    void drawSix(SkCanvas* canvas, SkScalar dx, SkScalar dy)
+    {
         for (int width = -1; width <= 1; width++) {
             canvas->save();
             circle(canvas, width, false);
@@ -71,7 +76,8 @@ protected:
         }
     }
 
-    static void make_poly(SkPath* path, int n) {
+    static void make_poly(SkPath* path, int n)
+    {
         if (n <= 0) {
             return;
         }
@@ -87,17 +93,19 @@ protected:
         path->close();
     }
 
-    static void rotate(SkCanvas* canvas, SkScalar angle, SkScalar px, SkScalar py) {
+    static void rotate(SkCanvas* canvas, SkScalar angle, SkScalar px, SkScalar py)
+    {
         canvas->translate(-px, -py);
         canvas->rotate(angle);
         canvas->translate(px, py);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
-//        canvas->drawCircle(250, 250, 220, paint);
+        //        canvas->drawCircle(250, 250, 220, paint);
         SkMatrix matrix;
         matrix.setScale(SkIntToScalar(100), SkIntToScalar(100));
         matrix.postTranslate(SkIntToScalar(200), SkIntToScalar(200));

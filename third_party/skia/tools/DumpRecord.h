@@ -18,7 +18,7 @@ class SkCanvas;
  *        first column.
  */
 void DumpRecord(const SkRecord& record,
-                SkCanvas* canvas,
-                bool timeWithCommand);
+    SkCanvas* canvas,
+    bool timeWithCommand);
 
-#endif  // DumpRecord_DEFINED
+#endif // DumpRecord_DEFINED

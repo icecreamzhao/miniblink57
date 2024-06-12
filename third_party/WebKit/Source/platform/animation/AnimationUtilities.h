@@ -30,8 +30,11 @@
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntPoint.h"
+#include "ui/gfx/geometry/cubic_bezier.h"
 #include "wtf/MathExtras.h"
-#include "wtf/TypeTraits.h"
+
+#include <algorithm>
+#include <type_traits>
 
 namespace blink {
 
@@ -44,8 +47,10 @@ inline int blend(int from, int to, double progress)
 template <typename T>
 inline T blend(T from, T to, double progress)
 {
-    static_assert(WTF::IsInteger<T>::value, "blend can only be used with integer types");
-    return clampTo<T>(round(to > from ? from + (to - from) * progress : from - (from - to) * progress));
+    static_assert(std::is_integral<T>::value,
+        "blend can only be used with integer types");
+    return clampTo<T>(round(to > from ? from + (to - from) * progress
+                                      : from - (from - to) * progress));
 }
 
 inline double blend(double from, double to, double progress)
@@ -60,23 +65,32 @@ inline float blend(float from, float to, double progress)
 
 inline LayoutUnit blend(LayoutUnit from, LayoutUnit to, double progress)
 {
-    return from + (to - from) * progress;
+    return LayoutUnit(from + (to - from) * progress);
 }
 
-inline IntPoint blend(const IntPoint& from, const IntPoint& to, double progress)
+inline IntPoint blend(const IntPoint& from,
+    const IntPoint& to,
+    double progress)
 {
-    return IntPoint(blend(from.x(), to.x(), progress), blend(from.y(), to.y(), progress));
+    return IntPoint(blend(from.x(), to.x(), progress),
+        blend(from.y(), to.y(), progress));
 }
 
-inline FloatPoint blend(const FloatPoint& from, const FloatPoint& to, double progress)
+inline FloatPoint blend(const FloatPoint& from,
+    const FloatPoint& to,
+    double progress)
 {
-    return FloatPoint(blend(from.x(), to.x(), progress), blend(from.y(), to.y(), progress));
+    return FloatPoint(blend(from.x(), to.x(), progress),
+        blend(from.y(), to.y(), progress));
 }
 
-// Calculates the accuracy for evaluating a timing function for an animation with the specified duration.
+static const double kBezierEpsilon = 1e-7;
+
+// Calculates the accuracy for evaluating a timing function for an animation
+// with the specified duration.
 inline double accuracyForDuration(double duration)
 {
-    return 1.0 / (200.0 * duration);
+    return std::max(1.0 / (200.0 * duration), kBezierEpsilon);
 }
 
 } // namespace blink

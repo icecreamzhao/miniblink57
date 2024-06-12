@@ -28,431 +28,491 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebURLRequest.h"
 
-#include "platform/exported/WebURLRequestPrivate.h"
+#include "platform/RuntimeEnabledFeatures.h"
 #include "platform/network/ResourceRequest.h"
+#include "public/platform/WebCachePolicy.h"
 #include "public/platform/WebHTTPBody.h"
 #include "public/platform/WebHTTPHeaderVisitor.h"
 #include "public/platform/WebSecurityOrigin.h"
 #include "public/platform/WebURL.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 namespace {
 
-class ExtraDataContainer : public ResourceRequest::ExtraData {
-public:
-    static PassRefPtr<ExtraDataContainer> create(WebURLRequest::ExtraData* extraData) { return adoptRef(new ExtraDataContainer(extraData)); }
+    class ExtraDataContainer : public ResourceRequest::ExtraData {
+    public:
+        static PassRefPtr<ExtraDataContainer> create(
+            WebURLRequest::ExtraData* extraData)
+        {
+            return adoptRef(new ExtraDataContainer(extraData));
+        }
 
-    ~ExtraDataContainer() override {}
+        ~ExtraDataContainer() override { }
 
-    WebURLRequest::ExtraData* extraData() const { return m_extraData.get(); }
+        WebURLRequest::ExtraData* getExtraData() const { return m_extraData.get(); }
 
-private:
-    explicit ExtraDataContainer(WebURLRequest::ExtraData* extraData)
-        : m_extraData(adoptPtr(extraData))
-    {
-    }
+    private:
+        explicit ExtraDataContainer(WebURLRequest::ExtraData* extraData)
+            : m_extraData(WTF::wrapUnique(extraData))
+        {
+        }
 
-    OwnPtr<WebURLRequest::ExtraData> m_extraData;
-};
+        std::unique_ptr<WebURLRequest::ExtraData> m_extraData;
+    };
 
 } // namespace
 
-// The standard implementation of WebURLRequestPrivate, which maintains
-// ownership of a ResourceRequest instance.
-class WebURLRequestPrivateImpl : public WebURLRequestPrivate {
-public:
-    WebURLRequestPrivateImpl()
+// The purpose of this struct is to permit allocating a ResourceRequest on the
+// heap, which is otherwise disallowed by DISALLOW_NEW_EXCEPT_PLACEMENT_NEW
+// annotation on ResourceRequest.
+struct WebURLRequest::ResourceRequestContainer {
+    ResourceRequestContainer() { }
+    explicit ResourceRequestContainer(const ResourceRequest& r)
+        : resourceRequest(r)
     {
-        m_resourceRequest = &m_resourceRequestAllocation;
     }
 
-    WebURLRequestPrivateImpl(const WebURLRequestPrivate* p)
-        : m_resourceRequestAllocation(*p->m_resourceRequest)
-    {
-        m_resourceRequest = &m_resourceRequestAllocation;
-    }
-
-    virtual void dispose() { delete this; }
-
-private:
-    virtual ~WebURLRequestPrivateImpl() { }
-
-    ResourceRequest m_resourceRequestAllocation;
+    ResourceRequest resourceRequest;
 };
 
-void WebURLRequest::initialize()
+WebURLRequest::~WebURLRequest() { }
+
+WebURLRequest::WebURLRequest()
+    : m_ownedResourceRequest(new ResourceRequestContainer())
+    , m_resourceRequest(&m_ownedResourceRequest->resourceRequest)
 {
-    assign(new WebURLRequestPrivateImpl());
 }
 
-void WebURLRequest::reset()
+WebURLRequest::WebURLRequest(const WebURLRequest& r)
+    : m_ownedResourceRequest(
+        new ResourceRequestContainer(*r.m_resourceRequest))
+    , m_resourceRequest(&m_ownedResourceRequest->resourceRequest)
 {
-    assign(0);
 }
 
-void WebURLRequest::assign(const WebURLRequest& r)
+WebURLRequest::WebURLRequest(const WebURL& url)
+    : WebURLRequest()
 {
+    setURL(url);
+}
+
+WebURLRequest& WebURLRequest::operator=(const WebURLRequest& r)
+{
+    // Copying subclasses that have different m_resourceRequest ownership
+    // semantics via this operator is just not supported.
+    DCHECK(m_ownedResourceRequest);
+    DCHECK(m_resourceRequest);
     if (&r != this)
-        assign(r.m_private ? new WebURLRequestPrivateImpl(r.m_private) : 0);
+        *m_resourceRequest = *r.m_resourceRequest;
+    return *this;
 }
 
 bool WebURLRequest::isNull() const
 {
-    return !m_private || m_private->m_resourceRequest->isNull();
+    return m_resourceRequest->isNull();
 }
 
 WebURL WebURLRequest::url() const
 {
-    return m_private->m_resourceRequest->url();
+    return m_resourceRequest->url();
 }
 
 void WebURLRequest::setURL(const WebURL& url)
 {
-    m_private->m_resourceRequest->setURL(url);
+    m_resourceRequest->setURL(url);
 }
 
 WebURL WebURLRequest::firstPartyForCookies() const
 {
-    return m_private->m_resourceRequest->firstPartyForCookies();
+    return m_resourceRequest->firstPartyForCookies();
 }
 
-void WebURLRequest::setFirstPartyForCookies(const WebURL& firstPartyForCookies)
+void WebURLRequest::setFirstPartyForCookies(
+    const WebURL& firstPartyForCookies)
 {
-    m_private->m_resourceRequest->setFirstPartyForCookies(firstPartyForCookies);
+    m_resourceRequest->setFirstPartyForCookies(firstPartyForCookies);
 }
 
 WebSecurityOrigin WebURLRequest::requestorOrigin() const
 {
-    return m_private->m_resourceRequest->requestorOrigin();
+    return m_resourceRequest->requestorOrigin();
 }
 
-void WebURLRequest::setRequestorOrigin(const WebSecurityOrigin& requestorOrigin)
+void WebURLRequest::setRequestorOrigin(
+    const WebSecurityOrigin& requestorOrigin)
 {
-    m_private->m_resourceRequest->setRequestorOrigin(requestorOrigin);
+    m_resourceRequest->setRequestorOrigin(requestorOrigin);
 }
 
 bool WebURLRequest::allowStoredCredentials() const
 {
-    return m_private->m_resourceRequest->allowStoredCredentials();
+    return m_resourceRequest->allowStoredCredentials();
 }
 
 void WebURLRequest::setAllowStoredCredentials(bool allowStoredCredentials)
 {
-    m_private->m_resourceRequest->setAllowStoredCredentials(allowStoredCredentials);
+    m_resourceRequest->setAllowStoredCredentials(allowStoredCredentials);
 }
 
-WebURLRequest::CachePolicy WebURLRequest::cachePolicy() const
+WebCachePolicy WebURLRequest::getCachePolicy() const
 {
-    return static_cast<WebURLRequest::CachePolicy>(
-        m_private->m_resourceRequest->cachePolicy());
+    return m_resourceRequest->getCachePolicy();
 }
 
-void WebURLRequest::setCachePolicy(CachePolicy cachePolicy)
+void WebURLRequest::setCachePolicy(WebCachePolicy cachePolicy)
 {
-    m_private->m_resourceRequest->setCachePolicy(
-        static_cast<ResourceRequestCachePolicy>(cachePolicy));
+    m_resourceRequest->setCachePolicy(cachePolicy);
 }
 
 WebString WebURLRequest::httpMethod() const
 {
-    return m_private->m_resourceRequest->httpMethod();
+    return m_resourceRequest->httpMethod();
 }
 
 void WebURLRequest::setHTTPMethod(const WebString& httpMethod)
 {
-    m_private->m_resourceRequest->setHTTPMethod(httpMethod);
+    m_resourceRequest->setHTTPMethod(httpMethod);
 }
 
 WebString WebURLRequest::httpHeaderField(const WebString& name) const
 {
-    return m_private->m_resourceRequest->httpHeaderField(name);
+    return m_resourceRequest->httpHeaderField(name);
 }
 
-void WebURLRequest::setHTTPHeaderField(const WebString& name, const WebString& value)
+void WebURLRequest::setHTTPHeaderField(const WebString& name,
+    const WebString& value)
 {
-    RELEASE_ASSERT(!equalIgnoringCase((WTF::String)name, "referer"));
-    m_private->m_resourceRequest->setHTTPHeaderField(name, value);
+    RELEASE_ASSERT(!equalIgnoringCase(name, "referer"));
+    m_resourceRequest->setHTTPHeaderField(name, value);
 }
 
-void WebURLRequest::setHTTPReferrer(const WebString& referrer, WebReferrerPolicy referrerPolicy)
+void WebURLRequest::setHTTPReferrer(const WebString& webReferrer,
+    WebReferrerPolicy referrerPolicy)
 {
-    m_private->m_resourceRequest->setHTTPReferrer(Referrer(referrer, static_cast<ReferrerPolicy>(referrerPolicy)));
+    // WebString doesn't have the distinction between empty and null. We use
+    // the null WTFString for referrer.
+    ASSERT(Referrer::noReferrer() == String());
+    String referrer = webReferrer.isEmpty() ? Referrer::noReferrer() : String(webReferrer);
+    m_resourceRequest->setHTTPReferrer(
+        Referrer(referrer, static_cast<ReferrerPolicy>(referrerPolicy)));
 }
 
-void WebURLRequest::addHTTPHeaderField(const WebString& name, const WebString& value)
+void WebURLRequest::addHTTPHeaderField(const WebString& name,
+    const WebString& value)
 {
-    m_private->m_resourceRequest->addHTTPHeaderField(name, value);
+    m_resourceRequest->addHTTPHeaderField(name, value);
 }
 
 void WebURLRequest::clearHTTPHeaderField(const WebString& name)
 {
-    m_private->m_resourceRequest->clearHTTPHeaderField(name);
+    m_resourceRequest->clearHTTPHeaderField(name);
 }
 
 void WebURLRequest::visitHTTPHeaderFields(WebHTTPHeaderVisitor* visitor) const
 {
-    const HTTPHeaderMap& map = m_private->m_resourceRequest->httpHeaderFields();
+    const HTTPHeaderMap& map = m_resourceRequest->httpHeaderFields();
     for (HTTPHeaderMap::const_iterator it = map.begin(); it != map.end(); ++it)
         visitor->visitHeader(it->key, it->value);
 }
 
 WebHTTPBody WebURLRequest::httpBody() const
 {
-    return WebHTTPBody(m_private->m_resourceRequest->httpBody());
+    // TODO(mkwst): This is wrong, as it means that we're producing the body
+    // before any ServiceWorker has a chance to operate, which means we're
+    // revealing data to the SW that we ought to be hiding. Baby steps.
+    // https://crbug.com/599597
+    if (m_resourceRequest->attachedCredential())
+        return WebHTTPBody(m_resourceRequest->attachedCredential());
+    return WebHTTPBody(m_resourceRequest->httpBody());
 }
 
 void WebURLRequest::setHTTPBody(const WebHTTPBody& httpBody)
 {
-    m_private->m_resourceRequest->setHTTPBody(httpBody);
+    m_resourceRequest->setHTTPBody(httpBody);
+}
+
+WebHTTPBody WebURLRequest::attachedCredential() const
+{
+    return WebHTTPBody(m_resourceRequest->attachedCredential());
+}
+
+void WebURLRequest::setAttachedCredential(
+    const WebHTTPBody& attachedCredential)
+{
+    m_resourceRequest->setAttachedCredential(attachedCredential);
 }
 
 bool WebURLRequest::reportUploadProgress() const
 {
-    return m_private->m_resourceRequest->reportUploadProgress();
+    return m_resourceRequest->reportUploadProgress();
 }
 
 void WebURLRequest::setReportUploadProgress(bool reportUploadProgress)
 {
-    m_private->m_resourceRequest->setReportUploadProgress(reportUploadProgress);
+    m_resourceRequest->setReportUploadProgress(reportUploadProgress);
 }
 
 void WebURLRequest::setReportRawHeaders(bool reportRawHeaders)
 {
-    m_private->m_resourceRequest->setReportRawHeaders(reportRawHeaders);
+    m_resourceRequest->setReportRawHeaders(reportRawHeaders);
 }
 
 bool WebURLRequest::reportRawHeaders() const
 {
-    return m_private->m_resourceRequest->reportRawHeaders();
+    return m_resourceRequest->reportRawHeaders();
 }
 
-WebURLRequest::RequestContext WebURLRequest::requestContext() const
+WebURLRequest::RequestContext WebURLRequest::getRequestContext() const
 {
-    return m_private->m_resourceRequest->requestContext();
+    return m_resourceRequest->requestContext();
 }
 
-WebURLRequest::FrameType WebURLRequest::frameType() const
+WebURLRequest::FrameType WebURLRequest::getFrameType() const
 {
-    return m_private->m_resourceRequest->frameType();
+    return m_resourceRequest->frameType();
 }
 
-WebReferrerPolicy WebURLRequest::referrerPolicy() const
+WebReferrerPolicy WebURLRequest::getReferrerPolicy() const
 {
-    return static_cast<WebReferrerPolicy>(m_private->m_resourceRequest->referrerPolicy());
+    return static_cast<WebReferrerPolicy>(m_resourceRequest->getReferrerPolicy());
 }
 
-void WebURLRequest::addHTTPOriginIfNeeded(const WebString& origin)
+void WebURLRequest::addHTTPOriginIfNeeded(const WebSecurityOrigin& origin)
 {
-    m_private->m_resourceRequest->addHTTPOriginIfNeeded(origin);
+    m_resourceRequest->addHTTPOriginIfNeeded(origin.get());
 }
 
 bool WebURLRequest::hasUserGesture() const
 {
-    return m_private->m_resourceRequest->hasUserGesture();
+    return m_resourceRequest->hasUserGesture();
 }
 
 void WebURLRequest::setHasUserGesture(bool hasUserGesture)
 {
-    m_private->m_resourceRequest->setHasUserGesture(hasUserGesture);
+    m_resourceRequest->setHasUserGesture(hasUserGesture);
 }
 
 void WebURLRequest::setRequestContext(RequestContext requestContext)
 {
-    m_private->m_resourceRequest->setRequestContext(requestContext);
+    m_resourceRequest->setRequestContext(requestContext);
 }
 
 void WebURLRequest::setFrameType(FrameType frameType)
 {
-    m_private->m_resourceRequest->setFrameType(frameType);
+    m_resourceRequest->setFrameType(frameType);
 }
 
 int WebURLRequest::requestorID() const
 {
-    return m_private->m_resourceRequest->requestorID();
+    return m_resourceRequest->requestorID();
 }
 
 void WebURLRequest::setRequestorID(int requestorID)
 {
-    m_private->m_resourceRequest->setRequestorID(requestorID);
+    m_resourceRequest->setRequestorID(requestorID);
 }
 
 int WebURLRequest::requestorProcessID() const
 {
-    return m_private->m_resourceRequest->requestorProcessID();
+    return m_resourceRequest->requestorProcessID();
 }
 
 void WebURLRequest::setRequestorProcessID(int requestorProcessID)
 {
-    m_private->m_resourceRequest->setRequestorProcessID(requestorProcessID);
+    m_resourceRequest->setRequestorProcessID(requestorProcessID);
 }
 
 int WebURLRequest::appCacheHostID() const
 {
-    return m_private->m_resourceRequest->appCacheHostID();
+    return m_resourceRequest->appCacheHostID();
 }
 
 void WebURLRequest::setAppCacheHostID(int appCacheHostID)
 {
-    m_private->m_resourceRequest->setAppCacheHostID(appCacheHostID);
+    m_resourceRequest->setAppCacheHostID(appCacheHostID);
 }
 
 bool WebURLRequest::downloadToFile() const
 {
-    return m_private->m_resourceRequest->downloadToFile();
+    return m_resourceRequest->downloadToFile();
 }
 
 void WebURLRequest::setDownloadToFile(bool downloadToFile)
 {
-    m_private->m_resourceRequest->setDownloadToFile(downloadToFile);
+    m_resourceRequest->setDownloadToFile(downloadToFile);
 }
 
 bool WebURLRequest::useStreamOnResponse() const
 {
-    return m_private->m_resourceRequest->useStreamOnResponse();
+    return m_resourceRequest->useStreamOnResponse();
 }
 
 void WebURLRequest::setUseStreamOnResponse(bool useStreamOnResponse)
 {
-    m_private->m_resourceRequest->setUseStreamOnResponse(useStreamOnResponse);
+    m_resourceRequest->setUseStreamOnResponse(useStreamOnResponse);
 }
 
-bool WebURLRequest::skipServiceWorker() const
+WebURLRequest::SkipServiceWorker WebURLRequest::skipServiceWorker() const
 {
-    return m_private->m_resourceRequest->skipServiceWorker();
+    return m_resourceRequest->skipServiceWorker();
 }
 
-void WebURLRequest::setSkipServiceWorker(bool skipServiceWorker)
+void WebURLRequest::setSkipServiceWorker(
+    WebURLRequest::SkipServiceWorker skipServiceWorker)
 {
-    m_private->m_resourceRequest->setSkipServiceWorker(skipServiceWorker);
+    m_resourceRequest->setSkipServiceWorker(skipServiceWorker);
 }
 
 bool WebURLRequest::shouldResetAppCache() const
 {
-    return m_private->m_resourceRequest->shouldResetAppCache();
+    return m_resourceRequest->shouldResetAppCache();
 }
 
 void WebURLRequest::setShouldResetAppCache(bool setShouldResetAppCache)
 {
-    m_private->m_resourceRequest->setShouldResetAppCache(setShouldResetAppCache);
+    m_resourceRequest->setShouldResetAppCache(setShouldResetAppCache);
 }
 
-WebURLRequest::FetchRequestMode WebURLRequest::fetchRequestMode() const
+WebURLRequest::FetchRequestMode WebURLRequest::getFetchRequestMode() const
 {
-    return m_private->m_resourceRequest->fetchRequestMode();
+    return m_resourceRequest->fetchRequestMode();
 }
 
 void WebURLRequest::setFetchRequestMode(WebURLRequest::FetchRequestMode mode)
 {
-    return m_private->m_resourceRequest->setFetchRequestMode(mode);
+    return m_resourceRequest->setFetchRequestMode(mode);
 }
 
-WebURLRequest::FetchCredentialsMode WebURLRequest::fetchCredentialsMode() const
+WebURLRequest::FetchCredentialsMode WebURLRequest::getFetchCredentialsMode()
+    const
 {
-    return m_private->m_resourceRequest->fetchCredentialsMode();
+    return m_resourceRequest->fetchCredentialsMode();
 }
 
-void WebURLRequest::setFetchCredentialsMode(WebURLRequest::FetchCredentialsMode mode)
+void WebURLRequest::setFetchCredentialsMode(
+    WebURLRequest::FetchCredentialsMode mode)
 {
-    return m_private->m_resourceRequest->setFetchCredentialsMode(mode);
+    return m_resourceRequest->setFetchCredentialsMode(mode);
 }
 
-WebURLRequest::ExtraData* WebURLRequest::extraData() const
+WebURLRequest::FetchRedirectMode WebURLRequest::getFetchRedirectMode() const
 {
-    RefPtr<ResourceRequest::ExtraData> data = m_private->m_resourceRequest->extraData();
+    return m_resourceRequest->fetchRedirectMode();
+}
+
+void WebURLRequest::setFetchRedirectMode(
+    WebURLRequest::FetchRedirectMode redirect)
+{
+    return m_resourceRequest->setFetchRedirectMode(redirect);
+}
+
+WebURLRequest::PreviewsState WebURLRequest::getPreviewsState() const
+{
+    return m_resourceRequest->previewsState();
+}
+
+void WebURLRequest::setPreviewsState(
+    WebURLRequest::PreviewsState previewsState)
+{
+    return m_resourceRequest->setPreviewsState(previewsState);
+}
+
+WebURLRequest::ExtraData* WebURLRequest::getExtraData() const
+{
+    RefPtr<ResourceRequest::ExtraData> data = m_resourceRequest->getExtraData();
     if (!data)
         return 0;
-    return static_cast<ExtraDataContainer*>(data.get())->extraData();
+    return static_cast<ExtraDataContainer*>(data.get())->getExtraData();
 }
 
 void WebURLRequest::setExtraData(WebURLRequest::ExtraData* extraData)
 {
-    m_private->m_resourceRequest->setExtraData(ExtraDataContainer::create(extraData));
+    m_resourceRequest->setExtraData(ExtraDataContainer::create(extraData));
 }
 
 ResourceRequest& WebURLRequest::toMutableResourceRequest()
 {
-    ASSERT(m_private);
-    ASSERT(m_private->m_resourceRequest);
-
-    return *m_private->m_resourceRequest;
+    DCHECK(m_resourceRequest);
+    return *m_resourceRequest;
 }
 
-WebURLRequest::Priority WebURLRequest::priority() const
+WebURLRequest::Priority WebURLRequest::getPriority() const
 {
-    return static_cast<WebURLRequest::Priority>(
-        m_private->m_resourceRequest->priority());
+    return static_cast<WebURLRequest::Priority>(m_resourceRequest->priority());
 }
 
 void WebURLRequest::setPriority(WebURLRequest::Priority priority)
 {
-    m_private->m_resourceRequest->setPriority(
-        static_cast<ResourceLoadPriority>(priority));
+    m_resourceRequest->setPriority(static_cast<ResourceLoadPriority>(priority));
 }
 
 bool WebURLRequest::checkForBrowserSideNavigation() const
 {
-    return m_private->m_resourceRequest->checkForBrowserSideNavigation();
+    return m_resourceRequest->checkForBrowserSideNavigation();
 }
 
 void WebURLRequest::setCheckForBrowserSideNavigation(bool check)
 {
-    m_private->m_resourceRequest->setCheckForBrowserSideNavigation(check);
+    m_resourceRequest->setCheckForBrowserSideNavigation(check);
 }
 
 double WebURLRequest::uiStartTime() const
 {
-    return m_private->m_resourceRequest->uiStartTime();
+    return m_resourceRequest->uiStartTime();
 }
 
-void WebURLRequest::setUiStartTime(double time)
+void WebURLRequest::setUiStartTime(double timeSeconds)
 {
-    m_private->m_resourceRequest->setUIStartTime(time);
+    m_resourceRequest->setUIStartTime(timeSeconds);
 }
 
-bool WebURLRequest::originatesFromReservedIPRange() const
+bool WebURLRequest::isExternalRequest() const
 {
-    return m_private->m_resourceRequest->originatesFromReservedIPRange();
+    return m_resourceRequest->isExternalRequest();
 }
 
-void WebURLRequest::setOriginatesFromReservedIPRange(bool value)
+WebURLRequest::LoadingIPCType WebURLRequest::getLoadingIPCType() const
 {
-    m_private->m_resourceRequest->setOriginatesFromReservedIPRange(value);
+    if (RuntimeEnabledFeatures::loadingWithMojoEnabled())
+        return WebURLRequest::LoadingIPCType::Mojo;
+    return WebURLRequest::LoadingIPCType::ChromeIPC;
 }
 
-WebURLRequest::InputToLoadPerfMetricReportPolicy WebURLRequest::inputPerfMetricReportPolicy() const
+void WebURLRequest::setNavigationStartTime(double navigationStartSeconds)
+{
+    m_resourceRequest->setNavigationStartTime(navigationStartSeconds);
+}
+
+WebURLRequest::InputToLoadPerfMetricReportPolicy
+WebURLRequest::inputPerfMetricReportPolicy() const
 {
     return static_cast<WebURLRequest::InputToLoadPerfMetricReportPolicy>(
-        m_private->m_resourceRequest->inputPerfMetricReportPolicy());
+        m_resourceRequest->inputPerfMetricReportPolicy());
 }
 
 void WebURLRequest::setInputPerfMetricReportPolicy(
     WebURLRequest::InputToLoadPerfMetricReportPolicy policy)
 {
-    m_private->m_resourceRequest->setInputPerfMetricReportPolicy(
+    m_resourceRequest->setInputPerfMetricReportPolicy(
         static_cast<blink::InputToLoadPerfMetricReportPolicy>(policy));
 }
 
 const ResourceRequest& WebURLRequest::toResourceRequest() const
 {
-    ASSERT(m_private);
-    ASSERT(m_private->m_resourceRequest);
-
-    return *m_private->m_resourceRequest;
+    DCHECK(m_resourceRequest);
+    return *m_resourceRequest;
 }
 
-void WebURLRequest::assign(WebURLRequestPrivate* p)
+WebURLRequest::WebURLRequest(ResourceRequest& r)
+    : m_resourceRequest(&r)
 {
-    // Subclasses may call this directly so a self-assignment check is needed
-    // here as well as in the public assign method.
-    if (m_private == p)
-        return;
-    if (m_private)
-        m_private->dispose();
-    m_private = p;
 }
 
 } // namespace blink

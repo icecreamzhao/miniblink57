@@ -27,7 +27,8 @@
 namespace blink {
 
 struct LinearGradientAttributes : GradientAttributes {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     LinearGradientAttributes()
         : m_x1(SVGLength::create(SVGLengthMode::Width))
@@ -39,7 +40,7 @@ public:
         , m_x2Set(false)
         , m_y2Set(false)
     {
-        m_x2->setValueAsString("100%", ASSERT_NO_EXCEPTION);
+        m_x2->setValueAsString("100%");
     }
 
     SVGLength* x1() const { return m_x1.get(); }
@@ -47,10 +48,26 @@ public:
     SVGLength* x2() const { return m_x2.get(); }
     SVGLength* y2() const { return m_y2.get(); }
 
-    void setX1(PassRefPtrWillBeRawPtr<SVGLength> value) { m_x1 = value; m_x1Set = true; }
-    void setY1(PassRefPtrWillBeRawPtr<SVGLength> value) { m_y1 = value; m_y1Set = true; }
-    void setX2(PassRefPtrWillBeRawPtr<SVGLength> value) { m_x2 = value; m_x2Set = true; }
-    void setY2(PassRefPtrWillBeRawPtr<SVGLength> value) { m_y2 = value; m_y2Set = true; }
+    void setX1(SVGLength* value)
+    {
+        m_x1 = value;
+        m_x1Set = true;
+    }
+    void setY1(SVGLength* value)
+    {
+        m_y1 = value;
+        m_y1Set = true;
+    }
+    void setX2(SVGLength* value)
+    {
+        m_x2 = value;
+        m_x2Set = true;
+    }
+    void setY2(SVGLength* value)
+    {
+        m_y2 = value;
+        m_y2Set = true;
+    }
 
     bool hasX1() const { return m_x1Set; }
     bool hasY1() const { return m_y1Set; }
@@ -67,10 +84,10 @@ public:
 
 private:
     // Properties
-    RefPtrWillBeMember<SVGLength> m_x1;
-    RefPtrWillBeMember<SVGLength> m_y1;
-    RefPtrWillBeMember<SVGLength> m_x2;
-    RefPtrWillBeMember<SVGLength> m_y2;
+    Member<SVGLength> m_x1;
+    Member<SVGLength> m_y1;
+    Member<SVGLength> m_x2;
+    Member<SVGLength> m_y2;
 
     // Property states
     bool m_x1Set : 1;
@@ -79,9 +96,9 @@ private:
     bool m_y2Set : 1;
 };
 
-#if ENABLE(OILPAN)
 // Wrapper object for the LinearGradientAttributes part object.
-class LinearGradientAttributesWrapper : public GarbageCollectedFinalized<LinearGradientAttributesWrapper> {
+class LinearGradientAttributesWrapper
+    : public GarbageCollectedFinalized<LinearGradientAttributesWrapper> {
 public:
     static LinearGradientAttributesWrapper* create()
     {
@@ -89,17 +106,17 @@ public:
     }
 
     LinearGradientAttributes& attributes() { return m_attributes; }
-    void set(const LinearGradientAttributes& attributes) { m_attributes = attributes; }
+    void set(const LinearGradientAttributes& attributes)
+    {
+        m_attributes = attributes;
+    }
     DEFINE_INLINE_TRACE() { visitor->trace(m_attributes); }
 
 private:
-    LinearGradientAttributesWrapper()
-    {
-    }
+    LinearGradientAttributesWrapper() { }
 
     LinearGradientAttributes m_attributes;
 };
-#endif
 
 } // namespace blink
 

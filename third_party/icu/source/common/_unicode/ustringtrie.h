@@ -22,7 +22,6 @@
 
 #include "unicode/utypes.h"
 
-
 /**
  * Return values for BytesTrie::next(), UCharsTrie::next() and similar methods.
  * @see USTRINGTRIE_MATCHES
@@ -70,7 +69,7 @@ enum UStringTrieResult {
  * @return true if the input bytes/units so far are part of a matching string/byte sequence.
  * @stable ICU 4.8
  */
-#define USTRINGTRIE_MATCHES(result) ((result)!=USTRINGTRIE_NO_MATCH)
+#define USTRINGTRIE_MATCHES(result) ((result) != USTRINGTRIE_NO_MATCH)
 
 /**
  * Equivalent to (result==USTRINGTRIE_INTERMEDIATE_VALUE || result==USTRINGTRIE_FINAL_VALUE) but
@@ -81,7 +80,7 @@ enum UStringTrieResult {
  * @see UCharsTrie::getValue
  * @stable ICU 4.8
  */
-#define USTRINGTRIE_HAS_VALUE(result) ((result)>=USTRINGTRIE_FINAL_VALUE)
+#define USTRINGTRIE_HAS_VALUE(result) ((result) >= USTRINGTRIE_FINAL_VALUE)
 
 /**
  * Equivalent to (result==USTRINGTRIE_NO_VALUE || result==USTRINGTRIE_INTERMEDIATE_VALUE) but
@@ -92,4 +91,4 @@ enum UStringTrieResult {
  */
 #define USTRINGTRIE_HAS_NEXT(result) ((result)&1)
 
-#endif  /* __USTRINGTRIE_H__ */
+#endif /* __USTRINGTRIE_H__ */

@@ -15,9 +15,9 @@ class SkPaint;
  *  action. This enum lists our possible actions.
  */
 enum SkXfermodeInterpretation {
-    kNormal_SkXfermodeInterpretation,      //< draw normally
-    kSrcOver_SkXfermodeInterpretation,     //< draw as if in srcover mode
-    kSkipDrawing_SkXfermodeInterpretation  //< draw nothing
+    kNormal_SkXfermodeInterpretation, //< draw normally
+    kSrcOver_SkXfermodeInterpretation, //< draw as if in srcover mode
+    kSkipDrawing_SkXfermodeInterpretation //< draw nothing
 };
 
 /**
@@ -27,4 +27,4 @@ enum SkXfermodeInterpretation {
  */
 SkXfermodeInterpretation SkInterpretXfermode(const SkPaint&, bool dstIsOpaque);
 
-#endif  // SkXfermodeInterpretation_DEFINED
+#endif // SkXfermodeInterpretation_DEFINED

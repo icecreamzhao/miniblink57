@@ -31,41 +31,49 @@
 #ifndef ServiceWorker_h
 #define ServiceWorker_h
 
+#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
 #include "core/workers/AbstractWorker.h"
 #include "modules/ModulesExport.h"
-#include "public/platform/WebServiceWorker.h"
-#include "public/platform/WebServiceWorkerProxy.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "public/platform/modules/serviceworker/WebServiceWorker.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerProxy.h"
 #include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include <memory>
 
 namespace blink {
 
-class ScriptPromiseResolver;
-
-class MODULES_EXPORT ServiceWorker final : public AbstractWorker, public WebServiceWorkerProxy {
+class MODULES_EXPORT ServiceWorker final
+    : public AbstractWorker,
+      public ActiveScriptWrappable<ServiceWorker>,
+      public WebServiceWorkerProxy {
     DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(ServiceWorker);
+
 public:
-    typedef WebServiceWorker WebType;
-    static PassRefPtrWillBeRawPtr<ServiceWorker> from(ExecutionContext*, WebType*);
+    static ServiceWorker* from(ExecutionContext*,
+        std::unique_ptr<WebServiceWorker::Handle>);
 
     ~ServiceWorker() override;
+    DECLARE_VIRTUAL_TRACE();
 
     // Eager finalization needed to promptly release owned WebServiceWorker.
     EAGERLY_FINALIZE();
-#if ENABLE(OILPAN)
-    // Override 'operator new' to enforce allocation of eagerly finalized object.
-    DECLARE_EAGER_FINALIZATION_OPERATOR_NEW();
-#endif
 
-    void postMessage(ExecutionContext*, PassRefPtr<SerializedScriptValue> message, const MessagePortArray*, ExceptionState&);
+    void postMessage(ExecutionContext*,
+        PassRefPtr<SerializedScriptValue> message,
+        const MessagePortArray&,
+        ExceptionState&);
+    static bool canTransferArrayBuffersAndImageBitmaps() { return false; }
 
     String scriptURL() const;
     String state() const;
     DEFINE_ATTRIBUTE_EVENT_LISTENER(statechange);
+
+    ServiceWorker* toServiceWorker() override { return this; }
+
+    // ScriptWrappable overrides.
+    bool hasPendingActivity() const final;
 
     // WebServiceWorkerProxy overrides.
     void dispatchStateChangeEvent() override;
@@ -74,15 +82,17 @@ public:
     const AtomicString& interfaceName() const override;
 
     void internalsTerminate();
+
 private:
-    static PassRefPtrWillBeRawPtr<ServiceWorker> getOrCreate(ExecutionContext*, WebType*);
-    ServiceWorker(ExecutionContext*, PassOwnPtr<WebServiceWorker>);
+    static ServiceWorker* getOrCreate(ExecutionContext*,
+        std::unique_ptr<WebServiceWorker::Handle>);
+    ServiceWorker(ExecutionContext*, std::unique_ptr<WebServiceWorker::Handle>);
 
-    // ActiveDOMObject overrides.
-    bool hasPendingActivity() const override;
-    void stop() override;
+    // SuspendableObject overrides.
+    void contextDestroyed(ExecutionContext*) override;
 
-    OwnPtr<WebServiceWorker> m_outerWorker;
+    // A handle to the service worker representation in the embedder.
+    std::unique_ptr<WebServiceWorker::Handle> m_handle;
     bool m_wasStopped;
 };
 

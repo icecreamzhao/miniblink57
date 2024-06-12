@@ -30,31 +30,31 @@
 #include "modules/EventModules.h"
 #include "modules/geolocation/Coordinates.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
-class Geoposition final : public GarbageCollected<Geoposition>, public ScriptWrappable {
+class Geoposition final : public GarbageCollected<Geoposition>,
+                          public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static Geoposition* create(Coordinates* coordinates, DOMTimeStamp timestamp)
     {
         return new Geoposition(coordinates, timestamp);
     }
 
-    DEFINE_INLINE_TRACE()
-    {
-        visitor->trace(m_coordinates);
-    }
+    DEFINE_INLINE_TRACE() { visitor->trace(m_coordinates); }
 
     DOMTimeStamp timestamp() const { return m_timestamp; }
-    Coordinates* coords() const { return m_coordinates.get(); }
+    Coordinates* coords() const { return m_coordinates; }
 
 private:
     Geoposition(Coordinates* coordinates, DOMTimeStamp timestamp)
         : m_coordinates(coordinates)
         , m_timestamp(timestamp)
     {
-        ASSERT(m_coordinates);
+        DCHECK(m_coordinates);
     }
 
     Member<Coordinates> m_coordinates;

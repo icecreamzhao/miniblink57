@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/SpeechRecognitionClientProxy.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -43,28 +42,38 @@
 #include "public/web/WebSpeechRecognitionResult.h"
 #include "public/web/WebSpeechRecognizer.h"
 #include "wtf/PassRefPtr.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-SpeechRecognitionClientProxy::~SpeechRecognitionClientProxy()
+SpeechRecognitionClientProxy::~SpeechRecognitionClientProxy() { }
+
+std::unique_ptr<SpeechRecognitionClientProxy>
+SpeechRecognitionClientProxy::create(WebSpeechRecognizer* recognizer)
 {
+    return WTF::wrapUnique(new SpeechRecognitionClientProxy(recognizer));
 }
 
-PassOwnPtr<SpeechRecognitionClientProxy> SpeechRecognitionClientProxy::create(WebSpeechRecognizer* recognizer)
+void SpeechRecognitionClientProxy::start(SpeechRecognition* recognition,
+    const SpeechGrammarList* grammarList,
+    const String& lang,
+    bool continuous,
+    bool interimResults,
+    unsigned long maxAlternatives,
+    MediaStreamTrack* audioTrack)
 {
-    return adoptPtr(new SpeechRecognitionClientProxy(recognizer));
-}
-
-void SpeechRecognitionClientProxy::start(SpeechRecognition* recognition, const SpeechGrammarList* grammarList, const String& lang, const String& serviceURI, bool continuous, bool interimResults, unsigned long maxAlternatives, MediaStreamTrack* audioTrack)
-{
-    WebVector<WebSpeechGrammar> webSpeechGrammars(static_cast<size_t>(grammarList->length()));
-    for (unsigned long i = 0; i < grammarList->length(); ++i)
+    size_t length = grammarList ? static_cast<size_t>(grammarList->length()) : 0U;
+    WebVector<WebSpeechGrammar> webSpeechGrammars(length);
+    for (unsigned long i = 0; i < length; ++i)
         webSpeechGrammars[i] = grammarList->item(i);
 
     WebMediaStreamTrack track;
     if (RuntimeEnabledFeatures::mediaStreamSpeechEnabled() && audioTrack)
         track.assign(audioTrack->component());
-    WebSpeechRecognitionParams params(webSpeechGrammars, lang, serviceURI, continuous, interimResults, maxAlternatives, track, WebSecurityOrigin(recognition->executionContext()->securityOrigin()));
+    WebSpeechRecognitionParams params(
+        webSpeechGrammars, lang, continuous, interimResults, maxAlternatives,
+        track, WebSecurityOrigin(recognition->getExecutionContext()->getSecurityOrigin()));
     m_recognizer->start(recognition, params, this);
 }
 
@@ -78,73 +87,91 @@ void SpeechRecognitionClientProxy::abort(SpeechRecognition* recognition)
     m_recognizer->abort(recognition, this);
 }
 
-void SpeechRecognitionClientProxy::didStartAudio(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didStartAudio(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didStartAudio();
 }
 
-void SpeechRecognitionClientProxy::didStartSound(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didStartSound(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didStartSound();
     recognition->didStartSpeech();
 }
 
-void SpeechRecognitionClientProxy::didEndSound(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didEndSound(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didEndSpeech();
     recognition->didEndSound();
 }
 
-void SpeechRecognitionClientProxy::didEndAudio(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didEndAudio(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didEndAudio();
 }
 
-void SpeechRecognitionClientProxy::didReceiveResults(const WebSpeechRecognitionHandle& handle, const WebVector<WebSpeechRecognitionResult>& newFinalResults, const WebVector<WebSpeechRecognitionResult>& currentInterimResults)
+void SpeechRecognitionClientProxy::didReceiveResults(
+    const WebSpeechRecognitionHandle& handle,
+    const WebVector<WebSpeechRecognitionResult>& newFinalResults,
+    const WebVector<WebSpeechRecognitionResult>& currentInterimResults)
 {
     SpeechRecognition* recognition(handle);
 
-    HeapVector<Member<SpeechRecognitionResult>> finalResultsVector(newFinalResults.size());
+    HeapVector<Member<SpeechRecognitionResult>> finalResultsVector(
+        newFinalResults.size());
     for (size_t i = 0; i < newFinalResults.size(); ++i)
         finalResultsVector[i] = Member<SpeechRecognitionResult>(newFinalResults[i]);
 
-    HeapVector<Member<SpeechRecognitionResult>> interimResultsVector(currentInterimResults.size());
+    HeapVector<Member<SpeechRecognitionResult>> interimResultsVector(
+        currentInterimResults.size());
     for (size_t i = 0; i < currentInterimResults.size(); ++i)
         interimResultsVector[i] = Member<SpeechRecognitionResult>(currentInterimResults[i]);
 
     recognition->didReceiveResults(finalResultsVector, interimResultsVector);
 }
 
-void SpeechRecognitionClientProxy::didReceiveNoMatch(const WebSpeechRecognitionHandle& handle, const WebSpeechRecognitionResult& result)
+void SpeechRecognitionClientProxy::didReceiveNoMatch(
+    const WebSpeechRecognitionHandle& handle,
+    const WebSpeechRecognitionResult& result)
 {
     SpeechRecognition* recognition(handle);
     recognition->didReceiveNoMatch(result);
 }
 
-void SpeechRecognitionClientProxy::didReceiveError(const WebSpeechRecognitionHandle& handle, const WebString& message, WebSpeechRecognizerClient::ErrorCode code)
+void SpeechRecognitionClientProxy::didReceiveError(
+    const WebSpeechRecognitionHandle& handle,
+    const WebString& message,
+    WebSpeechRecognizerClient::ErrorCode code)
 {
     SpeechRecognition* recognition(handle);
     SpeechRecognitionError::ErrorCode errorCode = static_cast<SpeechRecognitionError::ErrorCode>(code);
-    recognition->didReceiveError(SpeechRecognitionError::create(errorCode, message));
+    recognition->didReceiveError(
+        SpeechRecognitionError::create(errorCode, message));
 }
 
-void SpeechRecognitionClientProxy::didStart(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didStart(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didStart();
 }
 
-void SpeechRecognitionClientProxy::didEnd(const WebSpeechRecognitionHandle& handle)
+void SpeechRecognitionClientProxy::didEnd(
+    const WebSpeechRecognitionHandle& handle)
 {
     SpeechRecognition* recognition(handle);
     recognition->didEnd();
 }
 
-SpeechRecognitionClientProxy::SpeechRecognitionClientProxy(WebSpeechRecognizer* recognizer)
+SpeechRecognitionClientProxy::SpeechRecognitionClientProxy(
+    WebSpeechRecognizer* recognizer)
     : m_recognizer(recognizer)
 {
 }

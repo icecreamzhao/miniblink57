@@ -5,24 +5,27 @@
 #ifndef FontFamilyNames_h
 #define FontFamilyNames_h
 
-#include "wtf/text/AtomicString.h"
 #include "platform/PlatformExport.h"
+#include "wtf/text/AtomicString.h"
 
 // Generated from:
-// - fonts/FontFamilyNames.in
+// - ../../third_party/WebKit/Source/platform/fonts/FontFamilyNames.in
 
 namespace blink {
 namespace FontFamilyNames {
 
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_cursive;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_fantasy;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_monospace;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_pictograph;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_sans_serif;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_serif;
-PLATFORM_EXPORT extern const WTF::AtomicString& webkit_standard;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_cursive;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_fantasy;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_monospace;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_pictograph;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_sans_serif;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_serif;
+    PLATFORM_EXPORT extern const WTF::AtomicString& webkit_standard;
+    PLATFORM_EXPORT extern const WTF::AtomicString& system_ui;
 
-PLATFORM_EXPORT void init();
+    const unsigned FontFamilyNamesCount = 8;
+
+    PLATFORM_EXPORT void init();
 
 } // FontFamilyNames
 } // namespace blink

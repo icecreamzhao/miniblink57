@@ -12,10 +12,10 @@
 namespace ots {
 
 struct OpenTypeLTSH {
-  uint16_t version;
-  std::vector<uint8_t> ypels;
+    uint16_t version;
+    std::vector<uint8_t> ypels;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_LTSH_H_
+#endif // OTS_LTSH_H_

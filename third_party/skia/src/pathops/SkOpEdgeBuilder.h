@@ -13,38 +13,42 @@
 class SkOpEdgeBuilder {
 public:
     SkOpEdgeBuilder(const SkPathWriter& path, SkOpContour* contours2, SkChunkAlloc* allocator,
-            SkOpGlobalState* globalState)
-        : fAllocator(allocator)  // FIXME: replace with const, tune this
+        SkOpGlobalState* globalState)
+        : fAllocator(allocator) // FIXME: replace with const, tune this
         , fGlobalState(globalState)
         , fPath(path.nativePath())
         , fContoursHead(contours2)
-        , fAllowOpenContours(true) {
+        , fAllowOpenContours(true)
+    {
         init();
     }
 
     SkOpEdgeBuilder(const SkPath& path, SkOpContour* contours2, SkChunkAlloc* allocator,
-            SkOpGlobalState* globalState)
+        SkOpGlobalState* globalState)
         : fAllocator(allocator)
         , fGlobalState(globalState)
         , fPath(&path)
         , fContoursHead(contours2)
-        , fAllowOpenContours(false) {
+        , fAllowOpenContours(false)
+    {
         init();
     }
 
     void addOperand(const SkPath& path);
 
-    void complete() {
+    void complete()
+    {
         if (fCurrentContour && fCurrentContour->count()) {
             fCurrentContour->complete();
-            fCurrentContour = NULL;
+            fCurrentContour = nullptr;
         }
     }
 
     int count() const;
-    bool finish(SkChunkAlloc* );
+    bool finish(SkChunkAlloc*);
 
-    const SkOpContour* head() const {
+    const SkOpContour* head() const
+    {
         return fContoursHead;
     }
 
@@ -56,7 +60,7 @@ private:
     void closeContour(const SkPoint& curveEnd, const SkPoint& curveStart);
     bool close();
     int preFetch();
-    bool walk(SkChunkAlloc* );
+    bool walk(SkChunkAlloc*);
 
     SkChunkAlloc* fAllocator;
     SkOpGlobalState* fGlobalState;

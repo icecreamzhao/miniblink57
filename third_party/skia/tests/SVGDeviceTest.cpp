@@ -6,11 +6,11 @@
  */
 
 #include "SkCanvas.h"
-#include "SkData.h"
 #include "SkDOM.h"
+#include "SkData.h"
 #include "SkParse.h"
-#include "SkStream.h"
 #include "SkSVGCanvas.h"
+#include "SkStream.h"
 #include "SkXMLWriter.h"
 #include "Test.h"
 
@@ -19,26 +19,27 @@
 namespace {
 
 void check_text_node(skiatest::Reporter* reporter,
-                     const SkDOM& dom,
-                     const SkDOM::Node* root,
-                     const SkPoint& offset,
-                     unsigned scalarsPerPos,
-                     const char* expected) {
-    if (root == NULL) {
+    const SkDOM& dom,
+    const SkDOM::Node* root,
+    const SkPoint& offset,
+    unsigned scalarsPerPos,
+    const char* expected)
+{
+    if (root == nullptr) {
         ERRORF(reporter, "root element not found.");
         return;
     }
 
     const SkDOM::Node* textElem = dom.getFirstChild(root, "text");
-    if (textElem == NULL) {
+    if (textElem == nullptr) {
         ERRORF(reporter, "<text> element not found.");
         return;
     }
     REPORTER_ASSERT(reporter, dom.getType(textElem) == SkDOM::kElement_Type);
 
-    const SkDOM::Node* textNode= dom.getFirstChild(textElem);
-    REPORTER_ASSERT(reporter, textNode != NULL);
-    if (textNode != NULL) {
+    const SkDOM::Node* textNode = dom.getFirstChild(textElem);
+    REPORTER_ASSERT(reporter, textNode != nullptr);
+    if (textNode != nullptr) {
         REPORTER_ASSERT(reporter, dom.getType(textNode) == SkDOM::kText_Type);
         REPORTER_ASSERT(reporter, strcmp(expected, dom.getName(textNode)) == 0);
     }
@@ -46,8 +47,8 @@ void check_text_node(skiatest::Reporter* reporter,
     int textLen = SkToInt(strlen(expected));
 
     const char* x = dom.findAttr(textElem, "x");
-    REPORTER_ASSERT(reporter, x != NULL);
-    if (x != NULL) {
+    REPORTER_ASSERT(reporter, x != nullptr);
+    if (x != nullptr) {
         int xposCount = (scalarsPerPos < 1) ? 1 : textLen;
         REPORTER_ASSERT(reporter, SkParse::Count(x) == xposCount);
 
@@ -63,8 +64,8 @@ void check_text_node(skiatest::Reporter* reporter,
     }
 
     const char* y = dom.findAttr(textElem, "y");
-    REPORTER_ASSERT(reporter, y != NULL);
-    if (y != NULL) {
+    REPORTER_ASSERT(reporter, y != nullptr);
+    if (y != nullptr) {
         int yposCount = (scalarsPerPos < 2) ? 1 : textLen;
         REPORTER_ASSERT(reporter, SkParse::Count(y) == yposCount);
 
@@ -81,8 +82,9 @@ void check_text_node(skiatest::Reporter* reporter,
 }
 
 void test_whitespace_pos(skiatest::Reporter* reporter,
-                         const char* txt,
-                         const char* expected) {
+    const char* txt,
+    const char* expected)
+{
     size_t len = strlen(txt);
 
     SkDOM dom;
@@ -92,7 +94,7 @@ void test_whitespace_pos(skiatest::Reporter* reporter,
     {
         SkXMLParserWriter writer(dom.beginParsing());
         SkAutoTUnref<SkCanvas> svgCanvas(SkSVGCanvas::Create(SkRect::MakeWH(100, 100),
-                                                             &writer));
+            &writer));
         svgCanvas->drawText(txt, len, offset.x(), offset.y(), paint);
     }
     check_text_node(reporter, dom, dom.finishParsing(), offset, 0, expected);
@@ -105,7 +107,7 @@ void test_whitespace_pos(skiatest::Reporter* reporter,
 
         SkXMLParserWriter writer(dom.beginParsing());
         SkAutoTUnref<SkCanvas> svgCanvas(SkSVGCanvas::Create(SkRect::MakeWH(100, 100),
-                                                             &writer));
+            &writer));
         svgCanvas->drawPosTextH(txt, len, xpos, offset.y(), paint);
     }
     check_text_node(reporter, dom, dom.finishParsing(), offset, 1, expected);
@@ -118,7 +120,7 @@ void test_whitespace_pos(skiatest::Reporter* reporter,
 
         SkXMLParserWriter writer(dom.beginParsing());
         SkAutoTUnref<SkCanvas> svgCanvas(SkSVGCanvas::Create(SkRect::MakeWH(100, 100),
-                                                             &writer));
+            &writer));
         svgCanvas->drawPosText(txt, len, pos, paint);
     }
     check_text_node(reporter, dom, dom.finishParsing(), offset, 2, expected);
@@ -126,20 +128,21 @@ void test_whitespace_pos(skiatest::Reporter* reporter,
 
 }
 
-DEF_TEST(SVGDevice_whitespace_pos, reporter) {
+DEF_TEST(SVGDevice_whitespace_pos, reporter)
+{
     static const struct {
         const char* tst_in;
         const char* tst_out;
     } tests[] = {
-        { "abcd"      , "abcd" },
-        { "ab cd"     , "ab cd" },
+        { "abcd", "abcd" },
+        { "ab cd", "ab cd" },
         { "ab \t\t cd", "ab cd" },
-        { " abcd"     , "abcd" },
-        { "  abcd"    , "abcd" },
+        { " abcd", "abcd" },
+        { "  abcd", "abcd" },
         { " \t\t abcd", "abcd" },
-        { "abcd "     , "abcd " }, // we allow one trailing whitespace char
-        { "abcd  "    , "abcd " }, // because it makes no difference and
-        { "abcd\t  "  , "abcd\t" }, // simplifies the implementation
+        { "abcd ", "abcd " }, // we allow one trailing whitespace char
+        { "abcd  ", "abcd " }, // because it makes no difference and
+        { "abcd\t  ", "abcd\t" }, // simplifies the implementation
         { "\t\t  \t ab \t\t  \t cd \t\t   \t  ", "ab cd " },
     };
 

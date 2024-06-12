@@ -35,6 +35,7 @@ namespace blink {
 
 class MODULES_EXPORT SpeechRecognitionError final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     enum ErrorCode {
         // FIXME: This is an unspecified error and Chromium should stop using it.
@@ -50,23 +51,21 @@ public:
         ErrorCodeLanguageNotSupported = 8
     };
 
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionError> create(ErrorCode, const String&);
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionError> create();
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionError> create(const AtomicString&, const SpeechRecognitionErrorInit&);
+    static SpeechRecognitionError* create(ErrorCode, const String&);
+    static SpeechRecognitionError* create(const AtomicString&,
+        const SpeechRecognitionErrorInit&);
 
     const String& error() { return m_error; }
     const String& message() { return m_message; }
 
     const AtomicString& interfaceName() const override;
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        Event::trace(visitor);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { Event::trace(visitor); }
 
 private:
     SpeechRecognitionError(const String&, const String&);
-    SpeechRecognitionError(const AtomicString&, const SpeechRecognitionErrorInit&);
+    SpeechRecognitionError(const AtomicString&,
+        const SpeechRecognitionErrorInit&);
 
     String m_error;
     String m_message;

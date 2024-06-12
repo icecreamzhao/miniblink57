@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/serviceworkers/ServiceWorkerClient.h"
+#include "modules/serviceworkers/ServiceWorkerWindowClient.h"
 
 #include "bindings/core/v8/CallbackPromiseAdapter.h"
 #include "bindings/core/v8/ExceptionState.h"
@@ -11,10 +11,33 @@
 #include "modules/serviceworkers/ServiceWorkerGlobalScopeClient.h"
 #include "public/platform/WebString.h"
 #include "wtf/RefPtr.h"
+#include <memory>
 
 namespace blink {
 
-ServiceWorkerClient* ServiceWorkerClient::create(const WebServiceWorkerClientInfo& info)
+ServiceWorkerClient* ServiceWorkerClient::take(
+    ScriptPromiseResolver*,
+    std::unique_ptr<WebServiceWorkerClientInfo> webClient)
+{
+    if (!webClient)
+        return nullptr;
+
+    switch (webClient->clientType) {
+    case WebServiceWorkerClientTypeWindow:
+        return ServiceWorkerWindowClient::create(*webClient);
+    case WebServiceWorkerClientTypeWorker:
+    case WebServiceWorkerClientTypeSharedWorker:
+        return ServiceWorkerClient::create(*webClient);
+    case WebServiceWorkerClientTypeLast:
+        ASSERT_NOT_REACHED();
+        return nullptr;
+    }
+    ASSERT_NOT_REACHED();
+    return nullptr;
+}
+
+ServiceWorkerClient* ServiceWorkerClient::create(
+    const WebServiceWorkerClientInfo& info)
 {
     return new ServiceWorkerClient(info);
 }
@@ -26,9 +49,7 @@ ServiceWorkerClient::ServiceWorkerClient(const WebServiceWorkerClientInfo& info)
 {
 }
 
-ServiceWorkerClient::~ServiceWorkerClient()
-{
-}
+ServiceWorkerClient::~ServiceWorkerClient() { }
 
 String ServiceWorkerClient::frameType() const
 {
@@ -47,16 +68,20 @@ String ServiceWorkerClient::frameType() const
     return String();
 }
 
-void ServiceWorkerClient::postMessage(ExecutionContext* context, PassRefPtr<SerializedScriptValue> message, const MessagePortArray* ports, ExceptionState& exceptionState)
+void ServiceWorkerClient::postMessage(ExecutionContext* context,
+    PassRefPtr<SerializedScriptValue> message,
+    const MessagePortArray& ports,
+    ExceptionState& exceptionState)
 {
     // Disentangle the port in preparation for sending it to the remote context.
-    OwnPtr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
+    std::unique_ptr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
     if (exceptionState.hadException())
         return;
 
     WebString messageString = message->toWireString();
-    OwnPtr<WebMessagePortChannelArray> webChannels = MessagePort::toWebMessagePortChannelArray(channels.release());
-    ServiceWorkerGlobalScopeClient::from(context)->postMessageToClient(m_uuid, messageString, webChannels.release());
+    std::unique_ptr<WebMessagePortChannelArray> webChannels = MessagePort::toWebMessagePortChannelArray(std::move(channels));
+    ServiceWorkerGlobalScopeClient::from(context)->postMessageToClient(
+        m_uuid, messageString, std::move(webChannels));
 }
 
 } // namespace blink

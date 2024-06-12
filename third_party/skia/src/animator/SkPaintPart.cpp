@@ -12,59 +12,64 @@
 #include "SkDump.h"
 #endif
 
-SkPaintPart::SkPaintPart() : fPaint(NULL) {
+SkPaintPart::SkPaintPart()
+    : fPaint(nullptr)
+{
 }
 
-SkDisplayable* SkPaintPart::getParent() const {
+SkDisplayable* SkPaintPart::getParent() const
+{
     return fPaint;
 }
 
-bool SkPaintPart::setParent(SkDisplayable* parent) {
-    SkASSERT(parent != NULL);
+bool SkPaintPart::setParent(SkDisplayable* parent)
+{
+    SkASSERT(parent != nullptr);
     if (parent->isPaint() == false)
         return true;
-    fPaint = (SkDrawPaint*) parent;
+    fPaint = (SkDrawPaint*)parent;
     return false;
 }
 
-
 // SkDrawMaskFilter
-bool SkDrawMaskFilter::add() {
-    if (fPaint->maskFilter != (SkDrawMaskFilter*) -1)
+bool SkDrawMaskFilter::add()
+{
+    if (fPaint->maskFilter != (SkDrawMaskFilter*)-1)
         return true;
     fPaint->maskFilter = this;
     fPaint->fOwnsMaskFilter = true;
     return false;
 }
 
-SkMaskFilter* SkDrawMaskFilter::getMaskFilter() {
-    return NULL;
+SkMaskFilter* SkDrawMaskFilter::getMaskFilter()
+{
+    return nullptr;
 }
 
-
 // SkDrawPathEffect
-bool SkDrawPathEffect::add() {
+bool SkDrawPathEffect::add()
+{
     if (fPaint->isPaint()) {
-        if (fPaint->pathEffect != (SkDrawPathEffect*) -1)
+        if (fPaint->pathEffect != (SkDrawPathEffect*)-1)
             return true;
         fPaint->pathEffect = this;
         fPaint->fOwnsPathEffect = true;
         return false;
     }
-    fPaint->add(NULL, this);
+    fPaint->add(nullptr, this);
     return false;
 }
 
-SkPathEffect* SkDrawPathEffect::getPathEffect() {
-    return NULL;
+SkPathEffect* SkDrawPathEffect::getPathEffect()
+{
+    return nullptr;
 }
-
 
 // SkDrawShader
-SkShader* SkDrawShader::getShader() {
-    return NULL;
+SkShader* SkDrawShader::getShader()
+{
+    return nullptr;
 }
-
 
 // Typeface
 #if SK_USE_CONDENSED_INFO == 0
@@ -78,11 +83,14 @@ const SkMemberInfo SkDrawTypeface::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawTypeface);
 
-SkDrawTypeface::SkDrawTypeface() : style (SkTypeface::kNormal){
+SkDrawTypeface::SkDrawTypeface()
+    : style(SkTypeface::kNormal)
+{
 }
 
-bool SkDrawTypeface::add() {
-    if (fPaint->typeface != (SkDrawTypeface*) -1)
+bool SkDrawTypeface::add()
+{
+    if (fPaint->typeface != (SkDrawTypeface*)-1)
         return true;
     fPaint->typeface = this;
     fPaint->fOwnsTypeface = true;
@@ -90,7 +98,8 @@ bool SkDrawTypeface::add() {
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkDrawTypeface::dump(SkAnimateMaker*) {
+void SkDrawTypeface::dump(SkAnimateMaker*)
+{
     SkDebugf("%*s<typeface fontName=\"%s\" ", SkDisplayList::fIndent, "", fontName.c_str());
     SkString string;
     SkDump::GetEnumString(SkType_FontStyle, style, &string);

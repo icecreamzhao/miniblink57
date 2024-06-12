@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKDRAWCOMMANDGEOMETRYWIDGET_H_
 #define SKDRAWCOMMANDGEOMETRYWIDGET_H_
 
@@ -14,7 +13,7 @@
 #include "SkSurface.h"
 class SkDebugger;
 
-class  SkDrawCommandGeometryWidget : public QFrame {
+class SkDrawCommandGeometryWidget : public QFrame {
     Q_OBJECT
 
 public:
@@ -29,7 +28,7 @@ private:
     void updateImage();
 
     SkDebugger* fDebugger;
-    SkAutoTUnref<SkSurface> fSurface;
+    sk_sp<SkSurface> fSurface;
     int fCommandIndex;
 };
 

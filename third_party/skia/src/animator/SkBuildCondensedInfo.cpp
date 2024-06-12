@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkTypes.h"
 #if defined SK_BUILD_CONDENSED
 #include "SkMemberInfo.h"
@@ -26,19 +25,20 @@ SkTDDisplayTypesArray gInfosTypeIDs;
 SkTDMemberInfoArray gUnknowns;
 SkTDIntArray gUnknownsCounts;
 
-static void AddInfo(SkDisplayTypes type, const SkMemberInfo* info, int infoCount) {
-    SkASSERT(gInfos[type] == NULL);
+static void AddInfo(SkDisplayTypes type, const SkMemberInfo* info, int infoCount)
+{
+    SkASSERT(gInfos[type] == nullptr);
     gInfos[type] = info;
     gInfosCounts[type] = infoCount;
     *gInfosTypeIDs.append() = type;
     size_t allStrs = 0;
     for (int inner = 0; inner < infoCount; inner++) {
         SkASSERT(info[inner].fCount < 256);
-        int offset = (int) info[inner].fOffset;
+        int offset = (int)info[inner].fOffset;
         SkASSERT(offset < 128 && offset > -129);
         SkASSERT(allStrs < 256);
         if (info[inner].fType == SkType_BaseClassInfo) {
-            const SkMemberInfo* innerInfo = (const SkMemberInfo*) info[inner].fName;
+            const SkMemberInfo* innerInfo = (const SkMemberInfo*)info[inner].fName;
             if (gUnknowns.find(innerInfo) == -1) {
                 *gUnknowns.append() = innerInfo;
                 *gUnknownsCounts.append() = info[inner].fCount;
@@ -52,13 +52,13 @@ static void AddInfo(SkDisplayTypes type, const SkMemberInfo* info, int infoCount
 }
 
 static void WriteInfo(FILE* condensed, const SkMemberInfo* info, int infoCount,
-            const char* typeName, bool draw, bool display) {
+    const char* typeName, bool draw, bool display)
+{
     fprintf(condensed, "static const char g%sStrings[] = \n", typeName);
     int inner;
     // write strings
     for (inner = 0; inner < infoCount; inner++) {
-        const char* name = (info[inner].fType != SkType_BaseClassInfo && info[inner].fName) ?
-            info[inner].fName : "";
+        const char* name = (info[inner].fType != SkType_BaseClassInfo && info[inner].fName) ? info[inner].fName : "";
         const char* zero = inner < infoCount - 1 ? "\\0" : "";
         fprintf(condensed, "\t\"%s%s\"\n", name, zero);
     }
@@ -69,10 +69,10 @@ static void WriteInfo(FILE* condensed, const SkMemberInfo* info, int infoCount,
     for (inner = 0; inner < infoCount; inner++) {
         size_t offset = info[inner].fOffset;
         if (info[inner].fType == SkType_BaseClassInfo) {
-            offset = (size_t) gInfos.find((const SkMemberInfo* ) info[inner].fName);
-            SkASSERT((int) offset >= 0);
-            offset = gInfosTypeIDs.find((SkDisplayTypes) offset);
-            SkASSERT((int) offset >= 0);
+            offset = (size_t)gInfos.find((const SkMemberInfo*)info[inner].fName);
+            SkASSERT((int)offset >= 0);
+            offset = gInfosTypeIDs.find((SkDisplayTypes)offset);
+            SkASSERT((int)offset >= 0);
         }
         fprintf(condensed, "\n\t{%d, %d, %d, %d}", nameOffset, offset,
             info[inner].fType, info[inner].fCount);
@@ -85,10 +85,11 @@ static void WriteInfo(FILE* condensed, const SkMemberInfo* info, int infoCount,
     fprintf(condensed, "\n};\n\n");
 }
 
-static void Get3DName(char* scratch, const char* name) {
+static void Get3DName(char* scratch, const char* name)
+{
     if (strncmp("skia3d:", name, sizeof("skia3d:") - 1) == 0) {
         strcpy(scratch, "3D_");
-        scratch[3]= name[7] & ~0x20;
+        scratch[3] = name[7] & ~0x20;
         strcpy(&scratch[4], &name[8]);
     } else {
         scratch[0] = name[0] & ~0x20;
@@ -96,13 +97,15 @@ static void Get3DName(char* scratch, const char* name) {
     }
 }
 
-int type_compare(const void* a, const void* b) {
-    SkDisplayTypes first = *(SkDisplayTypes*) a;
-    SkDisplayTypes second = *(SkDisplayTypes*) b;
+int type_compare(const void* a, const void* b)
+{
+    SkDisplayTypes first = *(SkDisplayTypes*)a;
+    SkDisplayTypes second = *(SkDisplayTypes*)b;
     return first < second ? -1 : first == second ? 0 : 1;
 }
 
-void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
+void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker)
+{
     gInfos.setCount(kNumberOfTypes);
     memset(gInfos.begin(), 0, sizeof(gInfos[0]) * kNumberOfTypes);
     gInfosCounts.setCount(kNumberOfTypes);
@@ -111,15 +114,14 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
     int index, infoCount;
     for (index = 0; index < kTypeNamesSize; index++) {
         const SkMemberInfo* info = GetMembers(maker, gTypeNames[index].fType, &infoCount);
-        if (info == NULL)
+        if (info == nullptr)
             continue;
         AddInfo(gTypeNames[index].fType, info, infoCount);
     }
-    const SkMemberInfo* extraInfo =
-        SkDisplayType::GetMembers(maker, SkType_3D_Point, &infoCount);
+    const SkMemberInfo* extraInfo = SkDisplayType::GetMembers(maker, SkType_3D_Point, &infoCount);
     AddInfo(SkType_Point, extraInfo, infoCount);
     AddInfo(SkType_3D_Point, extraInfo, infoCount);
-//  int baseInfos = gInfos.count();
+    //  int baseInfos = gInfos.count();
     do {
         SkTDMemberInfoArray oldRefs = gUnknowns;
         SkTDIntArray oldRefCounts = gUnknownsCounts;
@@ -131,12 +133,12 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
                 int typeIndex = 0;
                 for (; typeIndex < kNumberOfTypes; typeIndex++) {
                     const SkMemberInfo* temp = SkDisplayType::GetMembers(
-                        maker, (SkDisplayTypes) typeIndex, NULL);
+                        maker, (SkDisplayTypes)typeIndex, nullptr);
                     if (temp == info)
                         break;
                 }
                 SkASSERT(typeIndex < kNumberOfTypes);
-                AddInfo((SkDisplayTypes) typeIndex, info, oldRefCounts[index]);
+                AddInfo((SkDisplayTypes)typeIndex, info, oldRefCounts[index]);
             }
         }
     } while (gUnknowns.count() > 0);
@@ -154,13 +156,13 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
     fprintf(condensed, "// This file was automatically generated.\n");
     fprintf(condensed, "// To change it, edit the file with the matching debug info.\n");
     fprintf(condensed, "// Then execute SkDisplayType::BuildCondensedInfo() to "
-        "regenerate this file.\n\n");
+                       "regenerate this file.\n\n");
     // write name of memberInfo
     int typeNameIndex = 0;
     int unknown = 1;
     for (index = 0; index < gInfos.count(); index++) {
         const SkMemberInfo* info = gInfos[index];
-        if (info == NULL)
+        if (info == nullptr)
             continue;
         char scratch[64];
         bool drawPrefix, displayPrefix;
@@ -177,13 +179,13 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
         WriteInfo(condensed, info, gInfosCounts[index], scratch, drawPrefix, displayPrefix);
     }
     // write array of table pointers
-//  start here;
+    //  start here;
     fprintf(condensed, "static const SkMemberInfo* const gInfoTables[] = {");
     typeNameIndex = 0;
     unknown = 1;
     for (index = 0; index < gInfos.count(); index++) {
         const SkMemberInfo* info = gInfos[index];
-        if (info == NULL)
+        if (info == nullptr)
             continue;
         char scratch[64];
         bool drawPrefix, displayPrefix;
@@ -204,7 +206,7 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
             fprintf(condensed, "Display");
         fprintf(condensed, "%sInfo", scratch);
         if (index < gInfos.count() - 1)
-                putc(',', condensed);
+            putc(',', condensed);
     }
     fprintf(condensed, "\n};\n\n");
     // write the array of number of entries in the info table
@@ -218,7 +220,7 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
             putc(',', condensed);
         if (written % 20 == 19)
             fprintf(condensed, "\n\t");
-        fprintf(condensed, "%d",count);
+        fprintf(condensed, "%d", count);
         written++;
     }
     fprintf(condensed, "\n};\n\n");
@@ -229,7 +231,7 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
     unknown = 1;
     for (index = 0; index < gInfosCounts.count(); index++) {
         const SkMemberInfo* info = gInfos[index];
-        if (info == NULL)
+        if (info == nullptr)
             continue;
         typeIDCount++;
         char scratch[64];
@@ -251,10 +253,10 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
     written = 0;
     for (index = 0; index < gInfosCounts.count(); index++) {
         const SkMemberInfo* info = gInfos[index];
-        if (info == NULL)
+        if (info == nullptr)
             continue;
         if (written > 0)
-                putc(',', condensed);
+            putc(',', condensed);
         written++;
         fprintf(condensed, "\n\tg");
         char scratch[64];
@@ -278,5 +280,5 @@ void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* maker) {
 
 #elif defined SK_DEBUG
 #include "SkDisplayType.h"
-void SkDisplayType::BuildCondensedInfo(SkAnimateMaker* ) {}
+void SkDisplayType::BuildCondensedInfo(SkAnimateMaker*) { }
 #endif

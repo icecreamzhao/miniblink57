@@ -30,13 +30,9 @@ protected:
 private:
     void purgeControllers();
 
-#if ENABLE(OILPAN)
-    void clearWeakMembers(Visitor*);
-#endif
-
-    WillBeHeapVector<PlatformEventController*> m_controllers;
-    bool m_needsPurge;
+    HeapHashSet<WeakMember<PlatformEventController>> m_controllers;
     bool m_isDispatching;
+    bool m_isListening;
 };
 
 } // namespace blink

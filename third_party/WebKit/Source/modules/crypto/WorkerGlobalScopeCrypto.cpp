@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/crypto/WorkerGlobalScopeCrypto.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -36,26 +35,27 @@
 
 namespace blink {
 
-WorkerGlobalScopeCrypto::WorkerGlobalScopeCrypto()
-{
-}
+WorkerGlobalScopeCrypto::WorkerGlobalScopeCrypto() { }
 
 const char* WorkerGlobalScopeCrypto::supplementName()
 {
     return "WorkerGlobalScopeCrypto";
 }
 
-WorkerGlobalScopeCrypto& WorkerGlobalScopeCrypto::from(WillBeHeapSupplementable<WorkerGlobalScope>& context)
+WorkerGlobalScopeCrypto& WorkerGlobalScopeCrypto::from(
+    Supplementable<WorkerGlobalScope>& context)
 {
-    WorkerGlobalScopeCrypto* supplement = static_cast<WorkerGlobalScopeCrypto*>(WillBeHeapSupplement<WorkerGlobalScope>::from(context, supplementName()));
+    WorkerGlobalScopeCrypto* supplement = static_cast<WorkerGlobalScopeCrypto*>(
+        Supplement<WorkerGlobalScope>::from(context, supplementName()));
     if (!supplement) {
-        supplement = new WorkerGlobalScopeCrypto();
-        provideTo(context, supplementName(), adoptPtrWillBeNoop(supplement));
+        supplement = new WorkerGlobalScopeCrypto;
+        provideTo(context, supplementName(), supplement);
     }
     return *supplement;
 }
 
-Crypto* WorkerGlobalScopeCrypto::crypto(WillBeHeapSupplementable<WorkerGlobalScope>& context)
+Crypto* WorkerGlobalScopeCrypto::crypto(
+    Supplementable<WorkerGlobalScope>& context)
 {
     return WorkerGlobalScopeCrypto::from(context).crypto();
 }
@@ -70,7 +70,7 @@ Crypto* WorkerGlobalScopeCrypto::crypto() const
 DEFINE_TRACE(WorkerGlobalScopeCrypto)
 {
     visitor->trace(m_crypto);
-    WillBeHeapSupplement<WorkerGlobalScope>::trace(visitor);
+    Supplement<WorkerGlobalScope>::trace(visitor);
 }
 
 } // namespace blink

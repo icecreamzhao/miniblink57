@@ -9,6 +9,7 @@
 #include "core/workers/WorkerClients.h"
 #include "modules/ModulesExport.h"
 #include "wtf/Forward.h"
+#include <memory>
 
 namespace blink {
 
@@ -18,13 +19,17 @@ class WebServiceWorkerProvider;
 // This mainly exists to provide access to WebServiceWorkerProvider.
 // Owned by Document (or WorkerClients).
 class MODULES_EXPORT ServiceWorkerContainerClient final
-    : public NoBaseWillBeGarbageCollectedFinalized<ServiceWorkerContainerClient>
-    , public WillBeHeapSupplement<Document>
-    , public WillBeHeapSupplement<WorkerClients> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainerClient);
+    : public GarbageCollectedFinalized<ServiceWorkerContainerClient>,
+      public Supplement<Document>,
+      public Supplement<WorkerClients> {
+    USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainerClient);
     WTF_MAKE_NONCOPYABLE(ServiceWorkerContainerClient);
+
 public:
-    static PassOwnPtrWillBeRawPtr<ServiceWorkerContainerClient> create(PassOwnPtr<WebServiceWorkerProvider>);
+    ServiceWorkerContainerClient(Document&,
+        std::unique_ptr<WebServiceWorkerProvider>);
+    ServiceWorkerContainerClient(WorkerClients&,
+        std::unique_ptr<WebServiceWorkerProvider>);
     virtual ~ServiceWorkerContainerClient();
 
     WebServiceWorkerProvider* provider() { return m_provider.get(); }
@@ -34,17 +39,17 @@ public:
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
-        WillBeHeapSupplement<Document>::trace(visitor);
-        WillBeHeapSupplement<WorkerClients>::trace(visitor);
+        Supplement<Document>::trace(visitor);
+        Supplement<WorkerClients>::trace(visitor);
     }
 
-protected:
-    explicit ServiceWorkerContainerClient(PassOwnPtr<WebServiceWorkerProvider>);
-
-    OwnPtr<WebServiceWorkerProvider> m_provider;
+private:
+    std::unique_ptr<WebServiceWorkerProvider> m_provider;
 };
 
-MODULES_EXPORT void provideServiceWorkerContainerClientToWorker(WorkerClients*, PassOwnPtr<WebServiceWorkerProvider>);
+MODULES_EXPORT void provideServiceWorkerContainerClientToWorker(
+    WorkerClients*,
+    std::unique_ptr<WebServiceWorkerProvider>);
 
 } // namespace blink
 

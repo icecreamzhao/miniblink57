@@ -33,19 +33,21 @@
 
 #include "WebElement.h"
 
-#if BLINK_IMPLEMENTATION
-namespace WTF { template <typename T> class PassRefPtr; }
-#endif
-
 namespace blink {
 
 class HTMLLabelElement;
 
 // Provides readonly access to some properties of a DOM label element node.
-class WebLabelElement : public WebElement {
+class WebLabelElement final : public WebElement {
 public:
-    WebLabelElement() : WebElement() { }
-    WebLabelElement(const WebLabelElement& element) : WebElement(element) { }
+    WebLabelElement()
+        : WebElement()
+    {
+    }
+    WebLabelElement(const WebLabelElement& element)
+        : WebElement(element)
+    {
+    }
 
     WebLabelElement& operator=(const WebLabelElement& element)
     {
@@ -58,11 +60,13 @@ public:
     BLINK_EXPORT WebElement correspondingControl();
 
 #if BLINK_IMPLEMENTATION
-    WebLabelElement(const PassRefPtrWillBeRawPtr<HTMLLabelElement>&);
-    WebLabelElement& operator=(const PassRefPtrWillBeRawPtr<HTMLLabelElement>&);
-    operator PassRefPtrWillBeRawPtr<HTMLLabelElement>() const;
+    WebLabelElement(HTMLLabelElement*);
+    WebLabelElement& operator=(HTMLLabelElement*);
+    operator HTMLLabelElement*() const;
 #endif
 };
+
+DECLARE_WEB_NODE_TYPE_CASTS(WebLabelElement);
 
 } // namespace blink
 

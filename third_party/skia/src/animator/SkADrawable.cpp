@@ -6,19 +6,22 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkADrawable.h"
 
-bool SkADrawable::doEvent(SkDisplayEvent::Kind , SkEventState* ) {
+bool SkADrawable::doEvent(SkDisplayEvent::Kind, SkEventState*)
+{
     return false;
 }
 
-bool SkADrawable::isDrawable() const {
+bool SkADrawable::isDrawable() const
+{
     return true;
 }
 
-void SkADrawable::initialize() {
+void SkADrawable::initialize()
+{
 }
 
-void SkADrawable::setSteps(int steps) {
+void SkADrawable::setSteps(int steps)
+{
 }

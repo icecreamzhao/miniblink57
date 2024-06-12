@@ -11,16 +11,20 @@
 #include "SkPaint.h"
 #include "SkPoint.h"
 #include "SkRect.h"
+#include "SkSurface.h"
 #include "SkTypes.h"
 #include "Test.h"
+#include <math.h>
 
 static const SkColor bgColor = SK_ColorWHITE;
 
-static void create(SkBitmap* bm, SkIRect bound) {
+static void create(SkBitmap* bm, SkIRect bound)
+{
     bm->allocN32Pixels(bound.width(), bound.height());
 }
 
-static void drawBG(SkCanvas* canvas) {
+static void drawBG(SkCanvas* canvas)
+{
     canvas->drawColor(bgColor);
 }
 
@@ -30,7 +34,7 @@ static void drawBG(SkCanvas* canvas) {
     ref is "bgColor".
  */
 static bool compare(const SkBitmap& ref, const SkIRect& iref,
-                    const SkBitmap& test, const SkIRect& itest)
+    const SkBitmap& test, const SkIRect& itest)
 {
     const int xOff = itest.fLeft - iref.fLeft;
     const int yOff = itest.fTop - iref.fTop;
@@ -44,9 +48,7 @@ static bool compare(const SkBitmap& ref, const SkIRect& iref,
             int refX = x + xOff;
             int refY = y + yOff;
             SkColor refColor;
-            if (refX >= 0 && refX < ref.width() &&
-                refY >= 0 && refY < ref.height())
-            {
+            if (refX >= 0 && refX < ref.width() && refY >= 0 && refY < ref.height()) {
                 refColor = ref.getColor(refX, refY);
             } else {
                 refColor = bgColor;
@@ -59,7 +61,8 @@ static bool compare(const SkBitmap& ref, const SkIRect& iref,
     return true;
 }
 
-DEF_TEST(DrawText, reporter) {
+DEF_TEST(DrawText, reporter)
+{
     SkPaint paint;
     paint.setColor(SK_ColorGRAY);
     paint.setTextSize(SkIntToScalar(20));
@@ -74,35 +77,59 @@ DEF_TEST(DrawText, reporter) {
     create(&drawPosTextBitmap, drawPosTextRect);
     SkCanvas drawPosTextCanvas(drawPosTextBitmap);
 
-    for (float offsetY = 0.0f; offsetY < 1.0f; offsetY += (1.0f / 16.0f)) {
-        for (float offsetX = 0.0f; offsetX < 1.0f; offsetX += (1.0f / 16.0f)) {
-            SkPoint point = SkPoint::Make(25.0f + offsetX,
-                                          25.0f + offsetY);
+    // Two test cases "A" for the normal path through the code, and " " to check the
+    // early return path.
+    const char* cases[] = { "A", " " };
+    for (auto c : cases) {
+        for (float offsetY = 0.0f; offsetY < 1.0f; offsetY += (1.0f / 16.0f)) {
+            for (float offsetX = 0.0f; offsetX < 1.0f; offsetX += (1.0f / 16.0f)) {
+                SkPoint point = SkPoint::Make(25.0f + offsetX,
+                    25.0f + offsetY);
 
-            for (int align = 0; align < SkPaint::kAlignCount; ++align) {
-                paint.setTextAlign(static_cast<SkPaint::Align>(align));
+                for (int align = 0; align < SkPaint::kAlignCount; ++align) {
+                    paint.setTextAlign(static_cast<SkPaint::Align>(align));
 
-                for (unsigned int flags = 0; flags < (1 << 3); ++flags) {
-                    static const unsigned int antiAliasFlag = 1;
-                    static const unsigned int subpixelFlag = 1 << 1;
-                    static const unsigned int lcdFlag = 1 << 2;
+                    for (unsigned int flags = 0; flags < (1 << 3); ++flags) {
+                        static const unsigned int antiAliasFlag = 1;
+                        static const unsigned int subpixelFlag = 1 << 1;
+                        static const unsigned int lcdFlag = 1 << 2;
 
-                    paint.setAntiAlias(SkToBool(flags & antiAliasFlag));
-                    paint.setSubpixelText(SkToBool(flags & subpixelFlag));
-                    paint.setLCDRenderText(SkToBool(flags & lcdFlag));
+                        paint.setAntiAlias(SkToBool(flags & antiAliasFlag));
+                        paint.setSubpixelText(SkToBool(flags & subpixelFlag));
+                        paint.setLCDRenderText(SkToBool(flags & lcdFlag));
 
-                    // Test: drawText and drawPosText draw the same.
-                    drawBG(&drawTextCanvas);
-                    drawTextCanvas.drawText("A", 1, point.fX, point.fY, paint);
+                        // Test: drawText and drawPosText draw the same.
+                        drawBG(&drawTextCanvas);
+                        drawTextCanvas.drawText(c, 1, point.fX, point.fY, paint);
 
-                    drawBG(&drawPosTextCanvas);
-                    drawPosTextCanvas.drawPosText("A", 1, &point, paint);
+                        drawBG(&drawPosTextCanvas);
+                        drawPosTextCanvas.drawPosText(c, 1, &point, paint);
 
-                    REPORTER_ASSERT(reporter,
-                        compare(drawTextBitmap, drawTextRect,
+                        REPORTER_ASSERT(reporter,
+                            compare(drawTextBitmap, drawTextRect,
                                 drawPosTextBitmap, drawPosTextRect));
+                    }
                 }
             }
         }
+    }
+}
+
+// Test drawing text at some unusual coordinates.
+// We measure success by not crashing or asserting.
+DEF_TEST(DrawText_weirdCoordinates, r)
+{
+    auto surface = SkSurface::MakeRasterN32Premul(10, 10);
+    auto canvas = surface->getCanvas();
+
+    SkScalar oddballs[] = { 0.0f, (float)INFINITY, (float)NAN, 34359738368.0f };
+
+    for (auto x : oddballs) {
+        canvas->drawText("a", 1, +x, 0.0f, SkPaint());
+        canvas->drawText("a", 1, -x, 0.0f, SkPaint());
+    }
+    for (auto y : oddballs) {
+        canvas->drawText("a", 1, 0.0f, +y, SkPaint());
+        canvas->drawText("a", 1, 0.0f, -y, SkPaint());
     }
 }

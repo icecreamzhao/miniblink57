@@ -32,6 +32,7 @@
 #define SecureTextInput_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/build_config.h"
 
 namespace blink {
 
@@ -41,7 +42,9 @@ namespace blink {
 PLATFORM_EXPORT void enableSecureTextInput();
 PLATFORM_EXPORT void disableSecureTextInput();
 #else
-inline void enableSecureTextInput() { }
+inline void enableSecureTextInput()
+{
+}
 inline void disableSecureTextInput() { }
 #endif
 

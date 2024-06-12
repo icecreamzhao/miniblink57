@@ -28,76 +28,94 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebView.h"
 
+#include "bindings/core/v8/V8Document.h"
 #include "core/dom/Document.h"
+#include "core/dom/DocumentUserGestureToken.h"
 #include "core/dom/Element.h"
+#include "core/dom/Fullscreen.h"
 #include "core/editing/FrameSelection.h"
+#include "core/editing/InputMethodController.h"
+#include "core/editing/markers/DocumentMarkerController.h"
 #include "core/frame/EventHandlerRegistry.h"
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
-#include "core/frame/PinchViewport.h"
 #include "core/frame/Settings.h"
-#include "core/html/HTMLDocument.h"
+#include "core/frame/VisualViewport.h"
 #include "core/html/HTMLIFrameElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLTextAreaElement.h"
-#include "core/layout/LayoutView.h"
+#include "core/layout/api/LayoutViewItem.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoadRequest.h"
 #include "core/page/Page.h"
-#include "core/paint/DeprecatedPaintLayer.h"
-#include "core/paint/DeprecatedPaintLayerPainter.h"
+#include "core/page/ScopedPageSuspender.h"
+#include "core/paint/PaintLayer.h"
+#include "core/paint/PaintLayerPainter.h"
 #include "core/timing/DOMWindowPerformance.h"
 #include "core/timing/Performance.h"
-#include "core/timing/PerformanceCompositeTiming.h"
 #include "platform/KeyboardCodes.h"
 #include "platform/UserGestureIndicator.h"
+#include "platform/geometry/IntRect.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/Color.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/paint/SkPictureBuilder.h"
+#include "platform/scroll/ScrollTypes.h"
+#include "platform/testing/RuntimeEnabledFeaturesTestHelpers.h"
 #include "platform/testing/URLTestHelpers.h"
 #include "platform/testing/UnitTestHelpers.h"
 #include "public/platform/Platform.h"
-#include "public/platform/WebClipboard.h"
 #include "public/platform/WebDisplayMode.h"
 #include "public/platform/WebDragData.h"
+#include "public/platform/WebDragOperation.h"
+#include "public/platform/WebFloatPoint.h"
+#include "public/platform/WebInputEvent.h"
+#include "public/platform/WebLayerTreeView.h"
+#include "public/platform/WebMockClipboard.h"
 #include "public/platform/WebSize.h"
 #include "public/platform/WebThread.h"
-#include "public/platform/WebUnitTestSupport.h"
+#include "public/platform/WebURLLoaderMockFactory.h"
 #include "public/web/WebAutofillClient.h"
-#include "public/web/WebContentDetectionResult.h"
+#include "public/web/WebCache.h"
 #include "public/web/WebDateTimeChooserCompletion.h"
 #include "public/web/WebDeviceEmulationParams.h"
 #include "public/web/WebDocument.h"
-#include "public/web/WebDragOperation.h"
 #include "public/web/WebElement.h"
 #include "public/web/WebFrame.h"
 #include "public/web/WebFrameClient.h"
+#include "public/web/WebFrameContentDumper.h"
 #include "public/web/WebHitTestResult.h"
-#include "public/web/WebInputEvent.h"
+#include "public/web/WebInputMethodController.h"
+#include "public/web/WebPrintParams.h"
 #include "public/web/WebScriptSource.h"
 #include "public/web/WebSettings.h"
 #include "public/web/WebTreeScopeType.h"
 #include "public/web/WebViewClient.h"
 #include "public/web/WebWidget.h"
 #include "public/web/WebWidgetClient.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/skia/include/core/SkBitmap.h"
-#include "third_party/skia/include/core/SkBitmapDevice.h"
 #include "third_party/skia/include/core/SkCanvas.h"
+#include "web/DevToolsEmulator.h"
+#include "web/WebInputMethodControllerImpl.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebSettingsImpl.h"
 #include "web/WebViewImpl.h"
 #include "web/tests/FrameTestHelpers.h"
-#include <gtest/gtest.h>
+#include "wtf/PtrUtil.h"
+#include <memory>
+
+#if OS(MACOSX)
+#include "public/web/mac/WebSubstringUtil.h"
+#endif
 
 using blink::FrameTestHelpers::loadFrame;
-using blink::URLTestHelpers::toKURL;
-using blink::URLTestHelpers::registerMockedURLLoad;
 using blink::testing::runPendingTasks;
+using blink::URLTestHelpers::registerMockedURLLoad;
+using blink::URLTestHelpers::toKURL;
 
 namespace blink {
 
@@ -115,13 +133,15 @@ class TestData {
 public:
     void setWebView(WebView* webView) { m_webView = toWebViewImpl(webView); }
     void setSize(const WebSize& newSize) { m_size = newSize; }
-    HorizontalScrollbarState horizontalScrollbarState() const
+    HorizontalScrollbarState getHorizontalScrollbarState() const
     {
-        return m_webView->hasHorizontalScrollbar() ? VisibleHorizontalScrollbar: NoHorizontalScrollbar;
+        return m_webView->hasHorizontalScrollbar() ? VisibleHorizontalScrollbar
+                                                   : NoHorizontalScrollbar;
     }
-    VerticalScrollbarState verticalScrollbarState() const
+    VerticalScrollbarState getVerticalScrollbarState() const
     {
-        return m_webView->hasVerticalScrollbar() ? VisibleVerticalScrollbar : NoVerticalScrollbar;
+        return m_webView->hasVerticalScrollbar() ? VisibleVerticalScrollbar
+                                                 : NoVerticalScrollbar;
     }
     int width() const { return m_size.width; }
     int height() const { return m_size.height; }
@@ -134,7 +154,10 @@ private:
 class AutoResizeWebViewClient : public FrameTestHelpers::TestWebViewClient {
 public:
     // WebViewClient methods
-    void didAutoResize(const WebSize& newSize) override { m_testData.setSize(newSize); }
+    void didAutoResize(const WebSize& newSize) override
+    {
+        m_testData.setSize(newSize);
+    }
 
     // Local methods
     TestData& testData() { return m_testData; }
@@ -143,28 +166,16 @@ private:
     TestData m_testData;
 };
 
-class SaveImageFromDataURLWebViewClient : public FrameTestHelpers::TestWebViewClient {
-public:
-    // WebViewClient methods
-    void saveImageFromDataURL(const WebString& dataURL) override { m_dataURL = dataURL; }
-
-    // Local methods
-    const WebString& result() const { return m_dataURL; }
-    void reset() { m_dataURL = WebString(); }
-
-private:
-    WebString m_dataURL;
-};
-
 class TapHandlingWebViewClient : public FrameTestHelpers::TestWebViewClient {
 public:
     // WebViewClient methods
-    void didHandleGestureEvent(const WebGestureEvent& event, bool eventCancelled) override
+    void didHandleGestureEvent(const WebGestureEvent& event,
+        bool eventCancelled) override
     {
-        if (event.type == WebInputEvent::GestureTap) {
+        if (event.type() == WebInputEvent::GestureTap) {
             m_tapX = event.x;
             m_tapY = event.y;
-        } else if (event.type == WebInputEvent::GestureLongPress) {
+        } else if (event.type() == WebInputEvent::GestureLongPress) {
             m_longpressX = event.x;
             m_longpressY = event.y;
         }
@@ -190,20 +201,20 @@ private:
     int m_longpressY;
 };
 
-class DateTimeChooserWebViewClient : public FrameTestHelpers::TestWebViewClient {
+class DateTimeChooserWebViewClient
+    : public FrameTestHelpers::TestWebViewClient {
 public:
     WebDateTimeChooserCompletion* chooserCompletion()
     {
         return m_chooserCompletion;
     }
 
-    void clearChooserCompletion()
-    {
-        m_chooserCompletion = 0;
-    }
+    void clearChooserCompletion() { m_chooserCompletion = 0; }
 
     // WebViewClient methods
-    bool openDateTimeChooser(const WebDateTimeChooserParams&, WebDateTimeChooserCompletion* chooser_completion) override
+    bool openDateTimeChooser(
+        const WebDateTimeChooserParams&,
+        WebDateTimeChooserCompletion* chooser_completion) override
     {
         m_chooserCompletion = chooser_completion;
         return true;
@@ -211,163 +222,53 @@ public:
 
 private:
     WebDateTimeChooserCompletion* m_chooserCompletion;
-
 };
 
-class WebViewTest : public ::testing::Test {
+typedef bool TestParamRootLayerScrolling;
+class WebViewTest
+    : public ::testing::Test,
+      public ::testing::WithParamInterface<TestParamRootLayerScrolling>,
+      private ScopedRootLayerScrollingForTest {
 public:
     WebViewTest()
-        : m_baseURL("http://www.test.com/")
+        : ScopedRootLayerScrollingForTest(GetParam())
+        , m_baseURL("http://www.test.com/")
     {
     }
 
     void TearDown() override
     {
-        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+        Platform::current()->getURLLoaderMockFactory()->unregisterAllURLs();
+        WebCache::clear();
     }
 
 protected:
     void registerMockedHttpURLLoad(const std::string& fileName)
     {
-        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(fileName.c_str()));
+        URLTestHelpers::registerMockedURLFromBaseURL(
+            WebString::fromUTF8(m_baseURL.c_str()),
+            WebString::fromUTF8(fileName.c_str()));
     }
 
-    void testAutoResize(const WebSize& minAutoResize, const WebSize& maxAutoResize,
-                        const std::string& pageWidth, const std::string& pageHeight,
-                        int expectedWidth, int expectedHeight,
-                        HorizontalScrollbarState expectedHorizontalState, VerticalScrollbarState expectedVerticalState);
+    void testAutoResize(const WebSize& minAutoResize,
+        const WebSize& maxAutoResize,
+        const std::string& pageWidth,
+        const std::string& pageHeight,
+        int expectedWidth,
+        int expectedHeight,
+        HorizontalScrollbarState expectedHorizontalState,
+        VerticalScrollbarState expectedVerticalState);
 
-    void testTextInputType(WebTextInputType expectedType, const std::string& htmlFile);
-    void testInputMode(const WebString& expectedInputMode, const std::string& htmlFile);
+    void testTextInputType(WebTextInputType expectedType,
+        const std::string& htmlFile);
+    void testInputMode(WebTextInputMode expectedInputMode,
+        const std::string& htmlFile);
+    bool tapElement(WebInputEvent::Type, Element*);
+    bool tapElementById(WebInputEvent::Type, const WebString& id);
 
     std::string m_baseURL;
     FrameTestHelpers::WebViewHelper m_webViewHelper;
 };
-
-TEST_F(WebViewTest, SaveImageAt)
-{
-    SaveImageFromDataURLWebViewClient client;
-
-    std::string url = m_baseURL + "image-with-data-url.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "image-with-data-url.html");
-    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
-    webView->resize(WebSize(400, 400));
-    webView->layout();
-
-    client.reset();
-    webView->saveImageAt(WebPoint(1, 1));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    client.reset();
-    webView->saveImageAt(WebPoint(1, 2));
-    EXPECT_EQ(WebString(), client.result());
-
-    webView->setPageScaleFactor(4);
-    webView->setPinchViewportOffset(WebFloatPoint(1, 1));
-
-    client.reset();
-    webView->saveImageAt(WebPoint(3, 3));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
-};
-
-TEST_F(WebViewTest, SaveImageWithImageMap)
-{
-    SaveImageFromDataURLWebViewClient client;
-
-    std::string url = m_baseURL + "image-map.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "image-map.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
-    webView->resize(WebSize(400, 400));
-
-    client.reset();
-    webView->saveImageAt(WebPoint(25, 25));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    client.reset();
-    webView->saveImageAt(WebPoint(75, 25));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    client.reset();
-    webView->saveImageAt(WebPoint(125, 25));
-    EXPECT_EQ(WebString(), client.result());
-
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
-}
-
-TEST_F(WebViewTest, CopyImageAt)
-{
-    std::string url = m_baseURL + "canvas-copy-image.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "canvas-copy-image.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(url, true, 0);
-    webView->resize(WebSize(400, 400));
-
-    uint64_t sequence = Platform::current()->clipboard()->sequenceNumber(WebClipboard::BufferStandard);
-
-    webView->copyImageAt(WebPoint(50, 50));
-
-    EXPECT_NE(sequence, Platform::current()->clipboard()->sequenceNumber(WebClipboard::BufferStandard));
-
-    WebData data = Platform::current()->clipboard()->readImage(WebClipboard::Buffer());
-    WebImage image = WebImage::fromData(data, WebSize());
-
-    SkAutoLockPixels autoLock(image.getSkBitmap());
-    EXPECT_EQ(SkColorSetARGB(255, 255, 0, 0), image.getSkBitmap().getColor(0, 0));
-};
-
-TEST_F(WebViewTest, CopyImageAtWithPinchZoom)
-{
-    std::string url = m_baseURL + "canvas-copy-image.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "canvas-copy-image.html");
-    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(url, true, 0);
-    webView->resize(WebSize(400, 400));
-    webView->layout();
-    webView->setPageScaleFactor(2);
-    webView->setPinchViewportOffset(WebFloatPoint(200, 200));
-
-    uint64_t sequence = Platform::current()->clipboard()->sequenceNumber(WebClipboard::BufferStandard);
-
-    webView->copyImageAt(WebPoint(0, 0));
-
-    EXPECT_NE(sequence, Platform::current()->clipboard()->sequenceNumber(WebClipboard::BufferStandard));
-
-    WebData data = Platform::current()->clipboard()->readImage(WebClipboard::Buffer());
-    WebImage image = WebImage::fromData(data, WebSize());
-
-    SkAutoLockPixels autoLock(image.getSkBitmap());
-    EXPECT_EQ(SkColorSetARGB(255, 255, 0, 0), image.getSkBitmap().getColor(0, 0));
-};
-
-TEST_F(WebViewTest, CopyImageWithImageMap)
-{
-    SaveImageFromDataURLWebViewClient client;
-
-    std::string url = m_baseURL + "image-map.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "image-map.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
-    webView->resize(WebSize(400, 400));
-
-    client.reset();
-    webView->saveImageAt(WebPoint(25, 25));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    client.reset();
-    webView->saveImageAt(WebPoint(75, 25));
-    EXPECT_EQ(WebString::fromUTF8("data:image/gif;base64"
-        ",R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="), client.result());
-
-    client.reset();
-    webView->saveImageAt(WebPoint(125, 25));
-    EXPECT_EQ(WebString(), client.result());
-
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
-}
 
 static bool hitTestIsContentEditable(WebView* view, int x, int y)
 {
@@ -383,10 +284,13 @@ static std::string hitTestElementId(WebView* view, int x, int y)
     return hitTestResult.node().to<WebElement>().getAttribute("id").utf8();
 }
 
-TEST_F(WebViewTest, HitTestContentEditableImageMaps)
+INSTANTIATE_TEST_CASE_P(All, WebViewTest, ::testing::Bool());
+
+TEST_P(WebViewTest, HitTestContentEditableImageMaps)
 {
     std::string url = m_baseURL + "content-editable-image-maps.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "content-editable-image-maps.html");
+    URLTestHelpers::registerMockedURLLoad(toKURL(url),
+        "content-editable-image-maps.html");
     WebView* webView = m_webViewHelper.initializeAndLoad(url, true, 0);
     webView->resize(WebSize(500, 500));
 
@@ -425,7 +329,7 @@ static WebElement hitTestUrlElement(WebView* view, int x, int y)
     return hitTestResult.urlElement();
 }
 
-TEST_F(WebViewTest, ImageMapUrls)
+TEST_P(WebViewTest, ImageMapUrls)
 {
     std::string url = m_baseURL + "image-map.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "image-map.html");
@@ -435,7 +339,8 @@ TEST_F(WebViewTest, ImageMapUrls)
     std::string imageUrl = "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
 
     EXPECT_EQ("area", hitTestElementId(webView, 25, 25));
-    EXPECT_EQ("area", hitTestUrlElement(webView, 25, 25).getAttribute("id").utf8());
+    EXPECT_EQ("area",
+        hitTestUrlElement(webView, 25, 25).getAttribute("id").utf8());
     EXPECT_EQ(imageUrl, hitTestAbsoluteUrl(webView, 25, 25));
 
     EXPECT_EQ("image", hitTestElementId(webView, 75, 25));
@@ -443,10 +348,48 @@ TEST_F(WebViewTest, ImageMapUrls)
     EXPECT_EQ(imageUrl, hitTestAbsoluteUrl(webView, 75, 25));
 }
 
-TEST_F(WebViewTest, SetBaseBackgroundColor)
+TEST_P(WebViewTest, BrokenImage)
 {
-    const WebColor kWhite    = 0xFFFFFFFF;
-    const WebColor kBlue     = 0xFF0000FF;
+    URLTestHelpers::registerMockedErrorURLLoad(
+        KURL(toKURL(m_baseURL), "non_existent.png"));
+    std::string url = m_baseURL + "image-broken.html";
+    URLTestHelpers::registerMockedURLLoad(toKURL(url), "image-broken.html");
+
+    WebView* webView = m_webViewHelper.initialize();
+    webView->settings()->setLoadsImagesAutomatically(true);
+    loadFrame(webView->mainFrame(), url);
+    webView->resize(WebSize(400, 400));
+
+    std::string imageUrl = "http://www.test.com/non_existent.png";
+
+    EXPECT_EQ("image", hitTestElementId(webView, 25, 25));
+    EXPECT_TRUE(hitTestUrlElement(webView, 25, 25).isNull());
+    EXPECT_EQ(imageUrl, hitTestAbsoluteUrl(webView, 25, 25));
+}
+
+TEST_P(WebViewTest, BrokenInputImage)
+{
+    URLTestHelpers::registerMockedErrorURLLoad(
+        KURL(toKURL(m_baseURL), "non_existent.png"));
+    std::string url = m_baseURL + "input-image-broken.html";
+    URLTestHelpers::registerMockedURLLoad(toKURL(url), "input-image-broken.html");
+
+    WebView* webView = m_webViewHelper.initialize();
+    webView->settings()->setLoadsImagesAutomatically(true);
+    loadFrame(webView->mainFrame(), url);
+    webView->resize(WebSize(400, 400));
+
+    std::string imageUrl = "http://www.test.com/non_existent.png";
+
+    EXPECT_EQ("image", hitTestElementId(webView, 25, 25));
+    EXPECT_TRUE(hitTestUrlElement(webView, 25, 25).isNull());
+    EXPECT_EQ(imageUrl, hitTestAbsoluteUrl(webView, 25, 25));
+}
+
+TEST_P(WebViewTest, SetBaseBackgroundColor)
+{
+    const WebColor kWhite = 0xFFFFFFFF;
+    const WebColor kBlue = 0xFF0000FF;
     const WebColor kDarkCyan = 0xFF227788;
     const WebColor kTranslucentPutty = 0x80BFB196;
     const WebColor kTransparent = 0x00000000;
@@ -458,10 +401,18 @@ TEST_F(WebViewTest, SetBaseBackgroundColor)
     EXPECT_EQ(kBlue, webView->backgroundColor());
 
     WebURL baseURL = URLTestHelpers::toKURL("http://example.com/");
-    FrameTestHelpers::loadHTMLString(webView->mainFrame(), "<html><head><style>body {background-color:#227788}</style></head></html>", baseURL);
+    FrameTestHelpers::loadHTMLString(webView->mainFrame(),
+        "<html><head><style>body "
+        "{background-color:#227788}</style></head></"
+        "html>",
+        baseURL);
     EXPECT_EQ(kDarkCyan, webView->backgroundColor());
 
-    FrameTestHelpers::loadHTMLString(webView->mainFrame(), "<html><head><style>body {background-color:rgba(255,0,0,0.5)}</style></head></html>", baseURL);
+    FrameTestHelpers::loadHTMLString(webView->mainFrame(),
+        "<html><head><style>body "
+        "{background-color:rgba(255,0,0,0.5)}</"
+        "style></head></html>",
+        baseURL);
     // Expected: red (50% alpha) blended atop base of kBlue.
     EXPECT_EQ(0xFF7F0080, webView->backgroundColor());
 
@@ -470,55 +421,60 @@ TEST_F(WebViewTest, SetBaseBackgroundColor)
     EXPECT_EQ(0xBFE93B32, webView->backgroundColor());
 
     webView->setBaseBackgroundColor(kTransparent);
-    FrameTestHelpers::loadHTMLString(webView->mainFrame(), "<html><head><style>body {background-color:transparent}</style></head></html>", baseURL);
+    FrameTestHelpers::loadHTMLString(webView->mainFrame(),
+        "<html><head><style>body "
+        "{background-color:transparent}</style></"
+        "head></html>",
+        baseURL);
     // Expected: transparent on top of kTransparent will still be transparent.
     EXPECT_EQ(kTransparent, webView->backgroundColor());
 
     LocalFrame* frame = webView->mainFrameImpl()->frame();
-    // The detach() and dispose() calls are a hack to prevent this test
+    // The shutdown() calls are a hack to prevent this test
     // from violating invariants about frame state during navigation/detach.
-    frame->document()->detach();
+    frame->document()->shutdown();
 
     // Creating a new frame view with the background color having 0 alpha.
     frame->createView(IntSize(1024, 768), Color::transparent, true);
     EXPECT_EQ(kTransparent, frame->view()->baseBackgroundColor());
     frame->view()->dispose();
 
-    Color kTransparentRed(100, 0, 0, 0);
-    frame->createView(IntSize(1024, 768), kTransparentRed, true);
-    EXPECT_EQ(kTransparentRed, frame->view()->baseBackgroundColor());
+    const Color transparentRed(100, 0, 0, 0);
+    frame->createView(IntSize(1024, 768), transparentRed, true);
+    EXPECT_EQ(transparentRed, frame->view()->baseBackgroundColor());
     frame->view()->dispose();
 }
 
-TEST_F(WebViewTest, SetBaseBackgroundColorBeforeMainFrame)
+TEST_P(WebViewTest, SetBaseBackgroundColorBeforeMainFrame)
 {
     const WebColor kBlue = 0xFF0000FF;
     FrameTestHelpers::TestWebViewClient webViewClient;
-    WebView* webView = WebViewImpl::create(&webViewClient);
+    WebViewImpl* webView = WebViewImpl::create(&webViewClient, WebPageVisibilityStateVisible);
     EXPECT_NE(kBlue, webView->backgroundColor());
-    // webView does not have a frame yet, but we should still be able to set the background color.
+    // webView does not have a frame yet, but we should still be able to set the
+    // background color.
     webView->setBaseBackgroundColor(kBlue);
     EXPECT_EQ(kBlue, webView->backgroundColor());
-    WebLocalFrameImpl* frame = WebLocalFrameImpl::create(WebTreeScopeType::Document, nullptr);
+    FrameTestHelpers::TestWebFrameClient webFrameClient;
+    WebLocalFrame* frame = WebLocalFrame::create(WebTreeScopeType::Document, &webFrameClient);
     webView->setMainFrame(frame);
     webView->close();
-    frame->close();
 }
 
-TEST_F(WebViewTest, SetBaseBackgroundColorAndBlendWithExistingContent)
+TEST_P(WebViewTest, SetBaseBackgroundColorAndBlendWithExistingContent)
 {
     const WebColor kAlphaRed = 0x80FF0000;
     const WebColor kAlphaGreen = 0x8000FF00;
     const int kWidth = 100;
     const int kHeight = 100;
 
-    WebView* webView = m_webViewHelper.initialize();
+    WebViewImpl* webView = m_webViewHelper.initialize();
 
     // Set WebView background to green with alpha.
     webView->setBaseBackgroundColor(kAlphaGreen);
     webView->settings()->setShouldClearDocumentBackground(false);
     webView->resize(WebSize(kWidth, kHeight));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
 
     // Set canvas background to red with alpha.
     SkBitmap bitmap;
@@ -528,12 +484,16 @@ TEST_F(WebViewTest, SetBaseBackgroundColorAndBlendWithExistingContent)
 
     SkPictureBuilder pictureBuilder(FloatRect(0, 0, kWidth, kHeight));
 
-    // Paint the root of the main frame in the way that CompositedLayerMapping would.
-    FrameView* view = m_webViewHelper.webViewImpl()->mainFrameImpl()->frameView();
-    DeprecatedPaintLayer* rootLayer = view->layoutView()->layer();
+    // Paint the root of the main frame in the way that CompositedLayerMapping
+    // would.
+    FrameView* view = m_webViewHelper.webView()->mainFrameImpl()->frameView();
+    PaintLayer* rootLayer = view->layoutViewItem().layer();
     LayoutRect paintRect(0, 0, kWidth, kHeight);
-    DeprecatedPaintLayerPaintingInfo paintingInfo(rootLayer, paintRect, PaintBehaviorNormal, LayoutSize());
-    DeprecatedPaintLayerPainter(*rootLayer).paintLayerContents(&pictureBuilder.context(), paintingInfo, PaintLayerPaintingCompositingAllPhases);
+    PaintLayerPaintingInfo paintingInfo(rootLayer, paintRect,
+        GlobalPaintNormalPhase, LayoutSize());
+    PaintLayerPainter(*rootLayer)
+        .paintLayerContents(pictureBuilder.context(), paintingInfo,
+            PaintLayerPaintingCompositingAllPhases);
 
     pictureBuilder.endRecording()->playback(&canvas);
 
@@ -543,17 +503,18 @@ TEST_F(WebViewTest, SetBaseBackgroundColorAndBlendWithExistingContent)
     EXPECT_TRUE(greenChannel(color));
 }
 
-TEST_F(WebViewTest, FocusIsInactive)
+TEST_P(WebViewTest, FocusIsInactive)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "visible_iframe.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "visible_iframe.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "visible_iframe.html");
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "visible_iframe.html");
 
     webView->setFocus(true);
     webView->setIsActive(true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     EXPECT_TRUE(frame->frame()->document()->isHTMLDocument());
 
-    HTMLDocument* document = toHTMLDocument(frame->frame()->document());
+    Document* document = frame->frame()->document();
     EXPECT_TRUE(document->hasFocus());
     webView->setFocus(false);
     webView->setIsActive(false);
@@ -569,9 +530,10 @@ TEST_F(WebViewTest, FocusIsInactive)
     EXPECT_FALSE(document->hasFocus());
 }
 
-TEST_F(WebViewTest, ActiveState)
+TEST_P(WebViewTest, ActiveState)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "visible_iframe.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "visible_iframe.html");
     WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "visible_iframe.html");
 
     ASSERT_TRUE(webView);
@@ -586,7 +548,7 @@ TEST_F(WebViewTest, ActiveState)
     EXPECT_TRUE(webView->isActive());
 }
 
-TEST_F(WebViewTest, HitTestResultAtWithPageScale)
+TEST_P(WebViewTest, HitTestResultAtWithPageScale)
 {
     std::string url = m_baseURL + "specify_size.html?" + "50px" + ":" + "50px";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "specify_size.html");
@@ -596,19 +558,17 @@ TEST_F(WebViewTest, HitTestResultAtWithPageScale)
 
     // Image is at top left quandrant, so should not hit it.
     WebHitTestResult negativeResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult.node().nodeType());
     EXPECT_FALSE(negativeResult.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult.reset();
 
     // Scale page up 2x so image should occupy the whole viewport.
     webView->setPageScaleFactor(2.0f);
     WebHitTestResult positiveResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, positiveResult.node().nodeType());
     EXPECT_TRUE(positiveResult.node().to<WebElement>().hasHTMLTagName("img"));
     positiveResult.reset();
 }
 
-TEST_F(WebViewTest, HitTestResultAtWithPageScaleAndPan)
+TEST_P(WebViewTest, HitTestResultAtWithPageScaleAndPan)
 {
     std::string url = m_baseURL + "specify_size.html?" + "50px" + ":" + "50px";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "specify_size.html");
@@ -619,26 +579,23 @@ TEST_F(WebViewTest, HitTestResultAtWithPageScaleAndPan)
 
     // Image is at top left quandrant, so should not hit it.
     WebHitTestResult negativeResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult.node().nodeType());
     EXPECT_FALSE(negativeResult.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult.reset();
 
     // Scale page up 2x so image should occupy the whole viewport.
     webView->setPageScaleFactor(2.0f);
     WebHitTestResult positiveResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, positiveResult.node().nodeType());
     EXPECT_TRUE(positiveResult.node().to<WebElement>().hasHTMLTagName("img"));
     positiveResult.reset();
 
     // Pan around the zoomed in page so the image is not visible in viewport.
-    webView->setPinchViewportOffset(WebFloatPoint(100, 100));
+    webView->setVisualViewportOffset(WebFloatPoint(100, 100));
     WebHitTestResult negativeResult2 = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult2.node().nodeType());
     EXPECT_FALSE(negativeResult2.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult2.reset();
 }
 
-TEST_F(WebViewTest, HitTestResultForTapWithTapArea)
+TEST_P(WebViewTest, HitTestResultForTapWithTapArea)
 {
     std::string url = m_baseURL + "hit_test.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "hit_test.html");
@@ -648,26 +605,23 @@ TEST_F(WebViewTest, HitTestResultForTapWithTapArea)
 
     // Image is at top left quandrant, so should not hit it.
     WebHitTestResult negativeResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult.node().nodeType());
     EXPECT_FALSE(negativeResult.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult.reset();
 
     // The tap area is 20 by 20 square, centered at 55, 55.
     WebSize tapArea(20, 20);
     WebHitTestResult positiveResult = webView->hitTestResultForTap(hitPoint, tapArea);
-    ASSERT_EQ(WebNode::ElementNode, positiveResult.node().nodeType());
     EXPECT_TRUE(positiveResult.node().to<WebElement>().hasHTMLTagName("img"));
     positiveResult.reset();
 
     // Move the hit point the image is just outside the tapped area now.
     hitPoint = WebPoint(61, 61);
     WebHitTestResult negativeResult2 = webView->hitTestResultForTap(hitPoint, tapArea);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult2.node().nodeType());
     EXPECT_FALSE(negativeResult2.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult2.reset();
 }
 
-TEST_F(WebViewTest, HitTestResultForTapWithTapAreaPageScaleAndPan)
+TEST_P(WebViewTest, HitTestResultForTapWithTapAreaPageScaleAndPan)
 {
     std::string url = m_baseURL + "hit_test.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "hit_test.html");
@@ -678,38 +632,40 @@ TEST_F(WebViewTest, HitTestResultForTapWithTapAreaPageScaleAndPan)
 
     // Image is at top left quandrant, so should not hit it.
     WebHitTestResult negativeResult = webView->hitTestResultAt(hitPoint);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult.node().nodeType());
     EXPECT_FALSE(negativeResult.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult.reset();
 
     // The tap area is 20 by 20 square, centered at 55, 55.
     WebSize tapArea(20, 20);
     WebHitTestResult positiveResult = webView->hitTestResultForTap(hitPoint, tapArea);
-    ASSERT_EQ(WebNode::ElementNode, positiveResult.node().nodeType());
     EXPECT_TRUE(positiveResult.node().to<WebElement>().hasHTMLTagName("img"));
     positiveResult.reset();
 
     // Zoom in and pan around the page so the image is not visible in viewport.
     webView->setPageScaleFactor(2.0f);
-    webView->setPinchViewportOffset(WebFloatPoint(100, 100));
+    webView->setVisualViewportOffset(WebFloatPoint(100, 100));
     WebHitTestResult negativeResult2 = webView->hitTestResultForTap(hitPoint, tapArea);
-    ASSERT_EQ(WebNode::ElementNode, negativeResult2.node().nodeType());
     EXPECT_FALSE(negativeResult2.node().to<WebElement>().hasHTMLTagName("img"));
     negativeResult2.reset();
 }
 
-void WebViewTest::testAutoResize(const WebSize& minAutoResize, const WebSize& maxAutoResize,
-                                 const std::string& pageWidth, const std::string& pageHeight,
-                                 int expectedWidth, int expectedHeight,
-                                 HorizontalScrollbarState expectedHorizontalState, VerticalScrollbarState expectedVerticalState)
+void WebViewTest::testAutoResize(
+    const WebSize& minAutoResize,
+    const WebSize& maxAutoResize,
+    const std::string& pageWidth,
+    const std::string& pageHeight,
+    int expectedWidth,
+    int expectedHeight,
+    HorizontalScrollbarState expectedHorizontalState,
+    VerticalScrollbarState expectedVerticalState)
 {
     AutoResizeWebViewClient client;
     std::string url = m_baseURL + "specify_size.html?" + pageWidth + ":" + pageHeight;
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "specify_size.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
     client.testData().setWebView(webView);
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     FrameView* frameView = frame->frame()->view();
     frameView->layout();
     EXPECT_FALSE(frameView->layoutPending());
@@ -725,16 +681,19 @@ void WebViewTest::testAutoResize(const WebSize& minAutoResize, const WebSize& ma
     EXPECT_EQ(expectedWidth, client.testData().width());
     EXPECT_EQ(expectedHeight, client.testData().height());
 
-    // Android disables main frame scrollbars.
+// Android disables main frame scrollbars.
 #if !OS(ANDROID)
-    EXPECT_EQ(expectedHorizontalState, client.testData().horizontalScrollbarState());
-    EXPECT_EQ(expectedVerticalState, client.testData().verticalScrollbarState());
+    EXPECT_EQ(expectedHorizontalState,
+        client.testData().getHorizontalScrollbarState());
+    EXPECT_EQ(expectedVerticalState,
+        client.testData().getVerticalScrollbarState());
 #endif
 
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
+    // Explicitly reset to break dependency on locally scoped client.
+    m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, AutoResizeMinimumSize)
+TEST_P(WebViewTest, AutoResizeMinimumSize)
 {
     WebSize minAutoResize(91, 56);
     WebSize maxAutoResize(403, 302);
@@ -743,10 +702,11 @@ TEST_F(WebViewTest, AutoResizeMinimumSize)
     int expectedWidth = 91;
     int expectedHeight = 56;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, NoHorizontalScrollbar, NoVerticalScrollbar);
+        expectedWidth, expectedHeight, NoHorizontalScrollbar,
+        NoVerticalScrollbar);
 }
 
-TEST_F(WebViewTest, AutoResizeHeightOverflowAndFixedWidth)
+TEST_P(WebViewTest, AutoResizeHeightOverflowAndFixedWidth)
 {
     WebSize minAutoResize(90, 95);
     WebSize maxAutoResize(90, 100);
@@ -755,10 +715,11 @@ TEST_F(WebViewTest, AutoResizeHeightOverflowAndFixedWidth)
     int expectedWidth = 90;
     int expectedHeight = 100;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, NoHorizontalScrollbar, VisibleVerticalScrollbar);
+        expectedWidth, expectedHeight, NoHorizontalScrollbar,
+        VisibleVerticalScrollbar);
 }
 
-TEST_F(WebViewTest, AutoResizeFixedHeightAndWidthOverflow)
+TEST_P(WebViewTest, AutoResizeFixedHeightAndWidthOverflow)
 {
     WebSize minAutoResize(90, 100);
     WebSize maxAutoResize(200, 100);
@@ -767,12 +728,13 @@ TEST_F(WebViewTest, AutoResizeFixedHeightAndWidthOverflow)
     int expectedWidth = 200;
     int expectedHeight = 100;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, VisibleHorizontalScrollbar, NoVerticalScrollbar);
+        expectedWidth, expectedHeight, VisibleHorizontalScrollbar,
+        NoVerticalScrollbar);
 }
 
 // Next three tests disabled for https://bugs.webkit.org/show_bug.cgi?id=92318 .
 // It seems we can run three AutoResize tests, then the next one breaks.
-TEST_F(WebViewTest, AutoResizeInBetweenSizes)
+TEST_P(WebViewTest, AutoResizeInBetweenSizes)
 {
     WebSize minAutoResize(90, 95);
     WebSize maxAutoResize(200, 300);
@@ -781,10 +743,11 @@ TEST_F(WebViewTest, AutoResizeInBetweenSizes)
     int expectedWidth = 100;
     int expectedHeight = 200;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, NoHorizontalScrollbar, NoVerticalScrollbar);
+        expectedWidth, expectedHeight, NoHorizontalScrollbar,
+        NoVerticalScrollbar);
 }
 
-TEST_F(WebViewTest, AutoResizeOverflowSizes)
+TEST_P(WebViewTest, AutoResizeOverflowSizes)
 {
     WebSize minAutoResize(90, 95);
     WebSize maxAutoResize(200, 300);
@@ -793,10 +756,11 @@ TEST_F(WebViewTest, AutoResizeOverflowSizes)
     int expectedWidth = 200;
     int expectedHeight = 300;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, VisibleHorizontalScrollbar, VisibleVerticalScrollbar);
+        expectedWidth, expectedHeight, VisibleHorizontalScrollbar,
+        VisibleVerticalScrollbar);
 }
 
-TEST_F(WebViewTest, AutoResizeMaxSize)
+TEST_P(WebViewTest, AutoResizeMaxSize)
 {
     WebSize minAutoResize(90, 95);
     WebSize maxAutoResize(200, 300);
@@ -805,18 +769,29 @@ TEST_F(WebViewTest, AutoResizeMaxSize)
     int expectedWidth = 200;
     int expectedHeight = 300;
     testAutoResize(minAutoResize, maxAutoResize, pageWidth, pageHeight,
-                   expectedWidth, expectedHeight, NoHorizontalScrollbar, NoVerticalScrollbar);
+        expectedWidth, expectedHeight, NoHorizontalScrollbar,
+        NoVerticalScrollbar);
 }
 
-void WebViewTest::testTextInputType(WebTextInputType expectedType, const std::string& htmlFile)
+void WebViewTest::testTextInputType(WebTextInputType expectedType,
+    const std::string& htmlFile)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(htmlFile.c_str()));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + htmlFile);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8(htmlFile.c_str()));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + htmlFile);
+    WebInputMethodControllerImpl* controller = webView->mainFrameImpl()->inputMethodController();
+    EXPECT_EQ(WebTextInputTypeNone, controller->textInputType());
+    EXPECT_EQ(WebTextInputTypeNone, controller->textInputInfo().type);
     webView->setInitialFocus(false);
-    EXPECT_EQ(expectedType, webView->textInputInfo().type);
+    EXPECT_EQ(expectedType, controller->textInputType());
+    EXPECT_EQ(expectedType, controller->textInputInfo().type);
+    webView->clearFocusedElement();
+    EXPECT_EQ(WebTextInputTypeNone, controller->textInputType());
+    EXPECT_EQ(WebTextInputTypeNone, controller->textInputInfo().type);
 }
 
-TEST_F(WebViewTest, TextInputType)
+TEST_P(WebViewTest, TextInputType)
 {
     testTextInputType(WebTextInputTypeText, "input_field_default.html");
     testTextInputType(WebTextInputTypePassword, "input_field_password.html");
@@ -827,58 +802,131 @@ TEST_F(WebViewTest, TextInputType)
     testTextInputType(WebTextInputTypeURL, "input_field_url.html");
 }
 
-void WebViewTest::testInputMode(const WebString& expectedInputMode, const std::string& htmlFile)
+TEST_P(WebViewTest, TextInputInfoUpdateStyleAndLayout)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(htmlFile.c_str()));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + htmlFile);
-    webView->setInitialFocus(false);
-    EXPECT_EQ(expectedInputMode, webView->textInputInfo().inputMode);
+    FrameTestHelpers::TestWebViewClient client;
+    FrameTestHelpers::WebViewHelper m_webViewHelper;
+    WebViewImpl* webViewImpl = m_webViewHelper.initialize(true, 0, &client);
+
+    WebURL baseURL = URLTestHelpers::toKURL("http://example.com/");
+    // Here, we need to construct a document that has a special property:
+    // Adding id="foo" to the <path> element will trigger creation of an SVG
+    // instance tree for the use <use> element.
+    // This is significant, because SVG instance trees are actually created lazily
+    // during Document::updateStyleAndLayout code, thus incrementing the DOM tree
+    // version and freaking out the EphemeralRange (invalidating it).
+    FrameTestHelpers::loadHTMLString(
+        webViewImpl->mainFrame(),
+        "<svg height='100%' version='1.1' viewBox='0 0 14 14' width='100%'>"
+        "<use xmlns:xlink='http://www.w3.org/1999/xlink' xlink:href='#foo'></use>"
+        "<path d='M 100 100 L 300 100 L 200 300 z' fill='#000'></path>"
+        "</svg>"
+        "<input>",
+        baseURL);
+    webViewImpl->setInitialFocus(false);
+
+    // Add id="foo" to <path>, thus triggering the condition described above.
+    Document* document = webViewImpl->mainFrameImpl()->frame()->document();
+    document->body()
+        ->querySelector("path", ASSERT_NO_EXCEPTION)
+        ->setIdAttribute("foo");
+
+    // This should not DCHECK.
+    EXPECT_EQ(WebTextInputTypeText, webViewImpl->mainFrameImpl()->inputMethodController()->textInputInfo().type);
 }
 
-TEST_F(WebViewTest, InputMode)
+void WebViewTest::testInputMode(WebTextInputMode expectedInputMode,
+    const std::string& htmlFile)
 {
-    testInputMode(WebString(), "input_mode_default.html");
-    testInputMode(WebString("unknown"), "input_mode_default_unknown.html");
-    testInputMode(WebString("verbatim"), "input_mode_default_verbatim.html");
-    testInputMode(WebString("verbatim"), "input_mode_type_text_verbatim.html");
-    testInputMode(WebString("verbatim"), "input_mode_type_search_verbatim.html");
-    testInputMode(WebString(), "input_mode_type_url_verbatim.html");
-    testInputMode(WebString("verbatim"), "input_mode_textarea_verbatim.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8(htmlFile.c_str()));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + htmlFile);
+    webViewImpl->setInitialFocus(false);
+    EXPECT_EQ(expectedInputMode, webViewImpl->mainFrameImpl()->inputMethodController()->textInputInfo().inputMode);
 }
 
-TEST_F(WebViewTest, TextInputInfoWithReplacedElements)
+TEST_P(WebViewTest, InputMode)
+{
+    testInputMode(WebTextInputMode::kWebTextInputModeDefault,
+        "input_mode_default.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeDefault,
+        "input_mode_default_unknown.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeVerbatim,
+        "input_mode_default_verbatim.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeVerbatim,
+        "input_mode_type_text_verbatim.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeVerbatim,
+        "input_mode_type_search_verbatim.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeDefault,
+        "input_mode_type_url_verbatim.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeLatin,
+        "input_mode_type_latin.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeLatinName,
+        "input_mode_type_latin_name.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeLatinProse,
+        "input_mode_type_latin_prose.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeFullWidthLatin,
+        "input_mode_type_full_width_latin.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeKana,
+        "input_mode_type_kana.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeKanaName,
+        "input_mode_type_kana_name.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeKataKana,
+        "input_mode_type_kata_kana.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeNumeric,
+        "input_mode_type_numeric.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeTel,
+        "input_mode_type_tel.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeEmail,
+        "input_mode_type_email.html");
+    testInputMode(WebTextInputMode::kWebTextInputModeUrl,
+        "input_mode_type_url.html");
+}
+
+TEST_P(WebViewTest, TextInputInfoWithReplacedElements)
 {
     std::string url = m_baseURL + "div_with_image.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "div_with_image.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(url);
-    webView->setInitialFocus(false);
-    WebTextInputInfo info = webView->textInputInfo();
+    URLTestHelpers::registerMockedURLLoad(toKURL("http://www.test.com/foo.png"),
+        "white-1x1.png");
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url);
+    webViewImpl->setInitialFocus(false);
+    WebTextInputInfo info = webViewImpl->mainFrameImpl()->inputMethodController()->textInputInfo();
 
     EXPECT_EQ("foo\xef\xbf\xbc", info.value.utf8());
 }
 
-TEST_F(WebViewTest, SetEditableSelectionOffsetsAndTextInputInfo)
+TEST_P(WebViewTest, SetEditableSelectionOffsetsAndTextInputInfo)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
     webView->setInitialFocus(false);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    WebInputMethodControllerImpl* activeInputMethodController = frame->inputMethodController();
     frame->setEditableSelectionOffsets(5, 13);
     EXPECT_EQ("56789abc", frame->selectionAsText());
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz", info.value);
     EXPECT_EQ(5, info.selectionStart);
     EXPECT_EQ(13, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("content_editable_populated.html"));
-    webView = m_webViewHelper.initializeAndLoad(m_baseURL + "content_editable_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content_editable_populated.html"));
+    webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content_editable_populated.html");
     webView->setInitialFocus(false);
-    frame = toWebLocalFrameImpl(webView->mainFrame());
+    frame = webView->mainFrameImpl();
+    activeInputMethodController = frame->inputMethodController();
     frame->setEditableSelectionOffsets(8, 19);
     EXPECT_EQ("89abcdefghi", frame->selectionAsText());
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz", info.value);
     EXPECT_EQ(8, info.selectionStart);
     EXPECT_EQ(19, info.selectionEnd);
@@ -886,187 +934,642 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsAndTextInputInfo)
     EXPECT_EQ(-1, info.compositionEnd);
 }
 
-TEST_F(WebViewTest, ConfirmCompositionCursorPositionChange)
+// Regression test for crbug.com/663645
+TEST_P(WebViewTest, FinishComposingTextDoesNotAssert)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_default.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_default.html");
+    webView->setInitialFocus(false);
+
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+
+    // The test requires non-empty composition.
+    std::string compositionText("hello");
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 5, 5);
+
+    // Do arbitrary change to make layout dirty.
+    Document& document = *webView->mainFrameImpl()->frame()->document();
+    Element* br = document.createElement("br");
+    document.body()->appendChild(br);
+
+    // Should not hit assertion when calling
+    // WebInputMethodController::finishComposingText with non-empty composition
+    // and dirty layout.
+    activeInputMethodController->finishComposingText(
+        WebInputMethodController::KeepSelection);
+}
+
+TEST_P(WebViewTest, FinishComposingTextCursorPositionChange)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
     webView->setInitialFocus(false);
 
     // Set up a composition that needs to be committed.
     std::string compositionText("hello");
 
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
     WebVector<WebCompositionUnderline> emptyUnderlines;
-    webView->setComposition(WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 3, 3);
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 3, 3);
 
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello", std::string(info.value.utf8().data()));
     EXPECT_EQ(3, info.selectionStart);
     EXPECT_EQ(3, info.selectionEnd);
     EXPECT_EQ(0, info.compositionStart);
     EXPECT_EQ(5, info.compositionEnd);
 
-    webView->confirmComposition(WebWidget::KeepSelection);
-    info = webView->textInputInfo();
+    activeInputMethodController->finishComposingText(
+        WebInputMethodController::KeepSelection);
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(3, info.selectionStart);
     EXPECT_EQ(3, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 
-    webView->setComposition(WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 3, 3);
-    info = webView->textInputInfo();
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 3, 3);
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("helhellolo", std::string(info.value.utf8().data()));
     EXPECT_EQ(6, info.selectionStart);
     EXPECT_EQ(6, info.selectionEnd);
     EXPECT_EQ(3, info.compositionStart);
     EXPECT_EQ(8, info.compositionEnd);
 
-    webView->confirmComposition(WebWidget::DoNotKeepSelection);
-    info = webView->textInputInfo();
+    activeInputMethodController->finishComposingText(
+        WebInputMethodController::DoNotKeepSelection);
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(8, info.selectionStart);
     EXPECT_EQ(8, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 }
 
-TEST_F(WebViewTest, InsertNewLinePlacementAfterConfirmComposition)
+TEST_P(WebViewTest, SetCompositionForNewCaretPositions)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("text_area_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "text_area_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    webView->setInitialFocus(false);
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+
+    activeInputMethodController->commitText("hello", emptyUnderlines, 0);
+    activeInputMethodController->commitText("world", emptyUnderlines, -5);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+
+    EXPECT_EQ("helloworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Set up a composition that needs to be committed.
+    std::string compositionText("ABC");
+
+    // Caret is on the left of composing text.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 0, 0);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret is on the right of composing text.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 3, 3);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(8, info.selectionStart);
+    EXPECT_EQ(8, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret is between composing text and left boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, -2, -2);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(3, info.selectionStart);
+    EXPECT_EQ(3, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret is between composing text and right boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 5, 5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(10, info.selectionStart);
+    EXPECT_EQ(10, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret is on the left boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, -5, -5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret is on the right boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 8, 8);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(13, info.selectionStart);
+    EXPECT_EQ(13, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret exceeds the left boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, -100,
+        -100);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+
+    // Caret exceeds the right boundary.
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 100, 100);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloABCworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(13, info.selectionStart);
+    EXPECT_EQ(13, info.selectionEnd);
+    EXPECT_EQ(5, info.compositionStart);
+    EXPECT_EQ(8, info.compositionEnd);
+}
+
+TEST_P(WebViewTest, SetCompositionWithEmptyText)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    webView->setInitialFocus(false);
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+
+    activeInputMethodController->commitText("hello", emptyUnderlines, 0);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    activeInputMethodController->setComposition(WebString::fromUTF8(""),
+        emptyUnderlines, 0, 0);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    activeInputMethodController->setComposition(WebString::fromUTF8(""),
+        emptyUnderlines, -2, -2);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+    EXPECT_EQ(3, info.selectionStart);
+    EXPECT_EQ(3, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+}
+
+TEST_P(WebViewTest, CommitTextForNewCaretPositions)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    webView->setInitialFocus(false);
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+
+    // Caret is on the left of composing text.
+    activeInputMethodController->commitText("ab", emptyUnderlines, -2);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("ab", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Caret is on the right of composing text.
+    activeInputMethodController->commitText("c", emptyUnderlines, 1);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("cab", std::string(info.value.utf8().data()));
+    EXPECT_EQ(2, info.selectionStart);
+    EXPECT_EQ(2, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Caret is on the left boundary.
+    activeInputMethodController->commitText("def", emptyUnderlines, -5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("cadefb", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Caret is on the right boundary.
+    activeInputMethodController->commitText("g", emptyUnderlines, 6);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("gcadefb", std::string(info.value.utf8().data()));
+    EXPECT_EQ(7, info.selectionStart);
+    EXPECT_EQ(7, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Caret exceeds the left boundary.
+    activeInputMethodController->commitText("hi", emptyUnderlines, -100);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("gcadefbhi", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Caret exceeds the right boundary.
+    activeInputMethodController->commitText("jk", emptyUnderlines, 100);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("jkgcadefbhi", std::string(info.value.utf8().data()));
+    EXPECT_EQ(11, info.selectionStart);
+    EXPECT_EQ(11, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+}
+
+TEST_P(WebViewTest, CommitTextWhileComposing)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    webView->setInitialFocus(false);
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+    activeInputMethodController->setComposition(WebString::fromUTF8("abc"),
+        emptyUnderlines, 0, 0);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("abc", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+    EXPECT_EQ(0, info.compositionStart);
+    EXPECT_EQ(3, info.compositionEnd);
+
+    // Deletes ongoing composition, inserts the specified text and moves the
+    // caret.
+    activeInputMethodController->commitText("hello", emptyUnderlines, -2);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+    EXPECT_EQ(3, info.selectionStart);
+    EXPECT_EQ(3, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    activeInputMethodController->setComposition(WebString::fromUTF8("abc"),
+        emptyUnderlines, 0, 0);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helabclo", std::string(info.value.utf8().data()));
+    EXPECT_EQ(3, info.selectionStart);
+    EXPECT_EQ(3, info.selectionEnd);
+    EXPECT_EQ(3, info.compositionStart);
+    EXPECT_EQ(6, info.compositionEnd);
+
+    // Deletes ongoing composition and moves the caret.
+    activeInputMethodController->commitText("", emptyUnderlines, 2);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Inserts the specified text and moves the caret.
+    activeInputMethodController->commitText("world", emptyUnderlines, -5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+
+    // Only moves the caret.
+    activeInputMethodController->commitText("", emptyUnderlines, 5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("helloworld", std::string(info.value.utf8().data()));
+    EXPECT_EQ(10, info.selectionStart);
+    EXPECT_EQ(10, info.selectionEnd);
+    EXPECT_EQ(-1, info.compositionStart);
+    EXPECT_EQ(-1, info.compositionEnd);
+}
+
+TEST_P(WebViewTest, FinishCompositionDoesNotRevealSelection)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("form_with_input.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form_with_input.html");
+    webView->resize(WebSize(800, 600));
+    webView->setInitialFocus(false);
+    EXPECT_EQ(0, webView->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(0, webView->mainFrame()->getScrollOffset().height);
+
+    // Set up a composition from existing text that needs to be committed.
+    Vector<CompositionUnderline> emptyUnderlines;
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    frame->frame()->inputMethodController().setCompositionFromExistingText(
+        emptyUnderlines, 0, 3);
+
+    // Scroll the input field out of the viewport.
+    Element* element = static_cast<Element*>(
+        webView->mainFrame()->document().getElementById("btn"));
+    element->scrollIntoView();
+    float offsetHeight = webView->mainFrame()->getScrollOffset().height;
+    EXPECT_EQ(0, webView->mainFrame()->getScrollOffset().width);
+    EXPECT_LT(0, offsetHeight);
+
+    WebTextInputInfo info = frame->inputMethodController()->textInputInfo();
+    EXPECT_EQ("hello", std::string(info.value.utf8().data()));
+
+    // Verify that the input field is not scrolled back into the viewport.
+    frame->frameWidget()
+        ->getActiveWebInputMethodController()
+        ->finishComposingText(WebInputMethodController::DoNotKeepSelection);
+    EXPECT_EQ(0, webView->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(offsetHeight, webView->mainFrame()->getScrollOffset().height);
+}
+
+TEST_P(WebViewTest, InsertNewLinePlacementAfterFinishComposingText)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("text_area_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "text_area_populated.html");
     webView->setInitialFocus(false);
 
     WebVector<WebCompositionUnderline> emptyUnderlines;
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    WebInputMethodController* activeInputMethodController = frame->inputMethodController();
     frame->setEditableSelectionOffsets(4, 4);
     frame->setCompositionFromExistingText(8, 12, emptyUnderlines);
 
-    WebTextInputInfo info = webView->textInputInfo();
-    EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz",
+        std::string(info.value.utf8().data()));
     EXPECT_EQ(4, info.selectionStart);
     EXPECT_EQ(4, info.selectionEnd);
     EXPECT_EQ(8, info.compositionStart);
     EXPECT_EQ(12, info.compositionEnd);
 
-    webView->confirmComposition(WebWidget::KeepSelection);
-    info = webView->textInputInfo();
+    activeInputMethodController->finishComposingText(
+        WebInputMethodController::KeepSelection);
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(4, info.selectionStart);
     EXPECT_EQ(4, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 
     std::string compositionText("\n");
-    webView->confirmComposition(WebString::fromUTF8(compositionText.c_str()));
-    info = webView->textInputInfo();
+    activeInputMethodController->commitText(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 0);
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(5, info.selectionStart);
     EXPECT_EQ(5, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
-    EXPECT_EQ("0123\n456789abcdefghijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
+    EXPECT_EQ("0123\n456789abcdefghijklmnopqrstuvwxyz",
+        std::string(info.value.utf8().data()));
 }
 
-TEST_F(WebViewTest, ExtendSelectionAndDelete)
+TEST_P(WebViewTest, ExtendSelectionAndDelete)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     webView->setInitialFocus(false);
     frame->setEditableSelectionOffsets(10, 10);
     frame->extendSelectionAndDelete(5, 8);
-    WebTextInputInfo info = webView->textInputInfo();
+    WebInputMethodController* activeInputMethodController = frame->inputMethodController();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("01234ijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
     EXPECT_EQ(5, info.selectionStart);
     EXPECT_EQ(5, info.selectionEnd);
     frame->extendSelectionAndDelete(10, 0);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("ijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
 }
 
-TEST_F(WebViewTest, SetCompositionFromExistingText)
+TEST_P(WebViewTest, DeleteSurroundingText)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebInputMethodController* activeInputMethodController = frame->inputMethodController();
+    webView->setInitialFocus(false);
+
+    frame->setEditableSelectionOffsets(10, 10);
+    frame->deleteSurroundingText(5, 8);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("01234ijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
+    EXPECT_EQ(5, info.selectionStart);
+    EXPECT_EQ(5, info.selectionEnd);
+
+    frame->setEditableSelectionOffsets(5, 10);
+    frame->deleteSurroundingText(3, 5);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("01ijklmstuvwxyz", std::string(info.value.utf8().data()));
+    EXPECT_EQ(2, info.selectionStart);
+    EXPECT_EQ(7, info.selectionEnd);
+
+    frame->setEditableSelectionOffsets(5, 5);
+    frame->deleteSurroundingText(10, 0);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("lmstuvwxyz", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+
+    frame->deleteSurroundingText(0, 20);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+
+    frame->deleteSurroundingText(10, 10);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("", std::string(info.value.utf8().data()));
+    EXPECT_EQ(0, info.selectionStart);
+    EXPECT_EQ(0, info.selectionEnd);
+}
+
+TEST_P(WebViewTest, SetCompositionFromExistingText)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
     webView->setInitialFocus(false);
     WebVector<WebCompositionUnderline> underlines(static_cast<size_t>(1));
     underlines[0] = WebCompositionUnderline(0, 4, 0, false, 0);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    WebInputMethodController* activeInputMethodController = frame->inputMethodController();
     frame->setEditableSelectionOffsets(4, 10);
     frame->setCompositionFromExistingText(8, 12, underlines);
-    WebVector<WebCompositionUnderline> underlineResults = toWebViewImpl(webView)->compositionUnderlines();
-    EXPECT_EQ(8u, underlineResults[0].startOffset);
-    EXPECT_EQ(12u, underlineResults[0].endOffset);
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(4, info.selectionStart);
     EXPECT_EQ(10, info.selectionEnd);
     EXPECT_EQ(8, info.compositionStart);
     EXPECT_EQ(12, info.compositionEnd);
     WebVector<WebCompositionUnderline> emptyUnderlines;
     frame->setCompositionFromExistingText(0, 0, emptyUnderlines);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(4, info.selectionStart);
     EXPECT_EQ(10, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 }
 
-TEST_F(WebViewTest, SetCompositionFromExistingTextInTextArea)
+TEST_P(WebViewTest, SetCompositionFromExistingTextInTextArea)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("text_area_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "text_area_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("text_area_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "text_area_populated.html");
     webView->setInitialFocus(false);
     WebVector<WebCompositionUnderline> underlines(static_cast<size_t>(1));
     underlines[0] = WebCompositionUnderline(0, 4, 0, false, 0);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    WebInputMethodController* activeInputMethodController = frame->frameWidget()->getActiveWebInputMethodController();
     frame->setEditableSelectionOffsets(27, 27);
     std::string newLineText("\n");
-    webView->confirmComposition(WebString::fromUTF8(newLineText.c_str()));
-    WebTextInputInfo info = webView->textInputInfo();
-    EXPECT_EQ("0123456789abcdefghijklmnopq\nrstuvwxyz", std::string(info.value.utf8().data()));
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+    activeInputMethodController->commitText(
+        WebString::fromUTF8(newLineText.c_str()), emptyUnderlines, 0);
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("0123456789abcdefghijklmnopq\nrstuvwxyz",
+        std::string(info.value.utf8().data()));
 
     frame->setEditableSelectionOffsets(31, 31);
     frame->setCompositionFromExistingText(30, 34, underlines);
-    WebVector<WebCompositionUnderline> underlineResults = toWebViewImpl(webView)->compositionUnderlines();
-    EXPECT_EQ(2u, underlineResults[0].startOffset);
-    EXPECT_EQ(6u, underlineResults[0].endOffset);
-    info = webView->textInputInfo();
-    EXPECT_EQ("0123456789abcdefghijklmnopq\nrstuvwxyz", std::string(info.value.utf8().data()));
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("0123456789abcdefghijklmnopq\nrstuvwxyz",
+        std::string(info.value.utf8().data()));
     EXPECT_EQ(31, info.selectionStart);
     EXPECT_EQ(31, info.selectionEnd);
     EXPECT_EQ(30, info.compositionStart);
     EXPECT_EQ(34, info.compositionEnd);
 
     std::string compositionText("yolo");
-    webView->confirmComposition(WebString::fromUTF8(compositionText.c_str()));
-    info = webView->textInputInfo();
-    EXPECT_EQ("0123456789abcdefghijklmnopq\nrsyoloxyz", std::string(info.value.utf8().data()));
+    activeInputMethodController->commitText(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 0);
+    info = activeInputMethodController->textInputInfo();
+    EXPECT_EQ("0123456789abcdefghijklmnopq\nrsyoloxyz",
+        std::string(info.value.utf8().data()));
     EXPECT_EQ(34, info.selectionStart);
     EXPECT_EQ(34, info.selectionEnd);
     EXPECT_EQ(-1, info.compositionStart);
     EXPECT_EQ(-1, info.compositionEnd);
 }
 
-TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
+TEST_P(WebViewTest, SetCompositionFromExistingTextInRichText)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content_editable_rich_text.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content_editable_rich_text.html");
+    webView->setInitialFocus(false);
+    WebVector<WebCompositionUnderline> underlines(static_cast<size_t>(1));
+    underlines[0] = WebCompositionUnderline(0, 4, 0, false, 0);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    frame->setEditableSelectionOffsets(1, 1);
+    WebDocument document = webView->mainFrame()->document();
+    EXPECT_FALSE(document.getElementById("bold").isNull());
+    frame->setCompositionFromExistingText(0, 4, underlines);
+    EXPECT_FALSE(document.getElementById("bold").isNull());
+}
+
+TEST_P(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
     webView->setInitialFocus(false);
 
     std::string compositionTextFirst("hello ");
     std::string compositionTextSecond("world");
     WebVector<WebCompositionUnderline> emptyUnderlines;
+    WebInputMethodController* activeInputMethodController = webView->mainFrameImpl()
+                                                                ->frameWidget()
+                                                                ->getActiveWebInputMethodController();
+    activeInputMethodController->commitText(
+        WebString::fromUTF8(compositionTextFirst.c_str()), emptyUnderlines, 0);
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionTextSecond.c_str()), emptyUnderlines, 5,
+        5);
 
-    webView->confirmComposition(WebString::fromUTF8(compositionTextFirst.c_str()));
-    webView->setComposition(WebString::fromUTF8(compositionTextSecond.c_str()), emptyUnderlines, 5, 5);
-
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(11, info.selectionStart);
     EXPECT_EQ(11, info.selectionEnd);
     EXPECT_EQ(6, info.compositionStart);
     EXPECT_EQ(11, info.compositionEnd);
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setEditableSelectionOffsets(6, 6);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(6, info.selectionStart);
     EXPECT_EQ(6, info.selectionEnd);
@@ -1074,7 +1577,7 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
     EXPECT_EQ(11, info.compositionEnd);
 
     frame->setEditableSelectionOffsets(8, 8);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(8, info.selectionStart);
     EXPECT_EQ(8, info.selectionEnd);
@@ -1082,7 +1585,7 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
     EXPECT_EQ(11, info.compositionEnd);
 
     frame->setEditableSelectionOffsets(11, 11);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(11, info.selectionStart);
     EXPECT_EQ(11, info.selectionEnd);
@@ -1090,7 +1593,7 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
     EXPECT_EQ(11, info.compositionEnd);
 
     frame->setEditableSelectionOffsets(6, 11);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(6, info.selectionStart);
     EXPECT_EQ(11, info.selectionEnd);
@@ -1098,7 +1601,7 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
     EXPECT_EQ(11, info.compositionEnd);
 
     frame->setEditableSelectionOffsets(2, 2);
-    info = webView->textInputInfo();
+    info = activeInputMethodController->textInputInfo();
     EXPECT_EQ("hello world", std::string(info.value.utf8().data()));
     EXPECT_EQ(2, info.selectionStart);
     EXPECT_EQ(2, info.selectionEnd);
@@ -1106,11 +1609,14 @@ TEST_F(WebViewTest, SetEditableSelectionOffsetsKeepsComposition)
     EXPECT_EQ(-1, info.compositionEnd);
 }
 
-TEST_F(WebViewTest, IsSelectionAnchorFirst)
+TEST_P(WebViewTest, IsSelectionAnchorFirst)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
-    WebFrame* frame = webView->mainFrame();
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrame* frame = webView->mainFrameImpl();
 
     webView->setInitialFocus(false);
     frame->setEditableSelectionOffsets(4, 10);
@@ -1122,9 +1628,11 @@ TEST_F(WebViewTest, IsSelectionAnchorFirst)
     EXPECT_FALSE(webView->isSelectionAnchorFirst());
 }
 
-TEST_F(WebViewTest, ExitingDeviceEmulationResetsPageScale)
+TEST_P(WebViewTest, ExitingDeviceEmulationResetsPageScale)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("200-by-300.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
     WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
     webViewImpl->resize(WebSize(200, 300));
 
@@ -1146,125 +1654,226 @@ TEST_F(WebViewTest, ExitingDeviceEmulationResetsPageScale)
     EXPECT_EQ(pageScaleExpected, webViewImpl->pageScaleFactor());
 }
 
-TEST_F(WebViewTest, HistoryResetScrollAndScaleState)
+TEST_P(WebViewTest, HistoryResetScrollAndScaleState)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("200-by-300.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
     WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
     webViewImpl->resize(WebSize(100, 150));
-    webViewImpl->layout();
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().height);
+    webViewImpl->updateAllLifecyclePhases();
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
 
     // Make the page scale and scroll with the given paremeters.
     webViewImpl->setPageScaleFactor(2.0f);
     webViewImpl->mainFrame()->setScrollOffset(WebSize(94, 111));
     EXPECT_EQ(2.0f, webViewImpl->pageScaleFactor());
-    EXPECT_EQ(94, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(111, webViewImpl->mainFrame()->scrollOffset().height);
+    EXPECT_EQ(94, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(111, webViewImpl->mainFrame()->getScrollOffset().height);
     LocalFrame* mainFrameLocal = toLocalFrame(webViewImpl->page()->mainFrame());
     mainFrameLocal->loader().saveScrollState();
     EXPECT_EQ(2.0f, mainFrameLocal->loader().currentItem()->pageScaleFactor());
-    EXPECT_EQ(94, mainFrameLocal->loader().currentItem()->scrollPoint().x());
-    EXPECT_EQ(111, mainFrameLocal->loader().currentItem()->scrollPoint().y());
+    EXPECT_EQ(94,
+        mainFrameLocal->loader().currentItem()->getScrollOffset().width());
+    EXPECT_EQ(111,
+        mainFrameLocal->loader().currentItem()->getScrollOffset().height());
 
     // Confirm that resetting the page state resets the saved scroll position.
     webViewImpl->resetScrollAndScaleState();
     EXPECT_EQ(1.0f, webViewImpl->pageScaleFactor());
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().height);
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
     EXPECT_EQ(1.0f, mainFrameLocal->loader().currentItem()->pageScaleFactor());
-    EXPECT_EQ(0, mainFrameLocal->loader().currentItem()->scrollPoint().x());
-    EXPECT_EQ(0, mainFrameLocal->loader().currentItem()->scrollPoint().y());
+    EXPECT_EQ(0,
+        mainFrameLocal->loader().currentItem()->getScrollOffset().width());
+    EXPECT_EQ(0,
+        mainFrameLocal->loader().currentItem()->getScrollOffset().height());
 }
 
-TEST_F(WebViewTest, BackForwardRestoreScroll)
+TEST_P(WebViewTest, BackForwardRestoreScroll)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("back_forward_restore_scroll.html"));
-    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "back_forward_restore_scroll.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("back_forward_restore_scroll.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "back_forward_restore_scroll.html");
     webViewImpl->resize(WebSize(640, 480));
-    webViewImpl->layout();
+    webViewImpl->updateAllLifecyclePhases();
 
     // Emulate a user scroll
     webViewImpl->mainFrame()->setScrollOffset(WebSize(0, 900));
     LocalFrame* mainFrameLocal = toLocalFrame(webViewImpl->page()->mainFrame());
-    RefPtrWillBePersistent<HistoryItem> item1 = mainFrameLocal->loader().currentItem();
+    Persistent<HistoryItem> item1 = mainFrameLocal->loader().currentItem();
 
     // Click an anchor
-    mainFrameLocal->loader().load(FrameLoadRequest(mainFrameLocal->document(), ResourceRequest(mainFrameLocal->document()->completeURL("#a"))));
-    RefPtrWillBePersistent<HistoryItem> item2 = mainFrameLocal->loader().currentItem();
+    mainFrameLocal->loader().load(FrameLoadRequest(
+        mainFrameLocal->document(),
+        ResourceRequest(mainFrameLocal->document()->completeURL("#a"))));
+    Persistent<HistoryItem> item2 = mainFrameLocal->loader().currentItem();
 
     // Go back, then forward, then back again.
     mainFrameLocal->loader().load(
-        FrameLoadRequest(nullptr, FrameLoader::resourceRequestFromHistoryItem(
-            item1.get(), UseProtocolCachePolicy)),
+        FrameLoadRequest(
+            nullptr, FrameLoader::resourceRequestFromHistoryItem(item1.get(), WebCachePolicy::UseProtocolCachePolicy)),
         FrameLoadTypeBackForward, item1.get(), HistorySameDocumentLoad);
     mainFrameLocal->loader().load(
-        FrameLoadRequest(nullptr, FrameLoader::resourceRequestFromHistoryItem(
-            item2.get(), UseProtocolCachePolicy)),
+        FrameLoadRequest(
+            nullptr, FrameLoader::resourceRequestFromHistoryItem(item2.get(), WebCachePolicy::UseProtocolCachePolicy)),
         FrameLoadTypeBackForward, item2.get(), HistorySameDocumentLoad);
     mainFrameLocal->loader().load(
-        FrameLoadRequest(nullptr, FrameLoader::resourceRequestFromHistoryItem(
-            item1.get(), UseProtocolCachePolicy)),
+        FrameLoadRequest(
+            nullptr, FrameLoader::resourceRequestFromHistoryItem(item1.get(), WebCachePolicy::UseProtocolCachePolicy)),
         FrameLoadTypeBackForward, item1.get(), HistorySameDocumentLoad);
 
     // Click a different anchor
-    mainFrameLocal->loader().load(FrameLoadRequest(mainFrameLocal->document(), ResourceRequest(mainFrameLocal->document()->completeURL("#b"))));
-    RefPtrWillBePersistent<HistoryItem> item3 = mainFrameLocal->loader().currentItem();
+    mainFrameLocal->loader().load(FrameLoadRequest(
+        mainFrameLocal->document(),
+        ResourceRequest(mainFrameLocal->document()->completeURL("#b"))));
+    Persistent<HistoryItem> item3 = mainFrameLocal->loader().currentItem();
 
-    // Go back, then forward. The scroll position should be properly set on the forward navigation.
+    // Go back, then forward. The scroll position should be properly set on the
+    // forward navigation.
     mainFrameLocal->loader().load(
-        FrameLoadRequest(nullptr, FrameLoader::resourceRequestFromHistoryItem(
-            item1.get(), UseProtocolCachePolicy)),
+        FrameLoadRequest(
+            nullptr, FrameLoader::resourceRequestFromHistoryItem(item1.get(), WebCachePolicy::UseProtocolCachePolicy)),
         FrameLoadTypeBackForward, item1.get(), HistorySameDocumentLoad);
     mainFrameLocal->loader().load(
-        FrameLoadRequest(nullptr, FrameLoader::resourceRequestFromHistoryItem(
-            item3.get(), UseProtocolCachePolicy)),
+        FrameLoadRequest(
+            nullptr, FrameLoader::resourceRequestFromHistoryItem(item3.get(), WebCachePolicy::UseProtocolCachePolicy)),
         FrameLoadTypeBackForward, item3.get(), HistorySameDocumentLoad);
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_GT(webViewImpl->mainFrame()->scrollOffset().height, 2000);
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_GT(webViewImpl->mainFrame()->getScrollOffset().height, 2000);
 }
 
-TEST_F(WebViewTest, EnterFullscreenResetScrollAndScaleState)
+// Tests that we restore scroll and scale *after* the fullscreen styles are
+// removed and the page is laid out. http://crbug.com/625683.
+TEST_P(WebViewTest, FullscreenResetScrollAndScaleFullscreenStyles)
 {
-    FrameTestHelpers::TestWebViewClient client;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("200-by-300.html"));
-    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html", true, 0, &client);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("fullscreen_style.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "fullscreen_style.html");
+    webViewImpl->resize(WebSize(800, 600));
+    webViewImpl->updateAllLifecyclePhases();
+
+    // Scroll the page down.
+    webViewImpl->mainFrame()->setScrollOffset(WebSize(0, 2000));
+    ASSERT_EQ(2000, webViewImpl->mainFrame()->getScrollOffset().height);
+
+    // Enter fullscreen.
+    Document* document = webViewImpl->mainFrameImpl()->frame()->document();
+    Element* element = document->getElementById("fullscreenElement");
+    UserGestureIndicator gesture(DocumentUserGestureToken::create(document));
+    Fullscreen::requestFullscreen(*element);
+    webViewImpl->didEnterFullscreen();
+    webViewImpl->updateAllLifecyclePhases();
+
+    // Sanity-check. There should be no scrolling possible.
+    ASSERT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
+    ASSERT_EQ(0, webViewImpl->mainFrameImpl()->frameView()->maximumScrollOffset().height());
+
+    // Confirm that after exiting and doing a layout, the scroll and scale
+    // parameters are reset. The page sets display: none on overflowing elements
+    // while in fullscreen so if we try to restore before the style and layout
+    // is applied the offsets will be clamped.
+    webViewImpl->didExitFullscreen();
+    EXPECT_TRUE(webViewImpl->mainFrameImpl()->frameView()->needsLayout());
+    webViewImpl->updateAllLifecyclePhases();
+
+    EXPECT_EQ(2000, webViewImpl->mainFrame()->getScrollOffset().height);
+}
+
+// Tests that exiting and immediately reentering fullscreen doesn't cause the
+// scroll and scale restoration to occur when we enter fullscreen again.
+TEST_P(WebViewTest, FullscreenResetScrollAndScaleExitAndReenter)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("fullscreen_style.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "fullscreen_style.html");
+    webViewImpl->resize(WebSize(800, 600));
+    webViewImpl->updateAllLifecyclePhases();
+
+    // Scroll the page down.
+    webViewImpl->mainFrame()->setScrollOffset(WebSize(0, 2000));
+    ASSERT_EQ(2000, webViewImpl->mainFrame()->getScrollOffset().height);
+
+    // Enter fullscreen.
+    Document* document = webViewImpl->mainFrameImpl()->frame()->document();
+    Element* element = document->getElementById("fullscreenElement");
+    UserGestureIndicator gesture(DocumentUserGestureToken::create(document));
+    Fullscreen::requestFullscreen(*element);
+    webViewImpl->didEnterFullscreen();
+    webViewImpl->updateAllLifecyclePhases();
+
+    // Sanity-check. There should be no scrolling possible.
+    ASSERT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
+    ASSERT_EQ(0, webViewImpl->mainFrameImpl()->frameView()->maximumScrollOffset().height());
+
+    // Exit and, without performing a layout, reenter fullscreen again. We
+    // shouldn't try to restore the scroll and scale values when we layout to
+    // enter fullscreen.
+    webViewImpl->didExitFullscreen();
+    Fullscreen::requestFullscreen(*element);
+    webViewImpl->didEnterFullscreen();
+    webViewImpl->updateAllLifecyclePhases();
+
+    // Sanity-check. There should be no scrolling possible.
+    ASSERT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
+    ASSERT_EQ(0, webViewImpl->mainFrameImpl()->frameView()->maximumScrollOffset().height());
+
+    // When we exit now, we should restore the original scroll value.
+    webViewImpl->didExitFullscreen();
+    webViewImpl->updateAllLifecyclePhases();
+
+    EXPECT_EQ(2000, webViewImpl->mainFrame()->getScrollOffset().height);
+}
+
+TEST_P(WebViewTest, EnterFullscreenResetScrollAndScaleState)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
     webViewImpl->resize(WebSize(100, 150));
-    webViewImpl->layout();
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(0, webViewImpl->mainFrame()->scrollOffset().height);
+    webViewImpl->updateAllLifecyclePhases();
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(0, webViewImpl->mainFrame()->getScrollOffset().height);
 
     // Make the page scale and scroll with the given paremeters.
     webViewImpl->setPageScaleFactor(2.0f);
     webViewImpl->mainFrame()->setScrollOffset(WebSize(94, 111));
-    webViewImpl->setPinchViewportOffset(WebFloatPoint(12, 20));
+    webViewImpl->setVisualViewportOffset(WebFloatPoint(12, 20));
     EXPECT_EQ(2.0f, webViewImpl->pageScaleFactor());
-    EXPECT_EQ(94, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(111, webViewImpl->mainFrame()->scrollOffset().height);
-    EXPECT_EQ(12, webViewImpl->pinchViewportOffset().x);
-    EXPECT_EQ(20, webViewImpl->pinchViewportOffset().y);
+    EXPECT_EQ(94, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(111, webViewImpl->mainFrame()->getScrollOffset().height);
+    EXPECT_EQ(12, webViewImpl->visualViewportOffset().x);
+    EXPECT_EQ(20, webViewImpl->visualViewportOffset().y);
 
-    RefPtrWillBeRawPtr<Element> element = static_cast<PassRefPtrWillBeRawPtr<Element>>(webViewImpl->mainFrame()->document().body());
-    webViewImpl->enterFullScreenForElement(element.get());
-    webViewImpl->didEnterFullScreen();
+    Document* document = webViewImpl->mainFrameImpl()->frame()->document();
+    Element* element = document->body();
+    UserGestureIndicator gesture(DocumentUserGestureToken::create(document));
+    Fullscreen::requestFullscreen(*element);
+    webViewImpl->didEnterFullscreen();
 
     // Page scale factor must be 1.0 during fullscreen for elements to be sized
     // properly.
     EXPECT_EQ(1.0f, webViewImpl->pageScaleFactor());
 
     // Make sure fullscreen nesting doesn't disrupt scroll/scale saving.
-    RefPtrWillBeRawPtr<Element> otherElement = static_cast<PassRefPtrWillBeRawPtr<Element>>(webViewImpl->mainFrame()->document().head());
-    webViewImpl->enterFullScreenForElement(otherElement.get());
+    Element* otherElement = document->getElementById("content");
+    Fullscreen::requestFullscreen(*otherElement);
 
     // Confirm that exiting fullscreen restores the parameters.
-    webViewImpl->didExitFullScreen();
-    EXPECT_EQ(2.0f, webViewImpl->pageScaleFactor());
-    EXPECT_EQ(94, webViewImpl->mainFrame()->scrollOffset().width);
-    EXPECT_EQ(111, webViewImpl->mainFrame()->scrollOffset().height);
-    EXPECT_EQ(12, webViewImpl->pinchViewportOffset().x);
-    EXPECT_EQ(20, webViewImpl->pinchViewportOffset().y);
+    webViewImpl->didExitFullscreen();
+    webViewImpl->updateAllLifecyclePhases();
 
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
+    EXPECT_EQ(2.0f, webViewImpl->pageScaleFactor());
+    EXPECT_EQ(94, webViewImpl->mainFrame()->getScrollOffset().width);
+    EXPECT_EQ(111, webViewImpl->mainFrame()->getScrollOffset().height);
+    EXPECT_EQ(12, webViewImpl->visualViewportOffset().x);
+    EXPECT_EQ(20, webViewImpl->visualViewportOffset().y);
 }
 
 class PrintWebViewClient : public FrameTestHelpers::TestWebViewClient {
@@ -1275,10 +1884,7 @@ public:
     }
 
     // WebViewClient methods
-    void printPage(WebLocalFrame*) override
-    {
-        m_printCalled = true;
-    }
+    void printPage(WebLocalFrame*) override { m_printCalled = true; }
 
     bool printCalled() const { return m_printCalled; }
 
@@ -1286,34 +1892,22 @@ private:
     bool m_printCalled;
 };
 
-
-TEST_F(WebViewTest, PrintWithXHRInFlight)
+TEST_P(WebViewTest, PrintWithXHRInFlight)
 {
     PrintWebViewClient client;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("print_with_xhr_inflight.html"));
-    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "print_with_xhr_inflight.html", true, 0, &client);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("print_with_xhr_inflight.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "print_with_xhr_inflight.html", true, 0, &client);
 
-    ASSERT_TRUE(toLocalFrame(webViewImpl->page()->mainFrame())->document()->loadEventFinished());
+    ASSERT_TRUE(toLocalFrame(webViewImpl->page()->mainFrame())
+                    ->document()
+                    ->loadEventFinished());
     EXPECT_TRUE(client.printCalled());
     m_webViewHelper.reset();
 }
 
-class DropTask : public WebThread::Task {
-public:
-    explicit DropTask(WebView* webView) : m_webView(webView)
-    {
-    }
-
-    void run() override
-    {
-        const WebPoint clientPoint(0, 0);
-        const WebPoint screenPoint(0, 0);
-        m_webView->dragTargetDrop(clientPoint, screenPoint, 0);
-    }
-
-private:
-    WebView* const m_webView;
-};
 static void DragAndDropURL(WebViewImpl* webView, const std::string& url)
 {
     WebDragData dragData;
@@ -1327,15 +1921,19 @@ static void DragAndDropURL(WebViewImpl* webView, const std::string& url)
 
     const WebPoint clientPoint(0, 0);
     const WebPoint screenPoint(0, 0);
-    webView->dragTargetDragEnter(dragData, clientPoint, screenPoint, WebDragOperationCopy, 0);
-    Platform::current()->currentThread()->postTask(FROM_HERE, new DropTask(webView));
-    FrameTestHelpers::pumpPendingRequestsDoNotUse(webView->mainFrame());
+    WebFrameWidgetBase* widget = webView->mainFrameImpl()->frameWidget();
+    widget->dragTargetDragEnter(dragData, clientPoint, screenPoint,
+        WebDragOperationCopy, 0);
+    widget->dragTargetDrop(dragData, clientPoint, screenPoint, 0);
+    FrameTestHelpers::pumpPendingRequestsForFrameToLoad(webView->mainFrame());
 }
 
-TEST_F(WebViewTest, DragDropURL)
+TEST_P(WebViewTest, DragDropURL)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "foo.html");
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "bar.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "foo.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "bar.html");
 
     const std::string fooUrl = m_baseURL + "foo.html";
     const std::string barUrl = m_baseURL + "bar.html";
@@ -1355,7 +1953,8 @@ TEST_F(WebViewTest, DragDropURL)
     // Disable navigation on drag-and-drop.
     webView->settingsImpl()->setNavigateOnDragDrop(false);
 
-    // Attempt to drag and drop to barUrl and verify that no navigation has occurred.
+    // Attempt to drag and drop to barUrl and verify that no navigation has
+    // occurred.
     DragAndDropURL(webView, barUrl);
     EXPECT_EQ(fooUrl, webView->mainFrame()->document().url().string().utf8());
 }
@@ -1364,15 +1963,16 @@ class ContentDetectorClient : public FrameTestHelpers::TestWebViewClient {
 public:
     ContentDetectorClient() { reset(); }
 
-    WebContentDetectionResult detectContentAround(const WebHitTestResult& hitTest) override
+    WebURL detectContentIntentAt(const WebHitTestResult& hitTest) override
     {
         m_contentDetectionRequested = true;
         return m_contentDetectionResult;
     }
 
-    void scheduleContentIntent(const WebURL& url) override
+    void scheduleContentIntent(const WebURL& url, bool isMainFrame) override
     {
         m_scheduledIntentURL = url;
+        m_wasInMainFrame = isMainFrame;
     }
 
     void cancelScheduledContentIntents() override
@@ -1385,51 +1985,75 @@ public:
         m_contentDetectionRequested = false;
         m_pendingIntentsCancelled = false;
         m_scheduledIntentURL = WebURL();
-        m_contentDetectionResult = WebContentDetectionResult();
+        m_wasInMainFrame = false;
+        m_contentDetectionResult = WebURL();
     }
 
     bool contentDetectionRequested() const { return m_contentDetectionRequested; }
     bool pendingIntentsCancelled() const { return m_pendingIntentsCancelled; }
     const WebURL& scheduledIntentURL() const { return m_scheduledIntentURL; }
-    void setContentDetectionResult(const WebContentDetectionResult& result) { m_contentDetectionResult = result; }
+    bool wasInMainFrame() const { return m_wasInMainFrame; }
+    void setContentDetectionResult(const WebURL& result)
+    {
+        m_contentDetectionResult = result;
+    }
 
 private:
     bool m_contentDetectionRequested;
     bool m_pendingIntentsCancelled;
     WebURL m_scheduledIntentURL;
-    WebContentDetectionResult m_contentDetectionResult;
+    bool m_wasInMainFrame;
+    WebURL m_contentDetectionResult;
 };
 
-static bool tapElementById(WebView* webView, WebInputEvent::Type type, const WebString& id)
+bool WebViewTest::tapElement(WebInputEvent::Type type, Element* element)
 {
-    ASSERT(webView);
-    RefPtrWillBeRawPtr<Element> element = static_cast<PassRefPtrWillBeRawPtr<Element>>(webView->mainFrame()->document().getElementById(id));
-    if (!element)
+    if (!element || !element->layoutObject())
         return false;
 
+    DCHECK(m_webViewHelper.webView());
     element->scrollIntoViewIfNeeded();
 
-    // TODO(bokan): Technically incorrect, event positions should be in viewport space. crbug.com/371902.
-    IntPoint center = element->screenRect().center();
+    // TODO(bokan): Technically incorrect, event positions should be in viewport
+    // space. crbug.com/371902.
+    IntPoint center = m_webViewHelper.webView()
+                          ->mainFrameImpl()
+                          ->frameView()
+                          ->contentsToScreen(element->layoutObject()->absoluteBoundingBoxRect())
+                          .center();
 
-    WebGestureEvent event;
-    event.type = type;
+    WebGestureEvent event(type, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+
+    event.sourceDevice = WebGestureDeviceTouchscreen;
     event.x = center.x();
     event.y = center.y();
 
-    webView->handleInputEvent(event);
+    m_webViewHelper.webView()->handleInputEvent(event);
     runPendingTasks();
     return true;
 }
 
-TEST_F(WebViewTest, DetectContentAroundPosition)
+bool WebViewTest::tapElementById(WebInputEvent::Type type,
+    const WebString& id)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("content_listeners.html"));
+    DCHECK(m_webViewHelper.webView());
+    Element* element = static_cast<Element*>(
+        m_webViewHelper.webView()->mainFrame()->document().getElementById(id));
+    return tapElement(type, element);
+}
+
+TEST_P(WebViewTest, DetectContentAroundPosition)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content_listeners.html"));
 
     ContentDetectorClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "content_listeners.html", true, 0, &client);
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content_listeners.html", true, 0, &client);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
 
     WebString clickListener = WebString::fromUTF8("clickListener");
@@ -1440,46 +2064,79 @@ TEST_F(WebViewTest, DetectContentAroundPosition)
 
     // Ensure content detection is not requested for nodes listening to click,
     // mouse or touch events when we do simple taps.
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, clickListener));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap, clickListener));
     EXPECT_FALSE(client.contentDetectionRequested());
     client.reset();
 
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, touchstartListener));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap, touchstartListener));
     EXPECT_FALSE(client.contentDetectionRequested());
     client.reset();
 
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, mousedownListener));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap, mousedownListener));
     EXPECT_FALSE(client.contentDetectionRequested());
     client.reset();
 
     // Content detection should work normally without these event listeners.
     // The click listener in the body should be ignored as a special case.
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, noListener));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap, noListener));
     EXPECT_TRUE(client.contentDetectionRequested());
     EXPECT_FALSE(client.scheduledIntentURL().isValid());
 
     WebURL intentURL = toKURL(m_baseURL);
-    client.setContentDetectionResult(WebContentDetectionResult(WebRange(), WebString(), intentURL));
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, noListener));
+    client.setContentDetectionResult(intentURL);
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap, noListener));
     EXPECT_TRUE(client.scheduledIntentURL() == intentURL);
+    EXPECT_TRUE(client.wasInMainFrame());
 
     // Tapping elsewhere should cancel the scheduled intent.
-    WebGestureEvent event;
-    event.type = WebInputEvent::GestureTap;
+    WebGestureEvent event(WebInputEvent::GestureTap, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
     webView->handleInputEvent(event);
     runPendingTasks();
     EXPECT_TRUE(client.pendingIntentsCancelled());
 
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
+    // Explicitly reset to break dependency on locally scoped client.
+    m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, ClientTapHandling)
+TEST_P(WebViewTest, ContentDetectionInIframe)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content_listeners_iframe.html"));
+
+    ContentDetectorClient client;
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content_listeners_iframe.html", true, 0, &client);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebString noListener = WebString::fromUTF8("noListener");
+    WebString frameName = WebString::fromUTF8("innerFrame");
+
+    WebURL intentURL = toKURL(m_baseURL);
+    client.setContentDetectionResult(intentURL);
+    Element* element = static_cast<Element*>(
+        webView->findFrameByName(frameName)->document().getElementById(
+            noListener));
+    EXPECT_TRUE(tapElement(WebInputEvent::GestureTap, element));
+    EXPECT_TRUE(client.scheduledIntentURL() == intentURL);
+    EXPECT_FALSE(client.wasInMainFrame());
+
+    // Explicitly reset to break dependency on locally scoped client.
+    m_webViewHelper.reset();
+}
+
+TEST_P(WebViewTest, ClientTapHandling)
 {
     TapHandlingWebViewClient client;
     client.reset();
     WebView* webView = m_webViewHelper.initializeAndLoad("about:blank", true, 0, &client);
-    WebGestureEvent event;
-    event.type = WebInputEvent::GestureTap;
+    WebGestureEvent event(WebInputEvent::GestureTap, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
     event.x = 3;
     event.y = 8;
     webView->handleInputEvent(event);
@@ -1487,7 +2144,7 @@ TEST_F(WebViewTest, ClientTapHandling)
     EXPECT_EQ(3, client.tapX());
     EXPECT_EQ(8, client.tapY());
     client.reset();
-    event.type = WebInputEvent::GestureLongPress;
+    event.setType(WebInputEvent::GestureLongPress);
     event.x = 25;
     event.y = 7;
     webView->handleInputEvent(event);
@@ -1495,83 +2152,542 @@ TEST_F(WebViewTest, ClientTapHandling)
     EXPECT_EQ(25, client.longpressX());
     EXPECT_EQ(7, client.longpressY());
 
-    m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
+    // Explicitly reset to break dependency on locally scoped client.
+    m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, ClientTapHandlingNullWebViewClient)
+TEST_P(WebViewTest, ClientTapHandlingNullWebViewClient)
 {
-    WebViewImpl* webView = WebViewImpl::create(nullptr);
-    webView->setMainFrame(WebLocalFrame::create(WebTreeScopeType::Document, nullptr));
-    WebGestureEvent event;
-    event.type = WebInputEvent::GestureTap;
+    WebViewImpl* webView = WebViewImpl::create(nullptr, WebPageVisibilityStateVisible);
+    FrameTestHelpers::TestWebFrameClient webFrameClient;
+    FrameTestHelpers::TestWebWidgetClient webWidgetClient;
+    WebLocalFrame* localFrame = WebLocalFrame::create(WebTreeScopeType::Document, &webFrameClient);
+    webView->setMainFrame(localFrame);
+
+    // TODO(dcheng): The main frame widget currently has a special case.
+    // Eliminate this once WebView is no longer a WebWidget.
+    blink::WebFrameWidget::create(&webWidgetClient, webView, localFrame);
+
+    WebGestureEvent event(WebInputEvent::GestureTap, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
     event.x = 3;
     event.y = 8;
-    EXPECT_FALSE(webView->handleInputEvent(event));
+    EXPECT_EQ(WebInputEventResult::NotHandled, webView->handleInputEvent(event));
     webView->close();
 }
 
-#if OS(ANDROID)
-TEST_F(WebViewTest, LongPressSelection)
+TEST_P(WebViewTest, LongPressEmptyDiv)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("longpress_selection.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_empty_div.html"));
 
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "longpress_selection.html", true);
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_empty_div.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(false);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 250;
+    event.y = 150;
+
+    EXPECT_EQ(WebInputEventResult::NotHandled, webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, LongPressEmptyDivAlwaysShow)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_empty_div.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_empty_div.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 250;
+    event.y = 150;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, LongPressObject)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_object.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_object.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 10;
+    event.y = 10;
+
+    EXPECT_NE(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+
+    HTMLElement* element = toHTMLElement(webView->mainFrame()->document().getElementById("obj"));
+    EXPECT_FALSE(element->canStartSelection());
+}
+
+TEST_P(WebViewTest, LongPressObjectFallback)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_object_fallback.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_object_fallback.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 10;
+    event.y = 10;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+
+    HTMLElement* element = toHTMLElement(webView->mainFrame()->document().getElementById("obj"));
+    EXPECT_TRUE(element->canStartSelection());
+}
+
+TEST_P(WebViewTest, LongPressImage)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_image.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_image.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(false);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 10;
+    event.y = 10;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, LongPressVideo)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_video.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_video.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(false);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 10;
+    event.y = 10;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, LongPressLink)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_link.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_link.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(false);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 500;
+    event.y = 300;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, showContextMenuOnLongPressingLinks)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_links_and_images.html"));
+
+    URLTestHelpers::registerMockedURLLoad(toKURL("http://www.test.com/foo.png"),
+        "white-1x1.png");
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_links_and_images.html", true);
+
+    webView->settingsImpl()->setTouchDragDropEnabled(true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebString anchorTagId = WebString::fromUTF8("anchorTag");
+    WebString imageTagId = WebString::fromUTF8("imageTag");
+
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureLongPress, anchorTagId));
+    EXPECT_STREQ("anchor contextmenu",
+        webView->mainFrame()->document().title().utf8().data());
+
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureLongPress, imageTagId));
+    EXPECT_STREQ("image contextmenu",
+        webView->mainFrame()->document().title().utf8().data());
+}
+
+TEST_P(WebViewTest, LongPressEmptyEditableSelection)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_empty_editable_selection.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_empty_editable_selection.html", true);
+    webView->settingsImpl()->setAlwaysShowContextMenuOnTouch(false);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 10;
+    event.y = 10;
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+}
+
+TEST_P(WebViewTest, LongPressEmptyNonEditableSelection)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("long_press_image.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "long_press_image.html", true);
+    webView->resize(WebSize(500, 500));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebGestureEvent event(WebInputEvent::GestureLongPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 300;
+    event.y = 300;
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(event));
+    EXPECT_TRUE(frame->selectionAsText().isEmpty());
+}
+
+TEST_P(WebViewTest, LongPressSelection)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("longpress_selection.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "longpress_selection.html", true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
 
     WebString target = WebString::fromUTF8("target");
     WebString onselectstartfalse = WebString::fromUTF8("onselectstartfalse");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
 
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureLongPress, onselectstartfalse));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureLongPress, onselectstartfalse));
     EXPECT_EQ("", std::string(frame->selectionAsText().utf8().data()));
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureLongPress, target));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureLongPress, target));
     EXPECT_EQ("testword", std::string(frame->selectionAsText().utf8().data()));
 }
 
-TEST_F(WebViewTest, BlinkCaretOnTypingAfterLongPress)
+#if !OS(MACOSX)
+TEST_P(WebViewTest, TouchDoesntSelectEmptyTextarea)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("blink_caret_on_typing_after_long_press.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("longpress_textarea.html"));
 
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "blink_caret_on_typing_after_long_press.html", true);
-    webView->resize(WebSize(640, 480));
-    webView->layout();
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "longpress_textarea.html", true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
 
-    WebString target = WebString::fromUTF8("target");
-    WebLocalFrameImpl* mainFrame = toWebLocalFrameImpl(webView->mainFrame());
+    WebString blanklinestextbox = WebString::fromUTF8("blanklinestextbox");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
 
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureLongPress, target));
-    EXPECT_TRUE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+    // Long-press on carriage returns.
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureLongPress, blanklinestextbox));
+    EXPECT_TRUE(frame->selectionAsText().isEmpty());
 
-    WebKeyboardEvent keyEvent;
-    keyEvent.type = WebInputEvent::RawKeyDown;
-    webView->handleInputEvent(keyEvent);
-    keyEvent.type = WebInputEvent::KeyUp;
-    webView->handleInputEvent(keyEvent);
-    EXPECT_FALSE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+    // Double-tap on carriage returns.
+    WebGestureEvent event(WebInputEvent::GestureTap, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
+    event.x = 100;
+    event.y = 25;
+    event.data.tap.tapCount = 2;
+
+    webView->handleInputEvent(event);
+    EXPECT_TRUE(frame->selectionAsText().isEmpty());
+
+    HTMLTextAreaElement* textAreaElement = toHTMLTextAreaElement(
+        webView->mainFrame()->document().getElementById(blanklinestextbox));
+    textAreaElement->setValue("hello");
+
+    // Long-press past last word of textbox.
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureLongPress, blanklinestextbox));
+    EXPECT_TRUE(frame->selectionAsText().isEmpty());
+
+    // Double-tap past last word of textbox.
+    webView->handleInputEvent(event);
+    EXPECT_TRUE(frame->selectionAsText().isEmpty());
 }
 #endif
 
-TEST_F(WebViewTest, SelectionOnReadOnlyInput)
+TEST_P(WebViewTest, LongPressImageTextarea)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("selection_readonly.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "selection_readonly.html", true);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("longpress_image_contenteditable.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "longpress_image_contenteditable.html", true);
+    webView->resize(WebSize(500, 300));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebString image = WebString::fromUTF8("purpleimage");
+
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureLongPress, image));
+    WebRange range = webView->caretOrSelectionRange();
+    EXPECT_FALSE(range.isNull());
+    EXPECT_EQ(0, range.startOffset());
+    EXPECT_EQ(1, range.length());
+}
+
+TEST_P(WebViewTest, BlinkCaretAfterLongPress)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("blink_caret_on_typing_after_long_press.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "blink_caret_on_typing_after_long_press.html", true);
     webView->resize(WebSize(640, 480));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebString target = WebString::fromUTF8("target");
+    WebLocalFrameImpl* mainFrame = webView->mainFrameImpl();
+
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureLongPress, target));
+    EXPECT_FALSE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+}
+
+TEST_P(WebViewTest, BlinkCaretOnClosingContextMenu)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("form.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form.html", true);
+
+    webView->setInitialFocus(false);
+    runPendingTasks();
+
+    // We suspend caret blinking when pressing with mouse right button.
+    // Note that we do not send MouseUp event here since it will be consumed
+    // by the context menu once it shows up.
+    WebMouseEvent mouseEvent(WebInputEvent::MouseDown, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+
+    mouseEvent.button = WebMouseEvent::Button::Right;
+    mouseEvent.x = 1;
+    mouseEvent.y = 1;
+    mouseEvent.clickCount = 1;
+    webView->handleInputEvent(mouseEvent);
+    runPendingTasks();
+
+    WebLocalFrameImpl* mainFrame = webView->mainFrameImpl();
+    EXPECT_TRUE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+
+    // Caret blinking is still suspended after showing context menu.
+    webView->showContextMenu();
+    EXPECT_TRUE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+
+    // Caret blinking will be resumed only after context menu is closed.
+    webView->didCloseContextMenu();
+
+    EXPECT_FALSE(mainFrame->frame()->selection().isCaretBlinkingSuspended());
+}
+
+TEST_P(WebViewTest, SelectionOnReadOnlyInput)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("selection_readonly.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "selection_readonly.html", true);
+    webView->resize(WebSize(640, 480));
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
 
     std::string testWord = "This text should be selected.";
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     EXPECT_EQ(testWord, std::string(frame->selectionAsText().utf8().data()));
 
-    size_t location;
-    size_t length;
-    EXPECT_TRUE(toWebViewImpl(webView)->caretOrSelectionRange(&location, &length));
-    EXPECT_EQ(location, 0UL);
-    EXPECT_EQ(length, testWord.length());
+    WebRange range = webView->caretOrSelectionRange();
+    EXPECT_FALSE(range.isNull());
+    EXPECT_EQ(0, range.startOffset());
+    EXPECT_EQ(static_cast<int>(testWord.length()), range.length());
+}
+
+TEST_P(WebViewTest, KeyDownScrollsHandled)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content-width-1000.html"));
+
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content-width-1000.html", true);
+    webView->resize(WebSize(100, 100));
+    webView->updateAllLifecyclePhases();
+    runPendingTasks();
+
+    WebKeyboardEvent keyEvent(WebInputEvent::RawKeyDown,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+
+    // RawKeyDown pagedown should be handled.
+    keyEvent.windowsKeyCode = VKEY_NEXT;
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    // Coalesced KeyDown arrow-down should be handled.
+    keyEvent.windowsKeyCode = VKEY_DOWN;
+    keyEvent.setType(WebInputEvent::KeyDown);
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    // Ctrl-Home should be handled...
+    keyEvent.windowsKeyCode = VKEY_HOME;
+    keyEvent.setModifiers(WebInputEvent::ControlKey);
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    // But Ctrl-Down should not.
+    keyEvent.windowsKeyCode = VKEY_DOWN;
+    keyEvent.setModifiers(WebInputEvent::ControlKey);
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    // Shift, meta, and alt should not be handled.
+    keyEvent.windowsKeyCode = VKEY_NEXT;
+    keyEvent.setModifiers(WebInputEvent::ShiftKey);
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    keyEvent.windowsKeyCode = VKEY_NEXT;
+    keyEvent.setModifiers(WebInputEvent::MetaKey);
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    keyEvent.windowsKeyCode = VKEY_NEXT;
+    keyEvent.setModifiers(WebInputEvent::AltKey);
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    // System-key labeled Alt-Down (as in Windows) should do nothing,
+    // but non-system-key labeled Alt-Down (as in Mac) should be handled
+    // as a page-down.
+    keyEvent.windowsKeyCode = VKEY_DOWN;
+    keyEvent.setModifiers(WebInputEvent::AltKey);
+    keyEvent.isSystemKey = true;
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::NotHandled,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
+
+    keyEvent.windowsKeyCode = VKEY_DOWN;
+    keyEvent.setModifiers(WebInputEvent::AltKey);
+    keyEvent.isSystemKey = false;
+    keyEvent.setType(WebInputEvent::RawKeyDown);
+    EXPECT_EQ(WebInputEventResult::HandledSystem,
+        webView->handleInputEvent(keyEvent));
+    keyEvent.setType(WebInputEvent::KeyUp);
+    webView->handleInputEvent(keyEvent);
 }
 
 static void configueCompositingWebView(WebSettings* settings)
@@ -1580,21 +2696,31 @@ static void configueCompositingWebView(WebSettings* settings)
     settings->setPreferCompositingToLCDTextEnabled(true);
 }
 
-TEST_F(WebViewTest, ShowPressOnTransformedLink)
+TEST_P(WebViewTest, ShowPressOnTransformedLink)
 {
-    OwnPtr<FrameTestHelpers::TestWebViewClient> fakeCompositingWebViewClient = adoptPtr(new FrameTestHelpers::TestWebViewClient());
+    std::unique_ptr<FrameTestHelpers::TestWebViewClient>
+        fakeCompositingWebViewClient = WTF::makeUnique<FrameTestHelpers::TestWebViewClient>();
     FrameTestHelpers::WebViewHelper webViewHelper;
-    WebViewImpl* webViewImpl = webViewHelper.initialize(true, 0, fakeCompositingWebViewClient.get(), &configueCompositingWebView);
+    WebViewImpl* webViewImpl = webViewHelper.initialize(
+        true, nullptr, fakeCompositingWebViewClient.get(), nullptr,
+        &configueCompositingWebView);
 
     int pageWidth = 640;
     int pageHeight = 480;
     webViewImpl->resize(WebSize(pageWidth, pageHeight));
 
     WebURL baseURL = URLTestHelpers::toKURL("http://example.com/");
-    FrameTestHelpers::loadHTMLString(webViewImpl->mainFrame(), "<a href='http://www.test.com' style='position: absolute; left: 20px; top: 20px; width: 200px; transform:translateZ(0);'>A link to highlight</a>", baseURL);
+    FrameTestHelpers::loadHTMLString(
+        webViewImpl->mainFrame(),
+        "<a href='http://www.test.com' style='position: absolute; left: 20px; "
+        "top: 20px; width: 200px; transform:translateZ(0);'>A link to "
+        "highlight</a>",
+        baseURL);
 
-    WebGestureEvent event;
-    event.type = WebInputEvent::GestureShowPress;
+    WebGestureEvent event(WebInputEvent::GestureShowPress,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    event.sourceDevice = WebGestureDeviceTouchscreen;
     event.x = 20;
     event.y = 20;
 
@@ -1605,53 +2731,50 @@ TEST_F(WebViewTest, ShowPressOnTransformedLink)
 class MockAutofillClient : public WebAutofillClient {
 public:
     MockAutofillClient()
-        : m_ignoreTextChanges(false)
+        : m_textChanges(0)
         , m_textChangesFromUserGesture(0)
-        , m_textChangesWhileIgnored(0)
-        , m_textChangesWhileNotIgnored(0)
-        , m_userGestureNotificationsCount(0) {}
+        , m_userGestureNotificationsCount(0)
+    {
+    }
 
-    ~MockAutofillClient() override {}
+    ~MockAutofillClient() override { }
 
-    void setIgnoreTextChanges(bool ignore) override { m_ignoreTextChanges = ignore; }
     void textFieldDidChange(const WebFormControlElement&) override
     {
-        if (m_ignoreTextChanges)
-            ++m_textChangesWhileIgnored;
-        else
-            ++m_textChangesWhileNotIgnored;
+        ++m_textChanges;
 
         if (UserGestureIndicator::processingUserGesture())
             ++m_textChangesFromUserGesture;
     }
-    void firstUserGestureObserved() override { ++m_userGestureNotificationsCount; }
-
-    void clearChangeCounts()
+    void firstUserGestureObserved() override
     {
-        m_textChangesWhileIgnored = 0;
-        m_textChangesWhileNotIgnored = 0;
+        ++m_userGestureNotificationsCount;
     }
 
+    void clearChangeCounts() { m_textChanges = 0; }
+
+    int textChanges() { return m_textChanges; }
     int textChangesFromUserGesture() { return m_textChangesFromUserGesture; }
-    int textChangesWhileIgnored() { return m_textChangesWhileIgnored; }
-    int textChangesWhileNotIgnored() { return m_textChangesWhileNotIgnored; }
-    int getUserGestureNotificationsCount() { return m_userGestureNotificationsCount; }
+    int getUserGestureNotificationsCount()
+    {
+        return m_userGestureNotificationsCount;
+    }
 
 private:
-    bool m_ignoreTextChanges;
+    int m_textChanges;
     int m_textChangesFromUserGesture;
-    int m_textChangesWhileIgnored;
-    int m_textChangesWhileNotIgnored;
     int m_userGestureNotificationsCount;
 };
 
-
-TEST_F(WebViewTest, LosingFocusDoesNotTriggerAutofillTextChange)
+TEST_P(WebViewTest, LosingFocusDoesNotTriggerAutofillTextChange)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
@@ -1659,37 +2782,44 @@ TEST_F(WebViewTest, LosingFocusDoesNotTriggerAutofillTextChange)
     WebVector<WebCompositionUnderline> emptyUnderlines;
     frame->setEditableSelectionOffsets(4, 10);
     frame->setCompositionFromExistingText(8, 12, emptyUnderlines);
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = frame->inputMethodController()->textInputInfo();
     EXPECT_EQ(4, info.selectionStart);
     EXPECT_EQ(10, info.selectionEnd);
     EXPECT_EQ(8, info.compositionStart);
     EXPECT_EQ(12, info.compositionEnd);
 
-    // Clear the focus and track that the subsequent composition commit does not trigger a
-    // text changed notification for autofill.
+    // Clear the focus and track that the subsequent composition commit does not
+    // trigger a text changed notification for autofill.
     client.clearChangeCounts();
     webView->setFocus(false);
-    EXPECT_EQ(1, client.textChangesWhileIgnored());
-    EXPECT_EQ(0, client.textChangesWhileNotIgnored());
+    EXPECT_EQ(0, client.textChanges());
 
     frame->setAutofillClient(0);
 }
 
-static void verifySelectionAndComposition(WebView* webView, int selectionStart, int selectionEnd, int compositionStart, int compositionEnd, const char* failMessage)
+static void verifySelectionAndComposition(WebViewImpl* webView,
+    int selectionStart,
+    int selectionEnd,
+    int compositionStart,
+    int compositionEnd,
+    const char* failMessage)
 {
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = webView->mainFrameImpl()->inputMethodController()->textInputInfo();
     EXPECT_EQ(selectionStart, info.selectionStart) << failMessage;
     EXPECT_EQ(selectionEnd, info.selectionEnd) << failMessage;
     EXPECT_EQ(compositionStart, info.compositionStart) << failMessage;
     EXPECT_EQ(compositionEnd, info.compositionEnd) << failMessage;
 }
 
-TEST_F(WebViewTest, CompositionNotCancelledByBackspace)
+TEST_P(WebViewTest, CompositionNotCancelledByBackspace)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("composition_not_cancelled_by_backspace.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("composition_not_cancelled_by_backspace.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "composition_not_cancelled_by_backspace.html");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "composition_not_cancelled_by_backspace.html");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
@@ -1698,24 +2828,29 @@ TEST_F(WebViewTest, CompositionNotCancelledByBackspace)
         // Select composition and do sanity check.
         WebVector<WebCompositionUnderline> emptyUnderlines;
         frame->setEditableSelectionOffsets(6, 6);
-        EXPECT_TRUE(webView->setComposition("fghij", emptyUnderlines, 0, 5));
+        WebInputMethodController* activeInputMethodController = frame->frameWidget()->getActiveWebInputMethodController();
+        EXPECT_TRUE(activeInputMethodController->setComposition(
+            "fghij", emptyUnderlines, 0, 5));
         frame->setEditableSelectionOffsets(11, 11);
         verifySelectionAndComposition(webView, 11, 11, 6, 11, "initial case");
 
-        // Press Backspace and verify composition didn't get cancelled. This is to verify the fix
-        // for crbug.com/429916.
-        WebKeyboardEvent keyEvent;
+        // Press Backspace and verify composition didn't get cancelled. This is to
+        // verify the fix for crbug.com/429916.
+        WebKeyboardEvent keyEvent(WebInputEvent::RawKeyDown,
+            WebInputEvent::NoModifiers,
+            WebInputEvent::TimeStampForTesting);
+        keyEvent.domKey = Platform::current()->domKeyEnumFromString("\b");
         keyEvent.windowsKeyCode = VKEY_BACK;
-        keyEvent.setKeyIdentifierFromWindowsKeyCode();
-        keyEvent.type = WebInputEvent::RawKeyDown;
         webView->handleInputEvent(keyEvent);
 
         frame->setEditableSelectionOffsets(6, 6);
-        EXPECT_TRUE(webView->setComposition("fghi", emptyUnderlines, 0, 4));
+        EXPECT_TRUE(activeInputMethodController->setComposition(
+            "fghi", emptyUnderlines, 0, 4));
         frame->setEditableSelectionOffsets(10, 10);
-        verifySelectionAndComposition(webView, 10, 10, 6, 10, "after pressing Backspace");
+        verifySelectionAndComposition(webView, 10, 10, 6, 10,
+            "after pressing Backspace");
 
-        keyEvent.type = WebInputEvent::KeyUp;
+        keyEvent.setType(WebInputEvent::KeyUp);
         webView->handleInputEvent(keyEvent);
 
         webView->advanceFocus(false);
@@ -1724,41 +2859,58 @@ TEST_F(WebViewTest, CompositionNotCancelledByBackspace)
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, ConfirmCompositionTriggersAutofillTextChange)
+TEST_P(WebViewTest, FinishComposingTextDoesntTriggerAutofillTextChange)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
+    WebDocument document = webView->mainFrame()->document();
+    HTMLFormControlElement* form = toHTMLFormControlElement(document.getElementById("sample"));
+
+    WebInputMethodController* activeInputMethodController = frame->frameWidget()->getActiveWebInputMethodController();
     // Set up a composition that needs to be committed.
     std::string compositionText("testingtext");
 
     WebVector<WebCompositionUnderline> emptyUnderlines;
-    webView->setComposition(WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 0, compositionText.length());
+    activeInputMethodController->setComposition(
+        WebString::fromUTF8(compositionText.c_str()), emptyUnderlines, 0,
+        compositionText.length());
 
-    WebTextInputInfo info = webView->textInputInfo();
+    WebTextInputInfo info = activeInputMethodController->textInputInfo();
     EXPECT_EQ(0, info.selectionStart);
-    EXPECT_EQ((int) compositionText.length(), info.selectionEnd);
+    EXPECT_EQ((int)compositionText.length(), info.selectionEnd);
     EXPECT_EQ(0, info.compositionStart);
-    EXPECT_EQ((int) compositionText.length(), info.compositionEnd);
+    EXPECT_EQ((int)compositionText.length(), info.compositionEnd);
 
+    form->setAutofilled(true);
     client.clearChangeCounts();
-    webView->confirmComposition();
-    EXPECT_EQ(0, client.textChangesWhileIgnored());
-    EXPECT_EQ(1, client.textChangesWhileNotIgnored());
+
+    activeInputMethodController->finishComposingText(
+        WebInputMethodController::KeepSelection);
+    EXPECT_EQ(0, client.textChanges());
+
+    EXPECT_TRUE(form->isAutofilled());
 
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, SetCompositionFromExistingTextTriggersAutofillTextChange)
+TEST_P(WebViewTest,
+    SetCompositionFromExistingTextDoesntTriggerAutofillTextChange)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html", true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html", true);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
@@ -1767,16 +2919,17 @@ TEST_F(WebViewTest, SetCompositionFromExistingTextTriggersAutofillTextChange)
     client.clearChangeCounts();
     frame->setCompositionFromExistingText(8, 12, emptyUnderlines);
 
-    WebTextInputInfo info = webView->textInputInfo();
-    EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz", std::string(info.value.utf8().data()));
+    WebTextInputInfo info = frame->inputMethodController()->textInputInfo();
+    EXPECT_EQ("0123456789abcdefghijklmnopqrstuvwxyz",
+        std::string(info.value.utf8().data()));
     EXPECT_EQ(8, info.compositionStart);
     EXPECT_EQ(12, info.compositionEnd);
 
-    EXPECT_EQ(0, client.textChangesWhileIgnored());
-    EXPECT_EQ(0, client.textChangesWhileNotIgnored());
+    EXPECT_EQ(0, client.textChanges());
 
     WebDocument document = webView->mainFrame()->document();
-    EXPECT_EQ(WebString::fromUTF8("none"),  document.getElementById("inputEvent").firstChild().nodeValue());
+    EXPECT_EQ(WebString::fromUTF8("none"),
+        document.getElementById("inputEvent").firstChild().nodeValue());
 
     frame->setAutofillClient(0);
 }
@@ -1789,16 +2942,18 @@ public:
     }
 
     // WebViewClient methods
-    WebView* createView(WebLocalFrame*, const WebURLRequest&, const WebWindowFeatures&, const WebString& name, WebNavigationPolicy, bool) override
+    WebView* createView(WebLocalFrame* opener,
+        const WebURLRequest&,
+        const WebWindowFeatures&,
+        const WebString& name,
+        WebNavigationPolicy,
+        bool) override
     {
-        return m_webViewHelper.initialize(true, 0, 0);
+        return m_webViewHelper.initializeWithOpener(opener, true);
     }
 
     // WebWidgetClient methods
-    void didFocus() override
-    {
-        m_didFocusCalled = true;
-    }
+    void didFocus() override { m_didFocusCalled = true; }
 
     bool didFocusCalled() const { return m_didFocusCalled; }
     WebView* createdWebView() const { return m_webViewHelper.webView(); }
@@ -1808,58 +2963,68 @@ private:
     bool m_didFocusCalled;
 };
 
-TEST_F(WebViewTest, DoNotFocusCurrentFrameOnNavigateFromLocalFrame)
+TEST_P(WebViewTest, DoNotFocusCurrentFrameOnNavigateFromLocalFrame)
 {
     ViewCreatingWebViewClient client;
     FrameTestHelpers::WebViewHelper m_webViewHelper;
     WebViewImpl* webViewImpl = m_webViewHelper.initialize(true, 0, &client);
-    webViewImpl->page()->settings().setJavaScriptCanOpenWindowsAutomatically(true);
+    webViewImpl->page()->settings().setJavaScriptCanOpenWindowsAutomatically(
+        true);
 
     WebURL baseURL = URLTestHelpers::toKURL("http://example.com/");
-    FrameTestHelpers::loadHTMLString(webViewImpl->mainFrame(), "<html><body><iframe src=\"about:blank\"></iframe></body></html>", baseURL);
+    FrameTestHelpers::loadHTMLString(
+        webViewImpl->mainFrame(),
+        "<html><body><iframe src=\"about:blank\"></iframe></body></html>",
+        baseURL);
 
     // Make a request from a local frame.
     WebURLRequest webURLRequestWithTargetStart;
-    webURLRequestWithTargetStart.initialize();
     LocalFrame* localFrame = toWebLocalFrameImpl(webViewImpl->mainFrame()->firstChild())->frame();
-    FrameLoadRequest requestWithTargetStart(localFrame->document(), webURLRequestWithTargetStart.toResourceRequest(), "_top");
+    FrameLoadRequest requestWithTargetStart(
+        localFrame->document(), webURLRequestWithTargetStart.toResourceRequest(),
+        "_top");
     localFrame->loader().load(requestWithTargetStart);
     EXPECT_FALSE(client.didFocusCalled());
 
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-TEST_F(WebViewTest, FocusExistingFrameOnNavigate)
+TEST_P(WebViewTest, FocusExistingFrameOnNavigate)
 {
     ViewCreatingWebViewClient client;
     FrameTestHelpers::WebViewHelper m_webViewHelper;
     WebViewImpl* webViewImpl = m_webViewHelper.initialize(true, 0, &client);
-    webViewImpl->page()->settings().setJavaScriptCanOpenWindowsAutomatically(true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webViewImpl->mainFrame());
+    webViewImpl->page()->settings().setJavaScriptCanOpenWindowsAutomatically(
+        true);
+    WebLocalFrameImpl* frame = webViewImpl->mainFrameImpl();
     frame->setName("_start");
 
     // Make a request that will open a new window
     WebURLRequest webURLRequest;
-    webURLRequest.initialize();
     FrameLoadRequest request(0, webURLRequest.toResourceRequest(), "_blank");
     toLocalFrame(webViewImpl->page()->mainFrame())->loader().load(request);
     ASSERT_TRUE(client.createdWebView());
     EXPECT_FALSE(client.didFocusCalled());
 
-    // Make a request from the new window that will navigate the original window. The original window should be focused.
+    // Make a request from the new window that will navigate the original window.
+    // The original window should be focused.
     WebURLRequest webURLRequestWithTargetStart;
-    webURLRequestWithTargetStart.initialize();
-    FrameLoadRequest requestWithTargetStart(0, webURLRequestWithTargetStart.toResourceRequest(), "_start");
-    toLocalFrame(toWebViewImpl(client.createdWebView())->page()->mainFrame())->loader().load(requestWithTargetStart);
+    FrameLoadRequest requestWithTargetStart(
+        0, webURLRequestWithTargetStart.toResourceRequest(), "_start");
+    toLocalFrame(toWebViewImpl(client.createdWebView())->page()->mainFrame())
+        ->loader()
+        .load(requestWithTargetStart);
     EXPECT_TRUE(client.didFocusCalled());
 
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-TEST_F(WebViewTest, DispatchesFocusOutFocusInOnViewToggleFocus)
+TEST_P(WebViewTest, DispatchesFocusOutFocusInOnViewToggleFocus)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "focusout_focusin_events.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "focusout_focusin_events.html", true, 0);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "focusout_focusin_events.html");
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "focusout_focusin_events.html", true, 0);
 
     webView->setFocus(true);
     webView->setFocus(false);
@@ -1869,10 +3034,13 @@ TEST_F(WebViewTest, DispatchesFocusOutFocusInOnViewToggleFocus)
     EXPECT_STREQ("focusoutfocusin", element.textContent().utf8().data());
 }
 
-TEST_F(WebViewTest, DispatchesDomFocusOutDomFocusInOnViewToggleFocus)
+TEST_P(WebViewTest, DispatchesDomFocusOutDomFocusInOnViewToggleFocus)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "domfocusout_domfocusin_events.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "domfocusout_domfocusin_events.html", true, 0);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        "domfocusout_domfocusin_events.html");
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "domfocusout_domfocusin_events.html", true, 0);
 
     webView->setFocus(true);
     webView->setFocus(false);
@@ -1882,23 +3050,32 @@ TEST_F(WebViewTest, DispatchesDomFocusOutDomFocusInOnViewToggleFocus)
     EXPECT_STREQ("DOMFocusOutDOMFocusIn", element.textContent().utf8().data());
 }
 
-#if !ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-static void openDateTimeChooser(WebView* webView, HTMLInputElement* inputElement)
+static void openDateTimeChooser(WebView* webView,
+    HTMLInputElement* inputElement)
 {
     inputElement->focus();
 
-    WebKeyboardEvent keyEvent;
+    WebKeyboardEvent keyEvent(WebInputEvent::RawKeyDown,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    keyEvent.domKey = Platform::current()->domKeyEnumFromString(" ");
     keyEvent.windowsKeyCode = VKEY_SPACE;
-    keyEvent.type = WebInputEvent::RawKeyDown;
-    keyEvent.setKeyIdentifierFromWindowsKeyCode();
     webView->handleInputEvent(keyEvent);
 
-    keyEvent.type = WebInputEvent::KeyUp;
+    keyEvent.setType(WebInputEvent::KeyUp);
     webView->handleInputEvent(keyEvent);
 }
 
-TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
+// TODO(crbug.com/605112) This test is crashing on Android (Nexus 4) bot.
+#if OS(ANDROID)
+TEST_P(WebViewTest, DISABLED_ChooseValueFromDateTimeChooser)
 {
+#else
+TEST_P(WebViewTest, ChooseValueFromDateTimeChooser)
+{
+#endif
+    bool originalMultipleFieldsFlag = RuntimeEnabledFeatures::inputMultipleFieldsUIEnabled();
+    RuntimeEnabledFeatures::setInputMultipleFieldsUIEnabled(false);
     DateTimeChooserWebViewClient client;
     std::string url = m_baseURL + "date_time_chooser.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "date_time_chooser.html");
@@ -1915,7 +3092,8 @@ TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
     EXPECT_STREQ("1970-01-01", inputElement->value().utf8().data());
 
     openDateTimeChooser(webViewImpl, inputElement);
-    client.chooserCompletion()->didChooseValue(std::numeric_limits<double>::quiet_NaN());
+    client.chooserCompletion()->didChooseValue(
+        std::numeric_limits<double>::quiet_NaN());
     client.clearChooserCompletion();
     EXPECT_STREQ("", inputElement->value().utf8().data());
 
@@ -1926,7 +3104,8 @@ TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
     EXPECT_STREQ("1970-01-01T00:00", inputElement->value().utf8().data());
 
     openDateTimeChooser(webViewImpl, inputElement);
-    client.chooserCompletion()->didChooseValue(std::numeric_limits<double>::quiet_NaN());
+    client.chooserCompletion()->didChooseValue(
+        std::numeric_limits<double>::quiet_NaN());
     client.clearChooserCompletion();
     EXPECT_STREQ("", inputElement->value().utf8().data());
 
@@ -1937,7 +3116,8 @@ TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
     EXPECT_STREQ("1970-01", inputElement->value().utf8().data());
 
     openDateTimeChooser(webViewImpl, inputElement);
-    client.chooserCompletion()->didChooseValue(std::numeric_limits<double>::quiet_NaN());
+    client.chooserCompletion()->didChooseValue(
+        std::numeric_limits<double>::quiet_NaN());
     client.clearChooserCompletion();
     EXPECT_STREQ("", inputElement->value().utf8().data());
 
@@ -1948,7 +3128,8 @@ TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
     EXPECT_STREQ("00:00", inputElement->value().utf8().data());
 
     openDateTimeChooser(webViewImpl, inputElement);
-    client.chooserCompletion()->didChooseValue(std::numeric_limits<double>::quiet_NaN());
+    client.chooserCompletion()->didChooseValue(
+        std::numeric_limits<double>::quiet_NaN());
     client.clearChooserCompletion();
     EXPECT_STREQ("", inputElement->value().utf8().data());
 
@@ -1959,20 +3140,24 @@ TEST_F(WebViewTest, ChooseValueFromDateTimeChooser)
     EXPECT_STREQ("1970-W01", inputElement->value().utf8().data());
 
     openDateTimeChooser(webViewImpl, inputElement);
-    client.chooserCompletion()->didChooseValue(std::numeric_limits<double>::quiet_NaN());
+    client.chooserCompletion()->didChooseValue(
+        std::numeric_limits<double>::quiet_NaN());
     client.clearChooserCompletion();
     EXPECT_STREQ("", inputElement->value().utf8().data());
 
-    // Clear the WebViewClient from the webViewHelper to avoid use-after-free in the
-    // WebViewHelper destructor.
+    // Clear the WebViewClient from the webViewHelper to avoid use-after-free in
+    // the WebViewHelper destructor.
     m_webViewHelper.reset();
+    RuntimeEnabledFeatures::setInputMultipleFieldsUIEnabled(
+        originalMultipleFieldsFlag);
 }
-#endif
 
-TEST_F(WebViewTest, DispatchesFocusBlurOnViewToggle)
+TEST_P(WebViewTest, DispatchesFocusBlurOnViewToggle)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), "focus_blur_events.html");
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "focus_blur_events.html", true, 0);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), "focus_blur_events.html");
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "focus_blur_events.html", true, 0);
 
     webView->setFocus(true);
     webView->setFocus(false);
@@ -1983,94 +3168,137 @@ TEST_F(WebViewTest, DispatchesFocusBlurOnViewToggle)
     EXPECT_STREQ("blurfocus", element.textContent().utf8().data());
 }
 
-TEST_F(WebViewTest, SmartClipData)
+TEST_P(WebViewTest, SmartClipData)
 {
-    static const char* kExpectedClipText = "\nPrice 10,000,000won";
-    static const char* kExpectedClipHtml =
-        "<div id=\"div4\" style=\"padding: 10px; margin: 10px; border: 2px "
-        "solid rgb(135, 206, 235); float: left; width: 190px; height: 30px; "
-        "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
-        "normal; font-variant: normal; font-weight: normal; letter-spacing: "
-        "normal; line-height: normal; orphans: auto; text-align: start; "
-        "text-indent: 0px; text-transform: none; white-space: normal; widows: "
-        "1; word-spacing: 0px; -webkit-text-stroke-width: 0px;\">Air "
-        "conditioner</div><div id=\"div5\" style=\"padding: 10px; margin: "
-        "10px; border: 2px solid rgb(135, 206, 235); float: left; width: "
-        "190px; height: 30px; color: rgb(0, 0, 0); font-family: myahem; "
-        "font-size: 8px; font-style: normal; font-variant: normal; "
-        "font-weight: normal; letter-spacing: normal; line-height: normal; "
-        "orphans: auto; text-align: start; text-indent: 0px; text-transform: "
-        "none; white-space: normal; widows: 1; word-spacing: 0px; "
-        "-webkit-text-stroke-width: 0px;\">Price 10,000,000won</div>";
+    static const char kExpectedClipText[] = "\nPrice 10,000,000won";
+    static const char kExpectedClipHtml[] = "<div id=\"div4\" style=\"padding: 10px; margin: 10px; border: 2px "
+                                            "solid skyblue; float: left; width: 190px; height: 30px; "
+                                            "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
+                                            "normal; font-variant-ligatures: normal; font-variant-caps: normal; "
+                                            "font-weight: normal; letter-spacing: "
+                                            "normal; orphans: 2; text-align: start; "
+                                            "text-indent: 0px; text-transform: none; white-space: normal; widows: "
+                                            "2; word-spacing: 0px; -webkit-text-stroke-width: 0px; "
+                                            "text-decoration-style: initial; text-decoration-color: initial;\">Air "
+                                            "conditioner</div><div id=\"div5\" style=\"padding: 10px; margin: 10px; "
+                                            "border: 2px solid skyblue; float: left; width: 190px; height: 30px; "
+                                            "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
+                                            "normal; font-variant-ligatures: normal; font-variant-caps: normal; "
+                                            "font-weight: normal; letter-spacing: normal; orphans: 2; text-align: "
+                                            "start; text-indent: 0px; text-transform: none; white-space: normal; "
+                                            "widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; "
+                                            "text-decoration-style: initial; text-decoration-color: initial;\">Price "
+                                            "10,000,000won</div>";
     WebString clipText;
     WebString clipHtml;
     WebRect clipRect;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("smartclip.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("smartclip.html"));
     WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "smartclip.html");
     webView->resize(WebSize(500, 500));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     WebRect cropRect(300, 125, 152, 50);
     webView->extractSmartClipData(cropRect, clipText, clipHtml, clipRect);
     EXPECT_STREQ(kExpectedClipText, clipText.utf8().c_str());
     EXPECT_STREQ(kExpectedClipHtml, clipHtml.utf8().c_str());
 }
 
-TEST_F(WebViewTest, SmartClipDataWithPinchZoom)
+TEST_P(WebViewTest, SmartClipDataWithPinchZoom)
 {
-    static const char* kExpectedClipText = "\nPrice 10,000,000won";
-    static const char* kExpectedClipHtml =
-        "<div id=\"div4\" style=\"padding: 10px; margin: 10px; border: 2px "
-        "solid rgb(135, 206, 235); float: left; width: 190px; height: 30px; "
-        "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
-        "normal; font-variant: normal; font-weight: normal; letter-spacing: "
-        "normal; line-height: normal; orphans: auto; text-align: start; "
-        "text-indent: 0px; text-transform: none; white-space: normal; widows: "
-        "1; word-spacing: 0px; -webkit-text-stroke-width: 0px;\">Air "
-        "conditioner</div><div id=\"div5\" style=\"padding: 10px; margin: "
-        "10px; border: 2px solid rgb(135, 206, 235); float: left; width: "
-        "190px; height: 30px; color: rgb(0, 0, 0); font-family: myahem; "
-        "font-size: 8px; font-style: normal; font-variant: normal; "
-        "font-weight: normal; letter-spacing: normal; line-height: normal; "
-        "orphans: auto; text-align: start; text-indent: 0px; text-transform: "
-        "none; white-space: normal; widows: 1; word-spacing: 0px; "
-        "-webkit-text-stroke-width: 0px;\">Price 10,000,000won</div>";
+    static const char kExpectedClipText[] = "\nPrice 10,000,000won";
+    static const char kExpectedClipHtml[] = "<div id=\"div4\" style=\"padding: 10px; margin: 10px; border: 2px "
+                                            "solid skyblue; float: left; width: 190px; height: 30px; "
+                                            "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
+                                            "normal; font-variant-ligatures: normal; font-variant-caps: normal; "
+                                            "font-weight: normal; letter-spacing: "
+                                            "normal; orphans: 2; text-align: start; "
+                                            "text-indent: 0px; text-transform: none; white-space: normal; widows: "
+                                            "2; word-spacing: 0px; -webkit-text-stroke-width: 0px; "
+                                            "text-decoration-style: initial; text-decoration-color: initial;\">Air "
+                                            "conditioner</div><div id=\"div5\" style=\"padding: 10px; margin: 10px; "
+                                            "border: 2px solid skyblue; float: left; width: 190px; height: 30px; "
+                                            "color: rgb(0, 0, 0); font-family: myahem; font-size: 8px; font-style: "
+                                            "normal; font-variant-ligatures: normal; font-variant-caps: normal; "
+                                            "font-weight: normal; letter-spacing: normal; orphans: 2; text-align: "
+                                            "start; text-indent: 0px; text-transform: none; white-space: normal; "
+                                            "widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; "
+                                            "text-decoration-style: initial; text-decoration-color: initial;\">Price "
+                                            "10,000,000won</div>";
     WebString clipText;
     WebString clipHtml;
     WebRect clipRect;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("smartclip.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("smartclip.html"));
     WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "smartclip.html");
     webView->resize(WebSize(500, 500));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     webView->setPageScaleFactor(1.5);
-    webView->setPinchViewportOffset(WebFloatPoint(167, 100));
+    webView->setVisualViewportOffset(WebFloatPoint(167, 100));
     WebRect cropRect(200, 38, 228, 75);
     webView->extractSmartClipData(cropRect, clipText, clipHtml, clipRect);
     EXPECT_STREQ(kExpectedClipText, clipText.utf8().c_str());
     EXPECT_STREQ(kExpectedClipHtml, clipHtml.utf8().c_str());
 }
 
-TEST_F(WebViewTest, SmartClipReturnsEmptyStringsWhenUserSelectIsNone)
+TEST_P(WebViewTest, SmartClipReturnsEmptyStringsWhenUserSelectIsNone)
 {
     WebString clipText;
     WebString clipHtml;
     WebRect clipRect;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("smartclip_user_select_none.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "smartclip_user_select_none.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("smartclip_user_select_none.html"));
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "smartclip_user_select_none.html");
     webView->resize(WebSize(500, 500));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     WebRect cropRect(0, 0, 100, 100);
     webView->extractSmartClipData(cropRect, clipText, clipHtml, clipRect);
     EXPECT_STREQ("", clipText.utf8().c_str());
     EXPECT_STREQ("", clipHtml.utf8().c_str());
 }
 
-class CreateChildCounterFrameClient : public FrameTestHelpers::TestWebFrameClient {
+TEST_P(WebViewTest, SmartClipDoesNotCrashPositionReversed)
+{
+    WebString clipText;
+    WebString clipHtml;
+    WebRect clipRect;
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("smartclip_reversed_positions.html"));
+    WebView* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "smartclip_reversed_positions.html");
+    webView->resize(WebSize(500, 500));
+    webView->updateAllLifecyclePhases();
+    // Left upper corner of the rect will be end position in the DOM hierarchy.
+    WebRect cropRect(30, 110, 400, 250);
+    // This should not still crash. See crbug.com/589082 for more details.
+    webView->extractSmartClipData(cropRect, clipText, clipHtml, clipRect);
+}
+
+class CreateChildCounterFrameClient
+    : public FrameTestHelpers::TestWebFrameClient {
 public:
-    CreateChildCounterFrameClient() : m_count(0) { }
-    WebFrame* createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, WebSandboxFlags) override;
+    CreateChildCounterFrameClient()
+        : m_count(0)
+    {
+    }
+    WebLocalFrame* createChildFrame(WebLocalFrame* parent,
+        WebTreeScopeType,
+        const WebString& name,
+        const WebString& uniqueName,
+        WebSandboxFlags,
+        const WebFrameOwnerProperties&) override;
 
     int count() const { return m_count; }
 
@@ -2078,69 +3306,93 @@ private:
     int m_count;
 };
 
-WebFrame* CreateChildCounterFrameClient::createChildFrame(WebLocalFrame* parent, WebTreeScopeType scope, const WebString& frameName, WebSandboxFlags sandboxFlags)
+WebLocalFrame* CreateChildCounterFrameClient::createChildFrame(
+    WebLocalFrame* parent,
+    WebTreeScopeType scope,
+    const WebString& name,
+    const WebString& uniqueName,
+    WebSandboxFlags sandboxFlags,
+    const WebFrameOwnerProperties& frameOwnerProperties)
 {
     ++m_count;
-    return TestWebFrameClient::createChildFrame(parent, scope, frameName, sandboxFlags);
+    return TestWebFrameClient::createChildFrame(
+        parent, scope, name, uniqueName, sandboxFlags, frameOwnerProperties);
 }
 
-TEST_F(WebViewTest, ChangeDisplayMode)
+TEST_P(WebViewTest, ChangeDisplayMode)
 {
-    WebView* webView = m_webViewHelper.initializeAndLoad("about:blank", true);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("display_mode.html"));
+    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "display_mode.html", true);
 
-    WebScriptSource source("document.querySelector('body').innerHTML = window.matchMedia('(display-mode: minimal-ui)').matches");
-
-    webView->mainFrame()->executeScript(source);
-    std::string content = webView->mainFrame()->contentAsText(5).utf8();
-    EXPECT_EQ("false", content);
+    std::string content = WebFrameContentDumper::dumpWebViewAsText(webView, 21).utf8();
+    EXPECT_EQ("regular-ui", content);
 
     webView->setDisplayMode(WebDisplayModeMinimalUi);
-    webView->mainFrame()->executeScript(source);
-    content = webView->mainFrame()->contentAsText(5).utf8();
-    EXPECT_EQ("true", content);
+    content = WebFrameContentDumper::dumpWebViewAsText(webView, 21).utf8();
+    EXPECT_EQ("minimal-ui", content);
+    m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, AddFrameInCloseUnload)
+TEST_P(WebViewTest, AddFrameInCloseUnload)
 {
     CreateChildCounterFrameClient frameClient;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("add_frame_in_unload.html"));
-    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html", true, &frameClient);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("add_frame_in_unload.html"));
+    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html",
+        true, &frameClient);
     m_webViewHelper.reset();
     EXPECT_EQ(0, frameClient.count());
 }
 
-TEST_F(WebViewTest, AddFrameInCloseURLUnload)
+TEST_P(WebViewTest, AddFrameInCloseURLUnload)
 {
     CreateChildCounterFrameClient frameClient;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("add_frame_in_unload.html"));
-    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html", true, &frameClient);
-    m_webViewHelper.webViewImpl()->mainFrame()->dispatchUnloadEvent();
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("add_frame_in_unload.html"));
+    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html",
+        true, &frameClient);
+    m_webViewHelper.webView()->mainFrame()->dispatchUnloadEvent();
     EXPECT_EQ(0, frameClient.count());
     m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, AddFrameInNavigateUnload)
+TEST_P(WebViewTest, AddFrameInNavigateUnload)
 {
     CreateChildCounterFrameClient frameClient;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("add_frame_in_unload.html"));
-    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html", true, &frameClient);
-    FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(), "about:blank");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("add_frame_in_unload.html"));
+    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload.html",
+        true, &frameClient);
+    FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(),
+        "about:blank");
     EXPECT_EQ(0, frameClient.count());
     m_webViewHelper.reset();
 }
 
-TEST_F(WebViewTest, AddFrameInChildInNavigateUnload)
+TEST_P(WebViewTest, AddFrameInChildInNavigateUnload)
 {
     CreateChildCounterFrameClient frameClient;
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("add_frame_in_unload_wrapper.html"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("add_frame_in_unload.html"));
-    m_webViewHelper.initializeAndLoad(m_baseURL + "add_frame_in_unload_wrapper.html", true, &frameClient);
-    FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(), "about:blank");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("add_frame_in_unload_wrapper.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("add_frame_in_unload.html"));
+    m_webViewHelper.initializeAndLoad(
+        m_baseURL + "add_frame_in_unload_wrapper.html", true, &frameClient);
+    FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(),
+        "about:blank");
     EXPECT_EQ(1, frameClient.count());
     m_webViewHelper.reset();
 }
 
-class TouchEventHandlerWebViewClient : public FrameTestHelpers::TestWebViewClient {
+class TouchEventHandlerWebViewClient
+    : public FrameTestHelpers::TestWebViewClient {
 public:
     // WebWidgetClient methods
     void hasTouchEventHandlers(bool state) override
@@ -2149,7 +3401,8 @@ public:
     }
 
     // Local methods
-    TouchEventHandlerWebViewClient() : m_hasTouchEventHandlerCount()
+    TouchEventHandlerWebViewClient()
+        : m_hasTouchEventHandlerCount()
     {
     }
 
@@ -2168,18 +3421,19 @@ private:
 // accordingly for various calls to EventHandlerRegistry::did{Add|Remove|
 // RemoveAll}EventHandler(..., TouchEvent). Verifying that those calls are made
 // correctly is the job of LayoutTests/fast/events/event-handler-count.html.
-TEST_F(WebViewTest, HasTouchEventHandlers)
+TEST_P(WebViewTest, HasTouchEventHandlers)
 {
     TouchEventHandlerWebViewClient client;
     std::string url = m_baseURL + "has_touch_event_handlers.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "has_touch_event_handlers.html");
+    URLTestHelpers::registerMockedURLLoad(toKURL(url),
+        "has_touch_event_handlers.html");
     WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
-    const EventHandlerRegistry::EventHandlerClass touchEvent = EventHandlerRegistry::TouchEvent;
+    const EventHandlerRegistry::EventHandlerClass touchEvent = EventHandlerRegistry::TouchStartOrMoveEventBlocking;
 
     // The page is initialized with at least one no-handlers call.
-    // In practice we get two such calls because WebViewHelper::initializeAndLoad first
-    // initializes and empty frame, and then loads a document into it, so there are two
-    // FrameLoader::commitProvisionalLoad calls.
+    // In practice we get two such calls because WebViewHelper::initializeAndLoad
+    // first initializes and empty frame, and then loads a document into it, so
+    // there are two FrameLoader::commitProvisionalLoad calls.
     EXPECT_GE(client.getAndResetHasTouchEventHandlerCallCount(false), 1);
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(true));
 
@@ -2207,7 +3461,7 @@ TEST_F(WebViewTest, HasTouchEventHandlers)
 
     // Adding a handler on a div results in a has-handlers call.
     Element* parentDiv = document->getElementById("parentdiv");
-    ASSERT(parentDiv);
+    DCHECK(parentDiv);
     registry->didAddEventHandler(*parentDiv, touchEvent);
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(1, client.getAndResetHasTouchEventHandlerCallCount(true));
@@ -2240,16 +3494,16 @@ TEST_F(WebViewTest, HasTouchEventHandlers)
 
     // Adding a handler inside of a child iframe results in a has-handlers call.
     Element* childFrame = document->getElementById("childframe");
-    ASSERT(childFrame);
+    DCHECK(childFrame);
     Document* childDocument = toHTMLIFrameElement(childFrame)->contentDocument();
     Element* childDiv = childDocument->getElementById("childdiv");
-    ASSERT(childDiv);
+    DCHECK(childDiv);
     registry->didAddEventHandler(*childDiv, touchEvent);
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(1, client.getAndResetHasTouchEventHandlerCallCount(true));
 
-    // Adding and clearing handlers in the parent doc or elsewhere in the child doc
-    // has no impact.
+    // Adding and clearing handlers in the parent doc or elsewhere in the child
+    // doc has no impact.
     registry->didAddEventHandler(*document, touchEvent);
     registry->didAddEventHandler(*childFrame, touchEvent);
     registry->didAddEventHandler(*childDocument, touchEvent);
@@ -2259,7 +3513,8 @@ TEST_F(WebViewTest, HasTouchEventHandlers)
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(true));
 
-    // Removing the final handler inside the child frame results in a no-handlers call.
+    // Removing the final handler inside the child frame results in a no-handlers
+    // call.
     registry->didRemoveAllEventHandlers(*childDiv);
     EXPECT_EQ(1, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(true));
@@ -2278,7 +3533,8 @@ TEST_F(WebViewTest, HasTouchEventHandlers)
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(true));
 
-    // Now removing the handler in the parent document results in a no-handlers call.
+    // Now removing the handler in the parent document results in a no-handlers
+    // call.
     registry->didRemoveEventHandler(*childFrame, touchEvent);
     EXPECT_EQ(1, client.getAndResetHasTouchEventHandlerCallCount(false));
     EXPECT_EQ(0, client.getAndResetHasTouchEventHandlerCallCount(true));
@@ -2291,178 +3547,79 @@ TEST_F(WebViewTest, HasTouchEventHandlers)
 // handlers also removes them from the event handler registry. Note that this
 // is different from detaching and re-attaching the same node, which is covered
 // by layout tests under fast/events/.
-TEST_F(WebViewTest, DeleteElementWithRegisteredHandler)
+TEST_P(WebViewTest, DeleteElementWithRegisteredHandler)
 {
     std::string url = m_baseURL + "simple_div.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "simple_div.html");
     WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url, true);
 
-    RefPtrWillBePersistent<Document> document = webViewImpl->mainFrameImpl()->frame()->document();
+    Persistent<Document> document = webViewImpl->mainFrameImpl()->frame()->document();
     Element* div = document->getElementById("div");
     EventHandlerRegistry& registry = document->frameHost()->eventHandlerRegistry();
 
     registry.didAddEventHandler(*div, EventHandlerRegistry::ScrollEvent);
     EXPECT_TRUE(registry.hasEventHandlers(EventHandlerRegistry::ScrollEvent));
 
-    TrackExceptionState exceptionState;
+    DummyExceptionStateForTesting exceptionState;
     div->remove(exceptionState);
-#if ENABLE(OILPAN)
-    // For oilpan we have to force a GC to ensure the event handlers have been removed when
-    // checking below. We do a precise GC (collectAllGarbage does not scan the stack)
-    // to ensure the div element dies. This is also why the Document is in a Persistent
-    // since we want that to stay around.
-    Heap::collectAllGarbage();
-#endif
+
+    // For oilpan we have to force a GC to ensure the event handlers have been
+    // removed when checking below. We do a precise GC (collectAllGarbage does not
+    // scan the stack) to ensure the div element dies. This is also why the
+    // Document is in a Persistent since we want that to stay around.
+    ThreadState::current()->collectAllGarbage();
+
     EXPECT_FALSE(registry.hasEventHandlers(EventHandlerRegistry::ScrollEvent));
 }
 
-class NonUserInputTextUpdateWebViewClient : public FrameTestHelpers::TestWebViewClient {
-public:
-    NonUserInputTextUpdateWebViewClient() : m_textIsUpdated(false) { }
-
-    // WebWidgetClient methods
-    void didUpdateTextOfFocusedElementByNonUserInput() override
-    {
-        m_textIsUpdated = true;
-    }
-
-    void reset()
-    {
-        m_textIsUpdated = false;
-    }
-
-    bool textIsUpdated() const
-    {
-        return m_textIsUpdated;
-    }
-
-private:
-    int m_textIsUpdated;
-};
-
 // This test verifies the text input flags are correctly exposed to script.
-TEST_F(WebViewTest, TextInputFlags)
+TEST_P(WebViewTest, TextInputFlags)
 {
-    NonUserInputTextUpdateWebViewClient client;
     std::string url = m_baseURL + "text_input_flags.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "text_input_flags.html");
-    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url, true);
     webViewImpl->setInitialFocus(false);
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webViewImpl->mainFrame());
-    HTMLDocument* document = toHTMLDocument(frame->frame()->document());
+    WebLocalFrameImpl* frame = webViewImpl->mainFrameImpl();
+    WebInputMethodControllerImpl* activeInputMethodController = frame->inputMethodController();
+    Document* document = frame->frame()->document();
 
     // (A) <input>
     // (A.1) Verifies autocorrect/autocomplete/spellcheck flags are Off and
     // autocapitalize is set to none.
     HTMLInputElement* inputElement = toHTMLInputElement(document->getElementById("input"));
-    document->setFocusedElement(inputElement);
+    document->setFocusedElement(
+        inputElement,
+        FocusParams(SelectionBehaviorOnFocus::None, WebFocusTypeNone, nullptr));
     webViewImpl->setFocus(true);
-    WebTextInputInfo info = webViewImpl->textInputInfo();
-    EXPECT_EQ(
-        WebTextInputFlagAutocompleteOff | WebTextInputFlagAutocorrectOff | WebTextInputFlagSpellcheckOff | WebTextInputFlagAutocapitalizeNone,
-        info.flags);
+    WebTextInputInfo info1 = activeInputMethodController->textInputInfo();
+    EXPECT_EQ(WebTextInputFlagAutocompleteOff | WebTextInputFlagAutocorrectOff | WebTextInputFlagSpellcheckOff | WebTextInputFlagAutocapitalizeNone,
+        info1.flags);
 
     // (A.2) Verifies autocorrect/autocomplete/spellcheck flags are On and
     // autocapitalize is set to sentences.
     inputElement = toHTMLInputElement(document->getElementById("input2"));
-    document->setFocusedElement(inputElement);
+    document->setFocusedElement(
+        inputElement,
+        FocusParams(SelectionBehaviorOnFocus::None, WebFocusTypeNone, nullptr));
     webViewImpl->setFocus(true);
-    info = webViewImpl->textInputInfo();
-    EXPECT_EQ(
-        WebTextInputFlagAutocompleteOn | WebTextInputFlagAutocorrectOn | WebTextInputFlagSpellcheckOn | WebTextInputFlagAutocapitalizeSentences,
-        info.flags);
+    WebTextInputInfo info2 = activeInputMethodController->textInputInfo();
+    EXPECT_EQ(WebTextInputFlagAutocompleteOn | WebTextInputFlagAutocorrectOn | WebTextInputFlagSpellcheckOn | WebTextInputFlagAutocapitalizeSentences,
+        info2.flags);
 
     // (B) <textarea> Verifies the default text input flags are
     // WebTextInputFlagAutocapitalizeSentences.
     HTMLTextAreaElement* textAreaElement = toHTMLTextAreaElement(document->getElementById("textarea"));
-    document->setFocusedElement(textAreaElement);
+    document->setFocusedElement(
+        textAreaElement,
+        FocusParams(SelectionBehaviorOnFocus::None, WebFocusTypeNone, nullptr));
     webViewImpl->setFocus(true);
-    info = webViewImpl->textInputInfo();
-    EXPECT_EQ(WebTextInputFlagAutocapitalizeSentences, info.flags);
+    WebTextInputInfo info3 = activeInputMethodController->textInputInfo();
+    EXPECT_EQ(WebTextInputFlagAutocapitalizeSentences, info3.flags);
 
-    // Free the webView before freeing the NonUserInputTextUpdateWebViewClient.
-    m_webViewHelper.reset();
-}
-
-// This test verifies that WebWidgetClient::didUpdateTextOfFocusedElementByNonUserInput is
-// called iff value of a focused element is modified via script.
-TEST_F(WebViewTest, NonUserInputTextUpdate)
-{
-    NonUserInputTextUpdateWebViewClient client;
-    std::string url = m_baseURL + "non_user_input_text_update.html";
-    URLTestHelpers::registerMockedURLLoad(toKURL(url), "non_user_input_text_update.html");
-    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(url, true, 0, &client);
-    webViewImpl->setInitialFocus(false);
-
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webViewImpl->mainFrame());
-    HTMLDocument* document = toHTMLDocument(frame->frame()->document());
-
-    // (A) <input>
-    // (A.1) Focused and value is changed by script.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-
-    HTMLInputElement* inputElement = toHTMLInputElement(document->getElementById("input"));
-    document->setFocusedElement(inputElement);
-    webViewImpl->setFocus(true);
-    EXPECT_EQ(document->focusedElement(), static_cast<Element*>(inputElement));
-
-    // Emulate value change from script.
-    inputElement->setValue("testA");
-    EXPECT_TRUE(client.textIsUpdated());
-    WebTextInputInfo info = webViewImpl->textInputInfo();
-    EXPECT_EQ("testA", std::string(info.value.utf8().data()));
-
-    // (A.2) Focused and user input modifies value.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-
-    WebVector<WebCompositionUnderline> emptyUnderlines;
-    webViewImpl->setComposition(WebString::fromUTF8("2"), emptyUnderlines, 1, 1);
-    webViewImpl->confirmComposition(WebWidget::KeepSelection);
-    EXPECT_FALSE(client.textIsUpdated());
-    info = webViewImpl->textInputInfo();
-    EXPECT_EQ("testA2", std::string(info.value.utf8().data()));
-
-    // (A.3) Unfocused and value is changed by script.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-    document->setFocusedElement(nullptr);
-    webViewImpl->setFocus(false);
-    EXPECT_NE(document->focusedElement(), static_cast<Element*>(inputElement));
-    inputElement->setValue("testA3");
-    EXPECT_FALSE(client.textIsUpdated());
-
-    // (B) <textarea>
-    // (B.1) Focused and value is changed by script.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-    HTMLTextAreaElement* textAreaElement = toHTMLTextAreaElement(document->getElementById("textarea"));
-    document->setFocusedElement(textAreaElement);
-    webViewImpl->setFocus(true);
-    EXPECT_EQ(document->focusedElement(), static_cast<Element*>(textAreaElement));
-    textAreaElement->setValue("testB");
-    EXPECT_TRUE(client.textIsUpdated());
-    info = webViewImpl->textInputInfo();
-    EXPECT_EQ("testB", std::string(info.value.utf8().data()));
-
-    // (B.2) Focused and user input modifies value.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-    webViewImpl->setComposition(WebString::fromUTF8("2"), emptyUnderlines, 1, 1);
-    webViewImpl->confirmComposition(WebWidget::KeepSelection);
-    info = webViewImpl->textInputInfo();
-    EXPECT_EQ("testB2", std::string(info.value.utf8().data()));
-
-    // (B.3) Unfocused and value is changed by script.
-    client.reset();
-    EXPECT_FALSE(client.textIsUpdated());
-    document->setFocusedElement(nullptr);
-    webViewImpl->setFocus(false);
-    EXPECT_NE(document->focusedElement(), static_cast<Element*>(textAreaElement));
-    inputElement->setValue("testB3");
-    EXPECT_FALSE(client.textIsUpdated());
+    // (C) Verifies the WebTextInputInfo's don't equal.
+    EXPECT_FALSE(info1.equals(info2));
+    EXPECT_FALSE(info2.equals(info3));
 
     // Free the webView before freeing the NonUserInputTextUpdateWebViewClient.
     m_webViewHelper.reset();
@@ -2470,81 +3627,94 @@ TEST_F(WebViewTest, NonUserInputTextUpdate)
 
 // Check that the WebAutofillClient is correctly notified about first user
 // gestures after load, following various input events.
-TEST_F(WebViewTest, FirstUserGestureObservedKeyEvent)
+TEST_P(WebViewTest, FirstUserGestureObservedKeyEvent)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("form.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("form.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form.html", true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form.html", true);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
     EXPECT_EQ(0, client.getUserGestureNotificationsCount());
 
-    WebKeyboardEvent keyEvent;
+    WebKeyboardEvent keyEvent(WebInputEvent::RawKeyDown,
+        WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    keyEvent.domKey = Platform::current()->domKeyEnumFromString(" ");
     keyEvent.windowsKeyCode = VKEY_SPACE;
-    keyEvent.type = WebInputEvent::RawKeyDown;
-    keyEvent.setKeyIdentifierFromWindowsKeyCode();
     webView->handleInputEvent(keyEvent);
-    keyEvent.type = WebInputEvent::KeyUp;
+    keyEvent.setType(WebInputEvent::KeyUp);
     webView->handleInputEvent(keyEvent);
 
     EXPECT_EQ(1, client.getUserGestureNotificationsCount());
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, FirstUserGestureObservedMouseEvent)
+TEST_P(WebViewTest, FirstUserGestureObservedMouseEvent)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("form.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("form.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form.html", true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "form.html", true);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
     EXPECT_EQ(0, client.getUserGestureNotificationsCount());
 
-    WebMouseEvent mouseEvent;
-    mouseEvent.button = WebMouseEvent::ButtonLeft;
+    WebMouseEvent mouseEvent(WebInputEvent::MouseDown, WebInputEvent::NoModifiers,
+        WebInputEvent::TimeStampForTesting);
+    mouseEvent.button = WebMouseEvent::Button::Left;
     mouseEvent.x = 1;
     mouseEvent.y = 1;
     mouseEvent.clickCount = 1;
-    mouseEvent.type = WebInputEvent::MouseDown;
     webView->handleInputEvent(mouseEvent);
-    mouseEvent.type = WebInputEvent::MouseUp;
+    mouseEvent.setType(WebInputEvent::MouseUp);
     webView->handleInputEvent(mouseEvent);
 
     EXPECT_EQ(1, client.getUserGestureNotificationsCount());
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, FirstUserGestureObservedGestureTap)
+TEST_P(WebViewTest, FirstUserGestureObservedGestureTap)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("longpress_selection.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("longpress_selection.html"));
     MockAutofillClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "longpress_selection.html", true);
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "longpress_selection.html", true);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
     EXPECT_EQ(0, client.getUserGestureNotificationsCount());
 
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
 
     EXPECT_EQ(1, client.getUserGestureNotificationsCount());
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, CompositionIsUserGesture)
+TEST_P(WebViewTest, CompositionIsUserGesture)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("input_field_populated.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "input_field_populated.html");
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_populated.html");
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
     MockAutofillClient client;
     frame->setAutofillClient(&client);
     webView->setInitialFocus(false);
 
-    EXPECT_TRUE(webView->setComposition(WebString::fromUTF8(std::string("hello").c_str()), WebVector<WebCompositionUnderline>(), 3, 3));
+    EXPECT_TRUE(
+        frame->frameWidget()->getActiveWebInputMethodController()->setComposition(
+            WebString::fromUTF8(std::string("hello").c_str()),
+            WebVector<WebCompositionUnderline>(), 3, 3));
     EXPECT_EQ(1, client.textChangesFromUserGesture());
     EXPECT_FALSE(UserGestureIndicator::processingUserGesture());
     EXPECT_TRUE(frame->hasMarkedText());
@@ -2552,21 +3722,26 @@ TEST_F(WebViewTest, CompositionIsUserGesture)
     frame->setAutofillClient(0);
 }
 
-TEST_F(WebViewTest, CompareSelectAllToContentAsText)
+TEST_P(WebViewTest, CompareSelectAllToContentAsText)
 {
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("longpress_selection.html"));
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "longpress_selection.html", true);
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("longpress_selection.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "longpress_selection.html", true);
 
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
-    frame->executeScript(WebScriptSource(WebString::fromUTF8("document.execCommand('SelectAll', false, null)")));
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    frame->executeScript(WebScriptSource(
+        WebString::fromUTF8("document.execCommand('SelectAll', false, null)")));
     std::string actual = frame->selectionAsText().utf8();
 
     const int kMaxOutputCharacters = 1024;
-    std::string expected = frame->contentAsText(kMaxOutputCharacters).utf8();
+    std::string expected = WebFrameContentDumper::dumpWebViewAsText(webView, kMaxOutputCharacters)
+                               .utf8();
     EXPECT_EQ(expected, actual);
 }
 
-TEST_F(WebViewTest, AutoResizeSubtreeLayout)
+TEST_P(WebViewTest, AutoResizeSubtreeLayout)
 {
     std::string url = m_baseURL + "subtree-layout.html";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "subtree-layout.html");
@@ -2575,14 +3750,15 @@ TEST_F(WebViewTest, AutoResizeSubtreeLayout)
     webView->enableAutoResizeMode(WebSize(200, 200), WebSize(200, 200));
     loadFrame(webView->mainFrame(), url);
 
-    FrameView* frameView = m_webViewHelper.webViewImpl()->mainFrameImpl()->frameView();
+    FrameView* frameView = m_webViewHelper.webView()->mainFrameImpl()->frameView();
 
-    // Auto-resizing used to ASSERT(needsLayout()) in LayoutBlockFlow::layout. This EXPECT is
-    // merely a dummy. The real test is that we don't trigger asserts in debug builds.
+    // Auto-resizing used to DCHECK(needsLayout()) in LayoutBlockFlow::layout.
+    // This EXPECT is merely a dummy. The real test is that we don't trigger
+    // asserts in debug builds.
     EXPECT_FALSE(frameView->needsLayout());
 };
 
-TEST_F(WebViewTest, PreferredSize)
+TEST_P(WebViewTest, PreferredSize)
 {
     std::string url = m_baseURL + "specify_size.html?100px:100px";
     URLTestHelpers::registerMockedURLLoad(toKURL(url), "specify_size.html");
@@ -2619,9 +3795,29 @@ TEST_F(WebViewTest, PreferredSize)
     EXPECT_EQ(2, size.height);
 }
 
+TEST_P(WebViewTest, PreferredSizeDirtyLayout)
+{
+    std::string url = m_baseURL + "specify_size.html?100px:100px";
+    URLTestHelpers::registerMockedURLLoad(toKURL(url), "specify_size.html");
+    WebView* webView = m_webViewHelper.initializeAndLoad(url, true);
+    WebElement documentElement = webView->mainFrame()->document().documentElement();
+
+    WebSize size = webView->contentsPreferredMinimumSize();
+    EXPECT_EQ(100, size.width);
+    EXPECT_EQ(100, size.height);
+
+    documentElement.setAttribute("style", "display: none");
+
+    size = webView->contentsPreferredMinimumSize();
+    EXPECT_EQ(0, size.width);
+    EXPECT_EQ(0, size.height);
+}
+
 class UnhandledTapWebViewClient : public FrameTestHelpers::TestWebViewClient {
 public:
-    void showUnhandledTapUIIfNeeded(const WebPoint& tappedPosition, const WebNode& tappedNode, bool pageChanged) override
+    void showUnhandledTapUIIfNeeded(const WebPoint& tappedPosition,
+        const WebNode& tappedNode,
+        bool pageChanged) override
     {
         m_wasCalled = true;
         m_tappedPosition = tappedPosition;
@@ -2641,6 +3837,7 @@ public:
         m_tappedNode = WebNode();
         m_pageChanged = false;
     }
+
 private:
     bool m_wasCalled = false;
     IntPoint m_tappedPosition;
@@ -2648,19 +3845,23 @@ private:
     bool m_pageChanged = false;
 };
 
-TEST_F(WebViewTest, ShowUnhandledTapUIIfNeeded)
+TEST_P(WebViewTest, ShowUnhandledTapUIIfNeeded)
 {
     std::string testFile = "show_unhandled_tap.html";
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
     UnhandledTapWebViewClient client;
     WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
 
-    // Scroll the bottom into view so we can distinguish window coordinates from document coordinates.
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("bottom")));
+    // Scroll the bottom into view so we can distinguish window coordinates from
+    // document coordinates.
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("bottom")));
     EXPECT_TRUE(client.getWasCalled());
     EXPECT_EQ(64, client.getTappedXPos());
     EXPECT_EQ(278, client.getTappedYPos());
@@ -2669,20 +3870,24 @@ TEST_F(WebViewTest, ShowUnhandledTapUIIfNeeded)
 
     // Test basic tap handling and notification.
     client.reset();
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
     EXPECT_TRUE(client.getWasCalled());
     EXPECT_EQ(144, client.getTappedXPos());
     EXPECT_EQ(82, client.getTappedYPos());
     EXPECT_FALSE(client.isTappedNodeNull());
     EXPECT_TRUE(client.getWebNode().isTextNode());
-    // Make sure the returned text node has the parent element that was our target.
-    EXPECT_EQ(webView->mainFrame()->document().getElementById("target"), client.getWebNode().parentNode());
+    // Make sure the returned text node has the parent element that was our
+    // target.
+    EXPECT_EQ(webView->mainFrame()->document().getElementById("target"),
+        client.getWebNode().parentNode());
 
     // Test correct conversion of coordinates to viewport space under pinch-zoom.
     webView->setPageScaleFactor(2);
-    webView->setPinchViewportOffset(WebFloatPoint(50, 20));
+    webView->setVisualViewportOffset(WebFloatPoint(50, 20));
     client.reset();
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
     EXPECT_TRUE(client.getWasCalled());
     EXPECT_EQ(188, client.getTappedXPos());
     EXPECT_EQ(124, client.getTappedYPos());
@@ -2690,34 +3895,40 @@ TEST_F(WebViewTest, ShowUnhandledTapUIIfNeeded)
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-#define TEST_EACH_MOUSEEVENT(handler, EXPECT) \
-frame->executeScript(WebScriptSource("setTest('mousedown-" handler "');")); \
-EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target"))); \
-EXPECT_##EXPECT(client.getPageChanged()); \
-client.reset(); \
-frame->executeScript(WebScriptSource("setTest('mouseup-" handler "');")); \
-EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target"))); \
-EXPECT_##EXPECT(client.getPageChanged()); \
-client.reset(); \
-frame->executeScript(WebScriptSource("setTest('mousemove-" handler "');")); \
-EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target"))); \
-EXPECT_##EXPECT(client.getPageChanged()); \
-client.reset(); \
-frame->executeScript(WebScriptSource("setTest('click-" handler "');")); \
-EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target"))); \
-EXPECT_##EXPECT(client.getPageChanged());
+#define TEST_EACH_MOUSEEVENT(handler, EXPECT)                                   \
+    frame->executeScript(WebScriptSource("setTest('mousedown-" handler "');")); \
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap,                       \
+        WebString::fromUTF8("target")));                                        \
+    EXPECT_##EXPECT(client.getPageChanged());                                   \
+    client.reset();                                                             \
+    frame->executeScript(WebScriptSource("setTest('mouseup-" handler "');"));   \
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap,                       \
+        WebString::fromUTF8("target")));                                        \
+    EXPECT_##EXPECT(client.getPageChanged());                                   \
+    client.reset();                                                             \
+    frame->executeScript(WebScriptSource("setTest('mousemove-" handler "');")); \
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap,                       \
+        WebString::fromUTF8("target")));                                        \
+    EXPECT_##EXPECT(client.getPageChanged());                                   \
+    client.reset();                                                             \
+    frame->executeScript(WebScriptSource("setTest('click-" handler "');"));     \
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap,                       \
+        WebString::fromUTF8("target")));                                        \
+    EXPECT_##EXPECT(client.getPageChanged());
 
-TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateDom)
+TEST_P(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateDom)
 {
     std::string testFile = "show_unhandled_tap.html";
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
     UnhandledTapWebViewClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
 
     // Test dom mutation.
     TEST_EACH_MOUSEEVENT("mutateDom", TRUE);
@@ -2725,23 +3936,26 @@ TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateDom)
     // Test without any DOM mutation.
     client.reset();
     frame->executeScript(WebScriptSource("setTest('none');"));
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
     EXPECT_FALSE(client.getPageChanged());
 
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateStyle)
+TEST_P(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateStyle)
 {
     std::string testFile = "show_unhandled_tap.html";
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
     UnhandledTapWebViewClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
 
     // Test style mutation.
     TEST_EACH_MOUSEEVENT("mutateStyle", TRUE);
@@ -2751,29 +3965,33 @@ TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithMutateStyle)
 
     // Test click div with :active style but it is not covered for now.
     client.reset();
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("style_active")));
+    EXPECT_TRUE(tapElementById(WebInputEvent::GestureTap,
+        WebString::fromUTF8("style_active")));
     EXPECT_FALSE(client.getPageChanged());
 
     // Test without any style mutation.
     client.reset();
     frame->executeScript(WebScriptSource("setTest('none');"));
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
     EXPECT_FALSE(client.getPageChanged());
 
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithPreventDefault)
+TEST_P(WebViewTest, ShowUnhandledTapUIIfNeededWithPreventDefault)
 {
     std::string testFile = "show_unhandled_tap.html";
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
-    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("Ahem.ttf"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8(testFile));
     UnhandledTapWebViewClient client;
-    WebView* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + testFile, true, 0, &client);
     webView->resize(WebSize(500, 300));
-    webView->layout();
+    webView->updateAllLifecyclePhases();
     runPendingTasks();
-    WebLocalFrameImpl* frame = toWebLocalFrameImpl(webView->mainFrame());
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
 
     // Testswallowing.
     TEST_EACH_MOUSEEVENT("preventDefault", FALSE);
@@ -2781,252 +3999,426 @@ TEST_F(WebViewTest, ShowUnhandledTapUIIfNeededWithPreventDefault)
     // Test without any preventDefault.
     client.reset();
     frame->executeScript(WebScriptSource("setTest('none');"));
-    EXPECT_TRUE(tapElementById(webView, WebInputEvent::GestureTap, WebString::fromUTF8("target")));
+    EXPECT_TRUE(
+        tapElementById(WebInputEvent::GestureTap, WebString::fromUTF8("target")));
     EXPECT_TRUE(client.getWasCalled());
 
     m_webViewHelper.reset(); // Remove dependency on locally scoped client.
 }
 
-// Test 3 frames, all on the same layer (i.e. [1 2 3])
-TEST_F(WebViewTest, TestPushFrameTimingRequestRectsToGraphicsLayer1)
+TEST_P(WebViewTest, StopLoadingIfJavaScriptURLReturnsNoStringResult)
 {
-    std::string url = m_baseURL + "frame_timing_inner.html?100px:100px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?200px:200px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?300px:300px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_1.html";
-    registerMockedURLLoad(toKURL(url), "frame_timing_1.html");
+    ViewCreatingWebViewClient client;
+    FrameTestHelpers::WebViewHelper mainWebView;
+    mainWebView.initializeAndLoad("about:blank", true, 0, &client);
+    mainWebView.webView()
+        ->page()
+        ->settings()
+        .setJavaScriptCanOpenWindowsAutomatically(true);
 
-    WebView* webView = m_webViewHelper.initialize(true);
-    loadFrame(webView->mainFrame(), url);
-
-    webView->resize(WebSize(800, 600));
-    webView->layout();
-
-    WebViewImpl* webViewImpl = toWebViewImpl(webView);
-
-    Frame* frame = webViewImpl->page()->mainFrame();
-    int64_t id = frame->frameID();
-
-    EXPECT_EQ(3u, frame->tree().childCount());
-
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests =
-        toLocalFrame(frame)->document()
-        ->layoutView()->enclosingLayer()
-        ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-        ->graphicsLayerBacking()->platformLayer()->frameTimingRequests();
-
-    EXPECT_EQ(4u, frameTimingRequests.size());
-    EXPECT_EQ(id + 0, frameTimingRequests[0].first);
-    EXPECT_EQ(WebRect(0, 0, 800, 600), frameTimingRequests[0].second);
-    EXPECT_EQ(id + 1, frameTimingRequests[1].first);
-    EXPECT_EQ(WebRect(2, 2, 100, 100), frameTimingRequests[1].second);
-    EXPECT_EQ(id + 2, frameTimingRequests[2].first);
-    EXPECT_EQ(WebRect(106, 2, 200, 200), frameTimingRequests[2].second);
-    EXPECT_EQ(id + 3, frameTimingRequests[3].first);
-    EXPECT_EQ(WebRect(310, 2, 300, 300), frameTimingRequests[3].second);
+    WebFrame* frame = mainWebView.webView()->mainFrame();
+    v8::HandleScope scope(v8::Isolate::GetCurrent());
+    v8::Local<v8::Value> v8Value = frame->executeScriptAndReturnValue(WebScriptSource(
+        "var win = window.open('javascript:false'); win.document"));
+    ASSERT_TRUE(v8Value->IsObject());
+    Document* document = V8Document::toImplWithTypeCheck(v8::Isolate::GetCurrent(), v8Value);
+    ASSERT_TRUE(document);
+    EXPECT_FALSE(document->frame()->isLoading());
 }
 
-// Test 3 frames, where frame 2 is on a different GraphicsLayer (i.e. [1 2' 3])
-TEST_F(WebViewTest, TestPushFrameTimingRequestRectsToGraphicsLayer2)
+#if OS(MACOSX)
+TEST_P(WebViewTest, WebSubstringUtil)
 {
-    std::string url = m_baseURL + "frame_timing_inner.html?100px:100px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?200px:200px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?300px:300px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_2.html";
-    registerMockedURLLoad(toKURL(url), "frame_timing_2.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("content_editable_populated.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "content_editable_populated.html");
+    webView->settings()->setDefaultFontSize(12);
+    webView->resize(WebSize(400, 400));
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    FrameView* frameView = frame->frame()->view();
 
-    WebView* webView = m_webViewHelper.initialize(true);
-    loadFrame(webView->mainFrame(), url);
+    WebPoint baselinePoint;
+    NSAttributedString* result = WebSubstringUtil::attributedSubstringInRange(
+        frame, 10, 3, &baselinePoint);
+    ASSERT_TRUE(!!result);
 
-    webView->resize(WebSize(800, 600));
-    webView->layout();
+    WebPoint point(baselinePoint.x, frameView->height() - baselinePoint.y);
+    result = WebSubstringUtil::attributedWordAtPoint(frame->frameWidget(), point,
+        baselinePoint);
+    ASSERT_TRUE(!!result);
 
-    WebViewImpl* webViewImpl = toWebViewImpl(webView);
+    webView->setZoomLevel(3);
 
-    Frame* frame = webViewImpl->page()->mainFrame();
-    int64_t id = frame->frameID();
+    result = WebSubstringUtil::attributedSubstringInRange(frame, 5, 5, &baselinePoint);
+    ASSERT_TRUE(!!result);
 
-    EXPECT_EQ(3u, frame->tree().childCount());
-
-    const WebLayer* graphicsLayer1 =
-        toLocalFrame(webViewImpl->page()->mainFrame())->document()
-        ->layoutView()->enclosingLayer()
-        ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-        ->graphicsLayerBacking()->platformLayer();
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests1 =
-        graphicsLayer1->frameTimingRequests();
-
-    EXPECT_EQ(3u, frameTimingRequests1.size());
-    EXPECT_EQ(id + 0, frameTimingRequests1[0].first);
-    EXPECT_EQ(WebRect(0, 0, 800, 600), frameTimingRequests1[0].second);
-    EXPECT_EQ(id + 1, frameTimingRequests1[1].first);
-    EXPECT_EQ(WebRect(2, 2, 100, 100), frameTimingRequests1[1].second);
-    EXPECT_EQ(id + 3, frameTimingRequests1[2].first);
-    EXPECT_EQ(WebRect(310, 2, 300, 300), frameTimingRequests1[2].second);
-
-    const WebLayer* graphicsLayer2 = nullptr;
-    for (Frame* frame = webViewImpl->page()->mainFrame(); frame;
-        frame = frame->tree().traverseNext()) {
-        graphicsLayer2 = toLocalFrame(frame)->document()->layoutView()
-            ->enclosingLayer()
-            ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-            ->graphicsLayerBacking()->platformLayer();
-        if (graphicsLayer2 != graphicsLayer1)
-            break;
-    }
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests2 =
-        graphicsLayer2->frameTimingRequests();
-    EXPECT_EQ(1u, frameTimingRequests2.size());
-    EXPECT_EQ(id + 2, frameTimingRequests2[0].first);
-    EXPECT_EQ(WebRect(2, 2, 200, 200), frameTimingRequests2[0].second);
+    point = WebPoint(baselinePoint.x, frameView->height() - baselinePoint.y);
+    result = WebSubstringUtil::attributedWordAtPoint(frame->frameWidget(), point,
+        baselinePoint);
+    ASSERT_TRUE(!!result);
 }
 
-
-// Test nested frames (i.e. [1 2'[4 5'] 3])
-TEST_F(WebViewTest, TestPushFrameTimingRequestRectsToGraphicsLayer3)
+TEST_P(WebViewTest, WebSubstringUtilIframe)
 {
-    std::string url = m_baseURL + "frame_timing_inner.html?100px:100px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?200px:200px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?300px:300px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_b.html";
-    registerMockedURLLoad(toKURL(url), "frame_timing_b.html");
-    url = m_baseURL + "frame_timing_3.html";
-    registerMockedURLLoad(toKURL(url), "frame_timing_3.html");
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("single_iframe.html"));
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("visible_iframe.html"));
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "single_iframe.html");
+    webView->settings()->setDefaultFontSize(12);
+    webView->settings()->setJavaScriptEnabled(true);
+    webView->resize(WebSize(400, 400));
+    WebLocalFrameImpl* mainFrame = webView->mainFrameImpl();
+    WebLocalFrameImpl* childFrame = WebLocalFrameImpl::fromFrame(
+        toLocalFrame(mainFrame->frame()->tree().firstChild()));
 
-    WebView* webView = m_webViewHelper.initialize(true);
-    loadFrame(webView->mainFrame(), url);
+    WebPoint baselinePoint;
+    NSAttributedString* result = WebSubstringUtil::attributedSubstringInRange(
+        childFrame, 11, 7, &baselinePoint);
+    ASSERT_NE(result, nullptr);
 
-    webView->resize(WebSize(800, 600));
-    webView->layout();
+    WebPoint point(baselinePoint.x,
+        mainFrame->frameView()->height() - baselinePoint.y);
+    result = WebSubstringUtil::attributedWordAtPoint(mainFrame->frameWidget(),
+        point, baselinePoint);
+    ASSERT_NE(result, nullptr);
 
-    WebViewImpl* webViewImpl = toWebViewImpl(webView);
+    int yBeforeChange = baselinePoint.y;
 
-    Frame* frame = webViewImpl->page()->mainFrame();
-    int64_t id = frame->frameID();
+    // Now move the <iframe> down by 100px.
+    mainFrame->executeScript(WebScriptSource(
+        "document.querySelector('iframe').style.marginTop = '100px';"));
 
-    EXPECT_EQ(3u, frame->tree().childCount());
+    point = WebPoint(point.x, point.y + 100);
+    result = WebSubstringUtil::attributedWordAtPoint(mainFrame->frameWidget(),
+        point, baselinePoint);
+    ASSERT_NE(result, nullptr);
 
-    const WebLayer* graphicsLayer1 =
-        toLocalFrame(webViewImpl->page()->mainFrame())->document()
-        ->layoutView()->enclosingLayer()
-        ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-        ->graphicsLayerBacking()->platformLayer();
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests1 =
-        graphicsLayer1->frameTimingRequests();
-
-    EXPECT_EQ(3u, frameTimingRequests1.size());
-    EXPECT_EQ(id + 0, frameTimingRequests1[0].first);
-    EXPECT_EQ(WebRect(0, 0, 800, 600), frameTimingRequests1[0].second);
-    EXPECT_EQ(WebRect(2, 2, 100, 100), frameTimingRequests1[1].second);
-    EXPECT_EQ(WebRect(410, 2, 200, 200), frameTimingRequests1[2].second);
-
-    const WebLayer* graphicsLayer2 = nullptr;
-    for (Frame* frame = webViewImpl->page()->mainFrame(); frame;
-        frame = frame->tree().traverseNext()) {
-        graphicsLayer2 = toLocalFrame(frame)->document()->layoutView()
-            ->enclosingLayer()
-            ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-            ->graphicsLayerBacking()->platformLayer();
-        if (graphicsLayer2 != graphicsLayer1)
-            break;
-    }
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests2 =
-        graphicsLayer2->frameTimingRequests();
-    EXPECT_EQ(2u, frameTimingRequests2.size());
-    EXPECT_EQ(WebRect(0, 0, 300, 300), frameTimingRequests2[0].second);
-    EXPECT_EQ(WebRect(2, 2, 100, 100), frameTimingRequests2[1].second);
-
-    const WebLayer* graphicsLayer3 = nullptr;
-    for (Frame* frame = webViewImpl->page()->mainFrame(); frame;
-        frame = frame->tree().traverseNext()) {
-        graphicsLayer3 = toLocalFrame(frame)->document()->layoutView()
-            ->enclosingLayer()
-            ->enclosingLayerForPaintInvalidationCrossingFrameBoundaries()
-            ->graphicsLayerBacking()->platformLayer();
-        if (graphicsLayer3 != graphicsLayer1 && graphicsLayer3 != graphicsLayer2)
-            break;
-    }
-    WebVector<std::pair<int64_t, WebRect>> frameTimingRequests3 =
-        graphicsLayer3->frameTimingRequests();
-    EXPECT_EQ(1u, frameTimingRequests3.size());
-    EXPECT_EQ(WebRect(2, 2, 100, 100), frameTimingRequests3[0].second);
+    EXPECT_EQ(yBeforeChange, baselinePoint.y + 100);
 }
 
-// Test 3 frames, all on the same layer (i.e. [1 2 3])
-// Fails on android, see crbug.com/488381.
-#if OS(ANDROID)
-TEST_F(WebViewTest, DISABLED_TestRecordFrameTimingEvents)
-#else
-TEST_F(WebViewTest, TestRecordFrameTimingEvents)
 #endif
-{
-    std::string url = m_baseURL + "frame_timing_inner.html?100px:100px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?200px:200px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_inner.html?300px:300px";
-    registerMockedURLLoad(toKURL(url), "frame_timing_inner.html");
-    url = m_baseURL + "frame_timing_1.html";
-    registerMockedURLLoad(toKURL(url), "frame_timing_1.html");
 
-    WebView* webView = m_webViewHelper.initialize(true);
-    loadFrame(webView->mainFrame(), url);
+TEST_P(WebViewTest, PasswordFieldEditingIsUserGesture)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("input_field_password.html"));
+    MockAutofillClient client;
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(
+        m_baseURL + "input_field_password.html", true);
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    frame->setAutofillClient(&client);
+    webView->setInitialFocus(false);
+
+    WebVector<WebCompositionUnderline> emptyUnderlines;
+
+    EXPECT_TRUE(
+        frame->frameWidget()->getActiveWebInputMethodController()->commitText(
+            WebString::fromUTF8(std::string("hello").c_str()), emptyUnderlines,
+            0));
+    EXPECT_EQ(1, client.textChangesFromUserGesture());
+    EXPECT_FALSE(UserGestureIndicator::processingUserGesture());
+    frame->setAutofillClient(0);
+}
+
+// Verify that a WebView created with a ScopedPageSuspender already on the
+// stack defers its loads.
+TEST_P(WebViewTest, CreatedDuringPageSuspension)
+{
+    {
+        WebViewImpl* webView = m_webViewHelper.initialize();
+        EXPECT_FALSE(webView->page()->suspended());
+    }
+
+    {
+        ScopedPageSuspender suspender;
+        WebViewImpl* webView = m_webViewHelper.initialize();
+        EXPECT_TRUE(webView->page()->suspended());
+    }
+}
+
+// Make sure the SubframeBeforeUnloadUseCounter is only incremented on subframe
+// unloads. crbug.com/635029.
+TEST_P(WebViewTest, SubframeBeforeUnloadUseCounter)
+{
+    registerMockedHttpURLLoad("visible_iframe.html");
+    registerMockedHttpURLLoad("single_iframe.html");
+    WebViewImpl* webView = m_webViewHelper.initializeAndLoad(m_baseURL + "single_iframe.html", true);
+
+    WebFrame* frame = m_webViewHelper.webView()->mainFrame();
+    Document* document = toLocalFrame(m_webViewHelper.webView()->page()->mainFrame())->document();
+
+    // Add a beforeunload handler in the main frame. Make sure firing
+    // beforeunload doesn't increment the subframe use counter.
+    {
+        frame->executeScript(
+            WebScriptSource("addEventListener('beforeunload', function() {});"));
+        webView->mainFrame()->toWebLocalFrame()->dispatchBeforeUnloadEvent(false);
+        EXPECT_FALSE(UseCounter::isCounted(*document,
+            UseCounter::SubFrameBeforeUnloadFired));
+    }
+
+    // Add a beforeunload handler in the iframe and dispatch. Make sure we do
+    // increment the use counter for subframe beforeunloads.
+    {
+        frame->executeScript(WebScriptSource(
+            "document.getElementsByTagName('iframe')[0].contentWindow."
+            "addEventListener('beforeunload', function() {});"));
+        webView->mainFrame()
+            ->firstChild()
+            ->toWebLocalFrame()
+            ->dispatchBeforeUnloadEvent(false);
+
+        Document* childDocument = toLocalFrame(
+            m_webViewHelper.webView()->page()->mainFrame()->tree().firstChild())
+                                      ->document();
+        EXPECT_TRUE(UseCounter::isCounted(*childDocument,
+            UseCounter::SubFrameBeforeUnloadFired));
+    }
+}
+
+// Verify that page loads are deferred until all ScopedPageLoadDeferrers are
+// destroyed.
+TEST_P(WebViewTest, NestedPageSuspensions)
+{
+    WebViewImpl* webView = m_webViewHelper.initialize();
+    EXPECT_FALSE(webView->page()->suspended());
+
+    {
+        ScopedPageSuspender suspender;
+        EXPECT_TRUE(webView->page()->suspended());
+
+        {
+            ScopedPageSuspender suspender2;
+            EXPECT_TRUE(webView->page()->suspended());
+        }
+
+        EXPECT_TRUE(webView->page()->suspended());
+    }
+
+    EXPECT_FALSE(webView->page()->suspended());
+}
+
+TEST_P(WebViewTest, ClosingPageIsSuspended)
+{
+    WebViewImpl* webView = m_webViewHelper.initialize();
+    Page* page = m_webViewHelper.webView()->page();
+    EXPECT_FALSE(page->suspended());
+
+    webView->setOpenedByDOM();
+
+    LocalFrame* mainFrame = toLocalFrame(page->mainFrame());
+    EXPECT_FALSE(mainFrame->domWindow()->closed());
+
+    mainFrame->domWindow()->close(nullptr);
+    // The window should be marked closed...
+    EXPECT_TRUE(mainFrame->domWindow()->closed());
+    // EXPECT_TRUE(page->isClosing());
+    // ...but not yet detached.
+    EXPECT_TRUE(mainFrame->host());
+
+    {
+        ScopedPageSuspender suspender;
+        EXPECT_TRUE(page->suspended());
+    }
+}
+
+TEST_P(WebViewTest, ForceAndResetViewport)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
+    webViewImpl->resize(WebSize(100, 150));
+    webViewImpl->layerTreeView()->setViewportSize(WebSize(100, 150));
+    VisualViewport* visualViewport = &webViewImpl->page()->frameHost().visualViewport();
+    DevToolsEmulator* devToolsEmulator = webViewImpl->devToolsEmulator();
+
+    TransformationMatrix expectedMatrix;
+    expectedMatrix.makeIdentity();
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    EXPECT_FALSE(devToolsEmulator->visibleContentRectForPainting());
+    EXPECT_TRUE(visualViewport->containerLayer()->masksToBounds());
+
+    // Override applies transform, sets visibleContentRect, and disables
+    // visual viewport clipping.
+    devToolsEmulator->forceViewport(WebFloatPoint(50, 55), 2.f);
+    expectedMatrix.makeIdentity().scale(2.f).translate(-50, -55);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    EXPECT_EQ(IntRect(50, 55, 50, 75),
+        *devToolsEmulator->visibleContentRectForPainting());
+    EXPECT_FALSE(visualViewport->containerLayer()->masksToBounds());
+
+    // Setting new override discards previous one.
+    devToolsEmulator->forceViewport(WebFloatPoint(5.4f, 10.5f), 1.5f);
+    expectedMatrix.makeIdentity().scale(1.5f).translate(-5.4f, -10.5f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    EXPECT_EQ(IntRect(5, 10, 68, 101),
+        *devToolsEmulator->visibleContentRectForPainting());
+    EXPECT_FALSE(visualViewport->containerLayer()->masksToBounds());
+
+    // Clearing override restores original transform, visibleContentRect and
+    // visual viewport clipping.
+    devToolsEmulator->resetViewport();
+    expectedMatrix.makeIdentity();
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    EXPECT_FALSE(devToolsEmulator->visibleContentRectForPainting());
+    EXPECT_TRUE(visualViewport->containerLayer()->masksToBounds());
+}
+
+TEST_P(WebViewTest, ViewportOverrideIntegratesDeviceMetricsOffsetAndScale)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
+    webViewImpl->resize(WebSize(100, 150));
+
+    TransformationMatrix expectedMatrix;
+    expectedMatrix.makeIdentity();
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+
+    WebDeviceEmulationParams emulationParams;
+    emulationParams.offset = WebFloatPoint(50, 50);
+    emulationParams.scale = 2.f;
+    webViewImpl->enableDeviceEmulation(emulationParams);
+    expectedMatrix.makeIdentity().translate(50, 50).scale(2.f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+
+    // Device metrics offset and scale are applied before viewport override.
+    webViewImpl->devToolsEmulator()->forceViewport(WebFloatPoint(5, 10), 1.5f);
+    expectedMatrix.makeIdentity()
+        .scale(1.5f)
+        .translate(-5, -10)
+        .translate(50, 50)
+        .scale(2.f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+}
+
+TEST_P(WebViewTest, ViewportOverrideAdaptsToScaleAndScroll)
+{
+    URLTestHelpers::registerMockedURLFromBaseURL(
+        WebString::fromUTF8(m_baseURL.c_str()),
+        WebString::fromUTF8("200-by-300.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "200-by-300.html");
+    webViewImpl->resize(WebSize(100, 150));
+    webViewImpl->layerTreeView()->setViewportSize(WebSize(100, 150));
+    FrameView* frameView = webViewImpl->mainFrameImpl()->frame()->view();
+    DevToolsEmulator* devToolsEmulator = webViewImpl->devToolsEmulator();
+
+    TransformationMatrix expectedMatrix;
+    expectedMatrix.makeIdentity();
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+
+    // Initial transform takes current page scale and scroll position into
+    // account.
+    webViewImpl->setPageScaleFactor(1.5f);
+    frameView->layoutViewportScrollableArea()->setScrollOffset(
+        ScrollOffset(100, 150), ProgrammaticScroll, ScrollBehaviorInstant);
+    devToolsEmulator->forceViewport(WebFloatPoint(50, 55), 2.f);
+    expectedMatrix.makeIdentity()
+        .scale(2.f)
+        .translate(-50, -55)
+        .translate(100, 150)
+        .scale(1. / 1.5f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    // Page scroll and scale are irrelevant for visibleContentRect.
+    EXPECT_EQ(IntRect(50, 55, 50, 75),
+        *devToolsEmulator->visibleContentRectForPainting());
+
+    // Transform adapts to scroll changes.
+    frameView->layoutViewportScrollableArea()->setScrollOffset(
+        ScrollOffset(50, 55), ProgrammaticScroll, ScrollBehaviorInstant);
+    expectedMatrix.makeIdentity()
+        .scale(2.f)
+        .translate(-50, -55)
+        .translate(50, 55)
+        .scale(1. / 1.5f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    // visibleContentRect doesn't change.
+    EXPECT_EQ(IntRect(50, 55, 50, 75),
+        *devToolsEmulator->visibleContentRectForPainting());
+
+    // Transform adapts to page scale changes.
+    webViewImpl->setPageScaleFactor(2.f);
+    expectedMatrix.makeIdentity()
+        .scale(2.f)
+        .translate(-50, -55)
+        .translate(50, 55)
+        .scale(1. / 2.f);
+    EXPECT_EQ(expectedMatrix,
+        webViewImpl->getDeviceEmulationTransformForTesting());
+    // visibleContentRect doesn't change.
+    EXPECT_EQ(IntRect(50, 55, 50, 75),
+        *devToolsEmulator->visibleContentRectForPainting());
+}
+
+TEST_P(WebViewTest, ResizeForPrintingViewportUnits)
+{
+    WebViewImpl* webView = m_webViewHelper.initialize();
+    webView->resize(WebSize(800, 600));
+
+    WebURL baseURL = URLTestHelpers::toKURL("http://example.com/");
+    FrameTestHelpers::loadHTMLString(webView->mainFrame(),
+        "<style>"
+        "  body { margin: 0px; }"
+        "  #vw { width: 100vw; height: 100vh; }"
+        "</style>"
+        "<div id=vw></div>",
+        baseURL);
+
+    WebLocalFrameImpl* frame = webView->mainFrameImpl();
+    Document* document = frame->frame()->document();
+    Element* vwElement = document->getElementById("vw");
+
+    EXPECT_EQ(800, vwElement->offsetWidth());
+
+    FloatSize pageSize(300, 360);
+
+    WebPrintParams printParams;
+    printParams.printContentArea.width = pageSize.width();
+    printParams.printContentArea.height = pageSize.height();
+
+    // This needs to match printingMinimumShrinkFactor in PrintContext.cpp. The
+    // layout is scaled by this factor for printing.
+    constexpr float minimumShrinkFactor = 1.333f;
+
+    // The expected layout size comes from the calculation done in
+    // resizePageRectsKeepingRatio which is used from PrintContext::begin to
+    // scale the page size.
+    const float ratio = pageSize.height() / (float)pageSize.width();
+    const int expectedWidth = floor(pageSize.width() * minimumShrinkFactor);
+    const int expectedHeight = floor(expectedWidth * ratio);
+
+    frame->printBegin(printParams, WebNode());
+
+    EXPECT_EQ(expectedWidth, vwElement->offsetWidth());
+    EXPECT_EQ(expectedHeight, vwElement->offsetHeight());
+
+    webView->resize(flooredIntSize(pageSize));
+
+    EXPECT_EQ(expectedWidth, vwElement->offsetWidth());
+    EXPECT_EQ(expectedHeight, vwElement->offsetHeight());
 
     webView->resize(WebSize(800, 600));
-    webView->layout();
+    frame->printEnd();
 
-    WebViewImpl* webViewImpl = toWebViewImpl(webView);
-
-    Frame* frame = webViewImpl->page()->mainFrame();
-    int64_t id = frame->frameID();
-
-    std::vector<WebFrameTimingEvent> compositePairs(3);
-    compositePairs[0] = WebFrameTimingEvent(1, 2.0);
-    compositePairs[1] = WebFrameTimingEvent(2, 3.0);
-    compositePairs[2] = WebFrameTimingEvent(3, 4.0);
-    WebVector<WebFrameTimingEvent> compositeEvents(compositePairs);
-    webViewImpl->recordFrameTimingEvent(WebView::CompositeEvent, id, compositeEvents);
-    PerformanceEntryVector composites = DOMWindowPerformance::performance(*frame->domWindow())->getEntriesByType("composite");
-    PerformanceEntryVector renders = DOMWindowPerformance::performance(*frame->domWindow())->getEntriesByType("render");
-    ASSERT_EQ(3ul, composites.size());
-    ASSERT_EQ(0ul, renders.size());
-    for (size_t i = 0; i < composites.size(); ++i) {
-        double docTime = frame->domWindow()->document()->loader()->timing().monotonicTimeToZeroBasedDocumentTime(compositePairs[i].startTime) * 1000.0;
-        ASSERT_EQ(docTime, composites[i]->startTime());
-    }
-
-    // Skip ahead to subframe 2.
-    frame = frame->tree().traverseNext();
-    frame = frame->tree().traverseNext();
-    id += 2;
-
-    std::vector<WebFrameTimingEvent> renderPairs(4);
-    renderPairs[0] = WebFrameTimingEvent(4, 5.0, 6.0);
-    renderPairs[1] =WebFrameTimingEvent(5, 6.0, 7.0);
-    renderPairs[2] =WebFrameTimingEvent(6, 7.0, 8.0);
-    renderPairs[3] =WebFrameTimingEvent(7, 8.0, 9.0);
-    WebVector<WebFrameTimingEvent> renderEvents(renderPairs);
-    webViewImpl->recordFrameTimingEvent(WebView::RenderEvent, id, renderEvents);
-    composites = DOMWindowPerformance::performance(*frame->domWindow())->getEntriesByType("composite");
-    renders = DOMWindowPerformance::performance(*frame->domWindow())->getEntriesByType("render");
-    ASSERT_EQ(0ul, composites.size());
-    ASSERT_EQ(4ul, renders.size());
-    for (size_t i = 0; i < renders.size(); ++i) {
-        double docStartTime = frame->domWindow()->document()->loader()->timing().monotonicTimeToZeroBasedDocumentTime(renderPairs[i].startTime) * 1000.0;
-        ASSERT_DOUBLE_EQ(docStartTime, renders[i]->startTime());
-        double docFinishTime = frame->domWindow()->document()->loader()->timing().monotonicTimeToZeroBasedDocumentTime(renderPairs[i].finishTime) * 1000.0;
-        double docDuration = docFinishTime - docStartTime;
-        ASSERT_DOUBLE_EQ(docDuration, renders[i]->duration());
-    }
+    EXPECT_EQ(800, vwElement->offsetWidth());
 }
 
 } // namespace blink

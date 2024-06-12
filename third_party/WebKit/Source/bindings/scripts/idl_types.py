@@ -10,6 +10,7 @@ IdlTypeBase
  IdlArrayOrSequenceType
   IdlArrayType
   IdlSequenceType
+  IdlFrozenArrayType
  IdlNullableType
 
 IdlTypes are picklable because we store them in interfaces_info.
@@ -138,7 +139,7 @@ class IdlType(IdlTypeBase):
     # FIXME: incorporate Nullable, etc.
     # to support types like short?[] vs. short[]?, instead of treating these
     # as orthogonal properties (via flags).
-    callback_functions = set(STANDARD_CALLBACK_FUNCTIONS)
+    callback_functions = {}
     callback_interfaces = set()
     dictionaries = set()
     enums = {}  # name -> values
@@ -166,8 +167,19 @@ class IdlType(IdlTypeBase):
         return self.base_type in BASIC_TYPES
 
     @property
-    def is_callback_function(self):
-        return self.base_type in IdlType.callback_functions
+    def is_callback_function(self):  # pylint: disable=C0103
+        return self.base_type in IdlType.callback_functions or self.base_type in STANDARD_CALLBACK_FUNCTIONS
+
+    @property
+    def is_custom_callback_function(self):
+        # Treat standard callback functions as custom as they aren't generated.
+        if self.base_type in STANDARD_CALLBACK_FUNCTIONS:
+            return True
+        entry = IdlType.callback_functions.get(self.base_type)
+        callback_function = entry.get('callback_function')
+        if not callback_function:
+            return False
+        return 'Custom' in callback_function.extended_attributes
 
     @property
     def is_callback_interface(self):
@@ -194,6 +206,10 @@ class IdlType(IdlTypeBase):
     @property
     def is_integer_type(self):
         return self.base_type in INTEGER_TYPES
+
+    @property
+    def is_void(self):
+        return self.base_type == 'void'
 
     @property
     def is_numeric_type(self):
@@ -334,11 +350,12 @@ class IdlUnionType(IdlTypeBase):
 
 
 ################################################################################
-# IdlArrayOrSequenceType, IdlArrayType, IdlSequenceType
+# IdlArrayOrSequenceType, IdlArrayType, IdlSequenceType, IdlFrozenArrayType
 ################################################################################
 
+# TODO(bashi): Rename this like "IdlArrayTypeBase" or something.
 class IdlArrayOrSequenceType(IdlTypeBase):
-    """Base class for IdlArrayType and IdlSequenceType."""
+    """Base class for array-like types."""
 
     def __init__(self, element_type):
         super(IdlArrayOrSequenceType, self).__init__()
@@ -359,6 +376,18 @@ class IdlArrayOrSequenceType(IdlTypeBase):
     @property
     def is_array_or_sequence_type(self):
         return True
+
+    @property
+    def is_array_type(self):
+        return False
+
+    @property
+    def is_sequence_type(self):
+        return False
+
+    @property
+    def is_frozen_array(self):
+        return False
 
     @property
     def enum_values(self):
@@ -385,6 +414,10 @@ class IdlArrayType(IdlArrayOrSequenceType):
     def name(self):
         return self.element_type.name + 'Array'
 
+    @property
+    def is_array_type(self):
+        return True
+
 
 class IdlSequenceType(IdlArrayOrSequenceType):
     def __init__(self, element_type):
@@ -396,6 +429,26 @@ class IdlSequenceType(IdlArrayOrSequenceType):
     @property
     def name(self):
         return self.element_type.name + 'Sequence'
+
+    @property
+    def is_sequence_type(self):
+        return True
+
+
+class IdlFrozenArrayType(IdlArrayOrSequenceType):
+    def __init__(self, element_type):
+        super(IdlFrozenArrayType, self).__init__(element_type)
+
+    def __str__(self):
+        return 'FrozenArray<%s>' % self.element_type
+
+    @property
+    def name(self):
+        return self.element_type.name + 'Array'
+
+    @property
+    def is_frozen_array(self):
+        return True
 
 
 ################################################################################

@@ -1,0 +1,4 @@
+./lib_display_compositor_benchmark__library.so
+./libosmesa.so
+gen/ipc/ipc.mojom.js
+../../testing/test_env.py

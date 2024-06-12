@@ -28,11 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/WebDevToolsFrontendImpl.h"
 
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8DevToolsHost.h"
+#include "core/frame/FrameHost.h"
 #include "core/frame/LocalFrame.h"
 #include "core/inspector/DevToolsHost.h"
 #include "public/platform/WebSecurityOrigin.h"
@@ -44,17 +44,8 @@
 namespace blink {
 
 WebDevToolsFrontend* WebDevToolsFrontend::create(
-    WebView* view,
-    WebDevToolsFrontendClient* client,
-    const WebString& applicationLocale)
-{
-    return new WebDevToolsFrontendImpl(toWebLocalFrameImpl(view->mainFrame()), client);
-}
-
-WebDevToolsFrontend* WebDevToolsFrontend::create(
     WebLocalFrame* frame,
-    WebDevToolsFrontendClient* client,
-    const WebString& applicationLocale)
+    WebDevToolsFrontendClient* client)
 {
     return new WebDevToolsFrontendImpl(toWebLocalFrameImpl(frame), client);
 }
@@ -66,45 +57,40 @@ WebDevToolsFrontendImpl::WebDevToolsFrontendImpl(
     , m_client(client)
 {
     m_webFrame->setDevToolsFrontend(this);
+    m_webFrame->frame()->host()->setDefaultPageScaleLimits(1.f, 1.f);
 }
 
 WebDevToolsFrontendImpl::~WebDevToolsFrontendImpl()
 {
     if (m_devtoolsHost)
         m_devtoolsHost->disconnectClient();
-
-    if (!m_devtoolsHost || !m_webFrame)
-        return;
-
-    v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
-    ScriptState::Scope scope(scriptState);
-
-    v8::Local<v8::Object> global = scriptState->context()->Global();
-    global->Delete(v8AtomicString(isolate, "DevToolsHost"));
-    m_devtoolsHost = nullptr;
 }
 
 void WebDevToolsFrontendImpl::didClearWindowObject(WebLocalFrameImpl* frame)
 {
     if (m_webFrame == frame) {
         v8::Isolate* isolate = v8::Isolate::GetCurrent();
+        // Use higher limit for DevTools isolate so that it does not OOM when
+        // profiling large heaps.
+        //isolate->IncreaseHeapLimitForDebugging();
+
         ScriptState* scriptState = ScriptState::forMainWorld(m_webFrame->frame());
+        DCHECK(scriptState);
         ScriptState::Scope scope(scriptState);
 
         if (m_devtoolsHost)
             m_devtoolsHost->disconnectClient();
         m_devtoolsHost = DevToolsHost::create(this, m_webFrame->frame());
         v8::Local<v8::Object> global = scriptState->context()->Global();
-        v8::Local<v8::Value> devtoolsHostObj = toV8(m_devtoolsHost.get(), global, scriptState->isolate());
-        ASSERT(!devtoolsHostObj.IsEmpty());
+        v8::Local<v8::Value> devtoolsHostObj = ToV8(m_devtoolsHost.get(), global, scriptState->isolate());
+        DCHECK(!devtoolsHostObj.IsEmpty());
         global->Set(v8AtomicString(isolate, "DevToolsHost"), devtoolsHostObj);
     }
 
     if (m_injectedScriptForOrigin.isEmpty())
         return;
 
-    String origin = frame->securityOrigin().toString();
+    String origin = frame->getSecurityOrigin().toString();
     String script = m_injectedScriptForOrigin.get(origin);
     if (script.isEmpty())
         return;
@@ -117,16 +103,16 @@ void WebDevToolsFrontendImpl::didClearWindowObject(WebLocalFrameImpl* frame)
     frame->frame()->script().executeScriptInMainWorld(scriptWithId.toString());
 }
 
-void WebDevToolsFrontendImpl::sendMessageToBackend(const String& message)
-{
-    if (m_client)
-        m_client->sendMessageToBackend(message);
-}
-
 void WebDevToolsFrontendImpl::sendMessageToEmbedder(const String& message)
 {
     if (m_client)
         m_client->sendMessageToEmbedder(message);
+}
+
+void WebDevToolsFrontendImpl::sendMessageToBackend(const String& message)
+{
+    if (m_client)
+        m_client->sendMessageToBackend(message);
 }
 
 bool WebDevToolsFrontendImpl::isUnderTest()
@@ -134,12 +120,19 @@ bool WebDevToolsFrontendImpl::isUnderTest()
     return m_client ? m_client->isUnderTest() : false;
 }
 
-void WebDevToolsFrontendImpl::showContextMenu(LocalFrame* targetFrame, float x, float y, PassRefPtrWillBeRawPtr<ContextMenuProvider> menuProvider)
+void WebDevToolsFrontendImpl::showContextMenu(
+    LocalFrame* targetFrame,
+    float x,
+    float y,
+    ContextMenuProvider* menuProvider)
 {
-    WebLocalFrameImpl::fromFrame(targetFrame)->viewImpl()->showContextMenuAtPoint(x, y, menuProvider);
+    WebLocalFrameImpl::fromFrame(targetFrame)
+        ->viewImpl()
+        ->showContextMenuAtPoint(x, y, menuProvider);
 }
 
-void WebDevToolsFrontendImpl::setInjectedScriptForOrigin(const String& origin, const String& source)
+void WebDevToolsFrontendImpl::setInjectedScriptForOrigin(const String& origin,
+    const String& source)
 {
     m_injectedScriptForOrigin.set(origin, source);
 }

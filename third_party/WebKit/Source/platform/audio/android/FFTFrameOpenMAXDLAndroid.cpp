@@ -22,9 +22,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
+#include "wtf/build_config.h"
 
 #if OS(ANDROID) && USE(WEBAUDIO_OPENMAX_DL_FFT)
 
@@ -37,7 +35,7 @@
 
 namespace blink {
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 const unsigned kMaxFFTPow2Size = 15;
 #endif
 
@@ -86,13 +84,9 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     memcpy(imagData(), frame.imagData(), nbytes);
 }
 
-void FFTFrame::initialize()
-{
-}
+void FFTFrame::initialize() { }
 
-void FFTFrame::cleanup()
-{
-}
+void FFTFrame::cleanup() { }
 
 FFTFrame::~FFTFrame()
 {
@@ -173,5 +167,3 @@ OMXFFTSpec_R_F32* FFTFrame::contextForSize(unsigned log2FFTSize)
 } // namespace blink
 
 #endif // #if OS(ANDROID) && !USE(WEBAUDIO_OPENMAX_DL_FFT)
-
-#endif // ENABLE(WEB_AUDIO)

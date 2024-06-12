@@ -6,23 +6,49 @@
  */
 
 #include "GrGLSL.h"
+#include "GrGLSLCaps.h"
 #include "SkString.h"
 
-bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration gen) {
+bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration gen)
+{
     switch (gen) {
-        case k110_GrGLSLGeneration:
-            return false;
-        case k130_GrGLSLGeneration:
-        case k140_GrGLSLGeneration:
-        case k150_GrGLSLGeneration:
-        case k330_GrGLSLGeneration:
-        case k310es_GrGLSLGeneration:
-            return true;
+    case k110_GrGLSLGeneration:
+        return false;
+    case k130_GrGLSLGeneration:
+    case k140_GrGLSLGeneration:
+    case k150_GrGLSLGeneration:
+    case k330_GrGLSLGeneration:
+    case k400_GrGLSLGeneration:
+    case k310es_GrGLSLGeneration:
+    case k320es_GrGLSLGeneration:
+        return true;
     }
     return false;
 }
 
-void GrGLSLMulVarBy4f(SkString* outAppend, const char* vec4VarName, const GrGLSLExpr4& mulFactor) {
+void GrGLSLAppendDefaultFloatPrecisionDeclaration(GrSLPrecision p,
+    const GrGLSLCaps& glslCaps,
+    SkString* out)
+{
+    if (glslCaps.usesPrecisionModifiers()) {
+        switch (p) {
+        case kHigh_GrSLPrecision:
+            out->append("precision highp float;\n");
+            break;
+        case kMedium_GrSLPrecision:
+            out->append("precision mediump float;\n");
+            break;
+        case kLow_GrSLPrecision:
+            out->append("precision lowp float;\n");
+            break;
+        default:
+            SkFAIL("Unknown precision value.");
+        }
+    }
+}
+
+void GrGLSLMulVarBy4f(SkString* outAppend, const char* vec4VarName, const GrGLSLExpr4& mulFactor)
+{
     if (mulFactor.isOnes()) {
         *outAppend = SkString();
     }

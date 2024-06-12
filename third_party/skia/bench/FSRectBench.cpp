@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -17,12 +16,16 @@
  */
 class FSRectBench : public Benchmark {
 public:
-    FSRectBench() : fInit(false) { }
+    FSRectBench()
+        : fInit(false)
+    {
+    }
 
 protected:
     const char* onGetName() override { return "fullscreen_rects"; }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         if (!fInit) {
             SkRandom rand;
             static const SkScalar kMinOffset = 0;
@@ -39,7 +42,8 @@ protected:
         }
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPaint paint;
         for (int i = 0; i < loops; ++i) {
             paint.setColor(fColors[i % N]);
@@ -53,11 +57,11 @@ private:
         H = 480,
         N = 300,
     };
-    SkRect  fRects[N];
+    SkRect fRects[N];
     SkColor fColors[N];
     bool fInit;
 
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return SkNEW_ARGS(FSRectBench, ()); )
+DEF_BENCH(return new FSRectBench();)

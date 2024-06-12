@@ -39,10 +39,13 @@ class PluginDocument;
 class WebPlugin;
 
 // Wraps a WebDocument for full page plugins.
-class WebPluginDocument : public WebDocument {
+class WebPluginDocument final : public WebDocument {
 public:
     WebPluginDocument() { }
-    WebPluginDocument(const WebPluginDocument& e) : WebDocument(e) { }
+    WebPluginDocument(const WebPluginDocument& e)
+        : WebDocument(e)
+    {
+    }
 
     WebPluginDocument& operator=(const WebPluginDocument& e)
     {
@@ -54,11 +57,13 @@ public:
     BLINK_EXPORT WebPlugin* plugin();
 
 #if BLINK_IMPLEMENTATION
-    WebPluginDocument(const PassRefPtrWillBeRawPtr<PluginDocument>&);
-    WebPluginDocument& operator=(const PassRefPtrWillBeRawPtr<PluginDocument>&);
-    operator PassRefPtrWillBeRawPtr<PluginDocument>() const;
+    WebPluginDocument(PluginDocument*);
+    WebPluginDocument& operator=(PluginDocument*);
+    operator PluginDocument*() const;
 #endif
 };
+
+DECLARE_WEB_NODE_TYPE_CASTS(WebPluginDocument);
 
 } // namespace blink
 

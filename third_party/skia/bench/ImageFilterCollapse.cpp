@@ -22,27 +22,24 @@
 
 class BaseImageFilterCollapseBench : public Benchmark {
 public:
-    BaseImageFilterCollapseBench(): fImageFilter(NULL) {}
-    ~BaseImageFilterCollapseBench() {
-        SkSafeUnref(fImageFilter);
-    }
+    BaseImageFilterCollapseBench() { }
 
 protected:
-    void doPreDraw(SkColorFilter* colorFilters[], int nFilters) {
+    void doPreDraw(sk_sp<SkColorFilter> colorFilters[], int nFilters)
+    {
+        SkASSERT(!fImageFilter);
+
         // Create a chain of ImageFilters from colorFilters
-        fImageFilter = NULL;
-        for(int i = nFilters; i --> 0;) {
-            SkAutoTUnref<SkImageFilter> filter(
-                        SkColorFilterImageFilter::Create(colorFilters[i], fImageFilter, NULL)
-            );
-            SkRefCnt_SafeAssign(fImageFilter, filter.get());
+        for (int i = nFilters; i-- > 0;) {
+            fImageFilter = SkColorFilterImageFilter::Make(colorFilters[i], fImageFilter);
         }
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         makeBitmap();
 
-        for(int i = 0; i < loops; i++) {
+        for (int i = 0; i < loops; i++) {
             SkPaint paint;
             paint.setImageFilter(fImageFilter);
             canvas->drawBitmap(fBitmap, 0, 0, &paint);
@@ -50,10 +47,11 @@ protected:
     }
 
 private:
-    SkImageFilter* fImageFilter;
+    sk_sp<SkImageFilter> fImageFilter;
     SkBitmap fBitmap;
 
-    void makeBitmap() {
+    void makeBitmap()
+    {
         int W = 400;
         int H = 400;
         fBitmap.allocN32Pixels(W, H);
@@ -61,29 +59,26 @@ private:
 
         SkCanvas canvas(fBitmap);
         SkPaint paint;
-        SkPoint pts[] = { {0, 0}, {SkIntToScalar(W), SkIntToScalar(H)} };
+        SkPoint pts[] = { { 0, 0 }, { SkIntToScalar(W), SkIntToScalar(H) } };
         SkColor colors[] = {
             SK_ColorBLACK, SK_ColorGREEN, SK_ColorCYAN,
             SK_ColorRED, 0, SK_ColorBLUE, SK_ColorWHITE
         };
-        SkAutoTUnref<SkShader> shader(SkGradientShader::CreateLinear(
-                    pts, colors, NULL, SK_ARRAY_COUNT(colors), SkShader::kClamp_TileMode
-        ));
-        paint.setShader(shader);
+        paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
+            SkShader::kClamp_TileMode));
         canvas.drawPaint(paint);
     }
 };
 
-class TableCollapseBench: public BaseImageFilterCollapseBench {
-public:
-    virtual ~TableCollapseBench() {}
-
+class TableCollapseBench : public BaseImageFilterCollapseBench {
 protected:
-    virtual const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "image_filter_collapse_table";
     }
 
-    virtual void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         for (int i = 0; i < 256; ++i) {
             int n = i >> 5;
             table1[i] = (n << 5) | (n << 2) | (n >> 1);
@@ -94,63 +89,56 @@ protected:
             table3[i] = static_cast<uint8_t>(sqrtf(fi) * 255);
         }
 
-        SkColorFilter* colorFilters[] = {
-            SkTableColorFilter::Create(table1),
-            SkTableColorFilter::Create(table2),
-            SkTableColorFilter::Create(table3),
+        sk_sp<SkColorFilter> colorFilters[] = {
+            SkTableColorFilter::Make(table1),
+            SkTableColorFilter::Make(table2),
+            SkTableColorFilter::Make(table3),
         };
 
-        doPreDraw(colorFilters, SK_ARRAY_COUNT(colorFilters));
-
-        for(unsigned i = 0; i < SK_ARRAY_COUNT(colorFilters); i++) {
-            colorFilters[i]->unref();
-        }
+        this->doPreDraw(colorFilters, SK_ARRAY_COUNT(colorFilters));
     }
 
 private:
     uint8_t table1[256], table2[256], table3[256];
 };
 
-static SkColorFilter* make_brightness(float amount) {
+static sk_sp<SkColorFilter> make_brightness(float amount)
+{
     SkScalar amount255 = SkScalarMul(amount, SkIntToScalar(255));
     SkScalar matrix[20] = { 1, 0, 0, 0, amount255,
-                            0, 1, 0, 0, amount255,
-                            0, 0, 1, 0, amount255,
-                            0, 0, 0, 1, 0 };
-    return SkColorMatrixFilter::Create(matrix);
+        0, 1, 0, 0, amount255,
+        0, 0, 1, 0, amount255,
+        0, 0, 0, 1, 0 };
+    return SkColorFilter::MakeMatrixFilterRowMajor255(matrix);
 }
 
-static SkColorFilter* make_grayscale() {
+static sk_sp<SkColorFilter> make_grayscale()
+{
     SkScalar matrix[20];
     memset(matrix, 0, 20 * sizeof(SkScalar));
     matrix[0] = matrix[5] = matrix[10] = 0.2126f;
     matrix[1] = matrix[6] = matrix[11] = 0.7152f;
     matrix[2] = matrix[7] = matrix[12] = 0.0722f;
     matrix[18] = 1.0f;
-    return SkColorMatrixFilter::Create(matrix);
+    return SkColorFilter::MakeMatrixFilterRowMajor255(matrix);
 }
 
-class MatrixCollapseBench: public BaseImageFilterCollapseBench {
-public:
-    virtual ~MatrixCollapseBench() {}
-
+class MatrixCollapseBench : public BaseImageFilterCollapseBench {
 protected:
-    virtual const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "image_filter_collapse_matrix";
     }
 
-    virtual void onPreDraw() override {
-        SkColorFilter* colorFilters[] = {
+    void onDelayedSetup() override
+    {
+        sk_sp<SkColorFilter> colorFilters[] = {
             make_brightness(0.1f),
             make_grayscale(),
             make_brightness(-0.1f),
         };
 
-        doPreDraw(colorFilters, SK_ARRAY_COUNT(colorFilters));
-
-        for(unsigned i = 0; i < SK_ARRAY_COUNT(colorFilters); i++) {
-            colorFilters[i]->unref();
-        }
+        this->doPreDraw(colorFilters, SK_ARRAY_COUNT(colorFilters));
     }
 };
 

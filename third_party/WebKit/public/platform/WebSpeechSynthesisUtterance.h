@@ -37,10 +37,14 @@ class PlatformSpeechSynthesisUtterance;
 class WebSpeechSynthesisUtterance {
 public:
     WebSpeechSynthesisUtterance() { }
-    WebSpeechSynthesisUtterance(const WebSpeechSynthesisUtterance& other) { assign(other); }
+    WebSpeechSynthesisUtterance(const WebSpeechSynthesisUtterance& other)
+    {
+        assign(other);
+    }
     ~WebSpeechSynthesisUtterance() { reset(); }
 
-    WebSpeechSynthesisUtterance& operator=(const WebSpeechSynthesisUtterance& other)
+    WebSpeechSynthesisUtterance& operator=(
+        const WebSpeechSynthesisUtterance& other)
     {
         assign(other);
         return *this;
@@ -54,7 +58,8 @@ public:
     BLINK_PLATFORM_EXPORT WebString lang() const;
     BLINK_PLATFORM_EXPORT WebString voice() const;
 
-    // As defined in: https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html
+    // As defined in:
+    // https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html
     BLINK_PLATFORM_EXPORT float volume() const; // 0...1, 1 is default
     BLINK_PLATFORM_EXPORT float rate() const; // 0.1...10, 1 is default
     BLINK_PLATFORM_EXPORT float pitch() const; // 0...2, 1 is default
@@ -62,8 +67,10 @@ public:
     BLINK_PLATFORM_EXPORT double startTime() const; // In seconds.
 
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT WebSpeechSynthesisUtterance(PlatformSpeechSynthesisUtterance*);
-    BLINK_PLATFORM_EXPORT WebSpeechSynthesisUtterance& operator=(PlatformSpeechSynthesisUtterance*);
+    BLINK_PLATFORM_EXPORT WebSpeechSynthesisUtterance(
+        PlatformSpeechSynthesisUtterance*);
+    BLINK_PLATFORM_EXPORT WebSpeechSynthesisUtterance& operator=(
+        PlatformSpeechSynthesisUtterance*);
     BLINK_PLATFORM_EXPORT operator PlatformSpeechSynthesisUtterance*() const;
 #endif
 

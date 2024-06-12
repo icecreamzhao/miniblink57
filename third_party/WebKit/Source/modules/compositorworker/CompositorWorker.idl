@@ -3,12 +3,12 @@
 // found in the LICENSE file.
 
 [
-    ActiveDOMObject,
+    ActiveScriptWrappable,
+    DependentLifetime,
     Constructor(DOMString scriptUrl),
     ConstructorCallWith=ExecutionContext,
     RaisesException=Constructor,
     RuntimeEnabled=CompositorWorker,
-    WillBeGarbageCollected,
 ] interface CompositorWorker : EventTarget {
     attribute EventHandler onmessage;
     [PostMessage, RaisesException] void postMessage(SerializedScriptValue message, optional sequence<Transferable> transfer);

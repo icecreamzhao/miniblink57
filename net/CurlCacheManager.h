@@ -27,54 +27,91 @@
 #ifndef CurlCacheManager_h
 #define CurlCacheManager_h
 
+#include "net/CancelledReason.h"
+#include "net/ProxyType.h"
+#include "net/WebURLLoaderInternal.h"
+#include "net/CurlCacheEntry.h"
+
+#include "third_party/libcurl/include/curl/curl.h"
+#include "third_party/WebKit/Source/platform/Timer.h"
+#include "third_party/WebKit/Source/wtf/Vector.h"
+#include "third_party/WebKit/Source/wtf/text/CString.h"
+#include "third_party/WebKit/Source/wtf/text/WTFString.h"
+#include "third_party/WebKit/Source/wtf/Threading.h"
+#include "third_party/WebKit/Source/platform/Timer.h"
+#include "third_party/WebKit/Source/platform/network/HTTPHeaderMap.h"
+#include "platform/network/ResourceResponse.h"
+#include <map>
+
 #include <wtf/HashMap.h>
 #include <wtf/ListHashSet.h>
 #include <wtf/text/WTFString.h>
+
+namespace blink {
+
+class WebURLRequest;
+class WebURLResponse;
+struct WebURLError;
+class WebURLLoaderClient;
+class WebURLLoader;
+
+}
 
 namespace net {
 
 class CurlCacheManager {
 
 public:
-    static CurlCacheManager& getInstance();
+    static CurlCacheManager* getInstance();
 
+    // 设置缓存路径
     void setCacheDirectory(const String&);
+    void setCacheLevel(int Level) { m_cacheLevel = Level; };
     const String& cacheDirectory() { return m_cacheDir; }
     void setStorageSizeLimit(size_t);
+    void setStorageSizeLimitDisk(size_t);
 
     bool isCached(const String&) const;
     HTTPHeaderMap& requestHeaders(const String&); // Load headers
-    bool getCachedResponse(const String& url, ResourceResponse&);
+    bool getCachedResponse(const String& url,ResourceResponse&);
 
-    void didReceiveResponse(ResourceHandle&, ResourceResponse&);
-    void didReceiveData(ResourceHandle&, const char*, size_t); // Save data
-    void didFinishLoading(ResourceHandle&);
-    void didFail(ResourceHandle&);
+    void didReceiveResponse(WebURLLoaderInternal&, ResourceResponse&);
+    void didReceiveData(WebURLLoaderInternal&, const char*, size_t); // Save data
+    void didFinishLoading(WebURLLoaderInternal&);
+    void didFail(WebURLLoaderInternal&);
 
-    void addCacheEntryClient(const String& url, ResourceHandle* job);
-    void removeCacheEntryClient(const String& url, ResourceHandle* job);
+    void shutdown();
+    void save()
+    {
+        saveIndex();
+    }
 
 private:
     CurlCacheManager();
     ~CurlCacheManager();
     CurlCacheManager(CurlCacheManager const&);
-    void operator=(CurlCacheManager const&);
+    
+    static CurlCacheManager *m_instance;
 
-    bool m_disabled;
+    int m_cacheLevel; // 缓存等级
+    bool m_disabled; // 禁用缓存
     String m_cacheDir;
-    HashMap<String, std::unique_ptr<CurlCacheEntry>> m_index;
+    HashMap<String, CurlCacheEntry*> m_index;
 
     ListHashSet<String> m_LRUEntryList;
     size_t m_currentStorageSize;
     size_t m_storageSizeLimit;
+    size_t m_storageSizeLimitDisk;
 
     void saveIndex();
+    void saveIndexForLevel2();
     void loadIndex();
     void makeRoomForNewEntry();
+    void makeRoomForNewEntryDisk();
 
-    void saveResponseHeaders(const String&, ResourceResponse&);
+    void saveResponseHeaders(const String&, const ResourceResponse&);
     void invalidateCacheEntry(const String&);
-    void readCachedData(const String&, ResourceHandle*, ResourceResponse&);
+    void readCachedData(const String&, WebURLLoaderInternal*, ResourceResponse&);
 };
 
 }

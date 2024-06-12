@@ -6,13 +6,13 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSettingsWidget.h"
 #include <iostream>
 #include <math.h>
 
 // TODO(chudy): See if the layout can't be attached to the frame post construction.
-SkSettingsWidget::SkSettingsWidget() : QFrame()
+SkSettingsWidget::SkSettingsWidget()
+    : QFrame()
 {
     this->setLayout(&fVerticalLayout);
     this->setFrameStyle(QFrame::Panel);
@@ -21,30 +21,36 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
 
     // Visualizations toggles.
     fVisualizationsGroup.setTitle("Visualizations");
+
     fVisibilityFilterCheckBox.setText("Visibility Filter");
     fVisualizationsLayout.addWidget(&fVisibilityFilterCheckBox);
+
     fMegaVizCheckBox.setText("Mega Viz");
     fVisualizationsLayout.addWidget(&fMegaVizCheckBox);
+
     fPathOpsCheckBox.setText("PathOps ");
     fVisualizationsLayout.addWidget(&fPathOpsCheckBox);
+
+    fOverdrawVizCheckBox.setText("Overdraw Viz");
+    fVisualizationsLayout.addWidget(&fOverdrawVizCheckBox);
+
     fVisualizationsGroup.setLayout(&fVisualizationsLayout);
+
     connect(&fVisibilityFilterCheckBox, SIGNAL(toggled(bool)), this,
-            SIGNAL(visualizationsChanged()));
+        SIGNAL(visualizationsChanged()));
     connect(&fMegaVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
     connect(&fPathOpsCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
+    connect(&fOverdrawVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
 
     fVerticalLayout.addRow(&fVisualizationsGroup);
 
     // Raster toggles.
     fRasterGroup.setTitle("Raster");
     fRasterGroup.setCheckable(true);
-    fOverdrawVizCheckBox.setText("Overdraw Viz");
-    fRasterLayout.addWidget(&fOverdrawVizCheckBox);
     fRasterGroup.setLayout(&fRasterLayout);
     fVerticalLayout.addRow(&fRasterGroup);
 
     connect(&fRasterGroup, SIGNAL(toggled(bool)), this, SIGNAL(rasterSettingsChanged()));
-    connect(&fOverdrawVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(rasterSettingsChanged()));
 
 #if SK_SUPPORT_GPU
     fGLGroup.setTitle("OpenGL");
@@ -53,13 +59,13 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
     fGLMSAACombo.addItem("Off", QVariant(0));
     fGLMSAACombo.addItem("4", QVariant(4));
     fGLMSAACombo.addItem("16", QVariant(16));
-    fGLLayout.addRow("MSAA",  &fGLMSAACombo);
+    fGLLayout.addRow("MSAA", &fGLMSAACombo);
     fGLGroup.setLayout(&fGLLayout);
 
     connect(&fGLGroup, SIGNAL(toggled(bool)), this,
-            SIGNAL(glSettingsChanged()));
+        SIGNAL(glSettingsChanged()));
     connect(&fGLMSAACombo, SIGNAL(activated(int)), this,
-            SIGNAL(glSettingsChanged()));
+        SIGNAL(glSettingsChanged()));
 
     fVerticalLayout.addRow(&fGLGroup);
 #endif
@@ -74,4 +80,3 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
     fVerticalLayout.addRow("Filtering", &fFilterCombo);
     this->setDisabled(true);
 }
-

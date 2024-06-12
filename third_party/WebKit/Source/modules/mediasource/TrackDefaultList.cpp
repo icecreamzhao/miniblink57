@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-
 #include "modules/mediasource/TrackDefaultList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -18,7 +16,9 @@ TrackDefaultList* TrackDefaultList::create()
     return new TrackDefaultList();
 }
 
-TrackDefaultList* TrackDefaultList::create(const HeapVector<Member<TrackDefault>>& trackDefaults, ExceptionState& exceptionState)
+TrackDefaultList* TrackDefaultList::create(
+    const HeapVector<Member<TrackDefault>>& trackDefaults,
+    ExceptionState& exceptionState)
 {
     // Per 11 Dec 2014 Editor's Draft
     // https://w3c.github.io/media-source/#trackdefaultlist
@@ -36,13 +36,14 @@ TrackDefaultList* TrackDefaultList::create(const HeapVector<Member<TrackDefault>
     for (const auto& trackDefault : trackDefaults) {
         TypeAndID key = TypeAndID(trackDefault->type(), trackDefault->byteStreamTrackID());
         if (!typeAndIDToTrackDefaultMap.add(key, trackDefault).isNewEntry) {
-            exceptionState.throwDOMException(InvalidAccessError, "Duplicate TrackDefault type (" + key.first + ") and byteStreamTrackID (" + key.second + ")");
+            exceptionState.throwDOMException(
+                InvalidAccessError, "Duplicate TrackDefault type (" + key.first + ") and byteStreamTrackID (" + key.second + ")");
             return nullptr;
         }
     }
 
-    // 2. Store a shallow copy of |trackDefaults| in this new object so the values can
-    //    be returned by the accessor methods.
+    // 2. Store a shallow copy of |trackDefaults| in this new object so the values
+    //    can be returned by the accessor methods.
     // This step is done in constructor initializer.
     return new TrackDefaultList(trackDefaults);
 }
@@ -61,11 +62,10 @@ TrackDefault* TrackDefaultList::item(unsigned index) const
     return m_trackDefaults[index].get();
 }
 
-TrackDefaultList::TrackDefaultList()
-{
-}
+TrackDefaultList::TrackDefaultList() { }
 
-TrackDefaultList::TrackDefaultList(const HeapVector<Member<TrackDefault>>& trackDefaults)
+TrackDefaultList::TrackDefaultList(
+    const HeapVector<Member<TrackDefault>>& trackDefaults)
     : m_trackDefaults(trackDefaults)
 {
 }

@@ -21,7 +21,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FEColorMatrix.h"
 
 #include "SkColorFilterImageFilter.h"
@@ -33,16 +32,20 @@ namespace blink {
 
 static const unsigned kColorMatrixSize = 20;
 
-FEColorMatrix::FEColorMatrix(Filter* filter, ColorMatrixType type, const Vector<float>& values)
+FEColorMatrix::FEColorMatrix(Filter* filter,
+    ColorMatrixType type,
+    const Vector<float>& values)
     : FilterEffect(filter)
     , m_type(type)
     , m_values(values)
 {
 }
 
-PassRefPtrWillBeRawPtr<FEColorMatrix> FEColorMatrix::create(Filter* filter, ColorMatrixType type, const Vector<float>& values)
+FEColorMatrix* FEColorMatrix::create(Filter* filter,
+    ColorMatrixType type,
+    const Vector<float>& values)
 {
-    return adoptRefWillBeNoop(new FEColorMatrix(filter, type, values));
+    return new FEColorMatrix(filter, type, values);
 }
 
 ColorMatrixType FEColorMatrix::type() const
@@ -63,7 +66,7 @@ const Vector<float>& FEColorMatrix::values() const
     return m_values;
 }
 
-bool FEColorMatrix::setValues(const Vector<float> &values)
+bool FEColorMatrix::setValues(const Vector<float>& values)
 {
     if (m_values == values)
         return false;
@@ -119,9 +122,10 @@ static void luminanceToAlphaMatrix(SkScalar matrix[kColorMatrixSize])
     matrix[17] = 0.0721f;
 }
 
-static SkColorFilter* createColorFilter(ColorMatrixType type, const Vector<float>& values)
+static sk_sp<SkColorFilter> createColorFilter(ColorMatrixType type,
+    const Vector<float>& values)
 {
-    // Use defaults if values contains too few values. See SVGFEColorMatrixElement::build
+    // Use defaults if values contains too few/many values.
     SkScalar matrix[kColorMatrixSize];
     memset(matrix, 0, kColorMatrixSize * sizeof(SkScalar));
     matrix[0] = matrix[6] = matrix[12] = matrix[18] = 1;
@@ -130,7 +134,7 @@ static SkColorFilter* createColorFilter(ColorMatrixType type, const Vector<float
     case FECOLORMATRIX_TYPE_UNKNOWN:
         break;
     case FECOLORMATRIX_TYPE_MATRIX:
-        if (values.size() >= kColorMatrixSize) {
+        if (values.size() == kColorMatrixSize) {
             for (unsigned i = 0; i < kColorMatrixSize; ++i)
                 matrix[i] = values[i];
         }
@@ -140,33 +144,35 @@ static SkColorFilter* createColorFilter(ColorMatrixType type, const Vector<float
         matrix[19] *= SkScalar(255);
         break;
     case FECOLORMATRIX_TYPE_SATURATE:
-        if (values.size())
+        if (values.size() == 1)
             saturateMatrix(values[0], matrix);
         break;
     case FECOLORMATRIX_TYPE_HUEROTATE:
-        if (values.size())
+        if (values.size() == 1)
             hueRotateMatrix(values[0], matrix);
         break;
     case FECOLORMATRIX_TYPE_LUMINANCETOALPHA:
         luminanceToAlphaMatrix(matrix);
         break;
     }
-    return SkColorMatrixFilter::Create(matrix);
+    return SkColorFilter::MakeMatrixFilterRowMajor255(matrix);
 }
 
-bool FEColorMatrix::affectsTransparentPixels()
+bool FEColorMatrix::affectsTransparentPixels() const
 {
-    // Because the input pixels are premultiplied, the only way clear pixels can be
-    // painted is if the additive component for the alpha is not 0.
+    // Because the input pixels are premultiplied, the only way clear pixels can
+    // be painted is if the additive component for the alpha is not 0.
     return m_type == FECOLORMATRIX_TYPE_MATRIX && m_values.size() >= kColorMatrixSize && m_values[19] > 0;
 }
 
-PassRefPtr<SkImageFilter> FEColorMatrix::createImageFilter(SkiaImageFilterBuilder* builder)
+sk_sp<SkImageFilter> FEColorMatrix::createImageFilter()
 {
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
-    SkAutoTUnref<SkColorFilter> filter(createColorFilter(m_type, m_values));
-    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
-    return adoptRef(SkColorFilterImageFilter::Create(filter, input.get(), &rect));
+    sk_sp<SkImageFilter> input(
+        SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+    sk_sp<SkColorFilter> filter = createColorFilter(m_type, m_values);
+    SkImageFilter::CropRect rect = getCropRect();
+    return SkColorFilterImageFilter::Make(std::move(filter), std::move(input),
+        &rect);
 }
 
 static TextStream& operator<<(TextStream& ts, const ColorMatrixType& type)
@@ -191,13 +197,32 @@ static TextStream& operator<<(TextStream& ts, const ColorMatrixType& type)
     return ts;
 }
 
-TextStream& FEColorMatrix::externalRepresentation(TextStream& ts, int indent) const
+static bool valuesIsValidForType(ColorMatrixType type,
+    const Vector<float>& values)
+{
+    switch (type) {
+    case FECOLORMATRIX_TYPE_MATRIX:
+        return values.size() == kColorMatrixSize;
+    case FECOLORMATRIX_TYPE_SATURATE:
+    case FECOLORMATRIX_TYPE_HUEROTATE:
+        return values.size() == 1;
+    case FECOLORMATRIX_TYPE_LUMINANCETOALPHA:
+        return values.size() == 0;
+    case FECOLORMATRIX_TYPE_UNKNOWN:
+        break;
+    }
+    ASSERT_NOT_REACHED();
+    return false;
+}
+
+TextStream& FEColorMatrix::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[feColorMatrix";
     FilterEffect::externalRepresentation(ts);
     ts << " type=\"" << m_type << "\"";
-    if (!m_values.isEmpty()) {
+    if (!m_values.isEmpty() && valuesIsValidForType(m_type, m_values)) {
         ts << " values=\"";
         Vector<float>::const_iterator ptr = m_values.begin();
         const Vector<float>::const_iterator end = m_values.end();

@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003, 2004, 2005, 2006 Apple Computer, Inc.  All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006 Apple Computer, Inc.  All rights
+ * reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +30,8 @@
 
 #include "platform/PlatformExport.h"
 #include "public/platform/WebCommon.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 
 #if OS(MACOSX)
 typedef struct CGSize CGSize;
@@ -38,12 +41,26 @@ typedef struct CGSize CGSize;
 #endif
 #endif
 
+namespace gfx {
+class Size;
+}
+
 namespace blink {
 
 class PLATFORM_EXPORT IntSize {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    IntSize() : m_width(0), m_height(0) { }
-    IntSize(int width, int height) : m_width(width), m_height(height) { }
+    IntSize()
+        : m_width(0)
+        , m_height(0)
+    {
+    }
+    IntSize(int width, int height)
+        : m_width(width)
+        , m_height(height)
+    {
+    }
 
     int width() const { return m_width; }
     int height() const { return m_height; }
@@ -54,7 +71,10 @@ public:
     bool isEmpty() const { return m_width <= 0 || m_height <= 0; }
     bool isZero() const { return !m_width && !m_height; }
 
-    float aspectRatio() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
+    float aspectRatio() const
+    {
+        return static_cast<float>(m_width) / static_cast<float>(m_height);
+    }
 
     void expand(int width, int height)
     {
@@ -68,10 +88,7 @@ public:
         m_height = static_cast<int>(static_cast<float>(m_height) * heightScale);
     }
 
-    void scale(float scale)
-    {
-        this->scale(scale, scale);
-    }
+    void scale(float scale) { this->scale(scale, scale); }
 
     IntSize expandedTo(const IntSize& other) const
     {
@@ -85,10 +102,7 @@ public:
             m_height < other.m_height ? m_height : other.m_height);
     }
 
-    void clampNegativeToZero()
-    {
-        *this = expandedTo(IntSize());
-    }
+    void clampNegativeToZero() { *this = expandedTo(IntSize()); }
 
     void clampToMinimumSize(const IntSize& minimumSize)
     {
@@ -99,30 +113,28 @@ public:
     }
 
     // Return area in a uint64_t to avoid overflow.
-    uint64_t area() const
-    {
-        return static_cast<uint64_t>(width()) * height();
-    }
+    uint64_t area() const { return static_cast<uint64_t>(width()) * height(); }
 
     int diagonalLengthSquared() const
     {
         return m_width * m_width + m_height * m_height;
     }
 
-    IntSize transposedSize() const
-    {
-        return IntSize(m_height, m_width);
-    }
+    IntSize transposedSize() const { return IntSize(m_height, m_width); }
 
 #if OS(MACOSX)
     explicit IntSize(const CGSize&); // don't do this implicitly since it's lossy
     operator CGSize() const;
 
 #if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
-    explicit IntSize(const NSSize &); // don't do this implicitly since it's lossy
+    explicit IntSize(const NSSize&); // don't do this implicitly since it's lossy
     operator NSSize() const;
 #endif
 #endif
+
+    operator gfx::Size() const;
+
+    String toString() const;
 
 private:
     int m_width, m_height;
@@ -166,6 +178,10 @@ inline bool operator!=(const IntSize& a, const IntSize& b)
 {
     return a.width() != b.width() || a.height() != b.height();
 }
+
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const IntSize&, std::ostream*);
 
 } // namespace blink
 

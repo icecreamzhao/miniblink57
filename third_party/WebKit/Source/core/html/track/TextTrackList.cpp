@@ -23,10 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/TextTrackList.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "core/events/GenericEventQueue.h"
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/track/InbandTextTrack.h"
@@ -42,31 +41,17 @@ TextTrackList::TextTrackList(HTMLMediaElement* owner)
 {
 }
 
-TextTrackList::~TextTrackList()
-{
-#if !ENABLE(OILPAN)
-    ASSERT(!m_owner);
-
-    // TextTrackList and m_asyncEventQueue always become unreachable
-    // together. So TextTrackList and m_asyncEventQueue are destructed in the
-    // same GC. We don't need to close it explicitly in Oilpan.
-    m_asyncEventQueue->close();
-
-    for (unsigned i = 0; i < length(); ++i) {
-        item(i)->setTrackList(0);
-    }
-#endif
-}
+TextTrackList::~TextTrackList() { }
 
 unsigned TextTrackList::length() const
 {
     return m_addTrackTracks.size() + m_elementTracks.size() + m_inbandTracks.size();
 }
 
-int TextTrackList::getTrackIndex(TextTrack *textTrack)
+int TextTrackList::getTrackIndex(TextTrack* textTrack)
 {
     if (textTrack->trackType() == TextTrack::TrackElement)
-        return static_cast<LoadableTextTrack*>(textTrack)->trackElementIndex();
+        return toLoadableTextTrack(textTrack)->trackElementIndex();
 
     if (textTrack->trackType() == TextTrack::AddTrack)
         return m_elementTracks.size() + m_addTrackTracks.find(textTrack);
@@ -74,67 +59,72 @@ int TextTrackList::getTrackIndex(TextTrack *textTrack)
     if (textTrack->trackType() == TextTrack::InBand)
         return m_elementTracks.size() + m_addTrackTracks.size() + m_inbandTracks.find(textTrack);
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
 
     return -1;
 }
 
-int TextTrackList::getTrackIndexRelativeToRenderedTracks(TextTrack *textTrack)
+int TextTrackList::getTrackIndexRelativeToRenderedTracks(TextTrack* textTrack)
 {
-    // Calculate the "Let n be the number of text tracks whose text track mode is showing and that are in the media element's list of text tracks before track."
+    // Calculate the "Let n be the number of text tracks whose text track mode is
+    // showing and that are in the media element's list of text tracks before
+    // track."
     int trackIndex = 0;
 
-    for (size_t i = 0; i < m_elementTracks.size(); ++i) {
-        if (!m_elementTracks[i]->isRendered())
+    for (const auto& track : m_elementTracks) {
+        if (!track->isRendered())
             continue;
 
-        if (m_elementTracks[i] == textTrack)
+        if (track == textTrack)
             return trackIndex;
         ++trackIndex;
     }
 
-    for (size_t i = 0; i < m_addTrackTracks.size(); ++i) {
-        if (!m_addTrackTracks[i]->isRendered())
+    for (const auto& track : m_addTrackTracks) {
+        if (!track->isRendered())
             continue;
 
-        if (m_addTrackTracks[i] == textTrack)
+        if (track == textTrack)
             return trackIndex;
         ++trackIndex;
     }
 
-    for (size_t i = 0; i < m_inbandTracks.size(); ++i) {
-        if (!m_inbandTracks[i]->isRendered())
+    for (const auto& track : m_inbandTracks) {
+        if (!track->isRendered())
             continue;
 
-        if (m_inbandTracks[i] == textTrack)
+        if (track == textTrack)
             return trackIndex;
         ++trackIndex;
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
 
     return -1;
 }
 
-TextTrack* TextTrackList::item(unsigned index)
+TextTrack* TextTrackList::anonymousIndexedGetter(unsigned index)
 {
     // 4.8.10.12.1 Text track model
     // The text tracks are sorted as follows:
-    // 1. The text tracks corresponding to track element children of the media element, in tree order.
-    // 2. Any text tracks added using the addTextTrack() method, in the order they were added, oldest first.
-    // 3. Any media-resource-specific text tracks (text tracks corresponding to data in the media
-    // resource), in the order defined by the media resource's format specification.
+    // 1. The text tracks corresponding to track element children of the media
+    // element, in tree order.
+    // 2. Any text tracks added using the addTextTrack() method, in the order they
+    // were added, oldest first.
+    // 3. Any media-resource-specific text tracks (text tracks corresponding to
+    // data in the media resource), in the order defined by the media resource's
+    // format specification.
 
     if (index < m_elementTracks.size())
-        return m_elementTracks[index].get();
+        return m_elementTracks[index];
 
     index -= m_elementTracks.size();
     if (index < m_addTrackTracks.size())
-        return m_addTrackTracks[index].get();
+        return m_addTrackTracks[index];
 
     index -= m_addTrackTracks.size();
     if (index < m_inbandTracks.size())
-        return m_inbandTracks[index].get();
+        return m_inbandTracks[index];
 
     return 0;
 }
@@ -146,8 +136,8 @@ TextTrack* TextTrackList::getTrackById(const AtomicString& id)
     // TextTrackList object whose id IDL attribute would return a value equal
     // to the value of the id argument.
     for (unsigned i = 0; i < length(); ++i) {
-        TextTrack* track = item(i);
-        if (track->id() == id)
+        TextTrack* track = anonymousIndexedGetter(i);
+        if (String(track->id()) == id)
             return track;
     }
 
@@ -157,22 +147,22 @@ TextTrack* TextTrackList::getTrackById(const AtomicString& id)
 
 void TextTrackList::invalidateTrackIndexesAfterTrack(TextTrack* track)
 {
-    WillBeHeapVector<RefPtrWillBeMember<TextTrack>>* tracks = 0;
+    HeapVector<TraceWrapperMember<TextTrack>>* tracks = nullptr;
 
     if (track->trackType() == TextTrack::TrackElement) {
         tracks = &m_elementTracks;
-        for (size_t i = 0; i < m_addTrackTracks.size(); ++i)
-            m_addTrackTracks[i]->invalidateTrackIndex();
-        for (size_t i = 0; i < m_inbandTracks.size(); ++i)
-            m_inbandTracks[i]->invalidateTrackIndex();
+        for (const auto& addTrack : m_addTrackTracks)
+            addTrack->invalidateTrackIndex();
+        for (const auto& inbandTrack : m_inbandTracks)
+            inbandTrack->invalidateTrackIndex();
     } else if (track->trackType() == TextTrack::AddTrack) {
         tracks = &m_addTrackTracks;
-        for (size_t i = 0; i < m_inbandTracks.size(); ++i)
-            m_inbandTracks[i]->invalidateTrackIndex();
+        for (const auto& inbandTrack : m_inbandTracks)
+            inbandTrack->invalidateTrackIndex();
     } else if (track->trackType() == TextTrack::InBand) {
         tracks = &m_inbandTracks;
     } else {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
     }
 
     size_t index = tracks->find(track);
@@ -180,36 +170,34 @@ void TextTrackList::invalidateTrackIndexesAfterTrack(TextTrack* track)
         return;
 
     for (size_t i = index; i < tracks->size(); ++i)
-        tracks->at(index)->invalidateTrackIndex();
+        tracks->at(i)->invalidateTrackIndex();
 }
 
-void TextTrackList::append(PassRefPtrWillBeRawPtr<TextTrack> prpTrack)
+void TextTrackList::append(TextTrack* track)
 {
-    RefPtrWillBeRawPtr<TextTrack> track = prpTrack;
-
     if (track->trackType() == TextTrack::AddTrack) {
-        m_addTrackTracks.append(track);
+        m_addTrackTracks.push_back(TraceWrapperMember<TextTrack>(this, track));
     } else if (track->trackType() == TextTrack::TrackElement) {
         // Insert tracks added for <track> element in tree order.
-        size_t index = static_cast<LoadableTextTrack*>(track.get())->trackElementIndex();
-        m_elementTracks.insert(index, track);
+        size_t index = toLoadableTextTrack(track)->trackElementIndex();
+        m_elementTracks.insert(index, TraceWrapperMember<TextTrack>(this, track));
     } else if (track->trackType() == TextTrack::InBand) {
-        m_inbandTracks.append(track);
+        m_inbandTracks.push_back(TraceWrapperMember<TextTrack>(this, track));
     } else {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
     }
 
-    invalidateTrackIndexesAfterTrack(track.get());
+    invalidateTrackIndexesAfterTrack(track);
 
-    ASSERT(!track->trackList());
+    DCHECK(!track->trackList());
     track->setTrackList(this);
 
-    scheduleAddTrackEvent(track.release());
+    scheduleAddTrackEvent(track);
 }
 
 void TextTrackList::remove(TextTrack* track)
 {
-    WillBeHeapVector<RefPtrWillBeMember<TextTrack>>* tracks = 0;
+    HeapVector<TraceWrapperMember<TextTrack>>* tracks = nullptr;
 
     if (track->trackType() == TextTrack::TrackElement) {
         tracks = &m_elementTracks;
@@ -218,7 +206,7 @@ void TextTrackList::remove(TextTrack* track)
     } else if (track->trackType() == TextTrack::InBand) {
         tracks = &m_inbandTracks;
     } else {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
     }
 
     size_t index = tracks->find(track);
@@ -227,7 +215,7 @@ void TextTrackList::remove(TextTrack* track)
 
     invalidateTrackIndexesAfterTrack(track);
 
-    ASSERT(track->trackList() == this);
+    DCHECK_EQ(track->trackList(), this);
     track->setTrackList(0);
 
     tracks->remove(index);
@@ -237,15 +225,15 @@ void TextTrackList::remove(TextTrack* track)
 
 void TextTrackList::removeAllInbandTracks()
 {
-    for (unsigned i = 0; i < m_inbandTracks.size(); ++i) {
-        m_inbandTracks[i]->setTrackList(0);
+    for (const auto& track : m_inbandTracks) {
+        track->setTrackList(0);
     }
     m_inbandTracks.clear();
 }
 
 bool TextTrackList::contains(TextTrack* track) const
 {
-    const WillBeHeapVector<RefPtrWillBeMember<TextTrack>>* tracks = 0;
+    const HeapVector<TraceWrapperMember<TextTrack>>* tracks = nullptr;
 
     if (track->trackType() == TextTrack::TrackElement)
         tracks = &m_elementTracks;
@@ -254,7 +242,7 @@ bool TextTrackList::contains(TextTrack* track) const
     else if (track->trackType() == TextTrack::InBand)
         tracks = &m_inbandTracks;
     else
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
 
     return tracks->find(track) != kNotFound;
 }
@@ -264,31 +252,25 @@ const AtomicString& TextTrackList::interfaceName() const
     return EventTargetNames::TextTrackList;
 }
 
-ExecutionContext* TextTrackList::executionContext() const
+ExecutionContext* TextTrackList::getExecutionContext() const
 {
-    return m_owner ? m_owner->executionContext() : 0;
+    return m_owner ? m_owner->getExecutionContext() : 0;
 }
 
-#if !ENABLE(OILPAN)
-void TextTrackList::clearOwner()
-{
-    m_owner = nullptr;
-}
-#endif
-
-void TextTrackList::scheduleTrackEvent(const AtomicString& eventName, PassRefPtrWillBeRawPtr<TextTrack> track)
+void TextTrackList::scheduleTrackEvent(const AtomicString& eventName,
+    TextTrack* track)
 {
     m_asyncEventQueue->enqueueEvent(TrackEvent::create(eventName, track));
 }
 
-void TextTrackList::scheduleAddTrackEvent(PassRefPtrWillBeRawPtr<TextTrack> track)
+void TextTrackList::scheduleAddTrackEvent(TextTrack* track)
 {
     // 4.8.10.12.3 Sourcing out-of-band text tracks
     // 4.8.10.12.4 Text track API
-    // ... then queue a task to fire an event with the name addtrack, that does not
-    // bubble and is not cancelable, and that uses the TrackEvent interface, with
-    // the track attribute initialized to the text track's TextTrack object, at
-    // the media element's textTracks attribute's TextTrackList object.
+    // ... then queue a task to fire an event with the name addtrack, that does
+    // not bubble and is not cancelable, and that uses the TrackEvent interface,
+    // with the track attribute initialized to the text track's TextTrack object,
+    // at the media element's textTracks attribute's TextTrackList object.
     scheduleTrackEvent(EventTypeNames::addtrack, track);
 }
 
@@ -305,7 +287,7 @@ void TextTrackList::scheduleChangeEvent()
     m_asyncEventQueue->enqueueEvent(Event::create(EventTypeNames::change));
 }
 
-void TextTrackList::scheduleRemoveTrackEvent(PassRefPtrWillBeRawPtr<TextTrack> track)
+void TextTrackList::scheduleRemoveTrackEvent(TextTrack* track)
 {
     // 4.8.10.12.3 Sourcing out-of-band text tracks
     // When a track element's parent element changes and the old parent was a
@@ -322,7 +304,7 @@ void TextTrackList::scheduleRemoveTrackEvent(PassRefPtrWillBeRawPtr<TextTrack> t
 bool TextTrackList::hasShowingTracks()
 {
     for (unsigned i = 0; i < length(); ++i) {
-        if (item(i)->mode() == TextTrack::showingKeyword())
+        if (anonymousIndexedGetter(i)->mode() == TextTrack::showingKeyword())
             return true;
     }
     return false;
@@ -341,4 +323,15 @@ DEFINE_TRACE(TextTrackList)
     visitor->trace(m_elementTracks);
     visitor->trace(m_inbandTracks);
     EventTargetWithInlineData::trace(visitor);
+}
+
+DEFINE_TRACE_WRAPPERS(TextTrackList)
+{
+    for (auto track : m_addTrackTracks)
+        visitor->traceWrappers(track);
+    for (auto track : m_elementTracks)
+        visitor->traceWrappers(track);
+    for (auto track : m_inbandTracks)
+        visitor->traceWrappers(track);
+    EventTargetWithInlineData::traceWrappers(visitor);
 }

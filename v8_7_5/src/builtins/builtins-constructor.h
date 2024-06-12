@@ -13,35 +13,32 @@
 namespace v8 {
 namespace internal {
 
-class ConstructorBuiltins {
- public:
-  static int MaximumFunctionContextSlots() {
-    return FLAG_test_small_max_function_context_stub_size ? kSmallMaximumSlots
-                                                          : kMaximumSlots;
-  }
+    class ConstructorBuiltins {
+    public:
+        static int MaximumFunctionContextSlots()
+        {
+            return FLAG_test_small_max_function_context_stub_size ? kSmallMaximumSlots
+                                                                  : kMaximumSlots;
+        }
 
-  // Maximum number of elements in copied array (chosen so that even an array
-  // backed by a double backing store will fit into new-space).
-  static const int kMaximumClonedShallowArrayElements =
-      JSArray::kInitialMaxFastElementArray;
-  // Maximum number of properties in copied object so that the properties store
-  // will fit into new-space. This constant is based on the assumption that
-  // NameDictionaries are 50% over-allocated.
-  static const int kMaximumClonedShallowObjectProperties =
-      NameDictionary::kMaxRegularCapacity / 3 * 2;
+        // Maximum number of elements in copied array (chosen so that even an array
+        // backed by a double backing store will fit into new-space).
+        static const int kMaximumClonedShallowArrayElements = JSArray::kInitialMaxFastElementArray;
+        // Maximum number of properties in copied object so that the properties store
+        // will fit into new-space. This constant is based on the assumption that
+        // NameDictionaries are 50% over-allocated.
+        static const int kMaximumClonedShallowObjectProperties = NameDictionary::kMaxRegularCapacity / 3 * 2;
 
- private:
-  static const int kMaximumSlots =
-      (kMaxRegularHeapObjectSize - Context::kTodoHeaderSize) / kTaggedSize - 1;
-  static const int kSmallMaximumSlots = 10;
+    private:
+        static const int kMaximumSlots = (kMaxRegularHeapObjectSize - Context::kTodoHeaderSize) / kTaggedSize - 1;
+        static const int kSmallMaximumSlots = 10;
 
-  // FastNewFunctionContext can only allocate closures which fit in the
-  // new space.
-  STATIC_ASSERT(Context::SizeFor(kMaximumSlots + Context::MIN_CONTEXT_SLOTS) <
-                kMaxRegularHeapObjectSize);
-};
+        // FastNewFunctionContext can only allocate closures which fit in the
+        // new space.
+        STATIC_ASSERT(Context::SizeFor(kMaximumSlots + Context::MIN_CONTEXT_SLOTS) < kMaxRegularHeapObjectSize);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_BUILTINS_BUILTINS_CONSTRUCTOR_H_
+#endif // V8_BUILTINS_BUILTINS_CONSTRUCTOR_H_

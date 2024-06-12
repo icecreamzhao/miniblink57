@@ -28,10 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/SegmentedString.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
@@ -47,20 +46,18 @@ TEST(SegmentedStringTest, CurrentChar)
         EXPECT_EQ('c', copied.currentChar());
         EXPECT_EQ('c', assigned.currentChar());
     }
-    original.push('a');
+    original.push('b');
     {
         SegmentedString copied(original);
         SegmentedString assigned;
         assigned = original;
-        EXPECT_EQ("acde", original.toString());
-        EXPECT_EQ('a', original.currentChar());
-        EXPECT_EQ('a', copied.currentChar());
-        EXPECT_EQ('a', assigned.currentChar());
+        EXPECT_EQ("bcde", original.toString());
+        EXPECT_EQ('b', original.currentChar());
+        EXPECT_EQ('b', copied.currentChar());
+        EXPECT_EQ('b', assigned.currentChar());
     }
-    original.push('b');
+    original.push('a');
     {
-        // Two consecutive push means to push the second char *after* the
-        // first char in SegmentedString.
         SegmentedString copied(original);
         SegmentedString assigned;
         assigned = original;

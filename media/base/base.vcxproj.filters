@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="simd">
+      <UniqueIdentifier>{0394451E-EA0C-72A4-10B6-0384BC9CFDC2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="audio_block_fifo.cc" />
+    <None Include="audio_block_fifo.h" />
+    <CustomBuild Include="audio_buffer.cc" />
+    <None Include="audio_buffer.h" />
+    <CustomBuild Include="audio_buffer_converter.cc" />
+    <None Include="audio_buffer_converter.h" />
+    <CustomBuild Include="audio_buffer_queue.cc" />
+    <None Include="audio_buffer_queue.h" />
+    <None Include="audio_capturer_source.h" />
+    <CustomBuild Include="audio_codecs.cc" />
+    <None Include="audio_codecs.h" />
+    <CustomBuild Include="audio_converter.cc" />
+    <None Include="audio_converter.h" />
+    <CustomBuild Include="audio_decoder.cc" />
+    <None Include="audio_decoder.h" />
+    <CustomBuild Include="audio_decoder_config.cc" />
+    <None Include="audio_decoder_config.h" />
+    <CustomBuild Include="audio_discard_helper.cc" />
+    <None Include="audio_discard_helper.h" />
+    <CustomBuild Include="audio_fifo.cc" />
+    <None Include="audio_fifo.h" />
+    <CustomBuild Include="audio_hash.cc" />
+    <None Include="audio_hash.h" />
+    <CustomBuild Include="audio_pull_fifo.cc" />
+    <None Include="audio_pull_fifo.h" />
+    <CustomBuild Include="audio_push_fifo.cc" />
+    <None Include="audio_push_fifo.h" />
+    <CustomBuild Include="audio_renderer.cc" />
+    <None Include="audio_renderer.h" />
+    <CustomBuild Include="audio_renderer_mixer.cc" />
+    <None Include="audio_renderer_mixer.h" />
+    <CustomBuild Include="audio_renderer_mixer_input.cc" />
+    <None Include="audio_renderer_mixer_input.h" />
+    <None Include="audio_renderer_mixer_pool.h" />
+    <None Include="audio_renderer_sink.h" />
+    <CustomBuild Include="audio_shifter.cc" />
+    <None Include="audio_shifter.h" />
+    <CustomBuild Include="audio_timestamp_helper.cc" />
+    <None Include="audio_timestamp_helper.h" />
+    <None Include="bind_to_current_loop.h" />
+    <CustomBuild Include="bit_reader.cc" />
+    <None Include="bit_reader.h" />
+    <CustomBuild Include="bit_reader_core.cc" />
+    <None Include="bit_reader_core.h" />
+    <CustomBuild Include="bitstream_buffer.cc" />
+    <None Include="bitstream_buffer.h" />
+    <None Include="buffering_state.h" />
+    <CustomBuild Include="byte_queue.cc" />
+    <None Include="byte_queue.h" />
+    <CustomBuild Include="cdm_callback_promise.cc" />
+    <None Include="cdm_callback_promise.h" />
+    <None Include="cdm_config.h" />
+    <CustomBuild Include="cdm_context.cc" />
+    <None Include="cdm_context.h" />
+    <CustomBuild Include="cdm_factory.cc" />
+    <None Include="cdm_factory.h" />
+    <CustomBuild Include="cdm_initialized_promise.cc" />
+    <None Include="cdm_initialized_promise.h" />
+    <CustomBuild Include="cdm_key_information.cc" />
+    <None Include="cdm_key_information.h" />
+    <CustomBuild Include="cdm_promise.cc" />
+    <None Include="cdm_promise.h" />
+    <CustomBuild Include="cdm_promise_adapter.cc" />
+    <None Include="cdm_promise_adapter.h" />
+    <CustomBuild Include="cdm_session_tracker.cc" />
+    <None Include="cdm_session_tracker.h" />
+    <CustomBuild Include="channel_mixer.cc" />
+    <None Include="channel_mixer.h" />
+    <CustomBuild Include="channel_mixing_matrix.cc" />
+    <None Include="channel_mixing_matrix.h" />
+    <CustomBuild Include="container_names.cc" />
+    <None Include="container_names.h" />
+    <CustomBuild Include="content_decryption_module.cc" />
+    <None Include="content_decryption_module.h" />
+    <CustomBuild Include="data_buffer.cc" />
+    <None Include="data_buffer.h" />
+    <CustomBuild Include="data_source.cc" />
+    <None Include="data_source.h" />
+    <CustomBuild Include="decode_status.cc" />
+    <None Include="decode_status.h" />
+    <CustomBuild Include="decoder_buffer.cc" />
+    <None Include="decoder_buffer.h" />
+    <CustomBuild Include="decoder_buffer_queue.cc" />
+    <None Include="decoder_buffer_queue.h" />
+    <CustomBuild Include="decoder_factory.cc" />
+    <None Include="decoder_factory.h" />
+    <CustomBuild Include="decrypt_config.cc" />
+    <None Include="decrypt_config.h" />
+    <CustomBuild Include="decryptor.cc" />
+    <None Include="decryptor.h" />
+    <CustomBuild Include="demuxer.cc" />
+    <None Include="demuxer.h" />
+    <CustomBuild Include="demuxer_stream.cc" />
+    <None Include="demuxer_stream.h" />
+    <CustomBuild Include="demuxer_stream_provider.cc" />
+    <None Include="demuxer_stream_provider.h" />
+    <CustomBuild Include="djb2.cc" />
+    <None Include="djb2.h" />
+    <None Include="eme_constants.h" />
+    <CustomBuild Include="encryption_scheme.cc" />
+    <None Include="encryption_scheme.h" />
+    <None Include="feedback_signal_accumulator.h" />
+    <CustomBuild Include="hdr_metadata.cc" />
+    <None Include="hdr_metadata.h" />
+    <CustomBuild Include="key_system_names.cc" />
+    <None Include="key_system_names.h" />
+    <CustomBuild Include="key_system_properties.cc" />
+    <None Include="key_system_properties.h" />
+    <CustomBuild Include="key_systems.cc" />
+    <None Include="key_systems.h" />
+    <CustomBuild Include="loopback_audio_converter.cc" />
+    <None Include="loopback_audio_converter.h" />
+    <CustomBuild Include="media.cc" />
+    <None Include="media.h" />
+    <CustomBuild Include="media_client.cc" />
+    <None Include="media_client.h" />
+    <CustomBuild Include="media_content_type.cc" />
+    <None Include="media_content_type.h" />
+    <CustomBuild Include="media_log.cc" />
+    <None Include="media_log.h" />
+    <None Include="media_log_event.h" />
+    <CustomBuild Include="media_observer.cc" />
+    <None Include="media_observer.h" />
+    <CustomBuild Include="media_permission.cc" />
+    <None Include="media_permission.h" />
+    <CustomBuild Include="media_resources.cc" />
+    <None Include="media_resources.h" />
+    <CustomBuild Include="media_switches.cc" />
+    <None Include="media_switches.h" />
+    <CustomBuild Include="media_track.cc" />
+    <None Include="media_track.h" />
+    <CustomBuild Include="media_tracks.cc" />
+    <None Include="media_tracks.h" />
+    <CustomBuild Include="media_url_demuxer.cc" />
+    <None Include="media_url_demuxer.h" />
+    <None Include="media_url_params.h" />
+    <CustomBuild Include="media_util.cc" />
+    <None Include="media_util.h" />
+    <CustomBuild Include="mime_util.cc" />
+    <None Include="mime_util.h" />
+    <CustomBuild Include="mime_util_internal.cc" />
+    <None Include="mime_util_internal.h" />
+    <CustomBuild Include="moving_average.cc" />
+    <None Include="moving_average.h" />
+    <CustomBuild Include="multi_channel_resampler.cc" />
+    <None Include="multi_channel_resampler.h" />
+    <CustomBuild Include="null_video_sink.cc" />
+    <None Include="null_video_sink.h" />
+    <CustomBuild Include="output_device_info.cc" />
+    <None Include="output_device_info.h" />
+    <None Include="pipeline.h" />
+    <CustomBuild Include="pipeline_impl.cc" />
+    <None Include="pipeline_impl.h" />
+    <CustomBuild Include="pipeline_metadata.cc" />
+    <None Include="pipeline_metadata.h" />
+    <None Include="pipeline_status.h" />
+    <CustomBuild Include="player_tracker.cc" />
+    <None Include="player_tracker.h" />
+    <None Include="provision_fetcher.h" />
+    <CustomBuild Include="ranges.cc" />
+    <None Include="ranges.h" />
+    <CustomBuild Include="renderer.cc" />
+    <None Include="renderer.h" />
+    <None Include="renderer_client.h" />
+    <CustomBuild Include="renderer_factory.cc" />
+    <None Include="renderer_factory.h" />
+    <CustomBuild Include="sample_format.cc" />
+    <None Include="sample_format.h" />
+    <CustomBuild Include="seekable_buffer.cc" />
+    <None Include="seekable_buffer.h" />
+    <CustomBuild Include="serial_runner.cc" />
+    <None Include="serial_runner.h" />
+    <CustomBuild Include="silent_sink_suspender.cc" />
+    <None Include="silent_sink_suspender.h" />
+    <None Include="simd/convert_rgb_to_yuv.h">
+      <Filter>simd</Filter>
+    </None>
+    <CustomBuild Include="simd/convert_rgb_to_yuv_c.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <None Include="simd/convert_yuv_to_rgb.h">
+      <Filter>simd</Filter>
+    </None>
+    <CustomBuild Include="simd/convert_yuv_to_rgb_c.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <None Include="simd/filter_yuv.h">
+      <Filter>simd</Filter>
+    </None>
+    <CustomBuild Include="simd/filter_yuv_c.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sinc_resampler.cc" />
+    <None Include="sinc_resampler.h" />
+    <CustomBuild Include="stream_parser.cc" />
+    <None Include="stream_parser.h" />
+    <CustomBuild Include="stream_parser_buffer.cc" />
+    <None Include="stream_parser_buffer.h" />
+    <None Include="subsample_entry.h" />
+    <None Include="surface_manager.h" />
+    <CustomBuild Include="text_cue.cc" />
+    <None Include="text_cue.h" />
+    <CustomBuild Include="text_ranges.cc" />
+    <None Include="text_ranges.h" />
+    <CustomBuild Include="text_renderer.cc" />
+    <None Include="text_renderer.h" />
+    <None Include="text_track.h" />
+    <CustomBuild Include="text_track_config.cc" />
+    <None Include="text_track_config.h" />
+    <CustomBuild Include="time_delta_interpolator.cc" />
+    <None Include="time_delta_interpolator.h" />
+    <None Include="time_source.h" />
+    <None Include="timestamp_constants.h" />
+    <CustomBuild Include="user_input_monitor.cc" />
+    <None Include="user_input_monitor.h" />
+    <CustomBuild Include="video_codecs.cc" />
+    <None Include="video_codecs.h" />
+    <CustomBuild Include="video_decoder.cc" />
+    <None Include="video_decoder.h" />
+    <CustomBuild Include="video_decoder_config.cc" />
+    <None Include="video_decoder_config.h" />
+    <CustomBuild Include="video_frame.cc" />
+    <None Include="video_frame.h" />
+    <CustomBuild Include="video_frame_metadata.cc" />
+    <None Include="video_frame_metadata.h" />
+    <CustomBuild Include="video_frame_pool.cc" />
+    <None Include="video_frame_pool.h" />
+    <CustomBuild Include="video_renderer.cc" />
+    <None Include="video_renderer.h" />
+    <None Include="video_rotation.h" />
+    <CustomBuild Include="video_types.cc" />
+    <None Include="video_types.h" />
+    <CustomBuild Include="video_util.cc" />
+    <None Include="video_util.h" />
+    <CustomBuild Include="wall_clock_time_source.cc" />
+    <None Include="wall_clock_time_source.h" />
+    <CustomBuild Include="yuv_convert.cc" />
+    <None Include="yuv_convert.h" />
+    <CustomBuild Include="audio_video_metadata_extractor.cc" />
+    <None Include="audio_video_metadata_extractor.h" />
+    <CustomBuild Include="media_file_checker.cc" />
+    <None Include="media_file_checker.h" />
+    <CustomBuild Include="user_input_monitor_win.cc" />
+    <CustomBuild Include="simd/convert_rgb_to_yuv_sse2.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <CustomBuild Include="simd/convert_rgb_to_yuv_ssse3.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <CustomBuild Include="simd/convert_yuv_to_rgb_x86.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <CustomBuild Include="simd/filter_yuv_sse2.cc">
+      <Filter>simd</Filter>
+    </CustomBuild>
+    <CustomBuild Include="keyboard_event_counter.cc" />
+    <None Include="keyboard_event_counter.h" />
+  </ItemGroup>
+</Project>

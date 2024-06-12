@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayBounds_DEFINED
 #define SkDisplayBounds_DEFINED
 
@@ -15,7 +14,8 @@
 class SkDisplayBounds : public SkDrawRect {
     DECLARE_DISPLAY_MEMBER_INFO(Bounds);
     SkDisplayBounds();
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
+
 private:
     SkBool inval;
     typedef SkDrawRect INHERITED;

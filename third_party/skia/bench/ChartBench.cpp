@@ -8,7 +8,9 @@
 #include "Benchmark.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
+#include "SkPath.h"
 #include "SkRandom.h"
+#include "SkTDArray.h"
 
 /**
  * This is a conversion of samplecode/SampleChart.cpp into a bench. It sure would be nice to be able
@@ -17,28 +19,30 @@
 
 // Generates y values for the chart plots.
 static void gen_data(SkScalar yAvg, SkScalar ySpread, int count,
-                     SkRandom* random, SkTDArray<SkScalar>* dataPts) {
+    SkRandom* random, SkTDArray<SkScalar>* dataPts)
+{
     dataPts->setCount(count);
     for (int i = 0; i < count; ++i) {
         (*dataPts)[i] = random->nextRangeScalar(yAvg - SkScalarHalf(ySpread),
-                                                yAvg + SkScalarHalf(ySpread));
+            yAvg + SkScalarHalf(ySpread));
     }
 }
 
 // Generates a path to stroke along the top of each plot and a fill path for the area below each
 // plot. The fill path is bounded below by the bottomData plot points or a horizontal line at
-// yBase if bottomData == NULL.
+// yBase if bottomData == nullptr.
 // The plots are animated by rotating the data points by leftShift.
 static void gen_paths(const SkTDArray<SkScalar>& topData,
-                      const SkTDArray<SkScalar>* bottomData,
-                      SkScalar yBase,
-                      SkScalar xLeft, SkScalar xDelta,
-                      int leftShift,
-                      SkPath* plot, SkPath* fill) {
+    const SkTDArray<SkScalar>* bottomData,
+    SkScalar yBase,
+    SkScalar xLeft, SkScalar xDelta,
+    int leftShift,
+    SkPath* plot, SkPath* fill)
+{
     plot->rewind();
     fill->rewind();
     plot->incReserve(topData.count());
-    if (NULL == bottomData) {
+    if (nullptr == bottomData) {
         fill->incReserve(topData.count() + 2);
     } else {
         fill->incReserve(2 * topData.count());
@@ -86,7 +90,8 @@ static void gen_paths(const SkTDArray<SkScalar>& topData,
 // filling
 class ChartBench : public Benchmark {
 public:
-    ChartBench(bool aa) {
+    ChartBench(bool aa)
+    {
         fShift = 0;
         fAA = aa;
         fSize.fWidth = -1;
@@ -94,7 +99,8 @@ public:
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         if (fAA) {
             return "chart_aa";
         } else {
@@ -102,7 +108,8 @@ protected:
         }
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         bool sizeChanged = false;
         if (canvas->getDeviceSize() != fSize) {
             fSize = canvas->getDeviceSize();
@@ -147,16 +154,16 @@ protected:
             fillPaint.setAntiAlias(fAA);
             fillPaint.setStyle(SkPaint::kFill_Style);
 
-            SkTDArray<SkScalar>* prevData = NULL;
+            SkTDArray<SkScalar>* prevData = nullptr;
             for (int i = 0; i < kNumGraphs; ++i) {
                 gen_paths(fData[i],
-                          prevData,
-                          height,
-                          0,
-                          SkIntToScalar(kPixelsPerTick),
-                          fShift,
-                          &plotPath,
-                          &fillPath);
+                    prevData,
+                    height,
+                    0,
+                    SkIntToScalar(kPixelsPerTick),
+                    fShift,
+                    &plotPath,
+                    &fillPath);
 
                 // Make the fills partially transparent
                 fillPaint.setColor((colors[i] & 0x00ffffff) | 0x80000000);
@@ -178,15 +185,15 @@ private:
         kPixelsPerTick = 3,
         kShiftPerFrame = 1,
     };
-    int                 fShift;
-    SkISize             fSize;
+    int fShift;
+    SkISize fSize;
     SkTDArray<SkScalar> fData[kNumGraphs];
-    bool                fAA;
+    bool fAA;
 
     typedef Benchmark INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new ChartBench(true); )
-DEF_BENCH( return new ChartBench(false); )
+DEF_BENCH(return new ChartBench(true);)
+DEF_BENCH(return new ChartBench(false);)

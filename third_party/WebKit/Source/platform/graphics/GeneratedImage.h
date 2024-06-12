@@ -28,7 +28,7 @@
 
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/Image.h"
-#include "wtf/RefPtr.h"
+#include "third_party/skia/include/core/SkRefCnt.h"
 
 namespace blink {
 
@@ -36,28 +36,37 @@ class PLATFORM_EXPORT GeneratedImage : public Image {
 public:
     bool currentFrameHasSingleSecurityOrigin() const override { return true; }
 
-    void setContainerSize(const IntSize& size) override { m_size = size; }
     bool usesContainerSize() const override { return true; }
-    bool hasRelativeWidth() const override { return true; }
-    bool hasRelativeHeight() const override { return true; }
-    void computeIntrinsicDimensions(Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio) override;
+    bool hasRelativeSize() const override { return true; }
 
     IntSize size() const override { return m_size; }
 
     // Assume that generated content has no decoded data we need to worry about
-    void destroyDecodedData(bool) override { }
+    void destroyDecodedData() override { }
+
+    sk_sp<SkImage> imageForCurrentFrame(const ColorBehavior&) override;
 
 protected:
-    void drawPattern(GraphicsContext*, const FloatRect&,
-        const FloatSize&, const FloatPoint&, SkXfermode::Mode,
-        const FloatRect&, const IntSize& repeatSpacing) final;
+    void drawPattern(GraphicsContext&,
+        const FloatRect&,
+        const FloatSize&,
+        const FloatPoint&,
+        SkBlendMode,
+        const FloatRect&,
+        const FloatSize& repeatSpacing) final;
 
     // FIXME: Implement this to be less conservative.
-    bool currentFrameKnownToBeOpaque() override { return false; }
+    bool currentFrameKnownToBeOpaque(MetadataMode = UseCurrentMetadata) override
+    {
+        return false;
+    }
 
-    GeneratedImage(const IntSize& size) : m_size(size) { }
+    GeneratedImage(const IntSize& size)
+        : m_size(size)
+    {
+    }
 
-    virtual void drawTile(GraphicsContext*, const FloatRect&) = 0;
+    virtual void drawTile(GraphicsContext&, const FloatRect&) = 0;
 
     IntSize m_size;
 };

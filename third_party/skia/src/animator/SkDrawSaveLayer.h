@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawSaveLayer_DEFINED
 #define SkDrawSaveLayer_DEFINED
 
@@ -20,17 +19,18 @@ class SkSaveLayer : public SkGroup {
     DECLARE_MEMBER_INFO(SaveLayer);
     SkSaveLayer();
     virtual ~SkSaveLayer();
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
-    void onEndElement(SkAnimateMaker& ) override;
+    void onEndElement(SkAnimateMaker&) override;
+
 protected:
     SkDrawPaint* paint;
     SkDrawRect* bounds;
+
 private:
     typedef SkGroup INHERITED;
-
 };
 
 #endif //SkDrawSaveLayer_DEFINED

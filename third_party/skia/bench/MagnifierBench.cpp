@@ -10,39 +10,45 @@
 #include "SkMagnifierImageFilter.h"
 #include "SkRandom.h"
 
-#define FILTER_WIDTH_SMALL  32
+#define FILTER_WIDTH_SMALL 32
 #define FILTER_HEIGHT_SMALL 32
-#define FILTER_WIDTH_LARGE  256
+#define FILTER_WIDTH_LARGE 256
 #define FILTER_HEIGHT_LARGE 256
 
 class MagnifierBench : public Benchmark {
 public:
-    MagnifierBench(bool small) :
-        fIsSmall(small), fInitialized(false) {
+    MagnifierBench(bool small)
+        : fIsSmall(small)
+        , fInitialized(false)
+    {
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fIsSmall ? "magnifier_small" : "magnifier_large";
     }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         if (!fInitialized) {
             make_checkerboard();
             fInitialized = true;
         }
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         const int w = fIsSmall ? FILTER_WIDTH_SMALL : FILTER_WIDTH_LARGE;
         const int h = fIsSmall ? FILTER_HEIGHT_SMALL : FILTER_HEIGHT_LARGE;
         SkPaint paint;
         paint.setImageFilter(
-            SkMagnifierImageFilter::Create(
+            SkMagnifierImageFilter::Make(
                 SkRect::MakeXYWH(SkIntToScalar(w / 4),
-                                 SkIntToScalar(h / 4),
-                                 SkIntToScalar(w / 2),
-                                 SkIntToScalar(h / 2)), 100))->unref();
+                    SkIntToScalar(h / 4),
+                    SkIntToScalar(w / 2),
+                    SkIntToScalar(h / 2)),
+                100, nullptr));
 
         for (int i = 0; i < loops; i++) {
             canvas->drawBitmap(fCheckerboard, 0, 0, &paint);
@@ -50,7 +56,8 @@ protected:
     }
 
 private:
-    void make_checkerboard() {
+    void make_checkerboard()
+    {
         const int w = fIsSmall ? FILTER_WIDTH_SMALL : FILTER_WIDTH_LARGE;
         const int h = fIsSmall ? FILTER_HEIGHT_LARGE : FILTER_HEIGHT_LARGE;
         fCheckerboard.allocN32Pixels(w, h);
@@ -81,5 +88,5 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new MagnifierBench(true); )
-DEF_BENCH( return new MagnifierBench(false); )
+DEF_BENCH(return new MagnifierBench(true);)
+DEF_BENCH(return new MagnifierBench(false);)

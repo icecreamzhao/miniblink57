@@ -5,6 +5,7 @@
 #ifndef CSSVariableParser_h
 #define CSSVariableParser_h
 
+#include "core/CoreExport.h"
 #include "core/css/parser/CSSParserTokenRange.h"
 #include "platform/heap/Handle.h"
 #include "wtf/RefPtr.h"
@@ -13,14 +14,23 @@
 namespace blink {
 
 class CSSCustomPropertyDeclaration;
+class CSSVariableReferenceValue;
 
-class CSSVariableParser {
+class CORE_EXPORT CSSVariableParser {
 public:
     static bool containsValidVariableReferences(CSSParserTokenRange);
 
-    static PassRefPtrWillBeRawPtr<CSSCustomPropertyDeclaration> parseDeclarationValue(const AtomicString&, CSSParserTokenRange);
+    static CSSCustomPropertyDeclaration* parseDeclarationValue(
+        const AtomicString&,
+        CSSParserTokenRange,
+        bool isAnimationTainted);
+    static CSSVariableReferenceValue* parseRegisteredPropertyValue(
+        CSSParserTokenRange,
+        bool requireVarReference,
+        bool isAnimationTainted);
 
     static bool isValidVariableName(const CSSParserToken&);
+    static bool isValidVariableName(const String&);
 };
 
 } // namespace blink

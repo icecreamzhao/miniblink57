@@ -28,14 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/BidiResolver.h"
 
 #include "platform/text/BidiTestHarness.h"
 #include "platform/text/TextRunIterator.h"
-#include "wtf/OwnPtr.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include <fstream>
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -45,17 +43,20 @@ TEST(BidiResolver, Basic)
     String value("foo");
     TextRun run(value);
     BidiResolver<TextRunIterator, BidiCharacterRun> bidiResolver;
-    bidiResolver.setStatus(BidiStatus(run.direction(), run.directionalOverride()));
+    bidiResolver.setStatus(
+        BidiStatus(run.direction(), run.directionalOverride()));
     bidiResolver.setPositionIgnoringNestedIsolates(TextRunIterator(&run, 0));
     TextDirection direction = bidiResolver.determineParagraphDirectionality(&hasStrongDirectionality);
     EXPECT_TRUE(hasStrongDirectionality);
-    EXPECT_EQ(LTR, direction);
+    EXPECT_EQ(TextDirection::kLtr, direction);
 }
 
-TextDirection determineParagraphDirectionality(const TextRun& textRun, bool* hasStrongDirectionality = 0)
+TextDirection determineParagraphDirectionality(
+    const TextRun& textRun,
+    bool* hasStrongDirectionality = 0)
 {
     BidiResolver<TextRunIterator, BidiCharacterRun> resolver;
-    resolver.setStatus(BidiStatus(LTR, false));
+    resolver.setStatus(BidiStatus(TextDirection::kLtr, false));
     resolver.setPositionIgnoringNestedIsolates(TextRunIterator(&textRun, 0));
     return resolver.determineParagraphDirectionality(hasStrongDirectionality);
 }
@@ -80,26 +81,33 @@ void testDirectionality(const TestData& entry)
 TEST(BidiResolver, ParagraphDirectionSurrogates)
 {
     const TestData testData[] = {
-        // Test strong RTL, non-BMP. (U+10858 Imperial Aramaic number one, strong RTL)
-        { { 0xD802, 0xDC58 }, 2, RTL, true },
+        // Test strong RTL, non-BMP. (U+10858 Imperial
+        // Aramaic number one, strong RTL)
+        { { 0xD802, 0xDC58 }, 2, TextDirection::kRtl, true },
 
-        // Test strong LTR, non-BMP. (U+1D15F Musical symbol quarter note, strong LTR)
-        { { 0xD834, 0xDD5F }, 2, LTR, true },
+        // Test strong LTR, non-BMP. (U+1D15F Musical
+        // symbol quarter note, strong LTR)
+        { { 0xD834, 0xDD5F }, 2, TextDirection::kLtr, true },
 
-        // Test broken surrogate: valid leading, invalid trail. (Lead of U+10858, space)
-        { { 0xD802, ' ' }, 2, LTR, false },
+        // Test broken surrogate: valid leading, invalid
+        // trail. (Lead of U+10858, space)
+        { { 0xD802, ' ' }, 2, TextDirection::kLtr, false },
 
-        // Test broken surrogate: invalid leading. (Trail of U+10858, U+05D0 Hebrew Alef)
-        { { 0xDC58, 0x05D0 }, 2, RTL, true },
+        // Test broken surrogate: invalid leading. (Trail
+        // of U+10858, U+05D0 Hebrew Alef)
+        { { 0xDC58, 0x05D0 }, 2, TextDirection::kRtl, true },
 
-        // Test broken surrogate: valid leading, invalid trail/valid lead, valid trail.
-        { { 0xD802, 0xD802, 0xDC58 }, 3, RTL, true },
+        // Test broken surrogate: valid leading, invalid
+        // trail/valid lead, valid trail.
+        { { 0xD802, 0xD802, 0xDC58 }, 3, TextDirection::kRtl, true },
 
-        // Test broken surrogate: valid leading, no trail (string too short). (Lead of U+10858)
-        { { 0xD802, 0xDC58 }, 1, LTR, false },
+        // Test broken surrogate: valid leading, no trail
+        // (string too short). (Lead of U+10858)
+        { { 0xD802, 0xDC58 }, 1, TextDirection::kLtr, false },
 
-        // Test broken surrogate: trail appearing before lead. (U+10858 units reversed)
-        { { 0xDC58, 0xD802 }, 2, LTR, false }
+        // Test broken surrogate: trail appearing before
+        // lead. (U+10858 units reversed)
+        { { 0xDC58, 0xD802 }, 2, TextDirection::kLtr, false }
     };
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(testData); ++i)
         testDirectionality(testData[i]);
@@ -116,14 +124,14 @@ public:
     {
     }
 
-    void skipTestsWith(UChar codepoint)
-    {
-        m_skippedCodePoints.insert(codepoint);
-    }
+    void skipTestsWith(UChar codepoint) { m_skippedCodePoints.insert(codepoint); }
 
-    void runTest(const std::basic_string<UChar>& input, const std::vector<int>& reorder,
-        const std::vector<int>& levels, bidi_test::ParagraphDirection,
-        const std::string& line, size_t lineNumber);
+    void runTest(const std::basic_string<UChar>& input,
+        const std::vector<int>& reorder,
+        const std::vector<int>& levels,
+        bidi_test::ParagraphDirection,
+        const std::string& line,
+        size_t lineNumber);
 
     size_t m_testsRun;
     size_t m_testsSkipped;
@@ -135,7 +143,8 @@ public:
 
 // Blink's UBA does not filter out control characters, etc. Maybe it should?
 // Instead it depends on later layers of Blink to simply ignore them.
-// This function helps us emulate that to be compatible with BidiTest.txt expectations.
+// This function helps us emulate that to be compatible with BidiTest.txt
+// expectations.
 static bool isNonRenderedCodePoint(UChar c)
 {
     // The tests also expect us to ignore soft-hyphen.
@@ -146,20 +155,26 @@ static bool isNonRenderedCodePoint(UChar c)
     // But it seems to expect LRI, etc. to be rendered!?
 }
 
-std::string diffString(const std::vector<int>& actual, const std::vector<int>& expected)
+std::string diffString(const std::vector<int>& actual,
+    const std::vector<int>& expected)
 {
     std::ostringstream diff;
     diff << "actual: ";
     // This is the magical way to print a vector to a stream, clear, right?
-    std::copy(actual.begin(), actual.end(), std::ostream_iterator<int>(diff, " "));
+    std::copy(actual.begin(), actual.end(),
+        std::ostream_iterator<int>(diff, " "));
     diff << " expected: ";
-    std::copy(expected.begin(), expected.end(), std::ostream_iterator<int>(diff, " "));
+    std::copy(expected.begin(), expected.end(),
+        std::ostream_iterator<int>(diff, " "));
     return diff.str();
 }
 
-void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::vector<int>& expectedOrder,
-    const std::vector<int>& expectedLevels, bidi_test::ParagraphDirection paragraphDirection,
-    const std::string& line, size_t lineNumber)
+void BidiTestRunner::runTest(const std::basic_string<UChar>& input,
+    const std::vector<int>& expectedOrder,
+    const std::vector<int>& expectedLevels,
+    bidi_test::ParagraphDirection paragraphDirection,
+    const std::string& line,
+    size_t lineNumber)
 {
     if (!m_skippedCodePoints.empty()) {
         for (size_t i = 0; i < input.size(); i++) {
@@ -178,14 +193,15 @@ void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::v
         textRun.setDirection(determineParagraphDirectionality(textRun));
         break;
     case bidi_test::DirectionLTR:
-        textRun.setDirection(LTR);
+        textRun.setDirection(TextDirection::kLtr);
         break;
     case bidi_test::DirectionRTL:
-        textRun.setDirection(RTL);
+        textRun.setDirection(TextDirection::kRtl);
         break;
     }
     BidiResolver<TextRunIterator, BidiCharacterRun> resolver;
-    resolver.setStatus(BidiStatus(textRun.direction(), textRun.directionalOverride()));
+    resolver.setStatus(
+        BidiStatus(textRun.direction(), textRun.directionalOverride()));
     resolver.setPositionIgnoringNestedIsolates(TextRunIterator(&textRun, 0));
 
     BidiRunList<BidiCharacterRun>& runs = resolver.runs();
@@ -193,15 +209,16 @@ void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::v
 
     std::ostringstream errorContext;
     errorContext << ", line " << lineNumber << " \"" << line << "\"";
-    errorContext << " context: " << bidi_test::nameFromParagraphDirection(paragraphDirection);
+    errorContext << " context: "
+                 << bidi_test::nameFromParagraphDirection(paragraphDirection);
 
     std::vector<int> actualOrder;
     std::vector<int> actualLevels;
     actualLevels.assign(input.size(), -1);
     BidiCharacterRun* run = runs.firstRun();
     while (run) {
-        // Blink's UBA just makes runs, the actual ordering of the display of characters
-        // is handled later in our pipeline, so we fake it here:
+        // Blink's UBA just makes runs, the actual ordering of the display of
+        // characters is handled later in our pipeline, so we fake it here:
         bool reversed = run->reversed(false);
         ASSERT(run->stop() >= run->start());
         size_t length = run->stop() - run->start();
@@ -209,7 +226,8 @@ void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::v
             int inputIndex = reversed ? run->stop() - i - 1 : run->start() + i;
             if (!isNonRenderedCodePoint(input[inputIndex]))
                 actualOrder.push_back(inputIndex);
-            // BidiTest.txt gives expected level data in the order of the original input.
+            // BidiTest.txt gives expected level data in the order of the original
+            // input.
             actualLevels[inputIndex] = run->level();
         }
         run = run->next();
@@ -220,7 +238,8 @@ void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::v
         EXPECT_EQ(expectedOrder.size(), actualOrder.size()) << errorContext.str();
     } else if (expectedOrder != actualOrder) {
         m_orderFailures++;
-        printf("ORDER %s%s\n", diffString(actualOrder, expectedOrder).c_str(), errorContext.str().c_str());
+        printf("ORDER %s%s\n", diffString(actualOrder, expectedOrder).c_str(),
+            errorContext.str().c_str());
     }
 
     if (expectedLevels.size() != actualLevels.size()) {
@@ -232,14 +251,14 @@ void BidiTestRunner::runTest(const std::basic_string<UChar>& input, const std::v
             if (expectedLevels[i] == actualLevels[i] || expectedLevels[i] == -1)
                 continue;
 
-            printf("LEVELS %s%s\n", diffString(actualLevels, expectedLevels).c_str(), errorContext.str().c_str());
+            printf("LEVELS %s%s\n", diffString(actualLevels, expectedLevels).c_str(),
+                errorContext.str().c_str());
             m_levelFailures++;
             break;
         }
     }
     runs.deleteRuns();
 }
-
 
 TEST(BidiResolver, BidiTest_txt)
 {

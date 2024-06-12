@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/StringTruncator.h"
 
 #include "platform/fonts/Font.h"
@@ -39,9 +38,14 @@ namespace blink {
 
 #define STRING_BUFFER_SIZE 2048
 
-typedef unsigned TruncationFunction(const String&, unsigned length, unsigned keepCount, UChar* buffer);
+typedef unsigned TruncationFunction(const String&,
+    unsigned length,
+    unsigned keepCount,
+    UChar* buffer);
 
-static inline int textBreakAtOrPreceding(const NonSharedCharacterBreakIterator& it, int offset)
+static inline int textBreakAtOrPreceding(
+    const NonSharedCharacterBreakIterator& it,
+    int offset)
 {
     if (it.isBreak(offset))
         return offset;
@@ -50,20 +54,27 @@ static inline int textBreakAtOrPreceding(const NonSharedCharacterBreakIterator& 
     return result == TextBreakDone ? 0 : result;
 }
 
-static inline int boundedTextBreakFollowing(const NonSharedCharacterBreakIterator& it, int offset, int length)
+static inline int boundedTextBreakFollowing(
+    const NonSharedCharacterBreakIterator& it,
+    int offset,
+    int length)
 {
     int result = it.following(offset);
     return result == TextBreakDone ? length : result;
 }
 
-static unsigned centerTruncateToBuffer(const String& string, unsigned length, unsigned keepCount, UChar* buffer)
+static unsigned centerTruncateToBuffer(const String& string,
+    unsigned length,
+    unsigned keepCount,
+    UChar* buffer)
 {
     ASSERT(keepCount < length);
     ASSERT(keepCount < STRING_BUFFER_SIZE);
 
     unsigned omitStart = (keepCount + 1) / 2;
     NonSharedCharacterBreakIterator it(string);
-    unsigned omitEnd = boundedTextBreakFollowing(it, omitStart + (length - keepCount) - 1, length);
+    unsigned omitEnd = boundedTextBreakFollowing(
+        it, omitStart + (length - keepCount) - 1, length);
     omitStart = textBreakAtOrPreceding(it, omitStart);
 
     unsigned truncatedLength = omitStart + 1 + (length - omitEnd);
@@ -76,7 +87,10 @@ static unsigned centerTruncateToBuffer(const String& string, unsigned length, un
     return truncatedLength;
 }
 
-static unsigned rightTruncateToBuffer(const String& string, unsigned length, unsigned keepCount, UChar* buffer)
+static unsigned rightTruncateToBuffer(const String& string,
+    unsigned length,
+    unsigned keepCount,
+    UChar* buffer)
 {
     ASSERT(keepCount < length);
     ASSERT(keepCount < STRING_BUFFER_SIZE);
@@ -97,13 +111,18 @@ static float stringWidth(const Font& renderer, const String& string)
     return renderer.width(run);
 }
 
-static float stringWidth(const Font& renderer, const UChar* characters, unsigned length)
+static float stringWidth(const Font& renderer,
+    const UChar* characters,
+    unsigned length)
 {
     TextRun run(characters, length);
     return renderer.width(run);
 }
 
-static String truncateString(const String& string, float maxWidth, const Font& font, TruncationFunction truncateToBuffer)
+static String truncateString(const String& string,
+    float maxWidth,
+    const Font& font,
+    TruncationFunction truncateToBuffer)
 {
     if (string.isEmpty())
         return string;
@@ -145,8 +164,7 @@ static String truncateString(const String& string, float maxWidth, const Font& f
         ASSERT(widthForLargestKnownToFit <= maxWidth);
         ASSERT(widthForSmallestKnownToNotFit > maxWidth);
 
-        float ratio = (keepCountForSmallestKnownToNotFit - keepCountForLargestKnownToFit)
-            / (widthForSmallestKnownToNotFit - widthForLargestKnownToFit);
+        float ratio = (keepCountForSmallestKnownToNotFit - keepCountForLargestKnownToFit) / (widthForSmallestKnownToNotFit - widthForLargestKnownToFit);
         keepCount = static_cast<unsigned>(maxWidth * ratio);
 
         if (keepCount <= keepCountForLargestKnownToFit) {
@@ -183,12 +201,16 @@ static String truncateString(const String& string, float maxWidth, const Font& f
     return String(stringBuffer, truncatedLength);
 }
 
-String StringTruncator::centerTruncate(const String& string, float maxWidth, const Font& font)
+String StringTruncator::centerTruncate(const String& string,
+    float maxWidth,
+    const Font& font)
 {
     return truncateString(string, maxWidth, font, centerTruncateToBuffer);
 }
 
-String StringTruncator::rightTruncate(const String& string, float maxWidth, const Font& font)
+String StringTruncator::rightTruncate(const String& string,
+    float maxWidth,
+    const Font& font)
 {
     return truncateString(string, maxWidth, font, rightTruncateToBuffer);
 }

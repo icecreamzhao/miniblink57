@@ -28,18 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/clipboard/DataTransferItem.h"
 
 #include "bindings/core/v8/V8Binding.h"
 #include "core/clipboard/DataObjectItem.h"
 #include "core/clipboard/DataTransfer.h"
+#include "core/dom/ExecutionContext.h"
+#include "core/dom/ExecutionContextTask.h"
 #include "core/dom/StringCallback.h"
+#include "core/dom/TaskRunnerHelper.h"
+#include "public/platform/WebTraceLocation.h"
 #include "wtf/StdLibExtras.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-DataTransferItem* DataTransferItem::create(DataTransfer* dataTransfer, DataObjectItem* item)
+DataTransferItem* DataTransferItem::create(DataTransfer* dataTransfer,
+    DataObjectItem* item)
 {
     return new DataTransferItem(dataTransfer, item);
 }
@@ -67,14 +72,19 @@ String DataTransferItem::type() const
     return m_item->type();
 }
 
-void DataTransferItem::getAsString(ExecutionContext* context, StringCallback* callback) const
+void DataTransferItem::getAsString(ScriptState* scriptState,
+    StringCallback* callback) const
 {
     if (!m_dataTransfer->canReadData())
         return;
     if (!callback || m_item->kind() != DataObjectItem::StringKind)
         return;
 
-    StringCallback::scheduleCallback(callback, context, m_item->getAsString(), "DataTransferItem.getAsString");
+    scriptState->getExecutionContext()->postTask(
+        TaskType::UserInteraction, BLINK_FROM_HERE,
+        createSameThreadTask(&StringCallback::handleEvent,
+            wrapPersistent(callback), m_item->getAsString()),
+        "DataTransferItem.getAsString");
 }
 
 Blob* DataTransferItem::getAsFile() const
@@ -85,7 +95,8 @@ Blob* DataTransferItem::getAsFile() const
     return m_item->getAsFile();
 }
 
-DataTransferItem::DataTransferItem(DataTransfer* dataTransfer, DataObjectItem* item)
+DataTransferItem::DataTransferItem(DataTransfer* dataTransfer,
+    DataObjectItem* item)
     : m_dataTransfer(dataTransfer)
     , m_item(item)
 {

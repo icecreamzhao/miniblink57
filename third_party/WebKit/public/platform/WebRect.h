@@ -85,10 +85,7 @@ struct WebRect {
         return *this;
     }
 
-    operator IntRect() const
-    {
-        return IntRect(x, y, width, height);
-    }
+    operator IntRect() const { return IntRect(x, y, width, height); }
 #else
     WebRect(const gfx::Rect& r)
         : x(r.x())

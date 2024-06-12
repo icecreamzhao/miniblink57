@@ -38,23 +38,23 @@ namespace blink {
 
 class Element;
 
-class DOMStringMap : public NoBaseWillBeGarbageCollected<DOMStringMap>, public ScriptWrappable {
-    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(DOMStringMap);
+class DOMStringMap : public GarbageCollected<DOMStringMap>,
+                     public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(DOMStringMap);
     WTF_MAKE_NONCOPYABLE(DOMStringMap);
-public:
-#if !ENABLE(OILPAN)
-    virtual void ref() = 0;
-    virtual void deref() = 0;
-#endif
 
+public:
     virtual void getNames(Vector<String>&) = 0;
     virtual String item(const String& name) = 0;
     virtual bool contains(const String& name) = 0;
-    virtual void setItem(const String& name, const String& value, ExceptionState&) = 0;
+    virtual void setItem(const String& name,
+        const String& value,
+        ExceptionState&)
+        = 0;
     virtual bool deleteItem(const String& name) = 0;
-    bool anonymousNamedSetter(const String& name, const String& value, ExceptionState& exceptionState)
+    bool anonymousNamedSetter(const String& name,
+        const String& value,
+        ExceptionState& exceptionState)
     {
         setItem(name, value, exceptionState);
         return true;
@@ -69,19 +69,6 @@ public:
         getNames(names);
     }
     bool namedPropertyQuery(const AtomicString&, ExceptionState&);
-
-    String anonymousIndexedGetter(uint32_t index)
-    {
-        return item(String::number(index));
-    }
-    bool anonymousIndexedSetter(uint32_t index, const String& value, ExceptionState& exceptionState)
-    {
-        return anonymousNamedSetter(String::number(index), value, exceptionState);
-    }
-    DeleteResult anonymousIndexedDeleter(uint32_t index)
-    {
-        return anonymousNamedDeleter(AtomicString::number(index));
-    }
 
     virtual Element* element() = 0;
 

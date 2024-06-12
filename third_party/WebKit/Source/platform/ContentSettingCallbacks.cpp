@@ -28,20 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/ContentSettingCallbacks.h"
+
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-PassOwnPtr<ContentSettingCallbacks> ContentSettingCallbacks::create(PassOwnPtr<Closure> allowed, PassOwnPtr<Closure> denied)
+std::unique_ptr<ContentSettingCallbacks> ContentSettingCallbacks::create(
+    std::unique_ptr<WTF::Closure> allowed,
+    std::unique_ptr<WTF::Closure> denied)
 {
-    return adoptPtr(new ContentSettingCallbacks(allowed, denied));
+    return WTF::wrapUnique(
+        new ContentSettingCallbacks(std::move(allowed), std::move(denied)));
 }
 
-ContentSettingCallbacks::ContentSettingCallbacks(PassOwnPtr<Closure> allowed, PassOwnPtr<Closure> denied)
-    : m_allowed(allowed)
-    , m_denied(denied)
+ContentSettingCallbacks::ContentSettingCallbacks(
+    std::unique_ptr<WTF::Closure> allowed,
+    std::unique_ptr<WTF::Closure> denied)
+    : m_allowed(std::move(allowed))
+    , m_denied(std::move(denied))
 {
 }
 

@@ -33,7 +33,6 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -43,30 +42,39 @@ class DOMArrayBuffer;
 class ExceptionState;
 class ExecutionContext;
 class FileReaderLoader;
+class ScriptState;
 
-class FileReaderSync final : public GarbageCollected<FileReaderSync>, public ScriptWrappable {
+class FileReaderSync final : public GarbageCollected<FileReaderSync>,
+                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static FileReaderSync* create()
+    static FileReaderSync* create(ExecutionContext* context)
     {
-        return new FileReaderSync();
+        return new FileReaderSync(context);
     }
 
-    PassRefPtr<DOMArrayBuffer> readAsArrayBuffer(ExecutionContext*, Blob*, ExceptionState&);
-    String readAsBinaryString(ExecutionContext*, Blob*, ExceptionState&);
-    String readAsText(ExecutionContext* executionContext, Blob* blob, ExceptionState& ec)
+    DOMArrayBuffer* readAsArrayBuffer(ScriptState*, Blob*, ExceptionState&);
+    String readAsBinaryString(ScriptState*, Blob*, ExceptionState&);
+    String readAsText(ScriptState* scriptState, Blob* blob, ExceptionState& ec)
     {
-        return readAsText(executionContext, blob, "", ec);
+        return readAsText(scriptState, blob, "", ec);
     }
-    String readAsText(ExecutionContext*, Blob*, const String& encoding, ExceptionState&);
-    String readAsDataURL(ExecutionContext*, Blob*, ExceptionState&);
+    String readAsText(ScriptState*,
+        Blob*,
+        const String& encoding,
+        ExceptionState&);
+    String readAsDataURL(ScriptState*, Blob*, ExceptionState&);
 
     DEFINE_INLINE_TRACE() { }
 
 private:
-    FileReaderSync();
+    explicit FileReaderSync(ExecutionContext*);
 
-    void startLoading(ExecutionContext*, FileReaderLoader&, const Blob&, ExceptionState&);
+    void startLoading(ExecutionContext*,
+        FileReaderLoader&,
+        const Blob&,
+        ExceptionState&);
 };
 
 } // namespace blink

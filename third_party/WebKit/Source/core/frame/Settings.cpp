@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All rights
+ * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,41 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/frame/Settings.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/scroll/ScrollbarTheme.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 // NOTEs
 //  1) EditingMacBehavior comprises builds on Mac;
 //  2) EditingWindowsBehavior comprises builds on Windows;
-//  3) EditingUnixBehavior comprises all unix-based systems, but Darwin/MacOS/Android (and then abusing the terminology);
+//  3) EditingUnixBehavior comprises all unix-based systems, but
+//     Darwin/MacOS/Android (and then abusing the terminology);
 //  4) EditingAndroidBehavior comprises Android builds.
 // 99) MacEditingBehavior is used a fallback.
 static EditingBehaviorType editingBehaviorTypeForPlatform()
 {
     return
 #if OS(MACOSX)
-    EditingMacBehavior
+        EditingMacBehavior
 #elif OS(WIN)
-    EditingWindowsBehavior
+        EditingWindowsBehavior
 #elif OS(ANDROID)
-    EditingAndroidBehavior
+        EditingAndroidBehavior
 #else // Rest of the UNIX-like systems
-    EditingUnixBehavior
+        EditingUnixBehavior
 #endif
-    ;
+        ;
 }
 
-static const bool defaultUnifiedTextCheckerEnabled = false;
-#if OS(MACOSX)
-static const bool defaultSmartInsertDeleteEnabled = true;
-#else
-static const bool defaultSmartInsertDeleteEnabled = false;
-#endif
 #if OS(WIN)
 static const bool defaultSelectTrailingWhitespaceEnabled = true;
 #else
@@ -65,20 +62,20 @@ static const bool defaultSelectTrailingWhitespaceEnabled = false;
 #endif
 
 Settings::Settings()
-    : m_openGLMultisamplingEnabled(false)
 #if DEBUG_TEXT_AUTOSIZING_ON_DESKTOP
-    , m_textAutosizingWindowSizeOverride(320, 480)
+    : m_textAutosizingWindowSizeOverride(320, 480)
     , m_textAutosizingEnabled(true)
 #else
-    , m_textAutosizingEnabled(false)
+    : m_textAutosizingEnabled(false)
 #endif
-    SETTINGS_INITIALIZER_LIST
+    , m_autoDetectToOpenFitScreenEnabled(true)
+          SETTINGS_INITIALIZER_LIST
 {
 }
 
-PassOwnPtr<Settings> Settings::create()
+std::unique_ptr<Settings> Settings::create()
 {
-    return adoptPtr(new Settings);
+    return WTF::wrapUnique(new Settings);
 }
 
 SETTINGS_SETTER_BODIES
@@ -104,7 +101,8 @@ void Settings::setTextAutosizingEnabled(bool textAutosizingEnabled)
 }
 
 // FIXME: Move to Settings.in once make_settings can understand IntSize.
-void Settings::setTextAutosizingWindowSizeOverride(const IntSize& textAutosizingWindowSizeOverride)
+void Settings::setTextAutosizingWindowSizeOverride(
+    const IntSize& textAutosizingWindowSizeOverride)
 {
     if (m_textAutosizingWindowSizeOverride == textAutosizingWindowSizeOverride)
         return;
@@ -123,13 +121,33 @@ bool Settings::mockScrollbarsEnabled()
     return ScrollbarTheme::mockScrollbarsEnabled();
 }
 
-void Settings::setOpenGLMultisamplingEnabled(bool flag)
+#ifdef TENCENT_FITSCREEN
+void Settings::setFitScreenEnabled(bool flag)
 {
-    if (m_openGLMultisamplingEnabled == flag)
+    if (m_fitScreenEnabled == flag)
         return;
 
-    m_openGLMultisamplingEnabled = flag;
-    invalidate(SettingsDelegate::MultisamplingChange);
+    m_fitScreenEnabled = flag;
+    invalidate(SettingsDelegate::StyleChange);
 }
+
+void Settings::setAutoDetectToOpenFitScreenEnabled(bool flag)
+{
+    if (m_autoDetectToOpenFitScreenEnabled == flag)
+        return;
+
+    m_autoDetectToOpenFitScreenEnabled = flag;
+    invalidate(SettingsDelegate::StyleChange);
+}
+
+void Settings::setFrameFlatteningEnabled(bool flag)
+{
+    if (m_frameFlatteningEnabled == flag)
+        return;
+
+    m_frameFlatteningEnabled = flag;
+    invalidate(SettingsDelegate::StyleChange);
+}
+#endif
 
 } // namespace blink

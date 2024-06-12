@@ -26,18 +26,15 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/HRTFElevation.h"
-
-#include <math.h>
-#include <algorithm>
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/HRTFPanner.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/text/StringHash.h"
+#include <algorithm>
+#include <math.h>
+#include <memory>
 
 namespace blink {
 
@@ -52,15 +49,16 @@ const size_t TotalNumberOfResponses = 240;
 // Number of frames in an individual impulse response.
 const size_t ResponseFrameSize = 256;
 
-// Sample-rate of the spatialization impulse responses as stored in the resource file.
-// The impulse responses may be resampled to a different sample-rate (depending on the audio hardware) when they are loaded.
+// Sample-rate of the spatialization impulse responses as stored in the resource
+// file.  The impulse responses may be resampled to a different sample-rate
+// (depending on the audio hardware) when they are loaded.
 const float ResponseSampleRate = 44100;
 
 #if USE(CONCATENATED_IMPULSE_RESPONSES)
 
-// This table maps the index into the elevation table with the corresponding angle. See
-// https://bugs.webkit.org/show_bug.cgi?id=98294#c9 for the elevation angles and their order in the
-// concatenated response.
+// This table maps the index into the elevation table with the corresponding
+// angle. See https://bugs.webkit.org/show_bug.cgi?id=98294#c9 for the
+// elevation angles and their order in the concatenated response.
 const int ElevationIndexTableSize = 10;
 const int ElevationIndexTable[ElevationIndexTableSize] = {
     0, 15, 30, 45, 60, 75, 90, 315, 330, 345
@@ -68,17 +66,20 @@ const int ElevationIndexTable[ElevationIndexTableSize] = {
 
 // Lazily load a concatenated HRTF database for given subject and store it in a
 // local hash table to ensure quick efficient future retrievals.
-static PassRefPtr<AudioBus> getConcatenatedImpulseResponsesForSubject(const String& subjectName)
+static PassRefPtr<AudioBus> getConcatenatedImpulseResponsesForSubject(
+    const String& subjectName)
 {
     typedef HashMap<String, RefPtr<AudioBus>> AudioBusMap;
-    AtomicallyInitializedStaticReference(AudioBusMap, audioBusMap, new AudioBusMap());
-    AtomicallyInitializedStaticReference(Mutex, mutex, new Mutex());
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(AudioBusMap, audioBusMap, new AudioBusMap());
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(Mutex, mutex, new Mutex());
 
     MutexLocker locker(mutex);
     RefPtr<AudioBus> bus;
     AudioBusMap::iterator iterator = audioBusMap.find(subjectName);
     if (iterator == audioBusMap.end()) {
-        RefPtr<AudioBus> concatenatedImpulseResponses(AudioBus::loadPlatformResource(subjectName.utf8().data(), ResponseSampleRate));
+        RefPtr<AudioBus> concatenatedImpulseResponses(
+            AudioBus::loadPlatformResource(subjectName.utf8().data(),
+                ResponseSampleRate));
         ASSERT(concatenatedImpulseResponses);
         if (!concatenatedImpulseResponses)
             return nullptr;
@@ -101,7 +102,13 @@ static PassRefPtr<AudioBus> getConcatenatedImpulseResponsesForSubject(const Stri
 }
 #endif
 
-bool HRTFElevation::calculateKernelsForAzimuthElevation(int azimuth, int elevation, float sampleRate, const String& subjectName, OwnPtr<HRTFKernel>& kernelL, OwnPtr<HRTFKernel>& kernelR)
+bool HRTFElevation::calculateKernelsForAzimuthElevation(
+    int azimuth,
+    int elevation,
+    float sampleRate,
+    const String& subjectName,
+    std::unique_ptr<HRTFKernel>& kernelL,
+    std::unique_ptr<HRTFKernel>& kernelR)
 {
     // Valid values for azimuth are 0 -> 345 in 15 degree increments.
     // Valid values for elevation are -45 -> +90 in 15 degree increments.
@@ -116,10 +123,12 @@ bool HRTFElevation::calculateKernelsForAzimuthElevation(int azimuth, int elevati
     if (!isElevationGood)
         return false;
 
-    // Construct the resource name from the subject name, azimuth, and elevation, for example:
+    // Construct the resource name from the subject name, azimuth, and elevation,
+    // for example:
     // "IRC_Composite_C_R0195_T015_P000"
-    // Note: the passed in subjectName is not a string passed in via JavaScript or the web.
-    // It's passed in as an internal ASCII identifier and is an implementation detail.
+    // Note: the passed in subjectName is not a string passed in via JavaScript or
+    // the web.  It's passed in as an internal ASCII identifier and is an
+    // implementation detail.
     int positiveElevation = elevation < 0 ? elevation + 360 : elevation;
 
 #if USE(CONCATENATED_IMPULSE_RESPONSES)
@@ -158,14 +167,18 @@ bool HRTFElevation::calculateKernelsForAzimuthElevation(int azimuth, int elevati
     // (hardware) sample-rate.
     unsigned startFrame = index * ResponseFrameSize;
     unsigned stopFrame = startFrame + ResponseFrameSize;
-    RefPtr<AudioBus> preSampleRateConvertedResponse(AudioBus::createBufferFromRange(bus.get(), startFrame, stopFrame));
-    RefPtr<AudioBus> response(AudioBus::createBySampleRateConverting(preSampleRateConvertedResponse.get(), false, sampleRate));
+    RefPtr<AudioBus> preSampleRateConvertedResponse(
+        AudioBus::createBufferFromRange(bus.get(), startFrame, stopFrame));
+    RefPtr<AudioBus> response(AudioBus::createBySampleRateConverting(
+        preSampleRateConvertedResponse.get(), false, sampleRate));
     AudioChannel* leftEarImpulseResponse = response->channel(AudioBus::ChannelLeft);
     AudioChannel* rightEarImpulseResponse = response->channel(AudioBus::ChannelRight);
 #else
-    String resourceName = String::format("IRC_%s_C_R0195_T%03d_P%03d", subjectName.utf8().data(), azimuth, positiveElevation);
+    String resourceName = String::format("IRC_%s_C_R0195_T%03d_P%03d", subjectName.utf8().data(),
+        azimuth, positiveElevation);
 
-    RefPtr<AudioBus> impulseResponse(AudioBus::loadPlatformResource(resourceName.utf8().data(), sampleRate));
+    RefPtr<AudioBus> impulseResponse(
+        AudioBus::loadPlatformResource(resourceName.utf8().data(), sampleRate));
 
     ASSERT(impulseResponse.get());
     if (!impulseResponse.get())
@@ -184,7 +197,8 @@ bool HRTFElevation::calculateKernelsForAzimuthElevation(int azimuth, int elevati
     AudioChannel* rightEarImpulseResponse = impulseResponse->channelByType(AudioBus::ChannelRight);
 #endif
 
-    // Note that depending on the fftSize returned by the panner, we may be truncating the impulse response we just loaded in.
+    // Note that depending on the fftSize returned by the panner, we may be
+    // truncating the impulse response we just loaded in.
     const size_t fftSize = HRTFPanner::fftSizeForSampleRate(sampleRate);
     kernelL = HRTFKernel::create(leftEarImpulseResponse, fftSize, sampleRate);
     kernelR = HRTFKernel::create(rightEarImpulseResponse, fftSize, sampleRate);
@@ -192,12 +206,13 @@ bool HRTFElevation::calculateKernelsForAzimuthElevation(int azimuth, int elevati
     return true;
 }
 
-// The range of elevations for the IRCAM impulse responses varies depending on azimuth, but the minimum elevation appears to always be -45.
+// The range of elevations for the IRCAM impulse responses varies depending on
+// azimuth, but the minimum elevation appears to always be -45.
 //
 // Here's how it goes:
 static int maxElevations[] = {
-        //  Azimuth
-        //
+    //  Azimuth
+    //
     90, // 0
     45, // 15
     60, // 30
@@ -224,15 +239,18 @@ static int maxElevations[] = {
     45 //  345
 };
 
-PassOwnPtr<HRTFElevation> HRTFElevation::createForSubject(const String& subjectName, int elevation, float sampleRate)
+std::unique_ptr<HRTFElevation> HRTFElevation::createForSubject(
+    const String& subjectName,
+    int elevation,
+    float sampleRate)
 {
     bool isElevationGood = elevation >= -45 && elevation <= 90 && (elevation / 15) * 15 == elevation;
     ASSERT(isElevationGood);
     if (!isElevationGood)
         return nullptr;
 
-    OwnPtr<HRTFKernelList> kernelListL = adoptPtr(new HRTFKernelList(NumberOfTotalAzimuths));
-    OwnPtr<HRTFKernelList> kernelListR = adoptPtr(new HRTFKernelList(NumberOfTotalAzimuths));
+    std::unique_ptr<HRTFKernelList> kernelListL = WTF::makeUnique<HRTFKernelList>(NumberOfTotalAzimuths);
+    std::unique_ptr<HRTFKernelList> kernelListR = WTF::makeUnique<HRTFKernelList>(NumberOfTotalAzimuths);
 
     // Load convolution kernels from HRTF files.
     int interpolatedIndex = 0;
@@ -241,7 +259,9 @@ PassOwnPtr<HRTFElevation> HRTFElevation::createForSubject(const String& subjectN
         int maxElevation = maxElevations[rawIndex];
         int actualElevation = std::min(elevation, maxElevation);
 
-        bool success = calculateKernelsForAzimuthElevation(rawIndex * AzimuthSpacing, actualElevation, sampleRate, subjectName, kernelListL->at(interpolatedIndex), kernelListR->at(interpolatedIndex));
+        bool success = calculateKernelsForAzimuthElevation(
+            rawIndex * AzimuthSpacing, actualElevation, sampleRate, subjectName,
+            kernelListL->at(interpolatedIndex), kernelListR->at(interpolatedIndex));
         if (!success)
             return nullptr;
 
@@ -256,16 +276,24 @@ PassOwnPtr<HRTFElevation> HRTFElevation::createForSubject(const String& subjectN
         for (unsigned jj = 1; jj < InterpolationFactor; ++jj) {
             float x = float(jj) / float(InterpolationFactor); // interpolate from 0 -> 1
 
-            (*kernelListL)[i + jj] = HRTFKernel::createInterpolatedKernel(kernelListL->at(i).get(), kernelListL->at(j).get(), x);
-            (*kernelListR)[i + jj] = HRTFKernel::createInterpolatedKernel(kernelListR->at(i).get(), kernelListR->at(j).get(), x);
+            (*kernelListL)[i + jj] = HRTFKernel::createInterpolatedKernel(
+                kernelListL->at(i).get(), kernelListL->at(j).get(), x);
+            (*kernelListR)[i + jj] = HRTFKernel::createInterpolatedKernel(
+                kernelListR->at(i).get(), kernelListR->at(j).get(), x);
         }
     }
 
-    OwnPtr<HRTFElevation> hrtfElevation = adoptPtr(new HRTFElevation(kernelListL.release(), kernelListR.release(), elevation, sampleRate));
-    return hrtfElevation.release();
+    std::unique_ptr<HRTFElevation> hrtfElevation = WTF::wrapUnique(
+        new HRTFElevation(std::move(kernelListL), std::move(kernelListR),
+            elevation, sampleRate));
+    return hrtfElevation;
 }
 
-PassOwnPtr<HRTFElevation> HRTFElevation::createByInterpolatingSlices(HRTFElevation* hrtfElevation1, HRTFElevation* hrtfElevation2, float x, float sampleRate)
+std::unique_ptr<HRTFElevation> HRTFElevation::createByInterpolatingSlices(
+    HRTFElevation* hrtfElevation1,
+    HRTFElevation* hrtfElevation2,
+    float x,
+    float sampleRate)
 {
     ASSERT(hrtfElevation1 && hrtfElevation2);
     if (!hrtfElevation1 || !hrtfElevation2)
@@ -273,8 +301,8 @@ PassOwnPtr<HRTFElevation> HRTFElevation::createByInterpolatingSlices(HRTFElevati
 
     ASSERT(x >= 0.0 && x < 1.0);
 
-    OwnPtr<HRTFKernelList> kernelListL = adoptPtr(new HRTFKernelList(NumberOfTotalAzimuths));
-    OwnPtr<HRTFKernelList> kernelListR = adoptPtr(new HRTFKernelList(NumberOfTotalAzimuths));
+    std::unique_ptr<HRTFKernelList> kernelListL = WTF::makeUnique<HRTFKernelList>(NumberOfTotalAzimuths);
+    std::unique_ptr<HRTFKernelList> kernelListR = WTF::makeUnique<HRTFKernelList>(NumberOfTotalAzimuths);
 
     HRTFKernelList* kernelListL1 = hrtfElevation1->kernelListL();
     HRTFKernelList* kernelListR1 = hrtfElevation1->kernelListR();
@@ -283,18 +311,27 @@ PassOwnPtr<HRTFElevation> HRTFElevation::createByInterpolatingSlices(HRTFElevati
 
     // Interpolate kernels of corresponding azimuths of the two elevations.
     for (unsigned i = 0; i < NumberOfTotalAzimuths; ++i) {
-        (*kernelListL)[i] = HRTFKernel::createInterpolatedKernel(kernelListL1->at(i).get(), kernelListL2->at(i).get(), x);
-        (*kernelListR)[i] = HRTFKernel::createInterpolatedKernel(kernelListR1->at(i).get(), kernelListR2->at(i).get(), x);
+        (*kernelListL)[i] = HRTFKernel::createInterpolatedKernel(
+            kernelListL1->at(i).get(), kernelListL2->at(i).get(), x);
+        (*kernelListR)[i] = HRTFKernel::createInterpolatedKernel(
+            kernelListR1->at(i).get(), kernelListR2->at(i).get(), x);
     }
 
     // Interpolate elevation angle.
     double angle = (1.0 - x) * hrtfElevation1->elevationAngle() + x * hrtfElevation2->elevationAngle();
 
-    OwnPtr<HRTFElevation> hrtfElevation = adoptPtr(new HRTFElevation(kernelListL.release(), kernelListR.release(), static_cast<int>(angle), sampleRate));
-    return hrtfElevation.release();
+    std::unique_ptr<HRTFElevation> hrtfElevation = WTF::wrapUnique(
+        new HRTFElevation(std::move(kernelListL), std::move(kernelListR),
+            static_cast<int>(angle), sampleRate));
+    return hrtfElevation;
 }
 
-void HRTFElevation::getKernelsFromAzimuth(double azimuthBlend, unsigned azimuthIndex, HRTFKernel* &kernelL, HRTFKernel* &kernelR, double& frameDelayL, double& frameDelayR)
+void HRTFElevation::getKernelsFromAzimuth(double azimuthBlend,
+    unsigned azimuthIndex,
+    HRTFKernel*& kernelL,
+    HRTFKernel*& kernelR,
+    double& frameDelayL,
+    double& frameDelayR)
 {
     bool checkAzimuthBlend = azimuthBlend >= 0.0 && azimuthBlend < 1.0;
     ASSERT(checkAzimuthBlend);
@@ -328,5 +365,3 @@ void HRTFElevation::getKernelsFromAzimuth(double azimuthBlend, unsigned azimuthI
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/ServiceWorkerRegistrationPush.h"
 
 #include "modules/push_messaging/PushManager.h"
@@ -10,23 +9,25 @@
 
 namespace blink {
 
-ServiceWorkerRegistrationPush::ServiceWorkerRegistrationPush(ServiceWorkerRegistration* registration)
+ServiceWorkerRegistrationPush::ServiceWorkerRegistrationPush(
+    ServiceWorkerRegistration* registration)
     : m_registration(registration)
 {
 }
 
-ServiceWorkerRegistrationPush::~ServiceWorkerRegistrationPush()
-{
-}
+ServiceWorkerRegistrationPush::~ServiceWorkerRegistrationPush() { }
 
 const char* ServiceWorkerRegistrationPush::supplementName()
 {
     return "ServiceWorkerRegistrationPush";
 }
 
-ServiceWorkerRegistrationPush& ServiceWorkerRegistrationPush::from(ServiceWorkerRegistration& registration)
+ServiceWorkerRegistrationPush& ServiceWorkerRegistrationPush::from(
+    ServiceWorkerRegistration& registration)
 {
-    ServiceWorkerRegistrationPush* supplement = static_cast<ServiceWorkerRegistrationPush*>(HeapSupplement<ServiceWorkerRegistration>::from(registration, supplementName()));
+    ServiceWorkerRegistrationPush* supplement = static_cast<ServiceWorkerRegistrationPush*>(
+        Supplement<ServiceWorkerRegistration>::from(registration,
+            supplementName()));
     if (!supplement) {
         supplement = new ServiceWorkerRegistrationPush(&registration);
         provideTo(registration, supplementName(), supplement);
@@ -34,7 +35,8 @@ ServiceWorkerRegistrationPush& ServiceWorkerRegistrationPush::from(ServiceWorker
     return *supplement;
 }
 
-PushManager* ServiceWorkerRegistrationPush::pushManager(ServiceWorkerRegistration& registration)
+PushManager* ServiceWorkerRegistrationPush::pushManager(
+    ServiceWorkerRegistration& registration)
 {
     return ServiceWorkerRegistrationPush::from(registration).pushManager();
 }
@@ -50,7 +52,7 @@ DEFINE_TRACE(ServiceWorkerRegistrationPush)
 {
     visitor->trace(m_registration);
     visitor->trace(m_pushManager);
-    HeapSupplement<ServiceWorkerRegistration>::trace(visitor);
+    Supplement<ServiceWorkerRegistration>::trace(visitor);
 }
 
 } // namespace blink

@@ -30,13 +30,18 @@
 #ifndef FloatBox_h
 #define FloatBox_h
 
+#include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint3D.h"
+#include "wtf/Allocator.h"
 #include <algorithm>
 #include <cmath>
+#include <iosfwd>
 
 namespace blink {
 
-class FloatBox {
+class PLATFORM_EXPORT FloatBox {
+    DISALLOW_NEW();
+
 public:
     FloatBox()
         : m_x(0)
@@ -122,14 +127,12 @@ public:
         m_depth = maxZ - minZ;
     }
 
-    void expandTo(const FloatPoint3D& point)
-    {
-        expandTo(point, point);
-    }
+    void expandTo(const FloatPoint3D& point) { expandTo(point, point); }
 
     void expandTo(const FloatBox& box)
     {
-        expandTo(FloatPoint3D(box.x(), box.y(), box.z()), FloatPoint3D(box.right(), box.bottom(), box.front()));
+        expandTo(FloatPoint3D(box.x(), box.y(), box.z()),
+            FloatPoint3D(box.right(), box.bottom(), box.front()));
     }
 
     void unionBounds(const FloatBox& box)
@@ -145,7 +148,10 @@ public:
         expandTo(box);
     }
 
-    bool isEmpty() const { return (m_width <= 0 && m_height <= 0) || (m_width <= 0 && m_depth <= 0) || (m_height <= 0 && m_depth <= 0); }
+    bool isEmpty() const
+    {
+        return (m_width <= 0 && m_height <= 0) || (m_width <= 0 && m_depth <= 0) || (m_height <= 0 && m_depth <= 0);
+    }
 
     float right() const { return m_x + m_width; }
     float bottom() const { return m_y + m_height; }
@@ -156,6 +162,9 @@ public:
     float width() const { return m_width; }
     float height() const { return m_height; }
     float depth() const { return m_depth; }
+
+    String toString() const;
+
 private:
     float m_x;
     float m_y;
@@ -167,14 +176,17 @@ private:
 
 inline bool operator==(const FloatBox& a, const FloatBox& b)
 {
-    return a.x() == b.x() && a.y() == b.y() && a.z() == b.z() && a.width() == b.width()
-        && a.height() == b.height() && a.depth() == b.depth();
+    return a.x() == b.x() && a.y() == b.y() && a.z() == b.z() && a.width() == b.width() && a.height() == b.height() && a.depth() == b.depth();
 }
 
 inline bool operator!=(const FloatBox& a, const FloatBox& b)
 {
     return !(a == b);
 }
+
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const FloatBox&, std::ostream*);
 
 } // namespace blink
 

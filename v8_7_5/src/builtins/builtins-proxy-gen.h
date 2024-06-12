@@ -7,50 +7,57 @@
 
 #include "src/code-stub-assembler.h"
 #include "src/objects/js-proxy.h"
+#include "torque-generated/builtins-proxy-from-dsl-gen.h"
 
 namespace v8 {
 namespace internal {
-using compiler::Node;
+    using compiler::Node;
 
-class ProxiesCodeStubAssembler : public CodeStubAssembler {
- public:
-  explicit ProxiesCodeStubAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+    class ProxiesCodeStubAssembler : public CodeStubAssembler {
+    public:
+        explicit ProxiesCodeStubAssembler(compiler::CodeAssemblerState* state)
+            : CodeStubAssembler(state)
+        {
+        }
 
-  // ES6 section 9.5.8 [[Get]] ( P, Receiver )
-  // name should not be an index.
-  Node* ProxyGetProperty(Node* context, Node* proxy, Node* name,
-                         Node* receiver);
+        // ES6 section 9.5.8 [[Get]] ( P, Receiver )
+        // name should not be an index.
+        Node* ProxyGetProperty(Node* context, Node* proxy, Node* name,
+            Node* receiver);
 
-  // ES6 section 9.5.9 [[Set]] ( P, V, Receiver )
-  // name should not be an index.
-  Node* ProxySetProperty(Node* context, Node* proxy, Node* name, Node* value,
-                         Node* receiver);
+        // ES6 section 9.5.9 [[Set]] ( P, V, Receiver )
+        // name should not be an index.
+        Node* ProxySetProperty(Node* context, Node* proxy, Node* name, Node* value,
+            Node* receiver);
 
- protected:
-  enum ProxyRevokeFunctionContextSlot {
-    kProxySlot = Context::MIN_CONTEXT_SLOTS,
-    kProxyContextLength,
-  };
+        Node* AllocateProxy(Node* target, Node* handler, Node* context);
+        Node* AllocateProxyRevokeFunction(Node* proxy, Node* context);
 
-  void GotoIfRevokedProxy(Node* object, Label* if_proxy_revoked);
-  Node* AllocateProxy(Node* target, Node* handler, Node* context);
-  Node* AllocateJSArrayForCodeStubArguments(Node* context,
-                                            CodeStubArguments& args, Node* argc,
-                                            ParameterMode mode);
-  Node* AllocateProxyRevokeFunction(Node* proxy, Node* context);
-  void CheckHasTrapResult(Node* context, Node* target, Node* proxy, Node* name,
-                          Label* check_passed, Label* if_bailout);
+        // Get JSNewTarget parameter for ProxyConstructor builtin (Torque).
+        // TODO(v8:9120): Remove this once torque support exists
+        Node* GetProxyConstructorJSNewTarget();
 
-  void CheckGetSetTrapResult(Node* context, Node* target, Node* proxy,
-                             Node* name, Node* trap_result, Label* if_not_found,
-                             JSProxy::AccessKind access_kind);
+    protected:
+        enum ProxyRevokeFunctionContextSlot {
+            kProxySlot = Context::MIN_CONTEXT_SLOTS,
+            kProxyContextLength,
+        };
 
- private:
-  Node* CreateProxyRevokeFunctionContext(Node* proxy, Node* native_context);
-};
+        Node* AllocateJSArrayForCodeStubArguments(Node* context,
+            CodeStubArguments& args, Node* argc,
+            ParameterMode mode);
+        void CheckHasTrapResult(Node* context, Node* target, Node* proxy, Node* name,
+            Label* check_passed, Label* if_bailout);
 
-}  // namespace internal
-}  // namespace v8
+        void CheckGetSetTrapResult(Node* context, Node* target, Node* proxy,
+            Node* name, Node* trap_result, Label* if_not_found,
+            JSProxy::AccessKind access_kind);
 
-#endif  // V8_BUILTINS_BUILTINS_PROXY_GEN_H_
+    private:
+        Node* CreateProxyRevokeFunctionContext(Node* proxy, Node* native_context);
+    };
+
+} // namespace internal
+} // namespace v8
+
+#endif // V8_BUILTINS_BUILTINS_PROXY_GEN_H_

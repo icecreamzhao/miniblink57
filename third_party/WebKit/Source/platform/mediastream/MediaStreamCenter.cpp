@@ -29,11 +29,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/mediastream/MediaStreamCenter.h"
 
 #include "platform/mediastream/MediaStreamDescriptor.h"
-#include "platform/mediastream/MediaStreamTrackSourcesRequest.h"
 #include "platform/mediastream/MediaStreamWebAudioSource.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebAudioSourceProvider.h"
@@ -41,8 +39,8 @@
 #include "public/platform/WebMediaStreamCenter.h"
 #include "public/platform/WebMediaStreamTrack.h"
 #include "wtf/Assertions.h"
-#include "wtf/MainThread.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -54,15 +52,15 @@ MediaStreamCenter& MediaStreamCenter::instance()
 }
 
 MediaStreamCenter::MediaStreamCenter()
-    : m_private(adoptPtr(Platform::current()->createMediaStreamCenter(this)))
+    : m_private(
+        WTF::wrapUnique(Platform::current()->createMediaStreamCenter(this)))
 {
 }
 
-MediaStreamCenter::~MediaStreamCenter()
-{
-}
+MediaStreamCenter::~MediaStreamCenter() { }
 
-void MediaStreamCenter::didSetMediaStreamTrackEnabled(MediaStreamComponent* component)
+void MediaStreamCenter::didSetMediaStreamTrackEnabled(
+    MediaStreamComponent* component)
 {
     if (m_private) {
         if (component->enabled()) {
@@ -73,12 +71,16 @@ void MediaStreamCenter::didSetMediaStreamTrackEnabled(MediaStreamComponent* comp
     }
 }
 
-bool MediaStreamCenter::didAddMediaStreamTrack(MediaStreamDescriptor* stream, MediaStreamComponent* component)
+bool MediaStreamCenter::didAddMediaStreamTrack(
+    MediaStreamDescriptor* stream,
+    MediaStreamComponent* component)
 {
     return m_private && m_private->didAddMediaStreamTrack(stream, component);
 }
 
-bool MediaStreamCenter::didRemoveMediaStreamTrack(MediaStreamDescriptor* stream, MediaStreamComponent* component)
+bool MediaStreamCenter::didRemoveMediaStreamTrack(
+    MediaStreamDescriptor* stream,
+    MediaStreamComponent* component)
 {
     return m_private && m_private->didRemoveMediaStreamTrack(stream, component);
 }
@@ -94,7 +96,8 @@ bool MediaStreamCenter::didStopMediaStreamTrack(MediaStreamComponent* track)
     return m_private && m_private->didStopMediaStreamTrack(track);
 }
 
-void MediaStreamCenter::didCreateMediaStreamAndTracks(MediaStreamDescriptor* stream)
+void MediaStreamCenter::didCreateMediaStreamAndTracks(
+    MediaStreamDescriptor* stream)
 {
     if (!m_private)
         return;
@@ -123,13 +126,21 @@ void MediaStreamCenter::didCreateMediaStreamTrack(MediaStreamComponent* track)
         m_private->didCreateMediaStreamTrack(track);
 }
 
-PassOwnPtr<AudioSourceProvider> MediaStreamCenter::createWebAudioSourceFromMediaStreamTrack(MediaStreamComponent* track)
+void MediaStreamCenter::didSetContentHint(MediaStreamComponent* track)
 {
-    ASSERT_UNUSED(track, track);
-#if ENABLE(WEB_AUDIO)
     if (m_private)
-        return MediaStreamWebAudioSource::create(adoptPtr(m_private->createWebAudioSourceFromMediaStreamTrack(track)));
-#endif
+        m_private->didSetContentHint(track);
+}
+
+std::unique_ptr<AudioSourceProvider>
+MediaStreamCenter::createWebAudioSourceFromMediaStreamTrack(
+    MediaStreamComponent* track)
+{
+    DCHECK(track);
+    if (m_private) {
+        return MediaStreamWebAudioSource::create(WTF::wrapUnique(
+            m_private->createWebAudioSourceFromMediaStreamTrack(track)));
+    }
 
     return nullptr;
 }
@@ -140,8 +151,6 @@ void MediaStreamCenter::stopLocalMediaStream(const WebMediaStream& webStream)
     MediaStreamDescriptorClient* client = stream->client();
     if (client)
         client->streamEnded();
-    else
-        stream->setEnded();
 }
 
 } // namespace blink

@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/FileChooser.h"
 
 namespace blink {
@@ -36,7 +35,8 @@ FileChooserClient::~FileChooserClient()
     discardChooser();
 }
 
-FileChooser* FileChooserClient::newFileChooser(const FileChooserSettings& settings)
+FileChooser* FileChooserClient::newFileChooser(
+    const FileChooserSettings& settings)
 {
     discardChooser();
 
@@ -50,27 +50,28 @@ void FileChooserClient::discardChooser()
         m_chooser->disconnectClient();
 }
 
-inline FileChooser::FileChooser(FileChooserClient* client, const FileChooserSettings& settings)
+inline FileChooser::FileChooser(FileChooserClient* client,
+    const FileChooserSettings& settings)
     : m_client(client)
     , m_settings(settings)
 {
 }
 
-PassRefPtr<FileChooser> FileChooser::create(FileChooserClient* client, const FileChooserSettings& settings)
+PassRefPtr<FileChooser> FileChooser::create(
+    FileChooserClient* client,
+    const FileChooserSettings& settings)
 {
     return adoptRef(new FileChooser(client, settings));
 }
 
-FileChooser::~FileChooser()
-{
-}
+FileChooser::~FileChooser() { }
 
 void FileChooser::chooseFiles(const Vector<FileChooserFileInfo>& files)
 {
     // FIXME: This is inelegant. We should not be looking at settings here.
     Vector<String> paths;
     for (unsigned i = 0; i < files.size(); ++i)
-        paths.append(files[i].path);
+        paths.push_back(files[i].path);
     if (m_settings.selectedFiles == paths)
         return;
 
@@ -87,4 +88,4 @@ Vector<String> FileChooserSettings::acceptTypes() const
     return acceptTypes;
 }
 
-}
+} // namespace blink

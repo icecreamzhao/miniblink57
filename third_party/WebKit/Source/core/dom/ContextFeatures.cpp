@@ -24,18 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/ContextFeatures.h"
 
 #include "core/dom/Document.h"
 #include "core/page/Page.h"
 #include "platform/RuntimeEnabledFeatures.h"
+#include "wtf/PtrUtil.h"
+#include "wtf/StdLibExtras.h"
+#include <memory>
 
 namespace blink {
 
-PassOwnPtr<ContextFeaturesClient> ContextFeaturesClient::empty()
+std::unique_ptr<ContextFeaturesClient> ContextFeaturesClient::empty()
 {
-    return adoptPtr(new ContextFeaturesClient());
+    return WTF::makeUnique<ContextFeaturesClient>();
 }
 
 const char* ContextFeatures::supplementName()
@@ -43,9 +45,11 @@ const char* ContextFeatures::supplementName()
     return "ContextFeatures";
 }
 
-ContextFeatures* ContextFeatures::defaultSwitch()
+ContextFeatures& ContextFeatures::defaultSwitch()
 {
-    DEFINE_STATIC_REF_WILL_BE_PERSISTENT(ContextFeatures, instance, (ContextFeatures::create(ContextFeaturesClient::empty())));
+    DEFINE_STATIC_LOCAL(
+        ContextFeatures, instance,
+        (ContextFeatures::create(ContextFeaturesClient::empty())));
     return instance;
 }
 
@@ -58,20 +62,23 @@ bool ContextFeatures::pagePopupEnabled(Document* document)
 
 bool ContextFeatures::mutationEventsEnabled(Document* document)
 {
-    ASSERT(document);
+    DCHECK(document);
     if (!document)
         return true;
     return document->contextFeatures().isEnabled(document, MutationEvents, true);
 }
 
-void provideContextFeaturesTo(Page& page, PassOwnPtr<ContextFeaturesClient> client)
+void provideContextFeaturesTo(Page& page,
+    std::unique_ptr<ContextFeaturesClient> client)
 {
-    ContextFeatures::SupplementType::provideTo(page, ContextFeatures::supplementName(), ContextFeatures::create(client));
+    Supplement<Page>::provideTo(page, ContextFeatures::supplementName(),
+        ContextFeatures::create(std::move(client)));
 }
 
 void provideContextFeaturesToDocumentFrom(Document& document, Page& page)
 {
-    ContextFeatures* provided = static_cast<ContextFeatures*>(ContextFeatures::SupplementType::from(page, ContextFeatures::supplementName()));
+    ContextFeatures* provided = static_cast<ContextFeatures*>(
+        Supplement<Page>::from(page, ContextFeatures::supplementName()));
     if (!provided)
         return;
     document.setContextFeatures(*provided);

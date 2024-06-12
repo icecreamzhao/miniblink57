@@ -51,27 +51,40 @@ struct WebPrintParams {
     // Specifies user selected DPI for printing.
     int printerDPI;
 
+    // Specifies whether to print PDFs as image.
+    bool rasterizePDF = false;
+
     // Specifies whether to reduce/enlarge/retain the print contents to fit the
     // printable area. (This is used only by plugin printing).
     WebPrintScalingOption printScalingOption;
 
     WebPrintParams()
         : printerDPI(72)
-        , printScalingOption(WebPrintScalingOptionFitToPrintableArea) { }
+        , printScalingOption(WebPrintScalingOptionFitToPrintableArea)
+    {
+    }
 
     WebPrintParams(const WebSize& paperSize)
         : printContentArea(WebRect(0, 0, paperSize.width, paperSize.height))
         , printableArea(WebRect(0, 0, paperSize.width, paperSize.height))
         , paperSize(paperSize)
         , printerDPI(72)
-        , printScalingOption(WebPrintScalingOptionSourceSize) { }
+        , printScalingOption(WebPrintScalingOptionSourceSize)
+    {
+    }
 
-    WebPrintParams(const WebRect& printContentArea, const WebRect& printableArea, const WebSize& paperSize, int printerDPI, WebPrintScalingOption printScalingOption)
+    WebPrintParams(const WebRect& printContentArea,
+        const WebRect& printableArea,
+        const WebSize& paperSize,
+        int printerDPI,
+        WebPrintScalingOption printScalingOption)
         : printContentArea(printContentArea)
         , printableArea(printableArea)
         , paperSize(paperSize)
         , printerDPI(printerDPI)
-        , printScalingOption(printScalingOption) { }
+        , printScalingOption(printScalingOption)
+    {
+    }
 };
 
 } // namespace blink

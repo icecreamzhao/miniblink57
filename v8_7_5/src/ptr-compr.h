@@ -12,14 +12,14 @@
 namespace v8 {
 namespace internal {
 
-// See v8:7703 for details about how pointer compression works.
-constexpr size_t kPtrComprHeapReservationSize = size_t{4} * GB;
-constexpr size_t kPtrComprIsolateRootBias = kPtrComprHeapReservationSize / 2;
-constexpr size_t kPtrComprIsolateRootAlignment = size_t{4} * GB;
+    // See v8:7703 for details about how pointer compression works.
+    constexpr size_t kPtrComprHeapReservationSize = size_t { 4 } * GB;
+    constexpr size_t kPtrComprIsolateRootBias = kPtrComprHeapReservationSize / 2;
+    constexpr size_t kPtrComprIsolateRootAlignment = size_t { 4 } * GB;
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TARGET_ARCH_64_BIT
+#endif // V8_TARGET_ARCH_64_BIT
 
-#endif  // V8_PTR_COMPR_H_
+#endif // V8_PTR_COMPR_H_

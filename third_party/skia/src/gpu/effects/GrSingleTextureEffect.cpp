@@ -7,37 +7,38 @@
 
 #include "effects/GrSingleTextureEffect.h"
 
-GrSingleTextureEffect::GrSingleTextureEffect(GrProcessorDataManager* procDataManager,
-                                             GrTexture* texture,
-                                             const SkMatrix& m,
-                                             GrCoordSet coordSet)
+GrSingleTextureEffect::GrSingleTextureEffect(GrTexture* texture,
+    const SkMatrix& m,
+    GrCoordSet coordSet)
     : fCoordTransform(coordSet, m, texture, GrTextureParams::kNone_FilterMode)
-    , fTextureAccess(texture) {
+    , fTextureAccess(texture)
+{
     this->addCoordTransform(&fCoordTransform);
     this->addTextureAccess(&fTextureAccess);
 }
 
-GrSingleTextureEffect::GrSingleTextureEffect(GrProcessorDataManager* procDataManager,
-                                             GrTexture* texture,
-                                             const SkMatrix& m,
-                                             GrTextureParams::FilterMode filterMode,
-                                             GrCoordSet coordSet)
+GrSingleTextureEffect::GrSingleTextureEffect(GrTexture* texture,
+    const SkMatrix& m,
+    GrTextureParams::FilterMode filterMode,
+    GrCoordSet coordSet)
     : fCoordTransform(coordSet, m, texture, filterMode)
-    , fTextureAccess(texture, filterMode) {
+    , fTextureAccess(texture, filterMode)
+{
     this->addCoordTransform(&fCoordTransform);
     this->addTextureAccess(&fTextureAccess);
 }
 
-GrSingleTextureEffect::GrSingleTextureEffect(GrProcessorDataManager* procDataManager,
-                                             GrTexture* texture,
-                                             const SkMatrix& m,
-                                             const GrTextureParams& params,
-                                             GrCoordSet coordSet)
+GrSingleTextureEffect::GrSingleTextureEffect(GrTexture* texture,
+    const SkMatrix& m,
+    const GrTextureParams& params,
+    GrCoordSet coordSet)
     : fCoordTransform(coordSet, m, texture, params.filterMode())
-    , fTextureAccess(texture, params) {
+    , fTextureAccess(texture, params)
+{
     this->addCoordTransform(&fCoordTransform);
     this->addTextureAccess(&fTextureAccess);
 }
 
-GrSingleTextureEffect::~GrSingleTextureEffect() {
+GrSingleTextureEffect::~GrSingleTextureEffect()
+{
 }

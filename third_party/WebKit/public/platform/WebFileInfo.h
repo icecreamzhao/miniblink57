@@ -44,11 +44,9 @@ struct WebFileInfo {
     // The value -1 means that the length is not set.
     long long length;
 
-    enum Type {
-        TypeUnknown = 0,
+    enum Type { TypeUnknown = 0,
         TypeFile,
-        TypeDirectory
-    };
+        TypeDirectory };
 
     Type type;
 

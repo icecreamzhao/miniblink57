@@ -14,22 +14,24 @@ namespace blink {
 
 class ApplicationCacheErrorEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    virtual ~ApplicationCacheErrorEvent();
+    ~ApplicationCacheErrorEvent() override;
 
-    static PassRefPtrWillBeRawPtr<ApplicationCacheErrorEvent> create()
+    static ApplicationCacheErrorEvent* create(
+        WebApplicationCacheHost::ErrorReason reason,
+        const String& url,
+        int status,
+        const String& message)
     {
-        return adoptRefWillBeNoop(new ApplicationCacheErrorEvent);
+        return new ApplicationCacheErrorEvent(reason, url, status, message);
     }
 
-    static PassRefPtrWillBeRawPtr<ApplicationCacheErrorEvent> create(WebApplicationCacheHost::ErrorReason reason, const String& url, int status, const String& message)
+    static ApplicationCacheErrorEvent* create(
+        const AtomicString& eventType,
+        const ApplicationCacheErrorEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new ApplicationCacheErrorEvent(reason, url, status, message));
-    }
-
-    static PassRefPtrWillBeRawPtr<ApplicationCacheErrorEvent> create(const AtomicString& eventType, const ApplicationCacheErrorEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new ApplicationCacheErrorEvent(eventType, initializer));
+        return new ApplicationCacheErrorEvent(eventType, initializer);
     }
 
     const String& reason() const { return m_reason; }
@@ -37,14 +39,20 @@ public:
     int status() const { return m_status; }
     const String& message() const { return m_message; }
 
-    virtual const AtomicString& interfaceName() const override { return EventNames::ApplicationCacheErrorEvent; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventNames::ApplicationCacheErrorEvent;
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    ApplicationCacheErrorEvent();
-    ApplicationCacheErrorEvent(WebApplicationCacheHost::ErrorReason, const String& url, int status, const String& message);
-    ApplicationCacheErrorEvent(const AtomicString& eventType, const ApplicationCacheErrorEventInit& initializer);
+    ApplicationCacheErrorEvent(WebApplicationCacheHost::ErrorReason,
+        const String& url,
+        int status,
+        const String& message);
+    ApplicationCacheErrorEvent(const AtomicString& eventType,
+        const ApplicationCacheErrorEventInit& initializer);
 
     String m_reason;
     String m_url;

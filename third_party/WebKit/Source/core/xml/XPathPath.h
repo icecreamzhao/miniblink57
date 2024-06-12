@@ -34,59 +34,64 @@ namespace blink {
 
 namespace XPath {
 
-class Predicate;
-class Step;
+    class Predicate;
+    class Step;
 
-class Filter final : public Expression {
-public:
-    Filter(Expression*, HeapVector<Member<Predicate>>&);
-    ~Filter() override;
-    DECLARE_VIRTUAL_TRACE();
+    class Filter final : public Expression {
+    public:
+        Filter(Expression*, HeapVector<Member<Predicate>>&);
+        ~Filter() override;
+        DECLARE_VIRTUAL_TRACE();
 
-    Value evaluate(EvaluationContext&) const override;
+        Value evaluate(EvaluationContext&) const override;
 
-private:
-    Value::Type resultType() const override { return Value::NodeSetValue; }
+    private:
+        Value::Type resultType() const override { return Value::NodeSetValue; }
 
-    Member<Expression> m_expr;
-    HeapVector<Member<Predicate>> m_predicates;
-};
+        Member<Expression> m_expr;
+        HeapVector<Member<Predicate>> m_predicates;
+    };
 
-class LocationPath final : public Expression {
-public:
-    LocationPath();
-    ~LocationPath() override;
-    DECLARE_VIRTUAL_TRACE();
+    class LocationPath final : public Expression {
+    public:
+        LocationPath();
+        ~LocationPath() override;
+        DECLARE_VIRTUAL_TRACE();
 
-    Value evaluate(EvaluationContext&) const override;
-    void setAbsolute(bool value) { m_absolute = value; setIsContextNodeSensitive(!m_absolute); }
-    void evaluate(EvaluationContext&, NodeSet&) const; // nodes is an input/output parameter
-    void appendStep(Step*);
-    void insertFirstStep(Step*);
+        Value evaluate(EvaluationContext&) const override;
+        void setAbsolute(bool value)
+        {
+            m_absolute = value;
+            setIsContextNodeSensitive(!m_absolute);
+        }
+        void evaluate(EvaluationContext&,
+            NodeSet&) const; // nodes is an input/output parameter
+        void appendStep(Step*);
+        void insertFirstStep(Step*);
 
-private:
-    Value::Type resultType() const override { return Value::NodeSetValue; }
+    private:
+        Value::Type resultType() const override { return Value::NodeSetValue; }
 
-    HeapVector<Member<Step>> m_steps;
-    bool m_absolute;
-};
+        HeapVector<Member<Step>> m_steps;
+        bool m_absolute;
+    };
 
-class Path final : public Expression {
-public:
-    Path(Expression*, LocationPath*);
-    ~Path() override;
-    DECLARE_VIRTUAL_TRACE();
+    class Path final : public Expression {
+    public:
+        Path(Expression*, LocationPath*);
+        ~Path() override;
+        DECLARE_VIRTUAL_TRACE();
 
-    Value evaluate(EvaluationContext&) const override;
+        Value evaluate(EvaluationContext&) const override;
 
-private:
-    Value::Type resultType() const override { return Value::NodeSetValue; }
+    private:
+        Value::Type resultType() const override { return Value::NodeSetValue; }
 
-    Member<Expression> m_filter;
-    Member<LocationPath> m_path;
-};
+        Member<Expression> m_filter;
+        Member<LocationPath> m_path;
+    };
 
-}
+} // namespace XPath
 
-}
+} // namespace blink
 #endif // XPathPath_h

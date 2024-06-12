@@ -10,16 +10,17 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef DeferredTaskHandler_h
@@ -34,27 +35,31 @@
 #include "wtf/Threading.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/Vector.h"
+#include "wtf/build_config.h"
 
 namespace blink {
 
-class AudioContext;
+class BaseAudioContext;
+class OfflineAudioContext;
 class AudioHandler;
 class AudioNodeOutput;
 class AudioSummingJunction;
 
 // DeferredTaskHandler manages the major part of pre- and post- rendering tasks,
 // and provides a lock mechanism against the audio rendering graph. A
-// DeferredTaskHandler object is created when an AudioContext object is created.
+// DeferredTaskHandler object is created when an BaseAudioContext object is
+// created.
 //
-// DeferredTaskHandler outlives the AudioContext only if all of the following
-// conditions match:
+// DeferredTaskHandler outlives the BaseAudioContext only if all of the
+// following conditions match:
 // - An audio rendering thread is running,
 // - It is requested to stop,
 // - The audio rendering thread calls requestToDeleteHandlersOnMainThread(),
 // - It posts a task of deleteHandlersOnMainThread(), and
-// - GC happens and it collects the AudioContext before the task execution.
+// - GC happens and it collects the BaseAudioContext before the task execution.
 //
-class MODULES_EXPORT DeferredTaskHandler final : public ThreadSafeRefCounted<DeferredTaskHandler> {
+class MODULES_EXPORT DeferredTaskHandler final
+    : public ThreadSafeRefCounted<DeferredTaskHandler> {
 public:
     static PassRefPtr<DeferredTaskHandler> create();
     ~DeferredTaskHandler();
@@ -62,8 +67,8 @@ public:
     void handleDeferredTasks();
     void contextWillBeDestroyed();
 
-    // AudioContext can pull node(s) at the end of each render quantum even when
-    // they are not connected to any downstream nodes.  These two methods are
+    // BaseAudioContext can pull node(s) at the end of each render quantum even
+    // when they are not connected to any downstream nodes.  These two methods are
     // called by the nodes who want to add/remove themselves into/from the
     // automatic pull lists.
     void addAutomaticPullNode(AudioHandler*);
@@ -77,9 +82,15 @@ public:
     void addChangedChannelCountMode(AudioHandler*);
     void removeChangedChannelCountMode(AudioHandler*);
 
+    // Keep track of AudioNode's that have their channel interpretation
+    // changed. We process the changes in the post rendering phase.
+    void addChangedChannelInterpretation(AudioHandler*);
+    void removeChangedChannelInterpretation(AudioHandler*);
+
     // Only accessed when the graph lock is held.
     void markSummingJunctionDirty(AudioSummingJunction*);
-    // Only accessed when the graph lock is held. Must be called on the main thread.
+    // Only accessed when the graph lock is held. Must be called on the main
+    // thread.
     void removeMarkedSummingJunction(AudioSummingJunction*);
 
     void markAudioNodeOutputDirty(AudioNodeOutput*);
@@ -97,29 +108,60 @@ public:
     //
     // Thread Safety and Graph Locking:
     //
-    void setAudioThread(ThreadIdentifier thread) { m_audioThread = thread; } // FIXME: check either not initialized or the same
-    ThreadIdentifier audioThread() const { return m_audioThread; }
-    bool isAudioThread() const;
+    void setAudioThreadToCurrentThread();
+    ThreadIdentifier audioThread() const { return acquireLoad(&m_audioThread); }
+
+    // TODO(hongchan): Use no-barrier load here. (crbug.com/247328)
+    //
+    // It is okay to use a relaxed (no-barrier) load here. Because the data
+    // referenced by m_audioThread is not actually being used, thus we do not
+    // need a barrier between the load of m_audioThread and of that data.
+    bool isAudioThread() const
+    {
+        return currentThread() == acquireLoad(&m_audioThread);
+    }
 
     void lock();
     bool tryLock();
     void unlock();
-#if ENABLE(ASSERT)
+
+    // This locks the audio render thread for OfflineAudioContext rendering.
+    // MUST NOT be used in the real-time audio context.
+    void offlineLock();
+
+#if DCHECK_IS_ON()
     // Returns true if this thread owns the context's lock.
     bool isGraphOwner();
 #endif
 
     class MODULES_EXPORT AutoLocker {
         STACK_ALLOCATED();
+
     public:
         explicit AutoLocker(DeferredTaskHandler& handler)
             : m_handler(handler)
         {
             m_handler.lock();
         }
-        explicit AutoLocker(AudioContext*);
+        explicit AutoLocker(BaseAudioContext*);
 
         ~AutoLocker() { m_handler.unlock(); }
+
+    private:
+        DeferredTaskHandler& m_handler;
+    };
+
+    // This is for locking offline render thread (which is considered as the
+    // audio thread) with unlocking on self-destruction at the end of the scope.
+    // Also note that it uses lock() rather than tryLock() because the timing
+    // MUST be accurate on offline rendering.
+    class MODULES_EXPORT OfflineGraphAutoLocker {
+        STACK_ALLOCATED();
+
+    public:
+        explicit OfflineGraphAutoLocker(OfflineAudioContext*);
+
+        ~OfflineGraphAutoLocker() { m_handler.unlock(); }
 
     private:
         DeferredTaskHandler& m_handler;
@@ -129,6 +171,7 @@ private:
     DeferredTaskHandler();
     void updateAutomaticPullNodes();
     void updateChangedChannelCountMode();
+    void updateChangedChannelInterpretation();
     void handleDirtyAudioSummingJunctions();
     void handleDirtyAudioNodeOutputs();
     void deleteHandlersOnMainThread();
@@ -139,13 +182,16 @@ private:
     // very start or end of the rendering quantum.
     HashSet<AudioHandler*> m_automaticPullNodes;
     Vector<AudioHandler*> m_renderingAutomaticPullNodes;
-    // m_automaticPullNodesNeedUpdating keeps track if m_automaticPullNodes is modified.
+    // m_automaticPullNodesNeedUpdating keeps track if m_automaticPullNodes is
+    // modified.
     bool m_automaticPullNodesNeedUpdating;
 
     // Collection of nodes where the channel count mode has changed. We want the
     // channel count mode to change in the pre- or post-rendering phase so as
     // not to disturb the running audio thread.
     HashSet<AudioHandler*> m_deferredCountModeChange;
+
+    HashSet<AudioHandler*> m_deferredChannelInterpretationChange;
 
     // These two HashSet must be accessed only when the graph lock is held.
     // These raw pointers are safe because their destructors unregister them.

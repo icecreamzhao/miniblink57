@@ -11,53 +11,55 @@
 namespace v8 {
 namespace internal {
 
-namespace compiler {
-class CodeAssemblerState;
-}
+    namespace compiler {
+        class CodeAssemblerState;
+    }
 
-class BinaryOpAssembler : public CodeStubAssembler {
- public:
-  typedef compiler::Node Node;
+    class BinaryOpAssembler : public CodeStubAssembler {
+    public:
+        using Node = compiler::Node;
 
-  explicit BinaryOpAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state) {}
+        explicit BinaryOpAssembler(compiler::CodeAssemblerState* state)
+            : CodeStubAssembler(state)
+        {
+        }
 
-  Node* Generate_AddWithFeedback(Node* context, Node* lhs, Node* rhs,
-                                 Node* slot_id, Node* feedback_vector,
-                                 bool rhs_is_smi);
+        Node* Generate_AddWithFeedback(Node* context, Node* lhs, Node* rhs,
+            Node* slot_id, Node* feedback_vector,
+            bool rhs_is_smi);
 
-  Node* Generate_SubtractWithFeedback(Node* context, Node* lhs, Node* rhs,
-                                      Node* slot_id, Node* feedback_vector,
-                                      bool rhs_is_smi);
+        Node* Generate_SubtractWithFeedback(Node* context, Node* lhs, Node* rhs,
+            Node* slot_id, Node* feedback_vector,
+            bool rhs_is_smi);
 
-  Node* Generate_MultiplyWithFeedback(Node* context, Node* lhs, Node* rhs,
-                                      Node* slot_id, Node* feedback_vector,
-                                      bool rhs_is_smi);
+        Node* Generate_MultiplyWithFeedback(Node* context, Node* lhs, Node* rhs,
+            Node* slot_id, Node* feedback_vector,
+            bool rhs_is_smi);
 
-  Node* Generate_DivideWithFeedback(Node* context, Node* dividend,
-                                    Node* divisor, Node* slot_id,
-                                    Node* feedback_vector, bool rhs_is_smi);
+        Node* Generate_DivideWithFeedback(Node* context, Node* dividend,
+            Node* divisor, Node* slot_id,
+            Node* feedback_vector, bool rhs_is_smi);
 
-  Node* Generate_ModulusWithFeedback(Node* context, Node* dividend,
-                                     Node* divisor, Node* slot_id,
-                                     Node* feedback_vector, bool rhs_is_smi);
+        Node* Generate_ModulusWithFeedback(Node* context, Node* dividend,
+            Node* divisor, Node* slot_id,
+            Node* feedback_vector, bool rhs_is_smi);
 
-  Node* Generate_ExponentiateWithFeedback(Node* context, Node* dividend,
-                                          Node* divisor, Node* slot_id,
-                                          Node* feedback_vector,
-                                          bool rhs_is_smi);
+        Node* Generate_ExponentiateWithFeedback(Node* context, Node* dividend,
+            Node* divisor, Node* slot_id,
+            Node* feedback_vector,
+            bool rhs_is_smi);
 
- private:
-  typedef std::function<Node*(Node*, Node*, Variable*)> SmiOperation;
-  typedef std::function<Node*(Node*, Node*)> FloatOperation;
+    private:
+        using SmiOperation = std::function<Node*(Node*, Node*, Variable*)>;
+        using FloatOperation = std::function<Node*(Node*, Node*)>;
 
-  Node* Generate_BinaryOperationWithFeedback(
-      Node* context, Node* lhs, Node* rhs, Node* slot_id, Node* feedback_vector,
-      const SmiOperation& smiOperation, const FloatOperation& floatOperation,
-      Operation op, bool rhs_is_smi);
-};
+        Node* Generate_BinaryOperationWithFeedback(
+            Node* context, Node* lhs, Node* rhs, Node* slot_id, Node* feedback_vector,
+            const SmiOperation& smiOperation, const FloatOperation& floatOperation,
+            Operation op, bool rhs_is_smi);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_IC_BINARY_OP_ASSEMBLER_H_
+#endif // V8_IC_BINARY_OP_ASSEMBLER_H_

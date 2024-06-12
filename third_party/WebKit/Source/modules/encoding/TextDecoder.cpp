@@ -28,22 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/encoding/TextDecoder.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMArrayBufferView.h"
-#include "core/dom/ExceptionCode.h"
 #include "modules/encoding/Encoding.h"
 #include "wtf/StringExtras.h"
 #include "wtf/text/TextEncodingRegistry.h"
 
 namespace blink {
 
-TextDecoder* TextDecoder::create(const String& label, const TextDecoderOptions& options, ExceptionState& exceptionState)
+TextDecoder* TextDecoder::create(const String& label,
+    const TextDecoderOptions& options,
+    ExceptionState& exceptionState)
 {
-    WTF::TextEncoding encoding(label.stripWhiteSpace(&Encoding::isASCIIWhiteSpace));
+    WTF::TextEncoding encoding(
+        label.stripWhiteSpace(&Encoding::isASCIIWhiteSpace));
     // The replacement encoding is not valid, but the Encoding API also
     // rejects aliases of the replacement encoding.
     if (!encoding.isValid() || !strcasecmp(encoding.name(), "replacement")) {
@@ -54,8 +55,9 @@ TextDecoder* TextDecoder::create(const String& label, const TextDecoderOptions& 
     return new TextDecoder(encoding, options.fatal(), options.ignoreBOM());
 }
 
-
-TextDecoder::TextDecoder(const WTF::TextEncoding& encoding, bool fatal, bool ignoreBOM)
+TextDecoder::TextDecoder(const WTF::TextEncoding& encoding,
+    bool fatal,
+    bool ignoreBOM)
     : m_encoding(encoding)
     , m_codec(newTextCodec(encoding))
     , m_fatal(fatal)
@@ -64,21 +66,22 @@ TextDecoder::TextDecoder(const WTF::TextEncoding& encoding, bool fatal, bool ign
 {
 }
 
-TextDecoder::~TextDecoder()
-{
-}
+TextDecoder::~TextDecoder() { }
 
 String TextDecoder::encoding() const
 {
     String name = String(m_encoding.name()).lower();
-    // Where possible, encoding aliases should be handled by changes to Chromium's ICU or Blink's WTF.
-    // The same codec is used, but WTF maintains a different name/identity for these.
+    // Where possible, encoding aliases should be handled by changes to Chromium's
+    // ICU or Blink's WTF.  The same codec is used, but WTF maintains a different
+    // name/identity for these.
     if (name == "iso-8859-1" || name == "us-ascii")
         return "windows-1252";
     return name;
 }
 
-String TextDecoder::decode(const BufferSource& input, const TextDecodeOptions& options, ExceptionState& exceptionState)
+String TextDecoder::decode(const BufferSource& input,
+    const TextDecodeOptions& options,
+    ExceptionState& exceptionState)
 {
     ASSERT(!input.isNull());
     if (input.isArrayBufferView()) {
@@ -92,7 +95,10 @@ String TextDecoder::decode(const BufferSource& input, const TextDecodeOptions& o
     return decode(start, length, options, exceptionState);
 }
 
-String TextDecoder::decode(const char* start, size_t length, const TextDecodeOptions& options, ExceptionState& exceptionState)
+String TextDecoder::decode(const char* start,
+    size_t length,
+    const TextDecodeOptions& options,
+    ExceptionState& exceptionState)
 {
     WTF::FlushBehavior flush = options.stream() ? WTF::DoNotFlush : WTF::DataEOF;
 

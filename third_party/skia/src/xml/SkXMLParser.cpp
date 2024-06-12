@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkXMLParser.h"
 
@@ -18,8 +16,10 @@ static char const* const gErrorStrings[] = {
     "unknown error "
 };
 
-SkXMLParserError::SkXMLParserError() : fCode(kNoError), fLineNumber(-1),
-    fNativeCode(-1)
+SkXMLParserError::SkXMLParserError()
+    : fCode(kNoError)
+    , fLineNumber(-1)
+    , fNativeCode(-1)
 {
     reset();
 }
@@ -42,16 +42,18 @@ void SkXMLParserError::getErrorString(SkString* str) const
     str->append(temp);
 }
 
-void SkXMLParserError::reset() {
+void SkXMLParserError::reset()
+{
     fCode = kNoError;
     fLineNumber = -1;
     fNativeCode = -1;
 }
 
-
 ////////////////
 
-SkXMLParser::SkXMLParser(SkXMLParserError* parserError) : fParser(NULL), fError(parserError)
+SkXMLParser::SkXMLParser(SkXMLParserError* parserError)
+    : fParser(nullptr)
+    , fError(parserError)
 {
 }
 
@@ -71,7 +73,6 @@ bool SkXMLParser::parse(const char doc[], size_t len)
 
 void SkXMLParser::GetNativeErrorString(int error, SkString* str)
 {
-
 }
 
 bool SkXMLParser::startElement(const char elem[])
@@ -96,7 +97,7 @@ bool SkXMLParser::text(const char text[], int len)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool SkXMLParser::onStartElement(const char elem[]) {return false; }
-bool SkXMLParser::onAddAttribute(const char name[], const char value[]) {return false; }
+bool SkXMLParser::onStartElement(const char elem[]) { return false; }
+bool SkXMLParser::onAddAttribute(const char name[], const char value[]) { return false; }
 bool SkXMLParser::onEndElement(const char elem[]) { return false; }
-bool SkXMLParser::onText(const char text[], int len) {return false; }
+bool SkXMLParser::onText(const char text[], int len) { return false; }

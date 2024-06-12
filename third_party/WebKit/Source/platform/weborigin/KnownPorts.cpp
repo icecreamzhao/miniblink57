@@ -24,28 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/weborigin/KnownPorts.h"
 
+//#include "net/base/port_util.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/HashMap.h"
-#include "wtf/StdLibExtras.h"
-#include "wtf/Threading.h"
-#include "wtf/text/StringHash.h"
-#include <algorithm>
+#include "wtf/text/StringUTF8Adaptor.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-bool isDefaultPortForProtocol(unsigned short port, const String& protocol)
+bool isDefaultPortForProtocol(unsigned short port,
+    const WTF::String& protocol)
 {
     if (protocol.isEmpty())
         return false;
 
     switch (port) {
     case 80:
-        return protocol == "http";
+        return protocol == "http" || protocol == "ws";
     case 443:
-        return protocol == "https";
+        return protocol == "https" || protocol == "wss";
     case 21:
         return protocol == "ftp";
     case 990:
@@ -54,4 +52,35 @@ bool isDefaultPortForProtocol(unsigned short port, const String& protocol)
     return false;
 }
 
+unsigned short defaultPortForProtocol(const WTF::String& protocol)
+{
+    if (protocol == "http" || protocol == "ws")
+        return 80;
+    if (protocol == "https" || protocol == "wss")
+        return 443;
+    if (protocol == "ftp")
+        return 21;
+    if (protocol == "ftps")
+        return 990;
+
+    return 0;
 }
+
+bool isPortAllowedForScheme(const KURL& url)
+{
+    return true;
+//     // Returns true for URLs without a port specified. This is needed to let
+//     // through non-network schemes that don't go over the network.
+//     if (!url.hasPort())
+//         return true;
+//     String protocol = url.protocol();
+//     if (protocol.isNull())
+//         protocol = emptyString();
+//     unsigned short effectivePort = url.port();
+//     if (!effectivePort)
+//         effectivePort = defaultPortForProtocol(protocol);
+//     StringUTF8Adaptor utf8(protocol);
+//     return net::IsPortAllowedForScheme(effectivePort, std::string(utf8.data(), utf8.length()));
+}
+
+} // namespace blink

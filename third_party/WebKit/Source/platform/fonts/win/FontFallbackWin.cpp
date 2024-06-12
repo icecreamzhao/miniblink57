@@ -28,317 +28,412 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/fonts/win/FontFallbackWin.h"
 
-#include "platform/fonts/FontCache.h"
 #include "SkFontMgr.h"
 #include "SkTypeface.h"
+#include "platform/fonts/AcceptLanguagesResolver.h"
+#include "platform/fonts/FontCache.h"
 #include "wtf/HashMap.h"
+#include "wtf/StringExtras.h"
 #include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
 #include <limits>
-// #include <unicode/locid.h>
-// #include <unicode/uchar.h>
-
-#if 0 //ndef MINIBLINK_NO_HARFBUZZ
-#include "third_party/icu/source/common/unicode/umachine.h"
-#include "third_party/icu/source/common/unicode/utrie2.h"
-#include "third_party/icu/source/common/unicode/utypes.h"
-#include "third_party/icu/source/common/unicode/mini_uchar.h"
-#endif
+#include "third_party/icu/source/common/unicode/uchar.h"
 
 namespace blink {
 
 namespace {
 
-static inline bool isFontPresent(const UChar* fontName, SkFontMgr* fontManager)
-{
-    String family = fontName;
-    SkTypeface* typeface;
-    if (FontCache::useDirectWrite())
+    static inline bool isFontPresent(const UChar* fontName, SkFontMgr* fontManager)
+    {
+        String family = fontName;
+        SkTypeface* typeface;
         typeface = fontManager->matchFamilyStyle(family.utf8().data(), SkFontStyle());
-    else
-        typeface = fontManager->legacyCreateTypeface(family.utf8().data(), SkTypeface::kNormal);
 
-    if (!typeface)
-        return false;
+        if (!typeface)
+            return false;
 
-    RefPtr<SkTypeface> tf = adoptRef(typeface);
-    SkTypeface::LocalizedStrings* actualFamilies = tf->createFamilyNameIterator();
-    bool matchesRequestedFamily = false;
-    SkTypeface::LocalizedString actualFamily;
-    while (actualFamilies->next(&actualFamily)) {
-        if (equalIgnoringCase(family, AtomicString::fromUTF8(actualFamily.fString.c_str()))) {
-            matchesRequestedFamily = true;
-            break;
-        }
-    }
-    actualFamilies->unref();
-
-    return matchesRequestedFamily;
-}
-
-// A simple mapping from UScriptCode to family name. This is a sparse array,
-// which works well since the range of UScriptCode values is small.
-typedef const UChar* ScriptToFontMap[USCRIPT_CODE_LIMIT];
-
-void initializeScriptMonospaceFontMap(ScriptToFontMap& scriptFontMap, SkFontMgr* fontManager)
-{
-    struct FontMap {
-        UScriptCode script;
-        const UChar* family;
-    };
-
-    static const FontMap fontMap[] = {
-        { USCRIPT_HEBREW, L"courier new" },
-        { USCRIPT_ARABIC, L"courier new" },
-    };
-
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(fontMap); ++i)
-        scriptFontMap[fontMap[i].script] = fontMap[i].family;
-}
-
-void initializeScriptFontMap(ScriptToFontMap& scriptFontMap, SkFontMgr* fontManager)
-{
-    struct FontMap {
-        UScriptCode script;
-        const UChar* family;
-    };
-
-    static const FontMap fontMap[] = {
-        {USCRIPT_LATIN, L"times new roman"},
-        {USCRIPT_GREEK, L"times new roman"},
-        {USCRIPT_CYRILLIC, L"times new roman"},
-        // FIXME: Consider trying new Vista fonts before XP fonts for CJK.
-        // Some Vista users do want to use Vista cleartype CJK fonts. If we
-        // did, the results of tests with CJK characters would have to be
-        // regenerated for Vista.
-        {USCRIPT_THAANA, L"mv boli"},
-        {USCRIPT_MONGOLIAN, L"mongolian balti"},
-        // For USCRIPT_COMMON, we map blocks to scripts when
-        // that makes sense.
-    };
-
-    struct ScriptToFontFamilies {
-        UScriptCode script;
-        const UChar** families;
-    };
-
-    // Kartika on Vista or earlier lacks the support for Chillu
-    // letters added to Unicode 5.1.
-    // Try AnjaliOldLipi (a very widely used Malaylalam font with the full
-    // Unicode 5.x support) before falling back to Kartika.
-    static const UChar* malayalamFonts[] = {L"AnjaliOldLipi", L"Lohit Malayalam", L"Kartika", L"Rachana", L"Nirmala UI", 0};
-    // Try Khmer OS before Vista fonts because 'Khmer OS' goes along better
-    // with Latin and looks better/larger for the same size.
-    static const UChar* khmerFonts[] = {L"Leelawadee UI", L"Khmer OS", L"MoolBoran", L"DaunPenh", L"Code2000", 0};
-    // For the following 6 scripts, two or fonts are listed. The fonts in
-    // the 1st slot are not available on Windows XP. To support these
-    // scripts on XP, listed in the rest of slots are widely used
-    // fonts.
-    static const UChar* ethiopicFonts[] = {L"Nyala", L"Abyssinica SIL", L"Ethiopia Jiret", L"Visual Geez Unicode", L"GF Zemen Unicode", L"Ebrima", 0};
-    static const UChar* oriyaFonts[] = {L"Kalinga", L"ori1Uni", L"Lohit Oriya", L"Nirmala UI", 0};
-    static const UChar* laoFonts[] = {L"Leelawadee UI", L"DokChampa", L"Saysettha OT", L"Phetsarath OT", L"Code2000", 0};
-    static const UChar* tibetanFonts[] = {L"Microsoft Himalaya", L"Jomolhari", L"Tibetan Machine Uni", 0};
-    static const UChar* sinhalaFonts[] = {L"Iskoola Pota", L"AksharUnicode", L"Nirmala UI", 0};
-    static const UChar* yiFonts[] = {L"Microsoft Yi Balti", L"Nuosu SIL", L"Code2000", 0};
-    // http://www.bethmardutho.org/support/meltho/download/index.php
-    static const UChar* syriacFonts[] = {L"Estrangelo Edessa", L"Estrangelo Nisibin", L"Code2000", 0};
-    static const UChar* myanmarFonts[] = {L"Myanmar Text", L"Padauk", L"Parabaik", L"Myanmar3", L"Code2000", 0};
-    static const UChar* gothicFonts[] = {L"Segoe UI Symbol", 0};
-    static const UChar* hangulFonts[] = {L"gulim", L"Malgun Gothic", 0};
-    static const UChar* devanagariFonts[] = {L"mangal", L"Nirmala UI", 0};
-    static const UChar* gujaratiFonts[] = {L"shruti", L"Nirmala UI", 0};
-    static const UChar* bengaliFonts[] = {L"vrinda", L"Nirmala UI", 0};
-    static const UChar* teluguFonts[] = {L"gautami", L"Nirmala UI", 0};
-    static const UChar* tamilFonts[] = {L"latha", L"Nirmala UI", 0};
-    static const UChar* kannadaFonts[] = {L"tunga", L"Nirmala UI", 0};
-    static const UChar* gurumukhiFonts[] = {L"raavi", L"Nirmala UI", 0};
-    static const UChar* thaiFonts[] = {L"tahoma", L"Leelawadee UI", L"Leelawadee", 0};
-    static const UChar* hebrewFonts[] = {L"david", L"Segoe UI", 0};
-    static const UChar* arabicFonts[] = {L"tahoma", L"Segoe UI", 0};
-    static const UChar* georgianFonts[] = {L"sylfaen", L"Segoe UI", 0};
-    static const UChar* armenianFonts[] = {L"sylfaen", L"Segoe UI", 0};
-    static const UChar* canadianAboriginalFonts[] = {L"euphemia", L"Gadugi", 0};
-    static const UChar* cherokeeFonts[] = {L"plantagenet cherokee", L"Gadugi", 0};
-    static const UChar* simplifiedHanFonts[] = {L"simsun", L"Microsoft YaHei", 0};
-    static const UChar* traditionalHanFonts[] = {L"pmingliu", L"Microsoft JhengHei", 0};
-    static const UChar* hiraganaFonts[] = {L"ms pgothic", L"Yu Gothic", L"Microsoft YaHei", 0};
-    static const UChar* katakanaFonts[] = {L"ms pgothic", L"Yu Gothic", L"Microsoft YaHei", 0};
-    static const UChar* katakanaOrHiraganaFonts[] = {L"ms pgothic", L"Yu Gothic", L"Microsoft YaHei", 0};
-
-    static const ScriptToFontFamilies scriptToFontFamilies[] = {
-        {USCRIPT_MALAYALAM, malayalamFonts},
-        {USCRIPT_KHMER, khmerFonts},
-        {USCRIPT_ETHIOPIC, ethiopicFonts},
-        {USCRIPT_ORIYA, oriyaFonts},
-        {USCRIPT_LAO, laoFonts},
-        {USCRIPT_TIBETAN, tibetanFonts},
-        {USCRIPT_SINHALA, sinhalaFonts},
-        {USCRIPT_YI, yiFonts},
-        {USCRIPT_SYRIAC, syriacFonts},
-        {USCRIPT_MYANMAR, myanmarFonts},
-        {USCRIPT_GOTHIC, gothicFonts},
-        {USCRIPT_HANGUL, hangulFonts},
-        {USCRIPT_DEVANAGARI, devanagariFonts},
-        {USCRIPT_GUJARATI, gujaratiFonts},
-        {USCRIPT_BENGALI, bengaliFonts},
-        {USCRIPT_TELUGU, teluguFonts},
-        {USCRIPT_TAMIL, tamilFonts},
-        {USCRIPT_KANNADA, kannadaFonts},
-        {USCRIPT_GURMUKHI, gurumukhiFonts},
-        {USCRIPT_THAI, thaiFonts},
-        {USCRIPT_HEBREW, hebrewFonts},
-        {USCRIPT_ARABIC, arabicFonts},
-        {USCRIPT_GEORGIAN, georgianFonts},
-        {USCRIPT_ARMENIAN, armenianFonts},
-        {USCRIPT_CANADIAN_ABORIGINAL, canadianAboriginalFonts},
-        {USCRIPT_CHEROKEE, cherokeeFonts},
-        {USCRIPT_SIMPLIFIED_HAN, simplifiedHanFonts},
-        {USCRIPT_TRADITIONAL_HAN, traditionalHanFonts},
-        {USCRIPT_HIRAGANA, hiraganaFonts},
-        {USCRIPT_KATAKANA, katakanaFonts},
-        {USCRIPT_KATAKANA_OR_HIRAGANA, katakanaOrHiraganaFonts},
-    };
-
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(fontMap); ++i)
-        scriptFontMap[fontMap[i].script] = fontMap[i].family;
-
-    // FIXME: Instead of scanning the hard-coded list, we have to
-    // use EnumFont* to 'inspect' fonts to pick up fonts covering scripts
-    // when it's possible (e.g. using OS/2 table). If we do that, this
-    // had better be pulled out of here.
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(scriptToFontFamilies); ++i) {
-        UScriptCode script = scriptToFontFamilies[i].script;
-        scriptFontMap[script] = 0;
-        const UChar** familyPtr = scriptToFontFamilies[i].families;
-        while (*familyPtr) {
-            if (isFontPresent(*familyPtr, fontManager)) {
-                scriptFontMap[script] = *familyPtr;
+        RefPtr<SkTypeface> tf = adoptRef(typeface);
+        SkTypeface::LocalizedStrings* actualFamilies = tf->createFamilyNameIterator();
+        bool matchesRequestedFamily = false;
+        SkTypeface::LocalizedString actualFamily;
+        while (actualFamilies->next(&actualFamily)) {
+            if (equalIgnoringCase(family, AtomicString::fromUTF8(actualFamily.fString.c_str()))) {
+                matchesRequestedFamily = true;
                 break;
             }
-            ++familyPtr;
         }
+        actualFamilies->unref();
+
+        return matchesRequestedFamily;
     }
 
-    // Initialize the locale-dependent mapping.
-    // Since Chrome synchronizes the ICU default locale with its UI locale,
-    // this ICU locale tells the current UI locale of Chrome.
-    const UChar* localeFamily = 0;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    icu::Locale locale = icu::Locale::getDefault();
-    
-    if (locale == icu::Locale::getJapanese()) {
-        localeFamily = scriptFontMap[USCRIPT_HIRAGANA];
-    } else if (locale == icu::Locale::getKorean()) {
-        localeFamily = scriptFontMap[USCRIPT_HANGUL];
-    } else if (locale == icu::Locale::getTraditionalChinese()) {
-        localeFamily = scriptFontMap[USCRIPT_TRADITIONAL_HAN];
-    } else {
+    // A simple mapping from UScriptCode to family name. This is a sparse array,
+    // which works well since the range of UScriptCode values is small.
+    typedef const UChar* ScriptToFontMap[USCRIPT_CODE_LIMIT];
+
+    void initializeScriptMonospaceFontMap(ScriptToFontMap& scriptFontMap, SkFontMgr* fontManager)
+    {
+        struct FontMap {
+            UScriptCode script;
+            const UChar* family;
+        };
+
+        static const FontMap fontMap[] = {
+            { USCRIPT_HEBREW, L"courier new" },
+            { USCRIPT_ARABIC, L"courier new" },
+        };
+
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(fontMap); ++i)
+            scriptFontMap[fontMap[i].script] = fontMap[i].family;
+    }
+
+    void initializeScriptFontMap(ScriptToFontMap& scriptFontMap, SkFontMgr* fontManager)
+    {
+        struct FontMap {
+            UScriptCode script;
+            const UChar* family;
+        };
+
+        static const FontMap fontMap[] = {
+            { USCRIPT_LATIN, L"Times New Roman" },
+            { USCRIPT_GREEK, L"Times New Roman" },
+            { USCRIPT_CYRILLIC, L"Times New Roman" },
+            // For USCRIPT_COMMON, we map blocks to scripts when
+            // that makes sense.
+        };
+
+        struct ScriptToFontFamilies {
+            UScriptCode script;
+            const UChar** families;
+        };
+
+        // For the following scripts, multiple fonts may be listed. They are tried
+        // in order. The first slot is preferred but the font may not be available,
+        // if so the remaining slots are tried in order.
+        // In general the order is the Windows 10 font follow by the 8.1, 8.0 and
+        // finally the font for Windows 7.
+        // For scripts where an optional or region specific font may be available
+        // that should be listed before the generic one.
+        // Based on the "Script and Font Support in Windows" MSDN documentation [1]
+        // with overrides and additional fallbacks as needed.
+        // 1: https://msdn.microsoft.com/en-us/goglobal/bb688099.aspx
+        static const UChar* arabicFonts[] = { L"Tahoma", L"Segoe UI", 0 };
+        static const UChar* armenianFonts[] = { L"Segoe UI", L"Sylfaen", 0 };
+        static const UChar* bengaliFonts[] = { L"Nirmala UI", L"Vrinda", 0 };
+        static const UChar* brahmiFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* brailleFonts[] = { L"Segoe UI Symbol", 0 };
+        static const UChar* bugineseFonts[] = { L"Leelawadee UI", 0 };
+        static const UChar* canadianAaboriginalFonts[] = { L"Gadugi",
+            L"Euphemia", 0 };
+        static const UChar* carianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* cherokeeFonts[] = { L"Gadugi", L"Plantagenet", 0 };
+        static const UChar* copticFonts[] = { L"Segoe UI Symbol", 0 };
+        static const UChar* cuneiformFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* cypriotFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* deseretFonts[] = { L"Segoe UI Symbol", 0 };
+        static const UChar* devanagariFonts[] = { L"Nirmala UI", L"Mangal", 0 };
+        static const UChar* egyptianHieroglyphsFonts[] = { L"Segoe UI Historic",
+            0 };
+        static const UChar* ethiopicFonts[] = { L"Nyala", L"Abyssinica SIL",
+            L"Ethiopia Jiret", L"Visual Geez Unicode", L"GF Zemen Unicode",
+            L"Ebrima", 0 };
+        static const UChar* georgianFonts[] = { L"Sylfaen", L"Segoe UI", 0 };
+        static const UChar* glagoliticFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* gothicFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* gujaratiFonts[] = { L"Nirmala UI", L"Shruti", 0 };
+        static const UChar* gurmukhiFonts[] = { L"Nirmala UI", L"Raavi", 0 };
+        static const UChar* hangulFonts[] = { L"Malgun Gothic", L"Gulim", 0 };
+        static const UChar* hebrewFonts[] = { L"David", L"Segoe UI", 0 };
+        static const UChar* imperialAramaicFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* inscriptionalPahlaviFonts[] = { L"Segoe UI Historic",
+            0 };
+        static const UChar* inscriptionalParthianFonts[] = { L"Segoe UI Historic",
+            0 };
+        static const UChar* javaneseFonts[] = { L"Javanese Text", 0 };
+        static const UChar* kannadaFonts[] = { L"Tunga", L"Nirmala UI", 0 };
+        static const UChar* katakanaOrHiraganaFonts[] = { L"Meiryo", L"Yu Gothic",
+            L"MS PGothic", L"Microsoft YaHei", 0 };
+        static const UChar* kharoshthiFonts[] = { L"Segoe UI Historic", 0 };
+        // Try Khmer OS before Vista fonts as it goes along better with Latin
+        // and looks better/larger for the same size.
+        static const UChar* khmerFonts[] = { L"Leelawadee UI", L"Khmer UI",
+            L"Khmer OS", L"MoolBoran", L"DaunPenh", 0 };
+        static const UChar* laoFonts[] = { L"Leelawadee UI", L"Lao UI",
+            L"DokChampa", L"Saysettha OT", L"Phetsarath OT", L"Code2000", 0 };
+        static const UChar* lisuFonts[] = { L"Segoe UI", 0 };
+        static const UChar* lycianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* lydianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* malayalamFonts[] = { L"Nirmala UI", L"Kartika", 0 };
+        static const UChar* meroiticCursiveFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* mongolianFonts[] = { L"Mongolian Baiti", 0 };
+        static const UChar* myanmarFonts[] = { L"Myanmar Text", L"Padauk",
+            L"Parabaik", L"Myanmar3", L"Code2000", 0 };
+        static const UChar* newTaiLueFonts[] = { L"Microsoft New Tai Lue", 0 };
+        static const UChar* nkoFonts[] = { L"Ebrima", 0 };
+        static const UChar* oghamFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* olChikiFonts[] = { L"Nirmala UI", 0 };
+        static const UChar* oldItalicFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* oldPersianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* oldSouthArabianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* oriyaFonts[] = { L"Kalinga", L"ori1Uni",
+            L"Lohit Oriya", L"Nirmala UI", 0 };
+        static const UChar* orkhonFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* osmanyaFonts[] = { L"Ebrima", 0 };
+        static const UChar* phagsPaFonts[] = { L"Microsoft PhagsPa", 0 };
+        static const UChar* runicFonts[] = { L"Segoe UI Historic",
+            L"Segoe UI Symbol", 0 };
+        static const UChar* shavianFonts[] = { L"Segoe UI Historic", 0 };
+        static const UChar* simplifiedHanFonts[] = { L"simsun", L"Microsoft YaHei",
+            0 };
+        static const UChar* sinhalaFonts[] = { L"Iskoola Pota", L"AksharUnicode",
+            L"Nirmala UI", 0 };
+        static const UChar* soraSompengFonts[] = { L"Nirmala UI", 0 };
+        static const UChar* symbolsFonts[] = { L"Segoe UI Symbol", 0 };
+        static const UChar* syriacFonts[] = { L"Estrangelo Edessa",
+            L"Estrangelo Nisibin", L"Code2000", 0 };
+        static const UChar* taiLeFonts[] = { L"Microsoft Tai Le", 0 };
+        static const UChar* tamilFonts[] = { L"Nirmala UI", L"Latha", 0 };
+        static const UChar* teluguFonts[] = { L"Nirmala UI", L"Gautami", 0 };
+        static const UChar* thaanaFonts[] = { L"MV Boli", 0 };
+        static const UChar* thaiFonts[] = { L"Tahoma", L"Leelawadee UI",
+            L"Leelawadee", 0 };
+        static const UChar* tibetanFonts[] = { L"Microsoft Himalaya", L"Jomolhari",
+            L"Tibetan Machine Uni", 0 };
+        static const UChar* tifinaghFonts[] = { L"Ebrima", 0 };
+        static const UChar* traditionalHanFonts[] = { L"pmingliu",
+            L"Microsoft JhengHei", 0 };
+        static const UChar* vaiFonts[] = { L"Ebrima", 0 };
+        static const UChar* yiFonts[] = { L"Microsoft Yi Baiti", L"Nuosu SIL",
+            L"Code2000", 0 };
+
+        static const ScriptToFontFamilies scriptToFontFamilies[] = {
+            { USCRIPT_ARABIC, arabicFonts },
+            { USCRIPT_ARMENIAN, armenianFonts },
+            { USCRIPT_BENGALI, bengaliFonts },
+            { USCRIPT_BRAHMI, brahmiFonts },
+            { USCRIPT_BRAILLE, brailleFonts },
+            { USCRIPT_BUGINESE, bugineseFonts },
+            { USCRIPT_CANADIAN_ABORIGINAL, canadianAaboriginalFonts },
+            { USCRIPT_CARIAN, carianFonts },
+            { USCRIPT_CHEROKEE, cherokeeFonts },
+            { USCRIPT_COPTIC, copticFonts },
+            { USCRIPT_CUNEIFORM, cuneiformFonts },
+            { USCRIPT_CYPRIOT, cypriotFonts },
+            { USCRIPT_DESERET, deseretFonts },
+            { USCRIPT_DEVANAGARI, devanagariFonts },
+            { USCRIPT_EGYPTIAN_HIEROGLYPHS, egyptianHieroglyphsFonts },
+            { USCRIPT_ETHIOPIC, ethiopicFonts },
+            { USCRIPT_GEORGIAN, georgianFonts },
+            { USCRIPT_GLAGOLITIC, glagoliticFonts },
+            { USCRIPT_GOTHIC, gothicFonts },
+            { USCRIPT_GUJARATI, gujaratiFonts },
+            { USCRIPT_GURMUKHI, gurmukhiFonts },
+            { USCRIPT_HANGUL, hangulFonts },
+            { USCRIPT_HEBREW, hebrewFonts },
+            { USCRIPT_HIRAGANA, katakanaOrHiraganaFonts },
+            { USCRIPT_IMPERIAL_ARAMAIC, imperialAramaicFonts },
+            { USCRIPT_INSCRIPTIONAL_PAHLAVI, inscriptionalPahlaviFonts },
+            { USCRIPT_INSCRIPTIONAL_PARTHIAN, inscriptionalParthianFonts },
+            { USCRIPT_JAVANESE, javaneseFonts },
+            { USCRIPT_KANNADA, kannadaFonts },
+            { USCRIPT_KATAKANA, katakanaOrHiraganaFonts },
+            { USCRIPT_KATAKANA_OR_HIRAGANA, katakanaOrHiraganaFonts },
+            { USCRIPT_KHAROSHTHI, kharoshthiFonts },
+            { USCRIPT_KHMER, khmerFonts },
+            { USCRIPT_LAO, laoFonts },
+            { USCRIPT_LISU, lisuFonts },
+            { USCRIPT_LYCIAN, lycianFonts },
+            { USCRIPT_LYDIAN, lydianFonts },
+            { USCRIPT_MALAYALAM, malayalamFonts },
+            { USCRIPT_MEROITIC_CURSIVE, meroiticCursiveFonts },
+            { USCRIPT_MONGOLIAN, mongolianFonts },
+            { USCRIPT_MYANMAR, myanmarFonts },
+            { USCRIPT_NEW_TAI_LUE, newTaiLueFonts },
+            { USCRIPT_NKO, nkoFonts },
+            { USCRIPT_OGHAM, oghamFonts },
+            { USCRIPT_OL_CHIKI, olChikiFonts },
+            { USCRIPT_OLD_ITALIC, oldItalicFonts },
+            { USCRIPT_OLD_PERSIAN, oldPersianFonts },
+            { USCRIPT_OLD_SOUTH_ARABIAN, oldSouthArabianFonts },
+            { USCRIPT_ORIYA, oriyaFonts },
+            { USCRIPT_ORKHON, orkhonFonts },
+            { USCRIPT_OSMANYA, osmanyaFonts },
+            { USCRIPT_PHAGS_PA, phagsPaFonts },
+            { USCRIPT_RUNIC, runicFonts },
+            { USCRIPT_SHAVIAN, shavianFonts },
+            { USCRIPT_SIMPLIFIED_HAN, simplifiedHanFonts },
+            { USCRIPT_SINHALA, sinhalaFonts },
+            { USCRIPT_SORA_SOMPENG, soraSompengFonts },
+            { USCRIPT_SYMBOLS, symbolsFonts },
+            { USCRIPT_SYRIAC, syriacFonts },
+            { USCRIPT_TAI_LE, taiLeFonts },
+            { USCRIPT_TAMIL, tamilFonts },
+            { USCRIPT_TELUGU, teluguFonts },
+            { USCRIPT_THAANA, thaanaFonts },
+            { USCRIPT_THAI, thaiFonts },
+            { USCRIPT_TIBETAN, tibetanFonts },
+            { USCRIPT_TIFINAGH, tifinaghFonts },
+            { USCRIPT_TRADITIONAL_HAN, traditionalHanFonts },
+            { USCRIPT_VAI, vaiFonts },
+            { USCRIPT_YI, yiFonts }
+        };
+
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(fontMap); ++i)
+            scriptFontMap[fontMap[i].script] = fontMap[i].family;
+
+        // FIXME: Instead of scanning the hard-coded list, we have to
+        // use EnumFont* to 'inspect' fonts to pick up fonts covering scripts
+        // when it's possible (e.g. using OS/2 table). If we do that, this
+        // had better be pulled out of here.
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(scriptToFontFamilies); ++i) {
+            UScriptCode script = scriptToFontFamilies[i].script;
+            scriptFontMap[script] = 0;
+            const UChar** familyPtr = scriptToFontFamilies[i].families;
+            while (*familyPtr) {
+                if (isFontPresent(*familyPtr, fontManager)) {
+                    scriptFontMap[script] = *familyPtr;
+                    break;
+                }
+                ++familyPtr;
+            }
+        }
+
+        // Initialize the locale-dependent mapping.
+        // Since Chrome synchronizes the ICU default locale with its UI locale,
+        // this ICU locale tells the current UI locale of Chrome.
+        UScriptCode hanScript = scriptCodeForHanFromLocale(/*icu::Locale::getDefault().getName()*/"zh-CN", '_');
         // For other locales, use the simplified Chinese font for Han.
-        localeFamily = scriptFontMap[USCRIPT_SIMPLIFIED_HAN];
+        const UChar* localeFamily = scriptFontMap[hanScript == USCRIPT_COMMON
+                ? USCRIPT_SIMPLIFIED_HAN
+                : hanScript];
+        if (localeFamily)
+            scriptFontMap[USCRIPT_HAN] = localeFamily;
     }
-#else
-    //localeFamily = L"simsun";
-#endif // MINIBLINK_NOT_IMPLEMENTED
 
-    if (localeFamily)
-        scriptFontMap[USCRIPT_HAN] = localeFamily;
-}
-
-// There are a lot of characters in USCRIPT_COMMON that can be covered
-// by fonts for scripts closely related to them. See
-// http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[:Script=Common:]
-// FIXME: make this more efficient with a wider coverage
-UScriptCode getScriptBasedOnUnicodeBlock(int ucs4)
-{
-#if 0 //ndef MINIBLINK_NO_HARFBUZZ
-    UBlockCode block = ublock_getCode(ucs4);
-    switch (block) {
-    case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
+    static UScriptCode scriptForHan(UScriptCode contentScript,
+        const AtomicString& contentLocale)
+    {
+        UScriptCode script = scriptCodeForHanFromLocale(contentScript, contentLocale);
+        if (script != USCRIPT_COMMON)
+            return script;
+        script = AcceptLanguagesResolver::preferredHanScript();
+        if (script != USCRIPT_COMMON)
+            return script;
+        // Use UI locale. See initializeScriptFontMap().
         return USCRIPT_HAN;
-    case UBLOCK_HIRAGANA:
-    case UBLOCK_KATAKANA:
-        return USCRIPT_HIRAGANA;
-    case UBLOCK_ARABIC:
-        return USCRIPT_ARABIC;
-    case UBLOCK_THAI:
-        return USCRIPT_THAI;
-    case UBLOCK_GREEK:
-        return USCRIPT_GREEK;
-    case UBLOCK_DEVANAGARI:
-        // For Danda and Double Danda (U+0964, U+0965), use a Devanagari
-        // font for now although they're used by other scripts as well.
-        // Without a context, we can't do any better.
-        return USCRIPT_DEVANAGARI;
-    case UBLOCK_ARMENIAN:
-        return USCRIPT_ARMENIAN;
-    case UBLOCK_GEORGIAN:
-        return USCRIPT_GEORGIAN;
-    case UBLOCK_KANNADA:
-        return USCRIPT_KANNADA;
-    case UBLOCK_GOTHIC:
-        return USCRIPT_GOTHIC;
-    default:
+    }
+
+    // There are a lot of characters in USCRIPT_COMMON that can be covered
+    // by fonts for scripts closely related to them. See
+    // http://unicode.org/cldr/utility/list-unicodeset.jsp?a=[:Script=Common:]
+    // FIXME: make this more efficient with a wider coverage
+    UScriptCode getScriptBasedOnUnicodeBlock(int ucs4)
+    {
+        UBlockCode block = ublock_getCode(ucs4);
+        switch (block) {
+        case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
+            return USCRIPT_HAN;
+        case UBLOCK_HIRAGANA:
+        case UBLOCK_KATAKANA:
+            return USCRIPT_KATAKANA_OR_HIRAGANA;
+        case UBLOCK_ARABIC:
+            return USCRIPT_ARABIC;
+        case UBLOCK_THAI:
+            return USCRIPT_THAI;
+        case UBLOCK_GREEK:
+            return USCRIPT_GREEK;
+        case UBLOCK_DEVANAGARI:
+            // For Danda and Double Danda (U+0964, U+0965), use a Devanagari
+            // font for now although they're used by other scripts as well.
+            // Without a context, we can't do any better.
+            return USCRIPT_DEVANAGARI;
+        case UBLOCK_ARMENIAN:
+            return USCRIPT_ARMENIAN;
+        case UBLOCK_GEORGIAN:
+            return USCRIPT_GEORGIAN;
+        case UBLOCK_KANNADA:
+            return USCRIPT_KANNADA;
+        case UBLOCK_GOTHIC:
+            return USCRIPT_GOTHIC;
+        default:
+            return USCRIPT_COMMON;
+        }
         return USCRIPT_COMMON;
     }
-#else
-    notImplemented();
-    return USCRIPT_COMMON;
-#endif // MINIBLINK_NO_HARFBUZZ
-}
 
-UScriptCode getScript(int ucs4)
-{
-#if 0 //ndef MINIBLINK_NO_HARFBUZZ
-    UErrorCode err = U_ZERO_ERROR;
-    UScriptCode script = uscript_getScript(ucs4, &err);
-    // If script is invalid, common or inherited or there's an error,
-    // infer a script based on the unicode block of a character.
-    if (script <= USCRIPT_INHERITED || U_FAILURE(err))
-        script = getScriptBasedOnUnicodeBlock(ucs4);
-    return script;
-#endif // MINIBLINK_NO_HARFBUZZ
-    notImplemented();
-    return USCRIPT_COMMON;
-}
-
-const UChar* getFontBasedOnUnicodeBlock(int ucs4, SkFontMgr* fontManager)
-{
-    static const UChar* emojiFonts[] = {L"Segoe UI Emoji", L"Segoe UI Symbol"};
-    static const UChar* symbolFont = L"Segoe UI Symbol";
-    const UChar* emojiFont = 0;
-    static bool initialized = false;
-    if (!initialized) {
-        for (size_t i = 0; i < WTF_ARRAY_LENGTH(emojiFonts); i++) {
-            if (isFontPresent(emojiFonts[i], fontManager)) {
-                emojiFont = emojiFonts[i];
-                break;
-            }
-        }
-        initialized = true;
+    UScriptCode getScript(int ucs4)
+    {
+        UErrorCode err = U_ZERO_ERROR;
+        UScriptCode script = uscript_getScript(ucs4, &err);
+        // If script is invalid, common or inherited or there's an error,
+        // infer a script based on the unicode block of a character.
+        if (script <= USCRIPT_INHERITED || U_FAILURE(err))
+            script = getScriptBasedOnUnicodeBlock(ucs4);
+        return script;
     }
-#if 0 //ndef MINIBLINK_NO_HARFBUZZ
-    UBlockCode block = ublock_getCode(ucs4);
-    switch (block) {
-    case UBLOCK_EMOTICONS:
-        return emojiFont;
-    case UBLOCK_PLAYING_CARDS:
-    case UBLOCK_MISCELLANEOUS_SYMBOLS:
-    case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:
-    case UBLOCK_TRANSPORT_AND_MAP_SYMBOLS:
-    case UBLOCK_ALCHEMICAL_SYMBOLS:
-    case UBLOCK_RUNIC:
-    case UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS:
-    case UBLOCK_DINGBATS:
-        return symbolFont;
-    default:
-        return 0;
-    };
-#endif // MINIBLINK_NO_HARFBUZZ
-    return symbolFont;
-}
+
+    const UChar* getFontBasedOnUnicodeBlock(UBlockCode blockCode, SkFontMgr* fontManager)
+    {
+        static const UChar* emojiFonts[] = { L"Segoe UI Emoji", L"Segoe UI Symbol" };
+        static const UChar* mathFonts[] = { L"Cambria Math", L"Segoe UI Symbol", L"Code2000" };
+        static const UChar* symbolFont = L"Segoe UI Symbol";
+        static const UChar* emojiFont = 0;
+        static const UChar* mathFont = 0;
+        static bool initialized = false;
+        if (!initialized) {
+            for (size_t i = 0; i < WTF_ARRAY_LENGTH(emojiFonts); i++) {
+                if (isFontPresent(emojiFonts[i], fontManager)) {
+                    emojiFont = emojiFonts[i];
+                    break;
+                }
+            }
+            for (size_t i = 0; i < WTF_ARRAY_LENGTH(mathFonts); i++) {
+                if (isFontPresent(mathFonts[i], fontManager)) {
+                    mathFont = mathFonts[i];
+                    break;
+                }
+            }
+            initialized = true;
+        }
+
+        switch (blockCode) {
+        case UBLOCK_EMOTICONS:
+        case UBLOCK_ENCLOSED_ALPHANUMERIC_SUPPLEMENT:
+            return emojiFont;
+        case UBLOCK_PLAYING_CARDS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS:
+        case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS:
+        case UBLOCK_TRANSPORT_AND_MAP_SYMBOLS:
+        case UBLOCK_ALCHEMICAL_SYMBOLS:
+        case UBLOCK_DINGBATS:
+        case UBLOCK_GOTHIC:
+            return symbolFont;
+        case UBLOCK_ARROWS:
+        case UBLOCK_MATHEMATICAL_OPERATORS:
+        case UBLOCK_MISCELLANEOUS_TECHNICAL:
+        case UBLOCK_GEOMETRIC_SHAPES:
+        case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A:
+        case UBLOCK_SUPPLEMENTAL_ARROWS_A:
+        case UBLOCK_SUPPLEMENTAL_ARROWS_B:
+        case UBLOCK_MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B:
+        case UBLOCK_SUPPLEMENTAL_MATHEMATICAL_OPERATORS:
+        case UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS:
+        case UBLOCK_ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS:
+        case UBLOCK_GEOMETRIC_SHAPES_EXTENDED:
+            return mathFont;
+        default:
+            return 0;
+        };
+    }
 
 } // namespace
 
@@ -387,14 +482,22 @@ const UChar* getFontFamilyForScript(UScriptCode script,
 //    font can cover) need to be taken into account
 const UChar* getFallbackFamily(UChar32 character,
     FontDescription::GenericFamilyType generic,
+    UScriptCode contentScript,
+    const AtomicString& contentLocale,
     UScriptCode* scriptChecked,
+    FontFallbackPriority fallbackPriority,
     SkFontMgr* fontManager)
 {
     ASSERT(character);
     ASSERT(fontManager);
-    const UChar* family = getFontBasedOnUnicodeBlock(character, fontManager);
-    if (family)
+    UBlockCode block = fallbackPriority == FontFallbackPriority::EmojiEmoji ?
+        UBLOCK_EMOTICONS : ublock_getCode(character);
+    const UChar* family = getFontBasedOnUnicodeBlock(block, fontManager);
+    if (family) {
+        if (scriptChecked)
+            *scriptChecked = USCRIPT_INVALID_CODE;
         return family;
+    }
 
     UScriptCode script = getScript(character);
 
@@ -407,6 +510,11 @@ const UChar* getFallbackFamily(UChar32 character,
 
     if (script == USCRIPT_COMMON)
         script = getScriptBasedOnUnicodeBlock(character);
+
+    // For unified-Han scripts, try the lang attribute, system, or
+    // accept-languages.
+    if (script == USCRIPT_HAN)
+        script = scriptForHan(contentScript, contentLocale);
 
     family = getFontFamilyForScript(script, generic, fontManager);
     // Another lame work-around to cover non-BMP characters.
@@ -425,12 +533,9 @@ const UChar* getFallbackFamily(UChar32 character,
             // fonts do support a small subset of ExtB (that are included in JIS X 0213),
             // but its coverage is rather sparse.
             // Eventually, this should be controlled by lang/xml:lang.
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-            if (icu::Locale::getDefault() == icu::Locale::getTraditionalChinese())
+            if (false/*icu::Locale::getDefault() == icu::Locale::getTraditionalChinese()*/)
                 family = L"pmingliu-extb";
             else
-#endif // MINIBLINK_NOT_IMPLEMENTED
-                notImplemented();
                 family = L"simsun-extb";
             break;
         default:
@@ -441,6 +546,8 @@ const UChar* getFallbackFamily(UChar32 character,
     if (scriptChecked)
         *scriptChecked = script;
     return family;
+
+    //return L"simsun-extb";
 }
 
 } // namespace blink

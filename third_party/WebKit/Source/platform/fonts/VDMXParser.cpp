@@ -28,13 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "VDMXParser.h"
+#include "platform/fonts/VDMXParser.h"
+
+#include "wtf/Allocator.h"
+#include "wtf/ByteOrder.h"
+#include "wtf/Noncopyable.h"
 
 #include <stdlib.h>
 #include <string.h>
-
-#include "wtf/ByteOrder.h"
 
 // Buffer helper class
 //
@@ -42,11 +43,16 @@
 // out-of-bounds errors. As a family they return false if anything is amiss,
 // updating the current offset otherwise.
 class Buffer {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(Buffer);
+
 public:
     Buffer(const uint8_t* buffer, size_t length)
         : m_buffer(buffer)
         , m_length(length)
-        , m_offset(0) { }
+        , m_offset(0)
+    {
+    }
 
     bool skip(size_t numBytes)
     {
@@ -91,7 +97,7 @@ public:
     }
 
 private:
-    const uint8_t *const m_buffer;
+    const uint8_t* const m_buffer;
     const size_t m_length;
     size_t m_offset;
 };
@@ -118,8 +124,8 @@ namespace blink {
 //
 // See http://www.microsoft.com/opentype/otspec/vdmx.htm
 bool parseVDMX(int* yMax, int* yMin,
-               const uint8_t* vdmx, size_t vdmxLength,
-               unsigned targetPixelSize)
+    const uint8_t* vdmx, size_t vdmxLength,
+    unsigned targetPixelSize)
 {
     Buffer buf(vdmx, vdmxLength);
 
@@ -134,8 +140,7 @@ bool parseVDMX(int* yMax, int* yMin,
     // of this second table.
     //
     // Range 6 <= x <= 262146
-    unsigned long offsetTableOffset =
-        buf.offset() + 4 /* sizeof struct ratio */ * numRatios;
+    unsigned long offsetTableOffset = buf.offset() + 4 /* sizeof struct ratio */ * numRatios;
 
     unsigned desiredRatio = 0xffffffff;
     // We read 4 bytes per record, so the offset range is

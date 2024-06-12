@@ -9,43 +9,40 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class ArrayBufferOrArrayBufferViewOrUSVString;
 class Blob;
 class DOMArrayBuffer;
 class ExceptionState;
 class ScriptState;
 
-class MODULES_EXPORT PushMessageData final : public GarbageCollectedFinalized<PushMessageData>, public ScriptWrappable {
+class MODULES_EXPORT PushMessageData final
+    : public GarbageCollectedFinalized<PushMessageData>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
 public:
-    static PushMessageData* create()
-    {
-        return new PushMessageData();
-    }
-
-    static PushMessageData* create(const String& messageData)
-    {
-        return new PushMessageData(messageData);
-    }
+    static PushMessageData* create(const String& data);
+    static PushMessageData* create(
+        const ArrayBufferOrArrayBufferViewOrUSVString& data);
 
     virtual ~PushMessageData();
 
-    PassRefPtr<DOMArrayBuffer> arrayBuffer() const;
+    DOMArrayBuffer* arrayBuffer() const;
     Blob* blob() const;
     ScriptValue json(ScriptState*, ExceptionState&) const;
-    const String& text() const;
+    String text() const;
 
     DECLARE_TRACE();
 
 private:
-    PushMessageData();
-    explicit PushMessageData(const String& messageData);
+    PushMessageData(const char* data, unsigned bytesSize);
 
-    String m_messageData;
+    Vector<char> m_data;
 };
 
 } // namespace blink

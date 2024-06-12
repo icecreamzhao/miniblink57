@@ -29,12 +29,10 @@ enum MediaKeySessionType {
 };
 
 [
-    ActiveDOMObject,
-    RuntimeEnabled=EncryptedMedia,
-    GarbageCollected,
-    TypeChecking=Interface
+    ActiveScriptWrappable,
+    DependentLifetime,
 ] interface MediaKeys {
     [CallWith=ScriptState, RaisesException] MediaKeySession createSession(optional MediaKeySessionType sessionType = "temporary");
 
-    [CallWith=ScriptState] Promise<void> setServerCertificate(BufferSource serverCertificate);
+    [CallWith=ScriptState] Promise<boolean> setServerCertificate(BufferSource serverCertificate);
 };

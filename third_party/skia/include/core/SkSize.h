@@ -10,35 +10,41 @@
 
 #include "SkScalar.h"
 
-template <typename T> struct SkTSize {
+template <typename T>
+struct SkTSize {
     T fWidth;
     T fHeight;
 
-    static SkTSize Make(T w, T h) {
+    static SkTSize Make(T w, T h)
+    {
         SkTSize s;
         s.fWidth = w;
         s.fHeight = h;
         return s;
     }
 
-    void set(T w, T h) {
+    void set(T w, T h)
+    {
         fWidth = w;
         fHeight = h;
     }
 
     /** Returns true iff fWidth == 0 && fHeight == 0
      */
-    bool isZero() const {
+    bool isZero() const
+    {
         return 0 == fWidth && 0 == fHeight;
     }
 
     /** Returns true if either widht or height are <= 0 */
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return fWidth <= 0 || fHeight <= 0;
     }
 
     /** Set the width and height to 0 */
-    void setEmpty() {
+    void setEmpty()
+    {
         fWidth = fHeight = 0;
     }
 
@@ -46,7 +52,8 @@ template <typename T> struct SkTSize {
     T height() const { return fHeight; }
 
     /** If width or height is < 0, it is set to 0 */
-    void clampNegToZero() {
+    void clampNegToZero()
+    {
         if (fWidth < 0) {
             fWidth = 0;
         }
@@ -55,18 +62,21 @@ template <typename T> struct SkTSize {
         }
     }
 
-    bool equals(T w, T h) const {
+    bool equals(T w, T h) const
+    {
         return fWidth == w && fHeight == h;
     }
 };
 
 template <typename T>
-static inline bool operator==(const SkTSize<T>& a, const SkTSize<T>& b) {
+static inline bool operator==(const SkTSize<T>& a, const SkTSize<T>& b)
+{
     return a.fWidth == b.fWidth && a.fHeight == b.fHeight;
 }
 
 template <typename T>
-static inline bool operator!=(const SkTSize<T>& a, const SkTSize<T>& b) {
+static inline bool operator!=(const SkTSize<T>& a, const SkTSize<T>& b)
+{
     return !(a == b);
 }
 
@@ -75,32 +85,36 @@ static inline bool operator!=(const SkTSize<T>& a, const SkTSize<T>& b) {
 typedef SkTSize<int32_t> SkISize;
 
 struct SkSize : public SkTSize<SkScalar> {
-    static SkSize Make(SkScalar w, SkScalar h) {
+    static SkSize Make(SkScalar w, SkScalar h)
+    {
         SkSize s;
         s.fWidth = w;
         s.fHeight = h;
         return s;
     }
 
-
-    SkSize& operator=(const SkISize& src) {
+    SkSize& operator=(const SkISize& src)
+    {
         this->set(SkIntToScalar(src.fWidth), SkIntToScalar(src.fHeight));
         return *this;
     }
 
-    SkISize toRound() const {
+    SkISize toRound() const
+    {
         SkISize s;
         s.set(SkScalarRoundToInt(fWidth), SkScalarRoundToInt(fHeight));
         return s;
     }
 
-    SkISize toCeil() const {
+    SkISize toCeil() const
+    {
         SkISize s;
         s.set(SkScalarCeilToInt(fWidth), SkScalarCeilToInt(fHeight));
         return s;
     }
 
-    SkISize toFloor() const {
+    SkISize toFloor() const
+    {
         SkISize s;
         s.set(SkScalarFloorToInt(fWidth), SkScalarFloorToInt(fHeight));
         return s;

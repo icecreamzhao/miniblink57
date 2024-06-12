@@ -23,11 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/storage/Storage.h"
 
 #include "bindings/core/v8/ExceptionState.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
 
@@ -39,23 +37,15 @@ Storage* Storage::create(LocalFrame* frame, StorageArea* storageArea)
 }
 
 Storage::Storage(LocalFrame* frame, StorageArea* storageArea)
-    : DOMWindowProperty(frame)
+    : ContextClient(frame)
     , m_storageArea(storageArea)
 {
-    ASSERT(m_frame);
-    ASSERT(m_storageArea);
+    DCHECK(frame);
+    DCHECK(m_storageArea);
 }
 
-Storage::~Storage()
-{
-}
-
-String Storage::anonymousIndexedGetter(unsigned index, ExceptionState& exceptionState)
-{
-    return anonymousNamedGetter(AtomicString::number(index), exceptionState);
-}
-
-String Storage::anonymousNamedGetter(const AtomicString& name, ExceptionState& exceptionState)
+String Storage::anonymousNamedGetter(const AtomicString& name,
+    ExceptionState& exceptionState)
 {
     bool found = contains(name, exceptionState);
     if (exceptionState.hadException() || !found)
@@ -66,18 +56,16 @@ String Storage::anonymousNamedGetter(const AtomicString& name, ExceptionState& e
     return result;
 }
 
-bool Storage::anonymousNamedSetter(const AtomicString& name, const AtomicString& value, ExceptionState& exceptionState)
+bool Storage::anonymousNamedSetter(const AtomicString& name,
+    const AtomicString& value,
+    ExceptionState& exceptionState)
 {
     setItem(name, value, exceptionState);
     return true;
 }
 
-bool Storage::anonymousIndexedSetter(unsigned index, const AtomicString& value, ExceptionState& exceptionState)
-{
-    return anonymousNamedSetter(AtomicString::number(index), value, exceptionState);
-}
-
-DeleteResult Storage::anonymousNamedDeleter(const AtomicString& name, ExceptionState& exceptionState)
+DeleteResult Storage::anonymousNamedDeleter(const AtomicString& name,
+    ExceptionState& exceptionState)
 {
     bool found = contains(name, exceptionState);
     if (!found)
@@ -90,13 +78,8 @@ DeleteResult Storage::anonymousNamedDeleter(const AtomicString& name, ExceptionS
     return DeleteSuccess;
 }
 
-DeleteResult Storage::anonymousIndexedDeleter(unsigned index, ExceptionState& exceptionState)
-{
-    DeleteResult result = anonymousNamedDeleter(AtomicString::number(index), exceptionState);
-    return result == DeleteUnknownProperty ? DeleteSuccess : result;
-}
-
-void Storage::namedPropertyEnumerator(Vector<String>& names, ExceptionState& exceptionState)
+void Storage::namedPropertyEnumerator(Vector<String>& names,
+    ExceptionState& exceptionState)
 {
     unsigned length = this->length(exceptionState);
     if (exceptionState.hadException())
@@ -114,7 +97,8 @@ void Storage::namedPropertyEnumerator(Vector<String>& names, ExceptionState& exc
     }
 }
 
-bool Storage::namedPropertyQuery(const AtomicString& name, ExceptionState& exceptionState)
+bool Storage::namedPropertyQuery(const AtomicString& name,
+    ExceptionState& exceptionState)
 {
     if (name == "length")
         return false;
@@ -127,7 +111,7 @@ bool Storage::namedPropertyQuery(const AtomicString& name, ExceptionState& excep
 DEFINE_TRACE(Storage)
 {
     visitor->trace(m_storageArea);
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 } // namespace blink

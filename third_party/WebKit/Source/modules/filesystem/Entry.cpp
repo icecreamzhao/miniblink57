@@ -27,11 +27,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "config.h"
 #include "modules/filesystem/Entry.h"
 
-#include "core/dom/ExecutionContext.h"
+#include "bindings/core/v8/ScriptState.h"
 #include "core/fileapi/FileError.h"
+#include "core/frame/UseCounter.h"
 #include "core/html/VoidCallback.h"
 #include "modules/filesystem/DirectoryEntry.h"
 #include "modules/filesystem/EntryCallback.h"
@@ -48,29 +48,80 @@ Entry::Entry(DOMFileSystemBase* fileSystem, const String& fullPath)
 {
 }
 
-void Entry::getMetadata(MetadataCallback* successCallback, ErrorCallback* errorCallback)
+DOMFileSystem* Entry::filesystem(ScriptState* scriptState) const
 {
-    m_fileSystem->getMetadata(this, successCallback, errorCallback);
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(
+            scriptState->getExecutionContext(),
+            UseCounter::Entry_Filesystem_AttributeGetter_IsolatedFileSystem);
+    return filesystem();
 }
 
-void Entry::moveTo(DirectoryEntry* parent, const String& name, EntryCallback* successCallback, ErrorCallback* errorCallback) const
+void Entry::getMetadata(ScriptState* scriptState,
+    MetadataCallback* successCallback,
+    ErrorCallback* errorCallback)
 {
-    m_fileSystem->move(this, parent, name, successCallback, errorCallback);
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_GetMetadata_Method_IsolatedFileSystem);
+    m_fileSystem->getMetadata(this, successCallback,
+        ScriptErrorCallback::wrap(errorCallback));
 }
 
-void Entry::copyTo(DirectoryEntry* parent, const String& name, EntryCallback* successCallback, ErrorCallback* errorCallback) const
+void Entry::moveTo(ScriptState* scriptState,
+    DirectoryEntry* parent,
+    const String& name,
+    EntryCallback* successCallback,
+    ErrorCallback* errorCallback) const
 {
-    m_fileSystem->copy(this, parent, name, successCallback, errorCallback);
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_MoveTo_Method_IsolatedFileSystem);
+    m_fileSystem->move(this, parent, name, successCallback,
+        ScriptErrorCallback::wrap(errorCallback));
 }
 
-void Entry::remove(VoidCallback* successCallback, ErrorCallback* errorCallback) const
+void Entry::copyTo(ScriptState* scriptState,
+    DirectoryEntry* parent,
+    const String& name,
+    EntryCallback* successCallback,
+    ErrorCallback* errorCallback) const
 {
-    m_fileSystem->remove(this, successCallback, errorCallback);
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_CopyTo_Method_IsolatedFileSystem);
+    m_fileSystem->copy(this, parent, name, successCallback,
+        ScriptErrorCallback::wrap(errorCallback));
 }
 
-void Entry::getParent(EntryCallback* successCallback, ErrorCallback* errorCallback) const
+void Entry::remove(ScriptState* scriptState,
+    VoidCallback* successCallback,
+    ErrorCallback* errorCallback) const
 {
-    m_fileSystem->getParent(this, successCallback, errorCallback);
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_Remove_Method_IsolatedFileSystem);
+    m_fileSystem->remove(this, successCallback,
+        ScriptErrorCallback::wrap(errorCallback));
+}
+
+void Entry::getParent(ScriptState* scriptState,
+    EntryCallback* successCallback,
+    ErrorCallback* errorCallback) const
+{
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_GetParent_Method_IsolatedFileSystem);
+    m_fileSystem->getParent(this, successCallback,
+        ScriptErrorCallback::wrap(errorCallback));
+}
+
+String Entry::toURL(ScriptState* scriptState) const
+{
+    if (m_fileSystem->type() == FileSystemTypeIsolated)
+        UseCounter::count(scriptState->getExecutionContext(),
+            UseCounter::Entry_ToURL_Method_IsolatedFileSystem);
+    return static_cast<const EntryBase*>(this)->toURL();
 }
 
 DEFINE_TRACE(Entry)

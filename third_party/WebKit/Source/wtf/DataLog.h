@@ -27,7 +27,9 @@
 #define DataLog_h
 
 #include "wtf/Assertions.h"
+#include "wtf/Compiler.h"
 #include "wtf/FilePrintStream.h"
+#include "wtf/WTFExport.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -36,11 +38,10 @@ namespace WTF {
 
 FilePrintStream& dataFile();
 
-void dataLogFV(const char* format, va_list) WTF_ATTRIBUTE_PRINTF(1, 0);
-void dataLogF(const char* format, ...) WTF_ATTRIBUTE_PRINTF(1, 2);
-void dataLogFString(const char*);
+WTF_EXPORT PRINTF_FORMAT(1, 0) void dataLogFV(const char* format, va_list);
+WTF_EXPORT PRINTF_FORMAT(1, 2) void dataLogF(const char* format, ...);
 
-template<typename... T>
+template <typename... T>
 void dataLog(const T&... values)
 {
     dataFile().print(values...);
@@ -50,7 +51,5 @@ void dataLog(const T&... values)
 
 using WTF::dataLog;
 using WTF::dataLogF;
-using WTF::dataLogFString;
 
 #endif // DataLog_h
-

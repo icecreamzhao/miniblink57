@@ -1,0 +1,11 @@
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/AutofillTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/BookmarksTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/FakeServerHelper.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/FirstRunTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/GmsCoreSyncListenerTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/OpenTabsTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/SyncCustomizationFragmentTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/SyncTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/SyncTestBase.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/TypedUrlsTest.java
+../../chrome/android/sync_shell/javatests/src/org/chromium/chrome/browser/sync/ui/PassphraseTypeDialogFragmentTest.java

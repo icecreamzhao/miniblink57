@@ -12,121 +12,122 @@ typedef enum UScriptCode {
     /** @stable ICU 2.2 */
     USCRIPT_INVALID_CODE = -1,
     /** @stable ICU 2.2 */
-    USCRIPT_COMMON = 0,  /* Zyyy */
+    USCRIPT_COMMON = 0, /* Zyyy */
     /** @stable ICU 2.2 */
-    USCRIPT_INHERITED = 1,  /* Zinh */ /* "Code for inherited script", for non-spacing combining marks; also Qaai */
+    USCRIPT_INHERITED = 1,
+    /* Zinh */ /* "Code for inherited script", for non-spacing combining marks; also Qaai */
     /** @stable ICU 2.2 */
-    USCRIPT_ARABIC = 2,  /* Arab */
+    USCRIPT_ARABIC = 2, /* Arab */
     /** @stable ICU 2.2 */
-    USCRIPT_ARMENIAN = 3,  /* Armn */
+    USCRIPT_ARMENIAN = 3, /* Armn */
     /** @stable ICU 2.2 */
-    USCRIPT_BENGALI = 4,  /* Beng */
+    USCRIPT_BENGALI = 4, /* Beng */
     /** @stable ICU 2.2 */
-    USCRIPT_BOPOMOFO = 5,  /* Bopo */
+    USCRIPT_BOPOMOFO = 5, /* Bopo */
     /** @stable ICU 2.2 */
-    USCRIPT_CHEROKEE = 6,  /* Cher */
+    USCRIPT_CHEROKEE = 6, /* Cher */
     /** @stable ICU 2.2 */
-    USCRIPT_COPTIC = 7,  /* Copt */
+    USCRIPT_COPTIC = 7, /* Copt */
     /** @stable ICU 2.2 */
-    USCRIPT_CYRILLIC = 8,  /* Cyrl */
+    USCRIPT_CYRILLIC = 8, /* Cyrl */
     /** @stable ICU 2.2 */
-    USCRIPT_DESERET = 9,  /* Dsrt */
+    USCRIPT_DESERET = 9, /* Dsrt */
     /** @stable ICU 2.2 */
-    USCRIPT_DEVANAGARI = 10,  /* Deva */
+    USCRIPT_DEVANAGARI = 10, /* Deva */
     /** @stable ICU 2.2 */
-    USCRIPT_ETHIOPIC = 11,  /* Ethi */
+    USCRIPT_ETHIOPIC = 11, /* Ethi */
     /** @stable ICU 2.2 */
-    USCRIPT_GEORGIAN = 12,  /* Geor */
+    USCRIPT_GEORGIAN = 12, /* Geor */
     /** @stable ICU 2.2 */
-    USCRIPT_GOTHIC = 13,  /* Goth */
+    USCRIPT_GOTHIC = 13, /* Goth */
     /** @stable ICU 2.2 */
-    USCRIPT_GREEK = 14,  /* Grek */
+    USCRIPT_GREEK = 14, /* Grek */
     /** @stable ICU 2.2 */
-    USCRIPT_GUJARATI = 15,  /* Gujr */
+    USCRIPT_GUJARATI = 15, /* Gujr */
     /** @stable ICU 2.2 */
-    USCRIPT_GURMUKHI = 16,  /* Guru */
+    USCRIPT_GURMUKHI = 16, /* Guru */
     /** @stable ICU 2.2 */
-    USCRIPT_HAN = 17,  /* Hani */
+    USCRIPT_HAN = 17, /* Hani */
     /** @stable ICU 2.2 */
-    USCRIPT_HANGUL = 18,  /* Hang */
+    USCRIPT_HANGUL = 18, /* Hang */
     /** @stable ICU 2.2 */
-    USCRIPT_HEBREW = 19,  /* Hebr */
+    USCRIPT_HEBREW = 19, /* Hebr */
     /** @stable ICU 2.2 */
-    USCRIPT_HIRAGANA = 20,  /* Hira */
+    USCRIPT_HIRAGANA = 20, /* Hira */
     /** @stable ICU 2.2 */
-    USCRIPT_KANNADA = 21,  /* Knda */
+    USCRIPT_KANNADA = 21, /* Knda */
     /** @stable ICU 2.2 */
-    USCRIPT_KATAKANA = 22,  /* Kana */
+    USCRIPT_KATAKANA = 22, /* Kana */
     /** @stable ICU 2.2 */
-    USCRIPT_KHMER = 23,  /* Khmr */
+    USCRIPT_KHMER = 23, /* Khmr */
     /** @stable ICU 2.2 */
-    USCRIPT_LAO = 24,  /* Laoo */
+    USCRIPT_LAO = 24, /* Laoo */
     /** @stable ICU 2.2 */
-    USCRIPT_LATIN = 25,  /* Latn */
+    USCRIPT_LATIN = 25, /* Latn */
     /** @stable ICU 2.2 */
-    USCRIPT_MALAYALAM = 26,  /* Mlym */
+    USCRIPT_MALAYALAM = 26, /* Mlym */
     /** @stable ICU 2.2 */
-    USCRIPT_MONGOLIAN = 27,  /* Mong */
+    USCRIPT_MONGOLIAN = 27, /* Mong */
     /** @stable ICU 2.2 */
-    USCRIPT_MYANMAR = 28,  /* Mymr */
+    USCRIPT_MYANMAR = 28, /* Mymr */
     /** @stable ICU 2.2 */
-    USCRIPT_OGHAM = 29,  /* Ogam */
+    USCRIPT_OGHAM = 29, /* Ogam */
     /** @stable ICU 2.2 */
-    USCRIPT_OLD_ITALIC = 30,  /* Ital */
+    USCRIPT_OLD_ITALIC = 30, /* Ital */
     /** @stable ICU 2.2 */
-    USCRIPT_ORIYA = 31,  /* Orya */
+    USCRIPT_ORIYA = 31, /* Orya */
     /** @stable ICU 2.2 */
-    USCRIPT_RUNIC = 32,  /* Runr */
+    USCRIPT_RUNIC = 32, /* Runr */
     /** @stable ICU 2.2 */
-    USCRIPT_SINHALA = 33,  /* Sinh */
+    USCRIPT_SINHALA = 33, /* Sinh */
     /** @stable ICU 2.2 */
-    USCRIPT_SYRIAC = 34,  /* Syrc */
+    USCRIPT_SYRIAC = 34, /* Syrc */
     /** @stable ICU 2.2 */
-    USCRIPT_TAMIL = 35,  /* Taml */
+    USCRIPT_TAMIL = 35, /* Taml */
     /** @stable ICU 2.2 */
-    USCRIPT_TELUGU = 36,  /* Telu */
+    USCRIPT_TELUGU = 36, /* Telu */
     /** @stable ICU 2.2 */
-    USCRIPT_THAANA = 37,  /* Thaa */
+    USCRIPT_THAANA = 37, /* Thaa */
     /** @stable ICU 2.2 */
-    USCRIPT_THAI = 38,  /* Thai */
+    USCRIPT_THAI = 38, /* Thai */
     /** @stable ICU 2.2 */
-    USCRIPT_TIBETAN = 39,  /* Tibt */
+    USCRIPT_TIBETAN = 39, /* Tibt */
     /** Canadian_Aboriginal script. @stable ICU 2.6 */
-    USCRIPT_CANADIAN_ABORIGINAL = 40,  /* Cans */
+    USCRIPT_CANADIAN_ABORIGINAL = 40, /* Cans */
     /** Canadian_Aboriginal script (alias). @stable ICU 2.2 */
     USCRIPT_UCAS = USCRIPT_CANADIAN_ABORIGINAL,
     /** @stable ICU 2.2 */
-    USCRIPT_YI = 41,  /* Yiii */
+    USCRIPT_YI = 41, /* Yiii */
     /* New scripts in Unicode 3.2 */
     /** @stable ICU 2.2 */
-    USCRIPT_TAGALOG = 42,  /* Tglg */
+    USCRIPT_TAGALOG = 42, /* Tglg */
     /** @stable ICU 2.2 */
-    USCRIPT_HANUNOO = 43,  /* Hano */
+    USCRIPT_HANUNOO = 43, /* Hano */
     /** @stable ICU 2.2 */
-    USCRIPT_BUHID = 44,  /* Buhd */
+    USCRIPT_BUHID = 44, /* Buhd */
     /** @stable ICU 2.2 */
-    USCRIPT_TAGBANWA = 45,  /* Tagb */
+    USCRIPT_TAGBANWA = 45, /* Tagb */
 
     /* New scripts in Unicode 4 */
     /** @stable ICU 2.6 */
-    USCRIPT_BRAILLE = 46,  /* Brai */
+    USCRIPT_BRAILLE = 46, /* Brai */
     /** @stable ICU 2.6 */
-    USCRIPT_CYPRIOT = 47,  /* Cprt */
+    USCRIPT_CYPRIOT = 47, /* Cprt */
     /** @stable ICU 2.6 */
-    USCRIPT_LIMBU = 48,  /* Limb */
+    USCRIPT_LIMBU = 48, /* Limb */
     /** @stable ICU 2.6 */
-    USCRIPT_LINEAR_B = 49,  /* Linb */
+    USCRIPT_LINEAR_B = 49, /* Linb */
     /** @stable ICU 2.6 */
-    USCRIPT_OSMANYA = 50,  /* Osma */
+    USCRIPT_OSMANYA = 50, /* Osma */
     /** @stable ICU 2.6 */
-    USCRIPT_SHAVIAN = 51,  /* Shaw */
+    USCRIPT_SHAVIAN = 51, /* Shaw */
     /** @stable ICU 2.6 */
-    USCRIPT_TAI_LE = 52,  /* Tale */
+    USCRIPT_TAI_LE = 52, /* Tale */
     /** @stable ICU 2.6 */
-    USCRIPT_UGARITIC = 53,  /* Ugar */
+    USCRIPT_UGARITIC = 53, /* Ugar */
 
     /** New script code in Unicode 4.0.1 @stable ICU 3.0 */
-    USCRIPT_KATAKANA_OR_HIRAGANA = 54,/*Hrkt */
+    USCRIPT_KATAKANA_OR_HIRAGANA = 54, /*Hrkt */
 
     /* New scripts in Unicode 4.1 */
     /** @stable ICU 3.4 */
@@ -228,159 +229,159 @@ typedef enum UScriptCode {
     /** @stable ICU 3.6 */
     USCRIPT_VAI = 99, /* Vaii */
     /** @stable ICU 3.6 */
-    USCRIPT_VISIBLE_SPEECH = 100,/* Visp */
+    USCRIPT_VISIBLE_SPEECH = 100, /* Visp */
     /** @stable ICU 3.6 */
-    USCRIPT_CUNEIFORM = 101,/* Xsux */
+    USCRIPT_CUNEIFORM = 101, /* Xsux */
     /** @stable ICU 3.6 */
-    USCRIPT_UNWRITTEN_LANGUAGES = 102,/* Zxxx */
+    USCRIPT_UNWRITTEN_LANGUAGES = 102, /* Zxxx */
     /** @stable ICU 3.6 */
-    USCRIPT_UNKNOWN = 103,/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
+    USCRIPT_UNKNOWN = 103,
+    /* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
 
     /** @stable ICU 3.8 */
-    USCRIPT_CARIAN = 104,/* Cari */
+    USCRIPT_CARIAN = 104, /* Cari */
     /** @stable ICU 3.8 */
-    USCRIPT_JAPANESE = 105,/* Jpan */
+    USCRIPT_JAPANESE = 105, /* Jpan */
     /** @stable ICU 3.8 */
-    USCRIPT_LANNA = 106,/* Lana */
+    USCRIPT_LANNA = 106, /* Lana */
     /** @stable ICU 3.8 */
-    USCRIPT_LYCIAN = 107,/* Lyci */
+    USCRIPT_LYCIAN = 107, /* Lyci */
     /** @stable ICU 3.8 */
-    USCRIPT_LYDIAN = 108,/* Lydi */
+    USCRIPT_LYDIAN = 108, /* Lydi */
     /** @stable ICU 3.8 */
-    USCRIPT_OL_CHIKI = 109,/* Olck */
+    USCRIPT_OL_CHIKI = 109, /* Olck */
     /** @stable ICU 3.8 */
-    USCRIPT_REJANG = 110,/* Rjng */
+    USCRIPT_REJANG = 110, /* Rjng */
     /** @stable ICU 3.8 */
-    USCRIPT_SAURASHTRA = 111,/* Saur */
+    USCRIPT_SAURASHTRA = 111, /* Saur */
     /** @stable ICU 3.8 */
-    USCRIPT_SIGN_WRITING = 112,/* Sgnw */
+    USCRIPT_SIGN_WRITING = 112, /* Sgnw */
     /** @stable ICU 3.8 */
-    USCRIPT_SUNDANESE = 113,/* Sund */
+    USCRIPT_SUNDANESE = 113, /* Sund */
     /** @stable ICU 3.8 */
-    USCRIPT_MOON = 114,/* Moon */
+    USCRIPT_MOON = 114, /* Moon */
     /** @stable ICU 3.8 */
-    USCRIPT_MEITEI_MAYEK = 115,/* Mtei */
+    USCRIPT_MEITEI_MAYEK = 115, /* Mtei */
 
     /** @stable ICU 4.0 */
-    USCRIPT_IMPERIAL_ARAMAIC = 116,/* Armi */
+    USCRIPT_IMPERIAL_ARAMAIC = 116, /* Armi */
     /** @stable ICU 4.0 */
-    USCRIPT_AVESTAN = 117,/* Avst */
+    USCRIPT_AVESTAN = 117, /* Avst */
     /** @stable ICU 4.0 */
-    USCRIPT_CHAKMA = 118,/* Cakm */
+    USCRIPT_CHAKMA = 118, /* Cakm */
     /** @stable ICU 4.0 */
-    USCRIPT_KOREAN = 119,/* Kore */
+    USCRIPT_KOREAN = 119, /* Kore */
     /** @stable ICU 4.0 */
-    USCRIPT_KAITHI = 120,/* Kthi */
+    USCRIPT_KAITHI = 120, /* Kthi */
     /** @stable ICU 4.0 */
-    USCRIPT_MANICHAEAN = 121,/* Mani */
+    USCRIPT_MANICHAEAN = 121, /* Mani */
     /** @stable ICU 4.0 */
-    USCRIPT_INSCRIPTIONAL_PAHLAVI = 122,/* Phli */
+    USCRIPT_INSCRIPTIONAL_PAHLAVI = 122, /* Phli */
     /** @stable ICU 4.0 */
-    USCRIPT_PSALTER_PAHLAVI = 123,/* Phlp */
+    USCRIPT_PSALTER_PAHLAVI = 123, /* Phlp */
     /** @stable ICU 4.0 */
-    USCRIPT_BOOK_PAHLAVI = 124,/* Phlv */
+    USCRIPT_BOOK_PAHLAVI = 124, /* Phlv */
     /** @stable ICU 4.0 */
-    USCRIPT_INSCRIPTIONAL_PARTHIAN = 125,/* Prti */
+    USCRIPT_INSCRIPTIONAL_PARTHIAN = 125, /* Prti */
     /** @stable ICU 4.0 */
-    USCRIPT_SAMARITAN = 126,/* Samr */
+    USCRIPT_SAMARITAN = 126, /* Samr */
     /** @stable ICU 4.0 */
-    USCRIPT_TAI_VIET = 127,/* Tavt */
+    USCRIPT_TAI_VIET = 127, /* Tavt */
     /** @stable ICU 4.0 */
-    USCRIPT_MATHEMATICAL_NOTATION = 128,/* Zmth */
+    USCRIPT_MATHEMATICAL_NOTATION = 128, /* Zmth */
     /** @stable ICU 4.0 */
-    USCRIPT_SYMBOLS = 129,/* Zsym */
+    USCRIPT_SYMBOLS = 129, /* Zsym */
 
     /** @stable ICU 4.4 */
-    USCRIPT_BAMUM = 130,/* Bamu */
+    USCRIPT_BAMUM = 130, /* Bamu */
     /** @stable ICU 4.4 */
-    USCRIPT_LISU = 131,/* Lisu */
+    USCRIPT_LISU = 131, /* Lisu */
     /** @stable ICU 4.4 */
-    USCRIPT_NAKHI_GEBA = 132,/* Nkgb */
+    USCRIPT_NAKHI_GEBA = 132, /* Nkgb */
     /** @stable ICU 4.4 */
-    USCRIPT_OLD_SOUTH_ARABIAN = 133,/* Sarb */
+    USCRIPT_OLD_SOUTH_ARABIAN = 133, /* Sarb */
 
     /** @stable ICU 4.6 */
-    USCRIPT_BASSA_VAH = 134,/* Bass */
+    USCRIPT_BASSA_VAH = 134, /* Bass */
     /** @stable ICU 54 */
-    USCRIPT_DUPLOYAN = 135,/* Dupl */
+    USCRIPT_DUPLOYAN = 135, /* Dupl */
 #ifndef U_HIDE_DEPRECATED_API
     /** @deprecated ICU 54 Typo, use USCRIPT_DUPLOYAN */
     USCRIPT_DUPLOYAN_SHORTAND = USCRIPT_DUPLOYAN,
-#endif  /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_DEPRECATED_API */
     /** @stable ICU 4.6 */
-    USCRIPT_ELBASAN = 136,/* Elba */
+    USCRIPT_ELBASAN = 136, /* Elba */
     /** @stable ICU 4.6 */
-    USCRIPT_GRANTHA = 137,/* Gran */
+    USCRIPT_GRANTHA = 137, /* Gran */
     /** @stable ICU 4.6 */
-    USCRIPT_KPELLE = 138,/* Kpel */
+    USCRIPT_KPELLE = 138, /* Kpel */
     /** @stable ICU 4.6 */
-    USCRIPT_LOMA = 139,/* Loma */
+    USCRIPT_LOMA = 139, /* Loma */
     /** Mende Kikakui @stable ICU 4.6 */
-    USCRIPT_MENDE = 140,/* Mend */
+    USCRIPT_MENDE = 140, /* Mend */
     /** @stable ICU 4.6 */
-    USCRIPT_MEROITIC_CURSIVE = 141,/* Merc */
+    USCRIPT_MEROITIC_CURSIVE = 141, /* Merc */
     /** @stable ICU 4.6 */
-    USCRIPT_OLD_NORTH_ARABIAN = 142,/* Narb */
+    USCRIPT_OLD_NORTH_ARABIAN = 142, /* Narb */
     /** @stable ICU 4.6 */
-    USCRIPT_NABATAEAN = 143,/* Nbat */
+    USCRIPT_NABATAEAN = 143, /* Nbat */
     /** @stable ICU 4.6 */
-    USCRIPT_PALMYRENE = 144,/* Palm */
+    USCRIPT_PALMYRENE = 144, /* Palm */
     /** @stable ICU 54 */
-    USCRIPT_KHUDAWADI = 145,/* Sind */
+    USCRIPT_KHUDAWADI = 145, /* Sind */
     /** @stable ICU 4.6 */
     USCRIPT_SINDHI = USCRIPT_KHUDAWADI,
     /** @stable ICU 4.6 */
-    USCRIPT_WARANG_CITI = 146,/* Wara */
+    USCRIPT_WARANG_CITI = 146, /* Wara */
 
     /** @stable ICU 4.8 */
-    USCRIPT_AFAKA = 147,/* Afak */
+    USCRIPT_AFAKA = 147, /* Afak */
     /** @stable ICU 4.8 */
-    USCRIPT_JURCHEN = 148,/* Jurc */
+    USCRIPT_JURCHEN = 148, /* Jurc */
     /** @stable ICU 4.8 */
-    USCRIPT_MRO = 149,/* Mroo */
+    USCRIPT_MRO = 149, /* Mroo */
     /** @stable ICU 4.8 */
-    USCRIPT_NUSHU = 150,/* Nshu */
+    USCRIPT_NUSHU = 150, /* Nshu */
     /** @stable ICU 4.8 */
-    USCRIPT_SHARADA = 151,/* Shrd */
+    USCRIPT_SHARADA = 151, /* Shrd */
     /** @stable ICU 4.8 */
-    USCRIPT_SORA_SOMPENG = 152,/* Sora */
+    USCRIPT_SORA_SOMPENG = 152, /* Sora */
     /** @stable ICU 4.8 */
-    USCRIPT_TAKRI = 153,/* Takr */
+    USCRIPT_TAKRI = 153, /* Takr */
     /** @stable ICU 4.8 */
-    USCRIPT_TANGUT = 154,/* Tang */
+    USCRIPT_TANGUT = 154, /* Tang */
     /** @stable ICU 4.8 */
-    USCRIPT_WOLEAI = 155,/* Wole */
+    USCRIPT_WOLEAI = 155, /* Wole */
 
     /** @stable ICU 49 */
-    USCRIPT_ANATOLIAN_HIEROGLYPHS = 156,/* Hluw */
+    USCRIPT_ANATOLIAN_HIEROGLYPHS = 156, /* Hluw */
     /** @stable ICU 49 */
-    USCRIPT_KHOJKI = 157,/* Khoj */
+    USCRIPT_KHOJKI = 157, /* Khoj */
     /** @stable ICU 49 */
-    USCRIPT_TIRHUTA = 158,/* Tirh */
+    USCRIPT_TIRHUTA = 158, /* Tirh */
 
     /** @stable ICU 52 */
-    USCRIPT_CAUCASIAN_ALBANIAN = 159,/* Aghb */
+    USCRIPT_CAUCASIAN_ALBANIAN = 159, /* Aghb */
     /** @stable ICU 52 */
-    USCRIPT_MAHAJANI = 160,/* Mahj */
+    USCRIPT_MAHAJANI = 160, /* Mahj */
 
     /** @stable ICU 54 */
-    USCRIPT_AHOM = 161,/* Ahom */
+    USCRIPT_AHOM = 161, /* Ahom */
     /** @stable ICU 54 */
-    USCRIPT_HATRAN = 162,/* Hatr */
+    USCRIPT_HATRAN = 162, /* Hatr */
     /** @stable ICU 54 */
-    USCRIPT_MODI = 163,/* Modi */
+    USCRIPT_MODI = 163, /* Modi */
     /** @stable ICU 54 */
-    USCRIPT_MULTANI = 164,/* Mult */
+    USCRIPT_MULTANI = 164, /* Mult */
     /** @stable ICU 54 */
-    USCRIPT_PAU_CIN_HAU = 165,/* Pauc */
+    USCRIPT_PAU_CIN_HAU = 165, /* Pauc */
     /** @stable ICU 54 */
-    USCRIPT_SIDDHAM = 166,/* Sidd */
+    USCRIPT_SIDDHAM = 166, /* Sidd */
 
     /* Private use codes from Qaaa - Qabx are not supported */
 
     /** @stable ICU 2.2 */
     USCRIPT_CODE_LIMIT = 167
 } UScriptCode;
-
 
 #endif // uscript_h

@@ -41,9 +41,14 @@ namespace blink {
 class DeviceMotionData;
 class WebDeviceMotionData;
 
-// This class listens to device motion data and notifies all registered controllers.
-class DeviceMotionDispatcher final : public GarbageCollectedFinalized<DeviceMotionDispatcher>, public PlatformEventDispatcher, public WebDeviceMotionListener {
+// This class listens to device motion data and notifies all registered
+// controllers.
+class DeviceMotionDispatcher final
+    : public GarbageCollectedFinalized<DeviceMotionDispatcher>,
+      public PlatformEventDispatcher,
+      public WebDeviceMotionListener {
     USING_GARBAGE_COLLECTED_MIXIN(DeviceMotionDispatcher);
+
 public:
     static DeviceMotionDispatcher& instance();
     ~DeviceMotionDispatcher() override;

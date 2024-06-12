@@ -33,26 +33,14 @@
 
 #include "platform/heap/Handle.h"
 #include "platform/text/TextDecoration.h"
-#include "wtf/RefCounted.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-enum TextCheckingType {
-    TextCheckingTypeNone     = 0,
-    TextCheckingTypeSpelling = 1 << 1,
-    TextCheckingTypeGrammar  = 1 << 2,
-};
-
-typedef unsigned TextCheckingTypeMask;
-
-enum TextCheckingProcessType {
-    TextCheckingProcessBatch,
-    TextCheckingProcessIncremental
-};
-
 struct GrammarDetail {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     int location;
     int length;
     Vector<String> guesses;
@@ -60,6 +48,7 @@ struct GrammarDetail {
 };
 
 struct TextCheckingResult {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     TextDecorationType decoration;
     int location;
     int length;
@@ -70,41 +59,39 @@ struct TextCheckingResult {
 
 const int unrequestedTextCheckingSequence = -1;
 
-class TextCheckingRequestData {
+class TextCheckingRequestData final {
+    DISALLOW_NEW();
     friend class SpellCheckRequest; // For access to m_sequence.
 public:
     TextCheckingRequestData()
         : m_sequence(unrequestedTextCheckingSequence)
-        , m_mask(TextCheckingTypeNone)
-        , m_processType(TextCheckingProcessIncremental)
-    { }
-    TextCheckingRequestData(int sequence, const String& text, TextCheckingTypeMask mask, TextCheckingProcessType processType, const Vector<uint32_t>& markers, const Vector<unsigned>& offsets)
+    {
+    }
+    TextCheckingRequestData(int sequence,
+        const String& text,
+        const Vector<uint32_t>& markers,
+        const Vector<unsigned>& offsets)
         : m_sequence(sequence)
         , m_text(text)
-        , m_mask(mask)
-        , m_processType(processType)
         , m_markers(markers)
         , m_offsets(offsets)
-    { }
+    {
+    }
 
     int sequence() const { return m_sequence; }
     String text() const { return m_text; }
-    TextCheckingTypeMask mask() const { return m_mask; }
-    bool maskContains(TextCheckingType type) const { return m_mask & type; }
-    TextCheckingProcessType processType() const { return m_processType; }
     const Vector<uint32_t>& markers() const { return m_markers; }
     const Vector<unsigned>& offsets() const { return m_offsets; }
 
 private:
     int m_sequence;
     String m_text;
-    TextCheckingTypeMask m_mask;
-    TextCheckingProcessType m_processType;
     Vector<uint32_t> m_markers;
     Vector<unsigned> m_offsets;
 };
 
-class TextCheckingRequest : public RefCountedWillBeGarbageCollectedFinalized<TextCheckingRequest> {
+class TextCheckingRequest
+    : public GarbageCollectedFinalized<TextCheckingRequest> {
 public:
     virtual ~TextCheckingRequest() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
@@ -114,6 +101,6 @@ public:
     virtual void didCancel() = 0;
 };
 
-}
+} // namespace blink
 
 #endif // TextChecking_h

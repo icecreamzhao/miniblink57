@@ -30,6 +30,7 @@
 #define AudioListener_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+#include "modules/webaudio/AudioParam.h"
 #include "platform/geometry/FloatPoint3D.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Vector.h"
@@ -39,48 +40,98 @@ namespace blink {
 class HRTFDatabaseLoader;
 class PannerHandler;
 
-// AudioListener maintains the state of the listener in the audio scene as defined in the OpenAL specification.
+// AudioListener maintains the state of the listener in the audio scene as
+// defined in the OpenAL specification.
 
-class AudioListener : public GarbageCollectedFinalized<AudioListener>, public ScriptWrappable {
+class AudioListener : public GarbageCollectedFinalized<AudioListener>,
+                      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static AudioListener* create()
+    static AudioListener* create(BaseAudioContext& context)
     {
-        return new AudioListener();
+        return new AudioListener(context);
     }
     virtual ~AudioListener();
 
+    // Location of the listener
+    AudioParam* positionX() const { return m_positionX; };
+    AudioParam* positionY() const { return m_positionY; };
+    AudioParam* positionZ() const { return m_positionZ; };
+
+    // Forward direction vector of the listener
+    AudioParam* forwardX() const { return m_forwardX; };
+    AudioParam* forwardY() const { return m_forwardY; };
+    AudioParam* forwardZ() const { return m_forwardZ; };
+
+    // Up direction vector for the listener
+    AudioParam* upX() const { return m_upX; };
+    AudioParam* upY() const { return m_upY; };
+    AudioParam* upZ() const { return m_upZ; };
+
+    // True if any of AudioParams have automations.
+    bool hasSampleAccurateValues() const;
+
+    // Update the internal state of the listener, including updating the dirty
+    // state of all PannerNodes if necessary.
+    void updateState();
+
+    bool isListenerDirty() const { return m_isListenerDirty; }
+
+    const FloatPoint3D position() const
+    {
+        return FloatPoint3D(m_positionX->value(), m_positionY->value(),
+            m_positionZ->value());
+    }
+    const FloatPoint3D orientation() const
+    {
+        return FloatPoint3D(m_forwardX->value(), m_forwardY->value(),
+            m_forwardZ->value());
+    }
+    const FloatPoint3D upVector() const
+    {
+        return FloatPoint3D(m_upX->value(), m_upY->value(), m_upZ->value());
+    }
+
+    const float* getPositionXValues(size_t framesToProcess);
+    const float* getPositionYValues(size_t framesToProcess);
+    const float* getPositionZValues(size_t framesToProcess);
+
+    const float* getForwardXValues(size_t framesToProcess);
+    const float* getForwardYValues(size_t framesToProcess);
+    const float* getForwardZValues(size_t framesToProcess);
+
+    const float* getUpXValues(size_t framesToProcess);
+    const float* getUpYValues(size_t framesToProcess);
+    const float* getUpZValues(size_t framesToProcess);
+
     // Position
-    void setPosition(float x, float y, float z) { setPosition(FloatPoint3D(x, y, z)); }
-    const FloatPoint3D& position() const { return m_position; }
+    void setPosition(float x, float y, float z)
+    {
+        setPosition(FloatPoint3D(x, y, z));
+    }
 
     // Orientation and Up-vector
-    void setOrientation(float x, float y, float z, float upX, float upY, float upZ)
+    void setOrientation(float x,
+        float y,
+        float z,
+        float upX,
+        float upY,
+        float upZ)
     {
         setOrientation(FloatPoint3D(x, y, z));
         setUpVector(FloatPoint3D(upX, upY, upZ));
     }
-    const FloatPoint3D& orientation() const { return m_orientation; }
-    const FloatPoint3D& upVector() const { return m_upVector; }
-
-    // Velocity
-    void setVelocity(float x, float y, float z) { setVelocity(FloatPoint3D(x, y, z)); }
-    const FloatPoint3D& velocity() const { return m_velocity; }
-
-    // Doppler factor
-    void setDopplerFactor(double);
-    double dopplerFactor() const { return m_dopplerFactor; }
-
-    // Speed of sound
-    void setSpeedOfSound(double);
-    double speedOfSound() const { return m_speedOfSound; }
 
     Mutex& listenerLock() { return m_listenerLock; }
     void addPanner(PannerHandler&);
     void removePanner(PannerHandler&);
 
     // HRTF DB loader
-    HRTFDatabaseLoader* hrtfDatabaseLoader() { return m_hrtfDatabaseLoader.get(); }
+    HRTFDatabaseLoader* hrtfDatabaseLoader()
+    {
+        return m_hrtfDatabaseLoader.get();
+    }
     void createAndLoadHRTFDatabaseLoader(float);
     bool isHRTFDatabaseLoaded();
     void waitForHRTFDatabaseLoaderThreadCompletion();
@@ -88,21 +139,55 @@ public:
     DECLARE_TRACE();
 
 private:
-    AudioListener();
+    AudioListener(BaseAudioContext&);
 
     void setPosition(const FloatPoint3D&);
     void setOrientation(const FloatPoint3D&);
     void setUpVector(const FloatPoint3D&);
-    void setVelocity(const FloatPoint3D&);
 
     void markPannersAsDirty(unsigned);
 
-    FloatPoint3D m_position;
-    FloatPoint3D m_orientation;
-    FloatPoint3D m_upVector;
-    FloatPoint3D m_velocity;
-    double m_dopplerFactor;
-    double m_speedOfSound;
+    // Location of the listener
+    Member<AudioParam> m_positionX;
+    Member<AudioParam> m_positionY;
+    Member<AudioParam> m_positionZ;
+
+    // Forward direction vector of the listener
+    Member<AudioParam> m_forwardX;
+    Member<AudioParam> m_forwardY;
+    Member<AudioParam> m_forwardZ;
+
+    // Up direction vector for the listener
+    Member<AudioParam> m_upX;
+    Member<AudioParam> m_upY;
+    Member<AudioParam> m_upZ;
+
+    // The position, forward, and up vectors from the last rendering quantum.
+    FloatPoint3D m_lastPosition;
+    FloatPoint3D m_lastForward;
+    FloatPoint3D m_lastUp;
+
+    // Last time that the automations were updated.
+    double m_lastUpdateTime;
+
+    // Set every rendering quantum if the listener has moved in any way
+    // (position, forward, or up).  This should only be read or written to from
+    // the audio thread.
+    bool m_isListenerDirty;
+
+    void updateValuesIfNeeded(size_t framesToProcess);
+
+    AudioFloatArray m_positionXValues;
+    AudioFloatArray m_positionYValues;
+    AudioFloatArray m_positionZValues;
+
+    AudioFloatArray m_forwardXValues;
+    AudioFloatArray m_forwardYValues;
+    AudioFloatArray m_forwardZValues;
+
+    AudioFloatArray m_upXValues;
+    AudioFloatArray m_upYValues;
+    AudioFloatArray m_upZValues;
 
     // Synchronize a panner's process() with setting of the state of the listener.
     mutable Mutex m_listenerLock;

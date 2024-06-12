@@ -31,7 +31,8 @@
 
 namespace blink {
 
-class NotificationPermissionCallback : public GarbageCollectedFinalized<NotificationPermissionCallback> {
+class NotificationPermissionCallback
+    : public GarbageCollectedFinalized<NotificationPermissionCallback> {
 public:
     virtual ~NotificationPermissionCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }

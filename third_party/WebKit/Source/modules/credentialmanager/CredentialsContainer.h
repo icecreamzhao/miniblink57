@@ -12,18 +12,20 @@ namespace blink {
 
 class Credential;
 class CredentialRequestOptions;
-class Dictionary;
 class ScriptPromise;
 class ScriptState;
 
-class CredentialsContainer final : public GarbageCollected<CredentialsContainer>, public ScriptWrappable {
+class CredentialsContainer final
+    : public GarbageCollected<CredentialsContainer>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static CredentialsContainer* create();
 
     // CredentialsContainer.h
-    ScriptPromise request(ScriptState*, const CredentialRequestOptions&);
-    ScriptPromise notifySignedIn(ScriptState*, Credential* = 0);
+    ScriptPromise get(ScriptState*, const CredentialRequestOptions&);
+    ScriptPromise store(ScriptState*, Credential* = 0);
     ScriptPromise requireUserMediation(ScriptState*);
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }

@@ -23,63 +23,72 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/exported/WebSpeechSynthesizerClientImpl.h"
 
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
 
 namespace blink {
 
-WebSpeechSynthesizerClientImpl::WebSpeechSynthesizerClientImpl(PlatformSpeechSynthesizer* synthesizer, PlatformSpeechSynthesizerClient* client)
+WebSpeechSynthesizerClientImpl::WebSpeechSynthesizerClientImpl(
+    PlatformSpeechSynthesizer* synthesizer,
+    PlatformSpeechSynthesizerClient* client)
     : m_synthesizer(synthesizer)
     , m_client(client)
 {
 }
 
-WebSpeechSynthesizerClientImpl::~WebSpeechSynthesizerClientImpl()
-{
-}
+WebSpeechSynthesizerClientImpl::~WebSpeechSynthesizerClientImpl() { }
 
-void WebSpeechSynthesizerClientImpl::setVoiceList(const WebVector<WebSpeechSynthesisVoice>& voices)
+void WebSpeechSynthesizerClientImpl::setVoiceList(
+    const WebVector<WebSpeechSynthesisVoice>& voices)
 {
-    HeapVector<Member<PlatformSpeechSynthesisVoice>> outVoices;
+    Vector<RefPtr<PlatformSpeechSynthesisVoice>> outVoices;
     for (size_t i = 0; i < voices.size(); i++)
-        outVoices.append(voices[i]);
+        outVoices.push_back(voices[i]);
     m_synthesizer->setVoiceList(outVoices);
     m_client->voicesDidChange();
 }
 
-void WebSpeechSynthesizerClientImpl::didStartSpeaking(const WebSpeechSynthesisUtterance& utterance)
+void WebSpeechSynthesizerClientImpl::didStartSpeaking(
+    const WebSpeechSynthesisUtterance& utterance)
 {
     m_client->didStartSpeaking(utterance);
 }
 
-void WebSpeechSynthesizerClientImpl::didFinishSpeaking(const WebSpeechSynthesisUtterance& utterance)
+void WebSpeechSynthesizerClientImpl::didFinishSpeaking(
+    const WebSpeechSynthesisUtterance& utterance)
 {
     m_client->didFinishSpeaking(utterance);
 }
 
-void WebSpeechSynthesizerClientImpl::didPauseSpeaking(const WebSpeechSynthesisUtterance& utterance)
+void WebSpeechSynthesizerClientImpl::didPauseSpeaking(
+    const WebSpeechSynthesisUtterance& utterance)
 {
     m_client->didPauseSpeaking(utterance);
 }
 
-void WebSpeechSynthesizerClientImpl::didResumeSpeaking(const WebSpeechSynthesisUtterance& utterance)
+void WebSpeechSynthesizerClientImpl::didResumeSpeaking(
+    const WebSpeechSynthesisUtterance& utterance)
 {
     m_client->didResumeSpeaking(utterance);
 }
 
-void WebSpeechSynthesizerClientImpl::speakingErrorOccurred(const WebSpeechSynthesisUtterance& utterance)
+void WebSpeechSynthesizerClientImpl::speakingErrorOccurred(
+    const WebSpeechSynthesisUtterance& utterance)
 {
     m_client->speakingErrorOccurred(utterance);
 }
 
-void WebSpeechSynthesizerClientImpl::wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance& utterance, unsigned charIndex)
+void WebSpeechSynthesizerClientImpl::wordBoundaryEventOccurred(
+    const WebSpeechSynthesisUtterance& utterance,
+    unsigned charIndex)
 {
     m_client->boundaryEventOccurred(utterance, SpeechWordBoundary, charIndex);
 }
 
-void WebSpeechSynthesizerClientImpl::sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance& utterance, unsigned charIndex)
+void WebSpeechSynthesizerClientImpl::sentenceBoundaryEventOccurred(
+    const WebSpeechSynthesisUtterance& utterance,
+    unsigned charIndex)
 {
     m_client->boundaryEventOccurred(utterance, SpeechSentenceBoundary, charIndex);
 }

@@ -26,11 +26,12 @@
 #define StyleRareInheritedData_h
 
 #include "core/CoreExport.h"
+#include "core/css/StyleAutoColor.h"
 #include "core/css/StyleColor.h"
-#include "core/style/DataRef.h"
-#include "core/style/StyleVariableData.h"
+#include "core/style/TextSizeAdjust.h"
 #include "platform/Length.h"
 #include "platform/graphics/Color.h"
+#include "platform/heap/Handle.h"
 #include "platform/text/TabSize.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
@@ -44,17 +45,28 @@ class CursorData;
 class QuotesData;
 class ShadowList;
 class StyleImage;
+class StyleInheritedVariables;
 
 typedef RefVector<AppliedTextDecoration> AppliedTextDecorationList;
-typedef RefVector<CursorData> CursorList;
+typedef HeapVector<CursorData> CursorList;
 
-// This struct is for rarely used inherited CSS3, CSS2, and WebKit-specific properties.
-// By grouping them together, we save space, and only allocate this object when someone
-// actually uses one of these properties.
-class CORE_EXPORT StyleRareInheritedData : public RefCounted<StyleRareInheritedData> {
+// This struct is for rarely used inherited CSS3, CSS2, and WebKit-specific
+// properties.  By grouping them together, we save space, and only allocate this
+// object when someone actually uses one of these properties.
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
+class CORE_EXPORT StyleRareInheritedData
+    : public RefCounted<StyleRareInheritedData> {
 public:
-    static PassRefPtr<StyleRareInheritedData> create() { return adoptRef(new StyleRareInheritedData); }
-    PassRefPtr<StyleRareInheritedData> copy() const { return adoptRef(new StyleRareInheritedData(*this)); }
+    static PassRefPtr<StyleRareInheritedData> create()
+    {
+        return adoptRef(new StyleRareInheritedData);
+    }
+    PassRefPtr<StyleRareInheritedData> copy() const
+    {
+        return adoptRef(new StyleRareInheritedData(*this));
+    }
     ~StyleRareInheritedData();
 
     bool operator==(const StyleRareInheritedData&) const;
@@ -65,49 +77,136 @@ public:
     bool shadowDataEquivalent(const StyleRareInheritedData&) const;
     bool quotesDataEquivalent(const StyleRareInheritedData&) const;
 
-    RefPtr<StyleImage> listStyleImage;
+    Persistent<StyleImage> listStyleImage;
 
-    StyleColor textStrokeColor() const { return m_textStrokeColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_textStrokeColor); }
-    StyleColor textFillColor() const { return m_textFillColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_textFillColor); }
-    StyleColor textEmphasisColor() const { return m_textEmphasisColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_textEmphasisColor); }
-    StyleColor visitedLinkTextStrokeColor() const { return m_visitedLinkTextStrokeColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_visitedLinkTextStrokeColor); }
-    StyleColor visitedLinkTextFillColor() const { return m_visitedLinkTextFillColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_visitedLinkTextFillColor); }
-    StyleColor visitedLinkTextEmphasisColor() const { return m_visitedLinkTextEmphasisColorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_visitedLinkTextEmphasisColor); }
+    StyleColor textStrokeColor() const
+    {
+        return m_textStrokeColorIsCurrentColor ? StyleColor::currentColor()
+                                               : StyleColor(m_textStrokeColor);
+    }
+    StyleColor textFillColor() const
+    {
+        return m_textFillColorIsCurrentColor ? StyleColor::currentColor()
+                                             : StyleColor(m_textFillColor);
+    }
+    StyleColor textEmphasisColor() const
+    {
+        return m_textEmphasisColorIsCurrentColor ? StyleColor::currentColor()
+                                                 : StyleColor(m_textEmphasisColor);
+    }
+    StyleAutoColor caretColor() const
+    {
+        if (m_caretColorIsCurrentColor)
+            return StyleAutoColor::currentColor();
+        if (m_caretColorIsAuto)
+            return StyleAutoColor::autoColor();
+        return StyleAutoColor(m_caretColor);
+    }
+    StyleColor visitedLinkTextStrokeColor() const
+    {
+        return m_visitedLinkTextStrokeColorIsCurrentColor
+            ? StyleColor::currentColor()
+            : StyleColor(m_visitedLinkTextStrokeColor);
+    }
+    StyleColor visitedLinkTextFillColor() const
+    {
+        return m_visitedLinkTextFillColorIsCurrentColor
+            ? StyleColor::currentColor()
+            : StyleColor(m_visitedLinkTextFillColor);
+    }
+    StyleColor visitedLinkTextEmphasisColor() const
+    {
+        return m_visitedLinkTextEmphasisColorIsCurrentColor
+            ? StyleColor::currentColor()
+            : StyleColor(m_visitedLinkTextEmphasisColor);
+    }
+    StyleAutoColor visitedLinkCaretColor() const
+    {
+        if (m_visitedLinkCaretColorIsCurrentColor)
+            return StyleAutoColor::currentColor();
+        if (m_visitedLinkCaretColorIsAuto)
+            return StyleAutoColor::autoColor();
+        return StyleAutoColor(m_visitedLinkCaretColor);
+    }
 
-    void setTextStrokeColor(const StyleColor& color) { m_textStrokeColor = color.resolve(Color()); m_textStrokeColorIsCurrentColor = color.isCurrentColor(); }
-    void setTextFillColor(const StyleColor& color) { m_textFillColor = color.resolve(Color()); m_textFillColorIsCurrentColor = color.isCurrentColor(); }
-    void setTextEmphasisColor(const StyleColor& color) { m_textEmphasisColor = color.resolve(Color()); m_textEmphasisColorIsCurrentColor = color.isCurrentColor(); }
-    void setVisitedLinkTextStrokeColor(const StyleColor& color) { m_visitedLinkTextStrokeColor = color.resolve(Color()); m_visitedLinkTextStrokeColorIsCurrentColor = color.isCurrentColor(); }
-    void setVisitedLinkTextFillColor(const StyleColor& color) { m_visitedLinkTextFillColor = color.resolve(Color()); m_visitedLinkTextFillColorIsCurrentColor = color.isCurrentColor(); }
-    void setVisitedLinkTextEmphasisColor(const StyleColor& color) { m_visitedLinkTextEmphasisColor = color.resolve(Color()); m_visitedLinkTextEmphasisColorIsCurrentColor = color.isCurrentColor(); }
+    void setTextStrokeColor(const StyleColor& color)
+    {
+        m_textStrokeColor = color.resolve(Color());
+        m_textStrokeColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setTextFillColor(const StyleColor& color)
+    {
+        m_textFillColor = color.resolve(Color());
+        m_textFillColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setTextEmphasisColor(const StyleColor& color)
+    {
+        m_textEmphasisColor = color.resolve(Color());
+        m_textEmphasisColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setCaretColor(const StyleAutoColor& color)
+    {
+        m_caretColor = color.resolve(Color());
+        m_caretColorIsCurrentColor = color.isCurrentColor();
+        m_caretColorIsAuto = color.isAutoColor();
+    }
+    void setVisitedLinkTextStrokeColor(const StyleColor& color)
+    {
+        m_visitedLinkTextStrokeColor = color.resolve(Color());
+        m_visitedLinkTextStrokeColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setVisitedLinkTextFillColor(const StyleColor& color)
+    {
+        m_visitedLinkTextFillColor = color.resolve(Color());
+        m_visitedLinkTextFillColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setVisitedLinkTextEmphasisColor(const StyleColor& color)
+    {
+        m_visitedLinkTextEmphasisColor = color.resolve(Color());
+        m_visitedLinkTextEmphasisColorIsCurrentColor = color.isCurrentColor();
+    }
+    void setVisitedLinkCaretColor(const StyleAutoColor& color)
+    {
+        m_visitedLinkCaretColor = color.resolve(Color());
+        m_visitedLinkCaretColorIsCurrentColor = color.isCurrentColor();
+        m_visitedLinkCaretColorIsAuto = color.isAutoColor();
+    }
 
     Color m_textStrokeColor;
     float textStrokeWidth;
     Color m_textFillColor;
     Color m_textEmphasisColor;
+    Color m_caretColor;
 
     Color m_visitedLinkTextStrokeColor;
     Color m_visitedLinkTextFillColor;
     Color m_visitedLinkTextEmphasisColor;
+    Color m_visitedLinkCaretColor;
 
-    RefPtr<ShadowList> textShadow; // Our text shadow information for shadowed text drawing.
-    AtomicString highlight; // Apple-specific extension for custom highlight rendering.
+    RefPtr<ShadowList>
+        textShadow; // Our text shadow information for shadowed text drawing.
+    AtomicString
+        highlight; // Apple-specific extension for custom highlight rendering.
 
-    RefPtr<CursorList> cursorData;
+    Persistent<CursorList> cursorData;
+
     Length indent;
     float m_effectiveZoom;
 
     // Paged media properties.
     short widows;
     short orphans;
-    unsigned m_hasAutoOrphans : 1;
 
     unsigned m_textStrokeColorIsCurrentColor : 1;
     unsigned m_textFillColorIsCurrentColor : 1;
     unsigned m_textEmphasisColorIsCurrentColor : 1;
+    unsigned m_caretColorIsCurrentColor : 1;
+    unsigned m_caretColorIsAuto : 1;
     unsigned m_visitedLinkTextStrokeColorIsCurrentColor : 1;
     unsigned m_visitedLinkTextFillColorIsCurrentColor : 1;
     unsigned m_visitedLinkTextEmphasisColorIsCurrentColor : 1;
+    unsigned m_visitedLinkCaretColorIsCurrentColor : 1;
+    unsigned m_visitedLinkCaretColorIsAuto : 1;
 
     unsigned textSecurity : 2; // ETextSecurity
     unsigned userModify : 2; // EUserModify (editing)
@@ -123,13 +222,13 @@ public:
     unsigned m_textAlignLast : 3; // TextAlignLast
     unsigned m_textJustify : 2; // TextJustify
     unsigned m_textOrientation : 2; // TextOrientation
-    unsigned m_textCombine : 1; // CSS3 text-combine properties
+    unsigned m_textCombine : 1; // CSS3 text-combine-upright properties
     unsigned m_textIndentLine : 1; // TextIndentEachLine
     unsigned m_textIndentType : 1; // TextIndentHanging
-    unsigned m_lineBoxContain: 7; // LineBoxContain
     // CSS Image Values Level 3
     unsigned m_imageRendering : 3; // EImageRendering
     unsigned m_textUnderlinePosition : 1; // TextUnderlinePosition
+    unsigned m_textDecorationSkip : 3; // TextDecorationSkip
     unsigned m_rubyPosition : 1; // RubyPosition
 
     // Though will-change is not itself an inherited property, the intent
@@ -138,12 +237,16 @@ public:
 
     unsigned m_selfOrAncestorHasDirAutoAttribute : 1;
 
+    unsigned m_respectImageOrientation : 1;
+
+    unsigned m_snapHeightPosition : 7;
+
     AtomicString hyphenationString;
     short hyphenationLimitBefore;
     short hyphenationLimitAfter;
     short hyphenationLimitLines;
 
-    AtomicString locale;
+    uint8_t m_snapHeightUnit;
 
     AtomicString textEmphasisCustomMark;
     RefPtr<QuotesData> quotes;
@@ -153,7 +256,8 @@ public:
     RefPtr<AppliedTextDecorationList> appliedTextDecorations;
     TabSize m_tabSize;
 
-	RefPtr<StyleVariableData> variables;
+    RefPtr<StyleInheritedVariables> variables;
+    TextSizeAdjust m_textSizeAdjust;
 
 private:
     StyleRareInheritedData();

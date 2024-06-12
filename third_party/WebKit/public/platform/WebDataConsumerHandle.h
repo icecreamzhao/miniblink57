@@ -5,11 +5,8 @@
 #ifndef WebDataConsumerHandle_h
 #define WebDataConsumerHandle_h
 
+#include <memory>
 #include <stddef.h>
-
-#if INSIDE_BLINK
-#include "wtf/PassOwnPtr.h"
-#endif
 
 #include "public/platform/WebCommon.h"
 
@@ -42,7 +39,7 @@ public:
     };
 
     // Client gets notification from the pipe.
-    class Client {
+    class BLINK_PLATFORM_EXPORT Client {
     public:
         virtual ~Client() { }
         // The associated handle gets readable. This function will be called
@@ -64,7 +61,7 @@ public:
     // destruction will not affect the reader functionality.
     // Reading functions may success (i.e. return Ok) or fail (otherwise), and
     // the behavior which is not specified is unspecified.
-    class Reader {
+    class BLINK_PLATFORM_EXPORT Reader {
     public:
         // Destructing a reader means it is released and a user can get another
         // Reader by calling |obtainReader| on any thread again.
@@ -76,11 +73,8 @@ public:
         // Returns Done when it reaches to the end of the data.
         // Returns ShouldWait when the handle does not have data to read but
         // it is not closed or errored.
-        virtual Result read(void* data, size_t /* size */, Flags, size_t* readSize)
-        {
-            BLINK_ASSERT_NOT_REACHED();
-            return UnexpectedError;
-        }
+        // The default implementation uses beginRead and endRead.
+        virtual Result read(void* data, size_t /* size */, Flags, size_t* readSize);
 
         // Begins a two-phase read. On success, the function stores a buffer
         // that contains the read data of length |*available| into |*buffer|.
@@ -89,19 +83,11 @@ public:
         // it is not closed or errored.
         // On fail, you don't have to (and should not) call endRead, because the
         // read session implicitly ends in that case.
-        virtual Result beginRead(const void** buffer, Flags, size_t* available)
-        {
-            BLINK_ASSERT_NOT_REACHED();
-            return UnexpectedError;
-        }
+        virtual Result beginRead(const void** buffer, Flags, size_t* available) = 0;
 
         // Ends a two-phase read.
         // |readSize| indicates the actual read size.
-        virtual Result endRead(size_t readSize)
-        {
-            BLINK_ASSERT_NOT_REACHED();
-            return UnexpectedError;
-        }
+        virtual Result endRead(size_t readSize) = 0;
     };
 
     WebDataConsumerHandle();
@@ -114,20 +100,10 @@ public:
     // if |client| is not null.
     // If |client| is not null and the handle is not waiting, client
     // notification is called asynchronously.
-#if INSIDE_BLINK
-    PassOwnPtr<Reader> obtainReader(Client*);
-#endif
+    virtual std::unique_ptr<Reader> obtainReader(Client*) = 0;
 
     // Returns a string literal (e.g. class name) for debugging only.
-    virtual const char* debugName() const { return "WebDataConsumerHandle"; }
-
-private:
-    // The caller takes ownership of the returned object.
-    virtual Reader* obtainReaderInternal(Client* client)
-    {
-        BLINK_ASSERT_NOT_REACHED();
-        return nullptr;
-    }
+    virtual const char* debugName() const = 0;
 };
 
 } // namespace blink

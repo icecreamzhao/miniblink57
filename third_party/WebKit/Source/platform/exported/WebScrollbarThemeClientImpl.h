@@ -29,17 +29,21 @@
 #include "platform/PlatformExport.h"
 #include "platform/scroll/ScrollbarThemeClient.h"
 #include "public/platform/WebScrollbar.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 // Adapts a WebScrollbar to the ScrollbarThemeClient interface
-class PLATFORM_EXPORT WebScrollbarThemeClientImpl : public ScrollbarThemeClient {
+class PLATFORM_EXPORT WebScrollbarThemeClientImpl
+    : public ScrollbarThemeClient {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(WebScrollbarThemeClientImpl);
+
 public:
     // Caller must retain ownership of this pointer and ensure that its lifetime
     // exceeds this instance.
-    WebScrollbarThemeClientImpl(WebScrollbar*);
+    WebScrollbarThemeClientImpl(WebScrollbar&);
     ~WebScrollbarThemeClientImpl() override;
 
     // Implement ScrollbarThemeClient interface
@@ -55,10 +59,10 @@ public:
     IntRect frameRect() const override;
     void invalidate() override;
     void invalidateRect(const IntRect&) override;
-    ScrollbarOverlayStyle scrollbarOverlayStyle() const override;
+    ScrollbarOverlayColorTheme getScrollbarOverlayColorTheme() const override;
     void getTickmarks(Vector<IntRect>&) const override;
     bool isScrollableAreaActive() const override;
-    IntPoint convertFromContainingWindow(const IntPoint&) override;
+    IntPoint convertFromRootFrame(const IntPoint&) const override;
     bool isCustomScrollbar() const override;
     ScrollbarOrientation orientation() const override;
     bool isLeftSideVerticalScrollbar() const override;
@@ -71,18 +75,15 @@ public:
     ScrollbarPart pressedPart() const override;
     ScrollbarPart hoveredPart() const override;
     void styleChanged() override;
+    void setScrollbarsHidden(bool) override;
     bool enabled() const override;
     void setEnabled(bool) override;
     bool isOverlayScrollbar() const override;
-    bool isAlphaLocked() const override;
-    void setIsAlphaLocked(bool) override;
     float elasticOverscroll() const override;
     void setElasticOverscroll(float) override;
-    DisplayItemClient displayItemClient() const override;
-    String debugName() const override;
 
 private:
-    WebScrollbar* m_scrollbar;
+    WebScrollbar& m_scrollbar;
 };
 
 } // namespace blink

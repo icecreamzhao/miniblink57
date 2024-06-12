@@ -118,6 +118,7 @@ function loadApplicationPackage(packagePath) {
             Module._resolveFilename(packagePath, module, true);
         } catch (e) {
             console.log(`default_app/main.js: Unable to find Electron app at ${packagePath}\n\n${e.message}`);
+            process.exit(1);
             return;
         }
 

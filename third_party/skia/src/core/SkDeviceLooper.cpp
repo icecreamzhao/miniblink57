@@ -8,7 +8,7 @@
 #include "SkDeviceLooper.h"
 
 SkDeviceLooper::SkDeviceLooper(const SkPixmap& base, const SkRasterClip& rc, const SkIRect& bounds,
-                               bool aa)
+    bool aa)
     : fBaseDst(base)
     , fBaseRC(rc)
     , fSubsetRC(rc.isForceConservativeRects())
@@ -16,8 +16,8 @@ SkDeviceLooper::SkDeviceLooper(const SkPixmap& base, const SkRasterClip& rc, con
 {
     // sentinels that next() has not yet been called, and so our mapper functions
     // should not be called either.
-    fCurrDst = NULL;
-    fCurrRC = NULL;
+    fCurrDst = nullptr;
+    fCurrRC = nullptr;
 
     if (!rc.isEmpty()) {
         // clip must be contained by the bitmap
@@ -32,24 +32,26 @@ SkDeviceLooper::SkDeviceLooper(const SkPixmap& base, const SkRasterClip& rc, con
         // back up by 1 DX, so that next() will put us in a correct starting
         // position.
         fCurrOffset.set(fClippedBounds.left() - fDelta,
-                        fClippedBounds.top());
+            fClippedBounds.top());
         fState = kComplex_State;
     }
 }
 
-SkDeviceLooper::~SkDeviceLooper() {}
+SkDeviceLooper::~SkDeviceLooper() { }
 
-void SkDeviceLooper::mapRect(SkRect* dst, const SkRect& src) const {
+void SkDeviceLooper::mapRect(SkRect* dst, const SkRect& src) const
+{
     SkASSERT(kDone_State != fState);
     SkASSERT(fCurrDst);
     SkASSERT(fCurrRC);
 
     *dst = src;
     dst->offset(SkIntToScalar(-fCurrOffset.fX),
-                SkIntToScalar(-fCurrOffset.fY));
+        SkIntToScalar(-fCurrOffset.fY));
 }
 
-void SkDeviceLooper::mapMatrix(SkMatrix* dst, const SkMatrix& src) const {
+void SkDeviceLooper::mapMatrix(SkMatrix* dst, const SkMatrix& src) const
+{
     SkASSERT(kDone_State != fState);
     SkASSERT(fCurrDst);
     SkASSERT(fCurrRC);
@@ -58,11 +60,12 @@ void SkDeviceLooper::mapMatrix(SkMatrix* dst, const SkMatrix& src) const {
     dst->postTranslate(SkIntToScalar(-fCurrOffset.fX), SkIntToScalar(-fCurrOffset.fY));
 }
 
-bool SkDeviceLooper::computeCurrBitmapAndClip() {
+bool SkDeviceLooper::computeCurrBitmapAndClip()
+{
     SkASSERT(kComplex_State == fState);
 
     SkIRect r = SkIRect::MakeXYWH(fCurrOffset.x(), fCurrOffset.y(),
-                                  fDelta, fDelta);
+        fDelta, fDelta);
     if (!fBaseDst.extractSubset(&fSubsetDst, r)) {
         fSubsetRC.setEmpty();
     } else {
@@ -75,7 +78,8 @@ bool SkDeviceLooper::computeCurrBitmapAndClip() {
     return !fCurrRC->isEmpty();
 }
 
-static bool next_tile(const SkIRect& boundary, int delta, SkIPoint* offset) {
+static bool next_tile(const SkIRect& boundary, int delta, SkIPoint* offset)
+{
     // can we move to the right?
     if (offset->x() + delta < boundary.right()) {
         offset->fX += delta;
@@ -93,34 +97,35 @@ static bool next_tile(const SkIRect& boundary, int delta, SkIPoint* offset) {
     return false;
 }
 
-bool SkDeviceLooper::next() {
+bool SkDeviceLooper::next()
+{
     switch (fState) {
-        case kDone_State:
-            // in theory, we should not get called here, since we must have
-            // previously returned false, but we check anyway.
-            break;
+    case kDone_State:
+        // in theory, we should not get called here, since we must have
+        // previously returned false, but we check anyway.
+        break;
 
-        case kSimple_State:
-            // first time for simple
-            if (NULL == fCurrDst) {
-                fCurrDst = &fBaseDst;
-                fCurrRC = &fBaseRC;
-                fCurrOffset.set(0, 0);
+    case kSimple_State:
+        // first time for simple
+        if (nullptr == fCurrDst) {
+            fCurrDst = &fBaseDst;
+            fCurrRC = &fBaseRC;
+            fCurrOffset.set(0, 0);
+            return true;
+        }
+        // 2nd time for simple, we are done
+        break;
+
+    case kComplex_State:
+        // need to propogate fCurrOffset through clippedbounds
+        // left to right, until we wrap around and move down
+
+        while (next_tile(fClippedBounds, fDelta, &fCurrOffset)) {
+            if (this->computeCurrBitmapAndClip()) {
                 return true;
             }
-            // 2nd time for simple, we are done
-            break;
-
-        case kComplex_State:
-            // need to propogate fCurrOffset through clippedbounds
-            // left to right, until we wrap around and move down
-
-            while (next_tile(fClippedBounds, fDelta, &fCurrOffset)) {
-                if (this->computeCurrBitmapAndClip()) {
-                    return true;
-                }
-            }
-            break;
+        }
+        break;
     }
     fState = kDone_State;
     return false;

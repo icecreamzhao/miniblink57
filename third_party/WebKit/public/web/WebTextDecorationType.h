@@ -34,8 +34,8 @@
 namespace blink {
 
 enum WebTextDecorationType {
-    WebTextDecorationTypeSpelling            = 1 << 1,
-    WebTextDecorationTypeGrammar             = 1 << 2,
+    WebTextDecorationTypeSpelling = 1 << 1,
+    WebTextDecorationTypeGrammar = 1 << 2,
     WebTextDecorationTypeInvisibleSpellcheck = 1 << 3,
 };
 

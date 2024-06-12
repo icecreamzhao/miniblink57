@@ -19,24 +19,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/LayoutSVGResourcePattern.h"
 
-#include "core/dom/ElementTraversal.h"
 #include "core/layout/svg/SVGLayoutSupport.h"
+#include "core/layout/svg/SVGResources.h"
 #include "core/paint/SVGPaintContext.h"
 #include "core/paint/TransformRecorder.h"
 #include "core/svg/SVGFitToViewBox.h"
 #include "core/svg/SVGPatternElement.h"
 #include "platform/graphics/GraphicsContext.h"
-#include "platform/graphics/paint/DisplayItemList.h"
+#include "platform/graphics/paint/PaintController.h"
 #include "platform/graphics/paint/SkPictureBuilder.h"
 #include "third_party/skia/include/core/SkPicture.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 struct PatternData {
-    WTF_MAKE_FAST_ALLOCATED(PatternData);
+    USING_FAST_MALLOC(PatternData);
+
 public:
     RefPtr<Pattern> pattern;
     AffineTransform transform;
@@ -45,40 +47,46 @@ public:
 LayoutSVGResourcePattern::LayoutSVGResourcePattern(SVGPatternElement* node)
     : LayoutSVGResourcePaintServer(node)
     , m_shouldCollectPatternAttributes(true)
-#if ENABLE(OILPAN)
     , m_attributesWrapper(PatternAttributesWrapper::create())
-#endif
 {
 }
 
-void LayoutSVGResourcePattern::removeAllClientsFromCache(bool markForInvalidation)
+void LayoutSVGResourcePattern::removeAllClientsFromCache(
+    bool markForInvalidation)
 {
     m_patternMap.clear();
     m_shouldCollectPatternAttributes = true;
-    markAllClientsForInvalidation(markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
+    markAllClientsForInvalidation(markForInvalidation ? PaintInvalidation
+                                                      : ParentOnlyInvalidation);
 }
 
-void LayoutSVGResourcePattern::removeClientFromCache(LayoutObject* client, bool markForInvalidation)
+void LayoutSVGResourcePattern::removeClientFromCache(LayoutObject* client,
+    bool markForInvalidation)
 {
     ASSERT(client);
     m_patternMap.remove(client);
-    markClientForInvalidation(client, markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
+    markClientForInvalidation(
+        client, markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
 }
 
-PatternData* LayoutSVGResourcePattern::patternForLayoutObject(const LayoutObject& object)
+PatternData* LayoutSVGResourcePattern::patternForLayoutObject(
+    const LayoutObject& object)
 {
     ASSERT(!m_shouldCollectPatternAttributes);
 
-    // FIXME: the double hash lookup is needed to guard against paint-time invalidation
-    // (painting animated images may trigger layout invals which delete our map entry).
-    // Hopefully that will be addressed at some point, and then we can optimize the lookup.
+    // FIXME: the double hash lookup is needed to guard against paint-time
+    // invalidation (painting animated images may trigger layout invals which
+    // delete our map entry). Hopefully that will be addressed at some point, and
+    // then we can optimize the lookup.
     if (PatternData* currentData = m_patternMap.get(&object))
         return currentData;
 
-    return m_patternMap.set(&object, buildPatternData(object)).storedValue->value.get();
+    return m_patternMap.set(&object, buildPatternData(object))
+        .storedValue->value.get();
 }
 
-PassOwnPtr<PatternData> LayoutSVGResourcePattern::buildPatternData(const LayoutObject& object)
+std::unique_ptr<PatternData> LayoutSVGResourcePattern::buildPatternData(
+    const LayoutObject& object)
 {
     // If we couldn't determine the pattern content element root, stop here.
     const PatternAttributes& attributes = this->attributes();
@@ -92,9 +100,9 @@ PassOwnPtr<PatternData> LayoutSVGResourcePattern::buildPatternData(const LayoutO
     ASSERT(element());
     // Compute tile metrics.
     FloatRect clientBoundingBox = object.objectBoundingBox();
-    FloatRect tileBounds = SVGLengthContext::resolveRectangle(element(),
-        attributes.patternUnits(), clientBoundingBox,
-        *attributes.x(), *attributes.y(), *attributes.width(), *attributes.height());
+    FloatRect tileBounds = SVGLengthContext::resolveRectangle(
+        element(), attributes.patternUnits(), clientBoundingBox, *attributes.x(),
+        *attributes.y(), *attributes.width(), *attributes.height());
     if (tileBounds.isEmpty())
         return nullptr;
 
@@ -102,27 +110,28 @@ PassOwnPtr<PatternData> LayoutSVGResourcePattern::buildPatternData(const LayoutO
     if (attributes.hasViewBox()) {
         if (attributes.viewBox().isEmpty())
             return nullptr;
-        tileTransform = SVGFitToViewBox::viewBoxToViewTransform(attributes.viewBox(),
-            attributes.preserveAspectRatio(), tileBounds.width(), tileBounds.height());
+        tileTransform = SVGFitToViewBox::viewBoxToViewTransform(
+            attributes.viewBox(), attributes.preserveAspectRatio(),
+            tileBounds.width(), tileBounds.height());
     } else {
         // A viewbox overrides patternContentUnits, per spec.
-        if (attributes.patternContentUnits() == SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX)
-            tileTransform.scale(clientBoundingBox.width(), clientBoundingBox.height());
+        if (attributes.patternContentUnits() == SVGUnitTypes::kSvgUnitTypeObjectboundingbox)
+            tileTransform.scale(clientBoundingBox.width(),
+                clientBoundingBox.height());
     }
 
-    OwnPtr<PatternData> patternData = adoptPtr(new PatternData);
+    std::unique_ptr<PatternData> patternData = WTF::wrapUnique(new PatternData);
     patternData->pattern = Pattern::createPicturePattern(asPicture(tileBounds, tileTransform));
 
     // Compute pattern space transformation.
     patternData->transform.translate(tileBounds.x(), tileBounds.y());
-    AffineTransform patternTransform = attributes.patternTransform();
-    if (!patternTransform.isIdentity())
-        patternData->transform = patternTransform * patternData->transform;
+    patternData->transform.preMultiply(attributes.patternTransform());
 
-    return patternData.release();
+    return patternData;
 }
 
-SVGPaintServer LayoutSVGResourcePattern::preparePaintServer(const LayoutObject& object)
+SVGPaintServer LayoutSVGResourcePattern::preparePaintServer(
+    const LayoutObject& object)
 {
     clearInvalidationMask();
 
@@ -133,57 +142,79 @@ SVGPaintServer LayoutSVGResourcePattern::preparePaintServer(const LayoutObject& 
     if (m_shouldCollectPatternAttributes) {
         patternElement->synchronizeAnimatedSVGAttribute(anyQName());
 
-#if ENABLE(OILPAN)
         m_attributesWrapper->set(PatternAttributes());
-#else
-        m_attributes = PatternAttributes();
-#endif
         patternElement->collectPatternAttributes(mutableAttributes());
         m_shouldCollectPatternAttributes = false;
     }
 
-    // Spec: When the geometry of the applicable element has no width or height and objectBoundingBox is specified,
-    // then the given effect (e.g. a gradient or a filter) will be ignored.
+    // Spec: When the geometry of the applicable element has no width or height
+    // and objectBoundingBox is specified, then the given effect (e.g. a gradient
+    // or a filter) will be ignored.
     FloatRect objectBoundingBox = object.objectBoundingBox();
-    if (attributes().patternUnits() == SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX && objectBoundingBox.isEmpty())
+    if (attributes().patternUnits() == SVGUnitTypes::kSvgUnitTypeObjectboundingbox && objectBoundingBox.isEmpty())
         return SVGPaintServer::invalid();
 
     PatternData* patternData = patternForLayoutObject(object);
     if (!patternData || !patternData->pattern)
         return SVGPaintServer::invalid();
 
-    patternData->pattern->setPatternSpaceTransform(patternData->transform);
-
-    return SVGPaintServer(patternData->pattern);
+    return SVGPaintServer(patternData->pattern, patternData->transform);
 }
 
-PassRefPtr<const SkPicture> LayoutSVGResourcePattern::asPicture(const FloatRect& tileBounds,
+const LayoutSVGResourceContainer*
+LayoutSVGResourcePattern::resolveContentElement() const
+{
+    ASSERT(attributes().patternContentElement());
+    LayoutSVGResourceContainer* expectedLayoutObject = toLayoutSVGResourceContainer(
+        attributes().patternContentElement()->layoutObject());
+    // No content inheritance - avoid walking the inheritance chain.
+    if (this == expectedLayoutObject)
+        return this;
+    // Walk the inheritance chain on the LayoutObject-side. If we reach the
+    // expected LayoutObject, all is fine. If we don't, there's a cycle that
+    // the cycle resolver did break, and the resource will be content-less.
+    const LayoutSVGResourceContainer* contentLayoutObject = this;
+    while (SVGResources* resources = SVGResourcesCache::cachedResourcesForLayoutObject(
+               contentLayoutObject)) {
+        LayoutSVGResourceContainer* linkedResource = resources->linkedResource();
+        if (!linkedResource)
+            break;
+        if (linkedResource == expectedLayoutObject)
+            return expectedLayoutObject;
+        contentLayoutObject = linkedResource;
+    }
+    // There was a cycle, just use this resource as the "content resource" even
+    // though it will be empty (have no children).
+    return this;
+}
+
+sk_sp<SkPicture> LayoutSVGResourcePattern::asPicture(
+    const FloatRect& tileBounds,
     const AffineTransform& tileTransform) const
 {
     ASSERT(!m_shouldCollectPatternAttributes);
 
     AffineTransform contentTransform;
-    if (attributes().patternContentUnits() == SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX)
+    if (attributes().patternContentUnits() == SVGUnitTypes::kSvgUnitTypeObjectboundingbox)
         contentTransform = tileTransform;
 
     FloatRect bounds(FloatPoint(), tileBounds.size());
     SkPictureBuilder pictureBuilder(bounds);
 
-    ASSERT(attributes().patternContentElement());
-    LayoutSVGResourceContainer* patternLayoutObject =
-        toLayoutSVGResourceContainer(attributes().patternContentElement()->layoutObject());
-    ASSERT(patternLayoutObject);
-    ASSERT(!patternLayoutObject->needsLayout());
+    const LayoutSVGResourceContainer* patternLayoutObject = resolveContentElement();
+    ASSERT(patternLayoutObject && !patternLayoutObject->needsLayout());
 
     SubtreeContentTransformScope contentTransformScope(contentTransform);
 
     {
-        TransformRecorder transformRecorder(pictureBuilder.context(), *patternLayoutObject, tileTransform);
-        for (LayoutObject* child = patternLayoutObject->firstChild(); child; child = child->nextSibling())
-            SVGPaintContext::paintSubtree(&pictureBuilder.context(), child);
+        TransformRecorder transformRecorder(pictureBuilder.context(),
+            *patternLayoutObject, tileTransform);
+        for (LayoutObject* child = patternLayoutObject->firstChild(); child;
+             child = child->nextSibling())
+            SVGPaintContext::paintSubtree(pictureBuilder.context(), child);
     }
 
     return pictureBuilder.endRecording();
 }
 
-}
+} // namespace blink

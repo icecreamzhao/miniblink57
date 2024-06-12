@@ -25,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/modules/indexeddb/WebIDBKey.h"
 
 #include "modules/indexeddb/IDBKey.h"
@@ -81,12 +80,10 @@ WebIDBKey WebIDBKey::createNull()
     return key;
 }
 
-#if BLINK_WEB_IMPLEMENTATION || !LINK_CORE_MODULES_SEPARATELY
 void WebIDBKey::reset()
 {
     m_private.reset();
 }
-#endif
 
 void WebIDBKey::assign(const WebIDBKey& value)
 {
@@ -100,39 +97,40 @@ static IDBKey* convertFromWebIDBKeyArray(const WebVector<WebIDBKey>& array)
     for (size_t i = 0; i < array.size(); ++i) {
         switch (array[i].keyType()) {
         case WebIDBKeyTypeArray:
-            keys.append(convertFromWebIDBKeyArray(array[i].array()));
+            keys.push_back(convertFromWebIDBKeyArray(array[i].array()));
             break;
         case WebIDBKeyTypeBinary:
-            keys.append(IDBKey::createBinary(array[i].binary()));
+            keys.push_back(IDBKey::createBinary(array[i].binary()));
             break;
         case WebIDBKeyTypeString:
-            keys.append(IDBKey::createString(array[i].string()));
+            keys.push_back(IDBKey::createString(array[i].string()));
             break;
         case WebIDBKeyTypeDate:
-            keys.append(IDBKey::createDate(array[i].date()));
+            keys.push_back(IDBKey::createDate(array[i].date()));
             break;
         case WebIDBKeyTypeNumber:
-            keys.append(IDBKey::createNumber(array[i].number()));
+            keys.push_back(IDBKey::createNumber(array[i].number()));
             break;
         case WebIDBKeyTypeInvalid:
-            keys.append(IDBKey::createInvalid());
+            keys.push_back(IDBKey::createInvalid());
             break;
         case WebIDBKeyTypeNull:
         case WebIDBKeyTypeMin:
-            ASSERT_NOT_REACHED();
+            NOTREACHED();
             break;
         }
     }
     return IDBKey::createArray(keys);
 }
 
-static void convertToWebIDBKeyArray(const IDBKey::KeyArray& array, WebVector<WebIDBKey>& result)
+static void convertToWebIDBKeyArray(const IDBKey::KeyArray& array,
+    WebVector<WebIDBKey>& result)
 {
     WebVector<WebIDBKey> keys(array.size());
     WebVector<WebIDBKey> subkeys;
     for (size_t i = 0; i < array.size(); ++i) {
         IDBKey* key = array[i];
-        switch (key->type()) {
+        switch (key->getType()) {
         case IDBKey::ArrayType:
             convertToWebIDBKeyArray(key->array(), subkeys);
             keys[i] = WebIDBKey::createArray(subkeys);
@@ -153,7 +151,7 @@ static void convertToWebIDBKeyArray(const IDBKey::KeyArray& array, WebVector<Web
             keys[i] = WebIDBKey::createInvalid();
             break;
         case IDBKey::MinType:
-            ASSERT_NOT_REACHED();
+            NOTREACHED();
             break;
         }
     }
@@ -199,7 +197,7 @@ WebIDBKeyType WebIDBKey::keyType() const
 {
     if (!m_private.get())
         return WebIDBKeyTypeNull;
-    return static_cast<WebIDBKeyType>(m_private->type());
+    return static_cast<WebIDBKeyType>(m_private->getType());
 }
 
 bool WebIDBKey::isValid() const

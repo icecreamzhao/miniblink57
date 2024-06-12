@@ -36,20 +36,29 @@
 namespace blink {
 
 class HTMLInputElement;
-class WebElementCollection;
+class WebOptionElement;
 
 // Provides readonly access to some properties of a DOM input element node.
-class WebInputElement : public WebFormControlElement {
+class WebInputElement final : public WebFormControlElement {
 public:
-    WebInputElement() : WebFormControlElement() { }
-    WebInputElement(const WebInputElement& element) : WebFormControlElement(element) { }
+    WebInputElement()
+        : WebFormControlElement()
+    {
+    }
+    WebInputElement(const WebInputElement& element)
+        : WebFormControlElement(element)
+    {
+    }
 
     WebInputElement& operator=(const WebInputElement& element)
     {
         WebFormControlElement::assign(element);
         return *this;
     }
-    void assign(const WebInputElement& element) { WebFormControlElement::assign(element); }
+    void assign(const WebInputElement& element)
+    {
+        WebFormControlElement::assign(element);
+    }
 
     // This returns true for all of textfield-looking types such as text,
     // password, search, email, url, and number.
@@ -61,6 +70,9 @@ public:
     BLINK_EXPORT bool isImageButton() const;
     BLINK_EXPORT bool isRadioButton() const;
     BLINK_EXPORT bool isCheckbox() const;
+    // This has different behavior from 'maxLength' IDL attribute, it returns
+    // defaultMaxLength() when no valid has been set, whereas 'maxLength' IDL
+    // attribute returns -1.
     BLINK_EXPORT int maxLength() const;
     BLINK_EXPORT void setActivatedSubmit(bool);
     BLINK_EXPORT int size() const;
@@ -73,7 +85,8 @@ public:
     BLINK_EXPORT bool isChecked() const;
     BLINK_EXPORT bool isMultiple() const;
 
-    BLINK_EXPORT WebElementCollection dataListOptions() const;
+    // Associated <datalist> options which match to the current INPUT value.
+    BLINK_EXPORT WebVector<WebOptionElement> filteredDataListOptions() const;
 
     // Return the localized value for this input type.
     BLINK_EXPORT WebString localizeValue(const WebString&) const;
@@ -85,11 +98,13 @@ public:
     BLINK_EXPORT void setShouldRevealPassword(bool value);
 
 #if BLINK_IMPLEMENTATION
-    WebInputElement(const PassRefPtrWillBeRawPtr<HTMLInputElement>&);
-    WebInputElement& operator=(const PassRefPtrWillBeRawPtr<HTMLInputElement>&);
-    operator PassRefPtrWillBeRawPtr<HTMLInputElement>() const;
+    WebInputElement(HTMLInputElement*);
+    WebInputElement& operator=(HTMLInputElement*);
+    operator HTMLInputElement*() const;
 #endif
 };
+
+DECLARE_WEB_NODE_TYPE_CASTS(WebInputElement);
 
 // This returns 0 if the specified WebElement is not a WebInputElement.
 BLINK_EXPORT WebInputElement* toWebInputElement(WebElement*);

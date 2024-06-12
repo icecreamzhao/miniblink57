@@ -8,20 +8,21 @@
 #include "Test.h"
 
 SK_CONF_DECLARE(int, c_RTConfTestVariable,
-                "test.utils.rtconf.testVariable", 1,
-                "This is only a test. Do not be alarmed.");
+    "test.utils.rtconf.testVariable", 1,
+    "This is only a test. Do not be alarmed.");
 // TODO(skia-team): more comprehensive unit tests of the SkRTConf
 // system.
-DEF_TEST(RuntimeConfig, reporter) {
+DEF_TEST(RuntimeConfig, reporter)
+{
     REPORTER_ASSERT(reporter, 1 == c_RTConfTestVariable);
 
     SK_CONF_SET("test.utils.rtconf.testVariable", 2);
-#ifdef SK_DEVELOPER
+#ifdef SK_DEBUG
     REPORTER_ASSERT(reporter, 2 == c_RTConfTestVariable);
-#else  // not SK_DEVELOPER
-    // Can not change RTConf variables in Release.
+#else // not SK_DEBUG
+    // Can not change RTConf variables in SK_RELEASE.
     REPORTER_ASSERT(reporter, 1 == c_RTConfTestVariable);
-#endif  // SK_DEVELOPER
+#endif // SK_DEBUG
 
     // This should not give a warning.
     SK_CONF_TRY_SET("test.utils.rtconf.nonexistentVariable", 7);

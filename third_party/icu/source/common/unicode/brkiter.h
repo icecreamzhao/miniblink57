@@ -1,12 +1,12 @@
 #ifndef BRKITER_H
 #define BRKITER_H
 
-#include "unicode/utypes.h"
 #include "unicode/utext.h"
+#include "unicode/utypes.h"
 
 namespace icu {
 
-class  BreakIterator;
+class BreakIterator;
 
 } // namespace icu
 

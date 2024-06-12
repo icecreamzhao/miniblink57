@@ -13,32 +13,41 @@
 
 #include "SkSurface.h"
 
+// This should be safe to include even in no-gpu builds. Include by relative path so it
+// can be found in non-gpu builds.
+#include "../include/gpu/GrContextOptions.h"
+
 #if SK_SUPPORT_GPU
 
 // Ganesh is available.  Yippee!
 
-#  include "GrContext.h"
-#  include "GrContextFactory.h"
+#include "GrContext.h"
+#include "GrContextFactory.h"
 
 namespace DM {
 
 static const bool kGPUDisabled = false;
 
-static inline SkSurface* NewGpuSurface(GrContextFactory* grFactory,
-                                       GrContextFactory::GLContextType type,
-                                       GrGLStandard gpuAPI,
-                                       SkImageInfo info,
-                                       int samples,
-                                       bool useDFText) {
-    uint32_t flags = useDFText ? SkSurfaceProps::kUseDistanceFieldFonts_Flag : 0;
+static inline sk_sp<SkSurface> NewGpuSurface(
+    sk_gpu_test::GrContextFactory* grFactory,
+    sk_gpu_test::GrContextFactory::ContextType type,
+    sk_gpu_test::GrContextFactory::ContextOptions options,
+    SkImageInfo info,
+    int samples,
+    bool useDIText)
+{
+    uint32_t flags = useDIText ? SkSurfaceProps::kUseDeviceIndependentFonts_Flag : 0;
+    if (SkImageInfoIsGammaCorrect(info)) {
+        flags |= SkSurfaceProps::kGammaCorrect_Flag;
+    }
     SkSurfaceProps props(flags, SkSurfaceProps::kLegacyFontHost_InitType);
-    return SkSurface::NewRenderTarget(grFactory->get(type, gpuAPI), SkSurface::kNo_Budgeted,
-                                      info, samples, &props);
+    return SkSurface::MakeRenderTarget(grFactory->get(type, options), SkBudgeted::kNo,
+        info, samples, &props);
 }
 
-}  // namespace DM
+} // namespace DM
 
-#else// !SK_SUPPORT_GPU
+#else // !SK_SUPPORT_GPU
 
 // Ganesh is not available.  Fake it.
 
@@ -51,46 +60,58 @@ static const int kGrGLStandardCnt = 3;
 
 class GrContext {
 public:
-    void dumpCacheStats(SkString*) const {}
-    void dumpGpuStats(SkString*) const {}
+    void dumpCacheStats(SkString*) const { }
+    void dumpGpuStats(SkString*) const { }
 };
 
-struct GrContextOptions {};
-
+namespace sk_gpu_test {
 class GrContextFactory {
 public:
     GrContextFactory() {};
-    explicit GrContextFactory(const GrContextOptions&) {}
+    explicit GrContextFactory(const GrContextOptions&) { }
 
-    typedef int GLContextType;
+    typedef int ContextType;
 
-    static const GLContextType kANGLE_GLContextType  = 0,
-                               kDebug_GLContextType  = 0,
-                               kMESA_GLContextType   = 0,
-                               kNVPR_GLContextType   = 0,
-                               kNative_GLContextType = 0,
-                               kNull_GLContextType   = 0;
-    static const int kGLContextTypeCnt = 1;
-    void destroyContexts() {}
+    static const ContextType kANGLE_ContextType = 0,
+                             kANGLE_GL_ContextType = 0,
+                             kCommandBuffer_ContextType = 0,
+                             kDebugGL_ContextType = 0,
+                             kMESA_ContextType = 0,
+                             kNVPR_ContextType = 0,
+                             kNativeGL_ContextType = 0,
+                             kGL_ContextType = 0,
+                             kGLES_ContextType = 0,
+                             kNullGL_ContextType = 0,
+                             kVulkan_ContextType = 0;
+    static const int kContextTypeCnt = 1;
+    enum ContextOptions {
+        kNone_ContextOptions = 0,
+        kEnableNVPR_ContextOptions = 0x1,
+    };
+    void destroyContexts() { }
 
-    void abandonContexts() {}
+    void abandonContexts() { }
+
+    void releaseResourcesAndAbandonContexts() { }
 };
+} // namespace sk_gpu_test
 
 namespace DM {
 
 static const bool kGPUDisabled = true;
 
-static inline SkSurface* NewGpuSurface(GrContextFactory*,
-                                       GrContextFactory::GLContextType,
-                                       GrGLStandard,
-                                       SkImageInfo,
-                                       int,
-                                       bool) {
-    return NULL;
+static inline SkSurface* NewGpuSurface(sk_gpu_test::GrContextFactory*,
+    sk_gpu_test::GrContextFactory::ContextType,
+    sk_gpu_test::GrContextFactory::ContextOptions,
+    SkImageInfo,
+    int,
+    bool)
+{
+    return nullptr;
 }
 
-}  // namespace DM
+} // namespace DM
 
-#endif//SK_SUPPORT_GPU
+#endif //SK_SUPPORT_GPU
 
-#endif//DMGpuSupport_DEFINED
+#endif //DMGpuSupport_DEFINED

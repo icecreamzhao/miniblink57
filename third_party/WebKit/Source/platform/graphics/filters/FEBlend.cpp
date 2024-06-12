@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FEBlend.h"
 
 #include "SkXfermodeImageFilter.h"
@@ -38,9 +37,9 @@ FEBlend::FEBlend(Filter* filter, WebBlendMode mode)
 {
 }
 
-PassRefPtrWillBeRawPtr<FEBlend> FEBlend::create(Filter* filter, WebBlendMode mode)
+FEBlend* FEBlend::create(Filter* filter, WebBlendMode mode)
 {
-    return adoptRefWillBeNoop(new FEBlend(filter, mode));
+    return new FEBlend(filter, mode);
 }
 
 WebBlendMode FEBlend::blendMode() const
@@ -56,13 +55,16 @@ bool FEBlend::setBlendMode(WebBlendMode mode)
     return true;
 }
 
-PassRefPtr<SkImageFilter> FEBlend::createImageFilter(SkiaImageFilterBuilder* builder)
+sk_sp<SkImageFilter> FEBlend::createImageFilter()
 {
-    RefPtr<SkImageFilter> foreground(builder->build(inputEffect(0), operatingColorSpace()));
-    RefPtr<SkImageFilter> background(builder->build(inputEffect(1), operatingColorSpace()));
-    RefPtr<SkXfermode> mode(adoptRef(SkXfermode::Create(WebCoreCompositeToSkiaComposite(CompositeSourceOver, m_mode))));
-    SkImageFilter::CropRect cropRect = getCropRect(builder->cropOffset());
-    return adoptRef(SkXfermodeImageFilter::Create(mode.get(), background.get(), foreground.get(), &cropRect));
+    sk_sp<SkImageFilter> foreground(
+        SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+    sk_sp<SkImageFilter> background(
+        SkiaImageFilterBuilder::build(inputEffect(1), operatingColorSpace()));
+    SkBlendMode mode = WebCoreCompositeToSkiaComposite(CompositeSourceOver, m_mode);
+    SkImageFilter::CropRect cropRect = getCropRect();
+    return SkXfermodeImageFilter::Make(mode, std::move(background),
+        std::move(foreground), &cropRect);
 }
 
 TextStream& FEBlend::externalRepresentation(TextStream& ts, int indent) const
@@ -70,7 +72,8 @@ TextStream& FEBlend::externalRepresentation(TextStream& ts, int indent) const
     writeIndent(ts, indent);
     ts << "[feBlend";
     FilterEffect::externalRepresentation(ts);
-    ts << " mode=\"" << (m_mode == WebBlendModeNormal ? "normal" : compositeOperatorName(CompositeSourceOver, m_mode)) << "\"]\n";
+    ts << " mode=\"" << (m_mode == WebBlendModeNormal ? "normal" : compositeOperatorName(CompositeSourceOver, m_mode))
+       << "\"]\n";
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     inputEffect(1)->externalRepresentation(ts, indent + 1);
     return ts;

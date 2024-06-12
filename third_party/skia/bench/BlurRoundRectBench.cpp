@@ -24,39 +24,40 @@
 class BlurRoundRectBench : public Benchmark {
 public:
     BlurRoundRectBench(int width, int height, int cornerRadius)
-        : fName("blurroundrect") {
+        : fName("blurroundrect")
+    {
         fName.appendf("_WH[%ix%i]_cr[%i]", width, height, cornerRadius);
         SkRect r = SkRect::MakeWH(SkIntToScalar(width), SkIntToScalar(height));
         fRRect.setRectXY(r, SkIntToScalar(cornerRadius), SkIntToScalar(cornerRadius));
     }
 
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    SkIPoint onGetSize() override {
+    SkIPoint onGetSize() override
+    {
         return SkIPoint::Make(SkScalarCeilToInt(fRRect.rect().width()),
-                              SkScalarCeilToInt(fRRect.rect().height()));
+            SkScalarCeilToInt(fRRect.rect().height()));
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkLayerDrawLooper::Builder looperBuilder;
         {
             SkLayerDrawLooper::LayerInfo info;
             info.fPaintBits = SkLayerDrawLooper::kMaskFilter_Bit
-                              | SkLayerDrawLooper::kColorFilter_Bit;
+                | SkLayerDrawLooper::kColorFilter_Bit;
             info.fColorMode = SkXfermode::kSrc_Mode;
             info.fOffset = SkPoint::Make(SkIntToScalar(-1), SkIntToScalar(0));
             info.fPostTranslate = false;
             SkPaint* paint = looperBuilder.addLayerOnTop(info);
-            SkMaskFilter* maskFilter = SkBlurMaskFilter::Create(
-                    kNormal_SkBlurStyle,
-                    SkBlurMask::ConvertRadiusToSigma(SK_ScalarHalf),
-                    SkBlurMaskFilter::kHighQuality_BlurFlag);
-            paint->setMaskFilter(maskFilter)->unref();
-            SkColorFilter* colorFilter = SkColorFilter::CreateModeFilter(SK_ColorLTGRAY,
-                    SkXfermode::kSrcIn_Mode);
-            paint->setColorFilter(colorFilter)->unref();
+            paint->setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
+                SkBlurMask::ConvertRadiusToSigma(0.5),
+                SkBlurMaskFilter::kHighQuality_BlurFlag));
+            paint->setColorFilter(SkColorFilter::MakeModeFilter(SK_ColorLTGRAY,
+                SkXfermode::kSrcIn_Mode));
             paint->setColor(SK_ColorGRAY);
         }
         {
@@ -67,7 +68,7 @@ public:
         dullPaint.setAntiAlias(true);
 
         SkPaint loopedPaint;
-        loopedPaint.setLooper(looperBuilder.detachLooper())->unref();
+        loopedPaint.setLooper(looperBuilder.detach());
         loopedPaint.setAntiAlias(true);
         loopedPaint.setColor(SK_ColorCYAN);
 
@@ -78,10 +79,10 @@ public:
     }
 
 private:
-    SkString    fName;
-    SkRRect     fRRect;
+    SkString fName;
+    SkRRect fRRect;
 
-    typedef     Benchmark INHERITED;
+    typedef Benchmark INHERITED;
 };
 
 // Create one with dimensions/rounded corners based on the skp

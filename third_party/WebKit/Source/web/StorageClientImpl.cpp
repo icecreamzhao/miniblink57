@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/StorageClientImpl.h"
 
 #include "modules/storage/StorageNamespace.h"
@@ -32,6 +31,8 @@
 #include "public/web/WebViewClient.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebViewImpl.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -40,12 +41,25 @@ StorageClientImpl::StorageClientImpl(WebViewImpl* webView)
 {
 }
 
-PassOwnPtr<StorageNamespace> StorageClientImpl::createSessionStorageNamespace()
+std::unique_ptr<StorageNamespace>
+StorageClientImpl::createSessionStorageNamespace()
 {
-    return adoptPtr(new StorageNamespace(adoptPtr(m_webView->client()->createSessionStorageNamespace())));
+    if (!m_webView->client())
+        return nullptr;
+    return WTF::wrapUnique(new StorageNamespace(WTF::wrapUnique(m_webView->client()->createSessionStorageNamespace())));
 }
 
-bool StorageClientImpl::canAccessStorage(LocalFrame* frame, StorageType type) const
+#ifndef MINIBLINK_NO_PAGE_LOCALSTORAGE
+
+std::unique_ptr<StorageNamespace> StorageClientImpl::createLocalStorageNamespace()
+{
+    return wrapUnique(new StorageNamespace(wrapUnique(m_webView->client()->createLocalStorageNamespace())));
+}
+
+#endif
+
+bool StorageClientImpl::canAccessStorage(LocalFrame* frame,
+    StorageType type) const
 {
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     return !webFrame->contentSettingsClient() || webFrame->contentSettingsClient()->allowStorage(type == LocalStorage);

@@ -45,9 +45,15 @@ struct WebPluginAction {
     bool enable;
 
     WebPluginAction()
-        : type(Unknown), enable(false) { }
+        : type(Unknown)
+        , enable(false)
+    {
+    }
     WebPluginAction(Type type, bool enable)
-        : type(type), enable(enable) { }
+        : type(type)
+        , enable(enable)
+    {
+    }
 };
 
 } // namespace blink

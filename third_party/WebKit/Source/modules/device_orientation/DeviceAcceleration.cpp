@@ -23,12 +23,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/device_orientation/DeviceAcceleration.h"
 
 namespace blink {
 
-DeviceAcceleration::DeviceAcceleration(DeviceMotionData::Acceleration* acceleration)
+DeviceAcceleration::DeviceAcceleration(
+    DeviceMotionData::Acceleration* acceleration)
     : m_acceleration(acceleration)
 {
 }

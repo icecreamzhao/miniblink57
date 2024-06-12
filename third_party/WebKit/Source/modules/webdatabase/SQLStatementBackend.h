@@ -33,6 +33,7 @@
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
@@ -41,10 +42,13 @@ class SQLErrorData;
 class SQLResultSet;
 class SQLStatement;
 
-class SQLStatementBackend final : public GarbageCollectedFinalized<SQLStatementBackend> {
+class SQLStatementBackend final
+    : public GarbageCollectedFinalized<SQLStatementBackend> {
 public:
     static SQLStatementBackend* create(SQLStatement*,
-        const String& sqlStatement, const Vector<SQLValue>& arguments, int permissions);
+        const String& sqlStatement,
+        const Vector<SQLValue>& arguments,
+        int permissions);
     DECLARE_TRACE();
 
     bool execute(Database*);
@@ -60,7 +64,10 @@ public:
     SQLResultSet* sqlResultSet() const;
 
 private:
-    SQLStatementBackend(SQLStatement*, const String& statement, const Vector<SQLValue>& arguments, int permissions);
+    SQLStatementBackend(SQLStatement*,
+        const String& statement,
+        const Vector<SQLValue>& arguments,
+        int permissions);
 
     void setFailureDueToQuota(Database*);
     void clearFailureDueToQuota();
@@ -71,7 +78,7 @@ private:
     bool m_hasCallback;
     bool m_hasErrorCallback;
 
-    OwnPtr<SQLErrorData> m_error;
+    std::unique_ptr<SQLErrorData> m_error;
     Member<SQLResultSet> m_resultSet;
 
     int m_permissions;

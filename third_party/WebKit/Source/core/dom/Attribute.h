@@ -3,7 +3,8 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Peter Kelly (pmk@post.com)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2012 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #define Attribute_h
 
 #include "core/dom/QualifiedName.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -33,6 +35,8 @@ namespace blink {
 // value. It is distinct from the web-exposed Attr, which also knows of the
 // element to which it attached, if any.
 class Attribute {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     Attribute(const QualifiedName& name, const AtomicString& value)
         : m_name(name)
@@ -41,8 +45,8 @@ public:
     }
 
     // NOTE: The references returned by these functions are only valid for as long
-    // as the Attribute stays in place. For example, calling a function that mutates
-    // an Element's internal attribute storage may invalidate them.
+    // as the Attribute stays in place. For example, calling a function that
+    // mutates an Element's internal attribute storage may invalidate them.
     const AtomicString& value() const { return m_value; }
     const AtomicString& prefix() const { return m_name.prefix(); }
     const AtomicString& localName() const { return m_name.localName(); }
@@ -52,6 +56,7 @@ public:
 
     bool isEmpty() const { return m_value.isEmpty(); }
     bool matches(const QualifiedName&) const;
+    bool matchesCaseInsensitive(const QualifiedName&) const;
 
     void setValue(const AtomicString& value) { m_value = value; }
 
@@ -61,8 +66,8 @@ public:
     void parserSetName(const QualifiedName& name) { m_name = name; }
 
 #if COMPILER(MSVC)
-    // NOTE: This constructor is not actually implemented, it's just defined so MSVC
-    // will let us use a zero-length array of Attributes.
+    // NOTE: This constructor is not actually implemented, it's just defined so
+    // MSVC will let us use a zero-length array of Attributes.
     Attribute();
 #endif
 
@@ -76,6 +81,12 @@ inline bool Attribute::matches(const QualifiedName& qualifiedName) const
     if (qualifiedName.localName() != localName())
         return false;
     return qualifiedName.prefix() == starAtom || qualifiedName.namespaceURI() == namespaceURI();
+}
+
+inline bool Attribute::matchesCaseInsensitive(
+    const QualifiedName& qualifiedName) const
+{
+    return qualifiedName.localNameUpper() == m_name.localNameUpper() && (qualifiedName.prefix() == starAtom || qualifiedName.namespaceURI() == namespaceURI());
 }
 
 } // namespace blink

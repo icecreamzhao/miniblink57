@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 The Android Open Source Project
  *
@@ -9,7 +8,6 @@
 #include "Benchmark.h"
 #include "SkCanvas.h"
 
-
 /**
  * This bench mark tests the use case where the user writes the a canvas
  * and then reads small chunks from it repeatedly. This can cause trouble
@@ -17,14 +15,16 @@
  */
 class ReadPixBench : public Benchmark {
 public:
-    ReadPixBench() {}
+    ReadPixBench() { }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "readpix";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         canvas->clear(SK_ColorBLACK);
 
         SkISize size = canvas->getDeviceSize();
@@ -36,10 +36,10 @@ protected:
 
         paint.setColor(SK_ColorBLUE);
 
-        canvas->drawCircle(SkIntToScalar(size.width()/2),
-                           SkIntToScalar(size.height()/2),
-                           SkIntToScalar(size.width()/2),
-                           paint);
+        canvas->drawCircle(SkIntToScalar(size.width() / 2),
+            SkIntToScalar(size.height() / 2),
+            SkIntToScalar(size.width() / 2),
+            paint);
 
         SkBitmap bitmap;
 
@@ -64,4 +64,4 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new ReadPixBench(); )
+DEF_BENCH(return new ReadPixBench();)

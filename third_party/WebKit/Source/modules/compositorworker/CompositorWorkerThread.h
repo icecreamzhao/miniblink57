@@ -5,38 +5,38 @@
 #ifndef CompositorWorkerThread_h
 #define CompositorWorkerThread_h
 
-#include "core/workers/WorkerThread.h"
 #include "modules/ModulesExport.h"
+#include "modules/compositorworker/AbstractAnimationWorkletThread.h"
+#include <memory>
 
 namespace blink {
 
-class WorkerObjectProxy;
+class InProcessWorkerObjectProxy;
 
-// This class is overridden in unit-tests.
-class MODULES_EXPORT CompositorWorkerThread : public WorkerThread {
+class MODULES_EXPORT CompositorWorkerThread final
+    : public AbstractAnimationWorkletThread {
 public:
-    static PassRefPtr<CompositorWorkerThread> create(PassRefPtr<WorkerLoaderProxy>, WorkerObjectProxy&, double timeOrigin);
+    static std::unique_ptr<CompositorWorkerThread> create(
+        PassRefPtr<WorkerLoaderProxy>,
+        InProcessWorkerObjectProxy&,
+        double timeOrigin);
     ~CompositorWorkerThread() override;
 
-    WorkerObjectProxy& workerObjectProxy() const { return m_workerObjectProxy; }
+    InProcessWorkerObjectProxy& workerObjectProxy() const
+    {
+        return m_workerObjectProxy;
+    }
 
 protected:
-    CompositorWorkerThread(PassRefPtr<WorkerLoaderProxy>, WorkerObjectProxy&, double timeOrigin);
-
-    // WorkerThread:
-    PassRefPtrWillBeRawPtr<WorkerGlobalScope> createWorkerGlobalScope(PassOwnPtr<WorkerThreadStartupData>) override;
-    WebThreadSupportingGC& backingThread() override;
-    void didStartRunLoop() override { }
-    void didStopRunLoop() override { }
-    void initializeBackingThread() override;
-    void shutdownBackingThread() override;
-    v8::Isolate* initializeIsolate() override;
-    void willDestroyIsolate() override;
-    void destroyIsolate() override;
-    void terminateV8Execution() override;
+    WorkerOrWorkletGlobalScope* createWorkerGlobalScope(
+        std::unique_ptr<WorkerThreadStartupData>) override;
 
 private:
-    WorkerObjectProxy& m_workerObjectProxy;
+    CompositorWorkerThread(PassRefPtr<WorkerLoaderProxy>,
+        InProcessWorkerObjectProxy&,
+        double timeOrigin);
+
+    InProcessWorkerObjectProxy& m_workerObjectProxy;
     double m_timeOrigin;
 };
 

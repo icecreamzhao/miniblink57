@@ -7,38 +7,55 @@
 
 #include "platform/graphics/paint/DisplayItem.h"
 #include "platform/transforms/AffineTransform.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-class PLATFORM_EXPORT BeginTransformDisplayItem : public PairedBeginDisplayItem {
+class PLATFORM_EXPORT BeginTransformDisplayItem final
+    : public PairedBeginDisplayItem {
 public:
-    BeginTransformDisplayItem(const DisplayItemClientWrapper& client, const AffineTransform& transform)
-        : PairedBeginDisplayItem(client, BeginTransform)
-        , m_transform(transform) { }
+    BeginTransformDisplayItem(const DisplayItemClient& client,
+        const AffineTransform& transform)
+        : PairedBeginDisplayItem(client, kBeginTransform, sizeof(*this))
+        , m_transform(transform)
+    {
+    }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
+
+    const AffineTransform& transform() const { return m_transform; }
 
 private:
 #ifndef NDEBUG
     void dumpPropertiesAsDebugString(WTF::StringBuilder&) const final;
 #endif
+    bool equals(const DisplayItem& other) const final
+    {
+        return DisplayItem::equals(other) && m_transform == static_cast<const BeginTransformDisplayItem&>(other).m_transform;
+    }
 
     const AffineTransform m_transform;
 };
 
-class PLATFORM_EXPORT EndTransformDisplayItem : public PairedEndDisplayItem {
+class PLATFORM_EXPORT EndTransformDisplayItem final
+    : public PairedEndDisplayItem {
 public:
-    EndTransformDisplayItem(const DisplayItemClientWrapper& client)
-        : PairedEndDisplayItem(client, EndTransform) { }
+    EndTransformDisplayItem(const DisplayItemClient& client)
+        : PairedEndDisplayItem(client, kEndTransform, sizeof(*this))
+    {
+    }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
 
 private:
-#if ENABLE(ASSERT)
-    bool isEndAndPairedWith(DisplayItem::Type otherType) const final { return otherType == BeginTransform; }
+#if DCHECK_IS_ON()
+    bool isEndAndPairedWith(DisplayItem::Type otherType) const final
+    {
+        return otherType == kBeginTransform;
+    }
 #endif
 };
 

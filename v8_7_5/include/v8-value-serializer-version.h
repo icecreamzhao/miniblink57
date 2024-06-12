@@ -19,6 +19,6 @@ namespace v8 {
 
 constexpr uint32_t CurrentValueSerializerFormatVersion() { return 13; }
 
-}  // namespace v8
+} // namespace v8
 
-#endif  // INCLUDE_V8_VALUE_SERIALIZER_VERSION_H_
+#endif // INCLUDE_V8_VALUE_SERIALIZER_VERSION_H_

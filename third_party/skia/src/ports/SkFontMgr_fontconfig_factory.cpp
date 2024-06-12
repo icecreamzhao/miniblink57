@@ -7,7 +7,9 @@
 
 #include "SkFontMgr.h"
 #include "SkFontMgr_fontconfig.h"
+#include "SkTypes.h"
 
-SkFontMgr* SkFontMgr::Factory() {
-    return SkFontMgr_New_FontConfig(NULL);
+SkFontMgr* SkFontMgr::Factory()
+{
+    return SkFontMgr_New_FontConfig(nullptr);
 }

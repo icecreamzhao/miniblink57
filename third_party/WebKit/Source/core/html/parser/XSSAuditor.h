@@ -30,8 +30,9 @@
 #include "platform/network/HTTPParsers.h"
 #include "platform/text/SuffixTree.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/TextEncoding.h"
+#include <memory>
 
 namespace blink {
 
@@ -41,11 +42,15 @@ class XSSInfo;
 class XSSAuditorDelegate;
 
 struct FilterTokenRequest {
-    FilterTokenRequest(HTMLToken& token, HTMLSourceTracker& sourceTracker, bool shouldAllowCDATA)
+    STACK_ALLOCATED();
+    FilterTokenRequest(HTMLToken& token,
+        HTMLSourceTracker& sourceTracker,
+        bool shouldAllowCDATA)
         : token(token)
         , sourceTracker(sourceTracker)
         , shouldAllowCDATA(shouldAllowCDATA)
-    { }
+    {
+    }
 
     HTMLToken& token;
     HTMLSourceTracker& sourceTracker;
@@ -53,17 +58,21 @@ struct FilterTokenRequest {
 };
 
 class XSSAuditor {
+    USING_FAST_MALLOC(XSSAuditor);
     WTF_MAKE_NONCOPYABLE(XSSAuditor);
+
 public:
     XSSAuditor();
 
     void init(Document*, XSSAuditorDelegate*);
     void initForFragment();
 
-    PassOwnPtr<XSSInfo> filterToken(const FilterTokenRequest&);
+    std::unique_ptr<XSSInfo> filterToken(const FilterTokenRequest&);
     bool isSafeToSendToAnotherThread() const;
 
     void setEncoding(const WTF::TextEncoding&);
+
+    bool isEnabled() const { return m_isEnabled; }
 
 private:
     static const size_t kMaximumFragmentLengthTarget = 100;
@@ -82,10 +91,8 @@ private:
         ScriptLikeAttributeTruncation
     };
 
-    enum HrefRestriction {
-        ProhibitSameOriginHref,
-        AllowSameOriginHref
-    };
+    enum HrefRestriction { ProhibitSameOriginHref,
+        AllowSameOriginHref };
 
     bool filterStartToken(const FilterTokenRequest&);
     void filterEndToken(const FilterTokenRequest&);
@@ -94,7 +101,6 @@ private:
     bool filterObjectToken(const FilterTokenRequest&);
     bool filterParamToken(const FilterTokenRequest&);
     bool filterEmbedToken(const FilterTokenRequest&);
-    bool filterAppletToken(const FilterTokenRequest&);
     bool filterFrameToken(const FilterTokenRequest&);
     bool filterMetaToken(const FilterTokenRequest&);
     bool filterBaseToken(const FilterTokenRequest&);
@@ -104,12 +110,18 @@ private:
     bool filterLinkToken(const FilterTokenRequest&);
 
     bool eraseDangerousAttributesIfInjected(const FilterTokenRequest&);
-    bool eraseAttributeIfInjected(const FilterTokenRequest&, const QualifiedName&, const String& replacementValue = String(), TruncationKind = NormalAttributeTruncation, HrefRestriction = ProhibitSameOriginHref);
+    bool eraseAttributeIfInjected(const FilterTokenRequest&,
+        const QualifiedName&,
+        const String& replacementValue = String(),
+        TruncationKind = NormalAttributeTruncation,
+        HrefRestriction = ProhibitSameOriginHref);
 
     String canonicalizedSnippetForTagName(const FilterTokenRequest&);
     String canonicalizedSnippetForJavaScript(const FilterTokenRequest&);
-    String nameFromAttribute(const FilterTokenRequest&, const HTMLToken::Attribute&);
-    String snippetFromAttribute(const FilterTokenRequest&, const HTMLToken::Attribute&);
+    String nameFromAttribute(const FilterTokenRequest&,
+        const HTMLToken::Attribute&);
+    String snippetFromAttribute(const FilterTokenRequest&,
+        const HTMLToken::Attribute&);
     String canonicalize(String, TruncationKind);
 
     bool isContainedInRequest(const String&);
@@ -119,13 +131,12 @@ private:
     bool m_isEnabled;
 
     ReflectedXSSDisposition m_xssProtection;
-    bool m_didSendValidCSPHeader;
     bool m_didSendValidXSSProtectionHeader;
 
     String m_decodedURL;
     String m_decodedHTTPBody;
     String m_httpBodyAsString;
-    OwnPtr<SuffixTree<ASCIICodebook>> m_decodedHTTPBodySuffixTree;
+    std::unique_ptr<SuffixTree<ASCIICodebook>> m_decodedHTTPBodySuffixTree;
 
     State m_state;
     bool m_scriptTagFoundInRequest;
@@ -133,6 +144,6 @@ private:
     WTF::TextEncoding m_encoding;
 };
 
-}
+} // namespace blink
 
 #endif

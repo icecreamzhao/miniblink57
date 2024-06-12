@@ -6,13 +6,12 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimator_DEFINED
 #define SkAnimator_DEFINED
 
-#include "SkScalar.h"
-#include "SkKey.h"
 #include "SkEventSink.h"
+#include "SkKey.h"
+#include "SkScalar.h"
 
 class SkAnimateMaker;
 class SkCanvas;
@@ -204,7 +203,6 @@ public:
         @return true if a mouseDown event handler is enabled.
     */
     bool findClickEvent(SkScalar x, SkScalar y);
-
 
     /** Get the nested animator associated with this element, if any.
         Use this to access a movie's event sink, to send events to movies.
@@ -426,7 +424,8 @@ public:
 
     typedef void* Handler;
     // This guy needs to be exported to java, so don't make it virtual
-    void setHostHandler(Handler handler) {
+    void setHostHandler(Handler handler)
+    {
         this->onSetHostHandler(handler);
     }
 
@@ -436,17 +435,18 @@ public:
     */
     class Timeline {
     public:
-        virtual ~Timeline() {}
+        virtual ~Timeline() { }
 
         /** Returns the current time in milliseconds */
         virtual SkMSec getMSecs() const = 0;
     };
 
     /** Sets a user class to return the current time to the animator.
-        Optional; if not called, the system clock will be used by calling SkTime::GetMSecs instead.
+        Optional; if not called, the system clock will be used by calling
+        SkEvent::GetMSecsSinceStartup instead.
         @param callBack the time function
     */
-    void setTimeline(const Timeline& );
+    void setTimeline(const Timeline&);
 
     static void Init(bool runUnitTests);
     static void Term();
@@ -460,7 +460,8 @@ public:
     SkEventSinkID getHostEventSinkID() const;
 
     // helper
-    void setHostEventSink(SkEventSink* sink) {
+    void setHostEventSink(SkEventSink* sink)
+    {
         this->setHostEventSinkID(sink ? sink->getSinkID() : 0);
     }
 
@@ -478,7 +479,7 @@ protected:
     virtual void onEventPostTime(SkEvent*, SkEventSinkID, SkMSec time);
 
 private:
-// helper functions for setters
+    // helper functions for setters
     bool setArray(SkDisplayable* element, const SkMemberInfo* field, SkTypedArray array);
     bool setArray(const char* elementID, const char* fieldName, SkTypedArray array);
     bool setInt(SkDisplayable* element, const SkMemberInfo* field, int32_t data);

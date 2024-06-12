@@ -9,14 +9,13 @@
 
 namespace blink {
 
-template <Visitor::MarkingMode Mode>
-class MarkingVisitor final : public Visitor, public MarkingVisitorImpl<MarkingVisitor<Mode>> {
+class MarkingVisitor final : public Visitor,
+                             public MarkingVisitorImpl<MarkingVisitor> {
 public:
-    using Impl = MarkingVisitorImpl<MarkingVisitor<Mode>>;
-    friend class MarkingVisitorImpl<MarkingVisitor<Mode>>;
+    using Impl = MarkingVisitorImpl<MarkingVisitor>;
 
-    MarkingVisitor()
-        : Visitor(Mode)
+    MarkingVisitor(ThreadState* state, VisitorMarkingMode mode)
+        : Visitor(state, mode)
     {
     }
 
@@ -35,45 +34,48 @@ public:
         Impl::registerDelayedMarkNoTracing(object);
     }
 
-    void registerWeakMembers(const void* closure, const void* objectPointer, WeakCallback callback) override
+    void registerWeakMembers(const void* closure,
+        const void* objectPointer,
+        WeakCallback callback) override
     {
         Impl::registerWeakMembers(closure, objectPointer, callback);
     }
 
-    virtual void registerWeakTable(const void* closure, EphemeronCallback iterationCallback, EphemeronCallback iterationDoneCallback)
+    virtual void registerWeakTable(const void* closure,
+        EphemeronCallback iterationCallback,
+        EphemeronCallback iterationDoneCallback)
     {
         Impl::registerWeakTable(closure, iterationCallback, iterationDoneCallback);
     }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     virtual bool weakTableRegistered(const void* closure)
     {
         return Impl::weakTableRegistered(closure);
     }
 #endif
 
+    void registerMovingObjectReference(MovableReference* slot) override
+    {
+        Impl::registerMovingObjectReference(slot);
+    }
+
+    void registerMovingObjectCallback(MovableReference backingStore,
+        MovingObjectCallback callback,
+        void* callbackData) override
+    {
+        Impl::registerMovingObjectCallback(backingStore, callback, callbackData);
+    }
+
     bool ensureMarked(const void* objectPointer) override
     {
         return Impl::ensureMarked(objectPointer);
     }
 
-protected:
-    void registerWeakCellWithCallback(void** cell, WeakCallback callback) override
+    void registerWeakCellWithCallback(void** cell,
+        WeakCallback callback) override
     {
         Impl::registerWeakCellWithCallback(cell, callback);
-    }
-
-    inline bool shouldMarkObject(const void* objectPointer)
-    {
-        if (Mode != ThreadLocalMarking)
-            return true;
-
-        BasePage* page = pageFromObject(objectPointer);
-        ASSERT(!page->orphaned());
-        // When doing a thread local GC, the marker checks if
-        // the object resides in another thread's heap. If it
-        // does, the object should not be marked & traced.
-        return page->terminating();
     }
 };
 

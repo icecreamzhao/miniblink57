@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawEmboss.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -22,13 +21,17 @@ const SkMemberInfo SkDrawEmboss::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawEmboss);
 
-SkDrawEmboss::SkDrawEmboss() : fSigma(-1) {
+SkDrawEmboss::SkDrawEmboss()
+    : fSigma(-1)
+{
     fDirection.setCount(3);
 }
 
-SkMaskFilter* SkDrawEmboss::getMaskFilter() {
-    if (fSigma < 0 || fDirection.count() !=3)
-        return NULL;
-    return SkBlurMaskFilter::CreateEmboss(fSigma, fDirection.begin(),
-                                          fAmbient, fSpecular);
+SkMaskFilter* SkDrawEmboss::getMaskFilter()
+{
+    if (fSigma < 0 || fDirection.count() != 3)
+        return nullptr;
+    return SkBlurMaskFilter::MakeEmboss(fSigma, fDirection.begin(),
+        fAmbient, fSpecular)
+        .release();
 }

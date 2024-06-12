@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{63078AA2-0CFB-4D0E-B955-E22D6594DD62}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>audio</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Release/gen;../../third_party/khronos;../../gpu;../../third_party/wtl/include;../../skia/config;../../skia/ext;../../third_party/skia/include/c;../../third_party/skia/include/config;../../third_party/skia/include/core;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/lazy;../../third_party/skia/include/pathops;../../third_party/skia/include/pdf;../../third_party/skia/include/pipe;../../third_party/skia/include/ports;../../third_party/skia/include/utils;../../third_party/skia/include/gpu;../../third_party/skia/src/gpu;../../third_party/skia/src/sksl;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;MEDIA_IMPLEMENTATION;USE_EGL;SK_IGNORE_DW_GRAY_FIX;SK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS;SK_SUPPORT_GPU=1;GR_GL_FUNCTION_TYPE=__stdcall;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="agc_audio_stream.h" />
+    <CustomBuild Include="audio_device_description.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_device_description.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_device_description.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_device_description.h" />
+    <CustomBuild Include="audio_device_name.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_device_name.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_device_name.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_device_name.h" />
+    <CustomBuild Include="audio_device_thread.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_device_thread.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_device_thread.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_device_thread.h" />
+    <CustomBuild Include="audio_features.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_features.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_features.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_features.h" />
+    <None Include="audio_file_writer.h" />
+    <CustomBuild Include="audio_input_controller.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_input_controller.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_input_controller.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_input_controller.h" />
+    <CustomBuild Include="audio_input_device.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_input_device.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_input_device.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_input_device.h" />
+    <CustomBuild Include="audio_input_ipc.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_input_ipc.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_input_ipc.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_input_ipc.h" />
+    <None Include="audio_io.h" />
+    <CustomBuild Include="audio_manager.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_manager.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_manager.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_manager.h" />
+    <CustomBuild Include="audio_manager_base.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_manager_base.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_manager_base.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_manager_base.h" />
+    <CustomBuild Include="audio_output_controller.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_controller.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_controller.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_controller.h" />
+    <CustomBuild Include="audio_output_device.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_device.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_device.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_device.h" />
+    <CustomBuild Include="audio_output_dispatcher.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_dispatcher.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_dispatcher.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_dispatcher.h" />
+    <CustomBuild Include="audio_output_dispatcher_impl.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_dispatcher_impl.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_dispatcher_impl.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_dispatcher_impl.h" />
+    <CustomBuild Include="audio_output_ipc.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_ipc.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_ipc.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_ipc.h" />
+    <CustomBuild Include="audio_output_proxy.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_proxy.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_proxy.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_proxy.h" />
+    <CustomBuild Include="audio_output_resampler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_resampler.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_resampler.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_resampler.h" />
+    <CustomBuild Include="audio_output_stream_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_output_stream_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_output_stream_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_output_stream_sink.h" />
+    <CustomBuild Include="audio_power_monitor.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_power_monitor.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_power_monitor.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_power_monitor.h" />
+    <None Include="audio_source_diverter.h" />
+    <CustomBuild Include="audio_streams_tracker.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_streams_tracker.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_streams_tracker.obj</Outputs>
+    </CustomBuild>
+    <None Include="audio_streams_tracker.h" />
+    <CustomBuild Include="clockless_audio_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/clockless_audio_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/clockless_audio_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="clockless_audio_sink.h" />
+    <CustomBuild Include="fake_audio_input_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/fake_audio_input_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/fake_audio_input_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_input_stream.h" />
+    <CustomBuild Include="fake_audio_log_factory.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/fake_audio_log_factory.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/fake_audio_log_factory.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_log_factory.h" />
+    <CustomBuild Include="fake_audio_manager.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/fake_audio_manager.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/fake_audio_manager.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_manager.h" />
+    <CustomBuild Include="fake_audio_output_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/fake_audio_output_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/fake_audio_output_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_output_stream.h" />
+    <CustomBuild Include="fake_audio_worker.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/fake_audio_worker.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/fake_audio_worker.obj</Outputs>
+    </CustomBuild>
+    <None Include="fake_audio_worker.h" />
+    <CustomBuild Include="null_audio_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/null_audio_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/null_audio_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="null_audio_sink.h" />
+    <CustomBuild Include="sample_rates.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/sample_rates.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/sample_rates.obj</Outputs>
+    </CustomBuild>
+    <None Include="sample_rates.h" />
+    <CustomBuild Include="scoped_task_runner_observer.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/scoped_task_runner_observer.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/scoped_task_runner_observer.obj</Outputs>
+    </CustomBuild>
+    <None Include="scoped_task_runner_observer.h" />
+    <CustomBuild Include="simple_sources.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/simple_sources.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/simple_sources.obj</Outputs>
+    </CustomBuild>
+    <None Include="simple_sources.h" />
+    <CustomBuild Include="sounds/audio_stream_handler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_stream_handler.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_stream_handler.obj</Outputs>
+    </CustomBuild>
+    <None Include="sounds/audio_stream_handler.h" />
+    <CustomBuild Include="sounds/sounds_manager.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/sounds_manager.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/sounds_manager.obj</Outputs>
+    </CustomBuild>
+    <None Include="sounds/sounds_manager.h" />
+    <CustomBuild Include="sounds/wav_audio_handler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/wav_audio_handler.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/wav_audio_handler.obj</Outputs>
+    </CustomBuild>
+    <None Include="sounds/wav_audio_handler.h" />
+    <CustomBuild Include="virtual_audio_input_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/virtual_audio_input_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/virtual_audio_input_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="virtual_audio_input_stream.h" />
+    <CustomBuild Include="virtual_audio_output_stream.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/virtual_audio_output_stream.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/virtual_audio_output_stream.obj</Outputs>
+    </CustomBuild>
+    <None Include="virtual_audio_output_stream.h" />
+    <CustomBuild Include="virtual_audio_sink.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/virtual_audio_sink.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/virtual_audio_sink.obj</Outputs>
+    </CustomBuild>
+    <None Include="virtual_audio_sink.h" />
+    <CustomBuild Include="win/audio_device_listener_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_device_listener_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_device_listener_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/audio_device_listener_win.h" />
+    <CustomBuild Include="win/audio_low_latency_input_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_low_latency_input_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_low_latency_input_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/audio_low_latency_input_win.h" />
+    <CustomBuild Include="win/audio_low_latency_output_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_low_latency_output_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_low_latency_output_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/audio_low_latency_output_win.h" />
+    <CustomBuild Include="win/audio_manager_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/audio_manager_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/audio_manager_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/audio_manager_win.h" />
+    <CustomBuild Include="win/avrt_wrapper_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/avrt_wrapper_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/avrt_wrapper_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/avrt_wrapper_win.h" />
+    <CustomBuild Include="win/core_audio_util_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/core_audio_util_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/core_audio_util_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/core_audio_util_win.h" />
+    <CustomBuild Include="win/device_enumeration_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/device_enumeration_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/device_enumeration_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/device_enumeration_win.h" />
+    <CustomBuild Include="win/wavein_input_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/wavein_input_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/wavein_input_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/wavein_input_win.h" />
+    <CustomBuild Include="win/waveout_output_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/audio/audio/waveout_output_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/audio/audio/waveout_output_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="win/waveout_output_win.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/audio/audio.stamp" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/audio/audio.stamp" />
+  </Target>
+</Project>

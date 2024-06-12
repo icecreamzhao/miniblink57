@@ -11,20 +11,21 @@
 #include "SkBitmapProcState.h"
 #include "SkBitmapScaler.h"
 #include "SkGradientShader.h"
-#include "SkImageDecoder.h"
 #include "SkImageEncoder.h"
 #include "SkStream.h"
 #include "SkTypeface.h"
 
-static SkSize computeSize(const SkBitmap& bm, const SkMatrix& mat) {
+static SkSize computeSize(const SkBitmap& bm, const SkMatrix& mat)
+{
     SkRect bounds = SkRect::MakeWH(SkIntToScalar(bm.width()),
-                                   SkIntToScalar(bm.height()));
+        SkIntToScalar(bm.height()));
     mat.mapRect(&bounds);
     return SkSize::Make(bounds.width(), bounds.height());
 }
 
 static void draw_cell(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& mat, SkScalar dx,
-                      SkFilterQuality lvl) {
+    SkFilterQuality lvl)
+{
     SkPaint paint;
     paint.setFilterQuality(lvl);
 
@@ -35,7 +36,8 @@ static void draw_cell(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& mat,
     canvas->drawBitmap(bm, 0, 0, &paint);
 }
 
-static void draw_row(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& mat, SkScalar dx) {
+static void draw_row(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& mat, SkScalar dx)
+{
     draw_cell(canvas, bm, mat, 0 * dx, kNone_SkFilterQuality);
     draw_cell(canvas, bm, mat, 1 * dx, kLow_SkFilterQuality);
     draw_cell(canvas, bm, mat, 2 * dx, kMedium_SkFilterQuality);
@@ -43,42 +45,50 @@ static void draw_row(SkCanvas* canvas, const SkBitmap& bm, const SkMatrix& mat, 
 }
 
 class FilterIndiaBoxGM : public skiagm::GM {
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         this->makeBitmap();
 
         SkScalar cx = SkScalarHalf(fBM.width());
         SkScalar cy = SkScalarHalf(fBM.height());
 
-        float vertScale = 30.0f/55.0f;
-        float horizScale = 150.0f/200.0f;
+        float vertScale = 30.0f / 55.0f;
+        float horizScale = 150.0f / 200.0f;
 
         fMatrix[0].setScale(horizScale, vertScale);
-        fMatrix[1].setRotate(30, cx, cy); fMatrix[1].postScale(horizScale, vertScale);
+        fMatrix[1].setRotate(30, cx, cy);
+        fMatrix[1].postScale(horizScale, vertScale);
     }
 
 public:
-    SkBitmap    fBM;
-    SkMatrix    fMatrix[2];
-    SkString    fName;
+    SkBitmap fBM;
+    SkMatrix fMatrix[2];
+    SkString fName;
 
-    FilterIndiaBoxGM() {
+    FilterIndiaBoxGM()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
-    FilterIndiaBoxGM(const char filename[]) : fFilename(filename) {
+    FilterIndiaBoxGM(const char filename[])
+        : fFilename(filename)
+    {
         fName.printf("filterindiabox");
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return fName;
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(1024, 768);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(10, 10);
         for (size_t i = 0; i < SK_ARRAY_COUNT(fMatrix); ++i) {
             SkSize size = computeSize(fBM, fMatrix[i]);
@@ -90,36 +100,28 @@ protected:
         }
     }
 
-  protected:
-      SkString fFilename;
-      int fSize;
+protected:
+    SkString fFilename;
+    int fSize;
 
-      SkScalar getScale() {
-          return 192.f/fSize;
-      }
+    SkScalar getScale()
+    {
+        return 192.f / fSize;
+    }
 
-      void makeBitmap() {
-          SkImageDecoder* codec = NULL;
-          SkString resourcePath = GetResourcePath(fFilename.c_str());
-          SkFILEStream stream(resourcePath.c_str());
-          if (stream.isValid()) {
-              codec = SkImageDecoder::Factory(&stream);
-          }
-          if (codec) {
-              stream.rewind();
-              codec->decode(&stream, &fBM, kN32_SkColorType, SkImageDecoder::kDecodePixels_Mode);
-              SkDELETE(codec);
-          } else {
-              fBM.allocN32Pixels(1, 1);
-              *(fBM.getAddr32(0,0)) = 0xFF0000FF; // red == bad
-          }
-          fSize = fBM.height();
-      }
-  private:
+    void makeBitmap()
+    {
+        if (!GetResourceAsBitmap(fFilename.c_str(), &fBM)) {
+            fBM.allocN32Pixels(1, 1);
+            fBM.eraseARGB(255, 255, 0, 0); // red == bad
+        }
+        fSize = fBM.height();
+    }
+
+private:
     typedef skiagm::GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-
-DEF_GM( return new FilterIndiaBoxGM("box.gif"); )
+DEF_GM(return new FilterIndiaBoxGM("box.gif");)

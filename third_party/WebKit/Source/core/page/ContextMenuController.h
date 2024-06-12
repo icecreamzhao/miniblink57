@@ -30,54 +30,60 @@
 #include "core/layout/HitTestResult.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
+#include <memory>
 
 namespace blink {
 
-    class ContextMenu;
-    class ContextMenuClient;
-    class ContextMenuItem;
-    class ContextMenuProvider;
-    class Document;
-    class Event;
-    class LocalFrame;
-    class Page;
+class ContextMenu;
+class ContextMenuClient;
+class ContextMenuItem;
+class ContextMenuProvider;
+class Document;
+class Event;
+class LocalFrame;
+class Page;
 
-    class CORE_EXPORT ContextMenuController final : public NoBaseWillBeGarbageCollectedFinalized<ContextMenuController> {
-        WTF_MAKE_NONCOPYABLE(ContextMenuController); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ContextMenuController);
-    public:
-        static PassOwnPtrWillBeRawPtr<ContextMenuController> create(Page*, ContextMenuClient*);
-        ~ContextMenuController();
-        DECLARE_TRACE();
+class CORE_EXPORT ContextMenuController final
+    : public GarbageCollectedFinalized<ContextMenuController> {
+    WTF_MAKE_NONCOPYABLE(ContextMenuController);
 
-        ContextMenu* contextMenu() const { return m_contextMenu.get(); }
-        void clearContextMenu();
+public:
+    static ContextMenuController* create(Page*, ContextMenuClient*);
+    ~ContextMenuController();
+    DECLARE_TRACE();
 
-        void documentDetached(Document*);
+    ContextMenu* contextMenu() const { return m_contextMenu.get(); }
+    void clearContextMenu();
 
-        void handleContextMenuEvent(Event*);
-        void showContextMenu(Event*, PassRefPtrWillBeRawPtr<ContextMenuProvider>);
-        void showContextMenuAtPoint(LocalFrame*, float x, float y, PassRefPtrWillBeRawPtr<ContextMenuProvider>);
+    void documentDetached(Document*);
 
-        void contextMenuItemSelected(const ContextMenuItem*);
+    void handleContextMenuEvent(Event*);
+    void showContextMenu(Event*, ContextMenuProvider*);
+    void showContextMenuAtPoint(LocalFrame*,
+        float x,
+        float y,
+        ContextMenuProvider*);
 
-        const HitTestResult& hitTestResult() { return m_hitTestResult; }
+    void contextMenuItemSelected(const ContextMenuItem*);
 
-    private:
-        ContextMenuController(Page*, ContextMenuClient*);
+    const HitTestResult& hitTestResult() { return m_hitTestResult; }
 
-        PassOwnPtr<ContextMenu> createContextMenu(Event*);
-        PassOwnPtr<ContextMenu> createContextMenu(LocalFrame*, const LayoutPoint&);
-        void populateCustomContextMenu(const Event&);
-        void showContextMenu(Event*);
+private:
+    ContextMenuController(Page*, ContextMenuClient*);
 
-        ContextMenuClient* m_client;
-        OwnPtr<ContextMenu> m_contextMenu;
-        RefPtrWillBeMember<ContextMenuProvider> m_menuProvider;
-        HitTestResult m_hitTestResult;
-    };
+    std::unique_ptr<ContextMenu> createContextMenu(Event*);
+    std::unique_ptr<ContextMenu> createContextMenu(LocalFrame*,
+        const LayoutPoint&);
+    void populateCustomContextMenu(const Event&);
+    void showContextMenu(Event*);
+
+    ContextMenuClient* m_client;
+    std::unique_ptr<ContextMenu> m_contextMenu;
+    Member<ContextMenuProvider> m_menuProvider;
+    HitTestResult m_hitTestResult;
+};
 
 } // namespace blink
 

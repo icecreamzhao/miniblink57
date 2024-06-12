@@ -4,6 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#include "SkOSWindow_ios.h"
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
@@ -11,7 +12,6 @@
 #import <OpenGLES/ES2/glext.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
-#include "SkOSWindow_ios.h"
 
 class SkEvent;
 @class SkUIView;
@@ -19,17 +19,17 @@ class SkEvent;
 @protocol SkUIViewOptionsDelegate <NSObject>
 @optional
 // Called when the view needs to handle adding an SkOSMenu
-- (void) view:(SkUIView*)view didAddMenu:(const SkOSMenu*)menu;
-- (void) view:(SkUIView*)view didUpdateMenu:(SkOSMenu*)menu;
+- (void)view:(SkUIView*)view didAddMenu:(const SkOSMenu*)menu;
+- (void)view:(SkUIView*)view didUpdateMenu:(SkOSMenu*)menu;
 @end
 
-@interface SkUIView : UIView  {
+@interface SkUIView : UIView {
     UINavigationItem* fTitleItem;
     SkOSWindow* fWind;
     id<SkUIViewOptionsDelegate> fOptionsDelegate;
 }
 
-@property (nonatomic, readonly) SkOSWindow *fWind;
+@property (nonatomic, readonly) SkOSWindow* fWind;
 @property (nonatomic, retain) UINavigationItem* fTitleItem;
 @property (nonatomic, assign) id<SkUIViewOptionsDelegate> fOptionsDelegate;
 

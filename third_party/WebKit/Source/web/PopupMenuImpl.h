@@ -5,7 +5,6 @@
 #ifndef PopupMenuImpl_h
 #define PopupMenuImpl_h
 
-#include "core/html/forms/PopupMenuClient.h"
 #include "core/page/PagePopupClient.h"
 #include "platform/PopupMenu.h"
 
@@ -17,18 +16,20 @@ class HTMLElement;
 class HTMLHRElement;
 class HTMLOptGroupElement;
 class HTMLOptionElement;
+class HTMLSelectElement;
 
 class PopupMenuImpl final : public PopupMenu, public PagePopupClient {
 public:
-    static PassRefPtrWillBeRawPtr<PopupMenuImpl> create(ChromeClientImpl*, PopupMenuClient*);
+    static PopupMenuImpl* create(ChromeClientImpl*, HTMLSelectElement&);
     ~PopupMenuImpl() override;
+    DECLARE_VIRTUAL_TRACE();
 
     void update();
 
     void dispose();
 
 private:
-    PopupMenuImpl(ChromeClientImpl*, PopupMenuClient*);
+    PopupMenuImpl(ChromeClientImpl*, HTMLSelectElement&);
 
     class ItemIterationContext;
     void addOption(ItemIterationContext&, HTMLOptionElement&);
@@ -37,28 +38,28 @@ private:
     void addElementStyle(ItemIterationContext&, HTMLElement&);
 
     // PopupMenu functions:
-    void show(const FloatQuad& controlPosition, const IntSize& controlSize, int index) override;
+    void show() override;
     void hide() override;
     void disconnectClient() override;
-    void updateFromElement() override;
+    void updateFromElement(UpdateReason) override;
 
     // PagePopupClient functions:
-    IntSize contentSize() override;
     void writeDocument(SharedBuffer*) override;
     void selectFontsFromOwnerDocument(Document&) override;
     void setValueAndClosePopup(int, const String&) override;
     void setValue(const String&) override;
     void closePopup() override;
     Element& ownerElement() override;
+    float zoomFactor() override { return 1.0; }
     Locale& locale() override;
     void didClosePopup() override;
 
-    ChromeClientImpl* m_chromeClient;
-    PopupMenuClient* m_client;
+    Member<ChromeClientImpl> m_chromeClient;
+    Member<HTMLSelectElement> m_ownerElement;
     PagePopup* m_popup;
     bool m_needsUpdate;
 };
 
-}
+} // namespace blink
 
 #endif // PopupMenuImpl_h

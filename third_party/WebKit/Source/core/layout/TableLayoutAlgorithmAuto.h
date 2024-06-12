@@ -31,32 +31,32 @@ namespace blink {
 class LayoutTable;
 class LayoutTableCell;
 
-enum CellsToProcess {
-    AllCells,
+enum CellsToProcess { AllCells,
     NonEmptyCells,
-    EmptyCells
-};
+    EmptyCells };
 
-enum DistributionMode {
-    ExtraWidth,
+enum DistributionMode { ExtraWidth,
     InitialWidth,
-    LeftoverWidth
-};
+    LeftoverWidth };
 
-enum DistributionDirection {
-    StartToEnd,
-    EndToStart
-};
+enum DistributionDirection { StartToEnd,
+    EndToStart };
 
 class TableLayoutAlgorithmAuto final : public TableLayoutAlgorithm {
 public:
     TableLayoutAlgorithmAuto(LayoutTable*);
-    virtual ~TableLayoutAlgorithmAuto();
+    ~TableLayoutAlgorithmAuto() override;
 
-    virtual void computeIntrinsicLogicalWidths(LayoutUnit& minWidth, LayoutUnit& maxWidth) override;
-    virtual void applyPreferredLogicalWidthQuirks(LayoutUnit& minWidth, LayoutUnit& maxWidth) const override;
-    virtual void layout() override;
-    virtual void willChangeTableLayout() override { }
+    void computeIntrinsicLogicalWidths(LayoutUnit& minWidth,
+        LayoutUnit& maxWidth) override;
+    LayoutUnit scaledWidthFromPercentColumns() override
+    {
+        return m_scaledWidthFromPercentColumns;
+    }
+    void applyPreferredLogicalWidthQuirks(LayoutUnit& minWidth,
+        LayoutUnit& maxWidth) const override;
+    void layout() override;
+    void willChangeTableLayout() override { }
 
 private:
     void fullRecalc();
@@ -64,7 +64,12 @@ private:
 
     int calcEffectiveLogicalWidth();
     void shrinkColumnWidth(const LengthType&, int& available);
-    template<typename Total, LengthType, CellsToProcess, DistributionMode, DistributionDirection> void distributeWidthToColumns(int& available, Total);
+    template <typename Total,
+        LengthType,
+        CellsToProcess,
+        DistributionMode,
+        DistributionDirection>
+    void distributeWidthToColumns(int& available, Total);
 
     void insertSpanCell(LayoutTableCell*);
 
@@ -89,13 +94,17 @@ private:
         int computedLogicalWidth;
         bool emptyCellsOnly;
         bool columnHasNoCells;
-        int clampedEffectiveMaxLogicalWidth() { return std::max<int>(1, effectiveMaxLogicalWidth); }
+        int clampedEffectiveMaxLogicalWidth()
+        {
+            return std::max<int>(1, effectiveMaxLogicalWidth);
+        }
     };
 
     Vector<Layout, 4> m_layoutStruct;
     Vector<LayoutTableCell*, 4> m_spanCells;
     bool m_hasPercent : 1;
     mutable bool m_effectiveLogicalWidthDirty : 1;
+    LayoutUnit m_scaledWidthFromPercentColumns;
 };
 
 } // namespace blink

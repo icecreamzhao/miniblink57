@@ -44,8 +44,10 @@ class ErrorCallback;
 
 class DirectoryReader : public DirectoryReaderBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static DirectoryReader* create(DOMFileSystemBase* fileSystem, const String& fullPath)
+    static DirectoryReader* create(DOMFileSystemBase* fileSystem,
+        const String& fullPath)
     {
         return new DirectoryReader(fileSystem, fullPath);
     }
@@ -54,7 +56,10 @@ public:
 
     void readEntries(EntriesCallback*, ErrorCallback* = nullptr);
 
-    DOMFileSystem* filesystem() const { return static_cast<DOMFileSystem*>(m_fileSystem.get()); }
+    DOMFileSystem* filesystem() const
+    {
+        return static_cast<DOMFileSystem*>(m_fileSystem.get());
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -66,11 +71,11 @@ private:
 
     void addEntries(const EntryHeapVector& entries);
 
-    void onError(FileError*);
+    void onError(FileError::ErrorCode);
 
     bool m_isReading;
     EntryHeapVector m_entries;
-    Member<FileError> m_error;
+    FileError::ErrorCode m_error = FileError::ErrorCode::kOK;
     Member<EntriesCallback> m_entriesCallback;
     Member<ErrorCallback> m_errorCallback;
 };

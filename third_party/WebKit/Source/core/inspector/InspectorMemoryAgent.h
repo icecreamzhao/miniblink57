@@ -32,24 +32,22 @@
 #define InspectorMemoryAgent_h
 
 #include "core/CoreExport.h"
-#include "core/InspectorFrontend.h"
 #include "core/inspector/InspectorBaseAgent.h"
-#include "wtf/PassOwnPtr.h"
+#include "core/inspector/protocol/Memory.h"
 
 namespace blink {
 
-typedef String ErrorString;
-
-class CORE_EXPORT InspectorMemoryAgent final : public InspectorBaseAgent<InspectorMemoryAgent, InspectorFrontend::Memory>, public InspectorBackendDispatcher::MemoryCommandHandler {
+class CORE_EXPORT InspectorMemoryAgent final
+    : public InspectorBaseAgent<protocol::Memory::Metainfo> {
     WTF_MAKE_NONCOPYABLE(InspectorMemoryAgent);
-public:
-    static PassOwnPtrWillBeRawPtr<InspectorMemoryAgent> create()
-    {
-        return adoptPtrWillBeNoop(new InspectorMemoryAgent());
-    }
-    virtual ~InspectorMemoryAgent();
 
-    virtual void getDOMCounters(ErrorString*, int* documents, int* nodes, int* jsEventListeners) override;
+public:
+    static InspectorMemoryAgent* create() { return new InspectorMemoryAgent(); }
+    ~InspectorMemoryAgent() override;
+
+    Response getDOMCounters(int* documents,
+        int* nodes,
+        int* jsEventListeners) override;
 
 private:
     InspectorMemoryAgent();

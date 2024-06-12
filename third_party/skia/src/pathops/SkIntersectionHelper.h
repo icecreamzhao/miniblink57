@@ -4,6 +4,9 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#ifndef SkIntersectionHelper_DEFINED
+#define SkIntersectionHelper_DEFINED
+
 #include "SkOpContour.h"
 #include "SkOpSegment.h"
 #include "SkPath.h"
@@ -23,45 +26,55 @@ public:
         kCubic_Segment = SkPath::kCubic_Verb,
     };
 
-    bool advance() {
+    bool advance()
+    {
         fSegment = fSegment->next();
-        return fSegment != NULL;
+        return fSegment != nullptr;
     }
 
-    SkScalar bottom() const {
+    SkScalar bottom() const
+    {
         return bounds().fBottom;
     }
 
-    const SkPathOpsBounds& bounds() const {
+    const SkPathOpsBounds& bounds() const
+    {
         return fSegment->bounds();
     }
 
-    SkOpContour* contour() const {
+    SkOpContour* contour() const
+    {
         return fSegment->contour();
     }
 
-    void init(SkOpContour* contour) {
+    void init(SkOpContour* contour)
+    {
         fSegment = contour->first();
     }
 
-    SkScalar left() const {
+    SkScalar left() const
+    {
         return bounds().fLeft;
     }
 
-    const SkPoint* pts() const {
+    const SkPoint* pts() const
+    {
         return fSegment->pts();
     }
 
-    SkScalar right() const {
+    SkScalar right() const
+    {
         return bounds().fRight;
     }
 
-    SkOpSegment* segment() const {
+    SkOpSegment* segment() const
+    {
         return fSegment;
     }
 
-    SegmentType segmentType() const {
-        SegmentType type = (SegmentType) fSegment->verb();
+    SegmentType segmentType() const
+    {
+        SegmentType type = (SegmentType)fSegment->verb();
         if (type != kLine_Segment) {
             return type;
         }
@@ -74,35 +87,44 @@ public:
         return kLine_Segment;
     }
 
-    bool startAfter(const SkIntersectionHelper& after) {
+    bool startAfter(const SkIntersectionHelper& after)
+    {
         fSegment = after.fSegment->next();
-        return fSegment != NULL;
+        return fSegment != nullptr;
     }
 
-    SkScalar top() const {
+    SkScalar top() const
+    {
         return bounds().fTop;
     }
 
-    SkScalar weight() const {
+    SkScalar weight() const
+    {
         return fSegment->weight();
     }
 
-    SkScalar x() const {
+    SkScalar x() const
+    {
         return bounds().fLeft;
     }
 
-    bool xFlipped() const {
+    bool xFlipped() const
+    {
         return x() != pts()[0].fX;
     }
 
-    SkScalar y() const {
+    SkScalar y() const
+    {
         return bounds().fTop;
     }
 
-    bool yFlipped() const {
+    bool yFlipped() const
+    {
         return y() != pts()[0].fY;
     }
 
 private:
     SkOpSegment* fSegment;
 };
+
+#endif

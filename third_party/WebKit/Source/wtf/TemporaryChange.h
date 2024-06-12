@@ -39,9 +39,10 @@ namespace WTF {
 // shorter lifetime than its scopedVariable, to prevent invalid memory writes
 // when the TemporaryChange<> object is destroyed.
 
-template<typename T>
+template <typename T>
 class TemporaryChange {
     WTF_MAKE_NONCOPYABLE(TemporaryChange);
+
 public:
     TemporaryChange(T& scopedVariable, T newValue)
         : m_scopedVariable(scopedVariable)
@@ -55,13 +56,12 @@ public:
         m_scopedVariable = m_originalValue;
     }
 
-
 private:
     T& m_scopedVariable;
     T m_originalValue;
 };
 
-}
+} // namespace WTF
 
 using WTF::TemporaryChange;
 

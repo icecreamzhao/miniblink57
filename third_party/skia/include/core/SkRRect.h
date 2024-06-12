@@ -8,8 +8,8 @@
 #ifndef SkRRect_DEFINED
 #define SkRRect_DEFINED
 
-#include "SkRect.h"
 #include "SkPoint.h"
+#include "SkRect.h"
 
 class SkPath;
 class SkMatrix;
@@ -85,9 +85,9 @@ public:
     /**
      * Returns the RR's sub type.
      */
-    Type getType() const {
-        SkDEBUGCODE(this->validate();)
-        return static_cast<Type>(fType);
+    Type getType() const
+    {
+        SkDEBUGCODE(this->validate();) return static_cast<Type>(fType);
     }
 
     Type type() const { return this->getType(); }
@@ -96,8 +96,15 @@ public:
     inline bool isRect() const { return kRect_Type == this->getType(); }
     inline bool isOval() const { return kOval_Type == this->getType(); }
     inline bool isSimple() const { return kSimple_Type == this->getType(); }
-    inline bool isSimpleCircular() const {
-        return this->isSimple() && fRadii[0].fX == fRadii[0].fY;
+    // TODO: should isSimpleCircular & isCircle take a tolerance? This could help
+    // instances where the mapping to device space is noisy.
+    inline bool isSimpleCircular() const
+    {
+        return this->isSimple() && SkScalarNearlyEqual(fRadii[0].fX, fRadii[0].fY);
+    }
+    inline bool isCircle() const
+    {
+        return this->isOval() && SkScalarNearlyEqual(fRadii[0].fX, fRadii[0].fY);
     }
     inline bool isNinePatch() const { return kNinePatch_Type == this->getType(); }
     inline bool isComplex() const { return kComplex_Type == this->getType(); }
@@ -110,7 +117,8 @@ public:
     /**
      * Set this RR to the empty rectangle (0,0,0,0) with 0 x & y radii.
      */
-    void setEmpty() {
+    void setEmpty()
+    {
         fRect.setEmpty();
         memset(fRadii, 0, sizeof(fRadii));
         fType = kEmpty_Type;
@@ -121,33 +129,67 @@ public:
     /**
      * Set this RR to match the supplied rect. All radii will be 0.
      */
-    void setRect(const SkRect& rect) {
-        if (rect.isEmpty()) {
+    void setRect(const SkRect& rect)
+    {
+        fRect = rect;
+        fRect.sort();
+
+        if (fRect.isEmpty()) {
             this->setEmpty();
             return;
         }
 
-        fRect = rect;
         memset(fRadii, 0, sizeof(fRadii));
         fType = kRect_Type;
 
         SkDEBUGCODE(this->validate();)
     }
 
+    static SkRRect MakeEmpty()
+    {
+        SkRRect rr;
+        rr.setEmpty();
+        return rr;
+    }
+
+    static SkRRect MakeRect(const SkRect& r)
+    {
+        SkRRect rr;
+        rr.setRect(r);
+        return rr;
+    }
+
+    static SkRRect MakeOval(const SkRect& oval)
+    {
+        SkRRect rr;
+        rr.setOval(oval);
+        return rr;
+    }
+
+    static SkRRect MakeRectXY(const SkRect& rect, SkScalar xRad, SkScalar yRad)
+    {
+        SkRRect rr;
+        rr.setRectXY(rect, xRad, yRad);
+        return rr;
+    }
+
     /**
      * Set this RR to match the supplied oval. All x radii will equal half the
      * width and all y radii will equal half the height.
      */
-    void setOval(const SkRect& oval) {
-        if (oval.isEmpty()) {
+    void setOval(const SkRect& oval)
+    {
+        fRect = oval;
+        fRect.sort();
+
+        if (fRect.isEmpty()) {
             this->setEmpty();
             return;
         }
 
-        SkScalar xRad = SkScalarHalf(oval.width());
-        SkScalar yRad = SkScalarHalf(oval.height());
+        SkScalar xRad = SkScalarHalf(fRect.width());
+        SkScalar yRad = SkScalarHalf(fRect.height());
 
-        fRect = oval;
         for (int i = 0; i < 4; ++i) {
             fRadii[i].set(xRad, yRad);
         }
@@ -165,7 +207,7 @@ public:
      * Initialize the rr with one radius per-side.
      */
     void setNinePatch(const SkRect& rect, SkScalar leftRad, SkScalar topRad,
-                      SkScalar rightRad, SkScalar bottomRad);
+        SkScalar rightRad, SkScalar bottomRad);
 
     /**
      * Initialize the RR with potentially different radii for all four corners.
@@ -188,21 +230,20 @@ public:
      *  When a rrect is simple, all of its radii are equal. This returns one
      *  of those radii. This call requires the rrect to be non-complex.
      */
-    const SkVector& getSimpleRadii() const {
+    const SkVector& getSimpleRadii() const
+    {
         SkASSERT(!this->isComplex());
         return fRadii[0];
     }
 
-    friend bool operator==(const SkRRect& a, const SkRRect& b) {
-        return a.fRect == b.fRect &&
-               SkScalarsEqual(a.fRadii[0].asScalars(),
-                              b.fRadii[0].asScalars(), 8);
+    friend bool operator==(const SkRRect& a, const SkRRect& b)
+    {
+        return a.fRect == b.fRect && SkScalarsEqual(a.fRadii[0].asScalars(), b.fRadii[0].asScalars(), 8);
     }
 
-    friend bool operator!=(const SkRRect& a, const SkRRect& b) {
-        return a.fRect != b.fRect ||
-               !SkScalarsEqual(a.fRadii[0].asScalars(),
-                               b.fRadii[0].asScalars(), 8);
+    friend bool operator!=(const SkRRect& a, const SkRRect& b)
+    {
+        return a.fRect != b.fRect || !SkScalarsEqual(a.fRadii[0].asScalars(), b.fRadii[0].asScalars(), 8);
     }
 
     /**
@@ -215,7 +256,8 @@ public:
      */
     void inset(SkScalar dx, SkScalar dy, SkRRect* dst) const;
 
-    void inset(SkScalar dx, SkScalar dy) {
+    void inset(SkScalar dx, SkScalar dy)
+    {
         this->inset(dx, dy, this);
     }
 
@@ -227,17 +269,20 @@ public:
      *
      *  It is valid for dst == this.
      */
-    void outset(SkScalar dx, SkScalar dy, SkRRect* dst) const {
+    void outset(SkScalar dx, SkScalar dy, SkRRect* dst) const
+    {
         this->inset(-dx, -dy, dst);
     }
-    void outset(SkScalar dx, SkScalar dy) {
+    void outset(SkScalar dx, SkScalar dy)
+    {
         this->inset(-dx, -dy, this);
     }
 
     /**
      * Translate the rrect by (dx, dy).
      */
-    void offset(SkScalar dx, SkScalar dy) {
+    void offset(SkScalar dx, SkScalar dy)
+    {
         fRect.offset(dx, dy);
     }
 
@@ -299,6 +344,7 @@ private:
 
     void computeType();
     bool checkCornerContainment(SkScalar x, SkScalar y) const;
+    void scaleRadii();
 
     // to access fRadii directly
     friend class SkPath;

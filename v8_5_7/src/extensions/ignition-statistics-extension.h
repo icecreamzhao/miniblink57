@@ -18,7 +18,7 @@ class IgnitionStatisticsExtension : public v8::Extension {
   v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
       v8::Isolate* isolate, v8::Local<v8::String> name) override;
 
-  static void GetIgnitionDispatchCounters(
+  static void V8CALL GetIgnitionDispatchCounters(
       const v8::FunctionCallbackInfo<v8::Value>& args);
 
  private:

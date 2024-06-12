@@ -40,14 +40,15 @@ namespace blink {
 
 class ImageInputType final : public BaseButtonInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
-    virtual PassRefPtr<ComputedStyle> customStyleForLayoutObject(PassRefPtr<ComputedStyle>);
+    static InputType* create(HTMLInputElement&);
+    virtual PassRefPtr<ComputedStyle> customStyleForLayoutObject(
+        PassRefPtr<ComputedStyle>);
 
 private:
     ImageInputType(HTMLInputElement&);
     const AtomicString& formControlType() const override;
     bool isFormDataAppendable() const override;
-    bool appendFormData(FormDataList&, bool) const override;
+    void appendToFormData(FormData&) const override;
     String resultForDialogSubmit() const override;
     bool supportsValidation() const override;
     LayoutObject* createLayoutObject(const ComputedStyle&) const override;
@@ -59,7 +60,6 @@ private:
     bool shouldRespectAlignAttribute() override;
     bool canBeSuccessfulSubmitButton() override;
     bool isEnumeratable() override;
-    bool isImage() const override;
     bool shouldRespectHeightAndWidthAttributes() override;
     unsigned height() const override;
     unsigned width() const override;
@@ -73,7 +73,9 @@ private:
     void setUseFallbackContent();
     bool hasFallbackContent() const { return m_useFallbackContent; }
 
-    IntPoint m_clickLocation; // Valid only during HTMLFormElement::prepareForSubmission().
+    // Valid only during HTMLFormElement::prepareForSubmission().
+    IntPoint m_clickLocation;
+
     bool m_useFallbackContent;
 };
 

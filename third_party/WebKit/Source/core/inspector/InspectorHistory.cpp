@@ -28,43 +28,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/inspector/InspectorHistory.h"
 
 #include "bindings/core/v8/ExceptionState.h"
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/dom/Node.h"
 
 namespace blink {
 
 namespace {
 
-class UndoableStateMark final : public InspectorHistory::Action {
-public:
-    UndoableStateMark() : InspectorHistory::Action("[UndoableState]") { }
+    class UndoableStateMark final : public InspectorHistory::Action {
+    public:
+        UndoableStateMark()
+            : InspectorHistory::Action("[UndoableState]")
+        {
+        }
 
-    virtual bool perform(ExceptionState&) override { return true; }
+        bool perform(ExceptionState&) override { return true; }
 
-    virtual bool undo(ExceptionState&) override { return true; }
+        bool undo(ExceptionState&) override { return true; }
 
-    virtual bool redo(ExceptionState&) override { return true; }
+        bool redo(ExceptionState&) override { return true; }
 
-    virtual bool isUndoableStateMark() override { return true; }
-};
+        bool isUndoableStateMark() override { return true; }
+    };
 
-}
+} // namespace
 
-InspectorHistory::Action::Action(const String& name) : m_name(name)
+InspectorHistory::Action::Action(const String& name)
+    : m_name(name)
 {
 }
 
-InspectorHistory::Action::~Action()
-{
-}
+InspectorHistory::Action::~Action() { }
 
-DEFINE_TRACE(InspectorHistory::Action)
-{
-}
+DEFINE_TRACE(InspectorHistory::Action) { }
 
 String InspectorHistory::Action::toString()
 {
@@ -81,17 +79,23 @@ String InspectorHistory::Action::mergeId()
     return "";
 }
 
-void InspectorHistory::Action::merge(PassRefPtrWillBeRawPtr<Action>)
+void InspectorHistory::Action::merge(Action*) { }
+
+InspectorHistory::InspectorHistory()
+    : m_afterLastActionIndex(0)
 {
 }
 
-InspectorHistory::InspectorHistory() : m_afterLastActionIndex(0) { }
-
-bool InspectorHistory::perform(PassRefPtrWillBeRawPtr<Action> action, ExceptionState& exceptionState)
+bool InspectorHistory::perform(Action* action, ExceptionState& exceptionState)
 {
     if (!action->perform(exceptionState))
         return false;
+    appendPerformedAction(action);
+    return true;
+}
 
+void InspectorHistory::appendPerformedAction(Action* action)
+{
     if (!action->mergeId().isEmpty() && m_afterLastActionIndex > 0 && action->mergeId() == m_history[m_afterLastActionIndex - 1]->mergeId()) {
         m_history[m_afterLastActionIndex - 1]->merge(action);
         if (m_history[m_afterLastActionIndex - 1]->isNoop())
@@ -99,15 +103,14 @@ bool InspectorHistory::perform(PassRefPtrWillBeRawPtr<Action> action, ExceptionS
         m_history.resize(m_afterLastActionIndex);
     } else {
         m_history.resize(m_afterLastActionIndex);
-        m_history.append(action);
+        m_history.push_back(action);
         ++m_afterLastActionIndex;
     }
-    return true;
 }
 
 void InspectorHistory::markUndoableState()
 {
-    perform(adoptRefWillBeNoop(new UndoableStateMark()), IGNORE_EXCEPTION);
+    perform(new UndoableStateMark(), IGNORE_EXCEPTION_FOR_TESTING);
 }
 
 bool InspectorHistory::undo(ExceptionState& exceptionState)
@@ -159,4 +162,3 @@ DEFINE_TRACE(InspectorHistory)
 }
 
 } // namespace blink
-

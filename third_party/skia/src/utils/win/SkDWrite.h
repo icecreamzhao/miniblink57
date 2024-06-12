@@ -8,8 +8,8 @@
 #ifndef SkDWrite_DEFINED
 #define SkDWrite_DEFINED
 
-#include "SkTemplates.h"
 #include "SkFontStyle.h"
+#include "SkTemplates.h"
 
 #include <dwrite.h>
 #include <winsdkver.h>
@@ -47,9 +47,9 @@ HRESULT sk_wchar_to_skstring(WCHAR* name, int nameLen, SkString* skname);
 // Locale
 
 void sk_get_locale_string(IDWriteLocalizedStrings* names, const WCHAR* preferedLocale,
-                       SkString* skname);
+    SkString* skname);
 
-typedef int (WINAPI *SkGetUserDefaultLocaleNameProc)(LPWSTR, int);
+typedef int(WINAPI* SkGetUserDefaultLocaleNameProc)(LPWSTR, int);
 HRESULT SkGetGetUserDefaultLocaleNameProc(SkGetUserDefaultLocaleNameProc* proc);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,12 +57,16 @@ HRESULT SkGetGetUserDefaultLocaleNameProc(SkGetUserDefaultLocaleNameProc* proc);
 
 class AutoDWriteTable {
 public:
-    AutoDWriteTable(IDWriteFontFace* fontFace, UINT32 beTag) : fExists(FALSE), fFontFace(fontFace) {
+    AutoDWriteTable(IDWriteFontFace* fontFace, UINT32 beTag)
+        : fExists(FALSE)
+        , fFontFace(fontFace)
+    {
         // Any errors are ignored, user must check fExists anyway.
         fontFace->TryGetFontTable(beTag,
-            reinterpret_cast<const void **>(&fData), &fSize, &fLock, &fExists);
+            reinterpret_cast<const void**>(&fData), &fSize, &fLock, &fExists);
     }
-    ~AutoDWriteTable() {
+    ~AutoDWriteTable()
+    {
         if (fExists) {
             fFontFace->ReleaseFontTable(fLock);
         }
@@ -71,15 +75,20 @@ public:
     const uint8_t* fData;
     UINT32 fSize;
     BOOL fExists;
+
 private:
     // Borrowed reference, the user must ensure the fontFace stays alive.
     IDWriteFontFace* fFontFace;
     void* fLock;
 };
-template<typename T> class AutoTDWriteTable : public AutoDWriteTable {
+template <typename T>
+class AutoTDWriteTable : public AutoDWriteTable {
 public:
     static const UINT32 tag = DWRITE_MAKE_OPENTYPE_TAG(T::TAG0, T::TAG1, T::TAG2, T::TAG3);
-    AutoTDWriteTable(IDWriteFontFace* fontFace) : AutoDWriteTable(fontFace, tag) { }
+    AutoTDWriteTable(IDWriteFontFace* fontFace)
+        : AutoDWriteTable(fontFace, tag)
+    {
+    }
 
     const T* get() const { return reinterpret_cast<const T*>(fData); }
     const T* operator->() const { return reinterpret_cast<const T*>(fData); }
@@ -89,7 +98,10 @@ public:
 // Style conversion
 
 struct DWriteStyle {
-    explicit DWriteStyle(const SkFontStyle& pattern) {
+    explicit DWriteStyle(const SkFontStyle& pattern)
+    {
+        fWeight = (DWRITE_FONT_WEIGHT)pattern.weight();
+        fWidth = (DWRITE_FONT_STRETCH)pattern.width();
         switch (pattern.slant()) {
         case SkFontStyle::kUpright_Slant:
             fSlant = DWRITE_FONT_STYLE_NORMAL;
@@ -97,16 +109,17 @@ struct DWriteStyle {
         case SkFontStyle::kItalic_Slant:
             fSlant = DWRITE_FONT_STYLE_ITALIC;
             break;
+        case SkFontStyle::kOblique_Slant:
+            fSlant = DWRITE_FONT_STYLE_OBLIQUE;
+            break;
         default:
             SkASSERT(false);
+            break;
         }
-
-        fWeight = (DWRITE_FONT_WEIGHT)pattern.weight();
-        fWidth = (DWRITE_FONT_STRETCH)pattern.width();
     }
-    DWRITE_FONT_STYLE fSlant;
     DWRITE_FONT_WEIGHT fWeight;
     DWRITE_FONT_STRETCH fWidth;
+    DWRITE_FONT_STYLE fSlant;
 };
 
 #endif

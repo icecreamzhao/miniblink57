@@ -3041,7 +3041,7 @@ class HConstant final : public HTemplateInstruction<0> {
   bool IsSpecialDouble() const {
     return HasDoubleValue() &&
            (bit_cast<int64_t>(double_value_) == bit_cast<int64_t>(-0.0) ||
-            std::isnan(double_value_));
+            std_isnan(double_value_));
   }
 
   bool NotInNewSpace() const {

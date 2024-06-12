@@ -6,13 +6,12 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDOM_DEFINED
 #define SkDOM_DEFINED
 
+#include "../private/SkTemplates.h"
 #include "SkChunkAlloc.h"
 #include "SkScalar.h"
-#include "SkTemplates.h"
 
 struct SkDOMNode;
 struct SkDOMAttr;
@@ -42,7 +41,7 @@ public:
         kElement_Type,
         kText_Type
     };
-    Type    getType(const Node*) const;
+    Type getType(const Node*) const;
 
     const char* getName(const Node*) const;
     const Node* getFirstChild(const Node*, const char elem[] = NULL) const;
@@ -62,7 +61,7 @@ public:
     bool findScalars(const Node*, const char name[], SkScalar value[], int count) const;
     bool findHex(const Node*, const char name[], uint32_t* value) const;
     bool findBool(const Node*, const char name[], bool*) const;
-    int  findList(const Node*, const char name[], const char list[]) const;
+    int findList(const Node*, const char name[], const char list[]) const;
 
     bool findScalar(const Node* node, const char name[], SkScalar value[]) const
     {
@@ -79,17 +78,17 @@ public:
     public:
         AttrIter(const class SkDOM&, const Node*);
         const char* next(const char** value);
+
     private:
         const Attr* fAttr;
         const Attr* fStop;
     };
 
     SkDEBUGCODE(void dump(const Node* node = NULL, int tabLevel = 0) const;)
-    SkDEBUGCODE(static void UnitTest();)
+        SkDEBUGCODE(static void UnitTest();)
 
-private:
-    SkChunkAlloc               fAlloc;
-    Node*                      fRoot;
+            private : SkChunkAlloc fAlloc;
+    Node* fRoot;
     SkAutoTDelete<SkDOMParser> fParser;
 
     friend class AttrIter;

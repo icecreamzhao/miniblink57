@@ -26,17 +26,16 @@
 interface HTMLDocument : Document {
     // https://html.spec.whatwg.org/#Document-partial
 
-    // FIXME: *Color should have [TreatNullAs=EmptyString].
-    [TreatNullAs=NullString, CustomElementCallbacks] attribute DOMString fgColor;
-    [TreatNullAs=NullString, CustomElementCallbacks] attribute DOMString linkColor;
-    [TreatNullAs=NullString, CustomElementCallbacks] attribute DOMString vlinkColor;
-    [TreatNullAs=NullString, CustomElementCallbacks] attribute DOMString alinkColor;
-    [TreatNullAs=NullString, CustomElementCallbacks] attribute DOMString bgColor;
+    [TreatNullAs=EmptyString, CEReactions, CustomElementCallbacks] attribute DOMString fgColor;
+    [TreatNullAs=EmptyString, CEReactions, CustomElementCallbacks] attribute DOMString linkColor;
+    [TreatNullAs=EmptyString, CEReactions, CustomElementCallbacks] attribute DOMString vlinkColor;
+    [TreatNullAs=EmptyString, CEReactions, CustomElementCallbacks] attribute DOMString alinkColor;
+    [TreatNullAs=EmptyString, CEReactions, CustomElementCallbacks] attribute DOMString bgColor;
 
     [MeasureAs=DocumentClear] void clear();
     [MeasureAs=DocumentCaptureEvents] void captureEvents();
     [MeasureAs=DocumentReleaseEvents] void releaseEvents();
 
     // FIXME: all should not be [Replaceable].
-    [Replaceable, ImplementedAs=allForBinding] readonly attribute HTMLAllCollection all;
+    [Replaceable, MeasureAs=DocumentAll] readonly attribute HTMLAllCollection all;
 };

@@ -28,42 +28,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/WebDataSourceImpl.h"
 
 #include "core/dom/Document.h"
+#include "public/platform/WebDocumentSubresourceFilter.h"
 #include "public/platform/WebURL.h"
 #include "public/platform/WebURLError.h"
 #include "public/platform/WebVector.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-static OwnPtr<WebPluginLoadObserver>& nextPluginLoadObserver()
+WebDataSourceImpl* WebDataSourceImpl::create(
+    LocalFrame* frame,
+    const ResourceRequest& request,
+    const SubstituteData& data,
+    ClientRedirectPolicy clientRedirectPolicy)
 {
-    DEFINE_STATIC_LOCAL(OwnPtr<WebPluginLoadObserver>, nextPluginLoadObserver, ());
-    return nextPluginLoadObserver;
-}
+    DCHECK(frame);
 
-PassRefPtrWillBeRawPtr<WebDataSourceImpl> WebDataSourceImpl::create(LocalFrame* frame, const ResourceRequest& request, const SubstituteData& data)
-{
-    return adoptRefWillBeNoop(new WebDataSourceImpl(frame, request, data));
+    return new WebDataSourceImpl(frame, request, data, clientRedirectPolicy);
 }
 
 const WebURLRequest& WebDataSourceImpl::originalRequest() const
 {
-    m_originalRequestWrapper.bind(DocumentLoader::originalRequest());
     return m_originalRequestWrapper;
 }
 
-const WebURLRequest& WebDataSourceImpl::request() const
+const WebURLRequest& WebDataSourceImpl::getRequest() const
 {
-    m_requestWrapper.bind(DocumentLoader::request());
     return m_requestWrapper;
 }
 
 const WebURLResponse& WebDataSourceImpl::response() const
 {
-    m_responseWrapper.bind(DocumentLoader::response());
     return m_responseWrapper;
 }
 
@@ -80,6 +79,23 @@ WebURL WebDataSourceImpl::unreachableURL() const
 void WebDataSourceImpl::appendRedirect(const WebURL& url)
 {
     DocumentLoader::appendRedirect(url);
+}
+
+void WebDataSourceImpl::updateNavigation(
+    double redirectStartTime,
+    double redirectEndTime,
+    double fetchStartTime,
+    const WebVector<WebURL>& redirectChain)
+{
+    // Updates the redirection timing if there is at least one redirection
+    // (between two URLs).
+    if (redirectChain.size() >= 2) {
+        for (size_t i = 0; i + 1 < redirectChain.size(); ++i)
+            didRedirect(redirectChain[i], redirectChain[i + 1]);
+        timing().setRedirectStart(redirectStartTime);
+        timing().setRedirectEnd(redirectEndTime);
+    }
+    timing().setFetchStart(fetchStartTime);
 }
 
 void WebDataSourceImpl::redirectChain(WebVector<WebURL>& result) const
@@ -99,18 +115,19 @@ bool WebDataSourceImpl::replacesCurrentHistoryItem() const
 
 WebNavigationType WebDataSourceImpl::navigationType() const
 {
-    return toWebNavigationType(DocumentLoader::navigationType());
+    return toWebNavigationType(DocumentLoader::getNavigationType());
 }
 
-WebDataSource::ExtraData* WebDataSourceImpl::extraData() const
+WebDataSource::ExtraData* WebDataSourceImpl::getExtraData() const
 {
     return m_extraData.get();
 }
 
 void WebDataSourceImpl::setExtraData(ExtraData* extraData)
 {
-    // extraData can't be a PassOwnPtr because setExtraData is a WebKit API function.
-    m_extraData = adoptPtr(extraData);
+    // extraData can't be a std::unique_ptr because setExtraData is a WebKit API
+    // function.
+    m_extraData = WTF::wrapUnique(extraData);
 }
 
 void WebDataSourceImpl::setNavigationStartTime(double navigationStart)
@@ -137,40 +154,33 @@ WebNavigationType WebDataSourceImpl::toWebNavigationType(NavigationType type)
     }
 }
 
-void WebDataSourceImpl::setNextPluginLoadObserver(PassOwnPtr<WebPluginLoadObserver> observer)
+WebDataSourceImpl::WebDataSourceImpl(LocalFrame* frame,
+    const ResourceRequest& request,
+    const SubstituteData& data,
+    ClientRedirectPolicy clientRedirectPolicy)
+    : DocumentLoader(frame, request, data, clientRedirectPolicy)
+    , m_originalRequestWrapper(DocumentLoader::originalRequest())
+    , m_requestWrapper(DocumentLoader::getRequest())
+    , m_responseWrapper(DocumentLoader::response())
 {
-    nextPluginLoadObserver() = observer;
-}
-
-WebDataSourceImpl::WebDataSourceImpl(LocalFrame* frame, const ResourceRequest& request, const SubstituteData& data)
-    : DocumentLoader(frame, request, data)
-{
-    if (!nextPluginLoadObserver())
-        return;
-    // When a new frame is created, it initially gets a data source for an
-    // empty document. Then it is navigated to the source URL of the
-    // frame, which results in a second data source being created. We want
-    // to wait to attach the WebPluginLoadObserver to that data source.
-    if (request.url().isEmpty())
-        return;
-
-    ASSERT(nextPluginLoadObserver()->url() == WebURL(request.url()));
-    m_pluginLoadObserver = nextPluginLoadObserver().release();
 }
 
 WebDataSourceImpl::~WebDataSourceImpl()
 {
     // Verify that detachFromFrame() has been called.
-    ASSERT(!m_extraData);
+    DCHECK(!m_extraData);
 }
 
 void WebDataSourceImpl::detachFromFrame()
 {
-    RefPtrWillBeRawPtr<DocumentLoader> protect(this);
-
     DocumentLoader::detachFromFrame();
-    m_extraData.clear();
-    m_pluginLoadObserver.clear();
+    m_extraData.reset();
+}
+
+void WebDataSourceImpl::setSubresourceFilter(
+    WebDocumentSubresourceFilter* subresourceFilter)
+{
+    DocumentLoader::setSubresourceFilter(WTF::wrapUnique(subresourceFilter));
 }
 
 DEFINE_TRACE(WebDataSourceImpl)

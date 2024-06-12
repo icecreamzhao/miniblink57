@@ -34,7 +34,7 @@
 #include "wtf/text/WTFString.h"
 
 #if COMPILER(MSVC)
-#pragma warning(disable: 4800)
+#pragma warning(disable : 4800)
 #endif
 
 struct sqlite3;
@@ -52,9 +52,10 @@ extern const int SQLResultInterrupt;
 extern const int SQLResultConstraint;
 
 class SQLiteDatabase {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(SQLiteDatabase);
     friend class SQLiteTransaction;
+
 public:
     SQLiteDatabase();
     ~SQLiteDatabase();
@@ -78,10 +79,12 @@ public:
 
     void setBusyTimeout(int ms);
 
-    // Sets the maximum size in bytes
-    // Depending on per-database attributes, the size will only be settable in units that are the page size of the database, which is established at creation
-    // These chunks will never be anything other than 512, 1024, 2048, 4096, 8192, 16384, or 32768 bytes in size.
-    // setMaximumSize() will round the size down to the next smallest chunk if the passed size doesn't align.
+    // Sets the maximum size in bytes.
+    // Depending on per-database attributes, the size will only be settable in
+    // units that are the page size of the database, which is established at
+    // creation.  These chunks will never be anything other than 512, 1024, 2048,
+    // 4096, 8192, 16384, or 32768 bytes in size.  setMaximumSize() will round the
+    // size down to the next smallest chunk if the passed size doesn't align.
     void setMaximumSize(int64_t);
 
     // Gets the number of unused bytes in the database file.
@@ -91,7 +94,8 @@ public:
     int lastError();
     const char* lastErrorMsg();
 
-    sqlite3* sqlite3Handle() const {
+    sqlite3* sqlite3Handle() const
+    {
         ASSERT(m_sharable || currentThread() == m_openingThread || !m_db);
         return m_db;
     }
@@ -107,15 +111,24 @@ public:
     //        requires SQLite to store additional information about each page in
     //        the database file.
     // INCREMENTAL - SQLite stores extra information for each page in the database
-    //               file, but removes the empty pages only when PRAGMA INCREMANTAL_VACUUM
-    //               is called.
-    enum AutoVacuumPragma { AutoVacuumNone = 0, AutoVacuumFull = 1, AutoVacuumIncremental = 2 };
+    //               file, but removes the empty pages only when PRAGMA
+    //               INCREMANTAL_VACUUM is called.
+    enum AutoVacuumPragma {
+        AutoVacuumNone = 0,
+        AutoVacuumFull = 1,
+        AutoVacuumIncremental = 2
+    };
     bool turnOnIncrementalAutoVacuum();
 
-    DECLARE_TRACE();
+    DEFINE_INLINE_TRACE() { }
 
 private:
-    static int authorizerFunction(void*, int, const char*, const char*, const char*, const char*);
+    static int authorizerFunction(void*,
+        int,
+        const char*,
+        const char*,
+        const char*,
+        const char*);
 
     void enableAuthorizer(bool enable);
 
@@ -128,7 +141,7 @@ private:
     bool m_sharable;
 
     Mutex m_authorizerLock;
-    Member<DatabaseAuthorizer> m_authorizer;
+    CrossThreadPersistent<DatabaseAuthorizer> m_authorizer;
 
     ThreadIdentifier m_openingThread;
 

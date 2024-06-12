@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawTextBox_DEFINED
 #define SkDrawTextBox_DEFINED
 
@@ -18,18 +17,18 @@ class SkDrawTextBox : public SkDrawRect {
     SkDrawTextBox();
 
     // overrides
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
     bool getProperty(int index, SkScriptValue* value) const override;
-    bool setProperty(int index, SkScriptValue& ) override;
+    bool setProperty(int index, SkScriptValue&) override;
 
 private:
     SkString fText;
     SkScalar fSpacingMul;
     SkScalar fSpacingAdd;
-    int /*SkTextBox::Mode*/  mode;
+    int /*SkTextBox::Mode*/ mode;
     int /*SkTextBox::SpacingAlign*/ spacingAlign;
 
     typedef SkDrawRect INHERITED;

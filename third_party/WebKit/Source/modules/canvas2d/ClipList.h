@@ -6,6 +6,7 @@
 #define ClipList_h
 
 #include "platform/graphics/GraphicsTypes.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 class SkCanvas;
@@ -13,9 +14,9 @@ class SkPath;
 
 namespace blink {
 
-class AffineTransform;
-
 class ClipList {
+    DISALLOW_NEW();
+
 public:
     ClipList() { }
     ClipList(const ClipList&);
@@ -23,9 +24,9 @@ public:
 
     void clipPath(const SkPath&, AntiAliasingMode, const SkMatrix&);
     void playback(SkCanvas*) const;
+    const SkPath& getCurrentClipPath() const;
 
 private:
-
     struct ClipOp {
         SkPath m_path;
         AntiAliasingMode m_antiAliasingMode;
@@ -34,10 +35,12 @@ private:
         ClipOp(const ClipOp&);
     };
 
-    // Number of clip ops that can be stored in a ClipList without resorting to dynamic allocation
+    // Number of clip ops that can be stored in a ClipList without resorting to
+    // dynamic allocation
     static const size_t cInlineClipOpCapacity = 4;
 
     WTF::Vector<ClipOp, cInlineClipOpCapacity> m_clipList;
+    SkPath m_currentClipPath;
 };
 
 } // namespace blink

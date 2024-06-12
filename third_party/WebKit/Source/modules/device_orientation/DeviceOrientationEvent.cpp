@@ -23,31 +23,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/device_orientation/DeviceOrientationEvent.h"
 
 #include "modules/device_orientation/DeviceOrientationData.h"
 
 namespace blink {
 
-DeviceOrientationEvent::~DeviceOrientationEvent()
-{
-}
+DeviceOrientationEvent::~DeviceOrientationEvent() { }
 
 DeviceOrientationEvent::DeviceOrientationEvent()
     : m_orientation(DeviceOrientationData::create())
 {
 }
 
-DeviceOrientationEvent::DeviceOrientationEvent(const AtomicString& eventType, DeviceOrientationData* orientation)
-    : Event(eventType, false, false) // Can't bubble, not cancelable
-    , m_orientation(orientation)
+DeviceOrientationEvent::DeviceOrientationEvent(
+    const AtomicString& eventType,
+    DeviceOrientationData* orientation)
+    : Event(eventType, false, false)
+    , // Can't bubble, not cancelable
+    m_orientation(orientation)
 {
 }
 
-void DeviceOrientationEvent::initDeviceOrientationEvent(const AtomicString& type, bool bubbles, bool cancelable, const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute)
+void DeviceOrientationEvent::initDeviceOrientationEvent(
+    const AtomicString& type,
+    bool bubbles,
+    bool cancelable,
+    const Nullable<double>& alpha,
+    const Nullable<double>& beta,
+    const Nullable<double>& gamma,
+    bool absolute)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initEvent(type, bubbles, cancelable);
@@ -81,13 +88,9 @@ double DeviceOrientationEvent::gamma(bool& isNull) const
     return 0;
 }
 
-bool DeviceOrientationEvent::absolute(bool& isNull) const
+bool DeviceOrientationEvent::absolute() const
 {
-    if (m_orientation->canProvideAbsolute())
-        return m_orientation->absolute();
-
-    isNull = true;
-    return 0;
+    return m_orientation->absolute();
 }
 
 const AtomicString& DeviceOrientationEvent::interfaceName() const

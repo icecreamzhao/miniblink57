@@ -1,6 +1,7 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,27 +24,28 @@
 
 #include "core/CoreExport.h"
 #include "core/css/CSSValue.h"
-#include "wtf/PassRefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class CORE_EXPORT CSSValueList : public CSSValue {
-public:
-    using iterator = WillBeHeapVector<RefPtrWillBeMember<CSSValue>, 4>::iterator;
-    using const_iterator = WillBeHeapVector<RefPtrWillBeMember<CSSValue>, 4>::const_iterator;
+    WTF_MAKE_NONCOPYABLE(CSSValueList);
 
-    static PassRefPtrWillBeRawPtr<CSSValueList> createCommaSeparated()
+public:
+    using iterator = HeapVector<Member<const CSSValue>, 4>::iterator;
+    using const_iterator = HeapVector<Member<const CSSValue>, 4>::const_iterator;
+
+    static CSSValueList* createCommaSeparated()
     {
-        return adoptRefWillBeNoop(new CSSValueList(CommaSeparator));
+        return new CSSValueList(CommaSeparator);
     }
-    static PassRefPtrWillBeRawPtr<CSSValueList> createSpaceSeparated()
+    static CSSValueList* createSpaceSeparated()
     {
-        return adoptRefWillBeNoop(new CSSValueList(SpaceSeparator));
+        return new CSSValueList(SpaceSeparator);
     }
-    static PassRefPtrWillBeRawPtr<CSSValueList> createSlashSeparated()
+    static CSSValueList* createSlashSeparated()
     {
-        return adoptRefWillBeNoop(new CSSValueList(SlashSeparator));
+        return new CSSValueList(SlashSeparator);
     }
 
     iterator begin() { return m_values.begin(); }
@@ -52,21 +54,20 @@ public:
     const_iterator end() const { return m_values.end(); }
 
     size_t length() const { return m_values.size(); }
-    CSSValue* item(size_t index) { return m_values[index].get(); }
-    const CSSValue* item(size_t index) const { return m_values[index].get(); }
-    CSSValue* itemWithBoundsCheck(size_t index) { return index < m_values.size() ? m_values[index].get() : 0; }
-    const CSSValue* itemWithBoundsCheck(size_t index) const { return index < m_values.size() ? m_values[index].get() : 0; }
+    const CSSValue& item(size_t index) const { return *m_values[index]; }
 
-    void append(PassRefPtrWillBeRawPtr<CSSValue> value) { m_values.append(value); }
-    void prepend(PassRefPtrWillBeRawPtr<CSSValue> value) { m_values.prepend(value); }
-    bool removeAll(CSSValue*);
-    bool hasValue(CSSValue*) const;
-    PassRefPtrWillBeRawPtr<CSSValueList> copy();
+    void append(const CSSValue& value) { m_values.push_back(value); }
+    bool removeAll(const CSSValue&);
+    bool hasValue(const CSSValue&) const;
+    CSSValueList* copy() const;
 
     String customCSSText() const;
     bool equals(const CSSValueList&) const;
 
     bool hasFailedOrCanceledSubresources() const;
+
+    bool mayContainUrl() const;
+    void reResolveUrl(const Document&) const;
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
@@ -76,7 +77,7 @@ protected:
 private:
     explicit CSSValueList(ValueListSeparator);
 
-    WillBeHeapVector<RefPtrWillBeMember<CSSValue>, 4> m_values;
+    HeapVector<Member<const CSSValue>, 4> m_values;
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSValueList, isValueList());

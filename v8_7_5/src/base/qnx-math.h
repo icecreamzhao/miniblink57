@@ -16,4 +16,4 @@
 
 using std::lrint;
 
-#endif  // V8_BASE_QNX_MATH_H_
+#endif // V8_BASE_QNX_MATH_H_

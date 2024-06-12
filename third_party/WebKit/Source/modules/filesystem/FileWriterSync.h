@@ -42,22 +42,15 @@ namespace blink {
 class Blob;
 class ExceptionState;
 
-class FileWriterSync final
-#if ENABLE(OILPAN)
-    : public GarbageCollectedFinalized<FileWriterSync>
-    , public FileWriterBase
-#else
-    : public FileWriterBase
-#endif
-    , public ScriptWrappable
-    , public WebFileWriterClient {
+class FileWriterSync final : public GarbageCollectedFinalized<FileWriterSync>,
+                             public FileWriterBase,
+                             public ScriptWrappable,
+                             public WebFileWriterClient {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(FileWriterSync);
+    USING_GARBAGE_COLLECTED_MIXIN(FileWriterSync);
+
 public:
-    static FileWriterSync* create()
-    {
-        return new FileWriterSync();
-    }
+    static FileWriterSync* create() { return new FileWriterSync(); }
     ~FileWriterSync() override;
     DECLARE_VIRTUAL_TRACE();
 
@@ -76,9 +69,7 @@ private:
     void prepareForWrite();
 
     FileError::ErrorCode m_error;
-#if ENABLE(ASSERT)
     bool m_complete;
-#endif
 };
 
 } // namespace blink

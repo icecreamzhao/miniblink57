@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://dev.w3.org/html5/webvtt/#the-vttcue-interface
+// https://w3c.github.io/webvtt/#the-vttcue-interface
 
 enum AutoKeyword { "auto" };
 enum DirectionSetting { "" /* horizontal */, "rl", "lr" };
@@ -40,7 +40,7 @@ enum AlignSetting { "start", "middle", "end", "left", "right" };
     ConstructorCallWith=Document,
     SetWrapperReferenceFrom=owner,
 ] interface VTTCue : TextTrackCue {
-    // TODO(philipj): regionId has been replaced by a region attribute.
+    // TODO(foolip): regionId has been replaced by a region attribute.
     [RuntimeEnabled=WebVTTRegions] attribute DOMString regionId;
     attribute DirectionSetting vertical;
     attribute boolean snapToLines;

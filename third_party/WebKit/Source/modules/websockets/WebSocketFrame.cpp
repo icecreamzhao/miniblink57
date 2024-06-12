@@ -20,13 +20,14 @@
  *
  */
 
-#include "config.h"
-
 #include "modules/websockets/WebSocketFrame.h"
 
 namespace blink {
 
-WebSocketFrame::WebSocketFrame(OpCode opCode, const char* payload, size_t payloadLength, Flags flags)
+WebSocketFrame::WebSocketFrame(OpCode opCode,
+    const char* payload,
+    size_t payloadLength,
+    Flags flags)
     : opCode(opCode)
     , final(flags & Final)
     , compress(flags & Compress)

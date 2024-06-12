@@ -8,27 +8,28 @@
 
 namespace v8 {
 namespace internal {
-namespace torque {
+    namespace torque {
 
-Signature FileVisitor::MakeSignature(const CallableNodeSignature* signature) {
-  LabelDeclarationVector definition_vector;
-  for (const auto& label : signature->labels) {
-    LabelDeclaration def = {label.name, GetTypeVector(label.types)};
-    definition_vector.push_back(def);
-  }
-  base::Optional<std::string> arguments_variable;
-  if (signature->parameters.has_varargs)
-    arguments_variable = signature->parameters.arguments_variable;
-  Signature result{signature->parameters.names,
-                   arguments_variable,
-                   {GetTypeVector(signature->parameters.types),
-                    signature->parameters.has_varargs},
-                   signature->parameters.implicit_count,
-                   Declarations::GetType(signature->return_type),
-                   definition_vector};
-  return result;
-}
+        Signature FileVisitor::MakeSignature(const CallableNodeSignature* signature)
+        {
+            LabelDeclarationVector definition_vector;
+            for (const auto& label : signature->labels) {
+                LabelDeclaration def = { label.name, GetTypeVector(label.types) };
+                definition_vector.push_back(def);
+            }
+            base::Optional<std::string> arguments_variable;
+            if (signature->parameters.has_varargs)
+                arguments_variable = signature->parameters.arguments_variable;
+            Signature result { signature->parameters.names,
+                arguments_variable,
+                { GetTypeVector(signature->parameters.types),
+                    signature->parameters.has_varargs },
+                signature->parameters.implicit_count,
+                Declarations::GetType(signature->return_type),
+                definition_vector };
+            return result;
+        }
 
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+    } // namespace torque
+} // namespace internal
+} // namespace v8

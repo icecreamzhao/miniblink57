@@ -6,6 +6,7 @@
  */
 
 #include "Benchmark.h"
+#include "SkAutoPixmapStorage.h"
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkColorPriv.h"
@@ -15,16 +16,19 @@
 #include "SkRasterClip.h"
 
 class DrawPathBench : public Benchmark {
-    SkPaint     fPaint;
-    SkString    fName;
-    SkPath      fPath;
+    SkPaint fPaint;
+    SkString fName;
+    SkPath fPath;
     SkRasterClip fRC;
     SkAutoPixmapStorage fPixmap;
-    SkMatrix    fIdentity;
-    SkDraw      fDraw;
-    bool        fDrawCoverage;
+    SkMatrix fIdentity;
+    SkDraw fDraw;
+    bool fDrawCoverage;
+
 public:
-    DrawPathBench(bool drawCoverage) : fDrawCoverage(drawCoverage) {
+    DrawPathBench(bool drawCoverage)
+        : fDrawCoverage(drawCoverage)
+    {
         fPaint.setAntiAlias(true);
         fName.printf("draw_coverage_%s", drawCoverage ? "true" : "false");
 
@@ -37,18 +41,19 @@ public:
         fIdentity.setIdentity();
         fRC.setRect(fPath.getBounds().round());
 
-        fDraw.fDst      = fPixmap;
-        fDraw.fMatrix   = &fIdentity;
-        fDraw.fClip     = &fRC.bwRgn();
-        fDraw.fRC       = &fRC;
+        fDraw.fDst = fPixmap;
+        fDraw.fMatrix = &fIdentity;
+        fDraw.fRC = &fRC;
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         if (fDrawCoverage) {
             for (int i = 0; i < loops; ++i) {
                 fDraw.drawPathCoverage(fPath, fPaint);
@@ -66,5 +71,5 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new DrawPathBench(false) )
-DEF_BENCH( return new DrawPathBench(true) )
+DEF_BENCH(return new DrawPathBench(false))
+DEF_BENCH(return new DrawPathBench(true))

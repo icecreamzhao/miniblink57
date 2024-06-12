@@ -2,18 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/platform/WebEncryptedMediaKeyInformation.h"
 
 namespace blink {
 
-WebEncryptedMediaKeyInformation::WebEncryptedMediaKeyInformation()
-{
-}
+WebEncryptedMediaKeyInformation::WebEncryptedMediaKeyInformation() { }
 
-WebEncryptedMediaKeyInformation::~WebEncryptedMediaKeyInformation()
-{
-}
+WebEncryptedMediaKeyInformation::~WebEncryptedMediaKeyInformation() { }
 
 WebData WebEncryptedMediaKeyInformation::id() const
 {
@@ -25,7 +20,8 @@ void WebEncryptedMediaKeyInformation::setId(const WebData& id)
     m_id.assign(id);
 }
 
-WebEncryptedMediaKeyInformation::KeyStatus WebEncryptedMediaKeyInformation::status() const
+WebEncryptedMediaKeyInformation::KeyStatus
+WebEncryptedMediaKeyInformation::status() const
 {
     return m_status;
 }

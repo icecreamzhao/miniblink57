@@ -11,7 +11,8 @@
 #include "GrGpu.h"
 
 void GrCoordTransform::reset(GrCoordSet sourceCoords, const SkMatrix& m, const GrTexture* texture,
-                             GrTextureParams::FilterMode filter) {
+    GrTextureParams::FilterMode filter)
+{
     SkASSERT(texture);
     SkASSERT(!fInProcessor);
 
@@ -54,8 +55,9 @@ void GrCoordTransform::reset(GrCoordSet sourceCoords, const SkMatrix& m, const G
 }
 
 void GrCoordTransform::reset(GrCoordSet sourceCoords,
-                             const SkMatrix& m,
-                             GrSLPrecision precision) {
+    const SkMatrix& m,
+    GrSLPrecision precision)
+{
     SkASSERT(!fInProcessor);
     fSourceCoords = sourceCoords;
     fMatrix = m;

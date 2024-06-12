@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutSliderThumb.h"
 
 #include "core/layout/LayoutTheme.h"
@@ -52,10 +51,10 @@ void LayoutSliderThumb::updateAppearance(const ComputedStyle& parentStyle)
         mutableStyleRef().setAppearance(MediaSliderThumbPart);
     else if (parentStyle.appearance() == MediaVolumeSliderPart)
         mutableStyleRef().setAppearance(MediaVolumeSliderThumbPart);
-    else if (parentStyle.appearance() == MediaFullScreenVolumeSliderPart)
-        mutableStyleRef().setAppearance(MediaFullScreenVolumeSliderThumbPart);
+    else if (parentStyle.appearance() == MediaFullscreenVolumeSliderPart)
+        mutableStyleRef().setAppearance(MediaFullscreenVolumeSliderThumbPart);
     if (styleRef().hasAppearance())
-        LayoutTheme::theme().adjustSliderThumbSize(mutableStyleRef(), toElement(node()));
+        LayoutTheme::theme().adjustSliderThumbSize(mutableStyleRef());
 }
 
 } // namespace blink

@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/SQLTransactionCoordinator.h"
 
 #include "modules/webdatabase/Database.h"
@@ -49,12 +48,10 @@ SQLTransactionCoordinator::SQLTransactionCoordinator()
 {
 }
 
-DEFINE_TRACE(SQLTransactionCoordinator)
-{
-    visitor->trace(m_coordinationInfoMap);
-}
+DEFINE_TRACE(SQLTransactionCoordinator) { }
 
-void SQLTransactionCoordinator::processPendingTransactions(CoordinationInfo& info)
+void SQLTransactionCoordinator::processPendingTransactions(
+    CoordinationInfo& info)
 {
     if (info.activeWriteTransaction || info.pendingTransactions.isEmpty())
         return;
@@ -73,7 +70,8 @@ void SQLTransactionCoordinator::processPendingTransactions(CoordinationInfo& inf
     }
 }
 
-void SQLTransactionCoordinator::acquireLock(SQLTransactionBackend* transaction)
+void SQLTransactionCoordinator::acquireLock(
+    SQLTransactionBackend* transaction)
 {
     ASSERT(!m_isShuttingDown);
 
@@ -82,7 +80,8 @@ void SQLTransactionCoordinator::acquireLock(SQLTransactionBackend* transaction)
     CoordinationInfoHeapMap::iterator coordinationInfoIterator = m_coordinationInfoMap.find(dbIdentifier);
     if (coordinationInfoIterator == m_coordinationInfoMap.end()) {
         // No pending transactions for this DB
-        CoordinationInfo& info = m_coordinationInfoMap.add(dbIdentifier, CoordinationInfo()).storedValue->value;
+        CoordinationInfo& info = m_coordinationInfoMap.add(dbIdentifier, CoordinationInfo())
+                                     .storedValue->value;
         info.pendingTransactions.append(transaction);
         processPendingTransactions(info);
     } else {
@@ -90,10 +89,10 @@ void SQLTransactionCoordinator::acquireLock(SQLTransactionBackend* transaction)
         info.pendingTransactions.append(transaction);
         processPendingTransactions(info);
     }
-
 }
 
-void SQLTransactionCoordinator::releaseLock(SQLTransactionBackend* transaction)
+void SQLTransactionCoordinator::releaseLock(
+    SQLTransactionBackend* transaction)
 {
     if (m_isShuttingDown)
         return;
@@ -101,7 +100,7 @@ void SQLTransactionCoordinator::releaseLock(SQLTransactionBackend* transaction)
     String dbIdentifier = getDatabaseIdentifier(transaction);
 
     CoordinationInfoHeapMap::iterator coordinationInfoIterator = m_coordinationInfoMap.find(dbIdentifier);
-    ASSERT_WITH_SECURITY_IMPLICATION(coordinationInfoIterator != m_coordinationInfoMap.end());
+    SECURITY_DCHECK(coordinationInfoIterator != m_coordinationInfoMap.end());
     CoordinationInfo& info = coordinationInfoIterator->value;
 
     if (transaction->isReadOnly()) {
@@ -121,9 +120,11 @@ void SQLTransactionCoordinator::shutdown()
     // while we're shutting down.
     m_isShuttingDown = true;
 
-    // Notify all transactions in progress that the database thread is shutting down
+    // Notify all transactions in progress that the database thread is shutting
+    // down.
     for (CoordinationInfoHeapMap::iterator coordinationInfoIterator = m_coordinationInfoMap.begin();
-         coordinationInfoIterator != m_coordinationInfoMap.end(); ++coordinationInfoIterator) {
+         coordinationInfoIterator != m_coordinationInfoMap.end();
+         ++coordinationInfoIterator) {
         CoordinationInfo& info = coordinationInfoIterator->value;
 
         // Clean up transactions that have reached "lockAcquired":
@@ -131,11 +132,8 @@ void SQLTransactionCoordinator::shutdown()
         // transaction is interrupted?" at the top of SQLTransactionBackend.cpp.
         if (info.activeWriteTransaction)
             info.activeWriteTransaction->notifyDatabaseThreadIsShuttingDown();
-        for (HeapHashSet<Member<SQLTransactionBackend>>::iterator activeReadTransactionsIterator =
-                     info.activeReadTransactions.begin();
-             activeReadTransactionsIterator != info.activeReadTransactions.end();
-             ++activeReadTransactionsIterator) {
-            (*activeReadTransactionsIterator)->notifyDatabaseThreadIsShuttingDown();
+        for (auto& it : info.activeReadTransactions) {
+            it->notifyDatabaseThreadIsShuttingDown();
         }
 
         // Clean up transactions that have NOT reached "lockAcquired":

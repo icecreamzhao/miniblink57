@@ -36,12 +36,16 @@ namespace blink {
 class MediaDevicesRequest;
 class WebDocument;
 class WebMediaDeviceInfo;
-template <typename T> class WebVector;
+template <typename T>
+class WebVector;
 
 class WebMediaDevicesRequest {
 public:
     WebMediaDevicesRequest() { }
-    WebMediaDevicesRequest(const WebMediaDevicesRequest& request) { assign(request); }
+    WebMediaDevicesRequest(const WebMediaDevicesRequest& request)
+    {
+        assign(request);
+    }
     ~WebMediaDevicesRequest() { reset(); }
 
     WebMediaDevicesRequest& operator=(const WebMediaDevicesRequest& other)
@@ -55,7 +59,7 @@ public:
     BLINK_EXPORT bool equals(const WebMediaDevicesRequest&) const;
     BLINK_EXPORT void assign(const WebMediaDevicesRequest&);
 
-    BLINK_EXPORT WebSecurityOrigin securityOrigin() const;
+    BLINK_EXPORT WebSecurityOrigin getSecurityOrigin() const;
     BLINK_EXPORT WebDocument ownerDocument() const;
 
     BLINK_EXPORT void requestSucceeded(WebVector<WebMediaDeviceInfo>);
@@ -69,7 +73,8 @@ private:
     WebPrivatePtr<MediaDevicesRequest> m_private;
 };
 
-inline bool operator==(const WebMediaDevicesRequest& a, const WebMediaDevicesRequest& b)
+inline bool operator==(const WebMediaDevicesRequest& a,
+    const WebMediaDevicesRequest& b)
 {
     return a.equals(b);
 }

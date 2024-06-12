@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/SourceAlpha.h"
 
 #include "platform/graphics/filters/Filter.h"
@@ -30,43 +29,31 @@
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<SourceAlpha> SourceAlpha::create(FilterEffect* sourceEffect)
+SourceAlpha* SourceAlpha::create(FilterEffect* sourceEffect)
 {
-    return adoptRefWillBeNoop(new SourceAlpha(sourceEffect));
-}
-
-const AtomicString& SourceAlpha::effectName()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, s_effectName, ("SourceAlpha", AtomicString::ConstructFromLiteral));
-    return s_effectName;
+    return new SourceAlpha(sourceEffect);
 }
 
 SourceAlpha::SourceAlpha(FilterEffect* sourceEffect)
-    : FilterEffect(sourceEffect->filter())
+    : FilterEffect(sourceEffect->getFilter())
 {
     setOperatingColorSpace(sourceEffect->operatingColorSpace());
-    inputEffects().append(sourceEffect);
+    inputEffects().push_back(sourceEffect);
 }
 
-FloatRect SourceAlpha::determineAbsolutePaintRect(const FloatRect& requestedRect)
+sk_sp<SkImageFilter> SourceAlpha::createImageFilter()
 {
-    return inputEffect(0)->determineAbsolutePaintRect(requestedRect);
+    sk_sp<SkImageFilter> sourceGraphic(
+        SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+    SkScalar matrix[20] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, SK_Scalar1, 0 };
+    sk_sp<SkColorFilter> colorFilter = SkColorFilter::MakeMatrixFilterRowMajor255(matrix);
+    return SkColorFilterImageFilter::Make(std::move(colorFilter),
+        std::move(sourceGraphic));
 }
 
-PassRefPtr<SkImageFilter> SourceAlpha::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> sourceGraphic(builder->build(inputEffect(0), operatingColorSpace()));
-    SkScalar matrix[20] = {
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, SK_Scalar1, 0
-    };
-    RefPtr<SkColorFilter> colorFilter(adoptRef(SkColorMatrixFilter::Create(matrix)));
-    return adoptRef(SkColorFilterImageFilter::Create(colorFilter.get(), sourceGraphic.get()));
-}
-
-TextStream& SourceAlpha::externalRepresentation(TextStream& ts, int indent) const
+TextStream& SourceAlpha::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[SourceAlpha]\n";

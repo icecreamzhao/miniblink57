@@ -27,51 +27,57 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/FloatPolygon.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 class FloatPolygonTestValue {
 public:
-    FloatPolygonTestValue(const float* coordinates, unsigned coordinatesLength, WindRule fillRule)
+    FloatPolygonTestValue(const float* coordinates,
+        unsigned coordinatesLength,
+        WindRule fillRule)
     {
         ASSERT(!(coordinatesLength % 2));
-        OwnPtr<Vector<FloatPoint>> vertices = adoptPtr(new Vector<FloatPoint>(coordinatesLength / 2));
+        std::unique_ptr<Vector<FloatPoint>> vertices = WTF::wrapUnique(new Vector<FloatPoint>(coordinatesLength / 2));
         for (unsigned i = 0; i < coordinatesLength; i += 2)
             (*vertices)[i / 2] = FloatPoint(coordinates[i], coordinates[i + 1]);
-        m_polygon = adoptPtr(new FloatPolygon(vertices.release(), fillRule));
+        m_polygon = WTF::wrapUnique(new FloatPolygon(std::move(vertices), fillRule));
     }
 
     const FloatPolygon& polygon() const { return *m_polygon; }
 
 private:
-    OwnPtr<FloatPolygon> m_polygon;
+    std::unique_ptr<FloatPolygon> m_polygon;
 };
 
 namespace {
 
-bool compareEdgeIndex(const FloatPolygonEdge* edge1, const FloatPolygonEdge* edge2)
-{
-    return edge1->edgeIndex() < edge2->edgeIndex();
-}
+    bool compareEdgeIndex(const FloatPolygonEdge* edge1,
+        const FloatPolygonEdge* edge2)
+    {
+        return edge1->edgeIndex() < edge2->edgeIndex();
+    }
 
-Vector<const FloatPolygonEdge*> sortedOverlappingEdges(const FloatPolygon& polygon, float minY, float maxY)
-{
-    Vector<const FloatPolygonEdge*> result;
-    polygon.overlappingEdges(minY, maxY, result);
-    std::sort(result.begin(), result.end(), compareEdgeIndex);
-    return result;
-}
+    Vector<const FloatPolygonEdge*>
+    sortedOverlappingEdges(const FloatPolygon& polygon, float minY, float maxY)
+    {
+        Vector<const FloatPolygonEdge*> result;
+        polygon.overlappingEdges(minY, maxY, result);
+        std::sort(result.begin(), result.end(), compareEdgeIndex);
+        return result;
+    }
 
 } // anonymous namespace
 
 #define SIZEOF_ARRAY(p) (sizeof(p) / sizeof(p[0]))
 
 /**
- * Checks a right triangle. This test covers all of the trivial FloatPolygon accessors.
+ * Checks a right triangle. This test covers all of the trivial FloatPolygon
+ * accessors.
  *
  *                        200,100
  *                          /|
@@ -82,8 +88,9 @@ Vector<const FloatPolygonEdge*> sortedOverlappingEdges(const FloatPolygon& polyg
  */
 TEST(FloatPolygonTest, basics)
 {
-    const float triangleCoordinates[] = {200, 100, 200, 200, 100, 200};
-    FloatPolygonTestValue triangleTestValue(triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_NONZERO);
+    const float triangleCoordinates[] = { 200, 100, 200, 200, 100, 200 };
+    FloatPolygonTestValue triangleTestValue(
+        triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_NONZERO);
     const FloatPolygon& triangle = triangleTestValue.polygon();
 
     EXPECT_EQ(RULE_NONZERO, triangle.fillRule());
@@ -178,8 +185,9 @@ TEST(FloatPolygonTest, basics)
  */
 TEST(FloatPolygonTest, triangle_nonzero)
 {
-    const float triangleCoordinates[] = {200, 100, 200, 200, 100, 200};
-    FloatPolygonTestValue triangleTestValue(triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_NONZERO);
+    const float triangleCoordinates[] = { 200, 100, 200, 200, 100, 200 };
+    FloatPolygonTestValue triangleTestValue(
+        triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_NONZERO);
     const FloatPolygon& triangle = triangleTestValue.polygon();
 
     EXPECT_EQ(RULE_NONZERO, triangle.fillRule());
@@ -205,8 +213,9 @@ TEST(FloatPolygonTest, triangle_nonzero)
  */
 TEST(FloatPolygonTest, triangle_evenodd)
 {
-    const float triangleCoordinates[] = {200, 100, 200, 200, 100, 200};
-    FloatPolygonTestValue triangleTestValue(triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_EVENODD);
+    const float triangleCoordinates[] = { 200, 100, 200, 200, 100, 200 };
+    FloatPolygonTestValue triangleTestValue(
+        triangleCoordinates, SIZEOF_ARRAY(triangleCoordinates), RULE_EVENODD);
     const FloatPolygon& triangle = triangleTestValue.polygon();
 
     EXPECT_EQ(RULE_EVENODD, triangle.fillRule());
@@ -220,36 +229,38 @@ TEST(FloatPolygonTest, triangle_evenodd)
     EXPECT_FALSE(triangle.contains(FloatPoint(201, 200.5)));
 }
 
-#define TEST_EMPTY(coordinates)                                                                        \
-{                                                                                                      \
-    FloatPolygonTestValue emptyPolygonTestValue(coordinates, SIZEOF_ARRAY(coordinates), RULE_NONZERO); \
-    const FloatPolygon& emptyPolygon = emptyPolygonTestValue.polygon();                                \
-    EXPECT_TRUE(emptyPolygon.isEmpty());                                                               \
-}
+#define TEST_EMPTY(coordinates)                                             \
+    {                                                                       \
+        FloatPolygonTestValue emptyPolygonTestValue(                        \
+            coordinates, SIZEOF_ARRAY(coordinates), RULE_NONZERO);          \
+        const FloatPolygon& emptyPolygon = emptyPolygonTestValue.polygon(); \
+        EXPECT_TRUE(emptyPolygon.isEmpty());                                \
+    }
 
 TEST(FloatPolygonTest, emptyPolygons)
 {
-    const float emptyCoordinates1[] = {0, 0};
+    const float emptyCoordinates1[] = { 0, 0 };
     TEST_EMPTY(emptyCoordinates1);
 
-    const float emptyCoordinates2[] = {0, 0, 1, 1};
+    const float emptyCoordinates2[] = { 0, 0, 1, 1 };
     TEST_EMPTY(emptyCoordinates2);
 
-    const float emptyCoordinates3[] = {0, 0, 1, 1, 2, 2, 3, 3};
+    const float emptyCoordinates3[] = { 0, 0, 1, 1, 2, 2, 3, 3 };
     TEST_EMPTY(emptyCoordinates3);
 
-    const float emptyCoordinates4[] = {0, 0, 1, 1, 2, 2, 3, 3, 1, 1};
+    const float emptyCoordinates4[] = { 0, 0, 1, 1, 2, 2, 3, 3, 1, 1 };
     TEST_EMPTY(emptyCoordinates4);
 
-    const float emptyCoordinates5[] = {0, 0, 0, 1, 0, 2, 0, 3, 0, 1};
+    const float emptyCoordinates5[] = { 0, 0, 0, 1, 0, 2, 0, 3, 0, 1 };
     TEST_EMPTY(emptyCoordinates5);
 
-    const float emptyCoordinates6[] = {0, 0, 1, 0, 2, 0, 3, 0, 1, 0};
+    const float emptyCoordinates6[] = { 0, 0, 1, 0, 2, 0, 3, 0, 1, 0 };
     TEST_EMPTY(emptyCoordinates6);
 }
 
 /*
- * Test FloatPolygon::contains() with a trapezoid. The vertices are listed in counter-clockwise order.
+ * Test FloatPolygon::contains() with a trapezoid. The vertices are listed in
+ * counter-clockwise order.
  *
  *        150,100   250,100
  *          +----------+
@@ -260,8 +271,9 @@ TEST(FloatPolygonTest, emptyPolygons)
  */
 TEST(FloatPolygonTest, trapezoid)
 {
-    const float trapezoidCoordinates[] = {100, 150, 300, 150, 250, 100, 150, 100};
-    FloatPolygonTestValue trapezoidTestValue(trapezoidCoordinates, SIZEOF_ARRAY(trapezoidCoordinates), RULE_EVENODD);
+    const float trapezoidCoordinates[] = { 100, 150, 300, 150, 250, 100, 150, 100 };
+    FloatPolygonTestValue trapezoidTestValue(
+        trapezoidCoordinates, SIZEOF_ARRAY(trapezoidCoordinates), RULE_EVENODD);
     const FloatPolygon& trapezoid = trapezoidTestValue.polygon();
 
     EXPECT_FALSE(trapezoid.isEmpty());
@@ -275,10 +287,9 @@ TEST(FloatPolygonTest, trapezoid)
     EXPECT_FALSE(trapezoid.contains(FloatPoint(301, 150)));
 }
 
-
 /*
- * Test FloatPolygon::contains() with a non-convex rectilinear polygon. The polygon has the same shape
- * as the letter "H":
+ * Test FloatPolygon::contains() with a non-convex rectilinear polygon. The
+ * polygon has the same shape as the letter "H":
  *
  *    100,100  150,100   200,100   250,100
  *       +--------+        +--------+
@@ -296,8 +307,11 @@ TEST(FloatPolygonTest, trapezoid)
  */
 TEST(FloatPolygonTest, rectilinear)
 {
-    const float hCoordinates[] = {100, 100, 150, 100, 150, 150, 200, 150, 200, 100, 250, 100, 250, 250, 200, 250, 200, 200, 150, 200, 150, 250, 100, 250};
-    FloatPolygonTestValue hTestValue(hCoordinates, SIZEOF_ARRAY(hCoordinates), RULE_NONZERO);
+    const float hCoordinates[] = { 100, 100, 150, 100, 150, 150, 200, 150,
+        200, 100, 250, 100, 250, 250, 200, 250,
+        200, 200, 150, 200, 150, 250, 100, 250 };
+    FloatPolygonTestValue hTestValue(hCoordinates, SIZEOF_ARRAY(hCoordinates),
+        RULE_NONZERO);
     const FloatPolygon& h = hTestValue.polygon();
 
     EXPECT_FALSE(h.isEmpty());

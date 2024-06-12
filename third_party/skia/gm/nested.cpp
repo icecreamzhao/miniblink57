@@ -5,22 +5,26 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
-#include "SkRandom.h"
+#include "SkPath.h"
 #include "SkRRect.h"
+#include "SkRandom.h"
+#include "gm.h"
 
 namespace skiagm {
 
 // Test out various combinations of nested rects, ovals and rrects.
 class NestedGM : public GM {
 public:
-    NestedGM(bool doAA, bool flipped) : fDoAA(doAA), fFlipped(flipped) {
+    NestedGM(bool doAA, bool flipped)
+        : fDoAA(doAA)
+        , fFlipped(flipped)
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         SkString name("nested");
         if (fFlipped) {
             name.append("_flipY");
@@ -33,7 +37,8 @@ protected:
         return name;
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kImageWidth, kImageHeight);
     }
 
@@ -44,26 +49,28 @@ protected:
         kShapeCount
     };
 
-    static void AddShape(SkPath* path, const SkRect& rect, Shapes shape, SkPath::Direction dir) {
+    static void AddShape(SkPath* path, const SkRect& rect, Shapes shape, SkPath::Direction dir)
+    {
         switch (shape) {
-            case kRect_Shape:
-                path->addRect(rect, dir);
-                break;
-            case kRRect_Shape: {
-                SkRRect rr;
-                rr.setRectXY(rect, 5, 5);
-                path->addRRect(rr, dir);
-                break;
-                }
-            case kOval_Shape:
-                path->addOval(rect, dir);
-                break;
-            default:
-                break;
+        case kRect_Shape:
+            path->addRect(rect, dir);
+            break;
+        case kRRect_Shape: {
+            SkRRect rr;
+            rr.setRectXY(rect, 5, 5);
+            path->addRRect(rr, dir);
+            break;
+        }
+        case kOval_Shape:
+            path->addOval(rect, dir);
+            break;
+        default:
+            break;
         }
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
 
         SkPaint shapePaint;
         shapePaint.setColor(SK_ColorBLACK);
@@ -72,8 +79,8 @@ protected:
         SkRect outerRect = SkRect::MakeWH(40, 40);
 
         SkRect innerRects[] = {
-            { 10, 10, 30, 30 },     // small
-            { .5f, 18, 4.5f, 22 }   // smaller and offset to left
+            { 10, 10, 30, 30 }, // small
+            { .5f, 18, 4.5f, 22 } // smaller and offset to left
         };
 
         // draw a background pattern to make transparency errors more apparent
@@ -82,8 +89,8 @@ protected:
         for (int y = 0; y < kImageHeight; y += 10) {
             for (int x = 0; x < kImageWidth; x += 10) {
                 SkRect r = SkRect::MakeXYWH(SkIntToScalar(x),
-                                            SkIntToScalar(y),
-                                            10, 10);
+                    SkIntToScalar(y),
+                    10, 10);
                 SkPaint p;
                 p.setColor(rand.nextU() | 0xFF000000);
                 canvas->drawRect(r, p);
@@ -96,9 +103,9 @@ protected:
                 for (size_t innerRect = 0; innerRect < SK_ARRAY_COUNT(innerRects); ++innerRect) {
                     SkPath path;
 
-                    AddShape(&path, outerRect, (Shapes) outerShape, SkPath::kCW_Direction);
-                    AddShape(&path, innerRects[innerRect], (Shapes) innerShape,
-                             SkPath::kCCW_Direction);
+                    AddShape(&path, outerRect, (Shapes)outerShape, SkPath::kCW_Direction);
+                    AddShape(&path, innerRects[innerRect], (Shapes)innerShape,
+                        SkPath::kCCW_Direction);
 
                     canvas->save();
                     if (fFlipped) {
@@ -118,7 +125,6 @@ protected:
             xOff = 2;
             yOff += 45;
         }
-
     }
 
 private:
@@ -133,9 +139,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return new NestedGM(/* doAA = */ true,  /* flipped = */ false); )
-DEF_GM( return new NestedGM(/* doAA = */ false, /* flipped = */ false); )
-DEF_GM( return new NestedGM(/* doAA = */ true,  /* flipped = */ true); )
-DEF_GM( return new NestedGM(/* doAA = */ false, /* flipped = */ true); )
+DEF_GM(return new NestedGM(/* doAA = */ true, /* flipped = */ false);)
+DEF_GM(return new NestedGM(/* doAA = */ false, /* flipped = */ false);)
+DEF_GM(return new NestedGM(/* doAA = */ true, /* flipped = */ true);)
+DEF_GM(return new NestedGM(/* doAA = */ false, /* flipped = */ true);)
 
 }

@@ -27,17 +27,24 @@
 
 #include "config.h"
 #include "content/web_impl_win/npapi/WebPluginImpl.h"
-
+#include "content/web_impl_win/npapi/WebPluginImeWin.h"
 #include "content/web_impl_win/npapi/PluginMessageThrottlerWin.h"
+#include "content/web_impl_win/BitmapColor.h"
 #include "content/browser/CheckReEnter.h"
 #include "third_party/WebKit/Source/web/WebPluginContainerImpl.h"
 #include "third_party/WebKit/Source/core/frame/FrameView.h"
 #include "third_party/WebKit/Source/platform/graphics/Image.h"
 #include "third_party/WebKit/Source/wtf/Functional.h"
 #include "third_party/WebKit/public/platform/Platform.h"
-#include "third_party/WebKit/public/web/WebInputEvent.h"
+#include "third_party/WebKit/public/platform/WebInputEvent.h"
+#include "third_party/WebKit/public/platform/WebMouseEvent.h"
+#include "third_party/WebKit/public/platform/WebMouseWheelEvent.h"
 #include "skia/ext/bitmap_platform_device_win.h"
 #include "skia/ext/platform_canvas.h"
+#include "wke/wkeGlobalVar.h"
+#include "wtf/text/WTFStringUtil.h"
+#include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 
 static inline HWND windowHandleForPageClient(HWND client)
 {
@@ -63,17 +70,12 @@ static BYTE* beginPaint;
 static unsigned endPaintSysCall;
 static BYTE* endPaint;
 
-typedef HDC (WINAPI *PtrBeginPaint)(HWND, PAINTSTRUCT*);
-typedef BOOL (WINAPI *PtrEndPaint)(HWND, const PAINTSTRUCT*);
+typedef HDC (__stdcall *PtrBeginPaint)(HWND, PAINTSTRUCT*);
+typedef BOOL (__stdcall *PtrEndPaint)(HWND, const PAINTSTRUCT*);
 
-#if CPU(X86_64)
-//extern "C" HDC __stdcall _HBeginPaint(HWND hWnd, LPPAINTSTRUCT lpPaint);
-//extern "C" BOOL __stdcall _HEndPaint(HWND hWnd, const PAINTSTRUCT* lpPaint);
-#endif
-
-HDC WINAPI WebPluginImpl::hookedBeginPaint(HWND hWnd, PAINTSTRUCT* lpPaint)
+HDC __stdcall WebPluginImpl::hookedBeginPaint(HWND hWnd, PAINTSTRUCT* lpPaint)
 {
-    WebPluginImpl* pluginView = reinterpret_cast<WebPluginImpl*>(GetProp(hWnd, kWebPluginViewProperty));
+    WebPluginImpl* pluginView = reinterpret_cast<WebPluginImpl*>(::GetPropW(hWnd, kWebPluginViewProperty));
     if (pluginView && pluginView->m_wmPrintHDC) {
         // We're secretly handling WM_PRINTCLIENT, so set up the PAINTSTRUCT so
         // that the plugin will paint into the HDC we provide.
@@ -94,9 +96,9 @@ HDC WINAPI WebPluginImpl::hookedBeginPaint(HWND hWnd, PAINTSTRUCT* lpPaint)
 #endif
 }
 
-BOOL WINAPI WebPluginImpl::hookedEndPaint(HWND hWnd, const PAINTSTRUCT* lpPaint)
+BOOL __stdcall WebPluginImpl::hookedEndPaint(HWND hWnd, const PAINTSTRUCT* lpPaint)
 {
-    WebPluginImpl* pluginView = reinterpret_cast<WebPluginImpl*>(GetProp(hWnd, kWebPluginViewProperty));
+    WebPluginImpl* pluginView = reinterpret_cast<WebPluginImpl*>(::GetPropW(hWnd, kWebPluginViewProperty));
     if (pluginView && pluginView->m_wmPrintHDC) {
         // We're secretly handling WM_PRINTCLIENT, so we don't have to do any
         // cleanup.
@@ -170,7 +172,7 @@ static void hook(const char* module, const char* proc, unsigned& sysCallID, BYTE
 #endif
 }
 
-static void setUpOffscreenPaintingHooks(HDC (WINAPI*hookedBeginPaint)(HWND, PAINTSTRUCT*), BOOL (WINAPI*hookedEndPaint)(HWND, const PAINTSTRUCT*))
+static void setUpOffscreenPaintingHooks(HDC (__stdcall*hookedBeginPaint)(HWND, PAINTSTRUCT*), BOOL (__stdcall*hookedEndPaint)(HWND, const PAINTSTRUCT*))
 {
     static bool haveHooked = false;
     if (haveHooked)
@@ -199,7 +201,7 @@ static bool registerPluginView()
     wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.hIconSm        = 0;
     wcex.style          = CS_DBLCLKS;
-    wcex.lpfnWndProc    = DefWindowProc;
+    wcex.lpfnWndProc    = ::DefWindowProcA;
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = nullptr; // WebCore::instanceHandle();
@@ -215,7 +217,6 @@ static bool registerPluginView()
 LRESULT CALLBACK WebPluginImpl::PluginViewWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     WebPluginImpl* pluginView = reinterpret_cast<WebPluginImpl*>(GetProp(hWnd, kWebPluginViewProperty));
-
     return pluginView->wndProc(hWnd, message, wParam, lParam);
 }
 
@@ -310,13 +311,64 @@ LRESULT WebPluginImpl::wndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
     return result;
 }
 
-#define TOO_FAR_POS_FORCE_INIT 1
+static void subtractRectanglesFromRegion(HRGN hrgn, const blink::WebVector<blink::WebRect>& cutouts)
+{
+    if (0 == cutouts.size())
+        return;
 
-void WebPluginImpl::updatePluginWidget(const IntRect& windowRect, const IntRect& clipRect)
+    HRGN cutout = ::CreateRectRgn(0, 0, 0, 0);
+    for (size_t i = 0; i < cutouts.size(); i++) {
+        blink::IntRect r = cutouts[i];
+        ::SetRectRgn(cutout, r.x(), r.y(), r.maxX(), r.maxY());
+        ::CombineRgn(hrgn, hrgn, cutout, RGN_DIFF);
+    }
+    ::DeleteObject(cutout);
+}
+
+void WebPluginImpl::setRgnIfNeeded(const blink::IntRect& windowRect, const blink::IntRect& oldWindowRect, const blink::IntRect& oldClipRect)
+{
+    if (!m_plugin)
+        return;
+
+    if (!m_cutOutsRectsDirty && (m_haveUpdatedPluginWidget && m_windowRect == oldWindowRect && m_clipRect == oldClipRect))
+        return;
+
+    m_cutOutsRectsDirty = false;
+    setCallingPlugin(true);
+
+    // To prevent flashes while scrolling, we disable drawing during the window
+    // update process by clipping the window to the zero rect.
+    bool clipToZeroRect = !m_plugin->quirks().contains(PluginQuirkDontClipToZeroRectWhenScrolling);
+
+    if (platformPluginWidget()) {
+        if (clipToZeroRect) {
+            HRGN rgn = ::CreateRectRgn(0, 0, 0, 0);
+            ::SetWindowRgn(platformPluginWidget(), rgn, FALSE);
+        } else {
+            HRGN rgn = ::CreateRectRgn(m_clipRect.x(), m_clipRect.y(), m_clipRect.maxX(), m_clipRect.maxY());
+            ::SetWindowRgn(platformPluginWidget(), rgn, TRUE);
+        }
+
+        if (!m_haveUpdatedPluginWidget || m_windowRect != oldWindowRect)
+            ::MoveWindow(platformPluginWidget(), m_windowRect.x() + m_widgetOffset.x(), m_windowRect.y() + m_widgetOffset.y(), m_windowRect.width(), m_windowRect.height(), TRUE);
+
+        if (clipToZeroRect) {
+            HRGN rgn = ::CreateRectRgn(m_clipRect.x(), m_clipRect.y(), m_clipRect.maxX(), m_clipRect.maxY());
+            if (wke::g_cutOutsNpapiRectsEnable)
+                subtractRectanglesFromRegion(rgn, m_cutOutsRects);
+            ::SetWindowRgn(platformPluginWidget(), rgn, TRUE);
+        }
+    }
+
+    setNPWindowRect(windowRect);
+    setCallingPlugin(false);
+    m_haveUpdatedPluginWidget = true;
+}
+
+void WebPluginImpl::updatePluginWidget(const IntRect& windowRect, const IntRect& clipRect, bool isVisible)
 {
     CheckReEnter enterContent(nullptr);
 
-#ifndef TOO_FAR_POS_FORCE_INIT
     WebPluginContainerImpl* container = (WebPluginContainerImpl*)m_pluginContainer;
     if (!container->parent())
         return;
@@ -324,7 +376,6 @@ void WebPluginImpl::updatePluginWidget(const IntRect& windowRect, const IntRect&
     FrameView* frameView = toFrameView(container->parent());
     if (!frameView)
         return;
-#endif
 
     IntRect oldWindowRect = m_windowRect;
     IntRect oldClipRect = m_clipRect;
@@ -337,44 +388,21 @@ void WebPluginImpl::updatePluginWidget(const IntRect& windowRect, const IntRect&
     m_windowRect = windowRect;
     m_clipRect = clipRect;
 #endif
-    if (platformPluginWidget() && (!m_haveUpdatedPluginWidget || m_windowRect != oldWindowRect || m_clipRect != oldClipRect)) {
-        setCallingPlugin(true);
 
-        // To prevent flashes while scrolling, we disable drawing during the window
-        // update process by clipping the window to the zero rect.
-
-        bool clipToZeroRect = !m_plugin->quirks().contains(PluginQuirkDontClipToZeroRectWhenScrolling);
-
-        if (clipToZeroRect) {
-            HRGN rgn = (::CreateRectRgn(0, 0, 0, 0));
-            ::SetWindowRgn(platformPluginWidget(), rgn, FALSE);
-            ::DeleteObject(rgn);
-        } else {
-            HRGN rgn = (::CreateRectRgn(m_clipRect.x(), m_clipRect.y(), m_clipRect.maxX(), m_clipRect.maxY()));
-            ::SetWindowRgn(platformPluginWidget(), rgn, TRUE);
-            ::DeleteObject(rgn);
-        }
-
-        if (!m_haveUpdatedPluginWidget || m_windowRect != oldWindowRect)
-            ::MoveWindow(platformPluginWidget(), m_windowRect.x() + m_widgetOffset.x(), m_windowRect.y() + m_widgetOffset.y(), m_windowRect.width(), m_windowRect.height(), TRUE);
-
-        if (clipToZeroRect) {
-            HRGN rgn = (::CreateRectRgn(m_clipRect.x(), m_clipRect.y(), m_clipRect.maxX(), m_clipRect.maxY()));
-            ::SetWindowRgn(platformPluginWidget(), rgn, TRUE);
-            ::DeleteObject(rgn);
-        }
-
-        setNPWindowRect(windowRect);
-
-        setCallingPlugin(false);
-
-        m_haveUpdatedPluginWidget = true;
-    }
+    setRgnIfNeeded(windowRect, oldWindowRect, oldClipRect);
+    
+    ::ShowWindow(platformPluginWidget(), isVisible ? SW_SHOWNA : SW_HIDE);
 
     if (m_windowRect != oldWindowRect || m_clipRect != oldClipRect) {
         if (m_memoryCanvas)
             delete m_memoryCanvas;
         m_memoryCanvas = skia::CreatePlatformCanvas(m_windowRect.width(), m_windowRect.height(), !m_isTransparent);
+
+        size_t rowBytes;
+        SkImageInfo memoryImageInfo;
+        m_memoryPixels = m_memoryCanvas->accessTopLayerPixels(&memoryImageInfo, &rowBytes);
+        m_memoryCanvasSize.cx = memoryImageInfo.width();
+        m_memoryCanvasSize.cy = memoryImageInfo.height();
     }
 }
 
@@ -390,7 +418,6 @@ bool WebPluginImpl::dispatchNPEvent(NPEvent& npEvent)
         shouldPop = true;
     }
 
-    //JSC::JSLock::DropAllLocks dropAllLocks(JSDOMWindowBase::commonVM());
     setCallingPlugin(true);
     bool accepted = !m_plugin->pluginFuncs()->event(m_instance, &npEvent);
     setCallingPlugin(false);
@@ -401,178 +428,79 @@ bool WebPluginImpl::dispatchNPEvent(NPEvent& npEvent)
     return accepted;
 }
 
-bool WebPluginImpl::supportsKeyboardFocus() const { return true; }
-bool WebPluginImpl::supportsEditCommands() const { return true; }
+bool WebPluginImpl::supportsKeyboardFocus() const
+{ 
+    return true; 
+}
 
-// void WebPluginImpl::movePluginWindowsHelper(HWND parent, const std::vector<WebPluginGeometry>& moves,
-//     const blink::WebRect& windowRect, const blink::WebRect& clipRect, ) {
-//     if (moves.empty())
-//         return;
-// 
-//     bool oop_plugins = !base::CommandLine::ForCurrentProcess()->HasSwitch(switches::kSingleProcess);
-// 
-//     HDWP defer_window_pos_info =
-//         ::BeginDeferWindowPos(static_cast<int>(moves.size()));
-// 
-//     if (!defer_window_pos_info) {
-//         NOTREACHED();
-//         return;
-//     }
-// 
-// #if defined(USE_AURA)
-//     std::vector<RECT> invalidate_rects;
-// #endif
-// 
-//     int failure_count = 0;
-//     for (int i = 0; i < (int)moves.size(); ++i) {
-//         unsigned long flags = 0;
-//         const WebPluginGeometry& move = moves[i];
-//         HWND window = move.window;
-// 
-//         // As the plugin parent window which lives on the browser UI thread is
-//         // destroyed asynchronously, it is possible that we have a stale window
-//         // sent in by the renderer for moving around.
-//         // Note: get the parent before checking if the window is valid, to avoid a
-//         // race condition where the window is destroyed after the check but before
-//         // the GetParent call.
-//         HWND cur_parent = ::GetParent(window);
-//         if (!::IsWindow(window))
-//             continue;
-// 
-//         if (!PluginServiceImpl::GetInstance()->IsPluginWindow(window)) {
-//             // The renderer should only be trying to move plugin windows. However,
-//             // this may happen as a result of a race condition (i.e. even after the
-//             // check right above), so we ignore it.
-//             continue;
-//         }
-// 
-//         if (oop_plugins) {
-//             if (cur_parent == GetDesktopWindow()) {
-//                 // The plugin window hasn't been parented yet, add an intermediate
-//                 // window that lives on this thread to speed up scrolling. Note this
-//                 // only works with out of process plugins since we depend on
-//                 // PluginProcessHost to destroy the intermediate HWNDs.
-//                 cur_parent = ReparentWindow(window, parent);
-//                 ::ShowWindow(window, SW_SHOW);  // Window was created hidden.
-//             }
-//             else if (!IsPluginWrapperWindow(cur_parent)) {
-//                 continue;  // Race if plugin process is shutting down.
-//             }
-// 
-//             // We move the intermediate parent window which doesn't result in cross-
-//             // process synchronous Windows messages.
-//             window = cur_parent;
-//         }
-//         else {
-//             if (cur_parent == GetDesktopWindow())
-//                 SetParent(window, parent);
-//         }
-// 
-//         if (move.visible)
-//             flags |= SWP_SHOWWINDOW;
-//         else
-//             flags |= SWP_HIDEWINDOW;
-// 
-// #if defined(USE_AURA)
-//         if (GpuDataManagerImpl::GetInstance()->CanUseGpuBrowserCompositor()) {
-//             // Without this flag, Windows repaints the parent area uncovered by this
-//             // move. However when software compositing is used the clipping region is
-//             // ignored. Since in Aura the browser chrome could be under the plugin, if
-//             // if Windows tries to paint it synchronously inside EndDeferWindowsPos
-//             // then it won't have the data and it will flash white. So instead we
-//             // manually redraw the plugin.
-//             // Why not do this for native Windows? Not sure if there are any
-//             // performance issues with this.
-//             flags |= SWP_NOREDRAW;
-//         }
-// #endif
-// 
-//         if (move.rects_valid) {
-//             gfx::Rect clip_rect_in_pixel = gfx::win::DIPToScreenRect(move.clip_rect);
-//             HRGN hrgn = ::CreateRectRgn(clip_rect_in_pixel.x(),
-//                 clip_rect_in_pixel.y(),
-//                 clip_rect_in_pixel.right(),
-//                 clip_rect_in_pixel.bottom());
-//             gfx::SubtractRectanglesFromRegion(hrgn, move.cutout_rects);
-// 
-//             // Note: System will own the hrgn after we call SetWindowRgn,
-//             // so we don't need to call DeleteObject(hrgn)
-//             ::SetWindowRgn(window, hrgn, !move.clip_rect.IsEmpty() && (flags & SWP_NOREDRAW) == 0);
-// 
-//         }
-//         else {
-//             flags |= SWP_NOMOVE;
-//             flags |= SWP_NOSIZE;
-//         }
-// 
-//         gfx::Rect window_rect_in_pixel = gfx::win::DIPToScreenRect(move.window_rect);
-//         defer_window_pos_info = ::DeferWindowPos(defer_window_pos_info,
-//             window, NULL,
-//             window_rect_in_pixel.x(),
-//             window_rect_in_pixel.y(),
-//             window_rect_in_pixel.width(),
-//             window_rect_in_pixel.height(),
-//             flags);
-// 
-//         if (!defer_window_pos_info) {
-//             DWORD lastError = GetLastError();
-//             if (lastError == ERROR_INVALID_WINDOW_HANDLE) {
-//                 // The window might have become invalid since the last time we checked
-//                 // it (at the beginning of this loop).  In this case, let's start
-//                 // again.
-//                 DCHECK(!::IsWindow(window));
-// 
-//                 ++failure_count;
-//                 int remaining = moves.size() - failure_count;
-//                 if (0 == remaining) {
-//                     return;
-//                 }
-// 
-//                 defer_window_pos_info = ::BeginDeferWindowPos(remaining);
-// 
-//                 if (!defer_window_pos_info) {
-//                     NOTREACHED();
-//                     return;
-//                 }
-// 
-//                 // Note that we set i to -1 here so that it increments up to 0 by the
-//                 // for-loop.
-//                 i = -1;
-//                 continue;
-//             }
-//             DCHECK(false) << "DeferWindowPos failed, so all plugin moves ignored: " << lastError;
-//             return;
-//         }
-//     }
-// 
-//     ::EndDeferWindowPos(defer_window_pos_info);
-// }
+bool WebPluginImpl::supportsEditCommands() const
+{
+    return true; 
+}
 
 void WebPluginImpl::updateGeometry(
     const blink::WebRect& windowRect, const blink::WebRect& clipRect,
     const blink::WebRect& unobscuredRect, const blink::WebVector<blink::WebRect>& cutOutsRects,
     bool isVisible)
 {
-    updatePluginWidget(windowRect, clipRect);
+    Vector<blink::IntRect> cutOutsRectsDirty;
+    if (cutOutsRects.size() != m_cutOutsRects.size()) {
+        m_cutOutsRectsDirty = true;
+    } else {
+        for (size_t i = 0; i < cutOutsRects.size(); ++i) {
+            bool find = false;
+            for (size_t j = 0; j < m_cutOutsRects.size(); ++j) {
+                blink::IntRect r = cutOutsRects[i];
+                if (r == m_cutOutsRects[j]) {
+                    find = true;
+                    break;
+                }
+            }
+            if (!find) {
+                m_cutOutsRectsDirty = true;
+                break;
+            }
+        }
+    }
+
+    if (m_cutOutsRectsDirty) {
+        m_cutOutsRects.clear();
+        for (size_t i = 0; i < cutOutsRects.size(); ++i) {
+            m_cutOutsRects.append(cutOutsRects[i]);
+        }
+    }
+
+    updatePluginWidget(windowRect, clipRect, isVisible);
 }
 
 void WebPluginImpl::updateFocus(bool focused, blink::WebFocusType)
 {
-    //DebugBreak();
+    if (!m_plugin)
+        return;
+
+    NPEvent focusEvent;
+    focusEvent.event = focused ? WM_SETFOCUS : WM_KILLFOCUS;
+    focusEvent.wParam = 0;
+    focusEvent.lParam = 0;
+
+    if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+        m_pluginIme = new WebPluginIMEWin();
+
+    m_plugin->pluginFuncs()->event(m_instance, &focusEvent);
 }
 
-void WebPluginImpl::asynSetPlatformPluginWidgetVisibilityTimerFired(blink::Timer<WebPluginImpl>*)
+void WebPluginImpl::asynSetPlatformPluginWidgetVisibilityTimerFired(blink::TimerBase*)
 {
     WebPluginContainerImpl* container = (WebPluginContainerImpl*)m_pluginContainer;
     if (!container)
         return;
 
-    bool isVisibility = container->isSelfVisible();
+    bool isVisibility = container->isVisible();
     if (isVisibility) {
-        if (container->isParentVisible() && platformPluginWidget())
+        if (platformPluginWidget())
             ::ShowWindow(platformPluginWidget(), SW_SHOWNA);
     } else {
-        if (container->isParentVisible() && platformPluginWidget())
+        if (platformPluginWidget())
             ::ShowWindow(platformPluginWidget(), SW_HIDE);
     }
 }
@@ -581,6 +509,11 @@ void WebPluginImpl::updateVisibility(bool isVisibility)
 {
     if (!m_setPlatformPluginWidgetVisibilityTimer.isActive())
         m_setPlatformPluginWidgetVisibilityTimer.startOneShot(0, FROM_HERE);
+}
+
+void WebPluginImpl::updateAllLifecyclePhases(void)
+{
+
 }
 
 bool WebPluginImpl::acceptsInputEvents()
@@ -602,56 +535,57 @@ bool WebPluginImpl::handleMouseEvent(const blink::WebMouseEvent& evt)
     npEvent.lParam = MAKELPARAM(p.x(), p.y());
     npEvent.wParam = 0;
 
-    if (evt.modifiers & WebInputEvent::ControlKey)
+    if (evt.modifiers() & WebInputEvent::ControlKey)
         npEvent.wParam |= MK_CONTROL;
-    if (evt.modifiers & WebInputEvent::ShiftKey)
+    if (evt.modifiers() & WebInputEvent::ShiftKey)
         npEvent.wParam |= MK_SHIFT;
 
-    if (evt.type == blink::WebInputEvent::Type::MouseMove
-        || evt.type == blink::WebInputEvent::Type::MouseLeave
-        || evt.type == blink::WebInputEvent::Type::MouseEnter) {
+    if (evt.type() == blink::WebInputEvent::Type::MouseMove
+        || evt.type() == blink::WebInputEvent::Type::MouseLeave
+        || evt.type() == blink::WebInputEvent::Type::MouseEnter) {
         npEvent.event = WM_MOUSEMOVE;
-        if (evt.button != blink::WebMouseEvent::Button::ButtonNone) {
+        if (evt.button != blink::WebMouseEvent::Button::NoButton) {
             switch (evt.button) {
-            case blink::WebMouseEvent::Button::ButtonLeft:
+            case blink::WebMouseEvent::Button::Left:
                 npEvent.wParam |= MK_LBUTTON;
                 break;
-            case blink::WebMouseEvent::Button::ButtonMiddle:
+            case blink::WebMouseEvent::Button::Middle:
                 npEvent.wParam |= MK_MBUTTON;
                 break;
-            case blink::WebMouseEvent::Button::ButtonRight:
+            case blink::WebMouseEvent::Button::Right:
                 npEvent.wParam |= MK_RBUTTON;
                 break;
-            case blink::WebMouseEvent::Button::ButtonNone:
+            case blink::WebMouseEvent::Button::NoButton:
                 break;
             }
         }
-    } else if (evt.type == blink::WebInputEvent::Type::MouseDown) {
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseDown) {
         focusPluginElement();
+
         switch (evt.button) {
-        case blink::WebMouseEvent::Button::ButtonLeft:
+        case blink::WebMouseEvent::Button::Left:
             npEvent.event = WM_LBUTTONDOWN;
             break;
-        case blink::WebMouseEvent::Button::ButtonMiddle:
+        case blink::WebMouseEvent::Button::Middle:
             npEvent.event = WM_MBUTTONDOWN;
             break;
-        case blink::WebMouseEvent::Button::ButtonRight:
+        case blink::WebMouseEvent::Button::Right:
             npEvent.event = WM_RBUTTONDOWN;
             break;
         }
-    } else if (evt.type == blink::WebInputEvent::Type::MouseUp) {
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseUp) {
         switch (evt.button) {
-        case blink::WebMouseEvent::Button::ButtonLeft:
+        case blink::WebMouseEvent::Button::Left:
             npEvent.event = WM_LBUTTONUP;
             break;
-        case blink::WebMouseEvent::Button::ButtonMiddle:
+        case blink::WebMouseEvent::Button::Middle:
             npEvent.event = WM_MBUTTONUP;
             break;
-        case blink::WebMouseEvent::Button::ButtonRight:
+        case blink::WebMouseEvent::Button::Right:
             npEvent.event = WM_RBUTTONUP;
             break;
         }
-    } else if (evt.type == blink::WebInputEvent::Type::MouseWheel) {
+    } else if (evt.type() == blink::WebInputEvent::Type::MouseWheel) {
         const blink::WebMouseWheelEvent& wheelEvt = static_cast<const blink::WebMouseWheelEvent&>(evt);
         npEvent.event = WM_MOUSEWHEEL;
         npEvent.wParam = MAKEWPARAM(wheelEvt.deltaX, wheelEvt.deltaY);
@@ -661,31 +595,65 @@ bool WebPluginImpl::handleMouseEvent(const blink::WebMouseEvent& evt)
     // FIXME: Consider back porting the http://webkit.org/b/58108 fix here.
     if (dispatchNPEvent(npEvent))
         isDefaultHandled = true;
+    
 
     // Currently, Widget::setCursor is always called after this function in EventHandler.cpp
     // and since we don't want that we set ignoreNextSetCursor to true here to prevent that.
-//     ignoreNextSetCursor = true;
-//     if (Page* page = m_parentFrame->page())
-//         page->chrome().client().setLastSetCursorToCurrentCursor();
-
     return isDefaultHandled;
+}
+
+bool WebPluginImpl::handleKeyboardCharEventForEmulateIme(int windowsKeyCode)
+{
+    if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+        m_pluginIme = new WebPluginIMEWin();
+    if (!m_pluginIme)
+        return false;
+
+    NPEvent npEvent;
+    npEvent.wParam = windowsKeyCode;
+
+    npEvent.event = WM_SETFOCUS;
+    npEvent.wParam = 0;
+    npEvent.lParam = 0;
+    dispatchNPEvent(npEvent);
+
+    wchar_t c = (wchar_t)windowsKeyCode;
+    wchar_t text[2] = { c, 0 };
+    std::vector<int> clauses;
+    std::vector<int> target;
+    clauses.push_back(0);
+    target.push_back(0);
+    m_pluginIme->compositionUpdated(text, clauses, target, 0);
+    m_pluginIme->compositionCompleted(text);
+    m_pluginIme->sendEvents(m_instance, m_plugin->pluginFuncs()->event);
+
+    return true;
 }
 
 bool WebPluginImpl::handleKeyboardEvent(const blink::WebKeyboardEvent& evt)
 {
+    if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+        m_pluginIme = new WebPluginIMEWin();
+    WebPluginIMEWin::ScopedLock lock(m_pluginIme);
+
     ASSERT(m_plugin && !m_isWindowed);
     bool isDefaultHandled = false;
     NPEvent npEvent;
 
     npEvent.wParam = evt.windowsKeyCode;
 
-    if (evt.type == blink::WebInputEvent::Type::KeyDown) {
+    if (evt.type() == blink::WebInputEvent::Type::KeyDown) {
         npEvent.event = WM_KEYDOWN;
         npEvent.lParam = 0;
-    } else if (evt.type == blink::WebInputEvent::Type::Char) {
-        npEvent.event = WM_CHAR;
-        npEvent.lParam = 0;
-    } else if (evt.type == blink::WebInputEvent::Type::KeyUp) {
+    } else if (evt.type() == blink::WebInputEvent::Type::Char) {
+        if (!m_plugin->quirks().contains(PluginQuirkEmulateIme)) {
+            npEvent.event = WM_CHAR;
+            npEvent.lParam = 1;
+            npEvent.wParam = evt.windowsKeyCode;
+            dispatchNPEvent(npEvent);
+        }
+        isDefaultHandled = true;
+    } else if (evt.type() == blink::WebInputEvent::Type::KeyUp) {
         npEvent.event = WM_KEYUP;
         npEvent.lParam = 0x8000;
     } else
@@ -696,24 +664,46 @@ bool WebPluginImpl::handleKeyboardEvent(const blink::WebKeyboardEvent& evt)
     return isDefaultHandled;
 }
 
-bool WebPluginImpl::handleInputEvent(const blink::WebInputEvent& evt, blink::WebCursorInfo&)
+blink::WebInputEventResult WebPluginImpl::handleInputEvent(const blink::WebInputEvent& evt, blink::WebCursorInfo&)
 {
     if (m_isWindowed)
+        return blink::WebInputEventResult::NotHandled;
+
+    if (blink::WebInputEvent::isMouseEventType(evt.type()) || blink::WebInputEvent::MouseWheel == evt.type())
+        return handleMouseEvent(static_cast<const blink::WebMouseEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
+
+    if (blink::WebInputEvent::isKeyboardEventType(evt.type()))
+        return handleKeyboardEvent(static_cast<const blink::WebKeyboardEvent&>(evt)) ? blink::WebInputEventResult::HandledSystem : blink::WebInputEventResult::NotHandled;
+
+    return blink::WebInputEventResult::NotHandled;
+}
+
+bool WebPluginImpl::getImeStatus(int* inputType, blink::IntRect* caretRect)
+{
+    if (!m_pluginIme)
         return false;
+    return m_pluginIme->getStatus(inputType, caretRect);
+}
 
-    if (blink::WebInputEvent::isMouseEventType(evt.type) || blink::WebInputEvent::MouseWheel == evt.type)
-        return handleMouseEvent(static_cast<const blink::WebMouseEvent&>(evt));
+static void captureWindow(HWND hWnd, HDC hdcDest)
+{
+    HDC hdcSrc = ::GetWindowDC(hWnd);
 
-    if (blink::WebInputEvent::isKeyboardEventType(evt.type))
-        return handleKeyboardEvent(static_cast<const blink::WebKeyboardEvent&>(evt));
+    RECT windowRect = { 0 };
+    ::GetWindowRect(hWnd, &windowRect);
 
-    return false;
+    int width = windowRect.right - windowRect.left;
+    int height = windowRect.bottom - windowRect.top;
+    ::BitBlt(hdcDest, 0, 0, width, height, hdcSrc, 0, 0, SRCCOPY);
+
+    ::ReleaseDC(hWnd, hdcSrc);
 }
 
 void WebPluginImpl::paintIntoTransformedContext(HDC hdc)
 {
     if (m_isWindowed) {
-        SendMessage(platformPluginWidget(), WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdc), PRF_CLIENT | PRF_CHILDREN | PRF_OWNED);
+        //captureWindow(platformPluginWidget(), hdc);
+        //SendMessage(platformPluginWidget(), WM_PRINTCLIENT, reinterpret_cast<WPARAM>(hdc), PRF_CLIENT | PRF_CHILDREN | PRF_OWNED);
         return;
     }
 
@@ -734,10 +724,8 @@ void WebPluginImpl::paintIntoTransformedContext(HDC hdc)
     r.setX(documentScrollOffsetRelativeToViewOrigin.x());
     r.setY(documentScrollOffsetRelativeToViewOrigin.y());
 
-#ifdef TOO_FAR_POS_FORCE_INIT
     if (r.isEmpty())
         r = blink::IntRect(0, 0, 1, 1);
-#endif
 
     windowpos.x = r.x();
     windowpos.y = r.y();
@@ -766,38 +754,47 @@ void WebPluginImpl::paintIntoTransformedContext(HDC hdc)
 
 void WebPluginImpl::paintWindowedPluginIntoContext(GraphicsContext& context, const IntRect& rect)
 {
-// #if !USE(WINGDI)
-//     ASSERT(m_isWindowed);
-//     ASSERT(context.shouldIncludeChildWindows());
-// 
-//     IntPoint locationInWindow = downcast<FrameView>(*parent()).convertToContainingWindow(frameRect().location());
-// 
-//     LocalWindowsContext windowsContext(context, frameRect(), false);
-// 
-// #if USE(CAIRO)
-//     // Must flush drawings up to this point to the backing metafile, otherwise the
-//     // plugin region will be overwritten with any clear regions specified in the
-//     // cairo-controlled portions of the rendering.
-//     cairo_show_page(context.platformContext()->cr());
-// #endif
-
-//     HDC hdc = windowsContext.hdc();
-//     XFORM originalTransform;
-//     GetWorldTransform(hdc, &originalTransform);
-// 
-//     // The plugin expects the DC to be in client coordinates, so we translate
-//     // the DC to make that so.
-//     AffineTransform ctm = context.getCTM();
-//     ctm.translate(locationInWindow.x(), locationInWindow.y());
-//     XFORM transform = static_cast<XFORM>(ctm.toTransformationMatrix());
-// 
-//     SetWorldTransform(hdc, &transform);
-// 
-//     paintIntoTransformedContext(hdc);
-// 
-//     SetWorldTransform(hdc, &originalTransform);
     DebugBreak();
-//#endif
+}
+
+static void doOrNormal(DWORD dwKey, LPVOID pBuff, int nLen)
+{
+    if (nLen <= 0 || nLen % 4) {
+        return;
+    }
+    for (DWORD* pSrc = (DWORD*)pBuff; nLen > 0; nLen -= 4, pSrc++) {
+        *pSrc |= dwKey;
+    }
+}
+
+static void doOrSSE(DWORD dwKey, LPVOID pBuff, int nLen)
+{
+#ifndef _WIN64
+    int nSSELen = nLen >> 4;
+    if (nSSELen) {
+        __asm {
+            push ecx;
+            push eax;
+            movss xmm1, [dwKey];
+            shufps xmm1, xmm1, 0;
+            mov	eax, [pBuff];
+            mov ecx, [nSSELen];
+xor_process:
+            movups xmm0, [eax];
+            orps xmm0, xmm1;
+            movups[eax], xmm0;
+            add eax, 10h;
+            dec ecx;
+            jnz xor_process;
+            pop eax;;
+            pop ecx;
+            emms;
+        }
+    }
+    doOrNormal(dwKey, (BYTE*)pBuff + (nSSELen << 4), nLen - (nSSELen << 4));
+#else
+    doOrNormal(dwKey, pBuff, nLen);
+#endif
 }
 
 void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
@@ -815,27 +812,20 @@ void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
     // Ensure that we have called SetWindow before we try to paint.
     if (!m_haveCalledSetWindow) {
         blink::IntRect r = container->frameRect();
-#ifdef TOO_FAR_POS_FORCE_INIT
         if (r.isEmpty())
             r = rect;
-#endif
         setNPWindowRect(r);
     }
 
-    if (m_isWindowed) {
-// #if !USE(WINGDI)
-//          if (context.shouldIncludeChildWindows())
-//              paintWindowedPluginIntoContext(context, rect);
-// #endif
+    if (m_isWindowed)
         return;
-    }
 
     if (!m_memoryCanvas || !canvas) // start()里有可能这两其中一个为nullptr，看打开哪个宏
         return;
 
     SkPaint clearPaint;
-    clearPaint.setARGB(0xff, 0xFF, 0xFF, 0xFF);
-    clearPaint.setXfermodeMode(SkXfermode::kClear_Mode);
+    clearPaint.setARGB(0xFF, 0xFF, 0xFF, 0xFF);
+    clearPaint.setXfermodeMode(SkXfermode::kSrc_Mode);
 
     SkRect skrc;
     blink::IntRect r = container->frameRect();
@@ -848,15 +838,22 @@ void WebPluginImpl::paint(blink::WebCanvas* canvas, const blink::WebRect& rect)
     // of the window and the plugin expects that the passed in DC has window coordinates.
     XFORM originalTransform;
     XFORM transform;
-    ::GetWorldTransform(hMemoryDC, &originalTransform);
-    transform = originalTransform;
-    transform.eDx = -r.x();
-    transform.eDy = -r.y();
-    ::SetWorldTransform(hMemoryDC, &transform);
+
+    if (!m_isWindowed) {
+        ::GetWorldTransform(hMemoryDC, &originalTransform);
+        transform = originalTransform;
+        transform.eDx = -r.x();
+        transform.eDy = -r.y();
+        ::SetWorldTransform(hMemoryDC, &transform);
+    }
 
     paintIntoTransformedContext(hMemoryDC);
 
-    ::SetWorldTransform(hMemoryDC, &originalTransform);
+    if (m_memoryPixels)
+        doOrSSE(0xff000000, m_memoryPixels, m_memoryCanvasSize.cx * m_memoryCanvasSize.cy * 4);
+
+    if (!m_isWindowed)
+        ::SetWorldTransform(hMemoryDC, &originalTransform);
     skia::EndPlatformPaint(m_memoryCanvas);
 
     SkBaseDevice* bitmapDevice = skia::GetTopDevice(*m_memoryCanvas);
@@ -956,7 +953,7 @@ bool WebPluginImpl::platformGetValue(NPNVariable variable, void* value, NPError*
 
         case NPNVSupportsWindowless: {
             NPBool* flag = reinterpret_cast<NPBool*>(value);
-            *flag = TRUE;
+            *flag = TRUE; // weolar
             *result = NPERR_NO_ERROR;
             return true;
         }
@@ -1047,9 +1044,10 @@ void WebPluginImpl::platformStartImpl(bool isSync)
         if (container->isSelfVisible())
             flags |= WS_VISIBLE;
 
-        HWND parentWindowHandle = m_parentWidget;
+        flags |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+
         HWND window = ::CreateWindowEx(0, kWebPluginViewClassName, 0, flags,
-            0, 0, 0, 0, parentWindowHandle, 0, /*WebCore::instanceHandle()*/nullptr, 0);
+            0, 0, 0, 0, m_parentWidget, 0, nullptr, 0);
 
         setPlatformPluginWidget(window);
 
@@ -1068,16 +1066,13 @@ void WebPluginImpl::platformStartImpl(bool isSync)
         m_npWindow.type = NPWindowTypeDrawable;
         m_npWindow.window = 0;
     }
-    
 
     blink::IntRect r(0, 0, 1, 1);
-#ifdef TOO_FAR_POS_FORCE_INIT
     if (m_windowRect.isEmpty() && m_clipRect.isEmpty()) {
-        updatePluginWidget(r, r);
+        updatePluginWidget(r, r, true);
         paint(m_memoryCanvas, r);
     } else    
-#endif
-        updatePluginWidget(m_windowRect, m_clipRect);
+        updatePluginWidget(m_windowRect, m_clipRect, true);
 
     if (!isSync && !m_plugin->quirks().contains(PluginQuirkDeferFirstSetWindowCall)) {
         r = container->frameRect();
@@ -1146,13 +1141,58 @@ void WebPluginImpl::platformDestroy()
     if (!widget)
         return;
 
-    blink::Platform::current()->currentThread()->postTask(FROM_HERE, WTF::bind(platformDestroyWindow, widget));
+    blink::Platform::current()->currentThread()->postTask(FROM_HERE, WTF::bind(platformDestroyWindow, WTF::unretained(widget)));
 
     CheckReEnter::incrementEnterCount();
     ::ShowWindow(widget, SW_HIDE);
     setPlatformPluginWidget(0);
     CheckReEnter::decrementEnterCount();
 }
+
+bool WebPluginImpl::setComposition(const blink::WebString& text, const blink::WebVector<blink::WebCompositionUnderline>& underlines, int selectionStart, int selectionEnd)
+{
+    if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+        m_pluginIme = new WebPluginIMEWin();
+    if (!m_pluginIme)
+        return false;
+
+    std::vector<int> clauses;
+    std::vector<int> target;
+    for (size_t i = 0; i < underlines.size(); ++i) {
+        clauses.push_back(underlines[i].startOffset);
+        clauses.push_back(underlines[i].endOffset);
+        if (underlines[i].thick) {
+            target.clear();
+            target.push_back(underlines[i].startOffset);
+            target.push_back(underlines[i].endOffset);
+        }
+    }
+
+    String textStr(text);
+    Vector<UChar> str = WTF::ensureUTF16UChar(textStr, false);
+    String textW(str.data(), str.size());
+
+    m_pluginIme->compositionUpdated(textW, clauses, target, selectionEnd);
+    m_pluginIme->sendEvents(m_instance, m_plugin->pluginFuncs()->event);
+
+    return true;
+}
+
+// bool WebPluginImpl::confirmComposition(const blink::WebString& text, blink::WebWidget::ConfirmCompositionBehavior selectionBehavior)
+// {
+//     if (!m_pluginIme && m_plugin->quirks().contains(PluginQuirkEmulateIme))
+//         m_pluginIme = new WebPluginIMEWin();
+//     if (!m_pluginIme)
+//         return false;
+// 
+//     String textStr(text);
+//     Vector<UChar> str = WTF::ensureUTF16UChar(textStr, false);
+//     String textW(str.data(), str.size());
+//     m_pluginIme->compositionCompleted(textW);
+//     m_pluginIme->sendEvents(m_instance, m_plugin->pluginFuncs()->event);
+// 
+//     return true;
+// }
 
 PassRefPtr<Image> WebPluginImpl::snapshot()
 {

@@ -11,6 +11,8 @@
 #include "GrSurface.h"
 #include "SkRect.h"
 
+class GrCaps;
+class GrDrawTarget;
 class GrStencilAttachment;
 class GrRenderTargetPriv;
 
@@ -25,7 +27,7 @@ class GrRenderTarget : virtual public GrSurface {
 public:
     // GrSurface overrides
     GrRenderTarget* asRenderTarget() override { return this; }
-    const GrRenderTarget* asRenderTarget() const  override { return this; }
+    const GrRenderTarget* asRenderTarget() const override { return this; }
 
     // GrRenderTarget
     /**
@@ -47,7 +49,8 @@ public:
      * @return true if the surface is multisampled in all buffers,
      *         false otherwise
      */
-    bool isUnifiedMultisampled() const {
+    bool isUnifiedMultisampled() const
+    {
         if (fSampleConfig != kUnified_SampleConfig) {
             return false;
         }
@@ -58,7 +61,8 @@ public:
      * @return true if the surface is multisampled in the stencil buffer,
      *         false otherwise
      */
-    bool isStencilBufferMultisampled() const {
+    bool isStencilBufferMultisampled() const
+    {
         return 0 != fDesc.fSampleCnt;
     }
 
@@ -66,7 +70,8 @@ public:
      * @return the number of color samples-per-pixel, or zero if non-MSAA or
      *         multisampled in the stencil buffer only.
      */
-    int numColorSamples() const {
+    int numColorSamples() const
+    {
         if (fSampleConfig == kUnified_SampleConfig) {
             return fDesc.fSampleCnt;
         }
@@ -76,16 +81,17 @@ public:
     /**
      * @return the number of stencil samples-per-pixel, or zero if non-MSAA.
      */
-    int numStencilSamples() const {
+    int numStencilSamples() const
+    {
         return fDesc.fSampleCnt;
     }
 
     /**
      * @return true if the surface is mixed sampled, false otherwise.
      */
-    bool hasMixedSamples() const {
-        SkASSERT(kStencil_SampleConfig != fSampleConfig ||
-                 this->isStencilBufferMultisampled());
+    bool hasMixedSamples() const
+    {
+        SkASSERT(kStencil_SampleConfig != fSampleConfig || this->isStencilBufferMultisampled());
         return kStencil_SampleConfig == fSampleConfig;
     }
 
@@ -144,36 +150,58 @@ public:
      */
     virtual GrBackendObject getRenderTargetHandle() const = 0;
 
+    // Checked when this object is asked to attach a stencil buffer.
+    virtual bool canAttemptStencilAttachment() const = 0;
+
     // Provides access to functions that aren't part of the public API.
     GrRenderTargetPriv renderTargetPriv();
     const GrRenderTargetPriv renderTargetPriv() const;
 
+    void setLastDrawTarget(GrDrawTarget* dt);
+    GrDrawTarget* getLastDrawTarget() { return fLastDrawTarget; }
+
+    static SampleConfig ComputeSampleConfig(const GrCaps& caps, int sampleCnt);
+
 protected:
-    GrRenderTarget(GrGpu* gpu, LifeCycle lifeCycle, const GrSurfaceDesc& desc,
-                   SampleConfig sampleConfig)
-        : INHERITED(gpu, lifeCycle, desc)
-        , fStencilAttachment(NULL)
-        , fSampleConfig(sampleConfig) {
+    GrRenderTarget(GrGpu* gpu, const GrSurfaceDesc& desc,
+        SampleConfig sampleConfig, GrStencilAttachment* stencil = nullptr)
+        : INHERITED(gpu, desc)
+        , fStencilAttachment(stencil)
+        , fSampleConfig(sampleConfig)
+        , fLastDrawTarget(nullptr)
+    {
         fResolveRect.setLargestInverted();
     }
+
+    ~GrRenderTarget() override;
 
     // override of GrResource
     void onAbandon() override;
     void onRelease() override;
 
 private:
-    // Checked when this object is asked to attach a stencil buffer.
-    virtual bool canAttemptStencilAttachment() const = 0;
+    // Allows the backends to perform any additional work that is required for attaching a
+    // GrStencilAttachment. When this is called, the GrStencilAttachment has already been put onto
+    // the GrRenderTarget. This function must return false if any failures occur when completing the
+    // stencil attachment.
+    virtual bool completeStencilAttachment() = 0;
 
     friend class GrRenderTargetPriv;
 
-    GrStencilAttachment*  fStencilAttachment;
-    SampleConfig          fSampleConfig;
+    GrStencilAttachment* fStencilAttachment;
+    SampleConfig fSampleConfig;
 
-    SkIRect               fResolveRect;
+    SkIRect fResolveRect;
+
+    // The last drawTarget that wrote to or is currently going to write to this renderTarget
+    // The drawTarget can be closed (e.g., no draw context is currently bound
+    // to this renderTarget).
+    // This back-pointer is required so that we can add a dependancy between
+    // the drawTarget used to create the current contents of this renderTarget
+    // and the drawTarget of a destination renderTarget to which this one is being drawn.
+    GrDrawTarget* fLastDrawTarget;
 
     typedef GrSurface INHERITED;
 };
-
 
 #endif

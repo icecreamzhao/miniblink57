@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,18 +5,19 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkXfermode_DEFINED
 #define SkXfermode_DEFINED
 
-#include "SkFlattenable.h"
 #include "SkColor.h"
+#include "SkFlattenable.h"
 
 class GrFragmentProcessor;
-class GrProcessorDataManager;
 class GrTexture;
 class GrXPFactory;
 class SkString;
+
+struct SkPM4f;
+typedef SkPM4f (*SkXfermodeProc4f)(const SkPM4f& src, const SkPM4f& dst);
 
 /** \class SkXfermode
  *
@@ -33,25 +33,25 @@ class SkString;
 class SK_API SkXfermode : public SkFlattenable {
 public:
     virtual void xfer32(SkPMColor dst[], const SkPMColor src[], int count,
-                        const SkAlpha aa[]) const;
+        const SkAlpha aa[]) const;
     virtual void xfer16(uint16_t dst[], const SkPMColor src[], int count,
-                        const SkAlpha aa[]) const;
+        const SkAlpha aa[]) const;
     virtual void xferA8(SkAlpha dst[], const SkPMColor src[], int count,
-                        const SkAlpha aa[]) const;
+        const SkAlpha aa[]) const;
 
     /** Enum of possible coefficients to describe some xfermodes
      */
     enum Coeff {
-        kZero_Coeff,    /** 0 */
-        kOne_Coeff,     /** 1 */
-        kSC_Coeff,      /** src color */
-        kISC_Coeff,     /** inverse src color (i.e. 1 - sc) */
-        kDC_Coeff,      /** dst color */
-        kIDC_Coeff,     /** inverse dst color (i.e. 1 - dc) */
-        kSA_Coeff,      /** src alpha */
-        kISA_Coeff,     /** inverse src alpha (i.e. 1 - sa) */
-        kDA_Coeff,      /** dst alpha */
-        kIDA_Coeff,     /** inverse dst alpha (i.e. 1 - da) */
+        kZero_Coeff, /** 0 */
+        kOne_Coeff, /** 1 */
+        kSC_Coeff, /** src color */
+        kISC_Coeff, /** inverse src color (i.e. 1 - sc) */
+        kDC_Coeff, /** dst color */
+        kIDC_Coeff, /** inverse dst color (i.e. 1 - dc) */
+        kSA_Coeff, /** src alpha */
+        kISA_Coeff, /** inverse src alpha (i.e. 1 - sa) */
+        kDA_Coeff, /** dst alpha */
+        kIDA_Coeff, /** inverse dst alpha (i.e. 1 - da) */
 
         kCoeffCount
     };
@@ -68,25 +68,26 @@ public:
         those that are not separable.
      */
     enum Mode {
-        kClear_Mode,    //!< [0, 0]
-        kSrc_Mode,      //!< [Sa, Sc]
-        kDst_Mode,      //!< [Da, Dc]
-        kSrcOver_Mode,  //!< [Sa + Da - Sa*Da, Rc = Sc + (1 - Sa)*Dc]
-        kDstOver_Mode,  //!< [Sa + Da - Sa*Da, Rc = Dc + (1 - Da)*Sc]
-        kSrcIn_Mode,    //!< [Sa * Da, Sc * Da]
-        kDstIn_Mode,    //!< [Sa * Da, Sa * Dc]
-        kSrcOut_Mode,   //!< [Sa * (1 - Da), Sc * (1 - Da)]
-        kDstOut_Mode,   //!< [Da * (1 - Sa), Dc * (1 - Sa)]
-        kSrcATop_Mode,  //!< [Da, Sc * Da + (1 - Sa) * Dc]
-        kDstATop_Mode,  //!< [Sa, Sa * Dc + Sc * (1 - Da)]
-        kXor_Mode,      //!< [Sa + Da - 2 * Sa * Da, Sc * (1 - Da) + (1 - Sa) * Dc]
-        kPlus_Mode,     //!< [Sa + Da, Sc + Dc]
+        kClear_Mode, //!< [0, 0]
+        kSrc_Mode, //!< [Sa, Sc]
+        kDst_Mode, //!< [Da, Dc]
+        kSrcOver_Mode, //!< [Sa + Da * (1 - Sa), Sc + Dc * (1 - Sa)]
+        kDstOver_Mode, //!< [Da + Sa * (1 - Da), Dc + Sc * (1 - Da)]
+        kSrcIn_Mode, //!< [Sa * Da, Sc * Da]
+        kDstIn_Mode, //!< [Da * Sa, Dc * Sa]
+        kSrcOut_Mode, //!< [Sa * (1 - Da), Sc * (1 - Da)]
+        kDstOut_Mode, //!< [Da * (1 - Sa), Dc * (1 - Sa)]
+        kSrcATop_Mode, //!< [Da, Sc * Da + Dc * (1 - Sa)]
+        kDstATop_Mode, //!< [Sa, Dc * Sa + Sc * (1 - Da)]
+        kXor_Mode, //!< [Sa + Da - 2 * Sa * Da, Sc * (1 - Da) + Dc * (1 - Sa)]
+        kPlus_Mode, //!< [Sa + Da, Sc + Dc]
         kModulate_Mode, // multiplies all components (= alpha and color)
 
         // Following blend modes are defined in the CSS Compositing standard:
         // https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html#blending
         kScreen_Mode,
         kLastCoeffMode = kScreen_Mode,
+        kLastCoeffMode_Mode = kScreen_Mode, // weolar
 
         kOverlay_Mode,
         kDarken_Mode,
@@ -99,12 +100,14 @@ public:
         kExclusion_Mode,
         kMultiply_Mode,
         kLastSeparableMode = kMultiply_Mode,
+        kLastSeparableMode_Mode = kMultiply_Mode, // weolar
 
         kHue_Mode,
         kSaturation_Mode,
         kColor_Mode,
         kLuminosity_Mode,
-        kLastMode = kLuminosity_Mode
+        kLastMode = kLuminosity_Mode,
+        kLastMode_Mode = kLuminosity_Mode // weolar
     };
 
     /**
@@ -124,6 +127,10 @@ public:
      *  if the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool AsMode(const SkXfermode*, Mode* mode);
+    static bool AsMode(const sk_sp<SkXfermode>& xfer, Mode* mode)
+    {
+        return AsMode(xfer.get(), mode);
+    }
 
     /**
      *  Returns true if the xfermode claims to be the specified Mode. This works
@@ -136,22 +143,143 @@ public:
      *  }
      */
     static bool IsMode(const SkXfermode* xfer, Mode mode);
+    static bool IsMode(const sk_sp<SkXfermode>& xfer, Mode mode)
+    {
+        return IsMode(xfer.get(), mode);
+    }
+
+#define GEN_SKBLENDMODE_LIST(F) \
+    F(Clear);                  \
+    F(Src);                    \
+    F(Dst);                    \
+    F(SrcOver);                \
+    F(DstOver);                \
+    F(SrcIn);                  \
+    F(DstIn);                  \
+    F(SrcOut);                 \
+    F(DstOut);                 \
+    F(SrcATop);                \
+    F(DstATop);                \
+    F(Xor);                    \
+    F(Plus);                   \
+    F(Modulate);               \
+    F(Screen);                 \
+    F(LastCoeffMode);          \
+    F(Overlay);                \
+    F(Darken);                 \
+    F(Lighten);                \
+    F(ColorDodge);             \
+    F(ColorBurn);              \
+    F(HardLight);              \
+    F(SoftLight);              \
+    F(Difference);             \
+    F(Exclusion);              \
+    F(Multiply);               \
+    F(LastSeparableMode);      \
+    F(Hue);                    \
+    F(Saturation);             \
+    F(Color);                  \
+    F(Luminosity);             \
+    F(LastMode);
+
+    static SkXfermode::Mode SkBlendModeToSkXfermodeMode(SkBlendMode mode)
+    {
+#define _SET_MODE_(x)               \
+    if (SkBlendMode::k##x == mode) \
+        return (SkXfermode::k##x##_Mode);
+
+        GEN_SKBLENDMODE_LIST(_SET_MODE_);
+#undef _SET_MODE_
+//         if (SkBlendMode::kClear == mode) 
+//             return (SkXfermode::kClear_Mode); 
+//         if (SkBlendMode::kSrc == mode) 
+//             return (SkXfermode::kSrc_Mode); 
+//         if (SkBlendMode::kDst == mode) 
+//             return (SkXfermode::kDst_Mode); 
+//         if (SkBlendMode::kSrcOver == mode) 
+//             return (SkXfermode::kSrcOver_Mode); 
+//         if (SkBlendMode::kDstOver == mode) 
+//             return (SkXfermode::kDstOver_Mode); 
+//         if (SkBlendMode::kSrcIn == mode) 
+//             return (SkXfermode::kSrcIn_Mode); 
+//         if (SkBlendMode::kDstIn == mode) 
+//             return (SkXfermode::kDstIn_Mode); 
+//         if (SkBlendMode::kSrcOut == mode) 
+//             return (SkXfermode::kSrcOut_Mode); 
+//         if (SkBlendMode::kDstOut == mode) 
+//             return (SkXfermode::kDstOut_Mode); 
+//         if (SkBlendMode::kSrcATop == mode) 
+//             return (SkXfermode::kSrcATop_Mode); 
+//         if (SkBlendMode::kDstATop == mode) 
+//             return (SkXfermode::kDstATop_Mode); 
+//         if (SkBlendMode::kXor == mode) 
+//             return (SkXfermode::kXor_Mode); 
+//         if (SkBlendMode::kPlus == mode) 
+//             return (SkXfermode::kPlus_Mode); 
+//         if (SkBlendMode::kModulate == mode) 
+//             return (SkXfermode::kModulate_Mode); 
+//         if (SkBlendMode::kScreen == mode) 
+//             return (SkXfermode::kScreen_Mode); 
+//         if (SkBlendMode::kLastCoeffMode == mode) 
+//             return (SkXfermode::kLastCoeffMode_Mode);
+//         if (SkBlendMode::kOverlay == mode) 
+//             return (SkXfermode::kOverlay_Mode); 
+//         if (SkBlendMode::kDarken == mode) 
+//             return (SkXfermode::kDarken_Mode); 
+//         if (SkBlendMode::kLighten == mode) 
+//             return (SkXfermode::kLighten_Mode); 
+//         if (SkBlendMode::kColorDodge == mode) 
+//             return (SkXfermode::kColorDodge_Mode); 
+//         if (SkBlendMode::kColorBurn == mode) 
+//             return (SkXfermode::kColorBurn_Mode); 
+//         if (SkBlendMode::kHardLight == mode) 
+//             return (SkXfermode::kHardLight_Mode); 
+//         if (SkBlendMode::kSoftLight == mode) 
+//             return (SkXfermode::kSoftLight_Mode); 
+//         if (SkBlendMode::kDifference == mode) 
+//             return (SkXfermode::kDifference_Mode); 
+//         if (SkBlendMode::kExclusion == mode) 
+//             return (SkXfermode::kExclusion_Mode); 
+//         if (SkBlendMode::kMultiply == mode) 
+//             return (SkXfermode::kMultiply_Mode); 
+//         if (SkBlendMode::kLastSeparableMode == mode) 
+//             return (SkXfermode::kLastSeparableMode_Mode);
+//         if (SkBlendMode::kHue == mode) 
+//             return (SkXfermode::kHue_Mode); 
+//         if (SkBlendMode::kSaturation == mode) 
+//             return (SkXfermode::kSaturation_Mode); 
+//         if (SkBlendMode::kColor == mode) 
+//             return (SkXfermode::kColor_Mode); 
+//         if (SkBlendMode::kLuminosity == mode) 
+//             return (SkXfermode::kLuminosity_Mode); 
+//         if (SkBlendMode::kLastMode == mode) 
+//             return (SkXfermode::kLastMode_Mode);
+//         *(int*)1 = 1;
+        return SkXfermode::kSrcOver_Mode;
+    }
 
     /** Return an SkXfermode object for the specified mode.
      */
-    static SkXfermode* Create(Mode mode);
+    static sk_sp<SkXfermode> Make(Mode);
+#ifdef SK_SUPPORT_LEGACY_XFERMODE_PTR
+    static SkXfermode* Create(Mode mode)
+    {
+        return Make(mode).release();
+    }
+    SK_ATTR_DEPRECATED("use AsMode(...)")
+    static bool IsMode(const SkXfermode* xfer, Mode* mode)
+    {
+        return AsMode(xfer, mode);
+    }
+#endif
 
     /** Return a function pointer to a routine that applies the specified
         porter-duff transfer mode.
      */
     static SkXfermodeProc GetProc(Mode mode);
+    static SkXfermodeProc4f GetProc4f(Mode);
 
-    /** Return a function pointer to a routine that applies the specified
-        porter-duff transfer mode and srcColor to a 16bit device color. Note,
-        if the mode+srcColor might return a non-opaque color, then there is not
-        16bit proc, and this will return NULL.
-      */
-    static SkXfermodeProc16 GetProc16(Mode mode, SkColor srcColor);
+    virtual SkXfermodeProc4f getProc4f() const;
 
     /**
      *  If the specified mode can be represented by a pair of Coeff, then return
@@ -160,11 +288,6 @@ public:
      *  src and dst parameters.
      */
     static bool ModeAsCoeff(Mode mode, Coeff* src, Coeff* dst);
-
-    SK_ATTR_DEPRECATED("use AsMode(...)")
-    static bool IsMode(const SkXfermode* xfer, Mode* mode) {
-        return AsMode(xfer, mode);
-    }
 
     /**
      * Returns whether or not the xfer mode can support treating coverage as alpha
@@ -176,6 +299,10 @@ public:
      *  the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool SupportsCoverageAsAlpha(const SkXfermode* xfer);
+    static bool SupportsCoverageAsAlpha(const sk_sp<SkXfermode>& xfer)
+    {
+        return SupportsCoverageAsAlpha(xfer.get());
+    }
 
     enum SrcColorOpacity {
         // The src color is known to be opaque (alpha == 255)
@@ -200,46 +327,81 @@ public:
      *  the xfermode is NULL, and if so, treats it as kSrcOver_Mode.
      */
     static bool IsOpaque(const SkXfermode* xfer, SrcColorOpacity opacityType);
+    static bool IsOpaque(const sk_sp<SkXfermode>& xfer, SrcColorOpacity opacityType)
+    {
+        return IsOpaque(xfer.get(), opacityType);
+    }
 
-    /** Implemented by a subclass to support use as an image filter in the GPU backend. When used as
-        an image filter the xfer mode blends the source color against a background texture rather
-        than the destination. It is implemented as a fragment processor. This can be called with
-        both params set to NULL to query whether it would succeed. Otherwise, both params are
-        required. Upon success the function returns true and the caller owns a ref to the fragment
-        parameter. Upon failure false is returned and the processor param is not written to.
+#if SK_SUPPORT_GPU
+    /** Used by the SkXfermodeImageFilter to blend two colors via a GrFragmentProcessor.
+        The input to the returned FP is the src color. The dst color is
+        provided by the dst param which becomes a child FP of the returned FP. 
+        It is legal for the function to return a null output. This indicates that
+        the output of the blend is simply the src color.
      */
-    virtual bool asFragmentProcessor(GrFragmentProcessor**, GrProcessorDataManager*,
-                                     GrTexture* background) const;
+    virtual sk_sp<GrFragmentProcessor> makeFragmentProcessorForImageFilter(
+        sk_sp<GrFragmentProcessor> dst) const;
 
-    /** A subclass may implement this factory function to work with the GPU backend. It is legal
-        to call this with xpf NULL to simply test the return value. If xpf is non-NULL then the
-        xfermode may optionally allocate a factory to return to the caller as *xpf. The caller
-        will install it and own a ref to it. Since the xfermode may or may not assign *xpf, the
-        caller should set *xpf to NULL beforehand. XferProcessors cannot use a background texture.
-     */
-    virtual bool asXPFactory(GrXPFactory** xpf) const;
-
-    /** Returns true if the xfermode can be expressed as an xfer processor factory (xpFactory).
-        This helper calls the asXPFactory() virtual. If the xfermode is NULL, it is treated as
-        kSrcOver_Mode. It is legal to call this with xpf param NULL to simply test the return value.
-     */
-    static bool AsXPFactory(SkXfermode*, GrXPFactory**);
+    /** A subclass must implement this factory function to work with the GPU backend. 
+        The xfermode will return a factory for which the caller will get a ref. It is up 
+        to the caller to install it. XferProcessors cannot use a background texture.
+      */
+    virtual sk_sp<GrXPFactory> asXPFactory() const;
+#endif
 
     SK_TO_STRING_PUREVIRT()
     SK_DECLARE_FLATTENABLE_REGISTRAR_GROUP()
     SK_DEFINE_FLATTENABLE_TYPE(SkXfermode)
 
+    enum D32Flags {
+        kSrcIsOpaque_D32Flag = 1 << 0,
+        kSrcIsSingle_D32Flag = 1 << 1,
+        kDstIsSRGB_D32Flag = 1 << 2,
+    };
+    typedef void (*D32Proc)(const SkXfermode*, uint32_t dst[], const SkPM4f src[],
+        int count, const SkAlpha coverage[]);
+    static D32Proc GetD32Proc(SkXfermode*, uint32_t flags);
+    static D32Proc GetD32Proc(const sk_sp<SkXfermode>& xfer, uint32_t flags)
+    {
+        return GetD32Proc(xfer.get(), flags);
+    }
+
+    enum F16Flags {
+        kSrcIsOpaque_F16Flag = 1 << 0,
+        kSrcIsSingle_F16Flag = 1 << 1,
+    };
+    typedef void (*F16Proc)(const SkXfermode*, uint64_t dst[], const SkPM4f src[], int count,
+        const SkAlpha coverage[]);
+    static F16Proc GetF16Proc(SkXfermode*, uint32_t flags);
+    static F16Proc GetF16Proc(const sk_sp<SkXfermode>& xfer, uint32_t flags)
+    {
+        return GetF16Proc(xfer.get(), flags);
+    }
+
+    enum LCDFlags {
+        kSrcIsOpaque_LCDFlag = 1 << 0, // else src(s) may have alpha < 1
+        kSrcIsSingle_LCDFlag = 1 << 1, // else src[count]
+        kDstIsSRGB_LCDFlag = 1 << 2, // else l32 or f16
+    };
+    typedef void (*LCD32Proc)(uint32_t* dst, const SkPM4f* src, int count, const uint16_t lcd[]);
+    typedef void (*LCDF16Proc)(uint64_t* dst, const SkPM4f* src, int count, const uint16_t lcd[]);
+    static LCD32Proc GetLCD32Proc(uint32_t flags);
+    static LCDF16Proc GetLCDF16Proc(uint32_t) { return nullptr; }
+
 protected:
-    SkXfermode() {}
+    SkXfermode() { }
     /** The default implementation of xfer32/xfer16/xferA8 in turn call this
         method, 1 color at a time (upscaled to a SkPMColor). The default
-        implmentation of this method just returns dst. If performance is
+        implementation of this method just returns dst. If performance is
         important, your subclass should override xfer32/xfer16/xferA8 directly.
 
         This method will not be called directly by the client, so it need not
         be implemented if your subclass has overridden xfer32/xfer16/xferA8
     */
     virtual SkPMColor xferColor(SkPMColor src, SkPMColor dst) const;
+
+    virtual D32Proc onGetD32Proc(uint32_t flags) const;
+    virtual F16Proc onGetF16Proc(uint32_t flags) const;
 
 private:
     enum {

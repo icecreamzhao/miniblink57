@@ -10,7 +10,7 @@
 #include "src/base/ring-buffer.h"
 #include "src/counters.h"
 #include "src/globals.h"
-#include "testing/gtest/include/gtest/gtest_prod.h"
+//#include "testing/gtest/include/gtest/gtest_prod.h"
 
 namespace v8 {
 namespace internal {
@@ -333,15 +333,15 @@ class V8_EXPORT_PRIVATE GCTracer {
   }
 
  private:
-  FRIEND_TEST(GCTracer, AverageSpeed);
-  FRIEND_TEST(GCTracerTest, AllocationThroughput);
-  FRIEND_TEST(GCTracerTest, NewSpaceAllocationThroughput);
-  FRIEND_TEST(GCTracerTest, NewSpaceAllocationThroughputWithProvidedTime);
-  FRIEND_TEST(GCTracerTest, OldGenerationAllocationThroughputWithProvidedTime);
-  FRIEND_TEST(GCTracerTest, RegularScope);
-  FRIEND_TEST(GCTracerTest, IncrementalMarkingDetails);
-  FRIEND_TEST(GCTracerTest, IncrementalScope);
-  FRIEND_TEST(GCTracerTest, IncrementalMarkingSpeed);
+  //FRIEND_TEST(GCTracer, AverageSpeed);
+  //FRIEND_TEST(GCTracerTest, AllocationThroughput);
+  //FRIEND_TEST(GCTracerTest, NewSpaceAllocationThroughput);
+  //FRIEND_TEST(GCTracerTest, NewSpaceAllocationThroughputWithProvidedTime);
+  //FRIEND_TEST(GCTracerTest, OldGenerationAllocationThroughputWithProvidedTime);
+  //FRIEND_TEST(GCTracerTest, RegularScope);
+  //FRIEND_TEST(GCTracerTest, IncrementalMarkingDetails);
+  //FRIEND_TEST(GCTracerTest, IncrementalScope);
+  //FRIEND_TEST(GCTracerTest, IncrementalMarkingSpeed);
 
   // Returns the average speed of the events in the buffer.
   // If the buffer is empty, the result is 0.

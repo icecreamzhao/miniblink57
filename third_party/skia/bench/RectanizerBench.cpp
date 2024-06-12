@@ -41,10 +41,11 @@ public:
         kSmallPow2_RectType
     };
 
-    RectanizerBench(RectanizerType rectanizerType, RectType rectType) 
+    RectanizerBench(RectanizerType rectanizerType, RectType rectType)
         : fName("rectanizer_")
         , fRectanizerType(rectanizerType)
-        , fRectType(rectType) {
+        , fRectType(rectType)
+    {
 
         if (kPow2_RectanizerType == fRectanizerType) {
             fName.append("pow2_");
@@ -64,26 +65,30 @@ public:
     }
 
 protected:
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return kNonRendering_Backend == backend;
     }
 
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onPreDraw() override {
-        SkASSERT(NULL == fRectanizer.get());
+    void onDelayedSetup() override
+    {
+        SkASSERT(nullptr == fRectanizer.get());
 
         if (kPow2_RectanizerType == fRectanizerType) {
-            fRectanizer.reset(SkNEW_ARGS(GrRectanizerPow2, (kWidth, kHeight)));
+            fRectanizer.reset(new GrRectanizerPow2(kWidth, kHeight));
         } else {
             SkASSERT(kSkyline_RectanizerType == fRectanizerType);
-            fRectanizer.reset(SkNEW_ARGS(GrRectanizerSkyline, (kWidth, kHeight)));
+            fRectanizer.reset(new GrRectanizerSkyline(kWidth, kHeight));
         }
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkRandom rand;
         SkIPoint16 loc;
         SkISize size;
@@ -91,10 +96,10 @@ protected:
         for (int i = 0; i < loops; ++i) {
             if (kRand_RectType == fRectType) {
                 size = SkISize::Make(rand.nextRangeU(1, kWidth / 2),
-                                     rand.nextRangeU(1, kHeight / 2));
+                    rand.nextRangeU(1, kHeight / 2));
             } else if (kRandPow2_RectType == fRectType) {
                 size = SkISize::Make(GrNextPow2(rand.nextRangeU(1, kWidth / 2)),
-                                     GrNextPow2(rand.nextRangeU(1, kHeight / 2)));
+                    GrNextPow2(rand.nextRangeU(1, kHeight / 2)));
             } else {
                 SkASSERT(kSmallPow2_RectType == fRectType);
                 size = SkISize::Make(128, 128);
@@ -112,9 +117,9 @@ protected:
     }
 
 private:
-    SkString                    fName;
-    RectanizerType              fRectanizerType;
-    RectType                    fRectType;
+    SkString fName;
+    RectanizerType fRectanizerType;
+    RectType fRectType;
     SkAutoTDelete<GrRectanizer> fRectanizer;
 
     typedef Benchmark INHERITED;
@@ -123,16 +128,16 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
-                                     RectanizerBench::kRand_RectType);)
+    RectanizerBench::kRand_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
-                                     RectanizerBench::kRandPow2_RectType);)
+    RectanizerBench::kRandPow2_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kPow2_RectanizerType,
-                                     RectanizerBench::kSmallPow2_RectType);)
+    RectanizerBench::kSmallPow2_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
-                                     RectanizerBench::kRand_RectType);)
+    RectanizerBench::kRand_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
-                                     RectanizerBench::kRandPow2_RectType);)
+    RectanizerBench::kRandPow2_RectType);)
 DEF_BENCH(return new RectanizerBench(RectanizerBench::kSkyline_RectanizerType,
-                                     RectanizerBench::kSmallPow2_RectType);)
+    RectanizerBench::kSmallPow2_RectType);)
 
 #endif

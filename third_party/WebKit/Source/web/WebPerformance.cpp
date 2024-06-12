@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebPerformance.h"
 
 #include "core/timing/Performance.h"
@@ -53,16 +52,16 @@ void WebPerformance::assign(const WebPerformance& other)
 WebNavigationType WebPerformance::navigationType() const
 {
     switch (m_private->navigation()->type()) {
-    case PerformanceNavigation::TYPE_NAVIGATE:
+    case PerformanceNavigation::kTypeNavigate:
         return WebNavigationTypeOther;
-    case PerformanceNavigation::TYPE_RELOAD:
+    case PerformanceNavigation::kTypeReload:
         return WebNavigationTypeReload;
-    case PerformanceNavigation::TYPE_BACK_FORWARD:
+    case PerformanceNavigation::kTypeBackForward:
         return WebNavigationTypeBackForward;
-    case PerformanceNavigation::TYPE_RESERVED:
+    case PerformanceNavigation::kTypeReserved:
         return WebNavigationTypeOther;
     }
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return WebNavigationTypeOther;
 }
 
@@ -143,7 +142,8 @@ double WebPerformance::domInteractive() const
 
 double WebPerformance::domContentLoadedEventStart() const
 {
-    return millisecondsToSeconds(m_private->timing()->domContentLoadedEventStart());
+    return millisecondsToSeconds(
+        m_private->timing()->domContentLoadedEventStart());
 }
 
 double WebPerformance::domContentLoadedEventEnd() const
@@ -171,12 +171,86 @@ double WebPerformance::firstLayout() const
     return millisecondsToSeconds(m_private->timing()->firstLayout());
 }
 
-WebPerformance::WebPerformance(const PassRefPtrWillBeRawPtr<Performance>& performance)
+double WebPerformance::firstPaint() const
+{
+    return millisecondsToSeconds(m_private->timing()->firstPaint());
+}
+
+double WebPerformance::firstTextPaint() const
+{
+    return millisecondsToSeconds(m_private->timing()->firstTextPaint());
+}
+
+double WebPerformance::firstImagePaint() const
+{
+    return millisecondsToSeconds(m_private->timing()->firstImagePaint());
+}
+
+double WebPerformance::firstContentfulPaint() const
+{
+    return millisecondsToSeconds(m_private->timing()->firstContentfulPaint());
+}
+
+double WebPerformance::firstMeaningfulPaint() const
+{
+    return millisecondsToSeconds(m_private->timing()->firstMeaningfulPaint());
+}
+
+double WebPerformance::parseStart() const
+{
+    return millisecondsToSeconds(m_private->timing()->parseStart());
+}
+
+double WebPerformance::parseStop() const
+{
+    return millisecondsToSeconds(m_private->timing()->parseStop());
+}
+
+double WebPerformance::parseBlockedOnScriptLoadDuration() const
+{
+    return millisecondsToSeconds(
+        m_private->timing()->parseBlockedOnScriptLoadDuration());
+}
+
+double WebPerformance::parseBlockedOnScriptLoadFromDocumentWriteDuration()
+    const
+{
+    return millisecondsToSeconds(
+        m_private->timing()->parseBlockedOnScriptLoadFromDocumentWriteDuration());
+}
+
+double WebPerformance::parseBlockedOnScriptExecutionDuration() const
+{
+    return millisecondsToSeconds(
+        m_private->timing()->parseBlockedOnScriptExecutionDuration());
+}
+
+double WebPerformance::parseBlockedOnScriptExecutionFromDocumentWriteDuration()
+    const
+{
+    return millisecondsToSeconds(
+        m_private->timing()
+            ->parseBlockedOnScriptExecutionFromDocumentWriteDuration());
+}
+
+double WebPerformance::authorStyleSheetParseDurationBeforeFCP() const
+{
+    return millisecondsToSeconds(
+        m_private->timing()->authorStyleSheetParseDurationBeforeFCP());
+}
+
+double WebPerformance::updateStyleDurationBeforeFCP() const
+{
+    return millisecondsToSeconds(
+        m_private->timing()->updateStyleDurationBeforeFCP());
+}
+
+WebPerformance::WebPerformance(Performance* performance)
     : m_private(performance)
 {
 }
 
-WebPerformance& WebPerformance::operator=(const PassRefPtrWillBeRawPtr<Performance>& performance)
+WebPerformance& WebPerformance::operator=(Performance* performance)
 {
     m_private = performance;
     return *this;

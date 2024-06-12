@@ -27,11 +27,11 @@
 #define SQLTransactionStateMachine_h
 
 #include "modules/webdatabase/SQLTransactionState.h"
-#include "wtf/ThreadSafeRefCounted.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
-template<typename T>
+template <typename T>
 class SQLTransactionStateMachine {
 public:
     virtual ~SQLTransactionStateMachine() { }
@@ -39,7 +39,7 @@ public:
 protected:
     SQLTransactionStateMachine();
 
-    typedef SQLTransactionState (T::* StateFunction)();
+    typedef SQLTransactionState (T::*StateFunction)();
     virtual StateFunction stateFunctionFor(SQLTransactionState) = 0;
 
     void setStateToRequestedState();
@@ -48,36 +48,33 @@ protected:
     SQLTransactionState m_nextState;
     SQLTransactionState m_requestedState;
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     // The state audit trail (i.e. bread crumbs) keeps track of up to the last
     // s_sizeOfStateAuditTrail states that the state machine enters. The audit
     // trail is updated before entering each state. This is for debugging use
     // only.
     static const int s_sizeOfStateAuditTrail = 20;
-    int m_nextStateAuditEntry;
+    int m_nextStateAuditEntry = 0;
     SQLTransactionState m_stateAuditTrail[s_sizeOfStateAuditTrail];
 #endif
 };
 
-#if !LOG_DISABLED
+#if DCHECK_IS_ON()
 extern const char* nameForSQLTransactionState(SQLTransactionState);
 #endif
 
-template<typename T>
+template <typename T>
 SQLTransactionStateMachine<T>::SQLTransactionStateMachine()
     : m_nextState(SQLTransactionState::Idle)
     , m_requestedState(SQLTransactionState::Idle)
-#if ENABLE(ASSERT)
-    , m_nextStateAuditEntry(0)
-#endif
 {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     for (int i = 0; i < s_sizeOfStateAuditTrail; i++)
         m_stateAuditTrail[i] = SQLTransactionState::NumberOfStates;
 #endif
 }
 
-template<typename T>
+template <typename T>
 void SQLTransactionStateMachine<T>::setStateToRequestedState()
 {
     ASSERT(m_nextState == SQLTransactionState::Idle);
@@ -86,7 +83,7 @@ void SQLTransactionStateMachine<T>::setStateToRequestedState()
     m_requestedState = SQLTransactionState::Idle;
 }
 
-template<typename T>
+template <typename T>
 void SQLTransactionStateMachine<T>::runStateMachine()
 {
     ASSERT(SQLTransactionState::End < SQLTransactionState::Idle);
@@ -95,7 +92,7 @@ void SQLTransactionStateMachine<T>::runStateMachine()
         StateFunction stateFunction = stateFunctionFor(m_nextState);
         ASSERT(stateFunction);
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
         m_stateAuditTrail[m_nextStateAuditEntry] = m_nextState;
         m_nextStateAuditEntry = (m_nextStateAuditEntry + 1) % s_sizeOfStateAuditTrail;
 #endif

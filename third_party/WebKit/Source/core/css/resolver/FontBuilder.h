@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,18 +28,19 @@
 #include "core/CoreExport.h"
 #include "core/css/FontSize.h"
 #include "platform/fonts/FontDescription.h"
+#include "platform/fonts/FontVariantNumeric.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
-class CSSValue;
 class FontSelector;
 class ComputedStyle;
 
 class CORE_EXPORT FontBuilder {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(FontBuilder);
+
 public:
     FontBuilder(const Document&);
 
@@ -52,55 +54,88 @@ public:
     AtomicString standardFontFamilyName() const;
     AtomicString genericFontFamilyName(FontDescription::GenericFamilyType) const;
 
+    float fontSizeForKeyword(unsigned keyword, bool isMonospace) const;
+
     void setWeight(FontWeight);
     void setSize(const FontDescription::Size&);
     void setSizeAdjust(const float aspectValue);
     void setStretch(FontStretch);
     void setFamilyDescription(const FontDescription::FamilyDescription&);
     void setFeatureSettings(PassRefPtr<FontFeatureSettings>);
-    void setScript(const AtomicString& locale);
+    void setLocale(PassRefPtr<const LayoutLocale>);
     void setStyle(FontStyle);
-    void setVariant(FontVariant);
+    void setVariantCaps(FontDescription::FontVariantCaps);
     void setVariantLigatures(const FontDescription::VariantLigatures&);
+    void setVariantNumeric(const FontVariantNumeric&);
     void setTextRendering(TextRenderingMode);
     void setKerning(FontDescription::Kerning);
     void setFontSmoothing(FontSmoothingMode);
+    void setVariationSettings(PassRefPtr<FontVariationSettings>);
 
     // FIXME: These need to just vend a Font object eventually.
-    void createFont(PassRefPtrWillBeRawPtr<FontSelector>, ComputedStyle&);
+    void createFont(FontSelector*, ComputedStyle&);
 
-    void createFontForDocument(PassRefPtrWillBeRawPtr<FontSelector>, ComputedStyle&);
+    void createFontForDocument(FontSelector*, ComputedStyle&);
 
     bool fontDirty() const { return m_flags; }
 
-    static FontDescription::FamilyDescription initialFamilyDescription() { return FontDescription::FamilyDescription(initialGenericFamily()); }
+    static FontDescription::FamilyDescription initialFamilyDescription()
+    {
+        return FontDescription::FamilyDescription(initialGenericFamily());
+    }
     static FontFeatureSettings* initialFeatureSettings() { return nullptr; }
-    static FontDescription::GenericFamilyType initialGenericFamily() { return FontDescription::StandardFamily; }
-    static FontDescription::Size initialSize() { return FontDescription::Size(FontSize::initialKeywordSize(), 0.0f, false); }
+    static FontVariationSettings* initialVariationSettings() { return nullptr; }
+    static FontDescription::GenericFamilyType initialGenericFamily()
+    {
+        return FontDescription::StandardFamily;
+    }
+    static FontDescription::Size initialSize()
+    {
+        return FontDescription::Size(FontSize::initialKeywordSize(), 0.0f, false);
+    }
     static float initialSizeAdjust() { return FontSizeAdjustNone; }
     static TextRenderingMode initialTextRendering() { return AutoTextRendering; }
-    static FontVariant initialVariant() { return FontVariantNormal; }
-    static FontDescription::VariantLigatures initialVariantLigatures() { return FontDescription::VariantLigatures(); }
+    static FontDescription::FontVariantCaps initialVariantCaps()
+    {
+        return FontDescription::CapsNormal;
+    }
+    static FontDescription::VariantLigatures initialVariantLigatures()
+    {
+        return FontDescription::VariantLigatures();
+    }
+    static FontVariantNumeric initialVariantNumeric()
+    {
+        return FontVariantNumeric();
+    };
+    static LayoutLocale* initialLocale() { return nullptr; }
     static FontStyle initialStyle() { return FontStyleNormal; }
-    static FontDescription::Kerning initialKerning() { return FontDescription::AutoKerning; }
+    static FontDescription::Kerning initialKerning()
+    {
+        return FontDescription::AutoKerning;
+    }
     static FontSmoothingMode initialFontSmoothing() { return AutoSmoothing; }
     static FontStretch initialStretch() { return FontStretchNormal; }
     static FontWeight initialWeight() { return FontWeightNormal; }
 
 private:
-
-    void setFamilyDescription(FontDescription&, const FontDescription::FamilyDescription&);
+    void setFamilyDescription(FontDescription&,
+        const FontDescription::FamilyDescription&);
     void setSize(FontDescription&, const FontDescription::Size&);
     void updateOrientation(FontDescription&, const ComputedStyle&);
-    // This function fixes up the default font size if it detects that the current generic font family has changed. -dwh
+    // This function fixes up the default font size if it detects that the current
+    // generic font family has changed. -dwh
     void checkForGenericFamilyChange(const FontDescription&, FontDescription&);
     void updateSpecifiedSize(FontDescription&, const ComputedStyle&);
     void updateComputedSize(FontDescription&, const ComputedStyle&);
-    void updateAdjustedSize(FontDescription&, const ComputedStyle&, FontSelector*);
+    void updateAdjustedSize(FontDescription&,
+        const ComputedStyle&,
+        FontSelector*);
 
-    float getComputedSizeFromSpecifiedSize(FontDescription&, float effectiveZoom, float specifiedSize);
+    float getComputedSizeFromSpecifiedSize(FontDescription&,
+        float effectiveZoom,
+        float specifiedSize);
 
-    const Document& m_document;
+    Member<const Document> m_document;
     FontDescription m_fontDescription;
 
     enum class PropertySetFlag {
@@ -109,11 +144,13 @@ private:
         Stretch,
         Family,
         FeatureSettings,
-        Script,
+        Locale,
         Style,
         SizeAdjust,
-        Variant,
+        VariantCaps,
         VariantLigatures,
+        VariantNumeric,
+        VariationSettings,
         TextRendering,
         Kerning,
         FontSmoothing,
@@ -124,11 +161,14 @@ private:
     };
 
     void set(PropertySetFlag flag) { m_flags |= (1 << unsigned(flag)); }
-    bool isSet(PropertySetFlag flag) const { return m_flags & (1 << unsigned(flag)); }
+    bool isSet(PropertySetFlag flag) const
+    {
+        return m_flags & (1 << unsigned(flag));
+    }
 
     unsigned m_flags;
 };
 
-}
+} // namespace blink
 
 #endif

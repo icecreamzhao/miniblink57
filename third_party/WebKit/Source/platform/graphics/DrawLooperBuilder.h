@@ -32,10 +32,11 @@
 #define DrawLooperBuilder_h
 
 #include "platform/PlatformExport.h"
+#include "third_party/skia/include/core/SkRefCnt.h"
 #include "third_party/skia/include/effects/SkLayerDrawLooper.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/PassRefPtr.h"
+#include <memory>
 
 class SkDrawLooper;
 
@@ -48,28 +49,27 @@ class PLATFORM_EXPORT DrawLooperBuilder final {
     // Implementing the copy constructor properly would require writing code to
     // copy the underlying SkLayerDrawLooper::Builder.
     WTF_MAKE_NONCOPYABLE(DrawLooperBuilder);
+    STACK_ALLOCATED();
 
 public:
     enum ShadowTransformMode {
         ShadowRespectsTransforms,
         ShadowIgnoresTransforms
     };
-    enum ShadowAlphaMode {
-        ShadowRespectsAlpha,
-        ShadowIgnoresAlpha
-    };
+    enum ShadowAlphaMode { ShadowRespectsAlpha,
+        ShadowIgnoresAlpha };
 
     DrawLooperBuilder();
     ~DrawLooperBuilder();
 
-    static PassOwnPtr<DrawLooperBuilder> create();
-
     // Creates the SkDrawLooper and passes ownership to the caller. The builder
     // should not be used any more after calling this method.
-    PassRefPtr<SkDrawLooper> detachDrawLooper();
+    sk_sp<SkDrawLooper> detachDrawLooper();
 
     void addUnmodifiedContent();
-    void addShadow(const FloatSize& offset, float blur, const Color&,
+    void addShadow(const FloatSize& offset,
+        float blur,
+        const Color&,
         ShadowTransformMode = ShadowRespectsTransforms,
         ShadowAlphaMode = ShadowRespectsAlpha);
 

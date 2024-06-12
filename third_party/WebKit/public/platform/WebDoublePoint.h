@@ -62,12 +62,8 @@ struct WebDoublePoint {
     {
     }
 
-    operator DoublePoint() const
-    {
-        return DoublePoint(x, y);
-    }
+    operator DoublePoint() const { return DoublePoint(x, y); }
 #endif
-
 };
 
 inline bool operator==(const WebDoublePoint& a, const WebDoublePoint& b)

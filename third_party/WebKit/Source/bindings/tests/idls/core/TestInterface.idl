@@ -32,21 +32,18 @@
 // Also used as a target by TestObject
 
 [
-    ActiveDOMObject,
-    Conditional=CONDITION,
+    ActiveScriptWrappable,
+    DependentLifetime,
     Custom=LegacyCallAsFunction,
     DoNotCheckConstants,
     ImplementedAs=TestInterfaceImplementation,
     Iterable,
-    Measure,
     RuntimeEnabled=FeatureName,
     SetWrapperReferenceTo(TestInterface referencedName),
-    TypeChecking=Interface,
     Exposed=(Worker,Window),
 ] interface TestInterface : TestInterfaceEmpty {
     // members needed to test [ImplementedAs], as this affect attribute
-    // configuration and method configuration, and [TypeChecking]
-    // constants also needed for [DoNotCheckConstants]
+    // configuration and method configuration
     const unsigned long UNSIGNED_LONG = 0;
     [Reflect=CONST_CPP] const short CONST_JAVASCRIPT = 1;
 
@@ -60,8 +57,13 @@
     attribute unrestricted float unrestrictedFloatAttribute;
     attribute TestEnum testEnumAttribute;
     attribute DOMStringOrDouble stringOrDoubleAttribute;
+    [RuntimeEnabled=FeatureName] attribute long conditionalLongAttribute;
+    [RuntimeEnabled=FeatureName] readonly attribute long conditionalReadOnlyLongAttribute;
     static attribute DOMString staticStringAttribute;
     static attribute TestInterface staticReturnDOMWrapperAttribute;
+    static readonly attribute DOMString staticReadOnlyStringAttribute;
+    static readonly attribute TestInterface staticReadOnlyReturnDOMWrapperAttribute;
+    [RuntimeEnabled=FeatureName] static readonly attribute long staticConditionalReadOnlyLongAttribute;
     [LegacyInterfaceTypeChecking] attribute TestInterfaceEmpty legacyInterfaceTypeCheckingAttribute;
 
     void voidMethodTestInterfaceEmptyArg(TestInterfaceEmpty testInterfaceEmptyArg);
@@ -71,17 +73,14 @@
     [PerWorldBindings] void voidMethod();
 
     // Anonymous indexed property operations
-    [DoNotCheckSecurity] getter DOMString (unsigned long index);
+    [CrossOrigin] getter DOMString (unsigned long index);
     setter DOMString (unsigned long index, DOMString value);
     deleter boolean (unsigned long index);
 
     // Anonymous named property operations
-    [DoNotCheckSecurity] getter DOMString (DOMString name);
+    [CrossOrigin] getter DOMString (DOMString name);
     setter DOMString (DOMString name, DOMString value);
     deleter boolean (DOMString name);
-
-    [NotEnumerable] stringifier;
-    [NotEnumerable, RaisesException] serializer;
 
     // Per-method [Exposed] annotation support.
     void alwaysExposedMethod();
@@ -117,6 +116,19 @@
     [LenientThis] attribute any lenientThisAttribute;
 
     [LegacyInterfaceTypeChecking] void legacyInterfaceTypeCheckingMethod(TestInterfaceEmpty testInterfaceEmptyArg);
+
+    [SecureContext] void secureContextMethod();
+    [SecureContext] attribute bool secureContextAttribute;
+    [SecureContext,RuntimeEnabled=SecureFeature] void secureContextRuntimeEnabledMethod();
+    [SecureContext,RuntimeEnabled=SecureFeature] attribute bool secureContextRuntimeEnabledAttribute;
+    [SecureContext,Exposed=Window] void secureContextWindowExposedMethod();
+    [SecureContext,Exposed=Window] attribute bool secureContextWindowExposedAttribute;
+    [SecureContext,Exposed=Worker] void secureContextWorkerExposedMethod();
+    [SecureContext,Exposed=Worker] attribute bool secureContextWorkerExposedAttribute;
+    [SecureContext,Exposed=Window,RuntimeEnabled=SecureFeature] void secureContextWindowExposedRuntimeEnabledMethod();
+    [SecureContext,Exposed=Window,RuntimeEnabled=SecureFeature] attribute bool secureContextWindowExposedRuntimeEnabledAttribute;
+    [SecureContext,Exposed=Worker,RuntimeEnabled=SecureFeature] void secureContextWorkerExposedRuntimeEnabledMethod();
+    [SecureContext,Exposed=Worker,RuntimeEnabled=SecureFeature] attribute bool secureContextWorkerExposedRuntimeEnabledAttribute;
 };
 
 TestInterface implements TestImplements;

@@ -13,8 +13,11 @@ namespace blink {
 
 class Event;
 
-class MODULES_EXPORT DeviceMotionController final : public DeviceSingleWindowEventController, public WillBeHeapSupplement<Document> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DeviceMotionController);
+class MODULES_EXPORT DeviceMotionController final
+    : public DeviceSingleWindowEventController,
+      public Supplement<Document> {
+    USING_GARBAGE_COLLECTED_MIXIN(DeviceMotionController);
+
 public:
     ~DeviceMotionController() override;
 
@@ -22,7 +25,8 @@ public:
     static DeviceMotionController& from(Document&);
 
     // DeviceSingleWindowEventController
-    void didAddEventListener(LocalDOMWindow*, const AtomicString& eventType) override;
+    void didAddEventListener(LocalDOMWindow*,
+        const AtomicString& eventType) override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -35,7 +39,7 @@ private:
     bool hasLastData() override;
 
     // Inherited from DeviceSingleWindowEventController.
-    PassRefPtrWillBeRawPtr<Event> lastEvent() const override;
+    Event* lastEvent() const override;
     const AtomicString& eventTypeName() const override;
     bool isNullEvent(Event*) const override;
 };

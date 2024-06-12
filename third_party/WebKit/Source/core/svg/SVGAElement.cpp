@@ -20,8 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGAElement.h"
 
 #include "core/SVGNames.h"
@@ -29,6 +27,7 @@
 #include "core/dom/Attr.h"
 #include "core/dom/Attribute.h"
 #include "core/dom/Document.h"
+#include "core/editing/EditingUtilities.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/events/MouseEvent.h"
 #include "core/frame/FrameHost.h"
@@ -55,7 +54,7 @@ using namespace HTMLNames;
 inline SVGAElement::SVGAElement(Document& document)
     : SVGGraphicsElement(SVGNames::aTag, document)
     , SVGURIReference(this)
-    , m_svgTarget(SVGAnimatedString::create(this, SVGNames::targetAttr, SVGString::create()))
+    , m_svgTarget(SVGAnimatedString::create(this, SVGNames::targetAttr))
     , m_wasFocusedByMouse(false)
 {
     addToPropertyMap(m_svgTarget);
@@ -83,17 +82,20 @@ String SVGAElement::title() const
 
 void SVGAElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    // Unlike other SVG*Element classes, SVGAElement only listens to SVGURIReference changes
-    // as none of the other properties changes the linking behaviour for our <a> element.
+    // Unlike other SVG*Element classes, SVGAElement only listens to
+    // SVGURIReference changes as none of the other properties changes the linking
+    // behaviour for our <a> element.
     if (SVGURIReference::isKnownAttribute(attrName)) {
         SVGElement::InvalidationGuard invalidationGuard(this);
 
         bool wasLink = isLink();
         setIsLink(!hrefString().isNull());
 
-        if (wasLink != isLink())
-            setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::LinkColorChange));
-
+        if (wasLink || isLink()) {
+            pseudoStateChanged(CSSSelector::PseudoLink);
+            pseudoStateChanged(CSSSelector::PseudoVisited);
+            pseudoStateChanged(CSSSelector::PseudoAnyLink);
+        }
         return;
     }
 
@@ -111,7 +113,7 @@ LayoutObject* SVGAElement::createLayoutObject(const ComputedStyle&)
 void SVGAElement::defaultEventHandler(Event* event)
 {
     if (isLink()) {
-        if (focused() && isEnterKeyKeydownEvent(event)) {
+        if (isFocused() && isEnterKeyKeydownEvent(event)) {
             event->setDefaultHandled();
             dispatchSimulatedClick(event);
             return;
@@ -131,13 +133,14 @@ void SVGAElement::defaultEventHandler(Event* event)
 
             AtomicString target(m_svgTarget->currentValue()->value());
             if (target.isEmpty() && fastGetAttribute(XLinkNames::showAttr) == "new")
-                target = AtomicString("_blank", AtomicString::ConstructFromLiteral);
+                target = AtomicString("_blank");
             event->setDefaultHandled();
 
             LocalFrame* frame = document().frame();
             if (!frame)
                 return;
-            FrameLoadRequest frameRequest(&document(), ResourceRequest(document().completeURL(url)), target);
+            FrameLoadRequest frameRequest(
+                &document(), ResourceRequest(document().completeURL(url)), target);
             frameRequest.setTriggeringEvent(event);
             frame->loader().load(frameRequest);
             return;
@@ -147,7 +150,7 @@ void SVGAElement::defaultEventHandler(Event* event)
     SVGGraphicsElement::defaultEventHandler(event);
 }
 
-short SVGAElement::tabIndex() const
+int SVGAElement::tabIndex() const
 {
     // Skip the supportsFocus check in SVGElement.
     return Element::tabIndex();
@@ -155,9 +158,10 @@ short SVGAElement::tabIndex() const
 
 bool SVGAElement::supportsFocus() const
 {
-    if (hasEditableStyle())
+    if (hasEditableStyle(*this))
         return SVGGraphicsElement::supportsFocus();
-    // If not a link we should still be able to focus the element if it has tabIndex.
+    // If not a link we should still be able to focus the element if it has
+    // tabIndex.
     return isLink() || SVGGraphicsElement::supportsFocus();
 }
 
@@ -166,18 +170,28 @@ bool SVGAElement::shouldHaveFocusAppearance() const
     return !m_wasFocusedByMouse || SVGGraphicsElement::supportsFocus();
 }
 
-void SVGAElement::dispatchFocusEvent(Element* oldFocusedElement, WebFocusType type)
+// TODO(lanwei): Will add the InputDeviceCapabilities when SVGAElement gets
+// focus later, see https://crbug.com/476530.
+void SVGAElement::dispatchFocusEvent(
+    Element* oldFocusedElement,
+    WebFocusType type,
+    InputDeviceCapabilities* sourceCapabilities)
 {
     if (type != WebFocusTypePage)
         m_wasFocusedByMouse = type == WebFocusTypeMouse;
-    SVGGraphicsElement::dispatchFocusEvent(oldFocusedElement, type);
+    SVGGraphicsElement::dispatchFocusEvent(oldFocusedElement, type,
+        sourceCapabilities);
 }
 
-void SVGAElement::dispatchBlurEvent(Element* newFocusedElement, WebFocusType type)
+void SVGAElement::dispatchBlurEvent(
+    Element* newFocusedElement,
+    WebFocusType type,
+    InputDeviceCapabilities* sourceCapabilities)
 {
     if (type != WebFocusTypePage)
         m_wasFocusedByMouse = false;
-    SVGGraphicsElement::dispatchBlurEvent(newFocusedElement, type);
+    SVGGraphicsElement::dispatchBlurEvent(newFocusedElement, type,
+        sourceCapabilities);
 }
 
 bool SVGAElement::isURLAttribute(const Attribute& attribute) const
@@ -197,9 +211,8 @@ bool SVGAElement::isKeyboardFocusable() const
 {
     if (isFocusable() && Element::supportsFocus())
         return SVGElement::isKeyboardFocusable();
-
-    if (isLink())
-        return document().frameHost()->chromeClient().tabsToLinks();
+    if (isLink() && !document().frameHost()->chromeClient().tabsToLinks())
+        return false;
     return SVGElement::isKeyboardFocusable();
 }
 
@@ -207,7 +220,7 @@ bool SVGAElement::canStartSelection() const
 {
     if (!isLink())
         return SVGElement::canStartSelection();
-    return hasEditableStyle();
+    return hasEditableStyle(*this);
 }
 
 bool SVGAElement::willRespondToMouseClickEvents()

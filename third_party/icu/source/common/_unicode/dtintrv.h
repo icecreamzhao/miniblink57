@@ -12,17 +12,15 @@
 #ifndef __DTINTRV_H__
 #define __DTINTRV_H__
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "unicode/utypes.h"
 
 /**
  * \file
  * \brief C++ API: Date Interval data type
  */
 
-
 U_NAMESPACE_BEGIN
-
 
 /**
  * This class represents a date interval.
@@ -31,7 +29,6 @@ U_NAMESPACE_BEGIN
 **/
 class U_COMMON_API DateInterval : public UObject {
 public:
-
     /** 
      * Construct a DateInterval given a from date and a to date.
      * @param fromDate  The from date in date interval.
@@ -45,7 +42,7 @@ public:
      * @stable ICU 4.0
      */
     virtual ~DateInterval();
- 
+
     /** 
      * Get the from date.
      * @return  the from date in dateInterval.
@@ -59,7 +56,6 @@ public:
      * @stable ICU 4.0
      */
     UDate getToDate() const;
-
 
     /**
      * Return the class ID for this class. This is useful only for comparing to
@@ -87,7 +83,6 @@ public:
      */
     virtual UClassID getDynamicClassID(void) const;
 
-    
     /**
      * Copy constructor.
      * @stable ICU 4.0
@@ -114,14 +109,13 @@ public:
      */
     UBool operator!=(const DateInterval& other) const;
 
-
     /**
      * clone this object. 
      * The caller owns the result and should delete it when done.
      * @return a cloned DateInterval
      * @stable ICU 4.0
      */
-     virtual DateInterval* clone() const;
+    virtual DateInterval* clone() const;
 
 private:
     /** 
@@ -132,26 +126,25 @@ private:
     UDate fromDate;
     UDate toDate;
 
-} ;// end class DateInterval
+}; // end class DateInterval
 
-
-inline UDate 
-DateInterval::getFromDate() const { 
-    return fromDate; 
+inline UDate
+DateInterval::getFromDate() const
+{
+    return fromDate;
 }
 
-
-inline UDate 
-DateInterval::getToDate() const { 
-    return toDate; 
+inline UDate
+DateInterval::getToDate() const
+{
+    return toDate;
 }
 
-
-inline UBool 
-DateInterval::operator!=(const DateInterval& other) const { 
-    return ( !operator==(other) );
+inline UBool
+DateInterval::operator!=(const DateInterval& other) const
+{
+    return (!operator==(other));
 }
-
 
 U_NAMESPACE_END
 

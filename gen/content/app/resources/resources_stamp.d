@@ -1,0 +1,1 @@
+gen/content/app/resources/resources_stamp.d.stamp: ./../../tools/gritsettings/resource_ids

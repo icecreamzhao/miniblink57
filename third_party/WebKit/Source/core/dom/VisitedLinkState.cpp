@@ -2,10 +2,12 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 2004-2005 Allan Sandfeld Jensen (kde@carewolf.com)
  * Copyright (C) 2006, 2007 Nicholas Shanks (webkit@nickshanks.com)
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2007 Alexey Proskuryakov <ap@webkit.org>
  * Copyright (C) 2007, 2008 Eric Seidel <eric@webkit.org>
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  * Copyright (C) Research In Motion Limited 2011. All rights reserved.
  * Copyright (C) 2012 Google Inc. All rights reserved.
@@ -26,32 +28,48 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/VisitedLinkState.h"
 
 #include "core/HTMLNames.h"
-#include "core/XLinkNames.h"
 #include "core/dom/ElementTraversal.h"
+#include "core/dom/shadow/ElementShadow.h"
+#include "core/dom/shadow/ShadowRoot.h"
 #include "core/html/HTMLAnchorElement.h"
+#if ENABLE_WML
+#include "core/wml/WMLAElement.h"
+#endif
+#include "core/svg/SVGURIReference.h"
 #include "public/platform/Platform.h"
 
 namespace blink {
 
 static inline const AtomicString& linkAttribute(const Element& element)
 {
-    ASSERT(element.isLink());
+    DCHECK(element.isLink());
     if (element.isHTMLElement())
         return element.fastGetAttribute(HTMLNames::hrefAttr);
-    ASSERT(element.isSVGElement());
-    return element.getAttribute(XLinkNames::hrefAttr);
+#if ENABLE_WML
+//     if (element.isWMLElement())
+//         return element.fastGetAttribute(HTMLNames::hrefAttr);
+#endif
+    DCHECK(element.isSVGElement());
+    return SVGURIReference::legacyHrefString(toSVGElement(element));
 }
 
-static inline LinkHash linkHashForElement(const Element& element, const AtomicString& attribute = AtomicString())
+static inline LinkHash linkHashForElement(
+    const Element& element,
+    const AtomicString& attribute = AtomicString())
 {
-    ASSERT(attribute.isNull() || linkAttribute(element) == attribute);
+    DCHECK(attribute.isNull() || linkAttribute(element) == attribute);
     if (isHTMLAnchorElement(element))
         return toHTMLAnchorElement(element).visitedLinkHash();
-    return visitedLinkHash(element.document().baseURL(), attribute.isNull() ? linkAttribute(element) : attribute);
+#if ENABLE_WML
+//     if (isWMLAOrAnchorElement(element))
+//         return toWMLAElement(element).visitedLinkHash();
+#endif
+    return visitedLinkHash(
+        element.document().baseURL(),
+        attribute.isNull() ? linkAttribute(element) : attribute);
 }
 
 VisitedLinkState::VisitedLinkState(const Document& document)
@@ -59,51 +77,83 @@ VisitedLinkState::VisitedLinkState(const Document& document)
 {
 }
 
-void VisitedLinkState::invalidateStyleForAllLinks()
+static void invalidateStyleForAllLinksRecursively(
+    Node& rootNode,
+    bool invalidateVisitedLinkHashes)
 {
-    if (m_linksCheckedForVisitedState.isEmpty())
-        return;
-    for (Node& node : NodeTraversal::startsAt(document().firstChild())) {
-        if (node.isLink())
-            node.setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::VisitedLink));
+    for (Node& node : NodeTraversal::startsAt(rootNode)) {
+        if (node.isLink()) {
+            if (invalidateVisitedLinkHashes && isHTMLAnchorElement(node))
+                toHTMLAnchorElement(node).invalidateCachedVisitedLinkHash();
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoLink);
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoVisited);
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoAnyLink);
+        }
+        if (isShadowHost(&node)) {
+            for (ShadowRoot* root = node.youngestShadowRoot(); root;
+                 root = root->olderShadowRoot())
+                invalidateStyleForAllLinksRecursively(*root,
+                    invalidateVisitedLinkHashes);
+        }
+    }
+}
+
+void VisitedLinkState::invalidateStyleForAllLinks(
+    bool invalidateVisitedLinkHashes)
+{
+    if (!m_linksCheckedForVisitedState.isEmpty() && document().firstChild())
+        invalidateStyleForAllLinksRecursively(*document().firstChild(),
+            invalidateVisitedLinkHashes);
+}
+
+static void invalidateStyleForLinkRecursively(Node& rootNode,
+    LinkHash linkHash)
+{
+    for (Node& node : NodeTraversal::startsAt(rootNode)) {
+        if (node.isLink() && linkHashForElement(toElement(node)) == linkHash) {
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoLink);
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoVisited);
+            toElement(node).pseudoStateChanged(CSSSelector::PseudoAnyLink);
+        }
+        if (isShadowHost(&node))
+            for (ShadowRoot* root = node.youngestShadowRoot(); root;
+                 root = root->olderShadowRoot())
+                invalidateStyleForLinkRecursively(*root, linkHash);
     }
 }
 
 void VisitedLinkState::invalidateStyleForLink(LinkHash linkHash)
 {
-    if (!m_linksCheckedForVisitedState.contains(linkHash))
-        return;
-    for (Node& node : NodeTraversal::startsAt(document().firstChild())) {
-        if (node.isLink() && linkHashForElement(toElement(node)) == linkHash)
-            node.setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::VisitedLink));
-    }
+    if (m_linksCheckedForVisitedState.contains(linkHash) && document().firstChild())
+        invalidateStyleForLinkRecursively(*document().firstChild(), linkHash);
 }
 
-EInsideLink VisitedLinkState::determineLinkStateSlowCase(const Element& element)
+EInsideLink VisitedLinkState::determineLinkStateSlowCase(
+    const Element& element)
 {
-    ASSERT(element.isLink());
-    ASSERT(document().isActive());
-    ASSERT(document() == element.document());
+    DCHECK(element.isLink());
+    DCHECK(document().isActive());
+    DCHECK(document() == element.document());
 
     const AtomicString& attribute = linkAttribute(element);
 
     if (attribute.isNull())
-        return NotInsideLink; // This can happen for <img usemap>
+        return EInsideLink::kNotInsideLink; // This can happen for <img usemap>
 
     // An empty attribute refers to the document itself which is always
     // visited. It is useful to check this explicitly so that visited
     // links can be tested in platform independent manner, without
     // explicit support in the test harness.
     if (attribute.isEmpty())
-        return InsideVisitedLink;
+        return EInsideLink::kInsideVisitedLink;
 
     if (LinkHash hash = linkHashForElement(element, attribute)) {
         m_linksCheckedForVisitedState.add(hash);
         if (Platform::current()->isLinkVisited(hash))
-            return InsideVisitedLink;
+            return EInsideLink::kInsideVisitedLink;
     }
 
-    return InsideUnvisitedLink;
+    return EInsideLink::kInsideUnvisitedLink;
 }
 
 DEFINE_TRACE(VisitedLinkState)

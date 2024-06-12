@@ -33,6 +33,10 @@
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutSize.h"
+#include "wtf/Allocator.h"
+#include <iosfwd>
+
+struct SkPoint;
 
 namespace blink {
 
@@ -40,12 +44,15 @@ namespace blink {
 // mapping a rectangle through transforms. When initialized from a rect, the
 // points are in clockwise order from top left.
 class PLATFORM_EXPORT FloatQuad {
-public:
-    FloatQuad()
-    {
-    }
+    USING_FAST_MALLOC(FloatQuad);
 
-    FloatQuad(const FloatPoint& p1, const FloatPoint& p2, const FloatPoint& p3, const FloatPoint& p4)
+public:
+    FloatQuad() { }
+
+    FloatQuad(const FloatPoint& p1,
+        const FloatPoint& p2,
+        const FloatPoint& p3,
+        const FloatPoint& p4)
         : m_p1(p1)
         , m_p2(p2)
         , m_p3(p3)
@@ -60,6 +67,9 @@ public:
         , m_p4(inRect.x(), inRect.maxY())
     {
     }
+
+    // Converts from an array of four SkPoints, as from SkMatrix::mapRectToQuad.
+    explicit FloatQuad(const SkPoint (&)[4]);
 
     FloatPoint p1() const { return m_p1; }
     FloatPoint p2() const { return m_p2; }
@@ -81,11 +91,13 @@ public:
     // corresponding FloatRect can be retrieved with boundingBox().
     bool isRectilinear() const;
 
-    // Tests whether the given point is inside, or on an edge or corner of this quad.
+    // Tests whether the given point is inside, or on an edge or corner of this
+    // quad.
     bool containsPoint(const FloatPoint&) const;
 
-    // Tests whether the four corners of other are inside, or coincident with the sides of this quad.
-    // Note that this only works for convex quads, but that includes all quads that originate
+    // Tests whether the four corners of other are inside, or coincident with the
+    // sides of this quad.  Note that this only works for convex quads, but that
+    // includes all quads that originate
     // from transformed rects.
     bool containsQuad(const FloatQuad&) const;
 
@@ -96,13 +108,15 @@ public:
     // Test whether any part of the circle/ellipse intersects with this quad.
     // Note that these two functions only work for convex quads.
     bool intersectsCircle(const FloatPoint& center, float radius) const;
-    bool intersectsEllipse(const FloatPoint& center, const FloatSize& radii) const;
+    bool intersectsEllipse(const FloatPoint& center,
+        const FloatSize& radii) const;
 
-    // The center of the quad. If the quad is the result of a affine-transformed rectangle this is the same as the original center transformed.
+    // The center of the quad. If the quad is the result of a affine-transformed
+    // rectangle this is the same as the original center transformed.
     FloatPoint center() const
     {
         return FloatPoint((m_p1.x() + m_p2.x() + m_p3.x() + m_p4.x()) / 4.0,
-                          (m_p1.y() + m_p2.y() + m_p3.y() + m_p4.y()) / 4.0);
+            (m_p1.y() + m_p2.y() + m_p3.y() + m_p4.y()) / 4.0);
     }
 
     FloatRect boundingBox() const;
@@ -144,6 +158,8 @@ public:
     // Note that output is undefined when all points are colinear.
     bool isCounterclockwise() const;
 
+    String toString() const;
+
 private:
     FloatPoint m_p1;
     FloatPoint m_p2;
@@ -165,22 +181,18 @@ inline FloatQuad& operator-=(FloatQuad& a, const FloatSize& b)
 
 inline bool operator==(const FloatQuad& a, const FloatQuad& b)
 {
-    return a.p1() == b.p1() &&
-           a.p2() == b.p2() &&
-           a.p3() == b.p3() &&
-           a.p4() == b.p4();
+    return a.p1() == b.p1() && a.p2() == b.p2() && a.p3() == b.p3() && a.p4() == b.p4();
 }
 
 inline bool operator!=(const FloatQuad& a, const FloatQuad& b)
 {
-    return a.p1() != b.p1() ||
-           a.p2() != b.p2() ||
-           a.p3() != b.p3() ||
-           a.p4() != b.p4();
+    return a.p1() != b.p1() || a.p2() != b.p2() || a.p3() != b.p3() || a.p4() != b.p4();
 }
 
-}   // namespace blink
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const FloatQuad&, std::ostream*);
 
+} // namespace blink
 
 #endif // FloatQuad_h
-

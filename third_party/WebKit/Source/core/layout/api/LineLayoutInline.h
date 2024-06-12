@@ -6,26 +6,29 @@
 #define LineLayoutInline_h
 
 #include "core/layout/LayoutInline.h"
-#include "core/layout/api/LineLayoutItem.h"
+#include "core/layout/api/LineLayoutBoxModel.h"
 #include "platform/LayoutUnit.h"
 
 namespace blink {
 
-class ComputedStyle;
 class LayoutInline;
-class LayoutObject;
 
-class LineLayoutInline : public LineLayoutItem {
+class LineLayoutInline : public LineLayoutBoxModel {
 public:
     explicit LineLayoutInline(LayoutInline* layoutInline)
-        : LineLayoutItem(layoutInline)
+        : LineLayoutBoxModel(layoutInline)
     {
     }
 
-    LineLayoutInline(const LineLayoutItem& item)
-        : LineLayoutItem(item)
+    explicit LineLayoutInline(const LineLayoutItem& item)
+        : LineLayoutBoxModel(item)
     {
-        ASSERT(!item || item.isLayoutInline());
+        SECURITY_DCHECK(!item || item.isLayoutInline());
+    }
+
+    explicit LineLayoutInline(std::nullptr_t)
+        : LineLayoutBoxModel(nullptr)
+    {
     }
 
     LineLayoutInline() { }
@@ -40,17 +43,67 @@ public:
         return LineLayoutItem(toInline()->lastChild());
     }
 
-protected:
-    LayoutInline* toInline()
+    LayoutUnit marginStart() const { return toInline()->marginStart(); }
+
+    LayoutUnit marginEnd() const { return toInline()->marginEnd(); }
+
+    int borderStart() const { return toInline()->borderStart(); }
+
+    int borderEnd() const { return toInline()->borderEnd(); }
+
+    LayoutUnit paddingStart() const { return toInline()->paddingStart(); }
+
+    LayoutUnit paddingEnd() const { return toInline()->paddingEnd(); }
+
+    bool hasInlineDirectionBordersPaddingOrMargin() const
     {
-        return toLayoutInline(layoutObject());
+        return toInline()->hasInlineDirectionBordersPaddingOrMargin();
     }
+
+    bool alwaysCreateLineBoxes() const
+    {
+        return toInline()->alwaysCreateLineBoxes();
+    }
+
+    InlineBox* firstLineBoxIncludingCulling() const
+    {
+        return toInline()->firstLineBoxIncludingCulling();
+    }
+
+    InlineBox* lastLineBoxIncludingCulling() const
+    {
+        return toInline()->lastLineBoxIncludingCulling();
+    }
+
+    LineBoxList* lineBoxes() { return toInline()->lineBoxes(); }
+
+    bool hitTestCulledInline(HitTestResult& result,
+        const HitTestLocation& locationInContainer,
+        const LayoutPoint& accumulatedOffset)
+    {
+        return toInline()->hitTestCulledInline(result, locationInContainer,
+            accumulatedOffset);
+    }
+
+    LayoutBoxModelObject* continuation() const
+    {
+        return toInline()->continuation();
+    }
+
+    InlineBox* createAndAppendInlineFlowBox()
+    {
+        return toInline()->createAndAppendInlineFlowBox();
+    }
+
+    InlineFlowBox* lastLineBox() { return toInline()->lastLineBox(); }
+
+protected:
+    LayoutInline* toInline() { return toLayoutInline(layoutObject()); }
 
     const LayoutInline* toInline() const
     {
         return toLayoutInline(layoutObject());
     }
-
 };
 
 } // namespace blink

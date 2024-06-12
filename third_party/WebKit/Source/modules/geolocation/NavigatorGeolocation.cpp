@@ -17,10 +17,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA  02110-1301 USA
  */
 
-#include "config.h"
 #include "modules/geolocation/NavigatorGeolocation.h"
 
 #include "core/dom/Document.h"
@@ -30,12 +30,8 @@
 
 namespace blink {
 
-NavigatorGeolocation::NavigatorGeolocation(LocalFrame* frame)
-    : DOMWindowProperty(frame)
-{
-}
-
-NavigatorGeolocation::~NavigatorGeolocation()
+NavigatorGeolocation::NavigatorGeolocation(Navigator& navigator)
+    : Supplement<Navigator>(navigator)
 {
 }
 
@@ -46,9 +42,10 @@ const char* NavigatorGeolocation::supplementName()
 
 NavigatorGeolocation& NavigatorGeolocation::from(Navigator& navigator)
 {
-    NavigatorGeolocation* supplement = static_cast<NavigatorGeolocation*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    NavigatorGeolocation* supplement = static_cast<NavigatorGeolocation*>(
+        Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
-        supplement = new NavigatorGeolocation(navigator.frame());
+        supplement = new NavigatorGeolocation(navigator);
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
@@ -61,16 +58,15 @@ Geolocation* NavigatorGeolocation::geolocation(Navigator& navigator)
 
 Geolocation* NavigatorGeolocation::geolocation()
 {
-    if (!m_geolocation && frame())
-        m_geolocation = Geolocation::create(frame()->document());
-    return m_geolocation.get();
+    if (!m_geolocation && supplementable()->frame())
+        m_geolocation = Geolocation::create(supplementable()->frame()->document());
+    return m_geolocation;
 }
 
 DEFINE_TRACE(NavigatorGeolocation)
 {
     visitor->trace(m_geolocation);
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<Navigator>::trace(visitor);
 }
 
 } // namespace blink

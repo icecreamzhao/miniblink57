@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkSVGLinearGradient_DEFINED
 #define SkSVGLinearGradient_DEFINED
@@ -14,6 +12,7 @@
 
 class SkSVGLinearGradient : public SkSVGGradient {
     DECLARE_SVG_INFO(LinearGradient);
+
 private:
     SkString f_gradientTransform;
     SkString f_gradientUnits;

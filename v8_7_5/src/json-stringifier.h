@@ -10,11 +10,11 @@
 namespace v8 {
 namespace internal {
 
-V8_WARN_UNUSED_RESULT MaybeHandle<Object> JsonStringify(Isolate* isolate,
-                                                        Handle<Object> object,
-                                                        Handle<Object> replacer,
-                                                        Handle<Object> gap);
-}  // namespace internal
-}  // namespace v8
+    V8_WARN_UNUSED_RESULT MaybeHandle<Object> JsonStringify(Isolate* isolate,
+        Handle<Object> object,
+        Handle<Object> replacer,
+        Handle<Object> gap);
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_JSON_STRINGIFIER_H_
+#endif // V8_JSON_STRINGIFIER_H_

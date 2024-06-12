@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/heap/PagePool.h"
 
 #include "platform/heap/Heap.h"
@@ -13,7 +12,7 @@ namespace blink {
 
 FreePagePool::~FreePagePool()
 {
-    for (int index = 0; index < ThreadState::NumberOfHeaps; ++index) {
+    for (int index = 0; index < BlinkGC::NumberOfArenas; ++index) {
         while (PoolEntry* entry = m_pool[index]) {
             m_pool[index] = entry->next;
             PageMemory* memory = entry->data;
@@ -54,7 +53,7 @@ PageMemory* FreePagePool::takeFreePage(int index)
 
 OrphanedPagePool::~OrphanedPagePool()
 {
-    for (int index = 0; index < ThreadState::NumberOfHeaps; ++index) {
+    for (int index = 0; index < BlinkGC::NumberOfArenas; ++index) {
         while (PoolEntry* entry = m_pool[index]) {
             m_pool[index] = entry->next;
             BasePage* page = entry->data;
@@ -78,14 +77,9 @@ NO_SANITIZE_ADDRESS
 void OrphanedPagePool::decommitOrphanedPages()
 {
     ASSERT(ThreadState::current()->isInGC());
+    ASSERT(ThreadState::current()->heap().isAtSafePoint());
 
-#if ENABLE(ASSERT)
-    // No locking needed as all threads are at safepoints at this point in time.
-    for (ThreadState* state : ThreadState::attachedThreads())
-        ASSERT(state->isAtSafePoint());
-#endif
-
-    for (int index = 0; index < ThreadState::NumberOfHeaps; ++index) {
+    for (int index = 0; index < BlinkGC::NumberOfArenas; ++index) {
         PoolEntry* entry = m_pool[index];
         PoolEntry** prevNext = &m_pool[index];
         while (entry) {
@@ -102,7 +96,8 @@ void OrphanedPagePool::decommitOrphanedPages()
             } else {
                 page->~BasePage();
                 clearMemory(memory);
-                Heap::freePagePool()->addFreePage(index, memory);
+                ThreadHeap::mainThreadHeap()->getFreePagePool()->addFreePage(index,
+                    memory);
             }
 
             PoolEntry* deadEntry = entry;
@@ -114,14 +109,20 @@ void OrphanedPagePool::decommitOrphanedPages()
 }
 
 // Make the compiler think that something is going on there.
-static inline void breakOptimization(void *arg) {
+static inline void breakOptimization(void* arg)
+{
 #if !defined(_WIN32) || defined(__clang__)
-    __asm__ __volatile__("" : : "r" (arg) : "memory");
+    __asm__ __volatile__(""
+                         :
+                         : "r"(arg)
+                         : "memory");
 #endif
 }
 
 NO_SANITIZE_ADDRESS
-void OrphanedPagePool::asanDisabledMemset(Address address, char value, size_t size)
+void OrphanedPagePool::asanDisabledMemset(Address address,
+    char value,
+    size_t size)
 {
     // Don't use memset when running with ASan since this needs to zap
     // poisoned memory as well and the NO_SANITIZE_ADDRESS annotation
@@ -137,10 +138,10 @@ void OrphanedPagePool::clearMemory(PageMemory* memory)
     asanDisabledMemset(memory->writableStart(), 0, blinkPagePayloadSize());
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 bool OrphanedPagePool::contains(void* object)
 {
-    for (int index = 0; index < ThreadState::NumberOfHeaps; ++index) {
+    for (int index = 0; index < BlinkGC::NumberOfArenas; ++index) {
         for (PoolEntry* entry = m_pool[index]; entry; entry = entry->next) {
             BasePage* page = entry->data;
             if (page->contains(reinterpret_cast<Address>(object)))

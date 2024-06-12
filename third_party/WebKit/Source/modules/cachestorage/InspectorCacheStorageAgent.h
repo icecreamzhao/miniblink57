@@ -5,33 +5,38 @@
 #ifndef InspectorCacheStorageAgent_h
 #define InspectorCacheStorageAgent_h
 
-#include "core/InspectorFrontend.h"
 #include "core/inspector/InspectorBaseAgent.h"
+#include "core/inspector/protocol/CacheStorage.h"
 #include "modules/ModulesExport.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-typedef String ErrorString;
-
-class MODULES_EXPORT InspectorCacheStorageAgent final : public InspectorBaseAgent<InspectorCacheStorageAgent, InspectorFrontend::CacheStorage>, public InspectorBackendDispatcher::CacheStorageCommandHandler {
+class MODULES_EXPORT InspectorCacheStorageAgent final
+    : public InspectorBaseAgent<protocol::CacheStorage::Metainfo> {
     WTF_MAKE_NONCOPYABLE(InspectorCacheStorageAgent);
 
 public:
-    static PassOwnPtrWillBeRawPtr<InspectorCacheStorageAgent> create()
+    static InspectorCacheStorageAgent* create()
     {
-        return adoptPtrWillBeNoop(new InspectorCacheStorageAgent());
+        return new InspectorCacheStorageAgent();
     }
 
     ~InspectorCacheStorageAgent() override;
 
     DECLARE_VIRTUAL_TRACE();
 
-    void requestCacheNames(ErrorString*, const String& securityOrigin, PassRefPtrWillBeRawPtr<RequestCacheNamesCallback>) override;
-    void requestEntries(ErrorString*, const String& cacheId, int skipCount, int pageSize, PassRefPtrWillBeRawPtr<RequestEntriesCallback>) override;
-    void deleteCache(ErrorString*, const String& cacheId, PassRefPtrWillBeRawPtr<DeleteCacheCallback>) override;
-    void deleteEntry(ErrorString*, const String& cacheId, const String& request, PassRefPtrWillBeRawPtr<DeleteEntryCallback>) override;
+    void requestCacheNames(const String& securityOrigin,
+        std::unique_ptr<RequestCacheNamesCallback>) override;
+    void requestEntries(const String& cacheId,
+        int skipCount,
+        int pageSize,
+        std::unique_ptr<RequestEntriesCallback>) override;
+    void deleteCache(const String& cacheId,
+        std::unique_ptr<DeleteCacheCallback>) override;
+    void deleteEntry(const String& cacheId,
+        const String& request,
+        std::unique_ptr<DeleteEntryCallback>) override;
 
 private:
     explicit InspectorCacheStorageAgent();

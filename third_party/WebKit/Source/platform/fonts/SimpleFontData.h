@@ -35,26 +35,25 @@
 #include "platform/fonts/TypesettingFeatures.h"
 #include "platform/fonts/opentype/OpenTypeVerticalData.h"
 #include "platform/geometry/FloatRect.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/StringHash.h"
-
-#if OS(MACOSX)
-#include "wtf/RetainPtr.h"
-#endif
+#include <memory>
 
 namespace blink {
 
 class FontDescription;
 
-enum FontDataVariant { AutoVariant, NormalVariant, SmallCapsVariant, EmphasisMarkVariant };
+enum FontDataVariant { AutoVariant,
+    NormalVariant,
+    SmallCapsVariant,
+    EmphasisMarkVariant };
 
 class PLATFORM_EXPORT SimpleFontData : public FontData {
 public:
     // Used to create platform fonts.
     static PassRefPtr<SimpleFontData> create(const FontPlatformData& platformData, PassRefPtr<CustomFontData> customData = nullptr, bool isTextOrientationFallback = false)
     {
-        return adoptRef(new SimpleFontData(platformData, customData, isTextOrientationFallback));
+        return adoptRef(new SimpleFontData(platformData, std::move(customData), isTextOrientationFallback));
     }
 
     ~SimpleFontData() override;
@@ -85,10 +84,12 @@ public:
 
     bool hasVerticalGlyphs() const { return m_hasVerticalGlyphs; }
     bool isTextOrientationFallback() const { return m_isTextOrientationFallback; }
+    bool isTextOrientationFallbackOf(const SimpleFontData*) const;
 
-    FontMetrics& fontMetrics() { return m_fontMetrics; }
-    const FontMetrics& fontMetrics() const { return m_fontMetrics; }
-    float sizePerUnit() const { return platformData().size() / (fontMetrics().unitsPerEm() ? fontMetrics().unitsPerEm() : 1); }
+    FontMetrics& getFontMetrics() { return m_fontMetrics; }
+    const FontMetrics& getFontMetrics() const { return m_fontMetrics; }
+    float sizePerUnit() const { return platformData().size() / (getFontMetrics().unitsPerEm() ? getFontMetrics().unitsPerEm() : 1); }
+    float internalLeading() const { return getFontMetrics().floatHeight() - platformData().size(); }
 
     float maxCharWidth() const { return m_maxCharWidth; }
     void setMaxCharWidth(float maxCharWidth) { m_maxCharWidth = maxCharWidth; }
@@ -106,17 +107,18 @@ public:
 
     Glyph spaceGlyph() const { return m_spaceGlyph; }
     void setSpaceGlyph(Glyph spaceGlyph) { m_spaceGlyph = spaceGlyph; }
+    Glyph zeroGlyph() const { return m_zeroGlyph; }
+    void setZeroGlyph(Glyph zeroGlyph) { m_zeroGlyph = zeroGlyph; }
+
     Glyph zeroWidthSpaceGlyph() const { return m_zeroWidthSpaceGlyph; }
     void setZeroWidthSpaceGlyph(Glyph spaceGlyph) { m_zeroWidthSpaceGlyph = spaceGlyph; }
     bool isZeroWidthSpaceGlyph(Glyph glyph) const { return glyph == m_zeroWidthSpaceGlyph && glyph; }
-    Glyph zeroGlyph() const { return m_zeroGlyph; }
-    void setZeroGlyph(Glyph zeroGlyph) { m_zeroGlyph = zeroGlyph; }
 
     const SimpleFontData* fontDataForCharacter(UChar32) const override;
 
     Glyph glyphForCharacter(UChar32) const;
 
-    bool isCustomFont() const override { return m_customFontData; }
+    bool isCustomFont() const override { return m_customFontData.get(); }
     bool isLoading() const override { return m_customFontData ? m_customFontData->isLoading() : false; }
     bool isLoadingFallback() const override { return m_customFontData ? m_customFontData->isLoadingFallback() : false; }
     bool isSegmented() const override;
@@ -127,7 +129,7 @@ public:
 
     bool canRenderCombiningCharacterSequence(const UChar*, size_t) const;
 
-    PassRefPtr<CustomFontData> customFontData() const { return m_customFontData; }
+    CustomFontData* customFontData() const { return m_customFontData.get(); }
 
     // Implemented by the platform.
     virtual bool fillGlyphPage(GlyphPage* pageToFill, unsigned offset, unsigned length, UChar* buffer, unsigned bufferLength) const;
@@ -142,7 +144,6 @@ private:
     void platformGlyphInit();
 
     PassRefPtr<SimpleFontData> createScaledFontData(const FontDescription&, float scaleFactor) const;
-    PassRefPtr<SimpleFontData> platformCreateScaledFontData(const FontDescription&, float scaleFactor) const;
 
     FontMetrics m_fontMetrics;
     float m_maxCharWidth;
@@ -150,7 +151,7 @@ private:
 
     FontPlatformData m_platformData;
 
-    mutable OwnPtr<GlyphMetricsMap<FloatRect>> m_glyphToBoundsMap;
+    mutable std::unique_ptr<GlyphMetricsMap<FloatRect>> m_glyphToBoundsMap;
     mutable GlyphMetricsMap<float> m_glyphToWidthMap;
 
     bool m_isTextOrientationFallback;
@@ -165,8 +166,13 @@ private:
 
     GlyphData m_missingGlyphData;
 
+public:
     struct DerivedFontData {
-        static PassOwnPtr<DerivedFontData> create(bool forCustomFont);
+        USING_FAST_MALLOC(DerivedFontData);
+        WTF_MAKE_NONCOPYABLE(DerivedFontData);
+
+    public:
+        static std::unique_ptr<DerivedFontData> create(bool forCustomFont);
         ~DerivedFontData();
 
         bool forCustomFont;
@@ -182,17 +188,13 @@ private:
         }
     };
 
-    mutable OwnPtr<DerivedFontData> m_derivedFontData;
+    mutable std::unique_ptr<DerivedFontData> m_derivedFontData;
 
     RefPtr<CustomFontData> m_customFontData;
-    mutable OwnPtr<HashMap<String, bool>> m_combiningCharacterSequenceSupport;
 };
 
 ALWAYS_INLINE FloatRect SimpleFontData::boundsForGlyph(Glyph glyph) const
 {
-    if (isZeroWidthSpaceGlyph(glyph))
-        return FloatRect();
-
     FloatRect bounds;
     if (m_glyphToBoundsMap) {
         bounds = m_glyphToBoundsMap->metricsForGlyph(glyph);
@@ -202,16 +204,13 @@ ALWAYS_INLINE FloatRect SimpleFontData::boundsForGlyph(Glyph glyph) const
 
     bounds = platformBoundsForGlyph(glyph);
     if (!m_glyphToBoundsMap)
-        m_glyphToBoundsMap = adoptPtr(new GlyphMetricsMap<FloatRect>);
+        m_glyphToBoundsMap = WTF::wrapUnique(new GlyphMetricsMap<FloatRect>);
     m_glyphToBoundsMap->setMetricsForGlyph(glyph, bounds);
     return bounds;
 }
 
 ALWAYS_INLINE float SimpleFontData::widthForGlyph(Glyph glyph) const
 {
-    if (isZeroWidthSpaceGlyph(glyph))
-        return 0;
-
     float width = m_glyphToWidthMap.metricsForGlyph(glyph);
     if (width != cGlyphSizeUnknown)
         return width;

@@ -10,14 +10,14 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
 #include "platform/heap/Handle.h"
-#include "web/ViewportAnchor.h"
 
 namespace blink {
 
 class FrameView;
 class Node;
 class PageScaleConstraintsSet;
-class PinchViewport;
+class ScrollableArea;
+class VisualViewport;
 
 // The rotation anchor provides a way to anchor a viewport origin to a DOM node.
 // In particular, the user supplies an anchor point (in view coordinates, e.g.,
@@ -27,10 +27,14 @@ class PinchViewport;
 // viewport origin maintains its orientation relative to the anchor. If there is
 // no node or it is lost during the resize, we fall back to the resize anchor
 // logic.
-class RotationViewportAnchor : public ViewportAnchor {
+class RotationViewportAnchor {
     STACK_ALLOCATED();
+
 public:
-    RotationViewportAnchor(FrameView& rootFrameView, PinchViewport&, const FloatSize& anchorInInnerViewCoords, PageScaleConstraintsSet&);
+    RotationViewportAnchor(FrameView& rootFrameView,
+        VisualViewport&,
+        const FloatSize& anchorInInnerViewCoords,
+        PageScaleConstraintsSet&);
     ~RotationViewportAnchor();
 
 private:
@@ -39,19 +43,25 @@ private:
 
     FloatPoint getInnerOrigin(const FloatSize& innerSize) const;
 
-    void computeOrigins(const FloatSize& innerSize, IntPoint& mainFrameOffset, FloatPoint& pinchViewportOffset) const;
+    void computeOrigins(const FloatSize& innerSize,
+        IntPoint& mainFrameOffset,
+        FloatPoint& visualViewportOffset) const;
+    ScrollableArea& layoutViewport() const;
+
+    Member<FrameView> m_rootFrameView;
+    Member<VisualViewport> m_visualViewport;
 
     float m_oldPageScaleFactor;
     float m_oldMinimumPageScaleFactor;
 
     // Inner viewport origin in the reference frame of the document in CSS pixels
-    FloatPoint m_pinchViewportInDocument;
+    FloatPoint m_visualViewportInDocument;
 
     // Inner viewport origin in the reference frame of the outer viewport
     // normalized to the outer viewport size.
-    FloatSize m_normalizedPinchViewportOffset;
+    FloatSize m_normalizedVisualViewportOffset;
 
-    RefPtrWillBeMember<Node> m_anchorNode;
+    Member<Node> m_anchorNode;
     LayoutRect m_anchorNodeBounds;
 
     FloatSize m_anchorInInnerViewCoords;

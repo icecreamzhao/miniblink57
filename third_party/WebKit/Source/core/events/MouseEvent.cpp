@@ -20,151 +20,392 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/events/MouseEvent.h"
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
 #include "bindings/core/v8/ScriptState.h"
-#include "core/clipboard/DataTransfer.h"
 #include "core/dom/Element.h"
 #include "core/events/EventDispatcher.h"
+#include "core/frame/FrameView.h"
+#include "core/frame/LocalDOMWindow.h"
+#include "core/frame/LocalFrame.h"
+#include "core/input/InputDeviceCapabilities.h"
+#include "core/layout/LayoutObject.h"
+#include "core/paint/PaintLayer.h"
+#include "core/svg/SVGElement.h"
 #include "platform/PlatformMouseEvent.h"
+#include "public/platform/WebPointerProperties.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<MouseEvent> MouseEvent::create(ScriptState* scriptState, const AtomicString& type, const MouseEventInit& initializer)
+namespace {
+
+    LayoutSize contentsScrollOffset(AbstractView* abstractView)
+    {
+        if (!abstractView || !abstractView->isLocalDOMWindow())
+            return LayoutSize();
+        LocalFrame* frame = toLocalDOMWindow(abstractView)->frame();
+        if (!frame)
+            return LayoutSize();
+        FrameView* frameView = frame->view();
+        if (!frameView)
+            return LayoutSize();
+        float scaleFactor = frame->pageZoomFactor();
+        return LayoutSize(frameView->scrollX() / scaleFactor,
+            frameView->scrollY() / scaleFactor);
+    }
+
+    float pageZoomFactor(const UIEvent* event)
+    {
+        if (!event->view() || !event->view()->isLocalDOMWindow())
+            return 1;
+        LocalFrame* frame = toLocalDOMWindow(event->view())->frame();
+        if (!frame)
+            return 1;
+        return frame->pageZoomFactor();
+    }
+
+    const LayoutObject* findTargetLayoutObject(Node*& targetNode)
+    {
+        LayoutObject* layoutObject = targetNode->layoutObject();
+        if (!layoutObject || !layoutObject->isSVG())
+            return layoutObject;
+        // If this is an SVG node, compute the offset to the padding box of the
+        // outermost SVG root (== the closest ancestor that has a CSS layout box.)
+        while (!layoutObject->isSVGRoot())
+            layoutObject = layoutObject->parent();
+        // Update the target node to point to the SVG root.
+        targetNode = layoutObject->node();
+        DCHECK(!targetNode || (targetNode->isSVGElement() && toSVGElement(*targetNode).isOutermostSVGSVGElement()));
+        return layoutObject;
+    }
+
+} // namespace
+
+MouseEvent* MouseEvent::create(ScriptState* scriptState,
+    const AtomicString& type,
+    const MouseEventInit& initializer)
 {
     if (scriptState && scriptState->world().isIsolatedWorld())
-        UIEventWithKeyState::didCreateEventInIsolatedWorld(initializer.ctrlKey(), initializer.altKey(), initializer.shiftKey(), initializer.metaKey());
-    return adoptRefWillBeNoop(new MouseEvent(type, initializer));
+        UIEventWithKeyState::didCreateEventInIsolatedWorld(
+            initializer.ctrlKey(), initializer.altKey(), initializer.shiftKey(),
+            initializer.metaKey());
+    return new MouseEvent(type, initializer);
 }
 
-PassRefPtrWillBeRawPtr<MouseEvent> MouseEvent::create(const AtomicString& eventType, PassRefPtrWillBeRawPtr<AbstractView> view, const PlatformMouseEvent& event, int detail, PassRefPtrWillBeRawPtr<Node> relatedTarget)
+MouseEvent* MouseEvent::create(const AtomicString& eventType,
+    AbstractView* view,
+    const PlatformMouseEvent& event,
+    int detail,
+    Node* relatedTarget)
 {
-    ASSERT(event.type() == PlatformEvent::MouseMoved || event.button() != NoButton);
-
     bool isMouseEnterOrLeave = eventType == EventTypeNames::mouseenter || eventType == EventTypeNames::mouseleave;
     bool isCancelable = !isMouseEnterOrLeave;
     bool isBubbling = !isMouseEnterOrLeave;
 
     return MouseEvent::create(
-        eventType, isBubbling, isCancelable, view,
-        detail, event.globalPosition().x(), event.globalPosition().y(), event.position().x(), event.position().y(),
-        event.movementDelta().x(), event.movementDelta().y(),
-        event.ctrlKey(), event.altKey(), event.shiftKey(), event.metaKey(), event.button(),
-        platformModifiersToButtons(event.modifiers()),
-        relatedTarget, nullptr, false, event.syntheticEventType(), event.timestamp());
+        eventType, isBubbling, isCancelable, view, detail,
+        event.globalPosition().x(), event.globalPosition().y(),
+        event.position().x(), event.position().y(), event.movementDelta().x(),
+        event.movementDelta().y(), event.getModifiers(),
+        static_cast<short>(event.pointerProperties().button),
+        platformModifiersToButtons(event.getModifiers()), relatedTarget,
+        event.timestamp(), event.getSyntheticEventType(), event.region(), &event);
 }
 
-PassRefPtrWillBeRawPtr<MouseEvent> MouseEvent::create(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view,
-    int detail, int screenX, int screenY, int windowX, int windowY,
-    int movementX, int movementY,
-    bool ctrlKey, bool altKey, bool shiftKey, bool metaKey,
-    short button, unsigned short buttons,
-    PassRefPtrWillBeRawPtr<EventTarget> relatedTarget, DataTransfer* dataTransfer, bool isSimulated, PlatformMouseEvent::SyntheticEventType syntheticEventType,
-    double uiCreateTime)
+MouseEvent* MouseEvent::create(
+    const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* view,
+    int detail,
+    int screenX,
+    int screenY,
+    int windowX,
+    int windowY,
+    int movementX,
+    int movementY,
+    PlatformEvent::Modifiers modifiers,
+    short button,
+    unsigned short buttons,
+    EventTarget* relatedTarget,
+    TimeTicks platformTimeStamp,
+    PlatformMouseEvent::SyntheticEventType syntheticEventType,
+    const String& region,
+    const PlatformMouseEvent* mouseEvent)
 {
-    return adoptRefWillBeNoop(new MouseEvent(type, canBubble, cancelable, view,
-        detail, screenX, screenY, windowX, windowY,
-        movementX, movementY,
-        ctrlKey, altKey, shiftKey, metaKey, button, buttons, relatedTarget, dataTransfer, isSimulated, syntheticEventType, uiCreateTime));
+    return new MouseEvent(
+        type, canBubble, cancelable, view, detail, screenX, screenY, windowX,
+        windowY, movementX, movementY, modifiers, button, buttons, relatedTarget,
+        platformTimeStamp, syntheticEventType, region, mouseEvent);
+}
+
+MouseEvent* MouseEvent::create(const AtomicString& eventType,
+    AbstractView* view,
+    Event* underlyingEvent,
+    SimulatedClickCreationScope creationScope)
+{
+    PlatformEvent::Modifiers modifiers = PlatformEvent::NoModifiers;
+    if (UIEventWithKeyState* keyStateEvent = findEventWithKeyState(underlyingEvent)) {
+        modifiers = keyStateEvent->modifiers();
+    }
+
+    PlatformMouseEvent::SyntheticEventType syntheticType = PlatformMouseEvent::Positionless;
+    int screenX = 0;
+    int screenY = 0;
+    if (underlyingEvent && underlyingEvent->isMouseEvent()) {
+        syntheticType = PlatformMouseEvent::RealOrIndistinguishable;
+        MouseEvent* mouseEvent = toMouseEvent(underlyingEvent);
+        screenX = mouseEvent->screenX();
+        screenY = mouseEvent->screenY();
+    }
+
+    TimeTicks timestamp = underlyingEvent ? underlyingEvent->platformTimeStamp() : TimeTicks::Now();
+    MouseEvent* createdEvent = MouseEvent::create(
+        eventType, true, true, view, 0, screenX, screenY, 0, 0, 0, 0, modifiers,
+        0, 0, nullptr, timestamp, syntheticType, String(), nullptr);
+
+    createdEvent->setTrusted(creationScope == SimulatedClickCreationScope::FromUserAgent);
+    createdEvent->setUnderlyingEvent(underlyingEvent);
+    if (syntheticType == PlatformMouseEvent::RealOrIndistinguishable) {
+        MouseEvent* mouseEvent = toMouseEvent(createdEvent->underlyingEvent());
+        createdEvent->initCoordinates(mouseEvent->clientX(), mouseEvent->clientY());
+    }
+
+    return createdEvent;
 }
 
 MouseEvent::MouseEvent()
-    : m_button(0)
+    : m_positionType(PositionType::Position)
+    , m_hasCachedRelativePosition(false)
+    , m_button(0)
     , m_buttons(0)
     , m_relatedTarget(nullptr)
-    , m_dataTransfer(nullptr)
     , m_syntheticEventType(PlatformMouseEvent::RealOrIndistinguishable)
 {
 }
 
-MouseEvent::MouseEvent(const AtomicString& eventType, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view,
-    int detail, int screenX, int screenY, int windowX, int windowY,
-    int movementX, int movementY,
-    bool ctrlKey, bool altKey, bool shiftKey, bool metaKey,
-    short button, unsigned short buttons, PassRefPtrWillBeRawPtr<EventTarget> relatedTarget,
-    DataTransfer* dataTransfer, bool isSimulated, PlatformMouseEvent::SyntheticEventType syntheticEventType,
-    double uiCreateTime)
-    : MouseRelatedEvent(eventType, canBubble, cancelable, view, detail, IntPoint(screenX, screenY),
-        IntPoint(windowX, windowY),
-        IntPoint(movementX, movementY),
-        ctrlKey, altKey, shiftKey, metaKey, isSimulated,
-        syntheticEventType == PlatformMouseEvent::FromTouch ? InputDevice::firesTouchEventsInputDevice() : InputDevice::doesntFireTouchEventsInputDevice())
+MouseEvent::MouseEvent(
+    const AtomicString& eventType,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* abstractView,
+    PlatformMouseEvent::SyntheticEventType syntheticEventType,
+    const String& region,
+    const WebMouseEvent& event)
+    : UIEventWithKeyState(
+        eventType,
+        canBubble,
+        cancelable,
+        abstractView,
+        0,
+        static_cast<PlatformEvent::Modifiers>(event.modifiers()),
+        TimeTicks::FromSeconds(event.timeStampSeconds()),
+        abstractView
+            ? abstractView->getInputDeviceCapabilities()->firesTouchEvents(
+                syntheticEventType == PlatformMouseEvent::FromTouch)
+            : nullptr)
+    , m_screenLocation(event.globalX, event.globalY)
+    , m_movementDelta(flooredIntPoint(event.movementInRootFrame()))
+    , m_positionType(syntheticEventType == PlatformMouseEvent::Positionless
+              ? PositionType::Positionless
+              : PositionType::Position)
+    , m_button(0)
+    , m_buttons(platformModifiersToButtons(event.modifiers()))
+    , m_syntheticEventType(syntheticEventType)
+    , m_region(region)
+{
+    IntPoint rootFrameCoordinates = flooredIntPoint(event.positionInRootFrame());
+    initCoordinatesFromRootFrame(rootFrameCoordinates.x(),
+        rootFrameCoordinates.y());
+}
+
+MouseEvent::MouseEvent(
+    const AtomicString& eventType,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* abstractView,
+    int detail,
+    int screenX,
+    int screenY,
+    int windowX,
+    int windowY,
+    int movementX,
+    int movementY,
+    PlatformEvent::Modifiers modifiers,
+    short button,
+    unsigned short buttons,
+    EventTarget* relatedTarget,
+    TimeTicks platformTimeStamp,
+    PlatformMouseEvent::SyntheticEventType syntheticEventType,
+    const String& region,
+    const PlatformMouseEvent* mouseEvent)
+    : UIEventWithKeyState(
+        eventType,
+        canBubble,
+        cancelable,
+        abstractView,
+        detail,
+        modifiers,
+        platformTimeStamp,
+        abstractView
+            ? abstractView->getInputDeviceCapabilities()->firesTouchEvents(
+                syntheticEventType == PlatformMouseEvent::FromTouch)
+            : nullptr)
+    , m_screenLocation(screenX, screenY)
+    , m_movementDelta(movementX, movementY)
+    , m_positionType(syntheticEventType == PlatformMouseEvent::Positionless
+              ? PositionType::Positionless
+              : PositionType::Position)
     , m_button(button)
     , m_buttons(buttons)
     , m_relatedTarget(relatedTarget)
-    , m_dataTransfer(dataTransfer)
     , m_syntheticEventType(syntheticEventType)
+    , m_region(region)
 {
-    setUICreateTime(uiCreateTime);
+    if (mouseEvent)
+        m_mouseEvent.reset(new PlatformMouseEvent(*mouseEvent));
+    initCoordinatesFromRootFrame(windowX, windowY);
 }
 
-MouseEvent::MouseEvent(const AtomicString& eventType, const MouseEventInit& initializer)
-    : MouseRelatedEvent(eventType, initializer.bubbles(), initializer.cancelable(), initializer.view(), initializer.detail(), IntPoint(initializer.screenX(), initializer.screenY()),
-        IntPoint(0 /* pageX */, 0 /* pageY */),
-        IntPoint(initializer.movementX(), initializer.movementY()),
-        initializer.ctrlKey(), initializer.altKey(), initializer.shiftKey(), initializer.metaKey(), false /* isSimulated */, initializer.sourceDevice())
+MouseEvent::MouseEvent(const AtomicString& eventType,
+    const MouseEventInit& initializer)
+    : UIEventWithKeyState(eventType, initializer)
+    , m_screenLocation(
+          DoublePoint(initializer.screenX(), initializer.screenY()))
+    , m_movementDelta(
+          IntPoint(initializer.movementX(), initializer.movementY()))
+    , m_positionType(PositionType::Position)
     , m_button(initializer.button())
     , m_buttons(initializer.buttons())
     , m_relatedTarget(initializer.relatedTarget())
-    , m_dataTransfer(nullptr)
     , m_syntheticEventType(PlatformMouseEvent::RealOrIndistinguishable)
+    , m_region(initializer.region())
 {
-    initCoordinates(IntPoint(initializer.clientX(), initializer.clientY()));
+    initCoordinates(initializer.clientX(), initializer.clientY());
 }
 
-MouseEvent::~MouseEvent()
+void MouseEvent::initCoordinates(const double clientX, const double clientY)
 {
+    // Set up initial values for coordinates.
+    // Correct values are computed lazily, see computeRelativePosition.
+    m_clientLocation = DoublePoint(clientX, clientY);
+    m_pageLocation = m_clientLocation + DoubleSize(contentsScrollOffset(view()));
+
+    m_layerLocation = m_pageLocation;
+    m_offsetLocation = m_pageLocation;
+
+    computePageLocation();
+    m_hasCachedRelativePosition = false;
 }
+
+void MouseEvent::initCoordinatesFromRootFrame(int windowX, int windowY)
+{
+    DoublePoint adjustedPageLocation;
+    DoubleSize scrollOffset;
+
+    LocalFrame* frame = view() && view()->isLocalDOMWindow()
+        ? toLocalDOMWindow(view())->frame()
+        : nullptr;
+    if (frame && hasPosition()) {
+        if (FrameView* frameView = frame->view()) {
+            adjustedPageLocation = frameView->rootFrameToContents(IntPoint(windowX, windowY));
+            scrollOffset = frameView->scrollOffsetInt();
+            float scaleFactor = 1 / frame->pageZoomFactor();
+            if (scaleFactor != 1.0f) {
+                adjustedPageLocation.scale(scaleFactor, scaleFactor);
+                scrollOffset.scale(scaleFactor, scaleFactor);
+            }
+        }
+    }
+
+    m_clientLocation = adjustedPageLocation - scrollOffset;
+    m_pageLocation = adjustedPageLocation;
+
+    // Set up initial values for coordinates.
+    // Correct values are computed lazily, see computeRelativePosition.
+    m_layerLocation = m_pageLocation;
+    m_offsetLocation = m_pageLocation;
+
+    computePageLocation();
+    m_hasCachedRelativePosition = false;
+}
+
+MouseEvent::~MouseEvent() { }
 
 unsigned short MouseEvent::platformModifiersToButtons(unsigned modifiers)
 {
     unsigned short buttons = 0;
 
     if (modifiers & PlatformEvent::LeftButtonDown)
-        buttons |= 1;
+        buttons |= static_cast<unsigned short>(WebPointerProperties::Buttons::Left);
     if (modifiers & PlatformEvent::RightButtonDown)
-        buttons |= 2;
+        buttons |= static_cast<unsigned short>(WebPointerProperties::Buttons::Right);
     if (modifiers & PlatformEvent::MiddleButtonDown)
-        buttons |= 4;
+        buttons |= static_cast<unsigned short>(WebPointerProperties::Buttons::Middle);
 
     return buttons;
 }
 
-void MouseEvent::initMouseEvent(ScriptState* scriptState, const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view,
-                                int detail, int screenX, int screenY, int clientX, int clientY,
-                                bool ctrlKey, bool altKey, bool shiftKey, bool metaKey,
-                                short button, PassRefPtrWillBeRawPtr<EventTarget> relatedTarget, unsigned short buttons)
+void MouseEvent::initMouseEvent(ScriptState* scriptState,
+    const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* view,
+    int detail,
+    int screenX,
+    int screenY,
+    int clientX,
+    int clientY,
+    bool ctrlKey,
+    bool altKey,
+    bool shiftKey,
+    bool metaKey,
+    short button,
+    EventTarget* relatedTarget,
+    unsigned short buttons)
 {
-    initMouseEventInternal(scriptState, type, canBubble, cancelable, view, detail, screenX, screenY, clientX, clientY, ctrlKey, altKey, shiftKey, metaKey, button, relatedTarget, nullptr, buttons);
-}
-
-void MouseEvent::initMouseEventInternal(ScriptState* scriptState, const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view,
-    int detail, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey,
-    short button, PassRefPtrWillBeRawPtr<EventTarget> relatedTarget, InputDevice* sourceDevice, unsigned short buttons)
-{
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     if (scriptState && scriptState->world().isIsolatedWorld())
-        UIEventWithKeyState::didCreateEventInIsolatedWorld(ctrlKey, altKey, shiftKey, metaKey);
+        UIEventWithKeyState::didCreateEventInIsolatedWorld(ctrlKey, altKey,
+            shiftKey, metaKey);
 
-    initUIEvent(type, canBubble, cancelable, view, detail);
+    initModifiers(ctrlKey, altKey, shiftKey, metaKey);
+    initMouseEventInternal(type, canBubble, cancelable, view, detail, screenX,
+        screenY, clientX, clientY, modifiers(), button,
+        relatedTarget, nullptr, buttons);
+}
+
+void MouseEvent::initMouseEventInternal(
+    const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* view,
+    int detail,
+    int screenX,
+    int screenY,
+    int clientX,
+    int clientY,
+    PlatformEvent::Modifiers modifiers,
+    short button,
+    EventTarget* relatedTarget,
+    InputDeviceCapabilities* sourceCapabilities,
+    unsigned short buttons)
+{
+    initUIEventInternal(type, canBubble, cancelable, relatedTarget, view, detail,
+        sourceCapabilities);
 
     m_screenLocation = IntPoint(screenX, screenY);
-    m_ctrlKey = ctrlKey;
-    m_altKey = altKey;
-    m_shiftKey = shiftKey;
-    m_metaKey = metaKey;
     m_button = button;
     m_buttons = buttons;
     m_relatedTarget = relatedTarget;
+    m_modifiers = modifiers;
 
-    initCoordinates(IntPoint(clientX, clientY));
+    initCoordinates(clientX, clientY);
 
-    // FIXME: m_isSimulated is not set to false here.
-    // FIXME: m_dataTransfer is not set to nullptr here.
+    // FIXME: SyntheticEventType is not set to RealOrIndistinguishable here.
 }
 
 const AtomicString& MouseEvent::interfaceName() const
@@ -177,86 +418,55 @@ bool MouseEvent::isMouseEvent() const
     return true;
 }
 
-bool MouseEvent::isDragEvent() const
-{
-    const AtomicString& t = type();
-    return t == EventTypeNames::dragenter || t == EventTypeNames::dragover || t == EventTypeNames::dragleave || t == EventTypeNames::drop
-               || t == EventTypeNames::dragstart|| t == EventTypeNames::drag || t == EventTypeNames::dragend;
-}
-
 int MouseEvent::which() const
 {
-    // For the DOM, the return values for left, middle and right mouse buttons are 0, 1, 2, respectively.
-    // For the Netscape "which" property, the return values for left, middle and right mouse buttons are 1, 2, 3, respectively.
+    // For the DOM, the return values for left, middle and right mouse buttons are
+    // 0, 1, 2, respectively.
+    // For the Netscape "which" property, the return values for left, middle and
+    // right mouse buttons are 1, 2, 3, respectively.
     // So we must add 1.
     return m_button + 1;
 }
 
 Node* MouseEvent::toElement() const
 {
-    // MSIE extension - "the object toward which the user is moving the mouse pointer"
+    // MSIE extension - "the object toward which the user is moving the mouse
+    // pointer"
     if (type() == EventTypeNames::mouseout || type() == EventTypeNames::mouseleave)
-        return relatedTarget() ? relatedTarget()->toNode() : 0;
+        return relatedTarget() ? relatedTarget()->toNode() : nullptr;
 
-    return target() ? target()->toNode() : 0;
+    return target() ? target()->toNode() : nullptr;
 }
 
 Node* MouseEvent::fromElement() const
 {
-    // MSIE extension - "object from which activation or the mouse pointer is exiting during the event" (huh?)
+    // MSIE extension - "object from which activation or the mouse pointer is
+    // exiting during the event" (huh?)
     if (type() != EventTypeNames::mouseout && type() != EventTypeNames::mouseleave)
-        return relatedTarget() ? relatedTarget()->toNode() : 0;
+        return relatedTarget() ? relatedTarget()->toNode() : nullptr;
 
-    return target() ? target()->toNode() : 0;
+    return target() ? target()->toNode() : nullptr;
 }
 
 DEFINE_TRACE(MouseEvent)
 {
     visitor->trace(m_relatedTarget);
-    visitor->trace(m_dataTransfer);
-    MouseRelatedEvent::trace(visitor);
+    UIEventWithKeyState::trace(visitor);
 }
 
-PassRefPtrWillBeRawPtr<SimulatedMouseEvent> SimulatedMouseEvent::create(const AtomicString& eventType, PassRefPtrWillBeRawPtr<AbstractView> view, PassRefPtrWillBeRawPtr<Event> underlyingEvent)
+EventDispatchMediator* MouseEvent::createMediator()
 {
-    return adoptRefWillBeNoop(new SimulatedMouseEvent(eventType, view, underlyingEvent));
+    return MouseEventDispatchMediator::create(this);
 }
 
-SimulatedMouseEvent::~SimulatedMouseEvent()
+MouseEventDispatchMediator* MouseEventDispatchMediator::create(
+    MouseEvent* mouseEvent)
 {
+    return new MouseEventDispatchMediator(mouseEvent);
 }
 
-SimulatedMouseEvent::SimulatedMouseEvent(const AtomicString& eventType, PassRefPtrWillBeRawPtr<AbstractView> view, PassRefPtrWillBeRawPtr<Event> underlyingEvent)
-    : MouseEvent(eventType, true, true, view, 0, 0, 0, 0, 0, 0, 0, false, false, false, false, 0, 0,
-        nullptr, nullptr, true, PlatformMouseEvent::RealOrIndistinguishable)
-{
-    if (UIEventWithKeyState* keyStateEvent = findEventWithKeyState(underlyingEvent.get())) {
-        m_ctrlKey = keyStateEvent->ctrlKey();
-        m_altKey = keyStateEvent->altKey();
-        m_shiftKey = keyStateEvent->shiftKey();
-        m_metaKey = keyStateEvent->metaKey();
-    }
-    setUnderlyingEvent(underlyingEvent);
-
-    if (this->underlyingEvent() && this->underlyingEvent()->isMouseEvent()) {
-        MouseEvent* mouseEvent = toMouseEvent(this->underlyingEvent());
-        m_screenLocation = mouseEvent->screenLocation();
-        initCoordinates(mouseEvent->clientLocation());
-    }
-}
-
-DEFINE_TRACE(SimulatedMouseEvent)
-{
-    MouseEvent::trace(visitor);
-}
-
-PassRefPtrWillBeRawPtr<MouseEventDispatchMediator> MouseEventDispatchMediator::create(PassRefPtrWillBeRawPtr<MouseEvent> mouseEvent, MouseEventType mouseEventType)
-{
-    return adoptRefWillBeNoop(new MouseEventDispatchMediator(mouseEvent, mouseEventType));
-}
-
-MouseEventDispatchMediator::MouseEventDispatchMediator(PassRefPtrWillBeRawPtr<MouseEvent> mouseEvent, MouseEventType mouseEventType)
-    : EventDispatchMediator(mouseEvent), m_mouseEventType(mouseEventType)
+MouseEventDispatchMediator::MouseEventDispatchMediator(MouseEvent* mouseEvent)
+    : EventDispatchMediator(mouseEvent)
 {
 }
 
@@ -265,44 +475,157 @@ MouseEvent& MouseEventDispatchMediator::event() const
     return toMouseEvent(EventDispatchMediator::event());
 }
 
-bool MouseEventDispatchMediator::dispatchEvent(EventDispatcher& dispatcher) const
+DispatchEventResult MouseEventDispatchMediator::dispatchEvent(
+    EventDispatcher& dispatcher) const
 {
-    if (isSyntheticMouseEvent()) {
-        event().eventPath().adjustForRelatedTarget(dispatcher.node(), event().relatedTarget());
+    MouseEvent& mouseEvent = event();
+    mouseEvent.eventPath().adjustForRelatedTarget(dispatcher.node(),
+        mouseEvent.relatedTarget());
+
+    if (!mouseEvent.isTrusted())
         return dispatcher.dispatch();
-    }
 
     if (isDisabledFormControl(&dispatcher.node()))
-        return false;
+        return DispatchEventResult::CanceledBeforeDispatch;
 
-    if (event().type().isEmpty())
-        return true; // Shouldn't happen.
+    if (mouseEvent.type().isEmpty())
+        return DispatchEventResult::NotCanceled; // Shouldn't happen.
 
-    ASSERT(!event().target() || event().target() != event().relatedTarget());
+    DCHECK(!mouseEvent.target() || mouseEvent.target() != mouseEvent.relatedTarget());
 
-    EventTarget* relatedTarget = event().relatedTarget();
-    event().eventPath().adjustForRelatedTarget(dispatcher.node(), relatedTarget);
+    EventTarget* relatedTarget = mouseEvent.relatedTarget();
 
-    dispatcher.dispatch();
-    bool swallowEvent = event().defaultHandled() || event().defaultPrevented();
+    DispatchEventResult dispatchResult = dispatcher.dispatch();
 
-    if (event().type() != EventTypeNames::click || event().detail() != 2)
-        return !swallowEvent;
+    if (mouseEvent.type() != EventTypeNames::click || mouseEvent.detail() != 2)
+        return dispatchResult;
 
-    // Special case: If it's a double click event, we also send the dblclick event. This is not part
-    // of the DOM specs, but is used for compatibility with the ondblclick="" attribute. This is treated
-    // as a separate event in other DOM-compliant browsers like Firefox, and so we do the same.
-    RefPtrWillBeRawPtr<MouseEvent> doubleClickEvent = MouseEvent::create();
-    doubleClickEvent->initMouseEventInternal(nullptr, EventTypeNames::dblclick, event().bubbles(), event().cancelable(), event().view(),
-        event().detail(), event().screenX(), event().screenY(), event().clientX(), event().clientY(),
-        event().ctrlKey(), event().altKey(), event().shiftKey(), event().metaKey(),
-        event().button(), relatedTarget, event().sourceDevice(), event().buttons());
-    if (event().defaultHandled())
+    // Special case: If it's a double click event, we also send the dblclick
+    // event. This is not part of the DOM specs, but is used for compatibility
+    // with the ondblclick="" attribute. This is treated as a separate event in
+    // other DOM-compliant browsers like Firefox, and so we do the same.
+    MouseEvent* doubleClickEvent = MouseEvent::create();
+    doubleClickEvent->initMouseEventInternal(
+        EventTypeNames::dblclick, mouseEvent.bubbles(), mouseEvent.cancelable(),
+        mouseEvent.view(), mouseEvent.detail(), mouseEvent.screenX(),
+        mouseEvent.screenY(), mouseEvent.clientX(), mouseEvent.clientY(),
+        mouseEvent.modifiers(), mouseEvent.button(), relatedTarget,
+        mouseEvent.sourceCapabilities(), mouseEvent.buttons());
+    doubleClickEvent->setComposed(mouseEvent.composed());
+
+    // Inherit the trusted status from the original event.
+    doubleClickEvent->setTrusted(mouseEvent.isTrusted());
+    if (mouseEvent.defaultHandled())
         doubleClickEvent->setDefaultHandled();
-    EventDispatcher::dispatchEvent(dispatcher.node(), MouseEventDispatchMediator::create(doubleClickEvent));
-    if (doubleClickEvent->defaultHandled() || doubleClickEvent->defaultPrevented())
-        return false;
-    return !swallowEvent;
+    DispatchEventResult doubleClickDispatchResult = EventDispatcher::dispatchEvent(
+        dispatcher.node(),
+        MouseEventDispatchMediator::create(doubleClickEvent));
+    if (doubleClickDispatchResult != DispatchEventResult::NotCanceled)
+        return doubleClickDispatchResult;
+    return dispatchResult;
+}
+
+void MouseEvent::computePageLocation()
+{
+    float scaleFactor = pageZoomFactor(this);
+    m_absoluteLocation = m_pageLocation.scaledBy(scaleFactor);
+}
+
+void MouseEvent::receivedTarget()
+{
+    m_hasCachedRelativePosition = false;
+}
+
+void MouseEvent::computeRelativePosition()
+{
+    Node* targetNode = target() ? target()->toNode() : nullptr;
+    if (!targetNode)
+        return;
+
+    // Compute coordinates that are based on the target.
+    m_layerLocation = m_pageLocation;
+    m_offsetLocation = m_pageLocation;
+
+    // Must have an updated layout tree for this math to work correctly.
+    targetNode->document().updateStyleAndLayoutIgnorePendingStylesheets();
+
+    // Adjust offsetLocation to be relative to the target's padding box.
+    if (const LayoutObject* layoutObject = findTargetLayoutObject(targetNode)) {
+        FloatPoint localPos = layoutObject->absoluteToLocal(
+            FloatPoint(absoluteLocation()), UseTransforms);
+
+        // Adding this here to address crbug.com/570666. Basically we'd like to
+        // find the local coordinates relative to the padding box not the border
+        // box.
+        if (layoutObject->isBoxModelObject()) {
+            const LayoutBoxModelObject* layoutBox = toLayoutBoxModelObject(layoutObject);
+            localPos.move(-layoutBox->borderLeft(), -layoutBox->borderTop());
+        }
+
+        m_offsetLocation = DoublePoint(localPos);
+        float scaleFactor = 1 / pageZoomFactor(this);
+        if (scaleFactor != 1.0f)
+            m_offsetLocation.scale(scaleFactor, scaleFactor);
+    }
+
+    // Adjust layerLocation to be relative to the layer.
+    // FIXME: event.layerX and event.layerY are poorly defined,
+    // and probably don't always correspond to PaintLayer offsets.
+    // https://bugs.webkit.org/show_bug.cgi?id=21868
+    Node* n = targetNode;
+    while (n && !n->layoutObject())
+        n = n->parentNode();
+
+    if (n) {
+        // FIXME: This logic is a wrong implementation of convertToLayerCoords.
+        for (PaintLayer* layer = n->layoutObject()->enclosingLayer(); layer;
+             layer = layer->parent()) {
+            m_layerLocation -= DoubleSize(layer->location().x().toDouble(),
+                layer->location().y().toDouble());
+        }
+    }
+
+    m_hasCachedRelativePosition = true;
+}
+
+int MouseEvent::layerX()
+{
+    if (!m_hasCachedRelativePosition)
+        computeRelativePosition();
+
+    // TODO(mustaq): Remove the PointerEvent specific code when mouse has
+    // fractional coordinates. See crbug.com/655786.
+    return isPointerEvent() ? m_layerLocation.x()
+                            : static_cast<int>(m_layerLocation.x());
+}
+
+int MouseEvent::layerY()
+{
+    if (!m_hasCachedRelativePosition)
+        computeRelativePosition();
+
+    // TODO(mustaq): Remove the PointerEvent specific code when mouse has
+    // fractional coordinates. See crbug.com/655786.
+    return isPointerEvent() ? m_layerLocation.y()
+                            : static_cast<int>(m_layerLocation.y());
+}
+
+int MouseEvent::offsetX()
+{
+    if (!hasPosition())
+        return 0;
+    if (!m_hasCachedRelativePosition)
+        computeRelativePosition();
+    return std::round(m_offsetLocation.x());
+}
+
+int MouseEvent::offsetY()
+{
+    if (!hasPosition())
+        return 0;
+    if (!m_hasCachedRelativePosition)
+        computeRelativePosition();
+    return std::round(m_offsetLocation.y());
 }
 
 } // namespace blink

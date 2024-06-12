@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/interface.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef V8URLSearchParams_h
 #define V8URLSearchParams_h
 
@@ -26,30 +26,27 @@ namespace blink {
 
 class V8URLSearchParams {
     STATIC_ONLY(V8URLSearchParams);
+
 public:
     CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
     static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
-    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*);
+    CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*, const DOMWrapperWorld&);
     static URLSearchParams* toImpl(v8::Local<v8::Object> object)
     {
         return toScriptWrappable(object)->toImpl<URLSearchParams>();
     }
     CORE_EXPORT static URLSearchParams* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
     CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-    static void refObject(ScriptWrappable*);
-    static void derefObject(ScriptWrappable*);
-
-    template<typename VisitorDispatcher>
+    template <typename VisitorDispatcher>
     static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
     {
         visitor->trace(scriptWrappable->toImpl<URLSearchParams>());
     }
+    static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+    {
+        visitor->traceWrappers(scriptWrappable->toImpl<URLSearchParams>());
+    }
     static void constructorCallback(const v8::FunctionCallbackInfo<v8::Value>&);
-    static void preparePrototypeObject(v8::Isolate*, v8::Local<v8::Object> prototypeObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) {}
-    static void installConditionallyEnabledProperties(v8::Local<v8::Object>, v8::Isolate*) {}
-    //CORE_EXPORT static void updateWrapperTypeInfo(InstallTemplateFunction, PreparePrototypeObjectFunction);
-    //CORE_EXPORT static void installV8URLTemplate(v8::Local<v8::FunctionTemplate>, v8::Isolate*);
-    
     static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
 };
 
@@ -58,6 +55,6 @@ struct V8TypeOf<URLSearchParams> {
     typedef V8URLSearchParams Type;
 };
 
-}  // namespace blink
+} // namespace blink
 
-#endif  // V8URLSearchParams_h
+#endif // V8URLSearchParams_h

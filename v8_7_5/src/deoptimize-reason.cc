@@ -7,31 +7,34 @@
 namespace v8 {
 namespace internal {
 
-std::ostream& operator<<(std::ostream& os, DeoptimizeReason reason) {
-  switch (reason) {
+    std::ostream& operator<<(std::ostream& os, DeoptimizeReason reason)
+    {
+        switch (reason) {
 #define DEOPTIMIZE_REASON(Name, message) \
-  case DeoptimizeReason::k##Name:        \
-    return os << #Name;
-    DEOPTIMIZE_REASON_LIST(DEOPTIMIZE_REASON)
+    case DeoptimizeReason::k##Name:      \
+        return os << #Name;
+            DEOPTIMIZE_REASON_LIST(DEOPTIMIZE_REASON)
 #undef DEOPTIMIZE_REASON
-  }
-  UNREACHABLE();
-}
+        }
+        UNREACHABLE();
+    }
 
-size_t hash_value(DeoptimizeReason reason) {
-  return static_cast<uint8_t>(reason);
-}
+    size_t hash_value(DeoptimizeReason reason)
+    {
+        return static_cast<uint8_t>(reason);
+    }
 
-char const* DeoptimizeReasonToString(DeoptimizeReason reason) {
-  static char const* kDeoptimizeReasonStrings[] = {
+    char const* DeoptimizeReasonToString(DeoptimizeReason reason)
+    {
+        static char const* kDeoptimizeReasonStrings[] = {
 #define DEOPTIMIZE_REASON(Name, message) message,
-      DEOPTIMIZE_REASON_LIST(DEOPTIMIZE_REASON)
+            DEOPTIMIZE_REASON_LIST(DEOPTIMIZE_REASON)
 #undef DEOPTIMIZE_REASON
-  };
-  size_t const index = static_cast<size_t>(reason);
-  DCHECK_LT(index, arraysize(kDeoptimizeReasonStrings));
-  return kDeoptimizeReasonStrings[index];
-}
+        };
+        size_t const index = static_cast<size_t>(reason);
+        DCHECK_LT(index, arraysize(kDeoptimizeReasonStrings));
+        return kDeoptimizeReasonStrings[index];
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

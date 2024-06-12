@@ -24,7 +24,7 @@
 namespace v8 {
 namespace internal {
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TARGET_ARCH_PPC
+#endif // V8_TARGET_ARCH_PPC

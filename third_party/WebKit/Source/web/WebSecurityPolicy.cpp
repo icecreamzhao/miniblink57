@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebSecurityPolicy.h"
 
 #include "core/loader/FrameLoader.h"
@@ -41,57 +40,46 @@
 
 namespace blink {
 
-void WebSecurityPolicy::registerURLSchemeAsLocal(const WebString& scheme)
-{
-    SchemeRegistry::registerURLSchemeAsLocal(scheme);
-}
-
-void WebSecurityPolicy::registerURLSchemeAsNoAccess(const WebString& scheme)
-{
-    SchemeRegistry::registerURLSchemeAsNoAccess(scheme);
-}
-
-void WebSecurityPolicy::registerURLSchemeAsDisplayIsolated(const WebString& scheme)
+void WebSecurityPolicy::registerURLSchemeAsDisplayIsolated(
+    const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsDisplayIsolated(scheme);
 }
 
-void WebSecurityPolicy::registerURLSchemeAsRestrictingMixedContent(const WebString& scheme)
-{
-    SchemeRegistry::registerURLSchemeAsRestrictingMixedContent(scheme);
-}
-
-void WebSecurityPolicy::registerURLSchemeAsSecure(const WebString& scheme)
-{
-    SchemeRegistry::registerURLSchemeAsSecure(scheme);
-}
-
-bool WebSecurityPolicy::shouldTreatURLSchemeAsSecure(const WebString& scheme)
-{
-    return SchemeRegistry::shouldTreatURLSchemeAsSecure(scheme);
-}
-
-void WebSecurityPolicy::registerURLSchemeAsCORSEnabled(const WebString& scheme)
-{
-    SchemeRegistry::registerURLSchemeAsCORSEnabled(scheme);
-}
-
-void WebSecurityPolicy::registerURLSchemeAsAllowingServiceWorkers(const WebString& scheme)
+void WebSecurityPolicy::registerURLSchemeAsAllowingServiceWorkers(
+    const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsAllowingServiceWorkers(scheme);
 }
 
-void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(const WebString& scheme)
+void WebSecurityPolicy::registerURLSchemeAsSupportingFetchAPI(
+    const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsSupportingFetchAPI(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(
+    const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsBypassingContentSecurityPolicy(scheme);
 }
 
-void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(const WebString& scheme, PolicyAreas policyAreas)
+void WebSecurityPolicy::registerURLSchemeAsBypassingContentSecurityPolicy(
+    const WebString& scheme,
+    PolicyAreas policyAreas)
 {
-    SchemeRegistry::registerURLSchemeAsBypassingContentSecurityPolicy(scheme, static_cast<SchemeRegistry::PolicyAreas>(policyAreas));
+    SchemeRegistry::registerURLSchemeAsBypassingContentSecurityPolicy(
+        scheme, static_cast<SchemeRegistry::PolicyAreas>(policyAreas));
 }
 
-void WebSecurityPolicy::registerURLSchemeAsEmptyDocument(const WebString& scheme)
+void WebSecurityPolicy::registerURLSchemeAsFirstPartyWhenTopLevel(
+    const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsFirstPartyWhenTopLevel(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsEmptyDocument(
+    const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsEmptyDocument(scheme);
 }
@@ -123,19 +111,38 @@ void WebSecurityPolicy::resetOriginAccessWhitelists()
     SecurityPolicy::resetOriginAccessWhitelists();
 }
 
-void WebSecurityPolicy::addOriginTrustworthyWhiteList(const WebSecurityOrigin& origin)
+void WebSecurityPolicy::addOriginTrustworthyWhiteList(
+    const WebSecurityOrigin& origin)
 {
     SecurityPolicy::addOriginTrustworthyWhiteList(origin);
 }
 
-WebString WebSecurityPolicy::generateReferrerHeader(WebReferrerPolicy referrerPolicy, const WebURL& url, const WebString& referrer)
+void WebSecurityPolicy::addSchemeToBypassSecureContextWhitelist(
+    const WebString& scheme)
 {
-    return SecurityPolicy::generateReferrer(static_cast<ReferrerPolicy>(referrerPolicy), url, referrer).referrer;
+    SchemeRegistry::registerURLSchemeBypassingSecureContextCheck(scheme);
 }
 
-void WebSecurityPolicy::registerURLSchemeAsNotAllowingJavascriptURLs(const WebString& scheme)
+WebString WebSecurityPolicy::generateReferrerHeader(
+    WebReferrerPolicy referrerPolicy,
+    const WebURL& url,
+    const WebString& referrer)
+{
+    return SecurityPolicy::generateReferrer(
+        static_cast<ReferrerPolicy>(referrerPolicy), url, referrer)
+        .referrer;
+}
+
+void WebSecurityPolicy::registerURLSchemeAsNotAllowingJavascriptURLs(
+    const WebString& scheme)
 {
     SchemeRegistry::registerURLSchemeAsNotAllowingJavascriptURLs(scheme);
+}
+
+void WebSecurityPolicy::registerURLSchemeAsAllowedForReferrer(
+    const WebString& scheme)
+{
+    SchemeRegistry::registerURLSchemeAsAllowedForReferrer(scheme);
 }
 
 } // namespace blink

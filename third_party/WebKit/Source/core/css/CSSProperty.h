@@ -27,13 +27,20 @@
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/text/TextDirection.h"
 #include "platform/text/WritingMode.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 struct StylePropertyMetadata {
-    StylePropertyMetadata(CSSPropertyID propertyID, bool isSetFromShorthand, int indexInShorthandsVector, bool important, bool implicit, bool inherited)
+    DISALLOW_NEW();
+    StylePropertyMetadata(CSSPropertyID propertyID,
+        bool isSetFromShorthand,
+        int indexInShorthandsVector,
+        bool important,
+        bool implicit,
+        bool inherited)
         : m_propertyID(propertyID)
         , m_isSetFromShorthand(isSetFromShorthand)
         , m_indexInShorthandsVector(indexInShorthandsVector)
@@ -45,38 +52,58 @@ struct StylePropertyMetadata {
 
     CSSPropertyID shorthandID() const;
 
-    uint16_t m_propertyID : 10;
-    uint16_t m_isSetFromShorthand : 1;
-    uint16_t m_indexInShorthandsVector : 2; // If this property was set as part of an ambiguous shorthand, gives the index in the shorthands vector.
-    uint16_t m_important : 1;
-    uint16_t m_implicit : 1; // Whether or not the property was set implicitly as the result of a shorthand.
-    uint16_t m_inherited : 1;
+    unsigned m_propertyID : 10;
+    unsigned m_isSetFromShorthand : 1;
+    // If this property was set as part of an ambiguous shorthand, gives the index
+    // in the shorthands vector.
+    unsigned m_indexInShorthandsVector : 2;
+    unsigned m_important : 1;
+    // Whether or not the property was set implicitly as the result of a
+    // shorthand.
+    unsigned m_implicit : 1;
+    unsigned m_inherited : 1;
 };
 
 class CSSProperty {
-    ALLOW_ONLY_INLINE_ALLOCATION();
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    CSSProperty(CSSPropertyID propertyID, PassRefPtrWillBeRawPtr<CSSValue> value, bool important = false, bool isSetFromShorthand = false, int indexInShorthandsVector = 0, bool implicit = false)
-        : m_metadata(propertyID, isSetFromShorthand, indexInShorthandsVector, important, implicit, CSSPropertyMetadata::isInheritedProperty(propertyID))
+    CSSProperty(CSSPropertyID propertyID,
+        const CSSValue& value,
+        bool important = false,
+        bool isSetFromShorthand = false,
+        int indexInShorthandsVector = 0,
+        bool implicit = false)
+        : m_metadata(propertyID,
+            isSetFromShorthand,
+            indexInShorthandsVector,
+            important,
+            implicit,
+            CSSPropertyMetadata::isInheritedProperty(propertyID))
         , m_value(value)
     {
     }
 
     // FIXME: Remove this.
-    CSSProperty(StylePropertyMetadata metadata, CSSValue* value)
+    CSSProperty(StylePropertyMetadata metadata, const CSSValue& value)
         : m_metadata(metadata)
         , m_value(value)
     {
     }
 
-    CSSPropertyID id() const { return static_cast<CSSPropertyID>(m_metadata.m_propertyID); }
+    CSSPropertyID id() const
+    {
+        return static_cast<CSSPropertyID>(m_metadata.m_propertyID);
+    }
     bool isSetFromShorthand() const { return m_metadata.m_isSetFromShorthand; }
     CSSPropertyID shorthandID() const { return m_metadata.shorthandID(); }
     bool isImportant() const { return m_metadata.m_important; }
 
-    CSSValue* value() const { return m_value.get(); }
+    const CSSValue* value() const { return m_value.get(); }
 
-    static CSSPropertyID resolveDirectionAwareProperty(CSSPropertyID, TextDirection, WritingMode);
+    static CSSPropertyID resolveDirectionAwareProperty(CSSPropertyID,
+        TextDirection,
+        WritingMode);
     static bool isAffectedByAllProperty(CSSPropertyID);
 
     const StylePropertyMetadata& metadata() const { return m_metadata; }
@@ -87,7 +114,7 @@ public:
 
 private:
     StylePropertyMetadata m_metadata;
-    RefPtrWillBeMember<CSSValue> m_value;
+    Member<const CSSValue> m_value;
 };
 
 } // namespace blink

@@ -2,12 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-#include "ServiceWorkerRegistration.h"
+#include "modules/serviceworkers/ServiceWorkerRegistration.h"
 
 #include "bindings/core/v8/CallbackPromiseAdapter.h"
 #include "bindings/core/v8/ScriptPromise.h"
-#include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
@@ -16,14 +14,23 @@
 #include "modules/EventTargetModules.h"
 #include "modules/serviceworkers/ServiceWorkerContainerClient.h"
 #include "modules/serviceworkers/ServiceWorkerError.h"
-#include "public/platform/WebServiceWorkerProvider.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerProvider.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
+#include <utility>
 
 namespace blink {
 
-static void deleteIfNoExistingOwner(WebServiceWorker* serviceWorker)
+ServiceWorkerRegistration* ServiceWorkerRegistration::take(
+    ScriptPromiseResolver* resolver,
+    std::unique_ptr<WebServiceWorkerRegistration::Handle> handle)
 {
-    if (serviceWorker && !serviceWorker->proxy())
-        delete serviceWorker;
+    return getOrCreate(resolver->getExecutionContext(), std::move(handle));
+}
+
+bool ServiceWorkerRegistration::hasPendingActivity() const
+{
+    return !m_stopped;
 }
 
 const AtomicString& ServiceWorkerRegistration::interfaceName() const
@@ -36,112 +43,119 @@ void ServiceWorkerRegistration::dispatchUpdateFoundEvent()
     dispatchEvent(Event::create(EventTypeNames::updatefound));
 }
 
-void ServiceWorkerRegistration::setInstalling(WebServiceWorker* serviceWorker)
+void ServiceWorkerRegistration::setInstalling(
+    std::unique_ptr<WebServiceWorker::Handle> handle)
 {
-    if (!executionContext()) {
-        deleteIfNoExistingOwner(serviceWorker);
+    if (!getExecutionContext())
         return;
-    }
-    m_installing = ServiceWorker::from(executionContext(), serviceWorker);
+    m_installing = ServiceWorker::from(getExecutionContext(),
+        WTF::wrapUnique(handle.release()));
 }
 
-void ServiceWorkerRegistration::setWaiting(WebServiceWorker* serviceWorker)
+void ServiceWorkerRegistration::setWaiting(
+    std::unique_ptr<WebServiceWorker::Handle> handle)
 {
-    if (!executionContext()) {
-        deleteIfNoExistingOwner(serviceWorker);
+    if (!getExecutionContext())
         return;
-    }
-    m_waiting = ServiceWorker::from(executionContext(), serviceWorker);
+    m_waiting = ServiceWorker::from(getExecutionContext(),
+        WTF::wrapUnique(handle.release()));
 }
 
-void ServiceWorkerRegistration::setActive(WebServiceWorker* serviceWorker)
+void ServiceWorkerRegistration::setActive(
+    std::unique_ptr<WebServiceWorker::Handle> handle)
 {
-    if (!executionContext()) {
-        deleteIfNoExistingOwner(serviceWorker);
+    if (!getExecutionContext())
         return;
+    m_active = ServiceWorker::from(getExecutionContext(),
+        WTF::wrapUnique(handle.release()));
+}
+
+ServiceWorkerRegistration* ServiceWorkerRegistration::getOrCreate(
+    ExecutionContext* executionContext,
+    std::unique_ptr<WebServiceWorkerRegistration::Handle> handle)
+{
+    ASSERT(handle);
+
+    ServiceWorkerRegistration* existingRegistration = static_cast<ServiceWorkerRegistration*>(handle->registration()->proxy());
+    if (existingRegistration) {
+        ASSERT(existingRegistration->getExecutionContext() == executionContext);
+        return existingRegistration;
     }
-    m_active = ServiceWorker::from(executionContext(), serviceWorker);
+
+    return new ServiceWorkerRegistration(executionContext, std::move(handle));
 }
 
-ServiceWorkerRegistration* ServiceWorkerRegistration::from(ExecutionContext* executionContext, WebType* registration)
+NavigationPreloadManager* ServiceWorkerRegistration::navigationPreload()
 {
-    if (!registration)
-        return 0;
-    return getOrCreate(executionContext, registration);
-}
-
-ServiceWorkerRegistration* ServiceWorkerRegistration::take(ScriptPromiseResolver* resolver, WebType* registration)
-{
-    return from(resolver->scriptState()->executionContext(), registration);
-}
-
-void ServiceWorkerRegistration::dispose(WebType* registration)
-{
-    if (registration && !registration->proxy())
-        delete registration;
+    if (!m_navigationPreload)
+        m_navigationPreload = NavigationPreloadManager::create(this);
+    return m_navigationPreload;
 }
 
 String ServiceWorkerRegistration::scope() const
 {
-    return m_outerRegistration->scope().string();
+    return m_handle->registration()->scope().string();
 }
 
-void ServiceWorkerRegistration::update(ScriptState* scriptState, ExceptionState& exceptionState)
+ScriptPromise ServiceWorkerRegistration::update(ScriptState* scriptState)
 {
-    if (!m_provider) {
-        exceptionState.throwDOMException(InvalidStateError, "Failed to update a ServiceWorkerRegistration: No associated provider is available.");
-        return;
-    }
-    m_outerRegistration->update(m_provider);
+    ServiceWorkerContainerClient* client = ServiceWorkerContainerClient::from(getExecutionContext());
+    if (!client || !client->provider())
+        return ScriptPromise::rejectWithDOMException(
+            scriptState,
+            DOMException::create(InvalidStateError,
+                "Failed to update a ServiceWorkerRegistration: No "
+                "associated provider is available."));
+
+    ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
+    ScriptPromise promise = resolver->promise();
+    m_handle->registration()->update(
+        client->provider(),
+        WTF::makeUnique<
+            CallbackPromiseAdapter<void, ServiceWorkerErrorForUpdate>>(resolver));
+    return promise;
 }
 
 ScriptPromise ServiceWorkerRegistration::unregister(ScriptState* scriptState)
 {
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
+    ServiceWorkerContainerClient* client = ServiceWorkerContainerClient::from(getExecutionContext());
+    if (!client || !client->provider())
+        return ScriptPromise::rejectWithDOMException(
+            scriptState, DOMException::create(InvalidStateError, "Failed to unregister a "
+                                                                 "ServiceWorkerRegistration: No "
+                                                                 "associated provider is available."));
+
+    ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
-
-    if (!m_provider) {
-        resolver->reject(DOMException::create(InvalidStateError, "Failed to unregister a ServiceWorkerRegistration: No associated provider is available."));
-        return promise;
-    }
-
-    m_outerRegistration->unregister(m_provider, new CallbackPromiseAdapter<bool, ServiceWorkerError>(resolver));
+    m_handle->registration()->unregister(
+        client->provider(),
+        WTF::makeUnique<CallbackPromiseAdapter<bool, ServiceWorkerError>>(
+            resolver));
     return promise;
 }
 
-ServiceWorkerRegistration* ServiceWorkerRegistration::getOrCreate(ExecutionContext* executionContext, WebServiceWorkerRegistration* outerRegistration)
-{
-    if (!outerRegistration)
-        return 0;
-
-    ServiceWorkerRegistration* existingRegistration = static_cast<ServiceWorkerRegistration*>(outerRegistration->proxy());
-    if (existingRegistration) {
-        ASSERT(existingRegistration->executionContext() == executionContext);
-        return existingRegistration;
-    }
-
-    ServiceWorkerRegistration* registration = new ServiceWorkerRegistration(executionContext, adoptPtr(outerRegistration));
-    registration->suspendIfNeeded();
-    return registration;
-}
-
-ServiceWorkerRegistration::ServiceWorkerRegistration(ExecutionContext* executionContext, PassOwnPtr<WebServiceWorkerRegistration> outerRegistration)
-    : ActiveDOMObject(executionContext)
-    , m_outerRegistration(outerRegistration)
-    , m_provider(0)
+ServiceWorkerRegistration::ServiceWorkerRegistration(
+    ExecutionContext* executionContext,
+    std::unique_ptr<WebServiceWorkerRegistration::Handle> handle)
+    : ContextLifecycleObserver(executionContext)
+    , m_handle(std::move(handle))
     , m_stopped(false)
 {
-    ASSERT(m_outerRegistration);
+    ASSERT(m_handle);
+    ASSERT(!m_handle->registration()->proxy());
 
     if (!executionContext)
         return;
-    if (ServiceWorkerContainerClient* client = ServiceWorkerContainerClient::from(executionContext))
-        m_provider = client->provider();
-    m_outerRegistration->setProxy(this);
+    m_handle->registration()->setProxy(this);
 }
 
-ServiceWorkerRegistration::~ServiceWorkerRegistration()
+ServiceWorkerRegistration::~ServiceWorkerRegistration() { }
+
+void ServiceWorkerRegistration::dispose()
 {
+    // Promptly clears a raw reference from content/ to an on-heap object
+    // so that content/ doesn't access it in a lazy sweeping phase.
+    m_handle.reset();
 }
 
 DEFINE_TRACE(ServiceWorkerRegistration)
@@ -149,22 +163,18 @@ DEFINE_TRACE(ServiceWorkerRegistration)
     visitor->trace(m_installing);
     visitor->trace(m_waiting);
     visitor->trace(m_active);
-    RefCountedGarbageCollectedEventTargetWithInlineData<ServiceWorkerRegistration>::trace(visitor);
-    HeapSupplementable<ServiceWorkerRegistration>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    visitor->trace(m_navigationPreload);
+    EventTargetWithInlineData::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
+    Supplementable<ServiceWorkerRegistration>::trace(visitor);
 }
 
-bool ServiceWorkerRegistration::hasPendingActivity() const
-{
-    return !m_stopped;
-}
-
-void ServiceWorkerRegistration::stop()
+void ServiceWorkerRegistration::contextDestroyed(ExecutionContext*)
 {
     if (m_stopped)
         return;
     m_stopped = true;
-    m_outerRegistration->proxyStopped();
+    m_handle->registration()->proxyStopped();
 }
 
 } // namespace blink

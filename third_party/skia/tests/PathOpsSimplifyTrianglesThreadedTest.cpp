@@ -7,7 +7,8 @@
 #include "PathOpsExtendedTest.h"
 #include "PathOpsThreadedCommon.h"
 
-static void testSimplifyTrianglesMain(PathOpsThreadState* data) {
+static void testSimplifyTrianglesMain(PathOpsThreadState* data)
+{
     SkASSERT(data);
     PathOpsThreadState& state = *data;
     char pathStr[1024];
@@ -72,7 +73,8 @@ static void testSimplifyTrianglesMain(PathOpsThreadState* data) {
     }
 }
 
-DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter) {
+DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter)
+{
     initializeTests(reporter, "testTriangles");
     PathOpsThreadedTestRunner testRunner(reporter);
     for (int a = 0; a < 15; ++a) {
@@ -90,10 +92,11 @@ DEF_TEST(PathOpsSimplifyTrianglesThreaded, reporter) {
                 if ((bx - ax) * (cy - ay) == (by - ay) * (cx - ax)) {
                     continue;
                 }
-                *testRunner.fRunnables.append() = SkNEW_ARGS(PathOpsThreadedRunnable,
-                        (&testSimplifyTrianglesMain, a, b, c, 0, &testRunner));
+                *testRunner.fRunnables.append() = new PathOpsThreadedRunnable(
+                    &testSimplifyTrianglesMain, a, b, c, 0, &testRunner);
             }
-            if (!reporter->allowExtendedTest()) goto finish;
+            if (!reporter->allowExtendedTest())
+                goto finish;
         }
     }
 finish:

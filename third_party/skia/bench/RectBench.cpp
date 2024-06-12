@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -23,15 +22,18 @@ public:
         H = 480,
         N = 300,
     };
-    SkRect  fRects[N];
+    SkRect fRects[N];
     SkColor fColors[N];
 
     RectBench(int shift, int stroke = 0)
         : fShift(shift)
-        , fStroke(stroke) {}
+        , fStroke(stroke)
+    {
+    }
 
     SkString fName;
-    const char* computeName(const char root[]) {
+    const char* computeName(const char root[])
+    {
         fName.printf("%s_%d", root, fShift);
         if (fStroke > 0) {
             fName.appendf("_stroke_%d", fStroke);
@@ -39,16 +41,20 @@ public:
         return fName.c_str();
     }
 
+    bool isVisual() override { return true; }
+
 protected:
-    virtual void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p) {
+    virtual void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p)
+    {
         c->drawRect(r, p);
     }
 
-    virtual const char* onGetName() { return computeName("rects"); }
+    const char* onGetName() override { return computeName("rects"); }
 
-    virtual void onPreDraw() {
+    void onDelayedSetup() override
+    {
         SkRandom rand;
-        const SkScalar offset = SK_Scalar1/3;
+        const SkScalar offset = SK_Scalar1 / 3;
         for (int i = 0; i < N; i++) {
             int x = rand.nextU() % W;
             int y = rand.nextU() % H;
@@ -56,16 +62,17 @@ protected:
             int h = rand.nextU() % H;
             w >>= fShift;
             h >>= fShift;
-            x -= w/2;
-            y -= h/2;
+            x -= w / 2;
+            y -= h / 2;
             fRects[i].set(SkIntToScalar(x), SkIntToScalar(y),
-                          SkIntToScalar(x+w), SkIntToScalar(y+h));
+                SkIntToScalar(x + w), SkIntToScalar(y + h));
             fRects[i].offset(offset, offset);
             fColors[i] = rand.nextU() | 0xFF808080;
         }
     }
 
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPaint paint;
         if (fStroke > 0) {
             paint.setStyle(SkPaint::kStroke_Style);
@@ -77,29 +84,30 @@ protected:
             this->drawThisRect(canvas, fRects[i % N], paint);
         }
     }
+
 private:
     typedef Benchmark INHERITED;
 };
 
 class SrcModeRectBench : public RectBench {
 public:
-    SrcModeRectBench() : INHERITED(1, 0) {
-        fMode = SkXfermode::Create(SkXfermode::kSrc_Mode);
-    }
-
-    virtual ~SrcModeRectBench() {
-        SkSafeUnref(fMode);
+    SrcModeRectBench()
+        : INHERITED(1, 0)
+    {
+        fMode = SkXfermode::Make(SkXfermode::kSrc_Mode);
     }
 
 protected:
-    void setupPaint(SkPaint* paint) override {
+    void setupPaint(SkPaint* paint) override
+    {
         this->INHERITED::setupPaint(paint);
         // srcmode is most interesting when we're not opaque
         paint->setAlpha(0x80);
         paint->setXfermode(fMode);
     }
 
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         fName.set(this->INHERITED::onGetName());
         fName.prepend("srcmode_");
         return fName.c_str();
@@ -107,29 +115,67 @@ protected:
 
 private:
     SkString fName;
-    SkXfermode* fMode;
+    sk_sp<SkXfermode> fMode;
+
+    typedef RectBench INHERITED;
+};
+
+class TransparentRectBench : public RectBench {
+public:
+    TransparentRectBench()
+        : INHERITED(1, 0)
+    {
+    }
+
+protected:
+    void setupPaint(SkPaint* paint) override
+    {
+        this->INHERITED::setupPaint(paint);
+        // draw non opaque rect
+        paint->setAlpha(0x80);
+    }
+
+    const char* onGetName() override
+    {
+        fName.set(this->INHERITED::onGetName());
+        fName.prepend("transparent_");
+        return fName.c_str();
+    }
+
+private:
+    SkString fName;
 
     typedef RectBench INHERITED;
 };
 
 class OvalBench : public RectBench {
 public:
-    OvalBench(int shift, int stroke = 0) : RectBench(shift, stroke) {}
+    OvalBench(int shift, int stroke = 0)
+        : RectBench(shift, stroke)
+    {
+    }
+
 protected:
-    virtual void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p) {
+    void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p) override
+    {
         c->drawOval(r, p);
     }
-    virtual const char* onGetName() { return computeName("ovals"); }
+    const char* onGetName() override { return computeName("ovals"); }
 };
 
 class RRectBench : public RectBench {
 public:
-    RRectBench(int shift, int stroke = 0) : RectBench(shift, stroke) {}
+    RRectBench(int shift, int stroke = 0)
+        : RectBench(shift, stroke)
+    {
+    }
+
 protected:
-    virtual void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p) {
+    void drawThisRect(SkCanvas* c, const SkRect& r, const SkPaint& p) override
+    {
         c->drawRoundRect(r, r.width() / 4, r.height() / 4, p);
     }
-    virtual const char* onGetName() { return computeName("rrects"); }
+    const char* onGetName() override { return computeName("rrects"); }
 };
 
 class PointsBench : public RectBench {
@@ -139,12 +185,14 @@ public:
 
     PointsBench(SkCanvas::PointMode mode, const char* name)
         : RectBench(2)
-        , fMode(mode) {
+        , fMode(mode)
+    {
         fName = name;
     }
 
 protected:
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkScalar gSizes[] = {
             SkIntToScalar(7), 0
         };
@@ -167,7 +215,7 @@ protected:
             }
         }
     }
-    virtual const char* onGetName() { return fName; }
+    const char* onGetName() override { return fName; }
 };
 
 /*******************************************************************************
@@ -186,13 +234,17 @@ public:
     const char* fName;
 
     BlitMaskBench(SkCanvas::PointMode mode,
-                  BlitMaskBench::kMaskType type, const char* name) :
-        RectBench(2), fMode(mode), _type(type) {
+        BlitMaskBench::kMaskType type, const char* name)
+        : RectBench(2)
+        , fMode(mode)
+        , _type(type)
+    {
         fName = name;
     }
 
 protected:
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkScalar gSizes[] = {
             SkIntToScalar(13), SkIntToScalar(24)
         };
@@ -212,77 +264,73 @@ protected:
             srcBM.allocN32Pixels(10, 1);
             srcBM.eraseColor(0xFF00FF00);
 
-            SkShader* s;
-            s  = SkShader::CreateBitmapShader(srcBM, SkShader::kClamp_TileMode,
-                                              SkShader::kClamp_TileMode);
-            paint.setShader(s)->unref();
+            paint.setShader(SkShader::MakeBitmapShader(srcBM, SkShader::kClamp_TileMode,
+                SkShader::kClamp_TileMode));
         }
         for (int loop = 0; loop < loops; loop++) {
             for (size_t i = 0; i < sizes; i++) {
                 switch (_type) {
-                    case kMaskOpaque:
-                        color = fColors[i];
-                        alpha = 0xFF;
-                        break;
-                    case kMaskBlack:
-                        alpha = 0xFF;
-                        color = 0xFF000000;
-                        break;
-                    case kMaskColor:
-                        color = fColors[i];
-                        alpha = rand.nextU() & 255;
-                        break;
-                    case KMaskShader:
-                        break;
+                case kMaskOpaque:
+                    color = fColors[i];
+                    alpha = 0xFF;
+                    break;
+                case kMaskBlack:
+                    alpha = 0xFF;
+                    color = 0xFF000000;
+                    break;
+                case kMaskColor:
+                    color = fColors[i];
+                    alpha = rand.nextU() & 255;
+                    break;
+                case KMaskShader:
+                    break;
                 }
                 paint.setStrokeWidth(gSizes[i]);
                 this->setupPaint(&paint);
                 paint.setColor(color);
                 paint.setAlpha(alpha);
                 canvas->drawPoints(fMode, N * 2, SkTCast<SkPoint*>(fRects), paint);
-           }
+            }
         }
     }
-    virtual const char* onGetName() { return fName; }
+    const char* onGetName() override { return fName; }
+
 private:
     typedef RectBench INHERITED;
     kMaskType _type;
 };
 
+DEF_BENCH(return new RectBench(1);)
+DEF_BENCH(return new RectBench(1, 4);)
+DEF_BENCH(return new RectBench(3);)
+DEF_BENCH(return new RectBench(3, 4);)
+DEF_BENCH(return new OvalBench(1);)
+DEF_BENCH(return new OvalBench(3);)
+DEF_BENCH(return new OvalBench(1, 4);)
+DEF_BENCH(return new OvalBench(3, 4);)
+DEF_BENCH(return new RRectBench(1);)
+DEF_BENCH(return new RRectBench(1, 4);)
+DEF_BENCH(return new RRectBench(3);)
+DEF_BENCH(return new RRectBench(3, 4);)
+DEF_BENCH(return new PointsBench(SkCanvas::kPoints_PointMode, "points");)
+DEF_BENCH(return new PointsBench(SkCanvas::kLines_PointMode, "lines");)
+DEF_BENCH(return new PointsBench(SkCanvas::kPolygon_PointMode, "polygon");)
 
-DEF_BENCH( return SkNEW_ARGS(RectBench, (1)); )
-DEF_BENCH( return SkNEW_ARGS(RectBench, (1, 4)); )
-DEF_BENCH( return SkNEW_ARGS(RectBench, (3)); )
-DEF_BENCH( return SkNEW_ARGS(RectBench, (3, 4)); )
-DEF_BENCH( return SkNEW_ARGS(OvalBench, (1)); )
-DEF_BENCH( return SkNEW_ARGS(OvalBench, (3)); )
-DEF_BENCH( return SkNEW_ARGS(OvalBench, (1, 4)); )
-DEF_BENCH( return SkNEW_ARGS(OvalBench, (3, 4)); )
-DEF_BENCH( return SkNEW_ARGS(RRectBench, (1)); )
-DEF_BENCH( return SkNEW_ARGS(RRectBench, (1, 4)); )
-DEF_BENCH( return SkNEW_ARGS(RRectBench, (3)); )
-DEF_BENCH( return SkNEW_ARGS(RRectBench, (3, 4)); )
-DEF_BENCH( return SkNEW_ARGS(PointsBench, (SkCanvas::kPoints_PointMode, "points")); )
-DEF_BENCH( return SkNEW_ARGS(PointsBench, (SkCanvas::kLines_PointMode, "lines")); )
-DEF_BENCH( return SkNEW_ARGS(PointsBench, (SkCanvas::kPolygon_PointMode, "polygon")); )
+DEF_BENCH(return new SrcModeRectBench();)
 
-DEF_BENCH( return SkNEW_ARGS(SrcModeRectBench, ()); )
+DEF_BENCH(return new TransparentRectBench();)
 
 /* init the blitmask bench
  */
-DEF_BENCH( return SkNEW_ARGS(BlitMaskBench,
-                      (SkCanvas::kPoints_PointMode,
-                      BlitMaskBench::kMaskOpaque, "maskopaque")
-                      ); )
-DEF_BENCH( return SkNEW_ARGS(BlitMaskBench,
-                      (SkCanvas::kPoints_PointMode,
-                      BlitMaskBench::kMaskBlack, "maskblack")
-                      ); )
-DEF_BENCH( return SkNEW_ARGS(BlitMaskBench,
-                      (SkCanvas::kPoints_PointMode,
-                      BlitMaskBench::kMaskColor, "maskcolor")
-                      ); )
-DEF_BENCH( return SkNEW_ARGS(BlitMaskBench,
-                     (SkCanvas::kPoints_PointMode,
-                     BlitMaskBench::KMaskShader, "maskshader")
-                     ); )
+DEF_BENCH(return new BlitMaskBench(SkCanvas::kPoints_PointMode,
+    BlitMaskBench::kMaskOpaque,
+    "maskopaque");)
+DEF_BENCH(return new BlitMaskBench(SkCanvas::kPoints_PointMode,
+    BlitMaskBench::kMaskBlack,
+    "maskblack");)
+DEF_BENCH(return new BlitMaskBench(SkCanvas::kPoints_PointMode,
+    BlitMaskBench::kMaskColor,
+    "maskcolor");)
+DEF_BENCH(return new BlitMaskBench(SkCanvas::kPoints_PointMode,
+    BlitMaskBench::KMaskShader,
+    "maskshader");)

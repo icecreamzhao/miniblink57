@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Stefan Schimanski (1Stein@gmx.de)
- * Copyright (C) 2004, 2005, 2006, 2008, 2009, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2008, 2009, 2011 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
  *
  * This library is free software; you can redistribute it and/or
@@ -21,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLEmbedElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -33,23 +33,29 @@
 #include "core/html/HTMLObjectElement.h"
 #include "core/html/PluginDocument.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/layout/LayoutEmbeddedObject.h"
 #include "core/layout/LayoutPart.h"
+#include "core/layout/api/LayoutEmbeddedItem.h"
+#include "core/loader/FrameLoaderClient.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLEmbedElement::HTMLEmbedElement(Document& document, bool createdByParser)
-    : HTMLPlugInElement(embedTag, document, createdByParser, ShouldPreferPlugInsForImages)
+inline HTMLEmbedElement::HTMLEmbedElement(Document& document,
+    bool createdByParser)
+    : HTMLPlugInElement(embedTag,
+        document,
+        createdByParser,
+        ShouldPreferPlugInsForImages)
 {
 }
 
-PassRefPtrWillBeRawPtr<HTMLEmbedElement> HTMLEmbedElement::create(Document& document, bool createdByParser)
+HTMLEmbedElement* HTMLEmbedElement::create(Document& document,
+    bool createdByParser)
 {
-    RefPtrWillBeRawPtr<HTMLEmbedElement> element = adoptRefWillBeNoop(new HTMLEmbedElement(document, createdByParser));
+    HTMLEmbedElement* element = new HTMLEmbedElement(document, createdByParser);
     element->ensureUserAgentShadowRoot();
-    return element.release();
+    return element;
 }
 
 static inline LayoutPart* findPartLayoutObject(const Node* n)
@@ -68,54 +74,77 @@ LayoutPart* HTMLEmbedElement::existingLayoutPart() const
     return findPartLayoutObject(this);
 }
 
-bool HTMLEmbedElement::isPresentationAttribute(const QualifiedName& name) const
+bool HTMLEmbedElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == hiddenAttr)
         return true;
     return HTMLPlugInElement::isPresentationAttribute(name);
 }
 
-void HTMLEmbedElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLEmbedElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == hiddenAttr) {
         if (equalIgnoringCase(value, "yes") || equalIgnoringCase(value, "true")) {
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyWidth, 0, CSSPrimitiveValue::CSS_PX);
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyHeight, 0, CSSPrimitiveValue::CSS_PX);
+            addPropertyToPresentationAttributeStyle(
+                style, CSSPropertyWidth, 0, CSSPrimitiveValue::UnitType::Pixels);
+            addPropertyToPresentationAttributeStyle(
+                style, CSSPropertyHeight, 0, CSSPrimitiveValue::UnitType::Pixels);
         }
     } else {
         HTMLPlugInElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-void HTMLEmbedElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void HTMLEmbedElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == typeAttr) {
-        m_serviceType = value.lower();
+    if (params.name == typeAttr) {
+        m_serviceType = params.newValue.lower();
         size_t pos = m_serviceType.find(";");
         if (pos != kNotFound)
             m_serviceType = m_serviceType.left(pos);
-        if (!layoutObject())
+        if (layoutObject()) {
+            setNeedsWidgetUpdate(true);
+            layoutObject()->setNeedsLayoutAndFullPaintInvalidation(
+                "Embed type changed");
+        } else {
             requestPluginCreationWithoutLayoutObjectIfPossible();
-    } else if (name == codeAttr) {
-        m_url = stripLeadingAndTrailingHTMLSpaces(value);
-    } else if (name == srcAttr) {
-        m_url = stripLeadingAndTrailingHTMLSpaces(value);
+        }
+    } else if (params.name == codeAttr) {
+        // TODO(schenney): Remove this branch? It's not in the spec and we're not in
+        // the HTMLAppletElement hierarchy.
+        m_url = stripLeadingAndTrailingHTMLSpaces(params.newValue);
+    } else if (params.name == srcAttr) {
+        m_url = stripLeadingAndTrailingHTMLSpaces(params.newValue);
         if (layoutObject() && isImageType()) {
             if (!m_imageLoader)
                 m_imageLoader = HTMLImageLoader::create(this);
             m_imageLoader->updateFromElement(ImageLoader::UpdateIgnorePreviousError);
+        } else if (layoutObject()) {
+            // Check if this Embed can transition from potentially-active to active
+            if (fastHasAttribute(typeAttr)) {
+                setNeedsWidgetUpdate(true);
+                lazyReattachIfNeeded();
+            }
+        } else {
+            requestPluginCreationWithoutLayoutObjectIfPossible();
         }
     } else {
-        HTMLPlugInElement::parseAttribute(name, value);
+        HTMLPlugInElement::parseAttribute(params);
     }
 }
 
-void HTMLEmbedElement::parametersForPlugin(Vector<String>& paramNames, Vector<String>& paramValues)
+void HTMLEmbedElement::parametersForPlugin(Vector<String>& paramNames,
+    Vector<String>& paramValues)
 {
     AttributeCollection attributes = this->attributes();
     for (const Attribute& attribute : attributes) {
-        paramNames.append(attribute.localName().string());
-        paramValues.append(attribute.value().string());
+        paramNames.push_back(attribute.localName().getString());
+        paramValues.push_back(attribute.value().getString());
     }
 }
 
@@ -123,8 +152,8 @@ void HTMLEmbedElement::parametersForPlugin(Vector<String>& paramNames, Vector<St
 // moved down into HTMLPluginElement.cpp
 void HTMLEmbedElement::updateWidgetInternal()
 {
-    ASSERT(!layoutEmbeddedObject()->showsUnavailablePluginIndicator());
-    ASSERT(needsWidgetUpdate());
+    DCHECK(!layoutEmbeddedItem().showsUnavailablePluginIndicator());
+    DCHECK(needsWidgetUpdate());
     setNeedsWidgetUpdate(false);
 
     if (m_url.isEmpty() && m_serviceType.isEmpty())
@@ -140,11 +169,18 @@ void HTMLEmbedElement::updateWidgetInternal()
     Vector<String> paramValues;
     parametersForPlugin(paramNames, paramValues);
 
-    RefPtrWillBeRawPtr<HTMLEmbedElement> protect(this); // Loading the plugin might remove us from the document.
-
-    // FIXME: Can we not have layoutObject here now that beforeload events are gone?
+    // FIXME: Can we not have layoutObject here now that beforeload events are
+    // gone?
     if (!layoutObject())
         return;
+
+    // Overwrites the URL and MIME type of a Flash embed to use an HTML5 embed.
+    KURL overridenUrl = document().frame()->loader().client()->overrideFlashEmbedWithHTML(
+        document().completeURL(m_url));
+    if (!overridenUrl.isEmpty()) {
+        m_url = overridenUrl.getString();
+        m_serviceType = "text/html";
+    }
 
     requestObject(m_url, m_serviceType, paramNames, paramValues);
 }
@@ -154,13 +190,25 @@ bool HTMLEmbedElement::layoutObjectIsNeeded(const ComputedStyle& style)
     if (isImageType())
         return HTMLPlugInElement::layoutObjectIsNeeded(style);
 
-    // If my parent is an <object> and is not set to use fallback content, I
-    // should be ignored and not get a layoutObject.
+    // https://html.spec.whatwg.org/multipage/embedded-content.html#the-embed-element
+    // While any of the following conditions are occurring, any plugin
+    // instantiated for the element must be removed, and the embed element
+    // represents nothing:
+
+    // * The element has neither a src attribute nor a type attribute.
+    if (!fastHasAttribute(srcAttr) && !fastHasAttribute(typeAttr))
+        return false;
+
+    // * The element has a media element ancestor.
+    // -> It's realized by LayoutMedia::isChildAllowed.
+
+    // * The element has an ancestor object element that is not showing its
+    //   fallback content.
     ContainerNode* p = parentNode();
     if (isHTMLObjectElement(p)) {
-        ASSERT(p->layoutObject());
-        if (!toHTMLObjectElement(p)->useFallbackContent()) {
-            ASSERT(!p->layoutObject()->isEmbeddedObject());
+        DCHECK(p->layoutObject());
+        if (!toHTMLObjectElement(p)->willUseFallbackContentAtLayout() && !toHTMLObjectElement(p)->useFallbackContent()) {
+            DCHECK(!p->layoutObject()->isEmbeddedObject());
             return false;
         }
     }
@@ -185,11 +233,12 @@ bool HTMLEmbedElement::isInteractiveContent() const
 bool HTMLEmbedElement::isExposed() const
 {
     // http://www.whatwg.org/specs/web-apps/current-work/#exposed
-    for (HTMLObjectElement* object = Traversal<HTMLObjectElement>::firstAncestor(*this); object; object = Traversal<HTMLObjectElement>::firstAncestor(*object)) {
+    for (HTMLObjectElement* object = Traversal<HTMLObjectElement>::firstAncestor(*this);
+         object; object = Traversal<HTMLObjectElement>::firstAncestor(*object)) {
         if (object->isExposed())
             return false;
     }
     return true;
 }
 
-}
+} // namespace blink

@@ -18,68 +18,76 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(PropertyArray, HeapObject)
-CAST_ACCESSOR(PropertyArray)
+    OBJECT_CONSTRUCTORS_IMPL(PropertyArray, HeapObject)
+    CAST_ACCESSOR(PropertyArray)
 
-Object PropertyArray::get(int index) const {
-  DCHECK_LT(static_cast<unsigned>(index),
+    Object PropertyArray::get(int index) const
+    {
+        DCHECK_LT(static_cast<unsigned>(index),
             static_cast<unsigned>(this->length()));
-  return RELAXED_READ_FIELD(*this, OffsetOfElementAt(index));
-}
+        return RELAXED_READ_FIELD(*this, OffsetOfElementAt(index));
+    }
 
-void PropertyArray::set(int index, Object value) {
-  DCHECK(IsPropertyArray());
-  DCHECK_LT(static_cast<unsigned>(index),
+    void PropertyArray::set(int index, Object value)
+    {
+        DCHECK(IsPropertyArray());
+        DCHECK_LT(static_cast<unsigned>(index),
             static_cast<unsigned>(this->length()));
-  int offset = OffsetOfElementAt(index);
-  RELAXED_WRITE_FIELD(*this, offset, value);
-  WRITE_BARRIER(*this, offset, value);
-}
+        int offset = OffsetOfElementAt(index);
+        RELAXED_WRITE_FIELD(*this, offset, value);
+        WRITE_BARRIER(*this, offset, value);
+    }
 
-void PropertyArray::set(int index, Object value, WriteBarrierMode mode) {
-  DCHECK_LT(static_cast<unsigned>(index),
+    void PropertyArray::set(int index, Object value, WriteBarrierMode mode)
+    {
+        DCHECK_LT(static_cast<unsigned>(index),
             static_cast<unsigned>(this->length()));
-  int offset = OffsetOfElementAt(index);
-  RELAXED_WRITE_FIELD(*this, offset, value);
-  CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);
-}
+        int offset = OffsetOfElementAt(index);
+        RELAXED_WRITE_FIELD(*this, offset, value);
+        CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);
+    }
 
-ObjectSlot PropertyArray::data_start() { return RawField(kHeaderSize); }
+    ObjectSlot PropertyArray::data_start() { return RawField(kHeaderSize); }
 
-int PropertyArray::length() const {
-  Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
-  int value = Smi::ToInt(value_obj);
-  return LengthField::decode(value);
-}
+    int PropertyArray::length() const
+    {
+        Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
+        int value = Smi::ToInt(value_obj);
+        return LengthField::decode(value);
+    }
 
-void PropertyArray::initialize_length(int len) {
-  DCHECK_LT(static_cast<unsigned>(len),
+    void PropertyArray::initialize_length(int len)
+    {
+        DCHECK_LT(static_cast<unsigned>(len),
             static_cast<unsigned>(LengthField::kMax));
-  WRITE_FIELD(*this, kLengthAndHashOffset, Smi::FromInt(len));
-}
+        WRITE_FIELD(*this, kLengthAndHashOffset, Smi::FromInt(len));
+    }
 
-int PropertyArray::synchronized_length() const {
-  Object value_obj = ACQUIRE_READ_FIELD(*this, kLengthAndHashOffset);
-  int value = Smi::ToInt(value_obj);
-  return LengthField::decode(value);
-}
+    int PropertyArray::synchronized_length() const
+    {
+        Object value_obj = ACQUIRE_READ_FIELD(*this, kLengthAndHashOffset);
+        int value = Smi::ToInt(value_obj);
+        return LengthField::decode(value);
+    }
 
-int PropertyArray::Hash() const {
-  Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
-  int value = Smi::ToInt(value_obj);
-  return HashField::decode(value);
-}
+    int PropertyArray::Hash() const
+    {
+        Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
+        int value = Smi::ToInt(value_obj);
+        return HashField::decode(value);
+    }
 
-void PropertyArray::SetHash(int hash) {
-  Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
-  int value = Smi::ToInt(value_obj);
-  value = HashField::update(value, hash);
-  WRITE_FIELD(*this, kLengthAndHashOffset, Smi::FromInt(value));
-}
+    void PropertyArray::SetHash(int hash)
+    {
+        Object value_obj = READ_FIELD(*this, kLengthAndHashOffset);
+        int value = Smi::ToInt(value_obj);
+        value = HashField::update(value, hash);
+        WRITE_FIELD(*this, kLengthAndHashOffset, Smi::FromInt(value));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_PROPERTY_ARRAY_INL_H_
+#endif // V8_OBJECTS_PROPERTY_ARRAY_INL_H_

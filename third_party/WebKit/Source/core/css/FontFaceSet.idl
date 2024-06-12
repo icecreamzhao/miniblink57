@@ -28,26 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://dev.w3.org/csswg/css-font-loading/#FontFaceSet-interface
+// https://dev.w3.org/csswg/css-font-loading/#FontFaceSet-interface
 
 enum FontFaceSetLoadStatus { "loading", "loaded" };
 
-// TODO(philipj): This interface should be [Exposed=Window,Worker] and should
+// TODO(foolip): This interface should be [Exposed=Window,Worker] and should
 // have a constructor, and thus not have [NoInterfaceObject].
 [
-    ActiveDOMObject,
+    DependentLifetime,
     SetWrapperReferenceFrom=document,
     NoInterfaceObject,
 ] interface FontFaceSet : EventTarget {
-    // TODO(ksakamoto): Make FontFaceSet Set-like. crbug.com/392075
-    // setlike<FontFace>;
-    void forEach(FontFaceSetForEachCallback callback, optional any thisArg);
-    [RaisesException] boolean has(FontFace fontFace);
+    setlike<FontFace>;
     readonly attribute unsigned long size;
-    // TODO(philipj): add() should return the FontFaceSet.
-    [RaisesException] void add(FontFace fontFace);
-    [RaisesException, ImplementedAs=remove] boolean delete(FontFace fontFace);
-    void clear();
 
     // events for when loading state changes
     attribute EventHandler onloading;

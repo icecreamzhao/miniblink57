@@ -34,57 +34,78 @@ namespace blink {
 
 // CSS Transforms (may become part of CSS3)
 
-class PLATFORM_EXPORT TransformOperation : public RefCounted<TransformOperation> {
+class PLATFORM_EXPORT TransformOperation
+    : public RefCounted<TransformOperation> {
+    WTF_MAKE_NONCOPYABLE(TransformOperation);
+
 public:
     enum OperationType {
-        ScaleX, ScaleY, Scale,
-        TranslateX, TranslateY, Translate,
+        ScaleX,
+        ScaleY,
+        Scale,
+        TranslateX,
+        TranslateY,
+        Translate,
         Rotate,
         RotateZ = Rotate,
-        SkewX, SkewY, Skew,
+        SkewX,
+        SkewY,
+        Skew,
         Matrix,
-        ScaleZ, Scale3D,
-        TranslateZ, Translate3D,
-        RotateX, RotateY, Rotate3D,
+        ScaleZ,
+        Scale3D,
+        TranslateZ,
+        Translate3D,
+        RotateX,
+        RotateY,
+        Rotate3D,
         Matrix3D,
         Perspective,
         Interpolated,
-        Identity, None
+        Identity,
+        RotateAroundOrigin,
     };
 
+    TransformOperation() { }
     virtual ~TransformOperation() { }
 
     virtual bool operator==(const TransformOperation&) const = 0;
     bool operator!=(const TransformOperation& o) const { return !(*this == o); }
 
-    virtual void apply(TransformationMatrix&, const FloatSize& borderBoxSize) const = 0;
+    virtual void apply(TransformationMatrix&,
+        const FloatSize& borderBoxSize) const = 0;
 
-    virtual PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) = 0;
+    virtual PassRefPtr<TransformOperation> blend(
+        const TransformOperation* from,
+        double progress,
+        bool blendToIdentity = false)
+        = 0;
+    virtual PassRefPtr<TransformOperation> zoom(double factor) = 0;
 
     virtual OperationType type() const = 0;
-    bool isSameType(const TransformOperation& other) const { return other.type() == type(); }
+
+    // https://drafts.csswg.org/css-transforms/#transform-primitives
+    virtual OperationType primitiveType() const { return type(); }
+
+    bool isSameType(const TransformOperation& other) const
+    {
+        return other.type() == type();
+    }
     virtual bool canBlendWith(const TransformOperation& other) const = 0;
 
     bool is3DOperation() const
     {
         OperationType opType = type();
-        return opType == ScaleZ
-            || opType == Scale3D
-            || opType == TranslateZ
-            || opType == Translate3D
-            || opType == RotateX
-            || opType == RotateY
-            || opType == Rotate3D
-            || opType == Matrix3D
-            || opType == Perspective
-            || opType == Interpolated;
+        return opType == ScaleZ || opType == Scale3D || opType == TranslateZ || opType == Translate3D || opType == RotateX || opType == RotateY || opType == Rotate3D || opType == Matrix3D || opType == Perspective || opType == Interpolated;
     }
 
     virtual bool dependsOnBoxSize() const { return false; }
 };
 
-#define DEFINE_TRANSFORM_TYPE_CASTS(thisType) \
-    DEFINE_TYPE_CASTS(thisType, TransformOperation, transform, thisType::isMatchingOperationType(transform->type()), thisType::isMatchingOperationType(transform.type()))
+#define DEFINE_TRANSFORM_TYPE_CASTS(thisType)                  \
+    DEFINE_TYPE_CASTS(thisType, TransformOperation, transform, \
+        thisType::isMatchingOperationType(transform->type()),  \
+        thisType::isMatchingOperationType(transform.type()))
 
 } // namespace blink
 

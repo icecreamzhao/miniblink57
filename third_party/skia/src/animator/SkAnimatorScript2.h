@@ -24,7 +24,7 @@ struct SkDisplayEnumMap {
 
 class SkAnimatorScript2 : public SkScriptEngine2 {
 public:
-    SkAnimatorScript2(SkAnimateMaker& , SkDisplayable* working, SkDisplayTypes type);
+    SkAnimatorScript2(SkAnimateMaker&, SkDisplayable* working, SkDisplayTypes type);
     ~SkAnimatorScript2();
     bool evalMemberCommon(const SkMemberInfo* info,
         SkDisplayable* displayable, SkOperand2* value);
@@ -34,6 +34,7 @@ public:
     static const SkDisplayEnumMap& GetEnumValues(SkDisplayTypes type);
     static SkDisplayTypes ToDisplayType(SkOperand2::OpType type);
     static SkOperand2::OpType ToOpType(SkDisplayTypes type);
+
 private:
     SkAnimateMaker& fMaker;
     SkDisplayable* fWorking;

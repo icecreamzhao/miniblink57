@@ -45,7 +45,7 @@
 // enabled. This requires the template specialization to be available:
 //
 //   template<> struct ValueToString<T> {
-//       static String string(const T& t);
+//       static String toString(const T& t);
 //   };
 //
 // Note that when complex types are stored in this red/black tree, it
@@ -73,6 +73,7 @@
 #define PODRedBlackTree_h
 
 #include "platform/PODFreeListArena.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
@@ -85,16 +86,16 @@
 namespace blink {
 
 #ifndef NDEBUG
-template<class T>
+template <class T>
 struct ValueToString;
 #endif
 
-enum UninitializedTreeEnum {
-    UninitializedTree
-};
+enum UninitializedTreeEnum { UninitializedTree };
 
-template<class T>
+template <class T>
 class PODRedBlackTree {
+    DISALLOW_NEW();
+
 public:
     class Node;
 
@@ -102,6 +103,7 @@ public:
     class Visitor {
     public:
         virtual void visit(const T& data) = 0;
+
     protected:
         virtual ~Visitor() { }
     };
@@ -154,10 +156,7 @@ public:
         m_root = 0;
     }
 
-    bool isInitialized() const
-    {
-        return m_arena;
-    }
+    bool isInitialized() const { return m_arena.get(); }
 
     void initIfNeeded()
     {
@@ -243,16 +242,16 @@ public:
     }
 #endif
 
-    enum Color {
-        Red = 1,
-        Black
-    };
+    enum NodeColor { Red = 1,
+        Black };
 
     // The base Node class which is stored in the tree. Nodes are only
     // an internal concept; users of the tree deal only with the data
     // they store in it.
     class Node {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         WTF_MAKE_NONCOPYABLE(Node);
+
     public:
         // Constructor. Newly-created nodes are colored red.
         explicit Node(const T& data)
@@ -266,8 +265,8 @@ public:
 
         virtual ~Node() { }
 
-        Color color() const { return m_color; }
-        void setColor(Color color) { m_color = color; }
+        NodeColor color() const { return m_color; }
+        void setColor(NodeColor color) { m_color = color; }
 
         // Fetches the user data.
         T& data() { return m_data; }
@@ -293,7 +292,7 @@ public:
         Node* m_left;
         Node* m_right;
         Node* m_parent;
-        Color m_color;
+        NodeColor m_color;
         T m_data;
     };
 
@@ -580,8 +579,7 @@ private:
                     leftRotate(xParent);
                     w = xParent->right();
                 }
-                if ((!w->left() || w->left()->color() == Black)
-                    && (!w->right() || w->right()->color() == Black)) {
+                if ((!w->left() || w->left()->color() == Black) && (!w->right() || w->right()->color() == Black)) {
                     // Case 2
                     w->setColor(Red);
                     x = xParent;
@@ -620,8 +618,7 @@ private:
                     rightRotate(xParent);
                     w = xParent->left();
                 }
-                if ((!w->right() || w->right()->color() == Black)
-                    && (!w->left() || w->left()->color() == Black)) {
+                if ((!w->right() || w->right()->color() == Black) && (!w->left() || w->left()->color() == Black)) {
                     // Case 2
                     w->setColor(Red);
                     x = xParent;
@@ -713,7 +710,7 @@ private:
             visitInorderImpl(node->right(), visitor);
     }
 
-    void markFree(Node *node)
+    void markFree(Node* node)
     {
         if (!node)
             return;
@@ -729,11 +726,15 @@ private:
     // Helper class for size()
 
     // A Visitor which simply counts the number of visited elements.
-    class Counter : public Visitor {
+    class Counter final : public Visitor {
+        DISALLOW_NEW();
         WTF_MAKE_NONCOPYABLE(Counter);
+
     public:
         Counter()
-            : m_count(0) { }
+            : m_count(0)
+        {
+        }
 
         virtual void visit(const T&) { ++m_count; }
         int count() const { return m_count; }
@@ -782,12 +783,14 @@ private:
     }
 
 #ifdef NDEBUG
-    void logIfVerbose(const char*) const { }
+    void logIfVerbose(const char*) const
+    {
+    }
 #else
     void logIfVerbose(const char* output) const
     {
         if (m_verboseDebugging)
-            WTF_LOG_ERROR("%s", output);
+            DLOG(ERROR) << output;
     }
 #endif
 
@@ -804,7 +807,7 @@ private:
             builder.append(ValueToString<T>::string(node->data()));
             builder.append((node->color() == Black) ? " (black)" : " (red)");
         }
-        WTF_LOG_ERROR("%s", builder.toString().ascii().data());
+        DLOG(ERROR) << builder.toString();
         if (node) {
             dumpFromNode(node->left(), indentation + 2);
             dumpFromNode(node->right(), indentation + 2);

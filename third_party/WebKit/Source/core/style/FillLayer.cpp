@@ -19,9 +19,9 @@
  *
  */
 
-#include "config.h"
 #include "core/style/FillLayer.h"
 
+#include "core/layout/LayoutObject.h"
 #include "core/style/DataEquivalency.h"
 
 namespace blink {
@@ -29,7 +29,7 @@ namespace blink {
 struct SameSizeAsFillLayer {
     FillLayer* m_next;
 
-    RefPtr<StyleImage> m_image;
+    Persistent<StyleImage> m_image;
 
     Length m_xPosition;
     Length m_yPosition;
@@ -40,7 +40,8 @@ struct SameSizeAsFillLayer {
     unsigned m_bitfields2;
 };
 
-static_assert(sizeof(FillLayer) == sizeof(SameSizeAsFillLayer), "FillLayer should stay small");
+static_assert(sizeof(FillLayer) == sizeof(SameSizeAsFillLayer),
+    "FillLayer should stay small");
 
 FillLayer::FillLayer(EFillLayerType type, bool useInitialValues)
     : m_next(0)
@@ -54,7 +55,8 @@ FillLayer::FillLayer(EFillLayerType type, bool useInitialValues)
     , m_repeatX(FillLayer::initialFillRepeatX(type))
     , m_repeatY(FillLayer::initialFillRepeatY(type))
     , m_composite(FillLayer::initialFillComposite(type))
-    , m_sizeType(useInitialValues ? FillLayer::initialFillSizeType(type) : SizeNone)
+    , m_sizeType(useInitialValues ? FillLayer::initialFillSizeType(type)
+                                  : SizeNone)
     , m_blendMode(FillLayer::initialFillBlendMode(type))
     , m_maskSourceType(FillLayer::initialFillMaskSourceType(type))
     , m_backgroundXOrigin(LeftEdge)
@@ -73,6 +75,9 @@ FillLayer::FillLayer(EFillLayerType type, bool useInitialValues)
     , m_blendModeSet(useInitialValues)
     , m_maskSourceTypeSet(useInitialValues)
     , m_type(type)
+    , m_thisOrNextLayersClipMax(0)
+    , m_thisOrNextLayersUseContentBox(0)
+    , m_thisOrNextLayersHaveLocalAttachment(0)
     , m_cachedPropertiesComputed(false)
 {
 }
@@ -108,6 +113,9 @@ FillLayer::FillLayer(const FillLayer& o)
     , m_blendModeSet(o.m_blendModeSet)
     , m_maskSourceTypeSet(o.m_maskSourceTypeSet)
     , m_type(o.m_type)
+    , m_thisOrNextLayersClipMax(0)
+    , m_thisOrNextLayersUseContentBox(0)
+    , m_thisOrNextLayersHaveLocalAttachment(0)
     , m_cachedPropertiesComputed(false)
 {
 }
@@ -156,26 +164,24 @@ FillLayer& FillLayer::operator=(const FillLayer& o)
 
     m_type = o.m_type;
 
+    m_cachedPropertiesComputed = false;
+
     return *this;
 }
 
 bool FillLayer::operator==(const FillLayer& o) const
 {
-    // We do not check the "isSet" booleans for each property, since those are only used during initial construction
-    // to propagate patterns into layers.  All layer comparisons happen after values have all been filled in anyway.
-    return dataEquivalent(m_image, o.m_image) && m_xPosition == o.m_xPosition && m_yPosition == o.m_yPosition
-        && m_backgroundXOrigin == o.m_backgroundXOrigin && m_backgroundYOrigin == o.m_backgroundYOrigin
-        && m_attachment == o.m_attachment && m_clip == o.m_clip && m_composite == o.m_composite
-        && m_blendMode == o.m_blendMode && m_origin == o.m_origin && m_repeatX == o.m_repeatX
-        && m_repeatY == o.m_repeatY && m_sizeType == o.m_sizeType && m_maskSourceType == o.m_maskSourceType
-        && m_sizeLength == o.m_sizeLength && m_type == o.m_type
-        && ((m_next && o.m_next) ? *m_next == *o.m_next : m_next == o.m_next);
+    // We do not check the "isSet" booleans for each property, since those are
+    // only used during initial construction to propagate patterns into layers.
+    // All layer comparisons happen after values have all been filled in anyway.
+    return dataEquivalent(m_image, o.m_image) && m_xPosition == o.m_xPosition && m_yPosition == o.m_yPosition && m_backgroundXOrigin == o.m_backgroundXOrigin && m_backgroundYOrigin == o.m_backgroundYOrigin && m_attachment == o.m_attachment && m_clip == o.m_clip && m_composite == o.m_composite && m_blendMode == o.m_blendMode && m_origin == o.m_origin && m_repeatX == o.m_repeatX && m_repeatY == o.m_repeatY && m_sizeType == o.m_sizeType && m_maskSourceType == o.m_maskSourceType && m_sizeLength == o.m_sizeLength && m_type == o.m_type && ((m_next && o.m_next) ? *m_next == *o.m_next : m_next == o.m_next);
 }
 
 void FillLayer::fillUnsetProperties()
 {
     FillLayer* curr;
-    for (curr = this; curr && curr->isXPositionSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isXPositionSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -190,7 +196,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isYPositionSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isYPositionSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -205,7 +212,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isAttachmentSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isAttachmentSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -216,7 +224,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isClipSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isClipSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -227,7 +236,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isCompositeSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isCompositeSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -238,7 +248,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isBlendModeSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isBlendModeSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -249,7 +260,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isOriginSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isOriginSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -260,7 +272,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isRepeatXSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isRepeatXSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -271,7 +284,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isRepeatYSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isRepeatYSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -282,7 +296,8 @@ void FillLayer::fillUnsetProperties()
         }
     }
 
-    for (curr = this; curr && curr->isSizeSet(); curr = curr->next()) { }
+    for (curr = this; curr && curr->isSizeSet(); curr = curr->next()) {
+    }
     if (curr && curr != this) {
         // We need to fill in the remaining values with the pattern specified.
         for (FillLayer* pattern = this; curr; curr = curr->next()) {
@@ -308,17 +323,6 @@ void FillLayer::cullEmptyLayers()
     }
 }
 
-static EFillBox clipMax(EFillBox clipA, EFillBox clipB)
-{
-    if (clipA == BorderFillBox || clipB == BorderFillBox)
-        return BorderFillBox;
-    if (clipA == PaddingFillBox || clipB == PaddingFillBox)
-        return PaddingFillBox;
-    if (clipA == ContentFillBox || clipB == ContentFillBox)
-        return ContentFillBox;
-    return TextFillBox;
-}
-
 void FillLayer::computeCachedPropertiesIfNeeded() const
 {
     if (m_cachedPropertiesComputed)
@@ -330,7 +334,8 @@ void FillLayer::computeCachedPropertiesIfNeeded() const
 
     if (m_next) {
         m_next->computeCachedPropertiesIfNeeded();
-        m_thisOrNextLayersClipMax = clipMax(thisOrNextLayersClipMax(), m_next->thisOrNextLayersClipMax());
+        m_thisOrNextLayersClipMax = enclosingFillBox(
+            thisOrNextLayersClipMax(), m_next->thisOrNextLayersClipMax());
         m_thisOrNextLayersUseContentBox |= m_next->m_thisOrNextLayersUseContentBox;
         m_thisOrNextLayersHaveLocalAttachment |= m_next->m_thisOrNextLayersHaveLocalAttachment;
     }
@@ -363,27 +368,60 @@ bool FillLayer::imagesAreLoaded() const
     return true;
 }
 
-bool FillLayer::hasOpaqueImage(const LayoutObject* layoutObject) const
+bool FillLayer::imageIsOpaque(const LayoutObject& layoutObject) const
 {
-    if (!m_image)
+    // Returns true if we have an image that will cover the content below it when
+    // m_composite == CompositeSourceOver && m_blendMode == WebBlendModeNormal.
+    // Otherwise false.
+    return m_image->knownToBeOpaque(layoutObject) && !m_image->imageSize(layoutObject, layoutObject.style()->effectiveZoom(), LayoutSize()).isEmpty();
+}
+
+bool FillLayer::imageTilesLayer() const
+{
+    // Returns true if an image will be tiled such that it covers any sized
+    // rectangle.
+    // TODO(schenney) We could relax the repeat mode requirement if we also knew
+    // the rect we had to fill, and the portion of the image we need to use, and
+    // know that the latter covers the former.
+    return (m_repeatX == RepeatFill || m_repeatX == RoundFill) && (m_repeatY == RepeatFill || m_repeatY == RoundFill);
+}
+
+bool FillLayer::imageOccludesNextLayers(
+    const LayoutObject& layoutObject) const
+{
+    // We can't cover without an image, regardless of other parameters
+    if (!m_image || !m_image->canRender())
         return false;
 
-    // TODO(trchen): Should check blend mode before composite mode.
-    if (m_composite == CompositeClear || m_composite == CompositeCopy)
-        return true;
-
-    if (m_blendMode != WebBlendModeNormal)
-        return false;
-
-    if (m_composite == CompositeSourceOver)
-        return m_image->knownToBeOpaque(layoutObject);
+    switch (m_composite) {
+    case CompositeClear:
+    case CompositeCopy:
+        return imageTilesLayer();
+    case CompositeSourceOver:
+        return (m_blendMode == WebBlendModeNormal) && imageTilesLayer() && imageIsOpaque(layoutObject);
+    default: {
+    }
+    }
 
     return false;
 }
 
-bool FillLayer::hasRepeatXY() const
+static inline bool layerImagesIdentical(const FillLayer& layer1,
+    const FillLayer& layer2)
 {
-    return m_repeatX == RepeatFill && m_repeatY == RepeatFill;
+    // We just care about pointer equivalency.
+    return layer1.image() == layer2.image();
+}
+
+bool FillLayer::imagesIdentical(const FillLayer* layer1,
+    const FillLayer* layer2)
+{
+    for (; layer1 && layer2; layer1 = layer1->next(), layer2 = layer2->next()) {
+        if (!layerImagesIdentical(*layer1, *layer2))
+            return false;
+    }
+
+    return !layer1 && !layer2;
 }
 
 } // namespace blink

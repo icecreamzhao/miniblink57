@@ -21,12 +21,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FEFlood.h"
 
 #include "SkColorFilter.h"
 #include "SkColorFilterImageFilter.h"
-#include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
 
 namespace blink {
@@ -39,9 +37,11 @@ FEFlood::FEFlood(Filter* filter, const Color& floodColor, float floodOpacity)
     FilterEffect::setOperatingColorSpace(ColorSpaceDeviceRGB);
 }
 
-PassRefPtrWillBeRawPtr<FEFlood> FEFlood::create(Filter* filter, const Color& floodColor, float floodOpacity)
+FEFlood* FEFlood::create(Filter* filter,
+    const Color& floodColor,
+    float floodOpacity)
 {
-    return adoptRefWillBeNoop(new FEFlood(filter, floodColor, floodOpacity));
+    return new FEFlood(filter, floodColor, floodOpacity);
 }
 
 Color FEFlood::floodColor() const
@@ -70,13 +70,12 @@ bool FEFlood::setFloodOpacity(float floodOpacity)
     return true;
 }
 
-PassRefPtr<SkImageFilter> FEFlood::createImageFilter(SkiaImageFilterBuilder* builder)
+sk_sp<SkImageFilter> FEFlood::createImageFilter()
 {
     Color color = floodColor().combineWithAlpha(floodOpacity());
-
-    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
-    SkAutoTUnref<SkColorFilter> cf(SkColorFilter::CreateModeFilter(color.rgb(), SkXfermode::kSrc_Mode));
-    return adoptRef(SkColorFilterImageFilter::Create(cf, 0, &rect));
+    SkImageFilter::CropRect rect = getCropRect();
+    return SkColorFilterImageFilter::Make(
+        SkColorFilter::MakeModeFilter(color.rgb(), SkBlendMode::kSrc), 0, &rect);
 }
 
 TextStream& FEFlood::externalRepresentation(TextStream& ts, int indent) const

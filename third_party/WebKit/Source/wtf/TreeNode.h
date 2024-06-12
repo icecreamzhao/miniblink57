@@ -39,12 +39,17 @@ namespace WTF {
 // TreeNode is generic, ContainerNode-like linked tree data structure.
 // There are a few notable difference between TreeNode and Node:
 //
-//  * Each TreeNode node is NOT ref counted. The user have to retain its lifetime somehow.
-//    FIXME: lifetime management could be parameterized so that ref counted implementations can be used.
-//  * It ASSERT()s invalid input. The callers have to ensure that given parameter is sound.
-//  * There is no branch-leaf difference. Every node can be a parent of other node.
+//  * Each TreeNode node is NOT ref counted. The user have to retain its
+//    lifetime somehow.
+//    FIXME: lifetime management could be parameterized so that ref counted
+//    implementations can be used.
+//  * It checks invalid input. The callers have to ensure that given
+//    parameter is sound.
+//  * There is no branch-leaf difference. Every node can be a parent of other
+//    node.
 //
-// FIXME: oilpan: Trace tree node edges to ensure we don't have dangling pointers.
+// FIXME: oilpan: Trace tree node edges to ensure we don't have dangling
+// pointers.
 // As it is used in HTMLImport it is safe since they all die together.
 template <class T>
 class TreeNode {
@@ -65,18 +70,24 @@ public:
     NodeType* parent() const { return m_parent; }
     NodeType* firstChild() const { return m_firstChild; }
     NodeType* lastChild() const { return m_lastChild; }
-    NodeType* here() const { return static_cast<NodeType*>(const_cast<TreeNode*>(this)); }
+    NodeType* here() const
+    {
+        return static_cast<NodeType*>(const_cast<TreeNode*>(this));
+    }
 
-    bool orphan() const { return !m_parent && !m_next && !m_previous && !m_firstChild && !m_lastChild; }
+    bool orphan() const
+    {
+        return !m_parent && !m_next && !m_previous && !m_firstChild && !m_lastChild;
+    }
     bool hasChildren() const { return m_firstChild; }
 
     void insertBefore(NodeType* newChild, NodeType* refChild)
     {
-        ASSERT(!newChild->parent());
-        ASSERT(!newChild->next());
-        ASSERT(!newChild->previous());
+        DCHECK(!newChild->parent());
+        DCHECK(!newChild->next());
+        DCHECK(!newChild->previous());
 
-        ASSERT(!refChild || this == refChild->parent());
+        DCHECK(!refChild || this == refChild->parent());
 
         if (!refChild) {
             appendChild(newChild);
@@ -96,19 +107,19 @@ public:
 
     void appendChild(NodeType* child)
     {
-        ASSERT(!child->parent());
-        ASSERT(!child->next());
-        ASSERT(!child->previous());
+        DCHECK(!child->parent());
+        DCHECK(!child->next());
+        DCHECK(!child->previous());
 
         child->m_parent = here();
 
         if (!m_lastChild) {
-            ASSERT(!m_firstChild);
+            DCHECK(!m_firstChild);
             m_lastChild = m_firstChild = child;
             return;
         }
 
-        ASSERT(!m_lastChild->m_next);
+        DCHECK(!m_lastChild->m_next);
         NodeType* oldLast = m_lastChild;
         m_lastChild = child;
 
@@ -118,7 +129,7 @@ public:
 
     NodeType* removeChild(NodeType* child)
     {
-        ASSERT(child->parent() == this);
+        DCHECK_EQ(child->parent(), this);
 
         if (m_firstChild == child)
             m_firstChild = child->next();
@@ -139,7 +150,7 @@ public:
 
     void takeChildrenFrom(NodeType* oldParent)
     {
-        ASSERT(oldParent != this);
+        DCHECK_NE(oldParent, this);
         while (oldParent->hasChildren()) {
             NodeType* child = oldParent->firstChild();
             oldParent->removeChild(child);
@@ -155,8 +166,10 @@ private:
     NodeType* m_lastChild;
 };
 
-template<class T>
-inline typename TreeNode<T>::NodeType* traverseNext(const TreeNode<T>* current, const TreeNode<T>* stayWithin = 0)
+template <class T>
+inline typename TreeNode<T>::NodeType* traverseNext(
+    const TreeNode<T>* current,
+    const TreeNode<T>* stayWithin = 0)
 {
     if (typename TreeNode<T>::NodeType* next = current->firstChild())
         return next;
@@ -164,7 +177,8 @@ inline typename TreeNode<T>::NodeType* traverseNext(const TreeNode<T>* current, 
         return 0;
     if (typename TreeNode<T>::NodeType* next = current->next())
         return next;
-    for (typename TreeNode<T>::NodeType* parent = current->parent(); parent; parent = parent->parent()) {
+    for (typename TreeNode<T>::NodeType* parent = current->parent(); parent;
+         parent = parent->parent()) {
         if (parent == stayWithin)
             return 0;
         if (typename TreeNode<T>::NodeType* next = parent->next())
@@ -174,8 +188,9 @@ inline typename TreeNode<T>::NodeType* traverseNext(const TreeNode<T>* current, 
     return 0;
 }
 
-template<class T>
-inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(const TreeNode<T>* current)
+template <class T>
+inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(
+    const TreeNode<T>* current)
 {
     typename TreeNode<T>::NodeType* first = current->here();
     while (first->firstChild())
@@ -183,8 +198,10 @@ inline typename TreeNode<T>::NodeType* traverseFirstPostOrder(const TreeNode<T>*
     return first;
 }
 
-template<class T>
-inline typename TreeNode<T>::NodeType* traverseNextPostOrder(const TreeNode<T>* current, const TreeNode<T>* stayWithin = 0)
+template <class T>
+inline typename TreeNode<T>::NodeType* traverseNextPostOrder(
+    const TreeNode<T>* current,
+    const TreeNode<T>* stayWithin = 0)
 {
     if (current == stayWithin)
         return 0;
@@ -197,10 +214,10 @@ inline typename TreeNode<T>::NodeType* traverseNextPostOrder(const TreeNode<T>* 
     return next;
 }
 
-}
+} // namespace WTF
 
-using WTF::TreeNode;
 using WTF::traverseNext;
 using WTF::traverseNextPostOrder;
+using WTF::TreeNode;
 
 #endif

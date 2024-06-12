@@ -22,20 +22,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLTableColElement.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/HTMLNames.h"
+#include "core/html/HTMLTableCellElement.h"
 #include "core/html/HTMLTableElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutTableCol.h"
+#include <algorithm>
 
 namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLTableColElement::HTMLTableColElement(const QualifiedName& tagName, Document& document)
+inline HTMLTableColElement::HTMLTableColElement(const QualifiedName& tagName,
+    Document& document)
     : HTMLTablePartElement(tagName, document)
     , m_span(1)
 {
@@ -43,48 +45,57 @@ inline HTMLTableColElement::HTMLTableColElement(const QualifiedName& tagName, Do
 
 DEFINE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLTableColElement)
 
-bool HTMLTableColElement::isPresentationAttribute(const QualifiedName& name) const
+bool HTMLTableColElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == widthAttr)
         return true;
     return HTMLTablePartElement::isPresentationAttribute(name);
 }
 
-void HTMLTableColElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLTableColElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == widthAttr)
         addHTMLLengthToStyle(style, CSSPropertyWidth, value);
     else
-        HTMLTablePartElement::collectStyleForPresentationAttribute(name, value, style);
+        HTMLTablePartElement::collectStyleForPresentationAttribute(name, value,
+            style);
 }
 
-void HTMLTableColElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void HTMLTableColElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == spanAttr) {
+    if (params.name == spanAttr) {
         unsigned newSpan = 0;
-        if (value.isEmpty() || !parseHTMLNonNegativeInteger(value, newSpan) || newSpan < 1) {
-            // If the value of span is not a valid non-negative integer greater than zero,
-            // set it to 1.
+        if (params.newValue.isEmpty() || !parseHTMLNonNegativeInteger(params.newValue, newSpan) || newSpan < 1) {
+            // If the value of span is not a valid non-negative integer greater than
+            // zero, set it to 1.
             newSpan = 1;
         }
+        newSpan = std::min(newSpan, HTMLTableCellElement::maxColSpan());
         m_span = newSpan;
         if (layoutObject() && layoutObject()->isLayoutTableCol())
             layoutObject()->updateFromElement();
-    } else if (name == widthAttr) {
-        if (!value.isEmpty()) {
+    } else if (params.name == widthAttr) {
+        if (!params.newValue.isEmpty()) {
             if (layoutObject() && layoutObject()->isLayoutTableCol()) {
                 LayoutTableCol* col = toLayoutTableCol(layoutObject());
                 int newWidth = width().toInt();
                 if (newWidth != col->size().width())
-                    col->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AttributeChanged);
+                    col->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
+                        LayoutInvalidationReason::AttributeChanged);
             }
         }
     } else {
-        HTMLTablePartElement::parseAttribute(name, value);
+        HTMLTablePartElement::parseAttribute(params);
     }
 }
 
-const StylePropertySet* HTMLTableColElement::additionalPresentationAttributeStyle()
+const StylePropertySet*
+HTMLTableColElement::additionalPresentationAttributeStyle()
 {
     if (!hasTagName(colgroupTag))
         return nullptr;
@@ -95,7 +106,7 @@ const StylePropertySet* HTMLTableColElement::additionalPresentationAttributeStyl
 
 void HTMLTableColElement::setSpan(unsigned n)
 {
-    setUnsignedIntegralAttribute(spanAttr, n);
+    setUnsignedIntegralAttribute(spanAttr, n ? n : 1);
 }
 
 const AtomicString& HTMLTableColElement::width() const
@@ -103,4 +114,4 @@ const AtomicString& HTMLTableColElement::width() const
     return getAttribute(widthAttr);
 }
 
-}
+} // namespace blink

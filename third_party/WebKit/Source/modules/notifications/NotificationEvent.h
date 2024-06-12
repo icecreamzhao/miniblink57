@@ -8,42 +8,49 @@
 #include "modules/EventModules.h"
 #include "modules/ModulesExport.h"
 #include "modules/notifications/Notification.h"
-#include "modules/notifications/NotificationEventInit.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
+class NotificationEventInit;
+
 class MODULES_EXPORT NotificationEvent final : public ExtendableEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<NotificationEvent> create()
+    static NotificationEvent* create(const AtomicString& type,
+        const NotificationEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new NotificationEvent);
+        return new NotificationEvent(type, initializer);
     }
-    static PassRefPtrWillBeRawPtr<NotificationEvent> create(const AtomicString& type, const NotificationEventInit& initializer)
+    static NotificationEvent* create(const AtomicString& type,
+        const NotificationEventInit& initializer,
+        WaitUntilObserver* observer)
     {
-        return adoptRefWillBeNoop(new NotificationEvent(type, initializer));
-    }
-    static PassRefPtrWillBeRawPtr<NotificationEvent> create(const AtomicString& type, const NotificationEventInit& initializer, WaitUntilObserver* observer)
-    {
-        return adoptRefWillBeNoop(new NotificationEvent(type, initializer, observer));
+        return new NotificationEvent(type, initializer, observer);
     }
 
     ~NotificationEvent() override;
 
-    Notification* notification() const { return m_notification.get(); }
+    Notification* getNotification() const { return m_notification.get(); }
+    String action() const { return m_action; }
+    String reply() const { return m_reply; }
 
+    // ExtendableEvent interface.
     const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    NotificationEvent();
     NotificationEvent(const AtomicString& type, const NotificationEventInit&);
-    NotificationEvent(const AtomicString& type, const NotificationEventInit&, WaitUntilObserver*);
+    NotificationEvent(const AtomicString& type,
+        const NotificationEventInit&,
+        WaitUntilObserver*);
 
-    PersistentWillBeMember<Notification> m_notification;
+    Member<Notification> m_notification;
+    String m_action;
+    String m_reply;
 };
 
 } // namespace blink

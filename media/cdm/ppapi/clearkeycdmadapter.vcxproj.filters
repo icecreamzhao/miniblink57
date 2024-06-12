@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..\..\..\media\cdm">
+      <UniqueIdentifier>{08C03585-B9EE-FB2A-556E-D3ACFEB351AF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..\media">
+      <UniqueIdentifier>{E11ADCDE-E6FE-B6A0-CC9C-8C84B28D11DB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..\..">
+      <UniqueIdentifier>{BC2D405D-5A7E-241B-15FC-441581082017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\..">
+      <UniqueIdentifier>{A8A4AA46-5437-4AB8-6540-F14ED994B38E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..">
+      <UniqueIdentifier>{78245A82-158D-7D20-54A6-7C428D0A7B36}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="../../../media/cdm/cdm_helpers.cc">
+      <Filter>..\..\..\media\cdm</Filter>
+    </CustomBuild>
+    <None Include="../../../media/cdm/cdm_helpers.h">
+      <Filter>..\..\..\media\cdm</Filter>
+    </None>
+    <None Include="../../../media/cdm/cdm_wrapper.h">
+      <Filter>..\..\..\media\cdm</Filter>
+    </None>
+    <CustomBuild Include="cdm_file_io_impl.cc" />
+    <None Include="cdm_file_io_impl.h" />
+    <CustomBuild Include="cdm_logging.cc" />
+    <None Include="cdm_logging.h" />
+    <None Include="linked_ptr.h" />
+    <CustomBuild Include="ppapi_cdm_adapter.cc" />
+    <None Include="ppapi_cdm_adapter.h" />
+    <CustomBuild Include="ppapi_cdm_buffer.cc" />
+    <None Include="ppapi_cdm_buffer.h" />
+    <CustomBuild Include="../../../media/cdm/supported_cdm_versions.cc">
+      <Filter>..\..\..\media\cdm</Filter>
+    </CustomBuild>
+    <None Include="../../../media/cdm/supported_cdm_versions.h">
+      <Filter>..\..\..\media\cdm</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,10 +5,10 @@
  * found in the LICENSE file.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "SkEvent.h"
 #import "SkNSView.h"
 #import "SkOSMenu.h"
-#import "SkEvent.h"
+#import <Cocoa/Cocoa.h>
 @interface SkOptionItem : NSObject {
     NSCell* fCell;
     const SkOSMenu::Item* fItem;

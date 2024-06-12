@@ -29,20 +29,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// https://notifications.spec.whatwg.org/#enumdef-notificationpermission
+
+enum NotificationPermission {
+    "default",
+    "denied",
+    "granted"
+};
+
+// https://notifications.spec.whatwg.org/#api
+
 [
-    GarbageCollected,
-    ActiveDOMObject,
-    Constructor(DOMString title, optional NotificationOptions options),
+    ActiveScriptWrappable,
     ConstructorCallWith=ExecutionContext,
+    Constructor(DOMString title, optional NotificationOptions options),
+    DependentLifetime,
     Exposed=(Window,Worker),
     MeasureAs=NotificationCreated,
     RaisesException=Constructor,
     RuntimeEnabled=Notifications,
 ] interface Notification : EventTarget {
-    [CallWith=ExecutionContext, MeasureAs=NotificationPermission] static readonly attribute DOMString permission;
-    [CallWith=ExecutionContext, MeasureAs=NotificationPermissionRequested] static void requestPermission(optional NotificationPermissionCallback callback);
+    [CallWith=ExecutionContext, MeasureAs=NotificationPermission] static readonly attribute NotificationPermission permission;
 
-    // FIXME: Implement the Notification.get() method.
+    [CallWith=ScriptState, Exposed=Window, MeasureAs=NotificationPermissionRequested] static Promise<NotificationPermission> requestPermission(optional NotificationPermissionCallback deprecatedCallback);
+
+    static readonly attribute unsigned long maxActions;
 
     attribute EventHandler onclick;
     [MeasureAs=NotificationShowEvent] attribute EventHandler onshow;
@@ -54,11 +65,17 @@
     readonly attribute DOMString lang;
     readonly attribute DOMString body;
     readonly attribute DOMString tag;
-    readonly attribute DOMString icon;
+    [RuntimeEnabled=NotificationContentImage] readonly attribute USVString image;
+    readonly attribute USVString icon;
+    [RuntimeEnabled=NotificationBadge] readonly attribute USVString badge;
 
-    [RuntimeEnabled=NotificationExperimental] readonly attribute sequence<unsigned long>? vibrate;
+    [SameObject, SaveSameObject] readonly attribute FrozenArray<unsigned long> vibrate;
+    readonly attribute DOMTimeStamp timestamp;
+    readonly attribute boolean renotify;
     readonly attribute boolean silent;
-    [CallWith=ScriptState] readonly attribute any data;
+    readonly attribute boolean requireInteraction;
+    [CallWith=ScriptState, SameObject, SaveSameObject] readonly attribute any data;
+    [CallWith=ScriptState, SameObject, SaveSameObject] readonly attribute FrozenArray<NotificationAction> actions;
 
     [MeasureAs=NotificationClosed] void close();
 };

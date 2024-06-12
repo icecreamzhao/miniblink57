@@ -10,58 +10,51 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediastream/MediaStreamEvent.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<MediaStreamEvent> MediaStreamEvent::create()
+MediaStreamEvent* MediaStreamEvent::create(const AtomicString& type,
+    MediaStream* stream)
 {
-    return adoptRefWillBeNoop(new MediaStreamEvent);
+    return new MediaStreamEvent(type, stream);
 }
 
-PassRefPtrWillBeRawPtr<MediaStreamEvent> MediaStreamEvent::create(const AtomicString& type, bool canBubble, bool cancelable, MediaStream* stream)
+MediaStreamEvent* MediaStreamEvent::create(
+    const AtomicString& type,
+    const MediaStreamEventInit& initializer)
 {
-    return adoptRefWillBeNoop(new MediaStreamEvent(type, canBubble, cancelable, stream));
+    return new MediaStreamEvent(type, initializer);
 }
 
-PassRefPtrWillBeRawPtr<MediaStreamEvent> MediaStreamEvent::create(const AtomicString& type, const MediaStreamEventInit& initializer)
-{
-    return adoptRefWillBeNoop(new MediaStreamEvent(type, initializer));
-}
-
-MediaStreamEvent::MediaStreamEvent()
-{
-}
-
-MediaStreamEvent::MediaStreamEvent(const AtomicString& type, bool canBubble, bool cancelable, MediaStream* stream)
-    : Event(type, canBubble, cancelable)
+MediaStreamEvent::MediaStreamEvent(const AtomicString& type,
+    MediaStream* stream)
+    : Event(type, false, false)
     , m_stream(stream)
 {
 }
 
-MediaStreamEvent::MediaStreamEvent(const AtomicString& type, const MediaStreamEventInit& initializer)
+MediaStreamEvent::MediaStreamEvent(const AtomicString& type,
+    const MediaStreamEventInit& initializer)
     : Event(type, initializer)
 {
     if (initializer.hasStream())
         m_stream = initializer.stream();
 }
 
-MediaStreamEvent::~MediaStreamEvent()
-{
-}
+MediaStreamEvent::~MediaStreamEvent() { }
 
 MediaStream* MediaStreamEvent::stream() const
 {
@@ -86,4 +79,3 @@ DEFINE_TRACE(MediaStreamEvent)
 }
 
 } // namespace blink
-

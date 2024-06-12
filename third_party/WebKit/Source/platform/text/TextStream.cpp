@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/TextStream.h"
 
 #include "platform/LayoutUnit.h"
@@ -41,11 +40,14 @@
 
 namespace blink {
 
-static const size_t printBufferSize = 100; // large enough for any integer or floating point value in string format, including trailing null character
+// large enough for any integer or floating point value in string format,
+// including trailing null character
+static const size_t printBufferSize = 100;
 
 static inline bool hasFractions(double val)
 {
-    // We use 0.011 to more than match the number of significant digits we print out when dumping the render tree.
+    // We use 0.011 to more than match the number of significant digits we print
+    // out when dumping the render tree.
     static const double s_epsilon = 0.011;
     int ival = static_cast<int>(round(val));
     double dval = static_cast<double>(ival);
@@ -124,7 +126,8 @@ TextStream& TextStream::operator<<(const String& string)
     return *this;
 }
 
-TextStream& TextStream::operator<<(const FormatNumberRespectingIntegers& numberToFormat)
+TextStream& TextStream::operator<<(
+    const FormatNumberRespectingIntegers& numberToFormat)
 {
     if (hasFractions(numberToFormat.value))
         return *this << numberToFormat.value;
@@ -142,7 +145,8 @@ String TextStream::release()
 
 TextStream& operator<<(TextStream& ts, const IntRect& r)
 {
-    return ts << "at (" << r.x() << "," << r.y() << ") size " << r.width() << "x" << r.height();
+    return ts << "at (" << r.x() << "," << r.y() << ") size " << r.width() << "x"
+              << r.height();
 }
 
 TextStream& operator<<(TextStream& ts, const IntPoint& p)
@@ -194,11 +198,10 @@ TextStream& operator<<(TextStream& ts, const LayoutSize& size)
     return ts << FloatSize(size);
 }
 
-
 void writeIndent(TextStream& ts, int indent)
 {
     for (int i = 0; i != indent; ++i)
         ts << "  ";
 }
 
-}
+} // namespace blink

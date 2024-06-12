@@ -2,15 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/platform/WebRTCOfferOptions.h"
 
-#include "platform/mediastream/RTCOfferOptions.h"
+#include "platform/peerconnection/RTCOfferOptionsPlatform.h"
 
 namespace blink {
 
-WebRTCOfferOptions::WebRTCOfferOptions(RTCOfferOptions* options)
+WebRTCOfferOptions::WebRTCOfferOptions(RTCOfferOptionsPlatform* options)
     : m_private(options)
+{
+}
+
+WebRTCOfferOptions::WebRTCOfferOptions(int32_t offerToReceiveAudio,
+    int32_t offerToReceiveVideo,
+    bool voiceActivityDetection,
+    bool iceRestart)
+    : m_private(RTCOfferOptionsPlatform::create(offerToReceiveAudio,
+        offerToReceiveVideo,
+        voiceActivityDetection,
+        iceRestart))
 {
 }
 

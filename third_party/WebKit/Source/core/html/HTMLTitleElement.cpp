@@ -20,16 +20,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLTitleElement.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "core/HTMLNames.h"
 #include "core/dom/ChildListMutationScope.h"
 #include "core/dom/Document.h"
 #include "core/dom/Text.h"
 #include "core/style/ComputedStyle.h"
 #include "core/style/StyleInheritedData.h"
+#ifdef TENCENT_FITSCREEN
+//#include "tencent/third_party/WebKit/SpecialSiteDetect.h"
+#endif
+#include "wtf/AutoReset.h"
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
@@ -44,10 +47,11 @@ inline HTMLTitleElement::HTMLTitleElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLTitleElement)
 
-Node::InsertionNotificationRequest HTMLTitleElement::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLTitleElement::insertedInto(
+    ContainerNode* insertionPoint)
 {
     HTMLElement::insertedInto(insertionPoint);
-    if (inDocument() && !isInShadowTree())
+    if (isInDocumentTree())
         document().setTitleElement(this);
     return InsertionDone;
 }
@@ -55,14 +59,17 @@ Node::InsertionNotificationRequest HTMLTitleElement::insertedInto(ContainerNode*
 void HTMLTitleElement::removedFrom(ContainerNode* insertionPoint)
 {
     HTMLElement::removedFrom(insertionPoint);
-    if (insertionPoint->inDocument() && !insertionPoint->isInShadowTree())
+    if (insertionPoint->isInDocumentTree())
         document().removeTitle(this);
 }
 
 void HTMLTitleElement::childrenChanged(const ChildrenChange& change)
 {
+// #ifdef TENCENT_FITSCREEN
+//     tencent::SpecialSiteDetect::inst()->process(this, text());
+// #endif
     HTMLElement::childrenChanged(change);
-    if (inDocument() && !isInShadowTree() && !m_ignoreTitleUpdatesWhenChildrenChange)
+    if (isInDocumentTree() && !m_ignoreTitleUpdatesWhenChildrenChange)
         document().setTitleElement(this);
 }
 
@@ -70,7 +77,7 @@ String HTMLTitleElement::text() const
 {
     StringBuilder result;
 
-    for (Node *n = firstChild(); n; n = n->nextSibling()) {
+    for (Node* n = firstChild(); n; n = n->nextSibling()) {
         if (n->isTextNode())
             result.append(toText(n)->data());
     }
@@ -78,18 +85,21 @@ String HTMLTitleElement::text() const
     return result.toString();
 }
 
-void HTMLTitleElement::setText(const String &value)
+void HTMLTitleElement::setText(const String& value)
 {
-    RefPtrWillBeRawPtr<Node> protectFromMutationEvents(this);
     ChildListMutationScope mutation(*this);
 
-    // Avoid calling Document::setTitleElement() during intermediate steps.
-    m_ignoreTitleUpdatesWhenChildrenChange = !value.isEmpty();
-    removeChildren(OmitSubtreeModifiedEvent);
-    m_ignoreTitleUpdatesWhenChildrenChange = false;
+    {
+        // Avoid calling Document::setTitleElement() during intermediate steps.
+        AutoReset<bool> inhibitTitleUpdateScope(
+            &m_ignoreTitleUpdatesWhenChildrenChange, !value.isEmpty());
+        removeChildren(OmitSubtreeModifiedEvent);
+    }
 
-    if (!value.isEmpty())
-        appendChild(document().createTextNode(value.impl()), IGNORE_EXCEPTION);
+    if (!value.isEmpty()) {
+        appendChild(document().createTextNode(value.impl()),
+            IGNORE_EXCEPTION_FOR_TESTING);
+    }
 }
 
-}
+} // namespace blink

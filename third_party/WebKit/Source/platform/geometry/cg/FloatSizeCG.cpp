@@ -24,14 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/FloatSize.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
-FloatSize::FloatSize(const CGSize& s) : m_width(s.width), m_height(s.height)
+FloatSize::FloatSize(const CGSize& s)
+    : m_width(s.width)
+    , m_height(s.height)
 {
 }
 
@@ -40,4 +41,4 @@ FloatSize::operator CGSize() const
     return CGSizeMake(m_width, m_height);
 }
 
-}
+} // namespace blink

@@ -10,17 +10,17 @@
 namespace v8 {
 namespace internal {
 
-void BranchIfIterableWithOriginalKeyOrValueMapIterator(
-    compiler::CodeAssemblerState* state, compiler::TNode<Object> iterable,
-    compiler::TNode<Context> context, compiler::CodeAssemblerLabel* if_true,
-    compiler::CodeAssemblerLabel* if_false);
+    void BranchIfIterableWithOriginalKeyOrValueMapIterator(
+        compiler::CodeAssemblerState* state, compiler::TNode<Object> iterable,
+        compiler::TNode<Context> context, compiler::CodeAssemblerLabel* if_true,
+        compiler::CodeAssemblerLabel* if_false);
 
-void BranchIfIterableWithOriginalValueSetIterator(
-    compiler::CodeAssemblerState* state, compiler::TNode<Object> iterable,
-    compiler::TNode<Context> context, compiler::CodeAssemblerLabel* if_true,
-    compiler::CodeAssemblerLabel* if_false);
+    void BranchIfIterableWithOriginalValueSetIterator(
+        compiler::CodeAssemblerState* state, compiler::TNode<Object> iterable,
+        compiler::TNode<Context> context, compiler::CodeAssemblerLabel* if_true,
+        compiler::CodeAssemblerLabel* if_false);
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_BUILTINS_BUILTINS_COLLECTIONS_GEN_H_
+#endif // V8_BUILTINS_BUILTINS_COLLECTIONS_GEN_H_

@@ -75,14 +75,14 @@ namespace double_conversion {
     //     false.
     // For both modes the buffer must be large enough to hold the result.
     bool FastDtoa(double d,
-                  FastDtoaMode mode,
-                  int requested_digits,
-                  Vector<char> buffer,
-                  int* length,
-                  int* decimal_point);
+        FastDtoaMode mode,
+        int requested_digits,
+        Vector<char> buffer,
+        int* length,
+        int* decimal_point);
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF
 
-#endif  // DOUBLE_CONVERSION_FAST_DTOA_H_
+#endif // DOUBLE_CONVERSION_FAST_DTOA_H_

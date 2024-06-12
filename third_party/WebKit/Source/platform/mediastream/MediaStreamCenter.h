@@ -34,9 +34,10 @@
 #include "platform/PlatformExport.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebMediaStreamCenterClient.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
@@ -45,10 +46,12 @@ class MediaStreamComponent;
 class MediaStreamDescriptor;
 class WebMediaStream;
 class WebMediaStreamCenter;
-class WebMediaStreamTrack;
 
-class PLATFORM_EXPORT MediaStreamCenter final : public WebMediaStreamCenterClient {
+class PLATFORM_EXPORT MediaStreamCenter final
+    : public WebMediaStreamCenterClient {
+    USING_FAST_MALLOC(MediaStreamCenter);
     WTF_MAKE_NONCOPYABLE(MediaStreamCenter);
+
 public:
     ~MediaStreamCenter() override;
 
@@ -56,8 +59,10 @@ public:
 
     void didCreateMediaStreamTrack(MediaStreamComponent*);
     void didSetMediaStreamTrackEnabled(MediaStreamComponent*);
+    void didSetContentHint(MediaStreamComponent*);
     bool didStopMediaStreamTrack(MediaStreamComponent*);
-    PassOwnPtr<AudioSourceProvider> createWebAudioSourceFromMediaStreamTrack(MediaStreamComponent*);
+    std::unique_ptr<AudioSourceProvider> createWebAudioSourceFromMediaStreamTrack(
+        MediaStreamComponent*);
 
     void didCreateMediaStream(MediaStreamDescriptor*);
     void didCreateMediaStreamAndTracks(MediaStreamDescriptor*);
@@ -71,7 +76,7 @@ public:
 private:
     MediaStreamCenter();
 
-    OwnPtr<WebMediaStreamCenter> m_private;
+    std::unique_ptr<WebMediaStreamCenter> m_private;
 };
 
 } // namespace blink

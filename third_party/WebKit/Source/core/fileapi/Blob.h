@@ -31,16 +31,16 @@
 #ifndef Blob_h
 #define Blob_h
 
+#include "bindings/core/v8/ArrayBufferOrArrayBufferViewOrBlobOrUSVString.h"
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "bindings/core/v8/UnionTypesCore.h"
 #include "core/CoreExport.h"
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMArrayBufferView.h"
 #include "core/html/URLRegistry.h"
+#include "core/imagebitmap/ImageBitmapSource.h"
 #include "platform/blob/BlobData.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -49,36 +49,56 @@ class BlobPropertyBag;
 class ExceptionState;
 class ExecutionContext;
 
-class CORE_EXPORT Blob : public GarbageCollectedFinalized<Blob>, public ScriptWrappable, public URLRegistrable {
+class CORE_EXPORT Blob : public GarbageCollectedFinalized<Blob>,
+                         public ScriptWrappable,
+                         public URLRegistrable,
+                         public ImageBitmapSource {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static Blob* create(ExceptionState&)
+    static Blob* create(ExecutionContext*, ExceptionState&)
     {
         return new Blob(BlobDataHandle::create());
     }
 
-    static Blob* create(const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrString>&, const BlobPropertyBag&, ExceptionState&);
+    static Blob* create(
+        ExecutionContext*,
+        const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>&,
+        const BlobPropertyBag&,
+        ExceptionState&);
 
     static Blob* create(PassRefPtr<BlobDataHandle> blobDataHandle)
     {
-        return new Blob(blobDataHandle);
+        return new Blob(std::move(blobDataHandle));
     }
 
-    virtual ~Blob();
+    static Blob* create(const unsigned char* data,
+        size_t bytes,
+        const String& contentType);
+
+    ~Blob() override;
 
     virtual unsigned long long size() const { return m_blobDataHandle->size(); }
-    virtual Blob* slice(long long start, long long end, const String& contentType, ExceptionState&) const;
+    virtual Blob* slice(long long start,
+        long long end,
+        const String& contentType,
+        ExceptionState&) const;
 
-    // To allow ExceptionState to be passed in last, manually enumerate the optional argument overloads.
+    // To allow ExceptionState to be passed in last, manually enumerate the
+    // optional argument overloads.
     Blob* slice(ExceptionState& exceptionState) const
     {
-        return slice(0, std::numeric_limits<long long>::max(), String(), exceptionState);
+        return slice(0, std::numeric_limits<long long>::max(), String(),
+            exceptionState);
     }
     Blob* slice(long long start, ExceptionState& exceptionState) const
     {
-        return slice(start, std::numeric_limits<long long>::max(), String(), exceptionState);
+        return slice(start, std::numeric_limits<long long>::max(), String(),
+            exceptionState);
     }
-    Blob* slice(long long start, long long end, ExceptionState& exceptionState) const
+    Blob* slice(long long start,
+        long long end,
+        ExceptionState& exceptionState) const
     {
         return slice(start, end, String(), exceptionState);
     }
@@ -92,46 +112,35 @@ public:
     virtual bool isFile() const { return false; }
     // Only true for File instances that are backed by platform files.
     virtual bool hasBackingFile() const { return false; }
-    bool hasBeenClosed() const { return m_hasBeenClosed; }
+    bool isClosed() const { return m_isClosed; }
 
     // Used by the JavaScript Blob and File constructors.
     virtual void appendTo(BlobData&) const;
 
     // URLRegistrable to support PublicURLs.
-    virtual URLRegistry& registry() const override final;
+    URLRegistry& registry() const final;
+
+    // ImageBitmapSource implementation
+    bool isBlob() const override { return true; }
 
     DEFINE_INLINE_TRACE() { }
 
 protected:
     explicit Blob(PassRefPtr<BlobDataHandle>);
 
-    template<typename ItemType>
-    static void populateBlobData(BlobData* blobData, const HeapVector<ItemType>& parts, bool normalizeLineEndingsToNative)
-    {
-        for (size_t i = 0; i < parts.size(); ++i) {
-            const ItemType& item = parts[i];
-            if (item.isArrayBuffer()) {
-                RefPtr<DOMArrayBuffer> arrayBuffer = item.getAsArrayBuffer();
-                blobData->appendBytes(arrayBuffer->data(), arrayBuffer->byteLength());
-            } else if (item.isArrayBufferView()) {
-                RefPtr<DOMArrayBufferView> arrayBufferView = item.getAsArrayBufferView();
-                blobData->appendBytes(arrayBufferView->baseAddress(), arrayBufferView->byteLength());
-            } else if (item.isBlob()) {
-                item.getAsBlob()->appendTo(*blobData);
-            } else if (item.isString()) {
-                blobData->appendText(item.getAsString(), normalizeLineEndingsToNative);
-            } else {
-                ASSERT_NOT_REACHED();
-            }
-        }
-    }
+    static void populateBlobData(
+        BlobData*,
+        const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>& parts,
+        bool normalizeLineEndingsToNative);
+    static void clampSliceOffsets(long long size,
+        long long& start,
+        long long& end);
 
-    static void clampSliceOffsets(long long size, long long& start, long long& end);
 private:
     Blob();
 
     RefPtr<BlobDataHandle> m_blobDataHandle;
-    bool m_hasBeenClosed;
+    bool m_isClosed;
 };
 
 } // namespace blink

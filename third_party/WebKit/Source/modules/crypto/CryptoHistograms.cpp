@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/crypto/CryptoHistograms.h"
 
 #include "core/frame/UseCounter.h"
@@ -54,14 +53,16 @@ static UseCounter::Feature algorithmIdToFeature(WebCryptoAlgorithmId id)
     return static_cast<UseCounter::Feature>(0);
 }
 
-static void histogramAlgorithmId(ExecutionContext* context, WebCryptoAlgorithmId algorithmId)
+static void histogramAlgorithmId(ExecutionContext* context,
+    WebCryptoAlgorithmId algorithmId)
 {
     UseCounter::Feature feature = algorithmIdToFeature(algorithmId);
     if (feature)
         UseCounter::count(context, feature);
 }
 
-void histogramAlgorithm(ExecutionContext* context, const WebCryptoAlgorithm& algorithm)
+void histogramAlgorithm(ExecutionContext* context,
+    const WebCryptoAlgorithm& algorithm)
 {
     histogramAlgorithmId(context, algorithm.id());
 
@@ -126,7 +127,9 @@ void histogramKey(ExecutionContext* context, const WebCryptoKey& key)
     }
 }
 
-void histogramAlgorithmAndKey(ExecutionContext* context, const WebCryptoAlgorithm& algorithm, const WebCryptoKey& key)
+void histogramAlgorithmAndKey(ExecutionContext* context,
+    const WebCryptoAlgorithm& algorithm,
+    const WebCryptoKey& key)
 {
     // Note that the algorithm ID for |algorithm| and |key| will usually be the
     // same. This is OK because UseCounter only increments things once per the

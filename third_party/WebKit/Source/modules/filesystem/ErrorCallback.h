@@ -35,15 +35,15 @@
 
 namespace blink {
 
-class FileError;
+class DOMException;
 
 class ErrorCallback : public GarbageCollectedFinalized<ErrorCallback> {
 public:
     virtual ~ErrorCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
-    virtual void handleEvent(FileError*) = 0;
+    virtual void handleEvent(DOMException*) = 0;
 };
 
-} // namespace
+} // namespace blink
 
 #endif // ErrorCallback_h

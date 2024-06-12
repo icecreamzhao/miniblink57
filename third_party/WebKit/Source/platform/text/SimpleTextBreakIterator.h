@@ -65,13 +65,15 @@ static bool isWordBreak(UChar c)
     return !isAlphaOrNum(c);
 }
 
+// 似乎icu里面，0的next是0，0的previous是-1.
+
 // 拆分单词。中文的话一字就是一个单词
 struct WordBreakIterator : TextBreakIterator {
     WordBreakIterator()
     {
     }
 
-    ~WordBreakIterator()
+    ~WordBreakIterator() override
     {
     }
 
@@ -173,7 +175,7 @@ struct CharBreakIterator : TextBreakIterator {
     {
     }
 
-    ~CharBreakIterator()
+    ~CharBreakIterator() override
     {
     }
 
@@ -186,7 +188,7 @@ struct CharBreakIterator : TextBreakIterator {
     virtual int next() override
     {
         if (m_currentPos >= m_length)
-            return m_length - 1;
+            return /*m_length*/ - 1;
         ++m_currentPos;
         return m_currentPos;
     }
@@ -203,6 +205,11 @@ struct CharBreakIterator : TextBreakIterator {
 };
 
 struct LineBreakIterator : TextBreakIterator {
+    ~LineBreakIterator() override
+    {
+
+    }
+
     virtual int first() override
     {
         m_currentPos = 0;
@@ -239,7 +246,7 @@ struct SentenceBreakIterator : TextBreakIterator {
     {
     }
 
-    ~SentenceBreakIterator()
+    ~SentenceBreakIterator() override
     {
     }
 
@@ -271,7 +278,11 @@ struct SentenceBreakIterator : TextBreakIterator {
     virtual int previous() override
     {
         --m_currentPos;
-        if (m_currentPos <= 0) {
+
+        if (m_currentPos == 0)
+            return m_currentPos;
+        
+        if (m_currentPos < 0) {
             m_currentPos = -1;
             return m_currentPos;
         }
@@ -290,4 +301,4 @@ struct SentenceBreakIterator : TextBreakIterator {
 
 } // blink 
 
-#endif SimpleTextBreakIterator_h
+#endif // SimpleTextBreakIterator_h

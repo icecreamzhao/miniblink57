@@ -5,25 +5,34 @@
 #ifndef FilterPainter_h
 #define FilterPainter_h
 
-#include "core/paint/DeprecatedPaintLayerPaintingInfo.h"
-#include "wtf/OwnPtr.h"
+#include "core/paint/PaintLayerPaintingInfo.h"
+#include "wtf/Allocator.h"
+#include <memory>
 
 namespace blink {
 
 class ClipRect;
 class GraphicsContext;
-class DeprecatedPaintLayer;
+class PaintLayer;
 class LayerClipRecorder;
+class LayoutObject;
 
 class FilterPainter {
+    STACK_ALLOCATED();
+
 public:
-    FilterPainter(DeprecatedPaintLayer&, GraphicsContext*, const LayoutPoint& offsetFromRoot, const ClipRect&, DeprecatedPaintLayerPaintingInfo&, PaintLayerFlags paintFlags, LayoutRect& rootRelativeBounds, bool& rootRelativeBoundsComputed);
+    FilterPainter(PaintLayer&,
+        GraphicsContext&,
+        const LayoutPoint& offsetFromRoot,
+        const ClipRect&,
+        PaintLayerPaintingInfo&,
+        PaintLayerFlags paintFlags);
     ~FilterPainter();
 
 private:
     bool m_filterInProgress;
-    GraphicsContext* m_context;
-    OwnPtr<LayerClipRecorder> m_clipRecorder;
+    GraphicsContext& m_context;
+    std::unique_ptr<LayerClipRecorder> m_clipRecorder;
     LayoutObject* m_layoutObject;
 };
 

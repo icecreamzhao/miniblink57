@@ -45,20 +45,21 @@ namespace blink {
 
 class CloseEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CloseEvent> create()
+    static CloseEvent* create() { return new CloseEvent(); }
+
+    static CloseEvent* create(bool wasClean,
+        unsigned short code,
+        const String& reason)
     {
-        return adoptRefWillBeNoop(new CloseEvent());
+        return new CloseEvent(wasClean, code, reason);
     }
 
-    static PassRefPtrWillBeRawPtr<CloseEvent> create(bool wasClean, unsigned short code, const String& reason)
+    static CloseEvent* create(const AtomicString& type,
+        const CloseEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new CloseEvent(wasClean, code, reason));
-    }
-
-    static PassRefPtrWillBeRawPtr<CloseEvent> create(const AtomicString& type, const CloseEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new CloseEvent(type, initializer));
+        return new CloseEvent(type, initializer);
     }
 
     bool wasClean() const { return m_wasClean; }
@@ -66,7 +67,10 @@ public:
     String reason() const { return m_reason; }
 
     // Event function.
-    const AtomicString& interfaceName() const override { return EventNames::CloseEvent; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventNames::CloseEvent;
+    }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { Event::trace(visitor); }
 
@@ -74,13 +78,17 @@ private:
     CloseEvent()
         : Event(EventTypeNames::close, false, false)
         , m_wasClean(false)
-        , m_code(0) { }
+        , m_code(0)
+    {
+    }
 
     CloseEvent(bool wasClean, int code, const String& reason)
         : Event(EventTypeNames::close, false, false)
         , m_wasClean(wasClean)
         , m_code(code)
-        , m_reason(reason) { }
+        , m_reason(reason)
+    {
+    }
 
     CloseEvent(const AtomicString& type, const CloseEventInit& initializer);
 

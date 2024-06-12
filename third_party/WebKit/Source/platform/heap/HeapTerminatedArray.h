@@ -11,9 +11,11 @@
 
 namespace blink {
 
-template<typename T>
+template <typename T>
 class HeapTerminatedArray : public TerminatedArray<T> {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+    IS_GARBAGE_COLLECTED_TYPE();
+
 public:
     using TerminatedArray<T>::begin;
     using TerminatedArray<T>::end;
@@ -25,20 +27,27 @@ public:
     }
 
 private:
-    // Allocator describes how HeapTerminatedArrayBuilder should create new intances
-    // of TerminateArray and manage their lifetimes.
-    struct Allocator {
-        typedef HeapTerminatedArray* PassPtr;
-        typedef RawPtr<HeapTerminatedArray> Ptr;
+    // Allocator describes how HeapTerminatedArrayBuilder should create new
+    // instances of HeapTerminatedArray and manage their lifetimes.
+    struct Allocator final {
+        STATIC_ONLY(Allocator);
+        using PassPtr = HeapTerminatedArray*;
+        using Ptr = Member<HeapTerminatedArray>;
+
+        static PassPtr release(Ptr& ptr) { return ptr; }
 
         static PassPtr create(size_t capacity)
         {
-            return reinterpret_cast<HeapTerminatedArray*>(Heap::allocate<HeapTerminatedArray>(capacity * sizeof(T), IsEagerlyFinalizedType<T>::value));
+            return reinterpret_cast<HeapTerminatedArray*>(
+                ThreadHeap::allocate<HeapTerminatedArray>(
+                    capacity * sizeof(T), IsEagerlyFinalizedType<T>::value));
         }
 
         static PassPtr resize(PassPtr ptr, size_t capacity)
         {
-            return reinterpret_cast<HeapTerminatedArray*>(Heap::reallocate<HeapTerminatedArray>(ptr, capacity * sizeof(T)));
+            return reinterpret_cast<HeapTerminatedArray*>(
+                ThreadHeap::reallocate<HeapTerminatedArray>(ptr,
+                    capacity * sizeof(T)));
         }
     };
 
@@ -46,10 +55,11 @@ private:
     // HeapTerminatedArrayBuilder by pointer casting.
     HeapTerminatedArray();
 
-    template<typename U, template <typename> class> friend class WTF::TerminatedArrayBuilder;
+    template <typename U, template <typename> class>
+    friend class WTF::TerminatedArrayBuilder;
 };
 
-template<typename T>
+template <typename T>
 class TraceEagerlyTrait<HeapTerminatedArray<T>> {
 public:
     static const bool value = TraceEagerlyTrait<T>::value;

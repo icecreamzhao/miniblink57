@@ -6,7 +6,7 @@
 #define DeviceSingleWindowEventController_h
 
 #include "core/CoreExport.h"
-#include "core/frame/DOMWindowLifecycleObserver.h"
+#include "core/frame/LocalDOMWindow.h"
 #include "core/frame/PlatformEventController.h"
 #include "platform/heap/Handle.h"
 
@@ -15,33 +15,36 @@ namespace blink {
 class Document;
 class Event;
 
-class CORE_EXPORT DeviceSingleWindowEventController : public NoBaseWillBeGarbageCollectedFinalized<DeviceSingleWindowEventController>, public PlatformEventController, public DOMWindowLifecycleObserver {
+class CORE_EXPORT DeviceSingleWindowEventController
+    : public GarbageCollectedFinalized<DeviceSingleWindowEventController>,
+      public PlatformEventController,
+      public LocalDOMWindow::EventListenerObserver {
 public:
     virtual ~DeviceSingleWindowEventController();
 
     // Inherited from DeviceEventControllerBase.
-    virtual void didUpdateData() override;
+    void didUpdateData() override;
     DECLARE_VIRTUAL_TRACE();
 
-    // Inherited from DOMWindowLifecycleObserver.
-    virtual void didAddEventListener(LocalDOMWindow*, const AtomicString&) override;
-    virtual void didRemoveEventListener(LocalDOMWindow*, const AtomicString&) override;
-    virtual void didRemoveAllEventListeners(LocalDOMWindow*) override;
+    // Inherited from LocalDOMWindow::EventListenerObserver.
+    void didAddEventListener(LocalDOMWindow*, const AtomicString&) override;
+    void didRemoveEventListener(LocalDOMWindow*, const AtomicString&) override;
+    void didRemoveAllEventListeners(LocalDOMWindow*) override;
 
 protected:
     explicit DeviceSingleWindowEventController(Document&);
 
     Document& document() const { return *m_document; }
 
-    void dispatchDeviceEvent(const PassRefPtrWillBeRawPtr<Event>);
+    void dispatchDeviceEvent(Event*);
 
-    virtual PassRefPtrWillBeRawPtr<Event> lastEvent() const = 0;
+    virtual Event* lastEvent() const = 0;
     virtual const AtomicString& eventTypeName() const = 0;
     virtual bool isNullEvent(Event*) const = 0;
 
 private:
     bool m_needsCheckingNullEvents;
-    RawPtrWillBeMember<Document> m_document;
+    Member<Document> m_document;
 };
 
 } // namespace blink

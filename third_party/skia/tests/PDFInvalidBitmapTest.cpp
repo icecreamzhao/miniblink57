@@ -21,31 +21,39 @@ namespace {
 // cannot be generated.
 class InvalidPixelRef : public SkPixelRef {
 public:
-    InvalidPixelRef(const SkImageInfo& info) : SkPixelRef(info) {}
+    InvalidPixelRef(const SkImageInfo& info)
+        : SkPixelRef(info)
+    {
+    }
+
 private:
     bool onNewLockPixels(LockRec*) override { return false; }
-    void onUnlockPixels() override {
+    void onUnlockPixels() override
+    {
         SkDEBUGFAIL("InvalidPixelRef can't be locked");
     }
 };
 
-SkBitmap make_invalid_bitmap(const SkImageInfo& imageInfo) {
+SkBitmap make_invalid_bitmap(const SkImageInfo& imageInfo)
+{
     SkBitmap bitmap;
     bitmap.setInfo(imageInfo);
-    bitmap.setPixelRef(SkNEW_ARGS(InvalidPixelRef, (imageInfo)))->unref();
+    bitmap.setPixelRef(new InvalidPixelRef(imageInfo))->unref();
     return bitmap;
 }
 
-SkBitmap make_invalid_bitmap(SkColorType colorType) {
+SkBitmap make_invalid_bitmap(SkColorType colorType)
+{
     return make_invalid_bitmap(
         SkImageInfo::Make(100, 100, colorType, kPremul_SkAlphaType));
 }
 
-}  // namespace
+} // namespace
 
-DEF_TEST(PDFInvalidBitmap, reporter) {
+DEF_TEST(PDFInvalidBitmap, reporter)
+{
     SkDynamicMemoryWStream stream;
-    SkAutoTUnref<SkDocument> document(SkDocument::CreatePDF(&stream));
+    sk_sp<SkDocument> document(SkDocument::MakePDF(&stream));
     SkCanvas* canvas = document->beginPage(100, 100);
 
     canvas->drawBitmap(SkBitmap(), 0, 0);

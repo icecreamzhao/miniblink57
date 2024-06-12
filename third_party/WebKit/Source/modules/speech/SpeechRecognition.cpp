@@ -23,8 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/speech/SpeechRecognition.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -43,9 +41,7 @@ SpeechRecognition* SpeechRecognition::create(ExecutionContext* context)
     ASSERT(context && context->isDocument());
     Document* document = toDocument(context);
     ASSERT(document);
-    SpeechRecognition* speechRecognition = new SpeechRecognition(document->page(), context);
-    speechRecognition->suspendIfNeeded();
-    return speechRecognition;
+    return new SpeechRecognition(document->page(), context);
 }
 
 void SpeechRecognition::start(ExceptionState& exceptionState)
@@ -54,12 +50,14 @@ void SpeechRecognition::start(ExceptionState& exceptionState)
         return;
 
     if (m_started) {
-        exceptionState.throwDOMException(InvalidStateError, "recognition has already started.");
+        exceptionState.throwDOMException(InvalidStateError,
+            "recognition has already started.");
         return;
     }
 
     m_finalResults.clear();
-    m_controller->start(this, m_grammars, m_lang, m_serviceURI, m_continuous, m_interimResults, m_maxAlternatives, m_audioTrack);
+    m_controller->start(this, m_grammars, m_lang, m_continuous, m_interimResults,
+        m_maxAlternatives, m_audioTrack);
     m_started = true;
 }
 
@@ -115,16 +113,18 @@ void SpeechRecognition::didEndAudio()
     dispatchEvent(Event::create(EventTypeNames::audioend));
 }
 
-void SpeechRecognition::didReceiveResults(const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults, const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults)
+void SpeechRecognition::didReceiveResults(
+    const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults,
+    const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults)
 {
     size_t resultIndex = m_finalResults.size();
 
     for (size_t i = 0; i < newFinalResults.size(); ++i)
-        m_finalResults.append(newFinalResults[i]);
+        m_finalResults.push_back(newFinalResults[i]);
 
     HeapVector<Member<SpeechRecognitionResult>> results = m_finalResults;
     for (size_t i = 0; i < currentInterimResults.size(); ++i)
-        results.append(currentInterimResults[i]);
+        results.push_back(currentInterimResults[i]);
 
     dispatchEvent(SpeechRecognitionEvent::createResult(resultIndex, results));
 }
@@ -134,7 +134,7 @@ void SpeechRecognition::didReceiveNoMatch(SpeechRecognitionResult* result)
     dispatchEvent(SpeechRecognitionEvent::createNoMatch(result));
 }
 
-void SpeechRecognition::didReceiveError(PassRefPtrWillBeRawPtr<SpeechRecognitionError> error)
+void SpeechRecognition::didReceiveError(SpeechRecognitionError* error)
 {
     dispatchEvent(error);
     m_started = false;
@@ -149,7 +149,9 @@ void SpeechRecognition::didEnd()
 {
     m_started = false;
     m_stopping = false;
-    if (!m_stoppedByActiveDOMObject)
+    // If m_controller is null, this is being aborted from the ExecutionContext
+    // being detached, so don't dispatch an event.
+    if (m_controller)
         dispatchEvent(Event::create(EventTypeNames::end));
 }
 
@@ -158,14 +160,14 @@ const AtomicString& SpeechRecognition::interfaceName() const
     return EventTargetNames::SpeechRecognition;
 }
 
-ExecutionContext* SpeechRecognition::executionContext() const
+ExecutionContext* SpeechRecognition::getExecutionContext() const
 {
-    return ActiveDOMObject::executionContext();
+    return ContextLifecycleObserver::getExecutionContext();
 }
 
-void SpeechRecognition::stop()
+void SpeechRecognition::contextDestroyed(ExecutionContext*)
 {
-    m_stoppedByActiveDOMObject = true;
+    m_controller = nullptr;
     if (hasPendingActivity())
         abort();
 }
@@ -176,42 +178,33 @@ bool SpeechRecognition::hasPendingActivity() const
 }
 
 SpeechRecognition::SpeechRecognition(Page* page, ExecutionContext* context)
-    : PageLifecycleObserver(page)
-    , ActiveDOMObject(context)
-    , m_grammars(SpeechGrammarList::create()) // FIXME: The spec is not clear on the default value for the grammars attribute.
-    , m_audioTrack(nullptr)
+    : ContextLifecycleObserver(context)
+    , m_grammars(SpeechGrammarList::create())
+    , // FIXME: The spec is not clear
+    // on the default value for the
+    // grammars attribute.
+    m_audioTrack(nullptr)
     , m_continuous(false)
     , m_interimResults(false)
     , m_maxAlternatives(1)
     , m_controller(SpeechRecognitionController::from(page))
-    , m_stoppedByActiveDOMObject(false)
     , m_started(false)
     , m_stopping(false)
 {
-    // FIXME: Need to hook up with Page to get notified when the visibility changes.
+    // FIXME: Need to hook up with Page to get notified when the visibility
+    // changes.
 }
 
-SpeechRecognition::~SpeechRecognition()
-{
-}
-
-void SpeechRecognition::contextDestroyed()
-{
-    m_controller = nullptr;
-    PageLifecycleObserver::contextDestroyed();
-}
+SpeechRecognition::~SpeechRecognition() { }
 
 DEFINE_TRACE(SpeechRecognition)
 {
     visitor->trace(m_grammars);
     visitor->trace(m_audioTrack);
-#if ENABLE(OILPAN)
     visitor->trace(m_controller);
-#endif
     visitor->trace(m_finalResults);
-    RefCountedGarbageCollectedEventTargetWithInlineData<SpeechRecognition>::trace(visitor);
-    PageLifecycleObserver::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 } // namespace blink

@@ -23,7 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/modules/indexeddb/WebIDBKeyRange.h"
 
 #include "modules/indexeddb/IDBKey.h"
@@ -37,20 +36,25 @@ void WebIDBKeyRange::assign(const WebIDBKeyRange& other)
     m_private = other.m_private;
 }
 
-void WebIDBKeyRange::assign(const WebIDBKey& lower, const WebIDBKey& upper, bool lowerOpen, bool upperOpen)
+void WebIDBKeyRange::assign(const WebIDBKey& lower,
+    const WebIDBKey& upper,
+    bool lowerOpen,
+    bool upperOpen)
 {
     if (!lower.isValid() && !upper.isValid())
         m_private.reset();
     else
-        m_private = IDBKeyRange::create(lower, upper, lowerOpen ? IDBKeyRange::LowerBoundOpen : IDBKeyRange::LowerBoundClosed, upperOpen ? IDBKeyRange::UpperBoundOpen : IDBKeyRange::UpperBoundClosed);
+        m_private = IDBKeyRange::create(
+            lower, upper,
+            lowerOpen ? IDBKeyRange::LowerBoundOpen : IDBKeyRange::LowerBoundClosed,
+            upperOpen ? IDBKeyRange::UpperBoundOpen
+                      : IDBKeyRange::UpperBoundClosed);
 }
 
-#if BLINK_WEB_IMPLEMENTATION || !LINK_CORE_MODULES_SEPARATELY
 void WebIDBKeyRange::reset()
 {
     m_private.reset();
 }
-#endif
 
 WebIDBKey WebIDBKeyRange::lower() const
 {

@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/ScriptableDocumentParser.h"
 
 #include "core/dom/Document.h"
@@ -31,7 +30,9 @@
 
 namespace blink {
 
-ScriptableDocumentParser::ScriptableDocumentParser(Document& document, ParserContentPolicy parserContentPolicy)
+ScriptableDocumentParser::ScriptableDocumentParser(
+    Document& document,
+    ParserContentPolicy parserContentPolicy)
     : DecodedDataDocumentParser(document)
     , m_wasCreatedByScript(false)
     , m_parserContentPolicy(parserContentPolicy)
@@ -43,4 +44,4 @@ bool ScriptableDocumentParser::isParsingAtLineNumber() const
     return isParsing() && !isWaitingForScripts() && !isExecutingScript();
 }
 
-};
+} // namespace blink

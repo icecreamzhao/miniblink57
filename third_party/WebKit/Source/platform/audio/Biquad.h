@@ -31,12 +31,9 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
+#include "wtf/Allocator.h"
 #include <complex>
 #include <sys/types.h>
-
-#if USE(WEBAUDIO_IPP)
-#include <ipps.h>
-#endif // USE(WEBAUDIO_IPP)
 
 namespace blink {
 
@@ -46,30 +43,30 @@ namespace blink {
 //    lowpass, highpass, shelving, parameteric, notch, allpass, ...
 
 class PLATFORM_EXPORT Biquad final {
+    DISALLOW_NEW();
+
 public:
     Biquad();
     ~Biquad();
 
     void process(const float* sourceP, float* destP, size_t framesToProcess);
 
+    bool hasSampleAccurateValues() const { return m_hasSampleAccurateValues; }
+    void setHasSampleAccurateValues(bool isSampleAccurate)
+    {
+        m_hasSampleAccurateValues = isSampleAccurate;
+    }
+
     // frequency is 0 - 1 normalized, resonance and dbGain are in decibels.
     // Q is a unitless quality factor.
-    void setLowpassParams(double frequency, double resonance);
-    void setHighpassParams(double frequency, double resonance);
-    void setBandpassParams(double frequency, double Q);
-    void setLowShelfParams(double frequency, double dbGain);
-    void setHighShelfParams(double frequency, double dbGain);
-    void setPeakingParams(double frequency, double Q, double dbGain);
-    void setAllpassParams(double frequency, double Q);
-    void setNotchParams(double frequency, double Q);
-
-    // Set the biquad coefficients given a single zero (other zero will be conjugate)
-    // and a single pole (other pole will be conjugate)
-    void setZeroPolePairs(const std::complex<double>& zero, const std::complex<double>& pole);
-
-    // Set the biquad coefficients given a single pole (other pole will be conjugate)
-    // (The zeroes will be the inverse of the poles)
-    void setAllpassPole(const std::complex<double>&);
+    void setLowpassParams(int, double frequency, double resonance);
+    void setHighpassParams(int, double frequency, double resonance);
+    void setBandpassParams(int, double frequency, double Q);
+    void setLowShelfParams(int, double frequency, double dbGain);
+    void setHighShelfParams(int, double frequency, double dbGain);
+    void setPeakingParams(int, double frequency, double Q, double dbGain);
+    void setAllpassParams(int, double frequency, double Q);
+    void setNotchParams(int, double frequency, double Q);
 
     // Resets filter state
     void reset();
@@ -78,39 +75,48 @@ public:
     // phase response are returned in magResponse and phaseResponse.
     // The phase response is in radians.
     void getFrequencyResponse(int nFrequencies,
-                              const float* frequency,
-                              float* magResponse,
-                              float* phaseResponse);
+        const float* frequency,
+        float* magResponse,
+        float* phaseResponse);
+
 private:
-    void setNormalizedCoefficients(double b0, double b1, double b2, double a0, double a1, double a2);
+    void setNormalizedCoefficients(int,
+        double b0,
+        double b1,
+        double b2,
+        double a0,
+        double a1,
+        double a2);
+
+    // If true, the filter coefficients are (possibly) time-varying due to a
+    // timeline automation on at least one filter parameter.
+    bool m_hasSampleAccurateValues;
 
     // Filter coefficients. The filter is defined as
     //
     // y[n] + m_a1*y[n-1] + m_a2*y[n-2] = m_b0*x[n] + m_b1*x[n-1] + m_b2*x[n-2].
-    double m_b0;
-    double m_b1;
-    double m_b2;
-    double m_a1;
-    double m_a2;
+    AudioDoubleArray m_b0;
+    AudioDoubleArray m_b1;
+    AudioDoubleArray m_b2;
+    AudioDoubleArray m_a1;
+    AudioDoubleArray m_a2;
 
 #if OS(MACOSX)
     void processFast(const float* sourceP, float* destP, size_t framesToProcess);
-    void processSliceFast(double* sourceP, double* destP, double* coefficientsP, size_t framesToProcess);
+    void processSliceFast(double* sourceP,
+        double* destP,
+        double* coefficientsP,
+        size_t framesToProcess);
 
     AudioDoubleArray m_inputBuffer;
     AudioDoubleArray m_outputBuffer;
 
-#elif USE(WEBAUDIO_IPP)
-    IppsIIRState64f_32f* m_biquadState;
-    Ipp8u* m_ippInternalBuffer;
-
-#else
+#endif
     // Filter memory
     double m_x1; // input delayed by 1 sample
     double m_x2; // input delayed by 2 samples
     double m_y1; // output delayed by 1 sample
     double m_y2; // output delayed by 2 samples
-#endif
 };
 
 } // namespace blink

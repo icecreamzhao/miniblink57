@@ -6,20 +6,19 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKINSPECTORWIDGET_H_
 #define SKINSPECTORWIDGET_H_
 
 #include "SkMatrix.h"
 
-#include <QWidget>
-#include <QTabWidget>
-#include <QTextEdit>
+#include <QGridLayout>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QGroupBox>
-#include <QGridLayout>
+#include <QTabWidget>
+#include <QTextEdit>
+#include <QWidget>
 
 /** \class SkInspectorWidget
 
@@ -43,7 +42,8 @@ public:
      */
     SkInspectorWidget();
 
-    void setDisabled(bool isDisabled) {
+    void setDisabled(bool isDisabled)
+    {
         fMatrixAndClipWidget.setDisabled(isDisabled);
     }
 
@@ -71,7 +71,8 @@ public:
         QTextEdit fTabText;
         QString fName;
 
-        Tab(const char* name) {
+        Tab(const char* name)
+        {
             fTabText.setReadOnly(true);
             fTabLayout.addWidget(&fTabText);
             fTab.setLayout(&fTabLayout);

@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "public/web/WebMediaStreamRegistry.h"
 
 #include "modules/mediastream/MediaStreamRegistry.h"
@@ -41,9 +39,14 @@
 
 namespace blink {
 
-WebMediaStream WebMediaStreamRegistry::lookupMediaStreamDescriptor(const WebURL& url)
+WebMediaStream WebMediaStreamRegistry::lookupMediaStreamDescriptor(
+    const WebURL& url)
 {
-    return WebMediaStream(MediaStreamRegistry::registry().lookupMediaStreamDescriptor(KURL(url).string()));
+    //   return WebMediaStream(
+    //       MediaStreamRegistry::registry().lookupMediaStreamDescriptor(
+    //           KURL(url).getString()));
+    DebugBreak();
+    return WebMediaStream();
 }
 
 } // namespace blink

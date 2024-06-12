@@ -1,13 +1,12 @@
-#include <math.h>
-#include <jni.h>
 #include <android/bitmap.h>
+#include <jni.h>
+#include <math.h>
 
 #include "SkCanvas.h"
 #include "SkGraphics.h"
-#include "SkSurface.h"
 #include "SkString.h"
+#include "SkSurface.h"
 #include "SkTime.h"
-
 
 /**
  * Draws something into the given bitmap
@@ -16,9 +15,8 @@
  * @param  dstBitmap   The bitmap to place the results of skia into
  * @param  elapsedTime The number of milliseconds since the app was started
  */
-extern "C"
-JNIEXPORT void JNICALL Java_com_example_HelloSkiaActivity_drawIntoBitmap(JNIEnv* env,
-        jobject thiz, jobject dstBitmap, jlong elapsedTime)
+extern "C" JNIEXPORT void JNICALL Java_com_example_HelloSkiaActivity_drawIntoBitmap(JNIEnv* env,
+    jobject thiz, jobject dstBitmap, jlong elapsedTime)
 {
     // Grab the dst bitmap info and pixels
     AndroidBitmapInfo dstInfo;
@@ -47,8 +45,8 @@ JNIEXPORT void JNICALL Java_com_example_HelloSkiaActivity_drawIntoBitmap(JNIEnv*
     SkString text("Skia is Best!");
     SkScalar fontHeight = paint.getFontSpacing();
     canvas->drawText(text.c_str(), text.size(), // text's data and length
-                     10, fontHeight,            // X and Y coordinates to place the text
-                     paint);                    // SkPaint to tell how to draw the text
+        10, fontHeight, // X and Y coordinates to place the text
+        paint); // SkPaint to tell how to draw the text
 
     // Adapt the SkPaint for drawing blue lines
     paint.setAntiAlias(false); // Turning off anti-aliasing speeds up the line drawing
@@ -56,13 +54,12 @@ JNIEXPORT void JNICALL Java_com_example_HelloSkiaActivity_drawIntoBitmap(JNIEnv*
     paint.setStrokeWidth(SkIntToScalar(2)); // This makes the lines have a thickness of 2 pixels
 
     // Draw some interesting lines using trig functions
-    for (int i = 0; i < 100; i++)
-    {
+    for (int i = 0; i < 100; i++) {
         float x = (float)i / 99.0f;
         float offset = elapsedTime / 1000.0f;
-        canvas->drawLine(sin(x * M_PI + offset) * 800.0f, 0,   // first endpoint
-                         cos(x * M_PI + offset) * 800.0f, 800, // second endpoint
-                         paint);                               // SkPapint to tell how to draw the line
+        canvas->drawLine(sin(x * M_PI + offset) * 800.0f, 0, // first endpoint
+            cos(x * M_PI + offset) * 800.0f, 800, // second endpoint
+            paint); // SkPapint to tell how to draw the line
     }
 
     // Unlock the dst's pixels

@@ -1,6 +1,7 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,8 +27,6 @@
 #include "core/dom/ExceptionCode.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
@@ -39,27 +38,25 @@ class ExceptionState;
 class MediaList;
 class MediaQuery;
 
-class CORE_EXPORT MediaQuerySet : public RefCountedWillBeGarbageCollected<MediaQuerySet> {
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(MediaQuerySet);
+class CORE_EXPORT MediaQuerySet : public GarbageCollected<MediaQuerySet> {
 public:
-    static PassRefPtrWillBeRawPtr<MediaQuerySet> create()
-    {
-        return adoptRefWillBeNoop(new MediaQuerySet());
-    }
-    static PassRefPtrWillBeRawPtr<MediaQuerySet> create(const String& mediaString);
-    static PassRefPtrWillBeRawPtr<MediaQuerySet> createOffMainThread(const String& mediaString);
+    static MediaQuerySet* create() { return new MediaQuerySet(); }
+    static MediaQuerySet* create(const String& mediaString);
 
     bool set(const String&);
     bool add(const String&);
     bool remove(const String&);
 
-    void addMediaQuery(PassOwnPtrWillBeRawPtr<MediaQuery>);
+    void addMediaQuery(MediaQuery*);
 
-    const WillBeHeapVector<OwnPtrWillBeMember<MediaQuery>>& queryVector() const { return m_queries; }
+    const HeapVector<Member<MediaQuery>>& queryVector() const
+    {
+        return m_queries;
+    }
 
     String mediaText() const;
 
-    PassRefPtrWillBeRawPtr<MediaQuerySet> copy() const { return adoptRefWillBeNoop(new MediaQuerySet(*this)); }
+    MediaQuerySet* copy() const { return new MediaQuerySet(*this); }
 
     DECLARE_TRACE();
 
@@ -67,21 +64,23 @@ private:
     MediaQuerySet();
     MediaQuerySet(const MediaQuerySet&);
 
-    WillBeHeapVector<OwnPtrWillBeMember<MediaQuery>> m_queries;
+    HeapVector<Member<MediaQuery>> m_queries;
 };
 
-class MediaList final : public RefCountedWillBeGarbageCollected<MediaList>, public ScriptWrappable {
+class MediaList final : public GarbageCollected<MediaList>,
+                        public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(MediaList);
+
 public:
-    static PassRefPtrWillBeRawPtr<MediaList> create(MediaQuerySet* mediaQueries, CSSStyleSheet* parentSheet)
+    static MediaList* create(MediaQuerySet* mediaQueries,
+        CSSStyleSheet* parentSheet)
     {
-        return adoptRefWillBeNoop(new MediaList(mediaQueries, parentSheet));
+        return new MediaList(mediaQueries, parentSheet);
     }
 
-    static PassRefPtrWillBeRawPtr<MediaList> create(MediaQuerySet* mediaQueries, CSSRule* parentRule)
+    static MediaList* create(MediaQuerySet* mediaQueries, CSSRule* parentRule)
     {
-        return adoptRefWillBeNoop(new MediaList(mediaQueries, parentRule));
+        return new MediaList(mediaQueries, parentRule);
     }
 
     unsigned length() const { return m_mediaQueries->queryVector().size(); }
@@ -96,11 +95,6 @@ public:
     CSSRule* parentRule() const { return m_parentRule; }
     CSSStyleSheet* parentStyleSheet() const { return m_parentStyleSheet; }
 
-#if !ENABLE(OILPAN)
-    void clearParentStyleSheet() { ASSERT(m_parentStyleSheet); m_parentStyleSheet = nullptr; }
-    void clearParentRule() { ASSERT(m_parentRule); m_parentRule = nullptr; }
-#endif
-
     const MediaQuerySet* queries() const { return m_mediaQueries.get(); }
 
     void reattach(MediaQuerySet*);
@@ -111,11 +105,12 @@ private:
     MediaList(MediaQuerySet*, CSSStyleSheet* parentSheet);
     MediaList(MediaQuerySet*, CSSRule* parentRule);
 
-    RefPtrWillBeMember<MediaQuerySet> m_mediaQueries;
+    Member<MediaQuerySet> m_mediaQueries;
     // Cleared in ~CSSStyleSheet destructor when oilpan is not enabled.
-    RawPtrWillBeMember<CSSStyleSheet> m_parentStyleSheet;
-    // Cleared in the ~CSSMediaRule and ~CSSImportRule destructors when oilpan is not enabled.
-    RawPtrWillBeMember<CSSRule> m_parentRule;
+    Member<CSSStyleSheet> m_parentStyleSheet;
+    // Cleared in the ~CSSMediaRule and ~CSSImportRule destructors when oilpan is
+    // not enabled.
+    Member<CSSRule> m_parentRule;
 };
 
 } // namespace blink

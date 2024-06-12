@@ -31,33 +31,48 @@
 #ifndef SVGAnimatedLength_h
 #define SVGAnimatedLength_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGLengthTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedLength : public SVGAnimatedProperty<SVGLength> {
+class SVGAnimatedLength : public SVGAnimatedProperty<SVGLength>,
+                          public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGAnimatedLength> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGLength> initialValue, SVGLengthNegativeValuesMode negativeValuesMode)
+    static SVGAnimatedLength* create(
+        SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        SVGLength* initialValue,
+        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
     {
-        return adoptRefWillBeNoop(new SVGAnimatedLength(contextElement, attributeName, initialValue, negativeValuesMode));
+        return new SVGAnimatedLength(contextElement, attributeName, initialValue,
+            cssPropertyId);
     }
 
     void setDefaultValueAsString(const String&);
-    void setBaseValueAsString(const String&, SVGParsingError&) override;
+    SVGParsingError setBaseValueAsString(const String&) override;
 
-    SVGLengthNegativeValuesMode negativeValuesMode() const { return m_negativeValuesMode; }
-
-protected:
-    SVGAnimatedLength(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGLength> initialValue, SVGLengthNegativeValuesMode negativeValuesMode)
-        : SVGAnimatedProperty<SVGLength>(contextElement, attributeName, initialValue)
-        , m_negativeValuesMode(negativeValuesMode)
+    const CSSValue* cssValue() const
     {
+        return &currentValue()->asCSSPrimitiveValue();
     }
 
-private:
-    SVGLengthNegativeValuesMode m_negativeValuesMode;
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+
+protected:
+    SVGAnimatedLength(SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        SVGLength* initialValue,
+        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
+        : SVGAnimatedProperty<SVGLength>(contextElement,
+            attributeName,
+            initialValue,
+            cssPropertyId)
+    {
+    }
 };
 
 } // namespace blink

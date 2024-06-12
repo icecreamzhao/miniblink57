@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/graphics/paint/ClipDisplayItem.h"
 
 #include "platform/geometry/FloatRoundedRect.h"
@@ -12,52 +11,52 @@
 
 namespace blink {
 
-void ClipDisplayItem::replay(GraphicsContext& context)
+void ClipDisplayItem::replay(GraphicsContext& context) const
 {
     context.save();
-    context.clipRect(m_clipRect, NotAntiAliased, SkRegion::kIntersect_Op);
+
+    // RoundedInnerRectClipper only cares about rounded-rect clips,
+    // and passes an "infinite" rect clip; there is no reason to apply this clip.
+    // TODO(fmalita): convert RoundedInnerRectClipper to a better suited
+    //   DisplayItem so we don't have to special-case its semantics.
+    if (m_clipRect != LayoutRect::infiniteIntRect())
+        context.clipRect(m_clipRect, AntiAliased);
 
     for (const FloatRoundedRect& roundedRect : m_roundedRectClips)
-        context.clipRoundedRect(roundedRect, SkRegion::kIntersect_Op);
+        context.clipRoundedRect(roundedRect);
 }
 
-void ClipDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+void ClipDisplayItem::appendToWebDisplayItemList(
+    const IntRect& visualRect,
+    WebDisplayItemList* list) const
 {
     WebVector<SkRRect> webRoundedRects(m_roundedRectClips.size());
-    for (size_t i = 0; i < m_roundedRectClips.size(); ++i) {
-        FloatRoundedRect::Radii rectRadii = m_roundedRectClips[i].radii();
-        SkVector skRadii[4];
-        skRadii[SkRRect::kUpperLeft_Corner].set(SkIntToScalar(rectRadii.topLeft().width()),
-            SkIntToScalar(rectRadii.topLeft().height()));
-        skRadii[SkRRect::kUpperRight_Corner].set(SkIntToScalar(rectRadii.topRight().width()),
-            SkIntToScalar(rectRadii.topRight().height()));
-        skRadii[SkRRect::kLowerRight_Corner].set(SkIntToScalar(rectRadii.bottomRight().width()),
-            SkIntToScalar(rectRadii.bottomRight().height()));
-        skRadii[SkRRect::kLowerLeft_Corner].set(SkIntToScalar(rectRadii.bottomLeft().width()),
-            SkIntToScalar(rectRadii.bottomLeft().height()));
-        SkRRect skRoundedRect;
-        skRoundedRect.setRectRadii(m_roundedRectClips[i].rect(), skRadii);
-        webRoundedRects[i] = skRoundedRect;
-    }
+    for (size_t i = 0; i < m_roundedRectClips.size(); ++i)
+        webRoundedRects[i] = m_roundedRectClips[i];
+
     list->appendClipItem(m_clipRect, webRoundedRects);
 }
 
-void EndClipDisplayItem::replay(GraphicsContext& context)
+void EndClipDisplayItem::replay(GraphicsContext& context) const
 {
     context.restore();
 }
 
-void EndClipDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
+void EndClipDisplayItem::appendToWebDisplayItemList(
+    const IntRect& visualRect,
+    WebDisplayItemList* list) const
 {
     list->appendEndClipItem();
 }
 
 #ifndef NDEBUG
-void ClipDisplayItem::dumpPropertiesAsDebugString(WTF::StringBuilder& stringBuilder) const
+void ClipDisplayItem::dumpPropertiesAsDebugString(
+    WTF::StringBuilder& stringBuilder) const
 {
     DisplayItem::dumpPropertiesAsDebugString(stringBuilder);
-    stringBuilder.append(WTF::String::format(", clipRect: [%d,%d,%d,%d]",
-        m_clipRect.x(), m_clipRect.y(), m_clipRect.width(), m_clipRect.height()));
+    stringBuilder.append(WTF::String::format(
+        ", clipRect: [%d,%d,%d,%d]", m_clipRect.x(), m_clipRect.y(),
+        m_clipRect.width(), m_clipRect.height()));
 }
 #endif
 

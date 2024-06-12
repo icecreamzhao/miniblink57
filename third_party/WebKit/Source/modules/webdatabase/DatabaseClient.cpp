@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/DatabaseClient.h"
 
 #include "core/dom/Document.h"
@@ -39,12 +38,20 @@
 namespace blink {
 
 DatabaseClient::DatabaseClient()
-    : m_inspectorAgent(0)
-{ }
+    : m_inspectorAgent(nullptr)
+{
+}
+
+DEFINE_TRACE(DatabaseClient)
+{
+    visitor->trace(m_inspectorAgent);
+    Supplement<Page>::trace(visitor);
+}
 
 DatabaseClient* DatabaseClient::fromPage(Page* page)
 {
-    return static_cast<DatabaseClient*>(WillBeHeapSupplement<Page>::from(page, supplementName()));
+    return static_cast<DatabaseClient*>(
+        Supplement<Page>::from(page, supplementName()));
 }
 
 DatabaseClient* DatabaseClient::from(ExecutionContext* context)
@@ -57,7 +64,10 @@ const char* DatabaseClient::supplementName()
     return "DatabaseClient";
 }
 
-void DatabaseClient::didOpenDatabase(Database* database, const String& domain, const String& name, const String& version)
+void DatabaseClient::didOpenDatabase(blink::Database* database,
+    const String& domain,
+    const String& name,
+    const String& version)
 {
     if (m_inspectorAgent)
         m_inspectorAgent->didOpenDatabase(database, domain, name, version);
@@ -65,11 +75,12 @@ void DatabaseClient::didOpenDatabase(Database* database, const String& domain, c
 
 void DatabaseClient::setInspectorAgent(InspectorDatabaseAgent* agent)
 {
-    ASSERT(!m_inspectorAgent);
+    // TODO(dgozman): we should not set agent twice, but it's happening in OOPIF
+    // case.
     m_inspectorAgent = agent;
 }
 
-void provideDatabaseClientTo(Page& page, PassOwnPtrWillBeRawPtr<DatabaseClient> client)
+void provideDatabaseClientTo(Page& page, DatabaseClient* client)
 {
     page.provideSupplement(DatabaseClient::supplementName(), client);
 }

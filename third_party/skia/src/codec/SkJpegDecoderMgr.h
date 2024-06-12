@@ -10,21 +10,15 @@
 
 #include "SkCodec.h"
 #include "SkCodecPriv.h"
-#include "SkJpegUtility_codec.h"
-#include "SkSwizzler.h"
-#include "SkTemplates.h"
-
-// stdio is needed for jpeglib
+#include "SkJpegUtility.h"
 #include <stdio.h>
 
 extern "C" {
-    #include "jpeglibmangler.h"
-    #include "jpeglib.h"
+#include "jpeglib.h"
 }
 
 class JpegDecoderMgr : SkNoncopyable {
 public:
-
     /*
      * Print a useful error message and return false
      */
@@ -45,12 +39,13 @@ public:
      * Initialize decompress struct
      * Initialize the source manager
      */
-    void  init();
+    void init();
 
     /*
-     * Recommend a color type based on the encoded format
+     * Returns true if it successfully sets outColor to the encoded color,
+     * and false otherwise.
      */
-    SkColorType getColorType();
+    bool getEncodedColor(SkEncodedInfo::Color* outColor);
 
     /*
      * Free memory used by the decode manager
@@ -68,11 +63,10 @@ public:
     jpeg_decompress_struct* dinfo();
 
 private:
-
     jpeg_decompress_struct fDInfo;
-    skjpeg_source_mgr      fSrcMgr;
-    skjpeg_error_mgr       fErrorMgr;
-    bool                   fInit;
+    skjpeg_source_mgr fSrcMgr;
+    skjpeg_error_mgr fErrorMgr;
+    bool fInit;
 };
 
 #endif

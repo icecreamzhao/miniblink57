@@ -64,6 +64,7 @@ public:
 
     // Returns a new string with corresponding entity names replaced.
     WTF::String convertEntitiesInString(const WTF::String&) const;
+
 private:
     typedef HashMap<int, WTF::String> EntitiesMapType;
     // An internal object that maps the Unicode character to corresponding

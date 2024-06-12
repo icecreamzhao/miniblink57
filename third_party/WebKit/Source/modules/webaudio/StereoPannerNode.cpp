@@ -2,26 +2,26 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
 #include "modules/webaudio/StereoPannerNode.h"
-
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
-#include "modules/webaudio/AudioContext.h"
 #include "modules/webaudio/AudioNodeInput.h"
 #include "modules/webaudio/AudioNodeOutput.h"
+#include "modules/webaudio/BaseAudioContext.h"
+#include "modules/webaudio/StereoPannerOptions.h"
 #include "platform/audio/StereoPanner.h"
 #include "wtf/MathExtras.h"
 
 namespace blink {
 
-StereoPannerHandler::StereoPannerHandler(AudioNode& node, float sampleRate, AudioParamHandler& pan)
+StereoPannerHandler::StereoPannerHandler(AudioNode& node,
+    float sampleRate,
+    AudioParamHandler& pan)
     : AudioHandler(NodeTypeStereoPanner, node, sampleRate)
     , m_pan(pan)
-    , m_sampleAccuratePanValues(ProcessingSizeInFrames)
+    , m_sampleAccuratePanValues(AudioUtilities::kRenderQuantumFrames)
 {
     addInput();
     addOutput(2);
@@ -29,13 +29,16 @@ StereoPannerHandler::StereoPannerHandler(AudioNode& node, float sampleRate, Audi
     // The node-specific default mixing rules declare that StereoPannerNode
     // can handle mono to stereo and stereo to stereo conversion.
     m_channelCount = 2;
-    m_channelCountMode = ClampedMax;
-    m_channelInterpretation = AudioBus::Speakers;
+    setInternalChannelCountMode(ClampedMax);
+    setInternalChannelInterpretation(AudioBus::Speakers);
 
     initialize();
 }
 
-PassRefPtr<StereoPannerHandler> StereoPannerHandler::create(AudioNode& node, float sampleRate, AudioParamHandler& pan)
+PassRefPtr<StereoPannerHandler> StereoPannerHandler::create(
+    AudioNode& node,
+    float sampleRate,
+    AudioParamHandler& pan)
 {
     return adoptRef(new StereoPannerHandler(node, sampleRate, pan));
 }
@@ -62,15 +65,25 @@ void StereoPannerHandler::process(size_t framesToProcess)
 
     if (m_pan->hasSampleAccurateValues()) {
         // Apply sample-accurate panning specified by AudioParam automation.
-        ASSERT(framesToProcess <= m_sampleAccuratePanValues.size());
+        DCHECK_LE(framesToProcess, m_sampleAccuratePanValues.size());
         if (framesToProcess <= m_sampleAccuratePanValues.size()) {
             float* panValues = m_sampleAccuratePanValues.data();
             m_pan->calculateSampleAccurateValues(panValues, framesToProcess);
-            m_stereoPanner->panWithSampleAccurateValues(inputBus, outputBus, panValues, framesToProcess);
+            m_stereoPanner->panWithSampleAccurateValues(inputBus, outputBus,
+                panValues, framesToProcess);
         }
     } else {
-        m_stereoPanner->panToTargetValue(inputBus, outputBus, m_pan->value(), framesToProcess);
+        m_stereoPanner->panToTargetValue(inputBus, outputBus, m_pan->value(),
+            framesToProcess);
     }
+}
+
+void StereoPannerHandler::processOnlyAudioParams(size_t framesToProcess)
+{
+    float values[AudioUtilities::kRenderQuantumFrames];
+    DCHECK_LE(framesToProcess, AudioUtilities::kRenderQuantumFrames);
+
+    m_pan->calculateSampleAccurateValues(values, framesToProcess);
 }
 
 void StereoPannerHandler::initialize()
@@ -78,42 +91,40 @@ void StereoPannerHandler::initialize()
     if (isInitialized())
         return;
 
-    m_stereoPanner = Spatializer::create(Spatializer::PanningModelEqualPower, sampleRate());
+    m_stereoPanner = StereoPanner::create(sampleRate());
 
     AudioHandler::initialize();
 }
 
-void StereoPannerHandler::setChannelCount(unsigned long channelCount, ExceptionState& exceptionState)
+void StereoPannerHandler::setChannelCount(unsigned long channelCount,
+    ExceptionState& exceptionState)
 {
-    ASSERT(isMainThread());
-    AudioContext::AutoLocker locker(context());
+    DCHECK(isMainThread());
+    BaseAudioContext::AutoLocker locker(context());
 
     // A PannerNode only supports 1 or 2 channels
     if (channelCount > 0 && channelCount <= 2) {
         if (m_channelCount != channelCount) {
             m_channelCount = channelCount;
-            if (m_channelCountMode != Max)
+            if (internalChannelCountMode() != Max)
                 updateChannelsForInputs();
         }
     } else {
         exceptionState.throwDOMException(
             NotSupportedError,
             ExceptionMessages::indexOutsideRange<unsigned long>(
-                "channelCount",
-                channelCount,
-                1,
-                ExceptionMessages::InclusiveBound,
-                2,
-                ExceptionMessages::InclusiveBound));
+                "channelCount", channelCount, 1, ExceptionMessages::InclusiveBound,
+                2, ExceptionMessages::InclusiveBound));
     }
 }
 
-void StereoPannerHandler::setChannelCountMode(const String& mode, ExceptionState& exceptionState)
+void StereoPannerHandler::setChannelCountMode(const String& mode,
+    ExceptionState& exceptionState)
 {
-    ASSERT(isMainThread());
-    AudioContext::AutoLocker locker(context());
+    DCHECK(isMainThread());
+    BaseAudioContext::AutoLocker locker(context());
 
-    ChannelCountMode oldMode = m_channelCountMode;
+    ChannelCountMode oldMode = internalChannelCountMode();
 
     if (mode == "clamped-max") {
         m_newChannelCountMode = ClampedMax;
@@ -122,9 +133,8 @@ void StereoPannerHandler::setChannelCountMode(const String& mode, ExceptionState
     } else if (mode == "max") {
         // This is not supported for a StereoPannerNode, which can only handle
         // 1 or 2 channels.
-        exceptionState.throwDOMException(
-            NotSupportedError,
-                "StereoPanner: 'max' is not allowed");
+        exceptionState.throwDOMException(NotSupportedError,
+            "StereoPanner: 'max' is not allowed");
         m_newChannelCountMode = oldMode;
     } else {
         // Do nothing for other invalid values.
@@ -137,16 +147,42 @@ void StereoPannerHandler::setChannelCountMode(const String& mode, ExceptionState
 
 // ----------------------------------------------------------------
 
-StereoPannerNode::StereoPannerNode(AudioContext& context, float sampleRate)
+StereoPannerNode::StereoPannerNode(BaseAudioContext& context)
     : AudioNode(context)
-    , m_pan(AudioParam::create(context, 0))
+    , m_pan(AudioParam::create(context, ParamTypeStereoPannerPan, 0, -1, 1))
 {
-    setHandler(StereoPannerHandler::create(*this, sampleRate, m_pan->handler()));
+    setHandler(StereoPannerHandler::create(*this, context.sampleRate(),
+        m_pan->handler()));
 }
 
-StereoPannerNode* StereoPannerNode::create(AudioContext& context, float sampleRate)
+StereoPannerNode* StereoPannerNode::create(BaseAudioContext& context,
+    ExceptionState& exceptionState)
 {
-    return new StereoPannerNode(context, sampleRate);
+    DCHECK(isMainThread());
+
+    if (context.isContextClosed()) {
+        context.throwExceptionForClosedState(exceptionState);
+        return nullptr;
+    }
+
+    return new StereoPannerNode(context);
+}
+
+StereoPannerNode* StereoPannerNode::create(BaseAudioContext* context,
+    const StereoPannerOptions& options,
+    ExceptionState& exceptionState)
+{
+    StereoPannerNode* node = create(*context, exceptionState);
+
+    if (!node)
+        return nullptr;
+
+    node->handleChannelOptions(options, exceptionState);
+
+    if (options.hasPan())
+        node->pan()->setValue(options.pan());
+
+    return node;
 }
 
 DEFINE_TRACE(StereoPannerNode)
@@ -161,5 +197,3 @@ AudioParam* StereoPannerNode::pan() const
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

@@ -30,10 +30,9 @@
 #include "platform/graphics/Color.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Assertions.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
-class SkShader;
+class SkPaint;
 
 namespace blink {
 
@@ -43,23 +42,35 @@ class HTMLCanvasElement;
 
 class CanvasStyle final : public GarbageCollected<CanvasStyle> {
 public:
-    static CanvasStyle* createFromRGBA(RGBA32 rgba) { return new CanvasStyle(rgba); }
+    static CanvasStyle* createFromRGBA(RGBA32 rgba)
+    {
+        return new CanvasStyle(rgba);
+    }
     static CanvasStyle* createFromGradient(CanvasGradient*);
     static CanvasStyle* createFromPattern(CanvasPattern*);
 
-    String color() const { ASSERT(m_type == ColorRGBA); return Color(m_rgba).serialized(); }
-    CanvasGradient* canvasGradient() const { return m_gradient.get(); }
-    CanvasPattern* canvasPattern() const { return m_pattern; }
+    String color() const
+    {
+        ASSERT(m_type == ColorRGBA);
+        return Color(m_rgba).serialized();
+    }
+    CanvasGradient* getCanvasGradient() const { return m_gradient.get(); }
+    CanvasPattern* getCanvasPattern() const { return m_pattern; }
 
-    SkShader* shader() const;
+    void applyToPaint(SkPaint&) const;
     RGBA32 paintColor() const;
 
-    bool isEquivalentRGBA(RGBA32 rgba) const { return m_type == ColorRGBA && m_rgba == rgba; }
+    bool isEquivalentRGBA(RGBA32 rgba) const
+    {
+        return m_type == ColorRGBA && m_rgba == rgba;
+    }
 
     DECLARE_TRACE();
 
 private:
-    enum Type { ColorRGBA, Gradient, ImagePattern };
+    enum Type { ColorRGBA,
+        Gradient,
+        ImagePattern };
 
     CanvasStyle(RGBA32);
     CanvasStyle(CanvasGradient*);
@@ -72,7 +83,9 @@ private:
     Member<CanvasPattern> m_pattern;
 };
 
-bool parseColorOrCurrentColor(RGBA32& parsedColor, const String& colorString, HTMLCanvasElement*);
+bool parseColorOrCurrentColor(Color& parsedColor,
+    const String& colorString,
+    HTMLCanvasElement*);
 
 } // namespace blink
 

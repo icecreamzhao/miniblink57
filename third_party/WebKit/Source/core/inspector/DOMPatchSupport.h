@@ -33,8 +33,6 @@
 
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
@@ -49,6 +47,7 @@ class Node;
 class DOMPatchSupport final {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(DOMPatchSupport);
+
 public:
     static void patchDocument(Document&, const String& markup);
 
@@ -58,28 +57,51 @@ public:
     Node* patchNode(Node*, const String& markup, ExceptionState&);
 
 private:
-    struct Digest;
-    typedef Vector<pair<Digest*, size_t> > ResultMap;
-    typedef HashMap<String, Digest*> UnusedNodesMap;
+    class Digest : public GarbageCollectedFinalized<Digest> {
+    public:
+        explicit Digest(Node* node)
+            : m_node(node)
+        {
+        }
+        DECLARE_TRACE();
+
+        String m_sha1;
+        String m_attrsSHA1;
+        Member<Node> m_node;
+        HeapVector<Member<Digest>> m_children;
+    };
+
+    typedef HeapVector<std::pair<Member<Digest>, size_t>> ResultMap;
+    typedef HeapHashMap<String, Member<Digest>> UnusedNodesMap;
 
     bool innerPatchNode(Digest* oldNode, Digest* newNode, ExceptionState&);
-    std::pair<ResultMap, ResultMap> diff(const Vector<OwnPtr<Digest> >& oldChildren, const Vector<OwnPtr<Digest> >& newChildren);
-    bool innerPatchChildren(ContainerNode*, const Vector<OwnPtr<Digest> >& oldChildren, const Vector<OwnPtr<Digest> >& newChildren, ExceptionState&);
-    PassOwnPtr<Digest> createDigest(Node*, UnusedNodesMap*);
-    bool insertBeforeAndMarkAsUsed(ContainerNode*, Digest*, Node* anchor, ExceptionState&);
+    std::pair<ResultMap, ResultMap> diff(
+        const HeapVector<Member<Digest>>& oldChildren,
+        const HeapVector<Member<Digest>>& newChildren);
+    bool innerPatchChildren(ContainerNode*,
+        const HeapVector<Member<Digest>>& oldChildren,
+        const HeapVector<Member<Digest>>& newChildren,
+        ExceptionState&);
+    Digest* createDigest(Node*, UnusedNodesMap*);
+    bool insertBeforeAndMarkAsUsed(ContainerNode*,
+        Digest*,
+        Node* anchor,
+        ExceptionState&);
     bool removeChildAndMoveToNew(Digest*, ExceptionState&);
     void markNodeAsUsed(Digest*);
 #ifdef DEBUG_DOM_PATCH_SUPPORT
     void dumpMap(const ResultMap&, const String& name);
 #endif
-    Document& document() const { return *m_document; }
+    Document& document() const
+    {
+        return *m_document;
+    }
 
-    RawPtrWillBeMember<DOMEditor> m_domEditor;
-    RawPtrWillBeMember<Document> m_document;
+    Member<DOMEditor> m_domEditor;
+    Member<Document> m_document;
 
     UnusedNodesMap m_unusedNodesMap;
 };
-
 
 } // namespace blink
 

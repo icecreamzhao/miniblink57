@@ -77,10 +77,10 @@ private:
 
     friend class GrProgramElement;
 
-    GrGpuResource*  fResource;
-    mutable bool    fOwnRef;
-    mutable bool    fPendingIO;
-    GrIOType        fIOType;
+    GrGpuResource* fResource;
+    mutable bool fOwnRef;
+    mutable bool fPendingIO;
+    GrIOType fIOType;
 
     typedef SkNoncopyable INHERITED;
 };
@@ -88,13 +88,17 @@ private:
 /**
  * Templated version of GrGpuResourceRef to enforce type safety.
  */
-template <typename T> class GrTGpuResourceRef : public GrGpuResourceRef {
+template <typename T>
+class GrTGpuResourceRef : public GrGpuResourceRef {
 public:
-    GrTGpuResourceRef() {}
+    GrTGpuResourceRef() { }
 
     /** Adopts a ref from the caller. ioType expresses what type of IO operations will be marked as
         pending on the resource when markPendingIO is called. */
-    GrTGpuResourceRef(T* resource, GrIOType ioType) : INHERITED(resource, ioType) { }
+    GrTGpuResourceRef(T* resource, GrIOType ioType)
+        : INHERITED(resource, ioType)
+    {
+    }
 
     T* get() const { return static_cast<T*>(this->getResource()); }
 
@@ -107,13 +111,18 @@ private:
 };
 
 // Specializations for GrTexture and GrRenderTarget because they use virtual inheritance.
-template<> class GrTGpuResourceRef<GrTexture> : public GrGpuResourceRef {
+template <>
+class GrTGpuResourceRef<GrTexture> : public GrGpuResourceRef {
 public:
-    GrTGpuResourceRef() {}
+    GrTGpuResourceRef() { }
 
-    GrTGpuResourceRef(GrTexture* texture, GrIOType ioType) : INHERITED(texture, ioType) { }
+    GrTGpuResourceRef(GrTexture* texture, GrIOType ioType)
+        : INHERITED(texture, ioType)
+    {
+    }
 
-    GrTexture* get() const {
+    GrTexture* get() const
+    {
         GrSurface* surface = static_cast<GrSurface*>(this->getResource());
         if (surface) {
             return surface->asTexture();
@@ -128,13 +137,18 @@ private:
     typedef GrGpuResourceRef INHERITED;
 };
 
-template<> class GrTGpuResourceRef<GrRenderTarget> : public GrGpuResourceRef {
+template <>
+class GrTGpuResourceRef<GrRenderTarget> : public GrGpuResourceRef {
 public:
-    GrTGpuResourceRef() {}
+    GrTGpuResourceRef() { }
 
-    GrTGpuResourceRef(GrRenderTarget* rt, GrIOType ioType) : INHERITED(rt, ioType) { }
+    GrTGpuResourceRef(GrRenderTarget* rt, GrIOType ioType)
+        : INHERITED(rt, ioType)
+    {
+    }
 
-    GrRenderTarget* get() const {
+    GrRenderTarget* get() const
+    {
         GrSurface* surface = static_cast<GrSurface*>(this->getResource());
         if (surface) {
             return surface->asRenderTarget();
@@ -153,53 +167,64 @@ private:
  * This is similar to GrTGpuResourceRef but can only be in the pending IO state. It never owns a
  * ref.
  */
-template <typename T, GrIOType IO_TYPE> class GrPendingIOResource : SkNoncopyable {
+template <typename T, GrIOType IO_TYPE>
+class GrPendingIOResource : SkNoncopyable {
 public:
-    GrPendingIOResource(T* resource = NULL) : fResource(NULL) {
+    GrPendingIOResource(T* resource = NULL)
+        : fResource(NULL)
+    {
         this->reset(resource);
     }
 
-    void reset(T* resource) {
+    void reset(T* resource)
+    {
         if (resource) {
             switch (IO_TYPE) {
-                case kRead_GrIOType:
-                    resource->addPendingRead();
-                    break;
-                case kWrite_GrIOType:
-                    resource->addPendingWrite();
-                    break;
-                case kRW_GrIOType:
-                    resource->addPendingRead();
-                    resource->addPendingWrite();
-                    break;
+            case kRead_GrIOType:
+                resource->addPendingRead();
+                break;
+            case kWrite_GrIOType:
+                resource->addPendingWrite();
+                break;
+            case kRW_GrIOType:
+                resource->addPendingRead();
+                resource->addPendingWrite();
+                break;
             }
         }
         this->release();
         fResource = resource;
     }
 
-    ~GrPendingIOResource() {
+    ~GrPendingIOResource()
+    {
         this->release();
     }
 
-    operator bool() const { return SkToBool(fResource); }
+    explicit operator bool() const { return SkToBool(fResource); }
+
+    bool operator==(const GrPendingIOResource& other) const
+    {
+        return fResource == other.fResource;
+    }
 
     T* get() const { return fResource; }
 
 private:
-    void release() {
+    void release()
+    {
         if (fResource) {
             switch (IO_TYPE) {
-                case kRead_GrIOType:
-                    fResource->completedRead();
-                    break;
-                case kWrite_GrIOType:
-                    fResource->completedWrite();
-                    break;
-                case kRW_GrIOType:
-                    fResource->completedRead();
-                    fResource->completedWrite();
-                    break;
+            case kRead_GrIOType:
+                fResource->completedRead();
+                break;
+            case kWrite_GrIOType:
+                fResource->completedWrite();
+                break;
+            case kRW_GrIOType:
+                fResource->completedRead();
+                fResource->completedWrite();
+                break;
             }
         }
     }

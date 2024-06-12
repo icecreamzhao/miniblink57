@@ -28,11 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/quota/DeprecatedStorageQuota.h"
 
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
+#include "core/dom/TaskRunnerHelper.h"
 #include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
 #include "modules/quota/StorageErrorCallback.h"
 #include "modules/quota/StorageQuotaClient.h"
@@ -52,46 +52,63 @@ DeprecatedStorageQuota::DeprecatedStorageQuota(Type type)
 {
 }
 
-void DeprecatedStorageQuota::queryUsageAndQuota(ExecutionContext* executionContext, StorageUsageCallback* successCallback, StorageErrorCallback* errorCallback)
+void DeprecatedStorageQuota::queryUsageAndQuota(
+    ExecutionContext* executionContext,
+    StorageUsageCallback* successCallback,
+    StorageErrorCallback* errorCallback)
 {
     ASSERT(executionContext);
 
     WebStorageQuotaType storageType = static_cast<WebStorageQuotaType>(m_type);
     if (storageType != WebStorageQuotaTypeTemporary && storageType != WebStorageQuotaTypePersistent) {
         // Unknown storage type is requested.
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
+            StorageErrorCallback::createSameThreadTask(
+                errorCallback, NotSupportedError));
         return;
     }
 
-    SecurityOrigin* securityOrigin = executionContext->securityOrigin();
+    SecurityOrigin* securityOrigin = executionContext->getSecurityOrigin();
     if (securityOrigin->isUnique()) {
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
+            StorageErrorCallback::createSameThreadTask(
+                errorCallback, NotSupportedError));
         return;
     }
 
     KURL storagePartition = KURL(KURL(), securityOrigin->toString());
-    StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback, errorCallback);
-    Platform::current()->queryStorageUsageAndQuota(storagePartition, storageType, callbacks);
+    StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback,
+        errorCallback);
+    Platform::current()->queryStorageUsageAndQuota(storagePartition, storageType,
+        callbacks);
 }
 
-void DeprecatedStorageQuota::requestQuota(ExecutionContext* executionContext, unsigned long long newQuotaInBytes, StorageQuotaCallback* successCallback, StorageErrorCallback* errorCallback)
+void DeprecatedStorageQuota::requestQuota(ExecutionContext* executionContext,
+    unsigned long long newQuotaInBytes,
+    StorageQuotaCallback* successCallback,
+    StorageErrorCallback* errorCallback)
 {
     ASSERT(executionContext);
 
     WebStorageQuotaType storageType = static_cast<WebStorageQuotaType>(m_type);
     if (storageType != WebStorageQuotaTypeTemporary && storageType != WebStorageQuotaTypePersistent) {
         // Unknown storage type is requested.
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
+            StorageErrorCallback::createSameThreadTask(
+                errorCallback, NotSupportedError));
         return;
     }
 
     StorageQuotaClient* client = StorageQuotaClient::from(executionContext);
     if (!client) {
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
+        executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
+            StorageErrorCallback::createSameThreadTask(
+                errorCallback, NotSupportedError));
         return;
     }
 
-    client->requestQuota(executionContext, storageType, newQuotaInBytes, successCallback, errorCallback);
+    client->requestQuota(executionContext, storageType, newQuotaInBytes,
+        successCallback, errorCallback);
 }
 
 } // namespace blink

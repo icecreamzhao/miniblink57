@@ -2,16 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/canvas2d/HitRegion.h"
 
 #include "core/dom/AXObjectCache.h"
-#include "core/layout/LayoutBoxModelObject.h"
 
 namespace blink {
 
 HitRegion::HitRegion(const Path& path, const HitRegionOptions& options)
-    : m_id(options.id())
+    : m_id(options.id().isEmpty() ? String() : options.id())
     , m_control(options.control())
     , m_path(path)
 {
@@ -19,33 +17,6 @@ HitRegion::HitRegion(const Path& path, const HitRegionOptions& options)
         m_fillRule = RULE_NONZERO;
     else
         m_fillRule = RULE_EVENODD;
-}
-
-void HitRegion::updateAccessibility(Element* canvas)
-{
-    if (!m_control || !canvas || !canvas->layoutObject() || !m_control->isDescendantOf(canvas))
-        return;
-
-    AXObjectCache* axObjectCache = m_control->document().existingAXObjectCache();
-    if (!axObjectCache)
-        return;
-
-    FloatRect boundingRect = m_path.boundingRect();
-
-    // Offset by the canvas rect, taking border and padding into account.
-    LayoutBoxModelObject* rbmo = canvas->layoutBoxModelObject();
-    IntRect canvasRect = canvas->layoutObject()->absoluteBoundingBoxRect();
-    canvasRect.move(rbmo->borderLeft() + rbmo->paddingLeft(),
-        rbmo->borderTop() + rbmo->paddingTop());
-    LayoutRect elementRect = enclosingLayoutRect(boundingRect);
-    elementRect.moveBy(canvasRect.location());
-
-    axObjectCache->setCanvasObjectBounds(m_control.get(), elementRect);
-}
-
-bool HitRegion::contains(const LayoutPoint& point) const
-{
-    return m_path.contains(FloatPoint(point), m_fillRule);
 }
 
 bool HitRegion::contains(const FloatPoint& point) const
@@ -63,10 +34,8 @@ DEFINE_TRACE(HitRegion)
     visitor->trace(m_control);
 }
 
-void HitRegionManager::addHitRegion(PassRefPtrWillBeRawPtr<HitRegion> passHitRegion)
+void HitRegionManager::addHitRegion(HitRegion* hitRegion)
 {
-    RefPtrWillBeRawPtr<HitRegion> hitRegion = passHitRegion;
-
     m_hitRegionList.add(hitRegion);
 
     if (!hitRegion->id().isEmpty())
@@ -96,12 +65,13 @@ void HitRegionManager::removeHitRegionById(const String& id)
         removeHitRegion(getHitRegionById(id));
 }
 
-void HitRegionManager::removeHitRegionByControl(Element* control)
+void HitRegionManager::removeHitRegionByControl(const Element* control)
 {
     removeHitRegion(getHitRegionByControl(control));
 }
 
-void HitRegionManager::removeHitRegionsInRect(const FloatRect& rect, const AffineTransform& ctm)
+void HitRegionManager::removeHitRegionsInRect(const FloatRect& rect,
+    const AffineTransform& ctm)
 {
     Path clearArea;
     clearArea.addRect(rect);
@@ -111,7 +81,7 @@ void HitRegionManager::removeHitRegionsInRect(const FloatRect& rect, const Affin
     HitRegionList toBeRemoved;
 
     for (HitRegionIterator it = m_hitRegionList.rbegin(); it != itEnd; ++it) {
-        RefPtrWillBeRawPtr<HitRegion> hitRegion = *it;
+        HitRegion* hitRegion = *it;
         hitRegion->removePixels(clearArea);
         if (hitRegion->path().isEmpty())
             toBeRemoved.add(hitRegion);
@@ -134,7 +104,8 @@ HitRegion* HitRegionManager::getHitRegionById(const String& id) const
     return m_hitRegionIdMap.get(id);
 }
 
-HitRegion* HitRegionManager::getHitRegionByControl(Element* control) const
+HitRegion* HitRegionManager::getHitRegionByControl(
+    const Element* control) const
 {
     if (control)
         return m_hitRegionControlMap.get(control);
@@ -142,14 +113,15 @@ HitRegion* HitRegionManager::getHitRegionByControl(Element* control) const
     return nullptr;
 }
 
-HitRegion* HitRegionManager::getHitRegionAtPoint(const LayoutPoint& point) const
+HitRegion* HitRegionManager::getHitRegionAtPoint(
+    const FloatPoint& point) const
 {
     HitRegionIterator itEnd = m_hitRegionList.rend();
 
     for (HitRegionIterator it = m_hitRegionList.rbegin(); it != itEnd; ++it) {
-        RefPtrWillBeRawPtr<HitRegion> hitRegion = *it;
+        HitRegion* hitRegion = *it;
         if (hitRegion->contains(point))
-            return hitRegion.get();
+            return hitRegion;
     }
 
     return nullptr;
@@ -162,11 +134,9 @@ unsigned HitRegionManager::getHitRegionsCount() const
 
 DEFINE_TRACE(HitRegionManager)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_hitRegionList);
     visitor->trace(m_hitRegionIdMap);
     visitor->trace(m_hitRegionControlMap);
-#endif
 }
 
 } // namespace blink

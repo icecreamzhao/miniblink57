@@ -19,44 +19,48 @@ namespace gin {
 
 namespace {
 
-void Fail(const std::string& description) {
-  FAIL() << description;
-}
+    void Fail(const std::string& description)
+    {
+        FAIL() << description;
+    }
 
-void ExpectTrue(bool condition, const std::string& description) {
-  EXPECT_TRUE(condition) << description;
-}
+    void ExpectTrue(bool condition, const std::string& description)
+    {
+        EXPECT_TRUE(condition) << description;
+    }
 
-void ExpectFalse(bool condition, const std::string& description) {
-  EXPECT_FALSE(condition) << description;
-}
+    void ExpectFalse(bool condition, const std::string& description)
+    {
+        EXPECT_FALSE(condition) << description;
+    }
 
-void ExpectEqual(const v8::Local<v8::Value> expected,
-                 const v8::Local<v8::Value> actual,
-                 const std::string& description) {
-  EXPECT_TRUE(expected->StrictEquals(actual)) << description;
-}
+    void ExpectEqual(const v8::Local<v8::Value> expected,
+        const v8::Local<v8::Value> actual,
+        const std::string& description)
+    {
+        EXPECT_TRUE(expected->StrictEquals(actual)) << description;
+    }
 
-WrapperInfo g_wrapper_info = { kEmbedderNativeGin };
+    WrapperInfo g_wrapper_info = { kEmbedderNativeGin };
 
-}  // namespace
+} // namespace
 
 const char GTest::kModuleName[] = "gtest";
 
-v8::Local<v8::Value> GTest::GetModule(v8::Isolate* isolate) {
-  PerIsolateData* data = PerIsolateData::From(isolate);
-  v8::Local<v8::ObjectTemplate> templ =
-      data->GetObjectTemplate(&g_wrapper_info);
-  if (templ.IsEmpty()) {
-    templ = ObjectTemplateBuilder(isolate)
-        .SetMethod("fail", Fail)
-        .SetMethod("expectTrue", ExpectTrue)
-        .SetMethod("expectFalse", ExpectFalse)
-        .SetMethod("expectEqual", ExpectEqual)
-        .Build();
-    data->SetObjectTemplate(&g_wrapper_info, templ);
-  }
-  return templ->NewInstance();
+v8::Local<v8::Value> GTest::GetModule(v8::Isolate* isolate)
+{
+    PerIsolateData* data = PerIsolateData::From(isolate);
+    v8::Local<v8::ObjectTemplate> templ = data->GetObjectTemplate(&g_wrapper_info);
+    if (templ.IsEmpty()) {
+        templ = ObjectTemplateBuilder(isolate)
+                    .SetMethod("fail", Fail)
+                    .SetMethod("expectTrue", ExpectTrue)
+                    .SetMethod("expectFalse", ExpectFalse)
+                    .SetMethod("expectEqual", ExpectEqual)
+                    .Build();
+        data->SetObjectTemplate(&g_wrapper_info, templ);
+    }
+    return templ->NewInstance();
 }
 
-}  // namespace gin
+} // namespace gin

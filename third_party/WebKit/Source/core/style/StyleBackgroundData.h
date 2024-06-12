@@ -25,31 +25,41 @@
 #ifndef StyleBackgroundData_h
 #define StyleBackgroundData_h
 
+#include "core/css/StyleColor.h"
 #include "core/style/FillLayer.h"
-#include "core/style/OutlineValue.h"
 #include "platform/graphics/Color.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 
 namespace blink {
 
-class StyleBackgroundData : public RefCounted<StyleBackgroundData> {
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
+class CORE_EXPORT StyleBackgroundData : public RefCounted<StyleBackgroundData> {
 public:
-    static PassRefPtr<StyleBackgroundData> create() { return adoptRef(new StyleBackgroundData); }
-    PassRefPtr<StyleBackgroundData> copy() const { return adoptRef(new StyleBackgroundData(*this)); }
+    static PassRefPtr<StyleBackgroundData> create()
+    {
+        return adoptRef(new StyleBackgroundData);
+    }
+    PassRefPtr<StyleBackgroundData> copy() const
+    {
+        return adoptRef(new StyleBackgroundData(*this));
+    }
     ~StyleBackgroundData() { }
 
     bool operator==(const StyleBackgroundData&) const;
-    bool operator!=(const StyleBackgroundData& o) const
-    {
-        return !(*this == o);
-    }
-
-    bool visuallyEqual(const StyleBackgroundData&) const;
+    bool operator!=(const StyleBackgroundData& o) const { return !(*this == o); }
 
     const FillLayer& background() const { return m_background; }
     const StyleColor& color() const { return m_color; }
-    const OutlineValue& outline() const { return m_outline; }
+#ifdef TENCENT_FITSCREEN
+    void setImageCleared(bool b)
+    {
+        m_isImageCleared = b;
+    }
+    bool isImageCleared() const { return m_isImageCleared; }
+#endif
 
 private:
     friend class ComputedStyle;
@@ -59,7 +69,9 @@ private:
 
     FillLayer m_background;
     StyleColor m_color;
-    OutlineValue m_outline;
+#ifdef TENCENT_FITSCREEN
+    bool m_isImageCleared;
+#endif
 };
 
 } // namespace blink

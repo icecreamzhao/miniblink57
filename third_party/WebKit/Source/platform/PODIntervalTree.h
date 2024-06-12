@@ -36,16 +36,20 @@
 namespace blink {
 
 #ifndef NDEBUG
-template<class T>
+template <class T>
 struct ValueToString;
 #endif
 
 template <class T, class UserData = void*>
 class PODIntervalSearchAdapter {
+    DISALLOW_NEW();
+
 public:
     typedef PODInterval<T, UserData> IntervalType;
 
-    PODIntervalSearchAdapter(Vector<IntervalType>& result, const T& lowValue, const T& highValue)
+    PODIntervalSearchAdapter(Vector<IntervalType>& result,
+        const T& lowValue,
+        const T& highValue)
         : m_result(result)
         , m_lowValue(lowValue)
         , m_highValue(highValue)
@@ -57,7 +61,7 @@ public:
     void collectIfNeeded(const IntervalType& data) const
     {
         if (data.overlaps(m_lowValue, m_highValue))
-            m_result.append(data);
+            m_result.push_back(data);
     }
 
 private:
@@ -69,9 +73,10 @@ private:
 // An interval tree, which is a form of augmented red-black tree. It
 // supports efficient (O(lg n)) insertion, removal and querying of
 // intervals in the tree.
-template<class T, class UserData = void*>
+template <class T, class UserData = void*>
 class PODIntervalTree final : public PODRedBlackTree<PODInterval<T, UserData>> {
     WTF_MAKE_NONCOPYABLE(PODIntervalTree);
+
 public:
     // Typedef to reduce typing when declaring intervals to be stored in
     // this tree.
@@ -109,7 +114,8 @@ public:
     // Returns all intervals in the tree which overlap the given query
     // interval. The returned intervals are sorted by increasing low
     // endpoint.
-    void allOverlaps(const IntervalType& interval, Vector<IntervalType>& result) const
+    void allOverlaps(const IntervalType& interval,
+        Vector<IntervalType>& result) const
     {
         // Explicit dereference of "this" required because of
         // inheritance rules in template classes.
@@ -126,7 +132,9 @@ public:
     }
 
     // Helper to create interval objects.
-    static IntervalType createInterval(const T& low, const T& high, const UserData data = 0)
+    static IntervalType createInterval(const T& low,
+        const T& high,
+        const UserData data = nullptr)
     {
         return IntervalType(low, high, data);
     }
@@ -155,7 +163,8 @@ private:
     // interval to the result vector. The intervals are sorted by
     // increasing low endpoint.
     template <class AdapterType>
-    void searchForOverlapsFrom(IntervalNode* node, AdapterType& adapter) const
+    DISABLE_CFI_PERF void searchForOverlapsFrom(IntervalNode* node,
+        AdapterType& adapter) const
     {
         if (!node)
             return;
@@ -239,9 +248,10 @@ private:
             localMaxValue = node->data().high();
         if (!(localMaxValue == node->data().maxHigh())) {
 #ifndef NDEBUG
-            String localMaxValueString = ValueToString<T>::string(localMaxValue);
-            WTF_LOG_ERROR("PODIntervalTree verification failed at node 0x%p: localMaxValue=%s and data=%s",
-                node, localMaxValueString.utf8().data(), node->data().toString().utf8().data());
+            String localMaxValueString = ValueToString<T>::toString(localMaxValue);
+            DLOG(ERROR) << "PODIntervalTree verification failed at node " << node
+                        << ": localMaxValue=" << localMaxValueString
+                        << " and data=" << node->data().toString();
 #endif
             return false;
         }
@@ -253,9 +263,9 @@ private:
 
 #ifndef NDEBUG
 // Support for printing PODIntervals at the PODRedBlackTree level.
-template<class T, class UserData>
+template <class T, class UserData>
 struct ValueToString<PODInterval<T, UserData>> {
-    static String string(const PODInterval<T, UserData>& interval)
+    static String toString(const PODInterval<T, UserData>& interval)
     {
         return interval.toString();
     }

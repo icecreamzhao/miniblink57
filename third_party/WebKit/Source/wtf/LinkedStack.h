@@ -31,16 +31,29 @@
 #ifndef LinkedStack_h
 #define LinkedStack_h
 
-#include "wtf/FastAllocBase.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/Allocator.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace WTF {
 
 template <typename T>
 class LinkedStack {
-    WTF_MAKE_FAST_ALLOCATED(LinkedStack);
+    USING_FAST_MALLOC(LinkedStack);
+
 public:
-    LinkedStack() : m_size(0) { }
+    LinkedStack()
+        : m_size(0)
+    {
+    }
+
+    // Iterative cleanup to prevent stack overflow problems.
+    ~LinkedStack()
+    {
+        std::unique_ptr<Node> ptr = m_head.release();
+        while (ptr)
+            ptr = ptr->m_next.release();
+    }
 
     bool isEmpty();
 
@@ -50,25 +63,23 @@ public:
 
     size_t size();
 
-    // This inner class used to be private but is now public on account of a
-    // possible MSVC bug. It can be made private again if we get rid of
-    // WTF_MAKE_FAST_ALLOCATED ever.
+private:
     class Node {
-        WTF_MAKE_FAST_ALLOCATED(LinkedStack::Node);
+        USING_FAST_MALLOC(LinkedStack::Node);
+
     public:
-        Node(const T&, PassOwnPtr<Node> next);
+        Node(const T&, std::unique_ptr<Node> next);
 
         T m_data;
-        OwnPtr<Node> m_next;
+        std::unique_ptr<Node> m_next;
     };
 
-private:
-    OwnPtr<Node> m_head;
+    std::unique_ptr<Node> m_head;
     size_t m_size;
 };
 
 template <typename T>
-LinkedStack<T>::Node::Node(const T& data, PassOwnPtr<Node> next)
+LinkedStack<T>::Node::Node(const T& data, std::unique_ptr<Node> next)
     : m_data(data)
     , m_next(next)
 {
@@ -83,7 +94,7 @@ inline bool LinkedStack<T>::isEmpty()
 template <typename T>
 inline void LinkedStack<T>::push(const T& data)
 {
-    m_head = adoptPtr(new Node(data, m_head.release()));
+    m_head = WTF::wrapUnique(new Node(data, m_head.release()));
     ++m_size;
 }
 
@@ -96,7 +107,8 @@ inline const T& LinkedStack<T>::peek()
 template <typename T>
 inline void LinkedStack<T>::pop()
 {
-    ASSERT(m_head && m_size);
+    DCHECK(m_head);
+    DCHECK(m_size);
     m_head = m_head->m_next.release();
     --m_size;
 }
@@ -107,7 +119,7 @@ inline size_t LinkedStack<T>::size()
     return m_size;
 }
 
-}
+} // namespace WTF
 
 using WTF::LinkedStack;
 

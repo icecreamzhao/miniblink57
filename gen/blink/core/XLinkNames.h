@@ -7,33 +7,33 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/QualifiedName.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
-class XLinkQualifiedName : public QualifiedName { };
+class XLinkQualifiedName : public QualifiedName {
+};
 
 namespace XLinkNames {
 
-// Namespace
-CORE_EXPORT extern const WTF::AtomicString& xlinkNamespaceURI;
+    // Namespace
+    CORE_EXPORT extern const WTF::AtomicString& xlinkNamespaceURI;
 
-// Tags
+    // Tags
 
-// Attributes
-CORE_EXPORT extern const blink::QualifiedName& actuateAttr;
-CORE_EXPORT extern const blink::QualifiedName& arcroleAttr;
-CORE_EXPORT extern const blink::QualifiedName& hrefAttr;
-CORE_EXPORT extern const blink::QualifiedName& roleAttr;
-CORE_EXPORT extern const blink::QualifiedName& showAttr;
-CORE_EXPORT extern const blink::QualifiedName& titleAttr;
-CORE_EXPORT extern const blink::QualifiedName& typeAttr;
+    // Attributes
+    CORE_EXPORT extern const blink::QualifiedName& actuateAttr;
+    CORE_EXPORT extern const blink::QualifiedName& arcroleAttr;
+    CORE_EXPORT extern const blink::QualifiedName& hrefAttr;
+    CORE_EXPORT extern const blink::QualifiedName& roleAttr;
+    CORE_EXPORT extern const blink::QualifiedName& showAttr;
+    CORE_EXPORT extern const blink::QualifiedName& titleAttr;
+    CORE_EXPORT extern const blink::QualifiedName& typeAttr;
 
+    const unsigned XLinkAttrsCount = 7;
+    std::unique_ptr<const QualifiedName*[]> getXLinkAttrs();
 
-const unsigned XLinkAttrsCount = 7;
-PassOwnPtr<const QualifiedName*[]> getXLinkAttrs();
-
-void init();
+    void init();
 
 } // XLinkNames
 } // namespace blink

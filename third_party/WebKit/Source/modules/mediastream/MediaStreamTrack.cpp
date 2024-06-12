@@ -11,19 +11,18 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediastream/MediaStreamTrack.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
@@ -31,37 +30,48 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/events/Event.h"
+#include "core/frame/Deprecation.h"
+#include "modules/mediastream/MediaConstraintsImpl.h"
 #include "modules/mediastream/MediaStream.h"
-#include "modules/mediastream/MediaStreamTrackSourcesCallback.h"
-#include "modules/mediastream/MediaStreamTrackSourcesRequestImpl.h"
+#include "modules/mediastream/MediaTrackSettings.h"
 #include "modules/mediastream/UserMediaController.h"
 #include "platform/mediastream/MediaStreamCenter.h"
 #include "platform/mediastream/MediaStreamComponent.h"
-#include "public/platform/WebSourceInfo.h"
+#include "public/platform/WebMediaStreamTrack.h"
+#include "wtf/Assertions.h"
+#include <memory>
 
 namespace blink {
 
-MediaStreamTrack* MediaStreamTrack::create(ExecutionContext* context, MediaStreamComponent* component)
+namespace {
+    static const char kContentHintStringNone[] = "";
+    static const char kContentHintStringAudioSpeech[] = "speech";
+    static const char kContentHintStringAudioMusic[] = "music";
+    static const char kContentHintStringVideoMotion[] = "motion";
+    static const char kContentHintStringVideoDetail[] = "detail";
+} // namespace
+
+MediaStreamTrack* MediaStreamTrack::create(ExecutionContext* context,
+    MediaStreamComponent* component)
 {
-    MediaStreamTrack* track = new MediaStreamTrack(context, component);
-    track->suspendIfNeeded();
-    return track;
+    return new MediaStreamTrack(context, component);
 }
 
-MediaStreamTrack::MediaStreamTrack(ExecutionContext* context, MediaStreamComponent* component)
-    : ActiveDOMObject(context)
+MediaStreamTrack::MediaStreamTrack(ExecutionContext* context,
+    MediaStreamComponent* component)
+    : ContextLifecycleObserver(context)
     , m_readyState(MediaStreamSource::ReadyStateLive)
     , m_isIteratingRegisteredMediaStreams(false)
     , m_stopped(false)
     , m_component(component)
+    ,
+    // The source's constraints aren't yet initialized at creation time.
+    m_constraints()
 {
     m_component->source()->addObserver(this);
 }
 
-MediaStreamTrack::~MediaStreamTrack()
-{
-    m_component->source()->removeObserver(this);
-}
+MediaStreamTrack::~MediaStreamTrack() { }
 
 String MediaStreamTrack::kind() const
 {
@@ -75,7 +85,7 @@ String MediaStreamTrack::kind() const
         return videoKind;
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return audioKind;
 }
 
@@ -102,7 +112,8 @@ void MediaStreamTrack::setEnabled(bool enabled)
     m_component->setEnabled(enabled);
 
     if (!ended())
-        MediaStreamCenter::instance().didSetMediaStreamTrackEnabled(m_component.get());
+        MediaStreamCenter::instance().didSetMediaStreamTrackEnabled(
+            m_component.get());
 }
 
 bool MediaStreamTrack::muted() const
@@ -110,14 +121,65 @@ bool MediaStreamTrack::muted() const
     return m_component->muted();
 }
 
+String MediaStreamTrack::contentHint() const
+{
+    WebMediaStreamTrack::ContentHintType hint = m_component->contentHint();
+    switch (hint) {
+    case WebMediaStreamTrack::ContentHintType::None:
+        return kContentHintStringNone;
+    case WebMediaStreamTrack::ContentHintType::AudioSpeech:
+        return kContentHintStringAudioSpeech;
+    case WebMediaStreamTrack::ContentHintType::AudioMusic:
+        return kContentHintStringAudioMusic;
+    case WebMediaStreamTrack::ContentHintType::VideoMotion:
+        return kContentHintStringVideoMotion;
+    case WebMediaStreamTrack::ContentHintType::VideoDetail:
+        return kContentHintStringVideoDetail;
+    }
+
+    NOTREACHED();
+    return String();
+}
+
+void MediaStreamTrack::setContentHint(const String& hint)
+{
+    WebMediaStreamTrack::ContentHintType translatedHint = WebMediaStreamTrack::ContentHintType::None;
+    switch (m_component->source()->type()) {
+    case MediaStreamSource::TypeAudio:
+        if (hint == kContentHintStringNone) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::None;
+        } else if (hint == kContentHintStringAudioSpeech) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::AudioSpeech;
+        } else if (hint == kContentHintStringAudioMusic) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::AudioMusic;
+        } else {
+            // TODO(pbos): Log warning?
+            // Invalid values for audio are to be ignored (similar to invalid enum
+            // values).
+            return;
+        }
+        break;
+    case MediaStreamSource::TypeVideo:
+        if (hint == kContentHintStringNone) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::None;
+        } else if (hint == kContentHintStringVideoMotion) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::VideoMotion;
+        } else if (hint == kContentHintStringVideoDetail) {
+            translatedHint = WebMediaStreamTrack::ContentHintType::VideoDetail;
+        } else {
+            // TODO(pbos): Log warning?
+            // Invalid values for video are to be ignored (similar to invalid enum
+            // values).
+            return;
+        }
+    }
+
+    m_component->setContentHint(translatedHint);
+}
+
 bool MediaStreamTrack::remote() const
 {
     return m_component->source()->remote();
-}
-
-bool MediaStreamTrack::readonly() const
-{
-    return m_component->source()->readonly();
 }
 
 String MediaStreamTrack::readyState() const
@@ -134,20 +196,8 @@ String MediaStreamTrack::readyState() const
         return "ended";
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return String();
-}
-
-void MediaStreamTrack::getSources(ExecutionContext* context, MediaStreamTrackSourcesCallback* callback, ExceptionState& exceptionState)
-{
-    LocalFrame* frame = toDocument(context)->frame();
-    UserMediaController* userMedia = UserMediaController::from(frame);
-    if (!userMedia) {
-        exceptionState.throwDOMException(NotSupportedError, "No sources controller available; is this a detached window?");
-        return;
-    }
-    MediaStreamTrackSourcesRequest* request = MediaStreamTrackSourcesRequestImpl::create(*context, callback);
-    userMedia->requestSources(request);
 }
 
 void MediaStreamTrack::stopTrack(ExceptionState& exceptionState)
@@ -163,10 +213,57 @@ void MediaStreamTrack::stopTrack(ExceptionState& exceptionState)
 
 MediaStreamTrack* MediaStreamTrack::clone(ExecutionContext* context)
 {
-    RefPtr<MediaStreamComponent> clonedComponent = MediaStreamComponent::create(component()->source());
-    MediaStreamTrack* clonedTrack = MediaStreamTrack::create(context, clonedComponent.get());
-    MediaStreamCenter::instance().didCreateMediaStreamTrack(clonedComponent.get());
+    // TODO(pbos): Make sure m_readyState and m_stopped carries over on cloned
+    // tracks.
+    MediaStreamComponent* clonedComponent = component()->clone();
+    MediaStreamTrack* clonedTrack = MediaStreamTrack::create(context, clonedComponent);
+    MediaStreamCenter::instance().didCreateMediaStreamTrack(clonedComponent);
     return clonedTrack;
+}
+
+void MediaStreamTrack::getConstraints(MediaTrackConstraints& constraints)
+{
+    MediaConstraintsImpl::convertConstraints(m_constraints, constraints);
+}
+
+void MediaStreamTrack::setConstraints(const WebMediaConstraints& constraints)
+{
+    m_constraints = constraints;
+}
+
+void MediaStreamTrack::getSettings(MediaTrackSettings& settings)
+{
+    WebMediaStreamTrack::Settings platformSettings;
+    m_component->getSettings(platformSettings);
+    if (platformSettings.hasFrameRate()) {
+        settings.setFrameRate(platformSettings.frameRate);
+    }
+    if (platformSettings.hasWidth()) {
+        settings.setWidth(platformSettings.width);
+    }
+    if (platformSettings.hasHeight()) {
+        settings.setHeight(platformSettings.height);
+    }
+    settings.setDeviceId(platformSettings.deviceId);
+    if (platformSettings.hasFacingMode()) {
+        switch (platformSettings.facingMode) {
+        case WebMediaStreamTrack::FacingMode::User:
+            settings.setFacingMode("user");
+            break;
+        case WebMediaStreamTrack::FacingMode::Environment:
+            settings.setFacingMode("environment");
+            break;
+        case WebMediaStreamTrack::FacingMode::Left:
+            settings.setFacingMode("left");
+            break;
+        case WebMediaStreamTrack::FacingMode::Right:
+            settings.setFacingMode("right");
+            break;
+        default:
+            // None, or unknown facing mode. Ignore.
+            break;
+        }
+    }
 }
 
 bool MediaStreamTrack::ended() const
@@ -179,7 +276,7 @@ void MediaStreamTrack::sourceChangedState()
     if (ended())
         return;
 
-    m_readyState = m_component->source()->readyState();
+    m_readyState = m_component->source()->getReadyState();
     switch (m_readyState) {
     case MediaStreamSource::ReadyStateLive:
         m_component->setMuted(false);
@@ -198,40 +295,54 @@ void MediaStreamTrack::sourceChangedState()
 
 void MediaStreamTrack::propagateTrackEnded()
 {
-    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
+    CHECK(!m_isIteratingRegisteredMediaStreams);
     m_isIteratingRegisteredMediaStreams = true;
-    for (HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.begin(); iter != m_registeredMediaStreams.end(); ++iter)
+    for (HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.begin();
+         iter != m_registeredMediaStreams.end(); ++iter)
         (*iter)->trackEnded();
     m_isIteratingRegisteredMediaStreams = false;
 }
 
-MediaStreamComponent* MediaStreamTrack::component()
-{
-    return m_component.get();
-}
-
-void MediaStreamTrack::stop()
+void MediaStreamTrack::contextDestroyed(ExecutionContext*)
 {
     m_stopped = true;
 }
 
-PassOwnPtr<AudioSourceProvider> MediaStreamTrack::createWebAudioSource()
+bool MediaStreamTrack::hasPendingActivity() const
 {
-    return MediaStreamCenter::instance().createWebAudioSourceFromMediaStreamTrack(component());
+    // If 'ended' listeners exist and the object hasn't yet reached
+    // that state, keep the object alive.
+    //
+    // An otherwise unreachable MediaStreamTrack object in an non-ended
+    // state will otherwise indirectly be transitioned to the 'ended' state
+    // while finalizing m_component. Which dispatches an 'ended' event,
+    // referring to this object as the target. If this object is then GCed
+    // at the same time, v8 objects will retain (wrapper) references to
+    // this dead MediaStreamTrack object. Bad.
+    //
+    // Hence insisting on keeping this object alive until the 'ended'
+    // state has been reached & handled.
+    return !ended() && hasEventListeners(EventTypeNames::ended);
+}
+
+std::unique_ptr<AudioSourceProvider> MediaStreamTrack::createWebAudioSource()
+{
+    return MediaStreamCenter::instance().createWebAudioSourceFromMediaStreamTrack(
+        component());
 }
 
 void MediaStreamTrack::registerMediaStream(MediaStream* mediaStream)
 {
-    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
-    RELEASE_ASSERT(!m_registeredMediaStreams.contains(mediaStream));
+    CHECK(!m_isIteratingRegisteredMediaStreams);
+    CHECK(!m_registeredMediaStreams.contains(mediaStream));
     m_registeredMediaStreams.add(mediaStream);
 }
 
 void MediaStreamTrack::unregisterMediaStream(MediaStream* mediaStream)
 {
-    RELEASE_ASSERT(!m_isIteratingRegisteredMediaStreams);
+    CHECK(!m_isIteratingRegisteredMediaStreams);
     HeapHashSet<Member<MediaStream>>::iterator iter = m_registeredMediaStreams.find(mediaStream);
-    RELEASE_ASSERT(iter != m_registeredMediaStreams.end());
+    CHECK(iter != m_registeredMediaStreams.end());
     m_registeredMediaStreams.remove(iter);
 }
 
@@ -240,16 +351,17 @@ const AtomicString& MediaStreamTrack::interfaceName() const
     return EventTargetNames::MediaStreamTrack;
 }
 
-ExecutionContext* MediaStreamTrack::executionContext() const
+ExecutionContext* MediaStreamTrack::getExecutionContext() const
 {
-    return ActiveDOMObject::executionContext();
+    return ContextLifecycleObserver::getExecutionContext();
 }
 
 DEFINE_TRACE(MediaStreamTrack)
 {
     visitor->trace(m_registeredMediaStreams);
-    RefCountedGarbageCollectedEventTargetWithInlineData<MediaStreamTrack>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    visitor->trace(m_component);
+    EventTargetWithInlineData::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 } // namespace blink

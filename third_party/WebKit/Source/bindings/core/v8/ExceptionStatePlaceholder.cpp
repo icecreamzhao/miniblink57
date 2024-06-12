@@ -28,31 +28,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 
 namespace blink {
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 
-NoExceptionStateAssertionChecker::NoExceptionStateAssertionChecker(const char* file, int line)
-    : ExceptionState(ExceptionState::UnknownContext, 0, 0, v8::Local<v8::Object>(), 0)
+NoExceptionStateAssertionChecker::NoExceptionStateAssertionChecker(
+    const char* file,
+    int line)
+    : ExceptionState(nullptr, ExceptionState::UnknownContext, nullptr, nullptr)
     , m_file(file)
-    , m_line(line) { }
-
-void NoExceptionStateAssertionChecker::throwDOMException(const ExceptionCode&, const String&)
+    , m_line(line)
 {
-    ASSERT_AT(false, m_file, m_line, "");
+}
+
+void NoExceptionStateAssertionChecker::throwDOMException(ExceptionCode,
+    const String&)
+{
+    DCHECK_AT(false, m_file, m_line) << "DOMExeption should not be thrown.";
+}
+
+void NoExceptionStateAssertionChecker::throwRangeError(const String& message)
+{
+    DCHECK_AT(false, m_file, m_line) << "RangeError should not be thrown.";
+}
+
+void NoExceptionStateAssertionChecker::throwSecurityError(const String&,
+    const String&)
+{
+    DCHECK_AT(false, m_file, m_line) << "SecurityError should not be thrown.";
 }
 
 void NoExceptionStateAssertionChecker::throwTypeError(const String&)
 {
-    ASSERT_AT(false, m_file, m_line, "");
+    DCHECK_AT(false, m_file, m_line) << "TypeError should not be thrown.";
 }
 
-void NoExceptionStateAssertionChecker::throwSecurityError(const String&, const String&)
+void NoExceptionStateAssertionChecker::rethrowV8Exception(
+    v8::Local<v8::Value>)
 {
-    ASSERT_AT(false, m_file, m_line, "");
+    DCHECK_AT(false, m_file, m_line) << "An exception should not be rethrown.";
 }
 
 #endif

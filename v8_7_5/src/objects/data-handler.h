@@ -13,48 +13,48 @@
 namespace v8 {
 namespace internal {
 
-// DataHandler is a base class for load and store handlers that can't be
-// encoded in one Smi. Kind of a handler can be deduced from instance type.
-class DataHandler : public Struct {
- public:
-  // [smi_handler]: A Smi which encodes a handler or Code object (we still
-  // use code handlers for accessing lexical environment variables, but soon
-  // only smi handlers will remain). See LoadHandler and StoreHandler for
-  // details about encoding.
-  DECL_ACCESSORS(smi_handler, Object)
+    // DataHandler is a base class for load and store handlers that can't be
+    // encoded in one Smi. Kind of a handler can be deduced from instance type.
+    class DataHandler : public Struct {
+    public:
+        // [smi_handler]: A Smi which encodes a handler or Code object (we still
+        // use code handlers for accessing lexical environment variables, but soon
+        // only smi handlers will remain). See LoadHandler and StoreHandler for
+        // details about encoding.
+        DECL_ACCESSORS(smi_handler, Object)
 
-  // [validity_cell]: A validity Cell that guards prototype chain modifications.
-  DECL_ACCESSORS(validity_cell, Object)
+        // [validity_cell]: A validity Cell that guards prototype chain modifications.
+        DECL_ACCESSORS(validity_cell, Object)
 
-  // Returns number of optional data fields available in the object.
-  inline int data_field_count() const;
+        // Returns number of optional data fields available in the object.
+        inline int data_field_count() const;
 
-  // [data1-3]: These are optional general-purpose fields whose content and
-  // presence depends on the handler kind.
-  DECL_ACCESSORS(data1, MaybeObject)
-  DECL_ACCESSORS(data2, MaybeObject)
-  DECL_ACCESSORS(data3, MaybeObject)
+        // [data1-3]: These are optional general-purpose fields whose content and
+        // presence depends on the handler kind.
+        DECL_ACCESSORS(data1, MaybeObject)
+        DECL_ACCESSORS(data2, MaybeObject)
+        DECL_ACCESSORS(data3, MaybeObject)
 
-  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
-                                TORQUE_GENERATED_DATA_HANDLER_FIELDS)
+        DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+            TORQUE_GENERATED_DATA_HANDLER_FIELDS)
 
-  static const int kSizeWithData0 = kData1Offset;
-  static const int kSizeWithData1 = kData2Offset;
-  static const int kSizeWithData2 = kData3Offset;
-  static const int kSizeWithData3 = kSize;
+        static const int kSizeWithData0 = kData1Offset;
+        static const int kSizeWithData1 = kData2Offset;
+        static const int kSizeWithData2 = kData3Offset;
+        static const int kSizeWithData3 = kSize;
 
-  DECL_CAST(DataHandler)
+        DECL_CAST(DataHandler)
 
-  DECL_VERIFIER(DataHandler)
+        DECL_VERIFIER(DataHandler)
 
-  class BodyDescriptor;
+        class BodyDescriptor;
 
-  OBJECT_CONSTRUCTORS(DataHandler, Struct);
-};
+        OBJECT_CONSTRUCTORS(DataHandler, Struct);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_DATA_HANDLER_H_
+#endif // V8_OBJECTS_DATA_HANDLER_H_

@@ -28,28 +28,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebElement.h"
 
 #include "bindings/core/v8/ExceptionState.h"
+#include "core/HTMLNames.h"
 #include "core/dom/Element.h"
-#include "core/dom/Fullscreen.h"
-#include "core/dom/NamedNodeMap.h"
-#include "core/dom/custom/CustomElementProcessingStack.h"
+#include "core/dom/custom/V0CustomElementProcessingStack.h"
+#include "core/editing/EditingUtilities.h"
+#include "core/html/TextControlElement.h"
 #include "platform/graphics/Image.h"
 #include "public/platform/WebRect.h"
 #include "wtf/PassRefPtr.h"
+#include "wtf/text/AtomicString.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
+
+using namespace HTMLNames;
 
 bool WebElement::isFormControlElement() const
 {
     return constUnwrap<Element>()->isFormControlElement();
 }
 
-bool WebElement::isTextFormControlElement() const
+// TODO(dglazkov): Remove. Consumers of this code should use
+// Node:hasEditableStyle.  http://crbug.com/612560
+bool WebElement::isEditable() const
 {
-    return constUnwrap<Element>()->isTextFormControl();
+    const Element* element = constUnwrap<Element>();
+
+    element->document().updateStyleAndLayoutTree();
+    if (hasEditableStyle(*element))
+        return true;
+
+    if (element->isTextControl()) {
+        if (!toTextControlElement(element)->isDisabledOrReadOnly())
+            return true;
+    }
+
+    return equalIgnoringASCIICase(element->getAttribute(roleAttr), "textbox");
 }
 
 WebString WebElement::tagName() const
@@ -73,27 +90,20 @@ bool WebElement::hasAttribute(const WebString& attrName) const
     return constUnwrap<Element>()->hasAttribute(attrName);
 }
 
-void WebElement::removeAttribute(const WebString& attrName)
-{
-    // TODO: Custom element callbacks need to be called on WebKit API methods that
-    // mutate the DOM in any way.
-    CustomElementProcessingStack::CallbackDeliveryScope deliverCustomElementCallbacks;
-    unwrap<Element>()->removeAttribute(attrName);
-}
-
 WebString WebElement::getAttribute(const WebString& attrName) const
 {
     return constUnwrap<Element>()->getAttribute(attrName);
 }
 
-bool WebElement::setAttribute(const WebString& attrName, const WebString& attrValue)
+void WebElement::setAttribute(const WebString& attrName,
+    const WebString& attrValue)
 {
     // TODO: Custom element callbacks need to be called on WebKit API methods that
     // mutate the DOM in any way.
-    CustomElementProcessingStack::CallbackDeliveryScope deliverCustomElementCallbacks;
-    TrackExceptionState exceptionState;
-    unwrap<Element>()->setAttribute(attrName, attrValue, exceptionState);
-    return !exceptionState.hadException();
+    V0CustomElementProcessingStack::CallbackDeliveryScope
+        deliverCustomElementCallbacks;
+    unwrap<Element>()->setAttribute(attrName, attrValue,
+        IGNORE_EXCEPTION_FOR_TESTING);
 }
 
 unsigned WebElement::attributeCount() const
@@ -122,20 +132,14 @@ WebString WebElement::textContent() const
     return constUnwrap<Element>()->textContent();
 }
 
-void WebElement::requestFullScreen()
-{
-    Element* element = unwrap<Element>();
-    Fullscreen::from(element->document()).requestFullscreen(*element, Fullscreen::PrefixedRequest);
-}
-
 bool WebElement::hasNonEmptyLayoutSize() const
 {
     return constUnwrap<Element>()->hasNonEmptyLayoutSize();
 }
 
-WebRect WebElement::boundsInViewportSpace()
+WebRect WebElement::boundsInViewport() const
 {
-    return unwrap<Element>()->boundsInViewportSpace();
+    return constUnwrap<Element>()->boundsInViewport();
 }
 
 WebImage WebElement::imageContents()
@@ -143,29 +147,23 @@ WebImage WebElement::imageContents()
     if (isNull())
         return WebImage();
 
-    Image* image = unwrap<Element>()->imageContents();
-    if (!image)
-        return WebImage();
-
-    SkBitmap bitmap;
-    if (!image->bitmapForCurrentFrame(&bitmap))
-        return WebImage();
-
-    return WebImage(bitmap);
+    return WebImage(unwrap<Element>()->imageContents());
 }
 
-WebElement::WebElement(const PassRefPtrWillBeRawPtr<Element>& elem)
+WebElement::WebElement(Element* elem)
     : WebNode(elem)
 {
 }
 
-WebElement& WebElement::operator=(const PassRefPtrWillBeRawPtr<Element>& elem)
+DEFINE_WEB_NODE_TYPE_CASTS(WebElement, isElementNode());
+
+WebElement& WebElement::operator=(Element* elem)
 {
     m_private = elem;
     return *this;
 }
 
-WebElement::operator PassRefPtrWillBeRawPtr<Element>() const
+WebElement::operator Element*() const
 {
     return toElement(m_private.get());
 }

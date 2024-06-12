@@ -23,19 +23,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/events/BeforeTextInsertedEvent.h"
 
 namespace blink {
 
 BeforeTextInsertedEvent::BeforeTextInsertedEvent(const String& text)
-    : Event(EventTypeNames::webkitBeforeTextInserted, false, true), m_text(text)
+    : Event(EventTypeNames::webkitBeforeTextInserted, false, true)
+    , m_text(text)
 {
 }
 
-BeforeTextInsertedEvent::~BeforeTextInsertedEvent()
-{
-}
+BeforeTextInsertedEvent::~BeforeTextInsertedEvent() { }
 
 const AtomicString& BeforeTextInsertedEvent::interfaceName() const
 {
@@ -48,4 +46,4 @@ DEFINE_TRACE(BeforeTextInsertedEvent)
     Event::trace(visitor);
 }
 
-}
+} // namespace blink

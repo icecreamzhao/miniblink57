@@ -27,26 +27,34 @@
 #define HostWindow_h
 
 #include "platform/PlatformExport.h"
-#include "wtf/FastAllocBase.h"
+#include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 class IntRect;
-struct WebScreenInfo;
+class Widget;
 
-class PLATFORM_EXPORT HostWindow {
-    WTF_MAKE_NONCOPYABLE(HostWindow); WTF_MAKE_FAST_ALLOCATED(HostWindow);
+class PLATFORM_EXPORT HostWindow
+    : public GarbageCollectedFinalized<HostWindow> {
+    WTF_MAKE_NONCOPYABLE(HostWindow);
+
 public:
     HostWindow() { }
     virtual ~HostWindow() { }
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 
     // Requests the host invalidate the contents.
     virtual void invalidateRect(const IntRect& updateRect) = 0;
 
-    // Converts from the window coordinates to screen coordinates.
-    virtual IntRect viewportToScreen(const IntRect&) const = 0;
+    // Converts the rect from the viewport coordinates to screen coordinates.
+    virtual IntRect viewportToScreen(const IntRect&, const Widget*) const = 0;
 
-    virtual void scheduleAnimation() = 0;
+    // Converts the scalar value from the window coordinates to the viewport
+    // scale.
+    virtual float windowToViewportScalar(const float) const = 0;
+
+    virtual void scheduleAnimation(Widget*) = 0;
 };
 
 } // namespace blink

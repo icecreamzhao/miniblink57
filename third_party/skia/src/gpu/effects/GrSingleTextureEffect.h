@@ -8,8 +8,8 @@
 #ifndef GrSingleTextureEffect_DEFINED
 #define GrSingleTextureEffect_DEFINED
 
-#include "GrFragmentProcessor.h"
 #include "GrCoordTransform.h"
+#include "GrFragmentProcessor.h"
 #include "GrInvariantOutput.h"
 #include "SkMatrix.h"
 
@@ -21,28 +21,33 @@ class GrTexture;
  */
 class GrSingleTextureEffect : public GrFragmentProcessor {
 public:
-    virtual ~GrSingleTextureEffect();
+    ~GrSingleTextureEffect() override;
+
+    SkString dumpInfo() const override
+    {
+        SkString str;
+        str.appendf("Texture: %d", fTextureAccess.getTexture()->getUniqueID());
+        return str;
+    }
 
 protected:
     /** unfiltered, clamp mode */
-    GrSingleTextureEffect(GrProcessorDataManager*, GrTexture*, const SkMatrix&,
-                          GrCoordSet = kLocal_GrCoordSet);
+    GrSingleTextureEffect(GrTexture*, const SkMatrix&, GrCoordSet = kLocal_GrCoordSet);
     /** clamp mode */
-    GrSingleTextureEffect(GrProcessorDataManager*, GrTexture*, const SkMatrix&,
-                          GrTextureParams::FilterMode filterMode,
-                          GrCoordSet = kLocal_GrCoordSet);
-    GrSingleTextureEffect(GrProcessorDataManager*,
-                          GrTexture*,
-                          const SkMatrix&,
-                          const GrTextureParams&,
-                          GrCoordSet = kLocal_GrCoordSet);
+    GrSingleTextureEffect(GrTexture*, const SkMatrix&, GrTextureParams::FilterMode filterMode,
+        GrCoordSet = kLocal_GrCoordSet);
+    GrSingleTextureEffect(GrTexture*,
+        const SkMatrix&,
+        const GrTextureParams&,
+        GrCoordSet = kLocal_GrCoordSet);
 
     /**
      * Can be used as a helper to implement subclass onComputeInvariantOutput(). It assumes that
      * the subclass output color will be a modulation of the input color with a value read from the
      * texture.
      */
-    void updateInvariantOutputForModulation(GrInvariantOutput* inout) const {
+    void updateInvariantOutputForModulation(GrInvariantOutput* inout) const
+    {
         if (GrPixelConfigIsAlphaOnly(this->texture(0)->config())) {
             inout->mulByUnknownSingleComponent();
         } else if (GrPixelConfigIsOpaque(this->texture(0)->config())) {
@@ -54,7 +59,7 @@ protected:
 
 private:
     GrCoordTransform fCoordTransform;
-    GrTextureAccess  fTextureAccess;
+    GrTextureAccess fTextureAccess;
 
     typedef GrFragmentProcessor INHERITED;
 };

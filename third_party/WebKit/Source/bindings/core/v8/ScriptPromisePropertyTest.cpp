@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "bindings/core/v8/ScriptPromiseProperty.h"
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
@@ -17,13 +16,11 @@
 #include "core/testing/DummyPageHolder.h"
 #include "core/testing/GCObservation.h"
 #include "core/testing/GarbageCollectedScriptWrappable.h"
-#include "core/testing/RefCountedScriptWrappable.h"
 #include "platform/heap/Handle.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
-#include <gtest/gtest.h>
+#include <memory>
 #include <v8.h>
 
 using namespace blink;
@@ -55,7 +52,9 @@ ScriptValue NotReached::call(ScriptValue)
 
 class StubFunction : public ScriptFunction {
 public:
-    static v8::Local<v8::Function> createFunction(ScriptState* scriptState, ScriptValue& value, size_t& callCount)
+    static v8::Local<v8::Function> createFunction(ScriptState* scriptState,
+        ScriptValue& value,
+        size_t& callCount)
     {
         StubFunction* self = new StubFunction(scriptState, value, callCount);
         return self->bindToV8Function();
@@ -82,13 +81,23 @@ private:
 
 class GarbageCollectedHolder : public GarbageCollectedScriptWrappable {
 public:
-    typedef ScriptPromiseProperty<Member<GarbageCollectedScriptWrappable>, Member<GarbageCollectedScriptWrappable>, Member<GarbageCollectedScriptWrappable>> Property;
+    typedef ScriptPromiseProperty<Member<GarbageCollectedScriptWrappable>,
+        Member<GarbageCollectedScriptWrappable>,
+        Member<GarbageCollectedScriptWrappable>>
+        Property;
     GarbageCollectedHolder(ExecutionContext* executionContext)
         : GarbageCollectedScriptWrappable("holder")
-        , m_property(new Property(executionContext, toGarbageCollectedScriptWrappable(), Property::Ready)) { }
+        , m_property(new Property(executionContext,
+              toGarbageCollectedScriptWrappable(),
+              Property::Ready))
+    {
+    }
 
-    Property* property() { return m_property; }
-    GarbageCollectedScriptWrappable* toGarbageCollectedScriptWrappable() { return this; }
+    Property* getProperty() { return m_property; }
+    GarbageCollectedScriptWrappable* toGarbageCollectedScriptWrappable()
+    {
+        return this;
+    }
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
@@ -100,62 +109,54 @@ private:
     Member<Property> m_property;
 };
 
-class RefCountedHolder : public RefCountedScriptWrappable {
-public:
-    // Do not resolve or reject the property with the holder itself. It leads
-    // to a leak.
-    typedef ScriptPromiseProperty<RefCountedScriptWrappable*, RefPtr<RefCountedScriptWrappable>, RefPtr<RefCountedScriptWrappable>> Property;
-    static PassRefPtr<RefCountedHolder> create(ExecutionContext* executionContext)
-    {
-        return adoptRef(new RefCountedHolder(executionContext));
-    }
-    Property* property() { return m_property; }
-    RefCountedScriptWrappable* toRefCountedScriptWrappable() { return this; }
-
-private:
-    RefCountedHolder(ExecutionContext* executionContext)
-        : RefCountedScriptWrappable("holder")
-        , m_property(new Property(executionContext, toRefCountedScriptWrappable(), Property::Ready)) { }
-
-    Persistent<Property> m_property;
-};
-
 class ScriptPromisePropertyTestBase {
 public:
     ScriptPromisePropertyTestBase()
         : m_page(DummyPageHolder::create(IntSize(1, 1)))
     {
         v8::HandleScope handleScope(isolate());
-        m_otherScriptState = ScriptStateForTesting::create(v8::Context::New(isolate()), DOMWrapperWorld::create(isolate(), 1));
+        m_otherScriptState = ScriptStateForTesting::create(
+            v8::Context::New(isolate()),
+            DOMWrapperWorld::ensureIsolatedWorld(isolate(), 1));
     }
 
-    virtual ~ScriptPromisePropertyTestBase()
-    {
-        m_page.clear();
-        gc();
-        Heap::collectAllGarbage();
-    }
+    virtual ~ScriptPromisePropertyTestBase() { destroyContext(); }
 
     Document& document() { return m_page->document(); }
     v8::Isolate* isolate() { return toIsolate(&document()); }
-    ScriptState* mainScriptState() { return ScriptState::forMainWorld(document().frame()); }
+    ScriptState* mainScriptState()
+    {
+        return ScriptState::forMainWorld(document().frame());
+    }
     DOMWrapperWorld& mainWorld() { return mainScriptState()->world(); }
     ScriptState* otherScriptState() { return m_otherScriptState.get(); }
     DOMWrapperWorld& otherWorld() { return m_otherScriptState->world(); }
     ScriptState* currentScriptState() { return ScriptState::current(isolate()); }
 
-    virtual void destroyContext()
+    void destroyContext()
     {
-        m_page.clear();
-        m_otherScriptState.clear();
-        gc();
-        Heap::collectGarbage(ThreadState::HeapPointersOnStack, ThreadState::GCWithSweep, Heap::ForcedGC);
+        m_page.reset();
+        if (m_otherScriptState) {
+            m_otherScriptState->disposePerContextData();
+            m_otherScriptState = nullptr;
+        }
     }
 
-    void gc() { V8GCController::collectGarbage(v8::Isolate::GetCurrent()); }
+    void gc()
+    {
+        V8GCController::collectAllGarbageForTesting(v8::Isolate::GetCurrent());
+    }
 
-    v8::Local<v8::Function> notReached(ScriptState* scriptState) { return NotReached::createFunction(scriptState); }
-    v8::Local<v8::Function> stub(ScriptState* scriptState, ScriptValue& value, size_t& callCount) { return StubFunction::createFunction(scriptState, value, callCount); }
+    v8::Local<v8::Function> notReached(ScriptState* scriptState)
+    {
+        return NotReached::createFunction(scriptState);
+    }
+    v8::Local<v8::Function> stub(ScriptState* scriptState,
+        ScriptValue& value,
+        size_t& callCount)
+    {
+        return StubFunction::createFunction(scriptState, value, callCount);
+    }
 
     template <typename T>
     ScriptValue wrap(DOMWrapperWorld& world, const T& value)
@@ -163,18 +164,21 @@ public:
         v8::HandleScope handleScope(isolate());
         ScriptState* scriptState = ScriptState::from(toV8Context(&document(), world));
         ScriptState::Scope scope(scriptState);
-        return ScriptValue(scriptState, toV8(value, scriptState->context()->Global(), isolate()));
+        return ScriptValue(
+            scriptState, ToV8(value, scriptState->context()->Global(), isolate()));
     }
 
 private:
-    OwnPtr<DummyPageHolder> m_page;
+    std::unique_ptr<DummyPageHolder> m_page;
     RefPtr<ScriptState> m_otherScriptState;
 };
 
 // This is the main test class.
 // If you want to examine a testcase independent of holder types, place the
 // test on this class.
-class ScriptPromisePropertyGarbageCollectedTest : public ScriptPromisePropertyTestBase, public ::testing::Test {
+class ScriptPromisePropertyGarbageCollectedTest
+    : public ScriptPromisePropertyTestBase,
+      public ::testing::Test {
 public:
     typedef GarbageCollectedHolder::Property Property;
 
@@ -184,37 +188,37 @@ public:
     }
 
     GarbageCollectedHolder* holder() { return m_holder; }
-    Property* property() { return m_holder->property(); }
-    ScriptPromise promise(DOMWrapperWorld& world) { return property()->promise(world); }
-
-    void destroyContext() override
+    Property* getProperty() { return m_holder->getProperty(); }
+    ScriptPromise promise(DOMWrapperWorld& world)
     {
-        m_holder = nullptr;
-        ScriptPromisePropertyTestBase::destroyContext();
+        return getProperty()->promise(world);
     }
 
 private:
     Persistent<GarbageCollectedHolder> m_holder;
 };
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_IsStableObjectInMainWorld)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    Promise_IsStableObjectInMainWorld)
 {
-    ScriptPromise v = property()->promise(DOMWrapperWorld::mainWorld());
-    ScriptPromise w = property()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise v = getProperty()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise w = getProperty()->promise(DOMWrapperWorld::mainWorld());
     EXPECT_EQ(v, w);
     ASSERT_FALSE(v.isEmpty());
     {
         ScriptState::Scope scope(mainScriptState());
-        EXPECT_EQ(v.v8Value().As<v8::Object>()->CreationContext(), toV8Context(&document(), mainWorld()));
+        EXPECT_EQ(v.v8Value().As<v8::Object>()->CreationContext(),
+            toV8Context(&document(), mainWorld()));
     }
-    EXPECT_EQ(Property::Pending, property()->state());
+    EXPECT_EQ(Property::Pending, getProperty()->getState());
 }
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_IsStableObjectInVariousWorlds)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    Promise_IsStableObjectInVariousWorlds)
 {
-    ScriptPromise u = property()->promise(otherWorld());
-    ScriptPromise v = property()->promise(DOMWrapperWorld::mainWorld());
-    ScriptPromise w = property()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise u = getProperty()->promise(otherWorld());
+    ScriptPromise v = getProperty()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise w = getProperty()->promise(DOMWrapperWorld::mainWorld());
     EXPECT_NE(mainScriptState(), otherScriptState());
     EXPECT_NE(&mainWorld(), &otherWorld());
     EXPECT_NE(u, v);
@@ -223,29 +227,33 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_IsStableObjectInVariou
     ASSERT_FALSE(v.isEmpty());
     {
         ScriptState::Scope scope(otherScriptState());
-        EXPECT_EQ(u.v8Value().As<v8::Object>()->CreationContext(), toV8Context(&document(), otherWorld()));
+        EXPECT_EQ(u.v8Value().As<v8::Object>()->CreationContext(),
+            toV8Context(&document(), otherWorld()));
     }
     {
         ScriptState::Scope scope(mainScriptState());
-        EXPECT_EQ(v.v8Value().As<v8::Object>()->CreationContext(), toV8Context(&document(), mainWorld()));
+        EXPECT_EQ(v.v8Value().As<v8::Object>()->CreationContext(),
+            toV8Context(&document(), mainWorld()));
     }
-    EXPECT_EQ(Property::Pending, property()->state());
+    EXPECT_EQ(Property::Pending, getProperty()->getState());
 }
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_IsStableObjectAfterSettling)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    Promise_IsStableObjectAfterSettling)
 {
     ScriptPromise v = promise(DOMWrapperWorld::mainWorld());
     GarbageCollectedScriptWrappable* value = new GarbageCollectedScriptWrappable("value");
 
-    property()->resolve(value);
-    EXPECT_EQ(Property::Resolved, property()->state());
+    getProperty()->resolve(value);
+    EXPECT_EQ(Property::Resolved, getProperty()->getState());
 
     ScriptPromise w = promise(DOMWrapperWorld::mainWorld());
     EXPECT_EQ(v, w);
     EXPECT_FALSE(v.isEmpty());
 }
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_DoesNotImpedeGarbageCollection)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    Promise_DoesNotImpedeGarbageCollection)
 {
     ScriptValue holderWrapper = wrap(mainWorld(), holder()->toGarbageCollectedScriptWrappable());
 
@@ -262,34 +270,38 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_DoesNotImpedeGarbageCo
     gc();
     EXPECT_TRUE(observation->wasCollected());
 
-    EXPECT_EQ(Property::Pending, property()->state());
+    EXPECT_EQ(Property::Pending, getProperty()->getState());
 }
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, Resolve_ResolvesScriptPromise)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    Resolve_ResolvesScriptPromise)
 {
-    ScriptPromise promise = property()->promise(DOMWrapperWorld::mainWorld());
-    ScriptPromise otherPromise = property()->promise(otherWorld());
+    ScriptPromise promise = getProperty()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise otherPromise = getProperty()->promise(otherWorld());
     ScriptValue actual, otherActual;
     size_t nResolveCalls = 0;
     size_t nOtherResolveCalls = 0;
 
     {
         ScriptState::Scope scope(mainScriptState());
-        promise.then(stub(currentScriptState(), actual, nResolveCalls), notReached(currentScriptState()));
+        promise.then(stub(currentScriptState(), actual, nResolveCalls),
+            notReached(currentScriptState()));
     }
 
     {
         ScriptState::Scope scope(otherScriptState());
-        otherPromise.then(stub(currentScriptState(), otherActual, nOtherResolveCalls), notReached(currentScriptState()));
+        otherPromise.then(
+            stub(currentScriptState(), otherActual, nOtherResolveCalls),
+            notReached(currentScriptState()));
     }
 
     EXPECT_NE(promise, otherPromise);
 
     GarbageCollectedScriptWrappable* value = new GarbageCollectedScriptWrappable("value");
-    property()->resolve(value);
-    EXPECT_EQ(Property::Resolved, property()->state());
+    getProperty()->resolve(value);
+    EXPECT_EQ(Property::Resolved, getProperty()->getState());
 
-    isolate()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(isolate());
     EXPECT_EQ(1u, nResolveCalls);
     EXPECT_EQ(1u, nOtherResolveCalls);
     EXPECT_EQ(wrap(mainWorld(), value), actual);
@@ -297,34 +309,38 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Resolve_ResolvesScriptPromise)
     EXPECT_EQ(wrap(otherWorld(), value), otherActual);
 }
 
-TEST_F(ScriptPromisePropertyGarbageCollectedTest, ResolveAndGetPromiseOnOtherWorld)
+TEST_F(ScriptPromisePropertyGarbageCollectedTest,
+    ResolveAndGetPromiseOnOtherWorld)
 {
-    ScriptPromise promise = property()->promise(DOMWrapperWorld::mainWorld());
-    ScriptPromise otherPromise = property()->promise(otherWorld());
+    ScriptPromise promise = getProperty()->promise(DOMWrapperWorld::mainWorld());
+    ScriptPromise otherPromise = getProperty()->promise(otherWorld());
     ScriptValue actual, otherActual;
     size_t nResolveCalls = 0;
     size_t nOtherResolveCalls = 0;
 
     {
         ScriptState::Scope scope(mainScriptState());
-        promise.then(stub(currentScriptState(), actual, nResolveCalls), notReached(currentScriptState()));
+        promise.then(stub(currentScriptState(), actual, nResolveCalls),
+            notReached(currentScriptState()));
     }
 
     EXPECT_NE(promise, otherPromise);
     GarbageCollectedScriptWrappable* value = new GarbageCollectedScriptWrappable("value");
-    property()->resolve(value);
-    EXPECT_EQ(Property::Resolved, property()->state());
+    getProperty()->resolve(value);
+    EXPECT_EQ(Property::Resolved, getProperty()->getState());
 
-    isolate()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(isolate());
     EXPECT_EQ(1u, nResolveCalls);
     EXPECT_EQ(0u, nOtherResolveCalls);
 
     {
         ScriptState::Scope scope(otherScriptState());
-        otherPromise.then(stub(currentScriptState(), otherActual, nOtherResolveCalls), notReached(currentScriptState()));
+        otherPromise.then(
+            stub(currentScriptState(), otherActual, nOtherResolveCalls),
+            notReached(currentScriptState()));
     }
 
-    isolate()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(isolate());
     EXPECT_EQ(1u, nResolveCalls);
     EXPECT_EQ(1u, nOtherResolveCalls);
     EXPECT_EQ(wrap(mainWorld(), value), actual);
@@ -335,23 +351,29 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, ResolveAndGetPromiseOnOtherWor
 TEST_F(ScriptPromisePropertyGarbageCollectedTest, Reject_RejectsScriptPromise)
 {
     GarbageCollectedScriptWrappable* reason = new GarbageCollectedScriptWrappable("reason");
-    property()->reject(reason);
-    EXPECT_EQ(Property::Rejected, property()->state());
+    getProperty()->reject(reason);
+    EXPECT_EQ(Property::Rejected, getProperty()->getState());
 
     ScriptValue actual, otherActual;
     size_t nRejectCalls = 0;
     size_t nOtherRejectCalls = 0;
     {
         ScriptState::Scope scope(mainScriptState());
-        property()->promise(DOMWrapperWorld::mainWorld()).then(notReached(currentScriptState()), stub(currentScriptState(), actual, nRejectCalls));
+        getProperty()
+            ->promise(DOMWrapperWorld::mainWorld())
+            .then(notReached(currentScriptState()),
+                stub(currentScriptState(), actual, nRejectCalls));
     }
 
     {
         ScriptState::Scope scope(otherScriptState());
-        property()->promise(otherWorld()).then(notReached(currentScriptState()), stub(currentScriptState(), otherActual, nOtherRejectCalls));
+        getProperty()
+            ->promise(otherWorld())
+            .then(notReached(currentScriptState()),
+                stub(currentScriptState(), otherActual, nOtherRejectCalls));
     }
 
-    isolate()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(isolate());
     EXPECT_EQ(1u, nRejectCalls);
     EXPECT_EQ(wrap(mainWorld(), reason), actual);
     EXPECT_EQ(1u, nOtherRejectCalls);
@@ -361,31 +383,31 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Reject_RejectsScriptPromise)
 
 TEST_F(ScriptPromisePropertyGarbageCollectedTest, Promise_DeadContext)
 {
-    Property* property = this->property();
-    property->resolve(new GarbageCollectedScriptWrappable("value"));
-    EXPECT_EQ(Property::Resolved, property->state());
+    getProperty()->resolve(new GarbageCollectedScriptWrappable("value"));
+    EXPECT_EQ(Property::Resolved, getProperty()->getState());
 
     destroyContext();
 
-    EXPECT_TRUE(property->promise(DOMWrapperWorld::mainWorld()).isEmpty());
+    EXPECT_TRUE(getProperty()->promise(DOMWrapperWorld::mainWorld()).isEmpty());
 }
 
 TEST_F(ScriptPromisePropertyGarbageCollectedTest, Resolve_DeadContext)
 {
-    Property* property = this->property();
-
     {
         ScriptState::Scope scope(mainScriptState());
-        property->promise(DOMWrapperWorld::mainWorld()).then(notReached(currentScriptState()), notReached(currentScriptState()));
+        getProperty()
+            ->promise(DOMWrapperWorld::mainWorld())
+            .then(notReached(currentScriptState()),
+                notReached(currentScriptState()));
     }
 
     destroyContext();
-    EXPECT_TRUE(!property->executionContext() || property->executionContext()->activeDOMObjectsAreStopped());
+    EXPECT_TRUE(!getProperty()->getExecutionContext() || getProperty()->getExecutionContext()->isContextDestroyed());
 
-    property->resolve(new GarbageCollectedScriptWrappable("value"));
-    EXPECT_EQ(Property::Pending, property->state());
+    getProperty()->resolve(new GarbageCollectedScriptWrappable("value"));
+    EXPECT_EQ(Property::Pending, getProperty()->getState());
 
-    v8::Isolate::GetCurrent()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(v8::Isolate::GetCurrent());
 }
 
 TEST_F(ScriptPromisePropertyGarbageCollectedTest, Reset)
@@ -399,24 +421,26 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Reset)
 
     {
         ScriptState::Scope scope(mainScriptState());
-        property()->resolve(oldValue);
-        oldPromise = property()->promise(mainWorld());
-        oldPromise.then(stub(currentScriptState(), oldActual, nOldResolveCalls), notReached(currentScriptState()));
+        getProperty()->resolve(oldValue);
+        oldPromise = getProperty()->promise(mainWorld());
+        oldPromise.then(stub(currentScriptState(), oldActual, nOldResolveCalls),
+            notReached(currentScriptState()));
     }
 
-    property()->reset();
+    getProperty()->reset();
 
     {
         ScriptState::Scope scope(mainScriptState());
-        newPromise = property()->promise(mainWorld());
-        newPromise.then(notReached(currentScriptState()), stub(currentScriptState(), newActual, nNewRejectCalls));
-        property()->reject(newValue);
+        newPromise = getProperty()->promise(mainWorld());
+        newPromise.then(notReached(currentScriptState()),
+            stub(currentScriptState(), newActual, nNewRejectCalls));
+        getProperty()->reject(newValue);
     }
 
     EXPECT_EQ(0u, nOldResolveCalls);
     EXPECT_EQ(0u, nNewRejectCalls);
 
-    isolate()->RunMicrotasks();
+    v8::MicrotasksScope::PerformCheckpoint(isolate());
     EXPECT_EQ(1u, nOldResolveCalls);
     EXPECT_EQ(1u, nNewRejectCalls);
     EXPECT_NE(oldPromise, newPromise);
@@ -425,129 +449,63 @@ TEST_F(ScriptPromisePropertyGarbageCollectedTest, Reset)
     EXPECT_NE(oldActual, newActual);
 }
 
-// Tests that ScriptPromiseProperty works with a ref-counted holder.
-class ScriptPromisePropertyRefCountedTest : public ScriptPromisePropertyTestBase, public ::testing::Test {
-public:
-    typedef RefCountedHolder::Property Property;
-
-    ScriptPromisePropertyRefCountedTest()
-        : m_holder(RefCountedHolder::create(&document()))
-    {
-    }
-
-    RefCountedHolder* holder() { return m_holder.get(); }
-    Property* property() { return m_holder->property(); }
-
-private:
-    RefPtr<RefCountedHolder> m_holder;
-};
-
-TEST_F(ScriptPromisePropertyRefCountedTest, Resolve)
-{
-    ScriptValue actual;
-    size_t nResolveCalls = 0;
-
-    {
-        ScriptState::Scope scope(mainScriptState());
-        property()->promise(DOMWrapperWorld::mainWorld()).then(stub(currentScriptState(), actual, nResolveCalls), notReached(currentScriptState()));
-    }
-
-    RefPtr<RefCountedScriptWrappable> value = RefCountedScriptWrappable::create("value");
-    property()->resolve(value.get());
-    EXPECT_EQ(Property::Resolved, property()->state());
-
-    isolate()->RunMicrotasks();
-    EXPECT_EQ(1u, nResolveCalls);
-    EXPECT_EQ(wrap(mainWorld(), value), actual);
-}
-
-TEST_F(ScriptPromisePropertyRefCountedTest, Reject)
-{
-    ScriptValue actual;
-    size_t nRejectCalls = 0;
-
-    {
-        ScriptState::Scope scope(mainScriptState());
-        property()->promise(DOMWrapperWorld::mainWorld()).then(notReached(currentScriptState()), stub(currentScriptState(), actual, nRejectCalls));
-    }
-
-    RefPtr<RefCountedScriptWrappable> reason = RefCountedScriptWrappable::create("reason");
-    property()->reject(reason);
-    EXPECT_EQ(Property::Rejected, property()->state());
-
-    isolate()->RunMicrotasks();
-    EXPECT_EQ(1u, nRejectCalls);
-    EXPECT_EQ(wrap(mainWorld(), reason), actual);
-}
-
-TEST_F(ScriptPromisePropertyRefCountedTest, ReSolveAndReset)
-{
-    RefPtr<RefCountedScriptWrappable> value = RefCountedScriptWrappable::create("value");
-
-    {
-        ScriptState::Scope scope(mainScriptState());
-        property()->resolve(value);
-    }
-
-    EXPECT_EQ(2, value->refCount());
-    property()->reset();
-    EXPECT_EQ(1, value->refCount());
-}
-
-TEST_F(ScriptPromisePropertyRefCountedTest, RejectAndReset)
-{
-    RefPtr<RefCountedScriptWrappable> value = RefCountedScriptWrappable::create("value");
-
-    {
-        ScriptState::Scope scope(mainScriptState());
-        property()->reject(value.get());
-    }
-
-    EXPECT_EQ(2, value->refCount());
-    property()->reset();
-    EXPECT_EQ(1, value->refCount());
-}
-
 // Tests that ScriptPromiseProperty works with a non ScriptWrappable resolution
 // target.
-class ScriptPromisePropertyNonScriptWrappableResolutionTargetTest : public ScriptPromisePropertyTestBase, public ::testing::Test {
+class ScriptPromisePropertyNonScriptWrappableResolutionTargetTest
+    : public ScriptPromisePropertyTestBase,
+      public ::testing::Test {
 public:
     template <typename T>
-    void test(const T& value, const char* expected, const char* file, size_t line)
+    void test(const T& value,
+        const char* expected,
+        const char* file,
+        size_t line)
     {
-        typedef ScriptPromiseProperty<Member<GarbageCollectedScriptWrappable>, T, ToV8UndefinedGenerator> Property;
-        Property* property = new Property(&document(), new GarbageCollectedScriptWrappable("holder"), Property::Ready);
+        typedef ScriptPromiseProperty<Member<GarbageCollectedScriptWrappable>, T,
+            ToV8UndefinedGenerator>
+            Property;
+        Property* property = new Property(&document(), new GarbageCollectedScriptWrappable("holder"),
+            Property::Ready);
         size_t nResolveCalls = 0;
         ScriptValue actualValue;
         String actual;
         {
             ScriptState::Scope scope(mainScriptState());
-            property->promise(DOMWrapperWorld::mainWorld()).then(stub(currentScriptState(), actualValue, nResolveCalls), notReached(currentScriptState()));
+            property->promise(DOMWrapperWorld::mainWorld())
+                .then(stub(currentScriptState(), actualValue, nResolveCalls),
+                    notReached(currentScriptState()));
         }
         property->resolve(value);
-        isolate()->RunMicrotasks();
+        v8::MicrotasksScope::PerformCheckpoint(isolate());
         {
             ScriptState::Scope scope(mainScriptState());
-            actual = toCoreString(actualValue.v8Value()->ToString(mainScriptState()->context()).ToLocalChecked());
+            actual = toCoreString(actualValue.v8Value()
+                                      ->ToString(mainScriptState()->context())
+                                      .ToLocalChecked());
         }
         if (expected != actual) {
-            ADD_FAILURE_AT(file, line) << "toV8 returns an incorrect value.\n  Actual: " << actual.utf8().data() << "\nExpected: " << expected;
+            ADD_FAILURE_AT(file, line)
+                << "toV8 returns an incorrect value.\n  Actual: "
+                << actual.utf8().data() << "\nExpected: " << expected;
             return;
         }
     }
 };
 
-TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest, ResolveWithUndefined)
+TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest,
+    ResolveWithUndefined)
 {
     test(ToV8UndefinedGenerator(), "undefined", __FILE__, __LINE__);
 }
 
-TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest, ResolveWithString)
+TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest,
+    ResolveWithString)
 {
     test(String("hello"), "hello", __FILE__, __LINE__);
 }
 
-TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest, ResolveWithInteger)
+TEST_F(ScriptPromisePropertyNonScriptWrappableResolutionTargetTest,
+    ResolveWithInteger)
 {
     test(-1, "-1", __FILE__, __LINE__);
 }

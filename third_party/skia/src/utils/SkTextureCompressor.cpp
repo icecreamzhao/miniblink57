@@ -14,16 +14,17 @@
 #include "SkBitmapProcShader.h"
 #include "SkData.h"
 #include "SkEndian.h"
-
-#include "SkTextureCompression_opts.h"
+#include "SkMathPriv.h"
+#include "SkOpts.h"
 
 #ifndef SK_IGNORE_ETC1_SUPPORT
-#  include "etc1.h"
+#include "etc1.h"
 #endif
 
 // Convert ETC1 functions to our function signatures
 static bool compress_etc1_565(uint8_t* dst, const uint8_t* src,
-                              int width, int height, size_t rowBytes) {
+    int width, int height, size_t rowBytes)
+{
 #ifndef SK_IGNORE_ETC1_SUPPORT
     return 0 == etc1_encode_image(src, width, height, 2, SkToInt(rowBytes), dst);
 #else
@@ -35,12 +36,13 @@ static bool compress_etc1_565(uint8_t* dst, const uint8_t* src,
 
 namespace SkTextureCompressor {
 
-void GetBlockDimensions(Format format, int* dimX, int* dimY, bool matchSpec) {
-    if (NULL == dimX || NULL == dimY) {
+void GetBlockDimensions(Format format, int* dimX, int* dimY, bool matchSpec)
+{
+    if (nullptr == dimX || nullptr == dimY) {
         return;
     }
 
-    if (!matchSpec && SkTextureCompressorGetPlatformDims(format, dimX, dimY)) {
+    if (!matchSpec && SkOpts::fill_block_dimensions(format, dimX, dimY)) {
         return;
     }
 
@@ -72,44 +74,45 @@ void GetBlockDimensions(Format format, int* dimX, int* dimY, bool matchSpec) {
     *dimY = kFormatDimensions[format].fBlockSizeY;
 }
 
-int GetCompressedDataSize(Format fmt, int width, int height) {
+int GetCompressedDataSize(Format fmt, int width, int height)
+{
     int dimX, dimY;
     GetBlockDimensions(fmt, &dimX, &dimY, true);
 
     int encodedBlockSize = 0;
-            
+
     switch (fmt) {
-        // These formats are 64 bits per 4x4 block.
-        case kLATC_Format:
-        case kR11_EAC_Format:
-        case kETC1_Format:
-            encodedBlockSize = 8;
-            break;
+    // These formats are 64 bits per 4x4 block.
+    case kLATC_Format:
+    case kR11_EAC_Format:
+    case kETC1_Format:
+        encodedBlockSize = 8;
+        break;
 
-        // This format is 128 bits.
-        case kASTC_4x4_Format:
-        case kASTC_5x4_Format:
-        case kASTC_5x5_Format:
-        case kASTC_6x5_Format:
-        case kASTC_6x6_Format:
-        case kASTC_8x5_Format:
-        case kASTC_8x6_Format:
-        case kASTC_8x8_Format:
-        case kASTC_10x5_Format:
-        case kASTC_10x6_Format:
-        case kASTC_10x8_Format:
-        case kASTC_10x10_Format:
-        case kASTC_12x10_Format:
-        case kASTC_12x12_Format:
-            encodedBlockSize = 16;
-            break;
+    // This format is 128 bits.
+    case kASTC_4x4_Format:
+    case kASTC_5x4_Format:
+    case kASTC_5x5_Format:
+    case kASTC_6x5_Format:
+    case kASTC_6x6_Format:
+    case kASTC_8x5_Format:
+    case kASTC_8x6_Format:
+    case kASTC_8x8_Format:
+    case kASTC_10x5_Format:
+    case kASTC_10x6_Format:
+    case kASTC_10x8_Format:
+    case kASTC_10x10_Format:
+    case kASTC_12x10_Format:
+    case kASTC_12x12_Format:
+        encodedBlockSize = 16;
+        break;
 
-        default:
-            SkFAIL("Unknown compressed format!");
-            return -1;
+    default:
+        SkFAIL("Unknown compressed format!");
+        return -1;
     }
 
-    if(((width % dimX) == 0) && ((height % dimY) == 0)) {
+    if (((width % dimX) == 0) && ((height % dimY) == 0)) {
         const int blocksX = width / dimX;
         const int blocksY = height / dimY;
 
@@ -120,97 +123,81 @@ int GetCompressedDataSize(Format fmt, int width, int height) {
 }
 
 bool CompressBufferToFormat(uint8_t* dst, const uint8_t* src, SkColorType srcColorType,
-                            int width, int height, size_t rowBytes, Format format, bool opt) {
-    CompressionProc proc = NULL;
-    if (opt) {
-        proc = SkTextureCompressorGetPlatformProc(srcColorType, format);
+    int width, int height, size_t rowBytes, Format format)
+{
+    SkOpts::TextureCompressor proc = SkOpts::texture_compressor(srcColorType, format);
+    if (proc && proc(dst, src, width, height, rowBytes)) {
+        return true;
     }
 
-    if (NULL == proc) {
-        switch (srcColorType) {
-            case kAlpha_8_SkColorType:
-            {
-                switch (format) {
-                    case kLATC_Format:
-                        proc = CompressA8ToLATC;
-                        break;
-                    case kR11_EAC_Format:
-                        proc = CompressA8ToR11EAC;
-                        break;
-                    case kASTC_12x12_Format:
-                        proc = CompressA8To12x12ASTC;
-                        break;
-                    default:
-                        // Do nothing...
-                        break;
-                }
-            }
-            break;
-
-            case kRGB_565_SkColorType:
-            {
-                switch (format) {
-                    case kETC1_Format:
-                        proc = compress_etc1_565;
-                        break;
-                    default:
-                        // Do nothing...
-                        break;
-                }
-            }
-            break;
-
-            default:
-                // Do nothing...
-                break;
+    switch (srcColorType) {
+    case kAlpha_8_SkColorType:
+        if (format == kLATC_Format) {
+            proc = CompressA8ToLATC;
         }
+        if (format == kR11_EAC_Format) {
+            proc = CompressA8ToR11EAC;
+        }
+        if (format == kASTC_12x12_Format) {
+            proc = CompressA8To12x12ASTC;
+        }
+        break;
+    case kRGB_565_SkColorType:
+        if (format == kETC1_Format) {
+            proc = compress_etc1_565;
+        }
+        break;
+    default:
+        break;
     }
-
-    if (proc) {
-        return proc(dst, src, width, height, rowBytes);
+    if (proc && proc(dst, src, width, height, rowBytes)) {
+        return true;
     }
 
     return false;
 }
 
-SkData* CompressBitmapToFormat(const SkPixmap& pixmap, Format format) {
+SkData* CompressBitmapToFormat(const SkPixmap& pixmap, Format format)
+{
     int compressedDataSize = GetCompressedDataSize(format, pixmap.width(), pixmap.height());
     if (compressedDataSize < 0) {
-        return NULL;
+        return nullptr;
     }
 
     const uint8_t* src = reinterpret_cast<const uint8_t*>(pixmap.addr());
     SkData* dst = SkData::NewUninitialized(compressedDataSize);
 
     if (!CompressBufferToFormat((uint8_t*)dst->writable_data(), src, pixmap.colorType(),
-                                pixmap.width(), pixmap.height(), pixmap.rowBytes(), format)) {
+            pixmap.width(), pixmap.height(), pixmap.rowBytes(), format)) {
         dst->unref();
-        dst = NULL;
+        dst = nullptr;
     }
     return dst;
 }
 
 SkBlitter* CreateBlitterForFormat(int width, int height, void* compressedBuffer,
-                                  SkTBlitterAllocator *allocator, Format format) {
-    switch(format) {
-        case kLATC_Format:
-            return CreateLATCBlitter(width, height, compressedBuffer, allocator);
+    SkTBlitterAllocator* allocator, Format format)
+{
+    switch (format) {
+    case kLATC_Format:
+        return CreateLATCBlitter(width, height, compressedBuffer, allocator);
 
-        case kR11_EAC_Format:
-            return CreateR11EACBlitter(width, height, compressedBuffer, allocator);
+    case kR11_EAC_Format:
+        return CreateR11EACBlitter(width, height, compressedBuffer, allocator);
 
-        case kASTC_12x12_Format:
-            return CreateASTCBlitter(width, height, compressedBuffer, allocator);
+    case kASTC_12x12_Format:
+        return CreateASTCBlitter(width, height, compressedBuffer, allocator);
 
-        default:
-            return NULL;
+    default:
+        return nullptr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool DecompressBufferFromFormat(uint8_t* dst, int dstRowBytes, const uint8_t* src,
-                                int width, int height, Format format) {
+    int width, int height, Format format)
+{
     int dimX, dimY;
     GetBlockDimensions(format, &dimX, &dimY, true);
 
@@ -218,43 +205,43 @@ bool DecompressBufferFromFormat(uint8_t* dst, int dstRowBytes, const uint8_t* sr
         return false;
     }
 
-    switch(format) {
-        case kLATC_Format:
-            DecompressLATC(dst, dstRowBytes, src, width, height);
-            return true;
+    switch (format) {
+    case kLATC_Format:
+        DecompressLATC(dst, dstRowBytes, src, width, height);
+        return true;
 
-        case kR11_EAC_Format:
-            DecompressR11EAC(dst, dstRowBytes, src, width, height);
-            return true;
+    case kR11_EAC_Format:
+        DecompressR11EAC(dst, dstRowBytes, src, width, height);
+        return true;
 
 #ifndef SK_IGNORE_ETC1_SUPPORT
-        case kETC1_Format:
-            return 0 == etc1_decode_image(src, dst, width, height, 3, dstRowBytes);
+    case kETC1_Format:
+        return 0 == etc1_decode_image(src, dst, width, height, 3, dstRowBytes);
 #endif
 
-        case kASTC_4x4_Format:
-        case kASTC_5x4_Format:
-        case kASTC_5x5_Format:
-        case kASTC_6x5_Format:
-        case kASTC_6x6_Format:
-        case kASTC_8x5_Format:
-        case kASTC_8x6_Format:
-        case kASTC_8x8_Format:
-        case kASTC_10x5_Format:
-        case kASTC_10x6_Format:
-        case kASTC_10x8_Format:
-        case kASTC_10x10_Format:
-        case kASTC_12x10_Format:
-        case kASTC_12x12_Format:
-            DecompressASTC(dst, dstRowBytes, src, width, height, dimX, dimY);
-            return true;
+    case kASTC_4x4_Format:
+    case kASTC_5x4_Format:
+    case kASTC_5x5_Format:
+    case kASTC_6x5_Format:
+    case kASTC_6x6_Format:
+    case kASTC_8x5_Format:
+    case kASTC_8x6_Format:
+    case kASTC_8x8_Format:
+    case kASTC_10x5_Format:
+    case kASTC_10x6_Format:
+    case kASTC_10x8_Format:
+    case kASTC_10x10_Format:
+    case kASTC_12x10_Format:
+    case kASTC_12x12_Format:
+        DecompressASTC(dst, dstRowBytes, src, width, height, dimX, dimY);
+        return true;
 
-        default:
-            // Do nothing...
-            break;
+    default:
+        // Do nothing...
+        break;
     }
 
     return false;
 }
 
-}  // namespace SkTextureCompressor
+} // namespace SkTextureCompressor

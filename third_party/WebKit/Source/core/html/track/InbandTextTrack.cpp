@@ -23,65 +23,63 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/InbandTextTrack.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/track/vtt/VTTCue.h"
-#include "platform/Logging.h"
 #include "public/platform/WebInbandTextTrack.h"
 #include "public/platform/WebString.h"
-#include <math.h>
 
 using blink::WebInbandTextTrack;
 using blink::WebString;
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<InbandTextTrack> InbandTextTrack::create(WebInbandTextTrack* webTrack)
+namespace {
+
+    const AtomicString& textTrackKindToString(WebInbandTextTrack::Kind kind)
+    {
+        switch (kind) {
+        case WebInbandTextTrack::KindSubtitles:
+            return TextTrack::subtitlesKeyword();
+        case WebInbandTextTrack::KindCaptions:
+            return TextTrack::captionsKeyword();
+        case WebInbandTextTrack::KindDescriptions:
+            return TextTrack::descriptionsKeyword();
+        case WebInbandTextTrack::KindChapters:
+            return TextTrack::chaptersKeyword();
+        case WebInbandTextTrack::KindMetadata:
+            return TextTrack::metadataKeyword();
+        case WebInbandTextTrack::KindNone:
+        default:
+            break;
+        }
+        NOTREACHED();
+        return TextTrack::subtitlesKeyword();
+    }
+
+} // namespace
+
+InbandTextTrack* InbandTextTrack::create(WebInbandTextTrack* webTrack)
 {
-    return adoptRefWillBeNoop(new InbandTextTrack(webTrack));
+    return new InbandTextTrack(webTrack);
 }
 
 InbandTextTrack::InbandTextTrack(WebInbandTextTrack* webTrack)
-    : TextTrack(emptyAtom, webTrack->label(), webTrack->language(), webTrack->id(), InBand)
+    : TextTrack(textTrackKindToString(webTrack->kind()),
+        webTrack->label(),
+        webTrack->language(),
+        webTrack->id(),
+        InBand)
     , m_webTrack(webTrack)
 {
     m_webTrack->setClient(this);
-
-    switch (m_webTrack->kind()) {
-    case WebInbandTextTrack::KindSubtitles:
-        setKind(TextTrack::subtitlesKeyword());
-        break;
-    case WebInbandTextTrack::KindCaptions:
-        setKind(TextTrack::captionsKeyword());
-        break;
-    case WebInbandTextTrack::KindDescriptions:
-        setKind(TextTrack::descriptionsKeyword());
-        break;
-    case WebInbandTextTrack::KindChapters:
-        setKind(TextTrack::chaptersKeyword());
-        break;
-    case WebInbandTextTrack::KindMetadata:
-        setKind(TextTrack::metadataKeyword());
-        break;
-    case WebInbandTextTrack::KindNone:
-    default:
-        ASSERT_NOT_REACHED();
-        break;
-    }
 }
 
 InbandTextTrack::~InbandTextTrack()
 {
-#if ENABLE(OILPAN)
     if (m_webTrack)
-        m_webTrack->setClient(0);
-#else
-    // Make sure m_webTrack was cleared by trackRemoved() before destruction.
-    ASSERT(!m_webTrack);
-#endif
+        m_webTrack->setClient(nullptr);
 }
 
 void InbandTextTrack::setTrackList(TextTrackList* trackList)
@@ -90,16 +88,20 @@ void InbandTextTrack::setTrackList(TextTrackList* trackList)
     if (trackList)
         return;
 
-    ASSERT(m_webTrack);
-    m_webTrack->setClient(0);
-    m_webTrack = 0;
+    DCHECK(m_webTrack);
+    m_webTrack->setClient(nullptr);
+    m_webTrack = nullptr;
 }
 
-void InbandTextTrack::addWebVTTCue(double start, double end, const WebString& id, const WebString& content, const WebString& settings)
+void InbandTextTrack::addWebVTTCue(double start,
+    double end,
+    const WebString& id,
+    const WebString& content,
+    const WebString& settings)
 {
     HTMLMediaElement* owner = mediaElement();
-    ASSERT(owner);
-    RefPtrWillBeRawPtr<VTTCue> cue = VTTCue::create(owner->document(), start, end, content);
+    DCHECK(owner);
+    VTTCue* cue = VTTCue::create(owner->document(), start, end, content);
     cue->setId(id);
     cue->parseSettings(settings);
     addCue(cue);

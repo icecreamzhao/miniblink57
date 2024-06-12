@@ -40,9 +40,15 @@ namespace blink {
 template <typename Strategy>
 class CORE_EXPORT CharacterIteratorAlgorithm {
     STACK_ALLOCATED();
+
 public:
-    CharacterIteratorAlgorithm(const PositionAlgorithm<Strategy>& start, const PositionAlgorithm<Strategy>& end, TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
-    explicit CharacterIteratorAlgorithm(const EphemeralRangeTemplate<Strategy>&, TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
+    CharacterIteratorAlgorithm(
+        const PositionTemplate<Strategy>& start,
+        const PositionTemplate<Strategy>& end,
+        TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
+    explicit CharacterIteratorAlgorithm(
+        const EphemeralRangeTemplate<Strategy>&,
+        TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
 
     void advance(int numCharacters);
 
@@ -50,22 +56,30 @@ public:
     bool atEnd() const { return m_textIterator.atEnd(); }
 
     int length() const { return m_textIterator.length() - m_runOffset; }
-    UChar characterAt(unsigned index) const { return m_textIterator.text().characterAt(m_runOffset + index); }
+    UChar characterAt(unsigned index) const
+    {
+        return m_textIterator.characterAt(m_runOffset + index);
+    }
 
-    template<typename BufferType>
-    void appendTextTo(BufferType& output) { m_textIterator.text().appendTextTo(output, m_runOffset); }
+    void copyTextTo(ForwardsTextBuffer* output);
 
     int characterOffset() const { return m_offset; }
     EphemeralRangeTemplate<Strategy> range() const;
+
+    bool isInTextSecurityMode() const
+    {
+        return m_textIterator.isInTextSecurityMode();
+    }
 
     Document* ownerDocument() const;
     Node* currentContainer() const;
     int startOffset() const;
     int endOffset() const;
-    PositionAlgorithm<Strategy> startPosition() const;
-    PositionAlgorithm<Strategy> endPosition() const;
+    PositionTemplate<Strategy> startPosition() const;
+    PositionTemplate<Strategy> endPosition() const;
 
-    EphemeralRangeTemplate<Strategy> calculateCharacterSubrange(int offset, int length);
+    EphemeralRangeTemplate<Strategy> calculateCharacterSubrange(int offset,
+        int length);
 
 private:
     void initialize();
@@ -77,10 +91,16 @@ private:
     TextIteratorAlgorithm<Strategy> m_textIterator;
 };
 
-extern template class CORE_EXTERN_TEMPLATE_EXPORT CharacterIteratorAlgorithm<EditingStrategy>;
+extern template class CORE_EXTERN_TEMPLATE_EXPORT
+    CharacterIteratorAlgorithm<EditingStrategy>;
 using CharacterIterator = CharacterIteratorAlgorithm<EditingStrategy>;
 
-CORE_EXPORT EphemeralRange findPlainText(const EphemeralRange& inputRange, const String&, FindOptions);
+extern template class CORE_EXTERN_TEMPLATE_EXPORT
+    CharacterIteratorAlgorithm<EditingInFlatTreeStrategy>;
+
+CORE_EXPORT EphemeralRange calculateCharacterSubrange(const EphemeralRange&,
+    int characterOffset,
+    int characterCount);
 
 } // namespace blink
 

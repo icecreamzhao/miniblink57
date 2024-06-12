@@ -23,13 +23,9 @@ struct SkOTTablePostScript {
 
     struct Format {
         SK_TYPED_ENUM(Value, SK_OT_Fixed,
-            ((version1, SkTEndian_SwapBE32(0x00010000)))
-            ((version2, SkTEndian_SwapBE32(0x00020000)))
-            ((version2_5, SkTEndian_SwapBE32(0x00025000)))
-            ((version3, SkTEndian_SwapBE32(0x00030000)))
-            ((version4, SkTEndian_SwapBE32(0x00040000)))
-            SK_SEQ_END,
-        SK_SEQ_END)
+            ((version1, SkTEndian_SwapBE32(0x00010000)))((version2, SkTEndian_SwapBE32(0x00020000)))((version2_5, SkTEndian_SwapBE32(0x00025000)))((version3, SkTEndian_SwapBE32(0x00030000)))((version4, SkTEndian_SwapBE32(0x00040000)))
+                SK_SEQ_END,
+            SK_SEQ_END)
         SK_OT_Fixed value;
     } format;
     SK_OT_Fixed italicAngle;
@@ -44,9 +40,8 @@ struct SkOTTablePostScript {
 
 #pragma pack(pop)
 
-
 #include <stddef.h>
-SK_COMPILE_ASSERT(offsetof(SkOTTablePostScript, maxMemType1) == 28, SkOTTablePostScript_maxMemType1_not_at_28);
-SK_COMPILE_ASSERT(sizeof(SkOTTablePostScript) == 32, sizeof_SkOTTablePostScript_not_32);
+static_assert(offsetof(SkOTTablePostScript, maxMemType1) == 28, "SkOTTablePostScript_maxMemType1_not_at_28");
+static_assert(sizeof(SkOTTablePostScript) == 32, "sizeof_SkOTTablePostScript_not_32");
 
 #endif

@@ -55,16 +55,21 @@ class StyleBuilderWriter(css_properties.CSSProperties):
             upper_camel = property['upper_camel_name']
             set_if_none(property, 'name_for_methods', upper_camel.replace('Webkit', ''))
             name = property['name_for_methods']
+            simple_type_name = str(property['type_name']).split('::')[-1]
             set_if_none(property, 'type_name', 'E' + name)
-            set_if_none(property, 'getter', lower_first(name))
+            set_if_none(property, 'getter', lower_first(name) if simple_type_name != name else 'get' + name)
             set_if_none(property, 'setter', 'set' + name)
+            set_if_none(property, 'inherited', False)
             set_if_none(property, 'initial', 'initial' + name)
             if property['custom_all']:
                 property['custom_initial'] = True
                 property['custom_inherit'] = True
                 property['custom_value'] = True
+            if property['inherited']:
+                property['is_inherited_setter'] = 'set' + name + 'IsInherited'
             property['should_declare_functions'] = not property['use_handlers_for'] and not property['longhands'] \
-                                                   and not property['direction_aware'] and not property['builder_skip']
+                and not property['direction_aware'] and not property['builder_skip'] \
+                and not property['descriptor_only']
 
     @template_expander.use_jinja('StyleBuilderFunctions.h.tmpl',
                                  filters=filters)

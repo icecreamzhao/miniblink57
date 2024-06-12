@@ -28,14 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/NavigationPolicy.h"
 
 #include "wtf/Assertions.h"
 
 namespace blink {
 
-bool navigationPolicyFromMouseEvent(unsigned short button, bool ctrl, bool shift, bool alt, bool meta, NavigationPolicy* policy)
+bool navigationPolicyFromMouseEvent(unsigned short button,
+    bool ctrl,
+    bool shift,
+    bool alt,
+    bool meta,
+    NavigationPolicy* policy)
 {
 #if OS(MACOSX)
     const bool newTabModifier = (button == 1) || meta;
@@ -45,7 +49,7 @@ bool navigationPolicyFromMouseEvent(unsigned short button, bool ctrl, bool shift
     if (!newTabModifier && !shift && !alt)
         return false;
 
-    ASSERT(policy);
+    DCHECK(policy);
     if (newTabModifier) {
         if (shift)
             *policy = NavigationPolicyNewForegroundTab;
@@ -61,4 +65,3 @@ bool navigationPolicyFromMouseEvent(unsigned short button, bool ctrl, bool shift
 }
 
 } // namespace blink
-

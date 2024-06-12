@@ -33,7 +33,8 @@
 
 namespace blink {
 
-enum CodePath { SimplePath, ComplexPath };
+enum CodePath { SimplePath,
+    ComplexPath };
 
 }
 

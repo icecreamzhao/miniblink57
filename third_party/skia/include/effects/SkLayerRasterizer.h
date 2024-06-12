@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,12 +5,11 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkLayerRasterizer_DEFINED
 #define SkLayerRasterizer_DEFINED
 
-#include "SkRasterizer.h"
 #include "SkDeque.h"
+#include "SkRasterizer.h"
 #include "SkScalar.h"
 
 class SkPaint;
@@ -25,7 +23,8 @@ public:
         Builder();
         ~Builder();
 
-        void addLayer(const SkPaint& paint) {
+        void addLayer(const SkPaint& paint)
+        {
             this->addLayer(paint, 0, 0);
         }
 
@@ -44,7 +43,7 @@ public:
           *
           *  The caller is responsible for calling unref() on the returned object, if non NULL.
           */
-        SkLayerRasterizer* detachRasterizer();
+        sk_sp<SkLayerRasterizer> detach();
 
         /**
           *  Create and return a new immutable SkLayerRasterizer that contains a shapshot of the
@@ -58,7 +57,18 @@ public:
           *
           *  The caller is responsible for calling unref() on the returned object, if non NULL.
           */
-        SkLayerRasterizer* snapshotRasterizer() const;
+        sk_sp<SkLayerRasterizer> snapshot() const;
+
+#ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
+        SkLayerRasterizer* detachRasterizer()
+        {
+            return this->detach().release();
+        }
+        SkLayerRasterizer* snapshotRasterizer() const
+        {
+            return this->snapshot().release();
+        }
+#endif
 
     private:
         SkDeque* fLayers;
@@ -73,8 +83,8 @@ protected:
 
     // override from SkRasterizer
     virtual bool onRasterize(const SkPath& path, const SkMatrix& matrix,
-                             const SkIRect* clipBounds,
-                             SkMask* mask, SkMask::CreateMode mode) const override;
+        const SkIRect* clipBounds,
+        SkMask* mask, SkMask::CreateMode mode) const override;
 
 private:
     const SkDeque* const fLayers;

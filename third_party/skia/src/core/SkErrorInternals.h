@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -15,13 +14,11 @@ class SkErrorInternals {
 
 public:
     static void ClearError();
-    static void SetError(SkError code, const char *fmt, ...);
+    static void SetError(SkError code, const char* fmt, ...);
     static SkError GetLastError();
-    static const char *GetLastErrorString();
-    static void SetErrorCallback(SkErrorCallbackFunction cb, void *context);
-    static void DefaultErrorCallback(SkError code, void *context);
+    static const char* GetLastErrorString();
+    static void SetErrorCallback(SkErrorCallbackFunction cb, void* context);
+    static void DefaultErrorCallback(SkError code, void* context);
 };
-
-
 
 #endif /* SkErrorInternals_DEFINED */

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayScreenplay_DEFINED
 #define SkDisplayScreenplay_DEFINED
 

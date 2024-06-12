@@ -35,15 +35,15 @@
 #include "core/CoreExport.h"
 #include "core/fetch/RawResource.h"
 #include "core/fetch/ResourceOwner.h"
-#include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/loader/ThreadableLoader.h"
 #include "platform/Timer.h"
+#include "platform/heap/Handle.h"
 #include "platform/network/HTTPHeaderMap.h"
 #include "platform/network/ResourceError.h"
+#include "platform/weborigin/Referrer.h"
 #include "wtf/Forward.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
@@ -53,124 +53,198 @@ class ResourceRequest;
 class SecurityOrigin;
 class ThreadableLoaderClient;
 
-class CORE_EXPORT DocumentThreadableLoader final : public ThreadableLoader, private ResourceOwner<RawResource>  {
-    WTF_MAKE_FAST_ALLOCATED(DocumentThreadableLoader);
-    public:
-        static void loadResourceSynchronously(Document&, const ResourceRequest&, ThreadableLoaderClient&, const ThreadableLoaderOptions&, const ResourceLoaderOptions&);
-        static PassRefPtr<DocumentThreadableLoader> create(Document&, ThreadableLoaderClient*, const ResourceRequest&, const ThreadableLoaderOptions&, const ResourceLoaderOptions&);
-        ~DocumentThreadableLoader() override;
+class CORE_EXPORT DocumentThreadableLoader final : public ThreadableLoader,
+                                                   private RawResourceClient {
+    USING_GARBAGE_COLLECTED_MIXIN(DocumentThreadableLoader);
 
-        void overrideTimeout(unsigned long timeout) override;
+public:
+    static void loadResourceSynchronously(Document&,
+        const ResourceRequest&,
+        ThreadableLoaderClient&,
+        const ThreadableLoaderOptions&,
+        const ResourceLoaderOptions&,
+        ThreadableLoader::ClientSpec);
+    static DocumentThreadableLoader* create(Document&,
+        ThreadableLoaderClient*,
+        const ThreadableLoaderOptions&,
+        const ResourceLoaderOptions&,
+        ThreadableLoader::ClientSpec);
+    ~DocumentThreadableLoader() override;
 
-        void cancel() override;
-        void setDefersLoading(bool);
+    void start(const ResourceRequest&) override;
 
-    private:
-        enum BlockingBehavior {
-            LoadSynchronously,
-            LoadAsynchronously
-        };
+    void overrideTimeout(unsigned long timeout) override;
 
-        DocumentThreadableLoader(Document&, ThreadableLoaderClient*, BlockingBehavior, const ResourceRequest&, const ThreadableLoaderOptions&, const ResourceLoaderOptions&);
+    void cancel() override;
+    void setDefersLoading(bool);
 
-        // ResourceClient
-        void notifyFinished(Resource*) override;
-        // RawResourceClient
-        void dataSent(Resource*, unsigned long long bytesSent, unsigned long long totalBytesToBeSent) override;
-        void responseReceived(Resource*, const ResourceResponse&, PassOwnPtr<WebDataConsumerHandle>) override;
-        void setSerializedCachedMetadata(Resource*, const char*, size_t) override;
-        void dataReceived(Resource*, const char* data, unsigned dataLength) override;
-        void redirectReceived(Resource*, ResourceRequest&, const ResourceResponse&) override;
-        void dataDownloaded(Resource*, int) override;
-        void didReceiveResourceTiming(Resource*, const ResourceTimingInfo&) override;
+    DECLARE_TRACE();
 
-        void cancelWithError(const ResourceError&);
+private:
+    enum BlockingBehavior { LoadSynchronously,
+        LoadAsynchronously };
 
-        // Notify Inspector and log to console about resource response. Use
-        // this method if response is not going to be finished normally.
-        void reportResponseReceived(unsigned long identifier, const ResourceResponse&);
+    DocumentThreadableLoader(Document&,
+        ThreadableLoaderClient*,
+        BlockingBehavior,
+        const ThreadableLoaderOptions&,
+        const ResourceLoaderOptions&,
+        ClientSpec);
 
-        // Methods containing code to handle resource fetch results which is
-        // common to both sync and async mode.
-        void handleResponse(unsigned long identifier, const ResourceResponse&, PassOwnPtr<WebDataConsumerHandle>);
-        void handleReceivedData(const char* data, unsigned dataLength);
-        void handleSuccessfulFinish(unsigned long identifier, double finishTime);
+    void clear();
 
-        void didTimeout(Timer<DocumentThreadableLoader>*);
-        // Calls the appropriate loading method according to policy and data
-        // about origin. Only for handling the initial load (including fallback
-        // after consulting ServiceWorker).
-        void dispatchInitialRequest(const ResourceRequest&);
-        void makeCrossOriginAccessRequest(const ResourceRequest&);
-        // Loads m_fallbackRequestForServiceWorker.
-        void loadFallbackRequestForServiceWorker();
-        // Loads m_actualRequest.
-        void loadActualRequest();
-        // Clears m_actualRequest and reports access control check failure to
-        // m_client.
-        void handlePreflightFailure(const String& url, const String& errorDescription);
-        // Investigates the response for the preflight request. If successful,
-        // the actual request will be made later in handleSuccessfulFinish().
-        void handlePreflightResponse(const ResourceResponse&);
+    // ResourceClient
+    void notifyFinished(Resource*) override;
 
-        void loadRequest(const ResourceRequest&, ResourceLoaderOptions);
-        bool isAllowedRedirect(const KURL&) const;
-        bool isAllowedByContentSecurityPolicy(const KURL&, ContentSecurityPolicy::RedirectStatus) const;
-        // Returns DoNotAllowStoredCredentials
-        // if m_forceDoNotAllowStoredCredentials is set. Otherwise, just
-        // returns allowCredentials value of m_resourceLoaderOptions.
-        StoredCredentials effectiveAllowCredentials() const;
+    String debugName() const override { return "DocumentThreadableLoader"; }
 
-        SecurityOrigin* securityOrigin() const;
+    // RawResourceClient
+    void dataSent(Resource*,
+        unsigned long long bytesSent,
+        unsigned long long totalBytesToBeSent) override;
+    void responseReceived(Resource*,
+        const ResourceResponse&,
+        std::unique_ptr<WebDataConsumerHandle>) override;
+    void setSerializedCachedMetadata(Resource*, const char*, size_t) override;
+    void dataReceived(Resource*, const char* data, size_t dataLength) override;
+    bool redirectReceived(Resource*,
+        const ResourceRequest&,
+        const ResourceResponse&) override;
+    void redirectBlocked() override;
+    void dataDownloaded(Resource*, int) override;
+    void didReceiveResourceTiming(Resource*, const ResourceTimingInfo&) override;
 
-        ThreadableLoaderClient* m_client;
-        Document& m_document;
+    // Notify Inspector and log to console about resource response. Use this
+    // method if response is not going to be finished normally.
+    void reportResponseReceived(unsigned long identifier,
+        const ResourceResponse&);
 
-        const ThreadableLoaderOptions m_options;
-        // Some items may be overridden by m_forceDoNotAllowStoredCredentials
-        // and m_securityOrigin. In such a case, build a ResourceLoaderOptions
-        // with up-to-date values from them and this variable, and use it.
-        const ResourceLoaderOptions m_resourceLoaderOptions;
+    // Methods containing code to handle resource fetch results which are common
+    // to both sync and async mode.
+    void handleResponse(unsigned long identifier,
+        const ResourceResponse&,
+        std::unique_ptr<WebDataConsumerHandle>);
+    void handleReceivedData(const char* data, size_t dataLength);
+    void handleSuccessfulFinish(unsigned long identifier, double finishTime);
 
-        bool m_forceDoNotAllowStoredCredentials;
-        RefPtr<SecurityOrigin> m_securityOrigin;
+    void didTimeout(TimerBase*);
+    // Calls the appropriate loading method according to policy and data about
+    // origin. Only for handling the initial load (including fallback after
+    // consulting ServiceWorker).
+    void dispatchInitialRequest(const ResourceRequest&);
+    void makeCrossOriginAccessRequest(const ResourceRequest&);
+    // Loads m_fallbackRequestForServiceWorker.
+    void loadFallbackRequestForServiceWorker();
+    // Loads m_actualRequest.
+    void loadActualRequest();
+    // Clears m_actualRequest and reports access control check failure to
+    // m_client.
+    void handlePreflightFailure(const String& url,
+        const String& errorDescription);
+    // Investigates the response for the preflight request. If successful,
+    // the actual request will be made later in handleSuccessfulFinish().
+    void handlePreflightResponse(const ResourceResponse&);
 
-        // True while the initial URL and all the URLs of the redirects
-        // this object has followed, if any, are same-origin to
-        // securityOrigin().
-        bool m_sameOriginRequest;
-        // Set to true if the current request is cross-origin and not simple.
-        bool m_crossOriginNonSimpleRequest;
+    void dispatchDidFailAccessControlCheck(const ResourceError&);
+    void dispatchDidFail(const ResourceError&);
 
-        // Set to true when the response data is given to a data consumer
-        // handle.
-        bool m_isUsingDataConsumerHandle;
+    void loadRequestAsync(const ResourceRequest&, ResourceLoaderOptions);
+    void loadRequestSync(const ResourceRequest&, ResourceLoaderOptions);
 
-        const bool m_async;
+    void prepareCrossOriginRequest(ResourceRequest&);
+    void loadRequest(const ResourceRequest&, ResourceLoaderOptions);
+    bool isAllowedRedirect(const KURL&) const;
+    // Returns DoNotAllowStoredCredentials if m_forceDoNotAllowStoredCredentials
+    // is set. Otherwise, just returns allowCredentials value of
+    // m_resourceLoaderOptions.
+    StoredCredentials effectiveAllowCredentials() const;
 
-        // Holds the original request context (used for sanity checks).
-        const WebURLRequest::RequestContext m_requestContext;
+    // TODO(hiroshige): After crbug.com/633696 is fixed,
+    // - Remove RawResourceClientStateChecker logic,
+    // - Make DocumentThreadableLoader to be a ResourceOwner and remove this
+    //   re-implementation of ResourceOwner, and
+    // - Consider re-applying RawResourceClientStateChecker in a more
+    //   general fashion (crbug.com/640291).
+    RawResource* resource() const { return m_resource.get(); }
+    void clearResource() { setResource(nullptr); }
+    void setResource(RawResource* newResource)
+    {
+        if (newResource == m_resource)
+            return;
 
-        // Holds the original request for fallback in case the Service Worker
-        // does not respond.
-        OwnPtr<ResourceRequest> m_fallbackRequestForServiceWorker;
+        if (RawResource* oldResource = m_resource.release()) {
+            m_checker.willRemoveClient();
+            oldResource->removeClient(this);
+        }
 
-        // Holds the original request and options for it during preflight
-        // request handling phase.
-        OwnPtr<ResourceRequest> m_actualRequest;
-        OwnPtr<ResourceLoaderOptions> m_actualOptions;
+        if (newResource) {
+            m_resource = newResource;
+            m_checker.willAddClient();
+            m_resource->addClient(this);
+        }
+    }
+    Member<RawResource> m_resource;
+    // End of ResourceOwner re-implementation, see above.
 
-        HTTPHeaderMap m_simpleRequestHeaders; // stores simple request headers in case of a cross-origin redirect.
-        Timer<DocumentThreadableLoader> m_timeoutTimer;
-        double m_requestStartedSeconds; // Time an asynchronous fetch request is started
+    const SecurityOrigin* getSecurityOrigin() const;
+    Document& document() const;
 
-        // Max number of times that this DocumentThreadableLoader can follow
-        // cross-origin redirects.
-        // This is used to limit the number of redirects.
-        // But this value is not the max number of total redirects allowed,
-        // because same-origin redirects are not counted here.
-        int m_corsRedirectLimit;
-    };
+    ThreadableLoaderClient* m_client;
+    const ClientSpec m_clientSpec;
+    Member<Document> m_document;
+
+    const ThreadableLoaderOptions m_options;
+    // Some items may be overridden by m_forceDoNotAllowStoredCredentials and
+    // m_securityOrigin. In such a case, build a ResourceLoaderOptions with
+    // up-to-date values from them and this variable, and use it.
+    const ResourceLoaderOptions m_resourceLoaderOptions;
+
+    bool m_forceDoNotAllowStoredCredentials;
+    RefPtr<SecurityOrigin> m_securityOrigin;
+
+    // True while the initial URL and all the URLs of the redirects this object
+    // has followed, if any, are same-origin to getSecurityOrigin().
+    bool m_sameOriginRequest;
+
+    // Set to true when the response data is given to a data consumer handle.
+    bool m_isUsingDataConsumerHandle;
+
+    const bool m_async;
+
+    // Holds the original request context (used for sanity checks).
+    WebURLRequest::RequestContext m_requestContext;
+
+    // Holds the original request for fallback in case the Service Worker
+    // does not respond.
+    ResourceRequest m_fallbackRequestForServiceWorker;
+
+    // Holds the original request and options for it during preflight request
+    // handling phase.
+    ResourceRequest m_actualRequest;
+    ResourceLoaderOptions m_actualOptions;
+
+    // stores request headers in case of a cross-origin redirect.
+    HTTPHeaderMap m_requestHeaders;
+
+    TaskRunnerTimer<DocumentThreadableLoader> m_timeoutTimer;
+    double
+        m_requestStartedSeconds; // Time an asynchronous fetch request is started
+
+    // Max number of times that this DocumentThreadableLoader can follow
+    // cross-origin redirects. This is used to limit the number of redirects. But
+    // this value is not the max number of total redirects allowed, because
+    // same-origin redirects are not counted here.
+    int m_corsRedirectLimit;
+
+    WebURLRequest::FetchRedirectMode m_redirectMode;
+
+    // Holds the referrer after a redirect response was received. This referrer is
+    // used to populate the HTTP Referer header when following the redirect.
+    bool m_overrideReferrer;
+    Referrer m_referrerAfterRedirect;
+
+    RawResourceClientStateChecker m_checker;
+};
 
 } // namespace blink
 

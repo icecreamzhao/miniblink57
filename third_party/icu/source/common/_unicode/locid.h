@@ -29,12 +29,12 @@
 #ifndef LOCID_H
 #define LOCID_H
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
 #include "unicode/putil.h"
-#include "unicode/uloc.h"
 #include "unicode/strenum.h"
+#include "unicode/uloc.h"
+#include "unicode/unistr.h"
+#include "unicode/uobject.h"
+#include "unicode/utypes.h"
 
 /**
  * \file
@@ -185,51 +185,50 @@ void U_CALLCONV locale_available_init(); /**< @internal */
 class U_COMMON_API Locale : public UObject {
 public:
     /** Useful constant for the Root locale. @stable ICU 4.4 */
-    static const Locale &U_EXPORT2 getRoot(void);
+    static const Locale& U_EXPORT2 getRoot(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getEnglish(void);
+    static const Locale& U_EXPORT2 getEnglish(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getFrench(void);
+    static const Locale& U_EXPORT2 getFrench(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getGerman(void);
+    static const Locale& U_EXPORT2 getGerman(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getItalian(void);
+    static const Locale& U_EXPORT2 getItalian(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getJapanese(void);
+    static const Locale& U_EXPORT2 getJapanese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getKorean(void);
+    static const Locale& U_EXPORT2 getKorean(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getChinese(void);
+    static const Locale& U_EXPORT2 getChinese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getSimplifiedChinese(void);
+    static const Locale& U_EXPORT2 getSimplifiedChinese(void);
     /** Useful constant for this language. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getTraditionalChinese(void);
+    static const Locale& U_EXPORT2 getTraditionalChinese(void);
 
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getFrance(void);
+    static const Locale& U_EXPORT2 getFrance(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getGermany(void);
+    static const Locale& U_EXPORT2 getGermany(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getItaly(void);
+    static const Locale& U_EXPORT2 getItaly(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getJapan(void);
+    static const Locale& U_EXPORT2 getJapan(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getKorea(void);
+    static const Locale& U_EXPORT2 getKorea(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getChina(void);
+    static const Locale& U_EXPORT2 getChina(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getPRC(void);
+    static const Locale& U_EXPORT2 getPRC(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getTaiwan(void);
+    static const Locale& U_EXPORT2 getTaiwan(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getUK(void);
+    static const Locale& U_EXPORT2 getUK(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getUS(void);
+    static const Locale& U_EXPORT2 getUS(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getCanada(void);
+    static const Locale& U_EXPORT2 getCanada(void);
     /** Useful constant for this country/region. @stable ICU 2.0 */
-    static const Locale &U_EXPORT2 getCanadaFrench(void);
-
+    static const Locale& U_EXPORT2 getCanadaFrench(void);
 
     /**
      * Construct a default locale object, a Locale for the default locale ID.
@@ -264,10 +263,10 @@ public:
      * @see uloc_getDefault
      * @stable ICU 2.0
      */
-    Locale( const   char * language,
-            const   char * country  = 0,
-            const   char * variant  = 0,
-            const   char * keywordsAndValues = 0);
+    Locale(const char* language,
+        const char* country = 0,
+        const char* variant = 0,
+        const char* keywordsAndValues = 0);
 
     /**
      * Initializes a Locale object from another Locale object.
@@ -275,14 +274,13 @@ public:
      * @param other The Locale object being copied in.
      * @stable ICU 2.0
      */
-    Locale(const    Locale& other);
-
+    Locale(const Locale& other);
 
     /**
      * Destructor
      * @stable ICU 2.0
      */
-    virtual ~Locale() ;
+    virtual ~Locale();
 
     /**
      * Replaces the entire contents of *this with the specified value.
@@ -300,7 +298,7 @@ public:
      * @return      True if the two locale keys are the same, false otherwise.
      * @stable ICU 2.0
      */
-    UBool   operator==(const    Locale&     other) const;
+    UBool operator==(const Locale& other) const;
 
     /**
      * Checks if two locale keys are not the same.
@@ -310,7 +308,7 @@ public:
      *              otherwise.
      * @stable ICU 2.0
      */
-    UBool   operator!=(const    Locale&     other) const;
+    UBool operator!=(const Locale& other) const;
 
     /**
      * Clone this object.
@@ -323,7 +321,7 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.8
      */
-    Locale *clone() const;
+    Locale* clone() const;
 
 #ifndef U_HIDE_SYSTEM_API
     /**
@@ -356,8 +354,8 @@ public:
      * @stable ICU 2.0
      */
     static void U_EXPORT2 setDefault(const Locale& newLocale,
-                                     UErrorCode&   success);
-#endif  /* U_HIDE_SYSTEM_API */
+        UErrorCode& success);
+#endif /* U_HIDE_SYSTEM_API */
 
     /**
      * Creates a locale which has had minimal canonicalization
@@ -368,7 +366,7 @@ public:
      * @stable ICU 2.0
      * @see uloc_getName
      */
-    static Locale U_EXPORT2 createFromName(const char *name);
+    static Locale U_EXPORT2 createFromName(const char* name);
 
     /**
      * Creates a locale from the given string after canonicalizing
@@ -385,7 +383,7 @@ public:
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getLanguage( ) const;
+    inline const char* getLanguage() const;
 
     /**
      * Returns the locale's ISO-15924 abbreviation script code.
@@ -394,21 +392,21 @@ public:
      * @see uscript_getCode
      * @stable ICU 2.8
      */
-    inline const char *  getScript( ) const;
+    inline const char* getScript() const;
 
     /**
      * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getCountry( ) const;
+    inline const char* getCountry() const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
      * @stable ICU 2.0
      */
-    inline const char *  getVariant( ) const;
+    inline const char* getVariant() const;
 
     /**
      * Returns the programmatic name of the entire locale, with the language,
@@ -418,7 +416,7 @@ public:
      * @return      A pointer to "name".
      * @stable ICU 2.0
      */
-    inline const char * getName() const;
+    inline const char* getName() const;
 
     /**
      * Returns the programmatic name of the entire locale as getName() would return,
@@ -427,8 +425,7 @@ public:
      * @see getName
      * @stable ICU 2.8
      */
-    const char * getBaseName() const;
-
+    const char* getBaseName() const;
 
     /**
      * Gets the list of keywords for the specified locale.
@@ -438,7 +435,7 @@ public:
      * Client must dispose of it by calling delete.
      * @stable ICU 2.8
      */
-    StringEnumeration * createKeywords(UErrorCode &status) const;
+    StringEnumeration* createKeywords(UErrorCode& status) const;
 
     /**
      * Gets the value for a keyword.
@@ -451,7 +448,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
+    int32_t getKeywordValue(const char* keywordName, char* buffer, int32_t bufferCapacity, UErrorCode& status) const;
 
     /**
      * Sets or removes the value for a keyword.
@@ -467,7 +464,7 @@ public:
      *
      * @stable ICU 49
      */
-    void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
+    void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode& status);
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -475,14 +472,14 @@ public:
      * @return      An alias to the code, or an empty string
      * @stable ICU 2.0
      */
-    const char * getISO3Language() const;
+    const char* getISO3Language() const;
 
     /**
      * Fills in "name" with the locale's three-letter ISO-3166 country code.
      * @return      An alias to the code, or an empty string
      * @stable ICU 2.0
      */
-    const char * getISO3Country() const;
+    const char* getISO3Country() const;
 
     /**
      * Returns the Windows LCID value corresponding to this locale.
@@ -491,7 +488,7 @@ public:
      * there is no Windows LCID value that corresponds to this locale, returns 0.
      * @stable ICU 2.0
      */
-    uint32_t        getLCID(void) const;
+    uint32_t getLCID(void) const;
 
 #ifndef U_HIDE_DRAFT_API
     /**
@@ -508,7 +505,7 @@ public:
      * @draft ICU 54
      */
     UBool isRightToLeft() const;
-#endif  /* U_HIDE_DRAFT_API */
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for
@@ -519,7 +516,7 @@ public:
      * @return          A reference to "dispLang".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
+    UnicodeString& getDisplayLanguage(UnicodeString& dispLang) const;
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for
@@ -534,8 +531,8 @@ public:
      * @return          A reference to "dispLang".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayLanguage( const   Locale&         displayLocale,
-                                                UnicodeString&  dispLang) const;
+    UnicodeString& getDisplayLanguage(const Locale& displayLocale,
+        UnicodeString& dispLang) const;
 
     /**
      * Fills in "dispScript" with the name of this locale's script in a format suitable
@@ -546,7 +543,7 @@ public:
      * @return              A reference to "dispScript".
      * @stable ICU 2.8
      */
-    UnicodeString&  getDisplayScript(          UnicodeString& dispScript) const;
+    UnicodeString& getDisplayScript(UnicodeString& dispScript) const;
 
     /**
      * Fills in "dispScript" with the name of this locale's country in a format suitable
@@ -562,8 +559,8 @@ public:
      * @return              A reference to "dispScript".
      * @stable ICU 2.8
      */
-    UnicodeString&  getDisplayScript(  const   Locale&         displayLocale,
-                                               UnicodeString&  dispScript) const;
+    UnicodeString& getDisplayScript(const Locale& displayLocale,
+        UnicodeString& dispScript) const;
 
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
@@ -574,7 +571,7 @@ public:
      * @return              A reference to "dispCountry".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
+    UnicodeString& getDisplayCountry(UnicodeString& dispCountry) const;
 
     /**
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
@@ -590,8 +587,8 @@ public:
      * @return              A reference to "dispCountry".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayCountry(  const   Locale&         displayLocale,
-                                                UnicodeString&  dispCountry) const;
+    UnicodeString& getDisplayCountry(const Locale& displayLocale,
+        UnicodeString& dispCountry) const;
 
     /**
      * Fills in "dispVar" with the name of this locale's variant code in a format suitable
@@ -600,7 +597,7 @@ public:
      * @return          A reference to "dispVar".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
+    UnicodeString& getDisplayVariant(UnicodeString& dispVar) const;
 
     /**
      * Fills in "dispVar" with the name of this locale's variant code in a format
@@ -610,8 +607,8 @@ public:
      * @return          A reference to "dispVar".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayVariant(  const   Locale&         displayLocale,
-                                                UnicodeString&  dispVar) const;
+    UnicodeString& getDisplayVariant(const Locale& displayLocale,
+        UnicodeString& dispVar) const;
 
     /**
      * Fills in "name" with the name of this locale in a format suitable for user display
@@ -624,7 +621,7 @@ public:
      * @return      A reference to "name".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayName(         UnicodeString&  name) const;
+    UnicodeString& getDisplayName(UnicodeString& name) const;
 
     /**
      * Fills in "name" with the name of this locale in a format suitable for user display
@@ -638,14 +635,14 @@ public:
      * @return          A reference to "name".
      * @stable ICU 2.0
      */
-    UnicodeString&  getDisplayName( const   Locale&         displayLocale,
-                                            UnicodeString&  name) const;
+    UnicodeString& getDisplayName(const Locale& displayLocale,
+        UnicodeString& name) const;
 
     /**
      * Generates a hash code for the locale.
      * @stable ICU 2.0
      */
-    int32_t         hashCode(void) const;
+    int32_t hashCode(void) const;
 
     /**
      * Sets the locale to bogus
@@ -714,8 +711,8 @@ protected: /* only protected for testing purposes. DO NOT USE. */
      * Set this from a single POSIX style locale string.
      * @internal
      */
-    void setFromPOSIXID(const char *posixID);
-#endif  /* U_HIDE_INTERNAL_API */
+    void setFromPOSIXID(const char* posixID);
+#endif /* U_HIDE_INTERNAL_API */
 
 private:
     /**
@@ -740,7 +737,7 @@ private:
     /**
      * Initialize the locale cache for commonly used locales
      */
-    static Locale *getLocaleCache(void);
+    static Locale* getLocaleCache(void);
 
     char language[ULOC_LANG_CAPACITY];
     char script[ULOC_SCRIPT_CAPACITY];
@@ -754,13 +751,13 @@ private:
 
     UBool fIsBogus;
 
-    static const Locale &getLocale(int locid);
+    static const Locale& getLocale(int locid);
 
     /**
      * A friend to allow the default locale to be set by either the C or C++ API.
      * @internal
      */
-    friend Locale *locale_set_default_internal(const char *, UErrorCode& status);
+    friend Locale* locale_set_default_internal(const char*, UErrorCode& status);
 
     /**
      * @internal
@@ -769,43 +766,44 @@ private:
 };
 
 inline UBool
-Locale::operator!=(const    Locale&     other) const
+Locale::operator!=(const Locale& other) const
 {
     return !operator==(other);
 }
 
-inline const char *
+inline const char*
 Locale::getCountry() const
 {
     return country;
 }
 
-inline const char *
+inline const char*
 Locale::getLanguage() const
 {
     return language;
 }
 
-inline const char *
+inline const char*
 Locale::getScript() const
 {
     return script;
 }
 
-inline const char *
+inline const char*
 Locale::getVariant() const
 {
     return &baseName[variantBegin];
 }
 
-inline const char *
+inline const char*
 Locale::getName() const
 {
     return fullName;
 }
 
 inline UBool
-Locale::isBogus(void) const {
+Locale::isBogus(void) const
+{
     return fIsBogus;
 }
 

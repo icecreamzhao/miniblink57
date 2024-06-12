@@ -15,20 +15,20 @@ namespace gin {
 
 // TryCatch is a convenient wrapper around v8::TryCatch.
 class GIN_EXPORT TryCatch {
- public:
-  explicit TryCatch(v8::Isolate* isolate);
-  ~TryCatch();
+public:
+    explicit TryCatch(v8::Isolate* isolate);
+    ~TryCatch();
 
-  bool HasCaught();
-  std::string GetStackTrace();
+    bool HasCaught();
+    std::string GetStackTrace();
 
- private:
-  v8::Isolate* isolate_;
-  v8::TryCatch try_catch_;
+private:
+    v8::Isolate* isolate_;
+    v8::TryCatch try_catch_;
 
-  DISALLOW_COPY_AND_ASSIGN(TryCatch);
+    DISALLOW_COPY_AND_ASSIGN(TryCatch);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_TRY_CATCH_H_
+#endif // GIN_TRY_CATCH_H_

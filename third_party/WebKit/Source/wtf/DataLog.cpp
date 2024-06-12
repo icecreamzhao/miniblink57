@@ -23,8 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "DataLog.h"
+#include "wtf/DataLog.h"
 
 #if OS(POSIX)
 #include <pthread.h>
@@ -33,15 +32,17 @@
 
 #define DATA_LOG_TO_FILE 0
 
-// Uncomment to force logging to the given file regardless of what the environment variable says. Note that
-// we will append ".<pid>.txt" where <pid> is the PID.
+// Uncomment to force logging to the given file regardless of what the
+// environment variable says. Note that we will append ".<pid>.txt" where <pid>
+// is the PID.
 
-// This path won't work on Windows, make sure to change to something like C:\\Users\\<more path>\\log.txt.
+// This path won't work on Windows, make sure to change to something like
+// C:\\Users\\<more path>\\log.txt.
 #define DATA_LOG_FILENAME "/tmp/WTFLog"
 
 namespace WTF {
 
-#if USE(PTHREADS)
+#if OS(POSIX)
 static pthread_once_t initializeLogFileOnceKey = PTHREAD_ONCE_INIT;
 #endif
 
@@ -57,23 +58,27 @@ static void initializeLogFileOnce()
 #endif
     char actualFilename[1024];
 
-    snprintf(actualFilename, sizeof(actualFilename), "%s.%d.txt", filename, getpid());
+    snprintf(actualFilename, sizeof(actualFilename), "%s.%d.txt", filename,
+        getpid());
 
     if (filename) {
-        file = FilePrintStream::open(actualFilename, "w").leakPtr();
+        file = FilePrintStream::open(actualFilename, "w").release();
         if (!file)
-            fprintf(stderr, "Warning: Could not open log file %s for writing.\n", actualFilename);
+            fprintf(stderr, "Warning: Could not open log file %s for writing.\n",
+                actualFilename);
     }
 #endif // DATA_LOG_TO_FILE
     if (!file)
         file = new FilePrintStream(stderr, FilePrintStream::Borrow);
 
-    setvbuf(file->file(), 0, _IONBF, 0); // Prefer unbuffered output, so that we get a full log upon crash or deadlock.
+    // Prefer unbuffered output, so that we get a full log upon crash or
+    // deadlock.
+    setvbuf(file->file(), 0, _IONBF, 0);
 }
 
 static void initializeLogFile()
 {
-#if USE(PTHREADS)
+#if OS(POSIX)
     pthread_once(&initializeLogFileOnceKey, initializeLogFileOnce);
 #else
     if (!file)
@@ -100,10 +105,4 @@ void dataLogF(const char* format, ...)
     va_end(argList);
 }
 
-void dataLogFString(const char* str)
-{
-    dataFile().printf("%s", str);
-}
-
 } // namespace WTF
-

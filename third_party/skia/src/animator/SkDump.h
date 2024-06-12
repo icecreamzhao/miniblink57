@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDump_DEFINED
 #define SkDump_DEFINED
 
@@ -20,10 +19,10 @@ class SkDump : public SkDisplayable {
     DECLARE_MEMBER_INFO(Dump);
 #ifdef SK_DUMP_ENABLED
     SkDump();
-    bool enable(SkAnimateMaker & ) override;
-    bool evaluate(SkAnimateMaker &);
+    bool enable(SkAnimateMaker&) override;
+    bool evaluate(SkAnimateMaker&);
     bool hasEnable() const override;
-    static void GetEnumString(SkDisplayTypes , int index, SkString* result);
+    static void GetEnumString(SkDisplayTypes, int index, SkString* result);
     SkBool displayList;
     SkBool eventList;
     SkBool events;
@@ -32,11 +31,10 @@ class SkDump : public SkDisplayable {
     SkBool posts;
     SkString script;
 #else
-    virtual bool enable(SkAnimateMaker & );
-    virtual bool hasEnable() const;
-    virtual bool setProperty(int index, SkScriptValue& );
+    bool enable(SkAnimateMaker&) override;
+    bool hasEnable() const override;
+    bool setProperty(int index, SkScriptValue&) override;
 #endif
 };
-
 
 #endif // SkDump_DEFINED

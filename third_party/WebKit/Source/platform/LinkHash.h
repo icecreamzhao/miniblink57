@@ -27,6 +27,7 @@
 #define LinkHash_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/text/StringHash.h"
 
@@ -38,6 +39,7 @@ typedef uint64_t LinkHash;
 
 // Use the low 32-bits of the 64-bit LinkHash as the key for HashSets.
 struct LinkHashHash {
+    STATIC_ONLY(LinkHashHash);
     static unsigned hash(LinkHash key) { return static_cast<unsigned>(key); }
     static bool equal(LinkHash a, LinkHash b) { return a == b; }
     static const bool safeToCompareToEmptyOrDeleted = true;
@@ -58,7 +60,8 @@ struct LinkHashHash {
 // base URL, and returns the hash of the string that will be used for visited
 // link coloring. It will return the special value of 0 if attributeURL does not
 // look like a relative URL.
-PLATFORM_EXPORT LinkHash visitedLinkHash(const KURL& base, const AtomicString& attributeURL);
+PLATFORM_EXPORT LinkHash visitedLinkHash(const KURL& base,
+    const AtomicString& attributeURL);
 
 } // namespace blink
 

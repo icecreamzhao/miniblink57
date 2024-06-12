@@ -12,25 +12,25 @@
 namespace v8 {
 namespace internal {
 
-namespace compiler {  // external declarations from compiler.
-class NodeOriginTable;
-class WasmGraphBuilder;
-}  // namespace compiler
+    namespace compiler { // external declarations from compiler.
+        class NodeOriginTable;
+        class WasmGraphBuilder;
+    } // namespace compiler
 
-namespace wasm {
+    namespace wasm {
 
-struct FunctionBody;
-struct WasmModule;
-struct WasmFeatures;
+        struct FunctionBody;
+        struct WasmModule;
+        struct WasmFeatures;
 
-V8_EXPORT_PRIVATE DecodeResult
-BuildTFGraph(AccountingAllocator* allocator, const WasmFeatures& enabled,
-             const WasmModule* module, compiler::WasmGraphBuilder* builder,
-             WasmFeatures* detected, const FunctionBody& body,
-             compiler::NodeOriginTable* node_origins);
+        V8_EXPORT_PRIVATE DecodeResult
+        BuildTFGraph(AccountingAllocator* allocator, const WasmFeatures& enabled,
+            const WasmModule* module, compiler::WasmGraphBuilder* builder,
+            WasmFeatures* detected, const FunctionBody& body,
+            compiler::NodeOriginTable* node_origins);
 
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
+    } // namespace wasm
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_WASM_GRAPH_BUILDER_INTERFACE_H_
+#endif // V8_WASM_GRAPH_BUILDER_INTERFACE_H_

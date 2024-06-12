@@ -26,10 +26,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// Web IDL exceptions are defined in prose rather than IDL.
+// https://heycam.github.io/webidl/#idl-exceptions
+// https://heycam.github.io/webidl/#es-DOMException
+
 [
+    Constructor(optional DOMString message = "", optional DOMString name = "Error"),
     Exposed=(Window,Worker),
     DoNotCheckConstants,
-    GarbageCollected,
 ] exception DOMException {
 
     readonly attribute unsigned short   code;
@@ -77,4 +81,3 @@
     const unsigned short      INVALID_NODE_TYPE_ERR          = 24;
     const unsigned short      DATA_CLONE_ERR                 = 25;
 };
-

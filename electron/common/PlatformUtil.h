@@ -42,6 +42,6 @@ bool moveItemToTrash(const base::FilePath& full_path);
 
 void beep();
 
-}  // namespace platform_util
+} // namespace platform_util
 
-#endif  // ATOM_COMMON_PLATFORM_UTIL_H_
+#endif // ATOM_COMMON_PLATFORM_UTIL_H_

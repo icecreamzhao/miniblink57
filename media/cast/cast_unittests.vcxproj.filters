@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{07AEAFC7-2F39-B64B-2877-3FB44E06BFBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logging">
+      <UniqueIdentifier>{9B707920-F1A4-1F32-0FFD-E7D9F01B5105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{6EE990AB-8D5A-EDB4-F3F6-510B9F50DC3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\pacing">
+      <UniqueIdentifier>{066052ED-2FCF-FCFB-D6C2-40E778C91D40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\rtcp">
+      <UniqueIdentifier>{17749A8D-42A0-D157-D2B4-59329A5D0DDF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\rtp">
+      <UniqueIdentifier>{0AB4C132-B565-9775-05B1-80F79C750A53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="receiver">
+      <UniqueIdentifier>{18CF94BB-5D1A-F467-C8D8-9DC7ECC29B7C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sender">
+      <UniqueIdentifier>{23349CB6-4066-C05B-598E-D52D89F8964E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{DF44A234-9BB1-A451-D75B-D95B649E9002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test\utility">
+      <UniqueIdentifier>{06773DE6-2F29-245A-2965-D6210E764678}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="common/expanded_value_base_unittest.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <CustomBuild Include="common/rtp_time_unittest.cc">
+      <Filter>common</Filter>
+    </CustomBuild>
+    <CustomBuild Include="logging/encoding_event_subscriber_unittest.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <CustomBuild Include="logging/receiver_time_offset_estimator_impl_unittest.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <CustomBuild Include="logging/serialize_deserialize_test.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <CustomBuild Include="logging/simple_event_subscriber_unittest.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <CustomBuild Include="logging/stats_event_subscriber_unittest.cc">
+      <Filter>logging</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/cast_transport_impl_unittest.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/mock_cast_transport.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <None Include="net/mock_cast_transport.h">
+      <Filter>net</Filter>
+    </None>
+    <CustomBuild Include="net/pacing/mock_paced_packet_sender.cc">
+      <Filter>net\pacing</Filter>
+    </CustomBuild>
+    <None Include="net/pacing/mock_paced_packet_sender.h">
+      <Filter>net\pacing</Filter>
+    </None>
+    <CustomBuild Include="net/pacing/paced_sender_unittest.cc">
+      <Filter>net\pacing</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/receiver_rtcp_event_subscriber_unittest.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/rtcp_builder_unittest.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/rtcp_unittest.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/rtcp_utility_unittest.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/test_rtcp_packet_builder.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/test_rtcp_packet_builder.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/cast_message_builder_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/frame_buffer_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/framer_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/mock_rtp_payload_feedback.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/mock_rtp_payload_feedback.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/packet_storage_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/receiver_stats_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/rtp_packet_builder.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/rtp_packetizer_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtp/rtp_parser_unittest.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/udp_transport_unittest.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <CustomBuild Include="receiver/audio_decoder_unittest.cc">
+      <Filter>receiver</Filter>
+    </CustomBuild>
+    <CustomBuild Include="receiver/frame_receiver_unittest.cc">
+      <Filter>receiver</Filter>
+    </CustomBuild>
+    <CustomBuild Include="receiver/video_decoder_unittest.cc">
+      <Filter>receiver</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/audio_encoder_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/audio_sender_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/congestion_control_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/external_video_encoder_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/fake_video_encode_accelerator_factory.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/fake_video_encode_accelerator_factory.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/video_encoder_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/video_sender_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="sender/vp8_quantizer_parser_unittest.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <CustomBuild Include="test/end2end_unittest.cc">
+      <Filter>test</Filter>
+    </CustomBuild>
+    <CustomBuild Include="test/utility/audio_utility_unittest.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+    <CustomBuild Include="test/utility/barcode_unittest.cc">
+      <Filter>test\utility</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

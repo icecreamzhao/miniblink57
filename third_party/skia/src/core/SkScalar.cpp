@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2010 The Android Open Source Project
  *
@@ -6,18 +5,18 @@
  * found in the LICENSE file.
  */
 
-
-#include "SkMath.h"
 #include "SkScalar.h"
+#include "SkMath.h"
 
 SkScalar SkScalarInterpFunc(SkScalar searchKey, const SkScalar keys[],
-                            const SkScalar values[], int length) {
+    const SkScalar values[], int length)
+{
     SkASSERT(length > 0);
-    SkASSERT(keys != NULL);
-    SkASSERT(values != NULL);
+    SkASSERT(keys != nullptr);
+    SkASSERT(values != nullptr);
 #ifdef SK_DEBUG
     for (int i = 1; i < length; i++)
-        SkASSERT(keys[i] >= keys[i-1]);
+        SkASSERT(keys[i] >= keys[i - 1]);
 #endif
     int right = 0;
     while (right < length && searchKey > keys[right])
@@ -25,12 +24,12 @@ SkScalar SkScalarInterpFunc(SkScalar searchKey, const SkScalar keys[],
     // Could use sentinel values to eliminate conditionals, but since the
     // tables are taken as input, a simpler format is better.
     if (length == right)
-        return values[length-1];
+        return values[length - 1];
     if (0 == right)
         return values[0];
     // Otherwise, interpolate between right - 1 and right.
     SkScalar rightKey = keys[right];
-    SkScalar leftKey = keys[right-1];
+    SkScalar leftKey = keys[right - 1];
     SkScalar fract = (searchKey - leftKey) / (rightKey - leftKey);
-    return SkScalarInterp(values[right-1], values[right], fract);
+    return SkScalarInterp(values[right - 1], values[right], fract);
 }

@@ -15,6 +15,8 @@ exports.load = (appUrl) => {
     const options = {
       width: 800,
       height: 600,
+      nodeIntegration: true,
+      contextIsolation: false,
       autoHideMenuBar: true,
       backgroundColor: '#FFFFFF',
       useContentSize: true

@@ -20,7 +20,7 @@
  * \file
  * \brief C API: Initialize and clean up ICU
  */
- 
+
 /**
  *  Initialize ICU.
  *
@@ -46,9 +46,9 @@
  *    failure, as usual.
  *
  * @stable ICU 2.6
- */  
-U_STABLE void U_EXPORT2 
-u_init(UErrorCode *status);
+ */
+U_STABLE void U_EXPORT2
+u_init(UErrorCode* status);
 
 #ifndef U_HIDE_SYSTEM_API
 /**
@@ -96,9 +96,8 @@ u_init(UErrorCode *status);
  * @stable ICU 2.0
  * @system
  */
-U_STABLE void U_EXPORT2 
+U_STABLE void U_EXPORT2
 u_cleanup(void);
-
 
 /**
   *  Pointer type for a user supplied memory allocation function.
@@ -108,7 +107,7 @@ u_cleanup(void);
   *  @stable ICU 2.8
   *  @system
   */
-typedef void *U_CALLCONV UMemAllocFn(const void *context, size_t size);
+typedef void* U_CALLCONV UMemAllocFn(const void* context, size_t size);
 /**
   *  Pointer type for a user supplied memory re-allocation function.
   *  @param context user supplied value, obtained from from u_setMemoryFunctions().
@@ -117,7 +116,7 @@ typedef void *U_CALLCONV UMemAllocFn(const void *context, size_t size);
   *  @stable ICU 2.8
   *  @system
   */
-typedef void *U_CALLCONV UMemReallocFn(const void *context, void *mem, size_t size);
+typedef void* U_CALLCONV UMemReallocFn(const void* context, void* mem, size_t size);
 /**
   *  Pointer type for a user supplied memory free  function.  Behavior should be
   *  similar the standard C library free().
@@ -128,7 +127,7 @@ typedef void *U_CALLCONV UMemReallocFn(const void *context, void *mem, size_t si
   *  @stable ICU 2.8
   *  @system
   */
-typedef void  U_CALLCONV UMemFreeFn (const void *context, void *mem);
+typedef void U_CALLCONV UMemFreeFn(const void* context, void* mem);
 
 /**
  *  Set the functions that ICU will use for memory allocation.
@@ -145,11 +144,10 @@ typedef void  U_CALLCONV UMemFreeFn (const void *context, void *mem);
  *  @param status  Receives error values.
  *  @stable ICU 2.8
  *  @system
- */  
-U_STABLE void U_EXPORT2 
-u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, 
-                    UErrorCode *status);
-
+ */
+U_STABLE void U_EXPORT2
+u_setMemoryFunctions(const void* context, UMemAllocFn* a, UMemReallocFn* r, UMemFreeFn* f,
+    UErrorCode* status);
 
 #ifndef U_HIDE_DEPRECATED_API
 /*********************************************************************************
@@ -168,7 +166,7 @@ u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMem
   * @deprecated ICU 52. This type is no longer supported.
   * @system
   */
-typedef void *UMTX;
+typedef void* UMTX;
 
 /**
   *  Function Pointer type for a user supplied mutex initialization function.
@@ -186,8 +184,7 @@ typedef void *UMTX;
   *  @deprecated ICU 52. This function is no longer supported.
   *  @system
   */
-typedef void U_CALLCONV UMtxInitFn (const void *context, UMTX  *mutex, UErrorCode* status);
-
+typedef void U_CALLCONV UMtxInitFn(const void* context, UMTX* mutex, UErrorCode* status);
 
 /**
   *  Function Pointer type for a user supplied mutex functions.
@@ -198,8 +195,7 @@ typedef void U_CALLCONV UMtxInitFn (const void *context, UMTX  *mutex, UErrorCod
   *  @deprecated ICU 52. This function is no longer supported.
   *  @system
   */
-typedef void U_CALLCONV UMtxFn   (const void *context, UMTX  *mutex);
-
+typedef void U_CALLCONV UMtxFn(const void* context, UMTX* mutex);
 
 /**
   *  Set the functions that ICU will use for mutex operations
@@ -217,11 +213,10 @@ typedef void U_CALLCONV UMtxFn   (const void *context, UMTX  *mutex);
   *  @param status  Receives error values.
   *  @deprecated ICU 52. This function is no longer supported.
   *  @system
-  */  
-U_DEPRECATED void U_EXPORT2 
-u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock,
-                    UErrorCode *status);
-
+  */
+U_DEPRECATED void U_EXPORT2
+u_setMutexFunctions(const void* context, UMtxInitFn* init, UMtxFn* destroy, UMtxFn* lock, UMtxFn* unlock,
+    UErrorCode* status);
 
 /**
   *  Pointer type for a user supplied atomic increment or decrement function.
@@ -231,7 +226,7 @@ u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtx
   *  @deprecated ICU 52. This function is no longer supported.
   *  @system
   */
-typedef int32_t U_CALLCONV UMtxAtomicFn(const void *context, int32_t *p);
+typedef int32_t U_CALLCONV UMtxAtomicFn(const void* context, int32_t* p);
 
 /**
  *  Set the functions that ICU will use for atomic increment and decrement of int32_t values.
@@ -247,12 +242,12 @@ typedef int32_t U_CALLCONV UMtxAtomicFn(const void *context, int32_t *p);
  *  @param status  Receives error values.
  *  @deprecated ICU 52. This function is no longer supported.
  *  @system
- */  
-U_DEPRECATED void U_EXPORT2 
-u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec,
-                    UErrorCode *status);
+ */
+U_DEPRECATED void U_EXPORT2
+u_setAtomicIncDecFunctions(const void* context, UMtxAtomicFn* inc, UMtxAtomicFn* dec,
+    UErrorCode* status);
 
-#endif  /* U_HIDE_DEPRECATED_API */
-#endif  /* U_HIDE_SYSTEM_API */
+#endif /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_SYSTEM_API */
 
 #endif

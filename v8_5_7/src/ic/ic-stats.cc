@@ -68,7 +68,7 @@ void ICStats::Dump() {
 }
 
 const char* ICStats::GetOrCacheScriptName(Script* script) {
-  DebugBreak();
+  base::OS::DebugBreak();
   if (script_name_map_.find(script) != script_name_map_.end()) {
     return script_name_map_[script]
 #if USING_VC6RT != 1
@@ -102,7 +102,7 @@ const char* ICStats::GetOrCacheScriptName(Script* script) {
 }
 
 const char* ICStats::GetOrCacheFunctionName(JSFunction* function) {
-  DebugBreak();
+  base::OS::DebugBreak();
   if (function_name_map_.find(function) != function_name_map_.end()) {
     return function_name_map_[function]
 #if USING_VC6RT != 1

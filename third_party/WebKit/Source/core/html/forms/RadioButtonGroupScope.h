@@ -24,7 +24,6 @@
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/text/StringHash.h"
 
 namespace blink {
@@ -33,7 +32,8 @@ class HTMLInputElement;
 class RadioButtonGroup;
 
 class RadioButtonGroupScope {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     RadioButtonGroupScope();
     ~RadioButtonGroupScope();
@@ -44,10 +44,11 @@ public:
     void removeButton(HTMLInputElement*);
     HTMLInputElement* checkedButtonForGroup(const AtomicString& groupName) const;
     bool isInRequiredGroup(HTMLInputElement*) const;
+    unsigned groupSizeFor(const HTMLInputElement*) const;
 
 private:
-    using NameToGroupMap = WillBeHeapHashMap<AtomicString, OwnPtrWillBeMember<RadioButtonGroup>, CaseFoldingHash>;
-    OwnPtrWillBeMember<NameToGroupMap> m_nameToGroupMap;
+    using NameToGroupMap = HeapHashMap<AtomicString, Member<RadioButtonGroup>>;
+    Member<NameToGroupMap> m_nameToGroupMap;
 };
 
 } // namespace blink

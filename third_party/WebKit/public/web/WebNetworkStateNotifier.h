@@ -39,7 +39,8 @@ namespace blink {
 class WebNetworkStateNotifier {
 public:
     BLINK_EXPORT static void setOnLine(bool);
-    BLINK_EXPORT static void setWebConnectionType(WebConnectionType);
+    BLINK_EXPORT static void setWebConnection(WebConnectionType,
+        double maxBandwidthMbps);
 
 private:
     WebNetworkStateNotifier();

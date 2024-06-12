@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/StyleMedia.h"
 
 #include "core/css/MediaList.h"
@@ -35,13 +34,13 @@
 namespace blink {
 
 StyleMedia::StyleMedia(LocalFrame* frame)
-    : DOMWindowProperty(frame)
+    : ContextClient(frame)
 {
 }
 
 AtomicString StyleMedia::type() const
 {
-    FrameView* view = m_frame ? m_frame->view() : 0;
+    FrameView* view = frame() ? frame()->view() : nullptr;
     if (view)
         return view->mediaType();
 
@@ -50,26 +49,26 @@ AtomicString StyleMedia::type() const
 
 bool StyleMedia::matchMedium(const String& query) const
 {
-    if (!m_frame)
+    if (!frame())
         return false;
 
-    Document* document = m_frame->document();
+    Document* document = frame()->document();
     ASSERT(document);
     Element* documentElement = document->documentElement();
     if (!documentElement)
         return false;
 
-    RefPtrWillBeRawPtr<MediaQuerySet> media = MediaQuerySet::create();
+    MediaQuerySet* media = MediaQuerySet::create();
     if (!media->set(query))
         return false;
 
-    MediaQueryEvaluator screenEval(m_frame);
-    return screenEval.eval(media.get());
+    MediaQueryEvaluator screenEval(frame());
+    return screenEval.eval(media);
 }
 
 DEFINE_TRACE(StyleMedia)
 {
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 } // namespace blink

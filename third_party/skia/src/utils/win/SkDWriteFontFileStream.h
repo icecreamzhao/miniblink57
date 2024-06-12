@@ -66,7 +66,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetLastWriteTime(UINT64* lastWriteTime);
 
     static HRESULT Create(SkStreamAsset* stream,
-                          SkDWriteFontFileStreamWrapper** streamFontFileStream);
+        SkDWriteFontFileStreamWrapper** streamFontFileStream);
 
 private:
     explicit SkDWriteFontFileStreamWrapper(SkStreamAsset* stream);

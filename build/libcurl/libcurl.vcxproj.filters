@@ -18,42 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\axtls.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\cyassl.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\darwinssl.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\gskit.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\gtls.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\mbedtls.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\nssg.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\openssl.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\polarssl.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\polarssl_threadlock.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\schannel.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\vtls.h">
-      <Filter>src\vtls</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\libcurl\src\vauth\digest.h">
       <Filter>src\vauth</Filter>
     </ClInclude>
@@ -426,44 +390,38 @@
     <ClInclude Include="..\..\third_party\libcurl\include\curl\system.h">
       <Filter>include\curl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\polarssl.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\polarssl_threadlock.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\schannel.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\vtls.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\gskit.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\gtls.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\mbedtls.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\nssg.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\openssl.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libcurl\src\vtls\cyassl.h">
+      <Filter>src\vtls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\axtls.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\cyassl.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\darwinssl.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\gskit.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\gtls.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\mbedtls.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\nss.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\openssl.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl_threadlock.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\schannel.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\vtls.c">
-      <Filter>src\vtls</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\vauth\digest_sspi.c">
       <Filter>src\vauth</Filter>
     </ClCompile>
@@ -525,12 +483,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\amigaos.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\asyn-ares.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\asyn-thread.c">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\base64.c">
@@ -737,9 +689,6 @@
     <ClCompile Include="..\..\third_party\libcurl\src\pingpong.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\pipeline.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\pop3.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -794,9 +743,6 @@
     <ClCompile Include="..\..\third_party\libcurl\src\splay.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libcurl\src\ssh.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\strcase.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -822,6 +768,45 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libcurl\src\curl_range.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl_threadlock.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\schannel.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\schannel_verify.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\vtls.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\gskit.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\gtls.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\mbedtls.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\nss.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\openssl.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\pipeline.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\cyassl.c">
+      <Filter>src\vtls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libcurl\src\asyn-thread.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

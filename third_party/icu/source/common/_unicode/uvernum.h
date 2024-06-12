@@ -22,7 +22,7 @@
  * macros and definitions. The actual version numbers are defined here.
  */
 
- /*
+/*
   * IMPORTANT: When updating version, the following things need to be done:
   * source/common/unicode/uvernum.h - this file: update major, minor,
   *        patchlevel, suffix, version, short version constants, namespace,
@@ -51,7 +51,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2014, International Business Machines Corporation and others. All Rights Reserved. "
+    " Copyright (C) 2014, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** The current ICU major version as an integer.
  *  This value will change in the subsequent releases of ICU
@@ -103,13 +103,13 @@
 
 #ifndef U_ICU_ENTRY_POINT_RENAME
 #ifdef U_HAVE_LIB_SUFFIX
-#define U_DEF_ICU_ENTRY_POINT_RENAME(x,y,z) x ## y ##  z
-#define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y,z) U_DEF_ICU_ENTRY_POINT_RENAME(x,y,z)
-#define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX,U_LIB_SUFFIX_C_NAME)
+#define U_DEF_ICU_ENTRY_POINT_RENAME(x, y, z) x##y##z
+#define U_DEF2_ICU_ENTRY_POINT_RENAME(x, y, z) U_DEF_ICU_ENTRY_POINT_RENAME(x, y, z)
+#define U_ICU_ENTRY_POINT_RENAME(x) U_DEF2_ICU_ENTRY_POINT_RENAME(x, U_ICU_VERSION_SUFFIX, U_LIB_SUFFIX_C_NAME)
 #else
-#define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y
-#define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)
-#define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)
+#define U_DEF_ICU_ENTRY_POINT_RENAME(x, y) x##y
+#define U_DEF2_ICU_ENTRY_POINT_RENAME(x, y) U_DEF_ICU_ENTRY_POINT_RENAME(x, y)
+#define U_ICU_ENTRY_POINT_RENAME(x) U_DEF2_ICU_ENTRY_POINT_RENAME(x, U_ICU_VERSION_SUFFIX)
 #endif
 #endif
 
@@ -131,7 +131,7 @@
  * @internal ICU 4.4 Internal Use Only
  **/
 #define U_ICU_DATA_VERSION "54.1"
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================
  * ICU collation framework version information
@@ -165,6 +165,6 @@
  * @deprecated ICU 54
  */
 #define UCOL_TAILORINGS_VERSION 1
-#endif  /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_DEPRECATED_API */
 
 #endif

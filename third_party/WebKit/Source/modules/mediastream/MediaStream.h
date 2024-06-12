@@ -11,22 +11,22 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef MediaStream_h
 #define MediaStream_h
 
-#include "core/dom/ContextLifecycleObserver.h"
+#include "core/dom/ExecutionContext.h"
 #include "core/html/URLRegistry.h"
 #include "modules/EventTargetModules.h"
 #include "modules/ModulesExport.h"
@@ -38,23 +38,19 @@ namespace blink {
 
 class ExceptionState;
 
-class MODULES_EXPORT MediaStream final
-    : public RefCountedGarbageCollectedEventTargetWithInlineData<MediaStream>
-    , public URLRegistrable
-    , public MediaStreamDescriptorClient
-    , public ContextLifecycleObserver {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MediaStream);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaStream);
+class MODULES_EXPORT MediaStream final : public EventTargetWithInlineData,
+                                         public ContextClient,
+                                         public URLRegistrable,
+                                         public MediaStreamDescriptorClient {
+    USING_GARBAGE_COLLECTED_MIXIN(MediaStream);
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static MediaStream* create(ExecutionContext*);
     static MediaStream* create(ExecutionContext*, MediaStream*);
     static MediaStream* create(ExecutionContext*, const MediaStreamTrackVector&);
-    static MediaStream* create(ExecutionContext*, PassRefPtr<MediaStreamDescriptor>);
+    static MediaStream* create(ExecutionContext*, MediaStreamDescriptor*);
     ~MediaStream() override;
-
-    // DEPRECATED
-    String label() const { return m_descriptor->id(); }
 
     String id() const { return m_descriptor->id(); }
 
@@ -68,12 +64,9 @@ public:
     MediaStreamTrackVector getTracks();
 
     bool active() const { return m_descriptor->active(); }
-    bool ended() const;
-    void stop();
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(active);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(inactive);
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(ended);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(addtrack);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(removetrack);
 
@@ -82,25 +75,31 @@ public:
     // MediaStreamDescriptorClient
     void streamEnded() override;
 
-    MediaStreamDescriptor* descriptor() const { return m_descriptor.get(); }
+    MediaStreamDescriptor* descriptor() const { return m_descriptor; }
 
     // EventTarget
     const AtomicString& interfaceName() const override;
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextClient::getExecutionContext();
+    }
 
     // URLRegistrable
     URLRegistry& registry() const override;
 
-    // Oilpan: need to eagerly unregister as m_descriptor client.
-    EAGERLY_FINALIZE();
     DECLARE_VIRTUAL_TRACE();
 
-private:
-    MediaStream(ExecutionContext*, PassRefPtr<MediaStreamDescriptor>);
-    MediaStream(ExecutionContext*, const MediaStreamTrackVector& audioTracks, const MediaStreamTrackVector& videoTracks);
+protected:
+    bool addEventListenerInternal(
+        const AtomicString& eventType,
+        EventListener*,
+        const AddEventListenerOptionsResolved&) override;
 
-    // ContextLifecycleObserver
-    void contextDestroyed() override;
+private:
+    MediaStream(ExecutionContext*, MediaStreamDescriptor*);
+    MediaStream(ExecutionContext*,
+        const MediaStreamTrackVector& audioTracks,
+        const MediaStreamTrackVector& videoTracks);
 
     // MediaStreamDescriptorClient
     void addRemoteTrack(MediaStreamComponent*) override;
@@ -108,20 +107,20 @@ private:
 
     bool emptyOrOnlyEndedTracks();
 
-    void scheduleDispatchEvent(PassRefPtrWillBeRawPtr<Event>);
-    void scheduledEventTimerFired(Timer<MediaStream>*);
-
-    bool m_stopped;
+    void scheduleDispatchEvent(Event*);
+    void scheduledEventTimerFired(TimerBase*);
 
     MediaStreamTrackVector m_audioTracks;
     MediaStreamTrackVector m_videoTracks;
-    RefPtr<MediaStreamDescriptor> m_descriptor;
+    Member<MediaStreamDescriptor> m_descriptor;
 
-    Timer<MediaStream> m_scheduledEventTimer;
-    WillBeHeapVector<RefPtrWillBeMember<Event>> m_scheduledEvents;
+    TaskRunnerTimer<MediaStream> m_scheduledEventTimer;
+    HeapVector<Member<Event>> m_scheduledEvents;
 };
 
-typedef HeapVector<Member<MediaStream>> MediaStreamVector;
+using MediaStreamVector = HeapVector<Member<MediaStream>>;
+
+MediaStream* toMediaStream(MediaStreamDescriptor*);
 
 } // namespace blink
 

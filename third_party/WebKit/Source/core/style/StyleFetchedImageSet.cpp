@@ -23,38 +23,59 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/style/StyleFetchedImageSet.h"
 
 #include "core/css/CSSImageSetValue.h"
-#include "core/fetch/ImageResource.h"
 #include "core/layout/LayoutObject.h"
+#include "core/loader/resource/ImageResourceContent.h"
+#include "core/svg/graphics/SVGImageForContainer.h"
 
 namespace blink {
 
-StyleFetchedImageSet::StyleFetchedImageSet(ImageResource* image, float imageScaleFactor, CSSImageSetValue* value)
+StyleFetchedImageSet::StyleFetchedImageSet(ImageResourceContent* image,
+    float imageScaleFactor,
+    CSSImageSetValue* value,
+    const KURL& url)
     : m_bestFitImage(image)
     , m_imageScaleFactor(imageScaleFactor)
     , m_imageSetValue(value)
+    , m_url(url)
 {
     m_isImageResourceSet = true;
-    m_bestFitImage->addClient(this);
+    m_bestFitImage->addObserver(this);
 }
 
+StyleFetchedImageSet::~StyleFetchedImageSet() { }
 
-StyleFetchedImageSet::~StyleFetchedImageSet()
+void StyleFetchedImageSet::dispose()
 {
-    m_bestFitImage->removeClient(this);
+    m_bestFitImage->removeObserver(this);
+    m_bestFitImage = nullptr;
 }
 
-PassRefPtrWillBeRawPtr<CSSValue> StyleFetchedImageSet::cssValue() const
+WrappedImagePtr StyleFetchedImageSet::data() const
+{
+    return m_bestFitImage.get();
+}
+
+ImageResourceContent* StyleFetchedImageSet::cachedImage() const
+{
+    return m_bestFitImage.get();
+}
+
+CSSValue* StyleFetchedImageSet::cssValue() const
 {
     return m_imageSetValue;
 }
 
-bool StyleFetchedImageSet::canRender(const LayoutObject& layoutObject, float multiplier) const
+CSSValue* StyleFetchedImageSet::computedCSSValue() const
 {
-    return m_bestFitImage->canRender(layoutObject, multiplier);
+    return m_imageSetValue->valueWithURLsMadeAbsolute();
+}
+
+bool StyleFetchedImageSet::canRender() const
+{
+    return !m_bestFitImage->errorOccurred() && !m_bestFitImage->getImage()->isNull();
 }
 
 bool StyleFetchedImageSet::isLoaded() const
@@ -67,26 +88,28 @@ bool StyleFetchedImageSet::errorOccurred() const
     return m_bestFitImage->errorOccurred();
 }
 
-LayoutSize StyleFetchedImageSet::imageSize(const LayoutObject* layoutObject, float multiplier) const
+LayoutSize StyleFetchedImageSet::imageSize(
+    const LayoutObject&,
+    float multiplier,
+    const LayoutSize& defaultObjectSize) const
 {
-    LayoutSize scaledImageSize = m_bestFitImage->imageSizeForLayoutObject(layoutObject, multiplier);
+    if (m_bestFitImage->getImage() && m_bestFitImage->getImage()->isSVGImage())
+        return imageSizeForSVGImage(toSVGImage(m_bestFitImage->getImage()),
+            multiplier, defaultObjectSize);
+
+    // Image orientation should only be respected for content images,
+    // not decorative ones such as StyleImage (backgrounds,
+    // border-image, etc.)
+    //
+    // https://drafts.csswg.org/css-images-3/#the-image-orientation
+    LayoutSize scaledImageSize = m_bestFitImage->imageSize(DoNotRespectImageOrientation, multiplier);
     scaledImageSize.scale(1 / m_imageScaleFactor);
     return scaledImageSize;
 }
 
-bool StyleFetchedImageSet::imageHasRelativeWidth() const
+bool StyleFetchedImageSet::imageHasRelativeSize() const
 {
-    return m_bestFitImage->imageHasRelativeWidth();
-}
-
-bool StyleFetchedImageSet::imageHasRelativeHeight() const
-{
-    return m_bestFitImage->imageHasRelativeHeight();
-}
-
-void StyleFetchedImageSet::computeIntrinsicDimensions(const LayoutObject*, Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio)
-{
-    m_bestFitImage->computeIntrinsicDimensions(intrinsicWidth, intrinsicHeight, intrinsicRatio);
+    return m_bestFitImage->imageHasRelativeSize();
 }
 
 bool StyleFetchedImageSet::usesImageContainerSize() const
@@ -94,29 +117,42 @@ bool StyleFetchedImageSet::usesImageContainerSize() const
     return m_bestFitImage->usesImageContainerSize();
 }
 
-void StyleFetchedImageSet::setContainerSizeForLayoutObject(const LayoutObject* layoutObject, const IntSize& imageContainerSize, float imageContainerZoomFactor)
-{
-    m_bestFitImage->setContainerSizeForLayoutObject(layoutObject, imageContainerSize, imageContainerZoomFactor);
-}
-
 void StyleFetchedImageSet::addClient(LayoutObject* layoutObject)
 {
-    m_bestFitImage->addClient(layoutObject);
+    m_bestFitImage->addObserver(layoutObject);
 }
 
 void StyleFetchedImageSet::removeClient(LayoutObject* layoutObject)
 {
-    m_bestFitImage->removeClient(layoutObject);
+    m_bestFitImage->removeObserver(layoutObject);
 }
 
-PassRefPtr<Image> StyleFetchedImageSet::image(LayoutObject* layoutObject, const IntSize&) const
+PassRefPtr<Image> StyleFetchedImageSet::image(const LayoutObject&,
+    const IntSize& containerSize,
+    float zoom) const
 {
-    return m_bestFitImage->imageForLayoutObject(layoutObject);
+    if (!m_bestFitImage->getImage()->isSVGImage())
+        return m_bestFitImage->getImage();
+
+    return SVGImageForContainer::create(toSVGImage(m_bestFitImage->getImage()),
+        containerSize, zoom, m_url);
 }
 
-bool StyleFetchedImageSet::knownToBeOpaque(const LayoutObject* layoutObject) const
+bool StyleFetchedImageSet::knownToBeOpaque(
+    const LayoutObject& layoutObject) const
 {
-    return m_bestFitImage->currentFrameKnownToBeOpaque(layoutObject);
+    TRACE_EVENT1(
+        TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "PaintImage", "data",
+        InspectorPaintImageEvent::data(&layoutObject, *m_bestFitImage.get()));
+    return m_bestFitImage->getImage()->currentFrameKnownToBeOpaque(
+        Image::PreCacheMetadata);
+}
+
+DEFINE_TRACE(StyleFetchedImageSet)
+{
+    visitor->trace(m_bestFitImage);
+    visitor->trace(m_imageSetValue);
+    StyleImage::trace(visitor);
 }
 
 } // namespace blink

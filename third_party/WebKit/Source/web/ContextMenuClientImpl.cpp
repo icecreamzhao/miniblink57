@@ -28,22 +28,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/ContextMenuClientImpl.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "core/CSSPropertyNames.h"
 #include "core/HTMLNames.h"
 #include "core/InputTypeNames.h"
 #include "core/css/CSSStyleDeclaration.h"
 #include "core/dom/Document.h"
-#include "core/dom/DocumentMarkerController.h"
 #include "core/editing/Editor.h"
-#include "core/editing/SpellChecker.h"
+#include "core/editing/markers/DocumentMarkerController.h"
+#include "core/editing/spellcheck/SpellChecker.h"
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
-#include "core/frame/PinchViewport.h"
 #include "core/frame/Settings.h"
+#include "core/frame/VisualViewport.h"
 #include "core/html/HTMLAnchorElement.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLImageElement.h"
@@ -77,6 +76,7 @@
 #include "public/web/WebSearchableFormData.h"
 #include "public/web/WebSpellCheckClient.h"
 #include "public/web/WebViewClient.h"
+#include "web/ContextMenuAllowedScope.h"
 #include "web/WebDataSourceImpl.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPluginContainerImpl.h"
@@ -86,68 +86,21 @@
 namespace blink {
 
 // Figure out the URL of a page or subframe. Returns |page_type| as the type,
-// which indicates page or subframe, or ContextNodeType::NONE if the URL could not
-// be determined for some reason.
+// which indicates page or subframe, or ContextNodeType::kNone if the URL could
+// not be determined for some reason.
 static WebURL urlFromFrame(LocalFrame* frame)
 {
     if (frame) {
         DocumentLoader* dl = frame->loader().documentLoader();
         if (dl) {
             WebDataSource* ds = WebDataSourceImpl::fromDocumentLoader(dl);
-            if (ds)
-                return ds->hasUnreachableURL() ? ds->unreachableURL() : ds->request().url();
+            if (ds) {
+                return ds->hasUnreachableURL() ? ds->unreachableURL()
+                                               : ds->getRequest().url();
+            }
         }
     }
     return WebURL();
-}
-
-// Helper function to determine whether text is a single word.
-static bool isASingleWord(const String& text)
-{
-    TextBreakIterator* it = wordBreakIterator(text, 0, text.length());
-    return it && it->next() == static_cast<int>(text.length());
-}
-
-// Helper function to get misspelled word on which context menu
-// is to be invoked. This function also sets the word on which context menu
-// has been invoked to be the selected word, as required. This function changes
-// the selection only when there were no selected characters on OS X.
-static String selectMisspelledWord(LocalFrame* selectedFrame)
-{
-    // First select from selectedText to check for multiple word selection.
-    String misspelledWord = selectedFrame->selectedText().stripWhiteSpace();
-
-    // If some texts were already selected, we don't change the selection.
-    if (!misspelledWord.isEmpty()) {
-        // Don't provide suggestions for multiple words.
-        if (!isASingleWord(misspelledWord))
-            return String();
-        return misspelledWord;
-    }
-
-    // Selection is empty, so change the selection to the word under the cursor.
-    HitTestResult hitTestResult = selectedFrame->eventHandler().
-        hitTestResultAtPoint(selectedFrame->page()->contextMenuController().hitTestResult().pointInInnerNodeFrame());
-    Node* innerNode = hitTestResult.innerNode();
-    VisiblePosition pos(innerNode->layoutObject()->positionForPoint(
-        hitTestResult.localPoint()));
-
-    if (pos.isNull())
-        return misspelledWord; // It is empty.
-
-    WebLocalFrameImpl::selectWordAroundPosition(selectedFrame, pos);
-    misspelledWord = selectedFrame->selectedText().stripWhiteSpace();
-
-#if OS(MACOSX)
-    // If misspelled word is still empty, then that portion should not be
-    // selected. Set the selection to that position only, and do not expand.
-    if (misspelledWord.isEmpty())
-        selectedFrame->selection().setSelection(VisibleSelection(pos));
-#else
-    // On non-Mac, right-click should not make a range selection in any case.
-    selectedFrame->selection().setSelection(VisibleSelection(pos));
-#endif
-    return misspelledWord;
 }
 
 static bool IsWhiteSpaceOrPunctuation(UChar c)
@@ -155,23 +108,27 @@ static bool IsWhiteSpaceOrPunctuation(UChar c)
     return isSpaceOrNewline(c) || WTF::Unicode::isPunct(c);
 }
 
-static String selectMisspellingAsync(LocalFrame* selectedFrame, String& description, uint32_t& hash)
+static String selectMisspellingAsync(LocalFrame* selectedFrame,
+    String& description,
+    uint32_t& hash)
 {
     VisibleSelection selection = selectedFrame->selection().selection();
-    if (!selection.isCaretOrRange())
+    if (selection.isNone())
         return String();
 
     // Caret and range selections always return valid normalized ranges.
-    RefPtrWillBeRawPtr<Range> selectionRange = selection.toNormalizedRange();
-    DocumentMarkerVector markers = selectedFrame->document()->markers().markersInRange(selectionRange.get(), DocumentMarker::MisspellingMarkers());
+    Range* selectionRange = createRange(selection.toNormalizedEphemeralRange());
+    DocumentMarkerVector markers = selectedFrame->document()->markers().markersInRange(
+        EphemeralRange(selectionRange), DocumentMarker::MisspellingMarkers());
     if (markers.size() != 1)
         return String();
     description = markers[0]->description();
     hash = markers[0]->hash();
 
     // Cloning a range fails only for invalid ranges.
-    RefPtrWillBeRawPtr<Range> markerRange = selectionRange->cloneRange();
-    markerRange->setStart(markerRange->startContainer(), markers[0]->startOffset());
+    Range* markerRange = selectionRange->cloneRange();
+    markerRange->setStart(markerRange->startContainer(),
+        markers[0]->startOffset());
     markerRange->setEnd(markerRange->endContainer(), markers[0]->endOffset());
 
     if (markerRange->text().stripWhiteSpace(&IsWhiteSpaceOrPunctuation) != selectionRange->text().stripWhiteSpace(&IsWhiteSpaceOrPunctuation))
@@ -180,15 +137,22 @@ static String selectMisspellingAsync(LocalFrame* selectedFrame, String& descript
     return markerRange->text();
 }
 
-void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
+bool ContextMenuClientImpl::shouldShowContextMenuFromTouch(
+    const WebContextMenuData& data)
+{
+    return m_webView->page()->settings().getAlwaysShowContextMenuOnTouch() || !data.linkURL.isEmpty() || data.mediaType == WebContextMenuData::MediaTypeImage || data.mediaType == WebContextMenuData::MediaTypeVideo || data.isEditable;
+}
+
+bool ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu,
+    bool fromTouch)
 {
     // Displaying the context menu in this function is a big hack as we don't
     // have context, i.e. whether this is being invoked via a script or in
     // response to user input (Mouse event WM_RBUTTONDOWN,
     // Keyboard events KeyVK_APPS, Shift+F10). Check if this is being invoked
     // in response to the above input events before popping up the context menu.
-    if (!m_webView->contextMenuAllowed())
-        return;
+    if (!ContextMenuAllowedScope::isContextMenuAllowed())
+        return false;
 
     HitTestResult r = m_webView->page()->contextMenuController().hitTestResult();
 
@@ -197,7 +161,8 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
     LocalFrame* selectedFrame = r.innerNodeFrame();
 
     WebContextMenuData data;
-    data.mousePosition = selectedFrame->view()->contentsToViewport(r.roundedPointInInnerNodeFrame());
+    data.mousePosition = selectedFrame->view()->contentsToViewport(
+        r.roundedPointInInnerNodeFrame());
 
     // Compute edit flags.
     data.editFlags = WebContextMenuData::CanDoNone;
@@ -273,7 +238,7 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
         // controls for audio then the player disappears, and there is no way to
         // return it back. Don't set this bit for fullscreen video, since
         // toggling is ignored in that case.
-        if (mediaElement->hasVideo() && !mediaElement->isFullscreen())
+        if (mediaElement->isHTMLVideoElement() && mediaElement->hasVideo() && !mediaElement->isFullscreen())
             data.mediaFlags |= WebContextMenuData::MediaCanToggleControls;
         if (mediaElement->shouldShowControls())
             data.mediaFlags |= WebContextMenuData::MediaControls;
@@ -311,58 +276,60 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
         data.frameEncoding = selectedFrame->document()->encodingName();
 
     // Send the frame and page URLs in any case.
-    data.pageURL = urlFromFrame(m_webView->mainFrameImpl()->frame());
-    if (selectedFrame != m_webView->mainFrameImpl()->frame()) {
+    if (!m_webView->page()->mainFrame()->isLocalFrame()) {
+        // TODO(kenrb): This works around the problem of URLs not being
+        // available for top-level frames that are in a different process.
+        // It mostly works to convert the security origin to a URL, but
+        // extensions accessing that property will not get the correct value
+        // in that case. See https://crbug.com/534561
+        WebSecurityOrigin origin = m_webView->mainFrame()->getSecurityOrigin();
+        if (!origin.isNull())
+            data.pageURL = KURL(ParsedURLString, origin.toString());
+    } else {
+        data.pageURL = urlFromFrame(toLocalFrame(m_webView->page()->mainFrame()));
+    }
+
+    if (selectedFrame != m_webView->page()->mainFrame()) {
         data.frameURL = urlFromFrame(selectedFrame);
-        RefPtrWillBeRawPtr<HistoryItem> historyItem = selectedFrame->loader().currentItem();
+        HistoryItem* historyItem = selectedFrame->loader().currentItem();
         if (historyItem)
             data.frameHistoryItem = WebHistoryItem(historyItem);
     }
 
+    // HitTestResult::isSelected() ensures clean layout by performing a hit test.
     if (r.isSelected()) {
-        if (!isHTMLInputElement(*r.innerNode()) || toHTMLInputElement(r.innerNode())->type() != InputTypeNames::password)
+        if (!isHTMLInputElement(*r.innerNode()) || toHTMLInputElement(r.innerNode())->type() != InputTypeNames::password) {
             data.selectedText = selectedFrame->selectedText().stripWhiteSpace();
+        }
     }
 
     if (r.isContentEditable()) {
         data.isEditable = true;
 
-        // When Chrome enables asynchronous spellchecking, its spellchecker adds spelling markers to misspelled
-        // words and attaches suggestions to these markers in the background. Therefore, when a user right-clicks
-        // a mouse on a word, Chrome just needs to find a spelling marker on the word instead of spellchecking it.
-        if (selectedFrame->settings() && selectedFrame->settings()->asynchronousSpellCheckingEnabled()) {
-            String description;
-            uint32_t hash = 0;
-            data.misspelledWord = selectMisspellingAsync(selectedFrame, description, hash);
-            data.misspellingHash = hash;
-            if (description.length()) {
-                Vector<String> suggestions;
-                description.split('\n', suggestions);
-                data.dictionarySuggestions = suggestions;
-            } else if (m_webView->spellCheckClient()) {
-                int misspelledOffset, misspelledLength;
-                m_webView->spellCheckClient()->spellCheck(data.misspelledWord, misspelledOffset, misspelledLength, &data.dictionarySuggestions);
-            }
-        } else {
-            data.isSpellCheckingEnabled =
-                toLocalFrame(m_webView->focusedCoreFrame())->spellChecker().isContinuousSpellCheckingEnabled();
-            // Spellchecking might be enabled for the field, but could be disabled on the node.
-            if (toLocalFrame(m_webView->focusedCoreFrame())->spellChecker().isSpellCheckingEnabledInFocusedNode()) {
-                data.misspelledWord = selectMisspelledWord(selectedFrame);
-                if (m_webView->spellCheckClient()) {
-                    int misspelledOffset, misspelledLength;
-                    m_webView->spellCheckClient()->spellCheck(
-                        data.misspelledWord, misspelledOffset, misspelledLength,
-                        &data.dictionarySuggestions);
-                    if (!misspelledLength)
-                        data.misspelledWord.reset();
-                }
-            }
+        // Spellchecker adds spelling markers to misspelled words and attaches
+        // suggestions to these markers in the background. Therefore, when a
+        // user right-clicks a mouse on a word, Chrome just needs to find a
+        // spelling marker on the word instead of spellchecking it.
+        String description;
+        uint32_t hash = 0;
+        data.misspelledWord = selectMisspellingAsync(selectedFrame, description, hash);
+        data.misspellingHash = hash;
+        if (description.length()) {
+            Vector<String> suggestions;
+            description.split('\n', suggestions);
+            data.dictionarySuggestions = suggestions;
+        } else if (m_webView->spellCheckClient()) {
+            int misspelledOffset, misspelledLength;
+            m_webView->spellCheckClient()->checkSpelling(
+                data.misspelledWord, misspelledOffset, misspelledLength,
+                &data.dictionarySuggestions);
         }
+
         HTMLFormElement* form = selectedFrame->selection().currentForm();
         if (form && isHTMLInputElement(*r.innerNode())) {
             HTMLInputElement& selectedElement = toHTMLInputElement(*r.innerNode());
-            WebSearchableFormData ws = WebSearchableFormData(WebFormElement(form), WebInputElement(&selectedElement));
+            WebSearchableFormData ws = WebSearchableFormData(
+                WebFormElement(form), WebInputElement(&selectedElement));
             if (ws.url().isValid())
                 data.keywordURL = ws.url();
         }
@@ -373,13 +340,8 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
     if (selectedFrame->editor().selectionHasStyle(CSSPropertyDirection, "rtl") != FalseTriState)
         data.writingDirectionRightToLeft |= WebContextMenuData::CheckableMenuItemChecked;
 
-    // Now retrieve the security info.
-    DocumentLoader* dl = selectedFrame->loader().documentLoader();
-    WebDataSource* ds = WebDataSourceImpl::fromDocumentLoader(dl);
-    if (ds)
-        data.securityInfo = ds->response().securityInfo();
-
-    data.referrerPolicy = static_cast<WebReferrerPolicy>(selectedFrame->document()->referrerPolicy());
+    data.referrerPolicy = static_cast<WebReferrerPolicy>(
+        selectedFrame->document()->getReferrerPolicy());
 
     // Filter out custom menu elements and add them into the data.
     populateCustomMenuItems(defaultMenu, &data);
@@ -390,7 +352,8 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
         // Extract suggested filename for saving file.
         data.suggestedFilename = anchor->fastGetAttribute(HTMLNames::downloadAttr);
 
-        // If the anchor wants to suppress the referrer, update the referrerPolicy accordingly.
+        // If the anchor wants to suppress the referrer, update the referrerPolicy
+        // accordingly.
         if (anchor->hasRel(RelationNoReferrer))
             data.referrerPolicy = WebReferrerPolicyNever;
 
@@ -410,11 +373,16 @@ void ContextMenuClientImpl::showContextMenu(const ContextMenu* defaultMenu)
         data.inputFieldType = WebContextMenuData::InputFieldTypeNone;
     }
 
-    data.node = r.innerNodeOrImageMapImage();
+    if (fromTouch && !shouldShowContextMenuFromTouch(data))
+        return false;
 
     WebLocalFrameImpl* selectedWebFrame = WebLocalFrameImpl::fromFrame(selectedFrame);
-    if (selectedWebFrame->client())
-        selectedWebFrame->client()->showContextMenu(data);
+    selectedWebFrame->setContextMenuNode(r.innerNodeOrImageMapImage());
+    if (!selectedWebFrame->client())
+        return false;
+
+    selectedWebFrame->client()->showContextMenu(data);
+    return true;
 }
 
 void ContextMenuClientImpl::clearContextMenu()
@@ -425,11 +393,11 @@ void ContextMenuClientImpl::clearContextMenu()
         return;
 
     WebLocalFrameImpl* selectedWebFrame = WebLocalFrameImpl::fromFrame(selectedFrame);
-    if (selectedWebFrame->client())
-        selectedWebFrame->client()->clearContextMenu();
+    selectedWebFrame->clearContextMenuNode();
 }
 
-static void populateSubMenuItems(const Vector<ContextMenuItem>& inputMenu, WebVector<WebMenuItemInfo>& subMenuItems)
+static void populateSubMenuItems(const Vector<ContextMenuItem>& inputMenu,
+    WebVector<WebMenuItemInfo>& subMenuItems)
 {
     Vector<WebMenuItemInfo> subItems;
     for (size_t i = 0; i < inputMenu.size(); ++i) {
@@ -455,10 +423,11 @@ static void populateSubMenuItems(const Vector<ContextMenuItem>& inputMenu, WebVe
             break;
         case SubmenuType:
             outputItem.type = WebMenuItemInfo::SubMenu;
-            populateSubMenuItems(inputItem->subMenuItems(), outputItem.subMenuItems);
+            populateSubMenuItems(inputItem->subMenuItems(),
+                outputItem.subMenuItems);
             break;
         }
-        subItems.append(outputItem);
+        subItems.push_back(outputItem);
     }
 
     WebVector<WebMenuItemInfo> outputItems(subItems.size());
@@ -467,7 +436,9 @@ static void populateSubMenuItems(const Vector<ContextMenuItem>& inputMenu, WebVe
     subMenuItems.swap(outputItems);
 }
 
-void ContextMenuClientImpl::populateCustomMenuItems(const ContextMenu* defaultMenu, WebContextMenuData* data)
+void ContextMenuClientImpl::populateCustomMenuItems(
+    const ContextMenu* defaultMenu,
+    WebContextMenuData* data)
 {
     populateSubMenuItems(defaultMenu->items(), data->customItems);
 }

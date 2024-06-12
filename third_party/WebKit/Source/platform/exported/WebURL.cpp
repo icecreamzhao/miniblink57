@@ -28,23 +28,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebURL.h"
 
 #include "platform/weborigin/KURL.h"
+#include "wtf/text/StringView.h"
+#include "url/gurl.h"
 
 namespace blink {
 
+bool WebURL::protocolIs(const char* protocol) const
+{
+    //   const url::Component& scheme = m_parsed.scheme;
+    //   StringView urlView = m_string;
+    //   // For subtlety why this works in all cases, see KURL::componentString.
+    //   return m_isValid && StringView(urlView, scheme.begin, scheme.len) == protocol;
+    KURL url(ParsedURLString, (String)m_string);
+    return url.protocolIs(protocol);
+}
+
 WebURL::WebURL(const KURL& url)
-    : m_string(url.string())
-   // , m_parsed(url.parsed())
-    , m_isValid(url.isValid())
+    : m_string(url.getString())
+    ,
+    //m_parsed(url.parsed()),
+    m_isValid(url.isValid())
 {
 }
 
 WebURL& WebURL::operator=(const KURL& url)
 {
-    m_string = url.string();
+    m_string = url.getString();
     //m_parsed = url.parsed();
     m_isValid = url.isValid();
     return *this;
@@ -52,10 +64,24 @@ WebURL& WebURL::operator=(const KURL& url)
 
 WebURL::operator KURL() const
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    return KURL(m_string, m_parsed, m_isValid);
-#endif // MINIBLINK_NOT_IMPLEMENTED
-	return KURL(ParsedURLString, (String)m_string);
+    //return KURL(m_string, /*m_parsed,*/ m_isValid);
+    return KURL(ParsedURLString, (String)m_string);
+}
+
+WebURL::WebURL(const WebURL& url)
+    : m_string(url.m_string)
+    ,
+    //m_parsed(url.m_parsed),
+    m_isValid(url.m_isValid)
+{
+}
+
+WebURL& WebURL::operator=(const WebURL& url)
+{
+    m_string = url.m_string;
+    //m_parsed = url.m_parsed;
+    m_isValid = url.m_isValid;
+    return *this;
 }
 
 } // namespace blink

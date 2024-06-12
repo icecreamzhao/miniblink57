@@ -2,11 +2,10 @@
 #ifndef QSTRING_H
 #define QSTRING_H
 
-#include "QtGlobal.h"
 #include "QChar.h"
+#include "QtGlobal.h"
 
-class Q_CORE_EXPORT QString
-{
+class Q_CORE_EXPORT QString {
 public:
     inline QString();
 
@@ -15,8 +14,6 @@ public:
 
     QString toLower() const Q_REQUIRED_RESULT;
     QString toUpper() const Q_REQUIRED_RESULT;
-
 };
-
 
 #endif // QSTRING_H

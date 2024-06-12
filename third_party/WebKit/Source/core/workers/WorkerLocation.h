@@ -35,18 +35,21 @@
 
 namespace blink {
 
-class WorkerLocation final : public GarbageCollectedFinalized<WorkerLocation>, public ScriptWrappable, public DOMURLUtilsReadOnly {
+class WorkerLocation final : public GarbageCollectedFinalized<WorkerLocation>,
+                             public ScriptWrappable,
+                             public DOMURLUtilsReadOnly {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static WorkerLocation* create(const KURL& url)
     {
         return new WorkerLocation(url);
     }
 
-    virtual KURL url() const override { return m_url; }
-    virtual String input() const override
+    KURL url() const override { return m_url; }
+    String input() const override
     {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
         return String();
     }
 
@@ -54,7 +57,9 @@ public:
 
 private:
     explicit WorkerLocation(const KURL& url)
-        : m_url(url) { }
+        : m_url(url)
+    {
+    }
 
     KURL m_url;
 };

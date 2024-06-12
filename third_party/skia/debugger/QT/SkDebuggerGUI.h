@@ -9,16 +9,16 @@
 #ifndef SKDEBUGGERUI_H
 #define SKDEBUGGERUI_H
 
-
 #include "SkCanvas.h"
 #include "SkCanvasWidget.h"
 #include "SkDebugger.h"
-#include "SkGLWidget.h"
-#include "SkListWidget.h"
-#include "SkInspectorWidget.h"
-#include "SkRasterWidget.h"
 #include "SkDrawCommandGeometryWidget.h"
+#include "SkGLWidget.h"
+#include "SkInspectorWidget.h"
+#include "SkListWidget.h"
+#include "SkRasterWidget.h"
 #include "SkSettingsWidget.h"
+#include <QtCore/QFileSystemWatcher>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -29,19 +29,14 @@
 #include <QtGui/QListView>
 #include <QtGui/QListWidget>
 #include <QtGui/QMainWindow>
+#include <QtGui/QMenu>
+#include <QtGui/QMenuBar>
 #include <QtGui/QSplitter>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
 #include <vector>
-
-class SkTimedPicture;
-namespace sk_tools {
-    class PictureRenderer;
-}
 
 /** \class SkDebuggerGUI
 
@@ -55,7 +50,7 @@ public:
         Constructs the view of the application.
         @param parent  The parent container of this widget.
      */
-    SkDebuggerGUI(QWidget *parent = 0);
+    SkDebuggerGUI(QWidget* parent = 0);
 
     /**
         Updates the directory widget with the latest directory path stored in
@@ -68,19 +63,14 @@ public:
     */
     void openFile(const QString& filename);
 
-signals:
+Q_SIGNALS:
     void commandChanged(int command);
 
-private slots:
+private Q_SLOTS:
     /**
         Toggles breakpoint view in the list widget.
      */
     void actionBreakpoints();
-
-    /**
-        Profile the commands
-     */
-    void actionProfile();
 
     /**
         Cancels the command filter in the list widget.
@@ -183,7 +173,7 @@ private slots:
     /**
         Loads an skpicture selected from the directory.
      */
-    void loadFile(QListWidgetItem *item);
+    void loadFile(QListWidgetItem* item);
 
     /**
         Toggles a dialog with a file browser for navigating to a skpicture. Loads
@@ -223,6 +213,12 @@ private slots:
     void toggleDirectory();
 
     /**
+        Populates the contents of the directory widget with the skp files in the
+        current directory pointed to by fFile.
+     */
+    void populateDirectoryWidget();
+
+    /**
         Filters the list widgets command visibility based on the currently
         active selection.
      */
@@ -231,6 +227,7 @@ private slots:
     void updateHit(int newHit);
 
     void updateImage();
+
 private:
     QSplitter fCentralSplitter;
     QStatusBar fStatusBar;
@@ -238,7 +235,6 @@ private:
 
     QAction fActionOpen;
     QAction fActionBreakpoint;
-    QAction fActionProfile;
     QAction fActionCancel;
     QAction fActionClearBreakpoints;
     QAction fActionClearDeletes;
@@ -273,6 +269,8 @@ private:
     QListWidget fListWidget;
     QListWidget fDirectoryWidget;
 
+    QFileSystemWatcher fDirectoryWatcher;
+
     SkDebugger fDebugger;
     SkCanvasWidget fCanvasWidget;
 
@@ -291,7 +289,6 @@ private:
     QString fPath;
     SkString fFileName;
     SkTDArray<bool> fSkipCommands; // has a specific command been deleted?
-    bool fDirectoryWidgetActive;
 
     QMenuBar fMenuBar;
     QMenu fMenuFile;
@@ -306,7 +303,7 @@ private:
     /**
         Creates the entire UI.
      */
-    void setupUi(QMainWindow *SkDebuggerGUI);
+    void setupUi(QMainWindow* SkDebuggerGUI);
 
     /**
         Pipes a QString in with the location of the filename, proceeds to updating
@@ -334,16 +331,8 @@ private:
      */
     void setupOverviewText(const SkTDArray<double>* typeTimes, double totTime, int numRuns);
 
-
-    /**
-        Render the supplied picture several times tracking the time consumed
-        by each command.
-     */
-    void run(const SkPicture* pict,
-             sk_tools::PictureRenderer* renderer,
-             int repeats);
-
-    bool isPaused() const {
+    bool isPaused() const
+    {
         return fActionPause.isChecked();
     }
 };

@@ -2,32 +2,29 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/device_orientation/DeviceOrientationController.h"
 
 #include "core/dom/Document.h"
+#include "core/frame/Deprecation.h"
+#include "core/frame/HostsUsingFeatures.h"
 #include "core/frame/Settings.h"
-#include "core/frame/UseCounter.h"
 #include "modules/EventModules.h"
 #include "modules/device_orientation/DeviceOrientationData.h"
 #include "modules/device_orientation/DeviceOrientationDispatcher.h"
 #include "modules/device_orientation/DeviceOrientationEvent.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
 DeviceOrientationController::DeviceOrientationController(Document& document)
     : DeviceSingleWindowEventController(document)
+    , Supplement<Document>(document)
 {
 }
 
-DeviceOrientationController::~DeviceOrientationController()
-{
-#if !ENABLE(OILPAN)
-    stopUpdating();
-#endif
-}
+DeviceOrientationController::~DeviceOrientationController() { }
 
 void DeviceOrientationController::didUpdateData()
 {
@@ -41,41 +38,55 @@ const char* DeviceOrientationController::supplementName()
     return "DeviceOrientationController";
 }
 
-DeviceOrientationController& DeviceOrientationController::from(Document& document)
+DeviceOrientationController& DeviceOrientationController::from(
+    Document& document)
 {
-    DeviceOrientationController* controller = static_cast<DeviceOrientationController*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
+    DeviceOrientationController* controller = static_cast<DeviceOrientationController*>(
+        Supplement<Document>::from(document, supplementName()));
     if (!controller) {
         controller = new DeviceOrientationController(document);
-        WillBeHeapSupplement<Document>::provideTo(document, supplementName(), adoptPtrWillBeNoop(controller));
+        Supplement<Document>::provideTo(document, supplementName(), controller);
     }
     return *controller;
 }
 
-void DeviceOrientationController::didAddEventListener(LocalDOMWindow* window, const AtomicString& eventType)
+void DeviceOrientationController::didAddEventListener(
+    LocalDOMWindow* window,
+    const AtomicString& eventType)
 {
     if (eventType != eventTypeName())
         return;
 
     if (document().frame()) {
-        String errorMessage;
-        if (document().isPrivilegedContext(errorMessage)) {
-            UseCounter::count(document().frame(), UseCounter::DeviceOrientationSecureOrigin);
+        if (document().isSecureContext()) {
+            UseCounter::count(document().frame(),
+                UseCounter::DeviceOrientationSecureOrigin);
         } else {
-            UseCounter::count(document().frame(), UseCounter::DeviceOrientationInsecureOrigin);
-            if (document().frame()->settings()->strictPowerfulFeatureRestrictions())
+            Deprecation::countDeprecation(
+                document().frame(), UseCounter::DeviceOrientationInsecureOrigin);
+            HostsUsingFeatures::countAnyWorld(
+                document(),
+                HostsUsingFeatures::Feature::DeviceOrientationInsecureHost);
+            if (document()
+                    .frame()
+                    ->settings()
+                    ->getStrictPowerfulFeatureRestrictions())
                 return;
         }
     }
 
     if (!m_hasEventListener)
-        Platform::current()->recordRapporURL("DeviceSensors.DeviceOrientation", WebURL(document().url()));
+        Platform::current()->recordRapporURL("DeviceSensors.DeviceOrientation",
+            WebURL(document().url()));
 
     DeviceSingleWindowEventController::didAddEventListener(window, eventType);
 }
 
 DeviceOrientationData* DeviceOrientationController::lastData() const
 {
-    return m_overrideOrientationData ? m_overrideOrientationData.get() : DeviceOrientationDispatcher::instance().latestDeviceOrientationData();
+    return m_overrideOrientationData
+        ? m_overrideOrientationData.get()
+        : dispatcherInstance().latestDeviceOrientationData();
 }
 
 bool DeviceOrientationController::hasLastData()
@@ -85,15 +96,15 @@ bool DeviceOrientationController::hasLastData()
 
 void DeviceOrientationController::registerWithDispatcher()
 {
-    DeviceOrientationDispatcher::instance().addController(this);
+    dispatcherInstance().addController(this);
 }
 
 void DeviceOrientationController::unregisterWithDispatcher()
 {
-    DeviceOrientationDispatcher::instance().removeController(this);
+    dispatcherInstance().removeController(this);
 }
 
-PassRefPtrWillBeRawPtr<Event> DeviceOrientationController::lastEvent() const
+Event* DeviceOrientationController::lastEvent() const
 {
     return DeviceOrientationEvent::create(eventTypeName(), lastData());
 }
@@ -109,9 +120,10 @@ const AtomicString& DeviceOrientationController::eventTypeName() const
     return EventTypeNames::deviceorientation;
 }
 
-void DeviceOrientationController::setOverride(DeviceOrientationData* deviceOrientationData)
+void DeviceOrientationController::setOverride(
+    DeviceOrientationData* deviceOrientationData)
 {
-    ASSERT(deviceOrientationData);
+    DCHECK(deviceOrientationData);
     m_overrideOrientationData = deviceOrientationData;
     dispatchDeviceEvent(lastEvent());
 }
@@ -125,11 +137,17 @@ void DeviceOrientationController::clearOverride()
         didUpdateData();
 }
 
+DeviceOrientationDispatcher& DeviceOrientationController::dispatcherInstance()
+    const
+{
+    return DeviceOrientationDispatcher::instance(false);
+}
+
 DEFINE_TRACE(DeviceOrientationController)
 {
     visitor->trace(m_overrideOrientationData);
     DeviceSingleWindowEventController::trace(visitor);
-    WillBeHeapSupplement<Document>::trace(visitor);
+    Supplement<Document>::trace(visitor);
 }
 
 } // namespace blink

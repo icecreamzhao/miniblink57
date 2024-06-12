@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKDEBUGGER_H_
 #define SKDEBUGGER_H_
 
@@ -22,10 +21,12 @@ public:
 
     ~SkDebugger();
 
-    void setIndex(int index) {
+    void setIndex(int index)
+    {
         fIndex = index;
     }
-    void draw(SkCanvas* canvas) {
+    void draw(SkCanvas* canvas)
+    {
         if (fIndex >= 0) {
             fDebugCanvas->drawTo(canvas, fIndex);
         }
@@ -36,89 +37,106 @@ public:
     void play();
     void rewind();
 
-    bool isCommandVisible(int index) {
+    bool isCommandVisible(int index)
+    {
         return fDebugCanvas->getDrawCommandVisibilityAt(index);
     }
 
-    void setCommandVisible(int index, bool isVisible) {
+    void setCommandVisible(int index, bool isVisible)
+    {
         fDebugCanvas->toggleCommand(index, isVisible);
     }
 
-    SkDrawCommand* getDrawCommandAt(int index) {
+    SkDrawCommand* getDrawCommandAt(int index)
+    {
         return fDebugCanvas->getDrawCommandAt(index);
     }
 
-    const SkTDArray<SkDrawCommand*>& getDrawCommands() const {
+    const SkTDArray<SkDrawCommand*>& getDrawCommands() const
+    {
         return fDebugCanvas->getDrawCommands();
     }
 
-    void highlightCurrentCommand(bool on) {
+    void highlightCurrentCommand(bool on)
+    {
         fDebugCanvas->toggleFilter(on);
     }
 
     void loadPicture(SkPicture* picture);
 
-    SkPicture* copyPicture();
+    sk_sp<SkPicture> copyPicture();
 
-    int getSize() const {
+    int getSize() const
+    {
         return fDebugCanvas->getSize();
     }
 
-    void setUserMatrix(SkMatrix userMatrix) {
+    void setUserMatrix(SkMatrix userMatrix)
+    {
         // Should this live in debugger instead?
         fDebugCanvas->setUserMatrix(userMatrix);
     }
 
-    int getCommandAtPoint(int x, int y, int index) {
+    int getCommandAtPoint(int x, int y, int index)
+    {
         return fDebugCanvas->getCommandAtPoint(x, y, index);
     }
 
-    const SkTDArray<SkString*>* getCommandInfo(int index) const {
+    const SkTDArray<SkString*>* getCommandInfo(int index) const
+    {
         return fDebugCanvas->getCommandInfo(index);
     }
 
-    const SkMatrix& getCurrentMatrix() {
+    const SkMatrix& getCurrentMatrix()
+    {
         return fDebugCanvas->getCurrentMatrix();
     }
 
-    const SkIRect& getCurrentClip() {
+    const SkIRect& getCurrentClip()
+    {
         return fDebugCanvas->getCurrentClip();
     }
 
-    SkRect pictureCull() const   { 
-        return NULL == fPicture ? SkRect::MakeEmpty() : fPicture->cullRect();
+    SkRect pictureCull() const
+    {
+        return nullptr == fPicture ? SkRect::MakeEmpty() : fPicture->cullRect();
     }
 
-    int index() {
+    int index()
+    {
         return fIndex;
     }
 
-    void setOverdrawViz(bool overDrawViz) {
+    void setOverdrawViz(bool overDrawViz)
+    {
         if (fDebugCanvas) {
             fDebugCanvas->setOverdrawViz(overDrawViz);
         }
     }
 
-    void setPathOps(bool pathOps) {
+    void setPathOps(bool pathOps)
+    {
         if (fDebugCanvas) {
             fDebugCanvas->setAllowSimplifyClip(pathOps);
         }
     }
 
-    void setMegaViz(bool megaViz) {
+    void setMegaViz(bool megaViz)
+    {
         if (fDebugCanvas) {
             fDebugCanvas->setMegaVizMode(megaViz);
         }
     }
 
-    void setTexFilterOverride(bool texFilterOverride, SkFilterQuality quality) {
+    void setTexFilterOverride(bool texFilterOverride, SkFilterQuality quality)
+    {
         if (fDebugCanvas) {
             fDebugCanvas->overrideTexFiltering(texFilterOverride, quality);
         }
     }
 
     void getOverviewText(const SkTDArray<double>* typeTimes, double totTime,
-                         SkString* overview, int numRuns);
+        SkString* overview, int numRuns);
 
     void getClipStackText(SkString* clipStack);
 
@@ -128,6 +146,5 @@ private:
 
     int fIndex;
 };
-
 
 #endif /* SKDEBUGGER_H_ */

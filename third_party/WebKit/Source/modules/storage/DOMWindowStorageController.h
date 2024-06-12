@@ -6,7 +6,7 @@
 #define DOMWindowStorageController_h
 
 #include "core/dom/Document.h"
-#include "core/frame/DOMWindowLifecycleObserver.h"
+#include "core/frame/LocalDOMWindow.h"
 #include "modules/ModulesExport.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
@@ -14,27 +14,26 @@
 namespace blink {
 
 class Document;
-class Event;
 
-class MODULES_EXPORT DOMWindowStorageController final : public NoBaseWillBeGarbageCollected<DOMWindowStorageController>, public WillBeHeapSupplement<Document>, public DOMWindowLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowStorageController);
-    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowStorageController);
+class MODULES_EXPORT DOMWindowStorageController final
+    : public GarbageCollected<DOMWindowStorageController>,
+      public Supplement<Document>,
+      public LocalDOMWindow::EventListenerObserver {
+    USING_GARBAGE_COLLECTED_MIXIN(DOMWindowStorageController);
+
 public:
     DECLARE_VIRTUAL_TRACE();
 
     static const char* supplementName();
     static DOMWindowStorageController& from(Document&);
 
-    // Inherited from DOMWindowLifecycleObserver
+    // Inherited from LocalDOMWindow::EventListenerObserver
     void didAddEventListener(LocalDOMWindow*, const AtomicString&) override;
-
-protected:
-    explicit DOMWindowStorageController(Document&);
+    void didRemoveEventListener(LocalDOMWindow*, const AtomicString&) override { }
+    void didRemoveAllEventListeners(LocalDOMWindow*) override { }
 
 private:
-    Document& document() const { return *m_document; }
-
-    RawPtrWillBeMember<Document> m_document;
+    explicit DOMWindowStorageController(Document&);
 };
 
 } // namespace blink

@@ -42,7 +42,8 @@
 // Unicode.org provides a reference implmentation, including parser:
 // http://www.unicode.org/Public/PROGRAMS/BidiReferenceC/6.3.0/source/brtest.c
 // But it, like the other implementations I've found, is rather tied to
-// the algorithms it is testing. This file seeks to only implement the parser bits.
+// the algorithms it is testing. This file seeks to only implement the parser
+// bits.
 
 // Other C/C++ implementations of this parser:
 // https://github.com/googlei18n/fribidi-vs-unicode/blob/master/test.c
@@ -78,7 +79,7 @@ std::string nameFromParagraphDirection(ParagraphDirection paragraphDirection)
     return "";
 }
 
-template<class Runner>
+template <class Runner>
 class Harness {
 public:
     Harness(Runner& runner)
@@ -109,7 +110,8 @@ inline void rtrim(std::string& s)
     size_t firstSpaceAtEndOfString = lastNonSpace + 1;
     if (firstSpaceAtEndOfString >= s.size())
         return; // lastNonSpace was the last char.
-    s.erase(firstSpaceAtEndOfString, std::string::npos); // erase to the end of the string.
+    s.erase(firstSpaceAtEndOfString,
+        std::string::npos); // erase to the end of the string.
 }
 
 inline void trim(std::string& s)
@@ -178,7 +180,8 @@ static std::basic_string<UChar> parseTestString(const std::string& line)
         charClassExamples.insert(std::make_pair("S", 0x09)); // <control-0009>
         charClassExamples.insert(std::make_pair("WS", 0x20)); // ' ' for WS
         charClassExamples.insert(std::make_pair("ON", 0x3d)); // '=' for ON
-        charClassExamples.insert(std::make_pair("NSM", 0x05BF)); // HEBREW POINT RAFE
+        charClassExamples.insert(
+            std::make_pair("NSM", 0x05BF)); // HEBREW POINT RAFE
         charClassExamples.insert(std::make_pair("AL", 0x0608)); // ARABIC RAY
         charClassExamples.insert(std::make_pair("BN", 0x00AD)); // SOFT HYPHEN
         charClassExamples.insert(std::make_pair("LRE", 0x202A));
@@ -200,7 +203,8 @@ static std::basic_string<UChar> parseTestString(const std::string& line)
     return testString;
 }
 
-static bool parseParagraphDirectionMask(const std::string& line, int& modeMask)
+static bool parseParagraphDirectionMask(const std::string& line,
+    int& modeMask)
 {
     modeMask = atoi(line.c_str());
     return modeMask >= 1 && modeMask <= kMaxParagraphDirection;
@@ -212,7 +216,7 @@ static void parseError(const std::string& line, size_t lineNumber)
     printf("Parse error, line %zu : %s\n", lineNumber, line.c_str());
 }
 
-template<class Runner>
+template <class Runner>
 void Harness<Runner>::parse(std::istream& bidiTestFile)
 {
     static const std::string levelsPrefix("@Levels");
@@ -253,17 +257,21 @@ void Harness<Runner>::parse(std::istream& bidiTestFile)
                 continue;
             }
             testString = parseTestString(line.substr(0, seperatorIndex));
-            if (!parseParagraphDirectionMask(line.substr(seperatorIndex + 1), paragraphDirectionMask)) {
+            if (!parseParagraphDirectionMask(line.substr(seperatorIndex + 1),
+                    paragraphDirectionMask)) {
                 parseError(originalLine, lineNumber);
                 continue;
             }
 
             if (paragraphDirectionMask & DirectionAutoLTR)
-                m_runner.runTest(testString, reorder, levels, DirectionAutoLTR, originalLine, lineNumber);
+                m_runner.runTest(testString, reorder, levels, DirectionAutoLTR,
+                    originalLine, lineNumber);
             if (paragraphDirectionMask & DirectionLTR)
-                m_runner.runTest(testString, reorder, levels, DirectionLTR, originalLine, lineNumber);
+                m_runner.runTest(testString, reorder, levels, DirectionLTR,
+                    originalLine, lineNumber);
             if (paragraphDirectionMask & DirectionRTL)
-                m_runner.runTest(testString, reorder, levels, DirectionRTL, originalLine, lineNumber);
+                m_runner.runTest(testString, reorder, levels, DirectionRTL,
+                    originalLine, lineNumber);
         }
     }
 }

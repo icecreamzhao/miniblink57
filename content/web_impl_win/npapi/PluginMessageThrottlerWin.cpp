@@ -113,7 +113,7 @@ void PluginMessageThrottlerWin::processQueuedMessage()
     freeMessage(message);
 }
 
-void PluginMessageThrottlerWin::messageThrottleTimerFired(blink::Timer<PluginMessageThrottlerWin>*)
+void PluginMessageThrottlerWin::messageThrottleTimerFired(blink::TimerBase*)
 {
     processQueuedMessage();
 

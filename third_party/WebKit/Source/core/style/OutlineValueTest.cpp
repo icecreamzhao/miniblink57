@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/style/OutlineValue.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
@@ -19,7 +18,7 @@ TEST(OutlineValueTest, VisuallyEqualStyle)
     outline2.setOffset(10);
     EXPECT_TRUE(outline1.visuallyEqual(outline2));
 
-    outline2.setStyle(DOTTED);
+    outline2.setStyle(BorderStyleDotted);
     outline1.setOffset(10);
     EXPECT_FALSE(outline1.visuallyEqual(outline2));
 }
@@ -29,8 +28,8 @@ TEST(OutlineValueTest, VisuallyEqualOffset)
     OutlineValue outline1;
     OutlineValue outline2;
 
-    outline1.setStyle(DOTTED);
-    outline2.setStyle(DOTTED);
+    outline1.setStyle(BorderStyleDotted);
+    outline2.setStyle(BorderStyleDotted);
     EXPECT_TRUE(outline1.visuallyEqual(outline2));
 
     outline1.setOffset(10);
@@ -45,14 +44,14 @@ TEST(OutlineValueTest, VisuallyEqualIsAuto)
     OutlineValue outline1;
     OutlineValue outline2;
 
-    outline1.setStyle(DOTTED);
-    outline2.setStyle(DOTTED);
+    outline1.setStyle(BorderStyleDotted);
+    outline2.setStyle(BorderStyleDotted);
     EXPECT_TRUE(outline1.visuallyEqual(outline2));
 
-    outline1.setIsAuto(AUTO_ON);
+    outline1.setIsAuto(OutlineIsAutoOn);
     EXPECT_FALSE(outline1.visuallyEqual(outline2));
 
-    outline2.setIsAuto(AUTO_ON);
+    outline2.setIsAuto(OutlineIsAutoOn);
     EXPECT_TRUE(outline1.visuallyEqual(outline2));
 }
 

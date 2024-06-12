@@ -6,6 +6,7 @@
 #define PagePool_h
 
 #include "platform/heap/ThreadState.h"
+#include "wtf/Allocator.h"
 #include "wtf/ThreadingPrimitives.h"
 
 namespace blink {
@@ -13,34 +14,39 @@ namespace blink {
 class BasePage;
 class PageMemory;
 
-template<typename DataType>
+template <typename DataType>
 class PagePool {
+    USING_FAST_MALLOC(PagePool);
+
 protected:
     PagePool()
     {
-        for (int i = 0; i < ThreadState::NumberOfHeaps; ++i)
+        for (int i = 0; i < BlinkGC::NumberOfArenas; ++i)
             m_pool[i] = nullptr;
     }
 
     class PoolEntry {
+        USING_FAST_MALLOC(PoolEntry);
+
     public:
         PoolEntry(DataType* data, PoolEntry* next)
             : data(data)
             , next(next)
-        { }
+        {
+        }
 
         DataType* data;
         PoolEntry* next;
     };
 
-    PoolEntry* m_pool[ThreadState::NumberOfHeaps];
+    PoolEntry* m_pool[BlinkGC::NumberOfArenas];
 };
 
 // Once pages have been used for one type of thread heap they will never be
 // reused for another type of thread heap.  Instead of unmapping, we add the
 // pages to a pool of pages to be reused later by a thread heap of the same
 // type. This is done as a security feature to avoid type confusion.  The
-// heaps are type segregated by having separate thread heaps for different
+// heaps are type segregated by having separate thread arenas for different
 // types of objects.  Holding on to pages ensures that the same virtual address
 // space cannot be used for objects of another type than the type contained
 // in this page to begin with.
@@ -51,7 +57,7 @@ public:
     PageMemory* takeFreePage(int);
 
 private:
-    Mutex m_mutex[ThreadState::NumberOfHeaps];
+    Mutex m_mutex[BlinkGC::NumberOfArenas];
 };
 
 class OrphanedPagePool : public PagePool<BasePage> {
@@ -63,7 +69,7 @@ public:
     ~OrphanedPagePool();
     void addOrphanedPage(int, BasePage*);
     void decommitOrphanedPages();
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     bool contains(void*);
 #endif
 
@@ -73,6 +79,7 @@ public:
     // causing ASan errors. asanDisabledMemset must not be used for
     // non-orphaned pages.
     static void asanDisabledMemset(Address, char, size_t);
+
 private:
     void clearMemory(PageMemory*);
 };

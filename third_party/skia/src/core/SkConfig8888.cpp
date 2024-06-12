@@ -5,9 +5,9 @@
  * found in the LICENSE file.
  */
 
+#include "SkConfig8888.h"
 #include "SkBitmap.h"
 #include "SkCanvas.h"
-#include "SkConfig8888.h"
 #include "SkColorPriv.h"
 #include "SkDither.h"
 #include "SkMathPriv.h"
@@ -19,7 +19,9 @@ enum AlphaVerb {
     kUnpremul_AlphaVerb,
 };
 
-template <bool doSwapRB, AlphaVerb doAlpha> uint32_t convert32(uint32_t c) {
+template <bool doSwapRB, AlphaVerb doAlpha>
+uint32_t convert32(uint32_t c)
+{
     if (doSwapRB) {
         c = SkSwizzle_RB(c);
     }
@@ -27,33 +29,36 @@ template <bool doSwapRB, AlphaVerb doAlpha> uint32_t convert32(uint32_t c) {
     // Lucky for us, in both RGBA and BGRA, the alpha component is always in the same place, so
     // we can perform premul or unpremul the same way without knowing the swizzles for RGB.
     switch (doAlpha) {
-        case kNothing_AlphaVerb:
-            // no change
-            break;
-        case kPremul_AlphaVerb:
-            c = SkPreMultiplyARGB(SkGetPackedA32(c), SkGetPackedR32(c),
-                                  SkGetPackedG32(c), SkGetPackedB32(c));
-            break;
-        case kUnpremul_AlphaVerb:
-            c = SkUnPreMultiply::UnPreMultiplyPreservingByteOrder(c);
-            break;
+    case kNothing_AlphaVerb:
+        // no change
+        break;
+    case kPremul_AlphaVerb:
+        c = SkPreMultiplyARGB(SkGetPackedA32(c), SkGetPackedR32(c),
+            SkGetPackedG32(c), SkGetPackedB32(c));
+        break;
+    case kUnpremul_AlphaVerb:
+        c = SkUnPreMultiply::UnPreMultiplyPreservingByteOrder(c);
+        break;
     }
     return c;
 }
 
 template <bool doSwapRB, AlphaVerb doAlpha>
-void convert32_row(uint32_t* dst, const uint32_t* src, int count) {
+void convert32_row(uint32_t* dst, const uint32_t* src, int count)
+{
     // This has to be correct if src == dst (but not partial overlap)
     for (int i = 0; i < count; ++i) {
         dst[i] = convert32<doSwapRB, doAlpha>(src[i]);
     }
 }
 
-static bool is_32bit_colortype(SkColorType ct) {
+static bool is_32bit_colortype(SkColorType ct)
+{
     return kRGBA_8888_SkColorType == ct || kBGRA_8888_SkColorType == ct;
 }
 
-static AlphaVerb compute_AlphaVerb(SkAlphaType src, SkAlphaType dst) {
+static AlphaVerb compute_AlphaVerb(SkAlphaType src, SkAlphaType dst)
+{
     SkASSERT(kUnknown_SkAlphaType != src);
     SkASSERT(kUnknown_SkAlphaType != dst);
 
@@ -70,11 +75,13 @@ static AlphaVerb compute_AlphaVerb(SkAlphaType src, SkAlphaType dst) {
     }
 }
 
-static void memcpy32_row(uint32_t* dst, const uint32_t* src, int count) {
+static void memcpy32_row(uint32_t* dst, const uint32_t* src, int count)
+{
     memcpy(dst, src, count * 4);
 }
 
-bool SkSrcPixelInfo::convertPixelsTo(SkDstPixelInfo* dst, int width, int height) const {
+bool SkSrcPixelInfo::convertPixelsTo(SkDstPixelInfo* dst, int width, int height) const
+{
     if (width <= 0 || height <= 0) {
         return false;
     }
@@ -83,39 +90,39 @@ bool SkSrcPixelInfo::convertPixelsTo(SkDstPixelInfo* dst, int width, int height)
         return false;
     }
 
-    void (*proc)(uint32_t* dst, const uint32_t* src, int count) = 0;
+    void (*proc)(uint32_t * dst, const uint32_t* src, int count);
+    proc = nullptr;
     AlphaVerb doAlpha = compute_AlphaVerb(fAlphaType, dst->fAlphaType);
     bool doSwapRB = fColorType != dst->fColorType;
 
     switch (doAlpha) {
-        case kNothing_AlphaVerb:
-            if (doSwapRB) {
-                proc = convert32_row<true, kNothing_AlphaVerb>;
-            } else {
-                if (fPixels == dst->fPixels) {
-                    return true;
-                }
-                proc = memcpy32_row;
+    case kNothing_AlphaVerb:
+        if (doSwapRB) {
+            proc = convert32_row<true, kNothing_AlphaVerb>;
+        } else {
+            if (fPixels == dst->fPixels) {
+                return true;
             }
-            break;
-        case kPremul_AlphaVerb:
-            if (doSwapRB) {
-                proc = convert32_row<true, kPremul_AlphaVerb>;
-            } else {
-                proc = convert32_row<false, kPremul_AlphaVerb>;
-            }
-            break;
-        case kUnpremul_AlphaVerb:
-            if (doSwapRB) {
-                proc = convert32_row<true, kUnpremul_AlphaVerb>;
-            } else {
-                proc = convert32_row<false, kUnpremul_AlphaVerb>;
-            }
-            break;
+            proc = memcpy32_row;
+        }
+        break;
+    case kPremul_AlphaVerb:
+        if (doSwapRB) {
+            proc = convert32_row<true, kPremul_AlphaVerb>;
+        } else {
+            proc = convert32_row<false, kPremul_AlphaVerb>;
+        }
+        break;
+    case kUnpremul_AlphaVerb:
+        if (doSwapRB) {
+            proc = convert32_row<true, kUnpremul_AlphaVerb>;
+        } else {
+            proc = convert32_row<false, kUnpremul_AlphaVerb>;
+        }
+        break;
     }
-
-	if (!proc)
-		return false;
+    if (!proc)
+        return false;
 
     uint32_t* dstP = static_cast<uint32_t*>(dst->fPixels);
     const uint32_t* srcP = static_cast<const uint32_t*>(fPixels);
@@ -129,10 +136,11 @@ bool SkSrcPixelInfo::convertPixelsTo(SkDstPixelInfo* dst, int width, int height)
     return true;
 }
 
-static void copy_g8_to_32(void* dst, size_t dstRB, const void* src, size_t srcRB, int w, int h) {
+static void copy_g8_to_32(void* dst, size_t dstRB, const void* src, size_t srcRB, int w, int h)
+{
     uint32_t* dst32 = (uint32_t*)dst;
     const uint8_t* src8 = (const uint8_t*)src;
-    
+
     for (int y = 0; y < h; ++y) {
         for (int x = 0; x < w; ++x) {
             dst32[x] = SkPackARGB32(0xFF, src8[x], src8[x], src8[x]);
@@ -143,7 +151,8 @@ static void copy_g8_to_32(void* dst, size_t dstRB, const void* src, size_t srcRB
 }
 
 static void copy_32_to_g8(void* dst, size_t dstRB, const void* src, size_t srcRB,
-                          const SkImageInfo& srcInfo) {
+    const SkImageInfo& srcInfo)
+{
     uint8_t* dst8 = (uint8_t*)dst;
     const uint32_t* src32 = (const uint32_t*)src;
 
@@ -171,14 +180,26 @@ static void copy_32_to_g8(void* dst, size_t dstRB, const void* src, size_t srcRB
 }
 
 bool SkPixelInfo::CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t dstRB,
-                             const SkImageInfo& srcInfo, const void* srcPixels, size_t srcRB,
-                             SkColorTable* ctable) {
+    const SkImageInfo& srcInfo, const void* srcPixels, size_t srcRB,
+    SkColorTable* ctable)
+{
     if (srcInfo.dimensions() != dstInfo.dimensions()) {
         return false;
     }
 
     const int width = srcInfo.width();
     const int height = srcInfo.height();
+
+    // Do the easiest one first : both configs are equal
+    if ((srcInfo == dstInfo) && !ctable) {
+        size_t bytes = width * srcInfo.bytesPerPixel();
+        for (int y = 0; y < height; ++y) {
+            memcpy(dstPixels, srcPixels, bytes);
+            srcPixels = (const char*)srcPixels + srcRB;
+            dstPixels = (char*)dstPixels + dstRB;
+        }
+        return true;
+    }
 
     // Handle fancy alpha swizzling if both are ARGB32
     if (4 == srcInfo.bytesPerPixel() && 4 == dstInfo.bytesPerPixel()) {
@@ -201,18 +222,18 @@ bool SkPixelInfo::CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t
     // Note: we've already taken care of 32bit colortypes above.
     if (srcInfo.colorType() == dstInfo.colorType()) {
         switch (srcInfo.colorType()) {
-            case kRGB_565_SkColorType:
-            case kAlpha_8_SkColorType:
-            case kGray_8_SkColorType:
-                break;
-            case kIndex_8_SkColorType:
-            case kARGB_4444_SkColorType:
-                if (srcInfo.alphaType() != dstInfo.alphaType()) {
-                    return false;
-                }
-                break;
-            default:
+        case kRGB_565_SkColorType:
+        case kAlpha_8_SkColorType:
+        case kGray_8_SkColorType:
+            break;
+        case kIndex_8_SkColorType:
+        case kARGB_4444_SkColorType:
+            if (srcInfo.alphaType() != dstInfo.alphaType()) {
                 return false;
+            }
+            break;
+        default:
+            return false;
         }
         SkRectMemcpy(dstPixels, dstRB, srcPixels, srcRB, width * srcInfo.bytesPerPixel(), height);
         return true;
@@ -233,16 +254,15 @@ bool SkPixelInfo::CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t
     }
 
     // Can no longer draw directly into 4444, but we can manually whack it for a few combinations
-    if (kARGB_4444_SkColorType == dstInfo.colorType() &&
-        (kN32_SkColorType == srcInfo.colorType() || kIndex_8_SkColorType == srcInfo.colorType())) {
+    if (kARGB_4444_SkColorType == dstInfo.colorType() && (kN32_SkColorType == srcInfo.colorType() || kIndex_8_SkColorType == srcInfo.colorType())) {
         if (srcInfo.alphaType() == kUnpremul_SkAlphaType) {
             // Our method for converting to 4444 assumes premultiplied.
             return false;
         }
 
-        const SkPMColor* table = NULL;
+        const SkPMColor* table = nullptr;
         if (kIndex_8_SkColorType == srcInfo.colorType()) {
-            if (NULL == ctable) {
+            if (nullptr == ctable) {
                 return false;
             }
             table = ctable->readColors();
@@ -279,15 +299,15 @@ bool SkPixelInfo::CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t
     // TODO: switch the allocation of tmpDst to call sk_calloc_throw
     {
         SkBitmap bm;
-        if (!bm.installPixels(srcInfo, const_cast<void*>(srcPixels), srcRB, ctable, NULL, NULL)) {
+        if (!bm.installPixels(srcInfo, const_cast<void*>(srcPixels), srcRB, ctable, nullptr, nullptr)) {
             return false;
         }
         SkAutoTUnref<SkCanvas> canvas(SkCanvas::NewRasterDirect(dstInfo, dstPixels, dstRB));
-        if (NULL == canvas.get()) {
+        if (nullptr == canvas.get()) {
             return false;
         }
 
-        SkPaint  paint;
+        SkPaint paint;
         paint.setDither(true);
 
         canvas->clear(0);
@@ -295,4 +315,3 @@ bool SkPixelInfo::CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t
         return true;
     }
 }
-

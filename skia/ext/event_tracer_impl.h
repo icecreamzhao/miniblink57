@@ -9,4 +9,4 @@
 
 SK_API void InitSkiaEventTracer();
 
-#endif  // SKIA_EXT_TRACE_EVENT_H_
+#endif // SKIA_EXT_TRACE_EVENT_H_

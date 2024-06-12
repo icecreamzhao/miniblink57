@@ -10,13 +10,15 @@
 namespace v8 {
 namespace internal {
 
-void Builtins::Generate_FrameDropperTrampoline(MacroAssembler* masm) {
-  DebugCodegen::GenerateFrameDropperTrampoline(masm);
-}
+    void Builtins::Generate_FrameDropperTrampoline(MacroAssembler* masm)
+    {
+        DebugCodegen::GenerateFrameDropperTrampoline(masm);
+    }
 
-void Builtins::Generate_HandleDebuggerStatement(MacroAssembler* masm) {
-  DebugCodegen::GenerateHandleDebuggerStatement(masm);
-}
+    void Builtins::Generate_HandleDebuggerStatement(MacroAssembler* masm)
+    {
+        DebugCodegen::GenerateHandleDebuggerStatement(masm);
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

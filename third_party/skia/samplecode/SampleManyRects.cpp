@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -7,14 +6,13 @@
  */
 #include "SampleCode.h"
 #include "SkCanvas.h"
-#include "SkDevice.h"
 #include "SkPaint.h"
 #include "SkRandom.h"
 #include "SkShader.h"
 #include "SkView.h"
 
 /**
- * Animated sample used to develop batched rect implementation in GrInOrderDrawBuffer.
+ * Animated sample used to develop batched rect implementation in GrBufferedDrawTarget.
  */
 class ManyRectsView : public SampleView {
 private:
@@ -23,10 +21,11 @@ private:
     };
 
 public:
-    ManyRectsView() {}
+    ManyRectsView() { }
 
 protected:
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ManyRects");
             return true;
@@ -34,13 +33,14 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         SkISize dsize = canvas->getDeviceSize();
         canvas->clear(0xFFF0E0F0);
 
         for (int i = 0; i < N; ++i) {
             SkRect rect = SkRect::MakeWH(SkIntToScalar(fRandom.nextRangeU(10, 100)),
-                                         SkIntToScalar(fRandom.nextRangeU(10, 100)));
+                SkIntToScalar(fRandom.nextRangeU(10, 100)));
             int x = fRandom.nextRangeU(0, dsize.fWidth);
             int y = fRandom.nextRangeU(0, dsize.fHeight);
             canvas->save();
@@ -51,8 +51,8 @@ protected:
             if (false) {
                 SkMatrix rotate;
                 rotate.setRotate(fRandom.nextUScalar1() * 360,
-                                 SkIntToScalar(x) + SkScalarHalf(rect.fRight),
-                                 SkIntToScalar(y) + SkScalarHalf(rect.fBottom));
+                    SkIntToScalar(x) + SkScalarHalf(rect.fRight),
+                    SkIntToScalar(y) + SkScalarHalf(rect.fBottom));
                 canvas->concat(rotate);
             }
             SkRect clipRect = rect;
@@ -65,7 +65,7 @@ protected:
             canvas->drawRect(rect, paint);
             canvas->restore();
         }
-        this->inval(NULL);
+        this->inval(nullptr);
     }
 
 private:

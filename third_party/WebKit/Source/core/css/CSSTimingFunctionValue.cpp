@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSTimingFunctionValue.h"
 
 #include "wtf/text/WTFString.h"
@@ -32,42 +31,36 @@ namespace blink {
 
 String CSSCubicBezierTimingFunctionValue::customCSSText() const
 {
-    return "cubic-bezier("
-        + String::number(m_x1) + ", "
-        + String::number(m_y1) + ", "
-        + String::number(m_x2) + ", "
-        + String::number(m_y2) + ")";
+    return "cubic-bezier(" + String::number(m_x1) + ", " + String::number(m_y1) + ", " + String::number(m_x2) + ", " + String::number(m_y2) + ")";
 }
 
-bool CSSCubicBezierTimingFunctionValue::equals(const CSSCubicBezierTimingFunctionValue& other) const
+bool CSSCubicBezierTimingFunctionValue::equals(
+    const CSSCubicBezierTimingFunctionValue& other) const
 {
     return m_x1 == other.m_x1 && m_x2 == other.m_x2 && m_y1 == other.m_y1 && m_y2 == other.m_y2;
 }
 
 String CSSStepsTimingFunctionValue::customCSSText() const
 {
-    String stepAtPositionString;
-    switch (m_stepAtPosition) {
-    case StepsTimingFunction::Start:
-        stepAtPositionString = "start";
+    String stepPositionString;
+    switch (m_stepPosition) {
+    case StepsTimingFunction::StepPosition::START:
+        stepPositionString = "start";
         break;
-    case StepsTimingFunction::Middle:
-        stepAtPositionString = "middle";
+    case StepsTimingFunction::StepPosition::MIDDLE:
+        stepPositionString = "middle";
         break;
-    case StepsTimingFunction::End:
-        stepAtPositionString = "end";
-        break;
-    default:
-        ASSERT_NOT_REACHED();
-        stepAtPositionString = "end";
+    case StepsTimingFunction::StepPosition::END:
+        stepPositionString = "end";
         break;
     }
-    return "steps(" + String::number(m_steps) + ", " + stepAtPositionString + ')';
+    return "steps(" + String::number(m_steps) + ", " + stepPositionString + ')';
 }
 
-bool CSSStepsTimingFunctionValue::equals(const CSSStepsTimingFunctionValue& other) const
+bool CSSStepsTimingFunctionValue::equals(
+    const CSSStepsTimingFunctionValue& other) const
 {
-    return m_steps == other.m_steps && m_stepAtPosition == other.m_stepAtPosition;
+    return m_steps == other.m_steps && m_stepPosition == other.m_stepPosition;
 }
 
 } // namespace blink

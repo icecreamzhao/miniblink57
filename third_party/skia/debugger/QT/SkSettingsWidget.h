@@ -6,20 +6,19 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKSETTINGSWIDGET_H_
 #define SKSETTINGSWIDGET_H_
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QTextEdit>
-#include <QFrame>
-#include <QGroupBox>
-#include <QLabel>
 #include <QCheckBox>
-#include <QLineEdit>
 #include <QComboBox>
 #include <QFormLayout>
+#include <QFrame>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QWidget>
 
 #include "SkPaint.h"
 
@@ -38,52 +37,58 @@ public:
      */
     SkSettingsWidget();
 
-
 #if SK_SUPPORT_GPU
     // GL settings.
-    bool isGLActive() const {
+    bool isGLActive() const
+    {
         return fGLGroup.isChecked();
     }
 
-    int getGLSampleCount() const {
+    int getGLSampleCount() const
+    {
         return fGLMSAACombo.itemData(fGLMSAACombo.currentIndex()).toInt();
     }
 
 #endif
 
-    bool getFilterOverride(SkFilterQuality* filterQuality) const {
+    bool getFilterOverride(SkFilterQuality* filterQuality) const
+    {
         int index = fFilterCombo.currentIndex();
         *filterQuality = (SkFilterQuality)fFilterCombo.itemData(index).toUInt();
 
         return index > 0;
     }
 
-
     // Raster settings.
-    bool isRasterEnabled() {
+    bool isRasterEnabled()
+    {
         return fRasterGroup.isChecked();
     }
 
-    bool isOverdrawVizEnabled() {
+    bool isOverdrawVizEnabled()
+    {
         return fOverdrawVizCheckBox.isChecked();
     }
 
     // Visualizations.
-    bool isVisibilityFilterEnabled() const {
+    bool isVisibilityFilterEnabled() const
+    {
         return fVisibilityFilterCheckBox.isChecked();
     }
 
-    bool isMegaVizEnabled() {
+    bool isMegaVizEnabled()
+    {
         return fMegaVizCheckBox.isChecked();
     }
 
-    bool isPathOpsEnabled() {
+    bool isPathOpsEnabled()
+    {
         return fPathOpsCheckBox.isChecked();
     }
 
-private slots:
+private Q_SLOTS:
 
-signals:
+Q_SIGNALS:
     void visualizationsChanged();
     void texFilterSettingsChanged();
 #if SK_SUPPORT_GPU

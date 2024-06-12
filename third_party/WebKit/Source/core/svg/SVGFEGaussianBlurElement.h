@@ -23,13 +23,14 @@
 
 #include "core/svg/SVGAnimatedNumberOptionalNumber.h"
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
-#include "platform/graphics/filters/FEGaussianBlur.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGFEGaussianBlurElement final : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEGaussianBlurElement final
+    : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEGaussianBlurElement);
 
@@ -45,10 +46,10 @@ private:
     explicit SVGFEGaussianBlurElement(Document&);
 
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_stdDeviation;
-    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    Member<SVGAnimatedNumberOptionalNumber> m_stdDeviation;
+    Member<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

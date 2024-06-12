@@ -31,7 +31,6 @@
 #ifndef StyleGridItemData_h
 #define StyleGridItemData_h
 
-
 #include "core/style/GridPosition.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
@@ -40,19 +39,21 @@ namespace blink {
 
 class StyleGridItemData : public RefCounted<StyleGridItemData> {
 public:
-    static PassRefPtr<StyleGridItemData> create() { return adoptRef(new StyleGridItemData); }
-    PassRefPtr<StyleGridItemData> copy() const { return adoptRef(new StyleGridItemData(*this)); }
+    static PassRefPtr<StyleGridItemData> create()
+    {
+        return adoptRef(new StyleGridItemData);
+    }
+    PassRefPtr<StyleGridItemData> copy() const
+    {
+        return adoptRef(new StyleGridItemData(*this));
+    }
 
     bool operator==(const StyleGridItemData& o) const
     {
-        return m_gridColumnStart == o.m_gridColumnStart && m_gridColumnEnd == o.m_gridColumnEnd
-            && m_gridRowStart == o.m_gridRowStart && m_gridRowEnd == o.m_gridRowEnd;
+        return m_gridColumnStart == o.m_gridColumnStart && m_gridColumnEnd == o.m_gridColumnEnd && m_gridRowStart == o.m_gridRowStart && m_gridRowEnd == o.m_gridRowEnd;
     }
 
-    bool operator!=(const StyleGridItemData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleGridItemData& o) const { return !(*this == o); }
 
     GridPosition m_gridColumnStart;
     GridPosition m_gridColumnEnd;

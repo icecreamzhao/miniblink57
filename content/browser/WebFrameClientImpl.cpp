@@ -5,6 +5,7 @@
 #include "content/ui/ContextMeun.h"
 #include "content/web_impl_win/WebMediaPlayerImpl.h"
 #include "content/web_impl_win/npapi/WebPluginImpl.h"
+#include "content/OrigChromeMgr.h"
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
 #include "wke/wkeWebView.h"
 #include "wke/wkeJsBind.h"
@@ -12,6 +13,8 @@
 #include "third_party/WebKit/public/web/WebFrameClient.h"
 #include "third_party/WebKit/public/web/WebDocument.h"
 #include "third_party/WebKit/public/web/WebUserGestureIndicator.h"
+//#include "third_party/WebKit/public/web/WebGeolocationClient.h"
+//#include "third_party/WebKit/public/web/WebGeolocationPosition.h"
 #include "third_party/WebKit/public/platform/WebURLLoader.h"
 #include "third_party/WebKit/Source/web/WebLocalFrameImpl.h"
 #include "third_party/WebKit/Source/web/WebViewImpl.h"
@@ -23,6 +26,11 @@
 #include "net/RequestExtraData.h"
 #include "net/cookies/WebCookieJarCurlImpl.h"
 #include "net/DataURL.h"
+
+#include "wke/wkeGlobalVar.h"
+//#include "node/nodeblink.h"
+
+#include "media/blink/url_index.h"
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
 namespace wke {
@@ -40,13 +48,71 @@ WebFrameClientImpl::WebFrameClientImpl()
     m_documentReady = false;
     m_webPage = nullptr;
     m_menu = nullptr;
+    m_frame = nullptr;
+    m_webGeolocationClientImpl = nullptr;
 }
+
+// class WebGeolocationClientImpl : public blink::WebGeolocationClient {
+// public:
+//     virtual ~WebGeolocationClientImpl() {}
+// 
+//     virtual void startUpdating() override
+//     {
+//     }
+// 
+//     virtual void stopUpdating() override
+//     {
+//     }
+// 
+//     virtual void setEnableHighAccuracy(bool) override
+//     {
+//     }
+// 
+//     virtual bool lastPosition(blink::WebGeolocationPosition& pos) override
+//     {
+//         if (!wke::g_geoPos)
+//             return false;
+// 
+//         pos.assign(
+//             wke::g_geoPos->timestamp,
+//             wke::g_geoPos->latitude,
+//             wke::g_geoPos->longitude,
+//             wke::g_geoPos->accuracy,
+//             wke::g_geoPos->providesAltitude,
+//             wke::g_geoPos->altitude,
+//             wke::g_geoPos->providesAltitudeAccuracy,
+//             wke::g_geoPos->altitudeAccuracy,
+//             wke::g_geoPos->providesHeading,
+//             wke::g_geoPos->heading,
+//             wke::g_geoPos->providesSpeed,
+//             wke::g_geoPos->speed
+//         );
+// 
+//         return true;
+//     }
+// 
+//     virtual void requestPermission(const blink::WebGeolocationPermissionRequest&) override
+//     {
+//     }
+// 
+//     virtual void cancelPermissionRequest(const blink::WebGeolocationPermissionRequest&) override
+//     {
+//     }
+// 
+//     virtual void setController(blink::WebGeolocationController*)  override
+//     {
+//     }
+// };
 
 WebFrameClientImpl::~WebFrameClientImpl()
 {
     RELEASE_ASSERT(0 == m_unusedFrames.size());
+#if defined(OS_WIN)
     if (m_menu)
         delete m_menu;
+//     if (m_webGeolocationClientImpl)
+//       delete m_webGeolocationClientImpl;
+#endif
 }
 
 void WebFrameClientImpl::didAddMessageToConsole(const WebConsoleMessage& message,
@@ -77,8 +143,13 @@ void WebFrameClientImpl::didAddMessageToConsole(const WebConsoleMessage& message
     }
 
     if (wke::g_consoleOutputEnable) {
+#if defined(OS_WIN)
         Vector<UChar> utf16 = WTF::ensureUTF16UChar(outstr, true);
         OutputDebugStringW(utf16.data());
+#else
+        Vector<char> utf8Str = WTF::ensureStringToUTF8(outstr, true);
+        OutputDebugStringA(utf8Str.data());
+#endif
     }
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
@@ -104,9 +175,9 @@ WebPage* WebFrameClientImpl::webPage()
     return m_webPage;
 }
 
-WebFrame* WebFrameClientImpl::createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, WebSandboxFlags sandboxFlags)
+WebLocalFrame* WebFrameClientImpl::createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, const WebString& uniqueName, WebSandboxFlags sandboxFlags, const WebFrameOwnerProperties&)
 {
-    WebLocalFrameImpl* webLocalFrameImpl = WebLocalFrameImpl::create(WebTreeScopeType::Document, this);
+    WebLocalFrameImpl* webLocalFrameImpl = WebLocalFrameImpl::create(WebTreeScopeType::Document, this, parent);
     parent->appendChild(webLocalFrameImpl);
     if (WTF::kNotFound == m_unusedFrames.find(webLocalFrameImpl))
         m_unusedFrames.append(webLocalFrameImpl);
@@ -114,7 +185,7 @@ WebFrame* WebFrameClientImpl::createChildFrame(WebLocalFrame* parent, WebTreeSco
     return webLocalFrameImpl; // TODO delete;
 }
 
-void WebFrameClientImpl::frameDetached(WebFrame* child, DetachType)
+void WebFrameClientImpl::frameDetached(WebLocalFrame* child, DetachType)
 {
     if (WebFrame* parent = child->parent())
         parent->removeChild(child);
@@ -128,10 +199,11 @@ void WebFrameClientImpl::frameDetached(WebFrame* child, DetachType)
     child->close();
 }
 
-blink::WebPluginPlaceholder* WebFrameClientImpl::createPluginPlaceholder(WebLocalFrame*, const blink::WebPluginParams&) { return 0; }
+//blink::WebPluginPlaceholder* WebFrameClientImpl::createPluginPlaceholder(WebLocalFrame*, const blink::WebPluginParams&) { return 0; }
 
 blink::WebPlugin* WebFrameClientImpl::createPlugin(WebLocalFrame* frame, const WebPluginParams& params)
 {
+#if defined(OS_WIN) 
     WebPluginParams newParam = params;
     Vector<String> paramNames;
     Vector<String> paramValues;
@@ -166,23 +238,32 @@ blink::WebPlugin* WebFrameClientImpl::createPlugin(WebLocalFrame* frame, const W
     plugin->setWkeWebView(m_webPage->wkeWebView());
 
     return plugin.leakRef();
+#else
+    return nullptr;
+#endif
 }
 
-blink::WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(WebLocalFrame* frame, const WebURL& url , WebMediaPlayerClient* client, WebContentDecryptionModule*)
+WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(const WebMediaPlayerSource& source,
+    WebMediaPlayerClient* client,
+    WebMediaPlayerEncryptedMediaClient* encrypt,
+    WebContentDecryptionModule* module,
+    const WebString& sinkId)
 {
-    return new WebMediaPlayerImpl(frame, url, client);
+#if defined(OS_WIN) 
+    if (!m_urlIndex.get() || m_urlIndex->frame() != m_frame)
+        m_urlIndex.reset(new media::UrlIndex(m_frame));
+
+    return OrigChromeMgr::createWebMediaPlayer(m_frame, source, client, encrypt, module, sinkId, m_urlIndex);
+#else
+    return nullptr;
+#endif
 }
 
-blink::WebMediaPlayer* WebFrameClientImpl::createMediaPlayer(WebLocalFrame* frame, const WebURL& url, WebMediaPlayerClient* client, WebMediaPlayerEncryptedMediaClient*, WebContentDecryptionModule*)
-{
-    return new WebMediaPlayerImpl(frame, url, client);
-}
+blink::WebApplicationCacheHost* WebFrameClientImpl::createApplicationCacheHost(WebApplicationCacheHostClient*) { return 0; }
 
-blink::WebApplicationCacheHost* WebFrameClientImpl::createApplicationCacheHost(WebLocalFrame*, WebApplicationCacheHostClient*) { return 0; }
+blink::WebServiceWorkerProvider* WebFrameClientImpl::createServiceWorkerProvider() { return 0; }
 
-blink::WebServiceWorkerProvider* WebFrameClientImpl::createServiceWorkerProvider(WebLocalFrame* frame) { return 0; }
-
-blink::WebWorkerContentSettingsClientProxy* WebFrameClientImpl::createWorkerContentSettingsClientProxy(WebLocalFrame* frame) { return 0; }
+blink::WebWorkerContentSettingsClientProxy* WebFrameClientImpl::createWorkerContentSettingsClientProxy() { return 0; }
 
 // Create a new WebPopupMenu. In the "createExternalPopupMenu" form, the
 // client is responsible for rendering the contents of the popup menu.
@@ -191,8 +272,12 @@ WebExternalPopupMenu* WebFrameClientImpl::createExternalPopupMenu(const WebPopup
     return 0;
 }
 
-WebCookieJar* WebFrameClientImpl::cookieJar(WebLocalFrame* frame)
+WebCookieJar* WebFrameClientImpl::cookieJar()
 {
+    PassRefPtr<net::PageNetExtraData> extra = m_webPage->getPageNetExtraData();
+    if (extra && extra->getCookieJar())
+        return extra->getCookieJar();
+
     net::WebURLLoaderManager* manager = net::WebURLLoaderManager::sharedInstance();
     if (!manager)
         return nullptr;
@@ -252,12 +337,15 @@ void WebFrameClientImpl::didChangeLoadProgress(double loadProgress)
     onLoadingStateChange(loadProgress != 1.0, true);
 }
 
-void WebFrameClientImpl::willSendSubmitEvent(WebLocalFrame*, const WebFormElement&) { }
-void WebFrameClientImpl::willSubmitForm(WebLocalFrame*, const WebFormElement&) { }
+void WebFrameClientImpl::willSendSubmitEvent(const WebFormElement&) { }
+void WebFrameClientImpl::willSubmitForm(const WebFormElement&) { }
 
-void WebFrameClientImpl::didCreateDataSource(WebLocalFrame*, WebDataSource*) { }
+void WebFrameClientImpl::didCreateDataSource(WebLocalFrame*, WebDataSource* dataSource)
+{
+    //dataSource->setNavigationStartTime(WTF::monotonicallyIncreasingTime());
+}
 
-void WebFrameClientImpl::didStartProvisionalLoad(WebLocalFrame* localFrame, double triggeringEventTime)
+void WebFrameClientImpl::didStartProvisionalLoad(WebLocalFrame* localFrame)
 {
     resetLoadState();
 
@@ -297,7 +385,7 @@ static wkeWebFrameHandle frameIdToWkeFrame(WebPage* webPage, WebLocalFrame* fram
 
 void WebFrameClientImpl::didCommitProvisionalLoad(WebLocalFrame* frame, const WebHistoryItem& history, WebHistoryCommitType type)
 {
-    if (!frame->parent())
+    //if (!frame->parent())
         m_webPage->didCommitProvisionalLoad(frame, history, type, false);
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
@@ -325,9 +413,13 @@ void WebFrameClientImpl::didCommitProvisionalLoad(WebLocalFrame* frame, const We
 #endif    
 }
 
+WebHistoryItem WebFrameClientImpl::historyItemForNewChildFrame()
+{
+    return m_webPage->historyItemForNewChildFrame(m_frame);
+}
+
 void WebFrameClientImpl::didCreateNewDocument(WebLocalFrame* frame)
 {
-    //OutputDebugStringA("WebFrameClientImpl::didFinishDocumentLoad\n");
 }
 
 void WebFrameClientImpl::didClearWindowObject(WebLocalFrame* frame) { }
@@ -415,7 +507,7 @@ void WebFrameClientImpl::didFinishLoad(WebLocalFrame* frame)
     //OutputDebugStringA("WebFrameClientImpl::didFinishLoad\n");
 }
 
-void WebFrameClientImpl::didNavigateWithinPage(WebLocalFrame* frame, const WebHistoryItem& history, WebHistoryCommitType type)
+void WebFrameClientImpl::didNavigateWithinPage(WebLocalFrame* frame, const WebHistoryItem& history, WebHistoryCommitType type, bool contentInitiated)
 {    
     m_webPage->didCommitProvisionalLoad(frame, history, type, true);
 
@@ -444,14 +536,14 @@ void WebFrameClientImpl::didNavigateWithinPage(WebLocalFrame* frame, const WebHi
 #endif 
 }
 
-void WebFrameClientImpl::didUpdateCurrentHistoryItem(WebLocalFrame*)
+void WebFrameClientImpl::didUpdateCurrentHistoryItem()
 {
     //OutputDebugStringA("didUpdateCurrentHistoryItem\n");
 }
 
-void WebFrameClientImpl::didChangeManifest(WebLocalFrame*) { }
+void WebFrameClientImpl::didChangeManifest() { }
 
-void WebFrameClientImpl::didChangeDefaultPresentation(WebLocalFrame*) { }
+//void WebFrameClientImpl::didChangeDefaultPresentation(WebLocalFrame*) { }
 void WebFrameClientImpl::didChangeThemeColor() { }
 
 void WebFrameClientImpl::dispatchLoad()
@@ -496,7 +588,7 @@ WebNavigationPolicy WebFrameClientImpl::decidePolicyForNavigation(const Navigati
         wkeWebView webView = m_webPage->wkeWebView();
         wkeTempCallbackInfo* tempInfo = wkeGetTempCallbackInfo(webView);
         tempInfo->size = sizeof(wkeTempCallbackInfo);
-        tempInfo->frame = frameIdToWkeFrame(m_webPage, info.frame);
+        tempInfo->frame = frameIdToWkeFrame(m_webPage, m_frame);
 
         bool ok = m_webPage->wkeHandler().navigationCallback(webView, m_webPage->wkeHandler().navigationCallbackParam, navigationType, &url);
         if (!ok)
@@ -507,58 +599,51 @@ WebNavigationPolicy WebFrameClientImpl::decidePolicyForNavigation(const Navigati
     return info.defaultPolicy;
 }
 
-void WebFrameClientImpl::willRequestResource(WebLocalFrame*, const WebCachedURLRequest&)
-{
-
-}
-
-void WebFrameClientImpl::didDispatchPingLoader(WebLocalFrame* webFrame, const WebURL& url)
-{
-
-}
-
-void WebFrameClientImpl::willSendRequest(WebLocalFrame* webFrame, unsigned identifier, WebURLRequest& request, const WebURLResponse& redirectResponse)
-{
-    if (request.extraData()) // ResourceLoader::willSendRequest会走到这
-        return;
-
-    net::RequestExtraData* requestExtraData = new net::RequestExtraData();
-
-#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
-    requestExtraData->page = m_webPage;
-#endif
-
-    requestExtraData->setFrame(webFrame); // 两种模式都需要此对象
-    request.setExtraData(requestExtraData);
-
-    request.addHTTPHeaderField("Accept-Language", m_webPage->webPageImpl()->acceptLanguages());
-
-//     request.addHTTPHeaderField("Upgrade-Insecure-Requests", "1");
-//     request.addHTTPHeaderField("Connection", "keep-alive");
-//     request.addHTTPHeaderField("Cache-Control", "max-age=0");
-
-//     WebViewImpl* viewImpl = m_webPage->webViewImpl();
-//     if (!viewImpl)
-//         return;
-//     Page* page = viewImpl->page();
-//     if (!page)
-//         return;
+// void WebFrameClientImpl::willRequestResource(WebLocalFrame*, const WebCachedURLRequest&)
+// {
 // 
-//     Settings& setting = page->settings();
-//     headerFieldValue = "GBK"; // setting.defaultTextEncodingName();
-//     headerFieldValue.append(",utf-8;q=0.7,*;q=0.3");
-//     value = headerFieldValue.latin1().data();
-//     request.addHTTPHeaderField("Accept-Charset", WebString::fromLatin1((const WebLChar*)value.data(), value.length()));
+// }
+
+void WebFrameClientImpl::didDispatchPingLoader(const WebURL& url) {}
+
+static void setRequestHead(WebLocalFrame* webFrame, WebPage* webPage, WebURLRequest& request)
+{
+    request.addHTTPHeaderField("Accept-Language", webPage->webPageImpl()->acceptLanguages());
+
+    request.addHTTPHeaderField("Upgrade-Insecure-Requests", "1");
+    request.addHTTPHeaderField("Connection", "keep-alive");
+    request.addHTTPHeaderField("Accept-Encoding", "deflate, gzip");
+
+    String ua = request.httpHeaderField("user-agent");
+    if (ua.isEmpty())
+        request.addHTTPHeaderField("user-agent", AtomicString(String(blink::Platform::current()->userAgent())));
+
+    //     request.addHTTPHeaderField("Cache-Control", "max-age=0");
+
+    //     WebViewImpl* viewImpl = m_webPage->webViewImpl();
+    //     if (!viewImpl)
+    //         return;
+    //     Page* page = viewImpl->page();
+    //     if (!page)
+    //         return;
+    // 
+    //     Settings& setting = page->settings();
+    //     headerFieldValue = "GBK"; // setting.defaultTextEncodingName();
+    //     headerFieldValue.append(",utf-8;q=0.7,*;q=0.3");
+    //     value = headerFieldValue.latin1().data();
+    //     request.addHTTPHeaderField("Accept-Charset", WebString::fromLatin1((const WebLChar*)value.data(), value.length()));
 
     // Set the first party for cookies url if it has not been set yet (new
     // requests). For redirects, it is updated by WebURLLoaderImpl.
     if (request.firstPartyForCookies().isEmpty()) {
-        if (request.frameType() == blink::WebURLRequest::FrameTypeTopLevel) {
+        if (request.getFrameType() == blink::WebURLRequest::FrameTypeTopLevel) {
             request.setFirstPartyForCookies(request.url());
-        } else {
+        } else if (webFrame) {
             // TODO(nasko): When the top-level frame is remote, there is no document.
             // This is broken and should be fixed to propagate the first party.
             WebFrame* top = webFrame->top();
+            if (!top)
+                top = webFrame;
             if (top->isWebLocalFrame())
                 request.setFirstPartyForCookies(webFrame->top()->document().firstPartyForCookies());
         }
@@ -567,8 +652,8 @@ void WebFrameClientImpl::willSendRequest(WebLocalFrame* webFrame, unsigned ident
     const char kDefaultAcceptHeader[] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
     const char kAcceptHeader[] = "Accept";
 
-//     WebDataSource* provisionalDataSource = webFrame->provisionalDataSource();
-//     WebDataSource* dataSource = provisionalDataSource ? provisionalDataSource : webFrame->dataSource();
+    //     WebDataSource* provisionalDataSource = webFrame->provisionalDataSource();
+    //     WebDataSource* dataSource = provisionalDataSource ? provisionalDataSource : webFrame->dataSource();
 
     // The request's extra data may indicate that we should set a custom user
     // agent. This needs to be done here, after WebKit is through with setting the
@@ -579,33 +664,54 @@ void WebFrameClientImpl::willSendRequest(WebLocalFrame* webFrame, unsigned ident
 
     // Add the default accept header for frame request if it has not been set
     // already.
-    if ((request.frameType() == blink::WebURLRequest::FrameTypeTopLevel ||
-        request.frameType() == blink::WebURLRequest::FrameTypeNested) && request.httpHeaderField(WebString::fromUTF8(kAcceptHeader)).isEmpty()) {
+    if ((request.getFrameType() == blink::WebURLRequest::FrameTypeTopLevel ||
+        request.getFrameType() == blink::WebURLRequest::FrameTypeNested) && request.httpHeaderField(WebString::fromUTF8(kAcceptHeader)).isEmpty()) {
         request.setHTTPHeaderField(WebString::fromUTF8(kAcceptHeader), WebString::fromUTF8(kDefaultAcceptHeader));
     }
 
     // Add an empty HTTP origin header for non GET methods if none is currently
     // present.
-    request.addHTTPOriginIfNeeded(WebString());
+    //request.addHTTPOriginIfNeeded(blink::WebSecurityOrigin());
 
     // This is an instance where we embed a copy of the routing id
     // into the data portion of the message. This can cause problems if we
     // don't register this id on the browser side, since the download manager
     // expects to find a RenderViewHost based off the id.
     request.setHasUserGesture(blink::WebUserGestureIndicator::isProcessingUserGesture());
+
 }
 
-void WebFrameClientImpl::didReceiveResponse(WebLocalFrame*, unsigned identifier, const WebURLResponse&)
+void WebFrameClientImpl::willSendRequest(WebLocalFrame* webFrame, WebURLRequest& request)
+{
+    if (request.getExtraData()) // ResourceLoader::willSendRequest会走到这
+        return;
+
+//     blink::Frame* blinkFrame = blink::toCoreFrame(webFrame);
+//     blink::Settings* settings = blinkFrame->settings();
+//     settings->setLoadsImagesAutomatically(true);
+
+    net::RequestExtraData* requestExtraData = new net::RequestExtraData();
+
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    requestExtraData->page = m_webPage;
+#endif
+
+    requestExtraData->setFrame(webFrame); // 两种模式都需要此对象
+    request.setExtraData(requestExtraData);
+
+    setRequestHead(webFrame, m_webPage, request);
+}
+
+void WebFrameClientImpl::didReceiveResponse(const WebURLResponse&)
 {
 
 }
 
-void WebFrameClientImpl::didChangeResourcePriority(WebLocalFrame* webFrame, unsigned identifier, const WebURLRequest::Priority& priority, int)
-{
-}
+//void WebFrameClientImpl::didChangeResourcePriority(WebLocalFrame* webFrame, unsigned identifier, const WebURLRequest::Priority& priority, int) {}
 
 void WebFrameClientImpl::runModalAlertDialog(const WebString& message)
 {
+#if defined(OS_WIN)
     bool needCall = true;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
@@ -621,10 +727,12 @@ void WebFrameClientImpl::runModalAlertDialog(const WebString& message)
 
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     ::MessageBoxW(nullptr, text.data(), L"Miniblink Alert", 0);
+#endif
 }
 
 bool WebFrameClientImpl::runModalConfirmDialog(const WebString& message)
 {
+#if defined(OS_WIN)
     bool needCall = true;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
@@ -641,10 +749,14 @@ bool WebFrameClientImpl::runModalConfirmDialog(const WebString& message)
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     int result = ::MessageBoxW(NULL, text.data(), L"Miniblink Confirm", MB_OKCANCEL);
     return result == IDOK;
+#else
+    return true;
+#endif
 }
 
 bool WebFrameClientImpl::runModalPromptDialog(const WebString& message, const WebString& defaultValue, WebString* actualValue)
 {
+#if defined(OS_WIN)
     bool needCall = true;
     bool result = false;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
@@ -653,7 +765,7 @@ bool WebFrameClientImpl::runModalPromptDialog(const WebString& message, const We
         needCall = false;
         wke::CString wkeMsg(message);
         wke::CString defaultResult(defaultValue);
-        wke::CString resultString("", 0);
+        wke::CString resultString("", 0, true);
         result = m_webPage->wkeHandler().promptBoxCallback(m_webPage->wkeWebView(),
             m_webPage->wkeHandler().promptBoxCallbackParam, &wkeMsg, &defaultResult, &resultString);
 
@@ -669,37 +781,43 @@ bool WebFrameClientImpl::runModalPromptDialog(const WebString& message, const We
     Vector<UChar> text = WTF::ensureUTF16UChar(message, true);
     int resultOk = ::MessageBoxW(NULL, text.data(), L"Miniblink Prompt", MB_OKCANCEL);
     return resultOk == IDOK;
+#else
+    return true;
+#endif
 }
 
-bool WebFrameClientImpl::runModalBeforeUnloadDialog(bool isReload, const WebString& message)
+bool WebFrameClientImpl::runModalBeforeUnloadDialog(bool isReload)
 {
     return true;
 }
 
 void WebFrameClientImpl::showContextMenu(const blink::WebContextMenuData& data)
 {
+#if defined(OS_WIN)
     if (!m_menu)
         m_menu = new ContextMenu(m_webPage);
 
-    blink::WebDocument doc = data.node.document();
-    blink::WebLocalFrame* frmae = doc.frame();
+//     blink::WebDocument doc = data.node.document();
+//     blink::WebLocalFrame* frmae = doc.frame();
     int64_t frameId = 0;
-    if (frmae)
-        frameId = WebPageImpl::getFrameIdByBlinkFrame(frmae);
+    if (m_frame)
+        frameId = WebPageImpl::getFrameIdByBlinkFrame(m_frame);
 
     if (m_webPage->getContextMenuEnabled())
         m_menu->show(data, frameId);
+#endif
 }
 
-void WebFrameClientImpl::clearContextMenu()
-{
+// void WebFrameClientImpl::clearContextMenu()
+// {
+// 
+// }
 
-}
-
-void WebFrameClientImpl::didCreateScriptContext(WebLocalFrame* frame, v8::Local<v8::Context> context, int extensionGroup, int worldId)
+void WebFrameClientImpl::didCreateScriptContext(WebLocalFrame* frame, v8::Local<v8::Context> context, int worldId)
 {
     v8::V8::SetCaptureStackTraceForUncaughtExceptions(true, 50, v8::StackTrace::kDetailed);
 
+    int extensionGroup = 0;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     if (frame->top() == frame)
         wke::onCreateGlobalObjectInMainFrame(this, frame, context, extensionGroup, worldId);
@@ -710,6 +828,12 @@ void WebFrameClientImpl::didCreateScriptContext(WebLocalFrame* frame, v8::Local<
     if (m_webPage->wkeHandler().didCreateScriptContextCallback && m_webPage->getState() == pageInited)
         m_webPage->wkeHandler().didCreateScriptContextCallback(m_webPage->wkeWebView(), m_webPage->wkeHandler().didCreateScriptContextCallbackParam,
             frameIdToWkeFrame(m_webPage, frame), &context, extensionGroup, worldId);
+#endif
+#if ENABLE_NODEJS
+    if (isNodejsEnable()) {        
+        NodeBindingInMbCore* nodebinding = nodeBindNodejsOnDidCreateScriptContext(m_webPage->wkeWebView(), frameIdToWkeFrame(m_webPage, frame), &context);
+        m_nodebindings.add(frame, nodebinding);
+    }
 #endif
 }
 
@@ -726,131 +850,162 @@ void WebFrameClientImpl::willReleaseScriptContext(WebLocalFrame* frame, v8::Loca
         m_webPage->wkeHandler().willReleaseScriptContextCallback(m_webPage->wkeWebView(), m_webPage->wkeHandler().willReleaseScriptContextCallbackParam,
             frameIdToWkeFrame(m_webPage, frame), &context, worldId);
 #endif
+
+#if ENABLE_NODEJS
+    if (isNodejsEnable()) {
+        WTF::HashMap<WebFrame *, NodeBindingInMbCore*>::iterator it = m_nodebindings.find(frame);
+        if (it != m_nodebindings.end()) {
+            NodeBindingInMbCore* nodebinding = it->value;
+            nodeWillReleaseScriptContext(nodebinding);
+        }
+    }
+#endif
 }
 
 class WebURLLoaderClientWrapped : public blink::WebURLLoaderClient {
 public:
-    WebURLLoaderClientWrapped(WebFrameClientImpl* frameClient, WebPage* webPage, blink::WebLocalFrame* frame, const WebString& downloadName)
+    WebURLLoaderClientWrapped(WebFrameClientImpl* frameClient, 
+        WebPage* webPage, blink::WebLocalFrame* frame, const WebString& downloadName, const blink::KURL& kurl)
     {
         m_frameClient = frameClient;
         m_webPage = webPage;
         m_frame = frame;
         m_downloadName = downloadName;
-        if (!m_downloadName.isNull() && !m_downloadName.isEmpty())
-            m_downloadName.insert(L"attachment; filename=", 0);
+        m_kurl = kurl;
     }
 
-    void willSendRequest(WebURLLoader* webFrame, WebURLRequest& request, const WebURLResponse& redirectResponse) override
+    bool willFollowRedirect(WebURLRequest& request, const WebURLResponse& redirectResponse) override
     {
-        if (request.extraData()) // ResourceLoader::willSendRequest会走到这
-            return;
+        if (request.getExtraData()) // ResourceLoader::willSendRequest会走到这
+            return true;
+
+        String downloadName = m_downloadName;
+        if (!downloadName.isNull() && !m_downloadName.isEmpty())
+            downloadName.insert("attachment; filename=", 0);
 
         net::RequestExtraData* requestExtraData = new net::RequestExtraData();
-        requestExtraData->setIsDownload(m_downloadName);
+        requestExtraData->setIsDownload(downloadName);
 
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
         requestExtraData->page = m_webPage;
 #endif
         requestExtraData->setFrame(m_frame); // 两种模式都需要此对象
         request.setExtraData(requestExtraData);
-        request.addHTTPHeaderField("Accept-Language", m_webPage->webPageImpl()->acceptLanguages());
+        setRequestHead(m_frame, m_webPage, request);
 
-        if (request.firstPartyForCookies().isEmpty()) {
-            if (request.frameType() == blink::WebURLRequest::FrameTypeTopLevel) {
-                request.setFirstPartyForCookies(request.url());
-            } else {
-                // TODO(nasko): When the top-level frame is remote, there is no document.
-                // This is broken and should be fixed to propagate the first party.
-                WebFrame* top = m_frame->top();
-                if (top->isWebLocalFrame())
-                    request.setFirstPartyForCookies(m_frame->top()->document().firstPartyForCookies());
-            }
-        }
-
-        const char kDefaultAcceptHeader[] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-        const char kAcceptHeader[] = "Accept";
-
-        if ((request.frameType() == blink::WebURLRequest::FrameTypeTopLevel ||
-            request.frameType() == blink::WebURLRequest::FrameTypeNested) && request.httpHeaderField(WebString::fromUTF8(kAcceptHeader)).isEmpty()) {
-            request.setHTTPHeaderField(WebString::fromUTF8(kAcceptHeader), WebString::fromUTF8(kDefaultAcceptHeader));
-        }
-
-        request.addHTTPOriginIfNeeded(WebString());
-        request.setHasUserGesture(blink::WebUserGestureIndicator::isProcessingUserGesture());
+        return true;
     }
-    void didSendData(WebURLLoader*, unsigned long long bytesSent, unsigned long long totalBytesToBeSent) override {};
-    void didReceiveResponse(WebURLLoader*, const WebURLResponse&) override {};
-    void didReceiveResponse(WebURLLoader*, const WebURLResponse&, WebDataConsumerHandle*) override {};
-    void didReceiveData(WebURLLoader*, const char*, int, int encodedDataLength) override {};
-    void didReceiveCachedMetadata(WebURLLoader*, const char* data, int length) override {};
-    void didFinishLoading(WebURLLoader*, double finishTime, int64_t encodedDataLength) override
+
+    void didSendData(unsigned long long bytesSent, unsigned long long totalBytesToBeSent) override 
+    {
+        OutputDebugStringA("WebURLLoaderClientWrapped::didSendData\n");
+    }
+
+    void didReceiveResponse(const WebURLResponse&) override 
+    {
+        OutputDebugStringA("WebURLLoaderClientWrapped::didReceiveResponse\n");
+    }
+
+    void didReceiveResponse(const WebURLResponse&, std::unique_ptr<WebDataConsumerHandle> handle) override
+    {
+        OutputDebugStringA("WebURLLoaderClientWrapped::didReceiveResponse\n");
+    }
+
+    void didReceiveData(const char* data, int length) override
+    {
+        m_cacheData.append(data, length);
+    }
+
+    void didReceiveCachedMetadata(const char* data, int length) override {};
+
+    void didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) override
+    {
+        dataBindDispatch(m_webPage, m_kurl, m_downloadName, &m_cacheData);
+        delete this;
+    }
+
+    void didFail(const WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) override
     {
         delete this;
     }
-    void didFail(WebURLLoader*, const WebURLError&) override
+
+    void didDownloadData(int, int) override {};
+
+    static void dataBindDispatch(WebPage* webPage, const blink::KURL& kurl, const String& downloadName, const Vector<char>* data)
     {
-        delete this;
+        wkeNetJobDataBind dataBind = { 0 };
+        wkeDownload2Callback cb = webPage->wkeHandler().download2Callback;
+        if (!cb)
+            return;
+
+        String mimeType;
+        String charset;
+        Vector<char> urlData;
+        const Vector<char>* dataPtr = data;
+        if (!data) {
+            bool b = net::parseDataURL(kurl, mimeType, charset, urlData);
+            if (!b || 0 == urlData.size())
+                return;
+            dataPtr = &urlData;
+        }
+
+        String disposition = downloadName;
+        if (!disposition.isNull() && !disposition.isEmpty())
+            disposition.insert("attachment; filename=", 0);
+        else
+            disposition = "attachment; filename=unknow.dat";
+        Vector<char> dispositionBuf = WTF::ensureStringToUTF8(disposition, true);
+
+        size_t expectedContentLength = 0;
+        void* param = webPage->wkeHandler().download2CallbackParam;
+
+        Vector<char> urlBuf = WTF::ensureStringToUTF8(kurl.string(), true);
+        wkeDownloadOpt opt = cb(webPage->wkeWebView(), param, expectedContentLength, urlBuf.data(), "", dispositionBuf.data(), nullptr, &dataBind);
+        if (kWkeDownloadOptCacheData != opt)
+            return;
+
+        if (dataBind.recvCallback)
+            dataBind.recvCallback(dataBind.param, nullptr, dataPtr->data(), dataPtr->size());
+
+        if (dataBind.finishCallback)
+            dataBind.finishCallback(dataBind.param, nullptr, WKE_LOADING_SUCCEEDED);
     }
-    void didDownloadData(WebURLLoader*, int, int) override {};
 
 private:
     WebFrameClientImpl* m_frameClient;
     WebPage* m_webPage;
     blink::WebLocalFrame* m_frame;
     String m_downloadName;
+    blink::KURL m_kurl;
+
+    Vector<char> m_cacheData;
 };
 
-static void dataUrlHandle(WebPage* webPage, const blink::KURL& kurl, const String& downloadName)
-{
-    wkeNetJobDataBind dataBind = { 0 };
-    wkeDownload2Callback cb = webPage->wkeHandler().download2Callback;
-    if (!cb)
-        return;
-
-    String mimeType;
-    String charset;
-    Vector<char> out;
-    bool b = net::parseDataURL(kurl, mimeType, charset, out);
-    if (!b || 0 == out.size())
-        return;
-
-    String disposition = WTF::ensureStringToUTF8String(downloadName);
-    if (!disposition.isNull() && !disposition.isEmpty())
-        disposition.insert("attachment; filename=", 0);
-    else
-        disposition = "attachment; filename=unknow.dat";
-    Vector<char> dispositionBuf = WTF::ensureStringToUTF8(disposition, true);
-
-    size_t expectedContentLength = 0;
-    void* param = webPage->wkeHandler().download2CallbackParam;
-
-    Vector<char> urlBuf = WTF::ensureStringToUTF8(kurl.string(), true);
-    wkeDownloadOpt opt = cb(webPage->wkeWebView(), param, expectedContentLength, urlBuf.data(), "", dispositionBuf.data(), nullptr, &dataBind);
-    if (kWkeDownloadOptCacheData != opt)
-        return;
-
-    if (dataBind.recvCallback)
-        dataBind.recvCallback(dataBind.param, nullptr, out.data(), out.size());
-
-    if (dataBind.finishCallback)
-        dataBind.finishCallback(dataBind.param, nullptr, WKE_LOADING_SUCCEEDED);
-}
-
-void WebFrameClientImpl::loadURLExternally(blink::WebLocalFrame* frame, const blink::WebURLRequest& request, blink::WebNavigationPolicy policy, const WebString& downloadName)
+void WebFrameClientImpl::loadURLExternally(const WebURLRequest& request, WebNavigationPolicy, const WebString& downloadName, bool shouldReplaceCurrentEntry)
 {
     blink::KURL kurl = request.url();
     if (kurl.protocolIsData()) {
-        dataUrlHandle(m_webPage, kurl, downloadName);
+        WebURLLoaderClientWrapped::dataBindDispatch(m_webPage, kurl, downloadName, nullptr);
         return;
     }
 
     blink::WebURLLoader* loader;
     loader = Platform::current()->createURLLoader();
 
+    wkeDownload2Callback cb = m_webPage->wkeHandler().download2Callback;
+    void* param = m_webPage->wkeHandler().download2CallbackParam;
+
     blink::WebURLRequest requestWrapped(request);
-    WebURLLoaderClientWrapped* clientWrapped = new WebURLLoaderClientWrapped(this, m_webPage, frame, downloadName);
-    clientWrapped->willSendRequest(loader, requestWrapped, blink::WebURLResponse());
+    WebURLLoaderClientWrapped* clientWrapped = new WebURLLoaderClientWrapped(this, m_webPage, m_frame, downloadName, kurl);
+    clientWrapped->willFollowRedirect(requestWrapped, blink::WebURLResponse());
     loader->loadAsynchronously(requestWrapped, clientWrapped);
 }
+
+// WebGeolocationClient* WebFrameClientImpl::geolocationClient()
+// {
+//     if (!m_webGeolocationClientImpl)
+//         m_webGeolocationClientImpl = new WebGeolocationClientImpl();
+//     return m_webGeolocationClientImpl;
+// }
 
 } // namespace blink

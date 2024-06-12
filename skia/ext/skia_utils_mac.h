@@ -10,6 +10,7 @@
 
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkColor.h"
+#include "third_party/skia/include/core/SkPixmap.h"
 
 struct SkIRect;
 struct SkPoint;
@@ -34,19 +35,7 @@ class NSImageRep;
 class NSColor;
 #endif
 
-namespace gfx {
-
-// Converts a Skia point to a CoreGraphics CGPoint.
-// Both use same in-memory format.
-inline const CGPoint& SkPointToCGPoint(const SkPoint& point) {
-  return reinterpret_cast<const CGPoint&>(point);
-}
-
-// Converts a CoreGraphics point to a Skia CGPoint.
-// Both use same in-memory format.
-inline const SkPoint& CGPointToSkPoint(const CGPoint& point) {
-  return reinterpret_cast<const SkPoint&>(point);
-}
+namespace skia {
 
 // Matrix converters.
 SK_API CGAffineTransform SkMatrixToCGAffineTransform(const SkMatrix& matrix);
@@ -79,14 +68,14 @@ SK_API SkBitmap CGImageToSkBitmap(CGImageRef image);
 
 // Draws an NSImage with a given size into a SkBitmap.
 SK_API SkBitmap NSImageToSkBitmapWithColorSpace(NSImage* image,
-                                                bool is_opaque,
-                                                CGColorSpaceRef color_space);
+    bool is_opaque,
+    CGColorSpaceRef color_space);
 
 // Draws an NSImageRep with a given size into a SkBitmap.
 SK_API SkBitmap NSImageRepToSkBitmapWithColorSpace(NSImageRep* image,
-                                                   NSSize size,
-                                                   bool is_opaque,
-                                                   CGColorSpaceRef colorspace);
+    NSSize size,
+    bool is_opaque,
+    CGColorSpaceRef colorspace);
 
 // Given an SkBitmap, return an autoreleased NSBitmapImageRep in the generic
 // color space.
@@ -98,7 +87,7 @@ SK_API NSBitmapImageRep* SkBitmapToNSBitmapImageRepWithColorSpace(
 
 // Given an SkBitmap and a color space, return an autoreleased NSImage.
 SK_API NSImage* SkBitmapToNSImageWithColorSpace(const SkBitmap& icon,
-                                                CGColorSpaceRef colorSpace);
+    CGColorSpaceRef colorSpace);
 
 // Given an SkBitmap, return an autoreleased NSImage in the generic color space.
 // DEPRECATED, use SkBitmapToNSImageWithColorSpace() instead.
@@ -107,21 +96,45 @@ SK_API NSImage* SkBitmapToNSImage(const SkBitmap& icon);
 
 // Converts a SkCanvas temporarily to a CGContext
 class SK_API SkiaBitLocker {
- public:
-  explicit SkiaBitLocker(SkCanvas* canvas);
-  ~SkiaBitLocker();
-  CGContextRef cgContext();
+public:
+    /**
+    User clip rect is an *additional* clip to be applied in addition to the
+    current state of the canvas, in *local* rather than device coordinates.
+    If no additional clipping is desired, pass in
+    SkIRect::MakeSize(canvas->getBaseLayerSize()) transformed by the inverse
+    CTM.
+   */
+    SkiaBitLocker(SkCanvas* canvas,
+        const SkIRect& userClipRect,
+        SkScalar bitmapScaleFactor = 1);
+    ~SkiaBitLocker();
+    CGContextRef cgContext();
+    bool hasEmptyClipRegion() const;
 
- private:
-  void releaseIfNeeded();
-  SkCanvas* canvas_;
-  CGContextRef cgContext_;
-  SkBitmap bitmap_;
-  SkIPoint bitmapOffset_;
-  bool useDeviceBits_;
+private:
+    void releaseIfNeeded();
+    SkIRect computeDirtyRect();
+
+    SkCanvas* canvas_;
+
+    CGContextRef cgContext_;
+    // offscreen_ is only valid if useDeviceBits_ is false
+    SkBitmap offscreen_;
+    SkIPoint bitmapOffset_;
+    SkScalar bitmapScaleFactor_;
+
+    // True if we are drawing to |canvas_|'s backing store directly.
+    // Otherwise, the bits in |bitmap_| are our allocation and need to
+    // be copied over to |canvas_|.
+    bool useDeviceBits_;
+
+    // True if |bitmap_| is a dummy 1x1 bitmap allocated for the sake of creating
+    // a non-NULL CGContext (it is invalid to use a NULL CGContext), and will not
+    // be copied to |canvas_|. This will happen if |canvas_|'s clip region is
+    // empty.
+    bool bitmapIsDummy_;
 };
 
+} // namespace skia
 
-}  // namespace gfx
-
-#endif  // SKIA_EXT_SKIA_UTILS_MAC_H_
+#endif // SKIA_EXT_SKIA_UTILS_MAC_H_

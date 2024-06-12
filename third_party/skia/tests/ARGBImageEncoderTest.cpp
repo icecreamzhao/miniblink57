@@ -10,6 +10,7 @@
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkStream.h"
+#include "SkTemplates.h"
 #include "Test.h"
 
 static SkColorType gColorTypes[] = {
@@ -17,17 +18,18 @@ static SkColorType gColorTypes[] = {
     kN32_SkColorType,
 };
 
-DEF_TEST(ARGBImageEncoder, reporter) {
+DEF_TEST(ARGBImageEncoder, reporter)
+{
     // Bytes we expect to get:
     const int kWidth = 3;
     const int kHeight = 5;
     const unsigned char comparisonBuffer[] = {
         // kHeight rows, each with kWidth pixels, premultiplied ARGB for each pixel
-        0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, 0xff,0xff,0x00,0x00, // red
-        0xff,0x00,0xff,0x00, 0xff,0x00,0xff,0x00, 0xff,0x00,0xff,0x00, // green
-        0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, // blue
-        0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, // blue
-        0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, 0xff,0x00,0x00,0xff, // blue
+        0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, // red
+        0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, // green
+        0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, // blue
+        0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, // blue
+        0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, 0xff, 0x00, 0x00, 0xff, // blue
     };
 
     SkAutoTDelete<SkImageEncoder> enc(CreateARGBImageEncoder());
@@ -36,7 +38,7 @@ DEF_TEST(ARGBImageEncoder, reporter) {
         SkBitmap bitmap;
         {
             bitmap.allocPixels(SkImageInfo::Make(kWidth, kHeight, gColorTypes[ctIndex],
-                                                 kOpaque_SkAlphaType));
+                kOpaque_SkAlphaType));
             bitmap.eraseColor(SK_ColorBLUE);
             // Change rows [0,1] from blue to [red,green].
             SkCanvas canvas(bitmap);
@@ -49,8 +51,8 @@ DEF_TEST(ARGBImageEncoder, reporter) {
 
         // Transform the bitmap.
         int bufferSize = bitmap.width() * bitmap.height() * 4;
-        SkAutoMalloc pixelBufferManager(bufferSize);
-        char *pixelBuffer = static_cast<char *>(pixelBufferManager.get());
+        SkAutoTMalloc<char> pixelBufferManager(bufferSize);
+        char* pixelBuffer = pixelBufferManager.get();
         SkMemoryWStream out(pixelBuffer, bufferSize);
         REPORTER_ASSERT(reporter, enc->encodeStream(&out, bitmap, SkImageEncoder::kDefaultQuality));
 

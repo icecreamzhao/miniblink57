@@ -30,13 +30,12 @@
 #define GlyphPageTreeNode_h
 
 #include "platform/fonts/GlyphPage.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/Unicode.h"
+#include <memory>
 #include <string.h>
-
 #include <unicode/uscript.h>
 
 namespace blink {
@@ -70,7 +69,9 @@ class GlyphPageTreeNode;
 class SystemFallbackGlyphPageTreeNode;
 
 class PLATFORM_EXPORT GlyphPageTreeNodeBase {
-    WTF_MAKE_FAST_ALLOCATED(GlyphPageTreeNodeBase); WTF_MAKE_NONCOPYABLE(GlyphPageTreeNodeBase);
+    USING_FAST_MALLOC(GlyphPageTreeNodeBase);
+    WTF_MAKE_NONCOPYABLE(GlyphPageTreeNodeBase);
+
 public:
     GlyphPageTreeNode* parent() const { return m_parent; }
 
@@ -118,7 +119,10 @@ public:
     size_t pageCount() const;
 
 private:
-    GlyphPageTreeNode(GlyphPageTreeNode* parent = nullptr) : GlyphPageTreeNodeBase(parent, false) { }
+    GlyphPageTreeNode(GlyphPageTreeNode* parent = nullptr)
+        : GlyphPageTreeNodeBase(parent, false)
+    {
+    }
 
     static GlyphPageTreeNode* getRoot(unsigned pageNumber);
 
@@ -134,9 +138,9 @@ private:
     static GlyphPageTreeNode* pageZeroRoot;
 
     RefPtr<GlyphPage> m_page;
-    typedef HashMap<const FontData*, OwnPtr<GlyphPageTreeNode>> GlyphPageTreeNodeMap;
+    typedef HashMap<const FontData*, std::unique_ptr<GlyphPageTreeNode>> GlyphPageTreeNodeMap;
     GlyphPageTreeNodeMap m_children;
-    OwnPtr<SystemFallbackGlyphPageTreeNode> m_systemFallbackChild;
+    std::unique_ptr<SystemFallbackGlyphPageTreeNode> m_systemFallbackChild;
 };
 
 class PLATFORM_EXPORT SystemFallbackGlyphPageTreeNode : public GlyphPageTreeNodeBase {
@@ -146,12 +150,16 @@ public:
 private:
     friend class GlyphPageTreeNode;
 
-    SystemFallbackGlyphPageTreeNode(GlyphPageTreeNode* parent) : GlyphPageTreeNodeBase(parent, true) { }
+    SystemFallbackGlyphPageTreeNode(GlyphPageTreeNode* parent)
+        : GlyphPageTreeNodeBase(parent, true)
+    {
+    }
 
     void pruneFontData(const SimpleFontData*);
     PassRefPtr<GlyphPage> initializePage();
 
     struct UScriptCodeHashTraits : WTF::GenericHashTraits<UScriptCode> {
+        STATIC_ONLY(UScriptCodeHashTraits);
         static UScriptCode emptyValue() { return USCRIPT_CODE_LIMIT; }
         static void constructDeletedValue(UScriptCode& slot, bool) { slot = USCRIPT_INVALID_CODE; }
         static bool isDeletedValue(UScriptCode value) { return value == USCRIPT_INVALID_CODE; }

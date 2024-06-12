@@ -5,16 +5,17 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
+#include "gm.h"
 
 class CircularClipsGM : public skiagm::GM {
     SkScalar fX1, fX2, fY, fR;
-    SkPath   fCircle1, fCircle2;
+    SkPath fCircle1, fCircle2;
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         fX1 = 80;
         fX2 = 120;
         fY = 50;
@@ -24,18 +25,20 @@ protected:
         fCircle2.addCircle(fX2, fY, fR, SkPath::kCW_Direction);
     }
 
-
     bool runAsBench() const override { return true; }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("circular-clips");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(800, 600);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkRegion::Op ops[] = {
             SkRegion::kDifference_Op,
             SkRegion::kIntersect_Op,
@@ -53,14 +56,14 @@ protected:
         fillPaint.setColor(0x80808080);
         canvas->save();
         canvas->scale(10, 10);
-        canvas->translate(-((fX1 + fX2)/2 - fR), -(fY - 2*fR/3));
+        canvas->translate(-((fX1 + fX2) / 2 - fR), -(fY - 2 * fR / 3));
         canvas->clipPath(fCircle1, SkRegion::kReplace_Op, true);
         canvas->clipPath(fCircle2, SkRegion::kIntersect_Op, true);
 
         canvas->drawRect(rect, fillPaint);
 
         canvas->restore();
-      
+
         fillPaint.setColor(0xFF000000);
 
         for (size_t i = 0; i < 4; i++) {
@@ -92,4 +95,4 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return new CircularClipsGM; )
+DEF_GM(return new CircularClipsGM;)

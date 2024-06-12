@@ -18,12 +18,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/CSSInitialValue.h"
 
+#include "core/css/CSSValuePool.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
+
+CSSInitialValue* CSSInitialValue::create()
+{
+    return cssValuePool().initialValue();
+}
 
 String CSSInitialValue::customCSSText() const
 {

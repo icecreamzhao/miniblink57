@@ -32,13 +32,15 @@
 #define WebFileChooserParams_h
 
 #include "../platform/WebString.h"
+#include "../platform/WebURL.h"
 #include "../platform/WebVector.h"
 #include "WebFileChooserCompletion.h"
 
 namespace blink {
 
 struct WebFileChooserParams {
-    // If |multiSelect| is true, the dialog allows the user to select multiple files.
+    // If |multiSelect| is true, the dialog allows the user to select multiple
+    // files.
     bool multiSelect;
     // If |directory| is true, the dialog allows the user to select a directory.
     bool directory;
@@ -47,9 +49,6 @@ struct WebFileChooserParams {
     bool saveAs;
     // |title| is the title for a file chooser dialog. It can be an empty string.
     WebString title;
-    // |initialValue| is a filename which the dialog should select by default.
-    // It can be an empty string.
-    WebString initialValue;
     // This contains MIME type strings such as "audio/*" "text/plain" or file
     // extensions beginning with a period (.) such as ".mp3" ".txt".
     // The dialog may restrict selectable files to files with the specified MIME
@@ -76,6 +75,9 @@ struct WebFileChooserParams {
     // WebFileChooserCompletion that can handle files without local paths,
     // 'false' should be specified to the flag.
     bool needLocalPath;
+    // If non-empty, represents the URL of the requestor if the request was
+    // initiated by a document.
+    WebURL requestor;
 
     WebFileChooserParams()
         : multiSelect(false)

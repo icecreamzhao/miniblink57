@@ -11,11 +11,12 @@
 
 #if SK_SUPPORT_GPU
 #include "GLBench.h"
-#include "gl/GrGLGLSL.h"
+#include "gl/GrGLContext.h"
 #include "gl/GrGLInterface.h"
-#include "gl/GrGLShaderVar.h"
 #include "gl/GrGLUtil.h"
+#include "glsl/GrGLSL.h"
 #include "glsl/GrGLSLCaps.h"
+#include "glsl/GrGLSLShaderVar.h"
 
 /*
  * This is a native GL benchmark for instanced arrays vs vertex buffer objects.  To benchmark this
@@ -51,18 +52,20 @@ public:
         : fVboSetup(vboSetup)
         , fDrawDiv(drawDiv)
         , fProgram(0)
-        , fVAO(0) {
+        , fVAO(0)
+    {
         fName = VboSetupToStr(vboSetup, fDrawDiv);
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
     const GrGLContext* onGetGLContext(const GrGLContext*) override;
     void setup(const GrGLContext*) override;
-    void glDraw(const int loops, const GrGLContext*) override;
+    void glDraw(int loops, const GrGLContext*) override;
     void teardown(const GrGLInterface*) override;
 
 private:
@@ -71,19 +74,20 @@ private:
     void setupSingleVbo(const GrGLInterface*, const SkMatrix*);
     GrGLuint setupShader(const GrGLContext*);
 
-    static SkString VboSetupToStr(VboSetup vboSetup, uint32_t drawDiv) {
+    static SkString VboSetupToStr(VboSetup vboSetup, uint32_t drawDiv)
+    {
         SkString name("GLInstancedArraysBench");
         switch (vboSetup) {
-            default:
-            case kUseOne_VboSetup:
-                name.appendf("_one_%u", drawDiv);
-                break;
-            case kUseTwo_VboSetup:
-                name.appendf("_two_%u", drawDiv);
-                break;
-            case kUseInstance_VboSetup:
-                name.append("_instance");
-                break;
+        default:
+        case kUseOne_VboSetup:
+            name.appendf("_one_%u", drawDiv);
+            break;
+        case kUseTwo_VboSetup:
+            name.appendf("_two_%u", drawDiv);
+            break;
+        case kUseInstance_VboSetup:
+            name.append("_instance");
+            break;
         }
         return name;
     }
@@ -105,43 +109,44 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-GrGLuint GLCpuPosInstancedArraysBench::setupShader(const GrGLContext* ctx) {
-    const char* version = GrGLGetGLSLVersionDecl(*ctx);
+GrGLuint GLCpuPosInstancedArraysBench::setupShader(const GrGLContext* ctx)
+{
+    const GrGLSLCaps* glslCaps = ctx->caps()->glslCaps();
+    const char* version = glslCaps->versionDeclString();
 
     // setup vertex shader
-    GrGLShaderVar aPosition("a_position", kVec2f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
-    GrGLShaderVar aColor("a_color", kVec3f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
-    GrGLShaderVar oColor("o_color", kVec3f_GrSLType, GrShaderVar::kVaryingOut_TypeModifier);
+    GrGLSLShaderVar aPosition("a_position", kVec2f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
+    GrGLSLShaderVar aColor("a_color", kVec3f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
+    GrGLSLShaderVar oColor("o_color", kVec3f_GrSLType, GrShaderVar::kVaryingOut_TypeModifier);
 
     SkString vshaderTxt(version);
-    aPosition.appendDecl(*ctx, &vshaderTxt);
+    aPosition.appendDecl(glslCaps, &vshaderTxt);
     vshaderTxt.append(";\n");
-    aColor.appendDecl(*ctx, &vshaderTxt);
+    aColor.appendDecl(glslCaps, &vshaderTxt);
     vshaderTxt.append(";\n");
-    oColor.appendDecl(*ctx, &vshaderTxt);
+    oColor.appendDecl(glslCaps, &vshaderTxt);
     vshaderTxt.append(";\n");
 
     vshaderTxt.append(
-            "void main()\n"
-            "{\n"
-                "gl_Position = vec4(a_position, 0.f, 1.f);\n"
-                "o_color = a_color;\n"
-            "}\n");
+        "void main()\n"
+        "{\n"
+        "gl_Position = vec4(a_position, 0., 1.);\n"
+        "o_color = a_color;\n"
+        "}\n");
 
     const GrGLInterface* gl = ctx->interface();
 
     // setup fragment shader
-    GrGLShaderVar oFragColor("o_FragColor", kVec4f_GrSLType, GrShaderVar::kOut_TypeModifier);
+    GrGLSLShaderVar oFragColor("o_FragColor", kVec4f_GrSLType, GrShaderVar::kOut_TypeModifier);
     SkString fshaderTxt(version);
-    GrGLAppendGLSLDefaultFloatPrecisionDeclaration(kDefault_GrSLPrecision, gl->fStandard,
-                                                   &fshaderTxt);
+    GrGLSLAppendDefaultFloatPrecisionDeclaration(kDefault_GrSLPrecision, *glslCaps, &fshaderTxt);
     oColor.setTypeModifier(GrShaderVar::kVaryingIn_TypeModifier);
-    oColor.appendDecl(*ctx, &fshaderTxt);
+    oColor.appendDecl(glslCaps, &fshaderTxt);
     fshaderTxt.append(";\n");
 
     const char* fsOutName;
-    if (ctx->caps()->glslCaps()->mustDeclareFragmentShaderOutput()) {
-        oFragColor.appendDecl(*ctx, &fshaderTxt);
+    if (glslCaps->mustDeclareFragmentShaderOutput()) {
+        oFragColor.appendDecl(glslCaps, &fshaderTxt);
         fshaderTxt.append(";\n");
         fsOutName = oFragColor.c_str();
     } else {
@@ -149,18 +154,20 @@ GrGLuint GLCpuPosInstancedArraysBench::setupShader(const GrGLContext* ctx) {
     }
 
     fshaderTxt.appendf(
-            "void main()\n"
-            "{\n"
-                "%s = vec4(o_color, 1.0f);\n"
-            "}\n", fsOutName);
+        "void main()\n"
+        "{\n"
+        "%s = vec4(o_color, 1.0);\n"
+        "}\n",
+        fsOutName);
 
     return CreateProgram(gl, vshaderTxt.c_str(), fshaderTxt.c_str());
 }
 
-template<typename Func>
-static void setup_matrices(int numQuads, Func f) {
+template <typename Func>
+static void setup_matrices(int numQuads, Func f)
+{
     // We draw a really small triangle so we are not fill rate limited
-    for (int i = 0 ; i < numQuads; i++) {
+    for (int i = 0; i < numQuads; i++) {
         SkMatrix m = SkMatrix::I();
         m.setScale(0.0001f, 0.0001f);
         f(m);
@@ -169,22 +176,24 @@ static void setup_matrices(int numQuads, Func f) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const GrGLContext* GLCpuPosInstancedArraysBench::onGetGLContext(const GrGLContext* ctx) {
+const GrGLContext* GLCpuPosInstancedArraysBench::onGetGLContext(const GrGLContext* ctx)
+{
     // We only care about gpus with drawArraysInstanced support
     if (!ctx->interface()->fFunctions.fDrawArraysInstanced) {
-        return NULL;
+        return nullptr;
     }
     return ctx;
 }
 
 void GLCpuPosInstancedArraysBench::setupInstanceVbo(const GrGLInterface* gl,
-                                                    const SkMatrix* viewMatrices) {
+    const SkMatrix* viewMatrices)
+{
     // We draw all of the instances at a single place because we aren't allowed to have per vertex
     // per instance attributes
     SkPoint positions[kVerticesPerTri];
     positions[0].set(-1.0f, -1.0f);
-    positions[1].set( 1.0f, -1.0f);
-    positions[2].set( 1.0f,  1.0f);
+    positions[1].set(1.0f, -1.0f);
+    positions[2].set(1.0f, 1.0f);
     viewMatrices[0].mapPointsWithStride(positions, sizeof(SkPoint), kVerticesPerTri);
 
     // setup colors so we can detect we are actually drawing instances(the last triangle will be
@@ -194,7 +203,9 @@ void GLCpuPosInstancedArraysBench::setupInstanceVbo(const GrGLInterface* gl,
         // set colors
         uint32_t offset = i * kVerticesPerTri;
         float color = i == kNumTri - 1 ? 1.0f : 0.0f;
-        colors[offset++] = color; colors[offset++] = 0.0f; colors[offset++] = 0.0f;
+        colors[offset++] = color;
+        colors[offset++] = 0.0f;
+        colors[offset++] = 0.0f;
     }
 
     GrGLuint posVBO;
@@ -203,8 +214,7 @@ void GLCpuPosInstancedArraysBench::setupInstanceVbo(const GrGLInterface* gl,
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, posVBO));
     GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, sizeof(positions), positions, GR_GL_STATIC_DRAW));
     GR_GL_CALL(gl, EnableVertexAttribArray(0));
-    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, 2 * sizeof(GrGLfloat),
-                                       (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, 2 * sizeof(GrGLfloat), (GrGLvoid*)0));
 
     // setup color VBO
     GrGLuint instanceVBO;
@@ -212,30 +222,32 @@ void GLCpuPosInstancedArraysBench::setupInstanceVbo(const GrGLInterface* gl,
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, instanceVBO));
     GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, sizeof(colors), colors, GR_GL_STATIC_DRAW));
     GR_GL_CALL(gl, EnableVertexAttribArray(1));
-    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, 3 * sizeof(GrGLfloat),
-                                       (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, 3 * sizeof(GrGLfloat), (GrGLvoid*)0));
     GR_GL_CALL(gl, VertexAttribDivisor(1, 1));
     fBuffers.push_back(posVBO);
     fBuffers.push_back(instanceVBO);
 }
 
 void GLCpuPosInstancedArraysBench::setupDoubleVbo(const GrGLInterface* gl,
-                                                  const SkMatrix* viewMatrices) {
+    const SkMatrix* viewMatrices)
+{
     // Constants for our various shader programs
     SkPoint positions[kVerticesPerTri * kNumTri];
     GrGLfloat colors[kVerticesPerTri * kNumTri * 3];
     for (uint32_t i = 0; i < kNumTri; i++) {
         SkPoint* position = &positions[i * kVerticesPerTri];
         position[0].set(-1.0f, -1.0f);
-        position[1].set( 1.0f, -1.0f);
-        position[2].set( 1.0f,  1.0f);
+        position[1].set(1.0f, -1.0f);
+        position[2].set(1.0f, 1.0f);
         viewMatrices[i].mapPointsWithStride(position, sizeof(SkPoint), kVerticesPerTri);
 
         // set colors
         float color = i == kNumTri - 1 ? 1.0f : 0.0f;
         uint32_t offset = i * kVerticesPerTri * 3;
         for (uint32_t j = 0; j < kVerticesPerTri; j++) {
-            colors[offset++] = color; colors[offset++] = 0.0f; colors[offset++] = 0.0f;
+            colors[offset++] = color;
+            colors[offset++] = 0.0f;
+            colors[offset++] = 0.0f;
         }
     }
 
@@ -244,16 +256,14 @@ void GLCpuPosInstancedArraysBench::setupDoubleVbo(const GrGLInterface* gl,
     GR_GL_CALL(gl, GenBuffers(1, &posVBO));
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, posVBO));
     GR_GL_CALL(gl, EnableVertexAttribArray(0));
-    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, 2 * sizeof(GrGLfloat),
-                                       (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, 2 * sizeof(GrGLfloat), (GrGLvoid*)0));
     GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, sizeof(positions), positions, GR_GL_STATIC_DRAW));
 
     // setup color VBO
     GR_GL_CALL(gl, GenBuffers(1, &colorVBO));
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, colorVBO));
     GR_GL_CALL(gl, EnableVertexAttribArray(1));
-    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, 3 * sizeof(GrGLfloat),
-                                       (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, 3 * sizeof(GrGLfloat), (GrGLvoid*)0));
     GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, sizeof(colors), colors, GR_GL_STATIC_DRAW));
 
     fBuffers.push_back(posVBO);
@@ -266,14 +276,15 @@ struct Vertex {
 };
 
 void GLCpuPosInstancedArraysBench::setupSingleVbo(const GrGLInterface* gl,
-                                                  const SkMatrix* viewMatrices) {
+    const SkMatrix* viewMatrices)
+{
     // Constants for our various shader programs
     Vertex vertices[kVerticesPerTri * kNumTri];
     for (uint32_t i = 0; i < kNumTri; i++) {
         Vertex* v = &vertices[i * kVerticesPerTri];
         v[0].fPositions.set(-1.0f, -1.0f);
-        v[1].fPositions.set( 1.0f, -1.0f);
-        v[2].fPositions.set( 1.0f,  1.0f);
+        v[1].fPositions.set(1.0f, -1.0f);
+        v[2].fPositions.set(1.0f, 1.0f);
 
         SkPoint* position = reinterpret_cast<SkPoint*>(v);
         viewMatrices[i].mapPointsWithStride(position, sizeof(Vertex), kVerticesPerTri);
@@ -282,7 +293,9 @@ void GLCpuPosInstancedArraysBench::setupSingleVbo(const GrGLInterface* gl,
         float color = i == kNumTri - 1 ? 1.0f : 0.0f;
         for (uint32_t j = 0; j < kVerticesPerTri; j++) {
             uint32_t offset = 0;
-            v->fColors[offset++] = color; v->fColors[offset++] = 0.0f; v->fColors[offset++] = 0.0f;
+            v->fColors[offset++] = color;
+            v->fColors[offset++] = 0.0f;
+            v->fColors[offset++] = 0.0f;
             v++;
         }
     }
@@ -293,15 +306,14 @@ void GLCpuPosInstancedArraysBench::setupSingleVbo(const GrGLInterface* gl,
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, vbo));
     GR_GL_CALL(gl, EnableVertexAttribArray(0));
     GR_GL_CALL(gl, EnableVertexAttribArray(1));
-    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, sizeof(Vertex),
-                                       (GrGLvoid*)0));
-    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, sizeof(Vertex),
-                                       (GrGLvoid*)(sizeof(SkPoint))));
+    GR_GL_CALL(gl, VertexAttribPointer(0, 2, GR_GL_FLOAT, GR_GL_FALSE, sizeof(Vertex), (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(1, 3, GR_GL_FLOAT, GR_GL_FALSE, sizeof(Vertex), (GrGLvoid*)(sizeof(SkPoint))));
     GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, sizeof(vertices), vertices, GR_GL_STATIC_DRAW));
     fBuffers.push_back(vbo);
 }
 
-void GLCpuPosInstancedArraysBench::setup(const GrGLContext* ctx) {
+void GLCpuPosInstancedArraysBench::setup(const GrGLContext* ctx)
+{
     const GrGLInterface* gl = ctx->interface();
     fTexture = SetupFramebuffer(gl, kScreenWidth, kScreenHeight);
 
@@ -319,15 +331,15 @@ void GLCpuPosInstancedArraysBench::setup(const GrGLContext* ctx) {
     GR_GL_CALL(gl, BindVertexArray(fVAO));
 
     switch (fVboSetup) {
-        case kUseOne_VboSetup:
-            this->setupSingleVbo(gl, viewMatrices);
-            break;
-        case kUseTwo_VboSetup:
-            this->setupDoubleVbo(gl, viewMatrices);
-            break;
-        case kUseInstance_VboSetup:
-            this->setupInstanceVbo(gl, viewMatrices);
-            break;
+    case kUseOne_VboSetup:
+        this->setupSingleVbo(gl, viewMatrices);
+        break;
+    case kUseTwo_VboSetup:
+        this->setupDoubleVbo(gl, viewMatrices);
+        break;
+    case kUseInstance_VboSetup:
+        this->setupInstanceVbo(gl, viewMatrices);
+        break;
     }
 
     // clear screen
@@ -339,11 +351,11 @@ void GLCpuPosInstancedArraysBench::setup(const GrGLContext* ctx) {
     GR_GL_CALL(gl, BindVertexArray(fVAO));
 }
 
-void GLCpuPosInstancedArraysBench::glDraw(const int loops, const GrGLContext* ctx) {
+void GLCpuPosInstancedArraysBench::glDraw(int loops, const GrGLContext* ctx)
+{
     const GrGLInterface* gl = ctx->interface();
 
-    uint32_t maxTrianglesPerFlush = fDrawDiv == 0 ?  kNumTri :
-                                                     kDrawMultiplier / fDrawDiv;
+    uint32_t maxTrianglesPerFlush = fDrawDiv == 0 ? kNumTri : kDrawMultiplier / fDrawDiv;
     uint32_t trianglesToDraw = loops * kDrawMultiplier;
 
     if (kUseInstance_VboSetup == fVboSetup) {
@@ -368,7 +380,8 @@ void GLCpuPosInstancedArraysBench::glDraw(const int loops, const GrGLContext* ct
 #endif
 }
 
-void GLCpuPosInstancedArraysBench::teardown(const GrGLInterface* gl) {
+void GLCpuPosInstancedArraysBench::teardown(const GrGLInterface* gl)
+{
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, 0));
     GR_GL_CALL(gl, BindVertexArray(0));
     GR_GL_CALL(gl, BindTexture(GR_GL_TEXTURE_2D, 0));
@@ -377,20 +390,21 @@ void GLCpuPosInstancedArraysBench::teardown(const GrGLInterface* gl) {
     GR_GL_CALL(gl, DeleteProgram(fProgram));
     GR_GL_CALL(gl, DeleteBuffers(fBuffers.count(), fBuffers.begin()));
     GR_GL_CALL(gl, DeleteVertexArrays(1, &fVAO));
+    fBuffers.reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseInstance_VboSetup, 0) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 0) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 0) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 1) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 1) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 2) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 2) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 4) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 4) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 8) )
-DEF_BENCH( return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 8) )
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseInstance_VboSetup, 0))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 0))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 0))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 1))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 1))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 2))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 2))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 4))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 4))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseOne_VboSetup, 8))
+DEF_BENCH(return new GLCpuPosInstancedArraysBench(GLCpuPosInstancedArraysBench::kUseTwo_VboSetup, 8))
 
 #endif

@@ -6,6 +6,7 @@
  */
 
 #include "SkCommandLineFlags.h"
+#include "SkFontDescriptor.h"
 #include "SkPicture.h"
 #include "SkPictureData.h"
 #include "SkStream.h"
@@ -29,7 +30,8 @@ static const int kMissingInput = 4;
 static const int kIOError = 5;
 
 int tool_main(int argc, char** argv);
-int tool_main(int argc, char** argv) {
+int tool_main(int argc, char** argv)
+{
     SkCommandLineFlags::SetUsage("Prints information about an skp file");
     SkCommandLineFlags::Parse(argc, argv);
 
@@ -60,11 +62,30 @@ int tool_main(int argc, char** argv) {
     }
     if (FLAGS_cullRect && !FLAGS_quiet) {
         SkDebugf("Cull Rect: %f,%f,%f,%f\n",
-                 info.fCullRect.fLeft, info.fCullRect.fTop,
-                 info.fCullRect.fRight, info.fCullRect.fBottom);
+            info.fCullRect.fLeft, info.fCullRect.fTop,
+            info.fCullRect.fRight, info.fCullRect.fBottom);
     }
     if (FLAGS_flags && !FLAGS_quiet) {
-        SkDebugf("Flags: 0x%x\n", info.fFlags);
+        SkDebugf("Flags: ");
+        bool needsSeparator = false;
+        if (info.fFlags & SkPictInfo::kCrossProcess_Flag) {
+            SkDebugf("kCrossProcess");
+            needsSeparator = true;
+        }
+        if (info.fFlags & SkPictInfo::kScalarIsFloat_Flag) {
+            if (needsSeparator) {
+                SkDebugf("|");
+            }
+            SkDebugf("kScalarIsFloat");
+            needsSeparator = true;
+        }
+        if (info.fFlags & SkPictInfo::kPtrIs64Bit_Flag) {
+            if (needsSeparator) {
+                SkDebugf("|");
+            }
+            SkDebugf("kPtrIs64Bit");
+        }
+        SkDebugf("\n");
     }
 
     if (!stream.readBool()) {
@@ -85,7 +106,7 @@ int tool_main(int argc, char** argv) {
 
         // "move" doesn't error out when seeking beyond the end of file
         // so we need a preemptive check here.
-        if (curPos+chunkSize > totStreamSize) {
+        if (curPos + chunkSize > totStreamSize) {
             if (!FLAGS_quiet) {
                 SkDebugf("truncated file\n");
             }
@@ -107,19 +128,32 @@ int tool_main(int argc, char** argv) {
                 SkDebugf("SK_PICT_FACTORY_TAG %d\n", chunkSize);
             }
             break;
-        case SK_PICT_TYPEFACE_TAG:
+        case SK_PICT_TYPEFACE_TAG: {
             if (FLAGS_tags && !FLAGS_quiet) {
                 SkDebugf("SK_PICT_TYPEFACE_TAG %d\n", chunkSize);
-                SkDebugf("Exiting early due to format limitations\n");
             }
-            return kSuccess;       // TODO: need to store size in bytes
+
+            const int count = SkToInt(chunkSize);
+            for (int i = 0; i < count; i++) {
+                SkFontDescriptor desc;
+                if (!SkFontDescriptor::Deserialize(&stream, &desc)) {
+                    if (!FLAGS_quiet) {
+                        SkDebugf("File corruption in SkFontDescriptor\n");
+                    }
+                    return kInvalidTag;
+                }
+            }
+
+            // clear this since we've consumed all the typefaces
+            chunkSize = 0;
             break;
+        }
         case SK_PICT_PICTURE_TAG:
             if (FLAGS_tags && !FLAGS_quiet) {
                 SkDebugf("SK_PICT_PICTURE_TAG %d\n", chunkSize);
                 SkDebugf("Exiting early due to format limitations\n");
             }
-            return kSuccess;       // TODO: need to store size in bytes
+            return kSuccess; // TODO: need to store size in bytes
             break;
         case SK_PICT_BUFFER_SIZE_TAG:
             if (FLAGS_tags && !FLAGS_quiet) {
@@ -145,7 +179,8 @@ int tool_main(int argc, char** argv) {
 }
 
 #if !defined SK_BUILD_FOR_IOS
-int main(int argc, char * const argv[]) {
-    return tool_main(argc, (char**) argv);
+int main(int argc, char* const argv[])
+{
+    return tool_main(argc, (char**)argv);
 }
 #endif

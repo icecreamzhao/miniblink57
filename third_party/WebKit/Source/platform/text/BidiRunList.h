@@ -23,14 +23,17 @@
 #ifndef BidiRunList_h
 #define BidiRunList_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
 template <class Run>
-class BidiRunList {
+class BidiRunList final {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(BidiRunList);
+
 public:
     BidiRunList()
         : m_firstRun(0)
@@ -142,7 +145,8 @@ inline void BidiRunList<Run>::moveRunToBeginning(Run* run)
 }
 
 template <class Run>
-void BidiRunList<Run>::replaceRunWithRuns(Run* toReplace, BidiRunList<Run>& newRuns)
+void BidiRunList<Run>::replaceRunWithRuns(Run* toReplace,
+    BidiRunList<Run>& newRuns)
 {
     ASSERT(newRuns.runCount());
     ASSERT(m_firstRun);

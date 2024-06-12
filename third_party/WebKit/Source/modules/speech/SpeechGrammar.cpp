@@ -23,8 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/speech/SpeechGrammar.h"
 
 #include "core/dom/Document.h"
@@ -41,7 +39,8 @@ SpeechGrammar* SpeechGrammar::create(const KURL& src, double weight)
     return new SpeechGrammar(src, weight);
 }
 
-void SpeechGrammar::setSrc(ExecutionContext* executionContext, const String& src)
+void SpeechGrammar::setSrc(ExecutionContext* executionContext,
+    const String& src)
 {
     Document* document = toDocument(executionContext);
     m_src = document->completeURL(src);

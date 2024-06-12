@@ -18,7 +18,7 @@ public:
 protected:
     const char* onGetName() override;
     bool isSuitableFor(Backend) override;
-    void onDraw(const int loops, SkCanvas*) override;
+    void onDraw(int loops, SkCanvas*) override;
     SkIPoint onGetSize() override;
 
 private:
@@ -29,4 +29,4 @@ private:
     typedef Benchmark INHERITED;
 };
 
-#endif//RecordingBench_DEFINED
+#endif //RecordingBench_DEFINED

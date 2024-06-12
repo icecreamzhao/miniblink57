@@ -11,79 +11,84 @@
 namespace v8 {
 namespace internal {
 
-const char* RootsTable::root_names_[RootsTable::kEntriesCount] = {
+    const char* RootsTable::root_names_[RootsTable::kEntriesCount] = {
 #define ROOT_NAME(type, name, CamelName) #name,
-    ROOT_LIST(ROOT_NAME)
+        ROOT_LIST(ROOT_NAME)
 #undef ROOT_NAME
-};
+    };
 
-// static
-RootIndex RootsTable::RootIndexForFixedTypedArray(
-    ExternalArrayType array_type) {
-  switch (array_type) {
+    // static
+    RootIndex RootsTable::RootIndexForFixedTypedArray(
+        ExternalArrayType array_type)
+    {
+        switch (array_type) {
 #define ARRAY_TYPE_TO_ROOT_INDEX(Type, type, TYPE, ctype) \
-  case kExternal##Type##Array:                            \
-    return RootIndex::kFixed##Type##ArrayMap;
+    case kExternal##Type##Array:                          \
+        return RootIndex::kFixed##Type##ArrayMap;
 
-    TYPED_ARRAYS(ARRAY_TYPE_TO_ROOT_INDEX)
+            TYPED_ARRAYS(ARRAY_TYPE_TO_ROOT_INDEX)
 #undef ARRAY_TYPE_TO_ROOT_INDEX
-  }
-  UNREACHABLE();
-}
+        }
+        UNREACHABLE();
+    }
 
-// static
-RootIndex RootsTable::RootIndexForFixedTypedArray(ElementsKind elements_kind) {
-  switch (elements_kind) {
+    // static
+    RootIndex RootsTable::RootIndexForFixedTypedArray(ElementsKind elements_kind)
+    {
+        switch (elements_kind) {
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype) \
-  case TYPE##_ELEMENTS:                           \
-    return RootIndex::kFixed##Type##ArrayMap;
-    TYPED_ARRAYS(TYPED_ARRAY_CASE)
-    default:
-      UNREACHABLE();
+    case TYPE##_ELEMENTS:                         \
+        return RootIndex::kFixed##Type##ArrayMap;
+            TYPED_ARRAYS(TYPED_ARRAY_CASE)
+        default:
+            UNREACHABLE();
 #undef TYPED_ARRAY_CASE
-  }
-}
+        }
+    }
 
-// static
-RootIndex RootsTable::RootIndexForEmptyFixedTypedArray(
-    ElementsKind elements_kind) {
-  switch (elements_kind) {
+    // static
+    RootIndex RootsTable::RootIndexForEmptyFixedTypedArray(
+        ElementsKind elements_kind)
+    {
+        switch (elements_kind) {
 #define ELEMENT_KIND_TO_ROOT_INDEX(Type, type, TYPE, ctype) \
-  case TYPE##_ELEMENTS:                                     \
-    return RootIndex::kEmptyFixed##Type##Array;
+    case TYPE##_ELEMENTS:                                   \
+        return RootIndex::kEmptyFixed##Type##Array;
 
-    TYPED_ARRAYS(ELEMENT_KIND_TO_ROOT_INDEX)
+            TYPED_ARRAYS(ELEMENT_KIND_TO_ROOT_INDEX)
 #undef ELEMENT_KIND_TO_ROOT_INDEX
-    default:
-      UNREACHABLE();
-  }
-}
+        default:
+            UNREACHABLE();
+        }
+    }
 
-void ReadOnlyRoots::Iterate(RootVisitor* visitor) {
-  visitor->VisitRootPointers(Root::kReadOnlyRootList, nullptr,
-                             roots_table_.read_only_roots_begin(),
-                             roots_table_.read_only_roots_end());
-  visitor->Synchronize(VisitorSynchronization::kReadOnlyRootList);
-}
+    void ReadOnlyRoots::Iterate(RootVisitor* visitor)
+    {
+        visitor->VisitRootPointers(Root::kReadOnlyRootList, nullptr,
+            roots_table_.read_only_roots_begin(),
+            roots_table_.read_only_roots_end());
+        visitor->Synchronize(VisitorSynchronization::kReadOnlyRootList);
+    }
 
 #ifdef DEBUG
 
-bool ReadOnlyRoots::CheckType(RootIndex index) const {
-  Object root(roots_table_[index]);
-  switch (index) {
+    bool ReadOnlyRoots::CheckType(RootIndex index) const
+    {
+        Object root(roots_table_[index]);
+        switch (index) {
 #define CHECKTYPE(Type, name, CamelName) \
-  case RootIndex::k##CamelName:          \
-    return root->Is##Type();
-    READ_ONLY_ROOT_LIST(CHECKTYPE)
+    case RootIndex::k##CamelName:        \
+        return root->Is##Type();
+            READ_ONLY_ROOT_LIST(CHECKTYPE)
 #undef CHECKTYPE
 
-    default:
-      UNREACHABLE();
-      return false;
-  }
-}
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
 
-#endif  // DEBUG
+#endif // DEBUG
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

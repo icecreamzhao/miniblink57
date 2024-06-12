@@ -31,17 +31,23 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint3D.h"
+#include "wtf/Allocator.h"
+#include "wtf/build_config.h"
 
 namespace blink {
 
 // Cone gain is defined according to the OpenAL specification
 
 class PLATFORM_EXPORT ConeEffect {
+    DISALLOW_NEW();
+
 public:
     ConeEffect();
 
     // Returns scalar gain for the given source/listener positions/orientations
-    double gain(FloatPoint3D sourcePosition, FloatPoint3D sourceOrientation, FloatPoint3D listenerPosition);
+    double gain(FloatPoint3D sourcePosition,
+        FloatPoint3D sourceOrientation,
+        FloatPoint3D listenerPosition);
 
     // Angles in degrees
     void setInnerAngle(double innerAngle) { m_innerAngle = innerAngle; }

@@ -37,17 +37,18 @@
 
 namespace blink {
 
-class DirectoryReaderBase : public GarbageCollectedFinalized<DirectoryReaderBase> {
+class DirectoryReaderBase
+    : public GarbageCollectedFinalized<DirectoryReaderBase> {
 public:
     DOMFileSystemBase* filesystem() const { return m_fileSystem.get(); }
-    void setHasMoreEntries(bool hasMoreEntries) { m_hasMoreEntries = hasMoreEntries; }
+    void setHasMoreEntries(bool hasMoreEntries)
+    {
+        m_hasMoreEntries = hasMoreEntries;
+    }
 
     virtual ~DirectoryReaderBase() { }
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        visitor->trace(m_fileSystem);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_fileSystem); }
 
 protected:
     DirectoryReaderBase(DOMFileSystemBase* fileSystem, const String& fullPath)

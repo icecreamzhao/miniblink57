@@ -10,30 +10,33 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef ConvolverNode_h
 #define ConvolverNode_h
 
+#include "base/gtest_prod_util.h"
 #include "modules/ModulesExport.h"
 #include "modules/webaudio/AudioNode.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/ThreadingPrimitives.h"
+#include <memory>
 
 namespace blink {
 
 class AudioBuffer;
+class ConvolverOptions;
 class ExceptionState;
 class Reverb;
 
@@ -57,25 +60,29 @@ private:
     double tailTime() const override;
     double latencyTime() const override;
 
-    OwnPtr<Reverb> m_reverb;
+    std::unique_ptr<Reverb> m_reverb;
     // This Persistent doesn't make a reference cycle including the owner
     // ConvolverNode.
     Persistent<AudioBuffer> m_buffer;
 
-    // This synchronizes dynamic changes to the convolution impulse response with process().
+    // This synchronizes dynamic changes to the convolution impulse response with
+    // process().
     mutable Mutex m_processLock;
 
     // Normalize the impulse response or not. Must default to true.
     bool m_normalize;
 
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class ConvolverNodeTest_ReverbLifetime_Test;
+    FRIEND_TEST_ALL_PREFIXES(ConvolverNodeTest, ReverbLifetime);
 };
 
 class MODULES_EXPORT ConvolverNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static ConvolverNode* create(AudioContext&, float sampleRate);
+    static ConvolverNode* create(BaseAudioContext&, ExceptionState&);
+    static ConvolverNode* create(BaseAudioContext*,
+        const ConvolverOptions&,
+        ExceptionState&);
 
     AudioBuffer* buffer() const;
     void setBuffer(AudioBuffer*, ExceptionState&);
@@ -83,11 +90,10 @@ public:
     void setNormalize(bool);
 
 private:
-    ConvolverNode(AudioContext&, float sampleRate);
+    ConvolverNode(BaseAudioContext&);
     ConvolverHandler& convolverHandler() const;
 
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class ConvolverNodeTest_ReverbLifetime_Test;
+    FRIEND_TEST_ALL_PREFIXES(ConvolverNodeTest, ReverbLifetime);
 };
 
 } // namespace blink

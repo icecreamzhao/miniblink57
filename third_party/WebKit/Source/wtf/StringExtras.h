@@ -26,28 +26,19 @@
 #ifndef WTF_StringExtras_h
 #define WTF_StringExtras_h
 
-#if OS(POSIX)
-#define HAVE_STRINGS_H 1
-#endif
-
-#if !defined(HAVE_STRNSTR)
-#if OS(MACOSX) || (OS(FREEBSD) && !defined(__GLIBC__))
-#define HAVE_STRNSTR 1
-#endif
-#endif
-
+#include "wtf/build_config.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
-#if HAVE(STRINGS_H)
+#if OS(POSIX)
 #include <strings.h>
 #endif
 
 #if COMPILER(MSVC)
 // FIXME: why a COMPILER check instead of OS? also, these should be HAVE checks
 
-#if _MSC_VER < 1900 || USING_VC6RT == 1
+#if _MSC_VER < 1900
 // snprintf is implemented in VS 2015
 inline int snprintf(char* buffer, size_t count, const char* format, ...)
 {
@@ -57,20 +48,23 @@ inline int snprintf(char* buffer, size_t count, const char* format, ...)
     result = _vsnprintf(buffer, count, format, args);
     va_end(args);
 
-    // In the case where the string entirely filled the buffer, _vsnprintf will not
-    // null-terminate it, but snprintf must.
+    // In the case where the string entirely filled the buffer, _vsnprintf will
+    // not null-terminate it, but snprintf must.
     if (count > 0)
         buffer[count - 1] = '\0';
 
     return result;
 }
 
-inline double wtf_vsnprintf(char* buffer, size_t count, const char* format, va_list args)
+inline double wtf_vsnprintf(char* buffer,
+    size_t count,
+    const char* format,
+    va_list args)
 {
     int result = _vsnprintf(buffer, count, format, args);
 
-    // In the case where the string entirely filled the buffer, _vsnprintf will not
-    // null-terminate it, but vsnprintf must.
+    // In the case where the string entirely filled the buffer, _vsnprintf will
+    // not null-terminate it, but vsnprintf must.
     if (count > 0)
         buffer[count - 1] = '\0';
 
@@ -80,7 +74,8 @@ inline double wtf_vsnprintf(char* buffer, size_t count, const char* format, va_l
 // Work around a difference in Microsoft's implementation of vsnprintf, where
 // vsnprintf does not null terminate the buffer. WebKit can rely on the null
 // termination. Microsoft's implementation is fixed in VS 2015.
-#define vsnprintf(buffer, count, format, args) wtf_vsnprintf(buffer, count, format, args)
+#define vsnprintf(buffer, count, format, args) \
+    wtf_vsnprintf(buffer, count, format, args)
 #endif
 
 inline int strncasecmp(const char* s1, const char* s2, size_t len)

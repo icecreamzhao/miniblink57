@@ -16,60 +16,57 @@ public:
 
     size_t read(void* buffer, size_t size) override;
 
-    bool peek(void* buffer, size_t size) const override;
+    size_t peek(void* buffer, size_t size) const override;
 
     bool isAtEnd() const override;
 
     bool rewind() override;
 
-    bool hasPosition() const override { return true; }
-
-    size_t getPosition() const override { return fOffset; }
-
     bool hasLength() const override { return fHasLength; }
 
     size_t getLength() const override { return fLength; }
 
-    SkStreamRewindable* duplicate() const override { return NULL; }
+    SkStreamRewindable* duplicate() const override { return nullptr; }
 
 private:
     SkAutoTDelete<SkStream> fStream;
-    const bool              fHasLength;
-    const size_t            fLength;
+    const bool fHasLength;
+    const size_t fLength;
     // Current offset into the stream. Always >= 0.
-    size_t                  fOffset;
+    size_t fOffset;
     // Amount that has been buffered by calls to read. Will always be less than
     // fBufferSize.
-    size_t                  fBufferedSoFar;
+    size_t fBufferedSoFar;
     // Total size of the buffer.
-    const size_t            fBufferSize;
+    const size_t fBufferSize;
     // FIXME: SkAutoTMalloc throws on failure. Instead, Create should return a
-    // NULL stream.
-    SkAutoTMalloc<char>     fBuffer;
+    // nullptr stream.
+    SkAutoTMalloc<char> fBuffer;
 
     // Read up to size bytes from already buffered data, and copy to
-    // dst, if non-NULL. Updates fOffset. Assumes that fOffset is less
+    // dst, if non-nullptr. Updates fOffset. Assumes that fOffset is less
     // than fBufferedSoFar.
     size_t readFromBuffer(char* dst, size_t size);
 
     // Buffer up to size bytes from the stream, and copy to dst if non-
-    // NULL. Updates fOffset and fBufferedSoFar. Assumes that fOffset is
+    // nullptr. Updates fOffset and fBufferedSoFar. Assumes that fOffset is
     // less than fBufferedSoFar, and size is greater than 0.
     size_t bufferAndWriteTo(char* dst, size_t size);
 
     // Read up to size bytes directly from the stream and into dst if non-
-    // NULL. Updates fOffset. Assumes fOffset is at or beyond the buffered
+    // nullptr. Updates fOffset. Assumes fOffset is at or beyond the buffered
     // data, and size is greater than 0.
     size_t readDirectlyFromStream(char* dst, size_t size);
 
     typedef SkStream INHERITED;
 };
 
-SkStreamRewindable* SkFrontBufferedStream::Create(SkStream* stream, size_t bufferSize) {
-    if (NULL == stream) {
-        return NULL;
+SkStreamRewindable* SkFrontBufferedStream::Create(SkStream* stream, size_t bufferSize)
+{
+    if (nullptr == stream) {
+        return nullptr;
     }
-    return SkNEW_ARGS(FrontBufferedStream, (stream, bufferSize));
+    return new FrontBufferedStream(stream, bufferSize);
 }
 
 FrontBufferedStream::FrontBufferedStream(SkStream* stream, size_t bufferSize)
@@ -79,9 +76,12 @@ FrontBufferedStream::FrontBufferedStream(SkStream* stream, size_t bufferSize)
     , fOffset(0)
     , fBufferedSoFar(0)
     , fBufferSize(bufferSize)
-    , fBuffer(bufferSize) {}
+    , fBuffer(bufferSize)
+{
+}
 
-bool FrontBufferedStream::isAtEnd() const {
+bool FrontBufferedStream::isAtEnd() const
+{
     if (fOffset < fBufferedSoFar) {
         // Even if the underlying stream is at the end, this stream has been
         // rewound after buffering, so it is not at the end.
@@ -91,7 +91,8 @@ bool FrontBufferedStream::isAtEnd() const {
     return fStream->isAtEnd();
 }
 
-bool FrontBufferedStream::rewind() {
+bool FrontBufferedStream::rewind()
+{
     // Only allow a rewind if we have not exceeded the buffer.
     if (fOffset <= fBufferSize) {
         fOffset = 0;
@@ -100,13 +101,14 @@ bool FrontBufferedStream::rewind() {
     return false;
 }
 
-size_t FrontBufferedStream::readFromBuffer(char* dst, size_t size) {
+size_t FrontBufferedStream::readFromBuffer(char* dst, size_t size)
+{
     SkASSERT(fOffset < fBufferedSoFar);
     // Some data has already been copied to fBuffer. Read up to the
     // lesser of the size requested and the remainder of the buffered
     // data.
     const size_t bytesToCopy = SkTMin(size, fBufferedSoFar - fOffset);
-    if (dst != NULL) {
+    if (dst != nullptr) {
         memcpy(dst, fBuffer + fOffset, bytesToCopy);
     }
 
@@ -118,7 +120,8 @@ size_t FrontBufferedStream::readFromBuffer(char* dst, size_t size) {
     return bytesToCopy;
 }
 
-size_t FrontBufferedStream::bufferAndWriteTo(char* dst, size_t size) {
+size_t FrontBufferedStream::bufferAndWriteTo(char* dst, size_t size)
+{
     SkASSERT(size > 0);
     SkASSERT(fOffset >= fBufferedSoFar);
     SkASSERT(fBuffer);
@@ -133,14 +136,15 @@ size_t FrontBufferedStream::bufferAndWriteTo(char* dst, size_t size) {
     SkASSERT(fBufferedSoFar <= fBufferSize);
 
     // Copy the buffer to the destination buffer and update the amount read.
-    if (dst != NULL) {
+    if (dst != nullptr) {
         memcpy(dst, buffer, buffered);
     }
 
     return buffered;
 }
 
-size_t FrontBufferedStream::readDirectlyFromStream(char* dst, size_t size) {
+size_t FrontBufferedStream::readDirectlyFromStream(char* dst, size_t size)
+{
     SkASSERT(size > 0);
     // If we get here, we have buffered all that can be buffered.
     SkASSERT(fBufferSize == fBufferedSoFar && fOffset >= fBufferSize);
@@ -151,31 +155,36 @@ size_t FrontBufferedStream::readDirectlyFromStream(char* dst, size_t size) {
     // If we have read past the end of the buffer, rewinding is no longer
     // supported, so we can go ahead and free the memory.
     if (bytesReadDirectly > 0) {
-        sk_free(fBuffer.detach());
+        sk_free(fBuffer.release());
     }
 
     return bytesReadDirectly;
 }
 
-bool FrontBufferedStream::peek(void* dst, size_t size) const {
+size_t FrontBufferedStream::peek(void* dst, size_t size) const
+{
     // Keep track of the offset so we can return to it.
     const size_t start = fOffset;
-    if (start + size > fBufferSize) {
-        // This stream is not able to buffer enough.
-        return false;
+
+    if (start >= fBufferSize) {
+        // This stream is not able to buffer.
+        return 0;
     }
+
+    size = SkTMin(size, fBufferSize - start);
     FrontBufferedStream* nonConstThis = const_cast<FrontBufferedStream*>(this);
-    SkDEBUGCODE(const size_t bytesRead =) nonConstThis->read(dst, size);
-    SkASSERT(bytesRead == size);
+    const size_t bytesRead = nonConstThis->read(dst, size);
     nonConstThis->fOffset = start;
-    return true;
+    return bytesRead;
 }
 
-size_t FrontBufferedStream::read(void* voidDst, size_t size) {
+size_t FrontBufferedStream::read(void* voidDst, size_t size)
+{
     // Cast voidDst to a char* for easy addition.
     char* dst = reinterpret_cast<char*>(voidDst);
     SkDEBUGCODE(const size_t totalSize = size;)
-    const size_t start = fOffset;
+        const size_t start
+        = fOffset;
 
     // First, read any data that was previously buffered.
     if (fOffset < fBufferedSoFar) {
@@ -185,7 +194,7 @@ size_t FrontBufferedStream::read(void* voidDst, size_t size) {
         // and the destination buffer.
         size -= bytesCopied;
         SkASSERT(size + (fOffset - start) == totalSize);
-        if (dst != NULL) {
+        if (dst != nullptr) {
             dst += bytesCopied;
         }
     }
@@ -199,7 +208,7 @@ size_t FrontBufferedStream::read(void* voidDst, size_t size) {
         // and the destination buffer.
         size -= buffered;
         SkASSERT(size + (fOffset - start) == totalSize);
-        if (dst != NULL) {
+        if (dst != nullptr) {
             dst += buffered;
         }
     }
@@ -207,7 +216,7 @@ size_t FrontBufferedStream::read(void* voidDst, size_t size) {
     if (size > 0 && !fStream->isAtEnd()) {
         SkDEBUGCODE(const size_t bytesReadDirectly =) this->readDirectlyFromStream(dst, size);
         SkDEBUGCODE(size -= bytesReadDirectly;)
-        SkASSERT(size + (fOffset - start) == totalSize);
+            SkASSERT(size + (fOffset - start) == totalSize);
     }
 
     return fOffset - start;

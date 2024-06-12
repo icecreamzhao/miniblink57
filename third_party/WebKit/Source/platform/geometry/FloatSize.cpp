@@ -24,12 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/FloatSize.h"
 
-#include "platform/FloatConversion.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/geometry/LayoutSize.h"
+#include "wtf/MathExtras.h"
+#include "wtf/text/WTFString.h"
 #include <limits>
 #include <math.h>
 
@@ -58,7 +58,12 @@ bool FloatSize::isExpressibleAsIntSize() const
 
 FloatSize FloatSize::narrowPrecision(double width, double height)
 {
-    return FloatSize(narrowPrecisionToFloat(width), narrowPrecisionToFloat(height));
+    return FloatSize(clampTo<float>(width), clampTo<float>(height));
 }
 
+String FloatSize::toString() const
+{
+    return String::format("%lgx%lg", width(), height());
 }
+
+} // namespace blink

@@ -5,22 +5,26 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkAnimTimer.h"
 #include "SkCanvas.h"
 #include "SkPathMeasure.h"
 #include "SkRandom.h"
+#include "gm.h"
 
 class AddArcGM : public skiagm::GM {
 public:
-    AddArcGM() : fRotate(0) {}
+    AddArcGM()
+        : fRotate(0)
+    {
+    }
 
 protected:
     SkString onShortName() override { return SkString("addarc"); }
 
     SkISize onISize() override { return SkISize::Make(1040, 1040); }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(20, 20);
 
         SkRect r = SkRect::MakeWH(1000, 1000);
@@ -36,7 +40,7 @@ protected:
 
         SkScalar sign = 1;
         while (r.width() > paint.getStrokeWidth() * 3) {
-            paint.setColor(rand.nextU() | (0xFF << 24));
+            paint.setColor(sk_tool_utils::color_to_565(rand.nextU() | (0xFF << 24)));
             SkScalar startAngle = rand.nextUScalar1() * 360;
 
             SkScalar speed = SkScalarSqrt(16 / r.width()) * 0.5f;
@@ -51,7 +55,8 @@ protected:
         }
     }
 
-    bool onAnimate(const SkAnimTimer& timer) override {
+    bool onAnimate(const SkAnimTimer& timer) override
+    {
         fRotate = timer.scaled(1, 360);
         return true;
     }
@@ -60,22 +65,23 @@ private:
     SkScalar fRotate;
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return new AddArcGM; )
+DEF_GM(return new AddArcGM;)
 
 ///////////////////////////////////////////////////
 
-#define R   400
+#define R 400
 
 class AddArcMeasGM : public skiagm::GM {
 public:
-    AddArcMeasGM() {}
+    AddArcMeasGM() { }
 
 protected:
     SkString onShortName() override { return SkString("addarc_meas"); }
 
-    SkISize onISize() override { return SkISize::Make(2*R + 40, 2*R + 40); }
+    SkISize onISize() override { return SkISize::Make(2 * R + 40, 2 * R + 40); }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(R + 20, R + 20);
 
         SkPaint paint;
@@ -101,7 +107,7 @@ protected:
             SkPathMeasure meas(path, false);
             SkScalar arcLen = rad * R;
             SkPoint pos;
-            if (meas.getPosTan(arcLen, &pos, NULL)) {
+            if (meas.getPosTan(arcLen, &pos, nullptr)) {
                 canvas->drawLine(0, 0, pos.x(), pos.y(), measPaint);
             }
         }
@@ -110,7 +116,7 @@ protected:
 private:
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return new AddArcMeasGM; )
+DEF_GM(return new AddArcMeasGM;)
 
 ///////////////////////////////////////////////////
 
@@ -119,14 +125,18 @@ DEF_GM( return new AddArcMeasGM; )
 //
 class StrokeCircleGM : public skiagm::GM {
 public:
-    StrokeCircleGM() : fRotate(0) {}
-    
+    StrokeCircleGM()
+        : fRotate(0)
+    {
+    }
+
 protected:
     SkString onShortName() override { return SkString("strokecircle"); }
-    
+
     SkISize onISize() override { return SkISize::Make(520, 520); }
-    
-    void onDraw(SkCanvas* canvas) override {
+
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->scale(20, 20);
         canvas->translate(13, 13);
 
@@ -144,14 +154,15 @@ protected:
             SkAutoCanvasRestore acr(canvas, true);
             canvas->rotate(fRotate * sign);
 
-            paint.setColor(rand.nextU() | (0xFF << 24));
+            paint.setColor(sk_tool_utils::color_to_565(rand.nextU() | (0xFF << 24)));
             canvas->drawOval(r, paint);
             r.inset(delta, delta);
             sign = -sign;
         }
     }
 
-    bool onAnimate(const SkAnimTimer& timer) override {
+    bool onAnimate(const SkAnimTimer& timer) override
+    {
         fRotate = timer.scaled(60, 360);
         return true;
     }
@@ -161,12 +172,13 @@ private:
 
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return new StrokeCircleGM; )
+DEF_GM(return new StrokeCircleGM;)
 
 //////////////////////
 
 static void html_canvas_arc(SkPath* path, SkScalar x, SkScalar y, SkScalar r, SkScalar start,
-                            SkScalar end, bool ccw) {
+    SkScalar end, bool ccw)
+{
     SkRect bounds = { x - r, y - r, x + r, y + r };
     SkScalar sweep = ccw ? end - start : start - end;
     path->arcTo(bounds, start, sweep, false);
@@ -175,14 +187,15 @@ static void html_canvas_arc(SkPath* path, SkScalar x, SkScalar y, SkScalar r, Sk
 // Lifted from canvas-arc-circumference-fill-diffs.html
 class ManyArcsGM : public skiagm::GM {
 public:
-    ManyArcsGM() {}
-    
+    ManyArcsGM() { }
+
 protected:
     SkString onShortName() override { return SkString("manyarcs"); }
-    
+
     SkISize onISize() override { return SkISize::Make(620, 330); }
-    
-    void onDraw(SkCanvas* canvas) override {
+
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -191,18 +204,18 @@ protected:
 
         // 20 angles.
         SkScalar sweepAngles[] = {
-                           -123.7f, -2.3f, -2, -1, -0.3f, -0.000001f, 0, 0.000001f, 0.3f, 0.7f,
-                           1, 1.3f, 1.5f, 1.7f, 1.99999f, 2, 2.00001f, 2.3f, 4.3f, 3934723942837.3f
+            -123.7f, -2.3f, -2, -1, -0.3f, -0.000001f, 0, 0.000001f, 0.3f, 0.7f,
+            1, 1.3f, 1.5f, 1.7f, 1.99999f, 2, 2.00001f, 2.3f, 4.3f, 3934723942837.3f
         };
         for (size_t i = 0; i < SK_ARRAY_COUNT(sweepAngles); ++i) {
             sweepAngles[i] *= 180;
         }
-        
+
         SkScalar startAngles[] = { -1, -0.5f, 0, 0.5f };
         for (size_t i = 0; i < SK_ARRAY_COUNT(startAngles); ++i) {
             startAngles[i] *= 180;
         }
-        
+
         bool anticlockwise = false;
         SkScalar sign = 1;
         for (size_t i = 0; i < SK_ARRAY_COUNT(startAngles) * 2; ++i) {
@@ -216,7 +229,7 @@ protected:
                 SkPath path;
                 path.moveTo(0, 2);
                 html_canvas_arc(&path, 18, 15, 10, startAngle, startAngle + (sweepAngles[j] * sign),
-                                anticlockwise);
+                    anticlockwise);
                 path.lineTo(0, 28);
                 canvas->drawPath(path, paint);
                 canvas->translate(30, 0);
@@ -225,9 +238,8 @@ protected:
             canvas->translate(0, 40);
         }
     }
-    
+
 private:
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return new ManyArcsGM; )
-
+DEF_GM(return new ManyArcsGM;)

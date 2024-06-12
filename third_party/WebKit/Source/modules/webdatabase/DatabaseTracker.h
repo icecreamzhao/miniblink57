@@ -32,57 +32,72 @@
 #include "modules/ModulesExport.h"
 #include "modules/webdatabase/DatabaseError.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Functional.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
 class Database;
 class DatabaseContext;
+class Page;
 class SecurityOrigin;
 
 class MODULES_EXPORT DatabaseTracker {
-    WTF_MAKE_NONCOPYABLE(DatabaseTracker); WTF_MAKE_FAST_ALLOCATED(DatabaseTracker);
+    WTF_MAKE_NONCOPYABLE(DatabaseTracker);
+    USING_FAST_MALLOC(DatabaseTracker);
+
 public:
     static DatabaseTracker& tracker();
-    // This singleton will potentially be used from multiple worker threads and the page's context thread simultaneously.  To keep this safe, it's
-    // currently using 4 locks.  In order to avoid deadlock when taking multiple locks, you must take them in the correct order:
+    // This singleton will potentially be used from multiple worker threads and
+    // the page's context thread simultaneously.  To keep this safe, it's
+    // currently using 4 locks.  In order to avoid deadlock when taking multiple
+    // locks, you must take them in the correct order:
     // m_databaseGuard before quotaManager if both locks are needed.
     // m_openDatabaseMapGuard before quotaManager if both locks are needed.
     // m_databaseGuard and m_openDatabaseMapGuard currently don't overlap.
     // notificationMutex() is currently independent of the other locks.
 
-    bool canEstablishDatabase(DatabaseContext*, const String& name, const String& displayName, unsigned long estimatedSize, DatabaseError&);
-    String fullPathForDatabase(SecurityOrigin*, const String& name, bool createIfDoesNotExist = true);
+    bool canEstablishDatabase(DatabaseContext*,
+        const String& name,
+        const String& displayName,
+        unsigned estimatedSize,
+        DatabaseError&);
+    String fullPathForDatabase(SecurityOrigin*,
+        const String& name,
+        bool createIfDoesNotExist = true);
 
     void addOpenDatabase(Database*);
     void removeOpenDatabase(Database*);
 
     unsigned long long getMaxSizeForDatabase(const Database*);
 
-    void closeDatabasesImmediately(const String& originIdentifier, const String& name);
+    void closeDatabasesImmediately(SecurityOrigin*, const String& name);
+
+    using DatabaseCallback = Function<void(Database*)>;
+    void forEachOpenDatabaseInPage(Page*, std::unique_ptr<DatabaseCallback>);
 
     void prepareToOpenDatabase(Database*);
     void failedToOpenDatabase(Database*);
 
 private:
-    typedef HashSet<Database*> DatabaseSet;
-    typedef HashMap<String, DatabaseSet*> DatabaseNameMap;
-    typedef HashMap<String, DatabaseNameMap*> DatabaseOriginMap;
-    class CloseOneDatabaseImmediatelyTask;
+    using DatabaseSet = HashSet<CrossThreadPersistent<Database>>;
+    using DatabaseNameMap = HashMap<String, DatabaseSet*>;
+    using DatabaseOriginMap = HashMap<String, DatabaseNameMap*>;
 
     DatabaseTracker();
 
-    void closeOneDatabaseImmediately(const String& originIdentifier, const String& name, Database*);
+    void closeOneDatabaseImmediately(const String& originIdentifier,
+        const String& name,
+        Database*);
 
     Mutex m_openDatabaseMapGuard;
-    // This map contains raw pointers to a garbage-collected class. We can't
-    // make this traceable because it is updated by multiple database threads.
-    GC_PLUGIN_IGNORE("crbug.com/417990")
-    mutable OwnPtr<DatabaseOriginMap> m_openDatabaseMap;
+
+    mutable std::unique_ptr<DatabaseOriginMap> m_openDatabaseMap;
 };
 
 } // namespace blink

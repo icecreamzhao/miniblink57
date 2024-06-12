@@ -22,7 +22,6 @@
  *
  */
 
-#include "config.h"
 #include "core/html/HTMLLegendElement.h"
 
 #include "core/HTMLNames.h"
@@ -33,7 +32,6 @@
 namespace blink {
 
 using namespace HTMLNames;
-
 
 inline HTMLLegendElement::HTMLLegendElement(Document& document)
     : HTMLElement(legendTag, document)
@@ -54,14 +52,18 @@ HTMLFormControlElement* HTMLLegendElement::associatedControl()
     return Traversal<HTMLFormControlElement>::next(*fieldset, fieldset);
 }
 
-void HTMLLegendElement::focus(bool, WebFocusType type)
+void HTMLLegendElement::focus(const FocusParams& params)
 {
-    if (isFocusable())
-        Element::focus(true, type);
+    document().updateStyleAndLayoutTreeForNode(this);
+    if (isFocusable()) {
+        Element::focus(params);
+        return;
+    }
 
     // To match other browsers' behavior, never restore previous selection.
     if (HTMLFormControlElement* control = associatedControl())
-        control->focus(false, type);
+        control->focus(FocusParams(SelectionBehaviorOnFocus::Reset, params.type,
+            params.sourceCapabilities));
 }
 
 void HTMLLegendElement::accessKeyAction(bool sendMouseEvents)
@@ -82,4 +84,4 @@ HTMLFormElement* HTMLLegendElement::form() const
     return toHTMLFieldSetElement(fieldset)->formOwner();
 }
 
-} // namespace
+} // namespace blink

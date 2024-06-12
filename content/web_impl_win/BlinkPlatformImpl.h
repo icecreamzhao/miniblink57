@@ -1,16 +1,19 @@
 #include "base/compiler_specific.h"
 #include "third_party/WebKit/public/platform/Platform.h"
+#include "net/StorageDef.h"
 
 namespace WTF {
 class Mutex;
+class RecursiveMutex;
 }
 
 namespace blink {
 template <typename T> class Timer;
+class TimerBase;
 class WebThreadSupportingGC;
 }
 
-namespace cc_blink {
+namespace mc_blink {
 class WebCompositorSupportImpl;
 }
 
@@ -31,12 +34,15 @@ public:
     void shutdown();
     void preShutdown();
 
-    static void initialize();
+    static void initialize(bool ocEnable);
 
     void setGcTimer(double intervalSec);
     void setResGcTimer(double intervalSec);
+
+    float getZoom() const { return m_zoom; }
+    void setZoom(float f) { m_zoom = f; }
    
-    virtual void cryptographicallyRandomValues(unsigned char* buffer, size_t length) override;
+    /*virtual*/ void cryptographicallyRandomValues(unsigned char* buffer, size_t length) /*override*/;
 
     // Threads -------------------------------------------------------
 
@@ -49,23 +55,25 @@ public:
     virtual blink::WebThread* currentThread() override;
     static void onCurrentThreadWhenWebThreadImplCreated(blink::WebThread* thread);    
 
-    virtual const unsigned char* getTraceCategoryEnabledFlag(const char* categoryName) override;
+    /*virtual*/ const unsigned char* getTraceCategoryEnabledFlag(const char* categoryName) /*override*/;
 
     // System --------------------------------------------------------------
     virtual blink::WebString defaultLocale() override;
-    virtual double currentTime() override;
-    virtual double monotonicallyIncreasingTime() override;
-    virtual double systemTraceTime() override;
+    /*virtual*/ double currentTime() /*override*/;
+    /*virtual*/ double monotonicallyIncreasingTime() /*override*/;
+    /*virtual*/ double systemTraceTime() /*override*/;
 
     virtual blink::WebString userAgent() override;
     static const char* getUserAgent();
     void setUserAgent(const char* ua);
 
+    blink::WebData parseDataURL(const  blink::WebURL&, blink::WebString& mimetype, blink::WebString& charset) /*override*/;
+
     virtual blink::WebData loadResource(const char* name) override;
 
     virtual blink::WebThemeEngine* themeEngine() override;
 
-    virtual blink::WebMimeRegistry* mimeRegistry() override;
+    //virtual blink::WebMimeRegistry* mimeRegistry() override;
 
     virtual blink::WebCompositorSupport* compositorSupport() override;
 
@@ -87,8 +95,9 @@ public:
 
     // DOM Storage --------------------------------------------------
     virtual blink::WebStorageNamespace* createLocalStorageNamespace() override;
-    blink::WebStorageNamespace* createSessionStorageNamespace();
-    virtual bool portAllowed(const blink::WebURL&) const override;
+    //blink::WebStorageNamespace* createSessionStorageNamespace();
+    int64 genStorageNamespaceId();
+    /*virtual*/ bool portAllowed(const blink::WebURL&) const /*override*/;
 
     // Resources -----------------------------------------------------------
     virtual blink::WebString queryLocalizedString(blink::WebLocalizedString::Name) override;
@@ -96,19 +105,19 @@ public:
     virtual blink::WebString queryLocalizedString(blink::WebLocalizedString::Name, const blink::WebString& parameter1, const blink::WebString& parameter2) override;
 
     // WaitableEvent------------------------------------------------------ -
-    virtual blink::WebWaitableEvent* createWaitableEvent(blink::WebWaitableEvent::ResetPolicy, blink::WebWaitableEvent::InitialState) override;
-    virtual blink::WebWaitableEvent* waitMultipleEvents(const blink::WebVector<blink::WebWaitableEvent*>& events) override;
+//     virtual blink::WebWaitableEvent* createWaitableEvent(blink::WebWaitableEvent::ResetPolicy, blink::WebWaitableEvent::InitialState) override;
+//     virtual blink::WebWaitableEvent* waitMultipleEvents(const blink::WebVector<blink::WebWaitableEvent*>& events) override;
 
     // Blob ----------------------------------------------------------------
 
     // Must return non-null.
-    virtual blink::WebBlobRegistry* blobRegistry() override;
+    virtual blink::WebBlobRegistry* getBlobRegistry() override;
 
     // clipboard -----------------------------------------------------------
     virtual blink::WebClipboard* clipboard() override;
 
     // Plugin --------------------------------------------------------------
-    void getPluginList(bool refresh, blink::WebPluginListBuilder* builder) override;
+    void getPluginList(bool refresh, const blink::WebSecurityOrigin& mainFrameOrigin, blink::WebPluginListBuilder* builder) override;
 
     // fileUtilities -------------------------------------------------------
     virtual blink::WebFileUtilities* fileUtilities() override;
@@ -118,12 +127,28 @@ public:
     virtual blink::WebCrypto* crypto() override;
 
     //////////////////////////////////////////////////////////////////////////
-    virtual void registerMemoryDumpProvider(blink::WebMemoryDumpProvider*) override;
-    virtual void unregisterMemoryDumpProvider(blink::WebMemoryDumpProvider*) override;
+//     virtual void registerMemoryDumpProvider(blink::WebMemoryDumpProvider*) override;
+//     virtual void unregisterMemoryDumpProvider(blink::WebMemoryDumpProvider*) override;
+
+    // Platform events -----------------------------------------------------
+    virtual blink::WebString domCodeStringFromEnum(int domCode) override;
+    virtual blink::WebString domKeyStringFromEnum(int domKey) override;
+
+    // GPU ----------------------------------------------------------------
+//     virtual blink::WebGraphicsContext3D* createOffscreenGraphicsContext3D(const blink::WebGraphicsContext3D::Attributes&, blink::WebGraphicsContext3D* shareContext) override;
+//     virtual blink::WebGraphicsContext3D* createOffscreenGraphicsContext3D(const blink::WebGraphicsContext3D::Attributes&, blink::WebGraphicsContext3D* shareContext, blink::WebGLInfo* glInfo) override;
+//     virtual blink::WebGraphicsContext3D* createOffscreenGraphicsContext3D(const blink::WebGraphicsContext3D::Attributes&) override;
+
+    virtual blink::WebGraphicsContext3DProvider* createSharedOffscreenGraphicsContext3DProvider() override;
+    /*virtual*/ bool canAccelerate2dCanvas() /*override*/;
+    virtual bool isThreadedCompositingEnabled() override;
+    virtual blink::WebFlingAnimator* createFlingAnimator() override;
+    virtual blink::WebGestureCurve* createFlingAnimationCurve(blink::WebGestureDevice deviceSource, const blink::WebFloatPoint& velocity, const blink::WebSize& cumulativeScroll) override;
 
     //////////////////////////////////////////////////////////////////////////
-    blink::WebThread* tryGetIoThread() const;
-    blink::WebThread* ioThread();
+    //blink::WebThread* tryGetIoThread() const;
+    WTF::Vector<blink::WebThread*> getIoThreads();
+    blink::WebThread* createIoThread(const char* threadName);
     void doGarbageCollected();
 
     //////////////////////////////////////////////////////////////////////////
@@ -140,10 +165,12 @@ public:
 private:
     void destroyWebInfo();
     void closeThread();
-    void resourceGarbageCollectedTimer(blink::Timer<BlinkPlatformImpl>*);
-    void garbageCollectedTimer(blink::Timer<BlinkPlatformImpl>*);
-    void perfTimer(blink::Timer<BlinkPlatformImpl>*);
+    void resourceGarbageCollectedTimer(blink::TimerBase*);
+    void garbageCollectedTimer(blink::TimerBase*);
+    void perfTimer(blink::TimerBase*);
     bool m_isDisableGC;
+
+    float m_zoom;
 
     CRITICAL_SECTION* m_lock;
     static const int m_maxThreadNum = 1000;
@@ -155,7 +182,9 @@ private:
     blink::Timer<BlinkPlatformImpl>* m_perfTimer;
     blink::Timer<BlinkPlatformImpl>* m_resTimer; // 资源单独一个定时器
 
-    WTF::OwnPtr<blink::WebThreadSupportingGC> m_ioThread;
+    //WTF::OwnPtr<blink::WebThreadSupportingGC> m_ioThread;
+    std::vector<blink::WebThreadSupportingGC*> m_ioThreads;
+    //blink::WebThreadSupportingGC* m_ioThread;
 
     ThreadIdentifier m_mainThreadId;
     blink::WebThemeEngine* m_webThemeEngine;
@@ -164,10 +193,14 @@ private:
     WebBlobRegistryImpl* m_blobRegistryImpl;
     WebFileUtilitiesImpl* m_webFileUtilitiesImpl;
     WebCryptoImpl* m_webCryptoImpl;
-    cc_blink::WebCompositorSupportImpl* m_webCompositorSupport;
+    blink::WebCompositorSupport* m_mcCompositorSupport;
+    blink::WebCompositorSupport* m_ccCompositorSupport;
+
     blink::WebScrollbarBehavior* m_webScrollbarBehavior;
-    DOMStorageMapWrap* m_localStorageStorageMap;
-    DOMStorageMapWrap* m_sessionStorageStorageMap;
+#ifdef MINIBLINK_NO_PAGE_LOCALSTORAGE
+    DOMStorageMap* m_localStorageStorageMap;
+#endif
+//  DOMStorageMap* m_sessionStorageStorageMap;
     int64 m_storageNamespaceIdCount;
     double m_firstMonotonicallyIncreasingTime;
 

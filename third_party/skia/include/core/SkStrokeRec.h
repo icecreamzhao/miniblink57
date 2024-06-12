@@ -12,6 +12,7 @@
 
 class SkPath;
 
+SK_BEGIN_REQUIRE_DENSE
 class SkStrokeRec {
 public:
     enum InitStyle {
@@ -35,14 +36,16 @@ public:
     Style getStyle() const;
     SkScalar getWidth() const { return fWidth; }
     SkScalar getMiter() const { return fMiterLimit; }
-    SkPaint::Cap getCap() const { return fCap; }
-    SkPaint::Join getJoin() const { return fJoin; }
+    SkPaint::Cap getCap() const { return (SkPaint::Cap)fCap; }
+    SkPaint::Join getJoin() const { return (SkPaint::Join)fJoin; }
 
-    bool isHairlineStyle() const {
+    bool isHairlineStyle() const
+    {
         return kHairline_Style == this->getStyle();
     }
 
-    bool isFillStyle() const {
+    bool isFillStyle() const
+    {
         return kFill_Style == this->getStyle();
     }
 
@@ -56,13 +59,20 @@ public:
      */
     void setStrokeStyle(SkScalar width, bool strokeAndFill = false);
 
-    void setStrokeParams(SkPaint::Cap cap, SkPaint::Join join, SkScalar miterLimit) {
+    void setStrokeParams(SkPaint::Cap cap, SkPaint::Join join, SkScalar miterLimit)
+    {
         fCap = cap;
         fJoin = join;
         fMiterLimit = miterLimit;
     }
 
-    void setResScale(SkScalar rs) {
+    SkScalar getResScale() const
+    {
+        return fResScale;
+    }
+
+    void setResScale(SkScalar rs)
+    {
         SkASSERT(rs > 0 && SkScalarIsFinite(rs));
         fResScale = rs;
     }
@@ -71,7 +81,8 @@ public:
      *  Returns true if this specifes any thick stroking, i.e. applyToPath()
      *  will return true.
      */
-    bool needToApply() const {
+    bool needToApply() const
+    {
         Style style = this->getStyle();
         return (kStroke_Style == style) || (kStrokeAndFill_Style == style);
     }
@@ -94,30 +105,50 @@ public:
     void applyToPaint(SkPaint* paint) const;
 
     /**
+     * Gives a conservative value for the outset that should applied to a
+     * geometries bounds to account for any inflation due to applying this
+     * strokeRec to the geometry.
+     */
+    SkScalar getInflationRadius() const;
+
+    /**
+     * Equivalent to:
+     *   SkStrokeRec rec(paint, style);
+     *   rec.getInflationRadius();
+     * This does not account for other effects on the paint (i.e. path
+     * effect).
+     */
+    static SkScalar GetInflationRadius(const SkPaint&, SkPaint::Style);
+
+    /**
      * Compare if two SkStrokeRecs have an equal effect on a path.
      * Equal SkStrokeRecs produce equal paths. Equality of produced
      * paths does not take the ResScale parameter into account.
      */
-    bool hasEqualEffect(const SkStrokeRec& other) const {
+    bool hasEqualEffect(const SkStrokeRec& other) const
+    {
         if (!this->needToApply()) {
             return this->getStyle() == other.getStyle();
         }
-        return fWidth == other.fWidth &&
-               fMiterLimit == other.fMiterLimit &&
-               fCap == other.fCap &&
-               fJoin == other.fJoin &&
-               fStrokeAndFill == other.fStrokeAndFill;
+        return fWidth == other.fWidth && fMiterLimit == other.fMiterLimit && fCap == other.fCap && fJoin == other.fJoin && fStrokeAndFill == other.fStrokeAndFill;
     }
 
 private:
     void init(const SkPaint&, SkPaint::Style, SkScalar resScale);
 
-    SkScalar        fResScale;
-    SkScalar        fWidth;
-    SkScalar        fMiterLimit;
-    SkPaint::Cap    fCap;
-    SkPaint::Join   fJoin;
-    bool            fStrokeAndFill;
+    SkScalar fResScale;
+    SkScalar fWidth;
+    SkScalar fMiterLimit;
+    // The following three members are packed together into a single u32.
+    // This is to avoid unnecessary padding and ensure binary equality for
+    // hashing (because the padded areas might contain garbage values).
+    //
+    // fCap and fJoin are larger than needed to avoid having to initialize
+    // any pad values
+    uint32_t fCap : 16; // SkPaint::Cap
+    uint32_t fJoin : 15; // SkPaint::Join
+    uint32_t fStrokeAndFill : 1; // bool
 };
+SK_END_REQUIRE_DENSE
 
 #endif

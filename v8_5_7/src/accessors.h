@@ -59,25 +59,25 @@ class Accessors : public AllStatic {
  public:
   // Accessor descriptors.
 #define ACCESSOR_INFO_DECLARATION(name)                   \
-  static void name##Getter(                               \
+  static void V8CALL name##Getter(                        \
       v8::Local<v8::Name> name,                           \
       const v8::PropertyCallbackInfo<v8::Value>& info);   \
-  static Handle<AccessorInfo> name##Info(                 \
+  static Handle<AccessorInfo> V8CALL name##Info(          \
       Isolate* isolate,                                   \
       PropertyAttributes attributes);
   ACCESSOR_INFO_LIST(ACCESSOR_INFO_DECLARATION)
 #undef ACCESSOR_INFO_DECLARATION
 
 #define ACCESSOR_SETTER_DECLARATION(name)                                \
-  static void name(v8::Local<v8::Name> name, v8::Local<v8::Value> value, \
+  static void V8CALL name(v8::Local<v8::Name> name, v8::Local<v8::Value> value, \
                    const v8::PropertyCallbackInfo<v8::Boolean>& info);
   ACCESSOR_SETTER_LIST(ACCESSOR_SETTER_DECLARATION)
 #undef ACCESSOR_SETTER_DECLARATION
 
-  static void ModuleNamespaceEntryGetter(
+  static void V8CALL ModuleNamespaceEntryGetter(
       v8::Local<v8::Name> name,
       const v8::PropertyCallbackInfo<v8::Value>& info);
-  static Handle<AccessorInfo> ModuleNamespaceEntryInfo(
+  static Handle<AccessorInfo> V8CALL ModuleNamespaceEntryInfo(
       Isolate* isolate, Handle<String> name, PropertyAttributes attributes);
 
   enum DescriptorId {
@@ -107,11 +107,11 @@ class Accessors : public AllStatic {
   // conventions as many of the internal methods in objects.cc:
   // - The return value is unset iff there was an exception.
   // - If the ShouldThrow argument is true, the return value must not be false.
-  typedef void (*AccessorNameBooleanSetterCallback)(
+  typedef void (V8CALL*AccessorNameBooleanSetterCallback)(
       Local<v8::Name> property, Local<v8::Value> value,
       const PropertyCallbackInfo<v8::Boolean>& info);
 
-  static Handle<AccessorInfo> MakeAccessor(
+  static Handle<AccessorInfo> V8CALL MakeAccessor(
       Isolate* isolate, Handle<Name> name, AccessorNameGetterCallback getter,
       AccessorNameBooleanSetterCallback setter, PropertyAttributes attributes);
 };

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/platform/WebContentDecryptionModuleResult.h"
 
 #include "platform/ContentDecryptionModuleResult.h"
@@ -15,25 +14,31 @@ void WebContentDecryptionModuleResult::complete()
     reset();
 }
 
-void WebContentDecryptionModuleResult::completeWithContentDecryptionModule(WebContentDecryptionModule* cdm)
+void WebContentDecryptionModuleResult::completeWithContentDecryptionModule(
+    WebContentDecryptionModule* cdm)
 {
     m_impl->completeWithContentDecryptionModule(cdm);
     reset();
 }
 
-void WebContentDecryptionModuleResult::completeWithSession(SessionStatus status)
+void WebContentDecryptionModuleResult::completeWithSession(
+    SessionStatus status)
 {
     m_impl->completeWithSession(status);
     reset();
 }
 
-void WebContentDecryptionModuleResult::completeWithError(WebContentDecryptionModuleException exception, unsigned long systemCode, const WebString& errorMessage)
+void WebContentDecryptionModuleResult::completeWithError(
+    WebContentDecryptionModuleException exception,
+    unsigned long systemCode,
+    const WebString& errorMessage)
 {
     m_impl->completeWithError(exception, systemCode, errorMessage);
     reset();
 }
 
-WebContentDecryptionModuleResult::WebContentDecryptionModuleResult(ContentDecryptionModuleResult* impl)
+WebContentDecryptionModuleResult::WebContentDecryptionModuleResult(
+    ContentDecryptionModuleResult* impl)
     : m_impl(impl)
 {
     ASSERT(m_impl.get());
@@ -44,7 +49,8 @@ void WebContentDecryptionModuleResult::reset()
     m_impl.reset();
 }
 
-void WebContentDecryptionModuleResult::assign(const WebContentDecryptionModuleResult& o)
+void WebContentDecryptionModuleResult::assign(
+    const WebContentDecryptionModuleResult& o)
 {
     m_impl = o.m_impl;
 }

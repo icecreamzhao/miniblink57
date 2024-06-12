@@ -5,29 +5,86 @@
 #ifndef StaticBitmapImage_h
 #define StaticBitmapImage_h
 
+#include "gpu/command_buffer/common/mailbox.h"
+#include "gpu/command_buffer/common/sync_token.h"
 #include "platform/graphics/Image.h"
+#include "third_party/khronos/GLES2/gl2.h"
+#include "third_party/skia/include/core/SkRefCnt.h"
 
 namespace blink {
 
+class WebGraphicsContext3DProvider;
+
 class PLATFORM_EXPORT StaticBitmapImage : public Image {
 public:
-    ~StaticBitmapImage() override;
+    static PassRefPtr<StaticBitmapImage> create(sk_sp<SkImage>);
 
-    bool isImmutableBitmap() override { return true; }
+    // Methods overrided by all sub-classes
+    virtual ~StaticBitmapImage() { }
+    bool currentFrameKnownToBeOpaque(MetadataMode = UseCurrentMetadata) = 0;
+    sk_sp<SkImage> imageForCurrentFrame(const ColorBehavior&) = 0;
+    void draw(SkCanvas*,
+        const SkPaint&,
+        const FloatRect& dstRect,
+        const FloatRect& srcRect,
+        RespectImageOrientationEnum,
+        ImageClampingMode,
+        const ColorBehavior&)
+        = 0;
 
-    static PassRefPtr<Image> create(PassRefPtr<SkImage>);
-    virtual void destroyDecodedData(bool destroyAll) { }
-    virtual bool currentFrameKnownToBeOpaque();
-    virtual IntSize size() const;
-    void draw(SkCanvas*, const SkPaint&, const FloatRect& dstRect, const FloatRect& srcRect, RespectImageOrientationEnum, ImageClampingMode) override;
+    // Methods have common implementation for all sub-classes
+    bool currentFrameIsComplete() override { return true; }
+    void destroyDecodedData() { }
 
+    // Methods that have a default implementation, and overrided by only one
+    // sub-class
+    virtual bool hasMailbox() { return false; }
 
-    PassRefPtr<SkImage> skImage() override { return m_image; }
+    virtual void transfer() { }
+
+    // Methods overrided by AcceleratedStaticBitmapImage only
+    virtual void copyToTexture(WebGraphicsContext3DProvider*,
+        GLuint,
+        GLenum,
+        GLenum,
+        bool)
+    {
+        NOTREACHED();
+    }
+    virtual void ensureMailbox() { NOTREACHED(); }
+    virtual gpu::Mailbox mailbox()
+    {
+        NOTREACHED();
+        return gpu::Mailbox();
+    }
+    virtual gpu::SyncToken syncToken()
+    {
+        NOTREACHED();
+        return gpu::SyncToken();
+    }
+    virtual void updateSyncToken(gpu::SyncToken) { NOTREACHED(); }
+
+    // Methods have exactly the same implementation for all sub-classes
+    bool originClean() const { return m_isOriginClean; }
+    void setOriginClean(bool flag) { m_isOriginClean = flag; }
+    bool isPremultiplied() const { return m_isPremultiplied; }
+    void setPremultiplied(bool flag) { m_isPremultiplied = flag; }
 
 protected:
-    StaticBitmapImage(PassRefPtr<SkImage>);
+    // Helper for sub-classes
+    void drawHelper(SkCanvas*,
+        const SkPaint&,
+        const FloatRect&,
+        const FloatRect&,
+        ImageClampingMode,
+        sk_sp<SkImage>);
 
-    RefPtr<SkImage> m_image;
+    // These two properties are here because the SkImage API doesn't expose the
+    // info. They applied to both UnacceleratedStaticBitmapImage and
+    // AcceleratedStaticBitmapImage. To change these two properties, the call
+    // site would have to call the API setOriginClean() and setPremultiplied().
+    bool m_isOriginClean = true;
+    bool m_isPremultiplied = true;
 };
 
 } // namespace blink

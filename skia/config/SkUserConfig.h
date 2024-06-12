@@ -17,11 +17,13 @@
 #ifndef SkUserConfig_DEFINED
 #define SkUserConfig_DEFINED
 
+#include "skia/ext/skia_histogram.h"
+
 /*  SkTypes.h, the root of the public header files, does the following trick:
 
+    #include <SkPostConfig.h>
     #include <SkPreConfig.h>
     #include <SkUserConfig.h>
-    #include <SkPostConfig.h>
 
     SkPreConfig.h runs first, and it is responsible for initializing certain
     skia defines.
@@ -44,29 +46,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/*  Scalars (the fractional value type in skia) can be implemented either as
-    floats or 16.16 integers (fixed). Exactly one of these two symbols must be
-    defined.
-*/
-//#define SK_SCALAR_IS_FLOAT
-//#define SK_SCALAR_IS_FIXED
-
-
-/*  Somewhat independent of how SkScalar is implemented, Skia also wants to know
-    if it can use floats at all. Naturally, if SK_SCALAR_IS_FLOAT is defined,
-    then so muse SK_CAN_USE_FLOAT, but if scalars are fixed, SK_CAN_USE_FLOAT
-    can go either way.
- */
-//#define SK_CAN_USE_FLOAT
-
-/*  For some performance-critical scalar operations, skia will optionally work
-    around the standard float operators if it knows that the CPU does not have
-    native support for floats. If your environment uses software floating point,
-    define this flag.
- */
-//#define SK_SOFTWARE_FLOAT
-
-
 /*  Skia has lots of debug-only code. Often this is just null checks or other
     parameter checking, but sometimes it can be quite intrusive (e.g. check that
     each 32bit pixel is in premultiplied form). This code can be very useful
@@ -79,6 +58,10 @@
 //#define SK_DEBUG
 //#define SK_RELEASE
 
+#ifdef DCHECK_ALWAYS_ON
+#undef SK_RELEASE
+#define SK_DEBUG
+#endif
 
 /*  If, in debugging mode, Skia needs to stop (presumably to invoke a debugger)
     it will call SK_CRASH(). If this is not defined it, it is defined in
@@ -86,24 +69,11 @@
  */
 //#define SK_CRASH() *(int *)(uintptr_t)0 = 0
 
-
 /*  preconfig will have attempted to determine the endianness of the system,
     but you can change these mutually exclusive flags here.
  */
 //#define SK_CPU_BENDIAN
 //#define SK_CPU_LENDIAN
-
-
-/*  Some compilers don't support long long for 64bit integers. If yours does
-    not, define this to the appropriate type.
- */
-//#define SkLONGLONG int64_t
-
-
-/*  Some envorinments do not suport writable globals (eek!). If yours does not,
-    define this flag.
- */
-//#define SK_USE_RUNTIME_GLOBALS
 
 /*  If zlib is available and you want to support the flate compression
     algorithm (used in PDF generation), define SK_ZLIB_INCLUDE to be the
@@ -112,16 +82,11 @@
 //#define SK_ZLIB_INCLUDE <zlib.h>
 #define SK_ZLIB_INCLUDE "third_party/zlib/zlib.h"
 
-/*  Define this to allow PDF scalars above 32k.  The PDF/A spec doesn't allow
-    them, but modern PDF interpreters should handle them just fine.
- */
-//#define SK_ALLOW_LARGE_PDF_SCALARS
-
 /*  Define this to provide font subsetter for font subsetting when generating
     PDF documents.
  */
 #define SK_SFNTLY_SUBSETTER \
-    "third_party/sfntly/cpp/src/sample/chromium/font_subsetter.h"
+    "third_party/sfntly/src/cpp/src/sample/chromium/font_subsetter.h"
 
 /*  To write debug messages to a console, skia will call SkDebugf(...) following
     printf conventions (e.g. const char* format, ...). If you want to redirect
@@ -129,13 +94,21 @@
  */
 //#define SkDebugf(...)  MyFunction(__VA_ARGS__)
 
-
 /*  If SK_DEBUG is defined, then you can optionally define SK_SUPPORT_UNITTEST
     which will run additional self-tests at startup. These can take a long time,
     so this flag is optional.
  */
 #ifdef SK_DEBUG
 #define SK_SUPPORT_UNITTEST
+#endif
+
+/* If cross process SkPictureImageFilters are not explicitly enabled then
+   they are always disabled.
+ */
+#ifndef SK_ALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS
+#ifndef SK_DISALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS
+#define SK_DISALLOW_CROSSPROCESS_PICTUREIMAGEFILTERS
+#endif
 #endif
 
 /* If your system embeds skia and has complex event logging, define this
@@ -164,25 +137,29 @@
 #define SK_MSCALAR_IS_FLOAT
 #undef SK_MSCALAR_IS_DOUBLE
 
-#define GR_MAX_OFFSCREEN_AA_DIM     512
+#define GR_MAX_OFFSCREEN_AA_DIM 512
 
 // Log the file and line number for assertions.
 #define SkDebugf(...) SkDebugf_FileLine(__FILE__, __LINE__, false, __VA_ARGS__)
 SK_API void SkDebugf_FileLine(const char* file, int line, bool fatal,
-                              const char* format, ...);
+    const char* format, ...);
 
 // Marking the debug print as "fatal" will cause a debug break, so we don't need
 // a separate crash call here.
-#define SK_DEBUGBREAK(cond) do { if (!(cond)) { \
-    SkDebugf_FileLine(__FILE__, __LINE__, true, \
-    "%s:%d: failed assertion \"%s\"\n", \
-    __FILE__, __LINE__, #cond); } } while (false)
+#define SK_DEBUGBREAK(cond)                             \
+    do {                                                \
+        if (!(cond)) {                                  \
+            SkDebugf_FileLine(__FILE__, __LINE__, true, \
+                "%s:%d: failed assertion \"%s\"\n",     \
+                __FILE__, __LINE__, #cond);             \
+        }                                               \
+    } while (false)
 
-#if !defined(ANDROID)   // On Android, we use the skia default settings.
-#define SK_A32_SHIFT    24
-#define SK_R32_SHIFT    16
-#define SK_G32_SHIFT    8
-#define SK_B32_SHIFT    0
+#if !defined(ANDROID) // On Android, we use the skia default settings.
+#define SK_A32_SHIFT 24
+#define SK_R32_SHIFT 16
+#define SK_G32_SHIFT 8
+#define SK_B32_SHIFT 0
 #endif
 
 #if defined(SK_BUILD_FOR_WIN32)
@@ -195,16 +172,16 @@ SK_API void SkDebugf_FileLine(const char* file, int line, bool fatal,
 #elif defined(SK_BUILD_FOR_MAC)
 
 #define SK_CPU_LENDIAN
-#undef  SK_CPU_BENDIAN
+#undef SK_CPU_BENDIAN
 
-#elif defined(SK_BUILD_FOR_UNIX)
+#elif defined(SK_BUILD_FOR_UNIX) || defined(SK_BUILD_FOR_ANDROID)
 
 // Prefer FreeType's emboldening algorithm to Skia's
 // TODO: skia used to just use hairline, but has improved since then, so
 // we should revisit this choice...
 #define SK_USE_FREETYPE_EMBOLDEN
 
-#ifdef SK_CPU_BENDIAN
+#if defined(SK_BUILD_FOR_UNIX) && defined(SK_CPU_BENDIAN)
 // Above we set the order for ARGB channels in registers. I suspect that, on
 // big endian machines, you can keep this the same and everything will work.
 // The in-memory order will be different, of course, but as long as everything
@@ -222,31 +199,65 @@ SK_API void SkDebugf_FileLine(const char* file, int line, bool fatal,
 // assertion.
 #define SK_CRASH() SkDebugf_FileLine(__FILE__, __LINE__, true, "SK_CRASH")
 
-// Uncomment the following line to forward skia trace events to Chrome
-// tracing.
-// #define SK_USER_TRACE_INCLUDE_FILE "skia/ext/skia_trace_shim.h"
-
-#ifndef SK_ATOMICS_PLATFORM_H
-#  if defined(SK_BUILD_FOR_WIN)
-#    define SK_ATOMICS_PLATFORM_H "third_party/skia/src/ports/SkAtomics_win.h"
-#  elif defined(SK_BUILD_FOR_ANDROID_FRAMEWORK)
-#    define SK_ATOMICS_PLATFORM_H "third_party/skia/src/ports/SkAtomics_android.h"
-#  else
-#    define SK_ATOMICS_PLATFORM_H "third_party/skia/src/ports/SkAtomics_sync.h"
-#  endif
+// These flags are no longer defined in Skia, but we have them (temporarily)
+// until we update our call-sites (typically these are for API changes).
+//
+// Remove these as we update our sites.
+//
+#ifndef SK_SUPPORT_LEGACY_GETTOPDEVICE
+#define SK_SUPPORT_LEGACY_GETTOPDEVICE
 #endif
 
-#ifndef SK_MUTEX_PLATFORM_H
-#  if defined(SK_BUILD_FOR_WIN)
-#    define SK_MUTEX_PLATFORM_H "third_party/skia/src/ports/SkMutex_win.h"
-#  else
-#    define SK_MUTEX_PLATFORM_H "third_party/skia/src/ports/SkMutex_pthread.h"
-#  endif
+#ifndef SK_SUPPORT_LEGACY_GETDEVICE
+#define SK_SUPPORT_LEGACY_GETDEVICE
 #endif
 
-#ifndef    SK_LEGACY_IMAGE_GENERATOR_ENUMS_AND_OPTIONS
-#   define SK_LEGACY_IMAGE_GENERATOR_ENUMS_AND_OPTIONS
+// Workaround for poor anisotropic mipmap quality,
+// pending Skia ripmap support.
+// (https://bugs.chromium.org/p/skia/issues/detail?id=4863)
+#ifndef SK_SUPPORT_LEGACY_ANISOTROPIC_MIPMAP_SCALE
+#define SK_SUPPORT_LEGACY_ANISOTROPIC_MIPMAP_SCALE
 #endif
+
+#ifndef SK_IGNORE_ETC1_SUPPORT
+#define SK_IGNORE_ETC1_SUPPORT
+#endif
+
+#ifndef SK_IGNORE_GPU_DITHER
+#define SK_IGNORE_GPU_DITHER
+#endif
+
+#ifndef SK_SUPPORT_LEGACY_EVAL_CUBIC
+#define SK_SUPPORT_LEGACY_EVAL_CUBIC
+#endif
+
+#ifndef SK_SUPPORT_LEGACY_COMPUTESAVELAYER_FLAG
+#define SK_SUPPORT_LEGACY_COMPUTESAVELAYER_FLAG
+#endif
+
+///////////////////////// Imported from BUILD.gn and skia_common.gypi
+
+/* In some places Skia can use static initializers for global initialization,
+ *  or fall back to lazy runtime initialization. Chrome always wants the latter.
+ */
+#define SK_ALLOW_STATIC_GLOBAL_INITIALIZERS 0
+
+/* This flag forces Skia not to use typographic metrics with GDI.
+ */
+#define SK_GDI_ALWAYS_USE_TEXTMETRICS_FOR_FONT_METRICS
+
+#define SK_IGNORE_BLURRED_RRECT_OPT
+#define SK_USE_DISCARDABLE_SCALEDIMAGECACHE
+#define SK_WILL_NEVER_DRAW_PERSPECTIVE_TEXT
+
+#define SK_ATTR_DEPRECATED SK_NOTHING_ARG1
+#define SK_ENABLE_INST_COUNT 0
+#define GR_GL_CUSTOM_SETUP_HEADER "GrGLConfig_chrome.h"
+
+// mtklein's fiddling with Src / SrcOver.  Will rebaseline these only once when done.
+#define SK_SUPPORT_LEGACY_X86_BLITS
+
+#define SK_DISABLE_TILE_IMAGE_FILTER_OPTIMIZATION
 
 // ===== End Chrome-specific definitions =====
 

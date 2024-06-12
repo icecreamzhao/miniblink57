@@ -23,14 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/transforms/Matrix3DTransformOperation.h"
 
 #include <algorithm>
 
 namespace blink {
 
-PassRefPtr<TransformOperation> Matrix3DTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
+PassRefPtr<TransformOperation> Matrix3DTransformOperation::blend(
+    const TransformOperation* from,
+    double progress,
+    bool blendToIdentity)
 {
     if (from && !from->isSameType(*this))
         return this;
@@ -49,6 +51,13 @@ PassRefPtr<TransformOperation> Matrix3DTransformOperation::blend(const Transform
 
     toT.blend(fromT, progress);
     return Matrix3DTransformOperation::create(toT);
+}
+
+PassRefPtr<TransformOperation> Matrix3DTransformOperation::zoom(double factor)
+{
+    TransformationMatrix result = m_matrix;
+    result.zoom(factor);
+    return create(result);
 }
 
 } // namespace blink

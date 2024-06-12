@@ -20,7 +20,7 @@
  * \file 
  * \brief C++ API: Replaceable String
  */
- 
+
 U_NAMESPACE_BEGIN
 
 class UnicodeString;
@@ -81,7 +81,7 @@ public:
      * Returns the number of 16-bit code units in the text.
      * @return number of 16-bit code units in text
      * @stable ICU 1.8
-     */ 
+     */
     inline int32_t length() const;
 
     /**
@@ -118,8 +118,8 @@ public:
      * @stable ICU 2.1
      */
     virtual void extractBetween(int32_t start,
-                                int32_t limit,
-                                UnicodeString& target) const = 0;
+        int32_t limit,
+        UnicodeString& target) const = 0;
 
     /**
      * Replaces a substring of this object with the given text.  If the
@@ -142,8 +142,9 @@ public:
      * @stable ICU 2.0
      */
     virtual void handleReplaceBetween(int32_t start,
-                                      int32_t limit,
-                                      const UnicodeString& text) = 0;
+        int32_t limit,
+        const UnicodeString& text)
+        = 0;
     // Note: All other methods in this class take the names of
     // existing UnicodeString methods.  This method is the exception.
     // It is named differently because all replace methods of
@@ -197,10 +198,9 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.6
      */
-    virtual Replaceable *clone() const;
+    virtual Replaceable* clone() const;
 
 protected:
-
     /**
      * Default constructor.
      * @stable ICU 2.4
@@ -221,7 +221,7 @@ protected:
     /**
      * Virtual version of length().
      * @stable ICU 2.4
-     */ 
+     */
     virtual int32_t getLength() const = 0;
 
     /**
@@ -237,20 +237,23 @@ protected:
     virtual UChar32 getChar32At(int32_t offset) const = 0;
 };
 
-inline Replaceable::Replaceable() {}
+inline Replaceable::Replaceable() { }
 
 inline int32_t
-Replaceable::length() const {
+Replaceable::length() const
+{
     return getLength();
 }
 
 inline UChar
-Replaceable::charAt(int32_t offset) const {
+Replaceable::charAt(int32_t offset) const
+{
     return getCharAt(offset);
 }
 
 inline UChar32
-Replaceable::char32At(int32_t offset) const {
+Replaceable::char32At(int32_t offset) const
+{
     return getChar32At(offset);
 }
 

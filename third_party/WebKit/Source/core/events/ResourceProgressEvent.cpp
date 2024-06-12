@@ -24,16 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/events/ResourceProgressEvent.h"
 
 namespace blink {
 
-ResourceProgressEvent::ResourceProgressEvent()
-{
-}
-
-ResourceProgressEvent::ResourceProgressEvent(const AtomicString& type, bool lengthComputable, unsigned long long loaded, unsigned long long total, const String& url)
+ResourceProgressEvent::ResourceProgressEvent(const AtomicString& type,
+    bool lengthComputable,
+    unsigned long long loaded,
+    unsigned long long total,
+    const String& url)
     : ProgressEvent(type, lengthComputable, loaded, total)
     , m_url(url)
 {
@@ -54,4 +53,4 @@ DEFINE_TRACE(ResourceProgressEvent)
     ProgressEvent::trace(visitor);
 }
 
-}
+} // namespace blink

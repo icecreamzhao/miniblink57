@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -15,36 +14,37 @@
 #include "SkPaint.h"
 #include "SkView.h"
 
-
 //#define COLOR 0xFFFF8844
 #define COLOR 0xFF888888
 
-static void paint_proc0(SkPaint*) {
+static void paint_proc0(SkPaint*)
+{
 }
 
-static void paint_proc1(SkPaint* paint) {
-    paint->setMaskFilter(SkBlurMaskFilter::Create(
-                                kNormal_SkBlurStyle,
-                                SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(2))))->unref();
+static void paint_proc1(SkPaint* paint)
+{
+    paint->setMaskFilter(SkBlurMaskFilter::Make(
+        kNormal_SkBlurStyle,
+        SkBlurMask::ConvertRadiusToSigma(2)));
 }
 
-static void paint_proc2(SkPaint* paint) {
-    SkScalar dir[3] = { 1, 1, 1};
+static void paint_proc2(SkPaint* paint)
+{
+    SkScalar dir[3] = { 1, 1, 1 };
     paint->setMaskFilter(
-            SkBlurMaskFilter::CreateEmboss(SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(1)),
-                                           dir,
-                                           0.1f,
-                                           0.05f))->unref();
+        SkBlurMaskFilter::MakeEmboss(SkBlurMask::ConvertRadiusToSigma(1), dir, 0.1f, 0.05f));
 }
 
-static void paint_proc3(SkPaint* paint) {
+static void paint_proc3(SkPaint* paint)
+{
     SkColor colors[] = { SK_ColorRED, COLOR, SK_ColorBLUE };
     SkPoint pts[] = { { 3, 0 }, { 7, 5 } };
-    paint->setShader(SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors),
-                                        SkShader::kMirror_TileMode))->unref();
+    paint->setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
+        SkShader::kMirror_TileMode));
 }
 
-static void paint_proc5(SkPaint* paint) {
+static void paint_proc5(SkPaint* paint)
+{
     paint_proc3(paint);
     paint_proc2(paint);
 }
@@ -65,7 +65,8 @@ public:
     SkPath fPath;
     SkPaint fPaint[SK_ARRAY_COUNT(gPaintProcs)];
 
-    EffectsView() {
+    EffectsView()
+    {
         size_t i;
         const float pts[] = {
             0, 0,
@@ -78,7 +79,7 @@ public:
         };
         fPath.moveTo(pts[0], pts[1]);
         for (i = 2; i < SK_ARRAY_COUNT(pts); i += 2) {
-            fPath.lineTo(pts[i], pts[i+1]);
+            fPath.lineTo(pts[i], pts[i + 1]);
         }
 
         for (i = 0; i < SK_ARRAY_COUNT(gPaintProcs); i++) {
@@ -96,7 +97,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Effects");
             return true;
@@ -104,7 +106,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         canvas->scale(3, 3);
         canvas->translate(10, 30);
         for (size_t i = 0; i < SK_ARRAY_COUNT(fPaint); i++) {

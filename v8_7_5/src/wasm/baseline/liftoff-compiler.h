@@ -11,32 +11,31 @@
 namespace v8 {
 namespace internal {
 
-class Counters;
+    class AccountingAllocator;
+    class Counters;
 
-namespace wasm {
+    namespace wasm {
 
-struct CompilationEnv;
-struct FunctionBody;
-class NativeModule;
-struct WasmFeatures;
+        struct CompilationEnv;
+        struct FunctionBody;
+        class NativeModule;
+        struct WasmFeatures;
 
-class LiftoffCompilationUnit final {
- public:
-  explicit LiftoffCompilationUnit(WasmCompilationUnit* wasm_unit)
-      : wasm_unit_(wasm_unit) {}
+        class LiftoffCompilationUnit final {
+        public:
+            LiftoffCompilationUnit() = default;
 
-  WasmCompilationResult ExecuteCompilation(CompilationEnv*, const FunctionBody&,
-                                           Counters*,
-                                           WasmFeatures* detected_features);
+            WasmCompilationResult ExecuteCompilation(AccountingAllocator*,
+                CompilationEnv*, const FunctionBody&,
+                Counters*,
+                WasmFeatures* detected_features);
 
- private:
-  WasmCompilationUnit* const wasm_unit_;
+        private:
+            DISALLOW_COPY_AND_ASSIGN(LiftoffCompilationUnit);
+        };
 
-  DISALLOW_COPY_AND_ASSIGN(LiftoffCompilationUnit);
-};
+    } // namespace wasm
+} // namespace internal
+} // namespace v8
 
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_WASM_BASELINE_LIFTOFF_COMPILER_H_
+#endif // V8_WASM_BASELINE_LIFTOFF_COMPILER_H_

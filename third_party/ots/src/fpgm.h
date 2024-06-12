@@ -10,10 +10,10 @@
 namespace ots {
 
 struct OpenTypeFPGM {
-  const uint8_t *data;
-  uint32_t length;
+    const uint8_t* data;
+    uint32_t length;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_FPGM_H_
+#endif // OTS_FPGM_H_

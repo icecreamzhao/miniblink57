@@ -28,7 +28,8 @@
 
 #include "WebCommon.h"
 #include "WebLayer.h"
-#include "third_party/skia/include/core/SkBitmap.h"
+
+class SkImage;
 
 namespace blink {
 
@@ -37,7 +38,7 @@ public:
     virtual ~WebImageLayer() { }
 
     virtual WebLayer* layer() = 0;
-    virtual void setImageBitmap(const SkBitmap&) = 0;
+    virtual void setImage(const SkImage*) = 0;
     virtual void setNearestNeighbor(bool) = 0;
 };
 

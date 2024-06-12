@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/quota/DOMWindowQuota.h"
 
 #include "core/frame/LocalDOMWindow.h"
@@ -39,11 +38,9 @@
 namespace blink {
 
 DOMWindowQuota::DOMWindowQuota(LocalDOMWindow& window)
-    : DOMWindowProperty(window.frame())
+    : Supplement<LocalDOMWindow>(window)
 {
 }
-
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowQuota);
 
 const char* DOMWindowQuota::supplementName()
 {
@@ -53,10 +50,11 @@ const char* DOMWindowQuota::supplementName()
 // static
 DOMWindowQuota& DOMWindowQuota::from(LocalDOMWindow& window)
 {
-    DOMWindowQuota* supplement = static_cast<DOMWindowQuota*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    DOMWindowQuota* supplement = static_cast<DOMWindowQuota*>(
+        Supplement<LocalDOMWindow>::from(window, supplementName()));
     if (!supplement) {
         supplement = new DOMWindowQuota(window);
-        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+        provideTo(window, supplementName(), supplement);
     }
     return *supplement;
 }
@@ -69,7 +67,7 @@ DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo(DOMWindow& window)
 
 DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo() const
 {
-    if (!m_storageInfo && frame())
+    if (!m_storageInfo)
         m_storageInfo = DeprecatedStorageInfo::create();
     return m_storageInfo.get();
 }
@@ -77,8 +75,7 @@ DeprecatedStorageInfo* DOMWindowQuota::webkitStorageInfo() const
 DEFINE_TRACE(DOMWindowQuota)
 {
     visitor->trace(m_storageInfo);
-    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<LocalDOMWindow>::trace(visitor);
 }
 
 } // namespace blink

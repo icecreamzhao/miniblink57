@@ -5,40 +5,42 @@
  * found in the LICENSE file.
  */
 
+#include "SkOTUtils.h"
 #include "SkData.h"
 #include "SkEndian.h"
-#include "SkSFNTHeader.h"
-#include "SkStream.h"
+#include "SkOTTableTypes.h"
 #include "SkOTTable_head.h"
 #include "SkOTTable_name.h"
-#include "SkOTTableTypes.h"
-#include "SkOTUtils.h"
+#include "SkSFNTHeader.h"
+#include "SkStream.h"
 
 extern const uint8_t SK_OT_GlyphData_NoOutline[] = {
-    0x0,0x0, //SkOTTableGlyphData::numberOfContours
-    0x0,0x0, //SkOTTableGlyphData::xMin
-    0x0,0x0, //SkOTTableGlyphData::yMin
-    0x0,0x0, //SkOTTableGlyphData::xMax
-    0x0,0x0, //SkOTTableGlyphData::yMax
+    0x0, 0x0, //SkOTTableGlyphData::numberOfContours
+    0x0, 0x0, //SkOTTableGlyphData::xMin
+    0x0, 0x0, //SkOTTableGlyphData::yMin
+    0x0, 0x0, //SkOTTableGlyphData::xMax
+    0x0, 0x0, //SkOTTableGlyphData::yMax
 
-    0x0,0x0, //SkOTTableGlyphDataInstructions::length
+    0x0, 0x0, //SkOTTableGlyphDataInstructions::length
 };
 
-uint32_t SkOTUtils::CalcTableChecksum(SK_OT_ULONG *data, size_t length) {
+uint32_t SkOTUtils::CalcTableChecksum(SK_OT_ULONG* data, size_t length)
+{
     uint32_t sum = 0;
-    SK_OT_ULONG *dataEnd = data + ((length + 3) & ~3) / sizeof(SK_OT_ULONG);
+    SK_OT_ULONG* dataEnd = data + ((length + 3) & ~3) / sizeof(SK_OT_ULONG);
     for (; data < dataEnd; ++data) {
         sum += SkEndian_SwapBE32(*data);
     }
     return sum;
 }
 
-SkData* SkOTUtils::RenameFont(SkStreamAsset* fontData, const char* fontName, int fontNameLen) {
+SkData* SkOTUtils::RenameFont(SkStreamAsset* fontData, const char* fontName, int fontNameLen)
+{
 
     // Get the sfnt header.
     SkSFNTHeader sfntHeader;
     if (fontData->read(&sfntHeader, sizeof(sfntHeader)) < sizeof(sfntHeader)) {
-        return NULL;
+        return nullptr;
     }
 
     // Find the existing 'name' table.
@@ -47,18 +49,18 @@ SkData* SkOTUtils::RenameFont(SkStreamAsset* fontData, const char* fontName, int
     int numTables = SkEndian_SwapBE16(sfntHeader.numTables);
     for (tableIndex = 0; tableIndex < numTables; ++tableIndex) {
         if (fontData->read(&tableEntry, sizeof(tableEntry)) < sizeof(tableEntry)) {
-            return NULL;
+            return nullptr;
         }
         if (SkOTTableName::TAG == tableEntry.tag) {
             break;
         }
     }
     if (tableIndex == numTables) {
-        return NULL;
+        return nullptr;
     }
 
     if (!fontData->rewind()) {
-        return NULL;
+        return nullptr;
     }
 
     // The required 'name' record types: Family, Style, Unique, Full and PostScript.
@@ -83,23 +85,23 @@ SkData* SkOTUtils::RenameFont(SkStreamAsset* fontData, const char* fontName, int
     size_t originalDataSize = fontData->getLength() - oldNameTablePhysicalSize;
     size_t newDataSize = originalDataSize + nameTablePhysicalSize;
 
-    SkAutoTUnref<SkData> rewrittenFontData(SkData::NewUninitialized(newDataSize));
+    auto rewrittenFontData = SkData::MakeUninitialized(newDataSize);
     SK_OT_BYTE* data = static_cast<SK_OT_BYTE*>(rewrittenFontData->writable_data());
 
     if (fontData->read(data, oldNameTableOffset) < oldNameTableOffset) {
-        return NULL;
+        return nullptr;
     }
     if (fontData->skip(oldNameTablePhysicalSize) < oldNameTablePhysicalSize) {
-        return NULL;
+        return nullptr;
     }
     if (fontData->read(data + oldNameTableOffset, originalDataSize - oldNameTableOffset) < originalDataSize - oldNameTableOffset) {
-        return NULL;
+        return nullptr;
     }
 
     //Fix up the offsets of the directory entries after the old 'name' table entry.
     SkSFNTHeader::TableDirectoryEntry* currentEntry = reinterpret_cast<SkSFNTHeader::TableDirectoryEntry*>(data + sizeof(SkSFNTHeader));
     SkSFNTHeader::TableDirectoryEntry* endEntry = currentEntry + numTables;
-    SkSFNTHeader::TableDirectoryEntry* headTableEntry = NULL;
+    SkSFNTHeader::TableDirectoryEntry* headTableEntry = nullptr;
     for (; currentEntry < endEntry; ++currentEntry) {
         uint32_t oldOffset = SkEndian_SwapBE32(currentEntry->offset);
         if (oldOffset > oldNameTableOffset) {
@@ -157,30 +159,30 @@ SkData* SkOTUtils::RenameFont(SkStreamAsset* fontData, const char* fontName, int
         }
     }
 
-    return rewrittenFontData.detach();
+    return rewrittenFontData.release();
 }
 
-
 SkOTUtils::LocalizedStrings_NameTable*
-SkOTUtils::LocalizedStrings_NameTable::CreateForFamilyNames(const SkTypeface& typeface) {
-    static const SkFontTableTag nameTag = SkSetFourByteTag('n','a','m','e');
+SkOTUtils::LocalizedStrings_NameTable::CreateForFamilyNames(const SkTypeface& typeface)
+{
+    static const SkFontTableTag nameTag = SkSetFourByteTag('n', 'a', 'm', 'e');
     size_t nameTableSize = typeface.getTableSize(nameTag);
     if (0 == nameTableSize) {
-        return NULL;
+        return nullptr;
     }
     SkAutoTDeleteArray<uint8_t> nameTableData(new uint8_t[nameTableSize]);
     size_t copied = typeface.getTableData(nameTag, 0, nameTableSize, nameTableData.get());
     if (copied != nameTableSize) {
-        return NULL;
+        return nullptr;
     }
 
-    return new SkOTUtils::LocalizedStrings_NameTable((SkOTTableName*)nameTableData.detach(),
+    return new SkOTUtils::LocalizedStrings_NameTable((SkOTTableName*)nameTableData.release(),
         SkOTUtils::LocalizedStrings_NameTable::familyNameTypes,
         SK_ARRAY_COUNT(SkOTUtils::LocalizedStrings_NameTable::familyNameTypes));
 }
 
-bool SkOTUtils::LocalizedStrings_NameTable::next(SkTypeface::LocalizedString* localizedString) {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+bool SkOTUtils::LocalizedStrings_NameTable::next(SkTypeface::LocalizedString* localizedString)
+{
     do {
         SkOTTableName::Iterator::Record record;
         if (fFamilyNameIter.next(record)) {
@@ -194,14 +196,12 @@ bool SkOTUtils::LocalizedStrings_NameTable::next(SkTypeface::LocalizedString* lo
         ++fTypesIndex;
         fFamilyNameIter.reset(fTypes[fTypesIndex]);
     } while (true);
-#endif
-    *(int*)1 = 1;
-    return false;
 }
 
 SkOTTableName::Record::NameID::Predefined::Value
-SkOTUtils::LocalizedStrings_NameTable::familyNameTypes[3] = {
-    SkOTTableName::Record::NameID::Predefined::FontFamilyName,
-    SkOTTableName::Record::NameID::Predefined::PreferredFamily,
-    SkOTTableName::Record::NameID::Predefined::WWSFamilyName,
-};
+    SkOTUtils::LocalizedStrings_NameTable::familyNameTypes[3]
+    = {
+          SkOTTableName::Record::NameID::Predefined::FontFamilyName,
+          SkOTTableName::Record::NameID::Predefined::PreferredFamily,
+          SkOTTableName::Record::NameID::Predefined::WWSFamilyName,
+      };

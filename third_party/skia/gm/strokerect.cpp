@@ -5,19 +5,20 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
+#include "gm.h"
 
-#define STROKE_WIDTH    SkIntToScalar(20)
+#define STROKE_WIDTH SkIntToScalar(20)
 
 static void draw_path(SkCanvas* canvas, const SkPath& path, const SkRect& rect,
-                      SkPaint::Join join, int doFill) {
+    SkPaint::Join join, int doFill)
+{
     SkPaint paint;
     paint.setAntiAlias(true);
     paint.setStyle(doFill ? SkPaint::kStrokeAndFill_Style : SkPaint::kStroke_Style);
 
-    paint.setColor(SK_ColorGRAY);
+    paint.setColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
     paint.setStrokeWidth(STROKE_WIDTH);
     paint.setStrokeJoin(join);
     canvas->drawRect(rect, paint);
@@ -43,21 +44,23 @@ static void draw_path(SkCanvas* canvas, const SkPath& path, const SkRect& rect,
  */
 class StrokeRectGM : public skiagm::GM {
 public:
-    StrokeRectGM() {}
+    StrokeRectGM() { }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("strokerect");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(1024, 740);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->drawColor(SK_ColorWHITE);
-        canvas->translate(STROKE_WIDTH*3/2, STROKE_WIDTH*3/2);
+        canvas->translate(STROKE_WIDTH * 3 / 2, STROKE_WIDTH * 3 / 2);
 
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
@@ -75,10 +78,13 @@ protected:
             { 0, H, W, 0 },
             { 0, 0, STROKE_WIDTH, H },
             { 0, 0, W, STROKE_WIDTH },
-            { 0, 0, STROKE_WIDTH/2, STROKE_WIDTH/2 },
+            { 0, 0, STROKE_WIDTH / 2, STROKE_WIDTH / 2 },
             { 0, 0, W, 0 },
             { 0, 0, 0, H },
             { 0, 0, 0, 0 },
+            { 0, 0, W, FLT_EPSILON },
+            { 0, 0, FLT_EPSILON, H },
+            { 0, 0, FLT_EPSILON, FLT_EPSILON },
         };
 
         for (int doFill = 0; doFill <= 1; ++doFill) {
@@ -107,7 +113,21 @@ protected:
 private:
     typedef GM INHERITED;
 };
+DEF_GM(return new StrokeRectGM;)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-DEF_GM(return new StrokeRectGM;)
+/*
+ *  Exercise rect-stroking (which is specialized from paths) when the resulting stroke-width is
+ *  non-square. See https://bugs.chromium.org/p/skia/issues/detail?id=5408
+ */
+DEF_SIMPLE_GM(strokerect_anisotropic_5408, canvas, 200, 50)
+{
+    SkPaint p;
+    p.setStyle(SkPaint::kStroke_Style);
+    p.setStrokeWidth(6);
+
+    canvas->scale(10, 1);
+    SkRect r = SkRect::MakeXYWH(5, 20, 10, 10);
+    canvas->drawRect(r, p);
+}

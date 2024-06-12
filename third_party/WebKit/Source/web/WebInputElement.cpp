@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebInputElement.h"
 
 #include "core/HTMLNames.h"
@@ -43,6 +42,7 @@
 #include "platform/RuntimeEnabledFeatures.h"
 #include "public/platform/WebString.h"
 #include "public/web/WebElementCollection.h"
+#include "public/web/WebOptionElement.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
@@ -84,7 +84,8 @@ bool WebInputElement::isCheckbox() const
 
 int WebInputElement::maxLength() const
 {
-    return constUnwrap<HTMLInputElement>()->maxLength();
+    int maxLen = constUnwrap<HTMLInputElement>()->maxLength();
+    return maxLen == -1 ? defaultMaxLength() : maxLen;
 }
 
 void WebInputElement::setActivatedSubmit(bool activated)
@@ -109,7 +110,8 @@ bool WebInputElement::isValidValue(const WebString& value) const
 
 void WebInputElement::setChecked(bool nowChecked, bool sendEvents)
 {
-    unwrap<HTMLInputElement>()->setChecked(nowChecked, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+    unwrap<HTMLInputElement>()->setChecked(
+        nowChecked, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
 }
 
 bool WebInputElement::isChecked() const
@@ -122,11 +124,10 @@ bool WebInputElement::isMultiple() const
     return constUnwrap<HTMLInputElement>()->multiple();
 }
 
-WebElementCollection WebInputElement::dataListOptions() const
+WebVector<WebOptionElement> WebInputElement::filteredDataListOptions() const
 {
-    if (HTMLDataListElement* dataList = toHTMLDataListElement(constUnwrap<HTMLInputElement>()->list()))
-        return WebElementCollection(dataList->options());
-    return WebElementCollection();
+    return WebVector<WebOptionElement>(
+        constUnwrap<HTMLInputElement>()->filteredDataListOptions());
 }
 
 WebString WebInputElement::localizeValue(const WebString& proposedValue) const
@@ -136,7 +137,7 @@ WebString WebInputElement::localizeValue(const WebString& proposedValue) const
 
 int WebInputElement::defaultMaxLength()
 {
-    return HTMLInputElement::maximumLength;
+    return std::numeric_limits<int>::max();
 }
 
 void WebInputElement::setShouldRevealPassword(bool value)
@@ -144,18 +145,21 @@ void WebInputElement::setShouldRevealPassword(bool value)
     unwrap<HTMLInputElement>()->setShouldRevealPassword(value);
 }
 
-WebInputElement::WebInputElement(const PassRefPtrWillBeRawPtr<HTMLInputElement>& elem)
+WebInputElement::WebInputElement(HTMLInputElement* elem)
     : WebFormControlElement(elem)
 {
 }
 
-WebInputElement& WebInputElement::operator=(const PassRefPtrWillBeRawPtr<HTMLInputElement>& elem)
+DEFINE_WEB_NODE_TYPE_CASTS(WebInputElement,
+    isHTMLInputElement(constUnwrap<Node>()));
+
+WebInputElement& WebInputElement::operator=(HTMLInputElement* elem)
 {
     m_private = elem;
     return *this;
 }
 
-WebInputElement::operator PassRefPtrWillBeRawPtr<HTMLInputElement>() const
+WebInputElement::operator HTMLInputElement*() const
 {
     return toHTMLInputElement(m_private.get());
 }

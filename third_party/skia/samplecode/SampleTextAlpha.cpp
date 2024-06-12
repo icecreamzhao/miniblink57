@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,34 +8,34 @@
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
-#include "SkDevice.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
 #include "SkTime.h"
 #include "SkTypeface.h"
+#include "SkUtils.h"
 #include "SkView.h"
+#include "SkXfermode.h"
 
 #include "SkOSFile.h"
 #include "SkStream.h"
 
 class TextAlphaView : public SampleView {
 public:
-    TextAlphaView() {
+    TextAlphaView()
+    {
         fByte = 0xFF;
     }
 
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "TextAlpha");
             return true;
@@ -44,19 +43,19 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         const char* str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         SkPaint paint;
-        SkScalar    x = SkIntToScalar(10);
-        SkScalar    y = SkIntToScalar(20);
+        SkScalar x = SkIntToScalar(10);
+        SkScalar y = SkIntToScalar(20);
 
         paint.setFlags(0x105);
 
         paint.setARGB(fByte, 0xFF, 0xFF, 0xFF);
 
-        paint.setMaskFilter(SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                    SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(3))));
-        paint.getMaskFilter()->unref();
+        paint.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
+            SkBlurMask::ConvertRadiusToSigma(3)));
 
         SkRandom rand;
 
@@ -65,15 +64,17 @@ protected:
             paint.setTextSize(SkIntToScalar(ps));
             paint.setTextSize(SkIntToScalar(24));
             canvas->drawText(str, strlen(str), x, y, paint);
-            y += paint.getFontMetrics(NULL);
+            y += paint.getFontMetrics(nullptr);
         }
     }
 
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned) override {
+    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned) override
+    {
         return new Click(this);
     }
 
-    bool onClick(Click* click) override {
+    bool onClick(Click* click) override
+    {
         int y = click->fICurr.fY;
         if (y < 0) {
             y = 0;
@@ -81,7 +82,7 @@ protected:
             y = 255;
         }
         fByte = y;
-        this->inval(NULL);
+        this->inval(nullptr);
         return true;
     }
 

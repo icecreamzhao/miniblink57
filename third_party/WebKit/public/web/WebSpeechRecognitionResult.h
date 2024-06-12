@@ -38,10 +38,15 @@ class SpeechRecognitionResult;
 class WebSpeechRecognitionResult {
 public:
     WebSpeechRecognitionResult() { }
-    WebSpeechRecognitionResult(const WebSpeechRecognitionResult& result) { assign(result); }
+    WebSpeechRecognitionResult(const WebSpeechRecognitionResult& result)
+    {
+        assign(result);
+    }
     ~WebSpeechRecognitionResult() { reset(); }
 
-    BLINK_EXPORT void assign(const WebVector<WebString>& transcripts, const WebVector<float>& confidences, bool final);
+    BLINK_EXPORT void assign(const WebVector<WebString>& transcripts,
+        const WebVector<float>& confidences,
+        bool final);
     BLINK_EXPORT void assign(const WebSpeechRecognitionResult&);
     BLINK_EXPORT void reset();
 

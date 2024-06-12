@@ -12,9 +12,9 @@
 namespace ots {
 
 struct OpenTypeLOCA {
-  std::vector<uint32_t> offsets;
+    std::vector<uint32_t> offsets;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_LOCA_H_
+#endif // OTS_LOCA_H_

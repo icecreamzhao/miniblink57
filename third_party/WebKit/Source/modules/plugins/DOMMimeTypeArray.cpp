@@ -14,10 +14,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA 02110-1301 USA
  */
 
-#include "config.h"
 #include "modules/plugins/DOMMimeTypeArray.h"
 
 #include "core/frame/LocalFrame.h"
@@ -29,13 +29,13 @@
 namespace blink {
 
 DOMMimeTypeArray::DOMMimeTypeArray(LocalFrame* frame)
-    : DOMWindowProperty(frame)
+    : ContextClient(frame)
 {
 }
 
 DEFINE_TRACE(DOMMimeTypeArray)
 {
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 unsigned DOMMimeTypeArray::length() const
@@ -54,7 +54,7 @@ DOMMimeType* DOMMimeTypeArray::item(unsigned index)
     const Vector<MimeClassInfo>& mimes = data->mimes();
     if (index >= mimes.size())
         return nullptr;
-    return DOMMimeType::create(data, m_frame, index);
+    return DOMMimeType::create(data, frame(), index);
 }
 
 DOMMimeType* DOMMimeTypeArray::namedItem(const AtomicString& propertyName)
@@ -65,19 +65,16 @@ DOMMimeType* DOMMimeTypeArray::namedItem(const AtomicString& propertyName)
     const Vector<MimeClassInfo>& mimes = data->mimes();
     for (unsigned i = 0; i < mimes.size(); ++i) {
         if (mimes[i].type == propertyName)
-            return DOMMimeType::create(data, m_frame, i);
+            return DOMMimeType::create(data, frame(), i);
     }
     return nullptr;
 }
 
 PluginData* DOMMimeTypeArray::getPluginData() const
 {
-    if (!m_frame)
+    if (!frame())
         return nullptr;
-    Page* p = m_frame->page();
-    if (!p)
-        return nullptr;
-    return p->pluginData();
+    return frame()->pluginData();
 }
 
 } // namespace blink

@@ -16,15 +16,15 @@
 namespace v8 {
 namespace internal {
 
-class Isolate;
-class ReadOnlyRoots;
+    class Isolate;
+    class ReadOnlyRoots;
 
-// TODO(v8:7464): Remove the Isolate version of this.
-inline uint64_t HashSeed(Isolate* isolate);
-inline uint64_t HashSeed(ReadOnlyRoots roots);
+    // TODO(v8:7464): Remove the Isolate version of this.
+    inline uint64_t HashSeed(Isolate* isolate);
+    inline uint64_t HashSeed(ReadOnlyRoots roots);
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 // See comment above for why this isn't at the top of the file.
 #include "src/objects/fixed-array-inl.h"
@@ -33,18 +33,20 @@ inline uint64_t HashSeed(ReadOnlyRoots roots);
 namespace v8 {
 namespace internal {
 
-inline uint64_t HashSeed(Isolate* isolate) {
-  return HashSeed(ReadOnlyRoots(isolate));
-}
+    inline uint64_t HashSeed(Isolate* isolate)
+    {
+        return HashSeed(ReadOnlyRoots(isolate));
+    }
 
-inline uint64_t HashSeed(ReadOnlyRoots roots) {
-  uint64_t seed;
-  roots.hash_seed()->copy_out(0, reinterpret_cast<byte*>(&seed), kInt64Size);
-  DCHECK(FLAG_randomize_hashes || seed == 0);
-  return seed;
-}
+    inline uint64_t HashSeed(ReadOnlyRoots roots)
+    {
+        uint64_t seed;
+        roots.hash_seed()->copy_out(0, reinterpret_cast<byte*>(&seed), kInt64Size);
+        DCHECK(FLAG_randomize_hashes || seed == 0);
+        return seed;
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_HASH_SEED_INL_H_
+#endif // V8_HASH_SEED_INL_H_

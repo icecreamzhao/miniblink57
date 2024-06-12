@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,27 +8,30 @@
 #include "SkCanvas.h"
 #include "SkPaint.h"
 
-SkMeshIndices::SkMeshIndices() {
+SkMeshIndices::SkMeshIndices()
+{
     sk_bzero(this, sizeof(*this));
 }
 
-SkMeshIndices::~SkMeshIndices() {
+SkMeshIndices::~SkMeshIndices()
+{
     sk_free(fStorage);
 }
 
 bool SkMeshIndices::init(SkPoint tex[], uint16_t indices[],
-                         int texW, int texH, int rows, int cols) {
+    int texW, int texH, int rows, int cols)
+{
     if (rows < 2 || cols < 2) {
         sk_free(fStorage);
-        fStorage = NULL;
-        fTex = NULL;
-        fIndices = NULL;
+        fStorage = nullptr;
+        fTex = nullptr;
+        fIndices = nullptr;
         fTexCount = fIndexCount = 0;
         return false;
     }
 
     sk_free(fStorage);
-    fStorage = NULL;
+    fStorage = nullptr;
 
     fTexCount = rows * cols;
     rows -= 1;
@@ -40,8 +42,7 @@ bool SkMeshIndices::init(SkPoint tex[], uint16_t indices[],
         fTex = tex;
         fIndices = indices;
     } else {
-        fStorage = sk_malloc_throw(fTexCount * sizeof(SkPoint) +
-                                   fIndexCount * sizeof(uint16_t));
+        fStorage = sk_malloc_throw(fTexCount * sizeof(SkPoint) + fIndexCount * sizeof(uint16_t));
         fTex = (SkPoint*)fStorage;
         fIndices = (uint16_t*)(fTex + fTexCount);
     }
@@ -73,7 +74,7 @@ bool SkMeshIndices::init(SkPoint tex[], uint16_t indices[],
         const SkScalar dy = SkIntToScalar(texH) / cols;
         for (int y = 0; y <= cols; y++) {
             for (int x = 0; x <= rows; x++) {
-                tex->set(x*dx, y*dy);
+                tex->set(x * dx, y * dy);
                 tex += 1;
             }
         }
@@ -86,17 +87,18 @@ bool SkMeshIndices::init(SkPoint tex[], uint16_t indices[],
 #include "SkShader.h"
 
 void SkMeshUtils::Draw(SkCanvas* canvas, const SkBitmap& bitmap,
-                       int rows, int cols, const SkPoint verts[],
-                       const SkColor colors[], const SkPaint& paint) {
+    int rows, int cols, const SkPoint verts[],
+    const SkColor colors[], const SkPaint& paint)
+{
     SkMeshIndices idx;
 
     if (idx.init(bitmap.width(), bitmap.height(), rows, cols)) {
         SkPaint p(paint);
-        p.setShader(SkShader::CreateBitmapShader(bitmap,
-                                         SkShader::kClamp_TileMode,
-                                         SkShader::kClamp_TileMode))->unref();
+        p.setShader(SkShader::MakeBitmapShader(bitmap,
+            SkShader::kClamp_TileMode,
+            SkShader::kClamp_TileMode));
         canvas->drawVertices(SkCanvas::kTriangles_VertexMode,
-                             rows * cols, verts, idx.tex(), colors, NULL,
-                             idx.indices(), idx.indexCount(), p);
+            rows * cols, verts, idx.tex(), colors, nullptr,
+            idx.indices(), idx.indexCount(), p);
     }
 }

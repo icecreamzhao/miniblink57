@@ -23,22 +23,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/graphics/ImageFrameGenerator.h"
 
-#include "platform/SharedBuffer.h"
-#include "platform/TraceEvent.h"
+#include "SkData.h"
 #include "platform/graphics/ImageDecodingStore.h"
 #include "platform/image-decoders/ImageDecoder.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "third_party/skia/include/core/SkYUVSizeInfo.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-// Creates a SkPixelRef such that the memory for pixels is given by an external body.
-// This is used to write directly to the memory given by Skia during decoding.
-class ImageFrameGenerator::ExternalMemoryAllocator : public SkBitmap::Allocator {
+static bool compatibleInfo(const SkImageInfo& src, const SkImageInfo& dst)
+{
+    if (src == dst)
+        return true;
+
+    // It is legal to write kOpaque_SkAlphaType pixels into a kPremul_SkAlphaType
+    // buffer. This can happen when DeferredImageDecoder allocates an
+    // kOpaque_SkAlphaType image generator based on cached frame info, while the
+    // ImageFrame-allocated dest bitmap stays kPremul_SkAlphaType.
+    if (src.alphaType() == kOpaque_SkAlphaType && dst.alphaType() == kPremul_SkAlphaType) {
+        const SkImageInfo& tmp = src.makeAlphaType(kPremul_SkAlphaType);
+        return tmp == dst;
+    }
+
+    return false;
+}
+
+// Creates a SkPixelRef such that the memory for pixels is given by an external
+// body. This is used to write directly to the memory given by Skia during
+// decoding.
+class ExternalMemoryAllocator final : public SkBitmap::Allocator {
+    USING_FAST_MALLOC(ExternalMemoryAllocator);
+    WTF_MAKE_NONCOPYABLE(ExternalMemoryAllocator);
+
 public:
-    ExternalMemoryAllocator(const SkImageInfo& info, void* pixels, size_t rowBytes)
+    ExternalMemoryAllocator(const SkImageInfo& info,
+        void* pixels,
+        size_t rowBytes)
         : m_info(info)
         , m_pixels(pixels)
         , m_rowBytes(rowBytes)
@@ -51,10 +75,10 @@ public:
         if (kUnknown_SkColorType == info.colorType())
             return false;
 
-        if (info != m_info || m_rowBytes != dst->rowBytes())
+        if (!compatibleInfo(m_info, info) || m_rowBytes != dst->rowBytes())
             return false;
 
-        if (!dst->installPixels(m_info, m_pixels, m_rowBytes))
+        if (!dst->installPixels(info, m_pixels, m_rowBytes))
             return false;
         dst->lockPixels();
         return true;
@@ -66,28 +90,35 @@ private:
     size_t m_rowBytes;
 };
 
-static bool updateYUVComponentSizes(ImageDecoder* decoder, SkISize componentSizes[3], ImageDecoder::SizeType sizeType)
+static bool updateYUVComponentSizes(ImageDecoder* decoder,
+    SkISize componentSizes[3],
+    size_t componentWidthBytes[3])
 {
     if (!decoder->canDecodeToYUV())
         return false;
 
-    IntSize size = decoder->decodedYUVSize(0, sizeType);
+    IntSize size = decoder->decodedYUVSize(0);
     componentSizes[0].set(size.width(), size.height());
-    size = decoder->decodedYUVSize(1, sizeType);
+    componentWidthBytes[0] = decoder->decodedYUVWidthBytes(0);
+    size = decoder->decodedYUVSize(1);
     componentSizes[1].set(size.width(), size.height());
-    size = decoder->decodedYUVSize(2, sizeType);
+    componentWidthBytes[1] = decoder->decodedYUVWidthBytes(1);
+    size = decoder->decodedYUVSize(2);
     componentSizes[2].set(size.width(), size.height());
+    componentWidthBytes[2] = decoder->decodedYUVWidthBytes(2);
     return true;
 }
 
-ImageFrameGenerator::ImageFrameGenerator(const SkISize& fullSize, PassRefPtr<SharedBuffer> data, bool allDataReceived, bool isMultiFrame)
+ImageFrameGenerator::ImageFrameGenerator(const SkISize& fullSize,
+    bool isMultiFrame,
+    const ColorBehavior& colorBehavior)
     : m_fullSize(fullSize)
+    , m_decoderColorBehavior(colorBehavior)
     , m_isMultiFrame(isMultiFrame)
-    , m_decodeFailedAndEmpty(false)
-    , m_decodeCount(0)
+    , m_decodeFailed(false)
+    , m_yuvDecodingFailed(false)
     , m_frameCount(0)
 {
-    setData(data.get(), allDataReceived);
 }
 
 ImageFrameGenerator::~ImageFrameGenerator()
@@ -95,158 +126,148 @@ ImageFrameGenerator::~ImageFrameGenerator()
     ImageDecodingStore::instance().removeCacheIndexedByGenerator(this);
 }
 
-void ImageFrameGenerator::setData(PassRefPtr<SharedBuffer> data, bool allDataReceived)
+bool ImageFrameGenerator::decodeAndScale(SegmentReader* data,
+    bool allDataReceived,
+    size_t index,
+    const SkImageInfo& info,
+    void* pixels,
+    size_t rowBytes)
 {
-    m_data.setData(data.get(), allDataReceived);
-}
+    if (m_decodeFailed)
+        return false;
 
-void ImageFrameGenerator::copyData(RefPtr<SharedBuffer>* data, bool* allDataReceived)
-{
-    SharedBuffer* buffer = 0;
-    m_data.data(&buffer, allDataReceived);
-    if (buffer)
-        *data = buffer->copy();
-}
-
-bool ImageFrameGenerator::decodeAndScale(const SkImageInfo& info, size_t index, void* pixels, size_t rowBytes)
-{
-    // This method is called to populate a discardable memory owned by Skia.
-
-    // Prevents concurrent decode or scale operations on the same image data.
-    MutexLocker lock(m_decodeMutex);
+    TRACE_EVENT1("blink", "ImageFrameGenerator::decodeAndScale", "frame index",
+        static_cast<int>(index));
 
     // This implementation does not support scaling so check the requested size.
     SkISize scaledSize = SkISize::Make(info.width(), info.height());
     ASSERT(m_fullSize == scaledSize);
 
-    if (m_decodeFailedAndEmpty)
-        return false;
+    // It is okay to allocate ref-counted ExternalMemoryAllocator on the stack,
+    // because 1) it contains references to memory that will be invalid after
+    // returning (i.e. a pointer to |pixels|) and therefore 2) should not live
+    // longer than the call to the current method.
+    ExternalMemoryAllocator externalAllocator(info, pixels, rowBytes);
+    SkBitmap bitmap = tryToResumeDecode(data, allDataReceived, index, scaledSize,
+        &externalAllocator);
+    DCHECK(externalAllocator.unique()); // Verify we have the only ref-count.
 
-    TRACE_EVENT2("blink", "ImageFrameGenerator::decodeAndScale", "generator", this, "decodeCount", m_decodeCount);
-
-    m_externalAllocator = adoptPtr(new ExternalMemoryAllocator(info, pixels, rowBytes));
-
-    SkBitmap bitmap = tryToResumeDecode(scaledSize, index);
     if (bitmap.isNull())
         return false;
 
-    // Don't keep the allocator because it contains a pointer to memory
-    // that we do not own.
-    m_externalAllocator.clear();
-
+    // Check to see if the decoder has written directly to the pixel memory
+    // provided. If not, make a copy.
     ASSERT(bitmap.width() == scaledSize.width());
     ASSERT(bitmap.height() == scaledSize.height());
-
-    bool result = true;
     SkAutoLockPixels bitmapLock(bitmap);
-    // Check to see if decoder has written directly to the memory provided
-    // by Skia. If not make a copy.
     if (bitmap.getPixels() != pixels)
-        result = bitmap.copyPixelsTo(pixels, rowBytes * info.height(), rowBytes);
-    return result;
+        return bitmap.copyPixelsTo(pixels, rowBytes * info.height(), rowBytes);
+    return true;
 }
 
-bool ImageFrameGenerator::decodeToYUV(SkISize componentSizes[3], void* planes[3], size_t rowBytes[3])
+bool ImageFrameGenerator::decodeToYUV(SegmentReader* data,
+    size_t index,
+    const SkISize componentSizes[3],
+    void* planes[3],
+    const size_t rowBytes[3])
 {
-    // This method is called to populate a discardable memory owned by Skia.
-
-    // Prevents concurrent decode or scale operations on the same image data.
-    MutexLocker lock(m_decodeMutex);
-
-    if (m_decodeFailedAndEmpty)
+    // TODO (scroggo): The only interesting thing this uses from the
+    // ImageFrameGenerator is m_decodeFailed. Move this into
+    // DecodingImageGenerator, which is the only class that calls it.
+    if (m_decodeFailed)
         return false;
 
-    TRACE_EVENT2("blink", "ImageFrameGenerator::decodeToYUV", "generator", this, "decodeCount", static_cast<int>(m_decodeCount));
+    TRACE_EVENT1("blink", "ImageFrameGenerator::decodeToYUV", "frame index",
+        static_cast<int>(index));
 
-    if (!planes || !planes[0] || !planes[1] || !planes[2]
-        || !rowBytes || !rowBytes[0] || !rowBytes[1] || !rowBytes[2]) {
+    if (!planes || !planes[0] || !planes[1] || !planes[2] || !rowBytes || !rowBytes[0] || !rowBytes[1] || !rowBytes[2]) {
         return false;
     }
 
-    SharedBuffer* data = 0;
-    bool allDataReceived = false;
-    m_data.data(&data, &allDataReceived);
+    std::unique_ptr<ImageDecoder> decoder = ImageDecoder::create(
+        data, true, ImageDecoder::AlphaPremultiplied, m_decoderColorBehavior);
+    // getYUVComponentSizes was already called and was successful, so
+    // ImageDecoder::create must succeed.
+    ASSERT(decoder);
 
-    // FIXME: YUV decoding does not currently support progressive decoding.
-    ASSERT(allDataReceived);
+    std::unique_ptr<ImagePlanes> imagePlanes = WTF::makeUnique<ImagePlanes>(planes, rowBytes);
+    decoder->setImagePlanes(std::move(imagePlanes));
 
-    OwnPtr<ImageDecoder> decoder = ImageDecoder::create(*data, ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied);
-    if (!decoder)
-        return false;
+    ASSERT(decoder->canDecodeToYUV());
 
-    decoder->setData(data, allDataReceived);
-
-    OwnPtr<ImagePlanes> imagePlanes = adoptPtr(new ImagePlanes(planes, rowBytes));
-    decoder->setImagePlanes(imagePlanes.release());
-
-    bool sizeUpdated = updateYUVComponentSizes(decoder.get(), componentSizes, ImageDecoder::ActualSize);
-    RELEASE_ASSERT(sizeUpdated);
-
-    bool yuvDecoded = decoder->decodeToYUV();
-    if (yuvDecoded)
+    if (decoder->decodeToYUV()) {
         setHasAlpha(0, false); // YUV is always opaque
-    return yuvDecoded;
+        return true;
+    }
+
+    ASSERT(decoder->failed());
+    m_yuvDecodingFailed = true;
+    return false;
 }
 
-SkBitmap ImageFrameGenerator::tryToResumeDecode(const SkISize& scaledSize, size_t index)
+SkBitmap ImageFrameGenerator::tryToResumeDecode(
+    SegmentReader* data,
+    bool allDataReceived,
+    size_t index,
+    const SkISize& scaledSize,
+    SkBitmap::Allocator* allocator)
 {
-    TRACE_EVENT1("blink", "ImageFrameGenerator::tryToResumeDecodeAndScale", "index", static_cast<int>(index));
+    TRACE_EVENT1("blink", "ImageFrameGenerator::tryToResumeDecode", "frame index",
+        static_cast<int>(index));
 
     ImageDecoder* decoder = 0;
+
+    // Lock the mutex, so only one thread can use the decoder at once.
+    MutexLocker lock(m_decodeMutex);
     const bool resumeDecoding = ImageDecodingStore::instance().lockDecoder(this, m_fullSize, &decoder);
     ASSERT(!resumeDecoding || decoder);
 
     SkBitmap fullSizeImage;
-    bool complete = decode(index, &decoder, &fullSizeImage);
+    bool complete = decode(data, allDataReceived, index, &decoder, &fullSizeImage, allocator);
 
     if (!decoder)
         return SkBitmap();
-    if (index >= m_frameComplete.size())
-        m_frameComplete.resize(index + 1);
-    m_frameComplete[index] = complete;
 
     // If we are not resuming decoding that means the decoder is freshly
     // created and we have ownership. If we are resuming decoding then
     // the decoder is owned by ImageDecodingStore.
-    OwnPtr<ImageDecoder> decoderContainer;
+    std::unique_ptr<ImageDecoder> decoderContainer;
     if (!resumeDecoding)
-        decoderContainer = adoptPtr(decoder);
+        decoderContainer = WTF::wrapUnique(decoder);
 
     if (fullSizeImage.isNull()) {
-        // If decode has failed and resulted an empty image we can save work
-        // in the future by returning early.
-        m_decodeFailedAndEmpty = !m_isMultiFrame && decoder->failed();
-
+        // If decoding has failed, we can save work in the future by
+        // ignoring further requests to decode the image.
+        m_decodeFailed = decoder->failed();
         if (resumeDecoding)
             ImageDecodingStore::instance().unlockDecoder(this, decoder);
         return SkBitmap();
     }
 
-    // If the image generated is complete then there is no need to keep
-    // the decoder. For multi-frame images, if all frames in the image are
-    // decoded, we remove the decoder.
-    bool removeDecoder;
-
-    if (m_isMultiFrame) {
-        size_t decodedFrameCount = 0;
-        for (Vector<bool>::iterator it = m_frameComplete.begin(); it != m_frameComplete.end(); ++it) {
-            if (*it)
-                decodedFrameCount++;
-        }
-        removeDecoder = m_frameCount && (decodedFrameCount == m_frameCount);
-    } else {
-        removeDecoder = complete;
+    bool removeDecoder = false;
+    if (complete) {
+        // Free as much memory as possible.  For single-frame images, we can
+        // just delete the decoder entirely.  For multi-frame images, we keep
+        // the decoder around in order to preserve decoded information such as
+        // the required previous frame indexes, but if we've reached the last
+        // frame we can at least delete all the cached frames.  (If we were to
+        // do this before reaching the last frame, any subsequent requested
+        // frames which relied on the current frame would trigger extra
+        // re-decoding of all frames in the dependency chain.)
+        if (!m_isMultiFrame)
+            removeDecoder = true;
+        else if (index == m_frameCount - 1)
+            decoder->clearCacheExceptFrame(kNotFound);
     }
 
     if (resumeDecoding) {
-        if (removeDecoder) {
+        if (removeDecoder)
             ImageDecodingStore::instance().removeDecoder(this, decoder);
-            m_frameComplete.clear();
-        } else {
+        else
             ImageDecodingStore::instance().unlockDecoder(this, decoder);
-        }
     } else if (!removeDecoder) {
-        ImageDecodingStore::instance().insertDecoder(this, decoderContainer.release());
+        ImageDecodingStore::instance().insertDecoder(this,
+            std::move(decoderContainer));
     }
     return fullSizeImage;
 }
@@ -263,24 +284,34 @@ void ImageFrameGenerator::setHasAlpha(size_t index, bool hasAlpha)
     m_hasAlpha[index] = hasAlpha;
 }
 
-bool ImageFrameGenerator::decode(size_t index, ImageDecoder** decoder, SkBitmap* bitmap)
+bool ImageFrameGenerator::decode(SegmentReader* data,
+    bool allDataReceived,
+    size_t index,
+    ImageDecoder** decoder,
+    SkBitmap* bitmap,
+    SkBitmap::Allocator* allocator)
 {
-    TRACE_EVENT2("blink", "ImageFrameGenerator::decode", "width", m_fullSize.width(), "height", m_fullSize.height());
-
-    ASSERT(decoder);
-    SharedBuffer* data = 0;
-    bool allDataReceived = false;
-    bool newDecoder = false;
-    m_data.data(&data, &allDataReceived);
+    ASSERT(m_decodeMutex.locked());
+    TRACE_EVENT2("blink", "ImageFrameGenerator::decode", "width",
+        m_fullSize.width(), "height", m_fullSize.height());
 
     // Try to create an ImageDecoder if we are not given one.
+    ASSERT(decoder);
+    bool newDecoder = false;
+    bool shouldCallSetData = true;
     if (!*decoder) {
         newDecoder = true;
         if (m_imageDecoderFactory)
-            *decoder = m_imageDecoderFactory->create().leakPtr();
+            *decoder = m_imageDecoderFactory->create().release();
 
-        if (!*decoder)
-            *decoder = ImageDecoder::create(*data, ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied).leakPtr();
+        if (!*decoder) {
+            *decoder = ImageDecoder::create(data, allDataReceived,
+                ImageDecoder::AlphaPremultiplied,
+                m_decoderColorBehavior)
+                           .release();
+            // The newly created decoder just grabbed the data.  No need to reset it.
+            shouldCallSetData = false;
+        }
 
         if (!*decoder)
             return false;
@@ -289,12 +320,14 @@ bool ImageFrameGenerator::decode(size_t index, ImageDecoder** decoder, SkBitmap*
     if (!m_isMultiFrame && newDecoder && allDataReceived) {
         // If we're using an external memory allocator that means we're decoding
         // directly into the output memory and we can save one memcpy.
-        ASSERT(m_externalAllocator.get());
-        (*decoder)->setMemoryAllocator(m_externalAllocator.get());
+        ASSERT(allocator);
+        (*decoder)->setMemoryAllocator(allocator);
     }
-    (*decoder)->setData(data, allDataReceived);
 
+    if (shouldCallSetData)
+        (*decoder)->setData(data, allDataReceived);
     ImageFrame* frame = (*decoder)->frameBufferAtIndex(index);
+
     // For multi-frame image decoders, we need to know how many frames are
     // in that image in order to release the decoder when all frames are
     // decoded. frameCount() is reliable only if all data is received and set in
@@ -302,23 +335,25 @@ bool ImageFrameGenerator::decode(size_t index, ImageDecoder** decoder, SkBitmap*
     if (allDataReceived)
         m_frameCount = (*decoder)->frameCount();
 
-    (*decoder)->setData(0, false); // Unref SharedBuffer from ImageDecoder.
+    (*decoder)->setData(PassRefPtr<SegmentReader>(nullptr),
+        false); // Unref SegmentReader from ImageDecoder.
     (*decoder)->clearCacheExceptFrame(index);
     (*decoder)->setMemoryAllocator(0);
 
-    if (!frame || frame->status() == ImageFrame::FrameEmpty)
+    if (!frame || frame->getStatus() == ImageFrame::FrameEmpty)
         return false;
 
     // A cache object is considered complete if we can decode a complete frame.
     // Or we have received all data. The image might not be fully decoded in
     // the latter case.
-    const bool isDecodeComplete = frame->status() == ImageFrame::FrameComplete || allDataReceived;
-    SkBitmap fullSizeBitmap = frame->getSkBitmap();
-    if (!fullSizeBitmap.isNull())
-    {
+    const bool isDecodeComplete = frame->getStatus() == ImageFrame::FrameComplete || allDataReceived;
+
+    SkBitmap fullSizeBitmap = frame->bitmap();
+    if (!fullSizeBitmap.isNull()) {
         ASSERT(fullSizeBitmap.width() == m_fullSize.width() && fullSizeBitmap.height() == m_fullSize.height());
         setHasAlpha(index, !fullSizeBitmap.isOpaque());
     }
+
     *bitmap = fullSizeBitmap;
     return isDecodeComplete;
 }
@@ -331,35 +366,27 @@ bool ImageFrameGenerator::hasAlpha(size_t index)
     return true;
 }
 
-bool ImageFrameGenerator::getYUVComponentSizes(SkISize componentSizes[3])
+bool ImageFrameGenerator::getYUVComponentSizes(SegmentReader* data,
+    SkYUVSizeInfo* sizeInfo)
 {
-    ASSERT(componentSizes);
+    TRACE_EVENT2("blink", "ImageFrameGenerator::getYUVComponentSizes", "width",
+        m_fullSize.width(), "height", m_fullSize.height());
 
-    TRACE_EVENT2("webkit", "ImageFrameGenerator::getYUVComponentSizes", "width", m_fullSize.width(), "height", m_fullSize.height());
-
-    SharedBuffer* data = 0;
-    bool allDataReceived = false;
-    m_data.data(&data, &allDataReceived);
-
-    // FIXME: YUV decoding does not currently support progressive decoding.
-    if (!allDataReceived)
+    if (m_yuvDecodingFailed)
         return false;
 
-    OwnPtr<ImageDecoder> decoder = ImageDecoder::create(*data, ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied);
+    std::unique_ptr<ImageDecoder> decoder = ImageDecoder::create(
+        data, true, ImageDecoder::AlphaPremultiplied, m_decoderColorBehavior);
     if (!decoder)
         return false;
 
-    // JPEG images support YUV decoding: other decoders do not. So don't pump data into decoders
-    // that always return false to updateYUVComponentSizes() requests.
-    if (decoder->filenameExtension() != "jpg")
-        return false;
+    // Setting a dummy ImagePlanes object signals to the decoder that we want to
+    // do YUV decoding.
+    std::unique_ptr<ImagePlanes> dummyImagePlanes = WTF::wrapUnique(new ImagePlanes);
+    decoder->setImagePlanes(std::move(dummyImagePlanes));
 
-    // Setting a dummy ImagePlanes object signals to the decoder that we want to do YUV decoding.
-    decoder->setData(data, allDataReceived);
-    OwnPtr<ImagePlanes> dummyImagePlanes = adoptPtr(new ImagePlanes);
-    decoder->setImagePlanes(dummyImagePlanes.release());
-
-    return updateYUVComponentSizes(decoder.get(), componentSizes, ImageDecoder::SizeForMemoryAllocation);
+    return updateYUVComponentSizes(decoder.get(), sizeInfo->fSizes,
+        sizeInfo->fWidthBytes);
 }
 
 } // namespace blink

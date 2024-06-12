@@ -13,68 +13,79 @@
 namespace v8_inspector {
 
 namespace ConsoleAgentState {
-static const char consoleEnabled[] = "consoleEnabled";
+    static const char consoleEnabled[] = "consoleEnabled";
 }
 
 V8ConsoleAgentImpl::V8ConsoleAgentImpl(
     V8InspectorSessionImpl* session, protocol::FrontendChannel* frontendChannel,
     protocol::DictionaryValue* state)
-    : m_session(session),
-      m_state(state),
-      m_frontend(frontendChannel),
-      m_enabled(false) {}
+    : m_session(session)
+    , m_state(state)
+    , m_frontend(frontendChannel)
+    , m_enabled(false)
+{
+}
 
 V8ConsoleAgentImpl::~V8ConsoleAgentImpl() = default;
 
-Response V8ConsoleAgentImpl::enable() {
-  if (m_enabled) return Response::OK();
-  m_state->setBoolean(ConsoleAgentState::consoleEnabled, true);
-  m_enabled = true;
-  m_session->inspector()->enableStackCapturingIfNeeded();
-  reportAllMessages();
-  return Response::OK();
+Response V8ConsoleAgentImpl::enable()
+{
+    if (m_enabled)
+        return Response::OK();
+    m_state->setBoolean(ConsoleAgentState::consoleEnabled, true);
+    m_enabled = true;
+    m_session->inspector()->enableStackCapturingIfNeeded();
+    reportAllMessages();
+    return Response::OK();
 }
 
-Response V8ConsoleAgentImpl::disable() {
-  if (!m_enabled) return Response::OK();
-  m_session->inspector()->disableStackCapturingIfNeeded();
-  m_state->setBoolean(ConsoleAgentState::consoleEnabled, false);
-  m_enabled = false;
-  return Response::OK();
+Response V8ConsoleAgentImpl::disable()
+{
+    if (!m_enabled)
+        return Response::OK();
+    m_session->inspector()->disableStackCapturingIfNeeded();
+    m_state->setBoolean(ConsoleAgentState::consoleEnabled, false);
+    m_enabled = false;
+    return Response::OK();
 }
 
 Response V8ConsoleAgentImpl::clearMessages() { return Response::OK(); }
 
-void V8ConsoleAgentImpl::restore() {
-  if (!m_state->booleanProperty(ConsoleAgentState::consoleEnabled, false))
-    return;
-  enable();
+void V8ConsoleAgentImpl::restore()
+{
+    if (!m_state->booleanProperty(ConsoleAgentState::consoleEnabled, false))
+        return;
+    enable();
 }
 
-void V8ConsoleAgentImpl::messageAdded(V8ConsoleMessage* message) {
-  if (m_enabled) reportMessage(message, true);
+void V8ConsoleAgentImpl::messageAdded(V8ConsoleMessage* message)
+{
+    if (m_enabled)
+        reportMessage(message, true);
 }
 
 bool V8ConsoleAgentImpl::enabled() { return m_enabled; }
 
-void V8ConsoleAgentImpl::reportAllMessages() {
-  V8ConsoleMessageStorage* storage =
-      m_session->inspector()->ensureConsoleMessageStorage(
-          m_session->contextGroupId());
-  for (const auto& message : storage->messages()) {
-    if (message->origin() == V8MessageOrigin::kConsole) {
-      if (!reportMessage(message.get(), false)) return;
+void V8ConsoleAgentImpl::reportAllMessages()
+{
+    V8ConsoleMessageStorage* storage = m_session->inspector()->ensureConsoleMessageStorage(
+        m_session->contextGroupId());
+    for (const auto& message : storage->messages()) {
+        if (message->origin() == V8MessageOrigin::kConsole) {
+            if (!reportMessage(message.get(), false))
+                return;
+        }
     }
-  }
 }
 
 bool V8ConsoleAgentImpl::reportMessage(V8ConsoleMessage* message,
-                                       bool generatePreview) {
-  DCHECK_EQ(V8MessageOrigin::kConsole, message->origin());
-  message->reportToFrontend(&m_frontend);
-  m_frontend.flush();
-  return m_session->inspector()->hasConsoleMessageStorage(
-      m_session->contextGroupId());
+    bool generatePreview)
+{
+    DCHECK_EQ(V8MessageOrigin::kConsole, message->origin());
+    message->reportToFrontend(&m_frontend);
+    m_frontend.flush();
+    return m_session->inspector()->hasConsoleMessageStorage(
+        m_session->contextGroupId());
 }
 
-}  // namespace v8_inspector
+} // namespace v8_inspector

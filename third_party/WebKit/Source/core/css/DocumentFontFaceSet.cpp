@@ -23,14 +23,13 @@
  * DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/DocumentFontFaceSet.h"
 
 #include "core/css/FontFaceSet.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<FontFaceSet> DocumentFontFaceSet::fonts(Document& document)
+FontFaceSet* DocumentFontFaceSet::fonts(Document& document)
 {
     return FontFaceSet::from(document);
 }

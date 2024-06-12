@@ -5,8 +5,8 @@
  * found in the LICENSE file.
  */
 
-#include "SkCanvas.h"
 #include "SkBBoxHierarchy.h"
+#include "SkCanvas.h"
 #include "SkPaint.h"
 #include "SkPicture.h"
 #include "SkPictureRecorder.h"
@@ -16,7 +16,8 @@
 class PictureBBHTestBase {
 public:
     PictureBBHTestBase(int playbackWidth, int playbackHeight,
-        int recordWidth, int recordHeight) {
+        int recordWidth, int recordHeight)
+    {
 
         fResultBitmap.allocN32Pixels(playbackWidth, playbackHeight);
         fPictureWidth = recordWidth;
@@ -27,9 +28,10 @@ public:
 
     virtual void doTest(SkCanvas& playbackCanvas, SkCanvas& recordingCanvas) = 0;
 
-    void run(skiatest::Reporter* reporter) {
+    void run(skiatest::Reporter* reporter)
+    {
         // No BBH
-        this->run(NULL, reporter);
+        this->run(nullptr, reporter);
 
         // With an R-Tree
         SkRTreeFactory RTreeFactory;
@@ -37,15 +39,16 @@ public:
     }
 
 private:
-    void run(SkBBHFactory* factory, skiatest::Reporter* reporter) {
+    void run(SkBBHFactory* factory, skiatest::Reporter* reporter)
+    {
         SkCanvas playbackCanvas(fResultBitmap);
         playbackCanvas.clear(SK_ColorGREEN);
         SkPictureRecorder recorder;
         SkCanvas* recordCanvas = recorder.beginRecording(SkIntToScalar(fPictureWidth),
-                                                         SkIntToScalar(fPictureHeight),
-                                                         factory);
+            SkIntToScalar(fPictureHeight),
+            factory);
         this->doTest(playbackCanvas, *recordCanvas);
-        SkAutoTUnref<SkPicture> picture(recorder.endRecording());
+        sk_sp<SkPicture> picture(recorder.finishRecordingAsPicture());
         playbackCanvas.drawPicture(picture);
         REPORTER_ASSERT(reporter, SK_ColorGREEN == fResultBitmap.getColor(0, 0));
     }
@@ -59,7 +62,9 @@ private:
 class DrawEmptyPictureBBHTest : public PictureBBHTestBase {
 public:
     DrawEmptyPictureBBHTest()
-        : PictureBBHTestBase(2, 2, 1, 1) { }
+        : PictureBBHTestBase(2, 2, 1, 1)
+    {
+    }
     virtual ~DrawEmptyPictureBBHTest() { }
 
     void doTest(SkCanvas&, SkCanvas&) override { }
@@ -71,21 +76,27 @@ public:
 class EmptyClipPictureBBHTest : public PictureBBHTestBase {
 public:
     EmptyClipPictureBBHTest()
-        : PictureBBHTestBase(2, 2, 3, 3) { }
+        : PictureBBHTestBase(2, 2, 3, 3)
+    {
+    }
 
-    void doTest(SkCanvas& playbackCanvas, SkCanvas& recordingCanvas) override {
+    void doTest(SkCanvas& playbackCanvas, SkCanvas& recordingCanvas) override
+    {
         // intersect with out of bounds rect -> empty clip.
         playbackCanvas.clipRect(SkRect::MakeXYWH(SkIntToScalar(10), SkIntToScalar(10),
-            SkIntToScalar(1), SkIntToScalar(1)), SkRegion::kIntersect_Op);
+                                    SkIntToScalar(1), SkIntToScalar(1)),
+            SkRegion::kIntersect_Op);
         SkPaint paint;
         recordingCanvas.drawRect(SkRect::MakeXYWH(SkIntToScalar(0), SkIntToScalar(0),
-            SkIntToScalar(3), SkIntToScalar(3)), paint);
+                                     SkIntToScalar(3), SkIntToScalar(3)),
+            paint);
     }
 
     virtual ~EmptyClipPictureBBHTest() { }
 };
 
-DEF_TEST(PictureBBH, reporter) {
+DEF_TEST(PictureBBH, reporter)
+{
 
     DrawEmptyPictureBBHTest emptyPictureTest;
     emptyPictureTest.run(reporter);

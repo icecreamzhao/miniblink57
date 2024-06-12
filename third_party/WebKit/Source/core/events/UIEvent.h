@@ -29,41 +29,48 @@
 #include "core/events/EventDispatchMediator.h"
 #include "core/events/UIEventInit.h"
 #include "core/frame/DOMWindow.h"
-#include "core/input/InputDevice.h"
 
 namespace blink {
 
-// FIXME: Get rid of this typedef.
-typedef DOMWindow AbstractView;
+class InputDeviceCapabilities;
+
+// FIXME: Get rid of this type alias.
+using AbstractView = DOMWindow;
 
 class CORE_EXPORT UIEvent : public Event {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    static PassRefPtrWillBeRawPtr<UIEvent> create()
-    {
-        return adoptRefWillBeNoop(new UIEvent);
-    }
-    static PassRefPtrWillBeRawPtr<UIEvent> create(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view, int detail)
-    {
-        return adoptRefWillBeNoop(new UIEvent(type, canBubble, cancelable, view, detail));
-    }
-    static PassRefPtrWillBeRawPtr<UIEvent> create(const AtomicString& type, const UIEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new UIEvent(type, initializer));
-    }
-    virtual ~UIEvent();
 
-    void initUIEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView>, int detail);
+public:
+    static UIEvent* create() { return new UIEvent; }
+    static UIEvent* create(const AtomicString& type,
+        const UIEventInit& initializer)
+    {
+        return new UIEvent(type, initializer);
+    }
+    ~UIEvent() override;
+
+    void initUIEvent(const AtomicString& type,
+        bool canBubble,
+        bool cancelable,
+        AbstractView*,
+        int detail);
+    void initUIEventInternal(const AtomicString& type,
+        bool canBubble,
+        bool cancelable,
+        EventTarget* relatedTarget,
+        AbstractView*,
+        int detail,
+        InputDeviceCapabilities* sourceCapabilities);
 
     AbstractView* view() const { return m_view.get(); }
     int detail() const { return m_detail; }
-    InputDevice* sourceDevice() const { return m_sourceDevice.get(); }
+    InputDeviceCapabilities* sourceCapabilities() const
+    {
+        return m_sourceCapabilities.get();
+    }
 
-    virtual const AtomicString& interfaceName() const override;
-    virtual bool isUIEvent() const override final;
-
-    virtual int keyCode() const;
-    virtual int charCode() const;
+    const AtomicString& interfaceName() const override;
+    bool isUIEvent() const final;
 
     virtual int which() const;
 
@@ -71,13 +78,20 @@ public:
 
 protected:
     UIEvent();
-    UIEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView>, int detail, InputDevice* sourceDevice = nullptr);
+    UIEvent(const AtomicString& type,
+        bool canBubble,
+        bool cancelable,
+        ComposedMode,
+        TimeTicks platformTimeStamp,
+        AbstractView*,
+        int detail,
+        InputDeviceCapabilities* sourceCapabilities);
     UIEvent(const AtomicString&, const UIEventInit&);
 
 private:
-    RefPtrWillBeMember<AbstractView> m_view;
+    Member<AbstractView> m_view;
     int m_detail;
-    PersistentWillBeMember<InputDevice> m_sourceDevice;
+    Member<InputDeviceCapabilities> m_sourceCapabilities;
 };
 
 } // namespace blink

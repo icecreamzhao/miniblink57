@@ -38,14 +38,17 @@
 
 namespace blink {
 
-class CORE_EXPORT AnimatableValue : public RefCountedWillBeGarbageCollectedFinalized<AnimatableValue> {
+class CORE_EXPORT AnimatableValue : public RefCounted<AnimatableValue> {
 public:
     virtual ~AnimatableValue() { }
 
-    static const AnimatableValue* neutralValue();
+    static PassRefPtr<AnimatableValue> neutralValue();
 
-    static PassRefPtrWillBeRawPtr<AnimatableValue> interpolate(const AnimatableValue*, const AnimatableValue*, double fraction);
-    static bool usesDefaultInterpolation(const AnimatableValue* from, const AnimatableValue* to)
+    static PassRefPtr<AnimatableValue> interpolate(const AnimatableValue*,
+        const AnimatableValue*,
+        double fraction);
+    static bool usesDefaultInterpolation(const AnimatableValue* from,
+        const AnimatableValue* to)
     {
         return !from->isSameType(to) || from->usesDefaultInterpolationWith(to);
     }
@@ -54,10 +57,7 @@ public:
     {
         return isSameType(value) && equalTo(value);
     }
-    bool equals(const AnimatableValue& value) const
-    {
-        return equals(&value);
-    }
+    bool equals(const AnimatableValue& value) const { return equals(&value); }
 
     bool isClipPathOperation() const { return type() == TypeClipPathOperation; }
     bool isColor() const { return type() == TypeColor; }
@@ -72,23 +72,25 @@ public:
     bool isLengthPoint3D() const { return type() == TypeLengthPoint3D; }
     bool isLengthSize() const { return type() == TypeLengthSize; }
     bool isNeutral() const { return type() == TypeNeutral; }
+    bool isPath() const { return type() == TypePath; }
     bool isRepeatable() const { return type() == TypeRepeatable; }
     bool isSVGLength() const { return type() == TypeSVGLength; }
     bool isSVGPaint() const { return type() == TypeSVGPaint; }
     bool isShadow() const { return type() == TypeShadow; }
     bool isShapeValue() const { return type() == TypeShapeValue; }
-    bool isStrokeDasharrayList() const { return type() == TypeStrokeDasharrayList; }
+    bool isStrokeDasharrayList() const
+    {
+        return type() == TypeStrokeDasharrayList;
+    }
     bool isTransform() const { return type() == TypeTransform; }
     bool isUnknown() const { return type() == TypeUnknown; }
     bool isVisibility() const { return type() == TypeVisibility; }
 
     bool isSameType(const AnimatableValue* value) const
     {
-        ASSERT(value);
+        DCHECK(value);
         return value->type() == type();
     }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
 
 protected:
     enum AnimatableType {
@@ -105,6 +107,7 @@ protected:
         TypeLengthPoint3D,
         TypeLengthSize,
         TypeNeutral,
+        TypePath,
         TypeRepeatable,
         TypeSVGLength,
         TypeSVGPaint,
@@ -116,23 +119,40 @@ protected:
         TypeVisibility,
     };
 
-    virtual bool usesDefaultInterpolationWith(const AnimatableValue* value) const { return false; }
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const = 0;
-    static PassRefPtrWillBeRawPtr<AnimatableValue> defaultInterpolateTo(const AnimatableValue* left, const AnimatableValue* right, double fraction) { return takeConstRef((fraction < 0.5) ? left : right); }
+    virtual bool usesDefaultInterpolationWith(
+        const AnimatableValue* value) const
+    {
+        return false;
+    }
+    virtual PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
+        double fraction) const = 0;
+    static PassRefPtr<AnimatableValue> defaultInterpolateTo(
+        const AnimatableValue* left,
+        const AnimatableValue* right,
+        double fraction)
+    {
+        return takeConstRef((fraction < 0.5) ? left : right);
+    }
 
     template <class T>
-    static PassRefPtrWillBeRawPtr<T> takeConstRef(const T* value) { return PassRefPtrWillBeRawPtr<T>(const_cast<T*>(value)); }
+    static PassRefPtr<T> takeConstRef(const T* value)
+    {
+        return PassRefPtr<T>(const_cast<T*>(value));
+    }
 
 private:
     virtual AnimatableType type() const = 0;
-    // Implementations can assume that the object being compared has the same type as the object this is called on
+    // Implementations can assume that the object being compared has the same type
+    // as the object this is called on
     virtual bool equalTo(const AnimatableValue*) const = 0;
 
-    template <class Keyframe> friend class KeyframeEffectModel;
+    template <class Keyframe>
+    friend class KeyframeEffectModel;
 };
 
-#define DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(thisType, predicate) \
-    DEFINE_TYPE_CASTS(thisType, AnimatableValue, value, value->predicate, value.predicate)
+#define DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(thisType, predicate)           \
+    DEFINE_TYPE_CASTS(thisType, AnimatableValue, value, value->predicate, \
+        value.predicate)
 
 } // namespace blink
 

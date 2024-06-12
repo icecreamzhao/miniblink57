@@ -11,26 +11,26 @@
 namespace v8 {
 namespace internal {
 
-// Changes the ID of all FunctionLiterals in the given Expression by adding the
-// given delta.
-class AstFunctionLiteralIdReindexer final
-    : public AstTraversalVisitor<AstFunctionLiteralIdReindexer> {
- public:
-  AstFunctionLiteralIdReindexer(size_t stack_limit, int delta);
-  ~AstFunctionLiteralIdReindexer();
+    // Changes the ID of all FunctionLiterals in the given Expression by adding the
+    // given delta.
+    class AstFunctionLiteralIdReindexer final
+        : public AstTraversalVisitor<AstFunctionLiteralIdReindexer> {
+    public:
+        AstFunctionLiteralIdReindexer(size_t stack_limit, int delta);
+        ~AstFunctionLiteralIdReindexer();
 
-  void Reindex(Expression* pattern);
+        void Reindex(Expression* pattern);
 
-  // AstTraversalVisitor implementation.
-  void VisitFunctionLiteral(FunctionLiteral* lit);
+        // AstTraversalVisitor implementation.
+        void VisitFunctionLiteral(FunctionLiteral* lit);
 
- private:
-  int delta_;
+    private:
+        int delta_;
 
-  DISALLOW_COPY_AND_ASSIGN(AstFunctionLiteralIdReindexer);
-};
+        DISALLOW_COPY_AND_ASSIGN(AstFunctionLiteralIdReindexer);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_AST_AST_FUNCTION_LITERAL_ID_REINDEXER_H_
+#endif // V8_AST_AST_FUNCTION_LITERAL_ID_REINDEXER_H_

@@ -21,7 +21,6 @@
 #define SVGMaskElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedEnumeration.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGElement.h"
@@ -31,10 +30,10 @@
 
 namespace blink {
 
-class SVGMaskElement final : public SVGElement,
-                             public SVGTests {
+class SVGMaskElement final : public SVGElement, public SVGTests {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGMaskElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGMaskElement);
+
 public:
     DECLARE_NODE_FACTORY(SVGMaskElement);
 
@@ -42,20 +41,26 @@ public:
     SVGAnimatedLength* y() const { return m_y.get(); }
     SVGAnimatedLength* width() const { return m_width.get(); }
     SVGAnimatedLength* height() const { return m_height.get(); }
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* maskUnits() { return m_maskUnits.get(); }
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* maskContentUnits() { return m_maskContentUnits.get(); }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* maskUnits()
+    {
+        return m_maskUnits.get();
+    }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* maskContentUnits()
+    {
+        return m_maskContentUnits.get();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit SVGMaskElement(Document&);
 
-    bool isValid() const override { return SVGTests::isValid(document()); }
+    bool isValid() const override { return SVGTests::isValid(); }
     bool needsPendingResourceHandling() const override { return false; }
 
-    bool isPresentationAttribute(const QualifiedName&) const override;
-    bool isPresentationAttributeWithSVGDOM(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
     void svgAttributeChanged(const QualifiedName&) override;
     void childrenChanged(const ChildrenChange&) override;
 
@@ -63,12 +68,12 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_x;
-    RefPtrWillBeMember<SVGAnimatedLength> m_y;
-    RefPtrWillBeMember<SVGAnimatedLength> m_width;
-    RefPtrWillBeMember<SVGAnimatedLength> m_height;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_maskUnits;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_maskContentUnits;
+    Member<SVGAnimatedLength> m_x;
+    Member<SVGAnimatedLength> m_y;
+    Member<SVGAnimatedLength> m_width;
+    Member<SVGAnimatedLength> m_height;
+    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_maskUnits;
+    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_maskContentUnits;
 };
 
 } // namespace blink

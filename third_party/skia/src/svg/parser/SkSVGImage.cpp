@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkSVGImage.h"
 #include "SkSVGParser.h"
@@ -14,24 +12,27 @@ const SkSVGAttribute SkSVGImage::gAttributes[] = {
     SVG_ATTRIBUTE(height),
     SVG_ATTRIBUTE(width),
     SVG_ATTRIBUTE(x),
-    SVG_LITERAL_ATTRIBUTE(xlink:href, f_xlink_href),
+    SVG_LITERAL_ATTRIBUTE(xlink
+                          : href, f_xlink_href),
     SVG_ATTRIBUTE(y)
 };
 
 DEFINE_SVG_INFO(Image)
 
-void SkSVGImage::translate(SkSVGParser& parser, bool defState) {
+void SkSVGImage::translate(SkSVGParser& parser, bool defState)
+{
     parser._startElement("image");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE(x);
     SVG_ADD_ATTRIBUTE(y);
-//  SVG_ADD_ATTRIBUTE(width);
-//  SVG_ADD_ATTRIBUTE(height);
+    //  SVG_ADD_ATTRIBUTE(width);
+    //  SVG_ADD_ATTRIBUTE(height);
     translateImage(parser);
     parser._endElement();
 }
 
-void SkSVGImage::translateImage(SkSVGParser& parser) {
+void SkSVGImage::translateImage(SkSVGParser& parser)
+{
     SkASSERT(f_xlink_href.size() > 0);
     const char* data = f_xlink_href.c_str();
     SkASSERT(strncmp(data, "data:image/", 11) == 0);

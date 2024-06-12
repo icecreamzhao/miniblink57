@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkHitClear.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -19,7 +18,8 @@ const SkMemberInfo SkHitClear::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkHitClear);
 
-bool SkHitClear::enable(SkAnimateMaker&) {
+bool SkHitClear::enable(SkAnimateMaker&)
+{
     for (int tIndex = 0; tIndex < targets.count(); tIndex++) {
         SkDisplayable* target = targets[tIndex];
         target->clearBounder();
@@ -27,6 +27,7 @@ bool SkHitClear::enable(SkAnimateMaker&) {
     return true;
 }
 
-bool SkHitClear::hasEnable() const {
+bool SkHitClear::hasEnable() const
+{
     return true;
 }

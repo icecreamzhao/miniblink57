@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/Dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Œ“µƒ“Ù¿÷</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="Content-Type" content="text/html; charset=ansi"/>
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<script src="js/jquery.js"></script>
+<style>
+.pr {
+    position: relative;
+}
+.pa {
+    position: absolute;
+}
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.oh {
+    overflow: hidden;
+}
+.center {
+    text-align: center
+}
+@keyframes rotary {
+0% {
+transform:rotate(0deg);
+}
+25% {
+transform:rotate(90deg);
+}
+50% {
+transform:rotate(180deg);
+}
+75% {
+transform:rotate(270deg);
+}
+100% {
+transform:rotate(360deg);
+}
+}
+.showPic {
+    width: 838px;
+    height: 478px;
+    border: 1px solid #EFF3F5;
+    position: relative;
+    background-color: #fff
+}
+.showPic .SoundDiskBox {
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    margin-left: -100px;
+    top: 80px;
+}
+.showPic .SoundDiskBox .SoundPlayerBg {
+    animation: rotary 10s linear infinite;
+    -webkit-animation: rotary 10s linear infinite;
+    animation-play-state: paused;
+    width: 200px;
+    height: 200px;
+    background: url("image/sound/viny-disc.png") no-repeat center;
+    background-size: 200px;
+    border-radius: 50%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+.showPic .SoundDiskBox .SoundPlayerBtn {
+    cursor: pointer;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+}
+.showPic .SoundDiskBox.StartPlay .SoundPlayerBtn {
+    background: #fff url("image/sound/play-2.png") no-repeat center;
+    background-size: 100% 100%;
+}
+.showPic .SoundDiskBox.PausePlay .SoundPlayerBtn {
+    background: #fff url("image/sound/pause-2.png") no-repeat center;
+    background-size: 100% 100%;
+}
+.showPic .SoundDiskBox.PausePlay .SoundPlayerBg {
+    animation-play-state: running;
+}
+.showPic .DurationBox {
+    width: 648px;
+    height: 64px;
+    line-height: 64px;
+    font-size: 20px;
+    position: absolute;
+    left: 50%;
+    margin-left: -324px;
+    top: 360px;
+}
+.showPic .DurationBox .SoundStartTime, .showPic .DurationBox .SoundEndTime {
+    width: 50px;
+    height: 64px;
+    line-height: 64px;
+}
+.showPic .SoundWave {
+    cursor: pointer;
+    width: 526px;
+    height: 40px;
+    margin: 10px 10px 0 10px;
+    background: #bfbfbf;
+}
+.showPic .SoundWave .progressBar {
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background: url(image/sound/audio.png) no-repeat -16px -83px;
+}
+.showPic .SoundWave .move-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    display: block;
+    width: 0;
+    height: 40px;
+    background-color: #FFD100;
+}
+</style>
+</head>
+<body>
+<div class="header-pic-title" style="display:none;width:100%;height:60px;background:#fff;position:fixed;z-index:50;top:-60px;box-shadow:rgba(0, 0, 0, 0.1) 0px 2px 4px;">
+  <div style="margin:0 auto;width:100%;">
+    <div  style="float:left;height:60px;line-height:60px;font-size:18px;">0069_20220424_151857_SR</div>
+  </div>
+</div>
+<style>
+	img{border:none;}
+	
+	.header-max{width:100%;height:60px;background-color:#FFD100;min-width: 1180px;}
+	.header{width:1180px;height:60px;line-height:60%;margin:0 auto;}
+	.header-left{float:left;width:750px;}
+	.header-logo{margin:14px 50px 0 0px;float:left;}
+	.header-ul{overflow:hidden;height:60px;line-height:60px;}
+	.header-ul li{float:left;margin-right:20px;font-size:16px;}
+	.header-right{float:right;width:412px;}
+	.header-search{position:relative;width:320px;height:60px;float:left;overflow:hidden;}
+	.header-search-input{padding-left:10px;width:320px;height:32px;background:#fff;border:none;border-radius:5px;margin-top:14px;}
+	.header-button-div{width:72px;height:60px;float:right;position:relative;z-index:60}
+	.button-login{display:inline-block;width:72px;height:30px;line-height:30px;text-align:center;border:1px solid #282828;border-radius:5px;margin-top:14px;}
+	.search-button{display:inline-block;width:16px;height:17px;background:url('image/icon-search.png');position:absolute;top:21px;right:10px}
+	
+	
+	.userinfo3:hover{background:#f4f4f4;}
+	
+</style>
+<script>
+    var statsData 	= {};
+    statsData.startLoadTime 			= (new Date()).getTime();
+    statsData.pageCode 				= '81';
+    statsData.exeTime 				= '0.0205';
+    statsData.url 					= '';
+        statsData.s_s 					= '';
+    statsData.s_k_i 				= '';
+    
+    	statsData.BDTG 					= "";
+	</script>
+<div id="give-model" style="display: none">
+  <div style="width: 620px;background: url('image/give/515-bonus.png');height: 410px;position: fixed;z-index: 102;top: 50%;left: 50%;margin-left: -350px;margin-top: -250px"> </div>
+  </a> <a href="javascript:;" class="close-give">
+  <div style="background: url('image/give/btn-newdelete.png');z-index: 102;height: 15px;width: 15px;float: left;position: fixed;top: 50%;left: 50%;margin-left: 208px;margin-top: -242px;"> </div>
+  </a> </div>
+<script src="js/common.v1.2.js?t=1238"></script> 
+<script>
+
+    function checkGivenCode()
+    {
+        $("#give-model").show();
+        $(".mask").show();
+        $.getJSON("http://www.51miz.com/?m=getCode&a=getrecord&ajax=1&callback=?",{"from_web":"2","userid":"0"},function (result) {});
+    }
+
+    
+        $(".close-give").live("click",function () {
+            $("#give-model").hide();
+            $(".mask").hide();
+            document.cookie="closetip=1";
+        });
+
+        $(".give-notice").live("click",function () {
+            checkGivenCode();
+        });
+
+</script> 
+<script type="text/javascript">
+
+		$(function(){
+			$(".user-img").live("mouseover",function(){$(".userinfo-box").show();});
+			$(".header-button-div").live("mouseleave",function(){$(".userinfo-box").hide();});
+		})
+</script>
+<style>
+    .main-banner{width:100%;background:#fff;}
+    .main-banner{text-align:center;padding:20px 0;border-bottom:1px solid #f0f0f0;}
+
+    .main{width:100%;background:#f0f0f0;overflow:hidden;}
+
+    .show-fav{display:inline-block;width:50px;height:100%;border-radius:5px;background:url('image/icon-star.png') no-repeat center;background-color:#d8d8d8;float: left;}
+    .show-fav.on{background-color:#FFD100}
+</style>
+<!--banner-->
+
+<div class="main" style="padding-top:20px;">
+<div class="main-content" style="width:1180px;margin:0 auto;">
+  <div class="pic-title" style="width:1180px;font-size:18px;">0069_20220424_151857_SR</div>
+  <div style="margin-top:20px;overflow:hidden;position:relative;">
+    <div class="picBox" style="width:840px;float:left;">
+      <div class="showPic center">
+        <div class="SoundDiskBox pr StartPlay" data-width="526">
+          <div class="SoundPlayerBg"></div>
+          <div class="SoundPlayerBtn pa opacity-8"></div>
+        </div>
+        <audio preload="none" data-time="248">
+          <source src="beyond - À≠∞ÈŒ“¥≥µ¥.mp3" type="audio/mpeg">
+        </audio>
+        <div class="DurationBox">
+          <div class="SoundStartTime fl star-time">00:00</div>
+          <div class="SoundWave fl pr time-bar"> <span class="progressBar"></span> <i class="move-color"></i> </div>
+          <div class="SoundEndTime fl end-time">04:08</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pic-keyword" style="font-size:12px;margin-top:15px;"></div>
+</div>
+</body>
+<script src="js/audio.js"></script>
+</html>

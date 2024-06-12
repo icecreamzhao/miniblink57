@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/PrerenderHandle.h"
 
 #include "core/dom/Document.h"
@@ -42,39 +41,48 @@
 namespace blink {
 
 // static
-PassOwnPtrWillBeRawPtr<PrerenderHandle> PrerenderHandle::create(Document& document, PrerenderClient* client, const KURL& url, const unsigned prerenderRelTypes)
+PrerenderHandle* PrerenderHandle::create(Document& document,
+    PrerenderClient* client,
+    const KURL& url,
+    const unsigned prerenderRelTypes)
 {
-    // Prerenders are unlike requests in most ways (for instance, they pass down fragments, and they don't return data),
-    // but they do have referrers.
+    // Prerenders are unlike requests in most ways (for instance, they pass down
+    // fragments, and they don't return data), but they do have referrers.
     if (!document.frame())
         return nullptr;
 
-    RefPtr<Prerender> prerender = Prerender::create(client, url, prerenderRelTypes, SecurityPolicy::generateReferrer(document.referrerPolicy(), url, document.outgoingReferrer()));
+    Prerender* prerender = Prerender::create(
+        client, url, prerenderRelTypes,
+        SecurityPolicy::generateReferrer(document.getReferrerPolicy(), url,
+            document.outgoingReferrer()));
 
     PrerendererClient* prerendererClient = PrerendererClient::from(document.page());
     if (prerendererClient)
-        prerendererClient->willAddPrerender(prerender.get());
+        prerendererClient->willAddPrerender(prerender);
     prerender->add();
 
-    return adoptPtrWillBeNoop(new PrerenderHandle(document, prerender.release()));
+    return new PrerenderHandle(document, prerender);
 }
 
-PrerenderHandle::PrerenderHandle(Document& document, PassRefPtr<Prerender> prerender)
-    : DocumentLifecycleObserver(&document)
+PrerenderHandle::PrerenderHandle(Document& document, Prerender* prerender)
+    : ContextLifecycleObserver(&document)
     , m_prerender(prerender)
 {
 }
 
 PrerenderHandle::~PrerenderHandle()
 {
-    if (m_prerender)
+    if (m_prerender) {
+        m_prerender->abandon();
         detach();
+    }
 }
 
 void PrerenderHandle::cancel()
 {
-    // Avoid both abandoning and canceling the same prerender. In the abandon case, the LinkLoader cancels the
-    // PrerenderHandle as the Document is destroyed, even through the DocumentLifecycleObserver has already abandoned
+    // Avoid both abandoning and canceling the same prerender. In the abandon
+    // case, the LinkLoader cancels the PrerenderHandle as the Document is
+    // destroyed, even through the ContextLifecycleObserver has already abandoned
     // it.
     if (!m_prerender)
         return;
@@ -87,32 +95,28 @@ const KURL& PrerenderHandle::url() const
     return m_prerender->url();
 }
 
-void PrerenderHandle::documentWasDetached()
+void PrerenderHandle::contextDestroyed(ExecutionContext*)
 {
-#if ENABLE(OILPAN)
-    // In Oilpan, a PrerenderHandle is not removed from
-    // LifecycleNotifier::m_observers until a next GC is triggered.
-    // Thus documentWasDetached() can be called for a PrerenderHandle
-    // that is already canceled (and thus detached). In that case,
-    // we should not detach the PrerenderHandle again, so we need this check.
+    // A PrerenderHandle is not removed from LifecycleNotifier::m_observers until
+    // the next GC runs. Thus contextDestroyed() can be called for a
+    // PrerenderHandle that is already cancelled (and thus detached). In that
+    // case, we should not detach the PrerenderHandle again.
     if (!m_prerender)
         return;
-#else
-    ASSERT(m_prerender);
-#endif
     m_prerender->abandon();
     detach();
 }
 
 void PrerenderHandle::detach()
 {
-    m_prerender->removeClient();
+    m_prerender->dispose();
     m_prerender.clear();
 }
 
 DEFINE_TRACE(PrerenderHandle)
 {
-    DocumentLifecycleObserver::trace(visitor);
+    visitor->trace(m_prerender);
+    ContextLifecycleObserver::trace(visitor);
 }
 
-}
+} // namespace blink

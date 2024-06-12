@@ -11,9 +11,9 @@
 namespace ots {
 
 struct OpenTypeHHEA {
-  OpenTypeMetricsHeader header;
+    OpenTypeMetricsHeader header;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_HHEA_H_
+#endif // OTS_HHEA_H_

@@ -534,18 +534,59 @@ function drawPath(commands, fillColor, outlineColor, bounds)
     context.fillStyle = fillColor;
     context.fill();
 
-    if (outlineColor) {
-        context.lineWidth = 2;
-        context.strokeStyle = outlineColor;
-        context.stroke();
-    }
+//    if (outlineColor) {
+//        context.lineWidth = 2;
+//        context.strokeStyle = outlineColor;
+//        context.stroke();
+//    }
 
     context.restore();
 }
 
+//setTimeout(function() {
+//    var resetData = {};
+//    resetData.viewportSize = {"width": 800, "height": 600};
+//    resetData.deviceScaleFactor = 1;
+//    resetData.pageZoomFactor = 1;
+//    resetData.scrollX = 0;
+//    resetData.scrollY = 0;
+//    
+//    reset(resetData);
+//    drawHighlight(1);
+//}, 1000);
+
 function drawHighlight(highlight)
-{
-    context.save();
+{    
+//    var highlight = {"paths":[
+//    {"path":["M",9,85,"L",309,85,"L",309,235,"L",9,235,"Z"],"fillColor":"rgba(111, 68, 220, 0.01)","name":"content"},
+//    {"path":["M",9,85,"L",309,85,"L",309,235,"L",9,235,"Z"],"fillColor":"rgba(147, 196, 125, 0.01)","name":"padding"},
+//    {"path":["M",8,84,"L",310,84,"L",310,236,"L",8,236,"Z"],"fillColor":"rgba(255, 229, 153, 0.01)","name":"border"},
+//    {"path":["M",8,84,"L",310,84,"L",310,236,"L",8,236,"Z"],"fillColor":"rgba(246, 178, 107, 0.01)","name":"margin"}
+//    ],
+//    "showRulers":false,"showExtensionLines":false,
+//    "elementInfo":{"tagName":"canvas","idValue":"canvas1","nodeWidth":"302","nodeHeight":"152"},"displayAsMaterial":true};
+
+//    var highlight = {"paths":[
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(111, 168, 220, 0.658823529411765)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(147, 196, 125, 0.549019607843137)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(255, 229, 153, 0.658823529411765)"},
+//    {"path":["M",0,0,"L",309,0,"L",309,656,"L",0,656,"Z"],"fillColor":"rgba(246, 178, 107, 0.658823529411765)"}],
+//    "showRulers":false,"showExtensionLines":false,"elementInfo":{"tagName":"canvas","idValue":"canvas1","nodeWidth":"302","nodeHeight":"152"}}
+//    
+//    context.save();
+//    
+//    window.context.beginPath();
+//    window.context.lineTo(200, 200);
+//    window.context.lineTo(500, 200);
+//    window.context.lineTo(500, 100);
+//    window.context.lineTo(700, 250);
+//    window.context.lineTo(500, 400);
+//    window.context.lineTo(500, 300);
+//    window.context.lineTo(200, 300);
+//    window.context.closePath();
+//    
+//    window.context.fillStyle = 'rgba(250,200,0,0.4)';
+//    window.context.fill();
 
     var bounds = {
         minX: Number.MAX_VALUE,
@@ -563,26 +604,30 @@ function drawHighlight(highlight)
         drawPath(path.path, path.fillColor, path.outlineColor, bounds);
         if (paths.length) {
             context.save();
-            context.globalCompositeOperation = "destination-out";
+            //context.globalCompositeOperation = "destination-out";
             drawPath(paths[paths.length - 1].path, "red", null, bounds);
             context.restore();
         }
     }
 
-    var rulerAtRight = highlight.paths.length && highlight.showRulers && bounds.minX < 20 && bounds.maxX + 20 < canvasWidth;
-    var rulerAtBottom = highlight.paths.length && highlight.showRulers && bounds.minY < 20 && bounds.maxY + 20 < canvasHeight;
-
-    if (highlight.showRulers)
-        _drawGrid(rulerAtRight, rulerAtBottom);
-
-    if (highlight.paths.length) {
-        if (highlight.showExtensionLines)
-            _drawRulers(bounds, rulerAtRight, rulerAtBottom);
-
-        if (highlight.elementInfo)
-           _drawElementTitle(highlight.elementInfo, bounds);
-    }
+//    var rulerAtRight = highlight.paths.length && highlight.showRulers && bounds.minX < 20 && bounds.maxX + 20 < canvasWidth;
+//    var rulerAtBottom = highlight.paths.length && highlight.showRulers && bounds.minY < 20 && bounds.maxY + 20 < canvasHeight;
+//
+//    if (highlight.showRulers)
+//        _drawGrid(rulerAtRight, rulerAtBottom);
+//
+//    if (highlight.paths.length) {
+//        if (highlight.showExtensionLines)
+//            _drawRulers(bounds, rulerAtRight, rulerAtBottom);
+//
+//        if (highlight.elementInfo)
+//           _drawElementTitle(highlight.elementInfo, bounds);
+//     }
     context.restore();
+    
+    //window.context.fillStyle = "rgba(250,200,0,0.5)";
+    //window.context.fillRect(150, 150, 200, 200);
+
 }
 
 function setPlatform(platform)

@@ -31,19 +31,24 @@
 #ifndef ColorInputType_h
 #define ColorInputType_h
 
-#include "core/html/forms/BaseClickableWithKeyInputType.h"
 #include "core/html/forms/ColorChooserClient.h"
+#include "core/html/forms/InputType.h"
+#include "core/html/forms/KeyboardClickableInputTypeView.h"
 
 namespace blink {
 
 class ColorChooser;
 
-class ColorInputType final : public BaseClickableWithKeyInputType, public ColorChooserClient {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ColorInputType);
+class ColorInputType final : public InputType,
+                             public KeyboardClickableInputTypeView,
+                             public ColorChooserClient {
+    USING_GARBAGE_COLLECTED_MIXIN(ColorInputType);
+
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
     ~ColorInputType() override;
     DECLARE_VIRTUAL_TRACE();
+    using InputType::element;
 
     // ColorChooserClient implementation.
     void didChooseColor(const Color&) override;
@@ -56,14 +61,16 @@ public:
     ColorChooserClient* colorChooserClient() override;
 
 private:
-    ColorInputType(HTMLInputElement& element) : BaseClickableWithKeyInputType(element) { }
+    explicit ColorInputType(HTMLInputElement&);
+    InputTypeView* createView() override;
+    ValueMode valueMode() const override;
+    void valueAttributeChanged() override;
     void countUsage() override;
     const AtomicString& formControlType() const override;
     bool supportsRequired() const override;
-    String fallbackValue() const override;
     String sanitizeValue(const String&) const override;
     void createShadowSubtree() override;
-    void setValue(const String&, bool valueChanged, TextFieldEventBehavior) override;
+    void didSetValue(const String&, bool valueChanged) override;
     void handleDOMActivateEvent(Event*) override;
     void closePopupView() override;
     bool shouldRespectListAttribute() override;
@@ -76,7 +83,7 @@ private:
     void endColorChooser();
     HTMLElement* shadowColorSwatch() const;
 
-    OwnPtrWillBeMember<ColorChooser> m_chooser;
+    Member<ColorChooser> m_chooser;
 };
 
 } // namespace blink

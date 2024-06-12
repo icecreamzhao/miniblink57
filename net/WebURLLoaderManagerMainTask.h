@@ -6,17 +6,49 @@
 #include "net/WebURLLoaderManagerUtil.h"
 #include "net/WebURLLoaderManagerAsynTask.h"
 #include "net/RequestExtraData.h"
+#include "net/CurlCacheManager.h"
 #include "content/browser/WebPage.h"
-#include "third_party/WebKit/Source/wtf/Threading.h"
 #include "third_party/WebKit/Source/platform/network/HTTPParsers.h"
+#include "third_party/WebKit/Source/platform/CrossThreadFunctional.h"
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebScheduler.h"
 #include "third_party/WebKit/public/web/WebLocalFrame.h"
+#include "third_party/WebKit/Source/wtf/Threading.h"
 #include "wke/wkeWebView.h"
 
 void WKE_CALL_TYPE wkeDeleteWillSendRequestInfo(wkeWebView webWindow, wkeWillSendRequestInfo* info);
 
 namespace net {
+
+struct URLError {
+    std::string domain;
+    int reason;
+    bool staleCopyInCache;
+    bool isCancellation;
+    bool wasIgnoredByHandler;
+    std::string unreachableURL;
+    std::string localizedDescription;
+
+    URLError()
+        : reason(0)
+        , staleCopyInCache(false)
+        , isCancellation(false)
+        , wasIgnoredByHandler(false) { }
+
+    blink::WebURLError toWebURLError()
+    {
+        blink::WebURLError result;
+
+        result.domain = blink::WebString::fromUTF8(domain.c_str());
+        result.reason = reason;
+        result.staleCopyInCache = staleCopyInCache;
+        result.isCancellation = isCancellation;
+        result.wasIgnoredByHandler = wasIgnoredByHandler;
+        result.unreachableURL = blink::KURL(blink::ParsedURLString, unreachableURL.c_str());
+        result.localizedDescription = blink::WebString::fromUTF8(localizedDescription.c_str());
+        return result;
+    }
+};
 
 struct MainTaskArgs {
     void* ptr;
@@ -25,7 +57,7 @@ struct MainTaskArgs {
     long httpCode;
     double contentLength;
     char* hdr;
-    blink::WebURLError* resourceError;
+    URLError* resourceError;
 
     int ref;
 
@@ -42,10 +74,13 @@ struct MainTaskArgs {
         args->size = size;
         args->nmemb = nmemb;
         args->ptr = malloc(totalSize);
-        args->resourceError = new blink::WebURLError();
+        args->resourceError = new URLError();
         args->ref = 0;
         memcpy(args->ptr, ptr, totalSize);
 
+//         curl_easy_getinfo(handle, !isProxy ? CURLINFO_RESPONSE_CODE : CURLINFO_HTTP_CONNECTCODE, &args->httpCode);
+//         if (isProxy && 0 == args->httpCode)
+//             args->httpCode = 200;
         curl_easy_getinfo(handle, !isProxyConnect ? CURLINFO_RESPONSE_CODE : CURLINFO_HTTP_CONNECTCODE, &args->httpCode); // 只有使用了代理的Connect请求才需要特殊处理
 
         double contentLength = 0;
@@ -91,9 +126,41 @@ private:
 
     static MainTaskRunner* m_inst;
     bool m_isDestroying;
-    WTF::Mutex m_mutex;
+    WTF::RecursiveMutex m_mutex;
     WTF::Vector<WebURLLoaderManagerMainTask*> m_list;
 };
+
+void WebURLLoaderInternal::release(int jobId)
+{
+    ASSERT(WTF::isMainThread());
+    WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
+    AutoLockJob autoLockJob(manager, jobId);
+    autoLockJob.setNotDerefForDelete();
+    WebURLLoaderInternal* job = autoLockJob.lock();
+    if (!job)
+        return;
+
+    WTF::RecursiveMutex& liveJobsMutex = manager->m_liveJobsMutex;
+    while (true) {
+        job->m_destroingMutex->lock(); // 不需要unlock了，因为job直接会被析构（此处存疑）
+        liveJobsMutex.lock();
+        if (2 < job->getRefCount()) {
+            liveJobsMutex.unlock();
+            job->m_destroingMutex->unlock();
+            ::Sleep(1);
+            continue;
+        }
+
+        job->m_handle = nullptr;
+        manager->removeLiveJobs(jobId);
+        WTF::RecursiveMutex* destroingMutex = job->m_destroingMutex;
+        delete job;
+        destroingMutex->unlock(); // 暂时先加个unlock。没搞懂以前不加是什么原因
+
+        liveJobsMutex.unlock();
+        break;
+    }
+}
 
 // 回调回main线程的task
 class WebURLLoaderManagerMainTask : public blink::WebThread::Task {
@@ -108,37 +175,12 @@ public:
         kContentEnded,
         kDidFail,
         kHandleHookRequest,
+        kDidSentData,
     };
 
     virtual ~WebURLLoaderManagerMainTask() override
     {
         delete m_args;
-    }
-
-    void release()
-    {
-        AutoLockJob autoLockJob(WebURLLoaderManager::sharedInstance(), m_jobId);
-        autoLockJob.setNotDerefForDelete();
-        WebURLLoaderInternal* job = autoLockJob.lock();
-        if (!job)
-            return;
-
-        WTF::Mutex& liveJobsMutex = WebURLLoaderManager::sharedInstance()->m_liveJobsMutex;
-        while (true) {
-            liveJobsMutex.lock();
-            if (2 < job->getRefCount()) {
-                liveJobsMutex.unlock();
-                ::Sleep(20);
-                continue;
-            }
-
-            job->m_handle = nullptr;
-            WebURLLoaderManager::sharedInstance()->removeLiveJobs(m_jobId);
-            delete job;
-
-            liveJobsMutex.unlock();
-            break;
-        }
     }
 
     virtual void run() override
@@ -151,8 +193,7 @@ public:
         dispatchHook(job, m_type, m_args->ptr, m_args->size, m_args->nmemb);
 
         if (kRemoveFromCurl == m_type || kDidCancel == m_type) {
-            autoLockJob.setNotDerefForDelete();
-            release();
+            WebURLLoaderInternal::release(m_jobId);
             return;
         }
 
@@ -168,8 +209,8 @@ public:
             break;
         case kDidFinishLoading:
             if (job->m_hookBufForEndHook)
-                WebURLLoaderManager::sharedInstance()->didReceiveDataOrDownload(job, job->m_hookBufForEndHook->data(), job->m_hookBufForEndHook->size(), 0);
-            WebURLLoaderManager::sharedInstance()->handleDidFinishLoading(job, 0, 0);
+                WebURLLoaderManager::sharedInstance()->didReceiveDataOrDownload(job, job->m_hookBufForEndHook->data(), job->m_hookBufForEndHook->size(), job->m_dataLength);
+            WebURLLoaderManager::sharedInstance()->handleDidFinishLoading(job, monotonicallyIncreasingTime(), job->m_dataLength);
             break;
         case kRemoveFromCurl:
             break;
@@ -184,10 +225,13 @@ public:
             job->m_multipartHandle->contentEnded();
             break;
         case kDidFail:
-            WebURLLoaderManager::sharedInstance()->handleDidFail(job, *(m_args->resourceError));
+            WebURLLoaderManager::sharedInstance()->handleDidFail(job, m_args->resourceError->toWebURLError());
             break;
         case kHandleHookRequest:
             handleHookRequestOnMainThread(job);
+            break;
+        case kDidSentData:
+            handleDidSendData(m_args, job);
             break;
         default:
             break;
@@ -223,23 +267,74 @@ public:
         }
     }
 
-    static MainTaskArgs* pushTask(int jobId, TaskType type, void* ptr, size_t size, size_t nmemb, size_t totalSize)
+    static void createAndPushTask(int jobId, TaskType type, void* ptr, size_t size, size_t nmemb, size_t totalSize)
     {
         AutoLockJob autoLockJob(WebURLLoaderManager::sharedInstance(), jobId);
         WebURLLoaderInternal* job = autoLockJob.lock();
         if (!job)
-            return nullptr;
+            return;
 
         MainTaskArgs* args = MainTaskArgs::build(ptr, size, nmemb, totalSize, job->m_handle, job->m_isProxyConnect);
         WebURLLoaderManagerMainTask* task = new WebURLLoaderManagerMainTask(jobId, type, args);
 
-        if (job->m_isSynchronous)
-            job->m_syncTasks.append(task);
-        else {
-            //blink::Platform::current()->mainThread()->scheduler()->postLoadingTask(FROM_HERE, task); // postLoadingTask
-            MainTaskRunner::add(task);
+        pushTask(job, task);
+    }
+
+private:
+    static void runMainTasks()
+    {
+        WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
+        while (true) {
+            manager->m_mainTasksMutex.lock();
+            WebURLLoaderManagerMainTask* task = manager->m_mainTasksBegin; // 从头部读起
+            if (!task) {
+                manager->m_mainTasksMutex.unlock();
+                break;
+            }
+            manager->m_mainTasksBegin = task->m_next;
+            if (nullptr == manager->m_mainTasksBegin)
+                manager->m_mainTasksEnd = nullptr;
+            manager->m_mainTasksMutex.unlock();
+
+            if (!task)
+                break;
+            task->run();
+            delete task;
         }
-        return args;
+    }
+
+public:
+    static void pushTask(WebURLLoaderInternal* job, WebURLLoaderManagerMainTask* task)
+    {
+        if (!task)
+            return;
+        if (job && job->m_isSynchronous) {
+            job->m_syncTasks.append(task);
+            return;
+        }
+        //blink::Platform::current()->mainThread()->scheduler()->postLoadingTask(FROM_HERE, task); // postLoadingTask
+        //MainTaskRunner::add(task);
+        //return;
+
+        WebURLLoaderManager* manager = WebURLLoaderManager::sharedInstance();
+
+        WTF::Locker<WTF::RecursiveMutex> locker(manager->m_mainTasksMutex);
+        bool needPost = false;
+        if (nullptr == manager->m_mainTasksEnd) {
+            manager->m_mainTasksEnd = task;
+            needPost = true;
+            ASSERT(nullptr == manager->m_mainTasksBegin);
+        } else {
+            ASSERT(nullptr != manager->m_mainTasksBegin);
+            manager->m_mainTasksEnd->m_next = task; // 在尾部插入
+            manager->m_mainTasksEnd = task;
+        }
+
+        if (nullptr == manager->m_mainTasksBegin)
+            manager->m_mainTasksBegin = task;
+
+        if (needPost)
+            blink::Platform::current()->mainThread()->postTask(FROM_HERE, blink::crossThreadBind(runMainTasks));
     }
 
     static WebURLLoaderManagerMainTask* createTask(int jobId, TaskType type, void* ptr, size_t size, size_t nmemb, size_t totalSize)
@@ -253,20 +348,38 @@ public:
         return task;
     }
 
+    static void createAndPushResErrTask(int jobId, URLError* resourceError)
+    {
+        AutoLockJob autoLockJob(WebURLLoaderManager::sharedInstance(), jobId);
+        WebURLLoaderInternal* job = autoLockJob.lock();
+        if (!job)
+            return;
+
+        WebURLLoaderManagerMainTask* task = createTask(jobId, WebURLLoaderManagerMainTask::TaskType::kDidFail, nullptr, 0, 0, 0);
+        delete task->m_args->resourceError;
+  
+        task->m_args->resourceError = resourceError;
+
+        pushTask(job, task);
+    }
+
     static size_t handleWriteCallbackOnMainThread(MainTaskArgs* args, WebURLLoaderInternal* job);
     static size_t handleHeaderCallbackOnMainThread(MainTaskArgs* args, WebURLLoaderInternal* job);
     static void handleLocalReceiveResponseOnMainThread(MainTaskArgs* args, WebURLLoaderInternal* job);
     static void handleHookRequestOnMainThread(WebURLLoaderInternal* job);
+    static void handleDidSendData(MainTaskArgs* args, WebURLLoaderInternal* job);
 
 private:
     int m_jobId;
     TaskType m_type;
     MainTaskArgs* m_args;
+    WebURLLoaderManagerMainTask* m_next;
 
     WebURLLoaderManagerMainTask(int jobId, TaskType type, MainTaskArgs* args)
         : m_jobId(jobId)
         , m_type(type)
         , m_args(args)
+        , m_next(nullptr)
     {
     }
 };
@@ -325,7 +438,7 @@ void MainTaskRunner::destroyImpl()
 
 void MainTaskRunner::addTask(WebURLLoaderManagerMainTask* task)
 {
-    WTF::Locker<WTF::Mutex> locker(m_mutex);
+    WTF::Locker<WTF::RecursiveMutex> locker(m_mutex);
     if (m_isDestroying) {
         delete task;
         return;
@@ -335,19 +448,19 @@ void MainTaskRunner::addTask(WebURLLoaderManagerMainTask* task)
 
 wkeResourceType webURLRequestToResourceType(const blink::WebURLRequest& request)
 {
-    blink::WebURLRequest::RequestContext requestContext = request.requestContext();
-    if (request.frameType() != blink::WebURLRequest::FrameTypeNone) {
+    blink::WebURLRequest::RequestContext requestContext = request.getRequestContext();
+    if (request.getFrameType() != blink::WebURLRequest::FrameTypeNone) {
         ASSERT(requestContext == blink::WebURLRequest::RequestContextForm ||
             requestContext == blink::WebURLRequest::RequestContextFrame ||
             requestContext == blink::WebURLRequest::RequestContextHyperlink ||
             requestContext == blink::WebURLRequest::RequestContextIframe ||
             requestContext == blink::WebURLRequest::RequestContextInternal ||
             requestContext == blink::WebURLRequest::RequestContextLocation);
-        if (request.frameType() == WebURLRequest::FrameTypeTopLevel ||
-            request.frameType() == WebURLRequest::FrameTypeAuxiliary) {
+        if (request.getFrameType() == WebURLRequest::FrameTypeTopLevel ||
+            request.getFrameType() == WebURLRequest::FrameTypeAuxiliary) {
             return WKE_RESOURCE_TYPE_MAIN_FRAME;
         }
-        if (request.frameType() == WebURLRequest::FrameTypeNested)
+        if (request.getFrameType() == WebURLRequest::FrameTypeNested)
             return WKE_RESOURCE_TYPE_SUB_FRAME;
         DebugBreak();
         return WKE_RESOURCE_TYPE_SUB_RESOURCE;
@@ -450,7 +563,7 @@ static bool isResourceTypeFrame(WebURLLoaderInternal* job)
         return false;
 // 
 //     blink::WebURLRequest::RequestContext requestContext = request->requestContext();
-//     if (request->frameType() != blink::WebURLRequest::FrameTypeNone) {
+//     if (request->getFrameType() != blink::WebURLRequest::FrameTypeNone) {
 //         ASSERT(requestContext == blink::WebURLRequest::RequestContextForm ||
 //             requestContext == blink::WebURLRequest::RequestContextFrame ||
 //             requestContext == blink::WebURLRequest::RequestContextHyperlink ||
@@ -458,10 +571,10 @@ static bool isResourceTypeFrame(WebURLLoaderInternal* job)
 //             requestContext == blink::WebURLRequest::RequestContextInternal ||
 //             requestContext == blink::WebURLRequest::RequestContextLocation);
 // 
-//         if (request->frameType() == blink::WebURLRequest::FrameTypeTopLevel || request->frameType() == blink::WebURLRequest::FrameTypeAuxiliary) {
+//         if (request->getFrameType() == blink::WebURLRequest::FrameTypeTopLevel || request->getFrameType() == blink::WebURLRequest::FrameTypeAuxiliary) {
 //             return true; //  RESOURCE_TYPE_MAIN_FRAME;
 //         }
-//         if (request->frameType() == WebURLRequest::FrameTypeNested)
+//         if (request->getFrameType() == WebURLRequest::FrameTypeNested)
 //             return true; //  RESOURCE_TYPE_SUB_FRAME
 //         
 //         ASSERT(false);
@@ -479,12 +592,15 @@ static bool isResourceTypeFrame(WebURLLoaderInternal* job)
 
 // content\public\common\resource_type.cc
 // content\browser\loader\mime_type_resource_handler.cc
-static bool isDownloadResponse(WebURLLoaderInternal* job, const AtomicString& contentType)
+static bool isDownloadResponse(WebURLLoaderInternal* job, const AtomicString& contentType, const AtomicString& contentLength)
 {
     if (!isResourceTypeFrame(job))
         return false;
 
-    if (contentDispositionType(job->m_response.httpHeaderField("Content-Disposition")) == ContentDispositionAttachment)
+    if (contentLength == "0")
+        return false;
+
+    if (getContentDispositionType(job->m_response.httpHeaderField("Content-Disposition")) == ContentDispositionAttachment)
         return true;
 
     if (contentType.isEmpty())
@@ -574,9 +690,9 @@ static bool dispatchDownloadToWke(WebPage* page, WebURLLoaderInternal* job, cons
     return true;
 }
 
-static bool dispatchResponseToWke(WebURLLoaderInternal* job, const AtomicString& contentType, bool isRedirect)
+static bool dispatchResponseToWke(WebURLLoaderInternal* job, const AtomicString& contentType, const AtomicString& contentLength, bool isRedirect)
 {
-    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->extraData());
+    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->getExtraData());
     if (!requestExtraData) { //没有的情况可能是客户端用导出接口发送的请求，也可能是即将关闭程序
         job->m_cacheForDownloadOpt = WebURLLoaderInternal::kCacheForDownloadNot;
         return false;
@@ -605,7 +721,7 @@ static bool dispatchResponseToWke(WebURLLoaderInternal* job, const AtomicString&
             }
         }
 
-        if (requestExtraData->isDownload() || (isDownloadResponse(job, contentType) && !isRedirect)) {
+        if (requestExtraData->isDownload() || (isDownloadResponse(job, contentType, contentLength) && !isRedirect)) {
             if (dispatchDownloadToWke(page, job, urlBuf.data(), contentType, requestExtraData->getDownloadName())) {
                 result = true;
                 break;
@@ -633,7 +749,7 @@ static bool dispatchResponseToWke(WebURLLoaderInternal* job, const AtomicString&
 
 static void distpatchWkeWillSendRequest(WebURLLoaderInternal* job, const KURL* newURL, long httpCode)
 {
-    net::RequestExtraData* requestExtraData = (net::RequestExtraData*)job->firstRequest()->extraData();
+    net::RequestExtraData* requestExtraData = (net::RequestExtraData*)job->firstRequest()->getExtraData();
     if (!requestExtraData)
         return;
 
@@ -641,22 +757,22 @@ static void distpatchWkeWillSendRequest(WebURLLoaderInternal* job, const KURL* n
     if (!page->wkeHandler().otherLoadCallback)
         return;
 
-    Vector<UChar> url = WTF::ensureUTF16UChar(job->firstRequest()->url().string(), false);
-    Vector<UChar> newUrl;
+    Vector<char> url = WTF::ensureStringToUTF8(job->firstRequest()->url().string(), false);
+    Vector<char> newUrl;
     if (newURL)
-        newUrl = WTF::ensureUTF16UChar(newURL->getUTF8String(), false);
-    Vector<UChar> method = WTF::ensureUTF16UChar(job->firstRequest()->httpMethod(), false);
-    Vector<UChar> referrer = WTF::ensureUTF16UChar(job->firstRequest()->httpHeaderField(blink::WebString::fromUTF8("Referer")), false);
+        newUrl = WTF::ensureStringToUTF8(newURL->getUTF8String(), false);
+    Vector<char> method = WTF::ensureStringToUTF8(job->firstRequest()->httpMethod(), false);
+    Vector<char> referrer = WTF::ensureStringToUTF8(job->firstRequest()->httpHeaderField(blink::WebString::fromUTF8("Referer")), false);
     
     wkeTempCallbackInfo* info = wkeGetTempCallbackInfo(page->wkeWebView());
     info->size = sizeof(wkeTempCallbackInfo);
     info->willSendRequestInfo = new wkeWillSendRequestInfo();
-    info->willSendRequestInfo->url = wkeCreateStringW(url.data(), url.size());
-    info->willSendRequestInfo->newUrl = newURL ? wkeCreateStringW(newUrl.data(), newUrl.size()) : nullptr;
+    info->willSendRequestInfo->url = wkeCreateString(url.data(), url.size());
+    info->willSendRequestInfo->newUrl = newURL ? wkeCreateString(newUrl.data(), newUrl.size()) : nullptr;
     info->willSendRequestInfo->resourceType = webURLRequestToResourceType(*job->firstRequest());
     info->willSendRequestInfo->httpResponseCode = httpCode;
-    info->willSendRequestInfo->method = wkeCreateStringW(method.data(), method.size());
-    info->willSendRequestInfo->referrer = wkeCreateStringW(referrer.data(), referrer.size());
+    info->willSendRequestInfo->method = wkeCreateString(method.data(), method.size());
+    info->willSendRequestInfo->referrer = wkeCreateString(referrer.data(), referrer.size());
     info->willSendRequestInfo->headers = nullptr;
 
     page->wkeHandler().otherLoadCallback(page->wkeWebView(), page->wkeHandler().otherLoadCallbackParam,
@@ -676,7 +792,7 @@ static void doRedirect(WebURLLoaderInternal* job, const String& location, MainTa
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
     distpatchWkeWillSendRequest(job, &newURL, args->httpCode);
 
-    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->extraData());
+    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->getExtraData());
     if (!requestExtraData)
         return;
     WebPage* page = requestExtraData->page;
@@ -695,7 +811,7 @@ static void doRedirect(WebURLLoaderInternal* job, const String& location, MainTa
                 curl_slist_free_all(job->m_customHeaders);
             job->m_customHeaders = nullptr;
             WebURLLoaderManager::sharedInstance()->cancelWithHookRedirect(job);
-            Platform::current()->currentThread()->scheduler()->postLoadingTask(FROM_HERE, new HookAsynTask(WebURLLoaderManager::sharedInstance(), job->m_id, false));
+            Platform::current()->currentThread()->postTask(FROM_HERE, new HookAsynTask(WebURLLoaderManager::sharedInstance(), job->m_id));
             return;
         }
     }
@@ -703,13 +819,25 @@ static void doRedirect(WebURLLoaderInternal* job, const String& location, MainTa
 
     blink::WebURLRequest* redirectedRequest = new blink::WebURLRequest(*job->firstRequest());
     redirectedRequest->setURL(newURL);
+    redirectedRequest->clearHTTPHeaderField("Origin");
+    redirectedRequest->addHTTPOriginIfNeeded(blink::WebSecurityOrigin::createFromString(newURL.host())); // 其实这里添加没啥用，http.c里会删掉这个Origin
+
     if (client && job->loader() && (WebURLLoaderInternal::kCacheForDownloadYes != job->m_cacheForDownloadOpt))
-        client->willSendRequest(job->loader(), *redirectedRequest, job->m_response);
+        client->willFollowRedirect(*redirectedRequest, job->m_response);
 
     if (isRedirectByHttpCode)
-        job->m_response.initialize();
+        job->m_response = blink::WebURLResponse();
 
     job->resetFirstRequest(redirectedRequest);
+}
+
+static String extractCharset(const String& contentType)
+{
+    String textEncodingName = blink::extractCharsetFromMediaType(contentType);
+    size_t pos = textEncodingName.find(',');
+    if (kNotFound != pos)
+        textEncodingName = textEncodingName.substring(0, pos);
+    return textEncodingName;
 }
 
 static bool setHttpResponseDataToJobWhenDidReceiveResponseOnMainThread(WebURLLoaderInternal* job, MainTaskArgs* args)
@@ -731,14 +859,17 @@ static bool setHttpResponseDataToJobWhenDidReceiveResponseOnMainThread(WebURLLoa
     }
 
     AtomicString contentType = job->m_response.httpHeaderField(WebString::fromUTF8("Content-Type"));
-    job->m_response.setMIMEType(extractMIMETypeFromMediaType(contentType).lower());
+    if (!contentType.isNull())
+        job->m_response.setMIMEType(extractMIMETypeFromMediaType(contentType).lower());
 
-    String textEncodingName = extractCharsetFromMediaType(contentType);
+    AtomicString contentLength = job->m_response.httpHeaderField(WebString::fromUTF8("Content-Length"));
+
+    String textEncodingName = extractCharset(contentType);
 //     if (textEncodingName.isNull() || textEncodingName.isEmpty())
 //         textEncodingName = "utf-8";
     job->m_response.setTextEncodingName(textEncodingName);
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
-    if (dispatchResponseToWke(job, contentType, isHttpRedirect(args->httpCode)))
+    if (dispatchResponseToWke(job, contentType, contentLength, isHttpRedirect(args->httpCode)))
         return false;
 #endif
     if (equalIgnoringCase((String)(job->m_response.mimeType()), "multipart/x-mixed-replace")) {
@@ -755,6 +886,8 @@ static bool setHttpResponseDataToJobWhenDidReceiveResponseOnMainThread(WebURLLoa
     bool isRedirectByUrl = (!job->m_effectiveUrl.empty() && job->m_effectiveUrl != job->m_url); // 有时有代理时，url会变，但没有30x码
 
     job->m_effectiveUrl = args->hdr;
+    if (!job->m_fragment.empty())
+        job->m_effectiveUrl += "#" + job->m_fragment;
 
     // HTTP redirection 重定向
     if (isRedirectByHttpCode || isRedirectByUrl) {
@@ -777,6 +910,18 @@ static bool setHttpResponseDataToJobWhenDidReceiveResponseOnMainThread(WebURLLoa
 //             location = job->m_effectiveUrl.c_str();
 
         if (!location.isEmpty()) {
+            if (job->m_fragment.empty()) {
+                KURL kurl = job->firstRequest()->url();
+                String fragment = WTF::ensureStringToUTF8String(kurl.fragmentIdentifier());
+                if (!fragment.isEmpty())
+                    job->m_fragment = std::string((const char*)fragment.characters8(), fragment.length());
+            }
+
+            if (!job->m_fragment.empty())
+                location.append("#");
+
+            location.append(job->m_fragment.c_str());
+
             Vector<char> locationBuffer = WTF::ensureStringToUTF8(location, false);
             locationBuffer.append('\n');
             locationBuffer.append('\0');
@@ -812,12 +957,21 @@ static void setResponseDataToJobWhenDidReceiveResponseOnMainThread(WebURLLoaderI
     job->m_response.setURL(KURL(ParsedURLString, args->hdr));
     job->m_response.setHTTPStatusCode(args->httpCode);
 
-    if (url.protocolIsInHTTPFamily())
+    if (url.isLocalFile() && 0 == job->m_response.httpStatusCode())
+        job->m_response.setHTTPStatusCode(200);
+
+    if (url.protocolIsInHTTPFamily() || url.isLocalFile())
         needSetResponseFired = setHttpResponseDataToJobWhenDidReceiveResponseOnMainThread(job, args);
 
     if (needSetResponseFired && !job->isCancelled()) {
-        if (job->client() && job->loader())
+        if (job->client() && job->loader()) {
+            if (args->httpCode == 304) {
+                const String& url = job->firstRequest()->url().string();
+                CurlCacheManager::getInstance()->getCachedResponse(url, const_cast<ResourceResponse&>(job->m_response.toResourceResponse()));
+            }
             WebURLLoaderManager::sharedInstance()->handleDidReceiveResponse(job);
+            CurlCacheManager::getInstance()->didReceiveResponse(*job, const_cast<ResourceResponse&>(job->m_response.toResourceResponse()));
+        }
         job->setResponseFired(true);
     }
 }
@@ -832,13 +986,28 @@ void WebURLLoaderManagerMainTask::handleLocalReceiveResponseOnMainThread(MainTas
     // which means the ResourceLoader's response does not contain the KURL.
     // Run the code here for local files to resolve the issue.
     // TODO: See if there is a better approach for handling this.
-    job->m_response.setURL(KURL(ParsedURLString, args->hdr));
+    std::string url = args->hdr;
+    if (std::string::npos != url.find("file:")) {
+        size_t questionMaskPos = url.find('?');
+        if (std::string::npos != questionMaskPos) {
+            url = url.substr(0, questionMaskPos);
+        }
+    }
+    job->m_response.setURL(KURL(ParsedURLString, url.c_str()));
 
     setResponseDataToJobWhenDidReceiveResponseOnMainThread(job, args);
+}
 
-    //     if (job->client() && job->loader() && !job->responseFired())
-    //         WebURLLoaderManager::sharedInstance()->handleDidReceiveResponse(job);
-    //     job->setResponseFired(true);
+void WebURLLoaderManagerMainTask::handleDidSendData(MainTaskArgs* args, WebURLLoaderInternal* job)
+{
+    void* ptr = args->ptr;
+    size_t size = args->size;
+    size_t nmemb = args->nmemb;
+
+    unsigned long long sentData = size * nmemb;
+
+    _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
+    WebURLLoaderManager::sharedInstance()->handleDidSentData(job, job->m_sentDataBytes, job->m_totalBytesToBeSent);
 }
 
 // called with data after all headers have been processed via headerCallbackOnIoThread
@@ -905,7 +1074,7 @@ size_t WebURLLoaderManagerMainTask::handleHeaderCallbackOnMainThread(MainTaskArg
                 job->m_response.addHTTPHeaderField(key, value);
             else
                 job->m_response.setHTTPHeaderField(key, value);
-        } else if (header.startsWith("HTTP", WTF::TextCaseInsensitive)) {
+        } else if (header.startsWith("HTTP", WTF::TextCaseASCIIInsensitive)) {
             // This is the first line of the response.
             // Extract the http status text from this.
             //
@@ -913,6 +1082,8 @@ size_t WebURLLoaderManagerMainTask::handleHeaderCallbackOnMainThread(MainTaskArg
             // curl will follow the redirections internally. Thus this header callback
             // will be called more than one time with the line starting "HTTP" for one job.
             String httpCodeString = String::number(args->httpCode);
+//             if (job->m_isProxy && 0 == args->httpCode)
+//                 httpCodeString = "200";
             int statusCodePos = header.find(httpCodeString);
 
             if (statusCodePos != -1) {
@@ -934,7 +1105,7 @@ void WebURLLoaderManagerMainTask::handleHookRequestOnMainThread(WebURLLoaderInte
     KURL kurl = job->firstRequest()->url();
     String url = WTF::ensureStringToUTF8String(kurl.string());
 
-    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->extraData());
+    RequestExtraData* requestExtraData = reinterpret_cast<RequestExtraData*>(job->firstRequest()->getExtraData());
     if (!requestExtraData)
         return;
     content::WebPage* page = requestExtraData->page;

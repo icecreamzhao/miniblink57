@@ -9,33 +9,36 @@
 namespace v8 {
 namespace internal {
 
-VectorSlotPair::VectorSlotPair() = default;
+    VectorSlotPair::VectorSlotPair() = default;
 
-int VectorSlotPair::index() const {
-  return vector_.is_null() ? -1 : FeedbackVector::GetIndex(slot_);
-}
+    int VectorSlotPair::index() const
+    {
+        return vector_.is_null() ? -1 : FeedbackVector::GetIndex(slot_);
+    }
 
-bool operator==(VectorSlotPair const& lhs, VectorSlotPair const& rhs) {
-  return lhs.slot() == rhs.slot() &&
-         lhs.vector().location() == rhs.vector().location() &&
-         lhs.ic_state() == rhs.ic_state();
-}
+    bool operator==(VectorSlotPair const& lhs, VectorSlotPair const& rhs)
+    {
+        return lhs.slot() == rhs.slot() && lhs.vector().location() == rhs.vector().location() && lhs.ic_state() == rhs.ic_state();
+    }
 
-bool operator!=(VectorSlotPair const& lhs, VectorSlotPair const& rhs) {
-  return !(lhs == rhs);
-}
+    bool operator!=(VectorSlotPair const& lhs, VectorSlotPair const& rhs)
+    {
+        return !(lhs == rhs);
+    }
 
-std::ostream& operator<<(std::ostream& os, const VectorSlotPair& p) {
-  if (p.IsValid()) {
-    return os << "VectorSlotPair(" << p.slot() << ", "
-              << InlineCacheState2String(p.ic_state()) << ")";
-  }
-  return os << "VectorSlotPair(INVALID)";
-}
+    std::ostream& operator<<(std::ostream& os, const VectorSlotPair& p)
+    {
+        if (p.IsValid()) {
+            return os << "VectorSlotPair(" << p.slot() << ", "
+                      << InlineCacheState2String(p.ic_state()) << ")";
+        }
+        return os << "VectorSlotPair(INVALID)";
+    }
 
-size_t hash_value(VectorSlotPair const& p) {
-  return base::hash_combine(p.slot(), p.vector().location(), p.ic_state());
-}
+    size_t hash_value(VectorSlotPair const& p)
+    {
+        return base::hash_combine(p.slot(), p.vector().location(), p.ic_state());
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

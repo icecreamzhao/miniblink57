@@ -5,31 +5,33 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
+#include "SkPath.h"
 #include "SkTArray.h"
+#include "gm.h"
 
 class ConicPathsGM : public skiagm::GM {
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("conicpaths");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(920, 960);
     }
 
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         {
-            const SkScalar w = SkScalarSqrt(2)/2;
+            const SkScalar w = SkScalarSqrt(2) / 2;
             SkPath* conicCirlce = &fPaths.push_back();
             conicCirlce->moveTo(0, 0);
             conicCirlce->conicTo(0, 50, 50, 50, w);
             conicCirlce->rConicTo(50, 0, 50, -50, w);
             conicCirlce->rConicTo(0, -50, -50, -50, w);
             conicCirlce->rConicTo(-50, 0, -50, 50, w);
-
         }
         {
             SkPath* hyperbola = &fPaths.push_back();
@@ -69,26 +71,27 @@ protected:
         }
         {
             SkPath* closedEllipse = &fPaths.push_back();
-            closedEllipse->moveTo(0,  0);
+            closedEllipse->moveTo(0, 0);
             closedEllipse->conicTo(100, 100, 0, 0, SK_ScalarHalf);
         }
         {
-            const SkScalar w = SkScalarSqrt(2)/2;
+            const SkScalar w = SkScalarSqrt(2) / 2;
             fGiantCircle.moveTo(2.1e+11f, -1.05e+11f);
             fGiantCircle.conicTo(2.1e+11f, 0, 1.05e+11f, 0, w);
             fGiantCircle.conicTo(0, 0, 0, -1.05e+11f, w);
             fGiantCircle.conicTo(0, -2.1e+11f, 1.05e+11f, -2.1e+11f, w);
             fGiantCircle.conicTo(2.1e+11f, -2.1e+11f, 2.1e+11f, -1.05e+11f, w);
-
         }
     }
 
-    void drawGiantCircle(SkCanvas* canvas) {
+    void drawGiantCircle(SkCanvas* canvas)
+    {
         SkPaint paint;
         canvas->drawPath(fGiantCircle, paint);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         const SkAlpha kAlphaValue[] = { 0xFF, 0x40 };
 
         const SkScalar margin = 15;
@@ -119,15 +122,31 @@ protected:
         }
         canvas->restore();
 
-        this->drawGiantCircle(canvas);  
+        this->drawGiantCircle(canvas);
     }
 
 private:
     SkTArray<SkPath> fPaths;
-    SkPath           fGiantCircle;
+    SkPath fGiantCircle;
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return SkNEW(ConicPathsGM); )
+DEF_GM(return new ConicPathsGM;)
 
 //////////////////////////////////////////////////////////////////////////////
 
+/* arc should be on top of circle */
+DEF_SIMPLE_GM(arccirclegap, canvas, 250, 250)
+{
+    canvas->translate(50, 100);
+    SkPoint c = { 1052.5390625f, 506.8760978034711f };
+    SkScalar radius = 1096.702150363923f;
+    SkPaint paint;
+    paint.setAntiAlias(true);
+    paint.setStyle(SkPaint::kStroke_Style);
+    canvas->drawCircle(c.fX, c.fY, radius, paint);
+    SkPath path;
+    path.moveTo(288.88884710654133f, -280.26680862609f);
+    path.arcTo(0, 0, -39.00216443306411f, 400.6058925796476f, radius);
+    paint.setColor(0xff007f00);
+    canvas->drawPath(path, paint);
+}

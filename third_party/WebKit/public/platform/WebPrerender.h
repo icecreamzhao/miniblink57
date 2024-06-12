@@ -37,15 +37,12 @@
 #include "WebString.h"
 #include "WebURL.h"
 
-#if INSIDE_BLINK
-#include "wtf/PassRefPtr.h"
-#endif
-
 namespace blink {
 
 class Prerender;
 
-// WebPrerenderRelType is a bitfield since multiple rel attributes can be set on the same prerender.
+// WebPrerenderRelType is a bitfield since multiple rel attributes can be set on
+// the same prerender.
 enum WebPrerenderRelType {
     PrerenderRelTypePrerender = 0x1,
     PrerenderRelTypeNext = 0x2,
@@ -68,7 +65,7 @@ public:
     }
 
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT explicit WebPrerender(PassRefPtr<Prerender>);
+    BLINK_PLATFORM_EXPORT explicit WebPrerender(Prerender*);
 
     BLINK_PLATFORM_EXPORT const Prerender* toPrerender() const;
 #endif
@@ -80,10 +77,10 @@ public:
     BLINK_PLATFORM_EXPORT WebURL url() const;
     BLINK_PLATFORM_EXPORT WebString referrer() const;
     BLINK_PLATFORM_EXPORT unsigned relTypes() const;
-    BLINK_PLATFORM_EXPORT WebReferrerPolicy referrerPolicy() const;
+    BLINK_PLATFORM_EXPORT WebReferrerPolicy getReferrerPolicy() const;
 
     BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
-    BLINK_PLATFORM_EXPORT const ExtraData* extraData() const;
+    BLINK_PLATFORM_EXPORT const ExtraData* getExtraData() const;
 
     BLINK_PLATFORM_EXPORT void didStartPrerender();
     BLINK_PLATFORM_EXPORT void didStopPrerender();

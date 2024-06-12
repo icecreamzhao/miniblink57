@@ -28,7 +28,9 @@ struct WebPrintPresetOptions {
     WebPrintPresetOptions()
         : isScalingDisabled(false)
         , copies(0)
-        , duplexMode(WebUnknownDuplexMode) { }
+        , duplexMode(WebUnknownDuplexMode)
+    {
+    }
 
     // Specifies whether scaling is disabled.
     bool isScalingDisabled;

@@ -9,6 +9,7 @@
 #define SkPictureContentInfo_DEFINED
 
 #include "SkTDArray.h"
+#include "SkPaint.h"
 
 class GrContext;
 
@@ -24,8 +25,8 @@ public:
     int numInteriorLayers() const { return fNumInteriorLayers; }
     int numLeafLayers() const { return fNumLeafLayers; }
 
-    bool suitableForGpuRasterization(GrContext* context, const char **reason,
-                                     int sampleCount) const;
+    bool suitableForGpuRasterization(GrContext* context, const char** reason,
+        int sampleCount) const;
 
     void addOperation() { ++fNumOperations; }
 
@@ -74,7 +75,7 @@ private:
     int fNumLeafLayers;
 
     enum Flags {
-        kSave_Flag      = 0x1,
+        kSave_Flag = 0x1,
         kSaveLayer_Flag = 0x2,
 
         // Did the current save or saveLayer contain another saveLayer.

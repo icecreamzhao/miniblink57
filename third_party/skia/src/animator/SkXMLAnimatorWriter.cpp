@@ -6,16 +6,18 @@
  */
 
 #include "SkXMLAnimatorWriter.h"
-#include "SkAnimator.h"
 #include "SkAnimateMaker.h"
+#include "SkAnimator.h"
 #include "SkDisplayXMLParser.h"
 
-SkXMLAnimatorWriter::SkXMLAnimatorWriter(SkAnimator* animator) : fAnimator(animator)
+SkXMLAnimatorWriter::SkXMLAnimatorWriter(SkAnimator* animator)
+    : fAnimator(animator)
 {
     fParser = new SkDisplayXMLParser(*fAnimator->fMaker);
 }
 
-SkXMLAnimatorWriter::~SkXMLAnimatorWriter() {
+SkXMLAnimatorWriter::~SkXMLAnimatorWriter()
+{
     delete fParser;
 }
 
@@ -24,7 +26,8 @@ void SkXMLAnimatorWriter::onAddAttributeLen(const char name[], const char value[
     fParser->onAddAttributeLen(name, value, length);
 }
 
-void SkXMLAnimatorWriter::onAddText(const char text[], size_t length) {
+void SkXMLAnimatorWriter::onAddText(const char text[], size_t length)
+{
     SkDebugf("not implemented: SkXMLAnimatorWriter::onAddText()\n");
 }
 
@@ -51,30 +54,30 @@ void SkXMLAnimatorWriter::writeHeader()
 
 void SkXMLAnimatorWriter::UnitTest(SkCanvas* canvas)
 {
-    SkAnimator  s;
-    SkXMLAnimatorWriter     w(&s);
+    SkAnimator s;
+    SkXMLAnimatorWriter w(&s);
     w.startElement("screenplay");
-        w.startElement("animateField");
-            w.addAttribute("field", "x1");
-            w.addAttribute("id", "to100");
-            w.addAttribute("from", "0");
-            w.addAttribute("to", "100");
-            w.addAttribute("dur", "1");
-        w.endElement();
-        w.startElement("event");
-            w.addAttribute("kind", "onLoad");
-            w.startElement("line");
-                w.addAttribute("id", "line");
-                w.addAttribute("x1", "-1");
-                w.addAttribute("y1", "20");
-                w.addAttribute("x2", "150");
-                w.addAttribute("y2", "40");
-            w.endElement();
-            w.startElement("apply");
-                w.addAttribute("animator", "to100");
-                w.addAttribute("scope", "line");
-            w.endElement();
-        w.endElement();
+    w.startElement("animateField");
+    w.addAttribute("field", "x1");
+    w.addAttribute("id", "to100");
+    w.addAttribute("from", "0");
+    w.addAttribute("to", "100");
+    w.addAttribute("dur", "1");
+    w.endElement();
+    w.startElement("event");
+    w.addAttribute("kind", "onLoad");
+    w.startElement("line");
+    w.addAttribute("id", "line");
+    w.addAttribute("x1", "-1");
+    w.addAttribute("y1", "20");
+    w.addAttribute("x2", "150");
+    w.addAttribute("y2", "40");
+    w.endElement();
+    w.startElement("apply");
+    w.addAttribute("animator", "to100");
+    w.addAttribute("scope", "line");
+    w.endElement();
+    w.endElement();
     w.endElement();
     SkPaint paint;
     canvas->drawColor(SK_ColorWHITE);

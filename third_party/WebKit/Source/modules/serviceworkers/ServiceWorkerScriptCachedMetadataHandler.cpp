@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/serviceworkers/ServiceWorkerScriptCachedMetadataHandler.h"
 
 #include "core/fetch/CachedMetadata.h"
@@ -11,36 +10,56 @@
 
 namespace blink {
 
-ServiceWorkerScriptCachedMetadataHandler::ServiceWorkerScriptCachedMetadataHandler(WorkerGlobalScope* workerGlobalScope, const KURL& scriptURL, const Vector<char>* metaData)
+ServiceWorkerScriptCachedMetadataHandler::
+    ServiceWorkerScriptCachedMetadataHandler(
+        WorkerGlobalScope* workerGlobalScope,
+        const KURL& scriptURL,
+        const Vector<char>* metaData)
     : m_workerGlobalScope(workerGlobalScope)
     , m_scriptURL(scriptURL)
 {
     if (metaData)
-        m_cachedMetadata = CachedMetadata::deserialize(metaData->data(), metaData->size());
+        m_cachedMetadata = CachedMetadata::createFromSerializedData(
+            metaData->data(), metaData->size());
 }
 
-ServiceWorkerScriptCachedMetadataHandler::~ServiceWorkerScriptCachedMetadataHandler()
+ServiceWorkerScriptCachedMetadataHandler::
+    ~ServiceWorkerScriptCachedMetadataHandler() { }
+
+DEFINE_TRACE(ServiceWorkerScriptCachedMetadataHandler)
 {
+    visitor->trace(m_workerGlobalScope);
+    CachedMetadataHandler::trace(visitor);
 }
 
-void ServiceWorkerScriptCachedMetadataHandler::setCachedMetadata(unsigned dataTypeID, const char* data, size_t size, CacheType type)
+void ServiceWorkerScriptCachedMetadataHandler::setCachedMetadata(
+    uint32_t dataTypeID,
+    const char* data,
+    size_t size,
+    CacheType type)
 {
     if (type != SendToPlatform)
         return;
     m_cachedMetadata = CachedMetadata::create(dataTypeID, data, size);
-    const Vector<char>& serializedData = m_cachedMetadata->serialize();
-    ServiceWorkerGlobalScopeClient::from(m_workerGlobalScope)->setCachedMetadata(m_scriptURL, serializedData.data(), serializedData.size());
+    const Vector<char>& serializedData = m_cachedMetadata->serializedData();
+    ServiceWorkerGlobalScopeClient::from(m_workerGlobalScope)
+        ->setCachedMetadata(m_scriptURL, serializedData.data(),
+            serializedData.size());
 }
 
-void ServiceWorkerScriptCachedMetadataHandler::clearCachedMetadata(CacheType type)
+void ServiceWorkerScriptCachedMetadataHandler::clearCachedMetadata(
+    CacheType type)
 {
     if (type != SendToPlatform)
         return;
     m_cachedMetadata = nullptr;
-    ServiceWorkerGlobalScopeClient::from(m_workerGlobalScope)->clearCachedMetadata(m_scriptURL);
+    ServiceWorkerGlobalScopeClient::from(m_workerGlobalScope)
+        ->clearCachedMetadata(m_scriptURL);
 }
 
-CachedMetadata* ServiceWorkerScriptCachedMetadataHandler::cachedMetadata(unsigned dataTypeID) const
+PassRefPtr<CachedMetadata>
+ServiceWorkerScriptCachedMetadataHandler::cachedMetadata(
+    uint32_t dataTypeID) const
 {
     if (!m_cachedMetadata || m_cachedMetadata->dataTypeID() != dataTypeID)
         return nullptr;

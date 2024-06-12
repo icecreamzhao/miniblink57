@@ -6,12 +6,11 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkOSMenu_DEFINED
 #define SkOSMenu_DEFINED
 
+#include "../private/SkTDArray.h"
 #include "SkEvent.h"
-#include "SkTDArray.h"
 
 class SkOSMenu {
 public:
@@ -54,25 +53,25 @@ public:
          * Note: Thread safe
          */
         Item(const char label[], SkOSMenu::Type type, const char slotName[],
-             SkEvent* evt);
+            SkEvent* evt);
         ~Item() { delete fEvent; }
 
-        SkEvent*    getEvent() const { return fEvent; }
-        int         getID() const { return fID; }
+        SkEvent* getEvent() const { return fEvent; }
+        int getID() const { return fID; }
         const char* getLabel() const { return fLabel.c_str(); }
         const char* getSlotName() const { return fSlotName.c_str(); }
-        Type        getType() const { return fType; }
-        void        setKeyEquivalent(SkUnichar key) { fKey = key; }
-        SkUnichar   getKeyEquivalent() const { return fKey; }
+        Type getType() const { return fType; }
+        void setKeyEquivalent(SkUnichar key) { fKey = key; }
+        SkUnichar getKeyEquivalent() const { return fKey; }
 
         /**
          * Helper functions for predefined types
          */
-        void setBool(bool value) const;             //For Switch
-        void setScalar(SkScalar value) const;       //For Slider
-        void setInt(int value) const;               //For List
-        void setTriState(TriState value) const;     //For Tristate
-        void setString(const char value[]) const;   //For TextField
+        void setBool(bool value) const; //For Switch
+        void setScalar(SkScalar value) const; //For Slider
+        void setInt(int value) const; //For List
+        void setTriState(TriState value) const; //For Tristate
+        void setString(const char value[]) const; //For TextField
 
         /**
          * Post event associated with the menu item to target, any changes to
@@ -81,26 +80,26 @@ public:
         void postEvent() const { (new SkEvent(*(fEvent)))->post(); }
 
     private:
-        int             fID;
-        SkEvent*        fEvent;
-        SkString        fLabel;
-        SkString        fSlotName;
-        Type            fType;
-        SkUnichar       fKey;
+        int fID;
+        SkEvent* fEvent;
+        SkString fLabel;
+        SkString fSlotName;
+        Type fType;
+        SkUnichar fKey;
     };
 
-    void        reset();
+    void reset();
     const char* getTitle() const { return fTitle.c_str(); }
-    void        setTitle (const char title[]) { fTitle.set(title); }
-    int         getCount() const { return fItems.count(); }
+    void setTitle(const char title[]) { fTitle.set(title); }
+    int getCount() const { return fItems.count(); }
     const Item* getItemByID(int itemID) const;
-    void        getItems(const Item* items[]) const;
+    void getItems(const Item* items[]) const;
 
     /**
      * Assign key to the menu item with itemID, will do nothing if there's no
      * item with the id given
      */
-    void        assignKeyEquivalentToItem(int itemID, SkUnichar key);
+    void assignKeyEquivalentToItem(int itemID, SkUnichar key);
     /**
      * Call this in a SkView's onHandleChar to trigger any menu items with the
      * given key equivalent. If such an item is found, the method will return
@@ -109,7 +108,7 @@ public:
      * for anything else, the event attached is posted without state changes)
      * If no menu item can be matched with the key, false will be returned
      */
-    bool        handleKeyEquivalent(SkUnichar key);
+    bool handleKeyEquivalent(SkUnichar key);
 
     /**
      * The following functions append new items to the menu and returns their
@@ -119,7 +118,7 @@ public:
      * NOTE: evt must be dynamically allocated
      */
     int appendItem(const char label[], Type type, const char slotName[],
-                   SkEvent* evt);
+        SkEvent* evt);
 
     /**
      * Create predefined items with the given parameters. To be used with the
@@ -129,17 +128,16 @@ public:
      */
     int appendAction(const char label[], SkEventSinkID target);
     int appendList(const char label[], const char slotName[],
-                   SkEventSinkID target, int defaultIndex, const char* ...);
+        SkEventSinkID target, int defaultIndex, const char*...);
     int appendSlider(const char label[], const char slotName[],
-                     SkEventSinkID target, SkScalar min, SkScalar max,
-                     SkScalar defaultValue);
+        SkEventSinkID target, SkScalar min, SkScalar max,
+        SkScalar defaultValue);
     int appendSwitch(const char label[], const char slotName[],
-                     SkEventSinkID target, bool defaultState = false);
+        SkEventSinkID target, bool defaultState = false);
     int appendTriState(const char label[], const char slotName[],
-                       SkEventSinkID target, TriState defaultState = kOffState);
+        SkEventSinkID target, TriState defaultState = kOffState);
     int appendTextField(const char label[], const char slotName[],
-                        SkEventSinkID target, const char placeholder[] = "");
-
+        SkEventSinkID target, const char placeholder[] = "");
 
     /**
      * Helper functions to retrieve information other than the stored value for

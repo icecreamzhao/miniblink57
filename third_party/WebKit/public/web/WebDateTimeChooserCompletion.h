@@ -33,12 +33,6 @@ namespace blink {
 // Gets called back when WebViewClient finished choosing a date/time value.
 class WebDateTimeChooserCompletion {
 public:
-
-    // Called with a date/time value in the HTML format. The callback instance
-    // is destroyed when this method is called.
-    // FIXME: Remove. Deprecated in favor of double version.
-    virtual void didChooseValue(const WebString&) = 0;
-
     // Called with a date/time value in the HTML format. The callback instance
     // is destroyed when this method is called. If the value is NaN it means an
     // empty value. Value should not be infinity.

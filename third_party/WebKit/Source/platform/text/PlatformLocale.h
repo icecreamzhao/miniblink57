@@ -29,20 +29,25 @@
 #include "platform/DateComponents.h"
 #include "platform/Language.h"
 #include "public/platform/WebLocalizedString.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
 class PLATFORM_EXPORT Locale {
     WTF_MAKE_NONCOPYABLE(Locale);
+    USING_FAST_MALLOC(Locale);
+
 public:
-    static PassOwnPtr<Locale> create(const String& localeIdentifier);
+    static std::unique_ptr<Locale> create(const String& localeIdentifier);
     static Locale& defaultLocale();
 
     String queryString(WebLocalizedString::Name);
     String queryString(WebLocalizedString::Name, const String& parameter);
-    String queryString(WebLocalizedString::Name, const String& parameter1, const String& parameter2);
+    String queryString(WebLocalizedString::Name,
+        const String& parameter1,
+        const String& parameter2);
     String validationMessageTooLongText(unsigned valueLength, int maxLength);
     String validationMessageTooShortText(unsigned valueLength, int minLength);
 
@@ -61,12 +66,11 @@ public:
 
     // Remove characters from |input| if a character is not included in
     // locale-specific number characters and |standardChars|.
-    String stripInvalidNumberCharacters(const String& input, const String& standardChars) const;
+    String stripInvalidNumberCharacters(const String& input,
+        const String& standardChars) const;
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
     // Returns localized decimal separator, e.g. "." for English, "," for French.
     String localizedDecimalSeparator();
-#endif
 
     // Returns date format in Unicode TR35 LDML[1] containing day of month,
     // month, and year, e.g. "dd/mm/yyyy"
@@ -135,13 +139,16 @@ public:
     // object.
     virtual bool isRTL() = 0;
 
-    enum FormatType { FormatTypeUnspecified, FormatTypeShort, FormatTypeMedium };
+    enum FormatType { FormatTypeUnspecified,
+        FormatTypeShort,
+        FormatTypeMedium };
 
     // Serializes the specified date into a formatted date string to
     // display to the user. If an implementation doesn't support
     // localized dates the function should return an empty string.
     // FormatType can be used to specify if you want the short format.
-    String formatDateTime(const DateComponents&, FormatType = FormatTypeUnspecified);
+    String formatDateTime(const DateComponents&,
+        FormatType = FormatTypeUnspecified);
 
     virtual ~Locale();
 
@@ -153,12 +160,22 @@ protected:
         DecimalSymbolsSize
     };
 
-    Locale() : m_hasLocaleData(false) { }
+    Locale()
+        : m_hasLocaleData(false)
+    {
+    }
     virtual void initializeLocaleData() = 0;
-    void setLocaleData(const Vector<String, DecimalSymbolsSize>&, const String& positivePrefix, const String& positiveSuffix, const String& negativePrefix, const String& negativeSuffix);
+    void setLocaleData(const Vector<String, DecimalSymbolsSize>&,
+        const String& positivePrefix,
+        const String& positiveSuffix,
+        const String& negativePrefix,
+        const String& negativeSuffix);
 
 private:
-    bool detectSignAndGetDigitRange(const String& input, bool& isNegative, unsigned& startIndex, unsigned& endIndex);
+    bool detectSignAndGetDigitRange(const String& input,
+        bool& isNegative,
+        unsigned& startIndex,
+        unsigned& endIndex);
     unsigned matchedDecimalSymbolIndex(const String& input, unsigned& position);
 
     String m_decimalSymbols[DecimalSymbolsSize];

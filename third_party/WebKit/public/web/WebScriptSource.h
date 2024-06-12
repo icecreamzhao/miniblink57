@@ -44,11 +44,22 @@ struct WebScriptSource {
     int startLine;
 
     WebScriptSource(const WebString& code)
-        : code(code), startLine(1) { }
+        : code(code)
+        , startLine(1)
+    {
+    }
     WebScriptSource(const WebString& code, const WebURL& url)
-        : code(code), url(url), startLine(1) { }
+        : code(code)
+        , url(url)
+        , startLine(1)
+    {
+    }
     WebScriptSource(const WebString& code, const WebURL& url, int startLine)
-        : code(code), url(url), startLine(startLine) { }
+        : code(code)
+        , url(url)
+        , startLine(startLine)
+    {
+    }
 
 #if BLINK_IMPLEMENTATION
     operator ScriptSourceCode() const;

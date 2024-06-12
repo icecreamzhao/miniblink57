@@ -19,10 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/layout/svg/LayoutSVGInline.h"
 
+#include "core/layout/LayoutView.h"
 #include "core/layout/svg/LayoutSVGText.h"
 #include "core/layout/svg/SVGLayoutSupport.h"
 #include "core/layout/svg/SVGResourcesCache.h"
@@ -31,7 +30,8 @@
 
 namespace blink {
 
-bool LayoutSVGInline::isChildAllowed(LayoutObject* child, const ComputedStyle& style) const
+bool LayoutSVGInline::isChildAllowed(LayoutObject* child,
+    const ComputedStyle& style) const
 {
     if (child->isText())
         return SVGLayoutSupport::isLayoutableTextNode(child);
@@ -56,59 +56,71 @@ LayoutSVGInline::LayoutSVGInline(Element* element)
 
 InlineFlowBox* LayoutSVGInline::createInlineFlowBox()
 {
-    InlineFlowBox* box = new SVGInlineFlowBox(*this);
+    InlineFlowBox* box = new SVGInlineFlowBox(LineLayoutItem(this));
     box->setHasVirtualLogicalHeight();
     return box;
 }
 
 FloatRect LayoutSVGInline::objectBoundingBox() const
 {
-    if (const LayoutObject* object = LayoutSVGText::locateLayoutSVGTextAncestor(this))
-        return object->objectBoundingBox();
+    if (const LayoutSVGText* textRoot = LayoutSVGText::locateLayoutSVGTextAncestor(this))
+        return textRoot->objectBoundingBox();
 
     return FloatRect();
 }
 
 FloatRect LayoutSVGInline::strokeBoundingBox() const
 {
-    if (const LayoutObject* object = LayoutSVGText::locateLayoutSVGTextAncestor(this))
-        return object->strokeBoundingBox();
+    if (const LayoutSVGText* textRoot = LayoutSVGText::locateLayoutSVGTextAncestor(this))
+        return textRoot->strokeBoundingBox();
 
     return FloatRect();
 }
 
-FloatRect LayoutSVGInline::paintInvalidationRectInLocalCoordinates() const
+FloatRect LayoutSVGInline::visualRectInLocalSVGCoordinates() const
 {
-    if (const LayoutObject* object = LayoutSVGText::locateLayoutSVGTextAncestor(this))
-        return object->paintInvalidationRectInLocalCoordinates();
+    if (const LayoutSVGText* textRoot = LayoutSVGText::locateLayoutSVGTextAncestor(this))
+        return textRoot->visualRectInLocalSVGCoordinates();
 
     return FloatRect();
 }
 
-LayoutRect LayoutSVGInline::clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState) const
+LayoutRect LayoutSVGInline::absoluteVisualRect() const
 {
-    return SVGLayoutSupport::clippedOverflowRectForPaintInvalidation(*this, paintInvalidationContainer, paintInvalidationState);
+    return SVGLayoutSupport::visualRectInAncestorSpace(*this, *view());
 }
 
-void LayoutSVGInline::mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState& transformState, MapCoordinatesFlags, bool* wasFixed, const PaintInvalidationState* paintInvalidationState) const
+void LayoutSVGInline::mapLocalToAncestor(const LayoutBoxModelObject* ancestor,
+    TransformState& transformState,
+    MapCoordinatesFlags flags) const
 {
-    SVGLayoutSupport::mapLocalToContainer(this, paintInvalidationContainer, transformState, wasFixed, paintInvalidationState);
+    SVGLayoutSupport::mapLocalToAncestor(this, ancestor, transformState, flags);
 }
 
-const LayoutObject* LayoutSVGInline::pushMappingToContainer(const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap& geometryMap) const
+const LayoutObject* LayoutSVGInline::pushMappingToContainer(
+    const LayoutBoxModelObject* ancestorToStopAt,
+    LayoutGeometryMap& geometryMap) const
 {
-    return SVGLayoutSupport::pushMappingToContainer(this, ancestorToStopAt, geometryMap);
+    return SVGLayoutSupport::pushMappingToContainer(this, ancestorToStopAt,
+        geometryMap);
 }
 
-void LayoutSVGInline::absoluteQuads(Vector<FloatQuad>& quads, bool* wasFixed) const
+void LayoutSVGInline::absoluteQuads(Vector<FloatQuad>& quads,
+    MapCoordinatesFlags mode) const
 {
-    const LayoutObject* object = LayoutSVGText::locateLayoutSVGTextAncestor(this);
-    if (!object)
+    const LayoutSVGText* textRoot = LayoutSVGText::locateLayoutSVGTextAncestor(this);
+    if (!textRoot)
         return;
 
-    FloatRect textBoundingBox = object->strokeBoundingBox();
-    for (InlineFlowBox* box = firstLineBox(); box; box = box->nextLineBox())
-        quads.append(localToAbsoluteQuad(FloatRect(textBoundingBox.x() + box->x().toFloat(), textBoundingBox.y() + box->y().toFloat(), box->logicalWidth().toFloat(), box->logicalHeight().toFloat()), false, wasFixed));
+    FloatRect textBoundingBox = textRoot->strokeBoundingBox();
+    for (InlineFlowBox* box = firstLineBox(); box; box = box->nextLineBox()) {
+        quads.push_back(
+            localToAbsoluteQuad(FloatRect(textBoundingBox.x() + box->x().toFloat(),
+                                    textBoundingBox.y() + box->y().toFloat(),
+                                    box->logicalWidth().toFloat(),
+                                    box->logicalHeight().toFloat()),
+                mode));
+    }
 }
 
 void LayoutSVGInline::willBeDestroyed()
@@ -117,7 +129,8 @@ void LayoutSVGInline::willBeDestroyed()
     LayoutInline::willBeDestroyed();
 }
 
-void LayoutSVGInline::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
+void LayoutSVGInline::styleDidChange(StyleDifference diff,
+    const ComputedStyle* oldStyle)
 {
     if (diff.needsFullLayout())
         setNeedsBoundariesUpdate();
@@ -132,22 +145,25 @@ void LayoutSVGInline::addChild(LayoutObject* child, LayoutObject* beforeChild)
     SVGResourcesCache::clientWasAddedToTree(child, child->styleRef());
 
     if (LayoutSVGText* textLayoutObject = LayoutSVGText::locateLayoutSVGTextAncestor(this))
-        textLayoutObject->subtreeChildWasAdded(child);
+        textLayoutObject->subtreeChildWasAdded();
 }
 
 void LayoutSVGInline::removeChild(LayoutObject* child)
 {
     SVGResourcesCache::clientWillBeRemovedFromTree(child);
 
-    LayoutSVGText* textLayoutObject = LayoutSVGText::locateLayoutSVGTextAncestor(this);
-    if (!textLayoutObject) {
-        LayoutInline::removeChild(child);
-        return;
-    }
-    Vector<SVGTextLayoutAttributes*, 2> affectedAttributes;
-    textLayoutObject->subtreeChildWillBeRemoved(child, affectedAttributes);
+    if (LayoutSVGText* textLayoutObject = LayoutSVGText::locateLayoutSVGTextAncestor(this))
+        textLayoutObject->subtreeChildWillBeRemoved();
     LayoutInline::removeChild(child);
-    textLayoutObject->subtreeChildWasRemoved(affectedAttributes);
 }
 
+void LayoutSVGInline::invalidateTreeIfNeeded(
+    const PaintInvalidationState& paintInvalidationState)
+{
+    // TODO(wangxianzhu): Verify if the inherited
+    // LayoutBoxModelObject::invalidateTreeIfNeeded() is applicable here.
+    // If yes, remove this overriding method.
+    LayoutObject::invalidateTreeIfNeeded(paintInvalidationState);
 }
+
+} // namespace blink

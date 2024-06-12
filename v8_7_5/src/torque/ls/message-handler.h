@@ -10,18 +10,18 @@
 
 namespace v8 {
 namespace internal {
-namespace torque {
-namespace ls {
+    namespace torque {
+        namespace ls {
 
-// The message handler might send responses or follow up requests.
-// To allow unit testing, the "sending" function is configurable.
-using MessageWriter = void (*)(JsonValue& message);
+            // The message handler might send responses or follow up requests.
+            // To allow unit testing, the "sending" function is configurable.
+            using MessageWriter = void (*)(JsonValue& message);
 
-V8_EXPORT_PRIVATE void HandleMessage(JsonValue& raw_message, MessageWriter);
+            V8_EXPORT_PRIVATE void HandleMessage(JsonValue& raw_message, MessageWriter);
 
-}  // namespace ls
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+        } // namespace ls
+    } // namespace torque
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TORQUE_LS_MESSAGE_HANDLER_H_
+#endif // V8_TORQUE_LS_MESSAGE_HANDLER_H_

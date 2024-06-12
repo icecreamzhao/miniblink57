@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,9 +33,11 @@ class Document;
 class Element;
 class ComputedStyle;
 
-// ElementResolveContext is immutable and serves as an input to the style resolve process.
-class ElementResolveContext {
+// ElementResolveContext is immutable and serves as an input to the style
+// resolve process.
+class CORE_EXPORT ElementResolveContext {
     STACK_ALLOCATED();
+
 public:
     explicit ElementResolveContext(const Document&);
 
@@ -43,13 +46,19 @@ public:
     Element* element() const { return m_element; }
     const ContainerNode* parentNode() const { return m_parentNode; }
     const ComputedStyle* rootElementStyle() const { return m_rootElementStyle; }
-    const ComputedStyle* parentStyle() const { return parentNode() ? parentNode()->computedStyle() : nullptr; }
+    const ComputedStyle* parentStyle() const
+    {
+        return parentNode() ? parentNode()->computedStyle() : nullptr;
+    }
     EInsideLink elementLinkState() const { return m_elementLinkState; }
-    bool distributedToInsertionPoint() const { return m_distributedToInsertionPoint; }
+    bool distributedToInsertionPoint() const
+    {
+        return m_distributedToInsertionPoint;
+    }
 
 private:
-    RawPtrWillBeMember<Element> m_element;
-    RawPtrWillBeMember<ContainerNode> m_parentNode;
+    Member<Element> m_element;
+    Member<ContainerNode> m_parentNode;
     const ComputedStyle* m_rootElementStyle;
     EInsideLink m_elementLinkState;
     bool m_distributedToInsertionPoint;

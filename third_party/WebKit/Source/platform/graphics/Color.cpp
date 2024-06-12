@@ -23,10 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/Color.h"
 
 #include "platform/Decimal.h"
+#include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/Assertions.h"
 #include "wtf/HexNumber.h"
 #include "wtf/MathExtras.h"
@@ -35,8 +35,10 @@
 
 namespace blink {
 
-#if !COMPILER(MSVC)
-// FIXME: Use C++11 strong enums to avoid static data member with initializer definition problems.
+// VS 2015 and above allow these definitions and in this case require them
+#if !COMPILER(MSVC) || _MSC_VER >= 1900
+// FIXME: Use C++11 enum classes to avoid static data member initializer
+// definition problems.
 const RGBA32 Color::black;
 const RGBA32 Color::white;
 const RGBA32 Color::darkGray;
@@ -50,17 +52,17 @@ static const RGBA32 darkenedWhite = 0xFFABABAB;
 
 RGBA32 makeRGB(int r, int g, int b)
 {
-    return 0xFF000000 | std::max(0, std::min(r, 255)) << 16 | std::max(0, std::min(g, 255)) << 8 | std::max(0, std::min(b, 255));
+    return 0xFF000000 | clampTo(r, 0, 255) << 16 | clampTo(g, 0, 255) << 8 | clampTo(b, 0, 255);
 }
 
 RGBA32 makeRGBA(int r, int g, int b, int a)
 {
-    return std::max(0, std::min(a, 255)) << 24 | std::max(0, std::min(r, 255)) << 16 | std::max(0, std::min(g, 255)) << 8 | std::max(0, std::min(b, 255));
+    return clampTo(a, 0, 255) << 24 | clampTo(r, 0, 255) << 16 | clampTo(g, 0, 255) << 8 | clampTo(b, 0, 255);
 }
 
 static int colorFloatToRGBAByte(float f)
 {
-    return std::max(0, std::min(static_cast<int>(lroundf(255.0f * f)), 255));
+    return clampTo(static_cast<int>(lroundf(255.0f * f)), 0, 255);
 }
 
 RGBA32 makeRGBA32FromFloats(float r, float g, float b, float a)
@@ -88,22 +90,29 @@ static double calcHue(double temp1, double temp2, double hueVal)
 // explanation available at http://en.wikipedia.org/wiki/HSL_color_space
 
 // all values are in the range of 0 to 1.0
-RGBA32 makeRGBAFromHSLA(double hue, double saturation, double lightness, double alpha)
+RGBA32 makeRGBAFromHSLA(double hue,
+    double saturation,
+    double lightness,
+    double alpha)
 {
     const double scaleFactor = nextafter(256.0, 0.0);
 
     if (!saturation) {
         int greyValue = static_cast<int>(lightness * scaleFactor);
-        return makeRGBA(greyValue, greyValue, greyValue, static_cast<int>(alpha * scaleFactor));
+        return makeRGBA(greyValue, greyValue, greyValue,
+            static_cast<int>(alpha * scaleFactor));
     }
 
-    double temp2 = lightness < 0.5 ? lightness * (1.0 + saturation) : lightness + saturation - lightness * saturation;
+    double temp2 = lightness < 0.5
+        ? lightness * (1.0 + saturation)
+        : lightness + saturation - lightness * saturation;
     double temp1 = 2.0 * lightness - temp2;
 
-    return makeRGBA(static_cast<int>(calcHue(temp1, temp2, hue + 1.0 / 3.0) * scaleFactor),
-                    static_cast<int>(calcHue(temp1, temp2, hue) * scaleFactor),
-                    static_cast<int>(calcHue(temp1, temp2, hue - 1.0 / 3.0) * scaleFactor),
-                    static_cast<int>(alpha * scaleFactor));
+    return makeRGBA(
+        static_cast<int>(calcHue(temp1, temp2, hue + 1.0 / 3.0) * scaleFactor),
+        static_cast<int>(calcHue(temp1, temp2, hue) * scaleFactor),
+        static_cast<int>(calcHue(temp1, temp2, hue - 1.0 / 3.0) * scaleFactor),
+        static_cast<int>(alpha * scaleFactor));
 }
 
 RGBA32 makeRGBAFromCMYKA(float c, float m, float y, float k, float a)
@@ -117,9 +126,13 @@ RGBA32 makeRGBAFromCMYKA(float c, float m, float y, float k, float a)
 
 // originally moved here from the CSS parser
 template <typename CharacterType>
-static inline bool parseHexColorInternal(const CharacterType* name, unsigned length, RGBA32& rgb)
+static inline bool parseHexColorInternal(const CharacterType* name,
+    unsigned length,
+    RGBA32& rgb)
 {
     if (length != 3 && length != 4 && length != 6 && length != 8)
+        return false;
+    if ((length == 8 || length == 4) && !RuntimeEnabledFeatures::cssHexAlphaColorEnabled())
         return false;
     unsigned value = 0;
     for (unsigned i = 0; i < length; ++i) {
@@ -140,15 +153,11 @@ static inline bool parseHexColorInternal(const CharacterType* name, unsigned len
     }
     if (length == 4) {
         // #abcd converts to ddaabbcc in RGBA32.
-        rgb = (value & 0xF) << 28 | (value & 0xF) << 24 | (value & 0xF000) << 8 |
-            (value & 0xF000) << 4 | (value & 0xF00) << 4 | (value & 0xF00) |
-            (value & 0xF0) | (value & 0xF0) >> 4;
+        rgb = (value & 0xF) << 28 | (value & 0xF) << 24 | (value & 0xF000) << 8 | (value & 0xF000) << 4 | (value & 0xF00) << 4 | (value & 0xF00) | (value & 0xF0) | (value & 0xF0) >> 4;
         return true;
     }
     // #abc converts to #aabbcc
-    rgb = 0xFF000000 | (value & 0xF00) << 12 | (value & 0xF00) << 8 |
-        (value & 0xF0) << 8 | (value & 0xF0) << 4 | (value & 0xF) << 4 |
-        (value & 0xF);
+    rgb = 0xFF000000 | (value & 0xF00) << 12 | (value & 0xF00) << 8 | (value & 0xF0) << 8 | (value & 0xF0) << 4 | (value & 0xF) << 4 | (value & 0xF);
     return true;
 }
 
@@ -162,11 +171,9 @@ bool Color::parseHexColor(const UChar* name, unsigned length, RGBA32& rgb)
     return parseHexColorInternal(name, length, rgb);
 }
 
-bool Color::parseHexColor(const String& name, RGBA32& rgb)
+bool Color::parseHexColor(const StringView& name, RGBA32& rgb)
 {
-    unsigned length = name.length();
-
-    if (!length)
+    if (name.isEmpty())
         return false;
     if (name.is8Bit())
         return parseHexColor(name.characters8(), name.length(), rgb);
@@ -196,23 +203,20 @@ String Color::serializedAsCSSComponentValue() const
     result.reserveCapacity(32);
     bool colorHasAlpha = hasAlpha();
     if (colorHasAlpha)
-        result.appendLiteral("rgba(");
+        result.append("rgba(");
     else
-        result.appendLiteral("rgb(");
+        result.append("rgb(");
 
     result.appendNumber(static_cast<unsigned char>(red()));
-    result.appendLiteral(", ");
+    result.append(", ");
 
     result.appendNumber(static_cast<unsigned char>(green()));
-    result.appendLiteral(", ");
+    result.append(", ");
 
     result.appendNumber(static_cast<unsigned char>(blue()));
     if (colorHasAlpha) {
-        result.appendLiteral(", ");
-
-        NumberToStringBuffer buffer;
-        const char* alphaString = numberToFixedPrecisionString(alpha() / 255.0f, 6, buffer, true);
-        result.append(alphaString, strlen(alphaString));
+        result.append(", ");
+        result.appendNumber(alpha() / 255.0f, 6);
     }
 
     result.append(')');
@@ -234,13 +238,13 @@ String Color::serialized() const
     StringBuilder result;
     result.reserveCapacity(28);
 
-    result.appendLiteral("rgba(");
+    result.append("rgba(");
     result.appendNumber(red());
-    result.appendLiteral(", ");
+    result.append(", ");
     result.appendNumber(green());
-    result.appendLiteral(", ");
+    result.append(", ");
     result.appendNumber(blue());
-    result.appendLiteral(", ");
+    result.append(", ");
 
     if (!alpha())
         result.append('0');
@@ -302,9 +306,8 @@ Color Color::light() const
     float multiplier = std::min(1.0f, v + 0.33f) / v;
 
     return Color(static_cast<int>(multiplier * r * scaleFactor),
-                 static_cast<int>(multiplier * g * scaleFactor),
-                 static_cast<int>(multiplier * b * scaleFactor),
-                 alpha());
+        static_cast<int>(multiplier * g * scaleFactor),
+        static_cast<int>(multiplier * b * scaleFactor), alpha());
 }
 
 Color Color::dark() const
@@ -319,12 +322,11 @@ Color Color::dark() const
     getRGBA(r, g, b, a);
 
     float v = std::max(r, std::max(g, b));
-    float multiplier = std::max(0.0f, (v - 0.33f) / v);
+    float multiplier = (v == 0.0f) ? 0.0f : std::max(0.0f, (v - 0.33f) / v);
 
     return Color(static_cast<int>(multiplier * r * scaleFactor),
-                 static_cast<int>(multiplier * g * scaleFactor),
-                 static_cast<int>(multiplier * b * scaleFactor),
-                 alpha());
+        static_cast<int>(multiplier * g * scaleFactor),
+        static_cast<int>(multiplier * b * scaleFactor), alpha());
 }
 
 Color Color::combineWithAlpha(float otherAlpha) const
@@ -371,8 +373,9 @@ Color Color::blendWithWhite() const
 
     Color newColor;
     for (int alpha = cStartAlpha; alpha <= cEndAlpha; alpha += cAlphaIncrement) {
-        // We have a solid color.  Convert to an equivalent color that looks the same when blended with white
-        // at the current alpha.  Try using less transparency if the numbers end up being negative.
+        // We have a solid color.  Convert to an equivalent color that looks the
+        // same when blended with white at the current alpha.  Try using less
+        // transparency if the numbers end up being negative.
         int r = blendComponent(red(), alpha);
         int g = blendComponent(green(), alpha);
         int b = blendComponent(blue(), alpha);
@@ -440,11 +443,9 @@ Color colorFromPremultipliedARGB(RGBA32 pixelColor)
 {
     int alpha = alphaChannel(pixelColor);
     if (alpha && alpha < 255) {
-        return Color::createUnchecked(
-            redChannel(pixelColor) * 255 / alpha,
+        return Color::createUnchecked(redChannel(pixelColor) * 255 / alpha,
             greenChannel(pixelColor) * 255 / alpha,
-            blueChannel(pixelColor) * 255 / alpha,
-            alpha);
+            blueChannel(pixelColor) * 255 / alpha, alpha);
     } else
         return Color(pixelColor);
 }
@@ -455,13 +456,12 @@ RGBA32 premultipliedARGBFromColor(const Color& color)
 
     unsigned alpha = color.alpha();
     if (alpha < 255) {
-        pixelColor = Color::createUnchecked(
-            (color.red() * alpha  + 254) / 255,
-            (color.green() * alpha  + 254) / 255,
-            (color.blue() * alpha  + 254) / 255,
-            alpha).rgb();
+        pixelColor = Color::createUnchecked((color.red() * alpha + 254) / 255,
+            (color.green() * alpha + 254) / 255,
+            (color.blue() * alpha + 254) / 255, alpha)
+                         .rgb();
     } else
-         pixelColor = color.rgb();
+        pixelColor = color.rgb();
 
     return pixelColor;
 }

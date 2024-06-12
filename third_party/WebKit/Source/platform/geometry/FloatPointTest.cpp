@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/geometry/FloatPoint.h"
 
 #include "platform/geometry/GeometryTestHelpers.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
@@ -21,11 +20,13 @@ TEST(FloatPointTest, LengthTest)
     // Test very small numbers. This fails under the old implementation of
     // FloatPoint::length(): `return sqrtf(lengthSquared());'
     FloatPoint p3 = FloatPoint(.5e-20f, .5e-20f);
-    EXPECT_PRED_FORMAT2(GeometryTest::AssertAlmostEqual, p3.length(), .707106781186548e-20f);
+    EXPECT_PRED_FORMAT2(GeometryTest::AssertAlmostEqual, p3.length(),
+        .707106781186548e-20f);
 
     // Test very large numbers.
     FloatPoint p4 = FloatPoint(.5e20f, .5e20f);
-    EXPECT_PRED_FORMAT2(GeometryTest::AssertAlmostEqual, p4.length(), .707106781186548e20f);
+    EXPECT_PRED_FORMAT2(GeometryTest::AssertAlmostEqual, p4.length(),
+        .707106781186548e20f);
 }
 
 } // namespace blink

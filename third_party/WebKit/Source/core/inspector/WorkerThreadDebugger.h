@@ -31,42 +31,65 @@
 #ifndef WorkerThreadDebugger_h
 #define WorkerThreadDebugger_h
 
-#include "core/inspector/ScriptDebuggerBase.h"
-#include "platform/heap/Handle.h"
-#include "wtf/Forward.h"
-
-#include <v8.h>
+#include "core/CoreExport.h"
+#include "core/inspector/ThreadDebugger.h"
 
 namespace blink {
 
-class WorkerGlobalScope;
+class ErrorEvent;
+class SourceLocation;
+class WorkerThread;
 
-class WorkerThreadDebugger final : public NoBaseWillBeGarbageCollectedFinalized<WorkerThreadDebugger>, public ScriptDebuggerBase {
+class CORE_EXPORT WorkerThreadDebugger final : public ThreadDebugger {
     WTF_MAKE_NONCOPYABLE(WorkerThreadDebugger);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WorkerThreadDebugger);
-public:
-    static PassOwnPtrWillBeRawPtr<WorkerThreadDebugger> create(WorkerGlobalScope* workerGlobalScope)
-    {
-        return adoptPtrWillBeNoop(new WorkerThreadDebugger(workerGlobalScope));
-    }
 
+public:
+    explicit WorkerThreadDebugger(v8::Isolate*);
     ~WorkerThreadDebugger() override;
 
-    static void setContextDebugData(v8::Local<v8::Context>);
-    void addListener(ScriptDebugListener*);
-    void removeListener(ScriptDebugListener*);
+    static WorkerThreadDebugger* from(v8::Isolate*);
+    bool isWorker() override { return true; }
 
-    DECLARE_VIRTUAL_TRACE();
+    int contextGroupId(WorkerThread*);
+    void contextCreated(WorkerThread*, v8::Local<v8::Context>);
+    void contextWillBeDestroyed(WorkerThread*, v8::Local<v8::Context>);
+    void exceptionThrown(WorkerThread*, ErrorEvent*);
 
 private:
-    explicit WorkerThreadDebugger(WorkerGlobalScope*);
+    int contextGroupId(ExecutionContext*) override;
+    void reportConsoleMessage(ExecutionContext*,
+        MessageSource,
+        MessageLevel,
+        const String& message,
+        SourceLocation*) override;
 
-    ScriptDebugListener* getDebugListenerForContext(v8::Local<v8::Context>);
-    void runMessageLoopOnPause(v8::Local<v8::Context>);
-    void quitMessageLoopOnPause();
+    // V8InspectorClient implementation.
+    void runMessageLoopOnPause(int contextGroupId) override;
+    void quitMessageLoopOnPause() override;
+    void muteMetrics(int contextGroupId) override;
+    void unmuteMetrics(int contextGroupId) override;
+    v8::Local<v8::Context> ensureDefaultContextInGroup(
+        int contextGroupId) override;
+    void beginEnsureAllContextsInGroup(int contextGroupId) override;
+    void endEnsureAllContextsInGroup(int contextGroupId) override;
+    bool canExecuteScripts(int contextGroupId) override;
+    void runIfWaitingForDebugger(int contextGroupId) override;
+    v8::MaybeLocal<v8::Value> memoryInfo(v8::Isolate*,
+        v8::Local<v8::Context>) override;
+    void consoleAPIMessage(int contextGroupId,
+#if V8_MAJOR_VERSION < 7
+        v8_inspector::V8ConsoleAPIType,
+#else
+        v8::Isolate::MessageErrorLevel,
+#endif
+        const v8_inspector::StringView& message,
+        const v8_inspector::StringView& url,
+        unsigned lineNumber,
+        unsigned columnNumber,
+        v8_inspector::V8StackTrace*) override;
 
-    ScriptDebugListener* m_listener;
-    RawPtrWillBeMember<WorkerGlobalScope> m_workerGlobalScope;
+    int m_pausedContextGroupId;
+    WTF::HashMap<int, WorkerThread*> m_workerThreads;
 };
 
 } // namespace blink

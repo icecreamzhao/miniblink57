@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/frame/PageScaleConstraintsSet.h"
 
 #include "platform/Length.h"
@@ -45,20 +44,24 @@ PageScaleConstraintsSet::PageScaleConstraintsSet()
 {
 }
 
-void PageScaleConstraintsSet::setDefaultConstraints(const PageScaleConstraints& defaultConstraints)
+void PageScaleConstraintsSet::setDefaultConstraints(
+    const PageScaleConstraints& defaultConstraints)
 {
     m_defaultConstraints = defaultConstraints;
     m_constraintsDirty = true;
 }
 
-const PageScaleConstraints& PageScaleConstraintsSet::defaultConstraints() const
+const PageScaleConstraints& PageScaleConstraintsSet::defaultConstraints()
+    const
 {
     return m_defaultConstraints;
 }
 
-void PageScaleConstraintsSet::updatePageDefinedConstraints(const ViewportDescription& description, Length legacyFallbackWidth)
+void PageScaleConstraintsSet::updatePageDefinedConstraints(
+    const ViewportDescription& description,
+    Length legacyFallbackWidth)
 {
-    m_pageDefinedConstraints = description.resolve(m_viewSize, legacyFallbackWidth);
+    m_pageDefinedConstraints = description.resolve(FloatSize(m_icbSize), legacyFallbackWidth);
 
     m_constraintsDirty = true;
 }
@@ -69,13 +72,15 @@ void PageScaleConstraintsSet::clearPageDefinedConstraints()
     m_constraintsDirty = true;
 }
 
-void PageScaleConstraintsSet::setUserAgentConstraints(const PageScaleConstraints& userAgentConstraints)
+void PageScaleConstraintsSet::setUserAgentConstraints(
+    const PageScaleConstraints& userAgentConstraints)
 {
     m_userAgentConstraints = userAgentConstraints;
     m_constraintsDirty = true;
 }
 
-void PageScaleConstraintsSet::setFullscreenConstraints(const PageScaleConstraints& fullscreenConstraints)
+void PageScaleConstraintsSet::setFullscreenConstraints(
+    const PageScaleConstraints& fullscreenConstraints)
 {
     m_fullscreenConstraints = fullscreenConstraints;
     m_constraintsDirty = true;
@@ -97,10 +102,14 @@ void PageScaleConstraintsSet::computeFinalConstraints()
     m_constraintsDirty = false;
 }
 
-void PageScaleConstraintsSet::adjustFinalConstraintsToContentsSize(IntSize contentsSize, int nonOverlayScrollbarWidth, bool shrinksViewportContentToFit)
+void PageScaleConstraintsSet::adjustFinalConstraintsToContentsSize(
+    IntSize contentsSize,
+    int nonOverlayScrollbarWidth,
+    bool shrinksViewportContentToFit)
 {
     if (shrinksViewportContentToFit)
-        m_finalConstraints.fitToContentsWidth(contentsSize.width(), m_viewSize.width() - nonOverlayScrollbarWidth);
+        m_finalConstraints.fitToContentsWidth(
+            contentsSize.width(), m_icbSize.width() - nonOverlayScrollbarWidth);
 
     m_finalConstraints.resolveAutoInitialScale();
 }
@@ -112,21 +121,22 @@ void PageScaleConstraintsSet::setNeedsReset(bool needsReset)
         m_constraintsDirty = true;
 }
 
-void PageScaleConstraintsSet::didChangeContentsSize(IntSize contentsSize, float pageScaleFactor)
+void PageScaleConstraintsSet::didChangeContentsSize(IntSize contentsSize,
+    float pageScaleFactor)
 {
     // If a large fixed-width element expanded the size of the document late in
     // loading and our initial scale is not set (or set to be less than the last
     // minimum scale), reset the page scale factor to the new initial scale.
-    if (contentsSize.width() > m_lastContentsWidth
-        && pageScaleFactor == finalConstraints().minimumScale
-        && computeConstraintsStack().initialScale < finalConstraints().minimumScale)
+    if (contentsSize.width() > m_lastContentsWidth && pageScaleFactor == finalConstraints().minimumScale && computeConstraintsStack().initialScale < finalConstraints().minimumScale)
         setNeedsReset(true);
 
     m_constraintsDirty = true;
     m_lastContentsWidth = contentsSize.width();
 }
 
-static float computeDeprecatedTargetDensityDPIFactor(const ViewportDescription& description, float deviceScaleFactor)
+static float computeDeprecatedTargetDensityDPIFactor(
+    const ViewportDescription& description,
+    float deviceScaleFactor)
 {
     if (description.deprecatedTargetDensityDPI == ViewportDescription::ValueDeviceDPI)
         return 1.0f / deviceScaleFactor;
@@ -143,32 +153,27 @@ static float computeDeprecatedTargetDensityDPIFactor(const ViewportDescription& 
     return targetDPI > 0 ? 160.0f / targetDPI : 1.0f;
 }
 
-static float getLayoutWidthForNonWideViewport(const FloatSize& deviceSize, float initialScale)
+static float getLayoutWidthForNonWideViewport(const FloatSize& deviceSize,
+    float initialScale)
 {
-    return initialScale == -1 ? deviceSize.width() : deviceSize.width() / initialScale;
+    return initialScale == -1 ? deviceSize.width()
+                              : deviceSize.width() / initialScale;
 }
 
-static float computeHeightByAspectRatio(float width, const FloatSize& deviceSize)
+static float computeHeightByAspectRatio(float width,
+    const FloatSize& deviceSize)
 {
     return width * (deviceSize.height() / deviceSize.width());
 }
 
-void PageScaleConstraintsSet::didChangeViewSize(const IntSize& size)
+void PageScaleConstraintsSet::didChangeInitialContainingBlockSize(
+    const IntSize& size)
 {
-    if (m_viewSize == size)
+    if (m_icbSize == size)
         return;
 
-    m_viewSize = size;
+    m_icbSize = size;
     m_constraintsDirty = true;
-}
-
-IntSize PageScaleConstraintsSet::mainFrameSize() const
-{
-    // The frame size should match the viewport size at minimum scale, since the
-    // viewport must always be contained by the frame.
-    FloatSize frameSize(m_viewSize);
-    frameSize.scale(1 / finalConstraints().minimumScale);
-    return expandedIntSize(frameSize);
 }
 
 IntSize PageScaleConstraintsSet::layoutSize() const
@@ -176,7 +181,15 @@ IntSize PageScaleConstraintsSet::layoutSize() const
     return flooredIntSize(computeConstraintsStack().layoutSize);
 }
 
-void PageScaleConstraintsSet::adjustForAndroidWebViewQuirks(const ViewportDescription& description, int layoutFallbackWidth, float deviceScaleFactor, bool supportTargetDensityDPI, bool wideViewportQuirkEnabled, bool useWideViewport, bool loadWithOverviewMode, bool nonUserScalableQuirkEnabled)
+void PageScaleConstraintsSet::adjustForAndroidWebViewQuirks(
+    const ViewportDescription& description,
+    int layoutFallbackWidth,
+    float deviceScaleFactor,
+    bool supportTargetDensityDPI,
+    bool wideViewportQuirkEnabled,
+    bool useWideViewport,
+    bool loadWithOverviewMode,
+    bool nonUserScalableQuirkEnabled)
 {
     if (!supportTargetDensityDPI && !wideViewportQuirkEnabled && loadWithOverviewMode && !nonUserScalableQuirkEnabled)
         return;
@@ -216,22 +229,28 @@ void PageScaleConstraintsSet::adjustForAndroidWebViewQuirks(const ViewportDescri
         if (useWideViewport && (description.maxWidth.isAuto() || description.maxWidth.type() == ExtendToZoom) && description.zoom != 1.0f) {
             if (layoutFallbackWidth)
                 adjustedLayoutSizeWidth = layoutFallbackWidth;
-            adjustedLayoutSizeHeight = computeHeightByAspectRatio(adjustedLayoutSizeWidth, m_viewSize);
+            adjustedLayoutSizeHeight = computeHeightByAspectRatio(
+                adjustedLayoutSizeWidth, FloatSize(m_icbSize));
         } else if (!useWideViewport) {
-            const float nonWideScale = description.zoom < 1 && description.maxWidth.type() != DeviceWidth && description.maxWidth.type() != DeviceHeight ? -1 : oldInitialScale;
-            adjustedLayoutSizeWidth = getLayoutWidthForNonWideViewport(m_viewSize, nonWideScale) / targetDensityDPIFactor;
+            const float nonWideScale = description.zoom < 1 && description.maxWidth.type() != DeviceWidth && description.maxWidth.type() != DeviceHeight
+                ? -1
+                : oldInitialScale;
+            adjustedLayoutSizeWidth = getLayoutWidthForNonWideViewport(FloatSize(m_icbSize), nonWideScale) / targetDensityDPIFactor;
             float newInitialScale = targetDensityDPIFactor;
             if (m_userAgentConstraints.initialScale != -1 && (description.maxWidth.type() == DeviceWidth || ((description.maxWidth.isAuto() || description.maxWidth.type() == ExtendToZoom) && description.zoom == -1))) {
                 adjustedLayoutSizeWidth /= m_userAgentConstraints.initialScale;
                 newInitialScale = m_userAgentConstraints.initialScale;
             }
-            adjustedLayoutSizeHeight = computeHeightByAspectRatio(adjustedLayoutSizeWidth, m_viewSize);
+            adjustedLayoutSizeHeight = computeHeightByAspectRatio(
+                adjustedLayoutSizeWidth, FloatSize(m_icbSize));
             if (description.zoom < 1) {
                 m_pageDefinedConstraints.initialScale = newInitialScale;
                 if (m_pageDefinedConstraints.minimumScale != -1)
-                    m_pageDefinedConstraints.minimumScale = std::min<float>(m_pageDefinedConstraints.minimumScale, m_pageDefinedConstraints.initialScale);
+                    m_pageDefinedConstraints.minimumScale = std::min<float>(m_pageDefinedConstraints.minimumScale,
+                        m_pageDefinedConstraints.initialScale);
                 if (m_pageDefinedConstraints.maximumScale != -1)
-                    m_pageDefinedConstraints.maximumScale = std::max<float>(m_pageDefinedConstraints.maximumScale, m_pageDefinedConstraints.initialScale);
+                    m_pageDefinedConstraints.maximumScale = std::max<float>(m_pageDefinedConstraints.maximumScale,
+                        m_pageDefinedConstraints.initialScale);
             }
         }
     }
@@ -241,8 +260,9 @@ void PageScaleConstraintsSet::adjustForAndroidWebViewQuirks(const ViewportDescri
         m_pageDefinedConstraints.minimumScale = m_pageDefinedConstraints.initialScale;
         m_pageDefinedConstraints.maximumScale = m_pageDefinedConstraints.initialScale;
         if (description.maxWidth.isAuto() || description.maxWidth.type() == ExtendToZoom || description.maxWidth.type() == DeviceWidth) {
-            adjustedLayoutSizeWidth = m_viewSize.width() / targetDensityDPIFactor;
-            adjustedLayoutSizeHeight = computeHeightByAspectRatio(adjustedLayoutSizeWidth, m_viewSize);
+            adjustedLayoutSizeWidth = m_icbSize.width() / targetDensityDPIFactor;
+            adjustedLayoutSizeHeight = computeHeightByAspectRatio(
+                adjustedLayoutSizeWidth, FloatSize(m_icbSize));
         }
     }
 

@@ -32,19 +32,18 @@
 #define HTMLInputElementFileSystem_h
 
 #include "modules/filesystem/EntriesCallback.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class HTMLInputElement;
-class ExecutionContext;
+class ScriptState;
 
 class HTMLInputElementFileSystem {
-public:
-    static EntryHeapVector webkitEntries(ExecutionContext*, HTMLInputElement&);
+    STATIC_ONLY(HTMLInputElementFileSystem);
 
-private:
-    HTMLInputElementFileSystem();
-    ~HTMLInputElementFileSystem();
+public:
+    static EntryHeapVector webkitEntries(ScriptState*, HTMLInputElement&);
 };
 
 } // namespace blink

@@ -37,11 +37,6 @@
             '-llog',
           ],
         }],
-        [ 'skia_gpu == 1', {
-          'include_dirs': [
-            '../src/gpu',
-          ],
-        }],
       ],
     },
   ],

@@ -31,18 +31,19 @@
 
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/SecurityOrigin.h"
+#include "wtf/Allocator.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 struct SecurityOriginHash {
+    STATIC_ONLY(SecurityOriginHash);
     static unsigned hash(SecurityOrigin* origin)
     {
         unsigned hashCodes[4] = {
             origin->protocol().impl() ? origin->protocol().impl()->hash() : 0,
             origin->host().impl() ? origin->host().impl()->hash() : 0,
-            origin->port(),
-            origin->suboriginName().impl() ? origin->suboriginName().impl()->hash() : 0
+            origin->port(), (origin->suborigin()->name().impl()) ? origin->suborigin()->name().impl()->hash() : 0
         };
         return StringHasher::hashMemory<sizeof(hashCodes)>(hashCodes);
     }
@@ -78,7 +79,8 @@ struct SecurityOriginHash {
     {
         return equal(a.get(), b);
     }
-    static bool equal(const RefPtr<SecurityOrigin>& a, const RefPtr<SecurityOrigin>& b)
+    static bool equal(const RefPtr<SecurityOrigin>& a,
+        const RefPtr<SecurityOrigin>& b)
     {
         return equal(a.get(), b.get());
     }
@@ -90,7 +92,8 @@ struct SecurityOriginHash {
 
 namespace WTF {
 
-template<> struct DefaultHash<RefPtr<blink::SecurityOrigin>> {
+template <>
+struct DefaultHash<RefPtr<blink::SecurityOrigin>> {
     typedef blink::SecurityOriginHash Hash;
 };
 

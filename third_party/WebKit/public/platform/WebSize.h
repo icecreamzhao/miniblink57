@@ -76,10 +76,7 @@ struct WebSize {
         return *this;
     }
 
-    operator IntSize() const
-    {
-        return IntSize(width, height);
-    }
+    operator IntSize() const { return IntSize(width, height); }
 #else
     WebSize(const gfx::Size& s)
         : width(s.width())
@@ -112,10 +109,7 @@ struct WebSize {
         return gfx::Size(std::max(0, width), std::max(0, height));
     }
 
-    operator gfx::Vector2d() const
-    {
-        return gfx::Vector2d(width, height);
-    }
+    operator gfx::Vector2d() const { return gfx::Vector2d(width, height); }
 #endif
 };
 

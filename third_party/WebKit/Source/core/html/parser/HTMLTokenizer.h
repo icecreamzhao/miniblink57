@@ -27,18 +27,26 @@
 #ifndef HTMLTokenizer_h
 #define HTMLTokenizer_h
 
+#include "core/CoreExport.h"
 #include "core/html/parser/HTMLParserOptions.h"
 #include "core/html/parser/HTMLToken.h"
 #include "core/html/parser/InputStreamPreprocessor.h"
 #include "platform/text/SegmentedString.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-class HTMLTokenizer {
+class CORE_EXPORT HTMLTokenizer {
     WTF_MAKE_NONCOPYABLE(HTMLTokenizer);
-    WTF_MAKE_FAST_ALLOCATED(HTMLTokenizer);
+    USING_FAST_MALLOC(HTMLTokenizer);
+
 public:
-    static PassOwnPtr<HTMLTokenizer> create(const HTMLParserOptions& options) { return adoptPtr(new HTMLTokenizer(options)); }
+    static std::unique_ptr<HTMLTokenizer> create(
+        const HTMLParserOptions& options)
+    {
+        return WTF::wrapUnique(new HTMLTokenizer(options));
+    }
     ~HTMLTokenizer();
 
     void reset();
@@ -116,31 +124,9 @@ public:
         AfterDOCTYPESystemIdentifierState,
         BogusDOCTYPEState,
         CDATASectionState,
-        // These CDATA states are not in the HTML5 spec, but we use them internally.
-        CDATASectionRightSquareBracketState,
-        CDATASectionDoubleRightSquareBracketState,
+        CDATASectionBracketState,
+        CDATASectionEndState,
     };
-
-    struct Checkpoint {
-        HTMLParserOptions options;
-        State state;
-        UChar additionalAllowedCharacter;
-        bool skipNextNewLine;
-        bool shouldAllowCDATA;
-
-        Checkpoint()
-            : options(0)
-            , state()
-            , additionalAllowedCharacter('\0')
-            , skipNextNewLine(false)
-            , shouldAllowCDATA(false)
-        {
-        }
-    };
-
-    bool canCreateCheckpoint() const;
-    void createCheckpoint(Checkpoint&) const;
-    void restoreFromCheckpoint(const Checkpoint&);
 
     // This function returns true if it emits a token. Otherwise, callers
     // must provide the same (in progress) token on the next call (unless
@@ -176,21 +162,24 @@ public:
     //
     void updateStateFor(const String& tagName);
 
-    bool forceNullCharacterReplacement() const { return m_forceNullCharacterReplacement; }
-    void setForceNullCharacterReplacement(bool value) { m_forceNullCharacterReplacement = value; }
+    bool forceNullCharacterReplacement() const
+    {
+        return m_forceNullCharacterReplacement;
+    }
+    void setForceNullCharacterReplacement(bool value)
+    {
+        m_forceNullCharacterReplacement = value;
+    }
 
     bool shouldAllowCDATA() const { return m_shouldAllowCDATA; }
     void setShouldAllowCDATA(bool value) { m_shouldAllowCDATA = value; }
 
-    State state() const { return m_state; }
+    State getState() const { return m_state; }
     void setState(State state) { m_state = state; }
 
     inline bool shouldSkipNullCharacters() const
     {
-        return !m_forceNullCharacterReplacement
-            && (m_state == HTMLTokenizer::DataState
-                || m_state == HTMLTokenizer::RCDATAState
-                || m_state == HTMLTokenizer::RAWTEXTState);
+        return !m_forceNullCharacterReplacement && (m_state == HTMLTokenizer::DataState || m_state == HTMLTokenizer::RCDATAState || m_state == HTMLTokenizer::RAWTEXTState);
     }
 
 private:
@@ -253,7 +242,6 @@ private:
     }
     inline bool isAppropriateEndTag();
 
-
     inline bool haveBufferedCharacterToken()
     {
         return m_token->type() == HTMLToken::Character;
@@ -286,6 +274,6 @@ private:
     HTMLParserOptions m_options;
 };
 
-}
+} // namespace blink
 
 #endif

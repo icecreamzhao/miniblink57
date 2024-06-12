@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/animation/css/CSSTimingData.h"
 
 #include "core/animation/Timing.h"
@@ -11,9 +10,9 @@ namespace blink {
 
 CSSTimingData::CSSTimingData()
 {
-    m_delayList.append(initialDelay());
-    m_durationList.append(initialDuration());
-    m_timingFunctionList.append(initialTimingFunction());
+    m_delayList.push_back(initialDelay());
+    m_durationList.push_back(initialDuration());
+    m_timingFunctionList.push_back(initialTimingFunction());
 }
 
 CSSTimingData::CSSTimingData(const CSSTimingData& other)

@@ -10,18 +10,18 @@
 namespace skia {
 
 void ConvolveVertically_SSE2(const ConvolutionFilter1D::Fixed* filter_values,
-                             int filter_length,
-                             unsigned char* const* source_data_rows,
-                             int pixel_width,
-                             unsigned char* out_row,
-                             bool has_alpha);
+    int filter_length,
+    unsigned char* const* source_data_rows,
+    int pixel_width,
+    unsigned char* out_row,
+    bool has_alpha);
 void Convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
-                                    const ConvolutionFilter1D& filter,
-                                    unsigned char* out_row[4]);
+    const ConvolutionFilter1D& filter,
+    unsigned char* out_row[4]);
 void ConvolveHorizontally_SSE2(const unsigned char* src_data,
-                               const ConvolutionFilter1D& filter,
-                               unsigned char* out_row,
-                               bool has_alpha);
-}  // namespace skia
+    const ConvolutionFilter1D& filter,
+    unsigned char* out_row,
+    bool has_alpha);
+} // namespace skia
 
-#endif  // SKIA_EXT_CONVOLVER_SSE2_H_
+#endif // SKIA_EXT_CONVOLVER_SSE2_H_

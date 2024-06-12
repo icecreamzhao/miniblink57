@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="egl">
+      <UniqueIdentifier>{8FC05352-A5FD-9D07-B47E-CF9E971275D3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="egl\config.cc">
+      <Filter>egl</Filter>
+    </ClCompile>
+    <ClInclude Include="egl\config.h">
+      <Filter>egl</Filter>
+    </ClInclude>
+    <ClCompile Include="egl\display.cc">
+      <Filter>egl</Filter>
+    </ClCompile>
+    <ClInclude Include="egl\display.h">
+      <Filter>egl</Filter>
+    </ClInclude>
+    <ClCompile Include="egl\egl.cc">
+      <Filter>egl</Filter>
+    </ClCompile>
+    <ClCompile Include="egl\surface.cc">
+      <Filter>egl</Filter>
+    </ClCompile>
+    <ClInclude Include="egl\surface.h">
+      <Filter>egl</Filter>
+    </ClInclude>
+    <None Include="gles2_conform_support.gyp"/>
+  </ItemGroup>
+</Project>

@@ -32,12 +32,19 @@
 #define HTTPParsers_h
 
 #include "platform/PlatformExport.h"
+#include "platform/json/JSONValues.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/HashSet.h"
 #include "wtf/Vector.h"
 #include "wtf/text/StringHash.h"
 
+#include <memory>
+
 namespace blink {
+
+class Suborigin;
+class ResourceResponse;
 
 typedef enum {
     ContentDispositionNone,
@@ -51,16 +58,9 @@ enum ContentTypeOptionsDisposition {
     ContentTypeOptionsNosniff
 };
 
-enum XFrameOptionsDisposition {
-    XFrameOptionsNone,
-    XFrameOptionsDeny,
-    XFrameOptionsSameOrigin,
-    XFrameOptionsAllowAll,
-    XFrameOptionsInvalid,
-    XFrameOptionsConflict
-};
-
-// Be sure to update the behavior of XSSAuditor::combineXSSProtectionHeaderAndCSP whenever you change this enum's content or ordering.
+// Be sure to update the behavior of
+// XSSAuditor::combineXSSProtectionHeaderAndCSP whenever you change this enum's
+// content or ordering.
 enum ReflectedXSSDisposition {
     ReflectedXSSUnset = 0,
     AllowReflectedXSS,
@@ -72,6 +72,7 @@ enum ReflectedXSSDisposition {
 using CommaDelimitedHeaderSet = HashSet<String, CaseFoldingHash>;
 
 struct CacheControlHeader {
+    DISALLOW_NEW();
     bool parsed : 1;
     bool containsNoCache : 1;
     bool containsNoStore : 1;
@@ -90,32 +91,59 @@ struct CacheControlHeader {
     }
 };
 
-PLATFORM_EXPORT ContentDispositionType contentDispositionType(const String&);
+PLATFORM_EXPORT ContentDispositionType getContentDispositionType(const String&);
 PLATFORM_EXPORT bool isValidHTTPHeaderValue(const String&);
+PLATFORM_EXPORT bool isValidHTTPFieldContentRFC7230(const String&);
+// Checks whether the given string conforms to the |token| ABNF production
+// defined in the RFC 7230 or not.
+//
+// The ABNF is for validating octets, but this method takes a String instance
+// for convenience which consists of Unicode code points. When this method sees
+// non-ASCII characters, it just returns false.
 PLATFORM_EXPORT bool isValidHTTPToken(const String&);
-PLATFORM_EXPORT bool parseHTTPRefresh(const String& refresh, bool fromHttpEquivMeta, double& delay, String& url);
+// |matcher| specifies a function to check a whitespace character. if |nullptr|
+// is specified, ' ' and '\t' are treated as whitespace characters.
+PLATFORM_EXPORT bool parseHTTPRefresh(const String& refresh, WTF::CharacterMatchFunctionPtr matcher, double& delay, String& url);
 PLATFORM_EXPORT double parseDate(const String&);
-PLATFORM_EXPORT String filenameFromHTTPContentDisposition(const String&);
+
+// Given a Media Type (like "foo/bar; baz=gazonk" - usually from the
+// 'Content-Type' HTTP header), extract and return the "type/subtype" portion
+// ("foo/bar").
+//
+// Note:
+// - This function does not in any way check that the "type/subtype" pair
+//   is well-formed.
+// - OWSes at the head and the tail of the region before the first semicolon
+//   are trimmed.
 PLATFORM_EXPORT AtomicString extractMIMETypeFromMediaType(const AtomicString&);
 PLATFORM_EXPORT String extractCharsetFromMediaType(const String&);
 PLATFORM_EXPORT void findCharsetInMediaType(const String& mediaType, unsigned& charsetPos, unsigned& charsetLen, unsigned start = 0);
+
 PLATFORM_EXPORT ReflectedXSSDisposition parseXSSProtectionHeader(const String& header, String& failureReason, unsigned& failurePosition, String& reportURL);
-PLATFORM_EXPORT String extractReasonPhraseFromHTTPStatusLine(const String&);
-PLATFORM_EXPORT XFrameOptionsDisposition parseXFrameOptionsHeader(const String&);
+
 PLATFORM_EXPORT CacheControlHeader parseCacheControlDirectives(const AtomicString& cacheControlHeader, const AtomicString& pragmaHeader);
 PLATFORM_EXPORT void parseCommaDelimitedHeader(const String& headerValue, CommaDelimitedHeaderSet&);
-
-// -1 could be set to one of the return parameters to indicate the value is not specified.
-PLATFORM_EXPORT bool parseRange(const String&, long long& rangeOffset, long long& rangeEnd, long long& rangeSuffixLength);
+// Returns true on success, otherwise false. The Suborigin argument must be a
+// non-null return argument. |messages| is a list of messages based on any
+// parse warnings or errors. Even if parseSuboriginHeader returns true, there
+// may be Strings in |messages|.
+PLATFORM_EXPORT bool parseSuboriginHeader(const String& header, Suborigin*, WTF::Vector<String>& messages);
 
 PLATFORM_EXPORT ContentTypeOptionsDisposition parseContentTypeOptionsHeader(const String& header);
 
-// Parsing Complete HTTP Messages.
-enum HTTPVersion { Unknown, HTTP_1_0, HTTP_1_1 };
-PLATFORM_EXPORT size_t parseHTTPRequestLine(const char* data, size_t length, String& failureReason, String& method, String& url, HTTPVersion&);
-PLATFORM_EXPORT size_t parseHTTPHeader(const char* data, size_t length, String& failureReason, AtomicString& nameStr, AtomicString& valueStr);
-PLATFORM_EXPORT size_t parseHTTPRequestBody(const char* data, size_t length, Vector<unsigned char>& body);
+// Returns true and stores the position of the end of the headers to |*end|
+// if the headers part ends in |bytes[0..size]|. Returns false otherwise.
+PLATFORM_EXPORT bool parseMultipartHeadersFromBody(const char* bytes, size_t, ResourceResponse*, size_t* end);
 
-}
+// Parses a header value containing JSON data, according to
+// https://tools.ietf.org/html/draft-ietf-httpbis-jfv-01
+// Returns an empty unique_ptr if the header cannot be parsed as JSON. JSON
+// strings which represent object nested deeper than |maxParseDepth| will also
+// cause an empty return value.
+PLATFORM_EXPORT std::unique_ptr<JSONArray> parseJSONHeader(const String& header, int maxParseDepth);
+
+size_t parseHTTPHeader(const char* s, size_t size, String& failureReason, AtomicString& name, AtomicString& value);
+
+} // namespace blink
 
 #endif

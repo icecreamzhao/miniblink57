@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkXMLParser_DEFINED
 #define SkXMLParser_DEFINED
 
@@ -40,10 +39,12 @@ public:
     void reset();
     void setCode(ErrorCode code) { fCode = code; }
     void setNoun(const SkString& str) { fNoun.set(str); }
-    void setNoun(const char* ch)  { fNoun.set(ch); }
+    void setNoun(const char* ch) { fNoun.set(ch); }
     void setNoun(const char* ch, size_t len) { fNoun.set(ch, len); }
+
 protected:
     ErrorCode fCode;
+
 private:
     int fLineNumber;
     int fNativeCode;
@@ -53,7 +54,7 @@ private:
 
 class SkXMLParser {
 public:
-            SkXMLParser(SkXMLParserError* parserError = NULL);
+    SkXMLParser(SkXMLParserError* parserError = NULL);
     virtual ~SkXMLParser();
 
     /** Returns true for success
@@ -78,8 +79,10 @@ public:
     virtual bool endElement(const char elem[]);
     virtual bool text(const char text[], int len);
     void* fParser;
+
 protected:
     SkXMLParserError* fError;
+
 private:
     void reportError(void* parser);
 };

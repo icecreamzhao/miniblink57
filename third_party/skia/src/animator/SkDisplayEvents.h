@@ -6,12 +6,11 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayEvents_DEFINED
 #define SkDisplayEvents_DEFINED
 
-#include "SkEvent.h"
 #include "SkDisplayEvent.h"
+#include "SkEvent.h"
 
 struct SkEventState {
     SkEventState();
@@ -27,12 +26,16 @@ public:
     SkEvents();
     ~SkEvents();
     void addEvent(SkDisplayEvent* evt) { *fEvents.append() = evt; }
-    bool doEvent(SkAnimateMaker& , SkDisplayEvent::Kind , SkEventState* );
+    bool doEvent(SkAnimateMaker&, SkDisplayEvent::Kind, SkEventState*);
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker& );
+    void dump(SkAnimateMaker&);
 #endif
-    void reset() { fEvents.reset(); }
-    void removeEvent(SkDisplayEvent::Kind kind, SkEventState* );
+    void reset()
+    {
+        fEvents.reset();
+    }
+    void removeEvent(SkDisplayEvent::Kind kind, SkEventState*);
+
 private:
     SkTDDisplayEventArray fEvents;
     SkBool fError;

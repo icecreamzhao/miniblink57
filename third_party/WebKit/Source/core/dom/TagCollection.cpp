@@ -21,7 +21,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/TagCollection.h"
 
 #include "core/dom/NodeRareData.h"
@@ -29,27 +28,23 @@
 
 namespace blink {
 
-TagCollection::TagCollection(ContainerNode& rootNode, CollectionType type, const AtomicString& namespaceURI, const AtomicString& localName)
+TagCollection::TagCollection(ContainerNode& rootNode,
+    CollectionType type,
+    const AtomicString& namespaceURI,
+    const AtomicString& localName)
     : HTMLCollection(rootNode, type, DoesNotOverrideItemAfter)
     , m_namespaceURI(namespaceURI)
     , m_localName(localName)
 {
-    ASSERT(m_namespaceURI.isNull() || !m_namespaceURI.isEmpty());
+    DCHECK(m_namespaceURI.isNull() || !m_namespaceURI.isEmpty());
 }
 
-TagCollection::~TagCollection()
-{
-#if !ENABLE(OILPAN)
-    if (m_namespaceURI == starAtom)
-        ownerNode().nodeLists()->removeCache(this, type(), m_localName);
-    else
-        ownerNode().nodeLists()->removeCache(this, m_namespaceURI, m_localName);
-#endif
-}
+TagCollection::~TagCollection() { }
 
 bool TagCollection::elementMatches(const Element& testNode) const
 {
-    // Implements http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#concept-getelementsbytagnamens
+    // Implements
+    // https://dom.spec.whatwg.org/#concept-getelementsbytagnamens
     if (m_localName != starAtom && m_localName != testNode.localName())
         return false;
 

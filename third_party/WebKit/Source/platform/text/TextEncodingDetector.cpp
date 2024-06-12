@@ -28,144 +28,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/TextEncodingDetector.h"
-#include "wtf/text/TextEncoding.h"
 
-#include <unicode/ucnv.h>
-#include <unicode/utypes.h>
-//#include <unicode/ucsdet.h>
+//#include "third_party/ced/src/compact_enc_det/compact_enc_det.h"
 #include "platform/text/IcuCharsetDetector.h"
-//#include <mlang.h>
-
-// #define UNICODE 1
-// 
-// #include <objbase.h>
-// #include <comip.h>
-// #pragma comment(lib, "comsupp.lib")
+#include "wtf/text/TextEncoding.h"
 
 namespace blink {
 
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
-// bool detectTextEncoding(const char* data, size_t length,
-//     const char* hintEncodingName, WTF::TextEncoding* detectedEncoding)
-// {
-//     *detectedEncoding = WTF::TextEncoding();
-//     int matchesCount = 0;
-//     UErrorCode status = U_ZERO_ERROR;
-//     UCharsetDetector* detector = ucsdet_open(&status);
-//     if (U_FAILURE(status))
-//         return false;
-//     ucsdet_enableInputFilter(detector, true);
-//     ucsdet_setText(detector, data, static_cast<int32_t>(length), &status);
-//     if (U_FAILURE(status))
-//         return false;
-// 
-//     // FIXME: A few things we can do other than improving
-//     // the ICU detector itself.
-//     // 1. Use ucsdet_detectAll and pick the most likely one given
-//     // "the context" (parent-encoding, referrer encoding, etc).
-//     // 2. 'Emulate' Firefox/IE's non-Universal detectors (e.g.
-//     // Chinese, Japanese, Russian, Korean and Hebrew) by picking the
-//     // encoding with a highest confidence among the detector-specific
-//     // limited set of candidate encodings.
-//     // Below is a partial implementation of the first part of what's outlined
-//     // above.
-//     const UCharsetMatch** matches = ucsdet_detectAll(detector, &matchesCount, &status);
-//     if (U_FAILURE(status)) {
-//         ucsdet_close(detector);
-//         return false;
-//     }
-// 
-//     const char* encoding = 0;
-//     if (hintEncodingName) {
-//         WTF::TextEncoding hintEncoding(hintEncodingName);
-//         // 10 is the minimum confidence value consistent with the codepoint
-//         // allocation in a given encoding. The size of a chunk passed to
-//         // us varies even for the same html file (apparently depending on
-//         // the network load). When we're given a rather short chunk, we
-//         // don't have a sufficiently reliable signal other than the fact that
-//         // the chunk is consistent with a set of encodings. So, instead of
-//         // setting an arbitrary threshold, we have to scan all the encodings
-//         // consistent with the data.
-//         const int32_t kThresold = 10;
-//         for (int i = 0; i < matchesCount; ++i) {
-//             int32_t confidence = ucsdet_getConfidence(matches[i], &status);
-//             if (U_FAILURE(status)) {
-//                 status = U_ZERO_ERROR;
-//                 continue;
-//             }
-//             if (confidence < kThresold)
-//                 break;
-//             const char* matchEncoding = ucsdet_getName(matches[i], &status);
-//             if (U_FAILURE(status)) {
-//                 status = U_ZERO_ERROR;
-//                 continue;
-//             }
-//             if (WTF::TextEncoding(matchEncoding) == hintEncoding) {
-//                 encoding = hintEncodingName;
-//                 break;
-//             }
-//         }
-//     }
-//     // If no match is found so far, just pick the top match.
-//     // This can happen, say, when a parent frame in EUC-JP refers to
-//     // a child frame in Shift_JIS and both frames do NOT specify the encoding
-//     // making us resort to auto-detection (when it IS turned on).
-//     if (!encoding && matchesCount > 0)
-//         encoding = ucsdet_getName(matches[0], &status);
-//     if (U_SUCCESS(status)) {
-//         *detectedEncoding = WTF::TextEncoding(encoding);
-//         ucsdet_close(detector);
-//         return true;
-//     }
-//     ucsdet_close(detector);
-// 
-// 	notImplemented();
+// bool detectTextEncoding(const char* data,
+//                         size_t length,
+//                         const char* hintEncodingName,
+//                         const char* hintUrl,
+//                         const char* hintUserLanguage,
+//                         WTF::TextEncoding* detectedEncoding) {
+//   *detectedEncoding = WTF::TextEncoding();
+//   Language language;
+//   LanguageFromCode(hintUserLanguage, &language);
+//   int consumedBytes;
+//   bool isReliable;
+//   Encoding encoding = CompactEncDet::DetectEncoding(
+//       data, length, hintUrl, nullptr, nullptr,
+//       EncodingNameAliasToEncoding(hintEncodingName), language,
+//       CompactEncDet::WEB_CORPUS,
+//       false,  // Include 7-bit encodings to detect ISO-2022-JP
+//       &consumedBytes, &isReliable);
+//
+//   // Should return false if the detected encoding is UTF8. This helps prevent
+//   // modern web sites from neglecting proper encoding labelling and simply
+//   // relying on browser-side encoding detection. Encoding detection is supposed
+//   // to work for web sites with legacy encoding only. Detection failure leads
+//   // |TextResourceDecoder| to use its default encoding determined from system
+//   // locale or TLD.
+//   if (encoding == UNKNOWN_ENCODING || encoding == UTF8)
 //     return false;
+//
+//   // 7-bit encodings (except ISO-2022-JP) are not supported in WHATWG encoding
+//   // standard. Mark them as ASCII to keep the raw bytes intact.
+//   switch (encoding) {
+//     case HZ_GB_2312:
+//     case ISO_2022_KR:
+//     case ISO_2022_CN:
+//     case UTF7:
+//       encoding = ASCII_7BIT;
+//       break;
+//     default:
+//       break;
+//   }
+//   *detectedEncoding = WTF::TextEncoding(MimeEncodingName(encoding));
 // }
 
-#else
-
-// bool detectTextEncodingByMLang(const char* data, size_t length)
-// {
-// //     const size_t length = 20;
-// //     unsigned char data[20] = {
-// //         0x61, 0x61, 0x73, 0x64, 0x61, 0x73, 0x64, 0x61, 0x73, 0x64, 0x61, 0x73, 0x64, 0xB9, 0xFE, 0xB9,
-// //         0xFE, 0, 0, 0
-// //     };
-// 
-//     char * pBuf = new char[length];
-//     memcpy(pBuf, data, length);
-// 
-//     IMultiLanguage2* pIMultiLanguage2 = NULL;
-// 
-//     HRESULT hr = S_OK;
-//     hr = ::CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage2, (void**)&pIMultiLanguage2);
-// 
-//     DetectEncodingInfo encoding[10];
-//     
-//     int nScores = 10;
-//     int nBufLen = length;
-//     memset(encoding, 0, sizeof(DetectEncodingInfo) * 10);
-//     DebugBreak();
-//     hr = pIMultiLanguage2->DetectInputCodepage(MLDETECTCP_NONE, 0, pBuf, &nBufLen, encoding, &nScores);
-//     if (0 > hr)
-//         return false;
-// 
-//     // 20127 9 "US-ASCII"
-//     // 936 4294967295 "gb2312"
-// 
-//     MIMECPINFO codePageInfo = { 0 };
-//     hr = pIMultiLanguage2->GetCodePageInfo(encoding[0].nCodePage, encoding[0].nLangID, &codePageInfo);
-// 
-//     pIMultiLanguage2->Release();
-// 
-//     return true;
-// }
-
-bool detectTextEncoding(const char* data, size_t length, const char* hintEncodingName, WTF::TextEncoding* detectedEncoding)
+bool detectTextEncoding(const char* data,
+    size_t length,
+    const char* hintEncodingName,
+    const char* hintUrl,
+    const char* hintUserLanguage,
+    WTF::TextEncoding* detectedEncoding)
 {
     *detectedEncoding = WTF::TextEncoding();
     int matchesCount = 0;
@@ -176,7 +94,7 @@ bool detectTextEncoding(const char* data, size_t length, const char* hintEncodin
     //ucsdet_enableInputFilter(detector, true);
     detector->setText(data, static_cast<int32_t>(length));
 
-    const CharsetMatch*const* matches = detector->detectAll(matchesCount, status);
+    const CharsetMatch* const* matches = detector->detectAll(matchesCount, status);
     if (U_ZERO_ERROR != (status)) {
         delete (detector);
         return false;
@@ -197,7 +115,6 @@ bool detectTextEncoding(const char* data, size_t length, const char* hintEncodin
             }
         }
     }
-
     // If no match is found so far, just pick the top match.
     // This can happen, say, when a parent frame in EUC-JP refers to
     // a child frame in Shift_JIS and both frames do NOT specify the encoding
@@ -205,17 +122,10 @@ bool detectTextEncoding(const char* data, size_t length, const char* hintEncodin
     if (!encoding && matchesCount > 0)
         encoding = matches[0]->getName();
 
-    //detectTextEncodingByMLang(data, length);
-
-    if (!encoding)
-        encoding = "GBK";
-
     *detectedEncoding = WTF::TextEncoding(encoding);
 
     delete (detector);
     return true;
 }
 
-#endif // MINIBLINK_NOT_IMPLEMENTED
-
-}
+} // namespace blink

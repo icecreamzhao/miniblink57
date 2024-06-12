@@ -5,19 +5,25 @@
 #include "src/heap/stress-marking-observer.h"
 #include "src/heap/incremental-marking.h"
 
+#include "src/objects/fixed-array-inl.h" // weolar
+
 namespace v8 {
 namespace internal {
 
-// TODO(majeski): meaningful step_size
-StressMarkingObserver::StressMarkingObserver(Heap& heap)
-    : AllocationObserver(64), heap_(heap) {}
+    // TODO(majeski): meaningful step_size
+    StressMarkingObserver::StressMarkingObserver(Heap& heap)
+        : AllocationObserver(64)
+        , heap_(heap)
+    {
+    }
 
-void StressMarkingObserver::Step(int bytes_allocated, Address soon_object,
-                                 size_t size) {
-  heap_.StartIncrementalMarkingIfAllocationLimitIsReached(Heap::kNoGCFlags,
-                                                          kNoGCCallbackFlags);
-  heap_.incremental_marking()->EnsureBlackAllocated(soon_object, size);
-}
+    void StressMarkingObserver::Step(int bytes_allocated, Address soon_object,
+        size_t size)
+    {
+        heap_.StartIncrementalMarkingIfAllocationLimitIsReached(Heap::kNoGCFlags,
+            kNoGCCallbackFlags);
+        heap_.incremental_marking()->EnsureBlackAllocated(soon_object, size);
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

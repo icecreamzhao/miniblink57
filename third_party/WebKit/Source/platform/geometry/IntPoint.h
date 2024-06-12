@@ -28,7 +28,10 @@
 #define IntPoint_h
 
 #include "platform/geometry/IntSize.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 #include "wtf/MathExtras.h"
+#include "wtf/SaturatedArithmetic.h"
 #include "wtf/VectorTraits.h"
 
 #if OS(MACOSX)
@@ -42,10 +45,24 @@ typedef struct CGPoint CGPoint;
 namespace blink {
 
 class PLATFORM_EXPORT IntPoint {
+    USING_FAST_MALLOC(IntPoint);
+
 public:
-    IntPoint() : m_x(0), m_y(0) { }
-    IntPoint(int x, int y) : m_x(x), m_y(y) { }
-    explicit IntPoint(const IntSize& size) : m_x(size.width()), m_y(size.height()) { }
+    IntPoint()
+        : m_x(0)
+        , m_y(0)
+    {
+    }
+    IntPoint(int x, int y)
+        : m_x(x)
+        , m_y(y)
+    {
+    }
+    explicit IntPoint(const IntSize& size)
+        : m_x(size.width())
+        , m_y(size.height())
+    {
+    }
 
     static IntPoint zero() { return IntPoint(); }
 
@@ -57,7 +74,17 @@ public:
 
     void move(const IntSize& s) { move(s.width(), s.height()); }
     void moveBy(const IntPoint& offset) { move(offset.x(), offset.y()); }
-    void move(int dx, int dy) { m_x += dx; m_y += dy; }
+    void move(int dx, int dy)
+    {
+        m_x += dx;
+        m_y += dy;
+    }
+    void saturatedMove(int dx, int dy)
+    {
+        m_x = SaturatedAddition(m_x, dx);
+        m_y = SaturatedAddition(m_y, dy);
+    }
+
     void scale(float sx, float sy)
     {
         m_x = lroundf(static_cast<float>(m_x * sx));
@@ -78,25 +105,23 @@ public:
 
     int distanceSquaredToPoint(const IntPoint&) const;
 
-    void clampNegativeToZero()
-    {
-        *this = expandedTo(zero());
-    }
+    void clampNegativeToZero() { *this = expandedTo(zero()); }
 
-    IntPoint transposedPoint() const
-    {
-        return IntPoint(m_y, m_x);
-    }
+    IntPoint transposedPoint() const { return IntPoint(m_y, m_x); }
 
 #if OS(MACOSX)
-    explicit IntPoint(const CGPoint&); // don't do this implicitly since it's lossy
+    explicit IntPoint(
+        const CGPoint&); // don't do this implicitly since it's lossy
     operator CGPoint() const;
 
 #if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
-    explicit IntPoint(const NSPoint&); // don't do this implicitly since it's lossy
+    explicit IntPoint(
+        const NSPoint&); // don't do this implicitly since it's lossy
     operator NSPoint() const;
 #endif
 #endif
+
+    String toString() const;
 
 private:
     int m_x, m_y;
@@ -158,6 +183,10 @@ inline int IntPoint::distanceSquaredToPoint(const IntPoint& point) const
 {
     return ((*this) - point).diagonalLengthSquared();
 }
+
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const IntPoint&, std::ostream*);
 
 } // namespace blink
 

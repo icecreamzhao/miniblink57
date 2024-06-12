@@ -6,14 +6,21 @@
 #define StyleSelfAlignmentData_h
 
 #include "core/style/ComputedStyleConstants.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class StyleSelfAlignmentData {
+    DISALLOW_NEW();
+
 public:
-    // Style data for Self-Aligment and Default-Alignment properties: align-{self, items}, justify-{self, items}.
-    // [ <self-position> && <overflow-position>? ] | [ legacy && [ left | right | center ] ]
-    StyleSelfAlignmentData(ItemPosition position, OverflowAlignment overflow, ItemPositionType positionType = NonLegacyPosition)
+    // Style data for Self-Aligment and Default-Alignment properties: align-{self,
+    // items}, justify-{self, items}.
+    // [ <self-position> && <overflow-position>? ] | [ legacy && [ left | right |
+    // center ] ]
+    StyleSelfAlignmentData(ItemPosition position,
+        OverflowAlignment overflow,
+        ItemPositionType positionType = NonLegacyPosition)
         : m_position(position)
         , m_positionType(positionType)
         , m_overflow(overflow)
@@ -21,12 +28,24 @@ public:
     }
 
     void setPosition(ItemPosition position) { m_position = position; }
-    void setPositionType(ItemPositionType positionType) { m_positionType = positionType; }
+    void setPositionType(ItemPositionType positionType)
+    {
+        m_positionType = positionType;
+    }
     void setOverflow(OverflowAlignment overflow) { m_overflow = overflow; }
 
-    ItemPosition position() const { return static_cast<ItemPosition>(m_position); }
-    ItemPositionType positionType() const { return static_cast<ItemPositionType>(m_positionType); }
-    OverflowAlignment overflow() const { return static_cast<OverflowAlignment>(m_overflow); }
+    ItemPosition position() const
+    {
+        return static_cast<ItemPosition>(m_position);
+    }
+    ItemPositionType positionType() const
+    {
+        return static_cast<ItemPositionType>(m_positionType);
+    }
+    OverflowAlignment overflow() const
+    {
+        return static_cast<OverflowAlignment>(m_overflow);
+    }
 
     bool operator==(const StyleSelfAlignmentData& o) const
     {
@@ -40,7 +59,8 @@ public:
 
 private:
     unsigned m_position : 4; // ItemPosition
-    unsigned m_positionType: 1; // Whether or not alignment uses the 'legacy' keyword.
+    unsigned m_positionType : 1; // Whether or not alignment uses the 'legacy'
+        // keyword.
     unsigned m_overflow : 2; // OverflowAlignment
 };
 

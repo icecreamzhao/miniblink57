@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawSaveLayer.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -24,10 +23,14 @@ const SkMemberInfo SkSaveLayer::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkSaveLayer);
 
-SkSaveLayer::SkSaveLayer() : paint(NULL), bounds(NULL) {
+SkSaveLayer::SkSaveLayer()
+    : paint(nullptr)
+    , bounds(nullptr)
+{
 }
 
-SkSaveLayer::~SkSaveLayer(){
+SkSaveLayer::~SkSaveLayer()
+{
 }
 
 bool SkSaveLayer::draw(SkAnimateMaker& maker)
@@ -37,13 +40,11 @@ bool SkSaveLayer::draw(SkAnimateMaker& maker)
     }
     SkPaint* save = maker.fPaint;
     //paint is an SkDrawPaint
-    if (paint)
-    {
+    if (paint) {
         SkPaint realPaint;
         paint->setupPaint(&realPaint);
         maker.fCanvas->saveLayer(&bounds->fRect, &realPaint);
-    }
-    else
+    } else
         maker.fCanvas->saveLayer(&bounds->fRect, save);
     SkPaint local = SkPaint(*maker.fPaint);
     maker.fPaint = &local;

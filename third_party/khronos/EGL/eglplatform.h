@@ -51,7 +51,7 @@
 #endif
 
 #ifndef EGLAPIENTRY
-#define EGLAPIENTRY  KHRONOS_APIENTRY
+#define EGLAPIENTRY KHRONOS_APIENTRY
 #endif
 #define EGLAPIENTRYP EGLAPIENTRY*
 
@@ -73,15 +73,15 @@
 #endif
 #include <windows.h>
 
-typedef HDC     EGLNativeDisplayType;
+typedef HDC EGLNativeDisplayType;
 typedef HBITMAP EGLNativePixmapType;
-typedef HWND    EGLNativeWindowType;
+typedef HWND EGLNativeWindowType;
 
-#elif defined(__WINSCW__) || defined(__SYMBIAN32__)  /* Symbian */
+#elif defined(__WINSCW__) || defined(__SYMBIAN32__) /* Symbian */
 
-typedef int   EGLNativeDisplayType;
-typedef void *EGLNativeWindowType;
-typedef void *EGLNativePixmapType;
+typedef int EGLNativeDisplayType;
+typedef void* EGLNativeWindowType;
+typedef void* EGLNativePixmapType;
 
 // From Android NDK.
 #elif defined(__ANDROID__) || defined(ANDROID)
@@ -90,9 +90,9 @@ typedef void *EGLNativePixmapType;
 
 struct egl_native_pixmap_t;
 
-typedef struct ANativeWindow*           EGLNativeWindowType;
-typedef struct egl_native_pixmap_t*     EGLNativePixmapType;
-typedef void*                           EGLNativeDisplayType;
+typedef struct ANativeWindow* EGLNativeWindowType;
+typedef struct egl_native_pixmap_t* EGLNativePixmapType;
+typedef void* EGLNativeDisplayType;
 
 #elif defined(USE_OZONE)
 
@@ -106,22 +106,22 @@ typedef intptr_t EGLNativePixmapType;
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef Display *EGLNativeDisplayType;
-typedef Pixmap   EGLNativePixmapType;
-typedef Window   EGLNativeWindowType;
+typedef Display* EGLNativeDisplayType;
+typedef Pixmap EGLNativePixmapType;
+typedef Window EGLNativeWindowType;
 
 #elif defined(__APPLE__)
 
 // TODO(gman): these are place holders.
-typedef void          *EGLNativeDisplayType;
-typedef int            EGLNativePixmapType;
+typedef void* EGLNativeDisplayType;
+typedef int EGLNativePixmapType;
 #ifdef __OBJC__
 @class NSView;
-typedef NSView *EGLNativeWindowType;
+typedef NSView* EGLNativeWindowType;
 #else
 struct NSView;
-typedef struct NSView *EGLNativeWindowType;
-#endif  // __OBJC__
+typedef struct NSView* EGLNativeWindowType;
+#endif // __OBJC__
 
 #else
 #error "Platform not recognized"
@@ -129,9 +129,8 @@ typedef struct NSView *EGLNativeWindowType;
 
 /* EGL 1.2 types, renamed for consistency in EGL 1.3 */
 typedef EGLNativeDisplayType NativeDisplayType;
-typedef EGLNativePixmapType  NativePixmapType;
-typedef EGLNativeWindowType  NativeWindowType;
-
+typedef EGLNativePixmapType NativePixmapType;
+typedef EGLNativeWindowType NativeWindowType;
 
 /* Define EGLint. This must be a signed integral type large enough to contain
  * all legal attribute names and values passed into and out of EGL, whether

@@ -70,15 +70,33 @@ Status View
 
 The status view shows a table with builders, grouped by test type and platform,
 on the X-axis and commits on the Y-axis.  The cells are colored according to
-the status of the build for each commit: green indicates success, red indicates
-failure, light orange indicates an in-progress build, and white indicates that
-no build has started yet for a given revision. Commits are listed by author, and
-the branch on which the commit was made is shown on the very left.
+the status of the build for each commit:
+
+* green: success
+* orange: failure
+* purple: exception (infrastructure issue)
+* black border, no fill: build in progress
+* blank: no build has started yet for a given revision
+
+Commits are listed by author, and the branch on which the commit was made is
+shown on the very left. A purple result will override an orange result.
 
 For more detail, you can click on an individual cell to get a summary of the
 steps which ran for that build.  You can also click one of the white bars at
 the top of each column to see a summary of recent builds for a given builder.
 
+The status page has several filters which can be used to show only a subset of
+bots:
 
+* Interesting: Bots which have both successes and failures within the visible
+  commit window.
+* Failures: Bots which have failures within the visible commit window.
+* Comments: Bots which have comments.
+* Failing w/o comment: Bots which have failures within the visible commit window
+  but have no comments.
+* All: Display all bots.
+* Search: Enter a search string. Substrings and regular expressions may be
+  used, per the Javascript String Match() rules:
+  http://www.w3schools.com/jsref/jsref_match.asp
 
 

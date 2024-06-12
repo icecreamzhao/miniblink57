@@ -43,10 +43,10 @@ private:
     JsContext* fJsContext;
 
 #if SK_SUPPORT_GPU
-    GrContext*              fCurContext;
-    const GrGLInterface*    fCurIntf;
-    GrRenderTarget*         fCurRenderTarget;
-    SkSurface*              fCurSurface;
+    GrContext* fCurContext;
+    const GrGLInterface* fCurIntf;
+    GrRenderTarget* fCurRenderTarget;
+    SkSurface* fCurSurface;
 #endif
 };
 

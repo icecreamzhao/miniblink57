@@ -24,11 +24,13 @@ namespace atom {
 
 class Dialog : public mate::EventEmitter<Dialog> {
 public:
-    explicit Dialog(v8::Isolate* isolate, v8::Local<v8::Object> wrapper) {
+    explicit Dialog(v8::Isolate* isolate, v8::Local<v8::Object> wrapper)
+    {
         gin::Wrappable<Dialog>::InitWith(isolate, wrapper);
     }
 
-    static void init(v8::Isolate* isolate, v8::Local<v8::Object> target) {
+    static void init(v8::Isolate* isolate, v8::Local<v8::Object> target)
+    {
         v8::Local<v8::FunctionTemplate> prototype = v8::FunctionTemplate::New(isolate, newFunction);
 
         prototype->SetClassName(v8::String::NewFromUtf8(isolate, "Dialog"));
@@ -37,15 +39,17 @@ public:
         builder.SetMethod("_showSaveDialog", &Dialog::_showSaveDialogApi);
         builder.SetMethod("_showMessageBox", &Dialog::_showMessageBoxApi);
         builder.SetMethod("_showErrorBox", &Dialog::_showErrorBoxApi);
-        
+
         constructor.Reset(isolate, prototype->GetFunction());
         target->Set(v8::String::NewFromUtf8(isolate, "Dialog"), prototype->GetFunction());
     }
 
-    void nullFunction() {
+    void nullFunction()
+    {
     }
 
-    static void newFunction(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    static void newFunction(const v8::FunctionCallbackInfo<v8::Value>& args)
+    {
         v8::Isolate* isolate = args.GetIsolate();
         if (args.IsConstructCall()) {
             new Dialog(isolate, args.This());
@@ -55,16 +59,19 @@ public:
     }
 
     // showSaveDialog([browserWindow, ]options[, callback])
-    void _showSaveDialogApi(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    void _showSaveDialogApi(const v8::FunctionCallbackInfo<v8::Value>& args)
+    {
         _showOpenOrSaveDialogApi(false, args);
     }
 
-    void _showOpenDialogApi(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    void _showOpenDialogApi(const v8::FunctionCallbackInfo<v8::Value>& args)
+    {
         _showOpenOrSaveDialogApi(true, args);
     }
 
     // showOpenDialog([browserWindow, ]options[, callback])
-    void _showOpenOrSaveDialogApi(bool isOpenOrSave, const v8::FunctionCallbackInfo<v8::Value>& args) {
+    void _showOpenOrSaveDialogApi(bool isOpenOrSave, const v8::FunctionCallbackInfo<v8::Value>& args)
+    {
         if (3 != args.Length())
             return;
 
@@ -104,13 +111,15 @@ public:
             args.GetReturnValue().Set(result);
     }
 
-    void _showErrorBoxApi(const std::string& title, const std::string& content) {
+    void _showErrorBoxApi(const std::string& title, const std::string& content)
+    {
         std::wstring titleW = StringUtil::UTF8ToUTF16(title);
         std::wstring contentW = StringUtil::UTF8ToUTF16(content);
         ::MessageBoxW(nullptr, contentW.c_str(), titleW.c_str(), MB_OK);
     }
 
-    void _showMessageBoxApi(const v8::FunctionCallbackInfo<v8::Value>& args) {
+    void _showMessageBoxApi(const v8::FunctionCallbackInfo<v8::Value>& args)
+    {
         if (3 != args.Length())
             return;
 
@@ -185,7 +194,7 @@ private:
     };
 
     // <description, extensions>
-    typedef std::pair<std::string, std::vector<std::string> > Filter;
+    typedef std::pair<std::string, std::vector<std::string>> Filter;
     typedef std::vector<Filter> Filters;
 
     void getMessageOptions(v8::Isolate* isolate,
@@ -193,7 +202,8 @@ private:
         std::string* title,
         std::string* message,
         std::string* type,
-        std::vector<std::string>* buttons) {
+        std::vector<std::string>* buttons)
+    {
         base::DictionaryValue optionsDict;
         if (options.IsEmpty() || !gin::Converter<base::DictionaryValue>::FromV8(isolate, options, &optionsDict))
             return;
@@ -206,7 +216,7 @@ private:
         bool b = optionsDict.GetList("buttons", &buttonsList);
         if (!b || !buttonsList)
             return;
-        
+
         for (size_t i = 0; i < buttonsList->GetSize(); ++i) {
             std::string button;
             buttonsList->GetString(i, &button);
@@ -215,14 +225,15 @@ private:
         }
     }
 
-    void getOptions(v8::Isolate* isolate, 
+    void getOptions(v8::Isolate* isolate,
         v8::Local<v8::Object> options,
         std::string* title,
         std::string* defaultPath,
         Filters* filters,
         std::string* buttonLabel,
         base::ListValue** properties,
-        int* fileDialogProperty) {
+        int* fileDialogProperty)
+    {
         base::DictionaryValue optionsDict;
         if (options.IsEmpty() || !gin::Converter<base::DictionaryValue>::FromV8(isolate, options, &optionsDict))
             return;
@@ -267,7 +278,8 @@ private:
         }
     }
 
-    int propertiesToEnum(base::ListValue* properties) {
+    int propertiesToEnum(base::ListValue* properties)
+    {
         int out = 0;
         if (!properties)
             return out;
@@ -291,71 +303,73 @@ private:
         return out;
     }
 
-//     std::vector<std::wstring> showOpenFile() {
-//         HRESULT hr = S_OK;
-//         std::vector<std::wstring> filePaths;
-// 
-//         IFileOpenDialog *fileDlg = NULL;
-//         hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&fileDlg));
-//         if (FAILED(hr)) return filePaths;
-//         //ON_SCOPE_EXIT([&] { fileDlg->Release(); });
-// 
-//         IKnownFolderManager *pkfm = NULL;
-//         hr = CoCreateInstance(CLSID_KnownFolderManager,
-//             NULL,
-//             CLSCTX_INPROC_SERVER,
-//             IID_PPV_ARGS(&pkfm));
-//         if (FAILED(hr)) return filePaths;
-//         //ON_SCOPE_EXIT([&] { pkfm->Release(); });
-// 
-//         IKnownFolder *pKnownFolder = NULL;
-//         hr = pkfm->GetFolder(FOLDERID_PublicMusic, &pKnownFolder);
-//         if (FAILED(hr)) return filePaths;
-//         //ON_SCOPE_EXIT([&] { pKnownFolder->Release(); });
-// 
-//         IShellItem *psi = NULL;
-//         hr = pKnownFolder->GetShellItem(0, IID_PPV_ARGS(&psi));
-//         if (FAILED(hr)) return filePaths;
-//         //ON_SCOPE_EXIT([&] { psi->Release(); });
-// 
-//         hr = fileDlg->AddPlace(psi, FDAP_BOTTOM);
-//         COMDLG_FILTERSPEC rgSpec[] = { 
-//             { L"音乐文件", L"*.mp3;*.wav;" }
-//         };
-//         fileDlg->SetFileTypes(1, rgSpec);
-// 
-//         DWORD dwOptions;
-//         fileDlg->GetOptions(&dwOptions);
-//         fileDlg->SetOptions(dwOptions | FOS_ALLOWMULTISELECT);
-//         hr = fileDlg->Show(NULL);
-//         if (SUCCEEDED(hr)) {
-//             IShellItemArray *pRets;
-//             hr = fileDlg->GetResults(&pRets);
-//             if (SUCCEEDED(hr)) {
-//                 DWORD count;
-//                 pRets->GetCount(&count);
-//                 for (DWORD i = 0; i < count; i++) {
-//                     IShellItem *pRet;
-//                     LPWSTR nameBuffer;
-//                     pRets->GetItemAt(i, &pRet);
-//                     pRet->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &nameBuffer);
-//                     filePaths.push_back(std::wstring(nameBuffer));
-//                     pRet->Release();
-//                     CoTaskMemFree(nameBuffer);
-//                 }
-//                 pRets->Release();
-//             }
-//         }
-//         return filePaths;
-//     }
+    //     std::vector<std::wstring> showOpenFile() {
+    //         HRESULT hr = S_OK;
+    //         std::vector<std::wstring> filePaths;
+    //
+    //         IFileOpenDialog *fileDlg = NULL;
+    //         hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&fileDlg));
+    //         if (FAILED(hr)) return filePaths;
+    //         //ON_SCOPE_EXIT([&] { fileDlg->Release(); });
+    //
+    //         IKnownFolderManager *pkfm = NULL;
+    //         hr = CoCreateInstance(CLSID_KnownFolderManager,
+    //             NULL,
+    //             CLSCTX_INPROC_SERVER,
+    //             IID_PPV_ARGS(&pkfm));
+    //         if (FAILED(hr)) return filePaths;
+    //         //ON_SCOPE_EXIT([&] { pkfm->Release(); });
+    //
+    //         IKnownFolder *pKnownFolder = NULL;
+    //         hr = pkfm->GetFolder(FOLDERID_PublicMusic, &pKnownFolder);
+    //         if (FAILED(hr)) return filePaths;
+    //         //ON_SCOPE_EXIT([&] { pKnownFolder->Release(); });
+    //
+    //         IShellItem *psi = NULL;
+    //         hr = pKnownFolder->GetShellItem(0, IID_PPV_ARGS(&psi));
+    //         if (FAILED(hr)) return filePaths;
+    //         //ON_SCOPE_EXIT([&] { psi->Release(); });
+    //
+    //         hr = fileDlg->AddPlace(psi, FDAP_BOTTOM);
+    //         COMDLG_FILTERSPEC rgSpec[] = {
+    //             { L"音乐文件", L"*.mp3;*.wav;" }
+    //         };
+    //         fileDlg->SetFileTypes(1, rgSpec);
+    //
+    //         DWORD dwOptions;
+    //         fileDlg->GetOptions(&dwOptions);
+    //         fileDlg->SetOptions(dwOptions | FOS_ALLOWMULTISELECT);
+    //         hr = fileDlg->Show(NULL);
+    //         if (SUCCEEDED(hr)) {
+    //             IShellItemArray *pRets;
+    //             hr = fileDlg->GetResults(&pRets);
+    //             if (SUCCEEDED(hr)) {
+    //                 DWORD count;
+    //                 pRets->GetCount(&count);
+    //                 for (DWORD i = 0; i < count; i++) {
+    //                     IShellItem *pRet;
+    //                     LPWSTR nameBuffer;
+    //                     pRets->GetItemAt(i, &pRet);
+    //                     pRet->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &nameBuffer);
+    //                     filePaths.push_back(std::wstring(nameBuffer));
+    //                     pRet->Release();
+    //                     CoTaskMemFree(nameBuffer);
+    //                 }
+    //                 pRets->Release();
+    //             }
+    //         }
+    //         return filePaths;
+    //     }
 
-    void pushStringToVector(std::vector<wchar_t>* buffer, const std::wstring& str) {
+    void pushStringToVector(std::vector<wchar_t>* buffer, const std::wstring& str)
+    {
         for (size_t i = 0; i < str.length(); ++i) {
             buffer->push_back(str[i]);
         }
     }
 
-    void convertFilters(const Filters& filters, std::vector<wchar_t>* buffer) {
+    void convertFilters(const Filters& filters, std::vector<wchar_t>* buffer)
+    {
         for (size_t i = 0; i < filters.size(); ++i) {
             Filter filter = filters[i];
             std::wstring name = base::UTF8ToWide(filter.first);
@@ -382,7 +396,8 @@ private:
         const std::string& defaultPath,
         const Filters& filters,
         int properties,
-        base::ListValue* paths) {
+        base::ListValue* paths)
+    {
         std::wstring titleW = base::UTF8ToWide(title);
         std::wstring defaultPathW = base::UTF8ToWide(defaultPath);
         std::vector<wchar_t> filtersStr;
@@ -406,8 +421,8 @@ private:
         ofn.nFilterIndex = 1;
         ofn.lpstrFile = &fileResult[0];
         ofn.nMaxFile = 1 * MAX_PATH;
-        ofn.lpstrFileTitle = nullptr;// titleW.c_str();
-        ofn.nMaxFileTitle = 0;// titleW.size();
+        ofn.lpstrFileTitle = nullptr; // titleW.c_str();
+        ofn.nMaxFileTitle = 0; // titleW.size();
         ofn.lpstrInitialDir = defaultPathW.c_str();
         ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 
@@ -436,7 +451,8 @@ private:
         return false;
     }
 
-    void splitPathFromGetOpenFileNameResult(const std::vector<wchar_t>& fileResult, base::ListValue* paths) {
+    void splitPathFromGetOpenFileNameResult(const std::vector<wchar_t>& fileResult, base::ListValue* paths)
+    {
         std::vector<std::wstring> pathsTemp;
         const wchar_t* begin = &fileResult[0];
         const wchar_t* end = nullptr;
@@ -476,7 +492,8 @@ private:
         return;
     }
 
-    static int CALLBACK browseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) {
+    static int CALLBACK browseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+    {
         switch (uMsg) {
         case BFFM_INITIALIZED:
             ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
@@ -489,7 +506,8 @@ private:
     unsigned selectDir(HWND parentWindow,
         const std::wstring& title,
         const std::wstring& defaultPath,
-        std::wstring* strDir) {
+        std::wstring* strDir)
+    {
         std::vector<wchar_t> szDir;
         szDir.resize(MAX_PATH);
         BROWSEINFO bi;
@@ -513,63 +531,64 @@ private:
 
         return IDCANCEL;
     }
-    
+
     static const int ID_COMBO_ADDR = 0x47c;
     static const int ID_LEFT_TOOBAR = 0x4A0;
     static LONG g_lOriWndProc;
 
-    LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    LRESULT static __stdcall _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
         switch (uMsg) {
-            case WM_COMMAND: {
-                if (wParam == IDOK) {
-                    std::vector<wchar_t> wcDirPath;
-                    wcDirPath.resize(MAX_PATH);
-                    HWND hComboAddr = GetDlgItem(hwnd, ID_COMBO_ADDR);
-                    if (hComboAddr != NULL)
-                        GetWindowText(hComboAddr, &wcDirPath[0], MAX_PATH);
-                    
-                    if (!wcslen(&wcDirPath[0]))
-                        break;
-                    
-                    DWORD dwAttr = GetFileAttributes(&wcDirPath[0]);
-                    if (dwAttr != -1 && (FILE_ATTRIBUTE_DIRECTORY & dwAttr)) {
-                        LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, L"OPENFILENAME");
-                        if (oFn) {
-                            int size = oFn->nMaxFile > MAX_PATH ? MAX_PATH : oFn->nMaxFile;
-                            memcpy(oFn->lpstrFile, &wcDirPath[0], size * sizeof(wchar_t));
-                            ::RemoveProp(hwnd, L"OPENFILENAME");
-                            ::EndDialog(hwnd, 1);
-                        } else {
-                            ::EndDialog(hwnd, 0);
-                        }
-                    }
+        case WM_COMMAND: {
+            if (wParam == IDOK) {
+                std::vector<wchar_t> wcDirPath;
+                wcDirPath.resize(MAX_PATH);
+                HWND hComboAddr = GetDlgItem(hwnd, ID_COMBO_ADDR);
+                if (hComboAddr != NULL)
+                    GetWindowText(hComboAddr, &wcDirPath[0], MAX_PATH);
+
+                if (!wcslen(&wcDirPath[0]))
                     break;
-                }
-                //////////////////////////////////////////////////////////////////////////
-                //如果是左边toolbar发出的WM_COMMOND消息（即点击左边的toolbar）, 则清空OK按钮旁的组合框。
-                HWND hCtrl = (HWND)lParam;
-                if (hCtrl == NULL) {
-                    break;
-                }
-                int ctrlId = ::GetDlgCtrlID(hCtrl);
-                if (ctrlId == ID_LEFT_TOOBAR) {
-                    HWND hComboAddr = ::GetDlgItem(hwnd, ID_COMBO_ADDR);
-                    if (hComboAddr != NULL) {
-                        ::SetWindowTextW(hComboAddr, L"");
+
+                DWORD dwAttr = GetFileAttributes(&wcDirPath[0]);
+                if (dwAttr != -1 && (FILE_ATTRIBUTE_DIRECTORY & dwAttr)) {
+                    LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, L"OPENFILENAME");
+                    if (oFn) {
+                        int size = oFn->nMaxFile > MAX_PATH ? MAX_PATH : oFn->nMaxFile;
+                        memcpy(oFn->lpstrFile, &wcDirPath[0], size * sizeof(wchar_t));
+                        ::RemoveProp(hwnd, L"OPENFILENAME");
+                        ::EndDialog(hwnd, 1);
+                    } else {
+                        ::EndDialog(hwnd, 0);
                     }
+                }
+                break;
+            }
+            //////////////////////////////////////////////////////////////////////////
+            //如果是左边toolbar发出的WM_COMMOND消息（即点击左边的toolbar）, 则清空OK按钮旁的组合框。
+            HWND hCtrl = (HWND)lParam;
+            if (hCtrl == NULL) {
+                break;
+            }
+            int ctrlId = ::GetDlgCtrlID(hCtrl);
+            if (ctrlId == ID_LEFT_TOOBAR) {
+                HWND hComboAddr = ::GetDlgItem(hwnd, ID_COMBO_ADDR);
+                if (hComboAddr != NULL) {
+                    ::SetWindowTextW(hComboAddr, L"");
                 }
             }
-            break;
+        } break;
         }
         int i = CallWindowProc((WNDPROC)g_lOriWndProc, hwnd, uMsg, wParam, lParam);
         return i;
     }
 
-    UINT_PTR static __stdcall folderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam) {
+    UINT_PTR static __stdcall folderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+    {
         //参考reactos可知，hdlg 是一个隐藏的对话框，其父窗口为打开文件对话框， OK，CANCEL按钮等控件的消息在父窗口处理。
         if (uiMsg != WM_NOTIFY)
             return 1;
-        
+
         LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
         if (lpOfNotify->hdr.code == CDN_INITDONE) {
             SetPropW(GetParent(hdlg), L"OPENFILENAME", (HANDLE)(lpOfNotify->lpOFN));
@@ -616,16 +635,16 @@ LONG Dialog::g_lOriWndProc = 0;
 v8::Persistent<v8::Function> Dialog::constructor;
 gin::WrapperInfo Dialog::kWrapperInfo = { gin::kEmbedderNativeGin };
 
-static void initializeDialogApi(v8::Local<v8::Object> target, v8::Local<v8::Value> unused, v8::Local<v8::Context> context, const NodeNative* native) {
+static void initializeDialogApi(v8::Local<v8::Object> target, v8::Local<v8::Value> unused, v8::Local<v8::Context> context, const NodeNative* native)
+{
     node::Environment* env = node::Environment::GetCurrent(context);
     Dialog::init(env->isolate(), target);
 }
 
-static const char BrowserDialogNative[] =
-"console.log('BrowserDialogNative');"
-"exports = function {};";
+static const char BrowserDialogNative[] = "console.log('BrowserDialogNative');"
+                                          "exports = function {};";
 
-static NodeNative nativeBrowserDialogNative{ "Dialog", BrowserDialogNative, sizeof(BrowserDialogNative) - 1 };
+static NodeNative nativeBrowserDialogNative { "Dialog", BrowserDialogNative, sizeof(BrowserDialogNative) - 1 };
 
 NODE_MODULE_CONTEXT_AWARE_BUILTIN_SCRIPT_MANUAL(atom_browser_dialog, initializeDialogApi, &nativeBrowserDialogNative)
 

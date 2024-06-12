@@ -1597,12 +1597,12 @@ double power_helper(Isolate* isolate, double x, double y) {
   }
   if (y == 0.5) {
     lazily_initialize_fast_sqrt(isolate);
-    return (std::isinf(x)) ? V8_INFINITY
+    return (std_isinf(x)) ? V8_INFINITY
                            : fast_sqrt(x + 0.0, isolate);  // Convert -0 to +0.
   }
   if (y == -0.5) {
     lazily_initialize_fast_sqrt(isolate);
-    return (std::isinf(x)) ? 0 : 1.0 / fast_sqrt(x + 0.0,
+    return (std_isinf(x)) ? 0 : 1.0 / fast_sqrt(x + 0.0,
                                                  isolate);  // Convert -0 to +0.
   }
   return power_double_double(x, y);
@@ -1631,7 +1631,7 @@ double power_double_int(double x, int y) {
 double power_double_double(double x, double y) {
   // The checks for special cases can be dropped in ia32 because it has already
   // been done in generated code before bailing out here.
-  if (std::isnan(y) || ((x == 1 || x == -1) && std::isinf(y))) {
+  if (std_isnan(y) || ((x == 1 || x == -1) && std_isinf(y))) {
     return std::numeric_limits<double>::quiet_NaN();
   }
   return Pow(x, y);

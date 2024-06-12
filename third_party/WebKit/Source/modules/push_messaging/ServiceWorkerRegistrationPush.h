@@ -5,6 +5,7 @@
 #ifndef ServiceWorkerRegistrationPush_h
 #define ServiceWorkerRegistrationPush_h
 
+#include "modules/serviceworkers/ServiceWorkerRegistration.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -13,9 +14,12 @@ namespace blink {
 class PushManager;
 class ServiceWorkerRegistration;
 
-class ServiceWorkerRegistrationPush final : public GarbageCollectedFinalized<ServiceWorkerRegistrationPush>, public HeapSupplement<ServiceWorkerRegistration> {
+class ServiceWorkerRegistrationPush final
+    : public GarbageCollectedFinalized<ServiceWorkerRegistrationPush>,
+      public Supplement<ServiceWorkerRegistration> {
     USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerRegistrationPush);
     WTF_MAKE_NONCOPYABLE(ServiceWorkerRegistrationPush);
+
 public:
     virtual ~ServiceWorkerRegistrationPush();
     static ServiceWorkerRegistrationPush& from(ServiceWorkerRegistration&);

@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/CookieJar.h"
 
 #include "core/dom/Document.h"
@@ -37,6 +36,7 @@
 #include "public/platform/Platform.h"
 #include "public/platform/WebCookieJar.h"
 #include "public/platform/WebURL.h"
+#include "net/cookies/WebCookieJarCurlImpl.h"
 
 namespace blink {
 
@@ -68,15 +68,16 @@ bool cookiesEnabled(const Document* document)
     WebCookieJar* cookieJar = toCookieJar(document);
     if (!cookieJar)
         return false;
-    return cookieJar->cookiesEnabled(document->cookieURL(), document->firstPartyForCookies());
+    return cookieJar->cookiesEnabled(document->cookieURL(),
+        document->firstPartyForCookies());
 }
 
-String cookieRequestHeaderFieldValue(const Document* document, const KURL& url)
+String cookieRequestHeaderFieldValue(const Document& document, const blink::KURL& url)
 {
-    WebCookieJar* cookieJar = toCookieJar(document);
+    net::WebCookieJarImpl* cookieJar = (net::WebCookieJarImpl*)toCookieJar(&document);
     if (!cookieJar)
         return String();
-    return cookieJar->cookieRequestHeaderFieldValue(url, document->firstPartyForCookies());
+    return cookieJar->cookieRequestHeaderFieldValue(url, document.firstPartyForCookies());
 }
 
 } // namespace blink

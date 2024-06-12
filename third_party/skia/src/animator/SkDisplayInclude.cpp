@@ -6,17 +6,9 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayInclude.h"
 #include "SkAnimateMaker.h"
 #include "SkAnimator.h"
-
-#if 0
-#undef SK_MEMBER
-#define SK_MEMBER(_member, _type) \
-    { #_member, SK_OFFSETOF(BASE_CLASS::_A, _member), SkType_##_type, \
-    sizeof(((BASE_CLASS::_A*) 0)->_member) / sizeof(SkScalar) }
-#endif
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -36,15 +28,18 @@ DEFINE_GET_MEMBER(SkInclude);
 //  src.unref();
 //}
 
-bool SkInclude::enable(SkAnimateMaker & ) {
+bool SkInclude::enable(SkAnimateMaker&)
+{
     return true;
 }
 
-bool SkInclude::hasEnable() const {
+bool SkInclude::hasEnable() const
+{
     return true;
 }
 
-void SkInclude::onEndElement(SkAnimateMaker& maker) {
+void SkInclude::onEndElement(SkAnimateMaker& maker)
+{
     maker.fInInclude = true;
     if (src.size() == 0 || maker.decodeURI(src.c_str()) == false) {
         if (maker.getErrorCode() != SkXMLParserError::kNoError || maker.getNativeCode() != -1) {

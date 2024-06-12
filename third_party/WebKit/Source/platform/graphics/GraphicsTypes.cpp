@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/GraphicsTypes.h"
 
 #include "wtf/Assertions.h"
@@ -32,8 +31,7 @@
 
 namespace blink {
 
-static const char* const compositeOperatorNames[] = {
-    "clear",
+static const char* const compositeOperatorNames[] = { "clear",
     "copy",
     "source-over",
     "source-in",
@@ -44,31 +42,20 @@ static const char* const compositeOperatorNames[] = {
     "destination-out",
     "destination-atop",
     "xor",
-    "lighter"
-};
+    "lighter" };
 
 static const char* const blendOperatorNames[] = {
-    "normal",
-    "multiply",
-    "screen",
-    "overlay",
-    "darken",
-    "lighten",
-    "color-dodge",
-    "color-burn",
-    "hard-light",
-    "soft-light",
-    "difference",
-    "exclusion",
-    "hue",
-    "saturation",
-    "color",
-    "luminosity"
+    "normal", "multiply", "screen", "overlay",
+    "darken", "lighten", "color-dodge", "color-burn",
+    "hard-light", "soft-light", "difference", "exclusion",
+    "hue", "saturation", "color", "luminosity"
 };
 const int numCompositeOperatorNames = WTF_ARRAY_LENGTH(compositeOperatorNames);
 const int numBlendOperatorNames = WTF_ARRAY_LENGTH(blendOperatorNames);
 
-bool parseCompositeAndBlendOperator(const String& s, CompositeOperator& op, WebBlendMode& blendOp)
+bool parseCompositeAndBlendOperator(const String& s,
+    CompositeOperator& op,
+    WebBlendMode& blendOp)
 {
     for (int i = 0; i < numCompositeOperatorNames; i++) {
         if (s == compositeOperatorNames[i]) {
@@ -186,7 +173,8 @@ String textBaselineName(TextBaseline baseline)
 {
     ASSERT(baseline >= 0);
     ASSERT(baseline < 6);
-    const char* const names[6] = { "alphabetic", "top", "middle", "bottom", "ideographic", "hanging" };
+    const char* const names[6] = { "alphabetic", "top", "middle",
+        "bottom", "ideographic", "hanging" };
     return names[baseline];
 }
 

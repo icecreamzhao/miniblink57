@@ -32,16 +32,21 @@
 #define AudioProcessor_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class AudioBus;
 
-// AudioProcessor is an abstract base class representing an audio signal processing object with a single input and a single output,
-// where the number of input channels equals the number of output channels.  It can be used as one part of a complex DSP algorithm,
-// or as the processor for a basic (one input - one output) AudioNode.
+// AudioProcessor is an abstract base class representing an audio signal
+// processing object with a single input and a single output, where the number
+// of input channels equals the number of output channels.  It can be used as
+// one part of a complex DSP algorithm, or as the processor for a basic (one
+// input - one output) AudioNode.
 
 class PLATFORM_EXPORT AudioProcessor {
+    USING_FAST_MALLOC(AudioProcessor);
+
 public:
     AudioProcessor(float sampleRate, unsigned numberOfChannels)
         : m_initialized(false)
@@ -56,8 +61,17 @@ public:
     virtual void initialize() = 0;
     virtual void uninitialize() = 0;
 
-    // Processes the source to destination bus.  The number of channels must match in source and destination.
-    virtual void process(const AudioBus* source, AudioBus* destination, size_t framesToProcess) = 0;
+    // Processes the source to destination bus.  The number of channels must match
+    // in source and destination.
+    virtual void process(const AudioBus* source,
+        AudioBus* destination,
+        size_t framesToProcess)
+        = 0;
+
+    // Forces all AudioParams in the processor to run the timeline,
+    // bypassing any other processing the processor would do in
+    // process().
+    virtual void processOnlyAudioParams(size_t framesToProcess) {};
 
     // Resets filter state
     virtual void reset() = 0;

@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/layout/svg/LayoutSVGGradientStop.h"
 
 #include "core/layout/svg/LayoutSVGResourceContainer.h"
@@ -32,18 +30,18 @@ LayoutSVGGradientStop::LayoutSVGGradientStop(SVGStopElement* element)
 {
 }
 
-LayoutSVGGradientStop::~LayoutSVGGradientStop()
-{
-}
+LayoutSVGGradientStop::~LayoutSVGGradientStop() { }
 
-void LayoutSVGGradientStop::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
+void LayoutSVGGradientStop::styleDidChange(StyleDifference diff,
+    const ComputedStyle* oldStyle)
 {
     LayoutObject::styleDidChange(diff, oldStyle);
     if (!diff.hasDifference())
         return;
 
-    // <stop> elements should only be allowed to make layoutObjects under gradient elements
-    // but I can imagine a few cases we might not be catching, so let's not crash if our parent isn't a gradient.
+    // <stop> elements should only be allowed to make layoutObjects under gradient
+    // elements but I can imagine a few cases we might not be catching, so let's
+    // not crash if our parent isn't a gradient.
     SVGGradientElement* gradient = gradientElement();
     if (!gradient)
         return;
@@ -65,7 +63,8 @@ SVGGradientElement* LayoutSVGGradientStop::gradientElement() const
 {
     ContainerNode* parentNode = node()->parentNode();
     ASSERT(parentNode);
-    return isSVGGradientElement(*parentNode) ? toSVGGradientElement(parentNode) : 0;
+    return isSVGGradientElement(*parentNode) ? toSVGGradientElement(parentNode)
+                                             : 0;
 }
 
-}
+} // namespace blink

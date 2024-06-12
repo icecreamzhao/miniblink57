@@ -8,11 +8,12 @@
 #ifndef GrBufferAllocPool_DEFINED
 #define GrBufferAllocPool_DEFINED
 
+#include "GrTypesPriv.h"
 #include "SkTArray.h"
 #include "SkTDArray.h"
 #include "SkTypes.h"
 
-class GrGeometryBuffer;
+class GrBuffer;
 class GrGpu;
 
 /**
@@ -47,16 +48,6 @@ public:
 
 protected:
     /**
-     * Used to determine what type of buffers to create. We could make the
-     * createBuffer a virtual except that we want to use it in the cons for
-     * pre-allocated buffers.
-     */
-    enum BufferType {
-        kVertex_BufferType,
-        kIndex_BufferType,
-    };
-
-    /**
      * Constructor
      *
      * @param gpu                   The GrGpu used to create the buffers.
@@ -65,11 +56,11 @@ protected:
      *                              This value will be clamped to some
      *                              reasonable minimum.
      */
-     GrBufferAllocPool(GrGpu* gpu,
-                       BufferType bufferType,
-                       size_t   bufferSize = 0);
+    GrBufferAllocPool(GrGpu* gpu,
+        GrBufferType bufferType,
+        size_t bufferSize = 0);
 
-     virtual ~GrBufferAllocPool();
+    virtual ~GrBufferAllocPool();
 
     /**
      * Returns a block of memory to hold data. A buffer designated to hold the
@@ -91,39 +82,37 @@ protected:
      * @return pointer to where the client should write the data.
      */
     void* makeSpace(size_t size,
-                    size_t alignment,
-                    const GrGeometryBuffer** buffer,
-                    size_t* offset);
+        size_t alignment,
+        const GrBuffer** buffer,
+        size_t* offset);
 
-    GrGeometryBuffer* getBuffer(size_t size);
+    GrBuffer* getBuffer(size_t size);
 
 private:
     struct BufferBlock {
-        size_t              fBytesFree;
-        GrGeometryBuffer*   fBuffer;
+        size_t fBytesFree;
+        GrBuffer* fBuffer;
     };
 
     bool createBlock(size_t requestSize);
     void destroyBlock();
     void deleteBlocks();
     void flushCpuData(const BufferBlock& block, size_t flushSize);
+    void* resetCpuData(size_t newSize);
 #ifdef SK_DEBUG
     void validate(bool unusedBlockAllowed = false) const;
 #endif
+    size_t fBytesInUse;
 
-    size_t                          fBytesInUse;
+    GrGpu* fGpu;
+    size_t fMinBlockSize;
+    GrBufferType fBufferType;
 
-    GrGpu*                          fGpu;
-    size_t                          fMinBlockSize;
-    BufferType                      fBufferType;
-
-    SkTArray<BufferBlock>           fBlocks;
-    SkAutoMalloc                    fCpuData;
-    void*                           fBufferPtr;
-    size_t                          fGeometryBufferMapThreshold;
+    SkTArray<BufferBlock> fBlocks;
+    void* fCpuData;
+    void* fBufferPtr;
+    size_t fBufferMapThreshold;
 };
-
-class GrVertexBuffer;
 
 /**
  * A GrBufferAllocPool of vertex buffers
@@ -159,15 +148,13 @@ public:
      * @return pointer to first vertex.
      */
     void* makeSpace(size_t vertexSize,
-                    int vertexCount,
-                    const GrVertexBuffer** buffer,
-                    int* startVertex);
+        int vertexCount,
+        const GrBuffer** buffer,
+        int* startVertex);
 
 private:
     typedef GrBufferAllocPool INHERITED;
 };
-
-class GrIndexBuffer;
 
 /**
  * A GrBufferAllocPool of index buffers
@@ -200,8 +187,8 @@ public:
      * @return pointer to first index.
      */
     void* makeSpace(int indexCount,
-                    const GrIndexBuffer** buffer,
-                    int* startIndex);
+        const GrBuffer** buffer,
+        int* startIndex);
 
 private:
     typedef GrBufferAllocPool INHERITED;

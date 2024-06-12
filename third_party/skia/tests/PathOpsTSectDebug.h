@@ -7,27 +7,39 @@
 
 #include "SkPathOpsTSect.h"
 
-template<typename TCurve, typename OppCurve>
-void SkTCoincident<TCurve, OppCurve>::dump() const {
-    SkDebugf("t=%1.9g pt=(%1.9g,%1.9g)%s\n", fPerpT, fPerpPt.fX, fPerpPt.fY,
-            fCoincident ? " coincident" : "");
+template <typename TCurve, typename OppCurve>
+char SkTCoincident<TCurve, OppCurve>::dumpIsCoincidentStr() const
+{
+    if (!!fCoincident != fCoincident) {
+        return '?';
+    }
+    return fCoincident ? '*' : 0;
 }
 
-template<typename TCurve, typename OppCurve>
-const SkTSpan<TCurve, OppCurve>* SkTSect<TCurve, OppCurve>::debugSpan(int id) const {
+template <typename TCurve, typename OppCurve>
+void SkTCoincident<TCurve, OppCurve>::dump() const
+{
+    SkDebugf("t=%1.9g pt=(%1.9g,%1.9g)%s\n", fPerpT, fPerpPt.fX, fPerpPt.fY,
+        fCoincident ? " coincident" : "");
+}
+
+template <typename TCurve, typename OppCurve>
+const SkTSpan<TCurve, OppCurve>* SkTSect<TCurve, OppCurve>::debugSpan(int id) const
+{
     const SkTSpan<TCurve, OppCurve>* test = fHead;
     do {
         if (test->debugID() == id) {
             return test;
         }
     } while ((test = test->next()));
-    return NULL;
+    return nullptr;
 }
 
-template<typename TCurve, typename OppCurve>
-const SkTSpan<TCurve, OppCurve>* SkTSect<TCurve, OppCurve>::debugT(double t) const {
+template <typename TCurve, typename OppCurve>
+const SkTSpan<TCurve, OppCurve>* SkTSect<TCurve, OppCurve>::debugT(double t) const
+{
     const SkTSpan<TCurve, OppCurve>* test = fHead;
-    const SkTSpan<TCurve, OppCurve>* closest = NULL;
+    const SkTSpan<TCurve, OppCurve>* closest = nullptr;
     double bestDist = DBL_MAX;
     do {
         if (between(test->fStartT, t, test->fEndT)) {
@@ -43,15 +55,17 @@ const SkTSpan<TCurve, OppCurve>* SkTSect<TCurve, OppCurve>::debugT(double t) con
     return closest;
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dump() const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dump() const
+{
     dumpCommon(fHead);
 }
 
 extern int gDumpTSectNum;
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpBoth(SkTSect<OppCurve, TCurve>* opp) const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpBoth(SkTSect<OppCurve, TCurve>* opp) const
+{
 #if DEBUG_T_SECT_DUMP <= 2
 #if DEBUG_T_SECT_DUMP == 2
     SkDebugf("%d ", ++gDumpTSectNum);
@@ -72,8 +86,9 @@ void SkTSect<TCurve, OppCurve>::dumpBoth(SkTSect<OppCurve, TCurve>* opp) const {
 #endif
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpBounded(int id) const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpBounded(int id) const
+{
     const SkTSpan<TCurve, OppCurve>* bounded = debugSpan(id);
     if (!bounded) {
         SkDebugf("no span matches %d\n", id);
@@ -83,30 +98,36 @@ void SkTSect<TCurve, OppCurve>::dumpBounded(int id) const {
     do {
         if (test->findOppSpan(bounded)) {
             test->dump();
+            SkDebugf(" ");
         }
     } while ((test = test->next()));
+    SkDebugf("\n");
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpBounds() const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpBounds() const
+{
     const SkTSpan<TCurve, OppCurve>* test = fHead;
     do {
         test->dumpBounds();
     } while ((test = test->next()));
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpCoin() const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpCoin() const
+{
     dumpCommon(fCoincident);
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpCoinCurves() const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpCoinCurves() const
+{
     dumpCommonCurves(fCoincident);
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpCommon(const SkTSpan<TCurve, OppCurve>* test) const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpCommon(const SkTSpan<TCurve, OppCurve>* test) const
+{
     SkDebugf("id=%d", debugID());
     if (!test) {
         SkDebugf(" (empty)");
@@ -118,30 +139,54 @@ void SkTSect<TCurve, OppCurve>::dumpCommon(const SkTSpan<TCurve, OppCurve>* test
     } while ((test = test->next()));
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpCommonCurves(const SkTSpan<TCurve, OppCurve>* test) const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpCommonCurves(const SkTSpan<TCurve, OppCurve>* test) const
+{
     do {
         test->fPart.dumpID(test->debugID());
     } while ((test = test->next()));
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSect<TCurve, OppCurve>::dumpCurves() const {
+template <typename TCurve, typename OppCurve>
+void SkTSect<TCurve, OppCurve>::dumpCurves() const
+{
     dumpCommonCurves(fHead);
 }
 
-template<typename TCurve, typename OppCurve>
-const SkTSpan<TCurve, OppCurve>* SkTSpan<TCurve, OppCurve>::debugSpan(int id) const {
-    return SkDEBUGRELEASE(fDebugSect->debugSpan(id), NULL);
+template <typename TCurve, typename OppCurve>
+const SkTSpan<TCurve, OppCurve>* SkTSpan<TCurve, OppCurve>::debugSpan(int id) const
+{
+    return SkDEBUGRELEASE(fDebugSect->debugSpan(id), nullptr);
 }
 
-template<typename TCurve, typename OppCurve>
-const SkTSpan<TCurve, OppCurve>* SkTSpan<TCurve, OppCurve>::debugT(double t) const {
-    return SkDEBUGRELEASE(fDebugSect->debugT(t), NULL);
+template <typename TCurve, typename OppCurve>
+const SkTSpan<TCurve, OppCurve>* SkTSpan<TCurve, OppCurve>::debugT(double t) const
+{
+    return SkDEBUGRELEASE(fDebugSect->debugT(t), nullptr);
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSpan<TCurve, OppCurve>::dump() const {
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dumpAll() const
+{
+    dumpID();
+    SkDebugf("=(%g,%g) [", fStartT, fEndT);
+    const SkTSpanBounded<OppCurve, TCurve>* testBounded = fBounded;
+    while (testBounded) {
+        const SkTSpan<OppCurve, TCurve>* span = testBounded->fBounded;
+        const SkTSpanBounded<OppCurve, TCurve>* next = testBounded->fNext;
+        span->dumpID();
+        SkDebugf("=(%g,%g)", span->fStartT, span->fEndT);
+        if (next) {
+            SkDebugf(" ");
+        }
+        testBounded = next;
+    }
+    SkDebugf("]\n");
+}
+
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dump() const
+{
     dumpID();
     SkDebugf("=(%g,%g) [", fStartT, fEndT);
     const SkTSpanBounded<OppCurve, TCurve>* testBounded = fBounded;
@@ -157,21 +202,24 @@ void SkTSpan<TCurve, OppCurve>::dump() const {
     SkDebugf("]");
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSpan<TCurve, OppCurve>::dumpBounded(int id) const {
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dumpBounded(int id) const
+{
     SkDEBUGCODE(fDebugSect->dumpBounded(id));
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSpan<TCurve, OppCurve>::dumpBounds() const {
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dumpBounds() const
+{
     dumpID();
     SkDebugf(" bounds=(%1.9g,%1.9g, %1.9g,%1.9g) boundsMax=%1.9g%s\n",
-            fBounds.fLeft, fBounds.fTop, fBounds.fRight, fBounds.fBottom, fBoundsMax,
-            fCollapsed ? " collapsed" : ""); 
+        fBounds.fLeft, fBounds.fTop, fBounds.fRight, fBounds.fBottom, fBoundsMax,
+        fCollapsed ? " collapsed" : "");
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSpan<TCurve, OppCurve>::dumpCoin() const {
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dumpCoin() const
+{
     dumpID();
     SkDebugf(" coinStart ");
     fCoinStart.dump();
@@ -179,13 +227,16 @@ void SkTSpan<TCurve, OppCurve>::dumpCoin() const {
     fCoinEnd.dump();
 }
 
-template<typename TCurve, typename OppCurve>
-void SkTSpan<TCurve, OppCurve>::dumpID() const {
-    if (fCoinStart.isCoincident()) {
-        SkDebugf("%c", '*');
+template <typename TCurve, typename OppCurve>
+void SkTSpan<TCurve, OppCurve>::dumpID() const
+{
+    char cS = fCoinStart.dumpIsCoincidentStr();
+    if (cS) {
+        SkDebugf("%c", cS);
     }
     SkDebugf("%d", debugID());
-    if (fCoinEnd.isCoincident()) {
-        SkDebugf("%c", '*');
+    char cE = fCoinEnd.dumpIsCoincidentStr();
+    if (cE) {
+        SkDebugf("%c", cE);
     }
 }

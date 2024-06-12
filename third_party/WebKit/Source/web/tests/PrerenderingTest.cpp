@@ -28,30 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
+#include "core/dom/NodeTraversal.h"
 #include "platform/testing/URLTestHelpers.h"
-#include "public/web/WebCache.h"
-#include "public/web/WebDocument.h"
-#include "public/web/WebElement.h"
-#include "public/web/WebFrame.h"
-#include "public/web/WebNode.h"
-#include "public/web/WebNodeList.h"
-#include "public/web/WebPrerendererClient.h"
-#include "public/web/WebScriptSource.h"
-#include "public/web/WebView.h"
-#include "public/web/WebViewClient.h"
-#include "web/tests/FrameTestHelpers.h"
-
 #include "public/platform/Platform.h"
 #include "public/platform/WebPrerender.h"
 #include "public/platform/WebPrerenderingSupport.h"
 #include "public/platform/WebString.h"
-#include "public/platform/WebUnitTestSupport.h"
-#include "wtf/OwnPtr.h"
+#include "public/platform/WebURLLoaderMockFactory.h"
+#include "public/web/WebCache.h"
+#include "public/web/WebFrame.h"
+#include "public/web/WebPrerendererClient.h"
+#include "public/web/WebScriptSource.h"
+#include "public/web/WebView.h"
+#include "public/web/WebViewClient.h"
+#include "testing/gtest/include/gtest/gtest.h"
+#include "web/WebLocalFrameImpl.h"
+#include "web/tests/FrameTestHelpers.h"
+#include "wtf/PtrUtil.h"
 #include <functional>
-#include <gtest/gtest.h>
 #include <list>
+#include <memory>
 
 using namespace blink;
 using blink::URLTestHelpers::toKURL;
@@ -70,53 +66,43 @@ public:
 
     void setExtraDataForNextPrerender(WebPrerender::ExtraData* extraData)
     {
-        ASSERT(!m_extraData);
-        m_extraData = adoptPtr(extraData);
+        DCHECK(!m_extraData);
+        m_extraData = WTF::wrapUnique(extraData);
     }
 
     WebPrerender releaseWebPrerender()
     {
-        ASSERT(!m_webPrerenders.empty());
+        DCHECK(!m_webPrerenders.empty());
         WebPrerender retval(m_webPrerenders.front());
         m_webPrerenders.pop_front();
         return retval;
     }
 
-    bool empty() const
-    {
-        return m_webPrerenders.empty();
-    }
+    bool empty() const { return m_webPrerenders.empty(); }
 
-    void clear()
-    {
-        m_webPrerenders.clear();
-    }
+    void clear() { m_webPrerenders.clear(); }
 
 private:
     // From WebPrerendererClient:
     void willAddPrerender(WebPrerender* prerender) override
     {
-        prerender->setExtraData(m_extraData.leakPtr());
+        prerender->setExtraData(m_extraData.release());
 
-        ASSERT(!prerender->isNull());
+        DCHECK(!prerender->isNull());
         m_webPrerenders.push_back(*prerender);
     }
 
-    OwnPtr<WebPrerender::ExtraData> m_extraData;
+    bool isPrefetchOnly() override { return false; }
+
+    std::unique_ptr<WebPrerender::ExtraData> m_extraData;
     std::list<WebPrerender> m_webPrerenders;
 };
 
 class TestPrerenderingSupport : public WebPrerenderingSupport {
 public:
-    TestPrerenderingSupport()
-    {
-        initialize(this);
-    }
+    TestPrerenderingSupport() { initialize(this); }
 
-    ~TestPrerenderingSupport() override
-    {
-        shutdown();
-    }
+    ~TestPrerenderingSupport() override { shutdown(); }
 
     void clear()
     {
@@ -132,28 +118,31 @@ public:
 
     size_t addCount(const WebPrerender& prerender) const
     {
-        return std::count_if(m_addedPrerenders.begin(), m_addedPrerenders.end(), std::bind1st(WebPrerenderEqual(), prerender));
+        return std::count_if(m_addedPrerenders.begin(), m_addedPrerenders.end(),
+            [&prerender](const WebPrerender& other) {
+                return other.toPrerender() == prerender.toPrerender();
+            });
     }
 
     size_t cancelCount(const WebPrerender& prerender) const
     {
-        return std::count_if(m_canceledPrerenders.begin(), m_canceledPrerenders.end(), std::bind1st(WebPrerenderEqual(), prerender));
+        return std::count_if(
+            m_canceledPrerenders.begin(), m_canceledPrerenders.end(),
+            [&prerender](const WebPrerender& other) {
+                return other.toPrerender() == prerender.toPrerender();
+            });
     }
 
     size_t abandonCount(const WebPrerender& prerender) const
     {
-        return std::count_if(m_abandonedPrerenders.begin(), m_abandonedPrerenders.end(), std::bind1st(WebPrerenderEqual(), prerender));
+        return std::count_if(
+            m_abandonedPrerenders.begin(), m_abandonedPrerenders.end(),
+            [&prerender](const WebPrerender& other) {
+                return other.toPrerender() == prerender.toPrerender();
+            });
     }
 
 private:
-    class WebPrerenderEqual : public std::binary_function<WebPrerender, WebPrerender, bool> {
-    public:
-        bool operator()(const WebPrerender& first, const WebPrerender& second) const
-        {
-            return first.toPrerender() == second.toPrerender();
-        }
-    };
-
     // From WebPrerenderingSupport:
     void add(const WebPrerender& prerender) override
     {
@@ -170,31 +159,37 @@ private:
         m_abandonedPrerenders.push_back(prerender);
     }
 
-    std::vector<WebPrerender> m_addedPrerenders;
-    std::vector<WebPrerender> m_canceledPrerenders;
-    std::vector<WebPrerender> m_abandonedPrerenders;
+    void prefetchFinished() override { }
+
+    Vector<WebPrerender> m_addedPrerenders;
+    Vector<WebPrerender> m_canceledPrerenders;
+    Vector<WebPrerender> m_abandonedPrerenders;
 };
 
 class PrerenderingTest : public testing::Test {
 public:
-    ~PrerenderingTest()
+    ~PrerenderingTest() override
     {
-        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+        Platform::current()->getURLLoaderMockFactory()->unregisterAllURLs();
+        WebCache::clear();
     }
 
     void initialize(const char* baseURL, const char* fileName)
     {
-        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(baseURL), WebString::fromUTF8(fileName));
+        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(baseURL),
+            WebString::fromUTF8(fileName));
         const bool RunJavascript = true;
         m_webViewHelper.initialize(RunJavascript);
         m_webViewHelper.webView()->setPrerendererClient(&m_prerendererClient);
 
-        FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(), std::string(baseURL) + fileName);
+        FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(),
+            std::string(baseURL) + fileName);
     }
 
     void navigateAway()
     {
-        FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(), "about:blank");
+        FrameTestHelpers::loadFrame(m_webViewHelper.webView()->mainFrame(),
+            "about:blank");
     }
 
     void close()
@@ -205,35 +200,33 @@ public:
         WebCache::clear();
     }
 
-    WebElement console()
+    Element& console()
     {
-        WebElement console = m_webViewHelper.webView()->mainFrame()->document().getElementById("console");
-        ASSERT(console.nodeName() == "UL");
-        return console;
+        Document* document = m_webViewHelper.webView()->mainFrameImpl()->frame()->document();
+        Element* console = document->getElementById("console");
+        DCHECK(isHTMLUListElement(console));
+        return *console;
     }
 
-    unsigned consoleLength()
+    unsigned consoleLength() { return console().countChildren() - 1; }
+
+    WebString consoleAt(unsigned i)
     {
-        return console().childNodes().length() - 1;
-    }
+        DCHECK_GT(consoleLength(), i);
 
-    std::string consoleAt(unsigned i)
-    {
-        ASSERT(consoleLength() > i);
+        Node* item = NodeTraversal::childAt(console(), 1 + i);
 
-        WebNode consoleListItem = console().childNodes().item(1 + i);
-        ASSERT(consoleListItem.nodeName() == "LI");
-        ASSERT(consoleListItem.hasChildNodes());
+        DCHECK(item);
+        DCHECK(isHTMLLIElement(item));
+        DCHECK(item->hasChildren());
 
-        WebNode textNode = consoleListItem.firstChild();
-        ASSERT(textNode.nodeName() == "#text");
-
-        return textNode.nodeValue().utf8().data();
+        return item->textContent();
     }
 
     void executeScript(const char* code)
     {
-        m_webViewHelper.webView()->mainFrame()->executeScript(WebScriptSource(WebString::fromUTF8(code)));
+        m_webViewHelper.webView()->mainFrame()->executeScript(
+            WebScriptSource(WebString::fromUTF8(code)));
     }
 
     TestPrerenderingSupport* prerenderingSupport()
@@ -241,10 +234,7 @@ public:
         return &m_prerenderingSupport;
     }
 
-    TestPrerendererClient* prerendererClient()
-    {
-        return &m_prerendererClient;
-    }
+    TestPrerendererClient* prerendererClient() { return &m_prerendererClient; }
 
 private:
     TestPrerenderingSupport m_prerenderingSupport;
@@ -313,7 +303,8 @@ TEST_F(PrerenderingTest, AbandonPrerender)
     EXPECT_EQ(1u, prerenderingSupport()->abandonCount(webPrerender));
     EXPECT_EQ(2u, prerenderingSupport()->totalCount());
 
-    // Check that the prerender does not emit an extra cancel when garbage-collecting everything.
+    // Check that the prerender does not emit an extra cancel when
+    // garbage-collecting everything.
     close();
 
     EXPECT_EQ(2u, prerenderingSupport()->totalCount());
@@ -323,7 +314,8 @@ TEST_F(PrerenderingTest, ExtraData)
 {
     class TestExtraData : public WebPrerender::ExtraData {
     public:
-        explicit TestExtraData(bool* alive) : m_alive(alive)
+        explicit TestExtraData(bool* alive)
+            : m_alive(alive)
         {
             *alive = true;
         }
@@ -336,7 +328,8 @@ TEST_F(PrerenderingTest, ExtraData)
 
     bool alive = false;
     {
-        prerendererClient()->setExtraDataForNextPrerender(new TestExtraData(&alive));
+        prerendererClient()->setExtraDataForNextPrerender(
+            new TestExtraData(&alive));
         initialize("http://www.foo.com/", "prerender/single_prerender.html");
         EXPECT_TRUE(alive);
 
@@ -441,12 +434,14 @@ TEST_F(PrerenderingTest, FastRemoveElement)
     EXPECT_EQ(1u, prerenderingSupport()->addCount(webPrerender));
     EXPECT_EQ(1u, prerenderingSupport()->totalCount());
 
-    // Race removing & starting the prerender against each other, as if the element was removed very quickly.
+    // Race removing & starting the prerender against each other, as if the
+    // element was removed very quickly.
     executeScript("removePrerender()");
     EXPECT_FALSE(webPrerender.isNull());
     webPrerender.didStartPrerender();
 
-    // The page should be totally disconnected from the Prerender at this point, so the console should not have updated.
+    // The page should be totally disconnected from the Prerender at this point,
+    // so the console should not have updated.
     EXPECT_EQ(0u, consoleLength());
 }
 
@@ -462,7 +457,8 @@ TEST_F(PrerenderingTest, MutateTarget)
     EXPECT_EQ(0u, prerenderingSupport()->cancelCount(webPrerender));
     EXPECT_EQ(1u, prerenderingSupport()->totalCount());
 
-    // Change the href of this prerender, make sure this is treated as a remove and add.
+    // Change the href of this prerender, make sure this is treated as a remove
+    // and add.
     executeScript("mutateTarget()");
     EXPECT_EQ(1u, prerenderingSupport()->cancelCount(webPrerender));
 
@@ -500,8 +496,11 @@ TEST_F(PrerenderingTest, RelNext)
     EXPECT_EQ(PrerenderRelTypeNext, relNextOnly.relTypes());
 
     WebPrerender relNextAndPrerender = prerendererClient()->releaseWebPrerender();
-    EXPECT_EQ(toWebURL("http://rel-next-and-prerender.com/"), relNextAndPrerender.url());
-    EXPECT_EQ(static_cast<unsigned>(PrerenderRelTypeNext | PrerenderRelTypePrerender), relNextAndPrerender.relTypes());
+    EXPECT_EQ(toWebURL("http://rel-next-and-prerender.com/"),
+        relNextAndPrerender.url());
+    EXPECT_EQ(
+        static_cast<unsigned>(PrerenderRelTypeNext | PrerenderRelTypePrerender),
+        relNextAndPrerender.relTypes());
 }
 
 } // namespace

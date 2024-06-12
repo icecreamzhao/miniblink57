@@ -19,11 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FETile.h"
 
 #include "SkTileImageFilter.h"
-
 #include "platform/graphics/filters/Filter.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
@@ -35,37 +33,27 @@ FETile::FETile(Filter* filter)
 {
 }
 
-PassRefPtrWillBeRawPtr<FETile> FETile::create(Filter* filter)
+FETile* FETile::create(Filter* filter)
 {
-    return adoptRefWillBeNoop(new FETile(filter));
+    return new FETile(filter);
 }
 
-FloatRect FETile::mapPaintRect(const FloatRect& rect, bool forward)
+FloatRect FETile::mapInputs(const FloatRect& rect) const
 {
-    return forward ? maxEffectRect() : inputEffect(0)->maxEffectRect();
+    return absoluteBounds();
 }
 
-static FloatRect getRect(FilterEffect* effect)
+sk_sp<SkImageFilter> FETile::createImageFilter()
 {
-    FloatRect result = effect->filter()->filterRegion();
-    FloatRect boundaries = effect->effectBoundaries();
-    if (effect->hasX())
-        result.setX(boundaries.x());
-    if (effect->hasY())
-        result.setY(boundaries.y());
-    if (effect->hasWidth())
-        result.setWidth(boundaries.width());
-    if (effect->hasHeight())
-        result.setHeight(boundaries.height());
-    return result;
-}
-
-PassRefPtr<SkImageFilter> FETile::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
-    FloatRect srcRect = inputEffect(0) ? getRect(inputEffect(0)) : filter()->filterRegion();
-    FloatRect dstRect = getRect(this);
-    return adoptRef(SkTileImageFilter::Create(srcRect, dstRect, input.get()));
+    sk_sp<SkImageFilter> input(
+        SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+    FloatRect srcRect;
+    if (inputEffect(0)->getFilterEffectType() == FilterEffectTypeSourceInput)
+        srcRect = getFilter()->filterRegion();
+    else
+        srcRect = inputEffect(0)->filterPrimitiveSubregion();
+    FloatRect dstRect = filterPrimitiveSubregion();
+    return SkTileImageFilter::Make(srcRect, dstRect, std::move(input));
 }
 
 TextStream& FETile::externalRepresentation(TextStream& ts, int indent) const

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/fetch/Headers.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -19,33 +18,43 @@ namespace blink {
 
 namespace {
 
-class HeadersIterationSource final : public PairIterable<String, String>::IterationSource {
-public:
-    explicit HeadersIterationSource(FetchHeaderList* headers) : m_headers(headers), m_current(0) { }
+    class HeadersIterationSource final
+        : public PairIterable<String, String>::IterationSource {
+    public:
+        explicit HeadersIterationSource(const FetchHeaderList* headers)
+            : m_headers(headers->clone())
+            , m_current(0)
+        {
+            m_headers->sortAndCombine();
+        }
 
-    bool next(ScriptState* scriptState, String& key, String& value, ExceptionState& exception) override
-    {
-        // FIXME: This simply advances an index and returns the next value if
-        // any, so if the iterated object is mutated values may be skipped.
-        if (m_current >= m_headers->size())
-            return false;
+        bool next(ScriptState* scriptState,
+            String& key,
+            String& value,
+            ExceptionState& exception) override
+        {
+            // This simply advances an index and returns the next value if any; the
+            // iterated list is not exposed to script so it will never be mutated
+            // during iteration.
+            if (m_current >= m_headers->size())
+                return false;
 
-        const FetchHeaderList::Header& header = m_headers->entry(m_current++);
-        key = header.first;
-        value = header.second;
-        return true;
-    }
+            const FetchHeaderList::Header& header = m_headers->entry(m_current++);
+            key = header.first;
+            value = header.second;
+            return true;
+        }
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        visitor->trace(m_headers);
-        PairIterable<String, String>::IterationSource::trace(visitor);
-    }
+        DEFINE_INLINE_VIRTUAL_TRACE()
+        {
+            visitor->trace(m_headers);
+            PairIterable<String, String>::IterationSource::trace(visitor);
+        }
 
-private:
-    const Member<FetchHeaderList> m_headers;
-    size_t m_current;
-};
+    private:
+        const Member<FetchHeaderList> m_headers;
+        size_t m_current;
+    };
 
 } // namespace
 
@@ -70,7 +79,8 @@ Headers* Headers::create(const Headers* init, ExceptionState& exceptionState)
     return headers;
 }
 
-Headers* Headers::create(const Vector<Vector<String>>& init, ExceptionState& exceptionState)
+Headers* Headers::create(const Vector<Vector<String>>& init,
+    ExceptionState& exceptionState)
 {
     // The same steps as above.
     Headers* headers = create();
@@ -78,7 +88,8 @@ Headers* Headers::create(const Vector<Vector<String>>& init, ExceptionState& exc
     return headers;
 }
 
-Headers* Headers::create(const Dictionary& init, ExceptionState& exceptionState)
+Headers* Headers::create(const Dictionary& init,
+    ExceptionState& exceptionState)
 {
     // "The Headers(|init|) constructor, when invoked, must run these steps:"
     // "1. Let |headers| be a new Headers object."
@@ -102,7 +113,9 @@ Headers* Headers::clone() const
     return headers;
 }
 
-void Headers::append(const String& name, const String& value, ExceptionState& exceptionState)
+void Headers::append(const String& name,
+    const String& value,
+    ExceptionState& exceptionState)
 {
     // "To append a name/value (|name|/|value|) pair to a Headers object
     // (|headers|), run these steps:"
@@ -174,14 +187,16 @@ String Headers::get(const String& name, ExceptionState& exceptionState)
         exceptionState.throwTypeError("Invalid name");
         return String();
     }
-    // "2. Return the value of the first header in header list whose name is
-    //     |name|, and null otherwise."
+    // "2. If there is no header in header list whose name is |name|,
+    //     return null."
+    // "3. Return the combined value given |name| and header list."
     String result;
     m_headerList->get(name, result);
     return result;
 }
 
-Vector<String> Headers::getAll(const String& name, ExceptionState& exceptionState)
+Vector<String> Headers::getAll(const String& name,
+    ExceptionState& exceptionState)
 {
     // "The getAll(|name|) method, when invoked, must run these steps:"
     // "1. If |name| is not a name, throw a TypeError."
@@ -209,7 +224,9 @@ bool Headers::has(const String& name, ExceptionState& exceptionState)
     return m_headerList->has(name);
 }
 
-void Headers::set(const String& name, const String& value, ExceptionState& exceptionState)
+void Headers::set(const String& name,
+    const String& value,
+    ExceptionState& exceptionState)
 {
     // "The set(|name|, |value|) method, when invoked, must run these steps:"
     // "1. If |name| is not a name or |value| is not a value, throw a
@@ -253,13 +270,15 @@ void Headers::fillWith(const Headers* object, ExceptionState& exceptionState)
     //     retaining order, append header's |name|/|header|'s value to
     //     |headers|. Rethrow any exception."
     for (size_t i = 0; i < object->m_headerList->list().size(); ++i) {
-        append(object->m_headerList->list()[i]->first, object->m_headerList->list()[i]->second, exceptionState);
+        append(object->m_headerList->list()[i]->first,
+            object->m_headerList->list()[i]->second, exceptionState);
         if (exceptionState.hadException())
             return;
     }
 }
 
-void Headers::fillWith(const Vector<Vector<String>>& object, ExceptionState& exceptionState)
+void Headers::fillWith(const Vector<Vector<String>>& object,
+    ExceptionState& exceptionState)
 {
     ASSERT(!m_headerList->size());
     // "2. Otherwise, if |object| is a sequence, then for each |header| in
@@ -279,12 +298,12 @@ void Headers::fillWith(const Vector<Vector<String>>& object, ExceptionState& exc
     }
 }
 
-void Headers::fillWith(const Dictionary& object, ExceptionState& exceptionState)
+void Headers::fillWith(const Dictionary& object,
+    ExceptionState& exceptionState)
 {
     ASSERT(!m_headerList->size());
-    Vector<String> keys;
-    object.getPropertyNames(keys);
-    if (!keys.size())
+    const Vector<String>& keys = object.getPropertyNames(exceptionState);
+    if (exceptionState.hadException() || !keys.size())
         return;
 
     // "3. Otherwise, if |object| is an open-ended dictionary, then for each
@@ -323,7 +342,9 @@ DEFINE_TRACE(Headers)
     visitor->trace(m_headerList);
 }
 
-PairIterable<String, String>::IterationSource* Headers::startIteration(ScriptState*, ExceptionState&)
+PairIterable<String, String>::IterationSource* Headers::startIteration(
+    ScriptState*,
+    ExceptionState&)
 {
     return new HeadersIterationSource(m_headerList);
 }

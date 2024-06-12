@@ -6,25 +6,32 @@
 #define NavigatorContentUtilsClientImpl_h
 
 #include "modules/navigatorcontentutils/NavigatorContentUtilsClient.h"
+#include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 
 namespace blink {
 
 class WebLocalFrameImpl;
 
-class NavigatorContentUtilsClientImpl final : public NavigatorContentUtilsClient {
+class NavigatorContentUtilsClientImpl final
+    : public NavigatorContentUtilsClient {
 public:
-    static PassOwnPtr<NavigatorContentUtilsClientImpl> create(WebLocalFrameImpl*);
+    static NavigatorContentUtilsClientImpl* create(WebLocalFrameImpl*);
     ~NavigatorContentUtilsClientImpl() override { }
 
-    void registerProtocolHandler(const String& scheme, const KURL&, const String& title) override;
-    CustomHandlersState isProtocolHandlerRegistered(const String& scheme, const KURL&) override;
+    void registerProtocolHandler(const String& scheme,
+        const KURL&,
+        const String& title) override;
+    CustomHandlersState isProtocolHandlerRegistered(const String& scheme,
+        const KURL&) override;
     void unregisterProtocolHandler(const String& scheme, const KURL&) override;
+
+    DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit NavigatorContentUtilsClientImpl(WebLocalFrameImpl*);
 
-    WebLocalFrameImpl* m_webFrame;
+    Member<WebLocalFrameImpl> m_webFrame;
 };
 
 } // namespace blink

@@ -10,32 +10,27 @@
 #include "platform/graphics/Path.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-class HitRegion final : public RefCountedWillBeGarbageCollectedFinalized<HitRegion> {
+class HitRegion final : public GarbageCollectedFinalized<HitRegion> {
 public:
-    static PassRefPtrWillBeRawPtr<HitRegion> create(const Path& path, const HitRegionOptions& options)
+    static HitRegion* create(const Path& path, const HitRegionOptions& options)
     {
-        return adoptRefWillBeNoop(new HitRegion(path, options));
+        return new HitRegion(path, options);
     }
 
     virtual ~HitRegion() { }
 
     void removePixels(const Path&);
-    void updateAccessibility(Element* canvas);
 
-    bool contains(const LayoutPoint&) const;
     bool contains(const FloatPoint&) const;
 
     const String& id() const { return m_id; }
     const Path& path() const { return m_path; }
     Element* control() const { return m_control.get(); }
-    WindRule fillRule() const { return m_fillRule; }
 
     DECLARE_TRACE();
 
@@ -43,28 +38,28 @@ private:
     HitRegion(const Path&, const HitRegionOptions&);
 
     String m_id;
-    RefPtrWillBeMember<Element> m_control;
+    Member<Element> m_control;
     Path m_path;
     WindRule m_fillRule;
 };
 
-class HitRegionManager final : public GarbageCollectedFinalized<HitRegionManager> {
+class HitRegionManager final : public GarbageCollected<HitRegionManager> {
     WTF_MAKE_NONCOPYABLE(HitRegionManager);
+
 public:
     static HitRegionManager* create() { return new HitRegionManager; }
-    ~HitRegionManager() { }
 
-    void addHitRegion(PassRefPtrWillBeRawPtr<HitRegion>);
+    void addHitRegion(HitRegion*);
 
     void removeHitRegion(HitRegion*);
     void removeHitRegionById(const String& id);
-    void removeHitRegionByControl(Element*);
+    void removeHitRegionByControl(const Element*);
     void removeHitRegionsInRect(const FloatRect&, const AffineTransform&);
     void removeAllHitRegions();
 
     HitRegion* getHitRegionById(const String& id) const;
-    HitRegion* getHitRegionByControl(Element*) const;
-    HitRegion* getHitRegionAtPoint(const LayoutPoint&) const;
+    HitRegion* getHitRegionByControl(const Element*) const;
+    HitRegion* getHitRegionAtPoint(const FloatPoint&) const;
 
     unsigned getHitRegionsCount() const;
 
@@ -73,10 +68,11 @@ public:
 private:
     HitRegionManager() { }
 
-    typedef WillBeHeapListHashSet<RefPtrWillBeMember<HitRegion>> HitRegionList;
+    typedef HeapListHashSet<Member<HitRegion>> HitRegionList;
     typedef HitRegionList::const_reverse_iterator HitRegionIterator;
-    typedef WillBeHeapHashMap<String, RefPtrWillBeMember<HitRegion>> HitRegionIdMap;
-    typedef WillBeHeapHashMap<RefPtrWillBeMember<Element>, RefPtrWillBeMember<HitRegion>> HitRegionControlMap;
+    typedef HeapHashMap<String, Member<HitRegion>> HitRegionIdMap;
+    typedef HeapHashMap<Member<const Element>, Member<HitRegion>>
+        HitRegionControlMap;
 
     HitRegionList m_hitRegionList;
     HitRegionIdMap m_hitRegionIdMap;

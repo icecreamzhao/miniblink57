@@ -26,15 +26,22 @@
 #define WebThread_h
 
 #include "WebCommon.h"
+#include "public/platform/WebTraceLocation.h"
+#include "third_party/WebKit/Source/wtf/Functional.h"
+
 #include <stdint.h>
 
-#ifdef INSIDE_BLINK
-#include "wtf/Functional.h"
-#endif
+namespace base {
+class SingleThreadTaskRunner;
+}
 
 namespace blink {
+namespace scheduler {
+    class TaskTimeObserver;
+}
+
 class WebScheduler;
-class WebTraceLocation;
+class WebTaskRunner;
 
 // Always an integer value.
 typedef uintptr_t PlatformThreadId;
@@ -53,17 +60,48 @@ public:
         virtual void run(double deadlineSeconds) = 0;
     };
 
-    class BLINK_PLATFORM_EXPORT Task {
-    public:
-        virtual ~Task() { }
-        virtual void run() = 0;
-    };
-
     class BLINK_PLATFORM_EXPORT TaskObserver {
     public:
         virtual ~TaskObserver() { }
         virtual void willProcessTask() = 0;
         virtual void didProcessTask() = 0;
+    };
+
+    // DEPRECATED: Returns a WebTaskRunner bound to the underlying scheduler's
+    // default task queue.
+    //
+    // Default scheduler task queue does not give scheduler enough freedom to
+    // manage task priorities and should not be used.
+    // Use TaskRunnerHelper::get instead (crbug.com/624696).
+    virtual WebTaskRunner* getWebTaskRunner() { return nullptr; }
+    base::SingleThreadTaskRunner* getSingleThreadTaskRunner();
+
+    virtual bool isCurrentThread() const = 0;
+    virtual PlatformThreadId threadId() const { return 0; }
+
+    // TaskObserver is an object that receives task notifications from the
+    // MessageLoop
+    // NOTE: TaskObserver implementation should be extremely fast!
+    // This API is performance sensitive. Use only if you have a compelling
+    // reason.
+    virtual void addTaskObserver(TaskObserver*) { }
+    virtual void removeTaskObserver(TaskObserver*) { }
+
+    // TaskTimeObserver is an object that receives notifications for
+    // CPU time spent in each top-level MessageLoop task.
+    // NOTE: TaskTimeObserver implementation should be extremely fast!
+    // This API is performance sensitive. Use only if you have a compelling
+    // reason.
+    virtual void addTaskTimeObserver(scheduler::TaskTimeObserver*) { }
+    virtual void removeTaskTimeObserver(scheduler::TaskTimeObserver*) { }
+
+    // Returns the scheduler associated with the thread.
+    virtual WebScheduler* scheduler() const = 0;
+
+    class BLINK_PLATFORM_EXPORT Task {
+    public:
+        virtual ~Task() {}
+        virtual void run() = 0;
     };
 
     // postTask() and postDelayedTask() take ownership of the passed Task
@@ -72,22 +110,16 @@ public:
     virtual void postTask(const WebTraceLocation&, Task*) = 0;
     virtual void postDelayedTask(const WebTraceLocation&, Task*, long long delayMs) = 0;
 
-    virtual bool isCurrentThread() const = 0;
-    virtual PlatformThreadId threadId() const { return 0; }
-
-    virtual void addTaskObserver(TaskObserver*) { }
-    virtual void removeTaskObserver(TaskObserver*) { }
-
-    // Returns the scheduler associated with the thread.
-    virtual WebScheduler* scheduler() const = 0;
-
-    virtual ~WebThread() { }
-
 #ifdef INSIDE_BLINK
     // Helpers for posting bound functions as tasks.
-    void postTask(const WebTraceLocation&, PassOwnPtr<Function<void()>>);
-    void postDelayedTask(const WebTraceLocation&, PassOwnPtr<Function<void()>>, long long delayMs);
+    void postTask(const WebTraceLocation&, std::unique_ptr<Function<void()>>);
+    void postTask(const WebTraceLocation&, std::unique_ptr<Function<void(), WTF::CrossThreadAffinity>>);
+    
+    void postDelayedTask(const WebTraceLocation&, std::unique_ptr<Function<void()>>, long long delayMs);
+    void postDelayedTask(const WebTraceLocation&, std::unique_ptr<Function<void(), WTF::CrossThreadAffinity>>, long long delayMs);
 #endif
+
+    virtual ~WebThread() { }
 };
 
 } // namespace blink

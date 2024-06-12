@@ -9,17 +9,18 @@
 
 namespace v8 {
 namespace internal {
-namespace wasm {
+    namespace wasm {
 
-// All the tiers of WASM execution.
-enum class ExecutionTier : int8_t {
-  kInterpreter,  // Interpreter
-  kBaseline,     // Liftoff
-  kOptimized,    // TurboFan
-};
+        // All the tiers of WASM execution.
+        enum class ExecutionTier : int8_t {
+            kNone,
+            kInterpreter,
+            kLiftoff,
+            kTurbofan,
+        };
 
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
+    } // namespace wasm
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_WASM_WASM_TIER_H_
+#endif // V8_WASM_WASM_TIER_H_

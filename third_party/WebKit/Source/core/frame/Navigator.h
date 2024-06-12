@@ -21,7 +21,8 @@
 #define Navigator_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/frame/DOMWindowProperty.h"
+#include "core/CoreExport.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "core/frame/NavigatorCPU.h"
 #include "core/frame/NavigatorID.h"
 #include "core/frame/NavigatorLanguage.h"
@@ -34,26 +35,19 @@ namespace blink {
 
 class LocalFrame;
 
-typedef int ExceptionCode;
-
-class Navigator final
-    : public GarbageCollectedFinalized<Navigator>
-    , public NavigatorCPU
-    , public NavigatorID
-    , public NavigatorLanguage
-    , public NavigatorOnLine
-    , public ScriptWrappable
-    , public DOMWindowProperty
-    , public HeapSupplementable<Navigator> {
+class CORE_EXPORT Navigator final : public GarbageCollected<Navigator>,
+                                    public NavigatorCPU,
+                                    public NavigatorID,
+                                    public NavigatorLanguage,
+                                    public NavigatorOnLine,
+                                    public ScriptWrappable,
+                                    public DOMWindowClient,
+                                    public Supplementable<Navigator> {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(Navigator);
-public:
-    static Navigator* create(LocalFrame* frame)
-    {
-        return new Navigator(frame);
-    }
 
-    virtual ~Navigator();
+public:
+    static Navigator* create(LocalFrame* frame) { return new Navigator(frame); }
 
     bool cookieEnabled() const;
 
@@ -61,13 +55,10 @@ public:
     String vendor() const;
     String vendorSub() const;
 
-    virtual String userAgent() const override;
-
-    // Relinquishes the storage lock, if one exists.
-    void getStorageUpdates();
+    String userAgent() const override;
 
     // NavigatorLanguage
-    virtual Vector<String> languages() override;
+    Vector<String> languages() override;
 
     DECLARE_VIRTUAL_TRACE();
 

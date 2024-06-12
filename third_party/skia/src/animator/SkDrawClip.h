@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawClip_DEFINED
 #define SkDrawClip_DEFINED
 
@@ -20,7 +19,8 @@ class SkDrawRect;
 class SkDrawClip : public SkADrawable {
     DECLARE_DRAW_MEMBER_INFO(Clip);
     SkDrawClip();
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
+
 private:
     SkDrawRect* rect;
     SkDrawPath* path;

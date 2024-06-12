@@ -1,8 +1,8 @@
-#import <UIKit/UIKit.h>
-#import "SkOptionListController.h"
-#import "SkOSMenu.h"
 #import "SkEvent.h"
+#import "SkOSMenu.h"
+#import "SkOptionListController.h"
 #import "SkUIView.h"
+#import <UIKit/UIKit.h>
 @interface SkOptionItem : NSObject {
     UITableViewCell* fCell;
     const SkOSMenu::Item* fItem;
@@ -12,7 +12,7 @@
 
 @end
 
-@interface SkOptionListItem : SkOptionItem{
+@interface SkOptionListItem : SkOptionItem {
     SkOptionListController* fOptions;
 }
 @property (nonatomic, retain) SkOptionListController* fOptions;

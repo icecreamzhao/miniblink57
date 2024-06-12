@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 Google Inc.
  *
@@ -15,42 +14,41 @@
 // Should only be initialized once via init(). Immutable afterwards.
 struct TwoPtRadial {
     enum {
-        kDontDrawT  = 0x80000000
+        // This value is outside the range SK_FixedMin to SK_FixedMax.
+        kDontDrawT = 0x80000000
     };
 
-    float   fCenterX, fCenterY;
-    float   fDCenterX, fDCenterY;
-    float   fRadius;
-    float   fDRadius;
-    float   fA;
-    float   fRadius2;
-    float   fRDR;
-    bool    fFlipped;
+    float fCenterX, fCenterY;
+    float fDCenterX, fDCenterY;
+    float fRadius;
+    float fDRadius;
+    float fA;
+    float fRadius2;
+    float fRDR;
+    bool fFlipped;
 
     void init(const SkPoint& center0, SkScalar rad0,
-              const SkPoint& center1, SkScalar rad1,
-              bool flipped);
+        const SkPoint& center1, SkScalar rad1,
+        bool flipped);
 
-    static bool DontDrawT(SkFixed t) {
+    static bool DontDrawT(SkFixed t)
+    {
         return kDontDrawT == (uint32_t)t;
     }
 };
 
-
 class SkTwoPointConicalGradient : public SkGradientShaderBase {
     TwoPtRadial fRec;
+
 public:
     SkTwoPointConicalGradient(const SkPoint& start, SkScalar startRadius,
-                              const SkPoint& end, SkScalar endRadius,
-                              bool flippedGrad, const Descriptor&);
-
-
-    size_t contextSize() const override;
+        const SkPoint& end, SkScalar endRadius,
+        bool flippedGrad, const Descriptor&);
 
     class TwoPointConicalGradientContext : public SkGradientShaderBase::GradientShaderBaseContext {
     public:
         TwoPointConicalGradientContext(const SkTwoPointConicalGradient&, const ContextRec&);
-        ~TwoPointConicalGradientContext() {}
+        ~TwoPointConicalGradientContext() { }
 
         void shadeSpan(int x, int y, SkPMColor dstC[], int count) override;
 
@@ -58,11 +56,14 @@ public:
         typedef SkGradientShaderBase::GradientShaderBaseContext INHERITED;
     };
 
-    BitmapType asABitmap(SkBitmap* bitmap, SkMatrix* matrix, TileMode* xy) const override;
-    SkShader::GradientType asAGradient(GradientInfo* info) const  override;
-    bool asFragmentProcessor(GrContext*, const SkPaint&, const SkMatrix&, const SkMatrix*,
-                             GrColor*, GrProcessorDataManager*,
-                             GrFragmentProcessor**) const override;
+    SkShader::GradientType asAGradient(GradientInfo* info) const override;
+#if SK_SUPPORT_GPU
+    sk_sp<GrFragmentProcessor> asFragmentProcessor(GrContext*,
+        const SkMatrix&,
+        const SkMatrix*,
+        SkFilterQuality,
+        SkSourceGammaTreatment) const override;
+#endif
     bool isOpaque() const override;
 
     SkScalar getCenterX1() const { return SkPoint::Distance(fCenter1, fCenter2); }
@@ -79,6 +80,7 @@ public:
 protected:
     SkTwoPointConicalGradient(SkReadBuffer& buffer);
     void flatten(SkWriteBuffer& buffer) const override;
+    size_t onContextSize(const ContextRec&) const override;
     Context* onCreateContext(const ContextRec&, void* storage) const override;
 
 private:

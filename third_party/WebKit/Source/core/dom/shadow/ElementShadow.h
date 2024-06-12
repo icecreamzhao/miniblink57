@@ -27,107 +27,95 @@
 #ifndef ElementShadow_h
 #define ElementShadow_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
+#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/CoreExport.h"
-#include "core/dom/shadow/InsertionPoint.h"
-#include "core/dom/shadow/SelectRuleFeatureSet.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "platform/heap/Handle.h"
-#include "wtf/DoublyLinkedList.h"
-#include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-class CORE_EXPORT ElementShadow final : public NoBaseWillBeGarbageCollectedFinalized<ElementShadow> {
-    WTF_MAKE_NONCOPYABLE(ElementShadow);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ElementShadow);
-public:
-    static PassOwnPtrWillBeRawPtr<ElementShadow> create();
-    ~ElementShadow();
+class ElementShadowV0;
 
-    Element* host() const;
-    ShadowRoot* youngestShadowRoot() const { return m_shadowRoots.head(); }
-    ShadowRoot* oldestShadowRoot() const { return m_shadowRoots.tail(); }
+class CORE_EXPORT ElementShadow final : public GarbageCollected<ElementShadow>,
+                                        public TraceWrapperBase {
+    WTF_MAKE_NONCOPYABLE(ElementShadow);
+
+public:
+    static ElementShadow* create();
+
+    Element& host() const
+    {
+        DCHECK(m_shadowRoot);
+        return m_shadowRoot->host();
+    }
+
+    // TODO(hayato): Remove youngestShadowRoot() and oldestShadowRoot() from
+    // ElementShadow
+    ShadowRoot& youngestShadowRoot() const;
+    ShadowRoot& oldestShadowRoot() const
+    {
+        DCHECK(m_shadowRoot);
+        return *m_shadowRoot;
+    }
+
     ElementShadow* containingShadow() const;
 
     ShadowRoot& addShadowRoot(Element& shadowHost, ShadowRootType);
 
-    bool hasSameStyles(const ElementShadow*) const;
+    bool hasSameStyles(const ElementShadow&) const;
 
     void attach(const Node::AttachContext&);
     void detach(const Node::AttachContext&);
 
-    void willAffectSelector();
-    const SelectRuleFeatureSet& ensureSelectFeatureSet();
-
     void distributeIfNeeded();
+
     void setNeedsDistributionRecalc();
+    bool needsDistributionRecalc() const { return m_needsDistributionRecalc; }
 
-    const InsertionPoint* finalDestinationInsertionPointFor(const Node*) const;
-    const DestinationInsertionPoints* destinationInsertionPointsFor(const Node*) const;
+    bool isV1() const { return youngestShadowRoot().isV1(); }
+    bool isOpenOrV0() const { return youngestShadowRoot().isOpenOrV0(); }
 
-    void didDistributeNode(const Node*, InsertionPoint*);
+    ElementShadowV0& v0() const
+    {
+        DCHECK(m_elementShadowV0);
+        return *m_elementShadowV0;
+    }
 
     DECLARE_TRACE();
+    DECLARE_TRACE_WRAPPERS();
 
 private:
     ElementShadow();
 
-#if !ENABLE(OILPAN)
-    void removeDetachedShadowRoots();
-#endif
-
+    void appendShadowRoot(ShadowRoot&);
     void distribute();
-    void clearDistribution();
 
-    void collectSelectFeatureSetFrom(ShadowRoot&);
-    void distributeNodeChildrenTo(InsertionPoint*, ContainerNode*);
-
-    bool needsSelectFeatureSet() const { return m_needsSelectFeatureSet; }
-    void setNeedsSelectFeatureSet() { m_needsSelectFeatureSet = true; }
-
-#if ENABLE(OILPAN)
-    // The cost of |new| in Oilpan is lower than non-Oilpan.  We should reduce
-    // the size of HashMap entry.
-    typedef HeapHashMap<Member<const Node>, Member<DestinationInsertionPoints>> NodeToDestinationInsertionPoints;
-#else
-    typedef HashMap<const Node*, DestinationInsertionPoints> NodeToDestinationInsertionPoints;
-#endif
-    NodeToDestinationInsertionPoints m_nodeToInsertionPoints;
-
-    SelectRuleFeatureSet m_selectFeatures;
-    // FIXME: Oilpan: add a heap-based version of DoublyLinkedList<>.
-    DoublyLinkedList<ShadowRoot> m_shadowRoots;
+    TraceWrapperMember<ElementShadowV0> m_elementShadowV0;
+    TraceWrapperMember<ShadowRoot> m_shadowRoot;
     bool m_needsDistributionRecalc;
-    bool m_needsSelectFeatureSet;
 };
-
-inline Element* ElementShadow::host() const
-{
-    ASSERT(!m_shadowRoots.isEmpty());
-    return youngestShadowRoot()->host();
-}
 
 inline ShadowRoot* Node::youngestShadowRoot() const
 {
     if (!isElementNode())
-        return 0;
+        return nullptr;
     return toElement(this)->youngestShadowRoot();
 }
 
 inline ShadowRoot* Element::youngestShadowRoot() const
 {
     if (ElementShadow* shadow = this->shadow())
-        return shadow->youngestShadowRoot();
-    return 0;
+        return &shadow->youngestShadowRoot();
+    return nullptr;
 }
 
 inline ElementShadow* ElementShadow::containingShadow() const
 {
-    if (ShadowRoot* parentRoot = host()->containingShadowRoot())
+    if (ShadowRoot* parentRoot = host().containingShadowRoot())
         return parentRoot->owner();
-    return 0;
+    return nullptr;
 }
 
 inline void ElementShadow::distributeIfNeeded()
@@ -137,6 +125,6 @@ inline void ElementShadow::distributeIfNeeded()
     m_needsDistributionRecalc = false;
 }
 
-} // namespace
+} // namespace blink
 
 #endif

@@ -26,10 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/AudioFIFO.h"
 
 namespace blink {
@@ -58,22 +54,22 @@ void AudioFIFO::consume(AudioBus* destination, size_t framesToConsume)
 
     size_t numberOfChannels = m_fifoAudioBus->numberOfChannels();
 
-    for (size_t channelIndex = 0; channelIndex < numberOfChannels; ++channelIndex) {
+    for (size_t channelIndex = 0; channelIndex < numberOfChannels;
+         ++channelIndex) {
         float* destinationData = destination->channel(channelIndex)->mutableData();
         const float* sourceData = m_fifoAudioBus->channel(channelIndex)->data();
 
-        bool isCopyGood = ((m_readIndex < m_fifoLength)
-                           && (m_readIndex + part1Length) <= m_fifoLength
-                           && (part1Length <= destination->length())
-                           && (part1Length + part2Length) <= destination->length());
+        bool isCopyGood = ((m_readIndex < m_fifoLength) && (m_readIndex + part1Length) <= m_fifoLength && (part1Length <= destination->length()) && (part1Length + part2Length) <= destination->length());
         ASSERT(isCopyGood);
         if (!isCopyGood)
             return;
 
-        memcpy(destinationData, sourceData + m_readIndex, part1Length * sizeof(*sourceData));
+        memcpy(destinationData, sourceData + m_readIndex,
+            part1Length * sizeof(*sourceData));
         // Handle wrap around of the FIFO, if needed.
         if (part2Length)
-            memcpy(destinationData + part1Length, sourceData, part2Length * sizeof(*sourceData));
+            memcpy(destinationData + part1Length, sourceData,
+                part2Length * sizeof(*sourceData));
     }
     m_readIndex = updateIndex(m_readIndex, framesToConsume);
     ASSERT(m_framesInFifo >= framesToConsume);
@@ -95,23 +91,23 @@ void AudioFIFO::push(const AudioBus* sourceBus)
 
     size_t numberOfChannels = m_fifoAudioBus->numberOfChannels();
 
-    for (size_t channelIndex = 0; channelIndex < numberOfChannels; ++channelIndex) {
+    for (size_t channelIndex = 0; channelIndex < numberOfChannels;
+         ++channelIndex) {
         float* destination = m_fifoAudioBus->channel(channelIndex)->mutableData();
         const float* source = sourceBus->channel(channelIndex)->data();
 
-        bool isCopyGood = ((m_writeIndex < m_fifoLength)
-                           && (m_writeIndex + part1Length) <= m_fifoLength
-                           && part2Length < m_fifoLength
-                           && part1Length + part2Length <= sourceLength);
+        bool isCopyGood = ((m_writeIndex < m_fifoLength) && (m_writeIndex + part1Length) <= m_fifoLength && part2Length < m_fifoLength && part1Length + part2Length <= sourceLength);
         ASSERT(isCopyGood);
         if (!isCopyGood)
             return;
 
-        memcpy(destination + m_writeIndex, source, part1Length * sizeof(*destination));
+        memcpy(destination + m_writeIndex, source,
+            part1Length * sizeof(*destination));
 
         // Handle wrap around of the FIFO, if needed.
         if (part2Length)
-            memcpy(destination, source + part1Length, part2Length * sizeof(*destination));
+            memcpy(destination, source + part1Length,
+                part2Length * sizeof(*destination));
     }
 
     m_framesInFifo += sourceLength;
@@ -119,9 +115,12 @@ void AudioFIFO::push(const AudioBus* sourceBus)
     m_writeIndex = updateIndex(m_writeIndex, sourceLength);
 }
 
-void AudioFIFO::findWrapLengths(size_t index, size_t size, size_t& part1Length, size_t& part2Length)
+void AudioFIFO::findWrapLengths(size_t index,
+    size_t size,
+    size_t& part1Length,
+    size_t& part2Length)
 {
-    ASSERT_WITH_SECURITY_IMPLICATION(index < m_fifoLength && size <= m_fifoLength);
+    SECURITY_DCHECK(index < m_fifoLength && size <= m_fifoLength);
     if (index < m_fifoLength && size <= m_fifoLength) {
         if (index + size > m_fifoLength) {
             // Need to wrap. Figure out the length of each piece.
@@ -133,12 +132,11 @@ void AudioFIFO::findWrapLengths(size_t index, size_t size, size_t& part1Length, 
             part2Length = 0;
         }
     } else {
-        // Invalid values for index or size. Set the part lengths to zero so nothing is copied.
+        // Invalid values for index or size. Set the part lengths to zero so nothing
+        // is copied.
         part1Length = 0;
         part2Length = 0;
     }
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

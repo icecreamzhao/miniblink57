@@ -27,13 +27,15 @@
 // https://html.spec.whatwg.org/#the-workerglobalscope-common-interface
 
 [
+    ActiveScriptWrappable,
+    DependentLifetime,
     Exposed=Worker,
+    ImmutablePrototype,
 ] interface WorkerGlobalScope : EventTarget {
     readonly attribute WorkerGlobalScope self;
     readonly attribute WorkerLocation location;
 
-    void close();
-    // TODO(philipj): onerror should be an OnErrorEventHandler.
+    // TODO(foolip): onerror should be an OnErrorEventHandler.
     attribute EventHandler onerror;
     // attribute EventHandler onlanguagechange;
     // attribute EventHandler onoffline;
@@ -43,14 +45,24 @@
     [RaisesException] void importScripts(DOMString... urls);
     readonly attribute WorkerNavigator navigator;
 
-    // Console API (non-standard but widely implemented in some form)
-    // https://developer.chrome.com/devtools/docs/console-api
-    [Replaceable] readonly attribute WorkerConsole console;
+
+    // Console API
+    // https://console.spec.whatwg.org/#console-interface
+    // [Replaceable] readonly attribute Console console;
+    // Console is installed by v8 inspector when context is created
+    // and is left commented here just for documentation.
+
+    // CORS and RFC1918
+    // https://wicg.github.io/cors-rfc1918/#feature-detect
+    [RuntimeEnabled=CorsRFC1918, ImplementedAs=addressSpaceForBindings] readonly attribute AddressSpace addressSpace;
 
     // Unhandled Promise Rejection Events
-    // https://github.com/domenic/unhandled-rejections-browser-spec
-    [RuntimeEnabled=PromiseRejectionEvent] attribute EventHandler onrejectionhandled;
-    [RuntimeEnabled=PromiseRejectionEvent] attribute EventHandler onunhandledrejection;
+    attribute EventHandler onrejectionhandled;
+    attribute EventHandler onunhandledrejection;
+
+    // Secure Contexts
+    // https://w3c.github.io/webappsec-secure-contexts/#dom-windoworworkerglobalscope-issecurecontext
+    [ImplementedAs=isSecureContextForBindings] readonly attribute boolean isSecureContext;
 };
 
 WorkerGlobalScope implements WindowBase64;

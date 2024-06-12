@@ -8,33 +8,68 @@
 #include "Benchmark.h"
 #include "SkBlurImageFilter.h"
 #include "SkCanvas.h"
+#include "SkDisplacementMapEffect.h"
 #include "SkMergeImageFilter.h"
-
-enum { kNumInputs = 5 };
 
 // Exercise a blur filter connected to 5 inputs of the same merge filter.
 // This bench shows an improvement in performance once cacheing of re-used
 // nodes is implemented, since the DAG is no longer flattened to a tree.
-
 class ImageFilterDAGBench : public Benchmark {
 public:
-    ImageFilterDAGBench() {}
+    ImageFilterDAGBench() { }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "image_filter_dag";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
+        const SkRect rect = SkRect::Make(SkIRect::MakeWH(400, 400));
+
         for (int j = 0; j < loops; j++) {
-            SkAutoTUnref<SkImageFilter> blur(SkBlurImageFilter::Create(20.0f, 20.0f));
-            SkImageFilter* inputs[kNumInputs];
+            sk_sp<SkImageFilter> blur(SkBlurImageFilter::Make(20.0f, 20.0f, nullptr));
+            sk_sp<SkImageFilter> inputs[kNumInputs];
             for (int i = 0; i < kNumInputs; ++i) {
-                inputs[i] = blur.get();
+                inputs[i] = blur;
             }
-            SkAutoTUnref<SkImageFilter> merge(SkMergeImageFilter::Create(inputs, kNumInputs));
             SkPaint paint;
-            paint.setImageFilter(merge);
+            paint.setImageFilter(SkMergeImageFilter::Make(inputs, kNumInputs));
+            canvas->drawRect(rect, paint);
+        }
+    }
+
+private:
+    static const int kNumInputs = 5;
+
+    typedef Benchmark INHERITED;
+};
+
+// Exercise a blur filter connected to both inputs of an SkDisplacementMapEffect.
+
+class ImageFilterDisplacedBlur : public Benchmark {
+public:
+    ImageFilterDisplacedBlur() { }
+
+protected:
+    const char* onGetName() override
+    {
+        return "image_filter_displaced_blur";
+    }
+
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
+        for (int j = 0; j < loops; j++) {
+            sk_sp<SkImageFilter> blur(SkBlurImageFilter::Make(4.0f, 4.0f, nullptr));
+            auto xSelector = SkDisplacementMapEffect::kR_ChannelSelectorType;
+            auto ySelector = SkDisplacementMapEffect::kB_ChannelSelectorType;
+            SkScalar scale = 2;
+
+            SkPaint paint;
+            paint.setImageFilter(SkDisplacementMapEffect::Make(xSelector, ySelector, scale,
+                blur, blur));
+
             SkRect rect = SkRect::Make(SkIRect::MakeWH(400, 400));
             canvas->drawRect(rect, paint);
         }
@@ -45,3 +80,4 @@ private:
 };
 
 DEF_BENCH(return new ImageFilterDAGBench;)
+DEF_BENCH(return new ImageFilterDisplacedBlur;)

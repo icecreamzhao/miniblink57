@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2011, 2012 Apple Inc.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,7 +34,17 @@ namespace blink {
 
 class KURL;
 
-PLATFORM_EXPORT bool isDefaultPortForProtocol(unsigned short port, const String& protocol);
+// Returns true if |port| is known to be the default for |protocol|. |protocol|
+// must be lower case.
+PLATFORM_EXPORT bool isDefaultPortForProtocol(unsigned short port,
+    const WTF::String& protocol);
+
+// Returns 0 for unknown protocols. |protocol| must be lower case.
+PLATFORM_EXPORT unsigned short defaultPortForProtocol(
+    const WTF::String& protocol);
+
+// Returns true if the port of the |url| is allowed for the scheme of the |url|.
+PLATFORM_EXPORT bool isPortAllowedForScheme(const KURL&);
 
 } // namespace blink
 

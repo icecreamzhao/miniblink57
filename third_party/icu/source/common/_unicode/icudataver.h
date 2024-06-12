@@ -7,7 +7,6 @@
 ******************************************************************************
 */
 
-
 /**
  * \file
  * \brief C API: access to ICU Data Version number
@@ -36,6 +35,6 @@
  * 
  * @stable ICU 49
  */
-U_STABLE void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode *status);
+U_STABLE void U_EXPORT2 u_getDataVersion(UVersionInfo dataVersionFillin, UErrorCode* status);
 
 #endif

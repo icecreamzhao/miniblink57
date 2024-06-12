@@ -31,8 +31,10 @@
 namespace blink {
 
 class CursorData {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    CursorData(PassRefPtr<StyleImage> image, bool hotSpotSpecified, const IntPoint& hotSpot)
+    CursorData(StyleImage* image, bool hotSpotSpecified, const IntPoint& hotSpot)
         : m_image(image)
         , m_hotSpotSpecified(hotSpotSpecified)
         , m_hotSpot(hotSpot)
@@ -44,25 +46,26 @@ public:
         return m_hotSpot == o.m_hotSpot && m_image == o.m_image;
     }
 
-    bool operator!=(const CursorData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const CursorData& o) const { return !(*this == o); }
 
     StyleImage* image() const { return m_image.get(); }
-    void setImage(PassRefPtr<StyleImage> image) { m_image = image; }
+    void setImage(StyleImage* image) { m_image = image; }
 
     bool hotSpotSpecified() const { return m_hotSpotSpecified; }
 
     // Hot spot in the image in logical pixels.
     const IntPoint& hotSpot() const { return m_hotSpot; }
 
+    DEFINE_INLINE_TRACE() { visitor->trace(m_image); }
+
 private:
-    RefPtr<StyleImage> m_image;
+    Member<StyleImage> m_image;
     bool m_hotSpotSpecified;
     IntPoint m_hotSpot; // for CSS3 support
 };
 
 } // namespace blink
+
+WTF_ALLOW_CLEAR_UNUSED_SLOTS_WITH_MEM_FUNCTIONS(blink::CursorData);
 
 #endif // CursorData_h

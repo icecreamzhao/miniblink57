@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,12 +5,13 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
-#include "SkShader.h"
 #include "SkKey.h"
+#include "SkShader.h"
+#include "SkView.h"
 
-static void make_bitmap(SkBitmap* bm) {
+static void make_bitmap(SkBitmap* bm)
+{
     const int W = 100;
     const int H = 100;
     bm->allocN32Pixels(W, H);
@@ -33,23 +33,25 @@ static void make_bitmap(SkBitmap* bm) {
     canvas.drawLine(0, 0, SkIntToScalar(W), 0, paint);
 }
 
-static void make_paint(SkPaint* paint, SkShader::TileMode tm) {
+static void make_paint(SkPaint* paint, SkShader::TileMode tm)
+{
     SkBitmap bm;
     make_bitmap(&bm);
 
-    SkShader* shader = SkShader::CreateBitmapShader(bm, tm, tm);
-    paint->setShader(shader)->unref();
+    paint->setShader(SkShader::MakeBitmapShader(bm, tm, tm));
 }
 
 class RepeatTileView : public SampleView {
 public:
-    RepeatTileView() {
+    RepeatTileView()
+    {
         this->setBGColor(SK_ColorGRAY);
     }
 
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "RepeatTile");
             return true;
@@ -57,27 +59,31 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         SkPaint paint;
         make_paint(&paint, SkShader::kRepeat_TileMode);
 
-//        canvas->scale(SK_Scalar1*2, SK_Scalar1);
+        //        canvas->scale(SK_Scalar1*2, SK_Scalar1);
         canvas->translate(SkIntToScalar(100), SkIntToScalar(100));
         canvas->drawPaint(paint);
     }
 
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override {
-        this->inval(NULL);
+    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override
+    {
+        this->inval(nullptr);
 
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 
-    bool onClick(Click* click) override {
+    bool onClick(Click* click) override
+    {
         return this->INHERITED::onClick(click);
     }
 
-    virtual bool handleKey(SkKey) {
-        this->inval(NULL);
+    virtual bool handleKey(SkKey)
+    {
+        this->inval(nullptr);
         return true;
     }
 

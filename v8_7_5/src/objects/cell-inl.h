@@ -16,19 +16,20 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(Cell, HeapObject)
+    OBJECT_CONSTRUCTORS_IMPL(Cell, HeapObject)
 
-CAST_ACCESSOR(Cell)
+    CAST_ACCESSOR(Cell)
 
-ACCESSORS(Cell, value, Object, kValueOffset)
+    ACCESSORS(Cell, value, Object, kValueOffset)
 
-Cell Cell::FromValueAddress(Address value) {
-  return Cell::cast(HeapObject::FromAddress(value - kValueOffset));
-}
+    Cell Cell::FromValueAddress(Address value)
+    {
+        return Cell::cast(HeapObject::FromAddress(value - kValueOffset));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_CELL_INL_H_
+#endif // V8_OBJECTS_CELL_INL_H_

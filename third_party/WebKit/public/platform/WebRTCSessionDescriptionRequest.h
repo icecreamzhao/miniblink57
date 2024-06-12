@@ -43,16 +43,16 @@ class WebRTCSessionDescription;
 
 class WebRTCSessionDescriptionRequest {
 public:
-    class ExtraData {
-    public:
-        virtual ~ExtraData() { }
-    };
-
     WebRTCSessionDescriptionRequest() { }
-    WebRTCSessionDescriptionRequest(const WebRTCSessionDescriptionRequest& other) { assign(other); }
+    WebRTCSessionDescriptionRequest(
+        const WebRTCSessionDescriptionRequest& other)
+    {
+        assign(other);
+    }
     ~WebRTCSessionDescriptionRequest() { reset(); }
 
-    WebRTCSessionDescriptionRequest& operator=(const WebRTCSessionDescriptionRequest& other)
+    WebRTCSessionDescriptionRequest& operator=(
+        const WebRTCSessionDescriptionRequest& other)
     {
         assign(other);
         return *this;
@@ -63,22 +63,19 @@ public:
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
 
-    BLINK_PLATFORM_EXPORT void requestSucceeded(const WebRTCSessionDescription&) const;
+    BLINK_PLATFORM_EXPORT void requestSucceeded(
+        const WebRTCSessionDescription&) const;
     BLINK_PLATFORM_EXPORT void requestFailed(const WebString& error) const;
 
-    // Extra data associated with this object.
-    // If non-null, the extra data pointer will be deleted when the object is destroyed.
-    // Setting the extra data pointer will cause any existing non-null
-    // extra data pointer to be deleted.
-    BLINK_PLATFORM_EXPORT ExtraData* extraData() const;
-    BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
-
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT WebRTCSessionDescriptionRequest(RTCSessionDescriptionRequest*);
+    BLINK_PLATFORM_EXPORT WebRTCSessionDescriptionRequest(
+        RTCSessionDescriptionRequest*);
 #endif
 
 private:
-    WebPrivatePtr<RTCSessionDescriptionRequest> m_private;
+    WebPrivatePtr<RTCSessionDescriptionRequest,
+        WebPrivatePtrDestructionCrossThread>
+        m_private;
 };
 
 } // namespace blink

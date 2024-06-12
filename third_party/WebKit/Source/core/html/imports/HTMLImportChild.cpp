@@ -28,13 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/imports/HTMLImportChild.h"
 
+#include "core/css/StyleSheetList.h"
 #include "core/dom/Document.h"
-#include "core/dom/custom/CustomElement.h"
-#include "core/dom/custom/CustomElementMicrotaskImportStep.h"
-#include "core/dom/custom/CustomElementSyncMicrotaskQueue.h"
+#include "core/dom/StyleEngine.h"
+#include "core/dom/custom/V0CustomElement.h"
+#include "core/dom/custom/V0CustomElementMicrotaskImportStep.h"
+#include "core/dom/custom/V0CustomElementSyncMicrotaskQueue.h"
+#include "core/frame/UseCounter.h"
 #include "core/html/imports/HTMLImportChildClient.h"
 #include "core/html/imports/HTMLImportLoader.h"
 #include "core/html/imports/HTMLImportTreeRoot.h"
@@ -42,30 +44,27 @@
 
 namespace blink {
 
-HTMLImportChild::HTMLImportChild(const KURL& url, HTMLImportLoader* loader, SyncMode sync)
+HTMLImportChild::HTMLImportChild(const KURL& url,
+    HTMLImportLoader* loader,
+    SyncMode sync)
     : HTMLImport(sync)
     , m_url(url)
-#if !ENABLE(OILPAN)
-    , m_weakFactory(this)
-#endif
     , m_loader(loader)
     , m_client(nullptr)
 {
+    DCHECK(loader);
 }
 
-HTMLImportChild::~HTMLImportChild()
-{
-#if !ENABLE(OILPAN)
-    // dispose() should be called before the destruction.
-    ASSERT(!m_loader);
-#endif
-}
+HTMLImportChild::~HTMLImportChild() { }
 
 void HTMLImportChild::ownerInserted()
 {
     if (!m_loader->isDone())
         return;
-    root()->document()->styleResolverChanged();
+
+    DCHECK(root());
+    DCHECK(root()->document());
+    root()->document()->styleEngine().htmlImportAddedOrRemoved();
 }
 
 void HTMLImportChild::didShareLoader()
@@ -88,7 +87,10 @@ void HTMLImportChild::didFinish()
 void HTMLImportChild::didFinishLoading()
 {
     stateWillChange();
-    CustomElement::didFinishLoadingImport(*(root()->document()));
+    if (document() && document()->styleSheets().length() > 0)
+        UseCounter::count(root()->document(),
+            UseCounter::HTMLImportsHasStyleSheets);
+    V0CustomElement::didFinishLoadingImport(*(root()->document()));
 }
 
 void HTMLImportChild::didFinishUpgradingCustomElements()
@@ -99,10 +101,11 @@ void HTMLImportChild::didFinishUpgradingCustomElements()
 
 void HTMLImportChild::dispose()
 {
+    invalidateCustomElementMicrotaskStep();
     if (parent())
         parent()->removeChild(this);
 
-    ASSERT(m_loader);
+    DCHECK(m_loader);
     m_loader->removeImport(this);
     m_loader = nullptr;
 
@@ -114,7 +117,7 @@ void HTMLImportChild::dispose()
 
 Document* HTMLImportChild::document() const
 {
-    ASSERT(m_loader);
+    DCHECK(m_loader);
     return m_loader->document();
 }
 
@@ -135,53 +138,39 @@ void HTMLImportChild::invalidateCustomElementMicrotaskStep()
 {
     if (!m_customElementMicrotaskStep)
         return;
-
     m_customElementMicrotaskStep->invalidate();
     m_customElementMicrotaskStep.clear();
 }
 
 void HTMLImportChild::createCustomElementMicrotaskStepIfNeeded()
 {
-    ASSERT(!m_customElementMicrotaskStep);
+    DCHECK(!m_customElementMicrotaskStep);
 
     if (!hasFinishedLoading() && !formsCycle()) {
-#if ENABLE(OILPAN)
-        m_customElementMicrotaskStep = CustomElement::didCreateImport(this);
-#else
-        m_customElementMicrotaskStep = CustomElement::didCreateImport(this)->weakPtr();
-#endif
+        m_customElementMicrotaskStep = V0CustomElement::didCreateImport(this);
     }
 }
 
 bool HTMLImportChild::hasFinishedLoading() const
 {
-    ASSERT(m_loader);
+    DCHECK(m_loader);
 
-    return m_loader->isDone() && /*m_loader->microtaskQueue()->isEmpty() &&*/ !m_customElementMicrotaskStep;
+    return m_loader->isDone() && m_loader->microtaskQueue()->isEmpty() && !m_customElementMicrotaskStep;
 }
 
 HTMLImportLoader* HTMLImportChild::loader() const
 {
     // This should never be called after dispose().
-    ASSERT(m_loader);
+    DCHECK(m_loader);
     return m_loader;
 }
 
 void HTMLImportChild::setClient(HTMLImportChildClient* client)
 {
-    ASSERT(client);
-    ASSERT(!m_client);
+    DCHECK(client);
+    DCHECK(!m_client);
     m_client = client;
 }
-
-#if !ENABLE(OILPAN)
-void HTMLImportChild::clearClient()
-{
-    // Doesn't check m_client nullity because we allow
-    // clearClient() to reenter.
-    m_client = nullptr;
-}
-#endif
 
 HTMLLinkElement* HTMLImportChild::link() const
 {
@@ -191,7 +180,8 @@ HTMLLinkElement* HTMLImportChild::link() const
 }
 
 // Ensuring following invariants against the import tree:
-// - HTMLImportChild::firstImport() is the "first import" of the DFS order of the import tree.
+// - HTMLImportChild::firstImport() is the "first import" of the DFS order of
+//   the import tree.
 // - The "first import" manages all the children that is loaded by the document.
 void HTMLImportChild::normalize()
 {
@@ -201,7 +191,8 @@ void HTMLImportChild::normalize()
         takeChildrenFrom(oldFirst);
     }
 
-    for (HTMLImportChild* child = toHTMLImportChild(firstChild()); child; child = toHTMLImportChild(child->next())) {
+    for (HTMLImportChild* child = toHTMLImportChild(firstChild()); child;
+         child = toHTMLImportChild(child->next())) {
         if (child->formsCycle())
             child->invalidateCustomElementMicrotaskStep();
         child->normalize();
@@ -213,12 +204,9 @@ void HTMLImportChild::showThis()
 {
     bool isFirst = loader() ? loader()->isFirstImport(this) : false;
     HTMLImport::showThis();
-    fprintf(stderr, " loader=%p first=%d, step=%p sync=%s url=%s",
-        m_loader.get(),
-        isFirst,
-        m_customElementMicrotaskStep.get(),
-        isSync() ? "Y" : "N",
-        url().string().utf8().data());
+    fprintf(stderr, " loader=%p first=%d, step=%p sync=%s url=%s", m_loader.get(),
+        isFirst, m_customElementMicrotaskStep.get(), isSync() ? "Y" : "N",
+        url().getString().utf8().data());
 }
 #endif
 

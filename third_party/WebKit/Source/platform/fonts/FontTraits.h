@@ -27,23 +27,30 @@
 #ifndef FontTraits_h
 #define FontTraits_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 
 namespace blink {
 
 enum FontWeight {
-    FontWeight100,
-    FontWeight200,
-    FontWeight300,
-    FontWeight400,
-    FontWeight500,
-    FontWeight600,
-    FontWeight700,
-    FontWeight800,
-    FontWeight900,
+    FontWeight100 = 0,
+    FontWeight200 = 1,
+    FontWeight300 = 2,
+    FontWeight400 = 3,
+    FontWeight500 = 4,
+    FontWeight600 = 5,
+    FontWeight700 = 6,
+    FontWeight800 = 7,
+    FontWeight900 = 8,
     FontWeightNormal = FontWeight400,
     FontWeightBold = FontWeight700
 };
+
+// Converts a FontWeight to its corresponding numeric value
+inline int numericFontWeight(FontWeight weight)
+{
+    return (weight - FontWeight100 + 1) * 100;
+}
 
 // Numeric values matching OS/2 & Windows Metrics usWidthClass table.
 // https://www.microsoft.com/typography/otspec/os2.htm
@@ -61,42 +68,36 @@ enum FontStretch {
 
 enum FontStyle {
     FontStyleNormal = 0,
-    FontStyleItalic = 1
-};
-
-enum FontVariant {
-    FontVariantNormal = 0,
-    FontVariantSmallCaps = 1
+    FontStyleOblique = 1,
+    FontStyleItalic = 2
 };
 
 typedef unsigned FontTraitsBitfield;
 
 struct FontTraits {
-    FontTraits(FontStyle style, FontVariant variant, FontWeight weight, FontStretch stretch)
+    DISALLOW_NEW();
+    FontTraits(FontStyle style, FontWeight weight, FontStretch stretch)
     {
         m_traits.m_style = style;
-        m_traits.m_variant = variant;
         m_traits.m_weight = weight;
         m_traits.m_stretch = stretch;
         m_traits.m_filler = 0;
-        ASSERT(!(m_bitfield >> 10));
+        DCHECK_EQ(m_bitfield >> 10, 0u);
     }
     FontTraits(FontTraitsBitfield bitfield)
         : m_bitfield(bitfield)
     {
-        ASSERT(!m_traits.m_filler);
-        ASSERT(!(m_bitfield >> 10));
+        DCHECK_EQ(m_traits.m_filler, 0u);
+        DCHECK_EQ(m_bitfield >> 10, 0u);
     }
     FontStyle style() const { return static_cast<FontStyle>(m_traits.m_style); }
-    FontVariant variant() const { return static_cast<FontVariant>(m_traits.m_variant); }
     FontWeight weight() const { return static_cast<FontWeight>(m_traits.m_weight); }
     FontStretch stretch() const { return static_cast<FontStretch>(m_traits.m_stretch); }
     FontTraitsBitfield bitfield() const { return m_bitfield; }
 
     union {
         struct {
-            unsigned m_style : 1;
-            unsigned m_variant : 1;
+            unsigned m_style : 2;
             unsigned m_weight : 4;
             unsigned m_stretch : 4;
             unsigned m_filler : 22;

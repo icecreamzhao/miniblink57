@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimateSet_DEFINED
 #define SkAnimateSet_DEFINED
 
@@ -16,10 +15,11 @@ class SkSet : public SkAnimate {
     DECLARE_MEMBER_INFO(Set);
     SkSet();
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
-    void onEndElement(SkAnimateMaker& ) override;
-    void refresh(SkAnimateMaker& ) override;
+    void onEndElement(SkAnimateMaker&) override;
+    void refresh(SkAnimateMaker&) override;
+
 private:
     typedef SkAnimate INHERITED;
 };

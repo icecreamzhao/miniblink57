@@ -33,9 +33,8 @@
 
 #include "platform/Timer.h"
 #include "public/web/WebHelperPlugin.h"
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/WTFString.h"
 
@@ -45,12 +44,13 @@ class HTMLObjectElement;
 class WebLocalFrameImpl;
 class WebPluginContainerImpl;
 
-// Utility class to host helper plugins for media. Internally, it creates a detached
-// HTMLPluginElement to host the plugin and uses FrameLoaderClient::createPlugin() to instantiate
-// the requested plugin.
+// Utility class to host helper plugins for media. Internally, it creates a
+// detached HTMLPluginElement to host the plugin and uses
+// FrameLoaderClient::createPlugin() to instantiate the requested plugin.
 class WebHelperPluginImpl final : public WebHelperPlugin {
     WTF_MAKE_NONCOPYABLE(WebHelperPluginImpl);
-    WTF_MAKE_FAST_ALLOCATED(WebHelperPluginImpl);
+    USING_FAST_MALLOC(WebHelperPluginImpl);
+
 public:
     // WebHelperPlugin methods:
     WebPlugin* getPlugin() override;
@@ -60,14 +60,13 @@ private:
     friend class WebHelperPlugin;
 
     WebHelperPluginImpl();
-    ~WebHelperPluginImpl() override;
 
     bool initialize(const String& pluginType, WebLocalFrameImpl*);
-    void reallyDestroy(Timer<WebHelperPluginImpl>*);
+    void reallyDestroy(TimerBase*);
 
     Timer<WebHelperPluginImpl> m_destructionTimer;
-    RefPtrWillBePersistent<HTMLObjectElement> m_objectElement;
-    RefPtrWillBePersistent<WebPluginContainerImpl> m_pluginContainer;
+    Persistent<HTMLObjectElement> m_objectElement;
+    Persistent<WebPluginContainerImpl> m_pluginContainer;
 };
 
 } // namespace blink

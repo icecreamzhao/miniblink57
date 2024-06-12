@@ -25,18 +25,19 @@
  *
  */
 
-#include "config.h"
 #include "core/events/MessageEvent.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/V8ArrayBuffer.h"
+#include "bindings/core/v8/V8PrivateProperty.h"
+#include <memory>
 
 namespace blink {
 
 static inline bool isValidSource(EventTarget* source)
 {
-    return !source || source->toDOMWindow() || source->toMessagePort();
+    return !source || source->toLocalDOMWindow() || source->toMessagePort() || source->toServiceWorker();
 }
 
 MessageEvent::MessageEvent()
@@ -44,7 +45,8 @@ MessageEvent::MessageEvent()
 {
 }
 
-MessageEvent::MessageEvent(const AtomicString& type, const MessageEventInit& initializer)
+MessageEvent::MessageEvent(const AtomicString& type,
+    const MessageEventInit& initializer)
     : Event(type, initializer)
     , m_dataType(DataTypeScriptValue)
     , m_source(nullptr)
@@ -55,14 +57,18 @@ MessageEvent::MessageEvent(const AtomicString& type, const MessageEventInit& ini
         m_origin = initializer.origin();
     if (initializer.hasLastEventId())
         m_lastEventId = initializer.lastEventId();
-    if (initializer.hasSource() && isValidSource(initializer.source().get()))
+    if (initializer.hasSource() && isValidSource(initializer.source()))
         m_source = initializer.source();
     if (initializer.hasPorts())
         m_ports = new MessagePortArray(initializer.ports());
-    ASSERT(isValidSource(m_source.get()));
+    DCHECK(isValidSource(m_source.get()));
 }
 
-MessageEvent::MessageEvent(const String& origin, const String& lastEventId, PassRefPtrWillBeRawPtr<EventTarget> source, MessagePortArray* ports)
+MessageEvent::MessageEvent(const String& origin,
+    const String& lastEventId,
+    EventTarget* source,
+    MessagePortArray* ports,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeScriptValue)
     , m_origin(origin)
@@ -70,10 +76,15 @@ MessageEvent::MessageEvent(const String& origin, const String& lastEventId, Pass
     , m_source(source)
     , m_ports(ports)
 {
-    ASSERT(isValidSource(m_source.get()));
+    DCHECK(isValidSource(m_source.get()));
 }
 
-MessageEvent::MessageEvent(PassRefPtr<SerializedScriptValue> data, const String& origin, const String& lastEventId, PassRefPtrWillBeRawPtr<EventTarget> source, MessagePortArray* ports)
+MessageEvent::MessageEvent(PassRefPtr<SerializedScriptValue> data,
+    const String& origin,
+    const String& lastEventId,
+    EventTarget* source,
+    MessagePortArray* ports,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeSerializedScriptValue)
     , m_dataAsSerializedScriptValue(data)
@@ -83,25 +94,35 @@ MessageEvent::MessageEvent(PassRefPtr<SerializedScriptValue> data, const String&
     , m_ports(ports)
 {
     if (m_dataAsSerializedScriptValue)
-        m_dataAsSerializedScriptValue->registerMemoryAllocatedWithCurrentScriptContext();
-    ASSERT(isValidSource(m_source.get()));
+        m_dataAsSerializedScriptValue
+            ->registerMemoryAllocatedWithCurrentScriptContext();
+    DCHECK(isValidSource(m_source.get()));
 }
 
-MessageEvent::MessageEvent(PassRefPtr<SerializedScriptValue> data, const String& origin, const String& lastEventId, PassRefPtrWillBeRawPtr<EventTarget> source, PassOwnPtr<MessagePortChannelArray> channels)
+MessageEvent::MessageEvent(PassRefPtr<SerializedScriptValue> data,
+    const String& origin,
+    const String& lastEventId,
+    EventTarget* source,
+    std::unique_ptr<MessagePortChannelArray> channels,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeSerializedScriptValue)
     , m_dataAsSerializedScriptValue(data)
     , m_origin(origin)
     , m_lastEventId(lastEventId)
     , m_source(source)
-    , m_channels(channels)
+    , m_channels(std::move(channels))
+    , m_suborigin(suborigin)
 {
     if (m_dataAsSerializedScriptValue)
-        m_dataAsSerializedScriptValue->registerMemoryAllocatedWithCurrentScriptContext();
-    ASSERT(isValidSource(m_source.get()));
+        m_dataAsSerializedScriptValue
+            ->registerMemoryAllocatedWithCurrentScriptContext();
+    DCHECK(isValidSource(m_source.get()));
 }
 
-MessageEvent::MessageEvent(const String& data, const String& origin)
+MessageEvent::MessageEvent(const String& data,
+    const String& origin,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeString)
     , m_dataAsString(data)
@@ -109,7 +130,9 @@ MessageEvent::MessageEvent(const String& data, const String& origin)
 {
 }
 
-MessageEvent::MessageEvent(Blob* data, const String& origin)
+MessageEvent::MessageEvent(Blob* data,
+    const String& origin,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeBlob)
     , m_dataAsBlob(data)
@@ -117,7 +140,9 @@ MessageEvent::MessageEvent(Blob* data, const String& origin)
 {
 }
 
-MessageEvent::MessageEvent(PassRefPtr<DOMArrayBuffer> data, const String& origin)
+MessageEvent::MessageEvent(DOMArrayBuffer* data,
+    const String& origin,
+    const String& suborigin)
     : Event(EventTypeNames::message, false, false)
     , m_dataType(DataTypeArrayBuffer)
     , m_dataAsArrayBuffer(data)
@@ -125,22 +150,30 @@ MessageEvent::MessageEvent(PassRefPtr<DOMArrayBuffer> data, const String& origin
 {
 }
 
-MessageEvent::~MessageEvent()
-{
-}
+MessageEvent::~MessageEvent() { }
 
-PassRefPtrWillBeRawPtr<MessageEvent> MessageEvent::create(const AtomicString& type, const MessageEventInit& initializer, ExceptionState& exceptionState)
+MessageEvent* MessageEvent::create(const AtomicString& type,
+    const MessageEventInit& initializer,
+    ExceptionState& exceptionState)
 {
-    if (initializer.source().get() && !isValidSource(initializer.source().get())) {
-        exceptionState.throwTypeError("The optional 'source' property is neither a Window nor MessagePort.");
+    if (initializer.source() && !isValidSource(initializer.source())) {
+        exceptionState.throwTypeError(
+            "The optional 'source' property is neither a Window nor MessagePort.");
         return nullptr;
     }
-    return adoptRefWillBeNoop(new MessageEvent(type, initializer));
+    return new MessageEvent(type, initializer);
 }
 
-void MessageEvent::initMessageEvent(const AtomicString& type, bool canBubble, bool cancelable, ScriptValue data, const String& origin, const String& lastEventId, DOMWindow* source, MessagePortArray* ports)
+void MessageEvent::initMessageEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    ScriptValue data,
+    const String& origin,
+    const String& lastEventId,
+    EventTarget* source,
+    MessagePortArray* ports)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initEvent(type, canBubble, cancelable);
@@ -151,11 +184,19 @@ void MessageEvent::initMessageEvent(const AtomicString& type, bool canBubble, bo
     m_lastEventId = lastEventId;
     m_source = source;
     m_ports = ports;
+    m_suborigin = "";
 }
 
-void MessageEvent::initMessageEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtr<SerializedScriptValue> data, const String& origin, const String& lastEventId, DOMWindow* source, MessagePortArray* ports)
+void MessageEvent::initMessageEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    PassRefPtr<SerializedScriptValue> data,
+    const String& origin,
+    const String& lastEventId,
+    EventTarget* source,
+    MessagePortArray* ports)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initEvent(type, canBubble, cancelable);
@@ -166,9 +207,11 @@ void MessageEvent::initMessageEvent(const AtomicString& type, bool canBubble, bo
     m_lastEventId = lastEventId;
     m_source = source;
     m_ports = ports;
+    m_suborigin = "";
 
     if (m_dataAsSerializedScriptValue)
-        m_dataAsSerializedScriptValue->registerMemoryAllocatedWithCurrentScriptContext();
+        m_dataAsSerializedScriptValue
+            ->registerMemoryAllocatedWithCurrentScriptContext();
 }
 
 const AtomicString& MessageEvent::interfaceName() const
@@ -198,37 +241,43 @@ MessagePortArray MessageEvent::ports() const
 
 void MessageEvent::entangleMessagePorts(ExecutionContext* context)
 {
-    m_ports = MessagePort::entanglePorts(*context, m_channels.release());
+    m_ports = MessagePort::entanglePorts(*context, std::move(m_channels));
 }
 
 DEFINE_TRACE(MessageEvent)
 {
     visitor->trace(m_dataAsBlob);
+    visitor->trace(m_dataAsArrayBuffer);
     visitor->trace(m_source);
-#if ENABLE(OILPAN)
     visitor->trace(m_ports);
-#endif
     Event::trace(visitor);
 }
 
-v8::Local<v8::Object> MessageEvent::associateWithWrapper(v8::Isolate* isolate, const WrapperTypeInfo* wrapperType, v8::Local<v8::Object> wrapper)
+v8::Local<v8::Object> MessageEvent::associateWithWrapper(
+    v8::Isolate* isolate,
+    const WrapperTypeInfo* wrapperType,
+    v8::Local<v8::Object> wrapper)
 {
     wrapper = Event::associateWithWrapper(isolate, wrapperType, wrapper);
 
-    // Ensures a wrapper is created for the data to return now so that V8 knows how
-    // much memory is used via the wrapper. To keep the wrapper alive, it's set to
-    // the wrapper of the MessageEvent as a hidden value.
-    switch (dataType()) {
+    // Ensures a wrapper is created for the data to return now so that V8 knows
+    // how much memory is used via the wrapper. To keep the wrapper alive, it's
+    // set to the wrapper of the MessageEvent as a private value.
+    switch (getDataType()) {
     case MessageEvent::DataTypeScriptValue:
     case MessageEvent::DataTypeSerializedScriptValue:
         break;
     case MessageEvent::DataTypeString:
-        V8HiddenValue::setHiddenValue(isolate, wrapper, V8HiddenValue::stringData(isolate), v8String(isolate, dataAsString()));
+        V8PrivateProperty::getMessageEventCachedData(isolate).set(
+            isolate->GetCurrentContext(), wrapper,
+            v8String(isolate, dataAsString()));
         break;
     case MessageEvent::DataTypeBlob:
         break;
     case MessageEvent::DataTypeArrayBuffer:
-        V8HiddenValue::setHiddenValue(isolate, wrapper, V8HiddenValue::arrayBufferData(isolate), toV8(dataAsArrayBuffer(), wrapper, isolate));
+        V8PrivateProperty::getMessageEventCachedData(isolate).set(
+            isolate->GetCurrentContext(), wrapper,
+            ToV8(dataAsArrayBuffer(), wrapper, isolate));
         break;
     }
 

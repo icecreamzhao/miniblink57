@@ -28,10 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/ReplayingCanvas.h"
-
-#include "third_party/skia/include/core/SkBitmapDevice.h"
 
 namespace blink {
 
@@ -41,8 +38,13 @@ CanvasInterceptor<ReplayingCanvas>::~CanvasInterceptor()
         canvas()->updateInRange();
 }
 
-ReplayingCanvas::ReplayingCanvas(SkBitmap bitmap, unsigned fromStep, unsigned toStep)
-    : InterceptingCanvas(bitmap), m_fromStep(fromStep), m_toStep(toStep), m_abortDrawing(false)
+ReplayingCanvas::ReplayingCanvas(SkBitmap bitmap,
+    unsigned fromStep,
+    unsigned toStep)
+    : InterceptingCanvas(bitmap)
+    , m_fromStep(fromStep)
+    , m_toStep(toStep)
+    , m_abortDrawing(false)
 {
 }
 
@@ -54,7 +56,7 @@ void ReplayingCanvas::updateInRange()
     if (m_toStep && step > m_toStep)
         m_abortDrawing = true;
     if (step == m_fromStep)
-        this->SkCanvas::clear(SkColorSetARGB(255, 255, 255, 255)); // FIXME: fill with nine patch instead.
+        this->SkCanvas::clear(SK_ColorTRANSPARENT);
 }
 
 bool ReplayingCanvas::abort()
@@ -62,17 +64,20 @@ bool ReplayingCanvas::abort()
     return m_abortDrawing;
 }
 
-SkCanvas::SaveLayerStrategy ReplayingCanvas::willSaveLayer(const SkRect* bounds, const SkPaint* paint, SaveFlags flags)
+SkCanvas::SaveLayerStrategy ReplayingCanvas::getSaveLayerStrategy(
+    const SaveLayerRec& rec)
 {
     // We're about to create a layer and we have not cleared the device yet.
     // Let's clear now, so it has effect on all layers.
     if (callCount() <= m_fromStep)
-        this->SkCanvas::clear(SkColorSetARGB(255, 255, 255, 255)); // FIXME: fill with nine patch instead.
+        this->SkCanvas::clear(SK_ColorTRANSPARENT);
 
-    return this->InterceptingCanvas<ReplayingCanvas>::willSaveLayer(bounds, paint, flags);
+    return this->InterceptingCanvas<ReplayingCanvas>::getSaveLayerStrategy(rec);
 }
 
-void ReplayingCanvas::onDrawPicture(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint)
+void ReplayingCanvas::onDrawPicture(const SkPicture* picture,
+    const SkMatrix* matrix,
+    const SkPaint* paint)
 {
     this->unrollDrawPicture(picture, matrix, paint, this);
 }

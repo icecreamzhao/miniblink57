@@ -7,7 +7,9 @@
   'include_dirs': [
     '../gm',
     # include dirs needed by particular GMs
-    '../src/utils/debugger',
+    '../include/client/android',
+    '../tools/debugger',
+    '../src/effects/gradients',
     '../src/images',
     '../src/lazy',
   ],
@@ -20,48 +22,21 @@
         '<!@(python find.py ../gm "*.c*")',
 
         # Files needed by particular GMs
-        '../src/gpu/GrTestBatch.h',
-        '../src/utils/debugger/SkDrawCommand.h',
-        '../src/utils/debugger/SkDrawCommand.cpp',
-        '../src/utils/debugger/SkDebugCanvas.h',
-        '../src/utils/debugger/SkDebugCanvas.cpp',
-        '../src/utils/debugger/SkObjectParser.h',
-        '../src/utils/debugger/SkObjectParser.cpp',
+        '../src/gpu/batches/GrTestBatch.h',
+        '../tools/debugger/SkDrawCommand.h',
+        '../tools/debugger/SkDrawCommand.cpp',
+        '../tools/debugger/SkDebugCanvas.h',
+        '../tools/debugger/SkDebugCanvas.cpp',
+        '../tools/debugger/SkJsonWriteBuffer.h',
+        '../tools/debugger/SkJsonWriteBuffer.cpp',
+        '../tools/debugger/SkObjectParser.h',
+        '../tools/debugger/SkObjectParser.cpp',
+        '../tools/debugger/SkOverdrawMode.h',
+        '../tools/debugger/SkOverdrawMode.cpp',
       ],
-      'sources!': [
-        '../gm/system_preferences_default.cpp',
-        '../gm/techtalk1.cpp',
-      ],
-    }],
-    # TODO: Several GMs are known to cause particular problems on Android, so
-    # we disable them on Android.  See http://skbug.com/2326
-    [ 'skia_os == "android"', {
-      'sources!': [
-        # TODO(borenet): Causes assertion failure on Nexus S.
-        # See http://skbug.com/705
-        '../gm/bitmapcopy.cpp',
-
-        # SOME of the bitmaprect tests are disabled on Android; see
-        # ../gm/bitmaprect.cpp
-
-        # We skip GPU tests in this GM; see
-        # ../gm/deviceproperties.cpp
-
-        # TODO(bsalomon): Hangs on Xoom and Nexus S. See http://skbug.com/637
-        '../gm/drawbitmaprect.cpp',
-
-        # TODO(epoger): Crashes on Nexus 10. See http://skbug.com/2313
-        '../gm/imagefilterscropexpand.cpp',
-
-        # TODO(borenet): Causes Nexus S to reboot. See http://skbug.com/665
-        '../gm/shadertext.cpp',
-        '../gm/shadertext2.cpp',
-        '../gm/shadertext3.cpp',
-
-        # TODO(reed): Allocates more memory than Android devices are capable of
-        # fulfilling. See http://skbug.com/1978
-        '../gm/verylargebitmap.cpp',
-      ],
+      'dependencies': [
+        'libpng.gyp:libpng',
+      ]
     }],
   ],
 }

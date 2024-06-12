@@ -21,17 +21,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "config.h"
 #include "platform/LengthFunctions.h"
 
 #include "platform/LayoutUnit.h"
+#include "platform/LengthPoint.h"
 #include "platform/LengthSize.h"
 
 namespace blink {
 
-int intValueForLength(const Length& length, LayoutUnit maximumValue)
+int intValueForLength(const Length& length, int maximumValue)
 {
-    return static_cast<int>(valueForLength(length, maximumValue));
+    return valueForLength(length, LayoutUnit(maximumValue)).toInt();
 }
 
 float floatValueForLength(const Length& length, float maximumValue)
@@ -45,9 +45,7 @@ float floatValueForLength(const Length& length, float maximumValue)
     case Auto:
         return static_cast<float>(maximumValue);
     case Calculated:
-        return length.nonNanCalculatedValue(maximumValue);
-    case Intrinsic:
-    case MinIntrinsic:
+        return length.nonNanCalculatedValue(LayoutUnit(maximumValue));
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -62,21 +60,22 @@ float floatValueForLength(const Length& length, float maximumValue)
     return 0;
 }
 
-LayoutUnit minimumValueForLength(const Length& length, LayoutUnit maximumValue)
+LayoutUnit minimumValueForLength(const Length& length,
+    LayoutUnit maximumValue)
 {
     switch (length.type()) {
     case Fixed:
-        return length.value();
+        return LayoutUnit(length.value());
     case Percent:
-        // Don't remove the extra cast to float. It is needed for rounding on 32-bit Intel machines that use the FPU stack.
-        return static_cast<float>(maximumValue * length.percent() / 100.0f);
+        // Don't remove the extra cast to float. It is needed for rounding on
+        // 32-bit Intel machines that use the FPU stack.
+        return LayoutUnit(
+            static_cast<float>(maximumValue * length.percent() / 100.0f));
     case Calculated:
-        return length.nonNanCalculatedValue(maximumValue.toFloat());
+        return LayoutUnit(length.nonNanCalculatedValue(maximumValue));
     case FillAvailable:
     case Auto:
-        return 0;
-    case Intrinsic:
-    case MinIntrinsic:
+        return LayoutUnit();
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -85,16 +84,18 @@ LayoutUnit minimumValueForLength(const Length& length, LayoutUnit maximumValue)
     case DeviceHeight:
     case MaxSizeNone:
         ASSERT_NOT_REACHED();
-        return 0;
+        return LayoutUnit();
     }
     ASSERT_NOT_REACHED();
-    return 0;
+    return LayoutUnit();
 }
 
-LayoutUnit roundedMinimumValueForLength(const Length& length, LayoutUnit maximumValue)
+LayoutUnit roundedMinimumValueForLength(const Length& length,
+    LayoutUnit maximumValue)
 {
     if (length.type() == Percent)
-        return static_cast<LayoutUnit>(round(maximumValue * length.percent() / 100.0f));
+        return static_cast<LayoutUnit>(
+            round(maximumValue * length.percent() / 100.0f));
     return minimumValueForLength(length, maximumValue);
 }
 
@@ -108,8 +109,6 @@ LayoutUnit valueForLength(const Length& length, LayoutUnit maximumValue)
     case FillAvailable:
     case Auto:
         return maximumValue;
-    case Intrinsic:
-    case MinIntrinsic:
     case MinContent:
     case MaxContent:
     case FitContent:
@@ -118,15 +117,24 @@ LayoutUnit valueForLength(const Length& length, LayoutUnit maximumValue)
     case DeviceHeight:
     case MaxSizeNone:
         ASSERT_NOT_REACHED();
-        return 0;
+        return LayoutUnit();
     }
     ASSERT_NOT_REACHED();
-    return 0;
+    return LayoutUnit();
 }
 
-FloatSize floatSizeForLengthSize(const LengthSize& lengthSize, const FloatSize& boxSize)
+FloatSize floatSizeForLengthSize(const LengthSize& lengthSize,
+    const FloatSize& boxSize)
 {
-    return FloatSize(floatValueForLength(lengthSize.width(), boxSize.width()), floatValueForLength(lengthSize.height(), boxSize.height()));
+    return FloatSize(floatValueForLength(lengthSize.width(), boxSize.width()),
+        floatValueForLength(lengthSize.height(), boxSize.height()));
+}
+
+FloatPoint floatPointForLengthPoint(const LengthPoint& LengthPoint,
+    const FloatSize& boxSize)
+{
+    return FloatPoint(floatValueForLength(LengthPoint.x(), boxSize.width()),
+        floatValueForLength(LengthPoint.y(), boxSize.height()));
 }
 
 } // namespace blink

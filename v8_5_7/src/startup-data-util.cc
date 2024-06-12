@@ -36,14 +36,14 @@ void DeleteStartupData(v8::StartupData* data) {
 }
 
 
-void FreeStartupData() {
+void __cdecl FreeStartupData() {
   DeleteStartupData(&g_natives);
   DeleteStartupData(&g_snapshot);
 }
 
 
 void Load(const char* blob_file, v8::StartupData* startup_data,
-          void (*setter_fn)(v8::StartupData*)) {
+          void (V8CALL*setter_fn)(v8::StartupData*)) {
   ClearStartupData(startup_data);
 
   CHECK(blob_file);

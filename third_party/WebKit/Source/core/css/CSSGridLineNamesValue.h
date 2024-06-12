@@ -32,27 +32,25 @@
 #define CSSGridLineNamesValue_h
 
 #include "core/css/CSSValueList.h"
-#include "wtf/PassRefPtr.h"
 
 namespace blink {
 
 class CSSGridLineNamesValue : public CSSValueList {
 public:
-    static PassRefPtrWillBeRawPtr<CSSGridLineNamesValue> create()
-    {
-        return adoptRefWillBeNoop(new CSSGridLineNamesValue());
-    }
+    static CSSGridLineNamesValue* create() { return new CSSGridLineNamesValue(); }
 
     String customCSSText() const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValueList::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValueList::traceAfterDispatch(visitor);
+    }
 
 private:
     CSSGridLineNamesValue();
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSGridLineNamesValue, isGridLineNamesValue());
-}
-
+} // namespace blink
 
 #endif

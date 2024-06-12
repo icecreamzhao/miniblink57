@@ -25,24 +25,22 @@
 
 // https://html.spec.whatwg.org/#the-video-element
 
-[
-    RuntimeEnabled=Media
-] interface HTMLVideoElement : HTMLMediaElement {
-    [Reflect] attribute unsigned long width;
-    [Reflect] attribute unsigned long height;
+interface HTMLVideoElement : HTMLMediaElement {
+    [CEReactions, Reflect] attribute unsigned long width;
+    [CEReactions, Reflect] attribute unsigned long height;
     readonly attribute unsigned long videoWidth;
     readonly attribute unsigned long videoHeight;
-    [Reflect, URL] attribute DOMString poster;
+    [CEReactions, Reflect, URL] attribute DOMString poster;
 
     // Non-standard APIs
     [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoSupportsFullscreen] readonly attribute boolean webkitSupportsFullscreen;
     [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoDisplayingFullscreen] readonly attribute boolean webkitDisplayingFullscreen;
 
-    [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoEnterFullscreen, RaisesException, LogActivity, LogAllWorlds] void webkitEnterFullscreen();
+    [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoEnterFullscreen, LogActivity, LogAllWorlds] void webkitEnterFullscreen();
     [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoExitFullscreen] void webkitExitFullscreen();
 
     // Note the different capitalization of the "S" in FullScreen.
-    [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoEnterFullScreen, ImplementedAs=webkitEnterFullscreen, RaisesException, LogActivity, LogAllWorlds] void webkitEnterFullScreen();
+    [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoEnterFullScreen, ImplementedAs=webkitEnterFullscreen, LogActivity, LogAllWorlds] void webkitEnterFullScreen();
     [RuntimeEnabled=PrefixedVideoFullscreen, DeprecateAs=PrefixedVideoExitFullScreen, ImplementedAs=webkitExitFullscreen] void webkitExitFullScreen();
 
     // The number of frames that have been decoded and made available for

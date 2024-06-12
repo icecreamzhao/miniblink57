@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8DevToolsHost.h"
 
 #include "bindings/core/v8/V8Binding.h"
@@ -45,7 +44,8 @@
 
 namespace blink {
 
-void V8DevToolsHost::platformMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+void V8DevToolsHost::platformMethodCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
 #if OS(MACOSX)
     v8SetReturnValue(info, v8AtomicString(info.GetIsolate(), "mac"));
@@ -56,7 +56,9 @@ void V8DevToolsHost::platformMethodCustom(const v8::FunctionCallbackInfo<v8::Val
 #endif
 }
 
-static bool populateContextMenuItems(v8::Isolate* isolate, const v8::Local<v8::Array>& itemArray, ContextMenu& menu)
+static bool populateContextMenuItems(v8::Isolate* isolate,
+    const v8::Local<v8::Array>& itemArray,
+    ContextMenu& menu)
 {
     v8::Local<v8::Context> context = isolate->GetCurrentContext();
     for (size_t i = 0; i < itemArray->Length(); ++i) {
@@ -67,41 +69,36 @@ static bool populateContextMenuItems(v8::Isolate* isolate, const v8::Local<v8::A
         v8::Local<v8::Value> enabled;
         v8::Local<v8::Value> checked;
         v8::Local<v8::Value> subItems;
-        if (!item->Get(context, v8AtomicString(isolate, "type")).ToLocal(&type)
-            || !item->Get(context, v8AtomicString(isolate, "id")).ToLocal(&id)
-            || !item->Get(context, v8AtomicString(isolate, "label")).ToLocal(&label)
-            || !item->Get(context, v8AtomicString(isolate, "enabled")).ToLocal(&enabled)
-            || !item->Get(context, v8AtomicString(isolate, "checked")).ToLocal(&checked)
-            || !item->Get(context, v8AtomicString(isolate, "subItems")).ToLocal(&subItems))
+        if (!item->Get(context, v8AtomicString(isolate, "type")).ToLocal(&type) || !item->Get(context, v8AtomicString(isolate, "id")).ToLocal(&id) || !item->Get(context, v8AtomicString(isolate, "label")).ToLocal(&label) || !item->Get(context, v8AtomicString(isolate, "enabled")).ToLocal(&enabled) || !item->Get(context, v8AtomicString(isolate, "checked")).ToLocal(&checked) || !item->Get(context, v8AtomicString(isolate, "subItems")).ToLocal(&subItems))
             return false;
         if (!type->IsString())
             continue;
         String typeString = toCoreStringWithNullCheck(type.As<v8::String>());
         if (typeString == "separator") {
-            ContextMenuItem item(ContextMenuItem(SeparatorType,
-                ContextMenuItemCustomTagNoAction,
-                String(),
-                String()));
+            ContextMenuItem item(ContextMenuItem(
+                SeparatorType, ContextMenuItemCustomTagNoAction, String(), String()));
             menu.appendItem(item);
         } else if (typeString == "subMenu" && subItems->IsArray()) {
             ContextMenu subMenu;
             v8::Local<v8::Array> subItemsArray = v8::Local<v8::Array>::Cast(subItems);
             if (!populateContextMenuItems(isolate, subItemsArray, subMenu))
                 return false;
-            TOSTRING_DEFAULT(V8StringResource<TreatNullAsNullString>, labelString, label, false);
-            ContextMenuItem item(SubmenuType,
-                ContextMenuItemCustomTagNoAction,
-                labelString,
-                String(),
-                &subMenu);
+            TOSTRING_DEFAULT(V8StringResource<TreatNullAsNullString>, labelString,
+                label, false);
+            ContextMenuItem item(SubmenuType, ContextMenuItemCustomTagNoAction,
+                labelString, String(), &subMenu);
             menu.appendItem(item);
         } else {
             int32_t int32Id;
             if (!v8Call(id->Int32Value(context), int32Id))
                 return false;
-            ContextMenuAction typedId = static_cast<ContextMenuAction>(ContextMenuItemBaseCustomTag + int32Id);
-            TOSTRING_DEFAULT(V8StringResource<TreatNullAsNullString>, labelString, label, false);
-            ContextMenuItem menuItem((typeString == "checkbox" ? CheckableActionType : ActionType), typedId, labelString, String());
+            ContextMenuAction typedId = static_cast<ContextMenuAction>(
+                ContextMenuItemBaseCustomTag + int32Id);
+            TOSTRING_DEFAULT(V8StringResource<TreatNullAsNullString>, labelString,
+                label, false);
+            ContextMenuItem menuItem(
+                (typeString == "checkbox" ? CheckableActionType : ActionType),
+                typedId, labelString, String());
             if (checked->IsBoolean())
                 menuItem.setChecked(checked.As<v8::Boolean>()->Value());
             if (enabled->IsBoolean())
@@ -112,59 +109,42 @@ static bool populateContextMenuItems(v8::Isolate* isolate, const v8::Local<v8::A
     return true;
 }
 
-void V8DevToolsHost::showContextMenuMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-    if (info.Length() < 2)
-        return;
-
-    v8::Local<v8::Object> eventWrapper = v8::Local<v8::Object>::Cast(info[0]);
-    if (!V8MouseEvent::wrapperTypeInfo.equals(toWrapperTypeInfo(eventWrapper)))
-        return;
-
-    Event* event = V8Event::toImpl(eventWrapper);
-    if (!info[1]->IsArray())
-        return;
-
-    v8::Local<v8::Array> array = v8::Local<v8::Array>::Cast(info[1]);
-    ContextMenu menu;
-    if (!populateContextMenuItems(info.GetIsolate(), array, menu))
-        return;
-
-    DevToolsHost* devtoolsHost = V8DevToolsHost::toImpl(info.Holder());
-    Vector<ContextMenuItem> items = menu.items();
-    devtoolsHost->showContextMenu(event, items);
-}
-
-void V8DevToolsHost::showContextMenuAtPointMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+void V8DevToolsHost::showContextMenuAtPointMethodCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     if (info.Length() < 3)
         return;
 
-    ExceptionState exceptionState(ExceptionState::ExecutionContext, "showContextMenuAtPoint", "DevToolsHost", info.Holder(), info.GetIsolate());
+    ExceptionState exceptionState(info.GetIsolate(),
+        ExceptionState::ExecutionContext,
+        "DevToolsHost", "showContextMenuAtPoint");
     v8::Isolate* isolate = info.GetIsolate();
 
     float x = toRestrictedFloat(isolate, info[0], exceptionState);
-    if (exceptionState.throwIfNeeded())
+    if (exceptionState.hadException())
         return;
     float y = toRestrictedFloat(isolate, info[1], exceptionState);
-    if (exceptionState.throwIfNeeded())
+    if (exceptionState.hadException())
         return;
 
     v8::Local<v8::Value> array = v8::Local<v8::Value>::Cast(info[2]);
     if (!array->IsArray())
         return;
     ContextMenu menu;
-    if (!populateContextMenuItems(isolate, v8::Local<v8::Array>::Cast(array), menu))
+    if (!populateContextMenuItems(isolate, v8::Local<v8::Array>::Cast(array),
+            menu))
         return;
 
     Document* document = nullptr;
     if (info.Length() >= 4 && v8::Local<v8::Value>::Cast(info[3])->IsObject()) {
         v8::Local<v8::Object> documentWrapper = v8::Local<v8::Object>::Cast(info[3]);
-        if (!V8HTMLDocument::wrapperTypeInfo.equals(toWrapperTypeInfo(documentWrapper)))
+        if (!V8HTMLDocument::wrapperTypeInfo.equals(
+                toWrapperTypeInfo(documentWrapper)))
             return;
         document = V8HTMLDocument::toImpl(documentWrapper);
     } else {
-        v8::Local<v8::Object> windowWrapper = V8Window::findInstanceInPrototypeChain(isolate->GetEnteredContext()->Global(), isolate);
+        v8::Local<v8::Object> windowWrapper = V8Window::findInstanceInPrototypeChain(
+            isolate->GetEnteredContext()->Global(), isolate);
         if (windowWrapper.IsEmpty())
             return;
         DOMWindow* window = V8Window::toImpl(windowWrapper);
@@ -179,4 +159,3 @@ void V8DevToolsHost::showContextMenuAtPointMethodCustom(const v8::FunctionCallba
 }
 
 } // namespace blink
-

@@ -29,34 +29,56 @@
 #ifndef SVGImageChromeClient_h
 #define SVGImageChromeClient_h
 
+#include "base/gtest_prod_util.h"
+#include "core/CoreExport.h"
 #include "core/loader/EmptyClients.h"
 #include "platform/Timer.h"
+#include <memory>
 
 namespace blink {
 
 class SVGImage;
 
-class SVGImageChromeClient final : public EmptyChromeClient {
-    WTF_MAKE_NONCOPYABLE(SVGImageChromeClient); WTF_MAKE_FAST_ALLOCATED(SVGImageChromeClient);
+class CORE_EXPORT SVGImageChromeClient final : public EmptyChromeClient {
 public:
-    explicit SVGImageChromeClient(SVGImage*);
+    static SVGImageChromeClient* create(SVGImage*);
+
     bool isSVGImageChromeClient() const override;
 
     SVGImage* image() const { return m_image; }
 
+    void suspendAnimation();
+    void resumeAnimation();
+    bool isSuspended() const { return m_timelineState >= Suspended; }
+
 private:
+    explicit SVGImageChromeClient(SVGImage*);
+
     void chromeDestroyed() override;
     void invalidateRect(const IntRect&) override;
-    void scheduleAnimation() override;
+    void scheduleAnimation(Widget*) override;
 
-    void animationTimerFired(Timer<SVGImageChromeClient>*);
+    void setTimer(std::unique_ptr<TimerBase>);
+    void animationTimerFired(TimerBase*);
 
     SVGImage* m_image;
-    Timer<SVGImageChromeClient> m_animationTimer;
+    std::unique_ptr<TimerBase> m_animationTimer;
+    enum {
+        Running,
+        Suspended,
+        SuspendedWithAnimationPending,
+    } m_timelineState;
+
+    FRIEND_TEST_ALL_PREFIXES(SVGImageTest, TimelineSuspendAndResume);
+    FRIEND_TEST_ALL_PREFIXES(SVGImageTest, ResetAnimation);
 };
 
-DEFINE_TYPE_CASTS(SVGImageChromeClient, ChromeClient, client, client->isSVGImageChromeClient(), client.isSVGImageChromeClient());
+DEFINE_TYPE_CASTS(SVGImageChromeClient,
+    ChromeClient,
+    client,
+    client->isSVGImageChromeClient(),
+    client.isSVGImageChromeClient());
 
-}
+} // namespace blink
 
 #endif // SVGImageChromeClient_h

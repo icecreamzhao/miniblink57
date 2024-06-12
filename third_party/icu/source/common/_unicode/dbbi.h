@@ -19,7 +19,7 @@
  * \file
  * \brief C++ API: Dictionary Based Break Iterator
  */
- 
+
 U_NAMESPACE_BEGIN
 
 #ifndef U_HIDE_DEPRECATED_API
@@ -31,7 +31,7 @@ U_NAMESPACE_BEGIN
  */
 typedef RuleBasedBreakIterator DictionaryBasedBreakIterator;
 
-#endif  /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_DEPRECATED_API */
 
 U_NAMESPACE_END
 

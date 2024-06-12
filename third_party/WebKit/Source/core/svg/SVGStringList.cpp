@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGStringList.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
@@ -30,18 +29,14 @@
 
 namespace blink {
 
-SVGStringList::SVGStringList()
-{
-}
+SVGStringList::SVGStringList() { }
 
-SVGStringList::~SVGStringList()
-{
-}
+SVGStringList::~SVGStringList() { }
 
 void SVGStringList::initialize(const String& item)
 {
     m_values.clear();
-    m_values.append(item);
+    m_values.push_back(item);
 }
 
 String SVGStringList::getItem(size_t index, ExceptionState& exceptionState)
@@ -54,12 +49,15 @@ String SVGStringList::getItem(size_t index, ExceptionState& exceptionState)
 
 void SVGStringList::insertItemBefore(const String& newItem, size_t index)
 {
-    // Spec: If the index is greater than or equal to numberOfItems, then the new item is appended to the end of the list.
+    // Spec: If the index is greater than or equal to numberOfItems, then the new
+    // item is appended to the end of the list.
     if (index > m_values.size())
         index = m_values.size();
 
-    // Spec: Inserts a new item into the list at the specified position. The index of the item before which the new item is to be
-    // inserted. The first item is number 0. If the index is equal to 0, then the new item is inserted at the front of the list.
+    // Spec: Inserts a new item into the list at the specified position. The index
+    // of the item before which the new item is to be inserted. The first item is
+    // number 0. If the index is equal to 0, then the new item is inserted at the
+    // front of the list.
     m_values.insert(index, newItem);
 }
 
@@ -75,10 +73,12 @@ String SVGStringList::removeItem(size_t index, ExceptionState& exceptionState)
 
 void SVGStringList::appendItem(const String& newItem)
 {
-    m_values.append(newItem);
+    m_values.push_back(newItem);
 }
 
-void SVGStringList::replaceItem(const String& newItem, size_t index, ExceptionState& exceptionState)
+void SVGStringList::replaceItem(const String& newItem,
+    size_t index,
+    ExceptionState& exceptionState)
 {
     if (!checkIndexBound(index, exceptionState))
         return;
@@ -87,7 +87,7 @@ void SVGStringList::replaceItem(const String& newItem, size_t index, ExceptionSt
     m_values[index] = newItem;
 }
 
-template<typename CharType>
+template <typename CharType>
 void SVGStringList::parseInternal(const CharType*& ptr, const CharType* end)
 {
     const UChar delimiter = ' ';
@@ -98,17 +98,19 @@ void SVGStringList::parseInternal(const CharType*& ptr, const CharType* end)
             ptr++;
         if (ptr == start)
             break;
-        m_values.append(String(start, ptr - start));
+        m_values.push_back(String(start, ptr - start));
         skipOptionalSVGSpacesOrDelimiter(ptr, end, delimiter);
     }
 }
 
-void SVGStringList::setValueAsString(const String& data, ExceptionState&)
+SVGParsingError SVGStringList::setValueAsString(const String& data)
 {
     // FIXME: Add more error checking and reporting.
     m_values.clear();
+
     if (data.isEmpty())
-        return;
+        return SVGParseStatus::NoError;
+
     if (data.is8Bit()) {
         const LChar* ptr = data.characters8();
         const LChar* end = ptr + data.length();
@@ -118,6 +120,7 @@ void SVGStringList::setValueAsString(const String& data, ExceptionState&)
         const UChar* end = ptr + data.length();
         parseInternal(ptr, end);
     }
+    return SVGParseStatus::NoError;
 }
 
 String SVGStringList::valueAsString() const
@@ -139,29 +142,37 @@ String SVGStringList::valueAsString() const
     return builder.toString();
 }
 
-bool SVGStringList::checkIndexBound(size_t index, ExceptionState& exceptionState)
+bool SVGStringList::checkIndexBound(size_t index,
+    ExceptionState& exceptionState)
 {
     if (index >= m_values.size()) {
-        exceptionState.throwDOMException(IndexSizeError, ExceptionMessages::indexExceedsMaximumBound("index", index, m_values.size()));
+        exceptionState.throwDOMException(
+            IndexSizeError, ExceptionMessages::indexExceedsMaximumBound("index", index, m_values.size()));
         return false;
     }
 
     return true;
 }
 
-void SVGStringList::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement* contextElement)
+void SVGStringList::add(SVGPropertyBase* other, SVGElement* contextElement)
 {
     // SVGStringList is never animated.
     ASSERT_NOT_REACHED();
 }
 
-void SVGStringList::calculateAnimatedValue(SVGAnimationElement*, float, unsigned, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+void SVGStringList::calculateAnimatedValue(SVGAnimationElement*,
+    float,
+    unsigned,
+    SVGPropertyBase*,
+    SVGPropertyBase*,
+    SVGPropertyBase*,
+    SVGElement*)
 {
     // SVGStringList is never animated.
     ASSERT_NOT_REACHED();
 }
 
-float SVGStringList::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+float SVGStringList::calculateDistance(SVGPropertyBase*, SVGElement*)
 {
     // SVGStringList is never animated.
     ASSERT_NOT_REACHED();
@@ -169,4 +180,4 @@ float SVGStringList::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, 
     return -1.0f;
 }
 
-}
+} // namespace blink

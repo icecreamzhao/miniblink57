@@ -14,17 +14,18 @@
 #include "Path2D.h"
 #include "SkCanvas.h"
 
-
 // Extracts a C string from a V8 Utf8Value.
 // TODO(jcgregrio) Currently dup'd in two files, fix.
-static const char* to_cstring(const v8::String::Utf8Value& value) {
+static const char* to_cstring(const v8::String::Utf8Value& value)
+{
     return *value ? *value : "<string conversion failed>";
 }
 
 v8::Persistent<v8::ObjectTemplate> JsContext::gContextTemplate;
 
 // Wraps 'this' in a Javascript object.
-v8::Handle<v8::Object> JsContext::wrap() {
+v8::Handle<v8::Object> JsContext::wrap()
+{
     // Handle scope for temporary handles.
     v8::EscapableHandleScope handleScope(fGlobal->getIsolate());
 
@@ -40,8 +41,7 @@ v8::Handle<v8::Object> JsContext::wrap() {
 
         gContextTemplate.Reset(fGlobal->getIsolate(), localTemplate);
     }
-    v8::Handle<v8::ObjectTemplate> templ =
-            v8::Local<v8::ObjectTemplate>::New(fGlobal->getIsolate(), gContextTemplate);
+    v8::Handle<v8::ObjectTemplate> templ = v8::Local<v8::ObjectTemplate>::New(fGlobal->getIsolate(), gContextTemplate);
 
     // Create an empty JsContext wrapper.
     v8::Local<v8::Object> result = templ->NewInstance();
@@ -60,7 +60,8 @@ v8::Handle<v8::Object> JsContext::wrap() {
     return handleScope.Escape(result);
 }
 
-void JsContext::onDraw(SkCanvas* canvas) {
+void JsContext::onDraw(SkCanvas* canvas)
+{
     // Record canvas and window in this.
     fCanvas = canvas;
 
@@ -83,8 +84,7 @@ void JsContext::onDraw(SkCanvas* canvas) {
     // and one argument, this JsContext.
     const int argc = 1;
     v8::Handle<v8::Value> argv[argc] = { contextObj };
-    v8::Local<v8::Function> onDraw =
-            v8::Local<v8::Function>::New(fGlobal->getIsolate(), fOnDraw);
+    v8::Local<v8::Function> onDraw = v8::Local<v8::Function>::New(fGlobal->getIsolate(), fOnDraw);
     v8::Handle<v8::Value> result = onDraw->Call(context->Global(), argc, argv);
 
     // Handle any exceptions or output.
@@ -105,7 +105,8 @@ void JsContext::onDraw(SkCanvas* canvas) {
 }
 
 // Fetch the onDraw function from the global context.
-bool JsContext::initialize() {
+bool JsContext::initialize()
+{
 
     // Create a stack-allocated handle scope.
     v8::HandleScope handleScope(fGlobal->getIsolate());

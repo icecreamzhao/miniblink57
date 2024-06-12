@@ -23,66 +23,76 @@
 namespace v8 {
 namespace base {
 
-inline AtomicWord Relaxed_CompareAndSwap(volatile AtomicWord* ptr,
-                                         AtomicWord old_value,
-                                         AtomicWord new_value) {
-  return Relaxed_CompareAndSwap(reinterpret_cast<volatile Atomic32*>(ptr),
-                                old_value, new_value);
-}
+    inline AtomicWord Relaxed_CompareAndSwap(volatile AtomicWord* ptr,
+        AtomicWord old_value,
+        AtomicWord new_value)
+    {
+        return Relaxed_CompareAndSwap(reinterpret_cast<volatile Atomic32*>(ptr),
+            old_value, new_value);
+    }
 
-inline AtomicWord Relaxed_AtomicExchange(volatile AtomicWord* ptr,
-                                         AtomicWord new_value) {
-  return Relaxed_AtomicExchange(reinterpret_cast<volatile Atomic32*>(ptr),
-                                new_value);
-}
+    inline AtomicWord Relaxed_AtomicExchange(volatile AtomicWord* ptr,
+        AtomicWord new_value)
+    {
+        return Relaxed_AtomicExchange(reinterpret_cast<volatile Atomic32*>(ptr),
+            new_value);
+    }
 
-inline AtomicWord Relaxed_AtomicIncrement(volatile AtomicWord* ptr,
-                                          AtomicWord increment) {
-  return Relaxed_AtomicIncrement(reinterpret_cast<volatile Atomic32*>(ptr),
-                                 increment);
-}
+    inline AtomicWord Relaxed_AtomicIncrement(volatile AtomicWord* ptr,
+        AtomicWord increment)
+    {
+        return Relaxed_AtomicIncrement(reinterpret_cast<volatile Atomic32*>(ptr),
+            increment);
+    }
 
-inline AtomicWord Barrier_AtomicIncrement(volatile AtomicWord* ptr,
-                                          AtomicWord increment) {
-  return Barrier_AtomicIncrement(
-      reinterpret_cast<volatile Atomic32*>(ptr), increment);
-}
+    inline AtomicWord Barrier_AtomicIncrement(volatile AtomicWord* ptr,
+        AtomicWord increment)
+    {
+        return Barrier_AtomicIncrement(
+            reinterpret_cast<volatile Atomic32*>(ptr), increment);
+    }
 
-inline AtomicWord Acquire_CompareAndSwap(volatile AtomicWord* ptr,
-                                         AtomicWord old_value,
-                                         AtomicWord new_value) {
-  return v8::base::Acquire_CompareAndSwap(
-      reinterpret_cast<volatile Atomic32*>(ptr), old_value, new_value);
-}
+    inline AtomicWord Acquire_CompareAndSwap(volatile AtomicWord* ptr,
+        AtomicWord old_value,
+        AtomicWord new_value)
+    {
+        return v8::base::Acquire_CompareAndSwap(
+            reinterpret_cast<volatile Atomic32*>(ptr), old_value, new_value);
+    }
 
-inline AtomicWord Release_CompareAndSwap(volatile AtomicWord* ptr,
-                                         AtomicWord old_value,
-                                         AtomicWord new_value) {
-  return v8::base::Release_CompareAndSwap(
-      reinterpret_cast<volatile Atomic32*>(ptr), old_value, new_value);
-}
+    inline AtomicWord Release_CompareAndSwap(volatile AtomicWord* ptr,
+        AtomicWord old_value,
+        AtomicWord new_value)
+    {
+        return v8::base::Release_CompareAndSwap(
+            reinterpret_cast<volatile Atomic32*>(ptr), old_value, new_value);
+    }
 
-inline void Relaxed_Store(volatile AtomicWord* ptr, AtomicWord value) {
-  Relaxed_Store(reinterpret_cast<volatile Atomic32*>(ptr), value);
-}
+    inline void Relaxed_Store(volatile AtomicWord* ptr, AtomicWord value)
+    {
+        Relaxed_Store(reinterpret_cast<volatile Atomic32*>(ptr), value);
+    }
 
-inline void Release_Store(volatile AtomicWord* ptr, AtomicWord value) {
-  return v8::base::Release_Store(
-      reinterpret_cast<volatile Atomic32*>(ptr), value);
-}
+    inline void Release_Store(volatile AtomicWord* ptr, AtomicWord value)
+    {
+        return v8::base::Release_Store(
+            reinterpret_cast<volatile Atomic32*>(ptr), value);
+    }
 
-inline AtomicWord Relaxed_Load(volatile const AtomicWord* ptr) {
-  return Relaxed_Load(reinterpret_cast<volatile const Atomic32*>(ptr));
-}
+    inline AtomicWord Relaxed_Load(volatile const AtomicWord* ptr)
+    {
+        return Relaxed_Load(reinterpret_cast<volatile const Atomic32*>(ptr));
+    }
 
-inline AtomicWord Acquire_Load(volatile const AtomicWord* ptr) {
-  return v8::base::Acquire_Load(
-      reinterpret_cast<volatile const Atomic32*>(ptr));
-}
+    inline AtomicWord Acquire_Load(volatile const AtomicWord* ptr)
+    {
+        return v8::base::Acquire_Load(
+            reinterpret_cast<volatile const Atomic32*>(ptr));
+    }
 
-}  // namespace base
-}  // namespace v8
+} // namespace base
+} // namespace v8
 
-#endif  // !defined(V8_HOST_ARCH_64_BIT)
+#endif // !defined(V8_HOST_ARCH_64_BIT)
 
-#endif  // V8_BASE_ATOMICOPS_INTERNALS_ATOMICWORD_COMPAT_H_
+#endif // V8_BASE_ATOMICOPS_INTERNALS_ATOMICWORD_COMPAT_H_

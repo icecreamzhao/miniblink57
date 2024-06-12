@@ -30,19 +30,29 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT MatrixTransformOperation : public TransformOperation {
+class PLATFORM_EXPORT MatrixTransformOperation final
+    : public TransformOperation {
 public:
-    static PassRefPtr<MatrixTransformOperation> create(double a, double b, double c, double d, double e, double f)
+    static PassRefPtr<MatrixTransformOperation> create(double a,
+        double b,
+        double c,
+        double d,
+        double e,
+        double f)
     {
         return adoptRef(new MatrixTransformOperation(a, b, c, d, e, f));
     }
 
-    static PassRefPtr<MatrixTransformOperation> create(const TransformationMatrix& t)
+    static PassRefPtr<MatrixTransformOperation> create(
+        const TransformationMatrix& t)
     {
         return adoptRef(new MatrixTransformOperation(t));
     }
 
-    TransformationMatrix matrix() const { return TransformationMatrix(m_a, m_b, m_c, m_d, m_e, m_f); }
+    TransformationMatrix matrix() const
+    {
+        return TransformationMatrix(m_a, m_b, m_c, m_d, m_e, m_f);
+    }
 
     virtual bool canBlendWith(const TransformOperation& other) const
     {
@@ -67,9 +77,17 @@ private:
         transform.multiply(matrix);
     }
 
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from,
+        double progress,
+        bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> zoom(double factor) final;
 
-    MatrixTransformOperation(double a, double b, double c, double d, double e, double f)
+    MatrixTransformOperation(double a,
+        double b,
+        double c,
+        double d,
+        double e,
+        double f)
         : m_a(a)
         , m_b(b)
         , m_c(c)

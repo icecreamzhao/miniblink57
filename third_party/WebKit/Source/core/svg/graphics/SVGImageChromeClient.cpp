@@ -26,23 +26,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/graphics/SVGImageChromeClient.h"
 
-#include "core/frame/FrameView.h"
 #include "core/svg/graphics/SVGImage.h"
-#include "platform/ScriptForbiddenScope.h"
 #include "platform/graphics/ImageObserver.h"
 #include "wtf/CurrentTime.h"
 
 namespace blink {
 
-static const double animationFrameDelay = 0.025;
+static const double animationFrameDelay = 1.0 / 60;
 
 SVGImageChromeClient::SVGImageChromeClient(SVGImage* image)
     : m_image(image)
-    , m_animationTimer(this, &SVGImageChromeClient::animationTimerFired)
+    , m_animationTimer(WTF::wrapUnique(new Timer<SVGImageChromeClient>(
+          this,
+          &SVGImageChromeClient::animationTimerFired)))
+    , m_timelineState(Running)
 {
+}
+
+SVGImageChromeClient* SVGImageChromeClient::create(SVGImage* image)
+{
+    return new SVGImageChromeClient(image);
 }
 
 bool SVGImageChromeClient::isSVGImageChromeClient() const
@@ -57,51 +62,76 @@ void SVGImageChromeClient::chromeDestroyed()
 
 void SVGImageChromeClient::invalidateRect(const IntRect& r)
 {
-    // If m_image->m_page is null, we're being destructed, don't fire changedInRect() in that case.
-    if (m_image && m_image->imageObserver() && m_image->m_page)
-        m_image->imageObserver()->changedInRect(m_image, r);
+    // If m_image->m_page is null, we're being destructed, don't fire
+    // changedInRect() in that case.
+    if (m_image && m_image->getImageObserver() && m_image->m_page)
+        m_image->getImageObserver()->changedInRect(m_image, r);
 }
 
-void SVGImageChromeClient::scheduleAnimation()
+void SVGImageChromeClient::suspendAnimation()
+{
+    if (m_image->hasAnimations()) {
+        m_timelineState = SuspendedWithAnimationPending;
+    } else {
+        // Preserve SuspendedWithAnimationPending if set.
+        m_timelineState = std::max(m_timelineState, Suspended);
+    }
+}
+
+void SVGImageChromeClient::resumeAnimation()
+{
+    bool havePendingAnimation = m_timelineState == SuspendedWithAnimationPending;
+    m_timelineState = Running;
+
+    // If an animation frame was pending/requested while animations were
+    // suspended, schedule a new animation frame.
+    if (!havePendingAnimation)
+        return;
+    scheduleAnimation(nullptr);
+}
+
+void SVGImageChromeClient::scheduleAnimation(Widget*)
 {
     // Because a single SVGImage can be shared by multiple pages, we can't key
     // our svg image layout on the page's real animation frame. Therefore, we
     // run this fake animation timer to trigger layout in SVGImages. The name,
     // "animationTimer", is to match the new requestAnimationFrame-based layout
     // approach.
-    if (m_animationTimer.isActive())
+    if (m_animationTimer->isActive())
         return;
     // Schedule the 'animation' ASAP if the image does not contain any
     // animations, but prefer a fixed, jittery, frame-delay if there're any
     // animations. Checking for pending/active animations could be more
     // stringent.
-    double fireTime = m_image->hasAnimations() ? animationFrameDelay : 0;
-    m_animationTimer.startOneShot(fireTime, FROM_HERE);
+    double fireTime = 0;
+    if (m_image->hasAnimations()) {
+        if (m_timelineState >= Suspended)
+            return;
+        fireTime = animationFrameDelay;
+    }
+    m_animationTimer->startOneShot(fireTime, BLINK_FROM_HERE);
 }
 
-void SVGImageChromeClient::animationTimerFired(Timer<SVGImageChromeClient>*)
+void SVGImageChromeClient::setTimer(std::unique_ptr<TimerBase> timer)
+{
+    m_animationTimer = std::move(timer);
+}
+
+void SVGImageChromeClient::animationTimerFired(TimerBase*)
 {
     if (!m_image)
         return;
-    // serviceScriptedAnimations runs requestAnimationFrame callbacks, but SVG
-    // images can't have any so we assert there's no script.
-    ScriptForbiddenScope forbidScript;
 
-    // As neither SVGImage nor this chrome client object are on the Oilpan heap,
-    // this object's reference to the SVGImage will not be traced should a GC
-    // strike below. Hence, we must ensure that they both remain alive for
-    // duration of this call.
+    // The SVGImageChromeClient object's lifetime is dependent on
+    // the ImageObserver (an ImageResourceContent) of its image. Should it
+    // be dead and about to be lazily swept out, do not proceed.
     //
-    // This is cannot arise non-Oilpan as an ImageResource is an owned object
-    // and will be promptly released along with its (SVG)Image..and everything
-    // below, including this object and its timer. For code simplicity, the
-    // object protection isn't made the conditional on Oilpan.
-    //
-    // FIXME: Oilpan: move this and other ChromeClients to the Oilpan heap
-    // to render this protection redundant.
-    RefPtr<SVGImage> protect(m_image);
-    m_image->frameView()->page()->animator().serviceScriptedAnimations(monotonicallyIncreasingTime());
-    m_image->frameView()->updateAllLifecyclePhases();
+    // TODO(Oilpan): move (SVG)Image to the Oilpan heap, and avoid
+    // this explicit lifetime check.
+    if (ThreadHeap::willObjectBeLazilySwept(m_image->getImageObserver()))
+        return;
+
+    m_image->serviceAnimations(monotonicallyIncreasingTime());
 }
 
 } // namespace blink

@@ -43,7 +43,6 @@ public:
     // didChooseColor callbacks anymore.
     virtual void endChooser() { }
 };
-
 }
 
 #endif // WebColorChooser_h

@@ -1,13 +1,14 @@
-#include "config.h"
 #include "StyleBuilderFunctions.h"
 
 #include "CSSValueKeywords.h"
+#include "core/animation/css/CSSAnimationData.h"
 #include "core/css/BasicShapeFunctions.h"
 #include "core/css/CSSContentDistributionValue.h"
+#include "core/css/CSSCustomIdentValue.h"
 #include "core/css/CSSPrimitiveValueMappings.h"
-#include "core/css/Pair.h"
+#include "core/css/CSSURIValue.h"
+#include "core/css/CSSValuePair.h"
 #include "core/css/resolver/StyleResolverState.h"
-
 
 namespace blink {
 
@@ -21,9 +22,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyVectorEffect(StyleResolverSta
     state.style()->accessSVGStyle().setVectorEffect(state.parentStyle()->svgStyle().vectorEffect());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyVectorEffect(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyVectorEffect(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setVectorEffect(static_cast<EVectorEffect>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setVectorEffect(toCSSIdentifierValue(value).convertTo<EVectorEffect>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFillRule(StyleResolverState& state)
@@ -36,24 +37,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFillRule(StyleResolverState& 
     state.style()->accessSVGStyle().setFillRule(state.parentStyle()->svgStyle().fillRule());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFillRule(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFillRule(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setFillRule(static_cast<WindRule>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setFillRule(toCSSIdentifierValue(value).convertTo<WindRule>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitLineBoxContain(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyFontVariantNumeric(StyleResolverState& state)
 {
-    state.style()->setLineBoxContain(ComputedStyle::initialLineBoxContain());
+    state.fontBuilder().setVariantNumeric(FontBuilder::initialVariantNumeric());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitLineBoxContain(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyFontVariantNumeric(StyleResolverState& state)
 {
-    state.style()->setLineBoxContain(state.parentStyle()->lineBoxContain());
+    state.fontBuilder().setVariantNumeric(state.parentFontDescription().variantNumeric());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitLineBoxContain(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontVariantNumeric(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setLineBoxContain(StyleBuilderConverter::convertLineBoxContain(state, value));
+    state.fontBuilder().setVariantNumeric(StyleBuilderConverter::convertFontVariantNumeric(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyCx(StyleResolverState& state)
@@ -66,7 +67,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCx(StyleResolverState& state)
     state.style()->accessSVGStyle().setCx(state.parentStyle()->svgStyle().cx());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyCx(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyCx(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setCx(StyleBuilderConverter::convertLength(state, value));
 }
@@ -81,7 +82,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCy(StyleResolverState& state)
     state.style()->accessSVGStyle().setCy(state.parentStyle()->svgStyle().cy());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyCy(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyCy(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setCy(StyleBuilderConverter::convertLength(state, value));
 }
@@ -96,7 +97,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyShapeOutside(StyleResolverSta
     state.style()->setShapeOutside(state.parentStyle()->shapeOutside());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyShapeOutside(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyShapeOutside(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setShapeOutside(StyleBuilderConverter::convertShapeValue(state, value));
 }
@@ -111,7 +112,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitHyphenateCharacter(Styl
     state.style()->setHyphenationString(state.parentStyle()->hyphenationString());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitHyphenateCharacter(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitHyphenateCharacter(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setHyphenationString(StyleBuilderConverter::convertString<CSSValueAuto>(state, value));
 }
@@ -126,9 +127,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxPack(StyleResolverSt
     state.style()->setBoxPack(state.parentStyle()->boxPack());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxPack(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxPack(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxPack(static_cast<EBoxPack>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxPack(toCSSIdentifierValue(value).convertTo<EBoxPack>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMarginBottomCollapse(StyleResolverState& state)
@@ -141,9 +142,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMarginBottomCollapse(St
     state.style()->setMarginAfterCollapse(state.parentStyle()->marginAfterCollapse());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginBottomCollapse(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginBottomCollapse(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setMarginAfterCollapse(static_cast<EMarginCollapse>(*toCSSPrimitiveValue(value)));
+    state.style()->setMarginAfterCollapse(toCSSIdentifierValue(value).convertTo<EMarginCollapse>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOutlineWidth(StyleResolverState& state)
@@ -156,9 +157,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOutlineWidth(StyleResolverSta
     state.style()->setOutlineWidth(state.parentStyle()->outlineWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOutlineWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOutlineWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setOutlineWidth(StyleBuilderConverter::convertLineWidth<unsigned short>(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleWidth(StyleResolverState& state)
+{
+    state.style()->setColumnRuleWidth(ComputedStyle::initialColumnRuleWidth());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleWidth(StyleResolverState& state)
+{
+    state.style()->setColumnRuleWidth(state.parentStyle()->columnRuleWidth());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyColumnRuleWidth(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setColumnRuleWidth(StyleBuilderConverter::convertLineWidth<unsigned short>(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeOpacity(StyleResolverState& state)
@@ -171,9 +187,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeOpacity(StyleResolverSt
     state.style()->accessSVGStyle().setStrokeOpacity(state.parentStyle()->svgStyle().strokeOpacity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeOpacity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeOpacity(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStrokeOpacity(StyleBuilderConverter::convertNumberOrPercentage(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetRotate(StyleResolverState& state)
+{
+    state.style()->setOffsetRotate(ComputedStyle::initialOffsetRotate());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetRotate(StyleResolverState& state)
+{
+    state.style()->setOffsetRotate(state.parentStyle()->offsetRotate());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetRotate(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOffsetRotate(StyleBuilderConverter::convertOffsetRotate(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontFamily(StyleResolverState& state)
@@ -183,10 +214,10 @@ void StyleBuilderFunctions::applyInitialCSSPropertyFontFamily(StyleResolverState
 
 void StyleBuilderFunctions::applyInheritCSSPropertyFontFamily(StyleResolverState& state)
 {
-    state.fontBuilder().setFamilyDescription(state.parentFontDescription().familyDescription());
+    state.fontBuilder().setFamilyDescription(state.parentFontDescription().getFamilyDescription());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontFamily(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontFamily(StyleResolverState& state, const CSSValue& value)
 {
     state.fontBuilder().setFamilyDescription(StyleBuilderConverter::convertFontFamily(state, value));
 }
@@ -201,24 +232,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxFlex(StyleResolverSt
     state.style()->setBoxFlex(state.parentStyle()->boxFlex());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlex(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlex(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxFlex(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxFlex(toCSSPrimitiveValue(value).convertTo<float>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppearance(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyContain(StyleResolverState& state)
 {
-    state.style()->setAppearance(ComputedStyle::initialAppearance());
+    state.style()->setContain(ComputedStyle::initialContain());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppearance(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyContain(StyleResolverState& state)
 {
-    state.style()->setAppearance(state.parentStyle()->appearance());
+    state.style()->setContain(state.parentStyle()->contain());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitAppearance(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyContain(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setAppearance(static_cast<ControlPart>(*toCSSPrimitiveValue(value)));
+    state.style()->setContain(StyleBuilderConverter::convertFlags<Containment>(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomStyle(StyleResolverState& state)
@@ -231,9 +262,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomStyle(StyleResolv
     state.style()->setBorderBottomStyle(state.parentStyle()->borderBottomStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBorderBottomStyle(static_cast<EBorderStyle>(*toCSSPrimitiveValue(value)));
+    state.style()->setBorderBottomStyle(toCSSIdentifierValue(value).convertTo<EBorderStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyHeight(StyleResolverState& state)
@@ -246,9 +277,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyHeight(StyleResolverState& st
     state.style()->setHeight(state.parentStyle()->height());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyHeight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyHeight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setHeight(StyleBuilderConverter::convertLengthSizing(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyBorderImageSource(StyleResolverState& state)
+{
+    state.style()->setBorderImageSource(ComputedStyle::initialBorderImageSource());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageSource(StyleResolverState& state)
+{
+    state.style()->setBorderImageSource(state.parentStyle()->borderImageSource());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyPaintOrder(StyleResolverState& state)
@@ -261,7 +302,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPaintOrder(StyleResolverState
     state.style()->accessSVGStyle().setPaintOrder(state.parentStyle()->svgStyle().paintOrder());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPaintOrder(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPaintOrder(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setPaintOrder(StyleBuilderConverter::convertPaintOrder(state, value));
 }
@@ -276,24 +317,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTextRendering(StyleResolverSt
     state.fontBuilder().setTextRendering(state.parentFontDescription().textRendering());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextRendering(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextRendering(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setTextRendering(static_cast<TextRenderingMode>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakAfter(StyleResolverState& state)
-{
-    state.style()->setColumnBreakAfter(ComputedStyle::initialPageBreak());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakAfter(StyleResolverState& state)
-{
-    state.style()->setColumnBreakAfter(state.parentStyle()->columnBreakAfter());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakAfter(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setColumnBreakAfter(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
+    state.fontBuilder().setTextRendering(toCSSIdentifierValue(value).convertTo<TextRenderingMode>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomLeftRadius(StyleResolverState& state)
@@ -306,7 +332,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomLeftRadius(StyleR
     state.style()->setBorderBottomLeftRadius(state.parentStyle()->borderBottomLeftRadius());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomLeftRadius(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomLeftRadius(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderBottomLeftRadius(StyleBuilderConverter::convertRadius(state, value));
 }
@@ -321,9 +347,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyColorInterpolation(StyleResol
     state.style()->accessSVGStyle().setColorInterpolation(state.parentStyle()->svgStyle().colorInterpolation());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyColorInterpolation(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColorInterpolation(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setColorInterpolation(static_cast<EColorInterpolation>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setColorInterpolation(toCSSIdentifierValue(value).convertTo<EColorInterpolation>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyFontVariationSettings(StyleResolverState& state)
+{
+    state.fontBuilder().setVariationSettings(FontBuilder::initialVariationSettings());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyFontVariationSettings(StyleResolverState& state)
+{
+    state.fontBuilder().setVariationSettings(state.parentFontDescription().variationSettings());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyFontVariationSettings(StyleResolverState& state, const CSSValue& value)
+{
+    state.fontBuilder().setVariationSettings(StyleBuilderConverter::convertFontVariationSettings(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationLine(StyleResolverState& state)
@@ -333,27 +374,27 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationLine(StyleResol
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationLine(StyleResolverState& state)
 {
-    state.style()->setTextDecoration(state.parentStyle()->textDecoration());
+    state.style()->setTextDecoration(state.parentStyle()->getTextDecoration());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationLine(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationLine(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTextDecoration(StyleBuilderConverter::convertFlags<TextDecoration>(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnSpan(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyFilter(StyleResolverState& state)
 {
-    state.style()->setColumnSpan(ComputedStyle::initialColumnSpan());
+    state.style()->setFilter(ComputedStyle::initialFilter());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnSpan(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyFilter(StyleResolverState& state)
 {
-    state.style()->setColumnSpan(state.parentStyle()->columnSpan());
+    state.style()->setFilter(state.parentStyle()->filter());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnSpan(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFilter(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setColumnSpan(static_cast<ColumnSpan>(*toCSSPrimitiveValue(value)));
+    state.style()->setFilter(StyleBuilderConverter::convertFilterOperations(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyShapeMargin(StyleResolverState& state)
@@ -366,7 +407,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyShapeMargin(StyleResolverStat
     state.style()->setShapeMargin(state.parentStyle()->shapeMargin());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyShapeMargin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyShapeMargin(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setShapeMargin(StyleBuilderConverter::convertLength(state, value));
 }
@@ -378,12 +419,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyScrollSnapType(StyleResolverS
 
 void StyleBuilderFunctions::applyInheritCSSPropertyScrollSnapType(StyleResolverState& state)
 {
-    state.style()->setScrollSnapType(state.parentStyle()->scrollSnapType());
+    state.style()->setScrollSnapType(state.parentStyle()->getScrollSnapType());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapType(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapType(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setScrollSnapType(static_cast<ScrollSnapType>(*toCSSPrimitiveValue(value)));
+    state.style()->setScrollSnapType(toCSSIdentifierValue(value).convertTo<ScrollSnapType>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyImageRendering(StyleResolverState& state)
@@ -396,24 +437,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyImageRendering(StyleResolverS
     state.style()->setImageRendering(state.parentStyle()->imageRendering());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyImageRendering(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyImageRendering(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setImageRendering(static_cast<EImageRendering>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitUserSelect(StyleResolverState& state)
-{
-    state.style()->setUserSelect(ComputedStyle::initialUserSelect());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitUserSelect(StyleResolverState& state)
-{
-    state.style()->setUserSelect(state.parentStyle()->userSelect());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitUserSelect(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setUserSelect(static_cast<EUserSelect>(*toCSSPrimitiveValue(value)));
+    state.style()->setImageRendering(toCSSIdentifierValue(value).convertTo<EImageRendering>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyPaddingBottom(StyleResolverState& state)
@@ -426,7 +452,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPaddingBottom(StyleResolverSt
     state.style()->setPaddingBottom(state.parentStyle()->paddingBottom());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPaddingBottom(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPaddingBottom(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setPaddingBottom(StyleBuilderConverter::convertLength(state, value));
 }
@@ -441,7 +467,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyQuotes(StyleResolverState& st
     state.style()->setQuotes(state.parentStyle()->quotes());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyQuotes(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyQuotes(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setQuotes(StyleBuilderConverter::convertQuotes(state, value));
 }
@@ -456,24 +482,39 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridAutoRows(StyleResolverSta
     state.style()->setGridAutoRows(state.parentStyle()->gridAutoRows());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridAutoRows(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridAutoRows(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setGridAutoRows(StyleBuilderConverter::convertGridTrackSize(state, value));
+    state.style()->setGridAutoRows(StyleBuilderConverter::convertGridTrackSizeList(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyClipPath(StyleResolverState& state)
 {
-    state.style()->accessSVGStyle().setClipperResource(SVGComputedStyle::initialClipperResource());
+    state.style()->setClipPath(ComputedStyle::initialClipPath());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyClipPath(StyleResolverState& state)
 {
-    state.style()->accessSVGStyle().setClipperResource(state.parentStyle()->svgStyle().clipperResource());
+    state.style()->setClipPath(state.parentStyle()->clipPath());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyClipPath(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyClipPath(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setClipperResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
+    state.style()->setClipPath(StyleBuilderConverter::convertClipPath(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyBreakBefore(StyleResolverState& state)
+{
+    state.style()->setBreakBefore(ComputedStyle::initialBreakBefore());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyBreakBefore(StyleResolverState& state)
+{
+    state.style()->setBreakBefore(state.parentStyle()->breakBefore());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyBreakBefore(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setBreakBefore(toCSSIdentifierValue(value).convertTo<EBreak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyObjectFit(StyleResolverState& state)
@@ -483,12 +524,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyObjectFit(StyleResolverState&
 
 void StyleBuilderFunctions::applyInheritCSSPropertyObjectFit(StyleResolverState& state)
 {
-    state.style()->setObjectFit(state.parentStyle()->objectFit());
+    state.style()->setObjectFit(state.parentStyle()->getObjectFit());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyObjectFit(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyObjectFit(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setObjectFit(static_cast<ObjectFit>(*toCSSPrimitiveValue(value)));
+    state.style()->setObjectFit(toCSSIdentifierValue(value).convertTo<ObjectFit>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStopOpacity(StyleResolverState& state)
@@ -501,7 +542,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStopOpacity(StyleResolverStat
     state.style()->accessSVGStyle().setStopOpacity(state.parentStyle()->svgStyle().stopOpacity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStopOpacity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStopOpacity(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStopOpacity(StyleBuilderConverter::convertNumberOrPercentage(state, value));
 }
@@ -516,7 +557,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxReflect(StyleResolve
     state.style()->setBoxReflect(state.parentStyle()->boxReflect());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxReflect(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxReflect(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBoxReflect(StyleBuilderConverter::convertBoxReflect(state, value));
 }
@@ -531,7 +572,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopRightRadius(StyleRes
     state.style()->setBorderTopRightRadius(state.parentStyle()->borderTopRightRadius());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderTopRightRadius(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderTopRightRadius(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderTopRightRadius(StyleBuilderConverter::convertRadius(state, value));
 }
@@ -539,16 +580,19 @@ void StyleBuilderFunctions::applyValueCSSPropertyBorderTopRightRadius(StyleResol
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxDirection(StyleResolverState& state)
 {
     state.style()->setBoxDirection(ComputedStyle::initialBoxDirection());
+    state.style()->setBoxDirectionIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxDirection(StyleResolverState& state)
 {
     state.style()->setBoxDirection(state.parentStyle()->boxDirection());
+    state.style()->setBoxDirectionIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxDirection(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxDirection(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxDirection(static_cast<EBoxDirection>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxDirection(toCSSIdentifierValue(value).convertTo<EBoxDirection>());
+    state.style()->setBoxDirectionIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitUserModify(StyleResolverState& state)
@@ -561,9 +605,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitUserModify(StyleResolve
     state.style()->setUserModify(state.parentStyle()->userModify());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitUserModify(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitUserModify(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setUserModify(static_cast<EUserModify>(*toCSSPrimitiveValue(value)));
+    state.style()->setUserModify(toCSSIdentifierValue(value).convertTo<EUserModify>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxDecorationBreak(StyleResolverState& state)
@@ -576,9 +620,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxDecorationBreak(Styl
     state.style()->setBoxDecorationBreak(state.parentStyle()->boxDecorationBreak());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxDecorationBreak(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxDecorationBreak(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxDecorationBreak(static_cast<EBoxDecorationBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxDecorationBreak(toCSSIdentifierValue(value).convertTo<EBoxDecorationBreak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontKerning(StyleResolverState& state)
@@ -588,12 +632,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyFontKerning(StyleResolverStat
 
 void StyleBuilderFunctions::applyInheritCSSPropertyFontKerning(StyleResolverState& state)
 {
-    state.fontBuilder().setKerning(state.parentFontDescription().kerning());
+    state.fontBuilder().setKerning(state.parentFontDescription().getKerning());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontKerning(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontKerning(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setKerning(static_cast<FontDescription::Kerning>(*toCSSPrimitiveValue(value)));
+    state.fontBuilder().setKerning(toCSSIdentifierValue(value).convertTo<FontDescription::Kerning>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontWeight(StyleResolverState& state)
@@ -606,7 +650,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFontWeight(StyleResolverState
     state.fontBuilder().setWeight(state.parentFontDescription().weight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontWeight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontWeight(StyleResolverState& state, const CSSValue& value)
 {
     state.fontBuilder().setWeight(StyleBuilderConverter::convertFontWeight(state, value));
 }
@@ -621,9 +665,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyShapeImageThreshold(StyleReso
     state.style()->setShapeImageThreshold(state.parentStyle()->shapeImageThreshold());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyShapeImageThreshold(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyShapeImageThreshold(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setShapeImageThreshold(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->setShapeImageThreshold(toCSSPrimitiveValue(value).convertTo<float>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyRy(StyleResolverState& state)
@@ -636,9 +680,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyRy(StyleResolverState& state)
     state.style()->accessSVGStyle().setRy(state.parentStyle()->svgStyle().ry());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyRy(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyRy(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setRy(StyleBuilderConverter::convertLength(state, value));
+    state.style()->accessSVGStyle().setRy(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyRx(StyleResolverState& state)
@@ -651,9 +695,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyRx(StyleResolverState& state)
     state.style()->accessSVGStyle().setRx(state.parentStyle()->svgStyle().rx());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyRx(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyRx(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setRx(StyleBuilderConverter::convertLength(state, value));
+    state.style()->accessSVGStyle().setRx(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMarginRight(StyleResolverState& state)
@@ -666,7 +710,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarginRight(StyleResolverStat
     state.style()->setMarginRight(state.parentStyle()->marginRight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarginRight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarginRight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMarginRight(StyleBuilderConverter::convertQuirkyLength(state, value));
 }
@@ -681,39 +725,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitFontSmoothing(StyleReso
     state.fontBuilder().setFontSmoothing(state.parentFontDescription().fontSmoothing());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitFontSmoothing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitFontSmoothing(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setFontSmoothing(static_cast<FontSmoothingMode>(*toCSSPrimitiveValue(value)));
+    state.fontBuilder().setFontSmoothing(toCSSIdentifierValue(value).convertTo<FontSmoothingMode>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyPageBreakBefore(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyBreakAfter(StyleResolverState& state)
 {
-    state.style()->setPageBreakBefore(ComputedStyle::initialPageBreak());
+    state.style()->setBreakAfter(ComputedStyle::initialBreakAfter());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyPageBreakBefore(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyBreakAfter(StyleResolverState& state)
 {
-    state.style()->setPageBreakBefore(state.parentStyle()->pageBreakBefore());
+    state.style()->setBreakAfter(state.parentStyle()->breakAfter());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPageBreakBefore(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBreakAfter(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPageBreakBefore(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitFontFeatureSettings(StyleResolverState& state)
-{
-    state.fontBuilder().setFeatureSettings(FontBuilder::initialFeatureSettings());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitFontFeatureSettings(StyleResolverState& state)
-{
-    state.fontBuilder().setFeatureSettings(state.parentFontDescription().featureSettings());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitFontFeatureSettings(StyleResolverState& state, CSSValue* value)
-{
-    state.fontBuilder().setFeatureSettings(StyleBuilderConverter::convertFontFeatureSettings(state, value));
+    state.style()->setBreakAfter(toCSSIdentifierValue(value).convertTo<EBreak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOpacity(StyleResolverState& state)
@@ -726,9 +755,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOpacity(StyleResolverState& s
     state.style()->setOpacity(state.parentStyle()->opacity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOpacity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOpacity(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOpacity(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->setOpacity(toCSSPrimitiveValue(value).convertTo<float>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyDominantBaseline(StyleResolverState& state)
@@ -741,9 +770,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyDominantBaseline(StyleResolve
     state.style()->accessSVGStyle().setDominantBaseline(state.parentStyle()->svgStyle().dominantBaseline());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyDominantBaseline(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyDominantBaseline(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setDominantBaseline(static_cast<EDominantBaseline>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setDominantBaseline(toCSSIdentifierValue(value).convertTo<EDominantBaseline>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAlignSelf(StyleResolverState& state)
@@ -756,7 +785,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAlignSelf(StyleResolverState&
     state.style()->setAlignSelf(state.parentStyle()->alignSelf());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAlignSelf(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAlignSelf(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setAlignSelf(StyleBuilderConverter::convertSelfOrDefaultAlignmentData(state, value));
 }
@@ -771,34 +800,39 @@ void StyleBuilderFunctions::applyInheritCSSPropertyClear(StyleResolverState& sta
     state.style()->setClear(state.parentStyle()->clear());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyClear(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyClear(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setClear(static_cast<EClear>(*toCSSPrimitiveValue(value)));
+    state.style()->setClear(toCSSIdentifierValue(value).convertTo<EClear>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakInside(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyPaddingRight(StyleResolverState& state)
 {
-    state.style()->setColumnBreakInside(ComputedStyle::initialPageBreak());
+    state.style()->setPaddingRight(ComputedStyle::initialPadding());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakInside(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyPaddingRight(StyleResolverState& state)
 {
-    state.style()->setColumnBreakInside(state.parentStyle()->columnBreakInside());
+    state.style()->setPaddingRight(state.parentStyle()->paddingRight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakInside(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPaddingRight(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setColumnBreakInside(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->setPaddingRight(StyleBuilderConverter::convertLength(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyTextCombineUpright(StyleResolverState& state)
 {
-    state.style()->setMaskBoxImageSource(ComputedStyle::initialMaskBoxImageSource());
+    state.style()->setTextCombine(ComputedStyle::initialTextCombine());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyTextCombineUpright(StyleResolverState& state)
 {
-    state.style()->setMaskBoxImageSource(state.parentStyle()->maskBoxImageSource());
+    state.style()->setTextCombine(state.parentStyle()->getTextCombine());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyTextCombineUpright(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTextCombine(toCSSIdentifierValue(value).convertTo<TextCombine>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransformStyle(StyleResolverState& state)
@@ -811,9 +845,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransformStyle(StyleResolverS
     state.style()->setTransformStyle3D(state.parentStyle()->transformStyle3D());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransformStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransformStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTransformStyle3D(static_cast<ETransformStyle3D>(*toCSSPrimitiveValue(value)));
+    state.style()->setTransformStyle3D(toCSSIdentifierValue(value).convertTo<ETransformStyle3D>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBorderHorizontalSpacing(StyleResolverState& state)
@@ -826,7 +860,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBorderHorizontalSpacing
     state.style()->setHorizontalBorderSpacing(state.parentStyle()->horizontalBorderSpacing());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBorderHorizontalSpacing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBorderHorizontalSpacing(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setHorizontalBorderSpacing(StyleBuilderConverter::convertComputedLength<short>(state, value));
 }
@@ -841,7 +875,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTapHighlightColor(Style
     state.style()->setTapHighlightColor(state.parentStyle()->tapHighlightColor());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTapHighlightColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTapHighlightColor(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTapHighlightColor(StyleBuilderConverter::convertColor(state, value));
 }
@@ -849,46 +883,37 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitTapHighlightColor(StyleRe
 void StyleBuilderFunctions::applyInitialCSSPropertyCaptionSide(StyleResolverState& state)
 {
     state.style()->setCaptionSide(ComputedStyle::initialCaptionSide());
+    state.style()->setCaptionSideIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyCaptionSide(StyleResolverState& state)
 {
     state.style()->setCaptionSide(state.parentStyle()->captionSide());
+    state.style()->setCaptionSideIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyCaptionSide(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyCaptionSide(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setCaptionSide(static_cast<ECaptionSide>(*toCSSPrimitiveValue(value)));
+    state.style()->setCaptionSide(toCSSIdentifierValue(value).convertTo<ECaptionSide>());
+    state.style()->setCaptionSideIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitPrintColorAdjust(StyleResolverState& state)
 {
     state.style()->setPrintColorAdjust(ComputedStyle::initialPrintColorAdjust());
+    state.style()->setPrintColorAdjustIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitPrintColorAdjust(StyleResolverState& state)
 {
     state.style()->setPrintColorAdjust(state.parentStyle()->printColorAdjust());
+    state.style()->setPrintColorAdjustIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitPrintColorAdjust(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitPrintColorAdjust(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPrintColorAdjust(static_cast<PrintColorAdjust>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyScrollBlocksOn(StyleResolverState& state)
-{
-    state.style()->setScrollBlocksOn(ComputedStyle::initialScrollBlocksOn());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyScrollBlocksOn(StyleResolverState& state)
-{
-    state.style()->setScrollBlocksOn(state.parentStyle()->scrollBlocksOn());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyScrollBlocksOn(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setScrollBlocksOn(StyleBuilderConverter::convertFlags<WebScrollBlocksOn>(state, value));
+    state.style()->setPrintColorAdjust(toCSSIdentifierValue(value).convertTo<EPrintColorAdjust>());
+    state.style()->setPrintColorAdjustIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeDasharray(StyleResolverState& state)
@@ -901,7 +926,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeDasharray(StyleResolver
     state.style()->accessSVGStyle().setStrokeDashArray(state.parentStyle()->svgStyle().strokeDashArray());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeDasharray(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeDasharray(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStrokeDashArray(StyleBuilderConverter::convertStrokeDasharray(state, value));
 }
@@ -916,24 +941,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFlexBasis(StyleResolverState&
     state.style()->setFlexBasis(state.parentStyle()->flexBasis());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFlexBasis(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFlexBasis(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setFlexBasis(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyLetterSpacing(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyWidows(StyleResolverState& state)
 {
-    state.style()->setLetterSpacing(ComputedStyle::initialLetterWordSpacing());
+    state.style()->setWidows(ComputedStyle::initialWidows());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyLetterSpacing(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyWidows(StyleResolverState& state)
 {
-    state.style()->setLetterSpacing(state.parentStyle()->letterSpacing());
+    state.style()->setWidows(state.parentStyle()->widows());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyLetterSpacing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWidows(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setLetterSpacing(StyleBuilderConverter::convertSpacing(state, value));
+    state.style()->setWidows(toCSSPrimitiveValue(value).convertTo<short>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitRubyPosition(StyleResolverState& state)
@@ -943,27 +968,27 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitRubyPosition(StyleResol
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitRubyPosition(StyleResolverState& state)
 {
-    state.style()->setRubyPosition(state.parentStyle()->rubyPosition());
+    state.style()->setRubyPosition(state.parentStyle()->getRubyPosition());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitRubyPosition(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitRubyPosition(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setRubyPosition(static_cast<RubyPosition>(*toCSSPrimitiveValue(value)));
+    state.style()->setRubyPosition(toCSSIdentifierValue(value).convertTo<RubyPosition>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTransformOriginZ(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyFlexShrink(StyleResolverState& state)
 {
-    state.style()->setTransformOriginZ(ComputedStyle::initialTransformOriginZ());
+    state.style()->setFlexShrink(ComputedStyle::initialFlexShrink());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginZ(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyFlexShrink(StyleResolverState& state)
 {
-    state.style()->setTransformOriginZ(state.parentStyle()->transformOriginZ());
+    state.style()->setFlexShrink(state.parentStyle()->flexShrink());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginZ(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFlexShrink(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTransformOriginZ(StyleBuilderConverter::convertComputedLength<float>(state, value));
+    state.style()->setFlexShrink(toCSSPrimitiveValue(value).convertTo<float>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTransformOriginY(StyleResolverState& state)
@@ -976,7 +1001,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginY(StyleR
     state.style()->setTransformOriginY(state.parentStyle()->transformOriginY());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginY(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTransformOriginY(StyleBuilderConverter::convertLength(state, value));
 }
@@ -991,7 +1016,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginX(StyleR
     state.style()->setTransformOriginX(state.parentStyle()->transformOriginX());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginX(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTransformOriginX(StyleBuilderConverter::convertLength(state, value));
 }
@@ -1006,6 +1031,11 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransform(StyleResolverState&
     state.style()->setTransform(state.parentStyle()->transform());
 }
 
+void StyleBuilderFunctions::applyValueCSSPropertyTransform(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTransform(StyleBuilderConverter::convertTransformOperations(state, value));
+}
+
 void StyleBuilderFunctions::applyInitialCSSPropertyScrollBehavior(StyleResolverState& state)
 {
     state.style()->setScrollBehavior(ComputedStyle::initialScrollBehavior());
@@ -1013,12 +1043,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyScrollBehavior(StyleResolverS
 
 void StyleBuilderFunctions::applyInheritCSSPropertyScrollBehavior(StyleResolverState& state)
 {
-    state.style()->setScrollBehavior(state.parentStyle()->scrollBehavior());
+    state.style()->setScrollBehavior(state.parentStyle()->getScrollBehavior());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollBehavior(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollBehavior(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setScrollBehavior(static_cast<ScrollBehavior>(*toCSSPrimitiveValue(value)));
+    state.style()->setScrollBehavior(toCSSIdentifierValue(value).convertTo<ScrollBehavior>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridAutoFlow(StyleResolverState& state)
@@ -1028,12 +1058,27 @@ void StyleBuilderFunctions::applyInitialCSSPropertyGridAutoFlow(StyleResolverSta
 
 void StyleBuilderFunctions::applyInheritCSSPropertyGridAutoFlow(StyleResolverState& state)
 {
-    state.style()->setGridAutoFlow(state.parentStyle()->gridAutoFlow());
+    state.style()->setGridAutoFlow(state.parentStyle()->getGridAutoFlow());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridAutoFlow(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridAutoFlow(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setGridAutoFlow(StyleBuilderConverter::convertGridAutoFlow(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state)
+{
+    state.style()->setTextEmphasisPosition(ComputedStyle::initialTextEmphasisPosition());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state)
+{
+    state.style()->setTextEmphasisPosition(state.parentStyle()->getTextEmphasisPosition());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTextEmphasisPosition(toCSSIdentifierValue(value).convertTo<TextEmphasisPosition>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStopColor(StyleResolverState& state)
@@ -1046,7 +1091,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStopColor(StyleResolverState&
     state.style()->accessSVGStyle().setStopColor(state.parentStyle()->svgStyle().stopColor());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStopColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStopColor(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStopColor(StyleBuilderConverter::convertColor(state, value));
 }
@@ -1061,9 +1106,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitLineClamp(StyleResolver
     state.style()->setLineClamp(state.parentStyle()->lineClamp());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitLineClamp(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitLineClamp(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setLineClamp(static_cast<LineClampValue>(*toCSSPrimitiveValue(value)));
+    state.style()->setLineClamp(toCSSPrimitiveValue(value).convertTo<LineClampValue>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyJustifySelf(StyleResolverState& state)
@@ -1076,7 +1121,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyJustifySelf(StyleResolverStat
     state.style()->setJustifySelf(state.parentStyle()->justifySelf());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyJustifySelf(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyJustifySelf(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setJustifySelf(StyleBuilderConverter::convertSelfOrDefaultAlignmentData(state, value));
 }
@@ -1088,12 +1133,27 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextJustify(StyleResolverStat
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextJustify(StyleResolverState& state)
 {
-    state.style()->setTextJustify(state.parentStyle()->textJustify());
+    state.style()->setTextJustify(state.parentStyle()->getTextJustify());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextJustify(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextJustify(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextJustify(static_cast<TextJustify>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextJustify(toCSSIdentifierValue(value).convertTo<TextJustify>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWordSpacing(StyleResolverState& state)
+{
+    state.style()->setWordSpacing(ComputedStyle::initialLetterWordSpacing());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWordSpacing(StyleResolverState& state)
+{
+    state.style()->setWordSpacing(state.parentStyle()->wordSpacing());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyWordSpacing(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setWordSpacing(StyleBuilderConverter::convertSpacing(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyPerspectiveOrigin(StyleResolverState& state)
@@ -1106,9 +1166,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPerspectiveOrigin(StyleResolv
     state.style()->setPerspectiveOrigin(state.parentStyle()->perspectiveOrigin());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPerspectiveOrigin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPerspectiveOrigin(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPerspectiveOrigin(StyleBuilderConverter::convertPerspectiveOrigin(state, value));
+    state.style()->setPerspectiveOrigin(StyleBuilderConverter::convertPosition(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextAnchor(StyleResolverState& state)
@@ -1121,9 +1181,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTextAnchor(StyleResolverState
     state.style()->accessSVGStyle().setTextAnchor(state.parentStyle()->svgStyle().textAnchor());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextAnchor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextAnchor(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setTextAnchor(static_cast<ETextAnchor>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setTextAnchor(toCSSIdentifierValue(value).convertTo<ETextAnchor>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontStyle(StyleResolverState& state)
@@ -1136,9 +1196,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFontStyle(StyleResolverState&
     state.fontBuilder().setStyle(state.parentFontDescription().style());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setStyle(static_cast<FontStyle>(*toCSSPrimitiveValue(value)));
+    state.fontBuilder().setStyle(toCSSIdentifierValue(value).convertTo<FontStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomRightRadius(StyleResolverState& state)
@@ -1151,7 +1211,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomRightRadius(Style
     state.style()->setBorderBottomRightRadius(state.parentStyle()->borderBottomRightRadius());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomRightRadius(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomRightRadius(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderBottomRightRadius(StyleBuilderConverter::convertRadius(state, value));
 }
@@ -1166,7 +1226,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderRightWidth(StyleResolve
     state.style()->setBorderRightWidth(state.parentStyle()->borderRightWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderRightWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderRightWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderRightWidth(StyleBuilderConverter::convertLineWidth<unsigned>(state, value));
 }
@@ -1181,39 +1241,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopLeftRadius(StyleReso
     state.style()->setBorderTopLeftRadius(state.parentStyle()->borderTopLeftRadius());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderTopLeftRadius(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderTopLeftRadius(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderTopLeftRadius(StyleBuilderConverter::convertRadius(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyFontVariant(StyleResolverState& state)
-{
-    state.fontBuilder().setVariant(FontBuilder::initialVariant());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyFontVariant(StyleResolverState& state)
-{
-    state.fontBuilder().setVariant(state.parentFontDescription().variant());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyFontVariant(StyleResolverState& state, CSSValue* value)
-{
-    state.fontBuilder().setVariant(static_cast<FontVariant>(*toCSSPrimitiveValue(value)));
-}
-
 void StyleBuilderFunctions::applyInitialCSSPropertyWritingMode(StyleResolverState& state)
 {
-    state.style()->accessSVGStyle().setWritingMode(SVGComputedStyle::initialWritingMode());
+    state.style()->setWritingMode(ComputedStyle::initialWritingMode());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWritingMode(StyleResolverState& state)
 {
-    state.style()->accessSVGStyle().setWritingMode(state.parentStyle()->svgStyle().writingMode());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWritingMode(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->accessSVGStyle().setWritingMode(static_cast<SVGWritingMode>(*toCSSPrimitiveValue(value)));
+    state.style()->setWritingMode(state.parentStyle()->getWritingMode());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextSecurity(StyleResolverState& state)
@@ -1226,9 +1266,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextSecurity(StyleResol
     state.style()->setTextSecurity(state.parentStyle()->textSecurity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextSecurity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextSecurity(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextSecurity(static_cast<ETextSecurity>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextSecurity(toCSSIdentifierValue(value).convertTo<ETextSecurity>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderLeftWidth(StyleResolverState& state)
@@ -1241,7 +1281,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderLeftWidth(StyleResolver
     state.style()->setBorderLeftWidth(state.parentStyle()->borderLeftWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderLeftWidth(StyleBuilderConverter::convertLineWidth<unsigned>(state, value));
 }
@@ -1253,12 +1293,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitLineBreak(StyleResolver
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitLineBreak(StyleResolverState& state)
 {
-    state.style()->setLineBreak(state.parentStyle()->lineBreak());
+    state.style()->setLineBreak(state.parentStyle()->getLineBreak());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitLineBreak(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitLineBreak(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setLineBreak(static_cast<LineBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->setLineBreak(toCSSIdentifierValue(value).convertTo<LineBreak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyIsolation(StyleResolverState& state)
@@ -1271,24 +1311,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyIsolation(StyleResolverState&
     state.style()->setIsolation(state.parentStyle()->isolation());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyIsolation(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyIsolation(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setIsolation(static_cast<EIsolation>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyGlyphOrientationHorizontal(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setGlyphOrientationHorizontal(SVGComputedStyle::initialGlyphOrientationHorizontal());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyGlyphOrientationHorizontal(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setGlyphOrientationHorizontal(state.parentStyle()->svgStyle().glyphOrientationHorizontal());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyGlyphOrientationHorizontal(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->accessSVGStyle().setGlyphOrientationHorizontal(StyleBuilderConverter::convertGlyphOrientation(state, value));
+    state.style()->setIsolation(toCSSIdentifierValue(value).convertTo<EIsolation>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFillOpacity(StyleResolverState& state)
@@ -1301,7 +1326,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFillOpacity(StyleResolverStat
     state.style()->accessSVGStyle().setFillOpacity(state.parentStyle()->svgStyle().fillOpacity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFillOpacity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFillOpacity(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setFillOpacity(StyleBuilderConverter::convertNumberOrPercentage(state, value));
 }
@@ -1316,7 +1341,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopWidth(StyleResolverS
     state.style()->setBorderTopWidth(state.parentStyle()->borderTopWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderTopWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderTopWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderTopWidth(StyleBuilderConverter::convertLineWidth<unsigned>(state, value));
 }
@@ -1331,7 +1356,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBottom(StyleResolverState& st
     state.style()->setBottom(state.parentStyle()->bottom());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBottom(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBottom(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBottom(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
@@ -1339,16 +1364,19 @@ void StyleBuilderFunctions::applyValueCSSPropertyBottom(StyleResolverState& stat
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderCollapse(StyleResolverState& state)
 {
     state.style()->setBorderCollapse(ComputedStyle::initialBorderCollapse());
+    state.style()->setBorderCollapseIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBorderCollapse(StyleResolverState& state)
 {
     state.style()->setBorderCollapse(state.parentStyle()->borderCollapse());
+    state.style()->setBorderCollapseIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderCollapse(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderCollapse(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBorderCollapse(static_cast<EBorderCollapse>(*toCSSPrimitiveValue(value)));
+    state.style()->setBorderCollapse(toCSSIdentifierValue(value).convertTo<EBorderCollapse>());
+    state.style()->setBorderCollapseIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTop(StyleResolverState& state)
@@ -1361,7 +1389,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTop(StyleResolverState& state
     state.style()->setTop(state.parentStyle()->top());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTop(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTop(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTop(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
@@ -1376,7 +1404,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyScrollSnapPointsX(StyleResolv
     state.style()->setScrollSnapPointsX(state.parentStyle()->scrollSnapPointsX());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapPointsX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapPointsX(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setScrollSnapPointsX(StyleBuilderConverter::convertSnapPoints(state, value));
 }
@@ -1391,7 +1419,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyScrollSnapPointsY(StyleResolv
     state.style()->setScrollSnapPointsY(state.parentStyle()->scrollSnapPointsY());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapPointsY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapPointsY(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setScrollSnapPointsY(StyleBuilderConverter::convertSnapPoints(state, value));
 }
@@ -1403,27 +1431,22 @@ void StyleBuilderFunctions::applyInitialCSSPropertyUnicodeBidi(StyleResolverStat
 
 void StyleBuilderFunctions::applyInheritCSSPropertyUnicodeBidi(StyleResolverState& state)
 {
-    state.style()->setUnicodeBidi(state.parentStyle()->unicodeBidi());
+    state.style()->setUnicodeBidi(state.parentStyle()->getUnicodeBidi());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyUnicodeBidi(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyUnicodeBidi(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setUnicodeBidi(static_cast<EUnicodeBidi>(*toCSSPrimitiveValue(value)));
+    state.style()->setUnicodeBidi(toCSSIdentifierValue(value).convertTo<UnicodeBidi>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitRtlOrdering(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitWritingMode(StyleResolverState& state)
 {
-    state.style()->setRTLOrdering(ComputedStyle::initialRTLOrdering());
+    state.style()->setWritingMode(ComputedStyle::initialWritingMode());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitRtlOrdering(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitWritingMode(StyleResolverState& state)
 {
-    state.style()->setRTLOrdering(state.parentStyle()->rtlOrdering());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitRtlOrdering(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setRTLOrdering(static_cast<Order>(*toCSSPrimitiveValue(value)));
+    state.style()->setWritingMode(state.parentStyle()->getWritingMode());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFloat(StyleResolverState& state)
@@ -1436,9 +1459,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFloat(StyleResolverState& sta
     state.style()->setFloating(state.parentStyle()->floating());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFloat(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFloat(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setFloating(static_cast<EFloat>(*toCSSPrimitiveValue(value)));
+    state.style()->setFloating(toCSSIdentifierValue(value).convertTo<EFloat>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWordWrap(StyleResolverState& state)
@@ -1451,9 +1474,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWordWrap(StyleResolverState& 
     state.style()->setOverflowWrap(state.parentStyle()->overflowWrap());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWordWrap(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWordWrap(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOverflowWrap(static_cast<EOverflowWrap>(*toCSSPrimitiveValue(value)));
+    state.style()->setOverflowWrap(toCSSIdentifierValue(value).convertTo<EOverflowWrap>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransformOrigin(StyleResolverState& state)
@@ -1466,9 +1489,27 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransformOrigin(StyleResolver
     state.style()->setTransformOrigin(state.parentStyle()->transformOrigin());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransformOrigin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransformOrigin(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTransformOrigin(StyleBuilderConverter::convertTransformOrigin(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitRtlOrdering(StyleResolverState& state)
+{
+    state.style()->setRtlOrdering(ComputedStyle::initialRtlOrdering());
+    state.style()->setRtlOrderingIsInherited(false);
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitRtlOrdering(StyleResolverState& state)
+{
+    state.style()->setRtlOrdering(state.parentStyle()->rtlOrdering());
+    state.style()->setRtlOrderingIsInherited(true);
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitRtlOrdering(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setRtlOrdering(toCSSIdentifierValue(value).convertTo<EOrder>());
+    state.style()->setRtlOrderingIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMarginTop(StyleResolverState& state)
@@ -1481,7 +1522,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarginTop(StyleResolverState&
     state.style()->setMarginTop(state.parentStyle()->marginTop());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarginTop(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarginTop(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMarginTop(StyleBuilderConverter::convertQuirkyLength(state, value));
 }
@@ -1496,7 +1537,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMaxWidth(StyleResolverState& 
     state.style()->setMaxWidth(state.parentStyle()->maxWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMaxWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMaxWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMaxWidth(StyleBuilderConverter::convertLengthMaxSizing(state, value));
 }
@@ -1511,24 +1552,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTextShadow(StyleResolverState
     state.style()->setTextShadow(state.parentStyle()->textShadow());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextShadow(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextShadow(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextShadow(StyleBuilderConverter::convertShadow(state, value));
+    state.style()->setTextShadow(StyleBuilderConverter::convertShadowList(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyPaddingRight(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyFontVariantCaps(StyleResolverState& state)
 {
-    state.style()->setPaddingRight(ComputedStyle::initialPadding());
+    state.fontBuilder().setVariantCaps(FontBuilder::initialVariantCaps());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyPaddingRight(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyFontVariantCaps(StyleResolverState& state)
 {
-    state.style()->setPaddingRight(state.parentStyle()->paddingRight());
+    state.fontBuilder().setVariantCaps(state.parentFontDescription().variantCaps());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPaddingRight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontVariantCaps(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPaddingRight(StyleBuilderConverter::convertLength(state, value));
+    state.fontBuilder().setVariantCaps(StyleBuilderConverter::convertFontVariantCaps(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxOrdinalGroup(StyleResolverState& state)
@@ -1541,9 +1582,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxOrdinalGroup(StyleRe
     state.style()->setBoxOrdinalGroup(state.parentStyle()->boxOrdinalGroup());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxOrdinalGroup(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxOrdinalGroup(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxOrdinalGroup(static_cast<unsigned int>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxOrdinalGroup(toCSSPrimitiveValue(value).convertTo<unsigned int>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyColumnFill(StyleResolverState& state)
@@ -1553,12 +1594,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyColumnFill(StyleResolverState
 
 void StyleBuilderFunctions::applyInheritCSSPropertyColumnFill(StyleResolverState& state)
 {
-    state.style()->setColumnFill(state.parentStyle()->columnFill());
+    state.style()->setColumnFill(state.parentStyle()->getColumnFill());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyColumnFill(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnFill(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setColumnFill(static_cast<ColumnFill>(*toCSSPrimitiveValue(value)));
+    state.style()->setColumnFill(toCSSIdentifierValue(value).convertTo<ColumnFill>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOverflowX(StyleResolverState& state)
@@ -1571,9 +1612,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOverflowX(StyleResolverState&
     state.style()->setOverflowX(state.parentStyle()->overflowX());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOverflowX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOverflowX(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOverflowX(static_cast<EOverflow>(*toCSSPrimitiveValue(value)));
+    state.style()->setOverflowX(toCSSIdentifierValue(value).convertTo<EOverflow>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOverflowY(StyleResolverState& state)
@@ -1586,9 +1627,39 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOverflowY(StyleResolverState&
     state.style()->setOverflowY(state.parentStyle()->overflowY());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOverflowY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOverflowY(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOverflowY(static_cast<EOverflow>(*toCSSPrimitiveValue(value)));
+    state.style()->setOverflowY(toCSSIdentifierValue(value).convertTo<EOverflow>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyHyphens(StyleResolverState& state)
+{
+    state.style()->setHyphens(ComputedStyle::initialHyphens());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyHyphens(StyleResolverState& state)
+{
+    state.style()->setHyphens(state.parentStyle()->getHyphens());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyHyphens(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setHyphens(toCSSIdentifierValue(value).convertTo<Hyphens>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyTextSizeAdjust(StyleResolverState& state)
+{
+    state.style()->setTextSizeAdjust(ComputedStyle::initialTextSizeAdjust());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyTextSizeAdjust(StyleResolverState& state)
+{
+    state.style()->setTextSizeAdjust(state.parentStyle()->getTextSizeAdjust());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyTextSizeAdjust(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTextSizeAdjust(StyleBuilderConverter::convertTextSizeAdjust(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyPerspective(StyleResolverState& state)
@@ -1601,9 +1672,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPerspective(StyleResolverStat
     state.style()->setPerspective(state.parentStyle()->perspective());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPerspective(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPerspective(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setPerspective(StyleBuilderConverter::convertPerspective(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyUserSelect(StyleResolverState& state)
+{
+    state.style()->setUserSelect(ComputedStyle::initialUserSelect());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyUserSelect(StyleResolverState& state)
+{
+    state.style()->setUserSelect(state.parentStyle()->userSelect());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyUserSelect(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setUserSelect(toCSSIdentifierValue(value).convertTo<EUserSelect>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyLineHeight(StyleResolverState& state)
@@ -1616,7 +1702,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyLineHeight(StyleResolverState
     state.style()->setLineHeight(state.parentStyle()->specifiedLineHeight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyLineHeight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyLineHeight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setLineHeight(StyleBuilderConverter::convertLineHeight(state, value));
 }
@@ -1631,9 +1717,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOrder(StyleResolverState& sta
     state.style()->setOrder(state.parentStyle()->order());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOrder(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOrder(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOrder(static_cast<int>(*toCSSPrimitiveValue(value)));
+    state.style()->setOrder(toCSSPrimitiveValue(value).convertTo<int>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxAlign(StyleResolverState& state)
@@ -1646,9 +1732,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxAlign(StyleResolverS
     state.style()->setBoxAlign(state.parentStyle()->boxAlign());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxAlign(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxAlign(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxAlign(static_cast<EBoxAlignment>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxAlign(toCSSIdentifierValue(value).convertTo<EBoxAlignment>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyScale(StyleResolverState& state)
@@ -1661,7 +1747,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyScale(StyleResolverState& sta
     state.style()->setScale(state.parentStyle()->scale());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScale(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScale(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setScale(StyleBuilderConverter::convertScale(state, value));
 }
@@ -1676,9 +1762,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridAutoColumns(StyleResolver
     state.style()->setGridAutoColumns(state.parentStyle()->gridAutoColumns());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridAutoColumns(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridAutoColumns(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setGridAutoColumns(StyleBuilderConverter::convertGridTrackSize(state, value));
+    state.style()->setGridAutoColumns(StyleBuilderConverter::convertGridTrackSizeList(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridRowStart(StyleResolverState& state)
@@ -1691,7 +1777,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridRowStart(StyleResolverSta
     state.style()->setGridRowStart(state.parentStyle()->gridRowStart());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridRowStart(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridRowStart(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setGridRowStart(StyleBuilderConverter::convertGridPosition(state, value));
 }
@@ -1706,7 +1792,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextStrokeWidth(StyleRe
     state.style()->setTextStrokeWidth(state.parentStyle()->textStrokeWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTextStrokeWidth(StyleBuilderConverter::convertTextStrokeWidth(state, value));
 }
@@ -1721,7 +1807,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeDashoffset(StyleResolve
     state.style()->accessSVGStyle().setStrokeDashOffset(state.parentStyle()->svgStyle().strokeDashOffset());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeDashoffset(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeDashoffset(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStrokeDashOffset(StyleBuilderConverter::convertLength(state, value));
 }
@@ -1731,24 +1817,9 @@ void StyleBuilderFunctions::applyInitialCSSPropertyPosition(StyleResolverState& 
     state.style()->setPosition(ComputedStyle::initialPosition());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyPosition(StyleResolverState& state)
+void StyleBuilderFunctions::applyValueCSSPropertyPosition(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPosition(state.parentStyle()->position());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyPosition(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setPosition(static_cast<EPosition>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyGlyphOrientationVertical(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setGlyphOrientationVertical(SVGComputedStyle::initialGlyphOrientationVertical());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyGlyphOrientationVertical(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setGlyphOrientationVertical(state.parentStyle()->svgStyle().glyphOrientationVertical());
+    state.style()->setPosition(toCSSIdentifierValue(value).convertTo<EPosition>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontStretch(StyleResolverState& state)
@@ -1761,9 +1832,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFontStretch(StyleResolverStat
     state.fontBuilder().setStretch(state.parentFontDescription().stretch());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontStretch(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontStretch(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setStretch(static_cast<FontStretch>(*toCSSPrimitiveValue(value)));
+    state.fontBuilder().setStretch(toCSSIdentifierValue(value).convertTo<FontStretch>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMixBlendMode(StyleResolverState& state)
@@ -1776,9 +1847,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMixBlendMode(StyleResolverSta
     state.style()->setBlendMode(state.parentStyle()->blendMode());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMixBlendMode(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMixBlendMode(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBlendMode(static_cast<blink::WebBlendMode>(*toCSSPrimitiveValue(value)));
+    state.style()->setBlendMode(toCSSIdentifierValue(value).convertTo<blink::WebBlendMode>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBaselineShift(StyleResolverState& state)
@@ -1796,7 +1867,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPaddingLeft(StyleResolverStat
     state.style()->setPaddingLeft(state.parentStyle()->paddingLeft());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPaddingLeft(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPaddingLeft(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setPaddingLeft(StyleBuilderConverter::convertLength(state, value));
 }
@@ -1804,16 +1875,19 @@ void StyleBuilderFunctions::applyValueCSSPropertyPaddingLeft(StyleResolverState&
 void StyleBuilderFunctions::applyInitialCSSPropertyWhiteSpace(StyleResolverState& state)
 {
     state.style()->setWhiteSpace(ComputedStyle::initialWhiteSpace());
+    state.style()->setWhiteSpaceIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWhiteSpace(StyleResolverState& state)
 {
     state.style()->setWhiteSpace(state.parentStyle()->whiteSpace());
+    state.style()->setWhiteSpaceIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWhiteSpace(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWhiteSpace(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setWhiteSpace(static_cast<EWhiteSpace>(*toCSSPrimitiveValue(value)));
+    state.style()->setWhiteSpace(toCSSIdentifierValue(value).convertTo<EWhiteSpace>());
+    state.style()->setWhiteSpaceIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOverflowWrap(StyleResolverState& state)
@@ -1826,9 +1900,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOverflowWrap(StyleResolverSta
     state.style()->setOverflowWrap(state.parentStyle()->overflowWrap());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOverflowWrap(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOverflowWrap(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setOverflowWrap(static_cast<EOverflowWrap>(*toCSSPrimitiveValue(value)));
+    state.style()->setOverflowWrap(toCSSIdentifierValue(value).convertTo<EOverflowWrap>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyVerticalAlign(StyleResolverState& state)
@@ -1838,12 +1912,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyVerticalAlign(StyleResolverSt
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitLocale(StyleResolverState& state)
 {
-    state.style()->setLocale(ComputedStyle::initialLocale());
+    state.fontBuilder().setLocale(FontBuilder::initialLocale());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitLocale(StyleResolverState& state)
 {
-    state.style()->setLocale(state.parentStyle()->locale());
+    state.fontBuilder().setLocale(state.parentFontDescription().locale());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMarginAfterCollapse(StyleResolverState& state)
@@ -1856,54 +1930,39 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMarginAfterCollapse(Sty
     state.style()->setMarginAfterCollapse(state.parentStyle()->marginAfterCollapse());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginAfterCollapse(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginAfterCollapse(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setMarginAfterCollapse(static_cast<EMarginCollapse>(*toCSSPrimitiveValue(value)));
+    state.style()->setMarginAfterCollapse(toCSSIdentifierValue(value).convertTo<EMarginCollapse>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetPosition(StyleResolverState& state)
 {
-    state.style()->setTextEmphasisPosition(ComputedStyle::initialTextEmphasisPosition());
+    state.style()->setOffsetPosition(ComputedStyle::initialOffsetPosition());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetPosition(StyleResolverState& state)
 {
-    state.style()->setTextEmphasisPosition(state.parentStyle()->textEmphasisPosition());
+    state.style()->setOffsetPosition(state.parentStyle()->offsetPosition());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisPosition(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetPosition(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextEmphasisPosition(static_cast<TextEmphasisPosition>(*toCSSPrimitiveValue(value)));
+    state.style()->setOffsetPosition(StyleBuilderConverter::convertPositionOrAuto(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWordSpacing(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyBackdropFilter(StyleResolverState& state)
 {
-    state.style()->setWordSpacing(ComputedStyle::initialLetterWordSpacing());
+    state.style()->setBackdropFilter(ComputedStyle::initialBackdropFilter());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWordSpacing(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyBackdropFilter(StyleResolverState& state)
 {
-    state.style()->setWordSpacing(state.parentStyle()->wordSpacing());
+    state.style()->setBackdropFilter(state.parentStyle()->backdropFilter());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWordSpacing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackdropFilter(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setWordSpacing(StyleBuilderConverter::convertSpacing(state, value));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyPageBreakAfter(StyleResolverState& state)
-{
-    state.style()->setPageBreakAfter(ComputedStyle::initialPageBreak());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyPageBreakAfter(StyleResolverState& state)
-{
-    state.style()->setPageBreakAfter(state.parentStyle()->pageBreakAfter());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyPageBreakAfter(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setPageBreakAfter(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->setBackdropFilter(StyleBuilderConverter::convertFilterOperations(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMarkerEnd(StyleResolverState& state)
@@ -1916,7 +1975,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarkerEnd(StyleResolverState&
     state.style()->accessSVGStyle().setMarkerEndResource(state.parentStyle()->svgStyle().markerEndResource());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarkerEnd(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarkerEnd(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setMarkerEndResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
 }
@@ -1931,9 +1990,39 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxLines(StyleResolverS
     state.style()->setBoxLines(state.parentStyle()->boxLines());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxLines(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxLines(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxLines(static_cast<EBoxLines>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxLines(toCSSIdentifierValue(value).convertTo<EBoxLines>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetAnchor(StyleResolverState& state)
+{
+    state.style()->setOffsetAnchor(ComputedStyle::initialOffsetAnchor());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetAnchor(StyleResolverState& state)
+{
+    state.style()->setOffsetAnchor(state.parentStyle()->offsetAnchor());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetAnchor(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOffsetAnchor(StyleBuilderConverter::convertPositionOrAuto(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnSpan(StyleResolverState& state)
+{
+    state.style()->setColumnSpan(ComputedStyle::initialColumnSpan());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnSpan(StyleResolverState& state)
+{
+    state.style()->setColumnSpan(state.parentStyle()->getColumnSpan());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyColumnSpan(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setColumnSpan(toCSSIdentifierValue(value).convertTo<ColumnSpan>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTableLayout(StyleResolverState& state)
@@ -1946,9 +2035,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTableLayout(StyleResolverStat
     state.style()->setTableLayout(state.parentStyle()->tableLayout());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTableLayout(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTableLayout(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTableLayout(static_cast<ETableLayout>(*toCSSPrimitiveValue(value)));
+    state.style()->setTableLayout(toCSSIdentifierValue(value).convertTo<ETableLayout>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyGridRowGap(StyleResolverState& state)
+{
+    state.style()->setGridRowGap(ComputedStyle::initialGridRowGap());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyGridRowGap(StyleResolverState& state)
+{
+    state.style()->setGridRowGap(state.parentStyle()->gridRowGap());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyGridRowGap(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setGridRowGap(StyleBuilderConverter::convertLength(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderRightStyle(StyleResolverState& state)
@@ -1961,9 +2065,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderRightStyle(StyleResolve
     state.style()->setBorderRightStyle(state.parentStyle()->borderRightStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderRightStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderRightStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBorderRightStyle(static_cast<EBorderStyle>(*toCSSPrimitiveValue(value)));
+    state.style()->setBorderRightStyle(toCSSIdentifierValue(value).convertTo<EBorderStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridRowEnd(StyleResolverState& state)
@@ -1976,7 +2080,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridRowEnd(StyleResolverState
     state.style()->setGridRowEnd(state.parentStyle()->gridRowEnd());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridRowEnd(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridRowEnd(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setGridRowEnd(StyleBuilderConverter::convertGridPosition(state, value));
 }
@@ -1988,12 +2092,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextUnderlinePosition(StyleRe
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextUnderlinePosition(StyleResolverState& state)
 {
-    state.style()->setTextUnderlinePosition(state.parentStyle()->textUnderlinePosition());
+    state.style()->setTextUnderlinePosition(state.parentStyle()->getTextUnderlinePosition());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextUnderlinePosition(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextUnderlinePosition(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextUnderlinePosition(static_cast<TextUnderlinePosition>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextUnderlinePosition(toCSSIdentifierValue(value).convertTo<TextUnderlinePosition>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBackfaceVisibility(StyleResolverState& state)
@@ -2006,9 +2110,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackfaceVisibility(StyleResol
     state.style()->setBackfaceVisibility(state.parentStyle()->backfaceVisibility());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackfaceVisibility(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackfaceVisibility(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBackfaceVisibility(static_cast<EBackfaceVisibility>(*toCSSPrimitiveValue(value)));
+    state.style()->setBackfaceVisibility(toCSSIdentifierValue(value).convertTo<EBackfaceVisibility>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyLeft(StyleResolverState& state)
@@ -2021,7 +2125,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyLeft(StyleResolverState& stat
     state.style()->setLeft(state.parentStyle()->left());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyLeft(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyLeft(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setLeft(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
@@ -2036,34 +2140,94 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWidth(StyleResolverState& sta
     state.style()->setWidth(state.parentStyle()->width());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setWidth(StyleBuilderConverter::convertLengthSizing(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyTouchAction(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleStyle(StyleResolverState& state)
 {
-    state.style()->setTouchAction(ComputedStyle::initialTouchAction());
+    state.style()->setColumnRuleStyle(ComputedStyle::initialBorderStyle());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyTouchAction(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleStyle(StyleResolverState& state)
 {
-    state.style()->setTouchAction(state.parentStyle()->touchAction());
+    state.style()->setColumnRuleStyle(state.parentStyle()->columnRuleStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTouchAction(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnRuleStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTouchAction(StyleBuilderConverter::convertFlags<TouchAction>(state, value));
+    state.style()->setColumnRuleStyle(toCSSIdentifierValue(value).convertTo<EBorderStyle>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitClipPath(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetPath(StyleResolverState& state)
 {
-    state.style()->setClipPath(ComputedStyle::initialClipPath());
+    state.style()->setOffsetPath(ComputedStyle::initialOffsetPath());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitClipPath(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetPath(StyleResolverState& state)
 {
-    state.style()->setClipPath(state.parentStyle()->clipPath());
+    state.style()->setOffsetPath(state.parentStyle()->offsetPath());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetPath(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOffsetPath(StyleBuilderConverter::convertPathOrNone(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationSkip(StyleResolverState& state)
+{
+    state.style()->setTextDecorationSkip(ComputedStyle::initialTextDecorationSkip());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationSkip(StyleResolverState& state)
+{
+    state.style()->setTextDecorationSkip(state.parentStyle()->getTextDecorationSkip());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationSkip(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTextDecorationSkip(StyleBuilderConverter::convertFlags<TextDecorationSkip>(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyBreakInside(StyleResolverState& state)
+{
+    state.style()->setBreakInside(ComputedStyle::initialBreakInside());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyBreakInside(StyleResolverState& state)
+{
+    state.style()->setBreakInside(state.parentStyle()->breakInside());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyBreakInside(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setBreakInside(toCSSIdentifierValue(value).convertTo<EBreak>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state)
+{
+    state.style()->setMaskBoxImageSource(ComputedStyle::initialMaskBoxImageSource());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state)
+{
+    state.style()->setMaskBoxImageSource(state.parentStyle()->maskBoxImageSource());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyFontFeatureSettings(StyleResolverState& state)
+{
+    state.fontBuilder().setFeatureSettings(FontBuilder::initialFeatureSettings());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyFontFeatureSettings(StyleResolverState& state)
+{
+    state.fontBuilder().setFeatureSettings(state.parentFontDescription().featureSettings());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyFontFeatureSettings(StyleResolverState& state, const CSSValue& value)
+{
+    state.fontBuilder().setFeatureSettings(StyleBuilderConverter::convertFontFeatureSettings(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeMiterlimit(StyleResolverState& state)
@@ -2076,9 +2240,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeMiterlimit(StyleResolve
     state.style()->accessSVGStyle().setStrokeMiterLimit(state.parentStyle()->svgStyle().strokeMiterLimit());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeMiterlimit(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeMiterlimit(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setStrokeMiterLimit(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setStrokeMiterLimit(toCSSPrimitiveValue(value).convertTo<float>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyOverflowAnchor(StyleResolverState& state)
+{
+    state.style()->setOverflowAnchor(ComputedStyle::initialOverflowAnchor());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyOverflowAnchor(StyleResolverState& state)
+{
+    state.style()->setOverflowAnchor(state.parentStyle()->overflowAnchor());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOverflowAnchor(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOverflowAnchor(toCSSIdentifierValue(value).convertTo<EOverflowAnchor>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridColumnStart(StyleResolverState& state)
@@ -2091,7 +2270,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridColumnStart(StyleResolver
     state.style()->setGridColumnStart(state.parentStyle()->gridColumnStart());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridColumnStart(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridColumnStart(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setGridColumnStart(StyleBuilderConverter::convertGridPosition(state, value));
 }
@@ -2106,7 +2285,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarginBottom(StyleResolverSta
     state.style()->setMarginBottom(state.parentStyle()->marginBottom());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarginBottom(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarginBottom(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMarginBottom(StyleBuilderConverter::convertQuirkyLength(state, value));
 }
@@ -2114,26 +2293,19 @@ void StyleBuilderFunctions::applyValueCSSPropertyMarginBottom(StyleResolverState
 void StyleBuilderFunctions::applyInitialCSSPropertyListStylePosition(StyleResolverState& state)
 {
     state.style()->setListStylePosition(ComputedStyle::initialListStylePosition());
+    state.style()->setListStylePositionIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyListStylePosition(StyleResolverState& state)
 {
     state.style()->setListStylePosition(state.parentStyle()->listStylePosition());
+    state.style()->setListStylePositionIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyListStylePosition(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyListStylePosition(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setListStylePosition(static_cast<EListStylePosition>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitFilter(StyleResolverState& state)
-{
-    state.style()->setFilter(ComputedStyle::initialFilter());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitFilter(StyleResolverState& state)
-{
-    state.style()->setFilter(state.parentStyle()->filter());
+    state.style()->setListStylePosition(toCSSIdentifierValue(value).convertTo<EListStylePosition>());
+    state.style()->setListStylePositionIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOutlineOffset(StyleResolverState& state)
@@ -2146,7 +2318,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOutlineOffset(StyleResolverSt
     state.style()->setOutlineOffset(state.parentStyle()->outlineOffset());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOutlineOffset(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOutlineOffset(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setOutlineOffset(StyleBuilderConverter::convertComputedLength<int>(state, value));
 }
@@ -2161,9 +2333,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyShapeRendering(StyleResolverS
     state.style()->accessSVGStyle().setShapeRendering(state.parentStyle()->svgStyle().shapeRendering());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyShapeRendering(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyShapeRendering(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setShapeRendering(static_cast<EShapeRendering>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setShapeRendering(toCSSIdentifierValue(value).convertTo<EShapeRendering>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyJustifyItems(StyleResolverState& state)
@@ -2176,7 +2348,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyJustifyItems(StyleResolverSta
     state.style()->setJustifyItems(state.parentStyle()->justifyItems());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyJustifyItems(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyJustifyItems(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setJustifyItems(StyleBuilderConverter::convertSelfOrDefaultAlignmentData(state, value));
 }
@@ -2191,7 +2363,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyRotate(StyleResolverState& st
     state.style()->setRotate(state.parentStyle()->rotate());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyRotate(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyRotate(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setRotate(StyleBuilderConverter::convertRotate(state, value));
 }
@@ -2206,9 +2378,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyColorRendering(StyleResolverS
     state.style()->accessSVGStyle().setColorRendering(state.parentStyle()->svgStyle().colorRendering());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyColorRendering(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColorRendering(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setColorRendering(static_cast<EColorRendering>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setColorRendering(toCSSIdentifierValue(value).convertTo<EColorRendering>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeLinejoin(StyleResolverState& state)
@@ -2221,9 +2393,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeLinejoin(StyleResolverS
     state.style()->accessSVGStyle().setJoinStyle(state.parentStyle()->svgStyle().joinStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeLinejoin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeLinejoin(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setJoinStyle(static_cast<LineJoin>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setJoinStyle(toCSSIdentifierValue(value).convertTo<LineJoin>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFlexGrow(StyleResolverState& state)
@@ -2236,9 +2408,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFlexGrow(StyleResolverState& 
     state.style()->setFlexGrow(state.parentStyle()->flexGrow());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFlexGrow(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFlexGrow(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setFlexGrow(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->setFlexGrow(toCSSPrimitiveValue(value).convertTo<float>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMask(StyleResolverState& state)
@@ -2251,7 +2423,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMask(StyleResolverState& stat
     state.style()->accessSVGStyle().setMaskerResource(state.parentStyle()->svgStyle().maskerResource());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMask(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMask(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setMaskerResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
 }
@@ -2266,24 +2438,42 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMarginBeforeCollapse(St
     state.style()->setMarginBeforeCollapse(state.parentStyle()->marginBeforeCollapse());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginBeforeCollapse(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginBeforeCollapse(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setMarginBeforeCollapse(static_cast<EMarginCollapse>(*toCSSPrimitiveValue(value)));
+    state.style()->setMarginBeforeCollapse(toCSSIdentifierValue(value).convertTo<EMarginCollapse>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppearance(StyleResolverState& state)
+{
+    state.style()->setAppearance(ComputedStyle::initialAppearance());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppearance(StyleResolverState& state)
+{
+    state.style()->setAppearance(state.parentStyle()->appearance());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitAppearance(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setAppearance(toCSSIdentifierValue(value).convertTo<ControlPart>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyPointerEvents(StyleResolverState& state)
 {
     state.style()->setPointerEvents(ComputedStyle::initialPointerEvents());
+    state.style()->setPointerEventsIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyPointerEvents(StyleResolverState& state)
 {
     state.style()->setPointerEvents(state.parentStyle()->pointerEvents());
+    state.style()->setPointerEventsIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPointerEvents(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPointerEvents(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPointerEvents(static_cast<EPointerEvents>(*toCSSPrimitiveValue(value)));
+    state.style()->setPointerEvents(toCSSIdentifierValue(value).convertTo<EPointerEvents>());
+    state.style()->setPointerEventsIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxOrient(StyleResolverState& state)
@@ -2296,9 +2486,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxOrient(StyleResolver
     state.style()->setBoxOrient(state.parentStyle()->boxOrient());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxOrient(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxOrient(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxOrient(static_cast<EBoxOrient>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxOrient(toCSSIdentifierValue(value).convertTo<EBoxOrient>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeLinecap(StyleResolverState& state)
@@ -2311,9 +2501,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeLinecap(StyleResolverSt
     state.style()->accessSVGStyle().setCapStyle(state.parentStyle()->svgStyle().capStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeLinecap(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeLinecap(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setCapStyle(static_cast<LineCap>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setCapStyle(toCSSIdentifierValue(value).convertTo<LineCap>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderLeftStyle(StyleResolverState& state)
@@ -2326,24 +2516,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderLeftStyle(StyleResolver
     state.style()->setBorderLeftStyle(state.parentStyle()->borderLeftStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBorderLeftStyle(static_cast<EBorderStyle>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleWidth(StyleResolverState& state)
-{
-    state.style()->setColumnRuleWidth(ComputedStyle::initialColumnRuleWidth());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleWidth(StyleResolverState& state)
-{
-    state.style()->setColumnRuleWidth(state.parentStyle()->columnRuleWidth());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleWidth(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setColumnRuleWidth(StyleBuilderConverter::convertLineWidth<unsigned short>(state, value));
+    state.style()->setBorderLeftStyle(toCSSIdentifierValue(value).convertTo<EBorderStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitUserDrag(StyleResolverState& state)
@@ -2356,9 +2531,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitUserDrag(StyleResolverS
     state.style()->setUserDrag(state.parentStyle()->userDrag());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitUserDrag(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitUserDrag(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setUserDrag(static_cast<EUserDrag>(*toCSSPrimitiveValue(value)));
+    state.style()->setUserDrag(toCSSIdentifierValue(value).convertTo<EUserDrag>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontVariantLigatures(StyleResolverState& state)
@@ -2368,10 +2543,10 @@ void StyleBuilderFunctions::applyInitialCSSPropertyFontVariantLigatures(StyleRes
 
 void StyleBuilderFunctions::applyInheritCSSPropertyFontVariantLigatures(StyleResolverState& state)
 {
-    state.fontBuilder().setVariantLigatures(state.parentFontDescription().variantLigatures());
+    state.fontBuilder().setVariantLigatures(state.parentFontDescription().getVariantLigatures());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontVariantLigatures(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontVariantLigatures(StyleResolverState& state, const CSSValue& value)
 {
     state.fontBuilder().setVariantLigatures(StyleBuilderConverter::convertFontVariantLigatures(state, value));
 }
@@ -2386,7 +2561,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarkerMid(StyleResolverState&
     state.style()->accessSVGStyle().setMarkerMidResource(state.parentStyle()->svgStyle().markerMidResource());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarkerMid(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarkerMid(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setMarkerMidResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
 }
@@ -2398,12 +2573,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextCombine(StyleResolv
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextCombine(StyleResolverState& state)
 {
-    state.style()->setTextCombine(state.parentStyle()->textCombine());
+    state.style()->setTextCombine(state.parentStyle()->getTextCombine());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextCombine(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextCombine(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextCombine(static_cast<TextCombine>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextCombine(toCSSIdentifierValue(value).convertTo<TextCombine>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyX(StyleResolverState& state)
@@ -2416,7 +2591,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyX(StyleResolverState& state)
     state.style()->accessSVGStyle().setX(state.parentStyle()->svgStyle().x());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyX(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setX(StyleBuilderConverter::convertLength(state, value));
 }
@@ -2431,24 +2606,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyY(StyleResolverState& state)
     state.style()->accessSVGStyle().setY(state.parentStyle()->svgStyle().y());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyY(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setY(StyleBuilderConverter::convertLength(state, value));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyFilter(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setFilterResource(SVGComputedStyle::initialFilterResource());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyFilter(StyleResolverState& state)
-{
-    state.style()->accessSVGStyle().setFilterResource(state.parentStyle()->svgStyle().filterResource());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyFilter(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->accessSVGStyle().setFilterResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyR(StyleResolverState& state)
@@ -2461,7 +2621,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyR(StyleResolverState& state)
     state.style()->accessSVGStyle().setR(state.parentStyle()->svgStyle().r());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyR(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyR(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setR(StyleBuilderConverter::convertLength(state, value));
 }
@@ -2476,34 +2636,49 @@ void StyleBuilderFunctions::applyInheritCSSPropertyResize(StyleResolverState& st
     state.style()->setResize(state.parentStyle()->resize());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyFontSizeAdjust(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetDistance(StyleResolverState& state)
 {
-    state.fontBuilder().setSizeAdjust(FontBuilder::initialSizeAdjust());
+    state.style()->setOffsetDistance(ComputedStyle::initialOffsetDistance());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyFontSizeAdjust(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetDistance(StyleResolverState& state)
 {
-    state.fontBuilder().setSizeAdjust(state.parentFontDescription().sizeAdjust());
+    state.style()->setOffsetDistance(state.parentStyle()->offsetDistance());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontSizeAdjust(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetDistance(StyleResolverState& state, const CSSValue& value)
 {
-    state.fontBuilder().setSizeAdjust(StyleBuilderConverter::convertFontSizeAdjust(state, value));
+    state.style()->setOffsetDistance(StyleBuilderConverter::convertLength(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyFlexShrink(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyLetterSpacing(StyleResolverState& state)
 {
-    state.style()->setFlexShrink(ComputedStyle::initialFlexShrink());
+    state.style()->setLetterSpacing(ComputedStyle::initialLetterWordSpacing());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyFlexShrink(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyLetterSpacing(StyleResolverState& state)
 {
-    state.style()->setFlexShrink(state.parentStyle()->flexShrink());
+    state.style()->setLetterSpacing(state.parentStyle()->letterSpacing());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFlexShrink(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyLetterSpacing(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setFlexShrink(static_cast<float>(*toCSSPrimitiveValue(value)));
+    state.style()->setLetterSpacing(StyleBuilderConverter::convertSpacing(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTransformOriginZ(StyleResolverState& state)
+{
+    state.style()->setTransformOriginZ(ComputedStyle::initialTransformOriginZ());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginZ(StyleResolverState& state)
+{
+    state.style()->setTransformOriginZ(state.parentStyle()->transformOriginZ());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginZ(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTransformOriginZ(StyleBuilderConverter::convertComputedLength<float>(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextOrientation(StyleResolverState& state)
@@ -2513,7 +2688,22 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextOrientation(StyleRe
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextOrientation(StyleResolverState& state)
 {
-    state.style()->setTextOrientation(state.parentStyle()->textOrientation());
+    state.style()->setTextOrientation(state.parentStyle()->getTextOrientation());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyD(StyleResolverState& state)
+{
+    state.style()->accessSVGStyle().setD(SVGComputedStyle::initialD());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyD(StyleResolverState& state)
+{
+    state.style()->accessSVGStyle().setD(state.parentStyle()->svgStyle().d());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyD(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->accessSVGStyle().setD(StyleBuilderConverter::convertPathOrNone(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyColorInterpolationFilters(StyleResolverState& state)
@@ -2526,39 +2716,27 @@ void StyleBuilderFunctions::applyInheritCSSPropertyColorInterpolationFilters(Sty
     state.style()->accessSVGStyle().setColorInterpolationFilters(state.parentStyle()->svgStyle().colorInterpolationFilters());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyColorInterpolationFilters(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColorInterpolationFilters(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setColorInterpolationFilters(static_cast<EColorInterpolation>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakBefore(StyleResolverState& state)
-{
-    state.style()->setColumnBreakBefore(ComputedStyle::initialPageBreak());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakBefore(StyleResolverState& state)
-{
-    state.style()->setColumnBreakBefore(state.parentStyle()->columnBreakBefore());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakBefore(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setColumnBreakBefore(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setColorInterpolationFilters(toCSSIdentifierValue(value).convertTo<EColorInterpolation>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextTransform(StyleResolverState& state)
 {
     state.style()->setTextTransform(ComputedStyle::initialTextTransform());
+    state.style()->setTextTransformIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextTransform(StyleResolverState& state)
 {
     state.style()->setTextTransform(state.parentStyle()->textTransform());
+    state.style()->setTextTransformIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextTransform(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextTransform(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextTransform(static_cast<ETextTransform>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextTransform(toCSSIdentifierValue(value).convertTo<ETextTransform>());
+    state.style()->setTextTransformIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyRight(StyleResolverState& state)
@@ -2571,7 +2749,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyRight(StyleResolverState& sta
     state.style()->setRight(state.parentStyle()->right());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyRight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyRight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setRight(StyleBuilderConverter::convertLengthOrAuto(state, value));
 }
@@ -2586,7 +2764,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridColumnEnd(StyleResolverSt
     state.style()->setGridColumnEnd(state.parentStyle()->gridColumnEnd());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridColumnEnd(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridColumnEnd(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setGridColumnEnd(StyleBuilderConverter::convertGridPosition(state, value));
 }
@@ -2601,7 +2779,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyScrollSnapCoordinate(StyleRes
     state.style()->setScrollSnapCoordinate(state.parentStyle()->scrollSnapCoordinate());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapCoordinate(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapCoordinate(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setScrollSnapCoordinate(StyleBuilderConverter::convertSnapCoordinates(state, value));
 }
@@ -2616,7 +2794,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAlignContent(StyleResolverSta
     state.style()->setAlignContent(state.parentStyle()->alignContent());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAlignContent(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAlignContent(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setAlignContent(StyleBuilderConverter::convertContentAlignmentData(state, value));
 }
@@ -2631,6 +2809,16 @@ void StyleBuilderFunctions::applyInheritCSSPropertyDirection(StyleResolverState&
     state.style()->setDirection(state.parentStyle()->direction());
 }
 
+void StyleBuilderFunctions::applyInitialCSSPropertyTextOrientation(StyleResolverState& state)
+{
+    state.style()->setTextOrientation(ComputedStyle::initialTextOrientation());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyTextOrientation(StyleResolverState& state)
+{
+    state.style()->setTextOrientation(state.parentStyle()->getTextOrientation());
+}
+
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBorderImage(StyleResolverState& state)
 {
     state.style()->setBorderImage(ComputedStyle::initialNinePieceImage());
@@ -2639,6 +2827,21 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBorderImage(StyleResolv
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBorderImage(StyleResolverState& state)
 {
     state.style()->setBorderImage(state.parentStyle()->borderImage());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyTouchAction(StyleResolverState& state)
+{
+    state.style()->setTouchAction(ComputedStyle::initialTouchAction());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyTouchAction(StyleResolverState& state)
+{
+    state.style()->setTouchAction(state.parentStyle()->getTouchAction());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyTouchAction(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setTouchAction(StyleBuilderConverter::convertFlags<TouchAction>(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBorderVerticalSpacing(StyleResolverState& state)
@@ -2651,7 +2854,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBorderVerticalSpacing(S
     state.style()->setVerticalBorderSpacing(state.parentStyle()->verticalBorderSpacing());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBorderVerticalSpacing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBorderVerticalSpacing(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setVerticalBorderSpacing(StyleBuilderConverter::convertComputedLength<short>(state, value));
 }
@@ -2666,7 +2869,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarginLeft(StyleResolverState
     state.style()->setMarginLeft(state.parentStyle()->marginLeft());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarginLeft(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarginLeft(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMarginLeft(StyleBuilderConverter::convertQuirkyLength(state, value));
 }
@@ -2681,9 +2884,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFlexWrap(StyleResolverState& 
     state.style()->setFlexWrap(state.parentStyle()->flexWrap());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFlexWrap(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFlexWrap(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setFlexWrap(static_cast<EFlexWrap>(*toCSSPrimitiveValue(value)));
+    state.style()->setFlexWrap(toCSSIdentifierValue(value).convertTo<EFlexWrap>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMinHeight(StyleResolverState& state)
@@ -2696,7 +2899,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMinHeight(StyleResolverState&
     state.style()->setMinHeight(state.parentStyle()->minHeight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMinHeight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMinHeight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMinHeight(StyleBuilderConverter::convertLengthSizing(state, value));
 }
@@ -2711,7 +2914,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFloodColor(StyleResolverState
     state.style()->accessSVGStyle().setFloodColor(state.parentStyle()->svgStyle().floodColor());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFloodColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFloodColor(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setFloodColor(StyleBuilderConverter::convertColor(state, value));
 }
@@ -2726,7 +2929,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMaxHeight(StyleResolverState&
     state.style()->setMaxHeight(state.parentStyle()->maxHeight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMaxHeight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMaxHeight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMaxHeight(StyleBuilderConverter::convertLengthMaxSizing(state, value));
 }
@@ -2741,19 +2944,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBufferedRendering(StyleResolv
     state.style()->accessSVGStyle().setBufferedRendering(state.parentStyle()->svgStyle().bufferedRendering());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBufferedRendering(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBufferedRendering(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setBufferedRendering(static_cast<EBufferedRendering>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setBufferedRendering(toCSSIdentifierValue(value).convertTo<EBufferedRendering>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitWritingMode(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyOrphans(StyleResolverState& state)
 {
-    state.style()->setWritingMode(ComputedStyle::initialWritingMode());
+    state.style()->setOrphans(ComputedStyle::initialOrphans());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitWritingMode(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyOrphans(StyleResolverState& state)
 {
-    state.style()->setWritingMode(state.parentStyle()->writingMode());
+    state.style()->setOrphans(state.parentStyle()->orphans());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOrphans(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOrphans(toCSSPrimitiveValue(value).convertTo<short>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAlignmentBaseline(StyleResolverState& state)
@@ -2766,9 +2974,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAlignmentBaseline(StyleResolv
     state.style()->accessSVGStyle().setAlignmentBaseline(state.parentStyle()->svgStyle().alignmentBaseline());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAlignmentBaseline(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAlignmentBaseline(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setAlignmentBaseline(static_cast<EAlignmentBaseline>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setAlignmentBaseline(toCSSIdentifierValue(value).convertTo<EAlignmentBaseline>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyMinWidth(StyleResolverState& state)
@@ -2781,7 +2989,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMinWidth(StyleResolverState& 
     state.style()->setMinWidth(state.parentStyle()->minWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMinWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMinWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMinWidth(StyleBuilderConverter::convertLengthSizing(state, value));
 }
@@ -2796,39 +3004,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMaskType(StyleResolverState& 
     state.style()->accessSVGStyle().setMaskType(state.parentStyle()->svgStyle().maskType());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMaskType(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMaskType(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setMaskType(static_cast<EMaskType>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setMaskType(toCSSIdentifierValue(value).convertTo<EMaskType>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleStyle(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state)
 {
-    state.style()->setColumnRuleStyle(ComputedStyle::initialBorderStyle());
+    state.style()->setPerspectiveOriginY(ComputedStyle::initialPerspectiveOriginY());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleStyle(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state)
 {
-    state.style()->setColumnRuleStyle(state.parentStyle()->columnRuleStyle());
+    state.style()->setPerspectiveOriginY(state.parentStyle()->perspectiveOriginY());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setColumnRuleStyle(static_cast<EBorderStyle>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state)
-{
-    state.style()->setBoxFlexGroup(ComputedStyle::initialBoxFlexGroup());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state)
-{
-    state.style()->setBoxFlexGroup(state.parentStyle()->boxFlexGroup());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setBoxFlexGroup(static_cast<unsigned int>(*toCSSPrimitiveValue(value)));
+    state.style()->setPerspectiveOriginY(StyleBuilderConverter::convertLength(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextAlignLast(StyleResolverState& state)
@@ -2838,12 +3031,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextAlignLast(StyleResolverSt
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextAlignLast(StyleResolverState& state)
 {
-    state.style()->setTextAlignLast(state.parentStyle()->textAlignLast());
+    state.style()->setTextAlignLast(state.parentStyle()->getTextAlignLast());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextAlignLast(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextAlignLast(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextAlignLast(static_cast<TextAlignLast>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextAlignLast(toCSSIdentifierValue(value).convertTo<TextAlignLast>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMarginTopCollapse(StyleResolverState& state)
@@ -2856,9 +3049,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMarginTopCollapse(Style
     state.style()->setMarginBeforeCollapse(state.parentStyle()->marginBeforeCollapse());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginTopCollapse(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginTopCollapse(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setMarginBeforeCollapse(static_cast<EMarginCollapse>(*toCSSPrimitiveValue(value)));
+    state.style()->setMarginBeforeCollapse(toCSSIdentifierValue(value).convertTo<EMarginCollapse>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTabSize(StyleResolverState& state)
@@ -2868,12 +3061,27 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTabSize(StyleResolverState& s
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTabSize(StyleResolverState& state)
 {
-    state.style()->setTabSize(state.parentStyle()->tabSize());
+    state.style()->setTabSize(state.parentStyle()->getTabSize());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTabSize(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTabSize(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTabSize(StyleBuilderConverter::convertLengthOrTabSpaces(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyOffsetRotation(StyleResolverState& state)
+{
+    state.style()->setOffsetRotation(ComputedStyle::initialOffsetRotation());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyOffsetRotation(StyleResolverState& state)
+{
+    state.style()->setOffsetRotation(state.parentStyle()->offsetRotation());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyOffsetRotation(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setOffsetRotation(StyleBuilderConverter::convertOffsetRotate(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomWidth(StyleResolverState& state)
@@ -2886,7 +3094,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomWidth(StyleResolv
     state.style()->setBorderBottomWidth(state.parentStyle()->borderBottomWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderBottomWidth(StyleBuilderConverter::convertLineWidth<unsigned>(state, value));
 }
@@ -2901,7 +3109,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitHighlight(StyleResolver
     state.style()->setHighlight(state.parentStyle()->highlight());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitHighlight(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitHighlight(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setHighlight(StyleBuilderConverter::convertString<CSSValueNone>(state, value));
 }
@@ -2909,41 +3117,19 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitHighlight(StyleResolverSt
 void StyleBuilderFunctions::applyInitialCSSPropertyEmptyCells(StyleResolverState& state)
 {
     state.style()->setEmptyCells(ComputedStyle::initialEmptyCells());
+    state.style()->setEmptyCellsIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyEmptyCells(StyleResolverState& state)
 {
     state.style()->setEmptyCells(state.parentStyle()->emptyCells());
+    state.style()->setEmptyCellsIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyEmptyCells(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyEmptyCells(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setEmptyCells(static_cast<EEmptyCell>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyBorderImageSource(StyleResolverState& state)
-{
-    state.style()->setBorderImageSource(ComputedStyle::initialBorderImageSource());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageSource(StyleResolverState& state)
-{
-    state.style()->setBorderImageSource(state.parentStyle()->borderImageSource());
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyMotionOffset(StyleResolverState& state)
-{
-    state.style()->setMotionOffset(ComputedStyle::initialMotionOffset());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyMotionOffset(StyleResolverState& state)
-{
-    state.style()->setMotionOffset(state.parentStyle()->motionOffset());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyMotionOffset(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setMotionOffset(StyleBuilderConverter::convertLength(state, value));
+    state.style()->setEmptyCells(toCSSIdentifierValue(value).convertTo<EEmptyCells>());
+    state.style()->setEmptyCellsIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextOverflow(StyleResolverState& state)
@@ -2953,12 +3139,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextOverflow(StyleResolverSta
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextOverflow(StyleResolverState& state)
 {
-    state.style()->setTextOverflow(state.parentStyle()->textOverflow());
+    state.style()->setTextOverflow(state.parentStyle()->getTextOverflow());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextOverflow(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextOverflow(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextOverflow(static_cast<TextOverflow>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextOverflow(toCSSIdentifierValue(value).convertTo<TextOverflow>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBoxSizing(StyleResolverState& state)
@@ -2971,9 +3157,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBoxSizing(StyleResolverState&
     state.style()->setBoxSizing(state.parentStyle()->boxSizing());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBoxSizing(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBoxSizing(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxSizing(static_cast<EBoxSizing>(*toCSSPrimitiveValue(value)));
+    state.style()->setBoxSizing(toCSSIdentifierValue(value).convertTo<EBoxSizing>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStrokeWidth(StyleResolverState& state)
@@ -2986,7 +3172,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStrokeWidth(StyleResolverStat
     state.style()->accessSVGStyle().setStrokeWidth(state.parentStyle()->svgStyle().strokeWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStrokeWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStrokeWidth(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setStrokeWidth(StyleBuilderConverter::convertUnzoomedLength(state, value));
 }
@@ -3001,7 +3187,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMarkerStart(StyleResolverStat
     state.style()->accessSVGStyle().setMarkerStartResource(state.parentStyle()->svgStyle().markerStartResource());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMarkerStart(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMarkerStart(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setMarkerStartResource(StyleBuilderConverter::convertFragmentIdentifier(state, value));
 }
@@ -3013,12 +3199,12 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationStyle(StyleReso
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationStyle(StyleResolverState& state)
 {
-    state.style()->setTextDecorationStyle(state.parentStyle()->textDecorationStyle());
+    state.style()->setTextDecorationStyle(state.parentStyle()->getTextDecorationStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setTextDecorationStyle(static_cast<TextDecorationStyle>(*toCSSPrimitiveValue(value)));
+    state.style()->setTextDecorationStyle(toCSSIdentifierValue(value).convertTo<TextDecorationStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTranslate(StyleResolverState& state)
@@ -3031,7 +3217,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTranslate(StyleResolverState&
     state.style()->setTranslate(state.parentStyle()->translate());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTranslate(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTranslate(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setTranslate(StyleBuilderConverter::convertTranslate(state, value));
 }
@@ -3046,7 +3232,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyPaddingTop(StyleResolverState
     state.style()->setPaddingTop(state.parentStyle()->paddingTop());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyPaddingTop(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyPaddingTop(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setPaddingTop(StyleBuilderConverter::convertLength(state, value));
 }
@@ -3061,9 +3247,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyDisplay(StyleResolverState& s
     state.style()->setDisplay(state.parentStyle()->display());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyDisplay(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyDisplay(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setDisplay(static_cast<EDisplay>(*toCSSPrimitiveValue(value)));
+    state.style()->setDisplay(toCSSIdentifierValue(value).convertTo<EDisplay>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWordBreak(StyleResolverState& state)
@@ -3076,9 +3262,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWordBreak(StyleResolverState&
     state.style()->setWordBreak(state.parentStyle()->wordBreak());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWordBreak(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWordBreak(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setWordBreak(static_cast<EWordBreak>(*toCSSPrimitiveValue(value)));
+    state.style()->setWordBreak(toCSSIdentifierValue(value).convertTo<EWordBreak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderTopStyle(StyleResolverState& state)
@@ -3091,9 +3277,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopStyle(StyleResolverS
     state.style()->setBorderTopStyle(state.parentStyle()->borderTopStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderTopStyle(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderTopStyle(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBorderTopStyle(static_cast<EBorderStyle>(*toCSSPrimitiveValue(value)));
+    state.style()->setBorderTopStyle(toCSSIdentifierValue(value).convertTo<EBorderStyle>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyJustifyContent(StyleResolverState& state)
@@ -3106,7 +3292,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyJustifyContent(StyleResolverS
     state.style()->setJustifyContent(state.parentStyle()->justifyContent());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyJustifyContent(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyJustifyContent(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setJustifyContent(StyleBuilderConverter::convertContentAlignmentData(state, value));
 }
@@ -3121,9 +3307,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBoxShadow(StyleResolverState&
     state.style()->setBoxShadow(state.parentStyle()->boxShadow());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBoxShadow(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBoxShadow(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setBoxShadow(StyleBuilderConverter::convertShadow(state, value));
+    state.style()->setBoxShadow(StyleBuilderConverter::convertShadowList(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertySpeak(StyleResolverState& state)
@@ -3136,9 +3322,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertySpeak(StyleResolverState& sta
     state.style()->setSpeak(state.parentStyle()->speak());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertySpeak(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertySpeak(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setSpeak(static_cast<ESpeak>(*toCSSPrimitiveValue(value)));
+    state.style()->setSpeak(toCSSIdentifierValue(value).convertTo<ESpeak>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyListStyleImage(StyleResolverState& state)
@@ -3161,7 +3347,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFloodOpacity(StyleResolverSta
     state.style()->accessSVGStyle().setFloodOpacity(state.parentStyle()->svgStyle().floodOpacity());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFloodOpacity(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFloodOpacity(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setFloodOpacity(StyleBuilderConverter::convertNumberOrPercentage(state, value));
 }
@@ -3176,9 +3362,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyClipRule(StyleResolverState& 
     state.style()->accessSVGStyle().setClipRule(state.parentStyle()->svgStyle().clipRule());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyClipRule(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyClipRule(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->accessSVGStyle().setClipRule(static_cast<WindRule>(*toCSSPrimitiveValue(value)));
+    state.style()->accessSVGStyle().setClipRule(toCSSIdentifierValue(value).convertTo<WindRule>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFlexDirection(StyleResolverState& state)
@@ -3191,9 +3377,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFlexDirection(StyleResolverSt
     state.style()->setFlexDirection(state.parentStyle()->flexDirection());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFlexDirection(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFlexDirection(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setFlexDirection(static_cast<EFlexDirection>(*toCSSPrimitiveValue(value)));
+    state.style()->setFlexDirection(toCSSIdentifierValue(value).convertTo<EFlexDirection>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyLightingColor(StyleResolverState& state)
@@ -3206,24 +3392,9 @@ void StyleBuilderFunctions::applyInheritCSSPropertyLightingColor(StyleResolverSt
     state.style()->accessSVGStyle().setLightingColor(state.parentStyle()->svgStyle().lightingColor());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyLightingColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyLightingColor(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->accessSVGStyle().setLightingColor(StyleBuilderConverter::convertColor(state, value));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyPageBreakInside(StyleResolverState& state)
-{
-    state.style()->setPageBreakInside(ComputedStyle::initialPageBreak());
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyPageBreakInside(StyleResolverState& state)
-{
-    state.style()->setPageBreakInside(state.parentStyle()->pageBreakInside());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyPageBreakInside(StyleResolverState& state, CSSValue* value)
-{
-    state.style()->setPageBreakInside(static_cast<EPageBreak>(*toCSSPrimitiveValue(value)));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyListStyleType(StyleResolverState& state)
@@ -3236,9 +3407,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyListStyleType(StyleResolverSt
     state.style()->setListStyleType(state.parentStyle()->listStyleType());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyListStyleType(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyListStyleType(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setListStyleType(static_cast<EListStyleType>(*toCSSPrimitiveValue(value)));
+    state.style()->setListStyleType(toCSSIdentifierValue(value).convertTo<EListStyleType>());
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyImageOrientation(StyleResolverState& state)
+{
+    state.style()->setRespectImageOrientation(ComputedStyle::initialRespectImageOrientation());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyImageOrientation(StyleResolverState& state)
+{
+    state.style()->setRespectImageOrientation(state.parentStyle()->respectImageOrientation());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyImageOrientation(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setRespectImageOrientation(StyleBuilderConverter::convertImageOrientation(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextAlign(StyleResolverState& state)
@@ -3253,7 +3439,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTextAlign(StyleResolverState&
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAlignItems(StyleResolverState& state)
 {
-    state.style()->setAlignItems(ComputedStyle::initialSelfAlignment());
+    state.style()->setAlignItems(ComputedStyle::initialDefaultAlignment());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAlignItems(StyleResolverState& state)
@@ -3261,7 +3447,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAlignItems(StyleResolverState
     state.style()->setAlignItems(state.parentStyle()->alignItems());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAlignItems(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAlignItems(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setAlignItems(StyleBuilderConverter::convertSelfOrDefaultAlignmentData(state, value));
 }
@@ -3276,9 +3462,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyObjectPosition(StyleResolverS
     state.style()->setObjectPosition(state.parentStyle()->objectPosition());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyObjectPosition(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyObjectPosition(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setObjectPosition(StyleBuilderConverter::convertPosition(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyGridColumnGap(StyleResolverState& state)
+{
+    state.style()->setGridColumnGap(ComputedStyle::initialGridColumnGap());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyGridColumnGap(StyleResolverState& state)
+{
+    state.style()->setGridColumnGap(state.parentStyle()->gridColumnGap());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyGridColumnGap(StyleResolverState& state, const CSSValue& value)
+{
+    state.style()->setGridColumnGap(StyleBuilderConverter::convertLength(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyScrollSnapDestination(StyleResolverState& state)
@@ -3291,24 +3492,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyScrollSnapDestination(StyleRe
     state.style()->setScrollSnapDestination(state.parentStyle()->scrollSnapDestination());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapDestination(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyScrollSnapDestination(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setScrollSnapDestination(StyleBuilderConverter::convertPosition(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state)
 {
-    state.style()->setPerspectiveOriginY(ComputedStyle::initialPerspectiveOriginY());
+    state.style()->setBoxFlexGroup(ComputedStyle::initialBoxFlexGroup());
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state)
 {
-    state.style()->setPerspectiveOriginY(state.parentStyle()->perspectiveOriginY());
+    state.style()->setBoxFlexGroup(state.parentStyle()->boxFlexGroup());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlexGroup(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setPerspectiveOriginY(StyleBuilderConverter::convertLength(state, value));
+    state.style()->setBoxFlexGroup(toCSSPrimitiveValue(value).convertTo<unsigned int>());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitPerspectiveOriginX(StyleResolverState& state)
@@ -3321,9 +3522,24 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginX(Styl
     state.style()->setPerspectiveOriginX(state.parentStyle()->perspectiveOriginX());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginX(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setPerspectiveOriginX(StyleBuilderConverter::convertLength(state, value));
+}
+
+void StyleBuilderFunctions::applyInitialCSSPropertyFontSizeAdjust(StyleResolverState& state)
+{
+    state.fontBuilder().setSizeAdjust(FontBuilder::initialSizeAdjust());
+}
+
+void StyleBuilderFunctions::applyInheritCSSPropertyFontSizeAdjust(StyleResolverState& state)
+{
+    state.fontBuilder().setSizeAdjust(state.parentFontDescription().sizeAdjust());
+}
+
+void StyleBuilderFunctions::applyValueCSSPropertyFontSizeAdjust(StyleResolverState& state, const CSSValue& value)
+{
+    state.fontBuilder().setSizeAdjust(StyleBuilderConverter::convertFontSizeAdjust(state, value));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFontSize(StyleResolverState& state)
@@ -3333,10 +3549,10 @@ void StyleBuilderFunctions::applyInitialCSSPropertyFontSize(StyleResolverState& 
 
 void StyleBuilderFunctions::applyInheritCSSPropertyFontSize(StyleResolverState& state)
 {
-    state.fontBuilder().setSize(state.parentFontDescription().size());
+    state.fontBuilder().setSize(state.parentFontDescription().getSize());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFontSize(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFontSize(StyleResolverState& state, const CSSValue& value)
 {
     state.fontBuilder().setSize(StyleBuilderConverter::convertFontSize(state, value));
 }
@@ -3344,24 +3560,26 @@ void StyleBuilderFunctions::applyValueCSSPropertyFontSize(StyleResolverState& st
 void StyleBuilderFunctions::applyInitialCSSPropertyVisibility(StyleResolverState& state)
 {
     state.style()->setVisibility(ComputedStyle::initialVisibility());
+    state.style()->setVisibilityIsInherited(false);
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyVisibility(StyleResolverState& state)
 {
     state.style()->setVisibility(state.parentStyle()->visibility());
+    state.style()->setVisibilityIsInherited(true);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyVisibility(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyVisibility(StyleResolverState& state, const CSSValue& value)
 {
-    state.style()->setVisibility(static_cast<EVisibility>(*toCSSPrimitiveValue(value)));
+    state.style()->setVisibility(toCSSIdentifierValue(value).convertTo<EVisibility>());
+    state.style()->setVisibilityIsInherited(false);
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationDelay(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.delayList().clear();
-    data.delayList().append(CSSAnimationData::initialDelay());
+    data.delayList().push_back(CSSAnimationData::initialDelay());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDelay(StyleResolverState& state)
@@ -3373,19 +3591,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDelay(StyleResolverS
         state.style()->accessAnimations().delayList() = parentData->delayList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationDelay(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationDelay(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.delayList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.delayList().append(CSSToStyleMap::mapAnimationDelay(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.delayList().push_back(CSSToStyleMap::mapAnimationDelay(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationDirection(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.directionList().clear();
-    data.directionList().append(CSSAnimationData::initialDirection());
+    data.directionList().push_back(CSSAnimationData::initialDirection());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDirection(StyleResolverState& state)
@@ -3397,19 +3615,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDirection(StyleResol
         state.style()->accessAnimations().directionList() = parentData->directionList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationDirection(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationDirection(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.directionList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.directionList().append(CSSToStyleMap::mapAnimationDirection(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.directionList().push_back(CSSToStyleMap::mapAnimationDirection(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationDuration(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.durationList().clear();
-    data.durationList().append(CSSAnimationData::initialDuration());
+    data.durationList().push_back(CSSAnimationData::initialDuration());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDuration(StyleResolverState& state)
@@ -3421,19 +3639,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationDuration(StyleResolv
         state.style()->accessAnimations().durationList() = parentData->durationList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationDuration(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationDuration(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.durationList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.durationList().append(CSSToStyleMap::mapAnimationDuration(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.durationList().push_back(CSSToStyleMap::mapAnimationDuration(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationFillMode(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.fillModeList().clear();
-    data.fillModeList().append(CSSAnimationData::initialFillMode());
+    data.fillModeList().push_back(CSSAnimationData::initialFillMode());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationFillMode(StyleResolverState& state)
@@ -3445,19 +3663,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationFillMode(StyleResolv
         state.style()->accessAnimations().fillModeList() = parentData->fillModeList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationFillMode(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationFillMode(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.fillModeList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.fillModeList().append(CSSToStyleMap::mapAnimationFillMode(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.fillModeList().push_back(CSSToStyleMap::mapAnimationFillMode(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationIterationCount(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.iterationCountList().clear();
-    data.iterationCountList().append(CSSAnimationData::initialIterationCount());
+    data.iterationCountList().push_back(CSSAnimationData::initialIterationCount());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationIterationCount(StyleResolverState& state)
@@ -3469,19 +3687,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationIterationCount(Style
         state.style()->accessAnimations().iterationCountList() = parentData->iterationCountList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationIterationCount(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationIterationCount(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.iterationCountList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.iterationCountList().append(CSSToStyleMap::mapAnimationIterationCount(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.iterationCountList().push_back(CSSToStyleMap::mapAnimationIterationCount(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationName(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.nameList().clear();
-    data.nameList().append(CSSAnimationData::initialName());
+    data.nameList().push_back(CSSAnimationData::initialName());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationName(StyleResolverState& state)
@@ -3493,19 +3711,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationName(StyleResolverSt
         state.style()->accessAnimations().nameList() = parentData->nameList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationName(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationName(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.nameList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.nameList().append(CSSToStyleMap::mapAnimationName(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.nameList().push_back(CSSToStyleMap::mapAnimationName(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationPlayState(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.playStateList().clear();
-    data.playStateList().append(CSSAnimationData::initialPlayState());
+    data.playStateList().push_back(CSSAnimationData::initialPlayState());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationPlayState(StyleResolverState& state)
@@ -3517,19 +3735,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationPlayState(StyleResol
         state.style()->accessAnimations().playStateList() = parentData->playStateList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationPlayState(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationPlayState(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.playStateList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.playStateList().append(CSSToStyleMap::mapAnimationPlayState(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.playStateList().push_back(CSSToStyleMap::mapAnimationPlayState(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyAnimationTimingFunction(StyleResolverState& state)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.timingFunctionList().clear();
-    data.timingFunctionList().append(CSSAnimationData::initialTimingFunction());
+    data.timingFunctionList().push_back(CSSAnimationData::initialTimingFunction());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyAnimationTimingFunction(StyleResolverState& state)
@@ -3541,19 +3759,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyAnimationTimingFunction(Style
         state.style()->accessAnimations().timingFunctionList() = parentData->timingFunctionList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyAnimationTimingFunction(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyAnimationTimingFunction(StyleResolverState& state, const CSSValue& value)
 {
     CSSAnimationData& data = state.style()->accessAnimations();
     data.timingFunctionList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.timingFunctionList().append(CSSToStyleMap::mapAnimationTimingFunction(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.timingFunctionList().push_back(CSSToStyleMap::mapAnimationTimingFunction(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransitionDelay(StyleResolverState& state)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.delayList().clear();
-    data.delayList().append(CSSTransitionData::initialDelay());
+    data.delayList().push_back(CSSTransitionData::initialDelay());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTransitionDelay(StyleResolverState& state)
@@ -3565,19 +3783,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransitionDelay(StyleResolver
         state.style()->accessTransitions().delayList() = parentData->delayList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransitionDelay(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransitionDelay(StyleResolverState& state, const CSSValue& value)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.delayList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.delayList().append(CSSToStyleMap::mapAnimationDelay(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.delayList().push_back(CSSToStyleMap::mapAnimationDelay(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransitionDuration(StyleResolverState& state)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.durationList().clear();
-    data.durationList().append(CSSTransitionData::initialDuration());
+    data.durationList().push_back(CSSTransitionData::initialDuration());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTransitionDuration(StyleResolverState& state)
@@ -3589,19 +3807,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransitionDuration(StyleResol
         state.style()->accessTransitions().durationList() = parentData->durationList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransitionDuration(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransitionDuration(StyleResolverState& state, const CSSValue& value)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.durationList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.durationList().append(CSSToStyleMap::mapAnimationDuration(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.durationList().push_back(CSSToStyleMap::mapAnimationDuration(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransitionProperty(StyleResolverState& state)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.propertyList().clear();
-    data.propertyList().append(CSSTransitionData::initialProperty());
+    data.propertyList().push_back(CSSTransitionData::initialProperty());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTransitionProperty(StyleResolverState& state)
@@ -3613,19 +3831,19 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransitionProperty(StyleResol
         state.style()->accessTransitions().propertyList() = parentData->propertyList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransitionProperty(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransitionProperty(StyleResolverState& state, const CSSValue& value)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.propertyList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.propertyList().append(CSSToStyleMap::mapAnimationProperty(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.propertyList().push_back(CSSToStyleMap::mapAnimationProperty(*listValue));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTransitionTimingFunction(StyleResolverState& state)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.timingFunctionList().clear();
-    data.timingFunctionList().append(CSSTransitionData::initialTimingFunction());
+    data.timingFunctionList().push_back(CSSTransitionData::initialTimingFunction());
 }
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTransitionTimingFunction(StyleResolverState& state)
@@ -3637,14 +3855,13 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTransitionTimingFunction(Styl
         state.style()->accessTransitions().timingFunctionList() = parentData->timingFunctionList();
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTransitionTimingFunction(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTransitionTimingFunction(StyleResolverState& state, const CSSValue& value)
 {
     CSSTransitionData& data = state.style()->accessTransitions();
     data.timingFunctionList().clear();
-    for (auto& listValue : toCSSValueList(*value))
-        data.timingFunctionList().append(CSSToStyleMap::mapAnimationTimingFunction(listValue.get()));
+    for (auto& listValue : toCSSValueList(value))
+        data.timingFunctionList().push_back(CSSToStyleMap::mapAnimationTimingFunction(*listValue));
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyClip(StyleResolverState& state)
 {
@@ -3659,49 +3876,20 @@ void StyleBuilderFunctions::applyInheritCSSPropertyClip(StyleResolverState& stat
         state.style()->setClip(state.parentStyle()->clip());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyClip(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyClip(StyleResolverState& state, const CSSValue& value)
 {
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
+    if (value.isIdentifierValue() && toCSSIdentifierValue(value).getValueID() == CSSValueAuto)
         state.style()->setHasAutoClip();
     else
         state.style()->setClip(StyleBuilderConverter::convertClip(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyOrphans(StyleResolverState& state)
-{
-    state.style()->setHasAutoOrphans();
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyOrphans(StyleResolverState& state)
-{
-    if (state.parentStyle()->hasAutoOrphans())
-        state.style()->setHasAutoOrphans();
-    else
-        state.style()->setOrphans(state.parentStyle()->orphans());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyOrphans(StyleResolverState& state, CSSValue* value)
-{
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
-        state.style()->setHasAutoOrphans();
-    else
-        state.style()->setOrphans(static_cast<short>(*toCSSPrimitiveValue(value)));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnCount(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnCount(StyleResolverState& state)
 {
     state.style()->setHasAutoColumnCount();
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnCount(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnCount(StyleResolverState& state)
 {
     if (state.parentStyle()->hasAutoColumnCount())
         state.style()->setHasAutoColumnCount();
@@ -3709,24 +3897,20 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnCount(StyleResolv
         state.style()->setColumnCount(state.parentStyle()->columnCount());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnCount(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnCount(StyleResolverState& state, const CSSValue& value)
 {
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
+    if (value.isIdentifierValue() && toCSSIdentifierValue(value).getValueID() == CSSValueAuto)
         state.style()->setHasAutoColumnCount();
     else
-        state.style()->setColumnCount(static_cast<unsigned short>(*toCSSPrimitiveValue(value)));
+        state.style()->setColumnCount(toCSSPrimitiveValue(value).convertTo<unsigned short>());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnGap(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnGap(StyleResolverState& state)
 {
     state.style()->setHasNormalColumnGap();
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnGap(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnGap(StyleResolverState& state)
 {
     if (state.parentStyle()->hasNormalColumnGap())
         state.style()->setHasNormalColumnGap();
@@ -3734,24 +3918,20 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnGap(StyleResolver
         state.style()->setColumnGap(state.parentStyle()->columnGap());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnGap(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnGap(StyleResolverState& state, const CSSValue& value)
 {
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueNormal)
+    if (value.isIdentifierValue() && toCSSIdentifierValue(value).getValueID() == CSSValueNormal)
         state.style()->setHasNormalColumnGap();
     else
         state.style()->setColumnGap(StyleBuilderConverter::convertComputedLength<float>(state, value));
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnWidth(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnWidth(StyleResolverState& state)
 {
     state.style()->setHasAutoColumnWidth();
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnWidth(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnWidth(StyleResolverState& state)
 {
     if (state.parentStyle()->hasAutoColumnWidth())
         state.style()->setHasAutoColumnWidth();
@@ -3759,41 +3939,12 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnWidth(StyleResolv
         state.style()->setColumnWidth(state.parentStyle()->columnWidth());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnWidth(StyleResolverState& state, const CSSValue& value)
 {
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
+    if (value.isIdentifierValue() && toCSSIdentifierValue(value).getValueID() == CSSValueAuto)
         state.style()->setHasAutoColumnWidth();
     else
         state.style()->setColumnWidth(StyleBuilderConverter::convertComputedLength<float>(state, value));
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWidows(StyleResolverState& state)
-{
-    state.style()->setHasAutoWidows();
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWidows(StyleResolverState& state)
-{
-    if (state.parentStyle()->hasAutoWidows())
-        state.style()->setHasAutoWidows();
-    else
-        state.style()->setWidows(state.parentStyle()->widows());
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWidows(StyleResolverState& state, CSSValue* value)
-{
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
-        state.style()->setHasAutoWidows();
-    else
-        state.style()->setWidows(static_cast<short>(*toCSSPrimitiveValue(value)));
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyZIndex(StyleResolverState& state)
@@ -3809,39 +3960,32 @@ void StyleBuilderFunctions::applyInheritCSSPropertyZIndex(StyleResolverState& st
         state.style()->setZIndex(state.parentStyle()->zIndex());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyZIndex(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyZIndex(StyleResolverState& state, const CSSValue& value)
 {
-    if (!value->isPrimitiveValue())
-        return;
-
-    CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-    if (primitiveValue->getValueID() == CSSValueAuto)
+    if (value.isIdentifierValue() && toCSSIdentifierValue(value).getValueID() == CSSValueAuto)
         state.style()->setHasAutoZIndex();
     else
-        state.style()->setZIndex(static_cast<int>(*toCSSPrimitiveValue(value)));
+        state.style()->setZIndex(toCSSPrimitiveValue(value).convertTo<int>());
 }
 
-
-static bool lengthMatchesAllSides(const LengthBox& lengthBox, const Length& length)
+static bool lengthMatchesAllSides(const LengthBox& lengthBox,
+    const Length& length)
 {
-    return (lengthBox.left() == length
-        && lengthBox.right() == length
-        && lengthBox.top() == length
-        && lengthBox.bottom() == length);
+    return (lengthBox.left() == length && lengthBox.right() == length && lengthBox.top() == length && lengthBox.bottom() == length);
 }
 
-static bool borderImageLengthMatchesAllSides(const BorderImageLengthBox& borderImageLengthBox, const BorderImageLength& borderImageLength)
+static bool borderImageLengthMatchesAllSides(
+    const BorderImageLengthBox& borderImageLengthBox,
+    const BorderImageLength& borderImageLength)
 {
-    return (borderImageLengthBox.left() == borderImageLength
-        && borderImageLengthBox.right() == borderImageLength
-        && borderImageLengthBox.top() == borderImageLength
-        && borderImageLengthBox.bottom() == borderImageLength);
+    return (borderImageLengthBox.left() == borderImageLength && borderImageLengthBox.right() == borderImageLength && borderImageLengthBox.top() == borderImageLength && borderImageLengthBox.bottom() == borderImageLength);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderImageOutset(StyleResolverState& state)
 {
     const NinePieceImage& currentImage = state.style()->borderImage();
-    if (borderImageLengthMatchesAllSides(currentImage.outset(), BorderImageLength(Length(0, Fixed))))
+    if (borderImageLengthMatchesAllSides(currentImage.outset(),
+            BorderImageLength(Length(0, Fixed))))
         return;
 
     NinePieceImage image(currentImage);
@@ -3856,7 +4000,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageOutset(StyleResolv
     state.style()->setBorderImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderImageOutset(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderImageOutset(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->borderImage());
     image.setOutset(CSSToStyleMap::mapNinePieceImageQuad(state, value));
@@ -3882,7 +4026,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageRepeat(StyleResolv
     state.style()->setBorderImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderImageRepeat(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderImageRepeat(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->borderImage());
     CSSToStyleMap::mapNinePieceImageRepeat(state, value, image);
@@ -3908,7 +4052,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageSlice(StyleResolve
     state.style()->setBorderImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderImageSlice(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderImageSlice(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->borderImage());
     CSSToStyleMap::mapNinePieceImageSlice(state, value, image);
@@ -3918,7 +4062,8 @@ void StyleBuilderFunctions::applyValueCSSPropertyBorderImageSlice(StyleResolverS
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderImageWidth(StyleResolverState& state)
 {
     const NinePieceImage& currentImage = state.style()->borderImage();
-    if (borderImageLengthMatchesAllSides(currentImage.borderSlices(), BorderImageLength(1.0)))
+    if (borderImageLengthMatchesAllSides(currentImage.borderSlices(),
+            BorderImageLength(1.0)))
         return;
 
     NinePieceImage image(currentImage);
@@ -3933,7 +4078,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderImageWidth(StyleResolve
     state.style()->setBorderImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderImageWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderImageWidth(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->borderImage());
     image.setBorderSlices(CSSToStyleMap::mapNinePieceImageQuad(state, value));
@@ -3943,7 +4088,8 @@ void StyleBuilderFunctions::applyValueCSSPropertyBorderImageWidth(StyleResolverS
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageOutset(StyleResolverState& state)
 {
     const NinePieceImage& currentImage = state.style()->maskBoxImage();
-    if (borderImageLengthMatchesAllSides(currentImage.outset(), BorderImageLength(Length(0, Fixed))))
+    if (borderImageLengthMatchesAllSides(currentImage.outset(),
+            BorderImageLength(Length(0, Fixed))))
         return;
 
     NinePieceImage image(currentImage);
@@ -3958,7 +4104,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageOutset(Styl
     state.style()->setMaskBoxImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageOutset(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageOutset(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->maskBoxImage());
     image.setOutset(CSSToStyleMap::mapNinePieceImageQuad(state, value));
@@ -3984,7 +4130,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageRepeat(Styl
     state.style()->setMaskBoxImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageRepeat(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageRepeat(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->maskBoxImage());
     CSSToStyleMap::mapNinePieceImageRepeat(state, value, image);
@@ -3994,7 +4140,8 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageRepeat(StyleR
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageSlice(StyleResolverState& state)
 {
     const NinePieceImage& currentImage = state.style()->maskBoxImage();
-    // Masks have a different initial value for slices. Preserve the value of 0 for backwards compatibility.
+    // Masks have a different initial value for slices. Preserve the value of 0
+    // for backwards compatibility.
     if (currentImage.fill() == true && lengthMatchesAllSides(currentImage.imageSlices(), Length(0, Fixed)))
         return;
 
@@ -4011,7 +4158,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageSlice(Style
     state.style()->setMaskBoxImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSlice(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSlice(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->maskBoxImage());
     CSSToStyleMap::mapNinePieceImageSlice(state, value, image);
@@ -4021,8 +4168,10 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSlice(StyleRe
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageWidth(StyleResolverState& state)
 {
     const NinePieceImage& currentImage = state.style()->maskBoxImage();
-    // Masks have a different initial value for widths. Preserve the value of 'auto' for backwards compatibility.
-    if (borderImageLengthMatchesAllSides(currentImage.borderSlices(), BorderImageLength(Length(Auto))))
+    // Masks have a different initial value for widths. Preserve the value of
+    // 'auto' for backwards compatibility.
+    if (borderImageLengthMatchesAllSides(currentImage.borderSlices(),
+            BorderImageLength(Length(Auto))))
         return;
 
     NinePieceImage image(currentImage);
@@ -4037,24 +4186,22 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageWidth(Style
     state.style()->setMaskBoxImage(image);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageWidth(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageWidth(StyleResolverState& state, const CSSValue& value)
 {
     NinePieceImage image(state.style()->maskBoxImage());
     image.setBorderSlices(CSSToStyleMap::mapNinePieceImageQuad(state, value));
     state.style()->setMaskBoxImage(image);
 }
 
-
-void StyleBuilderFunctions::applyValueCSSPropertyBorderImageSource(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderImageSource(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setBorderImageSource(state.styleImage(CSSPropertyBorderImageSource, value));
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSource(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->setMaskBoxImageSource(state.styleImage(CSSPropertyWebkitMaskBoxImageSource, value));
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBackgroundColor(StyleResolverState& state)
 {
@@ -4067,7 +4214,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyBackgroundColor(StyleResolver
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->backgroundColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setBackgroundColor(color);
@@ -4075,12 +4223,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundColor(StyleResolver
         state.style()->setVisitedLinkBackgroundColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setBackgroundColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkBackgroundColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkBackgroundColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomColor(StyleResolverState& state)
@@ -4094,7 +4244,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyBorderBottomColor(StyleResolv
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->borderBottomColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderBottomColor(color);
@@ -4102,12 +4253,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderBottomColor(StyleResolv
         state.style()->setVisitedLinkBorderBottomColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderBottomColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderBottomColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkBorderBottomColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkBorderBottomColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderLeftColor(StyleResolverState& state)
@@ -4121,7 +4274,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyBorderLeftColor(StyleResolver
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBorderLeftColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->borderLeftColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderLeftColor(color);
@@ -4129,12 +4283,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderLeftColor(StyleResolver
         state.style()->setVisitedLinkBorderLeftColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderLeftColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderLeftColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkBorderLeftColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkBorderLeftColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderRightColor(StyleResolverState& state)
@@ -4148,7 +4304,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyBorderRightColor(StyleResolve
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBorderRightColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->borderRightColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderRightColor(color);
@@ -4156,12 +4313,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderRightColor(StyleResolve
         state.style()->setVisitedLinkBorderRightColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderRightColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderRightColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderRightColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkBorderRightColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkBorderRightColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBorderTopColor(StyleResolverState& state)
@@ -4175,7 +4334,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyBorderTopColor(StyleResolverS
 
 void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->borderTopColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderTopColor(color);
@@ -4183,12 +4343,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBorderTopColor(StyleResolverS
         state.style()->setVisitedLinkBorderTopColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBorderTopColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBorderTopColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setBorderTopColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkBorderTopColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkBorderTopColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyOutlineColor(StyleResolverState& state)
@@ -4202,7 +4364,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyOutlineColor(StyleResolverSta
 
 void StyleBuilderFunctions::applyInheritCSSPropertyOutlineColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->outlineColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setOutlineColor(color);
@@ -4210,12 +4373,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyOutlineColor(StyleResolverSta
         state.style()->setVisitedLinkOutlineColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyOutlineColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyOutlineColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setOutlineColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkOutlineColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkOutlineColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationColor(StyleResolverState& state)
@@ -4229,7 +4394,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationColor(StyleReso
 
 void StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->textDecorationColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextDecorationColor(color);
@@ -4237,15 +4403,17 @@ void StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationColor(StyleReso
         state.style()->setVisitedLinkTextDecorationColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyTextDecorationColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextDecorationColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkTextDecorationColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkTextDecorationColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleColor(StyleResolverState& state)
+void StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleColor(StyleResolverState& state)
 {
     StyleColor color = StyleColor::currentColor();
     if (state.applyPropertyToRegularStyle())
@@ -4254,9 +4422,10 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleColor(StyleRe
         state.style()->setVisitedLinkColumnRuleColor(color);
 }
 
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleColor(StyleResolverState& state)
+void StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->columnRuleColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setColumnRuleColor(color);
@@ -4264,12 +4433,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleColor(StyleRe
         state.style()->setVisitedLinkColumnRuleColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyColumnRuleColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setColumnRuleColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkColumnRuleColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkColumnRuleColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisColor(StyleResolverState& state)
@@ -4283,7 +4454,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisColor(Style
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->textEmphasisColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextEmphasisColor(color);
@@ -4291,12 +4463,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisColor(Style
         state.style()->setVisitedLinkTextEmphasisColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextEmphasisColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkTextEmphasisColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkTextEmphasisColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextFillColor(StyleResolverState& state)
@@ -4310,7 +4484,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextFillColor(StyleReso
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextFillColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->textFillColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextFillColor(color);
@@ -4318,12 +4493,14 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextFillColor(StyleReso
         state.style()->setVisitedLinkTextFillColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextFillColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextFillColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextFillColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkTextFillColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkTextFillColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextStrokeColor(StyleResolverState& state)
@@ -4337,7 +4514,8 @@ void StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextStrokeColor(StyleRe
 
 void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextStrokeColor(StyleResolverState& state)
 {
-    // Visited link style can never explicitly inherit from parent visited link style so no separate getters are needed.
+    // Visited link style can never explicitly inherit from parent visited link
+    // style so no separate getters are needed.
     StyleColor color = state.parentStyle()->textStrokeColor();
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextStrokeColor(color);
@@ -4345,16 +4523,18 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextStrokeColor(StyleRe
         state.style()->setVisitedLinkTextStrokeColor(color);
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeColor(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeColor(StyleResolverState& state, const CSSValue& value)
 {
     if (state.applyPropertyToRegularStyle())
         state.style()->setTextStrokeColor(StyleBuilderConverter::convertStyleColor(state, value));
-    if (state.applyPropertyToVisitedLinkStyle())
-        state.style()->setVisitedLinkTextStrokeColor(StyleBuilderConverter::convertStyleColor(state, value, true));
+    if (state.applyPropertyToVisitedLinkStyle()) {
+        state.style()->setVisitedLinkTextStrokeColor(
+            StyleBuilderConverter::convertStyleColor(state, value, true));
+    }
 }
 
-
-void StyleBuilderFunctions::applyInitialCSSPropertyCounterIncrement(StyleResolverState& state) {
+void StyleBuilderFunctions::applyInitialCSSPropertyCounterIncrement(StyleResolverState& state)
+{
     state.style()->clearIncrementDirectives();
 }
 
@@ -4365,7 +4545,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCounterIncrement(StyleResolve
         return;
 
     CounterDirectiveMap& map = state.style()->accessCounterDirectives();
-    ASSERT(!parentMap->isEmpty());
+    DCHECK(!parentMap->isEmpty());
 
     typedef CounterDirectiveMap::const_iterator Iterator;
     Iterator end = parentMap->end();
@@ -4375,38 +4555,32 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCounterIncrement(StyleResolve
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyCounterIncrement(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyCounterIncrement(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->clearIncrementDirectives();
 
-    if (!value->isValueList()) {
-        ASSERT(value->isPrimitiveValue() && toCSSPrimitiveValue(value)->getValueID() == CSSValueNone);
+    if (!value.isValueList()) {
+        DCHECK(value.isIdentifierValue());
+        DCHECK_EQ(toCSSIdentifierValue(value).getValueID(), CSSValueNone);
         return;
     }
 
     CounterDirectiveMap& map = state.style()->accessCounterDirectives();
 
-    CSSValueList* list = toCSSValueList(value);
+    const CSSValueList& list = toCSSValueList(value);
 
-    int length = list ? list->length() : 0;
-    for (int i = 0; i < length; ++i) {
-        CSSValue* currValue = list->item(i);
-        if (!currValue->isPrimitiveValue())
-            continue;
-
-        Pair* pair = toCSSPrimitiveValue(currValue)->getPairValue();
-        if (!pair || !pair->first() || !pair->second())
-            continue;
-
-        AtomicString identifier(pair->first()->getStringValue());
-        int value = pair->second()->getIntValue();
+    for (size_t i = 0; i < list.length(); ++i) {
+        const CSSValuePair& pair = toCSSValuePair(list.item(i));
+        AtomicString identifier(toCSSCustomIdentValue(pair.first()).value());
+        int value = toCSSPrimitiveValue(pair.second()).getIntValue();
         CounterDirectives& directives = map.add(identifier, CounterDirectives()).storedValue->value;
         directives.addIncrementValue(value);
     }
-    ASSERT(!map.isEmpty());
+    DCHECK(!map.isEmpty());
 }
 
-void StyleBuilderFunctions::applyInitialCSSPropertyCounterReset(StyleResolverState& state) {
+void StyleBuilderFunctions::applyInitialCSSPropertyCounterReset(StyleResolverState& state)
+{
     state.style()->clearResetDirectives();
 }
 
@@ -4417,7 +4591,7 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCounterReset(StyleResolverSta
         return;
 
     CounterDirectiveMap& map = state.style()->accessCounterDirectives();
-    ASSERT(!parentMap->isEmpty());
+    DCHECK(!parentMap->isEmpty());
 
     typedef CounterDirectiveMap::const_iterator Iterator;
     Iterator end = parentMap->end();
@@ -4427,37 +4601,29 @@ void StyleBuilderFunctions::applyInheritCSSPropertyCounterReset(StyleResolverSta
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyCounterReset(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyCounterReset(StyleResolverState& state, const CSSValue& value)
 {
     state.style()->clearResetDirectives();
 
-    if (!value->isValueList()) {
-        ASSERT(value->isPrimitiveValue() && toCSSPrimitiveValue(value)->getValueID() == CSSValueNone);
+    if (!value.isValueList()) {
+        DCHECK(value.isIdentifierValue());
+        DCHECK_EQ(toCSSIdentifierValue(value).getValueID(), CSSValueNone);
         return;
     }
 
     CounterDirectiveMap& map = state.style()->accessCounterDirectives();
 
-    CSSValueList* list = toCSSValueList(value);
+    const CSSValueList& list = toCSSValueList(value);
 
-    int length = list ? list->length() : 0;
-    for (int i = 0; i < length; ++i) {
-        CSSValue* currValue = list->item(i);
-        if (!currValue->isPrimitiveValue())
-            continue;
-
-        Pair* pair = toCSSPrimitiveValue(currValue)->getPairValue();
-        if (!pair || !pair->first() || !pair->second())
-            continue;
-
-        AtomicString identifier(pair->first()->getStringValue());
-        int value = pair->second()->getIntValue();
+    for (size_t i = 0; i < list.length(); ++i) {
+        const CSSValuePair& pair = toCSSValuePair(list.item(i));
+        AtomicString identifier(toCSSCustomIdentValue(pair.first()).value());
+        int value = toCSSPrimitiveValue(pair.second()).getIntValue();
         CounterDirectives& directives = map.add(identifier, CounterDirectives()).storedValue->value;
         directives.setResetValue(value);
     }
-    ASSERT(!map.isEmpty());
+    DCHECK(!map.isEmpty());
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyBackgroundAttachment(StyleResolverState& state)
 {
@@ -4482,23 +4648,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundAttachment(StyleRes
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearAttachment();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundAttachment(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundAttachment(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillAttachment(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillAttachment(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4507,7 +4673,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundAttachment(StyleResol
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearAttachment();
         currChild = currChild->next();
     }
@@ -4536,23 +4702,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundBlendMode(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearBlendMode();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundBlendMode(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundBlendMode(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillBlendMode(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillBlendMode(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4561,7 +4727,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundBlendMode(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearBlendMode();
         currChild = currChild->next();
     }
@@ -4590,23 +4756,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundClip(StyleResolverS
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearClip();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundClip(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundClip(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillClip(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillClip(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4615,7 +4781,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundClip(StyleResolverSta
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearClip();
         currChild = currChild->next();
     }
@@ -4644,23 +4810,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundImage(StyleResolver
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearImage();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundImage(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundImage(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillImage(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillImage(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4669,7 +4835,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundImage(StyleResolverSt
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearImage();
         currChild = currChild->next();
     }
@@ -4698,23 +4864,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundOrigin(StyleResolve
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearOrigin();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundOrigin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundOrigin(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillOrigin(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillOrigin(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4723,7 +4889,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundOrigin(StyleResolverS
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearOrigin();
         currChild = currChild->next();
     }
@@ -4752,23 +4918,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundPositionX(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearXPosition();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionX(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillXPosition(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillXPosition(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4777,7 +4943,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionX(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearXPosition();
         currChild = currChild->next();
     }
@@ -4806,23 +4972,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundPositionY(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearYPosition();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionY(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillYPosition(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillYPosition(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4831,7 +4997,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundPositionY(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearYPosition();
         currChild = currChild->next();
     }
@@ -4860,23 +5026,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundRepeatX(StyleResolv
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearRepeatX();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatX(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillRepeatX(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillRepeatX(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4885,7 +5051,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatX(StyleResolver
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearRepeatX();
         currChild = currChild->next();
     }
@@ -4914,23 +5080,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundRepeatY(StyleResolv
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearRepeatY();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatY(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillRepeatY(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillRepeatY(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4939,7 +5105,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundRepeatY(StyleResolver
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearRepeatY();
         currChild = currChild->next();
     }
@@ -4968,23 +5134,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyBackgroundSize(StyleResolverS
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearSize();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyBackgroundSize(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyBackgroundSize(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessBackgroundLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillSize(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillSize(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -4993,7 +5159,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyBackgroundSize(StyleResolverSta
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearSize();
         currChild = currChild->next();
     }
@@ -5022,23 +5188,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyMaskSourceType(StyleResolverS
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearMaskSourceType();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyMaskSourceType(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyMaskSourceType(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillMaskSourceType(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillMaskSourceType(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5047,62 +5213,8 @@ void StyleBuilderFunctions::applyValueCSSPropertyMaskSourceType(StyleResolverSta
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearMaskSourceType();
-        currChild = currChild->next();
-    }
-}
-
-void StyleBuilderFunctions::applyInitialCSSPropertyWebkitBackgroundComposite(StyleResolverState& state)
-{
-    FillLayer* currChild = &state.style()->accessBackgroundLayers();
-    currChild->setComposite(FillLayer::initialFillComposite(BackgroundFillLayer));
-    for (currChild = currChild->next(); currChild; currChild = currChild->next())
-        currChild->clearComposite();
-}
-
-void StyleBuilderFunctions::applyInheritCSSPropertyWebkitBackgroundComposite(StyleResolverState& state)
-{
-    FillLayer* currChild = &state.style()->accessBackgroundLayers();
-    FillLayer* prevChild = 0;
-    const FillLayer* currParent = &state.parentStyle()->backgroundLayers();
-    while (currParent && currParent->isCompositeSet()) {
-        if (!currChild)
-            currChild = prevChild->ensureNext();
-        currChild->setComposite(currParent->composite());
-        prevChild = currChild;
-        currChild = prevChild->next();
-        currParent = currParent->next();
-    }
-
-    while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
-        currChild->clearComposite();
-        currChild = currChild->next();
-    }
-}
-
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitBackgroundComposite(StyleResolverState& state, CSSValue* value)
-{
-    FillLayer* currChild = &state.style()->accessBackgroundLayers();
-    FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
-            if (!currChild)
-                currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillComposite(state, currChild, valueList->item(i));
-            prevChild = currChild;
-            currChild = currChild->next();
-        }
-    } else {
-        CSSToStyleMap::mapFillComposite(state, currChild, value);
-        currChild = currChild->next();
-    }
-    while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
-        currChild->clearComposite();
         currChild = currChild->next();
     }
 }
@@ -5130,23 +5242,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskClip(StyleResolverS
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearClip();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskClip(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskClip(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillClip(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillClip(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5155,7 +5267,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskClip(StyleResolverSta
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearClip();
         currChild = currChild->next();
     }
@@ -5184,23 +5296,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskComposite(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearComposite();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskComposite(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskComposite(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillComposite(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillComposite(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5209,7 +5321,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskComposite(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearComposite();
         currChild = currChild->next();
     }
@@ -5238,23 +5350,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskImage(StyleResolver
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearImage();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskImage(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskImage(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillImage(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillImage(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5263,7 +5375,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskImage(StyleResolverSt
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearImage();
         currChild = currChild->next();
     }
@@ -5292,23 +5404,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskOrigin(StyleResolve
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearOrigin();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskOrigin(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskOrigin(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillOrigin(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillOrigin(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5317,7 +5429,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskOrigin(StyleResolverS
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearOrigin();
         currChild = currChild->next();
     }
@@ -5346,23 +5458,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskPositionX(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearXPosition();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionX(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillXPosition(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillXPosition(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5371,7 +5483,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionX(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearXPosition();
         currChild = currChild->next();
     }
@@ -5400,23 +5512,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskPositionY(StyleReso
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearYPosition();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionY(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillYPosition(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillYPosition(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5425,7 +5537,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionY(StyleResolv
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearYPosition();
         currChild = currChild->next();
     }
@@ -5454,23 +5566,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskRepeatX(StyleResolv
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearRepeatX();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatX(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatX(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillRepeatX(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillRepeatX(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5479,7 +5591,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatX(StyleResolver
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearRepeatX();
         currChild = currChild->next();
     }
@@ -5508,23 +5620,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskRepeatY(StyleResolv
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearRepeatY();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatY(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatY(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillRepeatY(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillRepeatY(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5533,7 +5645,7 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatY(StyleResolver
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearRepeatY();
         currChild = currChild->next();
     }
@@ -5562,23 +5674,23 @@ void StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskSize(StyleResolverS
     }
 
     while (currChild) {
-        /* Reset any remaining layers to not have the property set. */
+        // Reset any remaining layers to not have the property set.
         currChild->clearSize();
         currChild = currChild->next();
     }
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskSize(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskSize(StyleResolverState& state, const CSSValue& value)
 {
     FillLayer* currChild = &state.style()->accessMaskLayers();
     FillLayer* prevChild = 0;
-    if (value->isValueList() && !value->isImageSetValue()) {
-        /* Walk each value and put it into a layer, creating new layers as needed. */
-        CSSValueList* valueList = toCSSValueList(value);
-        for (unsigned int i = 0; i < valueList->length(); i++) {
+    if (value.isValueList() && !value.isImageSetValue()) {
+        // Walk each value and put it into a layer, creating new layers as needed.
+        const CSSValueList& valueList = toCSSValueList(value);
+        for (unsigned int i = 0; i < valueList.length(); i++) {
             if (!currChild)
                 currChild = prevChild->ensureNext();
-            CSSToStyleMap::mapFillSize(state, currChild, valueList->item(i));
+            CSSToStyleMap::mapFillSize(state, currChild, valueList.item(i));
             prevChild = currChild;
             currChild = currChild->next();
         }
@@ -5587,12 +5699,11 @@ void StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskSize(StyleResolverSta
         currChild = currChild->next();
     }
     while (currChild) {
-        /* Reset all remaining layers to not have the property set. */
+        // Reset all remaining layers to not have the property set.
         currChild->clearSize();
         currChild = currChild->next();
     }
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridTemplateColumns(StyleResolverState& state)
 {
@@ -5608,19 +5719,36 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridTemplateColumns(StyleReso
     state.style()->setOrderedNamedGridColumnLines(state.parentStyle()->orderedNamedGridColumnLines());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridTemplateColumns(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridTemplateColumns(StyleResolverState& state, const CSSValue& value)
 {
     Vector<GridTrackSize> trackSizes;
+    Vector<GridTrackSize> autoRepeatTrackSizes;
     NamedGridLinesMap namedGridLines;
     OrderedNamedGridLines orderedNamedGridLines;
-    if (!StyleBuilderConverter::convertGridTrackList(value, trackSizes, namedGridLines, orderedNamedGridLines, state))
-        return;
+    NamedGridLinesMap autoRepeatNamedGridLines;
+    OrderedNamedGridLines autoRepeatOrderedNamedGridLines;
+    AutoRepeatType autoRepeatType = ComputedStyle::initialGridAutoRepeatType();
+    size_t autoRepeatInsertionPoint = ComputedStyle::initialGridAutoRepeatInsertionPoint();
+    StyleBuilderConverter::convertGridTrackList(
+        value, trackSizes, namedGridLines, orderedNamedGridLines,
+        autoRepeatTrackSizes, autoRepeatNamedGridLines,
+        autoRepeatOrderedNamedGridLines, autoRepeatInsertionPoint,
+        autoRepeatType, state);
     const NamedGridAreaMap& namedGridAreas = state.style()->namedGridArea();
-    if (!namedGridAreas.isEmpty())
-        StyleBuilderConverter::createImplicitNamedGridLinesFromGridArea(namedGridAreas, namedGridLines, ForColumns);
+    if (!namedGridAreas.isEmpty()) {
+        StyleBuilderConverter::createImplicitNamedGridLinesFromGridArea(
+            namedGridAreas, namedGridLines, ForColumns);
+    }
     state.style()->setGridTemplateColumns(trackSizes);
     state.style()->setNamedGridColumnLines(namedGridLines);
     state.style()->setOrderedNamedGridColumnLines(orderedNamedGridLines);
+    state.style()->setGridAutoRepeatColumns(autoRepeatTrackSizes);
+    state.style()->setGridAutoRepeatColumnsInsertionPoint(
+        autoRepeatInsertionPoint);
+    state.style()->setAutoRepeatNamedGridColumnLines(autoRepeatNamedGridLines);
+    state.style()->setAutoRepeatOrderedNamedGridColumnLines(
+        autoRepeatOrderedNamedGridLines);
+    state.style()->setGridAutoRepeatColumnsType(autoRepeatType);
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyGridTemplateRows(StyleResolverState& state)
@@ -5637,21 +5765,37 @@ void StyleBuilderFunctions::applyInheritCSSPropertyGridTemplateRows(StyleResolve
     state.style()->setOrderedNamedGridRowLines(state.parentStyle()->orderedNamedGridRowLines());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyGridTemplateRows(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyGridTemplateRows(StyleResolverState& state, const CSSValue& value)
 {
     Vector<GridTrackSize> trackSizes;
+    Vector<GridTrackSize> autoRepeatTrackSizes;
     NamedGridLinesMap namedGridLines;
     OrderedNamedGridLines orderedNamedGridLines;
-    if (!StyleBuilderConverter::convertGridTrackList(value, trackSizes, namedGridLines, orderedNamedGridLines, state))
-        return;
+    NamedGridLinesMap autoRepeatNamedGridLines;
+    OrderedNamedGridLines autoRepeatOrderedNamedGridLines;
+    AutoRepeatType autoRepeatType = ComputedStyle::initialGridAutoRepeatType();
+    size_t autoRepeatInsertionPoint = ComputedStyle::initialGridAutoRepeatInsertionPoint();
+    StyleBuilderConverter::convertGridTrackList(
+        value, trackSizes, namedGridLines, orderedNamedGridLines,
+        autoRepeatTrackSizes, autoRepeatNamedGridLines,
+        autoRepeatOrderedNamedGridLines, autoRepeatInsertionPoint,
+        autoRepeatType, state);
     const NamedGridAreaMap& namedGridAreas = state.style()->namedGridArea();
-    if (!namedGridAreas.isEmpty())
-        StyleBuilderConverter::createImplicitNamedGridLinesFromGridArea(namedGridAreas, namedGridLines, ForRows);
+    if (!namedGridAreas.isEmpty()) {
+        StyleBuilderConverter::createImplicitNamedGridLinesFromGridArea(
+            namedGridAreas, namedGridLines, ForRows);
+    }
     state.style()->setGridTemplateRows(trackSizes);
     state.style()->setNamedGridRowLines(namedGridLines);
     state.style()->setOrderedNamedGridRowLines(orderedNamedGridLines);
+    state.style()->setGridAutoRepeatRows(autoRepeatTrackSizes);
+    state.style()->setGridAutoRepeatRowsInsertionPoint(
+        autoRepeatInsertionPoint);
+    state.style()->setAutoRepeatNamedGridRowLines(autoRepeatNamedGridLines);
+    state.style()->setAutoRepeatOrderedNamedGridRowLines(
+        autoRepeatOrderedNamedGridLines);
+    state.style()->setGridAutoRepeatRowsType(autoRepeatType);
 }
-
 
 void StyleBuilderFunctions::applyInitialCSSPropertyFill(StyleResolverState& state)
 {
@@ -5674,43 +5818,36 @@ void StyleBuilderFunctions::applyInheritCSSPropertyFill(StyleResolverState& stat
         state.applyPropertyToVisitedLinkStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyFill(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyFill(StyleResolverState& state, const CSSValue& value)
 {
+    const CSSValue* localValue = &value;
     String url;
-    if (value->isValueList()) {
-        CSSValueList* list = toCSSValueList(value);
-        ASSERT(list->length() > 1);
-
-        if (!list->item(0)->isPrimitiveValue())
-            return;
-
-        CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(list->item(0));
-        if (!primitiveValue->isURI())
-            return;
-
-        url = primitiveValue->getStringValue();
-        value = list->item(1);
+    if (value.isValueList()) {
+        const CSSValueList& list = toCSSValueList(value);
+        DCHECK_EQ(list.length(), 2U);
+        url = toCSSURIValue(list.item(0)).value();
+        localValue = &list.item(1);
     }
-    if (value->isPrimitiveValue()) {
-        CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-        Color color;
-        SVGPaintType paintType = SVG_PAINTTYPE_RGBCOLOR;
-        if (primitiveValue->getValueID() == CSSValueNone) {
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_NONE : SVG_PAINTTYPE_URI_NONE;
-        } else if (primitiveValue->isURI()) {
-            paintType = SVG_PAINTTYPE_URI;
-            url = primitiveValue->getStringValue();
-        } else if (primitiveValue->getValueID() == CSSValueCurrentcolor) {
-            color = state.style()->color();
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_CURRENTCOLOR : SVG_PAINTTYPE_URI_CURRENTCOLOR;
-        } else {
-            color = StyleBuilderConverter::convertColor(state, primitiveValue);
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_RGBCOLOR : SVG_PAINTTYPE_URI_RGBCOLOR;
-        }
-        state.style()->accessSVGStyle().setFillPaint(paintType, color, url,
-            state.applyPropertyToRegularStyle(),
-            state.applyPropertyToVisitedLinkStyle());
+
+    Color color;
+    SVGPaintType paintType = SVG_PAINTTYPE_RGBCOLOR;
+    if (localValue->isURIValue()) {
+        paintType = SVG_PAINTTYPE_URI;
+        url = toCSSURIValue(localValue)->value();
+    } else if (localValue->isIdentifierValue() && toCSSIdentifierValue(localValue)->getValueID() == CSSValueNone) {
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_NONE : SVG_PAINTTYPE_URI_NONE;
+    } else if (localValue->isIdentifierValue() && toCSSIdentifierValue(localValue)->getValueID() == CSSValueCurrentcolor) {
+        color = state.style()->color();
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_CURRENTCOLOR
+                                  : SVG_PAINTTYPE_URI_CURRENTCOLOR;
+    } else {
+        color = StyleBuilderConverter::convertColor(state, *localValue);
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_RGBCOLOR
+                                  : SVG_PAINTTYPE_URI_RGBCOLOR;
     }
+    state.style()->accessSVGStyle().setFillPaint(paintType, color, url,
+        state.applyPropertyToRegularStyle(),
+        state.applyPropertyToVisitedLinkStyle());
 }
 
 void StyleBuilderFunctions::applyInitialCSSPropertyStroke(StyleResolverState& state)
@@ -5734,43 +5871,36 @@ void StyleBuilderFunctions::applyInheritCSSPropertyStroke(StyleResolverState& st
         state.applyPropertyToVisitedLinkStyle());
 }
 
-void StyleBuilderFunctions::applyValueCSSPropertyStroke(StyleResolverState& state, CSSValue* value)
+void StyleBuilderFunctions::applyValueCSSPropertyStroke(StyleResolverState& state, const CSSValue& value)
 {
+    const CSSValue* localValue = &value;
     String url;
-    if (value->isValueList()) {
-        CSSValueList* list = toCSSValueList(value);
-        ASSERT(list->length() > 1);
-
-        if (!list->item(0)->isPrimitiveValue())
-            return;
-
-        CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(list->item(0));
-        if (!primitiveValue->isURI())
-            return;
-
-        url = primitiveValue->getStringValue();
-        value = list->item(1);
+    if (value.isValueList()) {
+        const CSSValueList& list = toCSSValueList(value);
+        DCHECK_EQ(list.length(), 2U);
+        url = toCSSURIValue(list.item(0)).value();
+        localValue = &list.item(1);
     }
-    if (value->isPrimitiveValue()) {
-        CSSPrimitiveValue* primitiveValue = toCSSPrimitiveValue(value);
-        Color color;
-        SVGPaintType paintType = SVG_PAINTTYPE_RGBCOLOR;
-        if (primitiveValue->getValueID() == CSSValueNone) {
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_NONE : SVG_PAINTTYPE_URI_NONE;
-        } else if (primitiveValue->isURI()) {
-            paintType = SVG_PAINTTYPE_URI;
-            url = primitiveValue->getStringValue();
-        } else if (primitiveValue->getValueID() == CSSValueCurrentcolor) {
-            color = state.style()->color();
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_CURRENTCOLOR : SVG_PAINTTYPE_URI_CURRENTCOLOR;
-        } else {
-            color = StyleBuilderConverter::convertColor(state, primitiveValue);
-            paintType = url.isEmpty() ? SVG_PAINTTYPE_RGBCOLOR : SVG_PAINTTYPE_URI_RGBCOLOR;
-        }
-        state.style()->accessSVGStyle().setStrokePaint(paintType, color, url,
-            state.applyPropertyToRegularStyle(),
-            state.applyPropertyToVisitedLinkStyle());
+
+    Color color;
+    SVGPaintType paintType = SVG_PAINTTYPE_RGBCOLOR;
+    if (localValue->isURIValue()) {
+        paintType = SVG_PAINTTYPE_URI;
+        url = toCSSURIValue(localValue)->value();
+    } else if (localValue->isIdentifierValue() && toCSSIdentifierValue(localValue)->getValueID() == CSSValueNone) {
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_NONE : SVG_PAINTTYPE_URI_NONE;
+    } else if (localValue->isIdentifierValue() && toCSSIdentifierValue(localValue)->getValueID() == CSSValueCurrentcolor) {
+        color = state.style()->color();
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_CURRENTCOLOR
+                                  : SVG_PAINTTYPE_URI_CURRENTCOLOR;
+    } else {
+        color = StyleBuilderConverter::convertColor(state, *localValue);
+        paintType = url.isEmpty() ? SVG_PAINTTYPE_RGBCOLOR
+                                  : SVG_PAINTTYPE_URI_RGBCOLOR;
     }
+    state.style()->accessSVGStyle().setStrokePaint(paintType, color, url,
+        state.applyPropertyToRegularStyle(),
+        state.applyPropertyToVisitedLinkStyle());
 }
 
 } // namespace blink

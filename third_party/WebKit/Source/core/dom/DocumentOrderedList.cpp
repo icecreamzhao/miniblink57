@@ -3,8 +3,10 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2011, 2012 Apple Inc. All
+ * rights reserved.
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2008, 2009, 2011, 2012 Google Inc. All rights reserved.
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2013 Google Inc. All rights reserved.
@@ -25,7 +27,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/DocumentOrderedList.h"
 
 #include "core/dom/Node.h"
@@ -48,7 +49,7 @@ void DocumentOrderedList::add(Node* node)
         --it;
         Node* n = *it;
         unsigned short position = n->compareDocumentPosition(node, Node::TreatShadowTreesAsComposed);
-        if (position & Node::DOCUMENT_POSITION_FOLLOWING) {
+        if (position & Node::kDocumentPositionFollowing) {
             m_nodes.insertBefore(followingNode, node);
             return;
         }
@@ -58,15 +59,6 @@ void DocumentOrderedList::add(Node* node)
     m_nodes.insertBefore(followingNode, node);
 }
 
-void DocumentOrderedList::parserAdd(Node* node)
-{
-    //ASSERT(m_nodes.isEmpty() || m_nodes.last()->compareDocumentPosition(node, Node::TreatShadowTreesAsComposed) & Node::DOCUMENT_POSITION_FOLLOWING);
-    //m_nodes.add(node);
-
-    //¼û https://chromium.googlesource.com/chromium/src/+/2cd49bb3ebb9ce32d49aa2dd7a80ca0593855890%5E%21/#F2
-    add(node);
-}
-
 void DocumentOrderedList::remove(const Node* node)
 {
     m_nodes.remove(const_cast<Node*>(node));
@@ -74,10 +66,7 @@ void DocumentOrderedList::remove(const Node* node)
 
 DEFINE_TRACE(DocumentOrderedList)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_nodes);
-#endif
 }
 
-}
-
+} // namespace blink

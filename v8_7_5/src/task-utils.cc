@@ -9,56 +9,73 @@
 namespace v8 {
 namespace internal {
 
-namespace {
+    namespace {
 
-class CancelableFuncTask final : public CancelableTask {
- public:
-  CancelableFuncTask(Isolate* isolate, std::function<void()> func)
-      : CancelableTask(isolate), func_(std::move(func)) {}
-  CancelableFuncTask(CancelableTaskManager* manager, std::function<void()> func)
-      : CancelableTask(manager), func_(std::move(func)) {}
-  void RunInternal() final { func_(); }
+        class CancelableFuncTask final : public CancelableTask {
+        public:
+            CancelableFuncTask(Isolate* isolate, std::function<void()> func)
+                : CancelableTask(isolate)
+                , func_(std::move(func))
+            {
+            }
+            CancelableFuncTask(CancelableTaskManager* manager, std::function<void()> func)
+                : CancelableTask(manager)
+                , func_(std::move(func))
+            {
+            }
+            void RunInternal() final { func_(); }
 
- private:
-  const std::function<void()> func_;
-};
+        private:
+            const std::function<void()> func_;
+        };
 
-class CancelableIdleFuncTask final : public CancelableIdleTask {
- public:
-  CancelableIdleFuncTask(Isolate* isolate, std::function<void(double)> func)
-      : CancelableIdleTask(isolate), func_(std::move(func)) {}
-  CancelableIdleFuncTask(CancelableTaskManager* manager,
-                         std::function<void(double)> func)
-      : CancelableIdleTask(manager), func_(std::move(func)) {}
-  void RunInternal(double deadline_in_seconds) final {
-    func_(deadline_in_seconds);
-  }
+        class CancelableIdleFuncTask final : public CancelableIdleTask {
+        public:
+            CancelableIdleFuncTask(Isolate* isolate, std::function<void(double)> func)
+                : CancelableIdleTask(isolate)
+                , func_(std::move(func))
+            {
+            }
+            CancelableIdleFuncTask(CancelableTaskManager* manager,
+                std::function<void(double)> func)
+                : CancelableIdleTask(manager)
+                , func_(std::move(func))
+            {
+            }
+            void RunInternal(double deadline_in_seconds) final
+            {
+                func_(deadline_in_seconds);
+            }
 
- private:
-  const std::function<void(double)> func_;
-};
+        private:
+            const std::function<void(double)> func_;
+        };
 
-}  // namespace
+    } // namespace
 
-std::unique_ptr<CancelableTask> MakeCancelableTask(Isolate* isolate,
-                                                   std::function<void()> func) {
-  return base::make_unique<CancelableFuncTask>(isolate, std::move(func));
-}
+    std::unique_ptr<CancelableTask> MakeCancelableTask(Isolate* isolate,
+        std::function<void()> func)
+    {
+        return base::make_unique<CancelableFuncTask>(isolate, std::move(func));
+    }
 
-std::unique_ptr<CancelableTask> MakeCancelableTask(
-    CancelableTaskManager* manager, std::function<void()> func) {
-  return base::make_unique<CancelableFuncTask>(manager, std::move(func));
-}
+    std::unique_ptr<CancelableTask> MakeCancelableTask(
+        CancelableTaskManager* manager, std::function<void()> func)
+    {
+        return base::make_unique<CancelableFuncTask>(manager, std::move(func));
+    }
 
-std::unique_ptr<CancelableIdleTask> MakeCancelableIdleTask(
-    Isolate* isolate, std::function<void(double)> func) {
-  return base::make_unique<CancelableIdleFuncTask>(isolate, std::move(func));
-}
+    std::unique_ptr<CancelableIdleTask> MakeCancelableIdleTask(
+        Isolate* isolate, std::function<void(double)> func)
+    {
+        return base::make_unique<CancelableIdleFuncTask>(isolate, std::move(func));
+    }
 
-std::unique_ptr<CancelableIdleTask> MakeCancelableIdleTask(
-    CancelableTaskManager* manager, std::function<void(double)> func) {
-  return base::make_unique<CancelableIdleFuncTask>(manager, std::move(func));
-}
+    std::unique_ptr<CancelableIdleTask> MakeCancelableIdleTask(
+        CancelableTaskManager* manager, std::function<void(double)> func)
+    {
+        return base::make_unique<CancelableIdleFuncTask>(manager, std::move(func));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

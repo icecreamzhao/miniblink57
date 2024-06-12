@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/netinfo/NetworkInformation.h"
 
 #include "core/dom/ExecutionContext.h"
 #include "core/events/Event.h"
 #include "core/page/NetworkStateNotifier.h"
 #include "modules/EventTargetModules.h"
+#include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/text/WTFString.h"
 
 namespace {
@@ -18,19 +18,23 @@ using namespace blink;
 String connectionTypeToString(WebConnectionType type)
 {
     switch (type) {
-    case ConnectionTypeCellular:
+    case WebConnectionTypeCellular2G:
+    case WebConnectionTypeCellular3G:
+    case WebConnectionTypeCellular4G:
         return "cellular";
-    case ConnectionTypeBluetooth:
+    case WebConnectionTypeBluetooth:
         return "bluetooth";
-    case ConnectionTypeEthernet:
+    case WebConnectionTypeEthernet:
         return "ethernet";
-    case ConnectionTypeWifi:
+    case WebConnectionTypeWifi:
         return "wifi";
-    case ConnectionTypeOther:
+    case WebConnectionTypeWimax:
+        return "wimax";
+    case WebConnectionTypeOther:
         return "other";
-    case ConnectionTypeNone:
+    case WebConnectionTypeNone:
         return "none";
-    case ConnectionTypeUnknown:
+    case WebConnectionTypeUnknown:
         return "unknown";
     }
     ASSERT_NOT_REACHED();
@@ -43,9 +47,7 @@ namespace blink {
 
 NetworkInformation* NetworkInformation::create(ExecutionContext* context)
 {
-    NetworkInformation* connection = new NetworkInformation(context);
-    connection->suspendIfNeeded();
-    return connection;
+    return new NetworkInformation(context);
 }
 
 NetworkInformation::~NetworkInformation()
@@ -55,8 +57,8 @@ NetworkInformation::~NetworkInformation()
 
 String NetworkInformation::type() const
 {
-    // m_type is only updated when listening for events, so ask networkStateNotifier
-    // if not listening (crbug.com/379841).
+    // m_type is only updated when listening for events, so ask
+    // networkStateNotifier if not listening (crbug.com/379841).
     if (!m_observing)
         return connectionTypeToString(networkStateNotifier().connectionType());
 
@@ -64,17 +66,30 @@ String NetworkInformation::type() const
     return connectionTypeToString(m_type);
 }
 
-void NetworkInformation::connectionTypeChange(WebConnectionType type)
+double NetworkInformation::downlinkMax() const
 {
-    ASSERT(executionContext()->isContextThread());
+    if (!m_observing)
+        return networkStateNotifier().maxBandwidth();
+
+    return m_downlinkMaxMbps;
+}
+
+void NetworkInformation::connectionChange(WebConnectionType type,
+    double downlinkMaxMbps)
+{
+    ASSERT(getExecutionContext()->isContextThread());
 
     // This can happen if the observer removes and then adds itself again
     // during notification.
-    if (m_type == type)
+    if (m_type == type && m_downlinkMaxMbps == downlinkMaxMbps)
         return;
 
     m_type = type;
+    m_downlinkMaxMbps = downlinkMaxMbps;
     dispatchEvent(Event::create(EventTypeNames::typechange));
+
+    if (RuntimeEnabledFeatures::netInfoDownlinkMaxEnabled())
+        dispatchEvent(Event::create(EventTypeNames::change));
 }
 
 const AtomicString& NetworkInformation::interfaceName() const
@@ -82,26 +97,27 @@ const AtomicString& NetworkInformation::interfaceName() const
     return EventTargetNames::NetworkInformation;
 }
 
-ExecutionContext* NetworkInformation::executionContext() const
+ExecutionContext* NetworkInformation::getExecutionContext() const
 {
-    return ActiveDOMObject::executionContext();
+    return ContextLifecycleObserver::getExecutionContext();
 }
 
-bool NetworkInformation::addEventListener(const AtomicString& eventType, PassRefPtr<EventListener> listener, bool useCapture)
+void NetworkInformation::addedEventListener(
+    const AtomicString& eventType,
+    RegisteredEventListener& registeredListener)
 {
-    if (!EventTargetWithInlineData::addEventListener(eventType, listener, useCapture))
-        return false;
+    EventTargetWithInlineData::addedEventListener(eventType, registeredListener);
     startObserving();
-    return true;
 }
 
-bool NetworkInformation::removeEventListener(const AtomicString& eventType, PassRefPtr<EventListener> listener, bool useCapture)
+void NetworkInformation::removedEventListener(
+    const AtomicString& eventType,
+    const RegisteredEventListener& registeredListener)
 {
-    if (!EventTargetWithInlineData::removeEventListener(eventType, listener, useCapture))
-        return false;
+    EventTargetWithInlineData::removedEventListener(eventType,
+        registeredListener);
     if (!hasEventListeners())
         stopObserving();
-    return true;
 }
 
 void NetworkInformation::removeAllEventListeners()
@@ -119,7 +135,7 @@ bool NetworkInformation::hasPendingActivity() const
     return m_observing;
 }
 
-void NetworkInformation::stop()
+void NetworkInformation::contextDestroyed(ExecutionContext*)
 {
     m_contextStopped = true;
     stopObserving();
@@ -129,7 +145,7 @@ void NetworkInformation::startObserving()
 {
     if (!m_observing && !m_contextStopped) {
         m_type = networkStateNotifier().connectionType();
-        networkStateNotifier().addObserver(this, executionContext());
+        networkStateNotifier().addObserver(this, getExecutionContext());
         m_observing = true;
     }
 }
@@ -137,14 +153,15 @@ void NetworkInformation::startObserving()
 void NetworkInformation::stopObserving()
 {
     if (m_observing) {
-        networkStateNotifier().removeObserver(this, executionContext());
+        networkStateNotifier().removeObserver(this, getExecutionContext());
         m_observing = false;
     }
 }
 
 NetworkInformation::NetworkInformation(ExecutionContext* context)
-    : ActiveDOMObject(context)
+    : ContextLifecycleObserver(context)
     , m_type(networkStateNotifier().connectionType())
+    , m_downlinkMaxMbps(networkStateNotifier().maxBandwidth())
     , m_observing(false)
     , m_contextStopped(false)
 {
@@ -152,8 +169,8 @@ NetworkInformation::NetworkInformation(ExecutionContext* context)
 
 DEFINE_TRACE(NetworkInformation)
 {
-    RefCountedGarbageCollectedEventTargetWithInlineData<NetworkInformation>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 } // namespace blink

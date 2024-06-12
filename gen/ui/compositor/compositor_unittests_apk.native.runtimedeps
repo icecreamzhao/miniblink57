@@ -1,0 +1,4 @@
+./lib_compositor_unittests__library.so
+../../ui/gfx/test/data/compositor/
+gen/ipc/ipc.mojom.js
+../../testing/test_env.py

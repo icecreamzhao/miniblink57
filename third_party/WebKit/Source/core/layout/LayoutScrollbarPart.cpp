@@ -23,9 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutScrollbarPart.h"
 
+#include "core/frame/FrameView.h"
 #include "core/frame/UseCounter.h"
 #include "core/layout/LayoutScrollbar.h"
 #include "core/layout/LayoutScrollbarTheme.h"
@@ -34,15 +34,24 @@
 
 namespace blink {
 
-LayoutScrollbarPart::LayoutScrollbarPart(LayoutScrollbar* scrollbar, ScrollbarPart part)
+LayoutScrollbarPart::LayoutScrollbarPart(ScrollableArea* scrollableArea,
+    LayoutScrollbar* scrollbar,
+    ScrollbarPart part)
     : LayoutBlock(nullptr)
+    , m_scrollableArea(scrollableArea)
     , m_scrollbar(scrollbar)
     , m_part(part)
 {
+    ASSERT(m_scrollableArea);
 }
 
 LayoutScrollbarPart::~LayoutScrollbarPart()
 {
+#if CHECK_DISPLAY_ITEM_CLIENT_ALIVENESS
+    // We may not have invalidated the painting layer for now, but the
+    // scrollable area will invalidate during paint invalidation.
+    endShouldKeepAlive();
+#endif
 }
 
 static void recordScrollbarPartStats(Document& document, ScrollbarPart part)
@@ -56,7 +65,8 @@ static void recordScrollbarPartStats(Document& document, ScrollbarPart part)
         break;
     case BackTrackPart:
     case ForwardTrackPart:
-        UseCounter::count(document, UseCounter::CSSSelectorPseudoScrollbarTrackPiece);
+        UseCounter::count(document,
+            UseCounter::CSSSelectorPseudoScrollbarTrackPiece);
         break;
     case ThumbPart:
         UseCounter::count(document, UseCounter::CSSSelectorPseudoScrollbarThumb);
@@ -73,9 +83,13 @@ static void recordScrollbarPartStats(Document& document, ScrollbarPart part)
     }
 }
 
-LayoutScrollbarPart* LayoutScrollbarPart::createAnonymous(Document* document, LayoutScrollbar* scrollbar, ScrollbarPart part)
+LayoutScrollbarPart* LayoutScrollbarPart::createAnonymous(
+    Document* document,
+    ScrollableArea* scrollableArea,
+    LayoutScrollbar* scrollbar,
+    ScrollbarPart part)
 {
-    LayoutScrollbarPart* layoutObject = new LayoutScrollbarPart(scrollbar, part);
+    LayoutScrollbarPart* layoutObject = new LayoutScrollbarPart(scrollableArea, scrollbar, part);
     recordScrollbarPartStats(*document, part);
     layoutObject->setDocumentForAnonymous(document);
     return layoutObject;
@@ -83,7 +97,9 @@ LayoutScrollbarPart* LayoutScrollbarPart::createAnonymous(Document* document, La
 
 void LayoutScrollbarPart::layout()
 {
-    setLocation(LayoutPoint()); // We don't worry about positioning ourselves. We're just determining our minimum width/height.
+    // We don't worry about positioning ourselves. We're just determining our
+    // minimum width/height.
+    setLocation(LayoutPoint());
     if (m_scrollbar->orientation() == HorizontalScrollbar)
         layoutHorizontalPart();
     else
@@ -95,11 +111,11 @@ void LayoutScrollbarPart::layout()
 void LayoutScrollbarPart::layoutHorizontalPart()
 {
     if (m_part == ScrollbarBGPart) {
-        setWidth(m_scrollbar->width());
+        setWidth(LayoutUnit(m_scrollbar->width()));
         computeScrollbarHeight();
     } else {
         computeScrollbarWidth();
-        setHeight(m_scrollbar->height());
+        setHeight(LayoutUnit(m_scrollbar->height()));
     }
 }
 
@@ -107,52 +123,74 @@ void LayoutScrollbarPart::layoutVerticalPart()
 {
     if (m_part == ScrollbarBGPart) {
         computeScrollbarWidth();
-        setHeight(m_scrollbar->height());
+        setHeight(LayoutUnit(m_scrollbar->height()));
     } else {
-        setWidth(m_scrollbar->width());
+        setWidth(LayoutUnit(m_scrollbar->width()));
         computeScrollbarHeight();
     }
 }
 
-static int calcScrollbarThicknessUsing(SizeType sizeType, const Length& length, int containingLength)
+static int calcScrollbarThicknessUsing(SizeType sizeType,
+    const Length& length,
+    int containingLength)
 {
     if (!length.isIntrinsicOrAuto() || (sizeType == MinSize && length.isAuto()))
-        return minimumValueForLength(length, containingLength);
-    return ScrollbarTheme::theme()->scrollbarThickness();
+        return minimumValueForLength(length, LayoutUnit(containingLength)).toInt();
+    return ScrollbarTheme::theme().scrollbarThickness();
 }
 
 void LayoutScrollbarPart::computeScrollbarWidth()
 {
     if (!m_scrollbar->owningLayoutObject())
         return;
-    // FIXME: We are querying layout information but nothing guarantees that it's up-to-date, especially since we are called at style change.
-    // FIXME: Querying the style's border information doesn't work on table cells with collapsing borders.
-    int visibleSize = m_scrollbar->owningLayoutObject()->size().width() - m_scrollbar->owningLayoutObject()->style()->borderLeftWidth() - m_scrollbar->owningLayoutObject()->style()->borderRightWidth();
-    int w = calcScrollbarThicknessUsing(MainOrPreferredSize, style()->width(), visibleSize);
+    // FIXME: We are querying layout information but nothing guarantees that it's
+    // up to date, especially since we are called at style change.
+    // FIXME: Querying the style's border information doesn't work on table cells
+    // with collapsing borders.
+    int visibleSize = (m_scrollbar->owningLayoutObject()->size().width() - m_scrollbar->owningLayoutObject()->style()->borderLeftWidth() - m_scrollbar->owningLayoutObject()->style()->borderRightWidth())
+                          .toInt();
+    int w = calcScrollbarThicknessUsing(MainOrPreferredSize, style()->width(),
+        visibleSize);
     int minWidth = calcScrollbarThicknessUsing(MinSize, style()->minWidth(), visibleSize);
-    int maxWidth = style()->maxWidth().isMaxSizeNone() ? w : calcScrollbarThicknessUsing(MaxSize, style()->maxWidth(), visibleSize);
-    setWidth(std::max(minWidth, std::min(maxWidth, w)));
+    int maxWidth = style()->maxWidth().isMaxSizeNone()
+        ? w
+        : calcScrollbarThicknessUsing(MaxSize, style()->maxWidth(),
+            visibleSize);
+    setWidth(LayoutUnit(std::max(minWidth, std::min(maxWidth, w))));
 
-    // Buttons and track pieces can all have margins along the axis of the scrollbar.
-    setMarginLeft(minimumValueForLength(style()->marginLeft(), visibleSize));
-    setMarginRight(minimumValueForLength(style()->marginRight(), visibleSize));
+    // Buttons and track pieces can all have margins along the axis of the
+    // scrollbar.
+    setMarginLeft(
+        minimumValueForLength(style()->marginLeft(), LayoutUnit(visibleSize)));
+    setMarginRight(
+        minimumValueForLength(style()->marginRight(), LayoutUnit(visibleSize)));
 }
 
 void LayoutScrollbarPart::computeScrollbarHeight()
 {
     if (!m_scrollbar->owningLayoutObject())
         return;
-    // FIXME: We are querying layout information but nothing guarantees that it's up-to-date, especially since we are called at style change.
-    // FIXME: Querying the style's border information doesn't work on table cells with collapsing borders.
-    int visibleSize = m_scrollbar->owningLayoutObject()->size().height() -  m_scrollbar->owningLayoutObject()->style()->borderTopWidth() - m_scrollbar->owningLayoutObject()->style()->borderBottomWidth();
-    int h = calcScrollbarThicknessUsing(MainOrPreferredSize, style()->height(), visibleSize);
+    // FIXME: We are querying layout information but nothing guarantees that it's
+    // up to date, especially since we are called at style change.
+    // FIXME: Querying the style's border information doesn't work on table cells
+    // with collapsing borders.
+    int visibleSize = (m_scrollbar->owningLayoutObject()->size().height() - m_scrollbar->owningLayoutObject()->style()->borderTopWidth() - m_scrollbar->owningLayoutObject()->style()->borderBottomWidth())
+                          .toInt();
+    int h = calcScrollbarThicknessUsing(MainOrPreferredSize, style()->height(),
+        visibleSize);
     int minHeight = calcScrollbarThicknessUsing(MinSize, style()->minHeight(), visibleSize);
-    int maxHeight = style()->maxHeight().isMaxSizeNone() ? h : calcScrollbarThicknessUsing(MaxSize, style()->maxHeight(), visibleSize);
-    setHeight(std::max(minHeight, std::min(maxHeight, h)));
+    int maxHeight = style()->maxHeight().isMaxSizeNone()
+        ? h
+        : calcScrollbarThicknessUsing(
+            MaxSize, style()->maxHeight(), visibleSize);
+    setHeight(LayoutUnit(std::max(minHeight, std::min(maxHeight, h))));
 
-    // Buttons and track pieces can all have margins along the axis of the scrollbar.
-    setMarginTop(minimumValueForLength(style()->marginTop(), visibleSize));
-    setMarginBottom(minimumValueForLength(style()->marginBottom(), visibleSize));
+    // Buttons and track pieces can all have margins along the axis of the
+    // scrollbar.
+    setMarginTop(
+        minimumValueForLength(style()->marginTop(), LayoutUnit(visibleSize)));
+    setMarginBottom(
+        minimumValueForLength(style()->marginBottom(), LayoutUnit(visibleSize)));
 }
 
 void LayoutScrollbarPart::computePreferredLogicalWidths()
@@ -160,42 +198,36 @@ void LayoutScrollbarPart::computePreferredLogicalWidths()
     if (!preferredLogicalWidthsDirty())
         return;
 
-    m_minPreferredLogicalWidth = m_maxPreferredLogicalWidth = 0;
+    m_minPreferredLogicalWidth = m_maxPreferredLogicalWidth = LayoutUnit();
 
     clearPreferredLogicalWidthsDirty();
 }
 
-void LayoutScrollbarPart::styleWillChange(StyleDifference diff, const ComputedStyle& newStyle)
+void LayoutScrollbarPart::styleWillChange(StyleDifference diff,
+    const ComputedStyle& newStyle)
 {
     LayoutBlock::styleWillChange(diff, newStyle);
     setInline(false);
 }
 
-void LayoutScrollbarPart::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
+void LayoutScrollbarPart::styleDidChange(StyleDifference diff,
+    const ComputedStyle* oldStyle)
 {
     LayoutBlock::styleDidChange(diff, oldStyle);
+    // See adjustStyleBeforeSet() above.
+    ASSERT(!isOrthogonalWritingModeRoot());
     setInline(false);
     clearPositionedState();
     setFloating(false);
-    setHasOverflowClip(false);
-    if (oldStyle && m_scrollbar && m_part != NoPart && (diff.needsPaintInvalidation() || diff.needsLayout()))
-        m_scrollbar->theme()->invalidatePart(m_scrollbar, m_part);
+    if (oldStyle && (diff.needsPaintInvalidation() || diff.needsLayout()))
+        setNeedsPaintInvalidation();
 }
 
-void LayoutScrollbarPart::imageChanged(WrappedImagePtr image, const IntRect* rect)
+void LayoutScrollbarPart::imageChanged(WrappedImagePtr image,
+    const IntRect* rect)
 {
-    if (m_scrollbar && m_part != NoPart) {
-        m_scrollbar->theme()->invalidatePart(m_scrollbar, m_part);
-    } else {
-        if (FrameView* frameView = view()->frameView()) {
-            if (frameView->isFrameViewScrollCorner(this)) {
-                frameView->invalidateScrollCorner(frameView->scrollCornerRect());
-                return;
-            }
-        }
-
-        LayoutBlock::imageChanged(image, rect);
-    }
+    setNeedsPaintInvalidation();
+    LayoutBlock::imageChanged(image, rect);
 }
 
 LayoutObject* LayoutScrollbarPart::layoutObjectOwningScrollbar() const
@@ -203,4 +235,30 @@ LayoutObject* LayoutScrollbarPart::layoutObjectOwningScrollbar() const
     return (!m_scrollbar) ? nullptr : m_scrollbar->owningLayoutObject();
 }
 
+void LayoutScrollbarPart::setNeedsPaintInvalidation()
+{
+    if (m_scrollbar) {
+        m_scrollbar->setNeedsPaintInvalidation(AllParts);
+        return;
+    }
+
+    // This LayoutScrollbarPart is a scroll corner or a resizer.
+    ASSERT(m_part == NoPart);
+    if (FrameView* frameView = view()->frameView()) {
+        if (frameView->isFrameViewScrollCorner(this)) {
+            frameView->setScrollCornerNeedsPaintInvalidation();
+            return;
+        }
+    }
+
+    m_scrollableArea->setScrollCornerNeedsPaintInvalidation();
 }
+
+LayoutRect LayoutScrollbarPart::visualRect() const
+{
+    // This returns the combined bounds of all scrollbar parts, which is
+    // sufficient for correctness but not as tight as it could be.
+    return m_scrollableArea->visualRectForScrollbarParts();
+}
+
+} // namespace blink

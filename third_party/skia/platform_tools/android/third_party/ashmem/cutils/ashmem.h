@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-int ashmem_create_region(const char *name, size_t size);
+int ashmem_create_region(const char* name, size_t size);
 int ashmem_set_prot_region(int fd, int prot);
 int ashmem_pin_region(int fd, size_t offset, size_t len);
 int ashmem_unpin_region(int fd, size_t offset, size_t len);
@@ -27,20 +27,20 @@ int ashmem_purge_all(void);
 }
 #endif
 
-#ifndef __ASHMEMIOC	/* in case someone included <linux/ashmem.h> too */
+#ifndef __ASHMEMIOC /* in case someone included <linux/ashmem.h> too */
 
-#define ASHMEM_NAME_LEN		256
+#define ASHMEM_NAME_LEN 256
 
-#define ASHMEM_NAME_DEF		"dev/ashmem"
+#define ASHMEM_NAME_DEF "dev/ashmem"
 
 /* Return values from ASHMEM_PIN: Was the mapping purged while unpinned? */
-#define ASHMEM_NOT_PURGED	0
-#define ASHMEM_WAS_PURGED	1
+#define ASHMEM_NOT_PURGED 0
+#define ASHMEM_WAS_PURGED 1
 
 /* Return values from ASHMEM_UNPIN: Is the mapping now pinned or unpinned? */
-#define ASHMEM_IS_UNPINNED	0
-#define ASHMEM_IS_PINNED	1
+#define ASHMEM_IS_UNPINNED 0
+#define ASHMEM_IS_PINNED 1
 
-#endif	/* ! __ASHMEMIOC */
+#endif /* ! __ASHMEMIOC */
 
-#endif	/* _THIRD_PARTY_ASHMEM_H */
+#endif /* _THIRD_PARTY_ASHMEM_H */

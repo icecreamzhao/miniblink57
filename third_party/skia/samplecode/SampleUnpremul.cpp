@@ -7,15 +7,13 @@
 
 #include "gm.h"
 
-#include "sk_tool_utils.h"
+#include "DecodeFile.h"
 #include "Resources.h"
 #include "SampleCode.h"
-#include "SkBlurMask.h"
 #include "SkBlurDrawLooper.h"
+#include "SkBlurMask.h"
 #include "SkCanvas.h"
 #include "SkColorPriv.h"
-#include "SkForceLinking.h"
-#include "SkImageDecoder.h"
 #include "SkOSFile.h"
 #include "SkStream.h"
 #include "SkString.h"
@@ -23,14 +21,14 @@
 #include "SkTypes.h"
 #include "SkUtils.h"
 #include "SkView.h"
-
-__SK_FORCE_IMAGE_DECODER_LINKING;
+#include "sk_tool_utils.h"
 
 /**
  *  Interprets c as an unpremultiplied color, and returns the
  *  premultiplied equivalent.
  */
-static SkPMColor premultiply_unpmcolor(SkPMColor c) {
+static SkPMColor premultiply_unpmcolor(SkPMColor c)
+{
     U8CPU a = SkGetPackedA32(c);
     U8CPU r = SkGetPackedR32(c);
     U8CPU g = SkGetPackedG32(c);
@@ -41,15 +39,17 @@ static SkPMColor premultiply_unpmcolor(SkPMColor c) {
 class UnpremulView : public SampleView {
 public:
     UnpremulView(SkString res)
-    : fResPath(res)
-    , fPremul(true)
-    , fDecodeSucceeded(false) {
+        : fResPath(res)
+        , fPremul(true)
+        , fDecodeSucceeded(false)
+    {
         this->nextImage();
     }
 
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "unpremul");
             return true;
@@ -61,34 +61,35 @@ protected:
             // Only consider events for single char keys
             if (1 == size) {
                 switch (utf8[0]) {
-                    case fNextImageChar:
-                        this->nextImage();
-                        return true;
-                    case fTogglePremulChar:
-                        this->togglePremul();
-                        return true;
-                    default:
-                        break;
+                case fNextImageChar:
+                    this->nextImage();
+                    return true;
+                case fTogglePremulChar:
+                    this->togglePremul();
+                    return true;
+                default:
+                    break;
                 }
             }
         }
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawBackground(SkCanvas* canvas) override {
+    void onDrawBackground(SkCanvas* canvas) override
+    {
         sk_tool_utils::draw_checkerboard(canvas, 0xFFCCCCCC, 0xFFFFFFFF, 12);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTextSize(SkIntToScalar(24));
-        SkAutoTUnref<SkBlurDrawLooper> looper(
-            SkBlurDrawLooper::Create(SK_ColorBLUE,
-                                     SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(2)),
-                                     0, 0));
+        auto looper(
+            SkBlurDrawLooper::Make(SK_ColorBLUE, SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(2)),
+                0, 0));
         paint.setLooper(looper);
-        SkScalar height = paint.getFontMetrics(NULL);
+        SkScalar height = paint.getFontMetrics(nullptr);
         if (!fDecodeSucceeded) {
             SkString failure;
             if (fResPath.size() == 0) {
@@ -103,7 +104,7 @@ protected:
         // Name, size of the file, and whether or not it is premultiplied.
         SkString header(SkOSPath::Basename(fCurrFile.c_str()));
         header.appendf("     [%dx%d]     %s", fBitmap.width(), fBitmap.height(),
-                       (fPremul ? "premultiplied" : "unpremultiplied"));
+            (fPremul ? "premultiplied" : "unpremultiplied"));
         canvas->drawText(header.c_str(), header.size(), 0, height, paint);
         canvas->translate(0, height);
 
@@ -136,17 +137,18 @@ protected:
     }
 
 private:
-    const SkString  fResPath;
-    SkString        fCurrFile;
-    bool            fPremul;
-    bool            fDecodeSucceeded;
-    SkBitmap        fBitmap;
-    SkOSFile::Iter  fFileIter;
+    const SkString fResPath;
+    SkString fCurrFile;
+    bool fPremul;
+    bool fDecodeSucceeded;
+    SkBitmap fBitmap;
+    SkOSFile::Iter fFileIter;
 
-    static const char   fNextImageChar      = 'j';
-    static const char   fTogglePremulChar   = 'h';
+    static const char fNextImageChar = 'j';
+    static const char fTogglePremulChar = 'h';
 
-    void nextImage() {
+    void nextImage()
+    {
         if (fResPath.size() == 0) {
             return;
         }
@@ -162,26 +164,18 @@ private:
         this->decodeCurrFile();
     }
 
-    void decodeCurrFile() {
+    void decodeCurrFile()
+    {
         if (fCurrFile.size() == 0) {
             fDecodeSucceeded = false;
             return;
         }
-        SkFILEStream stream(fCurrFile.c_str());
-        SkAutoTDelete<SkImageDecoder> decoder(SkImageDecoder::Factory(&stream));
-        if (NULL == decoder.get()) {
-            fDecodeSucceeded = false;
-            return;
-        }
-        if (!fPremul) {
-            decoder->setRequireUnpremultipliedColors(true);
-        }
-        fDecodeSucceeded = decoder->decode(&stream, &fBitmap, kN32_SkColorType,
-                SkImageDecoder::kDecodePixels_Mode) != SkImageDecoder::kFailure;
-        this->inval(NULL);
+        fDecodeSucceeded = decode_file(fCurrFile.c_str(), &fBitmap, kN32_SkColorType, !fPremul);
+        this->inval(nullptr);
     }
 
-    void togglePremul() {
+    void togglePremul()
+    {
         fPremul = !fPremul;
         this->decodeCurrFile();
     }
@@ -191,7 +185,8 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-static SkView* MyFactory() {
+static SkView* MyFactory()
+{
     return new UnpremulView(GetResourcePath());
 }
 static SkViewRegister reg(MyFactory);

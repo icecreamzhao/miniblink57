@@ -10,16 +10,17 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef AudioSummingJunction_h
@@ -35,24 +36,32 @@ namespace blink {
 class AudioNodeOutput;
 class DeferredTaskHandler;
 
-// An AudioSummingJunction represents a point where zero, one, or more AudioNodeOutputs connect.
+// An AudioSummingJunction represents a point where zero, one, or more
+// AudioNodeOutputs connect.
 
 class AudioSummingJunction {
 public:
     virtual ~AudioSummingJunction();
 
     // Can be called from any thread.
-    DeferredTaskHandler& deferredTaskHandler() const { return *m_deferredTaskHandler; }
+    DeferredTaskHandler& deferredTaskHandler() const
+    {
+        return *m_deferredTaskHandler;
+    }
 
     // This must be called whenever we modify m_outputs.
     void changedOutputs();
 
-    // This copies m_outputs to m_renderingOutputs. Please see comments for these lists below.
-    // This must be called when we own the context's graph lock in the audio thread at the very start or end of the render quantum.
+    // This copies m_outputs to m_renderingOutputs. Please see comments for these
+    // lists below.  This must be called when we own the context's graph lock in
+    // the audio thread at the very start or end of the render quantum.
     void updateRenderingState();
 
     // Rendering code accesses its version of the current connections here.
-    unsigned numberOfRenderingConnections() const { return m_renderingOutputs.size(); }
+    unsigned numberOfRenderingConnections() const
+    {
+        return m_renderingOutputs.size();
+    }
     AudioNodeOutput* renderingOutput(unsigned i) { return m_renderingOutputs[i]; }
     bool isConnected() const { return numberOfRenderingConnections() > 0; }
 

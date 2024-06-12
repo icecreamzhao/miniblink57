@@ -41,62 +41,82 @@
 #include "modules/serviceworkers/ServiceWorker.h"
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
 #include "platform/heap/Handle.h"
-#include "public/platform/WebServiceWorkerProviderClient.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerProvider.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerProviderClient.h"
 #include "wtf/Forward.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
+#include <memory>
 
 namespace blink {
 
 class ExecutionContext;
+class NavigatorServiceWorker;
 class WebServiceWorker;
 class WebServiceWorkerProvider;
-class WebServiceWorkerRegistration;
 
 class MODULES_EXPORT ServiceWorkerContainer final
-    : public RefCountedGarbageCollectedEventTargetWithInlineData<ServiceWorkerContainer>
-    , public ContextLifecycleObserver
-    , public WebServiceWorkerProviderClient {
+    : public EventTargetWithInlineData,
+      public ContextLifecycleObserver,
+      public WebServiceWorkerProviderClient {
     DEFINE_WRAPPERTYPEINFO();
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(ServiceWorkerContainer);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainer);
-public:
-    static ServiceWorkerContainer* create(ExecutionContext*);
-    ~ServiceWorkerContainer();
+    USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainer);
 
-    void willBeDetachedFromFrame();
+public:
+    using RegistrationCallbacks = WebServiceWorkerProvider::WebServiceWorkerRegistrationCallbacks;
+
+    static ServiceWorkerContainer* create(ExecutionContext*,
+        NavigatorServiceWorker*);
+    ~ServiceWorkerContainer();
 
     DECLARE_VIRTUAL_TRACE();
 
-    PassRefPtrWillBeRawPtr<ServiceWorker> controller() { return m_controller.get(); }
+    ServiceWorker* controller() { return m_controller; }
     ScriptPromise ready(ScriptState*);
     WebServiceWorkerProvider* provider() { return m_provider; }
 
-    ScriptPromise registerServiceWorker(ScriptState*, const String& pattern, const RegistrationOptions&);
+    void registerServiceWorkerImpl(ExecutionContext*,
+        const KURL& scriptURL,
+        const KURL& scope,
+        std::unique_ptr<RegistrationCallbacks>);
+
+    ScriptPromise registerServiceWorker(ScriptState*,
+        const String& pattern,
+        const RegistrationOptions&);
     ScriptPromise getRegistration(ScriptState*, const String& documentURL);
     ScriptPromise getRegistrations(ScriptState*);
 
+    void contextDestroyed(ExecutionContext*) override;
+
     // WebServiceWorkerProviderClient overrides.
-    void setController(WebServiceWorker*, bool shouldNotifyControllerChange) override;
-    void dispatchMessageEvent(WebServiceWorker*, const WebString& message, const WebMessagePortChannelArray&) override;
+    void setController(std::unique_ptr<WebServiceWorker::Handle>,
+        bool shouldNotifyControllerChange) override;
+    void dispatchMessageEvent(std::unique_ptr<WebServiceWorker::Handle>,
+        const WebString& message,
+        const WebMessagePortChannelArray&) override;
 
     // EventTarget overrides.
-    ExecutionContext* executionContext() const override { return ContextLifecycleObserver::executionContext(); }
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextLifecycleObserver::getExecutionContext();
+    }
     const AtomicString& interfaceName() const override;
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(controllerchange);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(message);
 
 private:
-    explicit ServiceWorkerContainer(ExecutionContext*);
+    ServiceWorkerContainer(ExecutionContext*, NavigatorServiceWorker*);
 
     class GetRegistrationForReadyCallback;
-    typedef ScriptPromiseProperty<Member<ServiceWorkerContainer>, Member<ServiceWorkerRegistration>, Member<ServiceWorkerRegistration>> ReadyProperty;
+    typedef ScriptPromiseProperty<Member<ServiceWorkerContainer>,
+        Member<ServiceWorkerRegistration>,
+        Member<ServiceWorkerRegistration>>
+        ReadyProperty;
     ReadyProperty* createReadyProperty();
 
     WebServiceWorkerProvider* m_provider;
-    RefPtrWillBeMember<ServiceWorker> m_controller;
+    Member<ServiceWorker> m_controller;
     Member<ReadyProperty> m_ready;
+    Member<NavigatorServiceWorker> m_navigator;
 };
 
 } // namespace blink

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -19,20 +18,24 @@ namespace skiagm {
  */
 class InternalLinksGM : public GM {
 public:
-    InternalLinksGM() {
+    InternalLinksGM()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-    virtual SkString onShortName() {
+    virtual SkString onShortName()
+    {
         return SkString("internal_links");
     }
 
-    virtual SkISize onISize() {
+    virtual SkISize onISize()
+    {
         return SkISize::Make(700, 500);
     }
 
-    virtual void onDraw(SkCanvas* canvas) {
+    virtual void onDraw(SkCanvas* canvas)
+    {
         SkAutoTUnref<SkData> name(SkData::NewWithCString("target-a"));
 
         canvas->save();
@@ -53,15 +56,16 @@ protected:
 private:
     /** Draw an arbitrary rectangle at a given location and label it with some
      *  text. */
-    void drawLabeledRect(SkCanvas* canvas, const char* text, SkScalar x, SkScalar y) {
+    void drawLabeledRect(SkCanvas* canvas, const char* text, SkScalar x, SkScalar y)
+    {
         SkPaint paint;
         paint.setColor(SK_ColorBLUE);
         SkRect rect = SkRect::MakeXYWH(x, y,
-                                       SkIntToScalar(50), SkIntToScalar(20));
+            SkIntToScalar(50), SkIntToScalar(20));
         canvas->drawRect(rect, paint);
 
         paint.setAntiAlias(true);
-        sk_tool_utils::set_portable_typeface_always(&paint);
+        sk_tool_utils::set_portable_typeface(&paint);
         paint.setTextSize(SkIntToScalar(25));
         paint.setColor(SK_ColorBLACK);
         canvas->drawText(text, strlen(text), x, y, paint);
@@ -72,7 +76,7 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-static GM* MyFactory(void*) { return SkNEW(InternalLinksGM); }
+static GM* MyFactory(void*) { return new InternalLinksGM; }
 static GMRegistry reg(MyFactory);
 
 }

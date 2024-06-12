@@ -32,21 +32,20 @@
 // Also used as a target by TestObject
 
 enum TestEnumModules { "EnumModulesValue1", "EnumModulesValue2" };
+callback VoidCallbackFunctionModules = void ();
 
 [
-    ActiveDOMObject,
-    Conditional=CONDITION,
+    ActiveScriptWrappable,
+    DependentLifetime,
     Custom=LegacyCallAsFunction,
     DoNotCheckConstants,
     ImplementedAs=TestInterface5Implementation,
     RuntimeEnabled=FeatureName,
     SetWrapperReferenceTo(TestInterface5 referencedName),
-    TypeChecking=Interface,
     Exposed=(Worker,Window),
 ] interface TestInterface5 : TestInterfaceEmpty {
     // members needed to test [ImplementedAs], as this affect attribute
-    // configuration and method configuration, and [TypeChecking]
-    // constants also needed for [DoNotCheckConstants]
+    // configuration and method configuration
     const unsigned long UNSIGNED_LONG = 0;
     [Reflect=CONST_CPP] const short CONST_JAVASCRIPT = 1;
 
@@ -94,6 +93,9 @@ enum TestEnumModules { "EnumModulesValue1", "EnumModulesValue2" };
     void voidMethodBooleanOrDOMStringArg((boolean or DOMString) arg);
     void voidMethodDoubleOrDOMStringArg((double or DOMString) arg);
 
+    // Callback functions
+    void voidMethodVoidExperimentalCallbackFunction(VoidExperimentalCallbackFunction arg);
+    void voidMethodVoidCallbackFunctionModulesArg(VoidCallbackFunctionModules arg);
+
     iterable<any>;
 };
-

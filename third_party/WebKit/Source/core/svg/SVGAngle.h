@@ -23,6 +23,7 @@
 #define SVGAngle_h
 
 #include "core/svg/SVGEnumeration.h"
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 #include "platform/heap/Handle.h"
 
@@ -37,21 +38,31 @@ enum SVGMarkerOrientType {
     SVGMarkerOrientAngle,
     SVGMarkerOrientAutoStartReverse
 };
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGMarkerOrientType>();
-template<> unsigned short getMaxExposedEnumValue<SVGMarkerOrientType>();
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGMarkerOrientType>();
+template <>
+unsigned short getMaxExposedEnumValue<SVGMarkerOrientType>();
 
-class SVGMarkerOrientEnumeration : public SVGEnumeration<SVGMarkerOrientType> {
+class SVGMarkerOrientEnumeration final
+    : public SVGEnumeration<SVGMarkerOrientType> {
 public:
-    static PassRefPtrWillBeRawPtr<SVGMarkerOrientEnumeration> create(SVGAngle* angle)
+    static SVGMarkerOrientEnumeration* create(SVGAngle* angle)
     {
-        return adoptRefWillBeNoop(new SVGMarkerOrientEnumeration(angle));
+        return new SVGMarkerOrientEnumeration(angle);
     }
 
     ~SVGMarkerOrientEnumeration() override;
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float, unsigned, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float,
+        unsigned,
+        SVGPropertyBase*,
+        SVGPropertyBase*,
+        SVGPropertyBase*,
+        SVGElement*) override;
+    float calculateDistance(SVGPropertyBase*, SVGElement*) override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -60,26 +71,23 @@ private:
 
     void notifyChange() override;
 
-    RawPtrWillBeMember<SVGAngle> m_angle;
+    Member<SVGAngle> m_angle;
 };
 
-class SVGAngle : public SVGPropertyHelper<SVGAngle> {
+class SVGAngle final : public SVGPropertyHelper<SVGAngle> {
 public:
     typedef SVGAngleTearOff TearOffType;
 
     enum SVGAngleType {
-        SVG_ANGLETYPE_UNKNOWN = 0,
-        SVG_ANGLETYPE_UNSPECIFIED = 1,
-        SVG_ANGLETYPE_DEG = 2,
-        SVG_ANGLETYPE_RAD = 3,
-        SVG_ANGLETYPE_GRAD = 4,
-        SVG_ANGLETYPE_TURN = 5
+        kSvgAngletypeUnknown = 0,
+        kSvgAngletypeUnspecified = 1,
+        kSvgAngletypeDeg = 2,
+        kSvgAngletypeRad = 3,
+        kSvgAngletypeGrad = 4,
+        kSvgAngletypeTurn = 5
     };
 
-    static PassRefPtrWillBeRawPtr<SVGAngle> create()
-    {
-        return adoptRefWillBeNoop(new SVGAngle());
-    }
+    static SVGAngle* create() { return new SVGAngle(); }
 
     ~SVGAngle() override;
 
@@ -88,26 +96,43 @@ public:
     void setValue(float);
     float value() const;
 
-    void setValueInSpecifiedUnits(float valueInSpecifiedUnits) { m_valueInSpecifiedUnits = valueInSpecifiedUnits; }
+    void setValueInSpecifiedUnits(float valueInSpecifiedUnits)
+    {
+        m_valueInSpecifiedUnits = valueInSpecifiedUnits;
+    }
     float valueInSpecifiedUnits() const { return m_valueInSpecifiedUnits; }
 
-    void newValueSpecifiedUnits(SVGAngleType unitType, float valueInSpecifiedUnits);
-    void convertToSpecifiedUnits(SVGAngleType unitType, ExceptionState&);
+    void newValueSpecifiedUnits(SVGAngleType unitType,
+        float valueInSpecifiedUnits);
+    void convertToSpecifiedUnits(SVGAngleType unitType);
 
-    SVGEnumeration<SVGMarkerOrientType>* orientType() { return m_orientType.get(); }
-    const SVGEnumeration<SVGMarkerOrientType>* orientType() const { return m_orientType.get(); }
+    SVGEnumeration<SVGMarkerOrientType>* orientType()
+    {
+        return m_orientType.get();
+    }
+    const SVGEnumeration<SVGMarkerOrientType>* orientType() const
+    {
+        return m_orientType.get();
+    }
     void orientTypeChanged();
 
     // SVGPropertyBase:
 
-    PassRefPtrWillBeRawPtr<SVGAngle> clone() const;
+    SVGAngle* clone() const;
 
     String valueAsString() const override;
-    void setValueAsString(const String&, ExceptionState&);
+    SVGParsingError setValueAsString(const String&);
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float percentage,
+        unsigned repeatCount,
+        SVGPropertyBase* from,
+        SVGPropertyBase* to,
+        SVGPropertyBase* toAtEndOfDurationValue,
+        SVGElement* contextElement) override;
+    float calculateDistance(SVGPropertyBase* to,
+        SVGElement* contextElement) override;
 
     static AnimatedPropertyType classType() { return AnimatedAngle; }
 
@@ -121,15 +146,10 @@ private:
 
     SVGAngleType m_unitType;
     float m_valueInSpecifiedUnits;
-    RefPtrWillBeMember<SVGMarkerOrientEnumeration> m_orientType;
+    Member<SVGMarkerOrientEnumeration> m_orientType;
 };
 
-inline PassRefPtrWillBeRawPtr<SVGAngle> toSVGAngle(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
-{
-    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
-    ASSERT(base->type() == SVGAngle::classType());
-    return static_pointer_cast<SVGAngle>(base.release());
-}
+DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGAngle);
 
 } // namespace blink
 

@@ -22,16 +22,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLIFrameElement.h"
 
-#include "bindings/core/v8/V8DOMActivityLogger.h"
 #include "core/CSSPropertyNames.h"
 #include "core/HTMLNames.h"
 #include "core/frame/UseCounter.h"
 #include "core/html/HTMLDocument.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "core/layout/LayoutIFrame.h"
+#include "platform/RuntimeEnabledFeatures.h"
 
 namespace blink {
 
@@ -40,7 +39,8 @@ using namespace HTMLNames;
 inline HTMLIFrameElement::HTMLIFrameElement(Document& document)
     : HTMLFrameElementBase(iframeTag, document)
     , m_didLoadNonEmptyDocument(false)
-    , m_sandbox(DOMSettableTokenList::create(this))
+    , m_sandbox(HTMLIFrameElementSandbox::create(this))
+    , m_referrerPolicy(ReferrerPolicyDefault)
 {
 }
 
@@ -49,30 +49,37 @@ DEFINE_NODE_FACTORY(HTMLIFrameElement)
 DEFINE_TRACE(HTMLIFrameElement)
 {
     visitor->trace(m_sandbox);
+    visitor->trace(m_permissions);
     HTMLFrameElementBase::trace(visitor);
-    DOMSettableTokenListObserver::trace(visitor);
+    Supplementable<HTMLIFrameElement>::trace(visitor);
 }
 
-HTMLIFrameElement::~HTMLIFrameElement()
-{
-#if !ENABLE(OILPAN)
-    m_sandbox->setObserver(nullptr);
-#endif
-}
+HTMLIFrameElement::~HTMLIFrameElement() { }
 
-DOMSettableTokenList* HTMLIFrameElement::sandbox() const
+DOMTokenList* HTMLIFrameElement::sandbox() const
 {
     return m_sandbox.get();
 }
 
-bool HTMLIFrameElement::isPresentationAttribute(const QualifiedName& name) const
+DOMTokenList* HTMLIFrameElement::permissions() const
+{
+    if (!const_cast<HTMLIFrameElement*>(this)->initializePermissionsAttribute())
+        return nullptr;
+    return m_permissions.get();
+}
+
+bool HTMLIFrameElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == widthAttr || name == heightAttr || name == alignAttr || name == frameborderAttr)
         return true;
     return HTMLFrameElementBase::isPresentationAttribute(name);
 }
 
-void HTMLIFrameElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLIFrameElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == widthAttr) {
         addHTMLLengthToStyle(style, CSSPropertyWidth, value);
@@ -81,53 +88,92 @@ void HTMLIFrameElement::collectStyleForPresentationAttribute(const QualifiedName
     } else if (name == alignAttr) {
         applyAlignmentAttributeToStyle(value, style);
     } else if (name == frameborderAttr) {
-        // LocalFrame border doesn't really match the HTML4 spec definition for iframes. It simply adds
-        // a presentational hint that the border should be off if set to zero.
+        // LocalFrame border doesn't really match the HTML4 spec definition for
+        // iframes. It simply adds a presentational hint that the border should be
+        // off if set to zero.
         if (!value.toInt()) {
             // Add a rule that nulls out our border width.
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyBorderWidth, 0, CSSPrimitiveValue::CSS_PX);
+            addPropertyToPresentationAttributeStyle(
+                style, CSSPropertyBorderWidth, 0,
+                CSSPrimitiveValue::UnitType::Pixels);
         }
     } else {
-        HTMLFrameElementBase::collectStyleForPresentationAttribute(name, value, style);
+        HTMLFrameElementBase::collectStyleForPresentationAttribute(name, value,
+            style);
     }
 }
 
-void HTMLIFrameElement::attributeWillChange(const QualifiedName& name, const AtomicString& oldValue, const AtomicString& newValue)
+void HTMLIFrameElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == srcAttr && inDocument()) {
-        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
-        if (activityLogger) {
-            Vector<String> argv;
-            argv.append("iframe");
-            argv.append(srcAttr.toString());
-            argv.append(oldValue);
-            argv.append(newValue);
-            activityLogger->logEvent("blinkSetAttribute", argv.size(), argv.data());
-        }
-    }
-    HTMLFrameElementBase::attributeWillChange(name, oldValue, newValue);
-}
-
-void HTMLIFrameElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
-{
+    const QualifiedName& name = params.name;
+    const AtomicString& value = params.newValue;
     if (name == nameAttr) {
-        if (inDocument() && document().isHTMLDocument() && !isInShadowTree()) {
+        if (isInDocumentTree() && document().isHTMLDocument()) {
             HTMLDocument& document = toHTMLDocument(this->document());
             document.removeExtraNamedItem(m_name);
             document.addExtraNamedItem(value);
         }
+        AtomicString oldName = m_name;
         m_name = value;
+        if (m_name != oldName)
+            frameOwnerPropertiesChanged();
     } else if (name == sandboxAttr) {
         m_sandbox->setValue(value);
         UseCounter::count(document(), UseCounter::SandboxViaIFrame);
+    } else if (name == referrerpolicyAttr) {
+        m_referrerPolicy = ReferrerPolicyDefault;
+        if (!value.isNull()) {
+            SecurityPolicy::referrerPolicyFromStringWithLegacyKeywords(
+                value, &m_referrerPolicy);
+            UseCounter::count(document(),
+                UseCounter::HTMLIFrameElementReferrerPolicyAttribute);
+        }
+    } else if (name == allowfullscreenAttr) {
+        bool oldAllowFullscreen = m_allowFullscreen;
+        m_allowFullscreen = !value.isNull();
+        if (m_allowFullscreen != oldAllowFullscreen) {
+            // TODO(iclelland): Remove this use counter when the allowfullscreen
+            // attribute state is snapshotted on document creation. crbug.com/682282
+            if (m_allowFullscreen && contentFrame()) {
+                UseCounter::count(
+                    document(),
+                    UseCounter::
+                        HTMLIFrameElementAllowfullscreenAttributeSetAfterContentLoad);
+            }
+            frameOwnerPropertiesChanged();
+        }
+    } else if (name == allowpaymentrequestAttr) {
+        bool oldAllowPaymentRequest = m_allowPaymentRequest;
+        m_allowPaymentRequest = !value.isNull();
+        if (m_allowPaymentRequest != oldAllowPaymentRequest)
+            frameOwnerPropertiesChanged();
+    } else if (name == permissionsAttr) {
+        if (initializePermissionsAttribute())
+            m_permissions->setValue(value);
+    } else if (RuntimeEnabledFeatures::embedderCSPEnforcementEnabled() && name == cspAttr) {
+        // TODO(amalika): add more robust validation of the value
+        if (!value.getString().containsOnlyASCII()) {
+            m_csp = nullAtom;
+            document().addConsoleMessage(ConsoleMessage::create(
+                OtherMessageSource, ErrorMessageLevel,
+                "'csp' attribute contains non-ASCII characters: " + value));
+            return;
+        }
+        AtomicString oldCSP = m_csp;
+        m_csp = value;
+        if (m_csp != oldCSP)
+            frameOwnerPropertiesChanged();
     } else {
-        HTMLFrameElementBase::parseAttribute(name, value);
+        if (name == srcAttr)
+            logUpdateAttributeIfIsolatedWorldAndInDocument("iframe", params);
+        HTMLFrameElementBase::parseAttribute(params);
     }
 }
 
 bool HTMLIFrameElement::layoutObjectIsNeeded(const ComputedStyle& style)
 {
-    return isURLAllowed() && HTMLElement::layoutObjectIsNeeded(style);
+    return contentFrame() && HTMLElement::layoutObjectIsNeeded(style);
 }
 
 LayoutObject* HTMLIFrameElement::createLayoutObject(const ComputedStyle&)
@@ -135,27 +181,20 @@ LayoutObject* HTMLIFrameElement::createLayoutObject(const ComputedStyle&)
     return new LayoutIFrame(this);
 }
 
-Node::InsertionNotificationRequest HTMLIFrameElement::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLIFrameElement::insertedInto(
+    ContainerNode* insertionPoint)
 {
-    if (insertionPoint->inDocument()) {
-        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
-        if (activityLogger) {
-            Vector<String> argv;
-            argv.append("iframe");
-            argv.append(fastGetAttribute(srcAttr));
-            activityLogger->logEvent("blinkAddElement", argv.size(), argv.data());
-        }
-    }
     InsertionNotificationRequest result = HTMLFrameElementBase::insertedInto(insertionPoint);
-    if (insertionPoint->inDocument() && document().isHTMLDocument() && !insertionPoint->isInShadowTree())
+    if (insertionPoint->isInDocumentTree() && document().isHTMLDocument())
         toHTMLDocument(document()).addExtraNamedItem(m_name);
+    logAddElementIfIsolatedWorldAndInDocument("iframe", srcAttr);
     return result;
 }
 
 void HTMLIFrameElement::removedFrom(ContainerNode* insertionPoint)
 {
     HTMLFrameElementBase::removedFrom(insertionPoint);
-    if (insertionPoint->inDocument() && document().isHTMLDocument() && !insertionPoint->isInShadowTree())
+    if (insertionPoint->isInDocumentTree() && document().isHTMLDocument())
         toHTMLDocument(document()).removeExtraNamedItem(m_name);
 }
 
@@ -164,13 +203,47 @@ bool HTMLIFrameElement::isInteractiveContent() const
     return true;
 }
 
-void HTMLIFrameElement::valueChanged()
+void HTMLIFrameElement::permissionsValueWasSet()
+{
+    if (!initializePermissionsAttribute())
+        return;
+
+    String invalidTokens;
+    m_delegatedPermissions = m_permissions->parseDelegatedPermissions(invalidTokens);
+    if (!invalidTokens.isNull())
+        document().addConsoleMessage(ConsoleMessage::create(
+            OtherMessageSource, ErrorMessageLevel,
+            "Error while parsing the 'permissions' attribute: " + invalidTokens));
+    setSynchronizedLazyAttribute(permissionsAttr, m_permissions->value());
+    frameOwnerPropertiesChanged();
+}
+
+void HTMLIFrameElement::sandboxValueWasSet()
 {
     String invalidTokens;
-    setSandboxFlags(m_sandbox->value().isNull() ? SandboxNone : parseSandboxPolicy(m_sandbox->tokens(), invalidTokens));
+    setSandboxFlags(m_sandbox->value().isNull()
+            ? SandboxNone
+            : parseSandboxPolicy(m_sandbox->tokens(), invalidTokens));
     if (!invalidTokens.isNull())
-        document().addConsoleMessage(ConsoleMessage::create(OtherMessageSource, ErrorMessageLevel, "Error while parsing the 'sandbox' attribute: " + invalidTokens));
+        document().addConsoleMessage(ConsoleMessage::create(
+            OtherMessageSource, ErrorMessageLevel,
+            "Error while parsing the 'sandbox' attribute: " + invalidTokens));
     setSynchronizedLazyAttribute(sandboxAttr, m_sandbox->value());
 }
 
+ReferrerPolicy HTMLIFrameElement::referrerPolicyAttribute()
+{
+    return m_referrerPolicy;
 }
+
+bool HTMLIFrameElement::initializePermissionsAttribute()
+{
+    if (!RuntimeEnabledFeatures::permissionDelegationEnabled())
+        return false;
+
+    if (!m_permissions)
+        m_permissions = HTMLIFrameElementPermissions::create(this);
+    return true;
+}
+
+} // namespace blink

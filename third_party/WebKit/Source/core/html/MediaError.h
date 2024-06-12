@@ -28,34 +28,35 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
-class CORE_EXPORT MediaError final : public RefCountedWillBeGarbageCollectedFinalized<MediaError>, public ScriptWrappable {
+class CORE_EXPORT MediaError final : public GarbageCollected<MediaError>,
+                                     public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    enum Code {
-        MEDIA_ERR_ABORTED = 1,
-        MEDIA_ERR_NETWORK,
-        MEDIA_ERR_DECODE,
-        MEDIA_ERR_SRC_NOT_SUPPORTED,
+    enum ErrorCode {
+        kMediaErrAborted = 1,
+        kMediaErrNetwork,
+        kMediaErrDecode,
+        kMediaErrSrcNotSupported,
     };
 
-    static PassRefPtrWillBeRawPtr<MediaError> create(Code code)
-    {
-        return adoptRefWillBeNoop(new MediaError(code));
-    }
+    static MediaError* create(ErrorCode code) { return new MediaError(code); }
 
-    Code code() const { return m_code; }
+    ErrorCode code() const { return m_code; }
 
     DEFINE_INLINE_TRACE() { }
 
 private:
-    MediaError(Code code) : m_code(code) { }
+    MediaError(ErrorCode code)
+        : m_code(code)
+    {
+    }
 
-    Code m_code;
+    ErrorCode m_code;
 };
 
 } // namespace blink

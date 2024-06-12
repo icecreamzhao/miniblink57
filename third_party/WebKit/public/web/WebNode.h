@@ -34,23 +34,22 @@
 #include "../platform/WebCommon.h"
 #include "../platform/WebPrivatePtr.h"
 #include "../platform/WebString.h"
-#include "WebExceptionCode.h"
+#include "../platform/WebVector.h"
 
 namespace blink {
 
 class Node;
 class WebAXObject;
-class WebDOMEvent;
 class WebDocument;
 class WebElement;
 class WebElementCollection;
-class WebNodeList;
 class WebPluginContainer;
 
 // Provides access to some properties of a DOM node.
-// Note that the class design requires that neither this class nor any of its subclasses have any virtual
-// methods (other than the destructor), so that it is possible to safely static_cast an instance of one
-// class to the appropriate subclass based on the actual type of the wrapped blink::Node. For the same
+// Note that the class design requires that neither this class nor any of its
+// subclasses have any virtual methods (other than the destructor), so that it
+// is possible to safely static_cast an instance of one class to the appropriate
+// subclass based on the actual type of the wrapped blink::Node. For the same
 // reason, subclasses must not add any additional data members.
 class WebNode {
 public:
@@ -74,89 +73,60 @@ public:
 
     bool isNull() const { return m_private.isNull(); }
 
-    enum NodeType {
-        ElementNode = 1,
-        AttributeNode = 2,
-        TextNode = 3,
-        CDataSectionNode = 4,
-        // EntityReferenceNodes are impossible to create in Blink.
-        // EntityNodes are impossible to create in Blink.
-        ProcessingInstructionsNode = 7,
-        CommentNode = 8,
-        DocumentNode = 9,
-        DocumentTypeNode = 10,
-        DocumentFragmentNode = 11,
-        // NotationNodes are impossible to create in Blink.
-        // XPathNamespaceNodes are impossible to create in Blink.
-        ShadowRootNode = 14
-    };
-
-    BLINK_EXPORT NodeType nodeType() const;
     BLINK_EXPORT WebNode parentNode() const;
-    BLINK_EXPORT WebString nodeName() const;
     BLINK_EXPORT WebString nodeValue() const;
     BLINK_EXPORT WebDocument document() const;
     BLINK_EXPORT WebNode firstChild() const;
     BLINK_EXPORT WebNode lastChild() const;
     BLINK_EXPORT WebNode previousSibling() const;
     BLINK_EXPORT WebNode nextSibling() const;
-    BLINK_EXPORT bool hasChildNodes() const;
+
     BLINK_EXPORT bool isDraggable() const;
-    BLINK_EXPORT WebNodeList childNodes();
-    BLINK_EXPORT WebString createMarkup() const;
     BLINK_EXPORT bool isLink() const;
+    BLINK_EXPORT bool isDocumentNode() const;
+    BLINK_EXPORT bool isDocumentTypeNode() const;
+    BLINK_EXPORT bool isCommentNode() const;
     BLINK_EXPORT bool isTextNode() const;
     BLINK_EXPORT bool isFocusable() const;
     BLINK_EXPORT bool isContentEditable() const;
     BLINK_EXPORT bool isElementNode() const;
-    BLINK_EXPORT void dispatchEvent(const WebDOMEvent&);
     BLINK_EXPORT void simulateClick();
+
     // The argument should be lower-cased.
-    BLINK_EXPORT WebElementCollection getElementsByHTMLTagName(const WebString&) const;
-    BLINK_EXPORT WebElement querySelector(const WebString&, WebExceptionCode&) const;
+    BLINK_EXPORT WebElementCollection
+    getElementsByHTMLTagName(const WebString&) const;
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+    // If the JS API would have thrown this returns null instead.
+    BLINK_EXPORT WebElement querySelector(const WebString& selector) const;
+
     BLINK_EXPORT bool focused() const;
-    BLINK_EXPORT bool remove();
 
-    // Returns true if the node has a non-empty bounding box in layout.
-    // This does not 100% guarantee the user can see it, but is pretty close.
-    // Note: This method only works properly after layout has occurred.
-    BLINK_EXPORT bool hasNonEmptyBoundingBox() const;
-
-    BLINK_EXPORT bool containsIncludingShadowDOM(const WebNode&) const;
     BLINK_EXPORT WebPluginContainer* pluginContainer() const;
 
     BLINK_EXPORT bool isInsideFocusableElementOrARIAWidget() const;
-#ifdef IMPLEMENTED_NEWEST_BLINK
-    BLINK_EXPORT WebAXObject accessibilityObject();
-#endif // IMPLEMENTED_NEWEST_BLINK
+    //BLINK_EXPORT WebAXObject accessibilityObject();
 
-    template<typename T> T to()
-    {
-        T res;
-        res.WebNode::assign(*this);
-        return res;
-    }
-
-    template<typename T> const T toConst() const
-    {
-        T res;
-        res.WebNode::assign(*this);
-        return res;
-    }
+    template <typename T>
+    T to();
+    template <typename T>
+    const T toConst() const;
 
 #if BLINK_IMPLEMENTATION
-    WebNode(const PassRefPtrWillBeRawPtr<Node>&);
-    WebNode& operator=(const PassRefPtrWillBeRawPtr<Node>&);
-    operator PassRefPtrWillBeRawPtr<Node>() const;
-#endif
+    BLINK_EXPORT static WebPluginContainer* pluginContainerFromNode(const Node*);
 
-#if BLINK_IMPLEMENTATION
-    template<typename T> T* unwrap()
+    BLINK_EXPORT WebNode(Node*);
+    BLINK_EXPORT WebNode& operator=(Node*);
+    BLINK_EXPORT operator Node*() const;
+
+    template <typename T>
+    T* unwrap()
     {
         return static_cast<T*>(m_private.get());
     }
 
-    template<typename T> const T* constUnwrap() const
+    template <typename T>
+    const T* constUnwrap() const
     {
         return static_cast<const T*>(m_private.get());
     }
@@ -165,6 +135,32 @@ public:
 protected:
     WebPrivatePtr<Node> m_private;
 };
+
+#define DECLARE_WEB_NODE_TYPE_CASTS(type)  \
+    template <>                            \
+    BLINK_EXPORT type WebNode::to<type>(); \
+    template <>                            \
+    BLINK_EXPORT const type WebNode::toConst<type>() const;
+
+#if BLINK_IMPLEMENTATION
+#define DEFINE_WEB_NODE_TYPE_CASTS(type, predicate) \
+    template <>                                     \
+    type WebNode::to<type>()                        \
+    {                                               \
+        SECURITY_DCHECK(isNull() || (predicate));   \
+        type result;                                \
+        result.WebNode::assign(*this);              \
+        return result;                              \
+    }                                               \
+    template <>                                     \
+    const type WebNode::toConst<type>() const       \
+    {                                               \
+        SECURITY_DCHECK(isNull() || (predicate));   \
+        type result;                                \
+        result.WebNode::assign(*this);              \
+        return result;                              \
+    }
+#endif
 
 inline bool operator==(const WebNode& a, const WebNode& b)
 {

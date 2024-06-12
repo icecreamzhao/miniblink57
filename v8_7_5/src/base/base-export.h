@@ -15,9 +15,9 @@
 #define V8_BASE_EXPORT __declspec(dllimport)
 #else
 #define V8_BASE_EXPORT
-#endif  // BUILDING_V8_BASE_SHARED
+#endif // BUILDING_V8_BASE_SHARED
 
-#else  // !V8_OS_WIN
+#else // !V8_OS_WIN
 
 // Setup for Linux shared library export.
 #ifdef BUILDING_V8_BASE_SHARED
@@ -26,6 +26,6 @@
 #define V8_BASE_EXPORT
 #endif
 
-#endif  // V8_OS_WIN
+#endif // V8_OS_WIN
 
-#endif  // V8_BASE_BASE_EXPORT_H_
+#endif // V8_BASE_BASE_EXPORT_H_

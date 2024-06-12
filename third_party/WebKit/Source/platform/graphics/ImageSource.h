@@ -27,35 +27,29 @@
 #define ImageSource_h
 
 #include "platform/PlatformExport.h"
+#include "platform/graphics/ColorBehavior.h"
+#include "platform/graphics/DeferredImageDecoder.h"
 #include "platform/graphics/ImageOrientation.h"
+#include "third_party/skia/include/core/SkRefCnt.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
+#include <memory>
 
-class SkBitmap;
+class SkImage;
 
 namespace blink {
 
-class DeferredImageDecoder;
 class ImageOrientation;
 class IntPoint;
 class IntSize;
 class SharedBuffer;
 
-class PLATFORM_EXPORT ImageSource {
+class PLATFORM_EXPORT ImageSource final {
+    USING_FAST_MALLOC(ImageSource);
     WTF_MAKE_NONCOPYABLE(ImageSource);
+
 public:
-    enum AlphaOption {
-        AlphaPremultiplied,
-        AlphaNotPremultiplied
-    };
-
-    enum GammaAndColorProfileOption {
-        GammaAndColorProfileApplied,
-        GammaAndColorProfileIgnored
-    };
-
-    ImageSource(AlphaOption alphaOption = AlphaPremultiplied, GammaAndColorProfileOption gammaAndColorProfileOption = GammaAndColorProfileApplied);
+    ImageSource();
     ~ImageSource();
 
     // Tells the ImageSource that the Image no longer cares about decoded frame
@@ -78,27 +72,32 @@ public:
     // Returns the number of bytes of frame data actually cleared.
     size_t clearCacheExceptFrame(size_t);
 
-    void setData(SharedBuffer& data, bool allDataReceived);
+    PassRefPtr<SharedBuffer> data();
+    // Returns false when the decoder layer rejects the data.
+    bool setData(PassRefPtr<SharedBuffer> data, bool allDataReceived);
     String filenameExtension() const;
 
     bool isSizeAvailable();
     bool hasColorProfile() const;
-    IntSize size(RespectImageOrientationEnum = DoNotRespectImageOrientation) const;
-    IntSize frameSizeAtIndex(size_t, RespectImageOrientationEnum = DoNotRespectImageOrientation) const;
+    IntSize size(
+        RespectImageOrientationEnum = DoNotRespectImageOrientation) const;
+    IntSize frameSizeAtIndex(
+        size_t,
+        RespectImageOrientationEnum = DoNotRespectImageOrientation) const;
 
     bool getHotSpot(IntPoint&) const;
     int repetitionCount();
 
     size_t frameCount() const;
 
-    // Attempts to create the requested frame if necessary, and sets the
-    // SkBitmap outparam to the associated bitmap.  Returns whether a valid
-    // bitmap was set.
-    bool createFrameAtIndex(size_t, SkBitmap*);
+    // Attempts to create the requested frame.
+    sk_sp<SkImage> createFrameAtIndex(size_t, const ColorBehavior&);
 
     float frameDurationAtIndex(size_t) const;
-    bool frameHasAlphaAtIndex(size_t) const; // Whether or not the frame actually used any alpha.
-    bool frameIsCompleteAtIndex(size_t) const; // Whether or not the frame is fully received.
+    bool frameHasAlphaAtIndex(
+        size_t) const; // Whether or not the frame actually used any alpha.
+    bool frameIsCompleteAtIndex(
+        size_t) const; // Whether or not the frame is fully received.
     ImageOrientation orientationAtIndex(size_t) const; // EXIF image orientation
 
     // Returns the number of bytes in the decoded frame. May return 0 if the
@@ -106,10 +105,9 @@ public:
     size_t frameBytesAtIndex(size_t) const;
 
 private:
-    OwnPtr<DeferredImageDecoder> m_decoder;
-
-    AlphaOption m_alphaOption;
-    GammaAndColorProfileOption m_gammaAndColorProfileOption;
+    std::unique_ptr<DeferredImageDecoder> m_decoder;
+    ColorBehavior m_decoderColorBehavior;
+    bool m_allDataReceived = false;
 };
 
 } // namespace blink

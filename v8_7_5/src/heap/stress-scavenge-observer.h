@@ -10,30 +10,30 @@
 namespace v8 {
 namespace internal {
 
-class StressScavengeObserver : public AllocationObserver {
- public:
-  explicit StressScavengeObserver(Heap& heap);
+    class StressScavengeObserver : public AllocationObserver {
+    public:
+        explicit StressScavengeObserver(Heap& heap);
 
-  void Step(int bytes_allocated, Address soon_object, size_t size) override;
+        void Step(int bytes_allocated, Address soon_object, size_t size) override;
 
-  bool HasRequestedGC() const;
-  void RequestedGCDone();
+        bool HasRequestedGC() const;
+        void RequestedGCDone();
 
-  // The maximum percent of the newspace capacity reached. This is tracked when
-  // specyfing --fuzzer-gc-analysis.
-  double MaxNewSpaceSizeReached() const;
+        // The maximum percent of the newspace capacity reached. This is tracked when
+        // specyfing --fuzzer-gc-analysis.
+        double MaxNewSpaceSizeReached() const;
 
- private:
-  Heap& heap_;
-  int limit_percentage_;
-  bool has_requested_gc_;
+    private:
+        Heap& heap_;
+        int limit_percentage_;
+        bool has_requested_gc_;
 
-  double max_new_space_size_reached_;
+        double max_new_space_size_reached_;
 
-  int NextLimit(int min = 0);
-};
+        int NextLimit(int min = 0);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_HEAP_STRESS_SCAVENGE_OBSERVER_H_
+#endif // V8_HEAP_STRESS_SCAVENGE_OBSERVER_H_

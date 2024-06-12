@@ -14,13 +14,13 @@ class SkBlitter;
 
 namespace SkTextureCompressor {
 
-    bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src,
-                          int width, int height, size_t rowBytes);
+bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src,
+    int width, int height, size_t rowBytes);
 
-    SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
-                                 SkTBlitterAllocator *allocator);
+SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
+    SkTBlitterAllocator* allocator);
 
-    void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height);
+void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height);
 }
 
-#endif  // SkTextureCompressor_LATC_DEFINED
+#endif // SkTextureCompressor_LATC_DEFINED

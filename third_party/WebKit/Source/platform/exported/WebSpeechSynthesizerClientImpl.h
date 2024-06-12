@@ -37,9 +37,12 @@ namespace blink {
 class PlatformSpeechSynthesizer;
 class PlatformSpeechSynthesizerClient;
 
-class WebSpeechSynthesizerClientImpl final : public GarbageCollectedFinalized<WebSpeechSynthesizerClientImpl>, public WebSpeechSynthesizerClient {
+class WebSpeechSynthesizerClientImpl final
+    : public GarbageCollectedFinalized<WebSpeechSynthesizerClientImpl>,
+      public WebSpeechSynthesizerClient {
 public:
-    WebSpeechSynthesizerClientImpl(PlatformSpeechSynthesizer*, PlatformSpeechSynthesizerClient*);
+    WebSpeechSynthesizerClientImpl(PlatformSpeechSynthesizer*,
+        PlatformSpeechSynthesizerClient*);
     virtual ~WebSpeechSynthesizerClientImpl();
 
     virtual void setVoiceList(const WebVector<WebSpeechSynthesisVoice>& voices);
@@ -48,8 +51,10 @@ public:
     virtual void didPauseSpeaking(const WebSpeechSynthesisUtterance&);
     virtual void didResumeSpeaking(const WebSpeechSynthesisUtterance&);
     virtual void speakingErrorOccurred(const WebSpeechSynthesisUtterance&);
-    virtual void wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance&, unsigned charIndex);
-    virtual void sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance&, unsigned charIndex);
+    virtual void wordBoundaryEventOccurred(const WebSpeechSynthesisUtterance&,
+        unsigned charIndex);
+    virtual void sentenceBoundaryEventOccurred(const WebSpeechSynthesisUtterance&,
+        unsigned charIndex);
 
     DECLARE_TRACE();
 

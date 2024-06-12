@@ -28,37 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/imports/HTMLImportLoader.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/DocumentParser.h"
 #include "core/dom/StyleEngine.h"
-#include "core/dom/custom/CustomElementSyncMicrotaskQueue.h"
+#include "core/dom/custom/V0CustomElementSyncMicrotaskQueue.h"
 #include "core/html/HTMLDocument.h"
 #include "core/html/imports/HTMLImportChild.h"
 #include "core/html/imports/HTMLImportsController.h"
 #include "core/loader/DocumentWriter.h"
 #include "platform/network/ContentSecurityPolicyResponseHeaders.h"
-
+#include <memory>
 
 namespace blink {
 
 HTMLImportLoader::HTMLImportLoader(HTMLImportsController* controller)
     : m_controller(controller)
     , m_state(StateLoading)
-#if 1 // def MINIBLINK_NOT_IMPLEMENTED
-    , m_microtaskQueue(CustomElementSyncMicrotaskQueue::create())
-#endif // MINIBLINK_NOT_IMPLEMENTED
+    , m_microtaskQueue(V0CustomElementSyncMicrotaskQueue::create())
 {
 }
 
-HTMLImportLoader::~HTMLImportLoader()
-{
-#if !ENABLE(OILPAN)
-    dispose();
-#endif
-}
+HTMLImportLoader::~HTMLImportLoader() { }
 
 void HTMLImportLoader::dispose()
 {
@@ -66,39 +58,44 @@ void HTMLImportLoader::dispose()
     if (m_document) {
         if (m_document->parser())
             m_document->parser()->removeClient(this);
-        m_document->setImportsController(nullptr);
-        m_document->cancelParsing();
+        m_document->clearImportsController();
         m_document.clear();
     }
+    clearResource();
 }
 
-void HTMLImportLoader::startLoading(const ResourcePtr<RawResource>& resource)
+void HTMLImportLoader::startLoading(RawResource* resource)
 {
     setResource(resource);
 }
 
-void HTMLImportLoader::responseReceived(Resource* resource, const ResourceResponse& response, PassOwnPtr<WebDataConsumerHandle> handle)
+void HTMLImportLoader::responseReceived(
+    Resource* resource,
+    const ResourceResponse& response,
+    std::unique_ptr<WebDataConsumerHandle> handle)
 {
-    ASSERT_UNUSED(handle, !handle);
+    DCHECK(!handle);
     // Resource may already have been loaded with the import loader
     // being added as a client later & now being notified. Fail early.
-    if (resource->loadFailedOrCanceled() || response.httpStatusCode() >= 400 || !response.httpHeaderField("Content-Disposition").isNull()) {
+    if (resource->loadFailedOrCanceled() || response.httpStatusCode() >= 400 || !response.httpHeaderField(HTTPNames::Content_Disposition).isNull()) {
         setState(StateError);
         return;
     }
     setState(startWritingAndParsing(response));
 }
 
-void HTMLImportLoader::dataReceived(Resource*, const char* data, unsigned length)
+void HTMLImportLoader::dataReceived(Resource*,
+    const char* data,
+    size_t length)
 {
-    RefPtrWillBeRawPtr<DocumentWriter> protectingWriter(m_writer.get());
     m_writer->addData(data, length);
 }
 
 void HTMLImportLoader::notifyFinished(Resource* resource)
 {
-    // The writer instance indicates that a part of the document can be already loaded.
-    // We don't take such a case as an error because the partially-loaded document has been visible from script at this point.
+    // The writer instance indicates that a part of the document can be already
+    // loaded.  We don't take such a case as an error because the partially-loaded
+    // document has been visible from script at this point.
     if (resource->loadFailedOrCanceled() && !m_writer) {
         setState(StateError);
         return;
@@ -107,16 +104,21 @@ void HTMLImportLoader::notifyFinished(Resource* resource)
     setState(finishWriting());
 }
 
-HTMLImportLoader::State HTMLImportLoader::startWritingAndParsing(const ResourceResponse& response)
+HTMLImportLoader::State HTMLImportLoader::startWritingAndParsing(
+    const ResourceResponse& response)
 {
-    ASSERT(!m_imports.isEmpty());
-    DocumentInit init = DocumentInit(response.url(), 0, m_controller->master()->contextDocument(), m_controller)
-        .withRegistrationContext(m_controller->master()->registrationContext());
+    DCHECK(m_controller);
+    DCHECK(!m_imports.isEmpty());
+    DocumentInit init = DocumentInit(response.url(), 0, m_controller->master()->contextDocument(),
+        m_controller)
+                            .withRegistrationContext(
+                                m_controller->master()->registrationContext());
     m_document = HTMLDocument::create(init);
-    m_writer = DocumentWriter::create(m_document.get(), AllowAsynchronousParsing, response.mimeType(), "UTF-8");
+    m_writer = DocumentWriter::create(m_document.get(), AllowAsynchronousParsing,
+        response.mimeType(), "UTF-8");
 
     DocumentParser* parser = m_document->parser();
-    ASSERT(parser);
+    DCHECK(parser);
     parser->addClient(this);
 
     return StateLoading;
@@ -145,11 +147,14 @@ void HTMLImportLoader::setState(State state)
     m_state = state;
 
     if (m_state == StateParsed || m_state == StateError || m_state == StateWritten) {
-        if (RefPtrWillBeRawPtr<DocumentWriter> writer = m_writer.release())
+        if (DocumentWriter* writer = m_writer.release())
             writer->end();
     }
 
-    // Since DocumentWriter::end() can let setState() reenter, we shouldn't refer to m_state here.
+    // Since DocumentWriter::end() can let setState() reenter, we shouldn't refer
+    // to m_state here.
+    if (state == StateLoaded)
+        m_document->setReadyState(Document::Complete);
     if (state == StateLoaded || state == StateError)
         didFinishLoading();
 }
@@ -161,7 +166,7 @@ void HTMLImportLoader::notifyParserStopped()
         setState(finishLoading());
 
     DocumentParser* parser = m_document->parser();
-    ASSERT(parser);
+    DCHECK(parser);
     parser->removeClient(this);
 }
 
@@ -173,32 +178,32 @@ void HTMLImportLoader::didRemoveAllPendingStylesheet()
 
 bool HTMLImportLoader::hasPendingResources() const
 {
-    return m_document && m_document->styleEngine().hasPendingSheets();
+    return m_document && m_document->styleEngine().hasPendingScriptBlockingSheets();
 }
 
 void HTMLImportLoader::didFinishLoading()
 {
-    for (size_t i = 0; i < m_imports.size(); ++i)
-        m_imports[i]->didFinishLoading();
+    for (const auto& importChild : m_imports)
+        importChild->didFinishLoading();
 
     clearResource();
 
-    ASSERT(!m_document || !m_document->parsing());
+    DCHECK(!m_document || !m_document->parsing());
 }
 
 void HTMLImportLoader::moveToFirst(HTMLImportChild* import)
 {
     size_t position = m_imports.find(import);
-    ASSERT(kNotFound != position);
+    DCHECK_NE(kNotFound, position);
     m_imports.remove(position);
     m_imports.insert(0, import);
 }
 
 void HTMLImportLoader::addImport(HTMLImportChild* import)
 {
-    ASSERT(kNotFound == m_imports.find(import));
+    DCHECK_EQ(kNotFound, m_imports.find(import));
 
-    m_imports.append(import);
+    m_imports.push_back(import);
     import->normalize();
     if (isDone())
         import->didFinishLoading();
@@ -206,7 +211,7 @@ void HTMLImportLoader::addImport(HTMLImportChild* import)
 
 void HTMLImportLoader::removeImport(HTMLImportChild* client)
 {
-    ASSERT(kNotFound != m_imports.find(client));
+    DCHECK_NE(kNotFound, m_imports.find(client));
     m_imports.remove(m_imports.find(client));
 }
 
@@ -215,25 +220,20 @@ bool HTMLImportLoader::shouldBlockScriptExecution() const
     return firstImport()->state().shouldBlockScriptExecution();
 }
 
-#if 1 //def MINIBLINK_NOT_IMPLEMENTED
-PassRefPtrWillBeRawPtr<CustomElementSyncMicrotaskQueue> HTMLImportLoader::microtaskQueue() const
+V0CustomElementSyncMicrotaskQueue* HTMLImportLoader::microtaskQueue() const
 {
     return m_microtaskQueue;
 }
-#endif // MINIBLINK_NOT_IMPLEMENTED
 
 DEFINE_TRACE(HTMLImportLoader)
 {
     visitor->trace(m_controller);
-#if ENABLE(OILPAN)
     visitor->trace(m_imports);
-#endif
     visitor->trace(m_document);
     visitor->trace(m_writer);
-#if 1 //def MINIBLINK_NOT_IMPLEMENTED
     visitor->trace(m_microtaskQueue);
-#endif // MINIBLINK_NOT_IMPLEMENTED
     DocumentParserClient::trace(visitor);
+    ResourceOwner<RawResource>::trace(visitor);
 }
 
 } // namespace blink

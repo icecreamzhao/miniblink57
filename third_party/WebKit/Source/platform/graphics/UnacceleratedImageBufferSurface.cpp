@@ -28,29 +28,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/UnacceleratedImageBufferSurface.h"
 
+#include "platform/graphics/skia/SkiaUtils.h"
 #include "third_party/skia/include/core/SkSurface.h"
 #include "wtf/PassRefPtr.h"
 
+class SkCanvas;
+
 namespace blink {
 
-UnacceleratedImageBufferSurface::UnacceleratedImageBufferSurface(const IntSize& size, OpacityMode opacityMode)
-    : ImageBufferSurface(size, opacityMode)
+UnacceleratedImageBufferSurface::UnacceleratedImageBufferSurface(
+    const IntSize& size,
+    OpacityMode opacityMode,
+    ImageInitializationMode initializationMode,
+    sk_sp<SkColorSpace> colorSpace,
+    SkColorType colorType)
+    : ImageBufferSurface(size, opacityMode, colorSpace, colorType)
 {
     SkAlphaType alphaType = (Opaque == opacityMode) ? kOpaque_SkAlphaType : kPremul_SkAlphaType;
-    SkImageInfo info = SkImageInfo::MakeN32(size.width(), size.height(), alphaType);
+    SkImageInfo info = SkImageInfo::Make(size.width(), size.height(), colorType,
+        alphaType, colorSpace);
     SkSurfaceProps disableLCDProps(0, kUnknown_SkPixelGeometry);
-    m_surface = adoptRef(SkSurface::NewRaster(info, Opaque == opacityMode ? 0 : &disableLCDProps));
+    m_surface = SkSurface::MakeRaster(info, Opaque == opacityMode ? 0 : &disableLCDProps);
 
+    // Always save an initial frame, to support resetting the top level matrix
+    // and clip.
     if (m_surface)
-        clear();
+        m_surface->getCanvas()->save();
+
+    if (initializationMode == InitializeImagePixels) {
+        if (m_surface)
+            clear();
+    }
 }
 
 UnacceleratedImageBufferSurface::~UnacceleratedImageBufferSurface() { }
 
-SkCanvas* UnacceleratedImageBufferSurface::canvas() const
+SkCanvas* UnacceleratedImageBufferSurface::canvas()
 {
     return m_surface->getCanvas();
 }
@@ -60,9 +75,11 @@ bool UnacceleratedImageBufferSurface::isValid() const
     return m_surface;
 }
 
-PassRefPtr<SkImage> UnacceleratedImageBufferSurface::newImageSnapshot() const
+sk_sp<SkImage> UnacceleratedImageBufferSurface::newImageSnapshot(
+    AccelerationHint,
+    SnapshotReason)
 {
-    return adoptRef(m_surface->newImageSnapshot());
+    return m_surface->makeImageSnapshot();
 }
 
 } // namespace blink

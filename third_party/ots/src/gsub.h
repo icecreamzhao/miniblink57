@@ -10,20 +10,20 @@
 namespace ots {
 
 struct OpenTypeGSUB {
-  OpenTypeGSUB()
-      : num_lookups(0),
-        data(NULL),
-        length(0) {
-  }
+    OpenTypeGSUB()
+        : num_lookups(0)
+        , data(NULL)
+        , length(0)
+    {
+    }
 
-  // Number of lookups in GPSUB table
-  uint16_t num_lookups;
+    // Number of lookups in GPSUB table
+    uint16_t num_lookups;
 
-  const uint8_t *data;
-  size_t length;
+    const uint8_t* data;
+    size_t length;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_GSUB_H_
-
+#endif // OTS_GSUB_H_

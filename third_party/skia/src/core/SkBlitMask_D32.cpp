@@ -8,99 +8,40 @@
 #include "SkBlitMask.h"
 #include "SkColor.h"
 #include "SkColorPriv.h"
+#include "SkOpts.h"
 
-static void D32_A8_Color(void* SK_RESTRICT dst, size_t dstRB,
-                         const void* SK_RESTRICT maskPtr, size_t maskRB,
-                         SkColor color, int width, int height) {
-    SkPMColor pmc = SkPreMultiplyColor(color);
-    size_t dstOffset = dstRB - (width << 2);
-    size_t maskOffset = maskRB - width;
-    SkPMColor* SK_RESTRICT device = (SkPMColor *)dst;
-    const uint8_t* SK_RESTRICT mask = (const uint8_t*)maskPtr;
-
-    do {
-        int w = width;
-        do {
-            unsigned aa = *mask++;
-            *device = SkBlendARGB32(pmc, *device, aa);
-            device += 1;
-        } while (--w != 0);
-        device = (uint32_t*)((char*)device + dstOffset);
-        mask += maskOffset;
-    } while (--height != 0);
-}
-
-static void D32_A8_Opaque(void* SK_RESTRICT dst, size_t dstRB,
-                          const void* SK_RESTRICT maskPtr, size_t maskRB,
-                          SkColor color, int width, int height) {
-    SkPMColor pmc = SkPreMultiplyColor(color);
-    SkPMColor* SK_RESTRICT device = (SkPMColor*)dst;
-    const uint8_t* SK_RESTRICT mask = (const uint8_t*)maskPtr;
-
-    maskRB -= width;
-    dstRB -= (width << 2);
-    do {
-        int w = width;
-        do {
-            unsigned aa = *mask++;
-            *device = SkAlphaMulQ(pmc, SkAlpha255To256(aa)) + SkAlphaMulQ(*device, SkAlpha255To256(255 - aa));
-            device += 1;
-        } while (--w != 0);
-        device = (uint32_t*)((char*)device + dstRB);
-        mask += maskRB;
-    } while (--height != 0);
-}
-
-static void D32_A8_Black(void* SK_RESTRICT dst, size_t dstRB,
-                         const void* SK_RESTRICT maskPtr, size_t maskRB,
-                         SkColor, int width, int height) {
-    SkPMColor* SK_RESTRICT device = (SkPMColor*)dst;
-    const uint8_t* SK_RESTRICT mask = (const uint8_t*)maskPtr;
-
-    maskRB -= width;
-    dstRB -= (width << 2);
-    do {
-        int w = width;
-        do {
-            unsigned aa = *mask++;
-            *device = (aa << SK_A32_SHIFT) + SkAlphaMulQ(*device, SkAlpha255To256(255 - aa));
-            device += 1;
-        } while (--w != 0);
-        device = (uint32_t*)((char*)device + dstRB);
-        mask += maskRB;
-    } while (--height != 0);
-}
-
-SkBlitMask::BlitLCD16RowProc SkBlitMask::BlitLCD16RowFactory(bool isOpaque) {
+SkBlitMask::BlitLCD16RowProc SkBlitMask::BlitLCD16RowFactory(bool isOpaque)
+{
     BlitLCD16RowProc proc = PlatformBlitRowProcs16(isOpaque);
     if (proc) {
         return proc;
     }
 
     if (isOpaque) {
-        return  SkBlitLCD16OpaqueRow;
+        return SkBlitLCD16OpaqueRow;
     } else {
-        return  SkBlitLCD16Row;
+        return SkBlitLCD16Row;
     }
 }
 
 static void D32_LCD16_Proc(void* SK_RESTRICT dst, size_t dstRB,
-                           const void* SK_RESTRICT mask, size_t maskRB,
-                           SkColor color, int width, int height) {
+    const void* SK_RESTRICT mask, size_t maskRB,
+    SkColor color, int width, int height)
+{
 
-    SkPMColor*        dstRow = (SkPMColor*)dst;
+    SkPMColor* dstRow = (SkPMColor*)dst;
     const uint16_t* srcRow = (const uint16_t*)mask;
-    SkPMColor       opaqueDst;
+    SkPMColor opaqueDst;
 
-    SkBlitMask::BlitLCD16RowProc proc = NULL;
+    SkBlitMask::BlitLCD16RowProc proc = nullptr;
     bool isOpaque = (0xFF == SkColorGetA(color));
     proc = SkBlitMask::BlitLCD16RowFactory(isOpaque);
-    SkASSERT(proc != NULL);
+    SkASSERT(proc != nullptr);
 
     if (isOpaque) {
         opaqueDst = SkPreMultiplyColor(color);
     } else {
-        opaqueDst = 0;  // ignored
+        opaqueDst = 0; // ignored
     }
 
     do {
@@ -112,71 +53,63 @@ static void D32_LCD16_Proc(void* SK_RESTRICT dst, size_t dstRB,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static SkBlitMask::ColorProc D32_A8_Factory(SkColor color) {
-    if (SK_ColorBLACK == color) {
-        return D32_A8_Black;
-    } else if (0xFF == SkColorGetA(color)) {
-        return D32_A8_Opaque;
-    } else {
-        return D32_A8_Color;
-    }
-}
-
-SkBlitMask::ColorProc SkBlitMask::ColorFactory(SkColorType ct,
-                                               SkMask::Format format,
-                                               SkColor color) {
-    ColorProc proc = PlatformColorProcs(ct, format, color);
-    if (proc) {
-        return proc;
-    }
-
-    switch (ct) {
-        case kN32_SkColorType:
-            switch (format) {
-                case SkMask::kA8_Format:
-                    return D32_A8_Factory(color);
-                case SkMask::kLCD16_Format:
-                    return D32_LCD16_Proc;
-                default:
-                    break;
-            }
-            break;
-        default:
-            break;
-    }
-    return NULL;
-}
-
 bool SkBlitMask::BlitColor(const SkPixmap& device, const SkMask& mask,
-                           const SkIRect& clip, SkColor color) {
-    ColorProc proc = ColorFactory(device.colorType(), mask.fFormat, color);
-    if (proc) {
-        int x = clip.fLeft;
-        int y = clip.fTop;
-        proc(device.writable_addr32(x, y), device.rowBytes(), mask.getAddr(x, y),
-             mask.fRowBytes, color, clip.width(), clip.height());
+    const SkIRect& clip, SkColor color)
+{
+    int x = clip.fLeft, y = clip.fTop;
+
+    if (device.colorType() == kN32_SkColorType && mask.fFormat == SkMask::kA8_Format) {
+        SkOpts::blit_mask_d32_a8(device.writable_addr32(x, y), device.rowBytes(),
+            (const SkAlpha*)mask.getAddr(x, y), mask.fRowBytes,
+            color, clip.width(), clip.height());
         return true;
     }
+
+    if (device.colorType() == kN32_SkColorType && mask.fFormat == SkMask::kLCD16_Format) {
+        // TODO: Is this reachable code?  Seems like no.
+        D32_LCD16_Proc(device.writable_addr32(x, y), device.rowBytes(),
+            mask.getAddr(x, y), mask.fRowBytes,
+            color, clip.width(), clip.height());
+        return true;
+    }
+
     return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-static void BW_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
-                             const uint8_t* SK_RESTRICT mask,
-                             const SkPMColor* SK_RESTRICT src, int count) {
+static void BW_RowProc_Blend(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint8_t* SK_RESTRICT mask = static_cast<const uint8_t*>(maskIn);
     int i, octuple = (count + 7) >> 3;
     for (i = 0; i < octuple; ++i) {
         int m = *mask++;
-        if (m & 0x80) { dst[0] = SkPMSrcOver(src[0], dst[0]); }
-        if (m & 0x40) { dst[1] = SkPMSrcOver(src[1], dst[1]); }
-        if (m & 0x20) { dst[2] = SkPMSrcOver(src[2], dst[2]); }
-        if (m & 0x10) { dst[3] = SkPMSrcOver(src[3], dst[3]); }
-        if (m & 0x08) { dst[4] = SkPMSrcOver(src[4], dst[4]); }
-        if (m & 0x04) { dst[5] = SkPMSrcOver(src[5], dst[5]); }
-        if (m & 0x02) { dst[6] = SkPMSrcOver(src[6], dst[6]); }
-        if (m & 0x01) { dst[7] = SkPMSrcOver(src[7], dst[7]); }
+        if (m & 0x80) {
+            dst[0] = SkPMSrcOver(src[0], dst[0]);
+        }
+        if (m & 0x40) {
+            dst[1] = SkPMSrcOver(src[1], dst[1]);
+        }
+        if (m & 0x20) {
+            dst[2] = SkPMSrcOver(src[2], dst[2]);
+        }
+        if (m & 0x10) {
+            dst[3] = SkPMSrcOver(src[3], dst[3]);
+        }
+        if (m & 0x08) {
+            dst[4] = SkPMSrcOver(src[4], dst[4]);
+        }
+        if (m & 0x04) {
+            dst[5] = SkPMSrcOver(src[5], dst[5]);
+        }
+        if (m & 0x02) {
+            dst[6] = SkPMSrcOver(src[6], dst[6]);
+        }
+        if (m & 0x01) {
+            dst[7] = SkPMSrcOver(src[7], dst[7]);
+        }
         src += 8;
         dst += 8;
     }
@@ -184,7 +117,9 @@ static void BW_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
     if (count > 0) {
         int m = *mask;
         do {
-            if (m & 0x80) { dst[0] = SkPMSrcOver(src[0], dst[0]); }
+            if (m & 0x80) {
+                dst[0] = SkPMSrcOver(src[0], dst[0]);
+            }
             m <<= 1;
             src += 1;
             dst += 1;
@@ -192,20 +127,37 @@ static void BW_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
     }
 }
 
-static void BW_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
-                              const uint8_t* SK_RESTRICT mask,
-                              const SkPMColor* SK_RESTRICT src, int count) {
+static void BW_RowProc_Opaque(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint8_t* SK_RESTRICT mask = static_cast<const uint8_t*>(maskIn);
     int i, octuple = (count + 7) >> 3;
     for (i = 0; i < octuple; ++i) {
         int m = *mask++;
-        if (m & 0x80) { dst[0] = src[0]; }
-        if (m & 0x40) { dst[1] = src[1]; }
-        if (m & 0x20) { dst[2] = src[2]; }
-        if (m & 0x10) { dst[3] = src[3]; }
-        if (m & 0x08) { dst[4] = src[4]; }
-        if (m & 0x04) { dst[5] = src[5]; }
-        if (m & 0x02) { dst[6] = src[6]; }
-        if (m & 0x01) { dst[7] = src[7]; }
+        if (m & 0x80) {
+            dst[0] = src[0];
+        }
+        if (m & 0x40) {
+            dst[1] = src[1];
+        }
+        if (m & 0x20) {
+            dst[2] = src[2];
+        }
+        if (m & 0x10) {
+            dst[3] = src[3];
+        }
+        if (m & 0x08) {
+            dst[4] = src[4];
+        }
+        if (m & 0x04) {
+            dst[5] = src[5];
+        }
+        if (m & 0x02) {
+            dst[6] = src[6];
+        }
+        if (m & 0x01) {
+            dst[7] = src[7];
+        }
         src += 8;
         dst += 8;
     }
@@ -213,7 +165,9 @@ static void BW_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
     if (count > 0) {
         int m = *mask;
         do {
-            if (m & 0x80) { dst[0] = SkPMSrcOver(src[0], dst[0]); }
+            if (m & 0x80) {
+                dst[0] = SkPMSrcOver(src[0], dst[0]);
+            }
             m <<= 1;
             src += 1;
             dst += 1;
@@ -221,9 +175,10 @@ static void BW_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
     }
 }
 
-static void A8_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
-                             const uint8_t* SK_RESTRICT mask,
-                             const SkPMColor* SK_RESTRICT src, int count) {
+static void A8_RowProc_Blend(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint8_t* SK_RESTRICT mask = static_cast<const uint8_t*>(maskIn);
     for (int i = 0; i < count; ++i) {
         if (mask[i]) {
             dst[i] = SkBlendARGB32(src[i], dst[i], mask[i]);
@@ -236,13 +191,14 @@ static void A8_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
 // instead of
 // expand..combine add expand..combine
 //
-#define EXPAND0(v, m, s)    ((v) & (m)) * (s)
-#define EXPAND1(v, m, s)    (((v) >> 8) & (m)) * (s)
-#define COMBINE(e0, e1, m)  ((((e0) >> 8) & (m)) | ((e1) & ~(m)))
+#define EXPAND0(v, m, s) ((v) & (m)) * (s)
+#define EXPAND1(v, m, s) (((v) >> 8) & (m)) * (s)
+#define COMBINE(e0, e1, m) ((((e0) >> 8) & (m)) | ((e1) & ~(m)))
 
-static void A8_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
-                              const uint8_t* SK_RESTRICT mask,
-                              const SkPMColor* SK_RESTRICT src, int count) {
+static void A8_RowProc_Opaque(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint8_t* SK_RESTRICT mask = static_cast<const uint8_t*>(maskIn);
     for (int i = 0; i < count; ++i) {
         int m = mask[i];
         if (m) {
@@ -265,19 +221,22 @@ static void A8_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
     }
 }
 
-static int upscale31To255(int value) {
+static int upscale31To255(int value)
+{
     value = (value << 3) | (value >> 2);
     return value;
 }
 
-static int src_alpha_blend(int src, int dst, int srcA, int mask) {
+static int src_alpha_blend(int src, int dst, int srcA, int mask)
+{
 
     return dst + SkAlphaMul(src - SkAlphaMul(srcA, dst), mask);
 }
 
-static void LCD16_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
-                                const uint16_t* SK_RESTRICT mask,
-                                const SkPMColor* SK_RESTRICT src, int count) {
+static void LCD16_RowProc_Blend(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint16_t* SK_RESTRICT mask = static_cast<const uint16_t*>(maskIn);
     for (int i = 0; i < count; ++i) {
         uint16_t m = mask[i];
         if (0 == m) {
@@ -312,15 +271,16 @@ static void LCD16_RowProc_Blend(SkPMColor* SK_RESTRICT dst,
         // LCD blitting is only supported if the dst is known/required
         // to be opaque
         dst[i] = SkPackARGB32(0xFF,
-                              src_alpha_blend(srcR, dstR, srcA, maskR),
-                              src_alpha_blend(srcG, dstG, srcA, maskG),
-                              src_alpha_blend(srcB, dstB, srcA, maskB));
+            src_alpha_blend(srcR, dstR, srcA, maskR),
+            src_alpha_blend(srcG, dstG, srcA, maskG),
+            src_alpha_blend(srcB, dstB, srcA, maskB));
     }
 }
 
-static void LCD16_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
-                                 const uint16_t* SK_RESTRICT mask,
-                                 const SkPMColor* SK_RESTRICT src, int count) {
+static void LCD16_RowProc_Opaque(
+    SkPMColor* SK_RESTRICT dst, const void* maskIn, const SkPMColor* SK_RESTRICT src, int count)
+{
+    const uint16_t* SK_RESTRICT mask = static_cast<const uint16_t*>(maskIn);
     for (int i = 0; i < count; ++i) {
         uint16_t m = mask[i];
         if (0 == m) {
@@ -353,16 +313,17 @@ static void LCD16_RowProc_Opaque(SkPMColor* SK_RESTRICT dst,
         // LCD blitting is only supported if the dst is known/required
         // to be opaque
         dst[i] = SkPackARGB32(0xFF,
-                              SkBlend32(srcR, dstR, maskR),
-                              SkBlend32(srcG, dstG, maskG),
-                              SkBlend32(srcB, dstB, maskB));
+            SkBlend32(srcR, dstR, maskR),
+            SkBlend32(srcG, dstG, maskG),
+            SkBlend32(srcB, dstB, maskB));
     }
 }
 
 SkBlitMask::RowProc SkBlitMask::RowFactory(SkColorType ct,
-                                           SkMask::Format format,
-                                           RowFlags flags) {
-// make this opt-in until chrome can rebaseline
+    SkMask::Format format,
+    RowFlags flags)
+{
+    // make this opt-in until chrome can rebaseline
     RowProc proc = PlatformRowProcs(ct, format, flags);
     if (proc) {
         return proc;
@@ -370,29 +331,37 @@ SkBlitMask::RowProc SkBlitMask::RowFactory(SkColorType ct,
 
     static const RowProc gProcs[] = {
         // need X coordinate to handle BW
-        false ? (RowProc)BW_RowProc_Blend : NULL, // suppress unused warning
-        false ? (RowProc)BW_RowProc_Opaque : NULL, // suppress unused warning
-        (RowProc)A8_RowProc_Blend,      (RowProc)A8_RowProc_Opaque,
-        (RowProc)LCD16_RowProc_Blend,   (RowProc)LCD16_RowProc_Opaque,
+        false ? (RowProc)BW_RowProc_Blend : nullptr, // suppress unused warning
+        false ? (RowProc)BW_RowProc_Opaque : nullptr, // suppress unused warning
+        (RowProc)A8_RowProc_Blend,
+        (RowProc)A8_RowProc_Opaque,
+        (RowProc)LCD16_RowProc_Blend,
+        (RowProc)LCD16_RowProc_Opaque,
     };
 
     int index;
     switch (ct) {
-        case kN32_SkColorType:
-            switch (format) {
-                case SkMask::kBW_Format:    index = 0; break;
-                case SkMask::kA8_Format:    index = 2; break;
-                case SkMask::kLCD16_Format: index = 4; break;
-                default:
-                    return NULL;
-            }
-            if (flags & kSrcIsOpaque_RowFlag) {
-                index |= 1;
-            }
-            SkASSERT((size_t)index < SK_ARRAY_COUNT(gProcs));
-            return gProcs[index];
-        default:
+    case kN32_SkColorType:
+        switch (format) {
+        case SkMask::kBW_Format:
+            index = 0;
             break;
+        case SkMask::kA8_Format:
+            index = 2;
+            break;
+        case SkMask::kLCD16_Format:
+            index = 4;
+            break;
+        default:
+            return nullptr;
+        }
+        if (flags & kSrcIsOpaque_RowFlag) {
+            index |= 1;
+        }
+        SkASSERT((size_t)index < SK_ARRAY_COUNT(gProcs));
+        return gProcs[index];
+    default:
+        break;
     }
-    return NULL;
+    return nullptr;
 }

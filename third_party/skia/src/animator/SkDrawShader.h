@@ -18,9 +18,11 @@ class SkDrawBitmapShader : public SkDrawShader {
     SkDrawBitmapShader();
     bool add() override;
     SkShader* getShader() override;
+
 protected:
     SkBool filterBitmap;
     SkBaseBitmap* image;
+
 private:
     typedef SkDrawShader INHERITED;
 };

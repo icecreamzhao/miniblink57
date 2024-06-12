@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2014 Google Inc.
  *
@@ -10,9 +9,11 @@
 
 #include "SkBitmap.h"
 #include "SkGradientShader.h"
+#include "SkPath.h"
 #include "SkTLList.h"
 
-static SkBitmap make_bmp(int w, int h) {
+static SkBitmap make_bmp(int w, int h)
+{
     SkBitmap bmp;
     bmp.allocN32Pixels(w, h, true);
 
@@ -20,33 +21,35 @@ static SkBitmap make_bmp(int w, int h) {
     SkScalar wScalar = SkIntToScalar(w);
     SkScalar hScalar = SkIntToScalar(h);
 
-    SkPoint     pt = { wScalar / 2, hScalar / 2 };
+    SkPoint pt = { wScalar / 2, hScalar / 2 };
 
-    SkScalar    radius = 3 * SkMaxScalar(wScalar, hScalar);
+    SkScalar radius = 3 * SkMaxScalar(wScalar, hScalar);
 
-    SkColor     colors[] = { SK_ColorDKGRAY, 0xFF222255,
-                             0xFF331133, 0xFF884422,
-                             0xFF000022, SK_ColorWHITE,
-                             0xFFAABBCC};
+    SkColor colors[] = { sk_tool_utils::color_to_565(SK_ColorDKGRAY),
+        sk_tool_utils::color_to_565(0xFF222255),
+        sk_tool_utils::color_to_565(0xFF331133),
+        sk_tool_utils::color_to_565(0xFF884422),
+        sk_tool_utils::color_to_565(0xFF000022), SK_ColorWHITE,
+        sk_tool_utils::color_to_565(0xFFAABBCC) };
 
-    SkScalar    pos[] = {0,
-                         SK_Scalar1 / 6,
-                         2 * SK_Scalar1 / 6,
-                         3 * SK_Scalar1 / 6,
-                         4 * SK_Scalar1 / 6,
-                         5 * SK_Scalar1 / 6,
-                         SK_Scalar1};
+    SkScalar pos[] = { 0,
+        SK_Scalar1 / 6,
+        2 * SK_Scalar1 / 6,
+        3 * SK_Scalar1 / 6,
+        4 * SK_Scalar1 / 6,
+        5 * SK_Scalar1 / 6,
+        SK_Scalar1 };
 
     SkPaint paint;
     SkRect rect = SkRect::MakeWH(wScalar, hScalar);
     SkMatrix mat = SkMatrix::I();
     for (int i = 0; i < 4; ++i) {
-        paint.setShader(SkGradientShader::CreateRadial(
-                        pt, radius,
-                        colors, pos,
-                        SK_ARRAY_COUNT(colors),
-                        SkShader::kRepeat_TileMode,
-                        0, &mat))->unref();
+        paint.setShader(SkGradientShader::MakeRadial(
+            pt, radius,
+            colors, pos,
+            SK_ARRAY_COUNT(colors),
+            SkShader::kRepeat_TileMode,
+            0, &mat));
         canvas.drawRect(rect, paint);
         rect.inset(wScalar / 8, hScalar / 8);
         mat.preTranslate(6 * wScalar, 6 * hScalar);
@@ -57,14 +60,14 @@ static SkBitmap make_bmp(int w, int h) {
     sk_tool_utils::set_portable_typeface(&paint);
     paint.setTextSize(wScalar / 2.2f);
     paint.setShader(0);
-    paint.setColor(SK_ColorLTGRAY);
+    paint.setColor(sk_tool_utils::color_to_565(SK_ColorLTGRAY));
     static const char kTxt[] = "Skia";
     SkPoint texPos = { wScalar / 17, hScalar / 2 + paint.getTextSize() / 2.5f };
-    canvas.drawText(kTxt, SK_ARRAY_COUNT(kTxt)-1, texPos.fX, texPos.fY, paint);
+    canvas.drawText(kTxt, SK_ARRAY_COUNT(kTxt) - 1, texPos.fX, texPos.fY, paint);
     paint.setColor(SK_ColorBLACK);
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setStrokeWidth(SK_Scalar1);
-    canvas.drawText(kTxt, SK_ARRAY_COUNT(kTxt)-1, texPos.fX, texPos.fY, paint);
+    canvas.drawText(kTxt, SK_ARRAY_COUNT(kTxt) - 1, texPos.fX, texPos.fY, paint);
     return bmp;
 }
 
@@ -74,16 +77,19 @@ namespace skiagm {
  */
 class ConvexPolyClip : public GM {
 public:
-    ConvexPolyClip() {
+    ConvexPolyClip()
+    {
         this->setBGColor(0xFFFFFFFF);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("convex_poly_clip");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         // When benchmarking the saveLayer set of draws is skipped.
         int w = 435;
         if (kBench_Mode != this->getMode()) {
@@ -92,7 +98,8 @@ protected:
         return SkISize::Make(w, 540);
     }
 
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         SkPath tri;
         tri.moveTo(5.f, 5.f);
         tri.lineTo(100.f, 20.f);
@@ -135,29 +142,28 @@ protected:
         fBmp = make_bmp(100, 100);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkScalar y = 0;
         static const SkScalar kMargin = 10.f;
 
         SkPaint bgPaint;
         bgPaint.setAlpha(0x15);
         SkISize size = canvas->getDeviceSize();
-        SkRect dstRect = SkRect::MakeWH(SkIntToScalar(size.fWidth),
-                                        SkIntToScalar(size.fHeight));
-        canvas->drawBitmapRectToRect(fBmp, NULL, dstRect, &bgPaint);
+        canvas->drawBitmapRect(fBmp, SkRect::MakeIWH(size.fWidth, size.fHeight), &bgPaint);
 
         static const char kTxt[] = "Clip Me!";
         SkPaint txtPaint;
         txtPaint.setTextSize(23.f);
         txtPaint.setAntiAlias(true);
         sk_tool_utils::set_portable_typeface(&txtPaint);
-        txtPaint.setColor(SK_ColorDKGRAY);
-        SkScalar textW = txtPaint.measureText(kTxt, SK_ARRAY_COUNT(kTxt)-1);
+        txtPaint.setColor(sk_tool_utils::color_to_565(SK_ColorDKGRAY));
+        SkScalar textW = txtPaint.measureText(kTxt, SK_ARRAY_COUNT(kTxt) - 1);
 
         SkScalar startX = 0;
         int testLayers = kBench_Mode != this->getMode();
         for (int doLayer = 0; doLayer <= testLayers; ++doLayer) {
-            for (SkTLList<Clip>::Iter iter(fClips, SkTLList<Clip>::Iter::kHead_IterStart);
+            for (ClipList::Iter iter(fClips, ClipList::Iter::kHead_IterStart);
                  iter.get();
                  iter.next()) {
                 const Clip* clip = iter.get();
@@ -168,7 +174,7 @@ protected:
                         clip->getBounds(&bounds);
                         bounds.outset(2, 2);
                         bounds.offset(x, y);
-                        canvas->saveLayer(&bounds, NULL);
+                        canvas->saveLayer(&bounds, nullptr);
                     } else {
                         canvas->save();
                     }
@@ -191,7 +197,7 @@ protected:
                         clip->getBounds(&bounds);
                         bounds.outset(2, 2);
                         bounds.offset(x, y);
-                        canvas->saveLayer(&bounds, NULL);
+                        canvas->saveLayer(&bounds, nullptr);
                     } else {
                         canvas->save();
                     }
@@ -201,9 +207,9 @@ protected:
                     canvas->drawPath(closedClipPath, clipOutlinePaint);
                     clip->setOnCanvas(canvas, SkRegion::kIntersect_Op, SkToBool(aa));
                     canvas->scale(1.f, 1.8f);
-                    canvas->drawText(kTxt, SK_ARRAY_COUNT(kTxt)-1,
-                                     0, 1.5f * txtPaint.getTextSize(),
-                                     txtPaint);
+                    canvas->drawText(kTxt, SK_ARRAY_COUNT(kTxt) - 1,
+                        0, 1.5f * txtPaint.getTextSize(),
+                        txtPaint);
                     canvas->restore();
                     x += textW + 2 * kMargin;
                 }
@@ -225,44 +231,51 @@ private:
             kRect_ClipType
         };
 
-        Clip () : fClipType(kNone_ClipType) {}
+        Clip()
+            : fClipType(kNone_ClipType)
+        {
+        }
 
-        void setOnCanvas(SkCanvas* canvas, SkRegion::Op op, bool aa) const {
+        void setOnCanvas(SkCanvas* canvas, SkRegion::Op op, bool aa) const
+        {
             switch (fClipType) {
-                case kPath_ClipType:
-                    canvas->clipPath(fPath, op, aa);
-                    break;
-                case kRect_ClipType:
-                    canvas->clipRect(fRect, op, aa);
-                    break;
-                case kNone_ClipType:
-                    SkDEBUGFAIL("Uninitialized Clip.");
-                    break;
+            case kPath_ClipType:
+                canvas->clipPath(fPath, op, aa);
+                break;
+            case kRect_ClipType:
+                canvas->clipRect(fRect, op, aa);
+                break;
+            case kNone_ClipType:
+                SkDEBUGFAIL("Uninitialized Clip.");
+                break;
             }
         }
 
-        void asClosedPath(SkPath* path) const {
+        void asClosedPath(SkPath* path) const
+        {
             switch (fClipType) {
-                case kPath_ClipType:
-                    *path = fPath;
-                    path->close();
-                    break;
-                case kRect_ClipType:
-                    path->reset();
-                    path->addRect(fRect);
-                    break;
-                case kNone_ClipType:
-                    SkDEBUGFAIL("Uninitialized Clip.");
-                    break;
+            case kPath_ClipType:
+                *path = fPath;
+                path->close();
+                break;
+            case kRect_ClipType:
+                path->reset();
+                path->addRect(fRect);
+                break;
+            case kNone_ClipType:
+                SkDEBUGFAIL("Uninitialized Clip.");
+                break;
             }
         }
 
-        void setPath(const SkPath& path) {
+        void setPath(const SkPath& path)
+        {
             fClipType = kPath_ClipType;
             fPath = path;
         }
 
-        void setRect(const SkRect& rect) {
+        void setRect(const SkRect& rect)
+        {
             fClipType = kRect_ClipType;
             fRect = rect;
             fPath.reset();
@@ -270,17 +283,18 @@ private:
 
         ClipType getType() const { return fClipType; }
 
-        void getBounds(SkRect* bounds) const {
+        void getBounds(SkRect* bounds) const
+        {
             switch (fClipType) {
-                case kPath_ClipType:
-                    *bounds = fPath.getBounds();
-                    break;
-                case kRect_ClipType:
-                    *bounds = fRect;
-                    break;
-                case kNone_ClipType:
-                    SkDEBUGFAIL("Uninitialized Clip.");
-                    break;
+            case kPath_ClipType:
+                *bounds = fPath.getBounds();
+                break;
+            case kRect_ClipType:
+                *bounds = fRect;
+                break;
+            case kNone_ClipType:
+                SkDEBUGFAIL("Uninitialized Clip.");
+                break;
             }
         }
 
@@ -290,12 +304,12 @@ private:
         SkRect fRect;
     };
 
-    SkTLList<Clip>   fClips;
-    SkBitmap         fBmp;
+    typedef SkTLList<Clip, 1> ClipList;
+    ClipList fClips;
+    SkBitmap fBmp;
 
     typedef GM INHERITED;
 };
 
-DEF_GM( return SkNEW(ConvexPolyClip); )
-
+DEF_GM(return new ConvexPolyClip;)
 }

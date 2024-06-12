@@ -26,9 +26,10 @@
 #ifndef MediaKeys_h
 #define MediaKeys_h
 
+#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/DOMArrayPiece.h"
 #include "platform/Timer.h"
 #include "public/platform/WebContentDecryptionModule.h"
@@ -37,6 +38,7 @@
 #include "public/platform/WebVector.h"
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
@@ -49,50 +51,81 @@ class WebContentDecryptionModule;
 
 // References are held by JS and HTMLMediaElement.
 // The WebContentDecryptionModule has the same lifetime as this object.
-class MediaKeys : public GarbageCollectedFinalized<MediaKeys>, public ActiveDOMObject, public ScriptWrappable {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaKeys);
+class MediaKeys : public GarbageCollectedFinalized<MediaKeys>,
+                  public ActiveScriptWrappable<MediaKeys>,
+                  public ContextLifecycleObserver,
+                  public ScriptWrappable {
+    USING_GARBAGE_COLLECTED_MIXIN(MediaKeys);
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static MediaKeys* create(ExecutionContext*, const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes, PassOwnPtr<WebContentDecryptionModule>);
-    ~MediaKeys() override;
+    static MediaKeys* create(
+        ExecutionContext*,
+        const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes,
+        std::unique_ptr<WebContentDecryptionModule>);
+    virtual ~MediaKeys();
 
-    MediaKeySession* createSession(ScriptState*, const String& sessionTypeString, ExceptionState&);
+    MediaKeySession* createSession(ScriptState*,
+        const String& sessionTypeString,
+        ExceptionState&);
 
-    ScriptPromise setServerCertificate(ScriptState*, const DOMArrayPiece& serverCertificate);
+    ScriptPromise setServerCertificate(ScriptState*,
+        const DOMArrayPiece& serverCertificate);
 
     // Indicates that the provided HTMLMediaElement wants to use this object.
     // Returns true if no other HTMLMediaElement currently references this
-    // object, false otherwise. Will take a weak reference to HTMLMediaElement.
-    bool setMediaElement(HTMLMediaElement*);
-    // Indicates that no HTMLMediaElement is currently using this object.
+    // object, false otherwise. If true, will take a weak reference to
+    // HTMLMediaElement and expects the reservation to be accepted/cancelled
+    // later.
+    bool reserveForMediaElement(HTMLMediaElement*);
+    // Indicates that SetMediaKeys completed successfully.
+    void acceptReservation();
+    // Indicates that SetMediaKeys failed, so HTMLMediaElement did not
+    // successfully link to this object.
+    void cancelReservation();
+
+    // The previously reserved and accepted HTMLMediaElement is no longer
+    // using this object.
     void clearMediaElement();
 
     WebContentDecryptionModule* contentDecryptionModule();
 
     DECLARE_VIRTUAL_TRACE();
 
-    // ActiveDOMObject implementation.
+    // ContextLifecycleObserver implementation.
     // FIXME: This class could derive from ContextLifecycleObserver
-    // again once hasPendingActivity() is moved to ScriptWrappable
-    // (http://crbug.com/483722).
-    void contextDestroyed() override;
-    bool hasPendingActivity() const override;
-    void stop() override;
+    // again (http://crbug.com/483722).
+    void contextDestroyed(ExecutionContext*) override;
+
+    // ScriptWrappable implementation.
+    bool hasPendingActivity() const final;
 
 private:
-    MediaKeys(ExecutionContext*, const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes, PassOwnPtr<WebContentDecryptionModule>);
+    MediaKeys(
+        ExecutionContext*,
+        const WebVector<WebEncryptedMediaSessionType>& supportedSessionTypes,
+        std::unique_ptr<WebContentDecryptionModule>);
     class PendingAction;
 
     bool sessionTypeSupported(WebEncryptedMediaSessionType);
-    void timerFired(Timer<MediaKeys>*);
+    void timerFired(TimerBase*);
 
     const WebVector<WebEncryptedMediaSessionType> m_supportedSessionTypes;
-    OwnPtr<WebContentDecryptionModule> m_cdm;
+    std::unique_ptr<WebContentDecryptionModule> m_cdm;
 
     // Keep track of the HTMLMediaElement that references this object. Keeping
     // a WeakMember so that HTMLMediaElement's lifetime isn't dependent on
     // this object.
-    RawPtrWillBeWeakMember<HTMLMediaElement> m_mediaElement;
+    // Note that the referenced HTMLMediaElement must be destroyed
+    // before this object. This is due to WebMediaPlayerImpl (owned by
+    // HTMLMediaElement) possibly having a pointer to Decryptor created
+    // by WebContentDecryptionModuleImpl (owned by this object).
+    WeakMember<HTMLMediaElement> m_mediaElement;
+
+    // Keep track of whether this object has been reserved by HTMLMediaElement
+    // (i.e. a setMediaKeys operation is in progress). Destruction of this
+    // object will be prevented until the setMediaKeys() completes.
+    bool m_reservedForMediaElement;
 
     HeapDeque<Member<PendingAction>> m_pendingActions;
     Timer<MediaKeys> m_timer;

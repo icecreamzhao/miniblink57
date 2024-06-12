@@ -22,19 +22,20 @@
 #define SVGFEMergeElement_h
 
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
-#include "platform/graphics/filters/FEMerge.h"
 
 namespace blink {
 
 class SVGFEMergeElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEMergeElement);
 
 private:
     explicit SVGFEMergeElement(Document&);
 
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
+    bool taintsOrigin(bool inputsTaintOrigin) const override;
 };
 
 } // namespace blink

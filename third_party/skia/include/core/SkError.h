@@ -8,14 +8,13 @@
 #ifndef SkError_DEFINED
 #define SkError_DEFINED
 
-
 /** \file SkError.h
 */
 
 enum SkError {
     /** All is well
      */
-    kNoError_SkError=0,
+    kNoError_SkError = 0,
 
     /** User argument passed to Skia function was invalid: NULL when that’s
      *  not allowed, out of numeric range, bad enum, or violating some
@@ -68,7 +67,7 @@ void SkClearLastError();
  *  Callback functions take the error code being set, as well as a context
  *  argument that is provided when the callback is registered.
  */
-typedef void (*SkErrorCallbackFunction)(SkError, void *);
+typedef void (*SkErrorCallbackFunction)(SkError, void*);
 
 /** Set the current per-thread error callback.
  *
@@ -79,13 +78,13 @@ typedef void (*SkErrorCallbackFunction)(SkError, void *);
  *  @param context An arbitrary pointer that will be passed to
  *                 the provided callback function.
  */
-void SkSetErrorCallback(SkErrorCallbackFunction cb, void *context);
+void SkSetErrorCallback(SkErrorCallbackFunction cb, void* context);
 
 /** Get a human-readable description of the last (per-thread) error that
  *  occurred.  The returned error message will include not only a human
  *  readable version of the error code, but also information about the
  *  conditions that led to the error itself.
  */
-const char *SkGetLastErrorString();
+const char* SkGetLastErrorString();
 
 #endif /* SkError_DEFINED */

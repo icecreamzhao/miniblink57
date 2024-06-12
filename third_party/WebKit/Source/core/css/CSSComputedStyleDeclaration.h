@@ -32,79 +32,86 @@
 
 namespace blink {
 
-class CSSPrimitiveValue;
-class CSSValueList;
+class CSSVariableData;
 class ExceptionState;
 class MutableStylePropertySet;
 class Node;
-class LayoutObject;
 class ComputedStyle;
-class ShadowData;
-class ShadowList;
-class StyleColor;
-class StylePropertyShorthand;
 
-class CORE_EXPORT CSSComputedStyleDeclaration final : public CSSStyleDeclaration {
+class CORE_EXPORT CSSComputedStyleDeclaration final
+    : public CSSStyleDeclaration {
 public:
-    static PassRefPtrWillBeRawPtr<CSSComputedStyleDeclaration> create(PassRefPtrWillBeRawPtr<Node> node, bool allowVisitedStyle = false, const String& pseudoElementName = String())
+    static CSSComputedStyleDeclaration* create(
+        Node* node,
+        bool allowVisitedStyle = false,
+        const String& pseudoElementName = String())
     {
-        return adoptRefWillBeNoop(new CSSComputedStyleDeclaration(node, allowVisitedStyle, pseudoElementName));
+        return new CSSComputedStyleDeclaration(node, allowVisitedStyle,
+            pseudoElementName);
     }
-    virtual ~CSSComputedStyleDeclaration();
-
-#if !ENABLE(OILPAN)
-    virtual void ref() override;
-    virtual void deref() override;
-#endif
+    ~CSSComputedStyleDeclaration() override;
 
     String getPropertyValue(CSSPropertyID) const;
     bool getPropertyPriority(CSSPropertyID) const;
 
-    PassRefPtrWillBeRawPtr<MutableStylePropertySet> copyProperties() const;
+    MutableStylePropertySet* copyProperties() const;
 
-    PassRefPtrWillBeRawPtr<CSSValue> getPropertyCSSValue(CSSPropertyID) const;
-    PassRefPtrWillBeRawPtr<CSSValue> getFontSizeCSSValuePreferringKeyword() const;
+    const CSSValue* getPropertyCSSValue(CSSPropertyID) const;
+    const CSSValue* getPropertyCSSValue(AtomicString customPropertyName) const;
+    std::unique_ptr<HashMap<AtomicString, RefPtr<CSSVariableData>>> getVariables()
+        const;
+
+    const CSSValue* getFontSizeCSSValuePreferringKeyword() const;
     bool isMonospaceFont() const;
 
-    PassRefPtrWillBeRawPtr<MutableStylePropertySet> copyPropertiesInSet(const Vector<CSSPropertyID>&) const;
+    MutableStylePropertySet* copyPropertiesInSet(
+        const Vector<CSSPropertyID>&) const;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    CSSComputedStyleDeclaration(PassRefPtrWillBeRawPtr<Node>, bool allowVisitedStyle, const String&);
+    CSSComputedStyleDeclaration(Node*, bool allowVisitedStyle, const String&);
 
     // The styled node is either the node passed into getComputedStyle, or the
     // PseudoElement for :before and :after if they exist.
     // FIXME: This should be styledElement since in JS getComputedStyle only works
-    // on Elements, but right now editing creates these for text nodes. We should fix
-    // that.
+    // on Elements, but right now editing creates these for text nodes. We should
+    // fix that.
     Node* styledNode() const;
 
     // CSSOM functions. Don't make these public.
-    virtual CSSRule* parentRule() const override;
-    virtual unsigned length() const override;
-    virtual String item(unsigned index) const override;
+    CSSRule* parentRule() const override;
+    unsigned length() const override;
+    String item(unsigned index) const override;
     const ComputedStyle* computeComputedStyle() const;
-    virtual String getPropertyValue(const String& propertyName) override;
-    virtual String getPropertyPriority(const String& propertyName) override;
-    virtual String getPropertyShorthand(const String& propertyName) override;
-    virtual bool isPropertyImplicit(const String& propertyName) override;
-    virtual void setProperty(const String& propertyName, const String& value, const String& priority, ExceptionState&) override;
-    virtual String removeProperty(const String& propertyName, ExceptionState&) override;
-    virtual String cssText() const override;
-    virtual void setCSSText(const String&, ExceptionState&) override;
-    virtual PassRefPtrWillBeRawPtr<CSSValue> getPropertyCSSValueInternal(CSSPropertyID) override;
-    virtual String getPropertyValueInternal(CSSPropertyID) override;
-    virtual void setPropertyInternal(CSSPropertyID, const String& value, bool important, ExceptionState&) override;
+    String getPropertyValue(const String& propertyName) override;
+    String getPropertyPriority(const String& propertyName) override;
+    String getPropertyShorthand(const String& propertyName) override;
+    bool isPropertyImplicit(const String& propertyName) override;
+    void setProperty(const String& propertyName,
+        const String& value,
+        const String& priority,
+        ExceptionState&) override;
+    String removeProperty(const String& propertyName, ExceptionState&) override;
+    String cssFloat() const;
+    void setCSSFloat(const String&, ExceptionState&);
+    String cssText() const override;
+    void setCSSText(const String&, ExceptionState&) override;
+    const CSSValue* getPropertyCSSValueInternal(CSSPropertyID) override;
+    const CSSValue* getPropertyCSSValueInternal(
+        AtomicString customPropertyName) override;
+    String getPropertyValueInternal(CSSPropertyID) override;
+    void setPropertyInternal(CSSPropertyID,
+        const String& customPropertyName,
+        const String& value,
+        bool important,
+        ExceptionState&) override;
 
-    virtual bool cssPropertyMatches(CSSPropertyID, const CSSValue*) const override;
+    bool cssPropertyMatches(CSSPropertyID, const CSSValue*) const override;
 
-    RefPtrWillBeMember<Node> m_node;
+    Member<Node> m_node;
     PseudoId m_pseudoElementSpecifier;
     bool m_allowVisitedStyle;
-#if !ENABLE(OILPAN)
-    unsigned m_refCount;
-#endif
 };
 
 } // namespace blink

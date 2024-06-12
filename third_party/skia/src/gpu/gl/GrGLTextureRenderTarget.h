@@ -5,19 +5,19 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrGLTextureRenderTarget_DEFINED
 #define GrGLTextureRenderTarget_DEFINED
 
-#include "GrGLTexture.h"
+#include "GrGLGpu.h"
 #include "GrGLRenderTarget.h"
+#include "GrGLTexture.h"
 
 class GrGLGpu;
 
 #ifdef SK_BUILD_FOR_WIN
 // Windows gives bogus warnings about inheriting asTexture/asRenderTarget via dominance.
 #pragma warning(push)
-#pragma warning(disable: 4250)
+#pragma warning(disable : 4250)
 #endif
 
 class GrGLTextureRenderTarget : public GrGLTexture, public GrGLRenderTarget {
@@ -25,32 +25,56 @@ public:
     // We're virtually derived from GrSurface (via both GrGLTexture and GrGLRenderTarget) so its
     // constructor must be explicitly called.
     GrGLTextureRenderTarget(GrGLGpu* gpu,
-                            const GrSurfaceDesc& desc,
-                            const GrGLTexture::IDDesc& texIDDesc,
-                            const GrGLRenderTarget::IDDesc& rtIDDesc)
-        : GrSurface(gpu, texIDDesc.fLifeCycle, desc)
-        , GrGLTexture(gpu, desc, texIDDesc, GrGLTexture::kDerived)
-        , GrGLRenderTarget(gpu, desc, rtIDDesc, GrGLRenderTarget::kDerived) {
-        this->registerWithCache();
+        SkBudgeted budgeted,
+        const GrSurfaceDesc& desc,
+        const GrGLTexture::IDDesc& texIDDesc,
+        const GrGLRenderTarget::IDDesc& rtIDDesc)
+        : GrSurface(gpu, desc)
+        , GrGLTexture(gpu, desc, texIDDesc)
+        , GrGLRenderTarget(gpu, desc, rtIDDesc)
+    {
+        this->registerWithCache(budgeted);
     }
 
+    bool canAttemptStencilAttachment() const override;
+
+    void dumpMemoryStatistics(SkTraceMemoryDump* traceMemoryDump) const override;
+
+    static GrGLTextureRenderTarget* CreateWrapped(GrGLGpu* gpu, const GrSurfaceDesc& desc,
+        const GrGLTexture::IDDesc& texIDDesc,
+        const GrGLRenderTarget::IDDesc& rtIDDesc);
+
 protected:
-    void onAbandon() override {
+    void onAbandon() override
+    {
         GrGLRenderTarget::onAbandon();
         GrGLTexture::onAbandon();
     }
 
-    void onRelease() override {
+    void onRelease() override
+    {
         GrGLRenderTarget::onRelease();
         GrGLTexture::onRelease();
     }
 
 private:
-    // GrGLRenderTarget accounts for the texture's memory and any MSAA renderbuffer's memory.
-    size_t onGpuMemorySize() const override {
-        return GrGLRenderTarget::onGpuMemorySize();
+    // Constructor for instances wrapping backend objects.
+    GrGLTextureRenderTarget(GrGLGpu* gpu,
+        const GrSurfaceDesc& desc,
+        const GrGLTexture::IDDesc& texIDDesc,
+        const GrGLRenderTarget::IDDesc& rtIDDesc)
+        : GrSurface(gpu, desc)
+        , GrGLTexture(gpu, desc, texIDDesc)
+        , GrGLRenderTarget(gpu, desc, rtIDDesc)
+    {
+        this->registerWithCacheWrapped();
     }
 
+    // GrGLRenderTarget accounts for the texture's memory and any MSAA renderbuffer's memory.
+    size_t onGpuMemorySize() const override
+    {
+        return GrGLRenderTarget::onGpuMemorySize();
+    }
 };
 
 #ifdef SK_BUILD_FOR_WIN

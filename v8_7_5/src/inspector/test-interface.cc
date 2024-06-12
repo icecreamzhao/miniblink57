@@ -9,16 +9,18 @@
 
 namespace v8_inspector {
 
-void SetMaxAsyncTaskStacksForTest(V8Inspector* inspector, int limit) {
-  static_cast<V8InspectorImpl*>(inspector)
-      ->debugger()
-      ->setMaxAsyncTaskStacksForTest(limit);
+void SetMaxAsyncTaskStacksForTest(V8Inspector* inspector, int limit)
+{
+    static_cast<V8InspectorImpl*>(inspector)
+        ->debugger()
+        ->setMaxAsyncTaskStacksForTest(limit);
 }
 
-void DumpAsyncTaskStacksStateForTest(V8Inspector* inspector) {
-  static_cast<V8InspectorImpl*>(inspector)
-      ->debugger()
-      ->dumpAsyncTaskStacksStateForTest();
+void DumpAsyncTaskStacksStateForTest(V8Inspector* inspector)
+{
+    static_cast<V8InspectorImpl*>(inspector)
+        ->debugger()
+        ->dumpAsyncTaskStacksStateForTest();
 }
 
-}  // namespace v8_inspector
+} // namespace v8_inspector

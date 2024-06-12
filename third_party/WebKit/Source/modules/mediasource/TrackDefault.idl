@@ -10,12 +10,15 @@ enum TrackDefaultType { "audio", "video", "text" };
 [
     Constructor(TrackDefaultType type, DOMString language, DOMString label, sequence<DOMString> kinds, optional DOMString byteStreamTrackID = ""),
     RaisesException=Constructor,
-    GarbageCollected,
     RuntimeEnabled=MediaSourceExperimental,
 ] interface TrackDefault {
     readonly attribute TrackDefaultType type;
     readonly attribute DOMString byteStreamTrackID;
     readonly attribute DOMString language;
     readonly attribute DOMString label;
+    // TODO(wolenetz): |kinds| should be [SameObject] FrozenArray<DOMString> or
+    // a getKinds() method returning sequence<DOMString>.
+    // https://github.com/w3c/media-source/issues/91
+    // https://crbug.com/619665
     readonly attribute DOMString[] kinds;
 };

@@ -32,6 +32,7 @@
 #define WorkerGlobalScopePerformance_h
 
 #include "core/timing/WorkerPerformance.h"
+#include "core/workers/WorkerGlobalScope.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -39,8 +40,11 @@ namespace blink {
 
 class WorkerGlobalScope;
 
-class WorkerGlobalScopePerformance final : public NoBaseWillBeGarbageCollected<WorkerGlobalScopePerformance>, public WillBeHeapSupplement<WorkerGlobalScope> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WorkerGlobalScopePerformance);
+class WorkerGlobalScopePerformance final
+    : public GarbageCollected<WorkerGlobalScopePerformance>,
+      public Supplement<WorkerGlobalScope> {
+    USING_GARBAGE_COLLECTED_MIXIN(WorkerGlobalScopePerformance);
+
 public:
     static WorkerGlobalScopePerformance& from(WorkerGlobalScope&);
 
@@ -54,7 +58,7 @@ private:
     WorkerPerformance* performance(WorkerGlobalScope*);
     static const char* supplementName();
 
-    PersistentWillBeMember<WorkerPerformance> m_performance;
+    Member<WorkerPerformance> m_performance;
 };
 
 } // namespace blink

@@ -4,18 +4,31 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#include "SkPathOpsTypes.h"
 #include "SkFloatBits.h"
 #include "SkOpCoincidence.h"
-#include "SkPathOpsTypes.h"
 
-static bool arguments_denormalized(float a, float b, int epsilon) {
+static bool arguments_denormalized(float a, float b, int epsilon)
+{
     float denormalizedCheck = FLT_EPSILON * epsilon / 2;
     return fabsf(a) <= denormalizedCheck && fabsf(b) <= denormalizedCheck;
 }
 
 // from http://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 // FIXME: move to SkFloatBits.h
-static bool equal_ulps(float a, float b, int epsilon, int depsilon) {
+static bool equal_ulps(float a, float b, int epsilon, int depsilon)
+{
+    if (arguments_denormalized(a, b, depsilon)) {
+        return true;
+    }
+    int aBits = SkFloatAs2sCompliment(a);
+    int bBits = SkFloatAs2sCompliment(b);
+    // Find the difference in ULPs.
+    return aBits < bBits + epsilon && bBits < aBits + epsilon;
+}
+
+static bool equal_ulps_pin(float a, float b, int epsilon, int depsilon)
+{
     if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
         return false;
     }
@@ -28,17 +41,27 @@ static bool equal_ulps(float a, float b, int epsilon, int depsilon) {
     return aBits < bBits + epsilon && bBits < aBits + epsilon;
 }
 
-static bool d_equal_ulps(float a, float b, int epsilon) {
-    if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
-        return false;
-    }
+static bool d_equal_ulps(float a, float b, int epsilon)
+{
     int aBits = SkFloatAs2sCompliment(a);
     int bBits = SkFloatAs2sCompliment(b);
     // Find the difference in ULPs.
     return aBits < bBits + epsilon && bBits < aBits + epsilon;
 }
 
-static bool not_equal_ulps(float a, float b, int epsilon) {
+static bool not_equal_ulps(float a, float b, int epsilon)
+{
+    if (arguments_denormalized(a, b, epsilon)) {
+        return false;
+    }
+    int aBits = SkFloatAs2sCompliment(a);
+    int bBits = SkFloatAs2sCompliment(b);
+    // Find the difference in ULPs.
+    return aBits >= bBits + epsilon || bBits >= aBits + epsilon;
+}
+
+static bool not_equal_ulps_pin(float a, float b, int epsilon)
+{
     if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
         return false;
     }
@@ -51,20 +74,16 @@ static bool not_equal_ulps(float a, float b, int epsilon) {
     return aBits >= bBits + epsilon || bBits >= aBits + epsilon;
 }
 
-static bool d_not_equal_ulps(float a, float b, int epsilon) {
-    if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
-        return false;
-    }
+static bool d_not_equal_ulps(float a, float b, int epsilon)
+{
     int aBits = SkFloatAs2sCompliment(a);
     int bBits = SkFloatAs2sCompliment(b);
     // Find the difference in ULPs.
     return aBits >= bBits + epsilon || bBits >= aBits + epsilon;
 }
 
-static bool less_ulps(float a, float b, int epsilon) {
-    if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
-        return false;
-    }
+static bool less_ulps(float a, float b, int epsilon)
+{
     if (arguments_denormalized(a, b, epsilon)) {
         return a <= b - FLT_EPSILON * epsilon;
     }
@@ -74,10 +93,8 @@ static bool less_ulps(float a, float b, int epsilon) {
     return aBits <= bBits - epsilon;
 }
 
-static bool less_or_equal_ulps(float a, float b, int epsilon) {
-    if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
-        return false;
-    }
+static bool less_or_equal_ulps(float a, float b, int epsilon)
+{
     if (arguments_denormalized(a, b, epsilon)) {
         return a < b + FLT_EPSILON * epsilon;
     }
@@ -88,69 +105,87 @@ static bool less_or_equal_ulps(float a, float b, int epsilon) {
 }
 
 // equality using the same error term as between
-bool AlmostBequalUlps(float a, float b) {
+bool AlmostBequalUlps(float a, float b)
+{
     const int UlpsEpsilon = 2;
     return equal_ulps(a, b, UlpsEpsilon, UlpsEpsilon);
 }
 
-bool AlmostPequalUlps(float a, float b) {
+bool AlmostPequalUlps(float a, float b)
+{
     const int UlpsEpsilon = 8;
     return equal_ulps(a, b, UlpsEpsilon, UlpsEpsilon);
 }
 
-bool AlmostDequalUlps(float a, float b) {
+bool AlmostDequalUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return d_equal_ulps(a, b, UlpsEpsilon);
 }
 
-bool AlmostDequalUlps(double a, double b) {
-    if (SkScalarIsFinite(a) || SkScalarIsFinite(b)) {
-        return AlmostDequalUlps(SkDoubleToScalar(a), SkDoubleToScalar(b));
-    }
-    return fabs(a - b) / SkTMax(fabs(a), fabs(b)) < FLT_EPSILON * 16;
+bool AlmostDequalUlps(double a, double b)
+{
+    return AlmostDequalUlps(SkDoubleToScalar(a), SkDoubleToScalar(b));
 }
 
-bool AlmostEqualUlps(float a, float b) {
+bool AlmostEqualUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return equal_ulps(a, b, UlpsEpsilon, UlpsEpsilon);
 }
 
-bool NotAlmostEqualUlps(float a, float b) {
+bool AlmostEqualUlps_Pin(float a, float b)
+{
+    const int UlpsEpsilon = 16;
+    return equal_ulps_pin(a, b, UlpsEpsilon, UlpsEpsilon);
+}
+
+bool NotAlmostEqualUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return not_equal_ulps(a, b, UlpsEpsilon);
 }
 
-bool NotAlmostDequalUlps(float a, float b) {
+bool NotAlmostEqualUlps_Pin(float a, float b)
+{
+    const int UlpsEpsilon = 16;
+    return not_equal_ulps_pin(a, b, UlpsEpsilon);
+}
+
+bool NotAlmostDequalUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return d_not_equal_ulps(a, b, UlpsEpsilon);
 }
 
-bool RoughlyEqualUlps(float a, float b) {
+bool RoughlyEqualUlps(float a, float b)
+{
     const int UlpsEpsilon = 256;
     const int DUlpsEpsilon = 1024;
     return equal_ulps(a, b, UlpsEpsilon, DUlpsEpsilon);
 }
 
-bool AlmostBetweenUlps(float a, float b, float c) {
+bool AlmostBetweenUlps(float a, float b, float c)
+{
     const int UlpsEpsilon = 2;
     return a <= c ? less_or_equal_ulps(a, b, UlpsEpsilon) && less_or_equal_ulps(b, c, UlpsEpsilon)
-        : less_or_equal_ulps(b, a, UlpsEpsilon) && less_or_equal_ulps(c, b, UlpsEpsilon);
+                  : less_or_equal_ulps(b, a, UlpsEpsilon) && less_or_equal_ulps(c, b, UlpsEpsilon);
 }
 
-bool AlmostLessUlps(float a, float b) {
+bool AlmostLessUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return less_ulps(a, b, UlpsEpsilon);
 }
 
-bool AlmostLessOrEqualUlps(float a, float b) {
+bool AlmostLessOrEqualUlps(float a, float b)
+{
     const int UlpsEpsilon = 16;
     return less_or_equal_ulps(a, b, UlpsEpsilon);
 }
 
-int UlpsDistance(float a, float b) {
-    if (!SkScalarIsFinite(a) || !SkScalarIsFinite(b)) {
-        return SK_MaxS32;
-    }
+int UlpsDistance(float a, float b)
+{
     SkFloatIntUnion floatIntA, floatIntB;
     floatIntA.fFloat = a;
     floatIntB.fFloat = b;
@@ -160,36 +195,40 @@ int UlpsDistance(float a, float b) {
         return a == b ? 0 : SK_MaxS32;
     }
     // Find the difference in ULPs.
-    return abs(floatIntA.fSignBitInt - floatIntB.fSignBitInt);
+    return SkTAbs(floatIntA.fSignBitInt - floatIntB.fSignBitInt);
 }
 
 // cube root approximation using bit hack for 64-bit float
 // adapted from Kahan's cbrt
-static double cbrt_5d(double d) {
+static double cbrt_5d(double d)
+{
     const unsigned int B1 = 715094163;
     double t = 0.0;
-    unsigned int* pt = (unsigned int*) &t;
-    unsigned int* px = (unsigned int*) &d;
+    unsigned int* pt = (unsigned int*)&t;
+    unsigned int* px = (unsigned int*)&d;
     pt[1] = px[1] / 3 + B1;
     return t;
 }
 
 // iterative cube root approximation using Halley's method (double)
-static double cbrta_halleyd(const double a, const double R) {
+static double cbrta_halleyd(const double a, const double R)
+{
     const double a3 = a * a * a;
     const double b = a * (a3 + R + R) / (a3 + a3 + R);
     return b;
 }
 
 // cube root approximation using 3 iterations of Halley's method (double)
-static double halley_cbrt3d(double d) {
+static double halley_cbrt3d(double d)
+{
     double a = cbrt_5d(d);
     a = cbrta_halleyd(a, d);
     a = cbrta_halleyd(a, d);
     return cbrta_halleyd(a, d);
 }
 
-double SkDCubeRoot(double x) {
+double SkDCubeRoot(double x)
+{
     if (approximately_zero_cubed(x)) {
         return 0;
     }
@@ -200,20 +239,26 @@ double SkDCubeRoot(double x) {
     return result;
 }
 
-SkOpGlobalState::SkOpGlobalState(SkOpCoincidence* coincidence, SkOpContourHead* head)
+SkOpGlobalState::SkOpGlobalState(SkOpCoincidence* coincidence, SkOpContourHead* head SkDEBUGPARAMS(bool debugSkipAssert) SkDEBUGPARAMS(const char* testName))
     : fCoincidence(coincidence)
     , fContourHead(head)
     , fNested(0)
     , fWindingFailed(false)
     , fAngleCoincidence(false)
     , fPhase(kIntersecting)
-    SkDEBUGPARAMS(fAngleID(0))
-    SkDEBUGPARAMS(fContourID(0))
-    SkDEBUGPARAMS(fPtTID(0))
-    SkDEBUGPARAMS(fSegmentID(0))
-    SkDEBUGPARAMS(fSpanID(0)) {
+          SkDEBUGPARAMS(fDebugTestName(testName))
+              SkDEBUGPARAMS(fAngleID(0))
+                  SkDEBUGPARAMS(fCoinID(0))
+                      SkDEBUGPARAMS(fContourID(0))
+                          SkDEBUGPARAMS(fPtTID(0))
+                              SkDEBUGPARAMS(fSegmentID(0))
+                                  SkDEBUGPARAMS(fSpanID(0))
+                                      SkDEBUGPARAMS(fDebugSkipAssert(debugSkipAssert))
+{
     if (coincidence) {
         coincidence->debugSetGlobalState(this);
     }
+#if DEBUG_T_SECT_LOOP_COUNT
+    debugResetLoopCounts();
+#endif
 }
-

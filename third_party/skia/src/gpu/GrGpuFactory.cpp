@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,27 +5,34 @@
  * found in the LICENSE file.
  */
 
-
 #include "GrGpuFactory.h"
 
 #include "GrGpu.h"
 #include "gl/GrGLConfig.h"
 #include "gl/GrGLGpu.h"
+#ifdef SK_VULKAN
+#include "vk/GrVkGpu.h"
+#endif
 
-static const int kMaxNumBackends = 4;
-static CreateGpuProc gGpuFactories[kMaxNumBackends] = {GrGLGpu::Create, NULL, NULL, NULL};
+static CreateGpuProc gGpuFactories[kBackendCount] = { GrGLGpu::Create, nullptr };
 
-GrGpuFactoryRegistrar::GrGpuFactoryRegistrar(int i, CreateGpuProc proc) {
+#ifdef SK_VULKAN
+GrGpuFactoryRegistrar gVkGpuFactoryProc(kVulkan_GrBackend, GrVkGpu::Create);
+#endif
+
+GrGpuFactoryRegistrar::GrGpuFactoryRegistrar(int i, CreateGpuProc proc)
+{
     gGpuFactories[i] = proc;
 }
 
 GrGpu* GrGpu::Create(GrBackend backend,
-                     GrBackendContext backendContext,
-                     const GrContextOptions& options,
-                     GrContext* context) {
-    SkASSERT((int)backend < kMaxNumBackends);
+    GrBackendContext backendContext,
+    const GrContextOptions& options,
+    GrContext* context)
+{
+    SkASSERT((int)backend < kBackendCount);
     if (!gGpuFactories[backend]) {
-        return NULL;
+        return nullptr;
     }
     return (gGpuFactories[backend])(backendContext, options, context);
 }

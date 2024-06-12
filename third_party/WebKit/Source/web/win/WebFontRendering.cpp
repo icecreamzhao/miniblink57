@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/web/win/WebFontRendering.h"
 
 #include "platform/fonts/FontCache.h"
@@ -10,63 +9,73 @@
 namespace blink {
 
 // static
-void WebFontRendering::setUseDirectWrite(bool useDirectWrite)
+void WebFontRendering::setSkiaFontManager(sk_sp<SkFontMgr> fontMgr)
 {
-    FontCache::setUseDirectWrite(useDirectWrite);
-}
-
-// static
-void WebFontRendering::setDirectWriteFactory(IDWriteFactory* factory)
-{
-    FontCache::setDirectWriteFactory(factory);
+    FontCache::setFontManager(std::move(fontMgr));
 }
 
 // static
 void WebFontRendering::setDeviceScaleFactor(float deviceScaleFactor)
 {
+#if OS(WIN)
     FontCache::setDeviceScaleFactor(deviceScaleFactor);
-}
-
-// static
-void WebFontRendering::setUseSubpixelPositioning(bool useSubpixelPositioning)
-{
-    FontCache::setUseSubpixelPositioning(useSubpixelPositioning);
+#endif
 }
 
 // static
 void WebFontRendering::addSideloadedFontForTesting(SkTypeface* typeface)
 {
+#if OS(WIN)
     FontCache::addSideloadedFontForTesting(typeface);
+#endif
 }
 
 // static
 void WebFontRendering::setMenuFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setMenuFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
 void WebFontRendering::setSmallCaptionFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setSmallCaptionFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
 void WebFontRendering::setStatusFontMetrics(const wchar_t* familyName, int32_t fontHeight)
 {
+#if OS(WIN)
     FontCache::setStatusFontMetrics(familyName, fontHeight);
+#endif
 }
 
 // static
-void WebFontRendering::setLCDOrder(SkFontHost::LCDOrder order)
+void WebFontRendering::setAntialiasedTextEnabled(bool enabled)
 {
-    SkFontHost::SetSubpixelOrder(order);
+#if OS(WIN)
+    FontCache::setAntialiasedTextEnabled(enabled);
+#endif
 }
 
 // static
-void WebFontRendering::setLCDOrientation(SkFontHost::LCDOrientation orientation)
+void WebFontRendering::setLCDTextEnabled(bool enabled)
 {
-    SkFontHost::SetSubpixelOrientation(orientation);
+#if OS(WIN)
+    FontCache::setLCDTextEnabled(enabled);
+#endif
+}
+
+// static
+void WebFontRendering::setUseSkiaFontFallback(bool useSkiaFontFallback)
+{
+#if OS(WIN)
+    FontCache::setUseSkiaFontFallback(useSkiaFontFallback);
+#endif
 }
 
 } // namespace blink

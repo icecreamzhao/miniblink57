@@ -8,8 +8,8 @@
 #ifndef GrBitmapTextGeoProc_DEFINED
 #define GrBitmapTextGeoProc_DEFINED
 
-#include "GrProcessor.h"
 #include "GrGeometryProcessor.h"
+#include "GrProcessor.h"
 
 class GrGLBitmapTextGeoProc;
 class GrInvariantOutput;
@@ -21,14 +21,15 @@ class GrInvariantOutput;
  */
 class GrBitmapTextGeoProc : public GrGeometryProcessor {
 public:
-    static GrGeometryProcessor* Create(GrColor color, GrTexture* tex, const GrTextureParams& p,
-                                       GrMaskFormat format, const SkMatrix& localMatrix,
-                                       bool usesLocalCoords) {
-        return SkNEW_ARGS(GrBitmapTextGeoProc, (color, tex, p, format, localMatrix,
-                usesLocalCoords));
+    static sk_sp<GrGeometryProcessor> Make(GrColor color, GrTexture* tex, const GrTextureParams& p,
+        GrMaskFormat format, const SkMatrix& localMatrix,
+        bool usesLocalCoords)
+    {
+        return sk_sp<GrGeometryProcessor>(
+            new GrBitmapTextGeoProc(color, tex, p, format, localMatrix, usesLocalCoords));
     }
 
-    virtual ~GrBitmapTextGeoProc() {}
+    virtual ~GrBitmapTextGeoProc() { }
 
     const char* name() const override { return "Texture"; }
 
@@ -42,25 +43,22 @@ public:
     const SkMatrix& localMatrix() const { return fLocalMatrix; }
     bool usesLocalCoords() const { return fUsesLocalCoords; }
 
-    virtual void getGLProcessorKey(const GrBatchTracker& bt,
-                                   const GrGLSLCaps& caps,
-                                   GrProcessorKeyBuilder* b) const override;
+    void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
-    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
-                                                     const GrGLSLCaps& caps) const override;
+    GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps& caps) const override;
 
 private:
     GrBitmapTextGeoProc(GrColor, GrTexture* texture, const GrTextureParams& params,
-                        GrMaskFormat format, const SkMatrix& localMatrix, bool usesLocalCoords);
+        GrMaskFormat format, const SkMatrix& localMatrix, bool usesLocalCoords);
 
-    GrColor          fColor;
-    SkMatrix         fLocalMatrix;
-    bool             fUsesLocalCoords;
-    GrTextureAccess  fTextureAccess;
+    GrColor fColor;
+    SkMatrix fLocalMatrix;
+    bool fUsesLocalCoords;
+    GrTextureAccess fTextureAccess;
     const Attribute* fInPosition;
     const Attribute* fInColor;
     const Attribute* fInTextureCoords;
-    GrMaskFormat     fMaskFormat;
+    GrMaskFormat fMaskFormat;
 
     GR_DECLARE_GEOMETRY_PROCESSOR_TEST;
 

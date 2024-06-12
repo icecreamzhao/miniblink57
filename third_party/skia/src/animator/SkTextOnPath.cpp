@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkTextOnPath.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -26,14 +25,19 @@ const SkMemberInfo SkTextOnPath::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkTextOnPath);
 
-SkTextOnPath::SkTextOnPath() : offset(0), path(NULL), text(NULL) {
+SkTextOnPath::SkTextOnPath()
+    : offset(0)
+    , path(nullptr)
+    , text(nullptr)
+{
 }
 
-bool SkTextOnPath::draw(SkAnimateMaker& maker) {
+bool SkTextOnPath::draw(SkAnimateMaker& maker)
+{
     SkASSERT(text);
     SkASSERT(path);
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawTextOnPathHV(text->getText(), text->getSize(),
-                                    path->getPath(), offset, 0, *maker.fPaint);
+        path->getPath(), offset, 0, *maker.fPaint);
     return false;
 }

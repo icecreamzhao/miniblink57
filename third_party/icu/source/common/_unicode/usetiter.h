@@ -7,9 +7,9 @@
 #ifndef USETITER_H
 #define USETITER_H
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
 #include "unicode/unistr.h"
+#include "unicode/uobject.h"
+#include "unicode/utypes.h"
 
 /**
  * \file 
@@ -60,8 +60,7 @@ class UnicodeString;
  */
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
- protected:
-
+protected:
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
@@ -96,8 +95,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      */
     const UnicodeString* string;
 
- public:
-
+public:
     /**
      * Create an iterator over the given set.  The iterator is valid
      * only so long as <tt>set</tt> is valid.
@@ -241,8 +239,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
 
     // ======================= PRIVATES ===========================
 
- protected:
-
+protected:
     // endElement and nextElements are really UChar32's, but we keep
     // them as signed int32_t's so we can do comparisons with
     // endElement set to -1.  Leave them as int32_t's.
@@ -281,7 +278,7 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      *  string and the current iteration item is a code point, not a string.
      *  @internal
      */
-    UnicodeString *cpString;
+    UnicodeString* cpString;
 
     /** Copy constructor. Disallowed.
      * @stable ICU 2.4
@@ -297,21 +294,22 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * @stable ICU 2.4
      */
     virtual void loadRange(int32_t range);
-
 };
 
-inline UBool UnicodeSetIterator::isString() const {
+inline UBool UnicodeSetIterator::isString() const
+{
     return codepoint == (UChar32)IS_STRING;
 }
 
-inline UChar32 UnicodeSetIterator::getCodepoint() const {
+inline UChar32 UnicodeSetIterator::getCodepoint() const
+{
     return codepoint;
 }
 
-inline UChar32 UnicodeSetIterator::getCodepointEnd() const {
+inline UChar32 UnicodeSetIterator::getCodepointEnd() const
+{
     return codepointEnd;
 }
-
 
 U_NAMESPACE_END
 

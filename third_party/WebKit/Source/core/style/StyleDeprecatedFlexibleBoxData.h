@@ -30,10 +30,17 @@
 
 namespace blink {
 
-class StyleDeprecatedFlexibleBoxData : public RefCounted<StyleDeprecatedFlexibleBoxData> {
+class StyleDeprecatedFlexibleBoxData
+    : public RefCounted<StyleDeprecatedFlexibleBoxData> {
 public:
-    static PassRefPtr<StyleDeprecatedFlexibleBoxData> create() { return adoptRef(new StyleDeprecatedFlexibleBoxData); }
-    PassRefPtr<StyleDeprecatedFlexibleBoxData> copy() const { return adoptRef(new StyleDeprecatedFlexibleBoxData(*this)); }
+    static PassRefPtr<StyleDeprecatedFlexibleBoxData> create()
+    {
+        return adoptRef(new StyleDeprecatedFlexibleBoxData);
+    }
+    PassRefPtr<StyleDeprecatedFlexibleBoxData> copy() const
+    {
+        return adoptRef(new StyleDeprecatedFlexibleBoxData(*this));
+    }
 
     bool operator==(const StyleDeprecatedFlexibleBoxData&) const;
     bool operator!=(const StyleDeprecatedFlexibleBoxData& o) const
@@ -46,8 +53,8 @@ public:
     unsigned ordinalGroup;
 
     unsigned align : 3; // EBoxAlignment
-    unsigned pack: 2; // EBoxPack
-    unsigned orient: 1; // EBoxOrient
+    unsigned pack : 2; // EBoxPack
+    unsigned orient : 1; // EBoxOrient
     unsigned lines : 1; // EBoxLines
 
 private:

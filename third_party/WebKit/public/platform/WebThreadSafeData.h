@@ -34,7 +34,9 @@
 #include "WebCommon.h"
 #include "WebPrivatePtr.h"
 
-#if !INSIDE_BLINK
+#if INSIDE_BLINK
+#include "wtf/PassRefPtr.h"
+#else
 #include <string>
 #endif
 
@@ -42,8 +44,8 @@ namespace blink {
 
 class RawData;
 
-// A container for raw bytes. It is inexpensive to copy a WebThreadSafeData object.
-// It is safe to pass a WebThreadSafeData across threads!!!
+// A container for raw bytes. It is inexpensive to copy a WebThreadSafeData
+// object.  It is safe to pass a WebThreadSafeData across threads.
 class WebThreadSafeData {
 public:
     WebThreadSafeData() { }
@@ -63,8 +65,8 @@ public:
     BLINK_PLATFORM_EXPORT WebThreadSafeData& operator=(const WebThreadSafeData&);
 
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT WebThreadSafeData(const WTF::PassRefPtr<RawData>&);
-    BLINK_PLATFORM_EXPORT WebThreadSafeData& operator=(const WTF::PassRefPtr<RawData>&);
+    BLINK_PLATFORM_EXPORT WebThreadSafeData(WTF::PassRefPtr<RawData>);
+    BLINK_PLATFORM_EXPORT WebThreadSafeData& operator=(WTF::PassRefPtr<RawData>);
 #else
     operator std::string() const
     {

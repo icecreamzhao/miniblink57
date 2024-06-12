@@ -15,16 +15,16 @@ namespace gin {
 // the (currently experimental) Isolate::SetAutorunMicrotasks() method.
 
 class RunMicrotasksObserver : public base::MessageLoop::TaskObserver {
- public:
-  RunMicrotasksObserver(v8::Isolate* isolate);
+public:
+    RunMicrotasksObserver(v8::Isolate* isolate);
 
-  void WillProcessTask(const base::PendingTask& pending_task) override;
-  void DidProcessTask(const base::PendingTask& pending_task) override;
+    void WillProcessTask(const base::PendingTask& pending_task) override;
+    void DidProcessTask(const base::PendingTask& pending_task) override;
 
- private:
-  v8::Isolate* isolate_;
+private:
+    v8::Isolate* isolate_;
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_RUN_MICROTASKS_OBSERVER_H_
+#endif // GIN_RUN_MICROTASKS_OBSERVER_H_

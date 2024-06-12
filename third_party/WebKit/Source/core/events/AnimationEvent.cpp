@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/events/AnimationEvent.h"
 
 namespace blink {
@@ -33,23 +32,24 @@ AnimationEvent::AnimationEvent()
 {
 }
 
-AnimationEvent::AnimationEvent(const AtomicString& type, const AnimationEventInit& initializer)
+AnimationEvent::AnimationEvent(const AtomicString& type,
+    const AnimationEventInit& initializer)
     : Event(type, initializer)
     , m_animationName(initializer.animationName())
     , m_elapsedTime(initializer.elapsedTime())
 {
 }
 
-AnimationEvent::AnimationEvent(const AtomicString& type, const String& animationName, double elapsedTime)
+AnimationEvent::AnimationEvent(const AtomicString& type,
+    const String& animationName,
+    double elapsedTime)
     : Event(type, true, true)
     , m_animationName(animationName)
     , m_elapsedTime(elapsedTime)
 {
 }
 
-AnimationEvent::~AnimationEvent()
-{
-}
+AnimationEvent::~AnimationEvent() { }
 
 const String& AnimationEvent::animationName() const
 {

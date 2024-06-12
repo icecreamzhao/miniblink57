@@ -1,6 +1,10 @@
 
 #include "wtf/text/WTFStringUtil.h"
 #include "wtf/text/UTF8.h"
+#include "wtf/text/qt4/UnicodeQt4.h"
+#if defined(OS_LINUX)
+#include <iconv.h>
+#endif
 
 namespace WTF {
 
@@ -39,7 +43,7 @@ Vector<UChar> ensureUTF16UChar(const String& string, bool isNullTermination)
     if (string.containsOnlyASCII()) {
         out = string.charactersWithNullTermination();
         if (!isNullTermination)
-            out.removeLast();
+            out.pop_back();
         return out;
     }
 
@@ -53,14 +57,14 @@ Vector<UChar> ensureUTF16UChar(const String& string, bool isNullTermination)
     }
 
     if (!isNullTermination)
-        out.removeLast();
+        out.pop_back();
     return out;
 }
 
 String ensureUTF16String(const String& string)
 {
     if (string.isNull() || string.isEmpty())
-        return String(L"");
+        return String();
     if (!string.is8Bit())
         return String(string.characters16(), string.length());
 
@@ -148,10 +152,213 @@ void stringTrim(String& stringInOut, bool leftTrim, bool rightTrim)
     }
 }
 
+#if defined(OS_LINUX)
+// https://docs.oracle.com/cd/E56344_01/html/E54073/gmwlq.html
+// https://blog.csdn.net/veryhehe2011/article/details/23272927
+// https://blog.csdn.net/smartfox80/article/details/51181700?spm=1001.2101.3001.6650.6
+// static int codeConvert(char* from_charset, char* to_charset, char* inbuf, size_t inlen, char* outbuf, size_t outlen)
+// {
+//     iconv_t cd;
+//     char** pin = &inbuf;
+//     char** pout = &outbuf;
+// 
+//     cd = iconv_open(to_charset, from_charset);
+//     if (cd == 0)
+//         return -1;
+// 
+//     memset(outbuf, 0, outlen);
+// 
+//     if (iconv(cd, pin, &inlen, pout, &outlen) == -1)
+//         return -1;
+//     iconv_close(cd);
+//     *pout = '\0';
+// 
+//     return 0;
+// }
+//
+// static int u2g(char* inbuf, size_t inlen, char* outbuf, size_t outlen)
+// {
+//     return codeConvert("utf-8", "gb2312", inbuf, inlen, outbuf, outlen);
+// }
+// 
+// static int g2u(char* inbuf, size_t inlen, char* outbuf, size_t outlen)
+// {
+//     return codeConvert("gb2312", "utf-8", inbuf, inlen, outbuf, outlen);
+// }
+// 
+// bool unicode_to_utf8 (char* inbuf, size_t* inlen, char* outbuf, size_t* outlen)
+// {
+//     /* 目的编码, TRANSLIT：遇到无法转换的字符就找相近字符替换
+//     *           IGNORE ：遇到无法转换字符跳过*/
+//     char* encTo = "UTF-8//IGNORE";
+//     /* 源编码 */
+//     char* encFrom = "UNICODE";
+// 
+//     /* 获得转换句柄
+//     *@param encTo 目标编码方式
+//     *@param encFrom 源编码方式
+//     *
+//     * */
+//     iconv_t cd = iconv_open (encTo, encFrom);
+//     if (cd == (iconv_t)-1)
+//     {
+//         perror ("iconv_open");
+//     }
+// 
+//     /* 需要转换的字符串 */
+//     printf("inbuf=%s\n", inbuf);
+// 
+//     /* 打印需要转换的字符串的长度 */
+//     printf("inlen=%d\n", *inlen);
+// 
+// 
+//     /* 由于iconv()函数会修改指针，所以要保存源指针 */
+//     char* tmpin = inbuf;
+//     char* tmpout = outbuf;
+//     size_t insize = *inlen;
+//     size_t outsize = *outlen;
+// 
+//     /* 进行转换
+//     *@param cd iconv_open()产生的句柄
+//     *@param srcstart 需要转换的字符串
+//     *@param inlen 存放还有多少字符没有转换
+//     *@param tempoutbuf 存放转换后的字符串
+//     *@param outlen 存放转换后,tempoutbuf剩余的空间
+//     *
+//     * */
+//     size_t ret = iconv (cd, &tmpin, inlen, &tmpout, outlen);
+//     if (ret == -1) {
+//         printf ("iconv");
+//         return false;
+//     }
+// 
+//     /* 存放转换后的字符串 */
+//     printf("outbuf = %s\n", outbuf);
+// 
+//     //存放转换后outbuf剩余的空间
+//     printf("outlen = %d\n", *outlen);
+// 
+//     int i = 0;
+// 
+//     for (int i = 0; i < (outsize- (*outlen)); ++i) {
+//         //printf("%2c", outbuf[i]);
+//         printf("%x\n", outbuf[i]);
+//     }
+// 
+//     /* 关闭句柄 */
+//     iconv_close (cd);
+// 
+//     return true;
+// }
+// 
+// bool utf8_to_unicode(char *inbuf, size_t *inlen, char *outbuf, size_t *outlen)
+// {
+//     /* 目的编码, TRANSLIT：遇到无法转换的字符就找相近字符替换
+//     *           IGNORE ：遇到无法转换字符跳过*/
+//     char *encTo = "UNICODE//IGNORE";
+//     /* 源编码 */
+//     char *encFrom = "UTF-8";
+// 
+//     /* 获得转换句柄
+//     *@param encTo 目标编码方式
+//     *@param encFrom 源编码方式
+//     *
+//     * */
+//     iconv_t cd = iconv_open (encTo, encFrom);
+//     if (cd == (iconv_t)-1)
+//     {
+//         perror ("iconv_open");
+//     }
+// 
+//     /* 需要转换的字符串 */
+//     printf("inbuf=%s\n", inbuf);
+// 
+//     /* 打印需要转换的字符串的长度 */
+//     printf("inlen=%d\n", *inlen);
+// 
+//     /* 由于iconv()函数会修改指针，所以要保存源指针 */
+//     char *tmpin = inbuf;
+//     char *tmpout = outbuf;
+//     size_t insize = *inlen;
+//     size_t outsize = *outlen;
+// 
+//     /* 进行转换
+//     *@param cd iconv_open()产生的句柄
+//     *@param srcstart 需要转换的字符串
+//     *@param inlen 存放还有多少字符没有转换
+//     *@param tempoutbuf 存放转换后的字符串
+//     *@param outlen 存放转换后,tempoutbuf剩余的空间
+//     *
+//     * */
+//     size_t ret = iconv (cd, &tmpin, inlen, &tmpout, outlen);
+//     if (ret == -1)
+//     {
+//         perror ("iconv");
+//     }
+// 
+//     /* 存放转换后的字符串 */
+//     printf("outbuf=%s\n", outbuf);
+// 
+//     //存放转换后outbuf剩余的空间
+//     printf("outlen=%d\n", *outlen);
+// 
+//     int i = 0;
+// 
+//     for (i=0; i<(outsize- (*outlen)); i++)
+//     {
+//         //printf("%2c", outbuf[i]);
+//         printf("%x\n", outbuf[i]);
+//     }
+// 
+//     /* 关闭句柄 */
+//     iconv_close (cd);
+// 
+//     return 0;
+// }
+#endif
+
 void MByteToWChar(const char* lpcszStr, size_t cbMultiByte, std::vector<UChar>* out, UINT codePage)
 {
     out->clear();
+    if (nullptr == lpcszStr || 0 == cbMultiByte)
+        return;
+#if defined(OS_LINUX)
+    out->resize(cbMultiByte * 4 / sizeof(UChar));
 
+    iconv_t cd;
+    char* data = (char*)out->data();
+    char* pIn = (char*)lpcszStr;
+    char** ppIn = &pIn;
+    char** ppOut = &data;
+    size_t outlen = out->size() * sizeof(UChar);
+    size_t oldSize = outlen;
+
+    if (CP_UTF8 == codePage) {
+        cd = iconv_open("UTF-16le//IGNORE", "UTF-8");
+    } else {
+        cd = iconv_open("UTF-16le//IGNORE", "gb2312");
+    }
+    if (cd == 0)
+        return;
+
+    memset(data, 0, outlen);
+    if (iconv(cd, ppIn, &cbMultiByte, ppOut, &outlen) == -1)
+        return;
+    iconv_close(cd);
+
+    size_t len = (((const UChar*)*ppOut) - out->data()) * sizeof(UChar);
+    if (len != oldSize - outlen) {
+        printf("MByteToWChar fail, len:%zu, oldSize:%zu, %p, %p, outlen: %zu\n", len, oldSize, *ppOut, out->data(), outlen);
+        *(int*)1 = 1;
+    }
+
+    size_t pre = len % sizeof(UChar);
+    len += pre;
+    if (len > oldSize)
+        len = oldSize;
+
+    out->resize(len / sizeof(UChar));
+#else
     DWORD dwMinSize;
     dwMinSize = MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, NULL, 0);
     if (0 == dwMinSize)
@@ -161,12 +368,45 @@ void MByteToWChar(const char* lpcszStr, size_t cbMultiByte, std::vector<UChar>* 
 
     // Convert headers from ASCII to Unicode.
     MultiByteToWideChar(codePage, 0, lpcszStr, cbMultiByte, &out->at(0), dwMinSize);
+#endif
 }
 
-void WCharToMByte(const wchar_t* lpWideCharStr, size_t cchWideChar, std::vector<char>* out, UINT codePage)
+void WCharToMByte(const UChar* lpWideCharStr, size_t cchWideChar, std::vector<char>* out, UINT codePage)
 {
     out->clear();
+    if (0 == cchWideChar || nullptr == lpWideCharStr)
+        return;
 
+#if defined(OS_LINUX)
+    cchWideChar *= sizeof(UChar);
+    out->resize(cchWideChar * 4);
+
+    iconv_t cd;
+    char* data = out->data();
+    char* pIn = (char*)lpWideCharStr;
+    char** ppIn = &pIn;
+    char** ppOut = &data;
+    size_t outlen = out->size();
+    size_t oldSize = outlen;
+
+    if (CP_UTF8 == codePage) {
+        cd = iconv_open("UTF-8//IGNORE", "UTF-16le");
+    } else {
+        cd = iconv_open("gb2312//IGNORE", "UTF-16le");
+    }
+    if (cd == 0)
+        return;
+
+    memset(data, 0, outlen);
+    if (iconv(cd, ppIn, &cchWideChar, ppOut, &outlen) == -1)
+        return;
+    iconv_close(cd);
+
+    size_t len = *ppOut - out->data();
+    if (len != oldSize - outlen)
+        *(int*)1 = 1;
+    out->resize(len);
+#else
     DWORD dwMinSize;
     dwMinSize = WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, NULL, 0, NULL, FALSE);
     if (0 == dwMinSize)
@@ -176,6 +416,7 @@ void WCharToMByte(const wchar_t* lpWideCharStr, size_t cchWideChar, std::vector<
 
     // Convert headers from ASCII to Unicode.
     WideCharToMultiByte(codePage, 0, lpWideCharStr, cchWideChar, &out->at(0), dwMinSize, NULL, FALSE);
+#endif
 }
 
 void Utf8ToMByte(const char* lpUtf8CharStr, size_t cchUtf8Char, std::vector<char>* out, UINT codePage)

@@ -9,7 +9,7 @@
 
 #ifdef __mips
 #include <asm/cachectl.h>
-#endif  // #ifdef __mips
+#endif // #ifdef __mips
 
 #if V8_TARGET_ARCH_MIPS
 
@@ -18,29 +18,30 @@
 namespace v8 {
 namespace internal {
 
-
-void CpuFeatures::FlushICache(void* start, size_t size) {
+    void CpuFeatures::FlushICache(void* start, size_t size)
+    {
 #if !defined(USE_SIMULATOR)
-  // Nothing to do, flushing no instructions.
-  if (size == 0) {
-    return;
-  }
+        // Nothing to do, flushing no instructions.
+        if (size == 0) {
+            return;
+        }
 
 #if defined(ANDROID)
-  // Bionic cacheflush can typically run in userland, avoiding kernel call.
-  char *end = reinterpret_cast<char *>(start) + size;
-  cacheflush(
-    reinterpret_cast<intptr_t>(start), reinterpret_cast<intptr_t>(end), 0);
-#else  // ANDROID
-  int res;
-  // See http://www.linux-mips.org/wiki/Cacheflush_Syscall.
-  res = syscall(__NR_cacheflush, start, size, ICACHE);
-  if (res) FATAL("Failed to flush the instruction cache");
-#endif  // ANDROID
-#endif  // !USE_SIMULATOR.
-}
+        // Bionic cacheflush can typically run in userland, avoiding kernel call.
+        char* end = reinterpret_cast<char*>(start) + size;
+        cacheflush(
+            reinterpret_cast<intptr_t>(start), reinterpret_cast<intptr_t>(end), 0);
+#else // ANDROID
+        int res;
+        // See http://www.linux-mips.org/wiki/Cacheflush_Syscall.
+        res = syscall(__NR_cacheflush, start, size, ICACHE);
+        if (res)
+            FATAL("Failed to flush the instruction cache");
+#endif // ANDROID
+#endif // !USE_SIMULATOR.
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TARGET_ARCH_MIPS
+#endif // V8_TARGET_ARCH_MIPS

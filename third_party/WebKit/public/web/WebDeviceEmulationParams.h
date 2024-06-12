@@ -9,6 +9,7 @@
 #include "../platform/WebPoint.h"
 #include "../platform/WebRect.h"
 #include "../platform/WebSize.h"
+#include "../platform/modules/screen_orientation/WebScreenOrientationType.h"
 
 namespace blink {
 
@@ -16,11 +17,9 @@ namespace blink {
 struct WebDeviceEmulationParams {
     // For mobile, |screenSize| and |viewPosition| are used.
     // For desktop, screen size and view position are preserved.
-    enum ScreenPosition {
-        Desktop,
+    enum ScreenPosition { Desktop,
         Mobile,
-        ScreenPositionLast = Mobile
-    };
+        ScreenPositionLast = Mobile };
 
     ScreenPosition screenPosition;
 
@@ -36,7 +35,8 @@ struct WebDeviceEmulationParams {
     // Emulated view size. Empty size means no override.
     WebSize viewSize;
 
-    // Whether emulated view should be scaled down if necessary to fit into available space.
+    // Whether emulated view should be scaled down if necessary to fit into
+    // available space.
     bool fitToView;
 
     // Offset of emulated view inside available space, not in fit to view mode.
@@ -45,19 +45,32 @@ struct WebDeviceEmulationParams {
     // Scale of emulated view inside available space, not in fit to view mode.
     float scale;
 
+    // Optional screen orientation type, with WebScreenOrientationUndefined
+    // value meaning no emulation necessary.
+    WebScreenOrientationType screenOrientationType;
+
+    // Screen orientation angle, used together with screenOrientationType.
+    int screenOrientationAngle;
+
     WebDeviceEmulationParams()
         : screenPosition(Desktop)
         , deviceScaleFactor(0)
         , fitToView(false)
-        , scale(1) { }
+        , scale(1)
+        , screenOrientationType(WebScreenOrientationUndefined)
+        , screenOrientationAngle(0)
+    {
+    }
 };
 
-inline bool operator==(const WebDeviceEmulationParams& a, const WebDeviceEmulationParams& b)
+inline bool operator==(const WebDeviceEmulationParams& a,
+    const WebDeviceEmulationParams& b)
 {
-    return a.screenPosition == b.screenPosition && a.screenSize == b.screenSize && a.viewPosition == b.viewPosition && a.deviceScaleFactor == b.deviceScaleFactor && a.viewSize == b.viewSize && a.fitToView == b.fitToView && a.offset == b.offset && a.scale == b.scale;
+    return a.screenPosition == b.screenPosition && a.screenSize == b.screenSize && a.viewPosition == b.viewPosition && a.deviceScaleFactor == b.deviceScaleFactor && a.viewSize == b.viewSize && a.fitToView == b.fitToView && a.offset == b.offset && a.scale == b.scale && a.screenOrientationType == b.screenOrientationType && a.screenOrientationAngle == b.screenOrientationAngle;
 }
 
-inline bool operator!=(const WebDeviceEmulationParams& a, const WebDeviceEmulationParams& b)
+inline bool operator!=(const WebDeviceEmulationParams& a,
+    const WebDeviceEmulationParams& b)
 {
     return !(a == b);
 }

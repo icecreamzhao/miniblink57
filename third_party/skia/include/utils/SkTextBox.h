@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkTextBox_DEFINED
 #define SkTextBox_DEFINED
 
@@ -33,8 +32,8 @@ public:
 
         kModeCount
     };
-    Mode    getMode() const { return (Mode)fMode; }
-    void    setMode(Mode);
+    Mode getMode() const { return (Mode)fMode; }
+    void setMode(Mode);
 
     enum SpacingAlign {
         kStart_SpacingAlign,
@@ -43,37 +42,37 @@ public:
 
         kSpacingAlignCount
     };
-    SpacingAlign    getSpacingAlign() const { return (SpacingAlign)fSpacingAlign; }
-    void            setSpacingAlign(SpacingAlign);
+    SpacingAlign getSpacingAlign() const { return (SpacingAlign)fSpacingAlign; }
+    void setSpacingAlign(SpacingAlign);
 
-    void    getBox(SkRect*) const;
-    void    setBox(const SkRect&);
-    void    setBox(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom);
+    void getBox(SkRect*) const;
+    void setBox(const SkRect&);
+    void setBox(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom);
 
-    void    getSpacing(SkScalar* mul, SkScalar* add) const;
-    void    setSpacing(SkScalar mul, SkScalar add);
+    void getSpacing(SkScalar* mul, SkScalar* add) const;
+    void setSpacing(SkScalar mul, SkScalar add);
 
-    void    draw(SkCanvas*, const char text[], size_t len, const SkPaint&);
+    void draw(SkCanvas*, const char text[], size_t len, const SkPaint&);
 
-    void    setText(const char text[], size_t len, const SkPaint&);
-    void    draw(SkCanvas*);
-    int     countLines() const;
+    void setText(const char text[], size_t len, const SkPaint&);
+    void draw(SkCanvas*);
+    int countLines() const;
     SkScalar getTextHeight() const;
 
     SkTextBlob* snapshotTextBlob(SkScalar* computedBottom) const;
 
     class Visitor {
     public:
-        virtual ~Visitor() {}
+        virtual ~Visitor() { }
         virtual void operator()(const char*, size_t, SkScalar x, SkScalar y, const SkPaint&) = 0;
     };
-    
+
 private:
-    SkRect      fBox;
-    SkScalar    fSpacingMul, fSpacingAdd;
-    uint8_t     fMode, fSpacingAlign;
+    SkRect fBox;
+    SkScalar fSpacingMul, fSpacingAdd;
+    uint8_t fMode, fSpacingAlign;
     const char* fText;
-    size_t      fLen;
+    size_t fLen;
     const SkPaint* fPaint;
 
     SkScalar visit(Visitor&, const char text[], size_t len, const SkPaint&) const;

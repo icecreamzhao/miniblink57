@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/imports/LinkImport.h"
 
 #include "core/dom/Document.h"
@@ -40,9 +39,9 @@
 
 namespace blink {
 
-PassOwnPtrWillBeRawPtr<LinkImport> LinkImport::create(HTMLLinkElement* owner)
+LinkImport* LinkImport::create(HTMLLinkElement* owner)
 {
-    return adoptPtrWillBeNoop(new LinkImport(owner));
+    return new LinkImport(owner);
 }
 
 LinkImport::LinkImport(HTMLLinkElement* owner)
@@ -51,19 +50,11 @@ LinkImport::LinkImport(HTMLLinkElement* owner)
 {
 }
 
-LinkImport::~LinkImport()
-{
-#if !ENABLE(OILPAN)
-    if (m_child) {
-        m_child->clearClient();
-        m_child = nullptr;
-    }
-#endif
-}
+LinkImport::~LinkImport() { }
 
 Document* LinkImport::importedDocument() const
 {
-    if (!m_child || !m_owner || !m_owner->inDocument())
+    if (!m_child || !m_owner || !m_owner->isConnected())
         return nullptr;
     if (m_child->loader()->hasError())
         return nullptr;
@@ -80,8 +71,10 @@ void LinkImport::process()
         return;
 
     if (!m_owner->document().importsController()) {
-        ASSERT(m_owner->document().frame()); // The document should be the master.
-        HTMLImportsController::provideTo(m_owner->document());
+        // The document should be the master.
+        Document& master = m_owner->document();
+        DCHECK(master.frame());
+        master.createImportsController();
     }
 
     LinkRequestBuilder builder(m_owner);
@@ -92,8 +85,9 @@ void LinkImport::process()
 
     HTMLImportsController* controller = m_owner->document().importsController();
     HTMLImportLoader* loader = m_owner->document().importLoader();
-    HTMLImport* parent = loader ? static_cast<HTMLImport*>(loader->firstImport()) : static_cast<HTMLImport*>(controller->root());
-    m_child = controller->load(parent, this, builder.build(true));
+    HTMLImport* parent = loader ? static_cast<HTMLImport*>(loader->firstImport())
+                                : static_cast<HTMLImport*>(controller->root());
+    m_child = controller->load(parent, this, builder.build(false));
     if (!m_child) {
         didFinish();
         return;
@@ -102,14 +96,14 @@ void LinkImport::process()
 
 void LinkImport::didFinish()
 {
-    if (!m_owner || !m_owner->inDocument())
+    if (!m_owner || !m_owner->isConnected())
         return;
     m_owner->scheduleEvent();
 }
 
 void LinkImport::importChildWasDisposed(HTMLImportChild* child)
 {
-    ASSERT(m_child == child);
+    DCHECK_EQ(m_child, child);
     m_child = nullptr;
     m_owner = nullptr;
 }
@@ -133,6 +127,12 @@ void LinkImport::ownerInserted()
 {
     if (m_child)
         m_child->ownerInserted();
+}
+
+void LinkImport::ownerRemoved()
+{
+    if (m_owner)
+        m_owner->document().styleEngine().htmlImportAddedOrRemoved();
 }
 
 DEFINE_TRACE(LinkImport)

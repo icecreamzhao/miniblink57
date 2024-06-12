@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimateBase_DEFINED
 #define SkAnimateBase_DEFINED
 
@@ -24,12 +23,15 @@ public:
     SkAnimateBase();
     virtual ~SkAnimateBase();
     virtual int components();
-    SkDisplayable* deepCopy(SkAnimateMaker* ) override;
+    SkDisplayable* deepCopy(SkAnimateMaker*) override;
     void dirty() override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
-    int entries() { return fValues.count() / components(); }
+    int entries()
+    {
+        return fValues.count() / components();
+    }
     virtual bool hasExecute() const;
     bool isDynamic() const { return SkToBool(fDynamic); }
     SkDisplayable* getParent() const override;
@@ -37,15 +39,16 @@ public:
     SkMSec getStart() const { return fStart; }
     SkOperand* getValues() { return fValues.begin(); }
     SkDisplayTypes getValuesType() { return fValues.getType(); }
-    void onEndElement(SkAnimateMaker& ) override;
-    void packARGB(SkScalar [], int count, SkTDOperandArray* );
-    virtual void refresh(SkAnimateMaker& );
+    void onEndElement(SkAnimateMaker&) override;
+    void packARGB(SkScalar[], int count, SkTDOperandArray*);
+    virtual void refresh(SkAnimateMaker&);
     void setChanged(bool changed) { fChanged = changed; }
     void setHasEndEvent() { fHasEndEvent = true; }
-    bool setParent(SkDisplayable* ) override;
+    bool setParent(SkDisplayable*) override;
     bool setProperty(int index, SkScriptValue& value) override;
-    void setTarget(SkAnimateMaker& );
+    void setTarget(SkAnimateMaker&);
     virtual bool targetNeedsInitialization() const;
+
 protected:
     SkMSec begin;
     SkTDScalarArray blend;
@@ -56,23 +59,24 @@ protected:
     SkString from;
     SkString lval;
     SkScalar repeat;
-    SkString target;    // temporary; once target is known, this is reset
+    SkString target; // temporary; once target is known, this is reset
     SkString to;
     SkApply* fApply;
     const SkMemberInfo* fFieldInfo;
     int fFieldOffset;
-    SkMSec fStart;  // corrected time when this apply was enabled
+    SkMSec fStart; // corrected time when this apply was enabled
     SkADrawable* fTarget;
     SkTypedArray fValues;
     unsigned fChanged : 1; // true when value referenced by script has changed
-    unsigned fDelayed : 1;  // enabled, but undrawn pending delay
+    unsigned fDelayed : 1; // enabled, but undrawn pending delay
     unsigned fDynamic : 1;
     unsigned fHasEndEvent : 1;
-    unsigned fHasValues : 1;        // set if 'values' passed instead of 'to'
+    unsigned fHasValues : 1; // set if 'values' passed instead of 'to'
     unsigned fMirror : 1;
     unsigned fReset : 1;
     unsigned fResetPending : 1;
     unsigned fTargetIsScope : 1;
+
 private:
     typedef SkDisplayable INHERITED;
     friend class SkActive;

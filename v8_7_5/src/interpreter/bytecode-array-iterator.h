@@ -9,22 +9,22 @@
 
 namespace v8 {
 namespace internal {
-namespace interpreter {
+    namespace interpreter {
 
-class V8_EXPORT_PRIVATE BytecodeArrayIterator final
-    : public BytecodeArrayAccessor {
- public:
-  explicit BytecodeArrayIterator(Handle<BytecodeArray> bytecode_array);
+        class V8_EXPORT_PRIVATE BytecodeArrayIterator final
+            : public BytecodeArrayAccessor {
+        public:
+            explicit BytecodeArrayIterator(Handle<BytecodeArray> bytecode_array);
 
-  void Advance();
-  bool done() const;
+            void Advance();
+            bool done() const;
 
- private:
-  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayIterator);
-};
+        private:
+            DISALLOW_COPY_AND_ASSIGN(BytecodeArrayIterator);
+        };
 
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
+    } // namespace interpreter
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_INTERPRETER_BYTECODE_ARRAY_ITERATOR_H_
+#endif // V8_INTERPRETER_BYTECODE_ARRAY_ITERATOR_H_

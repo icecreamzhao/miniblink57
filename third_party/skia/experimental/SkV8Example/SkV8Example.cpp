@@ -6,20 +6,17 @@
  * found in the LICENSE file.
  *
  */
-#include <v8.h>
 #include <include/libplatform/libplatform.h>
+#include <v8.h>
 
-#include "SkV8Example.h"
 #include "Global.h"
 #include "JsContext.h"
 #include "Path2D.h"
 #include "Path2DBuilder.h"
+#include "SkV8Example.h"
 
-#include "gl/GrGLUtil.h"
-#include "gl/GrGLDefines.h"
-#include "gl/GrGLInterface.h"
-#include "GrRenderTarget.h"
 #include "GrContext.h"
+#include "GrRenderTarget.h"
 #include "SkApplication.h"
 #include "SkCommandLineFlags.h"
 #include "SkData.h"
@@ -28,19 +25,22 @@
 #include "SkGraphics.h"
 #include "SkScalar.h"
 #include "SkSurface.h"
-
+#include "gl/GrGLDefines.h"
+#include "gl/GrGLInterface.h"
+#include "gl/GrGLUtil.h"
 
 DEFINE_string2(infile, i, NULL, "Name of file to load JS from.\n");
 DEFINE_bool(gpu, true, "Use the GPU for rendering.");
 
-void application_init() {
+void application_init()
+{
     SkGraphics::Init();
     SkEvent::Init();
 }
 
-void application_term() {
+void application_term()
+{
     SkEvent::Term();
-    SkGraphics::Term();
 }
 
 SkV8ExampleWindow::SkV8ExampleWindow(void* hwnd, JsContext* context)
@@ -53,7 +53,6 @@ SkV8ExampleWindow::SkV8ExampleWindow(void* hwnd, JsContext* context)
     , fCurSurface(NULL)
 #endif
 {
-    this->setColorType(kBGRA_8888_SkColorType);
     this->setVisibleP(true);
     this->setClipToBounds(false);
 
@@ -62,7 +61,8 @@ SkV8ExampleWindow::SkV8ExampleWindow(void* hwnd, JsContext* context)
 #endif
 }
 
-SkV8ExampleWindow::~SkV8ExampleWindow() {
+SkV8ExampleWindow::~SkV8ExampleWindow()
+{
 #if SK_SUPPORT_GPU
     SkSafeUnref(fCurContext);
     SkSafeUnref(fCurIntf);
@@ -72,11 +72,12 @@ SkV8ExampleWindow::~SkV8ExampleWindow() {
 }
 
 #if SK_SUPPORT_GPU
-void SkV8ExampleWindow::windowSizeChanged() {
+void SkV8ExampleWindow::windowSizeChanged()
+{
     if (FLAGS_gpu) {
         SkOSWindow::AttachmentInfo attachmentInfo;
         bool result = this->attach(
-                SkOSWindow::kNativeGL_BackEndType, 0, &attachmentInfo);
+            SkOSWindow::kNativeGL_BackEndType, 0, false, &attachmentInfo);
         if (!result) {
             printf("Failed to attach.");
             exit(1);
@@ -84,7 +85,7 @@ void SkV8ExampleWindow::windowSizeChanged() {
 
         fCurIntf = GrGLCreateNativeInterface();
         fCurContext = GrContext::Create(
-                kOpenGL_GrBackend, (GrBackendContext) fCurIntf);
+            kOpenGL_GrBackend, (GrBackendContext)fCurIntf);
         if (NULL == fCurIntf || NULL == fCurContext) {
             printf("Failed to initialize GL.");
             exit(1);
@@ -110,7 +111,8 @@ void SkV8ExampleWindow::windowSizeChanged() {
 #endif
 
 #if SK_SUPPORT_GPU
-SkSurface* SkV8ExampleWindow::createSurface() {
+SkSurface* SkV8ExampleWindow::createSurface()
+{
     if (FLAGS_gpu) {
         // Increase the ref count since callers of createSurface put the
         // results in a SkAutoTUnref.
@@ -122,7 +124,8 @@ SkSurface* SkV8ExampleWindow::createSurface() {
 }
 #endif
 
-void SkV8ExampleWindow::onSizeChange() {
+void SkV8ExampleWindow::onSizeChange()
+{
     this->INHERITED::onSizeChange();
 
 #if SK_SUPPORT_GPU
@@ -132,7 +135,8 @@ void SkV8ExampleWindow::onSizeChange() {
 
 Global* global = NULL;
 
-void SkV8ExampleWindow::onDraw(SkCanvas* canvas) {
+void SkV8ExampleWindow::onDraw(SkCanvas* canvas)
+{
 
     canvas->save();
     canvas->drawColor(SK_ColorWHITE);
@@ -153,7 +157,8 @@ void SkV8ExampleWindow::onDraw(SkCanvas* canvas) {
 }
 
 #ifdef SK_BUILD_FOR_WIN
-void SkV8ExampleWindow::onHandleInval(const SkIRect& rect) {
+void SkV8ExampleWindow::onHandleInval(const SkIRect& rect)
+{
     RECT winRect;
     winRect.top = rect.top();
     winRect.bottom = rect.bottom();
@@ -163,8 +168,8 @@ void SkV8ExampleWindow::onHandleInval(const SkIRect& rect) {
 }
 #endif
 
-
-SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv) {
+SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv)
+{
     printf("Started\n");
 
     v8::V8::SetFlagsFromCommandLine(&argc, argv, true);
@@ -182,28 +187,25 @@ SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv) {
 
     global = new Global(isolate);
 
-
     // Set up things to look like a browser by creating
     // a console object that invokes our print function.
-    const char* startupScript =
-            "function Console() {};                   \n"
-            "Console.prototype.log = function() {     \n"
-            "  var args = Array.prototype.slice.call(arguments).join(' '); \n"
-            "  print(args);                      \n"
-            "};                                       \n"
-            "console = new Console();                 \n";
+    const char* startupScript = "function Console() {};                   \n"
+                                "Console.prototype.log = function() {     \n"
+                                "  var args = Array.prototype.slice.call(arguments).join(' '); \n"
+                                "  print(args);                      \n"
+                                "};                                       \n"
+                                "console = new Console();                 \n";
 
     if (!global->parseScript(startupScript)) {
         printf("Failed to parse startup script: %s.\n", FLAGS_infile[0]);
         exit(1);
     }
 
-    const char* script =
-            "function onDraw(canvas) {              \n"
-            "    canvas.fillStyle = '#00FF00';      \n"
-            "    canvas.fillRect(20, 20, 100, 100); \n"
-            "    canvas.inval();                    \n"
-            "}                                      \n";
+    const char* script = "function onDraw(canvas) {              \n"
+                         "    canvas.fillStyle = '#00FF00';      \n"
+                         "    canvas.fillRect(20, 20, 100, 100); \n"
+                         "    canvas.inval();                    \n"
+                         "}                                      \n";
 
     SkAutoTUnref<SkData> data;
     if (FLAGS_infile.count()) {
@@ -221,7 +223,6 @@ SkOSWindow* create_sk_window(void* hwnd, int argc, char** argv) {
         printf("Failed to parse file: %s.\n", FLAGS_infile[0]);
         exit(1);
     }
-
 
     JsContext* jsContext = new JsContext(global);
 

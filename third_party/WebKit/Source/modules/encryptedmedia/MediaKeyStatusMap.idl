@@ -7,15 +7,16 @@
 enum MediaKeyStatus {
     "usable",
     "expired",
+    "released",
+    "output-restricted",
     "output-downscaled",
-    "output-not-allowed",
     "status-pending",
     "internal-error"
 };
 
-[
-    GarbageCollected,
-] interface MediaKeyStatusMap {
+interface MediaKeyStatusMap {
+    iterable <BufferSource, MediaKeyStatus>;
     readonly attribute unsigned long size;
-    readonly maplike <BufferSource, MediaKeyStatus>;
+    boolean has(BufferSource keyId);
+    [CallWith=ScriptState] any get(BufferSource keyId);
 };

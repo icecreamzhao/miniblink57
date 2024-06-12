@@ -10,24 +10,28 @@
 namespace gin {
 
 ContextHolder::ContextHolder(v8::Isolate* isolate)
-    : isolate_(isolate) {
+    : isolate_(isolate)
+    , data_(nullptr)
+{
 }
 
-ContextHolder::~ContextHolder() {
-  // PerContextData needs to be destroyed before the context.
-  //data_.reset();
+ContextHolder::~ContextHolder()
+{
+    // PerContextData needs to be destroyed before the context.
+    //data_.reset();
     if (data_)
         delete data_;
     data_ = nullptr;
 }
 
-void ContextHolder::SetContext(v8::Local<v8::Context> context) {
-  DCHECK(context_.IsEmpty());
-  context_.Reset(isolate_, context);
-  //data_.reset(new PerContextData(this, context));
-  if (data_)
-      delete data_;
-  data_ = new PerContextData(this, context);
+void ContextHolder::SetContext(v8::Local<v8::Context> context)
+{
+    DCHECK(context_.IsEmpty());
+    context_.Reset(isolate_, context);
+    //data_.reset(new PerContextData(this, context));
+    if (data_)
+        delete data_;
+    data_ = new PerContextData(this, context);
 }
 
-}  // namespace gin
+} // namespace gin

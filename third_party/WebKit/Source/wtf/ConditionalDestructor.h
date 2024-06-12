@@ -14,15 +14,16 @@ namespace WTF {
 // the object has a trivial destructor.
 // Note: the derived object MUST release all its recources at the finalize()
 // method.
-template<typename Derived, bool noDestructor>
+template <typename Derived, bool noDestructor>
 class ConditionalDestructor {
 public:
     ~ConditionalDestructor() { static_cast<Derived*>(this)->finalize(); }
 };
 
-template<typename Derived>
-class ConditionalDestructor<Derived, true> { };
+template <typename Derived>
+class ConditionalDestructor<Derived, true> {
+};
 
-}
+} // namespace WTF
 
 #endif // ConditionalDestructor_h

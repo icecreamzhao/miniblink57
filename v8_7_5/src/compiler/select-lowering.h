@@ -9,33 +9,32 @@
 
 namespace v8 {
 namespace internal {
-namespace compiler {
+    namespace compiler {
 
-// Forward declarations.
-class CommonOperatorBuilder;
-class Graph;
+        // Forward declarations.
+        class CommonOperatorBuilder;
+        class Graph;
 
+        // Lowers Select nodes to diamonds.
+        class SelectLowering final : public Reducer {
+        public:
+            SelectLowering(Graph* graph, CommonOperatorBuilder* common);
+            ~SelectLowering() override;
 
-// Lowers Select nodes to diamonds.
-class SelectLowering final : public Reducer {
- public:
-  SelectLowering(Graph* graph, CommonOperatorBuilder* common);
-  ~SelectLowering() override;
+            const char* reducer_name() const override { return "SelectLowering"; }
 
-  const char* reducer_name() const override { return "SelectLowering"; }
+            Reduction Reduce(Node* node) override;
 
-  Reduction Reduce(Node* node) override;
+        private:
+            CommonOperatorBuilder* common() const { return common_; }
+            Graph* graph() const { return graph_; }
 
- private:
-  CommonOperatorBuilder* common() const { return common_; }
-  Graph* graph() const { return graph_; }
+            CommonOperatorBuilder* common_;
+            Graph* graph_;
+        };
 
-  CommonOperatorBuilder* common_;
-  Graph* graph_;
-};
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_COMPILER_SELECT_LOWERING_H_
+#endif // V8_COMPILER_SELECT_LOWERING_H_

@@ -32,11 +32,12 @@
 // https://html.spec.whatwg.org/#shared-workers-and-the-sharedworker-interface
 
 [
-    ActiveDOMObject,
-    // TODO(philipj): The name argument should not have a default null value.
+    ActiveScriptWrappable,
+    // TODO(foolip): The name argument should not have a default null value.
     Constructor(DOMString scriptURL, optional DOMString name = null),
     ConstructorCallWith=ExecutionContext,
-    // TODO(philipj): Exposed=(Window,Worker),
+    DependentLifetime,
+    // TODO(foolip): Exposed=(Window,Worker),
     RaisesException=Constructor,
     RuntimeEnabled=SharedWorker,
 ] interface SharedWorker : EventTarget {

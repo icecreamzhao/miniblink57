@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkMatrixParts_DEFINED
 #define SkMatrixParts_DEFINED
 
@@ -29,7 +28,10 @@ public:
     virtual SkDisplayable* getParent() const;
     virtual bool setParent(SkDisplayable* parent);
 #ifdef SK_DEBUG
-    virtual bool isMatrixPart() const { return true; }
+    virtual bool isMatrixPart() const
+    {
+        return true;
+    }
 #endif
 protected:
     SkDrawMatrix* fMatrix;
@@ -38,6 +40,7 @@ protected:
 class SkRotate : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Rotate);
     SkRotate();
+
 protected:
     bool add() override;
     SkScalar degrees;
@@ -47,6 +50,7 @@ protected:
 class SkScale : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Scale);
     SkScale();
+
 protected:
     bool add() override;
     SkScalar x;
@@ -57,6 +61,7 @@ protected:
 class SkSkew : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Skew);
     SkSkew();
+
 protected:
     bool add() override;
     SkScalar x;
@@ -67,6 +72,7 @@ protected:
 class SkTranslate : public SkMatrixPart {
     DECLARE_MEMBER_INFO(Translate);
     SkTranslate();
+
 protected:
     bool add() override;
     SkScalar x;
@@ -77,6 +83,7 @@ class SkFromPath : public SkMatrixPart {
     DECLARE_MEMBER_INFO(FromPath);
     SkFromPath();
     virtual ~SkFromPath();
+
 protected:
     bool add() override;
     int32_t mode;
@@ -90,9 +97,10 @@ class SkRectToRect : public SkMatrixPart {
     SkRectToRect();
     virtual ~SkRectToRect();
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
+
 protected:
     bool add() override;
     SkDrawRect* source;
@@ -104,10 +112,11 @@ class SkPolyToPoly : public SkMatrixPart {
     SkPolyToPoly();
     virtual ~SkPolyToPoly();
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
-    void onEndElement(SkAnimateMaker& ) override;
+    void onEndElement(SkAnimateMaker&) override;
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
+
 protected:
     bool add() override;
     SkPolygon* source;

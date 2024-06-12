@@ -30,6 +30,7 @@ namespace blink {
 
 class HTMLFrameElement final : public HTMLFrameElementBase {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLFrameElement);
 
@@ -40,12 +41,12 @@ public:
 private:
     explicit HTMLFrameElement(Document&);
 
-    void attach(const AttachContext& = AttachContext()) override;
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
 
     bool m_frameBorder;
     bool m_frameBorderSet;

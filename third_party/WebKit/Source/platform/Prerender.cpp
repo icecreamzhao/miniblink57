@@ -29,7 +29,6 @@
  *
  */
 
-#include "config.h"
 #include "platform/Prerender.h"
 
 #include "platform/PrerenderClient.h"
@@ -38,12 +37,10 @@
 
 namespace blink {
 
-PassRefPtr<Prerender> Prerender::create(PrerenderClient* client, const KURL& url, unsigned relTypes, const Referrer& referrer)
-{
-    return adoptRef(new Prerender(client, url, relTypes, referrer));
-}
-
-Prerender::Prerender(PrerenderClient* client, const KURL& url, const unsigned relTypes, const Referrer& referrer)
+Prerender::Prerender(PrerenderClient* client,
+    const KURL& url,
+    const unsigned relTypes,
+    const Referrer& referrer)
     : m_client(client)
     , m_url(url)
     , m_relTypes(relTypes)
@@ -51,13 +48,17 @@ Prerender::Prerender(PrerenderClient* client, const KURL& url, const unsigned re
 {
 }
 
-Prerender::~Prerender()
+Prerender::~Prerender() { }
+
+DEFINE_TRACE(Prerender)
 {
+    visitor->trace(m_client);
 }
 
-void Prerender::removeClient()
+void Prerender::dispose()
 {
-    m_client = 0;
+    m_client = nullptr;
+    m_extraData.clear();
 }
 
 void Prerender::add()

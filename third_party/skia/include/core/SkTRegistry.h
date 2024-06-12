@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkTRegistry_DEFINED
 #define SkTRegistry_DEFINED
 
@@ -16,11 +15,14 @@
     and provides a function-pointer. This can be used to auto-register a set of
     services, e.g. a set of image codecs.
  */
-template <typename T> class SkTRegistry : SkNoncopyable {
+template <typename T>
+class SkTRegistry : SkNoncopyable {
 public:
     typedef T Factory;
 
-    explicit SkTRegistry(T fact) : fFact(fact) {
+    explicit SkTRegistry(T fact)
+        : fFact(fact)
+    {
 #ifdef SK_BUILD_FOR_ANDROID
         // work-around for double-initialization bug
         {
@@ -34,7 +36,7 @@ public:
         }
 #endif
         fChain = gHead;
-        gHead  = this;
+        gHead = this;
     }
 
     static const SkTRegistry* Head() { return gHead; }
@@ -43,13 +45,14 @@ public:
     const Factory& factory() const { return fFact; }
 
 private:
-    Factory      fFact;
+    Factory fFact;
     SkTRegistry* fChain;
 
     static SkTRegistry* gHead;
 };
 
 // The caller still needs to declare an instance of this somewhere
-template <typename T> SkTRegistry<T>* SkTRegistry<T>::gHead;
+template <typename T>
+SkTRegistry<T>* SkTRegistry<T>::gHead;
 
 #endif

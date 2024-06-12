@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,18 +5,18 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
-
+#include "SkView.h"
 
 class TwoPtConicalView : public SampleView {
 public:
-    TwoPtConicalView() {}
+    TwoPtConicalView() { }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "2PtConical");
             return true;
@@ -25,7 +24,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         canvas->translate(SkIntToScalar(10), SkIntToScalar(20));
 
         SkColor colors[] = { SK_ColorRED, SK_ColorBLUE };
@@ -33,12 +33,10 @@ protected:
         SkScalar r0 = 100;
         SkPoint c1 = { 100, 100 };
         SkScalar r1 = 100;
-        SkShader* s = SkGradientShader::CreateTwoPointConical(c0, r0, c1, r1, colors,
-                                                             NULL, 2,
-                                                             SkShader::kClamp_TileMode);
-
         SkPaint paint;
-        paint.setShader(s)->unref();
+        paint.setShader(SkGradientShader::MakeTwoPointConical(c0, r0, c1, r1, colors,
+            nullptr, 2,
+            SkShader::kClamp_TileMode));
         canvas->drawPaint(paint);
     }
 

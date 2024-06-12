@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/storage/StorageEvent.h"
 
 #include "modules/EventModules.h"
@@ -32,30 +31,37 @@
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create()
+StorageEvent* StorageEvent::create()
 {
-    return adoptRefWillBeNoop(new StorageEvent);
+    return new StorageEvent;
 }
 
-StorageEvent::StorageEvent()
+StorageEvent::StorageEvent() { }
+
+StorageEvent::~StorageEvent() { }
+
+StorageEvent* StorageEvent::create(const AtomicString& type,
+    const String& key,
+    const String& oldValue,
+    const String& newValue,
+    const String& url,
+    Storage* storageArea)
 {
+    return new StorageEvent(type, key, oldValue, newValue, url, storageArea);
 }
 
-StorageEvent::~StorageEvent()
+StorageEvent* StorageEvent::create(const AtomicString& type,
+    const StorageEventInit& initializer)
 {
+    return new StorageEvent(type, initializer);
 }
 
-PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
-{
-    return adoptRefWillBeNoop(new StorageEvent(type, key, oldValue, newValue, url, storageArea));
-}
-
-PassRefPtrWillBeRawPtr<StorageEvent> StorageEvent::create(const AtomicString& type, const StorageEventInit& initializer)
-{
-    return adoptRefWillBeNoop(new StorageEvent(type, initializer));
-}
-
-StorageEvent::StorageEvent(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
+StorageEvent::StorageEvent(const AtomicString& type,
+    const String& key,
+    const String& oldValue,
+    const String& newValue,
+    const String& url,
+    Storage* storageArea)
     : Event(type, false, false)
     , m_key(key)
     , m_oldValue(oldValue)
@@ -65,7 +71,8 @@ StorageEvent::StorageEvent(const AtomicString& type, const String& key, const St
 {
 }
 
-StorageEvent::StorageEvent(const AtomicString& type, const StorageEventInit& initializer)
+StorageEvent::StorageEvent(const AtomicString& type,
+    const StorageEventInit& initializer)
     : Event(type, initializer)
 {
     if (initializer.hasKey())
@@ -80,9 +87,16 @@ StorageEvent::StorageEvent(const AtomicString& type, const StorageEventInit& ini
         m_storageArea = initializer.storageArea();
 }
 
-void StorageEvent::initStorageEvent(const AtomicString& type, bool canBubble, bool cancelable, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea)
+void StorageEvent::initStorageEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    const String& key,
+    const String& oldValue,
+    const String& newValue,
+    const String& url,
+    Storage* storageArea)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initEvent(type, canBubble, cancelable);

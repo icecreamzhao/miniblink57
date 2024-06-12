@@ -28,24 +28,30 @@
 
 #include "platform/SharedBuffer.h"
 #include "platform/weborigin/KURL.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-enum SubstituteDataLoadPolicy {
-    LoadNormally,
-    ForceSynchronousLoad
-};
+enum SubstituteDataLoadPolicy { LoadNormally,
+    ForceSynchronousLoad };
 
 class SubstituteData {
+    DISALLOW_NEW();
+
 public:
     SubstituteData()
         : m_substituteDataLoadPolicy(LoadNormally)
     {
     }
 
-    SubstituteData(PassRefPtr<SharedBuffer> content, const AtomicString& mimeType, const AtomicString& textEncoding, const KURL& failingURL, SubstituteDataLoadPolicy substituteDataLoadPolicy = LoadNormally)
+    SubstituteData(
+        PassRefPtr<SharedBuffer> content,
+        const AtomicString& mimeType,
+        const AtomicString& textEncoding,
+        const KURL& failingURL,
+        SubstituteDataLoadPolicy substituteDataLoadPolicy = LoadNormally)
         : m_content(content)
         , m_mimeType(mimeType)
         , m_textEncoding(textEncoding)
@@ -54,13 +60,16 @@ public:
     {
     }
 
-    bool isValid() const { return m_content; }
+    bool isValid() const { return m_content.get(); }
 
     SharedBuffer* content() const { return m_content.get(); }
     const AtomicString& mimeType() const { return m_mimeType; }
     const AtomicString& textEncoding() const { return m_textEncoding; }
     const KURL& failingURL() const { return m_failingURL; }
-    bool forceSynchronousLoad() const { return m_substituteDataLoadPolicy == ForceSynchronousLoad; }
+    bool forceSynchronousLoad() const
+    {
+        return m_substituteDataLoadPolicy == ForceSynchronousLoad;
+    }
 
 private:
     RefPtr<SharedBuffer> m_content;
@@ -70,7 +79,6 @@ private:
     SubstituteDataLoadPolicy m_substituteDataLoadPolicy;
 };
 
-}
+} // namespace blink
 
 #endif // SubstituteData_h
-

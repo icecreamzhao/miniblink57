@@ -28,19 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/SearchInputType.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "core/HTMLNames.h"
 #include "core/InputTypeNames.h"
+#include "core/dom/ExecutionContextTask.h"
+#include "core/dom/TaskRunnerHelper.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/shadow/ShadowElementNames.h"
 #include "core/html/shadow/TextControlInnerElements.h"
 #include "core/layout/LayoutSearchField.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
@@ -48,13 +48,16 @@ using namespace HTMLNames;
 
 inline SearchInputType::SearchInputType(HTMLInputElement& element)
     : BaseTextInputType(element)
-    , m_searchEventTimer(this, &SearchInputType::searchEventTimerFired)
+    , m_searchEventTimer(
+          TaskRunnerHelper::get(TaskType::UserInteraction, &element.document()),
+          this,
+          &SearchInputType::searchEventTimerFired)
 {
 }
 
-PassRefPtrWillBeRawPtr<InputType> SearchInputType::create(HTMLInputElement& element)
+InputType* SearchInputType::create(HTMLInputElement& element)
 {
-    return adoptRefWillBeNoop(new SearchInputType(element));
+    return new SearchInputType(element);
 }
 
 void SearchInputType::countUsage()
@@ -81,12 +84,13 @@ void SearchInputType::createShadowSubtree()
 {
     TextFieldInputType::createShadowSubtree();
     Element* container = containerElement();
-    Element* viewPort = element().userAgentShadowRoot()->getElementById(ShadowElementNames::editingViewPort());
-    ASSERT(container);
-    ASSERT(viewPort);
-
-    container->insertBefore(SearchFieldDecorationElement::create(element().document()), viewPort);
-    container->insertBefore(SearchFieldCancelButtonElement::create(element().document()), viewPort->nextSibling());
+    Element* viewPort = element().userAgentShadowRoot()->getElementById(
+        ShadowElementNames::editingViewPort());
+    DCHECK(container);
+    DCHECK(viewPort);
+    container->insertBefore(
+        SearchFieldCancelButtonElement::create(element().document()),
+        viewPort->nextSibling());
 }
 
 void SearchInputType::handleKeydownEvent(KeyboardEvent* event)
@@ -96,11 +100,10 @@ void SearchInputType::handleKeydownEvent(KeyboardEvent* event)
         return;
     }
 
-    const String& key = event->keyIdentifier();
-    if (key == "U+001B") {
-        RefPtrWillBeRawPtr<HTMLInputElement> input(element());
-        input->setValueForUser("");
-        input->onSearch();
+    const String& key = event->key();
+    if (key == "Escape") {
+        element().setValueForUser("");
+        element().onSearch();
         event->setDefaultHandled();
         return;
     }
@@ -109,26 +112,31 @@ void SearchInputType::handleKeydownEvent(KeyboardEvent* event)
 
 void SearchInputType::startSearchEventTimer()
 {
-    ASSERT(element().layoutObject());
+    DCHECK(element().layoutObject());
     unsigned length = element().innerEditorValue().length();
 
     if (!length) {
-        stopSearchEventTimer();
-        element().onSearch();
+        m_searchEventTimer.stop();
+        element().document().postTask(
+            TaskType::UserInteraction, BLINK_FROM_HERE,
+            createSameThreadTask(&HTMLInputElement::onSearch,
+                wrapPersistent(&element())));
         return;
     }
 
     // After typing the first key, we wait 0.5 seconds.
     // After the second key, 0.4 seconds, then 0.3, then 0.2 from then on.
-    m_searchEventTimer.startOneShot(max(0.2, 0.6 - 0.1 * length), FROM_HERE);
+    m_searchEventTimer.startOneShot(max(0.2, 0.6 - 0.1 * length),
+        BLINK_FROM_HERE);
 }
 
-void SearchInputType::stopSearchEventTimer()
+void SearchInputType::dispatchSearchEvent()
 {
     m_searchEventTimer.stop();
+    element().dispatchEvent(Event::createBubble(EventTypeNames::search));
 }
 
-void SearchInputType::searchEventTimerFired(Timer<SearchInputType>*)
+void SearchInputType::searchEventTimerFired(TimerBase*)
 {
     element().onSearch();
 }
@@ -157,17 +165,19 @@ void SearchInputType::updateView()
 
 const AtomicString& SearchInputType::defaultAutocapitalize() const
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, sentences, ("sentences", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, sentences, ("sentences"));
     return sentences;
 }
 
 void SearchInputType::updateCancelButtonVisibility()
 {
-    Element* button = element().userAgentShadowRoot()->getElementById(ShadowElementNames::clearButton());
+    Element* button = element().userAgentShadowRoot()->getElementById(
+        ShadowElementNames::searchClearButton());
     if (!button)
         return;
     if (element().value().isEmpty()) {
-        button->setInlineStyleProperty(CSSPropertyOpacity, 0.0, CSSPrimitiveValue::CSS_NUMBER);
+        button->setInlineStyleProperty(CSSPropertyOpacity, 0.0,
+            CSSPrimitiveValue::UnitType::Number);
         button->setInlineStyleProperty(CSSPropertyPointerEvents, CSSValueNone);
     } else {
         button->removeInlineStyleProperty(CSSPropertyOpacity);

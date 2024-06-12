@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,14 +5,13 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkScript_DEFINED
 #define SkScript_DEFINED
 
-#include "SkOperand.h"
 #include "SkIntArray.h"
-#include "SkTDict.h"
+#include "SkOperand.h"
 #include "SkTDStack.h"
+#include "SkTDict.h"
 
 class SkAnimateMaker;
 
@@ -57,7 +55,7 @@ public:
         kString = 4,
         kArray = 8,
         kObject = 16
-//      kStruct = 32
+        //      kStruct = 32
     };
 
     typedef bool (*_boxCallBack)(void* userStorage, SkScriptValue* result);
@@ -67,13 +65,13 @@ public:
         void* userStorage, SkScriptValue* result);
     typedef bool (*_memberFunctionCallBack)(const char* member, size_t len, void* object,
         SkTDArray<SkScriptValue>& params, void* userStorage, SkScriptValue* result);
-//  typedef bool (*_objectToStringCallBack)(void* object, void* userStorage, SkScriptValue* result);
+    //  typedef bool (*_objectToStringCallBack)(void* object, void* userStorage, SkScriptValue* result);
     typedef bool (*_propertyCallBack)(const char* prop, size_t len, void* userStorage, SkScriptValue* result);
     typedef bool (*_unboxCallBack)(void* userStorage, SkScriptValue* result);
     SkScriptEngine(SkOpType returnType);
     ~SkScriptEngine();
     void boxCallBack(_boxCallBack func, void* userStorage);
-    bool convertTo(SkDisplayTypes , SkScriptValue* );
+    bool convertTo(SkDisplayTypes, SkScriptValue*);
     bool evaluateScript(const char** script, SkScriptValue* value);
     void forget(SkTypedArray* array);
     void functionCallBack(_functionCallBack func, void* userStorage);
@@ -81,15 +79,15 @@ public:
 #ifdef SK_DEBUG
     bool getErrorString(SkString* err) const;
 #endif
-    void memberCallBack(_memberCallBack , void* userStorage);
-    void memberFunctionCallBack(_memberFunctionCallBack , void* userStorage);
-//  void objectToStringCallBack(_objectToStringCallBack , void* userStorage);
+    void memberCallBack(_memberCallBack, void* userStorage);
+    void memberFunctionCallBack(_memberFunctionCallBack, void* userStorage);
+    //  void objectToStringCallBack(_objectToStringCallBack , void* userStorage);
     void propertyCallBack(_propertyCallBack prop, void* userStorage);
     void track(SkTypedArray* array);
     void track(SkString* string);
     void unboxCallBack(_unboxCallBack func, void* userStorage);
-    static bool ConvertTo(SkScriptEngine* , SkDisplayTypes toType, SkScriptValue* value);
-    static SkScalar IntToScalar(int32_t );
+    static bool ConvertTo(SkScriptEngine*, SkDisplayTypes toType, SkScriptValue* value);
+    static SkScalar IntToScalar(int32_t);
     static SkDisplayTypes ToDisplayType(SkOpType type);
     static SkOpType ToOpType(SkDisplayTypes type);
     static bool ValueToString(SkScriptValue value, SkString* string);
@@ -99,7 +97,7 @@ public:
         kFunction,
         kMember,
         kMemberFunction,
-    //  kObjectToString,
+        //  kObjectToString,
         kProperty,
         kUnbox
     };
@@ -112,7 +110,7 @@ public:
             _functionCallBack fFunctionCallBack;
             _memberCallBack fMemberCallBack;
             _memberFunctionCallBack fMemberFunctionCallBack;
-    //      _objectToStringCallBack fObjectToStringCallBack;
+            //      _objectToStringCallBack fObjectToStringCallBack;
             _propertyCallBack fPropertyCallBack;
             _unboxCallBack fUnboxCallBack;
         };
@@ -156,7 +154,7 @@ public:
         kMultiplyScalar,
         kParen,
         kShiftLeft,
-        kShiftRight,    // signed
+        kShiftRight, // signed
         kSubtract,
         kSubtractInt = kSubtract,
         kSubtractScalar,
@@ -171,10 +169,9 @@ public:
     };
 
 protected:
-
     struct SkOperatorAttributes {
         unsigned int fLeftType : 3; // SkOpType, but only lower values
-        unsigned int fRightType : 3;     // SkOpType, but only lower values
+        unsigned int fRightType : 3; // SkOpType, but only lower values
         SkOpBias fBias : 1;
     };
 
@@ -189,9 +186,10 @@ protected:
     static const signed char gPrecedence[];
     int arithmeticOp(char ch, char nextChar, bool lastPush);
     void commonCallBack(CallBackType type, UserCallBack& callBack, void* userStorage);
-    bool convertParams(SkTDArray<SkScriptValue>&, const SkFunctionParamType* ,
-                                    int paramTypeCount);
-    void convertToString(SkOperand& operand, SkDisplayTypes type) {
+    bool convertParams(SkTDArray<SkScriptValue>&, const SkFunctionParamType*,
+        int paramTypeCount);
+    void convertToString(SkOperand& operand, SkDisplayTypes type)
+    {
         SkScriptValue scriptValue;
         scriptValue.fOperand = operand;
         scriptValue.fType = type;
@@ -206,7 +204,7 @@ protected:
     bool handleFunction(const char** scriptPtr, bool suppressed);
     bool handleMember(const char* field, size_t len, void* object);
     bool handleMemberFunction(const char* field, size_t len, void* object, SkTDArray<SkScriptValue>& params);
-//  bool handleObjectToString(void* object);
+    //  bool handleObjectToString(void* object);
     bool handleProperty(bool suppressed);
     bool handleUnbox(SkScriptValue* scriptValue);
     bool innerScript(const char** scriptPtr, SkScriptValue* value);
@@ -214,9 +212,9 @@ protected:
     Error opError();
     bool processOp();
     void setAnimateMaker(SkAnimateMaker* maker) { fMaker = maker; }
-    bool setError(Error , const char* pos);
+    bool setError(Error, const char* pos);
     enum SkBraceStyle {
-    //  kStructBrace,
+        //  kStructBrace,
         kArrayBrace,
         kFunctionBrace
     };
@@ -228,7 +226,7 @@ protected:
     SkTDOperandArray fOperandStack;
     SkTDArray<SkSuppress> fSuppressStack;
 #else
-    SkTDStack<SkBraceStyle> fBraceStack;        // curly, square, function paren
+    SkTDStack<SkBraceStyle> fBraceStack; // curly, square, function paren
     SkTDStack<SkOp> fOpStack;
     SkTDStack<SkOpType> fTypeStack;
     SkTDStack<SkOperand> fOperandStack;
@@ -243,6 +241,7 @@ protected:
     SkOpType fReturnType;
     Error fError;
     int fErrorPosition;
+
 private:
     friend class SkTypedArray;
 #ifdef SK_SUPPORT_UNITTEST

@@ -19,7 +19,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/CounterNode.h"
 
 #include "core/layout/LayoutCounter.h"
@@ -46,12 +45,14 @@ CounterNode::CounterNode(LayoutObject& o, bool hasResetType, int value)
 
 CounterNode::~CounterNode()
 {
-    // Ideally this would be an assert and this would never be reached. In reality this happens a lot
-    // so we need to handle these cases. The node is still connected to the tree so we need to detach it.
+    // Ideally this would be an assert and this would never be reached. In reality
+    // this happens a lot so we need to handle these cases. The node is still
+    // connected to the tree so we need to detach it.
     if (m_parent || m_previousSibling || m_nextSibling || m_firstChild || m_lastChild) {
         CounterNode* oldParent = nullptr;
         CounterNode* oldPreviousSibling = nullptr;
-        // Instead of calling removeChild() we do this safely as the tree is likely broken if we get here.
+        // Instead of calling removeChild() we do this safely as the tree is likely
+        // broken if we get here.
         if (m_parent) {
             if (m_parent->m_firstChild == this)
                 m_parent->m_firstChild = m_nextSibling;
@@ -73,7 +74,7 @@ CounterNode::~CounterNode()
         }
         if (m_firstChild) {
             // The node's children are reparented to the old parent.
-            for (CounterNode* child = m_firstChild; child; ) {
+            for (CounterNode* child = m_firstChild; child;) {
                 CounterNode* nextChild = child->m_nextSibling;
                 CounterNode* nextSibling = nullptr;
                 child->m_parent = oldParent;
@@ -92,12 +93,15 @@ CounterNode::~CounterNode()
     resetLayoutObjects();
 }
 
-PassRefPtr<CounterNode> CounterNode::create(LayoutObject& owner, bool hasResetType, int value)
+PassRefPtr<CounterNode> CounterNode::create(LayoutObject& owner,
+    bool hasResetType,
+    int value)
 {
     return adoptRef(new CounterNode(owner, hasResetType, value));
 }
 
-CounterNode* CounterNode::nextInPreOrderAfterChildren(const CounterNode* stayWithin) const
+CounterNode* CounterNode::nextInPreOrderAfterChildren(
+    const CounterNode* stayWithin) const
 {
     if (this == stayWithin)
         return nullptr;
@@ -164,7 +168,8 @@ void CounterNode::addLayoutObject(LayoutCounter* value)
         value->m_counterNode->removeLayoutObject(value);
     }
     ASSERT(!value->m_nextForSameCounter);
-    for (LayoutCounter* iterator = m_rootLayoutObject; iterator; iterator = iterator->m_nextForSameCounter) {
+    for (LayoutCounter* iterator = m_rootLayoutObject; iterator;
+         iterator = iterator->m_nextForSameCounter) {
         if (iterator == value) {
             ASSERT_NOT_REACHED();
             return;
@@ -192,7 +197,8 @@ void CounterNode::removeLayoutObject(LayoutCounter* value)
         value->m_counterNode->removeLayoutObject(value);
     }
     LayoutCounter* previous = nullptr;
-    for (LayoutCounter* iterator = m_rootLayoutObject; iterator; iterator = iterator->m_nextForSameCounter) {
+    for (LayoutCounter* iterator = m_rootLayoutObject; iterator;
+         iterator = iterator->m_nextForSameCounter) {
         if (iterator == value) {
             if (previous)
                 previous->m_nextForSameCounter = value->m_nextForSameCounter;
@@ -209,8 +215,11 @@ void CounterNode::removeLayoutObject(LayoutCounter* value)
 
 void CounterNode::resetLayoutObjects()
 {
-    while (m_rootLayoutObject)
-        m_rootLayoutObject->invalidate(); // This makes m_rootLayoutObject point to the next layoutObject if any since it disconnects the m_rootLayoutObject from this.
+    while (m_rootLayoutObject) {
+        // This makes m_rootLayoutObject point to the next layoutObject if any since
+        // it disconnects the m_rootLayoutObject from this.
+        m_rootLayoutObject->invalidate();
+    }
 }
 
 void CounterNode::resetThisAndDescendantsLayoutObjects()
@@ -234,14 +243,18 @@ void CounterNode::recount()
     }
 }
 
-void CounterNode::insertAfter(CounterNode* newChild, CounterNode* refChild, const AtomicString& identifier)
+void CounterNode::insertAfter(CounterNode* newChild,
+    CounterNode* refChild,
+    const AtomicString& identifier)
 {
     ASSERT(newChild);
     ASSERT(!newChild->m_parent);
     ASSERT(!newChild->m_previousSibling);
     ASSERT(!newChild->m_nextSibling);
-    // If the refChild is not our child we can not complete the request. This hardens against bugs in LayoutCounter.
-    // When layoutObjects are reparented it may request that we insert counter nodes improperly.
+    // If the refChild is not our child we can not complete the request. This
+    // hardens against bugs in LayoutCounter.
+    // When layoutObjects are reparented it may request that we insert counter
+    // nodes improperly.
     if (refChild && refChild->m_parent != this)
         return;
 
@@ -280,8 +293,8 @@ void CounterNode::insertAfter(CounterNode* newChild, CounterNode* refChild, cons
         return;
     }
 
-    // The code below handles the case when a formerly root increment counter is loosing its root position
-    // and therefore its children become next siblings.
+    // The code below handles the case when a formerly root increment counter is
+    // loosing its root position and therefore its children become next siblings.
     CounterNode* last = newChild->m_lastChild;
     CounterNode* first = newChild->m_firstChild;
 
@@ -293,15 +306,17 @@ void CounterNode::insertAfter(CounterNode* newChild, CounterNode* refChild, cons
 
         first->m_previousSibling = newChild;
 
-        // The case when the original next sibling of the inserted node becomes a child of
-        // one of the former children of the inserted node is not handled as it is believed
-        // to be impossible since:
-        // 1. if the increment counter node lost it's root position as a result of another
-        //    counter node being created, it will be inserted as the last child so next is null.
-        // 2. if the increment counter node lost it's root position as a result of a layoutObject being
-        //    inserted into the document's layout tree, all its former children counters are attached
-        //    to children of the inserted layoutObject and hence cannot be in scope for counter nodes
-        //    attached to layoutObjects that were already in the document's layout tree.
+        // The case when the original next sibling of the inserted node becomes a
+        // child of one of the former children of the inserted node is not handled
+        // as it is believed to be impossible since:
+        // 1. if the increment counter node lost it's root position as a result of
+        //    another counter node being created, it will be inserted as the last
+        //    child so next is null.
+        // 2. if the increment counter node lost it's root position as a result of a
+        //    layoutObject being inserted into the document's layout tree, all its
+        //    former children counters are attached to children of the inserted
+        //    layoutObject and hence cannot be in scope for counter nodes attached
+        // to layoutObjects that were already in the document's layout tree.
         last->m_nextSibling = next;
         if (next) {
             ASSERT(next->m_previousSibling == newChild);
@@ -309,7 +324,7 @@ void CounterNode::insertAfter(CounterNode* newChild, CounterNode* refChild, cons
         } else {
             m_lastChild = last;
         }
-        for (next = first; ; next = next->m_nextSibling) {
+        for (next = first;; next = next->m_nextSibling) {
             next->m_parent = this;
             if (last == next)
                 break;
@@ -361,14 +376,17 @@ static void showTreeAndMark(const CounterNode* node)
     while (root->parent())
         root = root->parent();
 
-    for (const CounterNode* current = root; current; current = current->nextInPreOrder()) {
+    for (const CounterNode* current = root; current;
+         current = current->nextInPreOrder()) {
         fprintf(stderr, "%c", (current == node) ? '*' : ' ');
-        for (const CounterNode* parent = current; parent && parent != root; parent = parent->parent())
+        for (const CounterNode* parent = current; parent && parent != root;
+             parent = parent->parent())
             fprintf(stderr, "    ");
-        fprintf(stderr, "%p %s: %d %d P:%p PS:%p NS:%p R:%p\n",
-            current, current->actsAsReset() ? "reset____" : "increment", current->value(),
-            current->countInParent(), current->parent(), current->previousSibling(),
-            current->nextSibling(), &current->owner());
+        fprintf(stderr, "%p %s: %d %d P:%p PS:%p NS:%p R:%p\n", current,
+            current->actsAsReset() ? "reset____" : "increment",
+            current->value(), current->countInParent(), current->parent(),
+            current->previousSibling(), current->nextSibling(),
+            &current->owner());
     }
     fflush(stderr);
 }

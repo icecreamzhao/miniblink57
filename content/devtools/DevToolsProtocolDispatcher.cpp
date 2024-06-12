@@ -66,7 +66,7 @@ void DevToolsProtocolDispatcher::sendSuccess(int commandId, std::unique_ptr<base
 bool DevToolsProtocolDispatcher::dispatcher(const std::string& message)
 {
     std::unique_ptr<base::Value> value = base::JSONReader::Read(message);
-    if (!value || !value->IsType(base::Value::TYPE_DICTIONARY))
+    if (!value || !value->IsType(base::Value::Type::DICTIONARY))
         return false;
 
     base::DictionaryValue* command = static_cast<base::DictionaryValue*>(value.get());

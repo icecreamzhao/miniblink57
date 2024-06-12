@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2015 Google Inc.
  *
@@ -13,10 +12,12 @@
 #if SK_SUPPORT_GPU
 
 #include "GrContext.h"
-#include "GrTest.h"
-#include "effects/GrConstColorProcessor.h"
-#include "SkGr.h"
+#include "GrDrawContextPriv.h"
+#include "SkGrPriv.h"
 #include "SkGradientShader.h"
+#include "batches/GrDrawBatch.h"
+#include "batches/GrRectBatchFactory.h"
+#include "effects/GrConstColorProcessor.h"
 
 namespace skiagm {
 /**
@@ -24,34 +25,40 @@ namespace skiagm {
  */
 class ConstColorProcessor : public GM {
 public:
-    ConstColorProcessor() {
+    ConstColorProcessor()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("const_color_processor");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onOnceBeforeDraw() override {
-        SkColor colors[] = { 0xFFFF0000, 0x2000FF00, 0xFF0000FF};
+    void onOnceBeforeDraw() override
+    {
+        SkColor colors[] = { 0xFFFF0000, 0x2000FF00, 0xFF0000FF };
         SkPoint pts[] = { SkPoint::Make(0, 0), SkPoint::Make(kRectSize, kRectSize) };
-        fShader.reset(SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors),
-                       SkShader::kClamp_TileMode));
+        fShader = SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
+            SkShader::kClamp_TileMode);
     }
 
-    void onDraw(SkCanvas* canvas) override {
-        GrRenderTarget* rt = canvas->internal_private_accessTopLayerRenderTarget();
-        if (NULL == rt) {
+    void onDraw(SkCanvas* canvas) override
+    {
+        GrDrawContext* drawContext = canvas->internal_private_accessTopLayerDrawContext();
+        if (!drawContext) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
-        GrContext* context = rt->getContext();
-        if (NULL == context) {
-            this->drawGpuOnlyMessage(canvas);
+
+        GrContext* context = canvas->getGrContext();
+        if (!context) {
             return;
         }
 
@@ -90,13 +97,6 @@ protected:
                     // rect to draw
                     SkRect renderRect = SkRect::MakeXYWH(0, 0, kRectSize, kRectSize);
 
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    if (NULL == tt.target()) {
-                        SkDEBUGFAIL("Couldn't get Gr test target.");
-                        return;
-                    }
-
                     GrPaint grPaint;
                     SkPaint skPaint;
                     if (paintType >= SK_ARRAY_COUNT(kPaintColors)) {
@@ -104,26 +104,24 @@ protected:
                     } else {
                         skPaint.setColor(kPaintColors[paintType]);
                     }
-                    SkAssertResult(SkPaint2GrPaint(context, rt, skPaint, viewMatrix, false,
-                                                   &grPaint));
+                    // SRGBTODO: No sRGB inputs allowed here?
+                    SkAssertResult(SkPaintToGrPaint(context, skPaint, viewMatrix, false, &grPaint));
 
-                    GrConstColorProcessor::InputMode mode = (GrConstColorProcessor::InputMode) m;
+                    GrConstColorProcessor::InputMode mode = (GrConstColorProcessor::InputMode)m;
                     GrColor color = kColors[procColor];
-                    SkAutoTUnref<GrFragmentProcessor> fp(GrConstColorProcessor::Create(color, mode));
+                    sk_sp<GrFragmentProcessor> fp(GrConstColorProcessor::Make(color, mode));
 
-                    GrClip clip;
-                    GrPipelineBuilder pipelineBuilder(grPaint, rt, clip);
-                    pipelineBuilder.addColorProcessor(fp);
+                    grPaint.addColorFragmentProcessor(std::move(fp));
 
-                    tt.target()->drawSimpleRect(&pipelineBuilder,
-                                                grPaint.getColor(),
-                                                viewMatrix,
-                                                renderRect);
+                    SkAutoTUnref<GrDrawBatch> batch(
+                        GrRectBatchFactory::CreateNonAAFill(grPaint.getColor(), viewMatrix,
+                            renderRect, nullptr, nullptr));
+                    drawContext->drawContextPriv().testingOnly_drawBatch(grPaint, batch);
 
                     // Draw labels for the input to the processor and the processor to the right of
                     // the test rect. The input label appears above the processor label.
                     SkPaint labelPaint;
-                    sk_tool_utils::set_portable_typeface_always(&labelPaint);
+                    sk_tool_utils::set_portable_typeface(&labelPaint);
                     labelPaint.setAntiAlias(true);
                     labelPaint.setTextSize(10.f);
                     SkString inputLabel;
@@ -139,22 +137,22 @@ protected:
                     SkRect inputLabelBounds;
                     // get the bounds of the text in order to position it
                     labelPaint.measureText(inputLabel.c_str(), inputLabel.size(),
-                                           &inputLabelBounds);
+                        &inputLabelBounds);
                     canvas->drawText(inputLabel.c_str(), inputLabel.size(),
-                                     renderRect.fRight + kPad,
-                                     -inputLabelBounds.fTop, labelPaint);
+                        renderRect.fRight + kPad,
+                        -inputLabelBounds.fTop, labelPaint);
                     // update the bounds to reflect the offset we used to draw it.
                     inputLabelBounds.offset(renderRect.fRight + kPad, -inputLabelBounds.fTop);
 
                     SkRect procLabelBounds;
                     labelPaint.measureText(procLabel.c_str(), procLabel.size(),
-                                           &procLabelBounds);
+                        &procLabelBounds);
                     canvas->drawText(procLabel.c_str(), procLabel.size(),
-                                     renderRect.fRight + kPad,
-                                     inputLabelBounds.fBottom + 2.f - procLabelBounds.fTop,
-                                     labelPaint);
+                        renderRect.fRight + kPad,
+                        inputLabelBounds.fBottom + 2.f - procLabelBounds.fTop,
+                        labelPaint);
                     procLabelBounds.offset(renderRect.fRight + kPad,
-                                           inputLabelBounds.fBottom + 2.f - procLabelBounds.fTop);
+                        inputLabelBounds.fBottom + 2.f - procLabelBounds.fTop);
 
                     labelPaint.setStrokeWidth(0);
                     labelPaint.setStyle(SkPaint::kStroke_Style);
@@ -179,12 +177,12 @@ protected:
 
 private:
     // Use this as a way of generating and input FP
-    SkAutoTUnref<SkShader>      fShader;
+    sk_sp<SkShader> fShader;
 
-    static const SkScalar       kPad;
-    static const SkScalar       kRectSize;
-    static const int            kWidth  = 820;
-    static const int            kHeight = 500;
+    static const SkScalar kPad;
+    static const SkScalar kRectSize;
+    static const int kWidth = 820;
+    static const int kHeight = 500;
 
     typedef GM INHERITED;
 };
@@ -192,7 +190,7 @@ private:
 const SkScalar ConstColorProcessor::kPad = 10.f;
 const SkScalar ConstColorProcessor::kRectSize = 20.f;
 
-DEF_GM( return SkNEW(ConstColorProcessor); )
+DEF_GM(return new ConstColorProcessor;)
 }
 
 #endif

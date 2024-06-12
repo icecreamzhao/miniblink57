@@ -13,16 +13,19 @@ class SecurityOrigin;
 class WebContentDecryptionModuleAccess;
 struct WebMediaKeySystemConfiguration;
 class WebString;
-template <typename T> class WebVector;
+template <typename T>
+class WebVector;
 
-class EncryptedMediaRequest : public GarbageCollectedFinalized<EncryptedMediaRequest> {
+class EncryptedMediaRequest
+    : public GarbageCollectedFinalized<EncryptedMediaRequest> {
 public:
     virtual ~EncryptedMediaRequest() { }
 
     virtual WebString keySystem() const = 0;
-    virtual const WebVector<WebMediaKeySystemConfiguration>& supportedConfigurations() const = 0;
+    virtual const WebVector<WebMediaKeySystemConfiguration>&
+    supportedConfigurations() const = 0;
 
-    virtual SecurityOrigin* securityOrigin() const = 0;
+    virtual SecurityOrigin* getSecurityOrigin() const = 0;
 
     virtual void requestSucceeded(WebContentDecryptionModuleAccess*) = 0;
     virtual void requestNotSupported(const WebString& errorMessage) = 0;

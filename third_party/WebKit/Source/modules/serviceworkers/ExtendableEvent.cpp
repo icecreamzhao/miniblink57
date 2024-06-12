@@ -28,49 +28,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "ExtendableEvent.h"
+#include "modules/serviceworkers/ExtendableEvent.h"
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "modules/serviceworkers/WaitUntilObserver.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create()
+ExtendableEvent* ExtendableEvent::create(const AtomicString& type,
+    const ExtendableEventInit& eventInit)
 {
-    return adoptRefWillBeNoop(new ExtendableEvent());
+    return new ExtendableEvent(type, eventInit);
 }
 
-PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create(const AtomicString& type, const ExtendableEventInit& eventInit)
+ExtendableEvent* ExtendableEvent::create(const AtomicString& type,
+    const ExtendableEventInit& eventInit,
+    WaitUntilObserver* observer)
 {
-    return adoptRefWillBeNoop(new ExtendableEvent(type, eventInit));
+    return new ExtendableEvent(type, eventInit, observer);
 }
 
-PassRefPtrWillBeRawPtr<ExtendableEvent> ExtendableEvent::create(const AtomicString& type, const ExtendableEventInit& eventInit, WaitUntilObserver* observer)
-{
-    return adoptRefWillBeNoop(new ExtendableEvent(type, eventInit, observer));
-}
+ExtendableEvent::~ExtendableEvent() { }
 
-ExtendableEvent::~ExtendableEvent()
-{
-}
-
-void ExtendableEvent::waitUntil(ScriptState* scriptState, const ScriptValue& value, ExceptionState& exceptionState)
+void ExtendableEvent::waitUntil(ScriptState* scriptState,
+    ScriptPromise scriptPromise,
+    ExceptionState& exceptionState)
 {
     if (m_observer)
-        m_observer->waitUntil(scriptState, value, exceptionState);
+        m_observer->waitUntil(scriptState, scriptPromise, exceptionState);
 }
 
-ExtendableEvent::ExtendableEvent()
-{
-}
-
-ExtendableEvent::ExtendableEvent(const AtomicString& type, const ExtendableEventInit& initializer)
+ExtendableEvent::ExtendableEvent(const AtomicString& type,
+    const ExtendableEventInit& initializer)
     : Event(type, initializer)
 {
 }
 
-ExtendableEvent::ExtendableEvent(const AtomicString& type, const ExtendableEventInit& initializer, WaitUntilObserver* observer)
+ExtendableEvent::ExtendableEvent(const AtomicString& type,
+    const ExtendableEventInit& initializer,
+    WaitUntilObserver* observer)
     : Event(type, initializer)
     , m_observer(observer)
 {

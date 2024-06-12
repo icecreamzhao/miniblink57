@@ -33,17 +33,24 @@
 
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/DirectConvolver.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
 
 namespace blink {
 
 // UpSampler up-samples the source stream by a factor of 2x.
 
 class PLATFORM_EXPORT UpSampler {
+    USING_FAST_MALLOC(UpSampler);
+    WTF_MAKE_NONCOPYABLE(UpSampler);
+
 public:
     UpSampler(size_t inputBlockSize);
 
     // The destination buffer |destP| is of size sourceFramesToProcess * 2.
-    void process(const float* sourceP, float* destP, size_t sourceFramesToProcess);
+    void process(const float* sourceP,
+        float* destP,
+        size_t sourceFramesToProcess);
 
     void reset();
 
@@ -55,8 +62,9 @@ private:
 
     size_t m_inputBlockSize;
 
-    // Computes ideal band-limited filter coefficients to sample in between each source sample-frame.
-    // This filter will be used to compute the odd sample-frames of the output.
+    // Computes ideal band-limited filter coefficients to sample in between each
+    // source sample-frame.  This filter will be used to compute the odd
+    // sample-frames of the output.
     void initializeKernel();
     AudioFloatArray m_kernel;
 
@@ -66,8 +74,9 @@ private:
     AudioFloatArray m_tempBuffer;
 
     // Delay line for generating the even sample-frames of the output.
-    // The source samples are delayed exactly to match the linear phase delay of the FIR filter (convolution)
-    // used to generate the odd sample-frames of the output.
+    // The source samples are delayed exactly to match the linear phase delay of
+    // the FIR filter (convolution) used to generate the odd sample-frames of the
+    // output.
     AudioFloatArray m_inputBuffer;
 };
 

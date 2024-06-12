@@ -5,47 +5,59 @@
 #ifndef PresentationAvailability_h
 #define PresentationAvailability_h
 
-#include "core/dom/ActiveDOMObject.h"
-#include "core/dom/DocumentVisibilityObserver.h"
+#include "bindings/core/v8/ActiveScriptWrappable.h"
+#include "core/dom/SuspendableObject.h"
 #include "core/events/EventTarget.h"
+#include "core/page/PageVisibilityObserver.h"
+#include "modules/ModulesExport.h"
+#include "modules/presentation/PresentationPromiseProperty.h"
+#include "platform/weborigin/KURL.h"
+#include "public/platform/WebURL.h"
+#include "public/platform/WebVector.h"
 #include "public/platform/modules/presentation/WebPresentationAvailabilityObserver.h"
+#include "wtf/Vector.h"
 
 namespace blink {
 
 class ExecutionContext;
-class ScriptPromiseResolver;
 
-// Expose whether there is a presentation display available. The object will be
-// initialized with a default value passed via ::take() and will then subscribe
-// to receive callbacks if the status were to change. The object will only
-// listen to changes when required.
-class PresentationAvailability final
-    : public RefCountedGarbageCollectedEventTargetWithInlineData<PresentationAvailability>
-    , public ActiveDOMObject
-    , public DocumentVisibilityObserver
-    , public WebPresentationAvailabilityObserver {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(PresentationAvailability);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PresentationAvailability);
+// Expose whether there is a presentation display available for |url|. The
+// object will be initialized with a default value passed via ::take() and will
+// then subscribe to receive callbacks if the status for |url| were to
+// change. The object will only listen to changes when required.
+class MODULES_EXPORT PresentationAvailability final
+    : public EventTargetWithInlineData,
+      public ActiveScriptWrappable<PresentationAvailability>,
+      public SuspendableObject,
+      public PageVisibilityObserver,
+      public WebPresentationAvailabilityObserver {
+    USING_GARBAGE_COLLECTED_MIXIN(PresentationAvailability);
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PresentationAvailability* take(ScriptPromiseResolver*, bool);
+    static PresentationAvailability* take(PresentationAvailabilityProperty*,
+        const WTF::Vector<KURL>&,
+        bool);
     ~PresentationAvailability() override;
 
     // EventTarget implementation.
     const AtomicString& interfaceName() const override;
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override;
 
     // WebPresentationAvailabilityObserver implementation.
     void availabilityChanged(bool) override;
+    const WebVector<WebURL>& urls() const override;
 
-    // ActiveDOMObject implementation.
-    bool hasPendingActivity() const override;
+    // ScriptWrappable implementation.
+    bool hasPendingActivity() const final;
+
+    // SuspendableObject implementation.
     void suspend() override;
     void resume() override;
-    void stop() override;
+    void contextDestroyed(ExecutionContext*) override;
 
-    // DocumentVisibilityObserver implementation.
-    void didChangeVisibilityState(PageVisibilityState) override;
+    // PageVisibilityObserver implementation.
+    void pageVisibilityChanged() override;
 
     bool value() const;
 
@@ -53,8 +65,13 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
+protected:
+    // EventTarget implementation.
+    void addedEventListener(const AtomicString& eventType,
+        RegisteredEventListener&) override;
+
 private:
-    // Current state of the ActiveDOMObject. It is Active when created. It
+    // Current state of the SuspendableObject. It is Active when created. It
     // becomes Suspended when suspend() is called and moves back to Active if
     // resume() is called. It becomes Inactive when stop() is called or at
     // destruction time.
@@ -64,11 +81,12 @@ private:
         Inactive,
     };
 
-    PresentationAvailability(ExecutionContext*, bool);
+    PresentationAvailability(ExecutionContext*, const WTF::Vector<KURL>&, bool);
 
     void setState(State);
     void updateListening();
 
+    WebVector<WebURL> m_urls;
     bool m_value;
     State m_state;
 };

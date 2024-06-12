@@ -28,13 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/filesystem/DOMFileSystem.h"
 
+#include "core/fileapi/BlobCallback.h"
+#include "core/inspector/InspectorInstrumentation.h"
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DirectoryEntry.h"
-#include "modules/filesystem/ErrorCallback.h"
-#include "modules/filesystem/FileCallback.h"
 #include "modules/filesystem/FileEntry.h"
 #include "modules/filesystem/FileSystemCallbacks.h"
 #include "modules/filesystem/FileWriter.h"
@@ -42,51 +41,77 @@
 #include "modules/filesystem/FileWriterCallback.h"
 #include "modules/filesystem/MetadataCallback.h"
 #include "platform/FileMetadata.h"
-#include "platform/weborigin/DatabaseIdentifier.h"
+#include "platform/WebTaskRunner.h"
 #include "platform/weborigin/SecurityOrigin.h"
+#include "public/platform/Platform.h"
 #include "public/platform/WebFileSystem.h"
 #include "public/platform/WebFileSystemCallbacks.h"
-#include "wtf/OwnPtr.h"
+#include "public/platform/WebSecurityOrigin.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
+namespace {
+
+    void runCallback(ExecutionContext* executionContext,
+        std::unique_ptr<WTF::Closure> task)
+    {
+        if (!executionContext)
+            return;
+        DCHECK(executionContext->isContextThread());
+        InspectorInstrumentation::AsyncTask asyncTask(executionContext, task.get(),
+            true /* isInstrumented */);
+        (*task)();
+    }
+
+} // namespace
+
 // static
-DOMFileSystem* DOMFileSystem::create(ExecutionContext* context, const String& name, FileSystemType type, const KURL& rootURL)
+DOMFileSystem* DOMFileSystem::create(ExecutionContext* context,
+    const String& name,
+    FileSystemType type,
+    const KURL& rootURL)
 {
-    DOMFileSystem* fileSystem(new DOMFileSystem(context, name, type, rootURL));
-    fileSystem->suspendIfNeeded();
-    return fileSystem;
+    return new DOMFileSystem(context, name, type, rootURL);
 }
 
-DOMFileSystem* DOMFileSystem::createIsolatedFileSystem(ExecutionContext* context, const String& filesystemId)
+DOMFileSystem* DOMFileSystem::createIsolatedFileSystem(
+    ExecutionContext* context,
+    const String& filesystemId)
 {
     if (filesystemId.isEmpty())
         return 0;
 
     StringBuilder filesystemName;
-    filesystemName.append(createDatabaseIdentifierFromSecurityOrigin(context->securityOrigin()));
-    filesystemName.appendLiteral(":Isolated_");
+    filesystemName.append(Platform::current()->fileSystemCreateOriginIdentifier(
+        WebSecurityOrigin(context->getSecurityOrigin())));
+    filesystemName.append(":Isolated_");
     filesystemName.append(filesystemId);
 
-    // The rootURL created here is going to be attached to each filesystem request and
-    // is to be validated each time the request is being handled.
+    // The rootURL created here is going to be attached to each filesystem request
+    // and is to be validated each time the request is being handled.
     StringBuilder rootURL;
-    rootURL.appendLiteral("filesystem:");
-    rootURL.append(context->securityOrigin()->toString());
+    rootURL.append("filesystem:");
+    rootURL.append(context->getSecurityOrigin()->toString());
     rootURL.append('/');
     rootURL.append(isolatedPathPrefix);
     rootURL.append('/');
     rootURL.append(filesystemId);
     rootURL.append('/');
 
-    return DOMFileSystem::create(context, filesystemName.toString(), FileSystemTypeIsolated, KURL(ParsedURLString, rootURL.toString()));
+    return DOMFileSystem::create(context, filesystemName.toString(),
+        FileSystemTypeIsolated,
+        KURL(ParsedURLString, rootURL.toString()));
 }
 
-DOMFileSystem::DOMFileSystem(ExecutionContext* context, const String& name, FileSystemType type, const KURL& rootURL)
+DOMFileSystem::DOMFileSystem(ExecutionContext* context,
+    const String& name,
+    FileSystemType type,
+    const KURL& rootURL)
     : DOMFileSystemBase(context, name, type, rootURL)
-    , ActiveDOMObject(context)
+    , ContextLifecycleObserver(context)
     , m_numberOfPendingCallbacks(0)
     , m_rootEntry(DirectoryEntry::create(this, DOMFilePath::root))
 {
@@ -114,70 +139,104 @@ bool DOMFileSystem::hasPendingActivity() const
     return m_numberOfPendingCallbacks;
 }
 
-void DOMFileSystem::reportError(ErrorCallback* errorCallback, FileError* fileError)
+void DOMFileSystem::reportError(ErrorCallbackBase* errorCallback,
+    FileError::ErrorCode fileError)
 {
-    scheduleCallback(errorCallback, fileError);
+    reportError(getExecutionContext(), errorCallback, fileError);
+}
+
+void DOMFileSystem::reportError(ExecutionContext* executionContext,
+    ErrorCallbackBase* errorCallback,
+    FileError::ErrorCode fileError)
+{
+    if (!errorCallback)
+        return;
+    scheduleCallback(executionContext,
+        WTF::bind(&ErrorCallbackBase::invoke,
+            wrapPersistent(errorCallback), fileError));
 }
 
 namespace {
 
-class ConvertToFileWriterCallback : public FileWriterBaseCallback {
-public:
-    static ConvertToFileWriterCallback* create(FileWriterCallback* callback)
-    {
-        return new ConvertToFileWriterCallback(callback);
-    }
+    class ConvertToFileWriterCallback : public FileWriterBaseCallback {
+    public:
+        static ConvertToFileWriterCallback* create(FileWriterCallback* callback)
+        {
+            return new ConvertToFileWriterCallback(callback);
+        }
 
-    DEFINE_INLINE_TRACE()
-    {
-        visitor->trace(m_callback);
-        FileWriterBaseCallback::trace(visitor);
-    }
+        DEFINE_INLINE_TRACE()
+        {
+            visitor->trace(m_callback);
+            FileWriterBaseCallback::trace(visitor);
+        }
 
-    void handleEvent(FileWriterBase* fileWriterBase)
-    {
-        m_callback->handleEvent(static_cast<FileWriter*>(fileWriterBase));
-    }
-private:
-    explicit ConvertToFileWriterCallback(FileWriterCallback* callback)
-        : m_callback(callback)
-    {
-    }
-    Member<FileWriterCallback> m_callback;
-};
+        void handleEvent(FileWriterBase* fileWriterBase)
+        {
+            m_callback->handleEvent(static_cast<FileWriter*>(fileWriterBase));
+        }
 
-}
+    private:
+        explicit ConvertToFileWriterCallback(FileWriterCallback* callback)
+            : m_callback(callback)
+        {
+        }
+        Member<FileWriterCallback> m_callback;
+    };
 
-void DOMFileSystem::createWriter(const FileEntry* fileEntry, FileWriterCallback* successCallback, ErrorCallback* errorCallback)
+} // namespace
+
+void DOMFileSystem::createWriter(const FileEntry* fileEntry,
+    FileWriterCallback* successCallback,
+    ErrorCallbackBase* errorCallback)
 {
     ASSERT(fileEntry);
 
     if (!fileSystem()) {
-        reportError(errorCallback, FileError::create(FileError::ABORT_ERR));
+        reportError(errorCallback, FileError::kAbortErr);
         return;
     }
 
-    FileWriter* fileWriter = FileWriter::create(executionContext());
+    FileWriter* fileWriter = FileWriter::create(getExecutionContext());
     FileWriterBaseCallback* conversionCallback = ConvertToFileWriterCallback::create(successCallback);
-    OwnPtr<AsyncFileSystemCallbacks> callbacks = FileWriterBaseCallbacks::create(fileWriter, conversionCallback, errorCallback, m_context);
-    fileSystem()->createFileWriter(createFileSystemURL(fileEntry), fileWriter, callbacks.release());
+    std::unique_ptr<AsyncFileSystemCallbacks> callbacks = FileWriterBaseCallbacks::create(fileWriter, conversionCallback,
+        errorCallback, m_context);
+    fileSystem()->createFileWriter(createFileSystemURL(fileEntry), fileWriter,
+        std::move(callbacks));
 }
 
-void DOMFileSystem::createFile(const FileEntry* fileEntry, FileCallback* successCallback, ErrorCallback* errorCallback)
+void DOMFileSystem::createFile(const FileEntry* fileEntry,
+    BlobCallback* successCallback,
+    ErrorCallbackBase* errorCallback)
 {
     KURL fileSystemURL = createFileSystemURL(fileEntry);
     if (!fileSystem()) {
-        reportError(errorCallback, FileError::create(FileError::ABORT_ERR));
+        reportError(errorCallback, FileError::kAbortErr);
         return;
     }
 
-    fileSystem()->createSnapshotFileAndReadMetadata(fileSystemURL, SnapshotFileCallback::create(this, fileEntry->name(), fileSystemURL, successCallback, errorCallback, m_context));
+    fileSystem()->createSnapshotFileAndReadMetadata(
+        fileSystemURL,
+        SnapshotFileCallback::create(this, fileEntry->name(), fileSystemURL,
+            successCallback, errorCallback, m_context));
+}
+
+void DOMFileSystem::scheduleCallback(ExecutionContext* executionContext,
+    std::unique_ptr<WTF::Closure> task)
+{
+    DCHECK(executionContext->isContextThread());
+    InspectorInstrumentation::asyncTaskScheduled(
+        executionContext, taskNameForInstrumentation(), task.get());
+    TaskRunnerHelper::get(TaskType::FileReading, executionContext)
+        ->postTask(BLINK_FROM_HERE,
+            WTF::bind(&runCallback, wrapWeakPersistent(executionContext),
+                WTF::passed(std::move(task))));
 }
 
 DEFINE_TRACE(DOMFileSystem)
 {
     DOMFileSystemBase::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
     visitor->trace(m_rootEntry);
 }
 

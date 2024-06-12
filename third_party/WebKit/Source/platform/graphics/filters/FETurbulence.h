@@ -37,9 +37,10 @@ enum TurbulenceType {
     FETURBULENCE_TYPE_TURBULENCE = 2
 };
 
-class PLATFORM_EXPORT FETurbulence : public FilterEffect {
+class PLATFORM_EXPORT FETurbulence final : public FilterEffect {
 public:
-    static PassRefPtrWillBeRawPtr<FETurbulence> create(Filter*, TurbulenceType, float, float, int, float, bool);
+    static FETurbulence*
+    create(Filter*, TurbulenceType, float, float, int, float, bool);
 
     TurbulenceType type() const;
     bool setType(TurbulenceType);
@@ -64,8 +65,8 @@ public:
 private:
     FETurbulence(Filter*, TurbulenceType, float, float, int, float, bool);
 
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
-    SkShader* createShader();
+    sk_sp<SkImageFilter> createImageFilter() override;
+    sk_sp<SkShader> createShader() const;
 
     TurbulenceType m_type;
     float m_baseFrequencyX;

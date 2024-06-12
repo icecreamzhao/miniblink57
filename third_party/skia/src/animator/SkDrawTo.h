@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawTo_DEFINED
 #define SkDrawTo_DEFINED
 
@@ -18,14 +17,15 @@ class SkDrawBitmap;
 class SkDrawTo : public SkGroup {
     DECLARE_MEMBER_INFO(DrawTo);
     SkDrawTo();
-//  virtual ~SkDrawTo();
-    bool draw(SkAnimateMaker& ) override;
+    //  virtual ~SkDrawTo();
+    bool draw(SkAnimateMaker&) override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
 protected:
     SkBool drawOnce;
     SkDrawBitmap* use;
+
 private:
     typedef SkGroup INHERITED;
     SkBool fDrawnOnce;

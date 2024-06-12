@@ -413,7 +413,7 @@ bool CodeGenerationFromStringsAllowed(Isolate* isolate,
   } else {
     // Callback set. Let it decide if code generation is allowed.
     VMState<EXTERNAL> state(isolate);
-    return callback(v8::Utils::ToLocal(context));
+    return callback(v8::Utils::ToLocal(context), v8::Local<v8::String>());
   }
 }
 
@@ -436,6 +436,8 @@ static Object* CompileGlobalEval(Isolate* isolate, Handle<String> source,
     if (maybe_error.ToHandle(&error)) isolate->Throw(*error);
     return isolate->heap()->exception();
   }
+
+  //std::unique_ptr<char[]> flat = source->ToCString();
 
   // Deal with a normal eval call with a string argument. Compile it
   // and return the compiled function bound in the local context.

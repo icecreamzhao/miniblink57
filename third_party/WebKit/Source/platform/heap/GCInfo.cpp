@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/heap/GCInfo.h"
 
 #include "platform/heap/Handle.h"
@@ -17,12 +16,13 @@ int GCInfoTable::s_gcInfoIndex = 0;
 size_t GCInfoTable::s_gcInfoTableSize = 0;
 GCInfo const** s_gcInfoTable = nullptr;
 
-void GCInfoTable::ensureGCInfoIndex(const GCInfo* gcInfo, size_t* gcInfoIndexSlot)
+void GCInfoTable::ensureGCInfoIndex(const GCInfo* gcInfo,
+    size_t* gcInfoIndexSlot)
 {
     ASSERT(gcInfo);
     ASSERT(gcInfoIndexSlot);
     // Keep a global GCInfoTable lock while allocating a new slot.
-    AtomicallyInitializedStaticReference(Mutex, mutex, new Mutex);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(Mutex, mutex, new Mutex);
     MutexLocker locker(mutex);
 
     // If more than one thread ends up allocating a slot for
@@ -50,9 +50,11 @@ void GCInfoTable::resize()
 
     size_t newSize = s_gcInfoTableSize ? 2 * s_gcInfoTableSize : initialSize;
     ASSERT(newSize < GCInfoTable::maxIndex);
-    s_gcInfoTable = reinterpret_cast<GCInfo const**>(realloc(s_gcInfoTable, newSize * sizeof(GCInfo)));
+    s_gcInfoTable = reinterpret_cast<GCInfo const**>(WTF::Partitions::fastRealloc(
+        s_gcInfoTable, newSize * sizeof(GCInfo), "GCInfo"));
     ASSERT(s_gcInfoTable);
-    memset(reinterpret_cast<uint8_t*>(s_gcInfoTable) + s_gcInfoTableSize * sizeof(GCInfo), gcInfoZapValue, (newSize - s_gcInfoTableSize) * sizeof(GCInfo));
+    memset(reinterpret_cast<uint8_t*>(s_gcInfoTable) + s_gcInfoTableSize * sizeof(GCInfo),
+        gcInfoZapValue, (newSize - s_gcInfoTableSize) * sizeof(GCInfo));
     s_gcInfoTableSize = newSize;
 }
 
@@ -64,11 +66,11 @@ void GCInfoTable::init()
 
 void GCInfoTable::shutdown()
 {
-    free(s_gcInfoTable);
+    WTF::Partitions::fastFree(s_gcInfoTable);
     s_gcInfoTable = nullptr;
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 void assertObjectHasGCInfo(const void* payload, size_t gcInfoIndex)
 {
     ASSERT(HeapObjectHeader::fromPayload(payload)->checkHeader());

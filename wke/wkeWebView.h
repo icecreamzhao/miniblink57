@@ -8,6 +8,8 @@
 #include "wke/wkeString.h"
 #include "wke/wkeUtil.h"
 #include "third_party/WebKit/Source/platform/geometry/IntRect.h"
+#include "third_party/WebKit/public/web/WebHistoryItem.h"
+#include "third_party/WebKit/Source/wtf/OwnPtr.h"
 #include "net/WebURLLoaderManager.h"
 #include <map>
 #include <set>
@@ -123,8 +125,11 @@ struct CWebViewHandler {
 
     wkeOnContextMenuItemClickCallback contextMenuItemClickCallback;
     void* contextMenuItemClickCallbackParam;
+
+    wkeCaretChangedCallback caretChangedCallback;
+    void* caretChangedCallbackParam;
     
-    bool isWke; // 是否是使用的wke接口
+    BOOL needDestroyWnd; // 是否在关闭时刻销毁窗口
 };
 
 class CWebView : public IWebView {
@@ -135,32 +140,37 @@ public:
     virtual bool create();
     virtual void destroy() override;
 
+    static void shutdown();
+
+    bool isValid();
+    void setWillDestroy();
+
     const utf8* name() const override;
-    const wchar_t* nameW() const;
+    const WCHAR* nameW() const;
 
     void setName(const utf8* name) override;
-    void setName(const wchar_t* name);
+    void setName(const WCHAR* name);
 
     virtual bool isTransparent() const override;
     virtual void setTransparent(bool transparent) override;
 
     void loadURL(const utf8* inUrl) override;
-    void loadURL(const wchar_t* url) override;
+    void loadURL(const WCHAR* url) override;
     
     void loadPostURL(const utf8* inUrl,const char * poastData,int nLen);
-    void loadPostURL(const wchar_t * inUrl,const char * poastData,int nLen);
+    void loadPostURL(const WCHAR * inUrl,const char * poastData,int nLen);
 
     void loadHTML(const utf8* html) override;
     void loadHtmlWithBaseUrl(const utf8* html, const utf8* baseUrl);
-    void loadHTML(const wchar_t* html) override;
+    void loadHTML(const WCHAR* html) override;
 
     void loadFile(const utf8* filename) override;
-    void loadFile(const wchar_t* filename) override;
+    void loadFile(const WCHAR* filename) override;
 
     const utf8* url() const override;
 
-	  void setUserAgent(const utf8 * useragent);
-    void setUserAgent(const wchar_t * useragent);
+    void setUserAgent(const utf8 * useragent);
+    void setUserAgent(const WCHAR * useragent);
     
     virtual bool isLoading() const override;
     virtual bool isLoadingSucceeded() const override;
@@ -173,7 +183,7 @@ public:
     void goToIndex(int index);
 
     const utf8* title() override;
-    const wchar_t* titleW() override;
+    const WCHAR* titleW() override;
     
     virtual void resize(int w, int h) override;
     int width() const override;
@@ -194,15 +204,21 @@ public:
     void paint(void* bits, int bufWid, int bufHei, int xDst, int yDst, int w, int h, int xSrc, int ySrc, bool fKeepAlpha);
     void repaintIfNeeded();
     HDC viewDC();
+    void releaseHdc();
     HWND windowHandle() const;
     void setHandle(HWND wnd);
     void setHandleOffset(int x, int y);
+    void setDragDropEnable(bool b);
+    void setTouchSimulateEnabled(bool b);
+    void setSystemTouchEnabled(bool b);
     void setViewSettings(const wkeViewSettings*);
     bool canGoBack() const override;
     bool goBack() override;
     bool canGoForward() const override;
     bool goForward() override;
-    
+    void navigateAtIndex(int index);
+    int getNavigateIndex() const;
+
     void editorSelectAll() override;
     void editorUnSelect() override;
     void editorCopy() override;
@@ -212,7 +228,7 @@ public:
     void editorUndo() override;
     void editorRedo() override;
 
-    const wchar_t* cookieW();
+    const WCHAR* cookieW();
     const utf8* cookie();
 
     void setCookieEnabled(bool enable) override;
@@ -228,6 +244,7 @@ public:
     virtual bool fireKeyDownEvent(unsigned int virtualKeyCode, unsigned int flags, bool systemKey) override;
     virtual bool fireKeyPressEvent(unsigned int charCode, unsigned int flags, bool systemKey) override;
     bool fireWindowsMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT* result);
+    bool fireMouseWheelEventOnUiThread(int x, int y, int delta, unsigned int flags);
 
     virtual void setFocus() override;
     virtual void killFocus() override;
@@ -238,7 +255,7 @@ public:
     static int64_t wkeWebFrameHandleToFrameId(content::WebPage* page, wkeWebFrameHandle frameId);
     static wkeWebFrameHandle frameIdTowkeWebFrameHandle(content::WebPage* page, int64_t frameId);
 
-    jsValue runJS(const wchar_t* script) override;
+    jsValue runJS(const WCHAR* script) override;
     jsValue runJS(const utf8* script) override;
     jsValue runJsInFrame(wkeWebFrameHandle frameId, const utf8* script, bool isInClosure);
     jsExecState globalExec() override;
@@ -262,6 +279,7 @@ public:
     void onMouseOverUrlChanged(wkeTitleChangedCallback callback, void* callbackParam);
     virtual void onPaintUpdated(wkePaintUpdatedCallback callback, void* callbackParam);
     void onPaintBitUpdated(wkePaintBitUpdatedCallback callback, void* callbackParam);
+    void onCaretChanged(wkeCaretChangedCallback callback, void* callbackParam);
 
     void onAlertBox(wkeAlertBoxCallback callback, void* callbackParam);
     void onConfirmBox(wkeConfirmBoxCallback callback, void* callbackParam);
@@ -320,7 +338,10 @@ public:
 
     CURLSH* getCurlShareHandle();
     std::string getCookieJarPath();
+    void setCookieJarFullPath(const utf8* path);
     net::WebCookieJarImpl* getCookieJar();
+
+    void setLocalStorageFullPath(const utf8* path);
 
     std::set<jsValue>& getPersistentJsValue() { return m_persistentJsValue; }
 

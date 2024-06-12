@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,17 +5,18 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkScan.h"
 #include "SkBlitter.h"
 #include "SkRasterClip.h"
 
-static inline void blitrect(SkBlitter* blitter, const SkIRect& r) {
+static inline void blitrect(SkBlitter* blitter, const SkIRect& r)
+{
     blitter->blitRect(r.fLeft, r.fTop, r.width(), r.height());
 }
 
 void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
-                       SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     if (!r.isEmpty()) {
         if (clip) {
             if (clip->isRect()) {
@@ -31,8 +31,8 @@ void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
                     }
                 }
             } else {
-                SkRegion::Cliperator    cliper(*clip, r);
-                const SkIRect&          rr = cliper.rect();
+                SkRegion::Cliperator cliper(*clip, r);
+                const SkIRect& rr = cliper.rect();
 
                 while (!cliper.done()) {
                     blitrect(blitter, rr);
@@ -46,7 +46,8 @@ void SkScan::FillIRect(const SkIRect& r, const SkRegion* clip,
 }
 
 void SkScan::FillXRect(const SkXRect& xr, const SkRegion* clip,
-                       SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     SkIRect r;
 
     XRect_round(xr, &r);
@@ -54,7 +55,8 @@ void SkScan::FillXRect(const SkXRect& xr, const SkRegion* clip,
 }
 
 void SkScan::FillRect(const SkRect& r, const SkRegion* clip,
-                       SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     SkIRect ir;
 
     r.round(&ir);
@@ -64,7 +66,8 @@ void SkScan::FillRect(const SkRect& r, const SkRegion* clip,
 ///////////////////////////////////////////////////////////////////////////////
 
 void SkScan::FillIRect(const SkIRect& r, const SkRasterClip& clip,
-                       SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     if (clip.isEmpty() || r.isEmpty()) {
         return;
     }
@@ -79,7 +82,8 @@ void SkScan::FillIRect(const SkIRect& r, const SkRasterClip& clip,
 }
 
 void SkScan::FillXRect(const SkXRect& xr, const SkRasterClip& clip,
-                       SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     if (clip.isEmpty() || xr.isEmpty()) {
         return;
     }
@@ -94,7 +98,8 @@ void SkScan::FillXRect(const SkXRect& xr, const SkRasterClip& clip,
 }
 
 void SkScan::FillRect(const SkRect& r, const SkRasterClip& clip,
-                      SkBlitter* blitter) {
+    SkBlitter* blitter)
+{
     if (clip.isEmpty() || r.isEmpty()) {
         return;
     }

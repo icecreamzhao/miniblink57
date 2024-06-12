@@ -16,5 +16,6 @@ class SkCanvas;
  * Creates a canvas that draws nothing. This is useful for performance testing.
  */
 SK_API SkCanvas* SkCreateNullCanvas();
+SK_API std::unique_ptr<SkCanvas> SkMakeNullCanvas();
 
 #endif

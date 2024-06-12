@@ -5,6 +5,7 @@
 # Common gypi for unit tests.
 {
   'include_dirs': [
+    '../include/private',
     '../src/codec',
     '../src/core',
     '../src/effects',
@@ -13,13 +14,9 @@
     '../src/images',
     '../src/pathops',
     '../src/pdf',
-    '../src/pipe/utils',
+    '../src/ports',
     '../src/utils',
-    '../src/utils/debugger',
-
-    # Needed for TDStackNesterTest.
-    '../experimental/PdfViewer',
-    '../experimental/PdfViewer/src',
+    '../tools/debugger',
   ],
   'dependencies': [
     'experimental.gyp:experimental',
@@ -29,32 +26,36 @@
     'tools.gyp:picture_utils',
     'tools.gyp:resources',
     'tools.gyp:sk_tool_utils',
+    'zlib.gyp:zlib',
   ],
   'conditions': [
-    [ 'skia_os == "android"',
-      {
-        'include_dirs': [ '../src/ports', ],
-      }, {
+    [ 'skia_os not in ["linux", "freebsd", "openbsd", "solaris", "android"]', {
         'sources!': [ '../tests/FontMgrAndroidParserTest.cpp', ],
-      }
-    ],
-    [ 'skia_android_framework == 1', {
-      'libraries': [
-        '-ldl',
+    }],
+    [ 'not skia_pdf', {
+      'dependencies!': [ 'pdf.gyp:pdf', 'zlib.gyp:zlib' ],
+      'dependencies': [ 'pdf.gyp:nopdf' ],
+      'sources!': [ '<!@(python find.py ../tests "PDF*.c*")', ],
+    }],
+    [ 'skia_gpu_extra_tests_path', {
+      'sources': [
+        '<!@(python find.py <(skia_gpu_extra_tests_path) "*.c*")',
       ],
     }],
   ],
   'sources': [
     '../tests/Test.h',
     '<!@(python find.py ../tests "*.c*")',
-    '../src/utils/debugger/SkDrawCommand.h',
-    '../src/utils/debugger/SkDrawCommand.cpp',
-    '../src/utils/debugger/SkDebugCanvas.h',
-    '../src/utils/debugger/SkDebugCanvas.cpp',
-    '../src/utils/debugger/SkObjectParser.h',
-    '../src/utils/debugger/SkObjectParser.cpp',
-    '../src/pipe/utils/SamplePipeControllers.cpp',
-    '../experimental/PdfViewer/src/SkTDStackNester.h',
+    '../tools/debugger/SkDrawCommand.h',
+    '../tools/debugger/SkDrawCommand.cpp',
+    '../tools/debugger/SkDebugCanvas.h',
+    '../tools/debugger/SkDebugCanvas.cpp',
+    '../tools/debugger/SkJsonWriteBuffer.h',
+    '../tools/debugger/SkJsonWriteBuffer.cpp',
+    '../tools/debugger/SkObjectParser.h',
+    '../tools/debugger/SkObjectParser.cpp',
+    '../tools/debugger/SkOverdrawMode.h',
+    '../tools/debugger/SkOverdrawMode.cpp',
   ],
   'sources!': [
     '../tests/SkpSkGrTest.cpp',

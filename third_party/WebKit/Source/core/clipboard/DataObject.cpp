@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/clipboard/DataObject.h"
 
 #include "core/clipboard/DraggedIsolatedFileSystem.h"
@@ -38,24 +37,34 @@
 #include "public/platform/Platform.h"
 #include "public/platform/WebClipboard.h"
 #include "public/platform/WebDragData.h"
+#include "wtf/HashSet.h"
 
 namespace blink {
 
 DataObject* DataObject::createFromPasteboard(PasteMode pasteMode)
 {
     DataObject* dataObject = create();
+#if DCHECK_IS_ON()
+    HashSet<String> typesSeen;
+#endif
     WebClipboard::Buffer buffer = Pasteboard::generalPasteboard()->buffer();
     uint64_t sequenceNumber = Platform::current()->clipboard()->sequenceNumber(buffer);
     bool ignored;
     WebVector<WebString> webTypes = Platform::current()->clipboard()->readAvailableTypes(buffer, &ignored);
-    ListHashSet<String> types;
-    for (size_t i = 0; i < webTypes.size(); ++i)
-        types.add(webTypes[i]);
-    for (const String& type : types) {
+    for (const WebString& type : webTypes) {
         if (pasteMode == PlainTextOnly && type != mimeTypeTextPlain)
             continue;
-        dataObject->m_itemList.append(DataObjectItem::createFromPasteboard(type, sequenceNumber));
+        dataObject->m_itemList.push_back(
+            DataObjectItem::createFromPasteboard(type, sequenceNumber));
+        ASSERT(typesSeen.add(type).isNewEntry);
     }
+    return dataObject;
+}
+
+DataObject* DataObject::createFromString(const String& data)
+{
+    DataObject* dataObject = create();
+    dataObject->add(data, mimeTypeTextPlain);
     return dataObject;
 }
 
@@ -64,9 +73,7 @@ DataObject* DataObject::create()
     return new DataObject;
 }
 
-DataObject::~DataObject()
-{
-}
+DataObject::~DataObject() { }
 
 size_t DataObject::length() const
 {
@@ -106,7 +113,17 @@ DataObjectItem* DataObject::add(File* file)
         return nullptr;
 
     DataObjectItem* item = DataObjectItem::createFromFile(file);
-    m_itemList.append(item);
+    internalAddFileItem(item);
+    return item;
+}
+
+DataObjectItem* DataObject::add(File* file, const String& fileSystemId)
+{
+    if (!file)
+        return nullptr;
+
+    DataObjectItem* item = DataObjectItem::createFromFileWithFileSystemId(file, fileSystemId);
+    internalAddFileItem(item);
     return item;
 }
 
@@ -121,28 +138,35 @@ void DataObject::clearData(const String& type)
     }
 }
 
-ListHashSet<String> DataObject::types() const
+Vector<String> DataObject::types() const
 {
-    ListHashSet<String> results;
+    Vector<String> results;
+#if DCHECK_IS_ON()
+    HashSet<String> typesSeen;
+#endif
     bool containsFiles = false;
-    for (size_t i = 0; i < m_itemList.size(); ++i) {
-        switch (m_itemList[i]->kind()) {
+    for (const auto& item : m_itemList) {
+        switch (item->kind()) {
         case DataObjectItem::StringKind:
-            results.add(m_itemList[i]->type());
+            // Per the spec, type must be unique among all items of kind 'string'.
+            results.push_back(item->type());
+            ASSERT(typesSeen.add(item->type()).isNewEntry);
             break;
         case DataObjectItem::FileKind:
             containsFiles = true;
             break;
         }
     }
-    if (containsFiles)
-        results.add(mimeTypeFiles);
+    if (containsFiles) {
+        results.push_back(mimeTypeFiles);
+        ASSERT(typesSeen.add(mimeTypeFiles).isNewEntry);
+    }
     return results;
 }
 
 String DataObject::getData(const String& type) const
 {
-    for (size_t i = 0; i < m_itemList.size(); ++i)  {
+    for (size_t i = 0; i < m_itemList.size(); ++i) {
         if (m_itemList[i]->kind() == DataObjectItem::StringKind && m_itemList[i]->type() == type)
             return m_itemList[i]->getAsString();
     }
@@ -201,19 +225,24 @@ Vector<String> DataObject::filenames() const
     Vector<String> results;
     for (size_t i = 0; i < m_itemList.size(); ++i) {
         if (m_itemList[i]->isFilename())
-            results.append(toFile(m_itemList[i]->getAsFile())->path());
+            results.push_back(toFile(m_itemList[i]->getAsFile())->path());
     }
     return results;
 }
 
-void DataObject::addFilename(const String& filename, const String& displayName)
+void DataObject::addFilename(const String& filename,
+    const String& displayName,
+    const String& fileSystemId)
 {
-    internalAddFileItem(DataObjectItem::createFromFile(File::createForUserProvidedFile(filename, displayName)));
+    internalAddFileItem(DataObjectItem::createFromFileWithFileSystemId(
+        File::createForUserProvidedFile(filename, displayName), fileSystemId));
 }
 
-void DataObject::addSharedBuffer(const String& name, PassRefPtr<SharedBuffer> buffer)
+void DataObject::addSharedBuffer(const String& name,
+    PassRefPtr<SharedBuffer> buffer)
 {
-    internalAddFileItem(DataObjectItem::createFromSharedBuffer(name, buffer));
+    internalAddFileItem(
+        DataObjectItem::createFromSharedBuffer(name, std::move(buffer)));
 }
 
 DataObject::DataObject()
@@ -238,25 +267,26 @@ bool DataObject::internalAddStringItem(DataObjectItem* item)
             return false;
     }
 
-    m_itemList.append(item);
+    m_itemList.push_back(item);
     return true;
 }
 
 void DataObject::internalAddFileItem(DataObjectItem* item)
 {
     ASSERT(item->kind() == DataObjectItem::FileKind);
-    m_itemList.append(item);
+    m_itemList.push_back(item);
 }
 
 DEFINE_TRACE(DataObject)
 {
     visitor->trace(m_itemList);
-    HeapSupplementable<DataObject>::trace(visitor);
+    Supplementable<DataObject>::trace(visitor);
 }
 
 DataObject* DataObject::create(WebDragData data)
 {
     DataObject* dataObject = create();
+    bool hasFileSystem = false;
 
     WebVector<WebDragData::Item> items = data.items();
     for (unsigned i = 0; i < items.size(); ++i) {
@@ -272,24 +302,33 @@ DataObject* DataObject::create(WebDragData data)
                 dataObject->setData(item.stringType, item.stringData);
             break;
         case WebDragData::Item::StorageTypeFilename:
-            dataObject->addFilename(item.filenameData, item.displayNameData);
+            hasFileSystem = true;
+            dataObject->addFilename(item.filenameData, item.displayNameData,
+                data.filesystemId());
             break;
         case WebDragData::Item::StorageTypeBinaryData:
             // This should never happen when dragging in.
             break;
-        case WebDragData::Item::StorageTypeFileSystemFile:
-            {
-                // FIXME: The file system URL may refer a user visible file, see http://crbug.com/429077
-                FileMetadata fileMetadata;
-                fileMetadata.length = item.fileSystemFileSize;
-                dataObject->add(File::createForFileSystemFile(item.fileSystemURL, fileMetadata, File::IsNotUserVisible));
-            }
-            break;
+        case WebDragData::Item::StorageTypeFileSystemFile: {
+            // FIXME: The file system URL may refer a user visible file, see
+            // http://crbug.com/429077
+            hasFileSystem = true;
+            FileMetadata fileMetadata;
+            fileMetadata.length = item.fileSystemFileSize;
+
+            dataObject->add(
+                File::createForFileSystemFile(item.fileSystemURL, fileMetadata,
+                    File::IsNotUserVisible),
+                item.fileSystemId);
+        } break;
         }
     }
 
-    if (!data.filesystemId().isNull())
-        DraggedIsolatedFileSystem::prepareForDataObject(dataObject, data.filesystemId());
+    dataObject->setFilesystemId(data.filesystemId());
+
+    if (hasFileSystem)
+        DraggedIsolatedFileSystem::prepareForDataObject(dataObject);
+
     return dataObject;
 }
 
@@ -297,6 +336,7 @@ WebDragData DataObject::toWebDragData()
 {
     WebDragData data;
     data.initialize();
+    data.setModifierKeyState(m_modifiers);
     WebVector<WebDragData::Item> itemList(length());
 
     for (size_t i = 0; i < length(); ++i) {
@@ -322,8 +362,10 @@ WebDragData DataObject::toWebDragData()
                         item.storageType = WebDragData::Item::StorageTypeFileSystemFile;
                         item.fileSystemURL = file->fileSystemURL();
                         item.fileSystemFileSize = file->size();
+                        item.fileSystemId = originalItem->fileSystemId();
                     } else {
-                        // FIXME: support dragging constructed Files across renderers, see http://crbug.com/394955
+                        // FIXME: support dragging constructed Files across renderers, see
+                        // http://crbug.com/394955
                         item.storageType = WebDragData::Item::StorageTypeString;
                         item.stringType = "text/plain";
                         item.stringData = file->name();

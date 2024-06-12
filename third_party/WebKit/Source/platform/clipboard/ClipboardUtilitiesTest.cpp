@@ -28,26 +28,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/clipboard/ClipboardUtilities.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
 #if OS(WIN)
 const char invalidCharacters[] = "\x00/\\:*?\"<>|";
 #else
-const char invalidCharacters[] =
-    "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f"
-    "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f"
-    "\x7f/";
+const char invalidCharacters[] = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f"
+                                 "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f"
+                                 "\x7f/";
 #endif
-const char longString[] =
-    "0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,10946,17711,28657,46368,"
-    "75025,121393,196418,317811,514229,832040,1346269,2178309,3524578,5702887,9227465,14930352";
+const char longString[] = "0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,"
+                          "10946,17711,28657,46368,"
+                          "75025,121393,196418,317811,514229,832040,1346269,2178309,3524578,5702887,"
+                          "9227465,14930352";
 
 TEST(ClipboardUtilitiesTest, Normal)
 {
@@ -80,7 +79,10 @@ TEST(ClipboardUtilitiesTest, NamePlusExtensionTooLong)
     String name = String(longString) + longString;
     String extension = longString;
     validateFilename(name, extension);
-    EXPECT_EQ("0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,109", name);
+    EXPECT_EQ(
+        "0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765,"
+        "109",
+        name);
     EXPECT_EQ(longString, extension);
     EXPECT_EQ(254u, name.length() + extension.length());
 }

@@ -31,24 +31,17 @@
  */
 
 #include "bindings/core/v8/ScriptController.h"
-#include "config.h"
 
-#include "bindings/core/v8/BindingSecurity.h"
-#include "bindings/core/v8/NPV8Object.h"
-#include "bindings/core/v8/ScriptCallStackFactory.h"
 #include "bindings/core/v8/ScriptSourceCode.h"
 #include "bindings/core/v8/ScriptValue.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8Event.h"
 #include "bindings/core/v8/V8GCController.h"
 #include "bindings/core/v8/V8HTMLElement.h"
-#include "bindings/core/v8/V8NPObject.h"
 #include "bindings/core/v8/V8PerContextData.h"
 #include "bindings/core/v8/V8ScriptRunner.h"
 #include "bindings/core/v8/V8Window.h"
 #include "bindings/core/v8/WindowProxy.h"
-#include "bindings/core/v8/npruntime_impl.h"
-#include "bindings/core/v8/npruntime_priv.h"
 #include "core/dom/Document.h"
 #include "core/dom/Node.h"
 #include "core/dom/ScriptableDocumentParser.h"
@@ -62,16 +55,17 @@
 #include "core/inspector/ConsoleMessage.h"
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/inspector/InspectorTraceEvents.h"
-#include "core/inspector/ScriptCallStack.h"
+#include "core/inspector/MainThreadDebugger.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
+#include "core/loader/NavigationScheduler.h"
 #include "core/loader/ProgressTracker.h"
 #include "core/plugins/PluginView.h"
-#include "platform/NotImplemented.h"
-#include "platform/TraceEvent.h"
+#include "platform/Histogram.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/Widget.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
 #include "wtf/CurrentTime.h"
@@ -80,93 +74,82 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/TextPosition.h"
+#ifndef DISABLE_NPAPI
+#include "bindings/core/v8/npruntime_impl.h"
+#include "bindings/core/v8/npruntime_priv.h"
+#include "bindings/core/v8/NPV8Object.h"
+#include "bindings/core/v8/V8NPObject.h"
+#include "core/html/HTMLPluginElement.h"
+#endif
 
 namespace blink {
 
-bool ScriptController::canAccessFromCurrentOrigin(LocalFrame* frame)
-{
-    if (!frame)
-        return false;
-    v8::Isolate* isolate = toIsolate(frame);
-    return !isolate->InContext() || BindingSecurity::shouldAllowAccessToFrame(isolate, frame);
-}
-
 ScriptController::ScriptController(LocalFrame* frame)
-    : m_windowProxyManager(WindowProxyManager::create(*frame))
-    , m_sourceURL(0)
-    , m_windowScriptNPObject(0)
-{
-}
-
-ScriptController::~ScriptController()
+    : m_windowProxyManager(LocalWindowProxyManager::create(*frame))
+#ifndef DISABLE_NPAPI
+    , m_pluginObjects(new PluginObjectMap())
+    , m_windowScriptNPObject(nullptr)
+#endif
 {
 }
 
 DEFINE_TRACE(ScriptController)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_windowProxyManager);
-#endif
-}
-
-void ScriptController::clearScriptObjects()
-{
-    PluginObjectMap::iterator it = m_pluginObjects.begin();
-    for (; it != m_pluginObjects.end(); ++it) {
-        _NPN_UnregisterObject(it->value);
-        _NPN_ReleaseObject(it->value);
-    }
-
-    m_pluginObjects.clear();
-
-    if (m_windowScriptNPObject) {
-        // Dispose of the underlying V8 object before releasing our reference
-        // to it, so that if a plugin fails to release it properly we will
-        // only leak the NPObject wrapper, not the object, its document, or
-        // anything else they reference.
-        disposeUnderlyingV8Object(isolate(), m_windowScriptNPObject);
-        _NPN_ReleaseObject(m_windowScriptNPObject);
-        m_windowScriptNPObject = 0;
-    }
 }
 
 void ScriptController::clearForClose()
 {
-    double start = currentTime();
     m_windowProxyManager->clearForClose();
-    Platform::current()->histogramCustomCounts("WebCore.ScriptController.clearForClose", (currentTime() - start) * 1000, 0, 10000, 50);
+    MainThreadDebugger::instance()->didClearContextsForFrame(frame());
 }
 
-void ScriptController::updateSecurityOrigin(SecurityOrigin* origin)
+void ScriptController::updateSecurityOrigin(SecurityOrigin* securityOrigin)
 {
-    m_windowProxyManager->mainWorldProxy()->updateSecurityOrigin(origin);
+    m_windowProxyManager->updateSecurityOrigin(securityOrigin);
 }
 
-v8::MaybeLocal<v8::Value> ScriptController::callFunction(v8::Local<v8::Function> function, v8::Local<v8::Value> receiver, int argc, v8::Local<v8::Value> info[])
-{
-    // Keep LocalFrame (and therefore ScriptController) alive.
-    RefPtrWillBeRawPtr<LocalFrame> protect(frame());
-    return ScriptController::callFunction(frame()->document(), function, receiver, argc, info, isolate());
-}
+namespace {
 
-v8::MaybeLocal<v8::Value> ScriptController::callFunction(ExecutionContext* context, v8::Local<v8::Function> function, v8::Local<v8::Value> receiver, int argc, v8::Local<v8::Value> info[], v8::Isolate* isolate)
-{
-    InspectorInstrumentationCookie cookie = InspectorInstrumentation::willCallFunction(context, DevToolsFunctionInfo(function));
-    v8::MaybeLocal<v8::Value> result = V8ScriptRunner::callFunction(function, context, receiver, argc, info, isolate);
-    InspectorInstrumentation::didCallFunction(cookie);
-    return result;
-}
+    V8CacheOptions cacheOptions(const ScriptResource* resource,
+        const Settings* settings)
+    {
+        V8CacheOptions v8CacheOptions(V8CacheOptionsDefault);
+        if (settings)
+            v8CacheOptions = settings->getV8CacheOptions();
+        if (resource && !resource->response().cacheStorageCacheName().isNull()) {
+            switch (settings->getV8CacheStrategiesForCacheStorage()) {
+            case V8CacheStrategiesForCacheStorage::None:
+                v8CacheOptions = V8CacheOptionsNone;
+                break;
+            case V8CacheStrategiesForCacheStorage::Normal:
+                v8CacheOptions = V8CacheOptionsCode;
+                break;
+            case V8CacheStrategiesForCacheStorage::Default:
+            case V8CacheStrategiesForCacheStorage::Aggressive:
+                v8CacheOptions = V8CacheOptionsAlways;
+                break;
+            }
+        }
+        return v8CacheOptions;
+    }
 
-v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(v8::Local<v8::Context> context, const ScriptSourceCode& source, AccessControlStatus accessControlStatus, double* compilationFinishTime)
+} // namespace
+
+v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(
+    v8::Local<v8::Context> context,
+    const ScriptSourceCode& source,
+    AccessControlStatus accessControlStatus)
 {
-    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data", InspectorEvaluateScriptEvent::data(frame(), source.url().string(), source.startLine()));
-    InspectorInstrumentationCookie cookie = InspectorInstrumentation::willEvaluateScript(frame(), source.url().string(), source.startLine());
+    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data",
+        InspectorEvaluateScriptEvent::data(
+            frame(), source.url().getString(), source.startPosition()));
+    InspectorInstrumentation::NativeBreakpoint nativeBreakpoint(
+        frame()->document(), "scriptFirstStatement", false);
 
     v8::Local<v8::Value> result;
     {
-        V8CacheOptions v8CacheOptions(V8CacheOptionsDefault);
-        if (frame()->settings())
-            v8CacheOptions = frame()->settings()->v8CacheOptions();
+        V8CacheOptions v8CacheOptions = cacheOptions(source.resource(), frame()->settings());
 
         // Isolate exceptions that occur when compiling and executing
         // the code. These exceptions should not interfere with
@@ -176,43 +159,28 @@ v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(v8::Local<v8:
         tryCatch.SetVerbose(true);
 
         v8::Local<v8::Script> script;
-        if (!v8Call(V8ScriptRunner::compileScript(source, isolate(), accessControlStatus, v8CacheOptions), script, tryCatch))
+        if (!v8Call(V8ScriptRunner::compileScript(
+                        source, isolate(), accessControlStatus, v8CacheOptions),
+                script, tryCatch))
             return result;
 
-        if (compilationFinishTime) {
-            *compilationFinishTime = WTF::monotonicallyIncreasingTime();
-        }
-        // Keep LocalFrame (and therefore ScriptController) alive.
-        RefPtrWillBeRawPtr<LocalFrame> protect(frame());
-        if (!v8Call(V8ScriptRunner::runCompiledScript(isolate(), script, frame()->document()), result, tryCatch))
+        if (!v8Call(V8ScriptRunner::runCompiledScript(isolate(), script,
+                        frame()->document()),
+                result, tryCatch))
             return result;
     }
 
-    InspectorInstrumentation::didEvaluateScript(cookie);
-    TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", TRACE_EVENT_SCOPE_THREAD, "data", InspectorUpdateCountersEvent::data());
+    TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"),
+        "UpdateCounters", TRACE_EVENT_SCOPE_THREAD, "data",
+        InspectorUpdateCountersEvent::data());
 
     return result;
 }
 
-bool ScriptController::initializeMainWorld()
+LocalWindowProxy* ScriptController::windowProxy(DOMWrapperWorld& world)
 {
-    if (m_windowProxyManager->mainWorldProxy()->isContextInitialized())
-        return false;
-    return windowProxy(DOMWrapperWorld::mainWorld())->isContextInitialized();
-}
-
-WindowProxy* ScriptController::existingWindowProxy(DOMWrapperWorld& world)
-{
-    return m_windowProxyManager->existingWindowProxy(world);
-}
-
-WindowProxy* ScriptController::windowProxy(DOMWrapperWorld& world)
-{
-    WindowProxy* windowProxy = m_windowProxyManager->windowProxy(world);
-    if (!windowProxy->isContextInitialized() && windowProxy->initializeIfNeeded() && world.isMainWorld())
-        frame()->loader().dispatchDidClearWindowObjectInMainWorld();
-    // FIXME: There are some situations where we can return an uninitialized
-    // context. This is broken.
+    LocalWindowProxy* windowProxy = m_windowProxyManager->windowProxy(world);
+    windowProxy->initializeIfNeeded();
     return windowProxy;
 }
 
@@ -223,7 +191,8 @@ bool ScriptController::shouldBypassMainWorldCSP()
     if (context.IsEmpty() || !toDOMWindow(context))
         return false;
     DOMWrapperWorld& world = DOMWrapperWorld::current(isolate());
-    return world.isIsolatedWorld() ? world.isolatedWorldHasContentSecurityPolicy() : false;
+    return world.isIsolatedWorld() ? world.isolatedWorldHasContentSecurityPolicy()
+                                   : false;
 }
 
 TextPosition ScriptController::eventHandlerPosition() const
@@ -234,39 +203,28 @@ TextPosition ScriptController::eventHandlerPosition() const
     return TextPosition::minimumPosition();
 }
 
-// Create a V8 object with an interceptor of NPObjectPropertyGetter.
-bool ScriptController::bindToWindowObject(LocalFrame* frame, const String& key, NPObject* object)
-{
-    ScriptState* scriptState = ScriptState::forMainWorld(frame);
-    if (!scriptState->contextIsValid())
-        return false;
-
-    ScriptState::Scope scope(scriptState);
-    v8::Local<v8::Object> value = createV8ObjectForNPObject(isolate(), object, 0);
-
-    // Attach to the global object.
-    return v8CallBoolean(scriptState->context()->Global()->Set(scriptState->context(), v8String(isolate(), key), value));
-}
-
 void ScriptController::enableEval()
 {
-    if (!m_windowProxyManager->mainWorldProxy()->isContextInitialized())
-        return;
     v8::HandleScope handleScope(isolate());
-    m_windowProxyManager->mainWorldProxy()->context()->AllowCodeGenerationFromStrings(true);
+    v8::Local<v8::Context> v8Context = m_windowProxyManager->mainWorldProxy()->contextIfInitialized();
+    if (v8Context.IsEmpty())
+        return;
+    v8Context->AllowCodeGenerationFromStrings(true);
 }
 
 void ScriptController::disableEval(const String& errorMessage)
 {
-    if (!m_windowProxyManager->mainWorldProxy()->isContextInitialized())
-        return;
     v8::HandleScope handleScope(isolate());
-    v8::Local<v8::Context> v8Context = m_windowProxyManager->mainWorldProxy()->context();
+    v8::Local<v8::Context> v8Context = m_windowProxyManager->mainWorldProxy()->contextIfInitialized();
+    if (v8Context.IsEmpty())
+        return;
     v8Context->AllowCodeGenerationFromStrings(false);
-    v8Context->SetErrorMessageForCodeGenerationFromStrings(v8String(isolate(), errorMessage));
+    v8Context->SetErrorMessageForCodeGenerationFromStrings(
+        v8String(isolate(), errorMessage));
 }
 
-PassRefPtr<SharedPersistent<v8::Object>> ScriptController::createPluginWrapper(Widget* widget)
+PassRefPtr<SharedPersistent<v8::Object>> ScriptController::createPluginWrapper(
+    Widget* widget)
 {
     ASSERT(widget);
 
@@ -279,47 +237,7 @@ PassRefPtr<SharedPersistent<v8::Object>> ScriptController::createPluginWrapper(W
     if (scriptableObject.IsEmpty())
         return nullptr;
 
-    // LocalFrame Memory Management for NPObjects
-    // -------------------------------------
-    // NPObjects are treated differently than other objects wrapped by JS.
-    // NPObjects can be created either by the browser (e.g. the main
-    // window object) or by the plugin (the main plugin object
-    // for a HTMLEmbedElement). Further, unlike most DOM Objects, the frame
-    // is especially careful to ensure NPObjects terminate at frame teardown because
-    // if a plugin leaks a reference, it could leak its objects (or the browser's objects).
-    //
-    // The LocalFrame maintains a list of plugin objects (m_pluginObjects)
-    // which it can use to quickly find the wrapped embed object.
-    //
-    // Inside the NPRuntime, we've added a few methods for registering
-    // wrapped NPObjects. The purpose of the registration is because
-    // javascript garbage collection is non-deterministic, yet we need to
-    // be able to tear down the plugin objects immediately. When an object
-    // is registered, javascript can use it. When the object is destroyed,
-    // or when the object's "owning" object is destroyed, the object will
-    // be un-registered, and the javascript engine must not use it.
-    //
-    // Inside the javascript engine, the engine can keep a reference to the
-    // NPObject as part of its wrapper. However, before accessing the object
-    // it must consult the _NPN_Registry.
-    if (isWrappedNPObject(scriptableObject)) {
-        // Track the plugin object. We've been given a reference to the object.
-        m_pluginObjects.set(widget, v8ObjectToNPObject(scriptableObject));
-    }
-
     return SharedPersistent<v8::Object>::create(scriptableObject, isolate());
-}
-
-void ScriptController::cleanupScriptObjectsForPlugin(Widget* nativeHandle)
-{
-    PluginObjectMap::iterator it = m_pluginObjects.find(nativeHandle);
-    if (it == m_pluginObjects.end())
-        return;
-
-    _NPN_UnregisterObject(it->value);
-    _NPN_ReleaseObject(it->value);
-
-    m_pluginObjects.remove(it);
 }
 
 V8Extensions& ScriptController::registeredExtensions()
@@ -336,136 +254,42 @@ void ScriptController::registerExtensionIfNeeded(v8::Extension* extension)
             return;
     }
     v8::RegisterExtension(extension);
-    registeredExtensions().append(extension);
-}
-
-static NPObject* createNoScriptObject()
-{
-    notImplemented();
-    return 0;
-}
-
-static NPObject* createScriptObject(LocalFrame* frame, v8::Isolate* isolate)
-{
-    ScriptState* scriptState = ScriptState::forMainWorld(frame);
-    if (!scriptState->contextIsValid())
-        return createNoScriptObject();
-
-    ScriptState::Scope scope(scriptState);
-    LocalDOMWindow* window = frame->localDOMWindow();
-    v8::Local<v8::Value> global = toV8(window, scriptState->context()->Global(), scriptState->isolate());
-    if (global.IsEmpty())
-        return createNoScriptObject();
-    ASSERT(global->IsObject());
-
-    return npCreateV8ScriptObject(isolate, 0, v8::Local<v8::Object>::Cast(global), window);
-}
-
-NPObject* ScriptController::windowScriptNPObject()
-{
-    if (m_windowScriptNPObject)
-        return m_windowScriptNPObject;
-
-    if (canExecuteScripts(NotAboutToExecuteScript)) {
-        // JavaScript is enabled, so there is a JavaScript window object.
-        // Return an NPObject bound to the window object.
-        m_windowScriptNPObject = createScriptObject(frame(), isolate());
-        _NPN_RegisterObject(m_windowScriptNPObject, 0);
-    } else {
-        // JavaScript is not enabled, so we cannot bind the NPObject to the
-        // JavaScript window object. Instead, we create an NPObject of a
-        // different class, one which is not bound to a JavaScript object.
-        m_windowScriptNPObject = createNoScriptObject();
-    }
-    return m_windowScriptNPObject;
-}
-
-NPObject* ScriptController::createScriptObjectForPluginElement(HTMLPlugInElement* plugin)
-{
-    // Can't create NPObjects when JavaScript is disabled.
-    if (!canExecuteScripts(NotAboutToExecuteScript))
-        return createNoScriptObject();
-
-    ScriptState* scriptState = ScriptState::forMainWorld(frame());
-    if (!scriptState->contextIsValid())
-        return createNoScriptObject();
-
-    ScriptState::Scope scope(scriptState);
-    LocalDOMWindow* window = frame()->localDOMWindow();
-    v8::Local<v8::Value> v8plugin = toV8(plugin, scriptState->context()->Global(), scriptState->isolate());
-    if (v8plugin.IsEmpty() || !v8plugin->IsObject())
-        return createNoScriptObject();
-    return npCreateV8ScriptObject(scriptState->isolate(), 0, v8::Local<v8::Object>::Cast(v8plugin), window);
+    registeredExtensions().push_back(extension);
 }
 
 void ScriptController::clearWindowProxy()
 {
-    // V8 binding expects ScriptController::clearWindowProxy only be called
-    // when a frame is loading a new page. This creates a new context for the new page.
-
-    double start = currentTime();
-    // The V8 context must be available for |clearScriptObjects()|.
-    // The below call must be before |clearForNavigation()| which disposes the V8 context.
+#ifndef DISABLE_NPAPI
     clearScriptObjects();
-
+#endif
+    // V8 binding expects ScriptController::clearWindowProxy only be called when a
+    // frame is loading a new page. This creates a new context for the new page.
     m_windowProxyManager->clearForNavigation();
-    Platform::current()->histogramCustomCounts("WebCore.ScriptController.clearWindowProxy", (currentTime() - start) * 1000, 0, 10000, 50);
-}
-
-void ScriptController::setCaptureCallStackForUncaughtExceptions(bool value)
-{
-    v8::V8::SetCaptureStackTraceForUncaughtExceptions(value, ScriptCallStack::maxCallStackSizeToCapture, stackTraceOptions);
-}
-
-void ScriptController::collectIsolatedContexts(Vector<std::pair<ScriptState*, SecurityOrigin*>>& result)
-{
-    m_windowProxyManager->collectIsolatedContexts(result);
+    MainThreadDebugger::instance()->didClearContextsForFrame(frame());
 }
 
 void ScriptController::updateDocument()
 {
-    // For an uninitialized main window windowProxy, do not incur the cost of context initialization.
-    if (!m_windowProxyManager->mainWorldProxy()->isGlobalInitialized())
-        return;
-
-    if (!initializeMainWorld())
-        windowProxy(DOMWrapperWorld::mainWorld())->updateDocument();
+    m_windowProxyManager->mainWorldProxy()->updateDocument();
 }
 
-void ScriptController::namedItemAdded(HTMLDocument* doc, const AtomicString& name)
+bool ScriptController::canExecuteScripts(
+    ReasonForCallingCanExecuteScripts reason)
 {
-    windowProxy(DOMWrapperWorld::mainWorld())->namedItemAdded(doc, name);
-}
-
-void ScriptController::namedItemRemoved(HTMLDocument* doc, const AtomicString& name)
-{
-    windowProxy(DOMWrapperWorld::mainWorld())->namedItemRemoved(doc, name);
-}
-
-static bool isInPrivateScriptIsolateWorld(v8::Isolate* isolate)
-{
-    v8::Local<v8::Context> context = isolate->GetCurrentContext();
-    return !context.IsEmpty() && toDOMWindow(context) && DOMWrapperWorld::current(isolate).isPrivateScriptIsolatedWorld();
-}
-
-bool ScriptController::canExecuteScripts(ReasonForCallingCanExecuteScripts reason)
-{
-    // For performance reasons, we check isInPrivateScriptIsolateWorld() only if
-    // canExecuteScripts is going to return false.
-    if (!blink::RuntimeEnabledFeatures::cspCheckEnabled())
-        return true;
 
     if (frame()->document() && frame()->document()->isSandboxed(SandboxScripts)) {
-        if (isInPrivateScriptIsolateWorld(isolate()))
-            return true;
-        // FIXME: This message should be moved off the console once a solution to https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
+        // FIXME: This message should be moved off the console once a solution to
+        // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
         if (reason == AboutToExecuteScript)
-            frame()->document()->addConsoleMessage(ConsoleMessage::create(SecurityMessageSource, ErrorMessageLevel, "Blocked script execution in '" + frame()->document()->url().elidedString() + "' because the document's frame is sandboxed and the 'allow-scripts' permission is not set."));
+            frame()->document()->addConsoleMessage(ConsoleMessage::create(
+                SecurityMessageSource, ErrorMessageLevel,
+                "Blocked script execution in '" + frame()->document()->url().elidedString() + "' because the document's frame is sandboxed and the "
+                                                                                              "'allow-scripts' permission is not set."));
         return false;
     }
 
     if (frame()->document() && frame()->document()->isViewSource()) {
-        ASSERT(frame()->document()->securityOrigin()->isUnique());
+        ASSERT(frame()->document()->getSecurityOrigin()->isUnique());
         return true;
     }
 
@@ -473,46 +297,49 @@ bool ScriptController::canExecuteScripts(ReasonForCallingCanExecuteScripts reaso
     if (!client)
         return false;
     Settings* settings = frame()->settings();
-    const bool allowed = client->allowScript(settings && settings->scriptEnabled())
-        || isInPrivateScriptIsolateWorld(isolate());
+    const bool allowed = client->allowScript(settings && settings->getScriptEnabled());
     if (!allowed && reason == AboutToExecuteScript)
         client->didNotAllowScript();
     return allowed;
 }
 
-bool ScriptController::executeScriptIfJavaScriptURL(const KURL& url)
+bool ScriptController::executeScriptIfJavaScriptURL(const KURL& url,
+    Element* element)
 {
     if (!protocolIsJavaScript(url))
         return false;
 
     bool shouldBypassMainWorldContentSecurityPolicy = ContentSecurityPolicy::shouldBypassMainWorld(frame()->document());
-    if (!frame()->page()
-        || (!shouldBypassMainWorldContentSecurityPolicy && !frame()->document()->contentSecurityPolicy()->allowJavaScriptURLs(frame()->document()->url(), eventHandlerPosition().m_line)))
+    if (!frame()->page() || (!shouldBypassMainWorldContentSecurityPolicy && !frame()->document()->contentSecurityPolicy()->allowJavaScriptURLs(element, frame()->document()->url(), eventHandlerPosition().m_line))) {
         return true;
+    }
 
-    if (frame()->loader().stateMachine()->isDisplayingInitialEmptyDocument())
+    bool progressNotificationsNeeded = frame()->loader().stateMachine()->isDisplayingInitialEmptyDocument() && !frame()->isLoading();
+    if (progressNotificationsNeeded)
         frame()->loader().progress().progressStarted();
 
-    // We need to hold onto the LocalFrame here because executing script can
-    // destroy the frame.
-    RefPtrWillBeRawPtr<LocalFrame> protect(frame());
-    RefPtrWillBeRawPtr<Document> ownerDocument(frame()->document());
+    Document* ownerDocument = frame()->document();
 
     const int javascriptSchemeLength = sizeof("javascript:") - 1;
 
     bool locationChangeBefore = frame()->navigationScheduler().locationChangePending();
 
-    String decodedURL = decodeURLEscapeSequences(url.string());
+    String decodedURL = decodeURLEscapeSequences(url.getString());
     v8::HandleScope handleScope(isolate());
-    v8::Local<v8::Value> result = evaluateScriptInMainWorld(ScriptSourceCode(decodedURL.substring(javascriptSchemeLength)), NotSharableCrossOrigin, DoNotExecuteScriptWhenScriptsDisabled);
+    v8::Local<v8::Value> result = evaluateScriptInMainWorld(
+        ScriptSourceCode(decodedURL.substring(javascriptSchemeLength)),
+        NotSharableCrossOrigin, DoNotExecuteScriptWhenScriptsDisabled);
 
     // If executing script caused this frame to be removed from the page, we
     // don't want to try to replace its document!
     if (!frame()->page())
         return true;
 
-    if (result.IsEmpty() || !result->IsString())
+    if (result.IsEmpty() || !result->IsString()) {
+        if (progressNotificationsNeeded)
+            frame()->loader().progress().progressCompleted();
         return true;
+    }
     String scriptResult = toCoreString(v8::Local<v8::String>::Cast(result));
 
     // We're still in a frame, so there should be a DocumentLoader.
@@ -520,48 +347,54 @@ bool ScriptController::executeScriptIfJavaScriptURL(const KURL& url)
     if (!locationChangeBefore && frame()->navigationScheduler().locationChangePending())
         return true;
 
-    frame()->loader().replaceDocumentWhileExecutingJavaScriptURL(scriptResult, ownerDocument.get());
+    frame()->loader().replaceDocumentWhileExecutingJavaScriptURL(scriptResult,
+        ownerDocument);
     return true;
 }
 
-void ScriptController::executeScriptInMainWorld(const String& script, ExecuteScriptPolicy policy)
+void ScriptController::executeScriptInMainWorld(const String& script,
+    ExecuteScriptPolicy policy)
 {
     v8::HandleScope handleScope(isolate());
-    evaluateScriptInMainWorld(ScriptSourceCode(script), NotSharableCrossOrigin, policy);
+    evaluateScriptInMainWorld(ScriptSourceCode(script), NotSharableCrossOrigin,
+        policy);
 }
 
-void ScriptController::executeScriptInMainWorld(const ScriptSourceCode& sourceCode, AccessControlStatus accessControlStatus, double* compilationFinishTime)
+void ScriptController::executeScriptInMainWorld(
+    const ScriptSourceCode& sourceCode,
+    AccessControlStatus accessControlStatus)
 {
     v8::HandleScope handleScope(isolate());
-    evaluateScriptInMainWorld(sourceCode, accessControlStatus, DoNotExecuteScriptWhenScriptsDisabled, compilationFinishTime);
+    evaluateScriptInMainWorld(sourceCode, accessControlStatus,
+        DoNotExecuteScriptWhenScriptsDisabled);
 }
 
-v8::Local<v8::Value> ScriptController::executeScriptInMainWorldAndReturnValue(const ScriptSourceCode& sourceCode)
+v8::Local<v8::Value> ScriptController::executeScriptInMainWorldAndReturnValue(
+    const ScriptSourceCode& sourceCode,
+    ExecuteScriptPolicy policy)
 {
-    return evaluateScriptInMainWorld(sourceCode, NotSharableCrossOrigin, DoNotExecuteScriptWhenScriptsDisabled);
+    return evaluateScriptInMainWorld(sourceCode, NotSharableCrossOrigin, policy);
 }
 
-v8::Local<v8::Value> ScriptController::evaluateScriptInMainWorld(const ScriptSourceCode& sourceCode, AccessControlStatus accessControlStatus, ExecuteScriptPolicy policy, double* compilationFinishTime)
+v8::Local<v8::Value> ScriptController::evaluateScriptInMainWorld(
+    const ScriptSourceCode& sourceCode,
+    AccessControlStatus accessControlStatus,
+    ExecuteScriptPolicy policy)
 {
     if (policy == DoNotExecuteScriptWhenScriptsDisabled && !canExecuteScripts(AboutToExecuteScript))
         return v8::Local<v8::Value>();
 
-    String sourceURL = sourceCode.url();
-    const String* savedSourceURL = m_sourceURL;
-    m_sourceURL = &sourceURL;
-
     ScriptState* scriptState = ScriptState::forMainWorld(frame());
-    if (!scriptState->contextIsValid())
+    if (!scriptState)
         return v8::Local<v8::Value>();
     v8::EscapableHandleScope handleScope(isolate());
     ScriptState::Scope scope(scriptState);
 
-    RefPtrWillBeRawPtr<LocalFrame> protect(frame());
     if (frame()->loader().stateMachine()->isDisplayingInitialEmptyDocument())
         frame()->loader().didAccessInitialDocument();
 
-    v8::Local<v8::Value> object = executeScriptAndReturnValue(scriptState->context(), sourceCode, accessControlStatus, compilationFinishTime);
-    m_sourceURL = savedSourceURL;
+    v8::Local<v8::Value> object = executeScriptAndReturnValue(
+        scriptState->context(), sourceCode, accessControlStatus);
 
     if (object.IsEmpty())
         return v8::Local<v8::Value>();
@@ -569,16 +402,18 @@ v8::Local<v8::Value> ScriptController::evaluateScriptInMainWorld(const ScriptSou
     return handleScope.Escape(object);
 }
 
-void ScriptController::executeScriptInIsolatedWorld(int worldID, const WillBeHeapVector<ScriptSourceCode>& sources, int extensionGroup, Vector<v8::Local<v8::Value>>* results)
+void ScriptController::executeScriptInIsolatedWorld(
+    int worldID,
+    const HeapVector<ScriptSourceCode>& sources,
+    Vector<v8::Local<v8::Value>>* results)
 {
     ASSERT(worldID > 0);
 
-    RefPtr<DOMWrapperWorld> world = DOMWrapperWorld::ensureIsolatedWorld(isolate(), worldID, extensionGroup);
-    WindowProxy* isolatedWorldWindowProxy = windowProxy(*world);
-    if (!isolatedWorldWindowProxy->isContextInitialized())
+    RefPtr<DOMWrapperWorld> world = DOMWrapperWorld::ensureIsolatedWorld(isolate(), worldID);
+    LocalWindowProxy* isolatedWorldWindowProxy = windowProxy(*world);
+    ScriptState* scriptState = isolatedWorldWindowProxy->getScriptState();
+    if (!scriptState->contextIsValid())
         return;
-
-    ScriptState* scriptState = isolatedWorldWindowProxy->scriptState();
     v8::Context::Scope scope(scriptState->context());
     v8::Local<v8::Array> resultArray = v8::Array::New(isolate(), sources.size());
 
@@ -586,7 +421,8 @@ void ScriptController::executeScriptInIsolatedWorld(int worldID, const WillBeHea
         v8::Local<v8::Value> evaluationResult = executeScriptAndReturnValue(scriptState->context(), sources[i]);
         if (evaluationResult.IsEmpty())
             evaluationResult = v8::Local<v8::Value>::New(isolate(), v8::Undefined(isolate()));
-        if (!v8CallBoolean(resultArray->Set(scriptState->context(), v8::Integer::New(scriptState->isolate(), i), evaluationResult)))
+        if (!v8CallBoolean(resultArray->CreateDataProperty(scriptState->context(),
+                i, evaluationResult)))
             return;
     }
 
@@ -595,9 +431,164 @@ void ScriptController::executeScriptInIsolatedWorld(int worldID, const WillBeHea
             v8::Local<v8::Value> value;
             if (!resultArray->Get(scriptState->context(), i).ToLocal(&value))
                 return;
-            results->append(value);
+            results->push_back(value);
         }
     }
 }
+
+#ifndef DISABLE_NPAPI
+
+void* ScriptController::createPluginWrapper(void* widget)
+{
+    //   ASSERT(widget);
+    // 
+    // //   if (!widget->isPluginView())
+    // //     return nullptr;
+    // 
+    //   v8::HandleScope handleScope(isolate());
+    //   v8::Local<v8::Object> scriptableObject = toPluginView(widget)->scriptableObject(isolate());
+    // 
+    //   if (scriptableObject.IsEmpty())
+    //     return nullptr;
+    // 
+    //   // LocalFrame Memory Management for NPObjects
+    //   // -------------------------------------
+    //   // NPObjects are treated differently than other objects wrapped by JS.
+    //   // NPObjects can be created either by the browser (e.g. the main
+    //   // window object) or by the plugin (the main plugin object
+    //   // for a HTMLEmbedElement). Further, unlike most DOM Objects, the frame
+    //   // is especially careful to ensure NPObjects terminate at frame teardown because
+    //   // if a plugin leaks a reference, it could leak its objects (or the browser's objects).
+    //   //
+    //   // The LocalFrame maintains a list of plugin objects (m_pluginObjects)
+    //   // which it can use to quickly find the wrapped embed object.
+    //   //
+    //   // Inside the NPRuntime, we've added a few methods for registering
+    //   // wrapped NPObjects. The purpose of the registration is because
+    //   // javascript garbage collection is non-deterministic, yet we need to
+    //   // be able to tear down the plugin objects immediately. When an object
+    //   // is registered, javascript can use it. When the object is destroyed,
+    //   // or when the object's "owning" object is destroyed, the object will
+    //   // be un-registered, and the javascript engine must not use it.
+    //   //
+    //   // Inside the javascript engine, the engine can keep a reference to the
+    //   // NPObject as part of its wrapper. However, before accessing the object
+    //   // it must consult the _NPN_Registry.
+    // 
+    //   if (isWrappedNPObject(scriptableObject)) {
+    //     // Track the plugin object. We've been given a reference to the object.
+    //     m_pluginObjects->set(widget, v8ObjectToNPObject(scriptableObject));
+    //   }
+    // 
+    //   return SharedPersistent<v8::Object>::create(scriptableObject, isolate());
+    return nullptr;
+}
+
+void ScriptController::cleanupScriptObjectsForPlugin(void* nativeHandle)
+{
+    PluginObjectMap::iterator it = m_pluginObjects->find(nativeHandle);
+    if (it == m_pluginObjects->end())
+        return;
+    _NPN_UnregisterObject(it->value);
+    _NPN_ReleaseObject(it->value);
+    m_pluginObjects->remove(it);
+}
+
+void ScriptController::clearScriptObjects()
+{
+    PluginObjectMap::iterator it = m_pluginObjects->begin();
+    for (; it != m_pluginObjects->end(); ++it) {
+        _NPN_UnregisterObject(it->value);
+        _NPN_ReleaseObject(it->value);
+    }
+    m_pluginObjects->clear();
+
+    if (m_windowScriptNPObject) {
+        // Dispose of the underlying V8 object before releasing our reference
+        // to it, so that if a plugin fails to release it properly we will
+        // only leak the NPObject wrapper, not the object, its document, or
+        // anything else they reference.
+        disposeUnderlyingV8Object(isolate(), m_windowScriptNPObject);
+        _NPN_ReleaseObject(m_windowScriptNPObject);
+        m_windowScriptNPObject = nullptr;
+    }
+}
+
+static NPObject* createNoScriptObject()
+{
+    DebugBreak();
+    return 0;
+}
+
+static NPObject* createScriptObject(LocalFrame* frame, v8::Isolate* isolate)
+{
+    v8::HandleScope handleScope(isolate);
+    ScriptState* scriptState = ScriptState::from(toV8ContextEvenIfDetached(frame, DOMWrapperWorld::mainWorld()));
+
+    if (!scriptState->contextIsValid())
+        return createNoScriptObject();
+
+    ScriptState::Scope scope(scriptState);
+    LocalDOMWindow* window = frame->domWindow();
+    v8::Local<v8::Value> global = ToV8((ScriptWrappable*)window, scriptState->context()->Global(), scriptState->isolate());
+    if (global.IsEmpty())
+        return createNoScriptObject();
+    DCHECK(global->IsObject());
+    return npCreateV8ScriptObject(isolate, 0, v8::Local<v8::Object>::Cast(global), window);
+}
+
+NPObject* ScriptController::windowScriptNPObject()
+{
+    if (m_windowScriptNPObject)
+        return m_windowScriptNPObject;
+
+    m_windowScriptNPObject = createScriptObject(frame(), isolate());
+    _NPN_RegisterObject(m_windowScriptNPObject, 0);
+
+    return m_windowScriptNPObject;
+}
+
+NPObject* ScriptController::createScriptObjectForPluginElement(HTMLPlugInElement* plugin)
+{
+    // Can't create NPObjects when JavaScript is disabled.
+    v8::HandleScope handleScope(isolate());
+    ScriptState* scriptState = ScriptState::from(toV8ContextEvenIfDetached(frame(), DOMWrapperWorld::mainWorld()));
+
+    if (!scriptState->contextIsValid())
+        return createNoScriptObject();
+
+    ScriptState::Scope scope(scriptState);
+    LocalDOMWindow* window = frame()->domWindow();
+    v8::Local<v8::Value> v8plugin = ToV8(plugin, scriptState->context()->Global(), scriptState->isolate());
+    if (v8plugin.IsEmpty() || !v8plugin->IsObject())
+        return createNoScriptObject();
+
+    return npCreateV8ScriptObject(scriptState->isolate(), 0, v8::Local<v8::Object>::Cast(v8plugin), window);
+}
+
+bool ScriptController::bindToWindowObject(LocalFrame*, const String& key, NPObject* object)
+{
+    v8::HandleScope handleScope(isolate());
+    ScriptState* scriptState = ScriptState::from(toV8ContextEvenIfDetached(frame(), DOMWrapperWorld::mainWorld()));
+
+    if (!scriptState->contextIsValid())
+        return false;
+
+    ScriptState::Scope scope(scriptState);
+    v8::Local<v8::Object> value = createV8ObjectForNPObject(isolate(), object, 0);
+
+    // Attach to the global object.
+    v8::Maybe<bool> maybe = scriptState->context()->Global()->Set(scriptState->context(), v8String(isolate(), key), value);
+    if (maybe.IsNothing())
+        return false;
+    return maybe.FromJust();
+}
+
+ScriptController::~ScriptController()
+{
+    delete m_pluginObjects;
+}
+
+#endif // DISABLE_NPAPI
 
 } // namespace blink

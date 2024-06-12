@@ -39,7 +39,6 @@ namespace blink {
 class DataObject;
 class DocumentFragment;
 class LocalFrame;
-class Range;
 
 enum DragApplicationFlags {
     DragApplicationNone = 0,
@@ -51,23 +50,36 @@ enum DragApplicationFlags {
 
 class CORE_EXPORT DragData {
     STACK_ALLOCATED();
-public:
-    enum FilenameConversionPolicy { DoNotConvertFilenames, ConvertFilenames };
 
-    // clientPosition is taken to be the position of the drag event within the target window, with (0,0) at the top left
-    DragData(DataObject*, const IntPoint& clientPosition, const IntPoint& globalPosition, DragOperation, DragApplicationFlags = DragApplicationNone);
+public:
+    enum FilenameConversionPolicy { DoNotConvertFilenames,
+        ConvertFilenames };
+
+    // clientPosition is taken to be the position of the drag event within the
+    // target window, with (0,0) at the top left.
+    DragData(DataObject*,
+        const IntPoint& clientPosition,
+        const IntPoint& globalPosition,
+        DragOperation,
+        DragApplicationFlags = DragApplicationNone);
     const IntPoint& clientPosition() const { return m_clientPosition; }
     const IntPoint& globalPosition() const { return m_globalPosition; }
     DragApplicationFlags flags() const { return m_applicationFlags; }
     DataObject* platformData() const { return m_platformDragData; }
-    DragOperation draggingSourceOperationMask() const { return m_draggingSourceOperationMask; }
-    bool containsURL(FilenameConversionPolicy filenamePolicy = ConvertFilenames) const;
+    DragOperation draggingSourceOperationMask() const
+    {
+        return m_draggingSourceOperationMask;
+    }
+    bool containsURL(
+        FilenameConversionPolicy filenamePolicy = ConvertFilenames) const;
     bool containsPlainText() const;
     bool containsCompatibleContent() const;
-    String asURL(FilenameConversionPolicy filenamePolicy = ConvertFilenames, String* title = nullptr) const;
+    String asURL(FilenameConversionPolicy filenamePolicy = ConvertFilenames,
+        String* title = nullptr) const;
     String asPlainText() const;
     void asFilePaths(Vector<String>&) const;
-    PassRefPtrWillBeRawPtr<DocumentFragment> asFragment(LocalFrame*, PassRefPtrWillBeRawPtr<Range> context, bool allowPlainText, bool& chosePlainText) const;
+    unsigned numberOfFiles() const;
+    DocumentFragment* asFragment(LocalFrame*) const;
     bool canSmartReplace() const;
     bool containsFiles() const;
     int modifiers() const;
@@ -75,13 +87,15 @@ public:
     String droppedFileSystemId() const;
 
 private:
-    IntPoint m_clientPosition;
-    IntPoint m_globalPosition;
-    Member<DataObject> m_platformDragData;
-    DragOperation m_draggingSourceOperationMask;
-    DragApplicationFlags m_applicationFlags;
+    const IntPoint m_clientPosition;
+    const IntPoint m_globalPosition;
+    const Member<DataObject> m_platformDragData;
+    const DragOperation m_draggingSourceOperationMask;
+    const DragApplicationFlags m_applicationFlags;
+
+    bool containsHTML() const;
 };
 
-}
+} // namespace blink
 
 #endif // !DragData_h

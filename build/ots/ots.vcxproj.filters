@@ -1,53 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{3b7c378c-516b-4b03-916e-910e87661465}</UniqueIdentifier>
     </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{f94efebc-4530-40dc-8339-739bad2e97c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="brotli">
-      <UniqueIdentifier>{947533f8-c893-4704-9677-16cd32188d77}</UniqueIdentifier>
+    <Filter Include="src\libpng">
+      <UniqueIdentifier>{bae7b74a-dd6c-4979-9534-f5bd7597cad2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="brotli\dec">
-      <UniqueIdentifier>{fbd48b5c-55f6-4b85-b3ef-1e16f64d798f}</UniqueIdentifier>
+    <Filter Include="src\libjpeg">
+      <UniqueIdentifier>{12c7ed51-e48c-4cdd-b3cb-1c7e1c96a993}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sfntly">
-      <UniqueIdentifier>{7ab3b91f-c0f7-478d-9c12-43c51ccef292}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sample">
-      <UniqueIdentifier>{f3ebd87e-a87d-45a1-82bc-b50d1ccc78d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly">
-      <UniqueIdentifier>{aa0916bb-4f7f-43f9-90ee-17d2bd841ece}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\data">
-      <UniqueIdentifier>{5fa58e01-6fb5-4481-aa56-d5c5ea8096d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\math">
-      <UniqueIdentifier>{3700528d-aff2-44f1-9cb6-8e90be75cae4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\port">
-      <UniqueIdentifier>{b2164821-e664-48c3-bd3e-b73f0288dedf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\table">
-      <UniqueIdentifier>{3c52ce37-e92d-4458-bcd5-39459cf53f95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\table\bitmap">
-      <UniqueIdentifier>{4e26551e-5197-40ae-9e36-dc45e02358f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\table\core">
-      <UniqueIdentifier>{cc22dad7-e882-4f1a-93c4-c97b6ca569c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sfntly\sfntly\table\truetype">
-      <UniqueIdentifier>{965a898f-9318-4420-bfe2-82b3a1234fee}</UniqueIdentifier>
+    <Filter Include="src\brotli">
+      <UniqueIdentifier>{a6940a28-81fe-44b3-b08e-8af127d17f4c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\third_party\ots\src\vdmx.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -147,233 +138,95 @@
     <ClInclude Include="..\..\third_party\ots\include\opentype-sanitiser.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\dictionary.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jconfig.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\huffman.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jdct.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\port.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jerror.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\prefix.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jinclude.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\state.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jmemsys.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\streams.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jmorecfg.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\transform.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jpegint.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\types.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jpeglib.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\bit_reader.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libjpeg\jversion.h">
+      <Filter>src\libjpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\brotli\dec\context.h">
-      <Filter>brotli\dec</Filter>
+    <ClInclude Include="..\..\third_party\libpng\pngpriv.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\pngstruct.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\png.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\pngconf.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\pngdebug.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\pnginfo.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libpng\pnglibconf.h">
+      <Filter>src\libpng</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libjpeg\iccjpeg.h">
+      <Filter>src\libpng</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\brotli\dec\decode.h">
-      <Filter>brotli\dec</Filter>
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sample\chromium\subsetter_impl.h">
-      <Filter>sfntly\sample</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\dictionary.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sample\chromium\font_subsetter.h">
-      <Filter>sfntly\sample</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\huffman.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\font.h">
-      <Filter>sfntly\sfntly</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\port.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\font_factory.h">
-      <Filter>sfntly\sfntly</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\prefix.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\tag.h">
-      <Filter>sfntly\sfntly</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\state.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_input_stream.h">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\streams.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_output_stream.h">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\transform.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\growable_memory_byte_array.h">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\types.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\memory_byte_array.h">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\bit_reader.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\readable_font_data.h">
-      <Filter>sfntly\sfntly\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\writable_font_data.h">
-      <Filter>sfntly\sfntly\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\byte_array.h">
-      <Filter>sfntly\sfntly\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_data.h">
-      <Filter>sfntly\sfntly\data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\math\fixed1616.h">
-      <Filter>sfntly\sfntly\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\math\font_math.h">
-      <Filter>sfntly\sfntly\math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\file_input_stream.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\input_stream.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\java_iterator.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\lock.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\logging.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\memory_input_stream.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\memory_output_stream.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\output_stream.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\refcount.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\type.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\atomic.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\config.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\endian.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\exception_type.h">
-      <Filter>sfntly\sfntly\port</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\byte_array_table_builder.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\font_data_table.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\generic_table_builder.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\header.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\subtable.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\subtable_container_table.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\table.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\table_based_table_builder.h">
-      <Filter>sfntly\sfntly\table</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format1.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format2.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format3.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format4.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format5.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\simple_bitmap_glyph.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\small_glyph_metrics.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\big_glyph_metrics.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_glyph.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_glyph_info.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_size_table.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\composite_bitmap_glyph.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\ebdt_table.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\eblc_table.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\ebsc_table.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\glyph_metrics.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table.h">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\font_header_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_device_metrics_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_header_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_metrics_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\maximum_profile_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\name_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\os2_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\cmap_table.h">
-      <Filter>sfntly\sfntly\table\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\truetype\glyph_table.h">
-      <Filter>sfntly\sfntly\table\truetype</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\truetype\loca_table.h">
-      <Filter>sfntly\sfntly\table\truetype</Filter>
+    <ClInclude Include="..\..\third_party\brotli\dec\context.h">
+      <Filter>src\brotli</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\vdmx.cc">
       <Filter>src</Filter>
     </ClCompile>
@@ -464,179 +317,212 @@
     <ClCompile Include="..\..\third_party\ots\src\prep.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\dictionary.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcarith.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\huffman.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jccoefct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\state.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jccolor.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\streams.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcdctmgr.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\bit_reader.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jchuff.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\brotli\dec\decode.c">
-      <Filter>brotli\dec</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcinit.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sample\chromium\font_subsetter.cc">
-      <Filter>sfntly\sample</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcmainct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\font_factory.cc">
-      <Filter>sfntly\sfntly</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcmarker.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\tag.cc">
-      <Filter>sfntly\sfntly</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcmaster.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\font.cc">
-      <Filter>sfntly\sfntly</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcomapi.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_input_stream.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcparam.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_output_stream.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcprepct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\growable_memory_byte_array.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcsample.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\memory_byte_array.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jctrans.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\readable_font_data.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdapimin.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\writable_font_data.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdapistd.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\byte_array.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdarith.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\data\font_data.cc">
-      <Filter>sfntly\sfntly\data</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdatadst.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\file_input_stream.cc">
-      <Filter>sfntly\sfntly\port</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdatasrc.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\lock.cc">
-      <Filter>sfntly\sfntly\port</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdcoefct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\memory_input_stream.cc">
-      <Filter>sfntly\sfntly\port</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdcolor.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\port\memory_output_stream.cc">
-      <Filter>sfntly\sfntly\port</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jddctmgr.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\font_data_table.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdhuff.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\generic_table_builder.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdinput.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\header.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdmainct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\subtable.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdmarker.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\table.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdmaster.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\table_based_table_builder.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdmerge.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\byte_array_table_builder.cc">
-      <Filter>sfntly\sfntly\table</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdpostct.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format1.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdsample.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format2.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jdtrans.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format3.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jerror.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format4.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctflt.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table_format5.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctfst.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\simple_bitmap_glyph.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jfdctint.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\small_glyph_metrics.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jidctflt.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\big_glyph_metrics.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jidctfst.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_glyph.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jidctint.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_glyph_info.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jmemmgr.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\bitmap_size_table.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jmemnobs.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\composite_bitmap_glyph.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jquant1.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\ebdt_table.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jquant2.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\eblc_table.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jutils.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\ebsc_table.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jaricom.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\glyph_metrics.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcapimin.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\bitmap\index_sub_table.cc">
-      <Filter>sfntly\sfntly\table\bitmap</Filter>
+    <ClCompile Include="..\..\third_party\libjpeg\jcapistd.c">
+      <Filter>src\libjpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_device_metrics_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngmem.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_header_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngpread.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\horizontal_metrics_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngread.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\maximum_profile_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngrio.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\os2_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngrtran.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\cmap_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngrutil.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\font_header_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngset.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\truetype\loca_table.cc">
-      <Filter>sfntly\sfntly\table\truetype</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngtrans.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\truetype\glyph_table.cc">
-      <Filter>sfntly\sfntly\table\truetype</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngwio.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sample\chromium\subsetter_impl.cc">
-      <Filter>sfntly\sample</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngwrite.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\sfntly\src\cpp\src\sfntly\table\core\name_table.cc">
-      <Filter>sfntly\sfntly\table\core</Filter>
+    <ClCompile Include="..\..\third_party\libpng\pngwtran.c">
+      <Filter>src\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libpng\pngwutil.c">
+      <Filter>src\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libpng\libpng.c">
+      <Filter>src\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libpng\pngerror.c">
+      <Filter>src\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libpng\pngget.c">
+      <Filter>src\libpng</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg\iccjpeg.c">
+      <Filter>src\libpng</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\woff2.cc">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\dictionary.c">
+      <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\huffman.c">
+      <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\state.c">
+      <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\streams.c">
+      <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\bit_reader.c">
+      <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\brotli\dec\decode.c">
+      <Filter>src\brotli</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

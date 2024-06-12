@@ -28,67 +28,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8DOMWrapper.h"
 
 #include "bindings/core/v8/V8Binding.h"
-#include "bindings/core/v8/V8HTMLCollection.h"
-#include "bindings/core/v8/V8HTMLDocument.h"
+#include "bindings/core/v8/V8Location.h"
 #include "bindings/core/v8/V8ObjectConstructor.h"
 #include "bindings/core/v8/V8PerContextData.h"
 #include "bindings/core/v8/V8PerIsolateData.h"
 #include "bindings/core/v8/V8ScriptRunner.h"
 #include "bindings/core/v8/V8Window.h"
+#include "core/dom/Document.h"
+#include "core/frame/LocalDOMWindow.h"
 
 namespace blink {
 
-static v8::Local<v8::Object> wrapInShadowTemplate(v8::Local<v8::Object> wrapper, ScriptWrappable* scriptWrappable, v8::Isolate* isolate)
+v8::Local<v8::Object> V8DOMWrapper::createWrapper(
+    v8::Isolate* isolate,
+    v8::Local<v8::Object> creationContext,
+    const WrapperTypeInfo* type)
 {
-    static int shadowTemplateKey; // This address is used for a key to look up the dom template.
-    V8PerIsolateData* data = V8PerIsolateData::from(isolate);
-    v8::Local<v8::FunctionTemplate> shadowTemplate = data->existingDOMTemplate(&shadowTemplateKey);
-    if (shadowTemplate.IsEmpty()) {
-        shadowTemplate = v8::FunctionTemplate::New(isolate);
-        if (shadowTemplate.IsEmpty())
-            return v8::Local<v8::Object>();
-        shadowTemplate->SetClassName(v8AtomicString(isolate, "HTMLDocument"));
-        shadowTemplate->Inherit(V8HTMLDocument::domTemplate(isolate));
-        shadowTemplate->InstanceTemplate()->SetInternalFieldCount(V8HTMLDocument::internalFieldCount);
-        data->setDOMTemplate(&shadowTemplateKey, shadowTemplate);
-    }
-
-    v8::Local<v8::Function> shadowConstructor;
-    if (!shadowTemplate->GetFunction(isolate->GetCurrentContext()).ToLocal(&shadowConstructor))
-        return v8::Local<v8::Object>();
-
-    v8::Local<v8::Object> shadow;
-    if (!V8ScriptRunner::instantiateObject(isolate, shadowConstructor).ToLocal(&shadow))
-        return v8::Local<v8::Object>();
-    if (!v8CallBoolean(shadow->SetPrototype(isolate->GetCurrentContext(), wrapper)))
-        return v8::Local<v8::Object>();
-    V8DOMWrapper::setNativeInfo(wrapper, &V8HTMLDocument::wrapperTypeInfo, scriptWrappable);
-    return shadow;
-}
-
-v8::Local<v8::Object> V8DOMWrapper::createWrapper(v8::Isolate* isolate, v8::Local<v8::Object> creationContext, const WrapperTypeInfo* type, ScriptWrappable* scriptWrappable)
-{
-    V8WrapperInstantiationScope scope(creationContext, isolate);
+    ASSERT(!type->equals(&V8Window::wrapperTypeInfo));
+    // According to
+    // https://html.spec.whatwg.org/multipage/browsers.html#security-location,
+    // cross-origin script access to a few properties of Location is allowed.
+    // Location already implements the necessary security checks.
+    bool withSecurityCheck = !type->equals(&V8Location::wrapperTypeInfo);
+    V8WrapperInstantiationScope scope(creationContext, isolate,
+        withSecurityCheck);
 
     V8PerContextData* perContextData = V8PerContextData::from(scope.context());
     v8::Local<v8::Object> wrapper;
     if (perContextData) {
         wrapper = perContextData->createWrapperFromCache(type);
     } else {
-        v8::Local<v8::Function> function;
-        if (!type->domTemplate(isolate)->GetFunction(isolate->GetCurrentContext()).ToLocal(&function))
-            return v8::Local<v8::Object>();
-        if (!V8ObjectConstructor::newInstance(isolate, function).ToLocal(&wrapper))
-            return v8::Local<v8::Object>();
+        // The context is detached, but still accessible.
+        // TODO(yukishiino): This code does not create a wrapper with
+        // the correct settings.  Should follow the same way as
+        // V8PerContextData::createWrapperFromCache, though there is no need to
+        // cache resulting objects or their constructors.
+        const DOMWrapperWorld& world = DOMWrapperWorld::world(scope.context());
+        wrapper = type->domTemplate(isolate, world)
+                      ->InstanceTemplate()
+                      ->NewInstance(scope.context())
+                      .ToLocalChecked();
     }
-
-    if (type == &V8HTMLDocument::wrapperTypeInfo && !wrapper.IsEmpty())
-        wrapper = wrapInShadowTemplate(wrapper, scriptWrappable, isolate);
-
     return wrapper;
 }
 
@@ -119,9 +102,56 @@ bool V8DOMWrapper::hasInternalFieldsSet(v8::Local<v8::Value> value)
 
     const ScriptWrappable* untrustedScriptWrappable = toScriptWrappable(object);
     const WrapperTypeInfo* untrustedWrapperTypeInfo = toWrapperTypeInfo(object);
-    return untrustedScriptWrappable
-        && untrustedWrapperTypeInfo
-        && untrustedWrapperTypeInfo->ginEmbedder == gin::kEmbedderBlink;
+    return untrustedScriptWrappable && untrustedWrapperTypeInfo && untrustedWrapperTypeInfo->ginEmbedder == gin::kEmbedderBlink;
+}
+
+void V8WrapperInstantiationScope::securityCheck(
+    v8::Isolate* isolate,
+    v8::Local<v8::Context> contextForWrapper)
+{
+    if (m_context.IsEmpty())
+        return;
+    // If the context is different, we need to make sure that the current
+    // context has access to the creation context.
+    Frame* frame = toFrameIfNotDetached(contextForWrapper);
+    if (!frame) {
+        // Sandbox detached frames - they can't create cross origin objects.
+        LocalDOMWindow* callingWindow = currentDOMWindow(isolate);
+        DOMWindow* targetWindow = toDOMWindow(contextForWrapper);
+        // TODO(jochen): Currently, Location is the only object for which we can
+        // reach this code path. Should be generalized.
+        ExceptionState exceptionState(isolate, ExceptionState::ConstructionContext,
+            "Location");
+        if (BindingSecurity::shouldAllowAccessToDetachedWindow(
+                callingWindow, targetWindow, exceptionState))
+            return;
+
+        CHECK_EQ(SecurityError, exceptionState.code());
+        return;
+    }
+    const DOMWrapperWorld& currentWorld = DOMWrapperWorld::world(m_context);
+    RELEASE_ASSERT(currentWorld.worldId() == DOMWrapperWorld::world(contextForWrapper).worldId());
+    // TODO(jochen): Add the interface name here once this is generalized.
+    ExceptionState exceptionState(isolate, ExceptionState::ConstructionContext,
+        nullptr);
+    if (currentWorld.isMainWorld() && !BindingSecurity::shouldAllowAccessToFrame(currentDOMWindow(isolate), frame, exceptionState)) {
+        CHECK_EQ(SecurityError, exceptionState.code());
+        return;
+    }
+}
+
+void V8WrapperInstantiationScope::convertException()
+{
+    v8::Isolate* isolate = m_context->GetIsolate();
+    // TODO(jochen): Currently, Location is the only object for which we can reach
+    // this code path. Should be generalized.
+    ExceptionState exceptionState(isolate, ExceptionState::ConstructionContext,
+        "Location");
+    LocalDOMWindow* callingWindow = currentDOMWindow(isolate);
+    DOMWindow* targetWindow = toDOMWindow(m_context);
+    exceptionState.throwSecurityError(
+        targetWindow->sanitizedCrossDomainAccessErrorMessage(callingWindow),
+        targetWindow->crossDomainAccessErrorMessage(callingWindow));
 }
 
 } // namespace blink

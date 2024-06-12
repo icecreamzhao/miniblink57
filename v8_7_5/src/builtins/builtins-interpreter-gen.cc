@@ -6,44 +6,52 @@
 #include "src/globals.h"
 #include "src/macro-assembler.h"
 
+#include "src/objects-inl.h" // weolar
+
 namespace v8 {
 namespace internal {
 
-void Builtins::Generate_InterpreterPushArgsThenCall(MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenCallImpl(
-      masm, ConvertReceiverMode::kAny, InterpreterPushArgsMode::kOther);
-}
+    void Builtins::Generate_InterpreterPushArgsThenCall(MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenCallImpl(
+            masm, ConvertReceiverMode::kAny, InterpreterPushArgsMode::kOther);
+    }
 
-void Builtins::Generate_InterpreterPushUndefinedAndArgsThenCall(
-    MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenCallImpl(
-      masm, ConvertReceiverMode::kNullOrUndefined,
-      InterpreterPushArgsMode::kOther);
-}
+    void Builtins::Generate_InterpreterPushUndefinedAndArgsThenCall(
+        MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenCallImpl(
+            masm, ConvertReceiverMode::kNullOrUndefined,
+            InterpreterPushArgsMode::kOther);
+    }
 
-void Builtins::Generate_InterpreterPushArgsThenCallWithFinalSpread(
-    MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenCallImpl(
-      masm, ConvertReceiverMode::kAny,
-      InterpreterPushArgsMode::kWithFinalSpread);
-}
+    void Builtins::Generate_InterpreterPushArgsThenCallWithFinalSpread(
+        MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenCallImpl(
+            masm, ConvertReceiverMode::kAny,
+            InterpreterPushArgsMode::kWithFinalSpread);
+    }
 
-void Builtins::Generate_InterpreterPushArgsThenConstruct(MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenConstructImpl(
-      masm, InterpreterPushArgsMode::kOther);
-}
+    void Builtins::Generate_InterpreterPushArgsThenConstruct(MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenConstructImpl(
+            masm, InterpreterPushArgsMode::kOther);
+    }
 
-void Builtins::Generate_InterpreterPushArgsThenConstructWithFinalSpread(
-    MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenConstructImpl(
-      masm, InterpreterPushArgsMode::kWithFinalSpread);
-}
+    void Builtins::Generate_InterpreterPushArgsThenConstructWithFinalSpread(
+        MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenConstructImpl(
+            masm, InterpreterPushArgsMode::kWithFinalSpread);
+    }
 
-void Builtins::Generate_InterpreterPushArgsThenConstructArrayFunction(
-    MacroAssembler* masm) {
-  return Generate_InterpreterPushArgsThenConstructImpl(
-      masm, InterpreterPushArgsMode::kArrayFunction);
-}
+    void Builtins::Generate_InterpreterPushArgsThenConstructArrayFunction(
+        MacroAssembler* masm)
+    {
+        return Generate_InterpreterPushArgsThenConstructImpl(
+            masm, InterpreterPushArgsMode::kArrayFunction);
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

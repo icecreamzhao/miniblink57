@@ -37,7 +37,10 @@ class PlatformSpeechSynthesisVoice;
 class WebSpeechSynthesisVoice {
 public:
     BLINK_PLATFORM_EXPORT WebSpeechSynthesisVoice();
-    WebSpeechSynthesisVoice(const WebSpeechSynthesisVoice& other) { assign(other); }
+    WebSpeechSynthesisVoice(const WebSpeechSynthesisVoice& other)
+    {
+        assign(other);
+    }
     ~WebSpeechSynthesisVoice() { reset(); }
 
     WebSpeechSynthesisVoice& operator=(const WebSpeechSynthesisVoice& other)

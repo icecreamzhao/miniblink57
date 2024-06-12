@@ -28,13 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/vtt/BufferedLineReader.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -161,19 +160,20 @@ TEST(BufferedLineReaderTest, LineEndingCRLF_EOS)
     ASSERT_FALSE(reader.getLine(line));
 }
 
-enum LineBreakType {
-    Cr,
+enum LineBreakType { Cr,
     Lf,
-    CrLf
-};
+    CrLf };
 
 String LineBreakString(LineBreakType type)
 {
     static const char breakStrings[] = "\r\n";
-    return String(type == Lf ? breakStrings + 1 : breakStrings, type == CrLf ? 2 : 1);
+    return String(type == Lf ? breakStrings + 1 : breakStrings,
+        type == CrLf ? 2 : 1);
 }
 
-String MakeTestData(const char** lines, const LineBreakType* breaks, int count)
+String MakeTestData(const char** lines,
+    const LineBreakType* breaks,
+    int count)
 {
     StringBuilder builder;
     for (int i = 0; i < count; ++i) {
@@ -183,22 +183,17 @@ String MakeTestData(const char** lines, const LineBreakType* breaks, int count)
     return builder.toString();
 }
 
-const size_t blockSizes[] = { 64, 32, 16, 8, 4, 2, 1, 3, 5, 7, 9, 11, 13, 17, 19, 23 };
+const size_t blockSizes[] = { 64, 32, 16, 8, 4, 2, 1, 3,
+    5, 7, 9, 11, 13, 17, 19, 23 };
 
 TEST(BufferedLineReaderTest, BufferSizes)
 {
-    const char* lines[] = {
-        "aaaaaaaaaaaaaaaa",
-        "bbbbbbbbbb",
-        "ccccccccccccc",
-        "",
-        "dddddd",
-        "",
-        "eeeeeeeeee"
-    };
+    const char* lines[] = { "aaaaaaaaaaaaaaaa", "bbbbbbbbbb", "ccccccccccccc", "",
+        "dddddd", "", "eeeeeeeeee" };
     const LineBreakType breaks[] = { Lf, Lf, Lf, Lf, Lf, Lf, Lf };
     const size_t numTestLines = WTF_ARRAY_LENGTH(lines);
-    static_assert(numTestLines == WTF_ARRAY_LENGTH(breaks), "number of test lines and breaks should be the same");
+    static_assert(numTestLines == WTF_ARRAY_LENGTH(breaks),
+        "number of test lines and breaks should be the same");
     String data = MakeTestData(lines, breaks, numTestLines);
 
     for (size_t k = 0; k < WTF_ARRAY_LENGTH(blockSizes); ++k) {
@@ -221,17 +216,13 @@ TEST(BufferedLineReaderTest, BufferSizes)
 TEST(BufferedLineReaderTest, BufferSizesMixedEndings)
 {
     const char* lines[] = {
-        "aaaaaaaaaaaaaaaa",
-        "bbbbbbbbbb",
-        "ccccccccccccc",
-        "",
-        "dddddd",
-        "eeeeeeeeee",
-        "fffffffffffffffffff"
+        "aaaaaaaaaaaaaaaa", "bbbbbbbbbb", "ccccccccccccc", "",
+        "dddddd", "eeeeeeeeee", "fffffffffffffffffff"
     };
     const LineBreakType breaks[] = { Cr, Lf, CrLf, Cr, Lf, CrLf, Lf };
     const size_t numTestLines = WTF_ARRAY_LENGTH(lines);
-    static_assert(numTestLines == WTF_ARRAY_LENGTH(breaks), "number of test lines and breaks should be the same");
+    static_assert(numTestLines == WTF_ARRAY_LENGTH(breaks),
+        "number of test lines and breaks should be the same");
     String data = MakeTestData(lines, breaks, numTestLines);
 
     for (size_t k = 0; k < WTF_ARRAY_LENGTH(blockSizes); ++k) {

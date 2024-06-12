@@ -32,39 +32,44 @@
 #define AnimatableFilterOperations_h
 
 #include "core/animation/animatable/AnimatableValue.h"
-#include "platform/graphics/filters/FilterOperations.h"
+#include "core/style/FilterOperations.h"
 
 namespace blink {
 
 class AnimatableFilterOperations final : public AnimatableValue {
 public:
-    static PassRefPtrWillBeRawPtr<AnimatableFilterOperations> create(const FilterOperations& operations)
+    static PassRefPtr<AnimatableFilterOperations> create(
+        const FilterOperations& operations)
     {
-        return adoptRefWillBeNoop(new AnimatableFilterOperations(operations));
+        return adoptRef(new AnimatableFilterOperations(operations));
     }
 
-    virtual ~AnimatableFilterOperations() { }
-    DECLARE_VIRTUAL_TRACE();
+    ~AnimatableFilterOperations() override { }
 
-    const FilterOperations& operations() const { return m_operations; }
+    const FilterOperations& operations() const
+    {
+        return m_operationWrapper->operations();
+    }
 
 protected:
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
-    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
+        double fraction) const override;
+    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
     AnimatableFilterOperations(const FilterOperations& operations)
-        : m_operations(operations)
+        : m_operationWrapper(FilterOperationsWrapper::create(operations))
     {
     }
 
-    virtual bool equalTo(const AnimatableValue*) const override;
-    virtual AnimatableType type() const override { return TypeFilterOperations; }
+    bool equalTo(const AnimatableValue*) const override;
+    AnimatableType type() const override { return TypeFilterOperations; }
 
-    FilterOperations m_operations;
+    Persistent<FilterOperationsWrapper> m_operationWrapper;
 };
 
-DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableFilterOperations, isFilterOperations());
+DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableFilterOperations,
+    isFilterOperations());
 
 } // namespace blink
 

@@ -18,95 +18,99 @@
 namespace v8 {
 namespace internal {
 
-class Isolate;
-class Callable;
-class UnoptimizedCompilationJob;
-class FunctionLiteral;
-class ParseInfo;
-class RootVisitor;
-class SetupIsolateDelegate;
-template <typename>
-class ZoneVector;
+    class Isolate;
+    class Callable;
+    class UnoptimizedCompilationJob;
+    class FunctionLiteral;
+    class ParseInfo;
+    class RootVisitor;
+    class SetupIsolateDelegate;
+    template <typename>
+    class ZoneVector;
 
-namespace interpreter {
+    namespace interpreter {
 
-class InterpreterAssembler;
+        class InterpreterAssembler;
 
-class Interpreter {
- public:
-  explicit Interpreter(Isolate* isolate);
-  virtual ~Interpreter() = default;
+        class Interpreter {
+        public:
+            explicit Interpreter(Isolate* isolate);
+            virtual ~Interpreter() = default;
 
-  // Returns the interrupt budget which should be used for the profiler counter.
-  static int InterruptBudget();
+            // Returns the interrupt budget which should be used for the profiler counter.
+            V8_EXPORT_PRIVATE static int InterruptBudget();
 
-  // Creates a compilation job which will generate bytecode for |literal|.
-  // Additionally, if |eager_inner_literals| is not null, adds any eagerly
-  // compilable inner FunctionLiterals to this list.
-  static UnoptimizedCompilationJob* NewCompilationJob(
-      ParseInfo* parse_info, FunctionLiteral* literal,
-      AccountingAllocator* allocator,
-      std::vector<FunctionLiteral*>* eager_inner_literals);
+            // Creates a compilation job which will generate bytecode for |literal|.
+            // Additionally, if |eager_inner_literals| is not null, adds any eagerly
+            // compilable inner FunctionLiterals to this list.
+            static UnoptimizedCompilationJob* NewCompilationJob(
+                ParseInfo* parse_info, FunctionLiteral* literal,
+                AccountingAllocator* allocator,
+                std::vector<FunctionLiteral*>* eager_inner_literals);
 
-  // If the bytecode handler for |bytecode| and |operand_scale| has not yet
-  // been loaded, deserialize it. Then return the handler.
-  Code GetBytecodeHandler(Bytecode bytecode, OperandScale operand_scale);
+            // If the bytecode handler for |bytecode| and |operand_scale| has not yet
+            // been loaded, deserialize it. Then return the handler.
+            V8_EXPORT_PRIVATE Code GetBytecodeHandler(Bytecode bytecode,
+                OperandScale operand_scale);
 
-  // Set the bytecode handler for |bytecode| and |operand_scale|.
-  void SetBytecodeHandler(Bytecode bytecode, OperandScale operand_scale,
-                          Code handler);
+            // Set the bytecode handler for |bytecode| and |operand_scale|.
+            void SetBytecodeHandler(Bytecode bytecode, OperandScale operand_scale,
+                Code handler);
 
-  // GC support.
-  void IterateDispatchTable(RootVisitor* v);
+            // GC support.
+            void IterateDispatchTable(RootVisitor* v);
 
-  // Disassembler support (only useful with ENABLE_DISASSEMBLER defined).
-  const char* LookupNameOfBytecodeHandler(const Code code);
+            // Disassembler support (only useful with ENABLE_DISASSEMBLER defined).
+            const char* LookupNameOfBytecodeHandler(const Code code);
 
-  V8_EXPORT_PRIVATE Local<v8::Object> GetDispatchCountersObject();
+            V8_EXPORT_PRIVATE Local<v8::Object> GetDispatchCountersObject();
 
-  void ForEachBytecode(const std::function<void(Bytecode, OperandScale)>& f);
+            void ForEachBytecode(const std::function<void(Bytecode, OperandScale)>& f);
 
-  void Initialize();
+            void Initialize();
 
-  bool IsDispatchTableInitialized() const;
+            bool IsDispatchTableInitialized() const;
 
-  Address dispatch_table_address() {
-    return reinterpret_cast<Address>(&dispatch_table_[0]);
-  }
+            Address dispatch_table_address()
+            {
+                return reinterpret_cast<Address>(&dispatch_table_[0]);
+            }
 
-  Address bytecode_dispatch_counters_table() {
-    return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
-  }
+            Address bytecode_dispatch_counters_table()
+            {
+                return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
+            }
 
-  Address address_of_interpreter_entry_trampoline_instruction_start() const {
-    return reinterpret_cast<Address>(
-        &interpreter_entry_trampoline_instruction_start_);
-  }
+            Address address_of_interpreter_entry_trampoline_instruction_start() const
+            {
+                return reinterpret_cast<Address>(
+                    &interpreter_entry_trampoline_instruction_start_);
+            }
 
- private:
-  friend class SetupInterpreter;
-  friend class v8::internal::SetupIsolateDelegate;
+        private:
+            friend class SetupInterpreter;
+            friend class v8::internal::SetupIsolateDelegate;
 
-  uintptr_t GetDispatchCounter(Bytecode from, Bytecode to) const;
+            uintptr_t GetDispatchCounter(Bytecode from, Bytecode to) const;
 
-  // Get dispatch table index of bytecode.
-  static size_t GetDispatchTableIndex(Bytecode bytecode,
-                                      OperandScale operand_scale);
+            // Get dispatch table index of bytecode.
+            static size_t GetDispatchTableIndex(Bytecode bytecode,
+                OperandScale operand_scale);
 
-  static const int kNumberOfWideVariants = BytecodeOperands::kOperandScaleCount;
-  static const int kDispatchTableSize = kNumberOfWideVariants * (kMaxUInt8 + 1);
-  static const int kNumberOfBytecodes = static_cast<int>(Bytecode::kLast) + 1;
+            static const int kNumberOfWideVariants = BytecodeOperands::kOperandScaleCount;
+            static const int kDispatchTableSize = kNumberOfWideVariants * (kMaxUInt8 + 1);
+            static const int kNumberOfBytecodes = static_cast<int>(Bytecode::kLast) + 1;
 
-  Isolate* isolate_;
-  Address dispatch_table_[kDispatchTableSize];
-  std::unique_ptr<uintptr_t[]> bytecode_dispatch_counters_table_;
-  Address interpreter_entry_trampoline_instruction_start_;
+            Isolate* isolate_;
+            Address dispatch_table_[kDispatchTableSize];
+            std::unique_ptr<uintptr_t[]> bytecode_dispatch_counters_table_;
+            Address interpreter_entry_trampoline_instruction_start_;
 
-  DISALLOW_COPY_AND_ASSIGN(Interpreter);
-};
+            DISALLOW_COPY_AND_ASSIGN(Interpreter);
+        };
 
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
+    } // namespace interpreter
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_INTERPRETER_INTERPRETER_H_
+#endif // V8_INTERPRETER_INTERPRETER_H_

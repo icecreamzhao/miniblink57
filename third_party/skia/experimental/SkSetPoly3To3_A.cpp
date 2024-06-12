@@ -12,20 +12,24 @@ bool SkSetPoly3To3_A(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3
 
 typedef double SkDScalar;
 
-static SkScalar SkDScalar_toScalar(SkDScalar value) {
+static SkScalar SkDScalar_toScalar(SkDScalar value)
+{
     return static_cast<float>(value);
 }
-static SkScalar divide(SkDScalar numer, SkDScalar denom) {
+static SkScalar divide(SkDScalar numer, SkDScalar denom)
+{
     return static_cast<float>(numer / denom);
 }
 
-static SkDScalar SkDScalar_setMul(SkScalar a, SkScalar b) {
-    return (SkDScalar) ((SkDScalar) a * b);
+static SkDScalar SkDScalar_setMul(SkScalar a, SkScalar b)
+{
+    return (SkDScalar)((SkDScalar)a * b);
 }
 
 static void computeOuterProduct(SkScalar op[4],
-                                const SkPoint pts0[3], const SkPoint& ave0,
-                                const SkPoint pts1[3], const SkPoint& ave1) {
+    const SkPoint pts0[3], const SkPoint& ave0,
+    const SkPoint pts1[3], const SkPoint& ave1)
+{
     sk_bzero(op, 4 * sizeof(op[0]));
     for (int i = 0; i < 3; i++) {
         SkScalar x0 = pts0[i].fX - ave0.fX;
@@ -39,15 +43,18 @@ static void computeOuterProduct(SkScalar op[4],
     }
 }
 
-static SkDScalar ddot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by) {
+static SkDScalar ddot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by)
+{
     return SkDScalar_setMul(ax, bx) + SkDScalar_setMul(ay, by);
 }
 
-static SkScalar dot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by) {
+static SkScalar dot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by)
+{
     return SkDScalar_toScalar(ddot(ax, ay, bx, by));
 }
 
-bool SkSetPoly3To3_A(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3]) {
+bool SkSetPoly3To3_A(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3])
+{
     const SkPoint& srcAve = src[0];
     const SkPoint& dstAve = dst[0];
 
@@ -56,8 +63,7 @@ bool SkSetPoly3To3_A(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3
     computeOuterProduct(srcOP, src, srcAve, src, srcAve);
     computeOuterProduct(dstOP, src, srcAve, dst, dstAve);
 
-    SkDScalar det = SkDScalar_setMul(srcOP[0], srcOP[3]) -
-                    SkDScalar_setMul(srcOP[1], srcOP[2]);
+    SkDScalar det = SkDScalar_setMul(srcOP[0], srcOP[3]) - SkDScalar_setMul(srcOP[1], srcOP[2]);
 
     SkDScalar M[4];
 
@@ -73,12 +79,10 @@ bool SkSetPoly3To3_A(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3
 
     matrix->reset();
     matrix->setScaleX(divide(M[0], det));
-    matrix->setSkewX( divide(M[1], det));
-    matrix->setSkewY (divide(M[2], det));
+    matrix->setSkewX(divide(M[1], det));
+    matrix->setSkewY(divide(M[2], det));
     matrix->setScaleY(divide(M[3], det));
-    matrix->setTranslateX(dstAve.fX - dot(srcAve.fX, srcAve.fY,
-                                    matrix->getScaleX(), matrix->getSkewX()));
-    matrix->setTranslateY(dstAve.fY - dot(srcAve.fX, srcAve.fY,
-                                    matrix->getSkewY(), matrix->getScaleY()));
+    matrix->setTranslateX(dstAve.fX - dot(srcAve.fX, srcAve.fY, matrix->getScaleX(), matrix->getSkewX()));
+    matrix->setTranslateY(dstAve.fY - dot(srcAve.fX, srcAve.fY, matrix->getSkewY(), matrix->getScaleY()));
     return true;
 }

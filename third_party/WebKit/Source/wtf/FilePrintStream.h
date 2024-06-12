@@ -26,27 +26,28 @@
 #ifndef FilePrintStream_h
 #define FilePrintStream_h
 
-#include <stdio.h>
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Compiler.h"
 #include "wtf/PrintStream.h"
+#include <memory>
+#include <stdio.h>
 
 namespace WTF {
 
 class WTF_EXPORT FilePrintStream final : public PrintStream {
 public:
-    enum AdoptionMode {
-        Adopt,
-        Borrow
-    };
+    enum AdoptionMode { Adopt,
+        Borrow };
 
     FilePrintStream(FILE*, AdoptionMode = Adopt);
     ~FilePrintStream() override;
 
-    static PassOwnPtr<FilePrintStream> open(const char* filename, const char* mode);
+    static std::unique_ptr<FilePrintStream> open(const char* filename,
+        const char* mode);
 
     FILE* file() { return m_file; }
 
-    void vprintf(const char* format, va_list) override WTF_ATTRIBUTE_PRINTF(2, 0);
+    PRINTF_FORMAT(2, 0)
+    void vprintf(const char* format, va_list) override;
     void flush() override;
 
 private:
@@ -59,4 +60,3 @@ private:
 using WTF::FilePrintStream;
 
 #endif // FilePrintStream_h
-

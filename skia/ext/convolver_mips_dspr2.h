@@ -10,16 +10,16 @@
 namespace skia {
 
 void ConvolveVertically_mips_dspr2(const ConvolutionFilter1D::Fixed* filter_val,
-                                   int filter_length,
-                                   unsigned char* const* source_data_rows,
-                                   int pixel_width,
-                                   unsigned char* out_row,
-                                   bool has_alpha);
+    int filter_length,
+    unsigned char* const* source_data_rows,
+    int pixel_width,
+    unsigned char* out_row,
+    bool has_alpha);
 
 void ConvolveHorizontally_mips_dspr2(const unsigned char* src_data,
-                                     const ConvolutionFilter1D& filter,
-                                     unsigned char* out_row,
-                                     bool has_alpha);
-}  // namespace skia
+    const ConvolutionFilter1D& filter,
+    unsigned char* out_row,
+    bool has_alpha);
+} // namespace skia
 
-#endif  // SKIA_EXT_CONVOLVER_MIPS_DSPR2_H_
+#endif // SKIA_EXT_CONVOLVER_MIPS_DSPR2_H_

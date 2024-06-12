@@ -51,7 +51,6 @@ enum WebFocusType {
 
     WebFocusTypeLast = WebFocusTypePage
 };
-
 }
 
 #endif // WebFocusType_h

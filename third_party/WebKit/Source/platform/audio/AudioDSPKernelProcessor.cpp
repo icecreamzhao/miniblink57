@@ -28,19 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/AudioDSPKernelProcessor.h"
-
 #include "platform/audio/AudioDSPKernel.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
-// setNumberOfChannels() may later be called if the object is not yet in an "initialized" state.
-AudioDSPKernelProcessor::AudioDSPKernelProcessor(float sampleRate, unsigned numberOfChannels)
+// setNumberOfChannels() may later be called if the object is not yet in an
+// "initialized" state.
+AudioDSPKernelProcessor::AudioDSPKernelProcessor(float sampleRate,
+    unsigned numberOfChannels)
     : AudioProcessor(sampleRate, numberOfChannels)
     , m_hasJustReset(true)
 {
@@ -56,7 +52,7 @@ void AudioDSPKernelProcessor::initialize()
 
     // Create processing kernels, one per channel.
     for (unsigned i = 0; i < numberOfChannels(); ++i)
-        m_kernels.append(createKernel());
+        m_kernels.push_back(createKernel());
 
     m_initialized = true;
     m_hasJustReset = true;
@@ -73,7 +69,9 @@ void AudioDSPKernelProcessor::uninitialize()
     m_initialized = false;
 }
 
-void AudioDSPKernelProcessor::process(const AudioBus* source, AudioBus* destination, size_t framesToProcess)
+void AudioDSPKernelProcessor::process(const AudioBus* source,
+    AudioBus* destination,
+    size_t framesToProcess)
 {
     ASSERT(source && destination);
     if (!source || !destination)
@@ -92,11 +90,28 @@ void AudioDSPKernelProcessor::process(const AudioBus* source, AudioBus* destinat
             return;
 
         for (unsigned i = 0; i < m_kernels.size(); ++i)
-            m_kernels[i]->process(source->channel(i)->data(), destination->channel(i)->mutableData(), framesToProcess);
+            m_kernels[i]->process(source->channel(i)->data(),
+                destination->channel(i)->mutableData(),
+                framesToProcess);
     } else {
         // Unfortunately, the kernel is being processed by another thread.
         // See also ConvolverNode::process().
         destination->zero();
+    }
+}
+
+void AudioDSPKernelProcessor::processOnlyAudioParams(size_t framesToProcess)
+{
+    if (!isInitialized())
+        return;
+
+    MutexTryLocker tryLocker(m_processLock);
+    // Only update the AudioParams if we can get the lock.  If not, some
+    // other thread is updating the kernels, so we'll have to skip it
+    // this time.
+    if (tryLocker.locked()) {
+        for (unsigned i = 0; i < m_kernels.size(); ++i)
+            m_kernels[i]->processOnlyAudioParams(framesToProcess);
     }
 }
 
@@ -108,7 +123,8 @@ void AudioDSPKernelProcessor::reset()
         return;
 
     // Forces snap to parameter values - first time.
-    // Any processing depending on this value must set it to false at the appropriate time.
+    // Any processing depending on this value must set it to false at the
+    // appropriate time.
     m_hasJustReset = true;
 
     MutexLocker locker(m_processLock);
@@ -132,10 +148,10 @@ double AudioDSPKernelProcessor::tailTime() const
     MutexTryLocker tryLocker(m_processLock);
     if (tryLocker.locked()) {
         // It is expected that all the kernels have the same tailTime.
-        return !m_kernels.isEmpty() ? m_kernels.first()->tailTime() : 0;
+        return !m_kernels.isEmpty() ? m_kernels.front()->tailTime() : 0;
     }
-    // Since we don't want to block the Audio Device thread, we return a large value
-    // instead of trying to acquire the lock.
+    // Since we don't want to block the Audio Device thread, we return a large
+    // value instead of trying to acquire the lock.
     return std::numeric_limits<double>::infinity();
 }
 
@@ -145,13 +161,11 @@ double AudioDSPKernelProcessor::latencyTime() const
     MutexTryLocker tryLocker(m_processLock);
     if (tryLocker.locked()) {
         // It is expected that all the kernels have the same latencyTime.
-        return !m_kernels.isEmpty() ? m_kernels.first()->latencyTime() : 0;
+        return !m_kernels.isEmpty() ? m_kernels.front()->latencyTime() : 0;
     }
-    // Since we don't want to block the Audio Device thread, we return a large value
-    // instead of trying to acquire the lock.
+    // Since we don't want to block the Audio Device thread, we return a large
+    // value instead of trying to acquire the lock.
     return std::numeric_limits<double>::infinity();
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

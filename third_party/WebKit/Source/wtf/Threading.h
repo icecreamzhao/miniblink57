@@ -35,33 +35,24 @@
 #include "wtf/WTFExport.h"
 #include <stdint.h>
 
-// For portability, we do not make use of C++11 thread-safe statics, as supported
-// by some toolchains. Make use of double-checked locking to reduce overhead.
-#define AtomicallyInitializedStaticReferenceInternal(T, name, initializer, LOCK, UNLOCK) \
-    /* Init to nullptr is thread-safe on all implementations. */        \
-    static void* name##Pointer = nullptr;                               \
-    if (!WTF::acquireLoad(&name##Pointer)) {                            \
-        LOCK;                                                           \
-        if (!WTF::acquireLoad(&name##Pointer)) {                        \
-            WTF::RemoveConst<T>::Type* initializerResult = initializer; \
-            WTF::releaseStore(&name##Pointer, initializerResult);       \
-        }                                                               \
-        UNLOCK;                                                         \
-    }                                                                   \
+// For portability, we do not make use of C++11 thread-safe statics, as
+// supported by some toolchains. Make use of double-checked locking to reduce
+// overhead.  Note that this uses system-wide default lock, and cannot be used
+// before WTF::initializeThreading() is called.
+#define DEFINE_THREAD_SAFE_STATIC_LOCAL(T, name, initializer)            \
+    static_assert(!WTF::IsGarbageCollectedType<T>::value,                \
+        "Garbage collected types should not be a static local!");        \
+    /* Init to nullptr is thread-safe on all implementations. */         \
+    static void* name##Pointer = nullptr;                                \
+    if (!WTF::acquireLoad(&name##Pointer)) {                             \
+        WTF::lockAtomicallyInitializedStaticMutex();                     \
+        if (!WTF::acquireLoad(&name##Pointer)) {                         \
+            std::remove_const<T>::type* initializerResult = initializer; \
+            WTF::releaseStore(&name##Pointer, initializerResult);        \
+        }                                                                \
+        WTF::unlockAtomicallyInitializedStaticMutex();                   \
+    }                                                                    \
     T& name = *static_cast<T*>(name##Pointer)
-
-// Uses system-wide default lock. This version cannot be used before
-// WTF::initializeThreading() is called.
-#define AtomicallyInitializedStaticReference(T, name, initializer)      \
-    AtomicallyInitializedStaticReferenceInternal(                       \
-        T, name, initializer, \
-        WTF::lockAtomicallyInitializedStaticMutex(),                    \
-        WTF::unlockAtomicallyInitializedStaticMutex())
-
-// Same as above but uses a given lock.
-#define AtomicallyInitializedStaticReferenceWithLock(T, name, initializer, lockable)  \
-    AtomicallyInitializedStaticReferenceInternal(                       \
-        T, name, initializer, lockable.lock(), lockable.unlock());
 
 namespace WTF {
 
@@ -71,12 +62,16 @@ typedef uint32_t ThreadIdentifier;
 typedef intptr_t ThreadIdentifier;
 #endif
 
+namespace internal {
+    ThreadIdentifier currentThreadSyscall();
+} // namespace internal
+
 WTF_EXPORT ThreadIdentifier currentThread();
 
 WTF_EXPORT void lockAtomicallyInitializedStaticMutex();
 WTF_EXPORT void unlockAtomicallyInitializedStaticMutex();
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 WTF_EXPORT bool isAtomicallyInitializedStaticMutexLockHeld();
 WTF_EXPORT bool isBeforeThreadCreated();
 WTF_EXPORT void willCreateThread();
@@ -84,7 +79,7 @@ WTF_EXPORT void willCreateThread();
 
 } // namespace WTF
 
-using WTF::ThreadIdentifier;
 using WTF::currentThread;
+using WTF::ThreadIdentifier;
 
 #endif // Threading_h

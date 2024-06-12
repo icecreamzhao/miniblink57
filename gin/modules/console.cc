@@ -19,31 +19,33 @@ namespace gin {
 
 namespace {
 
-void Log(Arguments* args) {
-  std::vector<std::string> messages;
-  if (!args->GetRemaining(&messages)) {
-    args->ThrowError();
-    return;
-  }
-  std::cout << JoinString(messages, ' ') << std::endl;
-}
+    void Log(Arguments* args)
+    {
+        std::vector<std::string> messages;
+        if (!args->GetRemaining(&messages)) {
+            args->ThrowError();
+            return;
+        }
+        std::cout << JoinString(messages, ' ') << std::endl;
+    }
 
-WrapperInfo g_wrapper_info = { kEmbedderNativeGin };
+    WrapperInfo g_wrapper_info = { kEmbedderNativeGin };
 
-}  // namespace
+} // namespace
 
 const char Console::kModuleName[] = "console";
 
-v8::Local<v8::Value> Console::GetModule(v8::Isolate* isolate) {
-  PerIsolateData* data = PerIsolateData::From(isolate);
-  v8::Local<ObjectTemplate> templ = data->GetObjectTemplate(&g_wrapper_info);
-  if (templ.IsEmpty()) {
-    templ = ObjectTemplateBuilder(isolate)
-        .SetMethod("log", Log)
-        .Build();
-    data->SetObjectTemplate(&g_wrapper_info, templ);
-  }
-  return templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
+v8::Local<v8::Value> Console::GetModule(v8::Isolate* isolate)
+{
+    PerIsolateData* data = PerIsolateData::From(isolate);
+    v8::Local<ObjectTemplate> templ = data->GetObjectTemplate(&g_wrapper_info);
+    if (templ.IsEmpty()) {
+        templ = ObjectTemplateBuilder(isolate)
+                    .SetMethod("log", Log)
+                    .Build();
+        data->SetObjectTemplate(&g_wrapper_info, templ);
+    }
+    return templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked();
 }
 
-}  // namespace gin
+} // namespace gin

@@ -23,10 +23,11 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/text/AtomicString.h"
 
-#if USE(CF)
+#include "wtf/text/AtomicStringTable.h"
+
+#if OS(MACOSX)
 
 #include "wtf/text/CString.h"
 #include <CoreFoundation/CoreFoundation.h>
@@ -40,17 +41,20 @@ PassRefPtr<StringImpl> AtomicString::add(CFStringRef string)
 
     CFIndex length = CFStringGetLength(string);
 
-    if (const LChar* ptr = reinterpret_cast<const LChar*>(CFStringGetCStringPtr(string, kCFStringEncodingISOLatin1)))
-        return add(ptr, length);
+    if (const LChar* ptr = reinterpret_cast<const LChar*>(
+            CFStringGetCStringPtr(string, kCFStringEncodingISOLatin1)))
+        return AtomicStringTable::instance().add(ptr, length);
 
     if (const UniChar* ptr = CFStringGetCharactersPtr(string))
-        return add(reinterpret_cast<const UChar*>(ptr), length);
+        return AtomicStringTable::instance().add(
+            reinterpret_cast<const UChar*>(ptr), length);
 
     Vector<UniChar, 1024> ucharBuffer(length);
     CFStringGetCharacters(string, CFRangeMake(0, length), ucharBuffer.data());
-    return add(reinterpret_cast<const UChar*>(ucharBuffer.data()), length);
+    return AtomicStringTable::instance().add(
+        reinterpret_cast<const UChar*>(ucharBuffer.data()), length);
 }
 
 } // namespace WTF
 
-#endif // USE(CF)
+#endif // OS(MACOSX)

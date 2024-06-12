@@ -12,15 +12,19 @@
 
 class GeometryBench : public Benchmark {
 public:
-    GeometryBench(const char suffix[]) : fVolatileInt(0) {
+    GeometryBench(const char suffix[])
+        : fVolatileInt(0)
+    {
         fName.printf("geo_%s", suffix);
     }
 
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return kNonRendering_Backend == backend;
     }
 
@@ -41,12 +45,16 @@ private:
 
 class GeoRectBench : public GeometryBench {
 public:
-    GeoRectBench(const char suffix[]) : GeometryBench(suffix) {}
+    GeoRectBench(const char suffix[])
+        : GeometryBench(suffix)
+    {
+    }
 
 protected:
     SkRect fRects[2048];
 
-    virtual void onPreDraw() {
+    virtual void onDelayedSetup()
+    {
         const SkScalar min = -100;
         const SkScalar max = 100;
         SkRandom rand;
@@ -62,10 +70,14 @@ protected:
 
 class GeoRectBench_intersect : public GeoRectBench {
 public:
-    GeoRectBench_intersect() : GeoRectBench("rect_intersect") {}
+    GeoRectBench_intersect()
+        : GeoRectBench("rect_intersect")
+    {
+    }
 
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int outer = 0; outer < loops; ++outer) {
             int count = 0;
             for (size_t i = 0; i < SK_ARRAY_COUNT(fRects); ++i) {
@@ -79,10 +91,14 @@ protected:
 
 class GeoRectBench_intersect_rect : public GeoRectBench {
 public:
-    GeoRectBench_intersect_rect() : GeoRectBench("rect_intersect_rect") {}
+    GeoRectBench_intersect_rect()
+        : GeoRectBench("rect_intersect_rect")
+    {
+    }
 
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int outer = 0; outer < loops; ++outer) {
             int count = 0;
             SkRect r;
@@ -96,10 +112,14 @@ protected:
 
 class GeoRectBench_Intersects : public GeoRectBench {
 public:
-    GeoRectBench_Intersects() : GeoRectBench("rect_Intersects") {}
-    
+    GeoRectBench_Intersects()
+        : GeoRectBench("rect_Intersects")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int outer = 0; outer < loops; ++outer) {
             int count = 0;
             for (size_t i = 0; i < SK_ARRAY_COUNT(fRects); ++i) {
@@ -112,10 +132,14 @@ protected:
 
 class GeoRectBench_sort : public GeoRectBench {
 public:
-    GeoRectBench_sort() : GeoRectBench("rect_sort") {}
-    
+    GeoRectBench_sort()
+        : GeoRectBench("rect_sort")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int outer = 0; outer < loops; ++outer) {
             for (size_t i = 0; i < SK_ARRAY_COUNT(fRects); ++i) {
                 fRects[i].sort();
@@ -124,19 +148,22 @@ protected:
     }
 };
 
-DEF_BENCH( return new GeoRectBench_intersect; )
-DEF_BENCH( return new GeoRectBench_intersect_rect; )
-DEF_BENCH( return new GeoRectBench_Intersects; )
+DEF_BENCH(return new GeoRectBench_intersect;)
+DEF_BENCH(return new GeoRectBench_intersect_rect;)
+DEF_BENCH(return new GeoRectBench_Intersects;)
 
-DEF_BENCH( return new GeoRectBench_sort; )
+DEF_BENCH(return new GeoRectBench_sort;)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class QuadBenchBase : public GeometryBench {
 protected:
     SkPoint fPts[4];
+
 public:
-    QuadBenchBase(const char name[]) : GeometryBench(name) {
+    QuadBenchBase(const char name[])
+        : GeometryBench(name)
+    {
         SkRandom rand;
         for (int i = 0; i < 4; ++i) {
             fPts[i].set(rand.nextUScalar1(), rand.nextUScalar1());
@@ -146,9 +173,14 @@ public:
 
 class EvalQuadAt0 : public QuadBenchBase {
 public:
-    EvalQuadAt0() : QuadBenchBase("evalquadat0") {}
+    EvalQuadAt0()
+        : QuadBenchBase("evalquadat0")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint result;
         for (int outer = 0; outer < loops; ++outer) {
             SkEvalQuadAt(fPts, 0.5f, &result);
@@ -158,13 +190,18 @@ protected:
         }
     }
 };
-DEF_BENCH( return new EvalQuadAt0; )
+DEF_BENCH(return new EvalQuadAt0;)
 
 class EvalQuadAt1 : public QuadBenchBase {
 public:
-    EvalQuadAt1() : QuadBenchBase("evalquadat1") {}
+    EvalQuadAt1()
+        : QuadBenchBase("evalquadat1")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint result;
         for (int outer = 0; outer < loops; ++outer) {
             result = SkEvalQuadAt(fPts, 0.5f);
@@ -174,31 +211,41 @@ protected:
         }
     }
 };
-DEF_BENCH( return new EvalQuadAt1; )
+DEF_BENCH(return new EvalQuadAt1;)
 
 ////////
 
 class EvalQuadTangentAt0 : public QuadBenchBase {
 public:
-    EvalQuadTangentAt0() : QuadBenchBase("evalquadtangentat0") {}
+    EvalQuadTangentAt0()
+        : QuadBenchBase("evalquadtangentat0")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint result;
         for (int outer = 0; outer < loops; ++outer) {
-            SkEvalQuadAt(fPts, 0.5f, NULL, &result);
-            SkEvalQuadAt(fPts, 0.5f, NULL, &result);
-            SkEvalQuadAt(fPts, 0.5f, NULL, &result);
-            SkEvalQuadAt(fPts, 0.5f, NULL, &result);
+            SkEvalQuadAt(fPts, 0.5f, nullptr, &result);
+            SkEvalQuadAt(fPts, 0.5f, nullptr, &result);
+            SkEvalQuadAt(fPts, 0.5f, nullptr, &result);
+            SkEvalQuadAt(fPts, 0.5f, nullptr, &result);
         }
     }
 };
-DEF_BENCH( return new EvalQuadTangentAt0; )
+DEF_BENCH(return new EvalQuadTangentAt0;)
 
 class EvalQuadTangentAt1 : public QuadBenchBase {
 public:
-    EvalQuadTangentAt1() : QuadBenchBase("evalquadtangentat1") {}
+    EvalQuadTangentAt1()
+        : QuadBenchBase("evalquadtangentat1")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint result;
         for (int outer = 0; outer < loops; ++outer) {
             result = SkEvalQuadTangentAt(fPts, 0.5f);
@@ -208,15 +255,20 @@ protected:
         }
     }
 };
-DEF_BENCH( return new EvalQuadTangentAt1; )
+DEF_BENCH(return new EvalQuadTangentAt1;)
 
 ////////
 
 class ChopQuadAt : public QuadBenchBase {
 public:
-    ChopQuadAt() : QuadBenchBase("chopquadat") {}
+    ChopQuadAt()
+        : QuadBenchBase("chopquadat")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint dst[5];
         for (int outer = 0; outer < loops; ++outer) {
             SkChopQuadAt(fPts, dst, 0.5f);
@@ -226,13 +278,18 @@ protected:
         }
     }
 };
-DEF_BENCH( return new ChopQuadAt; )
+DEF_BENCH(return new ChopQuadAt;)
 
 class ChopCubicAt : public QuadBenchBase {
 public:
-    ChopCubicAt() : QuadBenchBase("chopcubicat0") {}
+    ChopCubicAt()
+        : QuadBenchBase("chopcubicat0")
+    {
+    }
+
 protected:
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPoint dst[7];
         for (int outer = 0; outer < loops; ++outer) {
             SkChopCubicAt(fPts, dst, 0.5f);
@@ -242,5 +299,4 @@ protected:
         }
     }
 };
-DEF_BENCH( return new ChopCubicAt; )
-
+DEF_BENCH(return new ChopCubicAt;)

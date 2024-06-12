@@ -16,25 +16,27 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(PropertyCell, HeapObject)
+    OBJECT_CONSTRUCTORS_IMPL(PropertyCell, HeapObject)
 
-CAST_ACCESSOR(PropertyCell)
-ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
-ACCESSORS(PropertyCell, name, Name, kNameOffset)
-ACCESSORS(PropertyCell, value, Object, kValueOffset)
-ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
+    CAST_ACCESSOR(PropertyCell)
+    ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
+    ACCESSORS(PropertyCell, name, Name, kNameOffset)
+    ACCESSORS(PropertyCell, value, Object, kValueOffset)
+    ACCESSORS(PropertyCell, property_details_raw, Smi, kPropertyDetailsRawOffset)
 
-PropertyDetails PropertyCell::property_details() const {
-  return PropertyDetails(Smi::cast(property_details_raw()));
-}
+    PropertyDetails PropertyCell::property_details() const
+    {
+        return PropertyDetails(Smi::cast(property_details_raw()));
+    }
 
-void PropertyCell::set_property_details(PropertyDetails details) {
-  set_property_details_raw(details.AsSmi());
-}
+    void PropertyCell::set_property_details(PropertyDetails details)
+    {
+        set_property_details_raw(details.AsSmi());
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_PROPERTY_CELL_INL_H_
+#endif // V8_OBJECTS_PROPERTY_CELL_INL_H_

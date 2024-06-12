@@ -26,7 +26,8 @@
 #define GlyphOverflow_h
 
 #include "platform/geometry/FloatRect.h"
-#include <math.h>
+#include "wtf/Allocator.h"
+#include <algorithm>
 
 namespace blink {
 
@@ -36,32 +37,36 @@ struct GlyphOverflow {
         , right(0)
         , top(0)
         , bottom(0)
-        , computeBounds(false)
     {
     }
 
-    bool isZero() const
+    bool isApproximatelyZero() const
     {
-        return !left && !right && !top && !bottom;
+        // Overflow can be expensive so we try to avoid it. Small amounts of
+        // overflow is imperceptible and is typically masked by pixel snapping.
+        static const float kApproximatelyNoOverflow = 0.0625f;
+        return std::fabs(left) < kApproximatelyNoOverflow && std::fabs(right) < kApproximatelyNoOverflow && std::fabs(top) < kApproximatelyNoOverflow && std::fabs(bottom) < kApproximatelyNoOverflow;
     }
 
-    void setFromBounds(const FloatRect& bounds, float ascent, float descent, float textWidth)
+    void setFromBounds(const FloatRect& bounds,
+        float ascent,
+        float descent,
+        float textWidth)
     {
-        top = ceilf(computeBounds ? -bounds.y() : std::max(0.0f, -bounds.y() - ascent));
-        bottom = ceilf(computeBounds ? bounds.maxY() : std::max(0.0f, bounds.maxY() - descent));
-        left = ceilf(std::max(0.0f, -bounds.x()));
-        right = ceilf(std::max(0.0f, bounds.maxX() - textWidth));
+        top = std::max(0.0f, -bounds.y() - ascent);
+        bottom = std::max(0.0f, bounds.maxY() - descent);
+        left = std::max(0.0f, -bounds.x());
+        right = std::max(0.0f, bounds.maxX() - textWidth);
     }
 
-    // If computeBounds, top and bottom are the maximum heights of the glyphs above and below the baseline, respectively.
-    // Otherwise they are the amounts of glyph overflows exceeding the font metrics' ascent and descent, respectively.
-    // Left and right are the amounts of glyph overflows exceeding the left and right edge of normal layout boundary, respectively.
-    // All fields are in absolute number of pixels rounded up to the nearest integer.
-    int left;
-    int right;
-    int top;
-    int bottom;
-    bool computeBounds;
+    // Top and bottom are the amounts of glyph overflows exceeding the font
+    // metrics' ascent and descent, respectively. Left and right are the amounts
+    // of glyph overflows exceeding the left and right edge of normal layout
+    // boundary, respectively.
+    float left;
+    float right;
+    float top;
+    float bottom;
 };
 
 } // namespace blink

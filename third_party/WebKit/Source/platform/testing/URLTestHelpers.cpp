@@ -28,48 +28,85 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/testing/URLTestHelpers.h"
 
+#include "platform/testing/UnitTestHelpers.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebURL.h"
+#include "public/platform/WebURLError.h"
+#include "public/platform/WebURLLoadTiming.h"
+#include "public/platform/WebURLLoaderMockFactory.h"
 #include "public/platform/WebURLResponse.h"
-#include "public/platform/WebUnitTestSupport.h"
 
 namespace blink {
 namespace URLTestHelpers {
 
-void registerMockedURLFromBaseURL(const WebString& baseURL, const WebString& fileName, const WebString& mimeType)
-{
-    // fullURL = baseURL + fileName.
-    std::string fullString = std::string(baseURL.utf8().data()) + std::string(fileName.utf8().data());
-    registerMockedURLLoad(toKURL(fullString.c_str()), fileName, WebString::fromUTF8(""), mimeType);
-}
+    void registerMockedURLFromBaseURL(const WebString& baseURL,
+        const WebString& fileName,
+        const WebString& mimeType)
+    {
+        // fullURL = baseURL + fileName.
+        std::string fullString = std::string(baseURL.utf8().data()) + std::string(fileName.utf8().data());
+        registerMockedURLLoad(toKURL(fullString.c_str()), fileName,
+            WebString::fromUTF8(""), mimeType);
+    }
 
-void registerMockedURLLoad(const WebURL& fullURL, const WebString& fileName, const WebString& mimeType)
-{
-    registerMockedURLLoad(fullURL, fileName, WebString::fromUTF8(""), mimeType);
-}
+    void registerMockedURLLoad(const WebURL& fullURL,
+        const WebString& fileName,
+        const WebString& mimeType)
+    {
+        registerMockedURLLoad(fullURL, fileName, WebString::fromUTF8(""), mimeType);
+    }
 
-void registerMockedURLLoad(const WebURL& fullURL, const WebString& fileName, const WebString& relativeBaseDirectory, const WebString& mimeType)
-{
-    WebURLResponse response(fullURL);
-    response.setMIMEType(mimeType);
-    response.setHTTPStatusCode(200);
+    void registerMockedURLLoad(const WebURL& fullURL,
+        const WebString& fileName,
+        const WebString& relativeBaseDirectory,
+        const WebString& mimeType)
+    {
+        WebURLLoadTiming timing;
+        timing.initialize();
 
-    registerMockedURLLoadWithCustomResponse(fullURL, fileName, relativeBaseDirectory, response);
-}
+        WebURLResponse response(fullURL);
+        response.setMIMEType(mimeType);
+        response.setHTTPStatusCode(200);
+        response.setLoadTiming(timing);
 
-void registerMockedURLLoadWithCustomResponse(const WebURL& fullURL, const WebString& fileName, const WebString& relativeBaseDirectory, WebURLResponse response)
-{
-    // Physical file path for the mock = <webkitRootDir> + relativeBaseDirectory + fileName.
-    std::string filePath = std::string(Platform::current()->unitTestSupport()->webKitRootDir().utf8().data());
-    filePath.append("/Source/web/tests/data/");
-    filePath.append(std::string(relativeBaseDirectory.utf8().data()));
-    filePath.append(std::string(fileName.utf8().data()));
+        registerMockedURLLoadWithCustomResponse(fullURL, fileName,
+            relativeBaseDirectory, response);
+    }
 
-    Platform::current()->unitTestSupport()->registerMockedURL(fullURL, response, WebString::fromUTF8(filePath.c_str()));
-}
+    void registerMockedErrorURLLoad(const WebURL& fullURL)
+    {
+        WebURLLoadTiming timing;
+        timing.initialize();
+
+        WebURLResponse response;
+        response.setMIMEType("image/png");
+        response.setHTTPStatusCode(404);
+        response.setLoadTiming(timing);
+
+        WebURLError error;
+        error.reason = 404;
+        Platform::current()->getURLLoaderMockFactory()->registerErrorURL(
+            fullURL, response, error);
+    }
+
+    void registerMockedURLLoadWithCustomResponse(
+        const WebURL& fullURL,
+        const WebString& fileName,
+        const WebString& relativeBaseDirectory,
+        WebURLResponse response)
+    {
+        // Physical file path for the mock =
+        // <webkitRootDir> + relativeBaseDirectory + fileName.
+        String filePath = testing::blinkRootDir();
+        filePath.append("/Source/web/tests/data/");
+        filePath.append(relativeBaseDirectory);
+        filePath.append(fileName);
+
+        Platform::current()->getURLLoaderMockFactory()->registerURL(fullURL, response,
+            filePath);
+    }
 
 } // namespace URLTestHelpers
 } // namespace blink

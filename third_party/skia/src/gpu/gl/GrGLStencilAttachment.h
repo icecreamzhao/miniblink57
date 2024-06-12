@@ -5,42 +5,45 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrGLStencilAttachment_DEFINED
 #define GrGLStencilAttachment_DEFINED
 
-#include "gl/GrGLInterface.h"
 #include "GrStencilAttachment.h"
+#include "gl/GrGLInterface.h"
 
 class GrGLStencilAttachment : public GrStencilAttachment {
 public:
     static const GrGLenum kUnknownInternalFormat = ~0U;
     static const GrGLuint kUnknownBitCount = ~0U;
     struct Format {
-        GrGLenum  fInternalFormat;
-        GrGLuint  fStencilBits;
-        GrGLuint  fTotalBits;
-        bool      fPacked;
+        GrGLenum fInternalFormat;
+        GrGLuint fStencilBits;
+        GrGLuint fTotalBits;
+        bool fPacked;
     };
 
     struct IDDesc {
-        IDDesc() : fRenderbufferID(0), fLifeCycle(kCached_LifeCycle) {}
+        IDDesc()
+            : fRenderbufferID(0)
+        {
+        }
         GrGLuint fRenderbufferID;
-        GrGpuResource::LifeCycle fLifeCycle;
     };
 
     GrGLStencilAttachment(GrGpu* gpu,
-                      const IDDesc& idDesc,
-                      int width, int height,
-                      int sampleCnt,
-                      const Format& format)
-        : GrStencilAttachment(gpu, idDesc.fLifeCycle, width, height, format.fStencilBits, sampleCnt)
+        const IDDesc& idDesc,
+        int width, int height,
+        int sampleCnt,
+        const Format& format)
+        : GrStencilAttachment(gpu, width, height, format.fStencilBits, sampleCnt)
         , fFormat(format)
-        , fRenderbufferID(idDesc.fRenderbufferID) {
-        this->registerWithCache();
+        , fRenderbufferID(idDesc.fRenderbufferID)
+    {
+        this->registerWithCache(SkBudgeted::kYes);
     }
 
-    GrGLuint renderbufferID() const {
+    GrGLuint renderbufferID() const
+    {
         return fRenderbufferID;
     }
 
@@ -50,6 +53,8 @@ protected:
     // overrides of GrResource
     void onRelease() override;
     void onAbandon() override;
+    void setMemoryBacking(SkTraceMemoryDump* traceMemoryDump,
+        const SkString& dumpName) const override;
 
 private:
     size_t onGpuMemorySize() const override;

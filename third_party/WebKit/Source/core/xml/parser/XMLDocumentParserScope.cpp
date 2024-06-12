@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/parser/XMLDocumentParserScope.h"
 
 namespace blink {
@@ -39,7 +38,11 @@ XMLDocumentParserScope::XMLDocumentParserScope(Document* document)
     currentDocument = document;
 }
 
-XMLDocumentParserScope::XMLDocumentParserScope(Document* document, xmlGenericErrorFunc genericErrorFunc, xmlStructuredErrorFunc structuredErrorFunc, void* errorContext)
+XMLDocumentParserScope::XMLDocumentParserScope(
+    Document* document,
+    xmlGenericErrorFunc genericErrorFunc,
+    xmlStructuredErrorFunc structuredErrorFunc,
+    void* errorContext)
     : m_oldDocument(currentDocument)
     , m_oldGenericErrorFunc(xmlGenericError)
     , m_oldStructuredErrorFunc(xmlStructuredError)
@@ -59,4 +62,4 @@ XMLDocumentParserScope::~XMLDocumentParserScope()
     xmlSetStructuredErrorFunc(m_oldErrorContext, m_oldStructuredErrorFunc);
 }
 
-}
+} // namespace blink

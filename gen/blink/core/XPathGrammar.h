@@ -1,23 +1,21 @@
 #ifndef XPathGrammarH
 #define XPathGrammarH
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
-/* A Bison parser, made by GNU Bison 2.4.1.  */
+/* Bison interface for Yacc-like parsers in C
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
-   
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -30,46 +28,50 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-
-/* Tokens.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-   /* Put the tokens into the symbol table, so that GDB and other debuggers
-      know about them.  */
-   enum yytokentype {
-     MULOP = 258,
-     RELOP = 259,
-     EQOP = 260,
-     MINUS = 261,
-     PLUS = 262,
-     AND = 263,
-     OR = 264,
-     AXISNAME = 265,
-     NODETYPE = 266,
-     PI = 267,
-     FUNCTIONNAME = 268,
-     LITERAL = 269,
-     VARIABLEREFERENCE = 270,
-     NUMBER = 271,
-     DOTDOT = 272,
-     SLASHSLASH = 273,
-     NAMETEST = 274,
-     XPATH_ERROR = 275
-   };
+#ifndef YY_XPATHYY_GEN_BLINK_CORE_XPATHGRAMMAR_HPP_INCLUDED
+#define YY_XPATHYY_GEN_BLINK_CORE_XPATHGRAMMAR_HPP_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+#define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int xpathyydebug;
 #endif
 
+/* Token type.  */
+#ifndef YYTOKENTYPE
+#define YYTOKENTYPE
+enum yytokentype {
+    MULOP = 258,
+    EQOP = 259,
+    RELOP = 260,
+    PLUS = 261,
+    MINUS = 262,
+    OR = 263,
+    AND = 264,
+    AXISNAME = 265,
+    NODETYPE = 266,
+    PI = 267,
+    FUNCTIONNAME = 268,
+    LITERAL = 269,
+    VARIABLEREFERENCE = 270,
+    NUMBER = 271,
+    DOTDOT = 272,
+    SLASHSLASH = 273,
+    NAMETEST = 274,
+    XPATH_ERROR = 275
+};
+#endif
 
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-{
-
-/* Line 1676 of yacc.c  */
-#line 58 "xml\\XPathGrammar.y"
+/* Value type.  */
+#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE {
+#line 61 "../../third_party/WebKit/Source/core/xml/XPathGrammar.y" /* yacc.c:1909  */
 
     blink::XPath::Step::Axis axis;
     blink::XPath::Step::NodeTest* nodeTest;
@@ -82,18 +84,14 @@ typedef union YYSTYPE
     blink::XPath::Step* step;
     blink::XPath::LocationPath* locationPath;
 
-
-
-/* Line 1676 of yacc.c  */
-#line 87 "..\\..\\..\\..\\..\\..\\out\\Debug/gen/blink/core\\XPathGrammar.hpp"
-} YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
+#line 88 "gen/blink/core/XPathGrammar.hpp" /* yacc.c:1909  */
+};
+#define YYSTYPE_IS_TRIVIAL 1
+#define YYSTYPE_IS_DECLARED 1
 #endif
 
+int xpathyyparse(blink::XPath::Parser* parser);
 
-
-
+#endif /* !YY_XPATHYY_GEN_BLINK_CORE_XPATHGRAMMAR_HPP_INCLUDED  */
 
 #endif

@@ -6,12 +6,12 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkCanvasWidget.h"
 #include <QtGui>
 
 SkCanvasWidget::SkCanvasWidget(QWidget* parent,
-        SkDebugger* debugger) : QWidget(parent)
+    SkDebugger* debugger)
+    : QWidget(parent)
     , fHorizontalLayout(this)
     , fRasterWidget(debugger)
 #if SK_SUPPORT_GPU
@@ -22,12 +22,12 @@ SkCanvasWidget::SkCanvasWidget(QWidget* parent,
     fDebugger = debugger;
 
     fHorizontalLayout.setSpacing(6);
-    fHorizontalLayout.setContentsMargins(0,0,0,0);
+    fHorizontalLayout.setContentsMargins(0, 0, 0, 0);
     fRasterWidget.setSizePolicy(QSizePolicy::Expanding,
-            QSizePolicy::Expanding);
+        QSizePolicy::Expanding);
 #if SK_SUPPORT_GPU
     fGLWidget.setSizePolicy(QSizePolicy::Expanding,
-            QSizePolicy::Expanding);
+        QSizePolicy::Expanding);
 #endif
 
     fHorizontalLayout.addWidget(&fRasterWidget);
@@ -35,28 +35,32 @@ SkCanvasWidget::SkCanvasWidget(QWidget* parent,
     fHorizontalLayout.addWidget(&fGLWidget);
 #endif
 
-    fPreviousPoint.set(0,0);
+    fPreviousPoint.set(0, 0);
     fUserMatrix.reset();
 
 #if SK_SUPPORT_GPU
     setWidgetVisibility(kGPU_WidgetType, true);
 #endif
     connect(&fRasterWidget, SIGNAL(drawComplete()), this->parentWidget(), SLOT(drawComplete()));
+#if SK_SUPPORT_GPU
     connect(&fGLWidget, SIGNAL(drawComplete()), this->parentWidget(), SLOT(drawComplete()));
+#endif
 }
 
-SkCanvasWidget::~SkCanvasWidget() {}
+SkCanvasWidget::~SkCanvasWidget() { }
 
-void SkCanvasWidget::drawTo(int index) {
+void SkCanvasWidget::drawTo(int index)
+{
     fDebugger->setIndex(index);
     fRasterWidget.updateImage();
 #if SK_SUPPORT_GPU
     fGLWidget.updateImage();
 #endif
-    emit commandChanged(fDebugger->index());
+    Q_EMIT commandChanged(fDebugger->index());
 }
 
-void SkCanvasWidget::mouseMoveEvent(QMouseEvent* event) {
+void SkCanvasWidget::mouseMoveEvent(QMouseEvent* event)
+{
     SkIPoint eventPoint = SkIPoint::Make(event->globalX(), event->globalY());
     SkIPoint eventOffset = eventPoint - fPreviousPoint;
     fPreviousPoint = eventPoint;
@@ -65,13 +69,15 @@ void SkCanvasWidget::mouseMoveEvent(QMouseEvent* event) {
     drawTo(fDebugger->index());
 }
 
-void SkCanvasWidget::mousePressEvent(QMouseEvent* event) {
+void SkCanvasWidget::mousePressEvent(QMouseEvent* event)
+{
     fPreviousPoint.set(event->globalX(), event->globalY());
-    emit hitChanged(fDebugger->getCommandAtPoint(event->x(), event->y(),
-            fDebugger->index()));
+    Q_EMIT hitChanged(fDebugger->getCommandAtPoint(event->x(), event->y(),
+        fDebugger->index()));
 }
 
-void SkCanvasWidget::mouseDoubleClickEvent(QMouseEvent* event) {
+void SkCanvasWidget::mouseDoubleClickEvent(QMouseEvent* event)
+{
     Qt::KeyboardModifiers modifiers = event->modifiers();
     if (modifiers.testFlag(Qt::ControlModifier)) {
         snapWidgetTransform();
@@ -82,7 +88,8 @@ void SkCanvasWidget::mouseDoubleClickEvent(QMouseEvent* event) {
 
 #define ZOOM_FACTOR (1.25f)
 
-void SkCanvasWidget::wheelEvent(QWheelEvent* event) {
+void SkCanvasWidget::wheelEvent(QWheelEvent* event)
+{
     Qt::KeyboardModifiers modifiers = event->modifiers();
     if (modifiers.testFlag(Qt::ControlModifier)) {
         zoom(event->delta() > 0 ? ZOOM_FACTOR : (1.0f / ZOOM_FACTOR), event->x(), event->y());
@@ -97,12 +104,14 @@ void SkCanvasWidget::wheelEvent(QWheelEvent* event) {
     }
 }
 
-void SkCanvasWidget::zoom(int zoomCommand) {
+void SkCanvasWidget::zoom(int zoomCommand)
+{
     zoom(kIn_ZoomCommand == zoomCommand ? ZOOM_FACTOR : (1.0f / ZOOM_FACTOR),
-         this->size().width() / 2, this->size().height() / 2);
+        this->size().width() / 2, this->size().height() / 2);
 }
 
-void SkCanvasWidget::snapWidgetTransform() {
+void SkCanvasWidget::snapWidgetTransform()
+{
     double x, y;
     modf(fUserMatrix.getTranslateX(), &x);
     modf(fUserMatrix.getTranslateY(), &y);
@@ -112,14 +121,16 @@ void SkCanvasWidget::snapWidgetTransform() {
     drawTo(fDebugger->index());
 }
 
-void SkCanvasWidget::resetWidgetTransform() {
+void SkCanvasWidget::resetWidgetTransform()
+{
     fUserMatrix.reset();
     fDebugger->setUserMatrix(fUserMatrix);
-    emit scaleFactorChanged(fUserMatrix.getScaleX());
+    Q_EMIT scaleFactorChanged(fUserMatrix.getScaleX());
     drawTo(fDebugger->index());
 }
 
-void SkCanvasWidget::setWidgetVisibility(WidgetType type, bool isHidden) {
+void SkCanvasWidget::setWidgetVisibility(WidgetType type, bool isHidden)
+{
     if (type == kRaster_8888_WidgetType) {
         fRasterWidget.setHidden(isHidden);
     }
@@ -137,9 +148,10 @@ void SkCanvasWidget::setGLSampleCount(int sampleCount)
 }
 #endif
 
-void SkCanvasWidget::zoom(float scale, int px, int py) {
+void SkCanvasWidget::zoom(float scale, int px, int py)
+{
     fUserMatrix.postScale(scale, scale, px, py);
-    emit scaleFactorChanged(fUserMatrix.getScaleX());
+    Q_EMIT scaleFactorChanged(fUserMatrix.getScaleX());
     fDebugger->setUserMatrix(fUserMatrix);
     drawTo(fDebugger->index());
 }

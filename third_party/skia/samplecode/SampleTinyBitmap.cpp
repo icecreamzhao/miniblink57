@@ -1,18 +1,19 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+
 #include "SampleCode.h"
+#include "SkCanvas.h"
 #include "SkColorPriv.h"
 #include "SkShader.h"
-#include "SkView.h"
-#include "SkCanvas.h"
 #include "SkUtils.h"
+#include "SkView.h"
 
-static SkBitmap make_bitmap() {
+static SkBitmap make_bitmap()
+{
     const int N = 1;
 
     SkPMColor c[N];
@@ -23,8 +24,8 @@ static SkBitmap make_bitmap() {
 
     SkBitmap bm;
     bm.allocPixels(SkImageInfo::Make(1, 1, kIndex_8_SkColorType,
-                                     kPremul_SkAlphaType),
-                   NULL, ctable);
+                       kPremul_SkAlphaType),
+        nullptr, ctable);
     ctable->unref();
 
     bm.lockPixels();
@@ -39,16 +40,18 @@ static SkBitmap make_bitmap() {
 }
 
 class TinyBitmapView : public SampleView {
-    SkBitmap    fBM;
+    SkBitmap fBM;
+
 public:
-    TinyBitmapView() {
+    TinyBitmapView()
+    {
         fBM = make_bitmap();
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "TinyBitmap");
             return true;
@@ -56,16 +59,17 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    static void setBitmapOpaque(SkBitmap* bm, bool isOpaque) {
-        SkAutoLockPixels alp(*bm);  // needed for ctable
+    static void setBitmapOpaque(SkBitmap* bm, bool isOpaque)
+    {
+        SkAutoLockPixels alp(*bm); // needed for ctable
         bm->setAlphaType(isOpaque ? kOpaque_SkAlphaType : kPremul_SkAlphaType);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
-        SkShader* s = SkShader::CreateBitmapShader(fBM, SkShader::kRepeat_TileMode,
-                                                   SkShader::kMirror_TileMode);
+    void onDrawContent(SkCanvas* canvas) override
+    {
         SkPaint paint;
-        paint.setShader(s)->unref();
+        paint.setShader(SkShader::MakeBitmapShader(fBM, SkShader::kRepeat_TileMode,
+            SkShader::kMirror_TileMode));
         canvas->drawPaint(paint);
     }
 

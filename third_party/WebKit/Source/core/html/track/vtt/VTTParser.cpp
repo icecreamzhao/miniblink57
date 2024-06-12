@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/vtt/VTTParser.h"
 
 #include "core/dom/Document.h"
@@ -38,6 +37,7 @@
 #include "core/html/track/vtt/VTTScanner.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/text/SegmentedString.h"
+#include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -49,7 +49,8 @@ const double secondsPerMinute = 60;
 const double secondsPerMillisecond = 0.001;
 const unsigned fileIdentifierLength = 6;
 
-bool VTTParser::parseFloatPercentageValue(VTTScanner& valueScanner, float& percentage)
+bool VTTParser::parseFloatPercentageValue(VTTScanner& valueScanner,
+    float& percentage)
 {
     float number;
     if (!valueScanner.scanFloat(number))
@@ -63,7 +64,9 @@ bool VTTParser::parseFloatPercentageValue(VTTScanner& valueScanner, float& perce
     return true;
 }
 
-bool VTTParser::parseFloatPercentageValuePair(VTTScanner& valueScanner, char delimiter, FloatPoint& valuePair)
+bool VTTParser::parseFloatPercentageValuePair(VTTScanner& valueScanner,
+    char delimiter,
+    FloatPoint& valuePair)
 {
     float firstCoord;
     if (!parseFloatPercentageValue(valueScanner, firstCoord))
@@ -90,19 +93,19 @@ VTTParser::VTTParser(VTTParserClient* client, Document& document)
 {
 }
 
-void VTTParser::getNewCues(WillBeHeapVector<RefPtrWillBeMember<TextTrackCue>>& outputCues)
+void VTTParser::getNewCues(HeapVector<Member<TextTrackCue>>& outputCues)
 {
-    ASSERT(outputCues.isEmpty());
+    DCHECK(outputCues.isEmpty());
     outputCues.swap(m_cueList);
 }
 
-void VTTParser::getNewRegions(WillBeHeapVector<RefPtrWillBeMember<VTTRegion>>& outputRegions)
+void VTTParser::getNewRegions(HeapVector<Member<VTTRegion>>& outputRegions)
 {
-    ASSERT(outputRegions.isEmpty());
+    DCHECK(outputRegions.isEmpty());
     outputRegions.swap(m_regionList);
 }
 
-void VTTParser::parseBytes(const char* data, unsigned length)
+void VTTParser::parseBytes(const char* data, size_t length)
 {
     String textData = m_decoder->decode(data, length);
     m_lineReader.append(textData);
@@ -149,7 +152,8 @@ void VTTParser::parse()
                 break;
             }
 
-            // Step 15 - Break out of header loop if the line could be a timestamp line.
+            // Step 15 - Break out of header loop if the line could be a timestamp
+            // line.
             if (line.contains("-->"))
                 m_state = recoverCue(line);
 
@@ -157,14 +161,16 @@ void VTTParser::parse()
             break;
 
         case Id:
-            // Steps 17 - 20 - Allow any number of line terminators, then initialize new cue values.
+            // Steps 17 - 20 - Allow any number of line terminators, then initialize
+            // new cue values.
             if (line.isEmpty())
                 break;
 
             // Step 21 - Cue creation (start a new cue).
             resetCueValues();
 
-            // Steps 22 - 25 - Check if this line contains an optional identifier or timing data.
+            // Steps 22 - 25 - Check if this line contains an optional identifier or
+            // timing data.
             m_state = collectCueId(line);
             break;
 
@@ -180,12 +186,14 @@ void VTTParser::parse()
             break;
 
         case CueText:
-            // Steps 31 - 41 - Collect the cue text, create a cue, and add it to the output.
+            // Steps 31 - 41 - Collect the cue text, create a cue, and add it to the
+            // output.
             m_state = collectCueText(line);
             break;
 
         case BadCue:
-            // Steps 42 - 48 - Discard lines until an empty line or a potential timing line is seen.
+            // Steps 42 - 48 - Discard lines until an empty line or a potential
+            // timing line is seen.
             m_state = ignoreBadCue(line);
             break;
         }
@@ -194,36 +202,43 @@ void VTTParser::parse()
 
 void VTTParser::flushPendingCue()
 {
-    ASSERT(m_lineReader.isAtEndOfStream());
-    // If we're in the CueText state when we run out of data, we emit the pending cue.
+    DCHECK(m_lineReader.isAtEndOfStream());
+    // If we're in the CueText state when we run out of data, we emit the pending
+    // cue.
     if (m_state == CueText)
         createNewCue();
 }
 
 bool VTTParser::hasRequiredFileIdentifier(const String& line)
 {
-    // A WebVTT file identifier consists of an optional BOM character,
-    // the string "WEBVTT" followed by an optional space or tab character,
-    // and any number of characters that are not line terminators ...
+    // WebVTT parser algorithm step 6:
+    // If input is more than six characters long but the first six characters
+    // do not exactly equal "WEBVTT", or the seventh character is not a U+0020
+    // SPACE character, a U+0009 CHARACTER TABULATION (tab) character, or a
+    // U+000A LINE FEED (LF) character, then abort these steps.
     if (!line.startsWith("WEBVTT"))
         return false;
-    if (line.length() > fileIdentifierLength && !isASpace(line[fileIdentifierLength]))
-        return false;
-
+    if (line.length() > fileIdentifierLength) {
+        UChar maybeSeparator = line[fileIdentifierLength];
+        // The line reader handles the line break characters, so we don't need
+        // to check for LF here.
+        if (maybeSeparator != spaceCharacter && maybeSeparator != tabulationCharacter)
+            return false;
+    }
     return true;
 }
 
 void VTTParser::collectMetadataHeader(const String& line)
 {
     // WebVTT header parsing (WebVTT parser algorithm step 12)
-    DEFINE_STATIC_LOCAL(const AtomicString, regionHeaderName, ("Region", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, regionHeaderName, ("Region"));
 
     // The only currently supported header is the "Region" header.
     if (!RuntimeEnabledFeatures::webVTTRegionsEnabled())
         return;
 
-    // Step 12.4 If line contains the character ":" (A U+003A COLON), then set metadata's
-    // name to the substring of line before the first ":" character and
+    // Step 12.4 If line contains the character ":" (A U+003A COLON), then set
+    // metadata's name to the substring of line before the first ":" character and
     // metadata's value to the substring after this character.
     size_t colonPosition = line.find(':');
     if (colonPosition == kNotFound)
@@ -234,7 +249,8 @@ void VTTParser::collectMetadataHeader(const String& line)
     // Steps 12.5 If metadata's name equals "Region":
     if (headerName == regionHeaderName) {
         String headerValue = line.substring(colonPosition + 1);
-        // Steps 12.5.1 - 12.5.11 Region creation: Let region be a new text track region [...]
+        // Steps 12.5.1 - 12.5.11 Region creation: Let region be a new text track
+        // region [...]
         createNewRegion(headerValue);
     }
 }
@@ -251,26 +267,34 @@ VTTParser::ParseState VTTParser::collectTimingsAndSettings(const String& line)
 {
     VTTScanner input(line);
 
-    // Collect WebVTT cue timings and settings. (5.3 WebVTT cue timings and settings parsing.)
-    // Steps 1 - 3 - Let input be the string being parsed and position be a pointer into input.
+    // Collect WebVTT cue timings and settings. (5.3 WebVTT cue timings and
+    // settings parsing.)
+    // Steps 1 - 3 - Let input be the string being parsed and position be a
+    // pointer into input.
     input.skipWhile<isASpace>();
 
-    // Steps 4 - 5 - Collect a WebVTT timestamp. If that fails, then abort and return failure. Otherwise, let cue's text track cue start time be the collected time.
+    // Steps 4 - 5 - Collect a WebVTT timestamp. If that fails, then abort and
+    // return failure. Otherwise, let cue's text track cue start time be the
+    // collected time.
     if (!collectTimeStamp(input, m_currentStartTime))
         return BadCue;
     input.skipWhile<isASpace>();
 
-    // Steps 6 - 9 - If the next three characters are not "-->", abort and return failure.
+    // Steps 6 - 9 - If the next three characters are not "-->", abort and return
+    // failure.
     if (!input.scan("-->"))
         return BadCue;
     input.skipWhile<isASpace>();
 
-    // Steps 10 - 11 - Collect a WebVTT timestamp. If that fails, then abort and return failure. Otherwise, let cue's text track cue end time be the collected time.
+    // Steps 10 - 11 - Collect a WebVTT timestamp. If that fails, then abort and
+    // return failure. Otherwise, let cue's text track cue end time be the
+    // collected time.
     if (!collectTimeStamp(input, m_currentEndTime))
         return BadCue;
     input.skipWhile<isASpace>();
 
-    // Step 12 - Parse the WebVTT settings for the cue (conducted in TextTrackCue).
+    // Step 12 - Parse the WebVTT settings for the cue (conducted in
+    // TextTrackCue).
     m_currentSettings = input.restOfInputAsString();
     return CueText;
 }
@@ -318,29 +342,32 @@ VTTParser::ParseState VTTParser::ignoreBadCue(const String& line)
 // A helper class for the construction of a "cue fragment" from the cue text.
 class VTTTreeBuilder {
     STACK_ALLOCATED();
+
 public:
     explicit VTTTreeBuilder(Document& document)
-        : m_document(&document) { }
+        : m_document(&document)
+    {
+    }
 
-    PassRefPtrWillBeRawPtr<DocumentFragment> buildFromString(const String& cueText);
+    DocumentFragment* buildFromString(const String& cueText);
 
 private:
     void constructTreeFromToken(Document&);
     Document& document() const { return *m_document; }
 
     VTTToken m_token;
-    RefPtrWillBeMember<ContainerNode> m_currentNode;
+    Member<ContainerNode> m_currentNode;
     Vector<AtomicString> m_languageStack;
-    RawPtrWillBeMember<Document> m_document;
+    Member<Document> m_document;
 };
 
-PassRefPtrWillBeRawPtr<DocumentFragment> VTTTreeBuilder::buildFromString(const String& cueText)
+DocumentFragment* VTTTreeBuilder::buildFromString(const String& cueText)
 {
     // Cue text processing based on
     // 5.4 WebVTT cue text parsing rules, and
     // 5.5 WebVTT cue text DOM construction rules
 
-    RefPtrWillBeRawPtr<DocumentFragment> fragment = DocumentFragment::create(document());
+    DocumentFragment* fragment = DocumentFragment::create(document());
 
     if (cueText.isEmpty()) {
         fragment->parserAppendChild(Text::create(document(), ""));
@@ -355,10 +382,12 @@ PassRefPtrWillBeRawPtr<DocumentFragment> VTTTreeBuilder::buildFromString(const S
     while (tokenizer.nextToken(m_token))
         constructTreeFromToken(document());
 
-    return fragment.release();
+    return fragment;
 }
 
-PassRefPtrWillBeRawPtr<DocumentFragment> VTTParser::createDocumentFragmentFromCueText(Document& document, const String& cueText)
+DocumentFragment* VTTParser::createDocumentFragmentFromCueText(
+    Document& document,
+    const String& cueText)
 {
     VTTTreeBuilder treeBuilder(document);
     return treeBuilder.buildFromString(cueText);
@@ -366,11 +395,12 @@ PassRefPtrWillBeRawPtr<DocumentFragment> VTTParser::createDocumentFragmentFromCu
 
 void VTTParser::createNewCue()
 {
-    RefPtrWillBeRawPtr<VTTCue> cue = VTTCue::create(*m_document, m_currentStartTime, m_currentEndTime, m_currentContent.toString());
+    VTTCue* cue = VTTCue::create(*m_document, m_currentStartTime,
+        m_currentEndTime, m_currentContent.toString());
     cue->setId(m_currentId);
     cue->parseSettings(m_currentSettings);
 
-    m_cueList.append(cue);
+    m_cueList.push_back(cue);
     if (m_client)
         m_client->newCuesParsed();
 }
@@ -390,7 +420,7 @@ void VTTParser::createNewRegion(const String& headerValue)
         return;
 
     // Steps 12.5.1 - 12.5.9 - Construct and initialize a WebVTT Region object.
-    RefPtrWillBeRawPtr<VTTRegion> region = VTTRegion::create();
+    VTTRegion* region = VTTRegion::create();
     region->setRegionSettings(headerValue);
 
     // Step 12.5.10 If the text track list of regions regions contains a region
@@ -403,7 +433,7 @@ void VTTParser::createNewRegion(const String& headerValue)
     }
 
     // Step 12.5.11
-    m_regionList.append(region);
+    m_regionList.push_back(region);
 }
 
 bool VTTParser::collectTimeStamp(const String& line, double& timeStamp)
@@ -416,7 +446,8 @@ bool VTTParser::collectTimeStamp(VTTScanner& input, double& timeStamp)
 {
     // Collect a WebVTT timestamp (5.3 WebVTT cue timings and settings parsing.)
     // Steps 1 - 4 - Initial checks, let most significant units be minutes.
-    enum Mode { Minutes, Hours };
+    enum Mode { Minutes,
+        Hours };
     Mode mode = Minutes;
 
     // Steps 5 - 7 - Collect a sequence of characters that are 0-9.
@@ -428,7 +459,8 @@ bool VTTParser::collectTimeStamp(VTTScanner& input, double& timeStamp)
     if (value1Digits != 2 || value1 > 59)
         mode = Hours;
 
-    // Steps 8 - 11 - Collect the next sequence of 0-9 after ':' (must be 2 chars).
+    // Steps 8 - 11 - Collect the next sequence of 0-9 after ':' (must be 2
+    // chars).
     int value2;
     if (!input.scan(':') || input.scanDigits(value2) != 2)
         return false;
@@ -491,7 +523,8 @@ void VTTTreeBuilder::constructTreeFromToken(Document& document)
 
     switch (m_token.type()) {
     case VTTTokenTypes::Character: {
-        m_currentNode->parserAppendChild(Text::create(document, m_token.characters()));
+        m_currentNode->parserAppendChild(
+            Text::create(document, m_token.characters()));
         break;
     }
     case VTTTokenTypes::StartTag: {
@@ -499,23 +532,27 @@ void VTTTreeBuilder::constructTreeFromToken(Document& document)
         if (nodeType == VTTNodeTypeNone)
             break;
 
-        VTTNodeType currentType = m_currentNode->isVTTElement() ? toVTTElement(m_currentNode.get())->webVTTNodeType() : VTTNodeTypeNone;
+        VTTNodeType currentType = m_currentNode->isVTTElement()
+            ? toVTTElement(m_currentNode.get())->webVTTNodeType()
+            : VTTNodeTypeNone;
         // <rt> is only allowed if the current node is <ruby>.
         if (nodeType == VTTNodeTypeRubyText && currentType != VTTNodeTypeRuby)
             break;
 
-        RefPtrWillBeRawPtr<VTTElement> child = VTTElement::create(nodeType, &document);
+        VTTElement* child = VTTElement::create(nodeType, &document);
         if (!m_token.classes().isEmpty())
             child->setAttribute(classAttr, m_token.classes());
 
         if (nodeType == VTTNodeTypeVoice) {
-            child->setAttribute(VTTElement::voiceAttributeName(), m_token.annotation());
+            child->setAttribute(VTTElement::voiceAttributeName(),
+                m_token.annotation());
         } else if (nodeType == VTTNodeTypeLanguage) {
-            m_languageStack.append(m_token.annotation());
-            child->setAttribute(VTTElement::langAttributeName(), m_languageStack.last());
+            m_languageStack.push_back(m_token.annotation());
+            child->setAttribute(VTTElement::langAttributeName(),
+                m_languageStack.back());
         }
         if (!m_languageStack.isEmpty())
-            child->setLanguage(m_languageStack.last());
+            child->setLanguage(m_languageStack.back());
         m_currentNode->parserAppendChild(child);
         m_currentNode = child;
         break;
@@ -542,7 +579,7 @@ void VTTTreeBuilder::constructTreeFromToken(Document& document)
             }
         }
         if (nodeType == VTTNodeTypeLanguage)
-            m_languageStack.removeLast();
+            m_languageStack.pop_back();
         if (m_currentNode->parentNode())
             m_currentNode = m_currentNode->parentNode();
         break;
@@ -551,7 +588,8 @@ void VTTTreeBuilder::constructTreeFromToken(Document& document)
         String charactersString = m_token.characters();
         double parsedTimeStamp;
         if (VTTParser::collectTimeStamp(charactersString, parsedTimeStamp))
-            m_currentNode->parserAppendChild(ProcessingInstruction::create(document, "timestamp", charactersString));
+            m_currentNode->parserAppendChild(ProcessingInstruction::create(
+                document, "timestamp", charactersString));
         break;
     }
     default:
@@ -562,8 +600,9 @@ void VTTTreeBuilder::constructTreeFromToken(Document& document)
 DEFINE_TRACE(VTTParser)
 {
     visitor->trace(m_document);
+    visitor->trace(m_client);
     visitor->trace(m_cueList);
     visitor->trace(m_regionList);
 }
 
-}
+} // namespace blink

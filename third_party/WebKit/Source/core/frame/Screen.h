@@ -26,12 +26,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef Screen_h
 #define Screen_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/frame/DOMWindowProperty.h"
+#include "core/CoreExport.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -39,14 +39,15 @@ namespace blink {
 
 class LocalFrame;
 
-class Screen final : public GarbageCollectedFinalized<Screen>, public ScriptWrappable, public DOMWindowProperty, public HeapSupplementable<Screen> {
+class CORE_EXPORT Screen final : public GarbageCollected<Screen>,
+                                 public ScriptWrappable,
+                                 public DOMWindowClient,
+                                 public Supplementable<Screen> {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(Screen);
+
 public:
-    static Screen* create(LocalFrame* frame)
-    {
-        return new Screen(frame);
-    }
+    static Screen* create(LocalFrame* frame) { return new Screen(frame); }
 
     int height() const;
     int width() const;

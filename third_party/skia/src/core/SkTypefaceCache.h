@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,32 +5,23 @@
  * found in the LICENSE file.
  */
 
-
-
 #ifndef SkTypefaceCache_DEFINED
 #define SkTypefaceCache_DEFINED
 
+#include "SkRefCnt.h"
+#include "SkTArray.h"
 #include "SkTypeface.h"
-#include "SkTDArray.h"
-
-/*  TODO
- *  Provide std way to cache name+requestedStyle aliases to the same typeface.
- *
- *  The current mechanism ends up create a diff typeface for each one, even if
- *  they map to the same internal obj (e.g. CTFontRef on the mac)
- */
 
 class SkTypefaceCache {
 public:
     SkTypefaceCache();
-    ~SkTypefaceCache();
 
     /**
      * Callback for FindByProc. Returns true if the given typeface is a match
      * for the given context. The passed typeface is owned by the cache and is
      * not additionally ref()ed. The typeface may be in the disposed state.
      */
-    typedef bool(*FindProc)(SkTypeface*, const SkFontStyle&, void* context);
+    typedef bool (*FindProc)(SkTypeface*, void* context);
 
     /**
      *  Add a typeface to the cache. This ref()s the typeface, so that the
@@ -39,12 +29,12 @@ public:
      *  whose refcnt is 1 (meaning only the cache is an owner) will be
      *  unref()ed.
      */
-    void add(SkTypeface*, const SkFontStyle& requested);
+    void add(SkTypeface*);
 
     /**
      *  Iterate through the cache, calling proc(typeface, ctx) with each
      *  typeface. If proc returns true, then we return that typeface (this
-     *  ref()s the typeface). If it never returns true, we return NULL.
+     *  ref()s the typeface). If it never returns true, we return nullptr.
      */
     SkTypeface* findByProcAndRef(FindProc proc, void* ctx) const;
 
@@ -64,7 +54,7 @@ public:
 
     // These are static wrappers around a global instance of a cache.
 
-    static void Add(SkTypeface*, const SkFontStyle& requested);
+    static void Add(SkTypeface*);
     static SkTypeface* FindByProcAndRef(FindProc proc, void* ctx);
     static void PurgeAll();
 
@@ -78,11 +68,7 @@ private:
 
     void purge(int count);
 
-    struct Rec {
-        SkTypeface* fFace;
-        SkFontStyle fRequestedStyle;
-    };
-    SkTDArray<Rec> fArray;
+    SkTArray<sk_sp<SkTypeface>> fTypefaces;
 };
 
 #endif

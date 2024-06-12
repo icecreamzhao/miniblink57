@@ -27,18 +27,23 @@
  */
 
 // https://html.spec.whatwg.org/#dom-imagedata
+// https://github.com/junov/CanvasColorSpace/blob/master/CanvasColorSpaceProposal.md#imagedata
+
+enum ImageDataColorSpace { "legacy-srgb", "srgb", "linear-rgb" };
 
 [
-    TypeChecking=Interface,
     Constructor(unsigned long sw, unsigned long sh),
     Constructor(Uint8ClampedArray data, unsigned long sw, optional unsigned long sh),
     Exposed=(Window,Worker),
     RaisesException=Constructor,
-    GarbageCollected,
 ] interface ImageData {
-    // TODO(philipj): width/height should be unsigned long.
-    readonly attribute long width;
-    readonly attribute long height;
-    // TODO(philipj): Expose data.
-    // readonly attribute Uint8ClampedArray data;
+
+    [RuntimeEnabled=ExperimentalCanvasFeatures, RaisesException] ImageData createImageData(unsigned long sw, unsigned long sh, ImageDataColorSpace colorSpace);
+    [RuntimeEnabled=ExperimentalCanvasFeatures, RaisesException] ImageData createImageData(Uint8ClampedArray data, unsigned long sw, ImageDataColorSpace colorSpace);
+    [RuntimeEnabled=ExperimentalCanvasFeatures, RaisesException] ImageData createImageData(Uint8ClampedArray data, unsigned long sw, unsigned long sh, ImageDataColorSpace colorSpace);
+
+    readonly attribute unsigned long width;
+    readonly attribute unsigned long height;
+    readonly attribute Uint8ClampedArray data;
+    readonly attribute ImageDataColorSpace colorSpace;
 };

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,26 +5,29 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkTableMaskFilter.h"
+#include "SkFixed.h"
 #include "SkReadBuffer.h"
-#include "SkWriteBuffer.h"
 #include "SkString.h"
+#include "SkWriteBuffer.h"
 
-SkTableMaskFilter::SkTableMaskFilter() {
+SkTableMaskFilter::SkTableMaskFilter()
+{
     for (int i = 0; i < 256; i++) {
         fTable[i] = i;
     }
 }
 
-SkTableMaskFilter::SkTableMaskFilter(const uint8_t table[256]) {
+SkTableMaskFilter::SkTableMaskFilter(const uint8_t table[256])
+{
     memcpy(fTable, table, sizeof(fTable));
 }
 
-SkTableMaskFilter::~SkTableMaskFilter() {}
+SkTableMaskFilter::~SkTableMaskFilter() { }
 
 bool SkTableMaskFilter::filterMask(SkMask* dst, const SkMask& src,
-                                 const SkMatrix&, SkIPoint* margin) const {
+    const SkMatrix&, SkIPoint* margin) const
+{
     if (src.fFormat != SkMask::kA8_Format) {
         return false;
     }
@@ -33,7 +35,7 @@ bool SkTableMaskFilter::filterMask(SkMask* dst, const SkMask& src,
     dst->fBounds = src.fBounds;
     dst->fRowBytes = SkAlign4(dst->fBounds.width());
     dst->fFormat = SkMask::kA8_Format;
-    dst->fImage = NULL;
+    dst->fImage = nullptr;
 
     if (src.fImage) {
         dst->fImage = SkMask::AllocImage(dst->computeImageSize());
@@ -66,38 +68,43 @@ bool SkTableMaskFilter::filterMask(SkMask* dst, const SkMask& src,
     return true;
 }
 
-SkMask::Format SkTableMaskFilter::getFormat() const {
+SkMask::Format SkTableMaskFilter::getFormat() const
+{
     return SkMask::kA8_Format;
 }
 
-void SkTableMaskFilter::flatten(SkWriteBuffer& wb) const {
+void SkTableMaskFilter::flatten(SkWriteBuffer& wb) const
+{
     wb.writeByteArray(fTable, 256);
 }
 
-SkFlattenable* SkTableMaskFilter::CreateProc(SkReadBuffer& buffer) {
+sk_sp<SkFlattenable> SkTableMaskFilter::CreateProc(SkReadBuffer& buffer)
+{
     uint8_t table[256];
     if (!buffer.readByteArray(table, 256)) {
-        return NULL;
+        return nullptr;
     }
-    return Create(table);
+    return sk_sp<SkFlattenable>(Create(table));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkTableMaskFilter::MakeGammaTable(uint8_t table[256], SkScalar gamma) {
+void SkTableMaskFilter::MakeGammaTable(uint8_t table[256], SkScalar gamma)
+{
     const float dx = 1 / 255.0f;
     const float g = SkScalarToFloat(gamma);
 
     float x = 0;
     for (int i = 0; i < 256; i++) {
-     // float ee = powf(x, g) * 255;
-        table[i] = SkPin32(sk_float_round2int(powf(x, g) * 255), 0, 255);
+        // float ee = powf(x, g) * 255;
+        table[i] = SkTPin(sk_float_round2int(powf(x, g) * 255), 0, 255);
         x += dx;
     }
 }
 
 void SkTableMaskFilter::MakeClipTable(uint8_t table[256], uint8_t min,
-                                      uint8_t max) {
+    uint8_t max)
+{
     if (0 == max) {
         max = 1;
     }
@@ -131,7 +138,8 @@ void SkTableMaskFilter::MakeClipTable(uint8_t table[256], uint8_t min,
 }
 
 #ifndef SK_IGNORE_TO_STRING
-void SkTableMaskFilter::toString(SkString* str) const {
+void SkTableMaskFilter::toString(SkString* str) const
+{
     str->append("SkTableMaskFilter: (");
 
     str->append("table: ");

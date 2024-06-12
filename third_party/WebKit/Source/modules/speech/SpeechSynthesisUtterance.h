@@ -34,10 +34,13 @@
 
 namespace blink {
 
-class SpeechSynthesisUtterance final : public RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesisUtterance>, public PlatformSpeechSynthesisUtteranceClient, public ContextLifecycleObserver {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SpeechSynthesisUtterance);
+class SpeechSynthesisUtterance final
+    : public EventTargetWithInlineData,
+      public ContextClient,
+      public PlatformSpeechSynthesisUtteranceClient {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(SpeechSynthesisUtterance);
+
 public:
     static SpeechSynthesisUtterance* create(ExecutionContext*, const String&);
 
@@ -62,7 +65,10 @@ public:
     void setPitch(float pitch) { m_platformUtterance->setPitch(pitch); }
 
     double startTime() const { return m_platformUtterance->startTime(); }
-    void setStartTime(double startTime) { m_platformUtterance->setStartTime(startTime); }
+    void setStartTime(double startTime)
+    {
+        m_platformUtterance->setStartTime(startTime);
+    }
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(start);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(end);
@@ -72,9 +78,15 @@ public:
     DEFINE_ATTRIBUTE_EVENT_LISTENER(mark);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(boundary);
 
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextClient::getExecutionContext();
+    }
 
-    PlatformSpeechSynthesisUtterance* platformUtterance() const { return m_platformUtterance; }
+    PlatformSpeechSynthesisUtterance* platformUtterance() const
+    {
+        return m_platformUtterance;
+    }
 
     DECLARE_VIRTUAL_TRACE();
 

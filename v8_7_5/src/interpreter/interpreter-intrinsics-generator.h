@@ -10,18 +10,18 @@
 namespace v8 {
 namespace internal {
 
-namespace compiler {
-class Node;
-}  // namespace compiler
+    namespace compiler {
+        class Node;
+    } // namespace compiler
 
-namespace interpreter {
+    namespace interpreter {
 
-extern compiler::Node* GenerateInvokeIntrinsic(
-    InterpreterAssembler* assembler, compiler::Node* function_id,
-    compiler::Node* context, const InterpreterAssembler::RegListNodePair& args);
+        extern compiler::Node* GenerateInvokeIntrinsic(
+            InterpreterAssembler* assembler, compiler::Node* function_id,
+            compiler::Node* context, const InterpreterAssembler::RegListNodePair& args);
 
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
+    } // namespace interpreter
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_INTERPRETER_INTERPRETER_INTRINSICS_GENERATOR_H_
+#endif // V8_INTERPRETER_INTERPRETER_INTRINSICS_GENERATOR_H_

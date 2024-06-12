@@ -31,34 +31,41 @@
 #ifndef InspectorPageAgent_h
 #define InspectorPageAgent_h
 
-
 #include "core/CoreExport.h"
-#include "core/InspectorFrontend.h"
 #include "core/inspector/InspectorBaseAgent.h"
+#include "core/inspector/protocol/Page.h"
 #include "core/page/ChromeClient.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/WTFString.h"
+
+#include <v8-inspector.h>
 
 namespace blink {
 
 class Resource;
 class Document;
 class DocumentLoader;
-class FrameHost;
-class InspectorCSSAgent;
-class InspectorDebuggerAgent;
-class InspectorOverlay;
+class InspectedFrames;
 class InspectorResourceContentLoader;
 class KURL;
 class LocalFrame;
 class SharedBuffer;
-class TextResourceDecoder;
 
-typedef String ErrorString;
+using blink::protocol::Maybe;
 
-class CORE_EXPORT InspectorPageAgent final : public InspectorBaseAgent<InspectorPageAgent, InspectorFrontend::Page>, public InspectorBackendDispatcher::PageCommandHandler {
+class CORE_EXPORT InspectorPageAgent final
+    : public InspectorBaseAgent<protocol::Page::Metainfo> {
     WTF_MAKE_NONCOPYABLE(InspectorPageAgent);
+
 public:
+    class Client {
+    public:
+        virtual ~Client() { }
+        virtual void pageLayoutInvalidated(bool resized) { }
+        virtual void configureOverlay(bool suspended, const String& message) { }
+        virtual void waitForCreateWindow(LocalFrame*) { }
+    };
+
     enum ResourceType {
         DocumentResource,
         StylesheetResource,
@@ -68,38 +75,68 @@ public:
         ScriptResource,
         TextTrackResource,
         XHRResource,
+        FetchResource,
+        EventSourceResource,
         WebSocketResource,
+        ManifestResource,
         OtherResource
     };
 
-    static PassOwnPtrWillBeRawPtr<InspectorPageAgent> create(LocalFrame* inspectedFrame, InspectorOverlay*, InspectorResourceContentLoader*);
-    void setDeferredAgents(InspectorDebuggerAgent*, InspectorCSSAgent*);
+    static InspectorPageAgent* create(InspectedFrames*,
+        Client*,
+        InspectorResourceContentLoader*,
+        v8_inspector::V8InspectorSession*);
 
-    static Vector<Document*> importsForFrame(LocalFrame*);
-    static bool cachedResourceContent(Resource*, String* result, bool* base64Encoded);
-    static bool sharedBufferContent(PassRefPtr<SharedBuffer>, const String& textEncodingName, bool withBase64Encode, String* result);
+    static HeapVector<Member<Document>> importsForFrame(LocalFrame*);
+    static bool cachedResourceContent(Resource*,
+        String* result,
+        bool* base64Encoded);
+    static bool sharedBufferContent(PassRefPtr<const SharedBuffer>,
+        const String& mimeType,
+        const String& textEncodingName,
+        String* result,
+        bool* base64Encoded);
 
-    static PassRefPtr<SharedBuffer> resourceData(LocalFrame*, const KURL&, String* textEncodingName);
     static Resource* cachedResource(LocalFrame*, const KURL&);
-    static TypeBuilder::Page::ResourceType::Enum resourceTypeJson(ResourceType);
+    static String resourceTypeJson(ResourceType);
     static ResourceType cachedResourceType(const Resource&);
-    static TypeBuilder::Page::ResourceType::Enum cachedResourceTypeJson(const Resource&);
-    static PassOwnPtr<TextResourceDecoder> createResourceTextDecoder(const String& mimeType, const String& textEncodingName);
+    static String cachedResourceTypeJson(const Resource&);
 
-    // Page API for InspectorFrontend
-    void enable(ErrorString*) override;
-    void addScriptToEvaluateOnLoad(ErrorString*, const String& source, String* result) override;
-    void removeScriptToEvaluateOnLoad(ErrorString*, const String& identifier) override;
-    void reload(ErrorString*, const bool* optionalIgnoreCache, const String* optionalScriptToEvaluateOnLoad) override;
-    void navigate(ErrorString*, const String& url, String* frameId) override;
-    void getResourceTree(ErrorString*, RefPtr<TypeBuilder::Page::FrameResourceTree>&) override;
-    void getResourceContent(ErrorString*, const String& frameId, const String& url, PassRefPtrWillBeRawPtr<GetResourceContentCallback>) override;
-    void searchInResource(ErrorString*, const String& frameId, const String& url, const String& query, const bool* optionalCaseSensitive, const bool* optionalIsRegex, RefPtr<TypeBuilder::Array<TypeBuilder::Debugger::SearchMatch>>&) override;
-    void setDocumentContent(ErrorString*, const String& frameId, const String& html) override;
-    void startScreencast(ErrorString*, const String* format, const int* quality, const int* maxWidth, const int* maxHeight) override;
-    void stopScreencast(ErrorString*) override;
-    void setShowViewportSizeOnResize(ErrorString*, bool show, const bool* showGrid) override;
-    void setOverlayMessage(ErrorString*, const String*) override;
+    // Page API for frontend
+    Response enable() override;
+    Response disable() override;
+    Response addScriptToEvaluateOnLoad(const String& scriptSource,
+        String* identifier) override;
+    Response removeScriptToEvaluateOnLoad(const String& identifier) override;
+    Response setAutoAttachToCreatedPages(bool) override;
+    Response reload(Maybe<bool> bypassCache,
+        Maybe<String> scriptToEvaluateOnLoad) override;
+    Response navigate(const String& url, String* frameId) override;
+    Response stopLoading() override;
+    Response getResourceTree(
+        std::unique_ptr<protocol::Page::FrameResourceTree>* frameTree) override;
+    void getResourceContent(const String& frameId,
+        const String& url,
+        std::unique_ptr<GetResourceContentCallback>) override;
+    void searchInResource(const String& frameId,
+        const String& url,
+        const String& query,
+        Maybe<bool> caseSensitive,
+        Maybe<bool> isRegex,
+        std::unique_ptr<SearchInResourceCallback>) override;
+    Response setDocumentContent(const String& frameId,
+        const String& html) override;
+    Response startScreencast(Maybe<String> format,
+        Maybe<int> quality,
+        Maybe<int> maxWidth,
+        Maybe<int> maxHeight,
+        Maybe<int> everyNthFrame) override;
+    Response stopScreencast() override;
+    Response configureOverlay(Maybe<bool> suspended,
+        Maybe<String> message) override;
+    Response getLayoutMetrics(
+        std::unique_ptr<protocol::Page::LayoutViewport>*,
+        std::unique_ptr<protocol::Page::VisualViewport>*) override;
 
     // InspectorInstrumentation API
     void didClearDocumentOfWindowObject(LocalFrame*);
@@ -114,52 +151,57 @@ public:
     void frameClearedScheduledNavigation(LocalFrame*);
     void willRunJavaScriptDialog(const String& message, ChromeClient::DialogType);
     void didRunJavaScriptDialog(bool result);
-    void didLayout();
-    void didScroll();
+    void didUpdateLayout();
     void didResizeMainFrame();
+    void didRecalculateStyle();
+    void windowCreated(LocalFrame*);
 
     // Inspector Controller API
-    void disable(ErrorString*) override;
     void restore() override;
-
-    // Cross-agents API
-    static DocumentLoader* assertDocumentLoader(ErrorString*, LocalFrame*);
-    LocalFrame* frameForId(const String& frameId);
-    LocalFrame* assertFrame(ErrorString*, const String& frameId);
-    FrameHost* frameHost();
-    LocalFrame* inspectedFrame() const { return m_inspectedFrame.get(); }
-    LocalFrame* findFrameWithSecurityOrigin(const String& originRawString);
     bool screencastEnabled();
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    class GetResourceContentLoadListener;
-
-    InspectorPageAgent(LocalFrame* inspectedFrame, InspectorOverlay*, InspectorResourceContentLoader*);
+    InspectorPageAgent(InspectedFrames*,
+        Client*,
+        InspectorResourceContentLoader*,
+        v8_inspector::V8InspectorSession*);
 
     void finishReload();
-    void getResourceContentAfterResourcesContentLoaded(const String& frameId, const String& url, PassRefPtrWillBeRawPtr<GetResourceContentCallback>);
+    void getResourceContentAfterResourcesContentLoaded(
+        const String& frameId,
+        const String& url,
+        std::unique_ptr<GetResourceContentCallback>);
+    void searchContentAfterResourcesContentLoaded(
+        const String& frameId,
+        const String& url,
+        const String& query,
+        bool caseSensitive,
+        bool isRegex,
+        std::unique_ptr<SearchInResourceCallback>);
 
-    static bool dataContent(const char* data, unsigned size, const String& textEncodingName, bool withBase64Encode, String* result);
+    static bool dataContent(const char* data,
+        unsigned size,
+        const String& textEncodingName,
+        bool withBase64Encode,
+        String* result);
 
-    PassRefPtr<TypeBuilder::Page::Frame> buildObjectForFrame(LocalFrame*);
-    PassRefPtr<TypeBuilder::Page::FrameResourceTree> buildObjectForFrameTree(LocalFrame*);
-    RawPtrWillBeMember<LocalFrame> m_inspectedFrame;
-    RawPtrWillBeMember<InspectorDebuggerAgent> m_debuggerAgent;
-    RawPtrWillBeMember<InspectorCSSAgent> m_cssAgent;
-    RawPtrWillBeMember<InspectorOverlay> m_overlay;
+    std::unique_ptr<protocol::Page::Frame> buildObjectForFrame(LocalFrame*);
+    std::unique_ptr<protocol::Page::FrameResourceTree> buildObjectForFrameTree(
+        LocalFrame*);
+    Member<InspectedFrames> m_inspectedFrames;
+    v8_inspector::V8InspectorSession* m_v8Session;
+    Client* m_client;
     long m_lastScriptIdentifier;
     String m_pendingScriptToEvaluateOnLoadOnce;
     String m_scriptToEvaluateOnLoadOnce;
     bool m_enabled;
     bool m_reloading;
-
-    RawPtrWillBeMember<InspectorResourceContentLoader> m_inspectorResourceContentLoader;
+    Member<InspectorResourceContentLoader> m_inspectorResourceContentLoader;
+    int m_resourceContentLoaderClientId;
 };
 
-
 } // namespace blink
-
 
 #endif // !defined(InspectorPagerAgent_h)

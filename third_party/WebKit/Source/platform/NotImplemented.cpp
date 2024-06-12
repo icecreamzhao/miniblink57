@@ -23,20 +23,21 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/NotImplemented.h"
+#include "config.h"
 
-#include "platform/Logging.h"
+//#include "platform/Logging.h"
 #include <windows.h>
 
 namespace blink {
 
 #if !LOG_DISABLED
 
-WTFLogChannel* notImplementedLoggingChannel()
+void* notImplementedLoggingChannel()
 {
     DebugBreak();
-    return &LogNotYetImplemented;
+    //return &LogNotYetImplemented;
+    return nullptr;
 }
 
 #endif

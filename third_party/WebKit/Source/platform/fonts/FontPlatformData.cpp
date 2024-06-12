@@ -18,20 +18,15 @@
  *
  */
 
-#include "config.h"
 #include "platform/fonts/FontPlatformData.h"
 
-#include "SkEndian.h"
 #include "SkTypeface.h"
-#ifndef MINIBLINK_NO_HARFBUZZ
 #include "third_party/harfbuzz-ng/src/hb-ot.h"
 #include "third_party/harfbuzz-ng/src/hb.h"
-#endif
-#include "platform/fonts/Character.h"
 #include "platform/fonts/FontCache.h"
-#ifndef MINIBLINK_NO_HARFBUZZ
 #include "platform/fonts/shaping/HarfBuzzFace.h"
-#endif
+#include "platform/text/Character.h"
+#include "wtf/ByteSwap.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
@@ -46,20 +41,13 @@ namespace blink {
 
 FontPlatformData::FontPlatformData(WTF::HashTableDeletedValueType)
     : m_typeface(nullptr)
-#if !OS(WIN)
-    , m_family(CString())
-#endif
     , m_textSize(0)
     , m_syntheticBold(false)
     , m_syntheticItalic(false)
     , m_orientation(FontOrientation::Horizontal)
-#if !OS(MACOSX)
-    , m_style(FontRenderStyle())
-#endif
     , m_isHashTableDeletedValue(true)
 #if OS(WIN)
     , m_paintTextFlags(0)
-    , m_useSubpixelPositioning(false)
     , m_minSizeForAntiAlias(0)
     , m_minSizeForSubpixel(0)
 #endif
@@ -68,20 +56,13 @@ FontPlatformData::FontPlatformData(WTF::HashTableDeletedValueType)
 
 FontPlatformData::FontPlatformData()
     : m_typeface(nullptr)
-#if !OS(WIN)
-    , m_family(CString())
-#endif
     , m_textSize(0)
     , m_syntheticBold(false)
     , m_syntheticItalic(false)
     , m_orientation(FontOrientation::Horizontal)
-#if !OS(MACOSX)
-    , m_style(FontRenderStyle())
-#endif
     , m_isHashTableDeletedValue(false)
 #if OS(WIN)
     , m_paintTextFlags(0)
-    , m_useSubpixelPositioning(false)
     , m_minSizeForAntiAlias(0)
     , m_minSizeForSubpixel(0)
 #endif
@@ -90,20 +71,13 @@ FontPlatformData::FontPlatformData()
 
 FontPlatformData::FontPlatformData(float size, bool syntheticBold, bool syntheticItalic, FontOrientation orientation)
     : m_typeface(nullptr)
-#if !OS(WIN)
-    , m_family(CString())
-#endif
     , m_textSize(size)
     , m_syntheticBold(syntheticBold)
     , m_syntheticItalic(syntheticItalic)
     , m_orientation(orientation)
-#if !OS(MACOSX)
-    , m_style(FontRenderStyle())
-#endif
     , m_isHashTableDeletedValue(false)
 #if OS(WIN)
     , m_paintTextFlags(0)
-    , m_useSubpixelPositioning(false)
     , m_minSizeForAntiAlias(0)
     , m_minSizeForSubpixel(0)
 #endif
@@ -119,14 +93,13 @@ FontPlatformData::FontPlatformData(const FontPlatformData& source)
     , m_syntheticBold(source.m_syntheticBold)
     , m_syntheticItalic(source.m_syntheticItalic)
     , m_orientation(source.m_orientation)
-#if !OS(MACOSX)
+#if OS(LINUX) || OS(ANDROID)
     , m_style(source.m_style)
 #endif
     //, m_harfBuzzFace(nullptr)
     , m_isHashTableDeletedValue(false)
 #if OS(WIN)
     , m_paintTextFlags(source.m_paintTextFlags)
-    , m_useSubpixelPositioning(source.m_useSubpixelPositioning)
     , m_minSizeForAntiAlias(source.m_minSizeForAntiAlias)
     , m_minSizeForSubpixel(source.m_minSizeForSubpixel)
 #endif
@@ -142,24 +115,25 @@ FontPlatformData::FontPlatformData(const FontPlatformData& src, float textSize)
     , m_syntheticBold(src.m_syntheticBold)
     , m_syntheticItalic(src.m_syntheticItalic)
     , m_orientation(src.m_orientation)
-#if !OS(MACOSX)
-    , m_style(src.m_style)
+#if OS(LINUX) || OS(ANDROID)
+    , m_style(FontRenderStyle::querySystem(m_family, m_textSize, m_typeface->style()))
 #endif
     //, m_harfBuzzFace(nullptr)
     , m_isHashTableDeletedValue(false)
 #if OS(WIN)
     , m_paintTextFlags(src.m_paintTextFlags)
-    , m_useSubpixelPositioning(src.m_useSubpixelPositioning)
     , m_minSizeForAntiAlias(src.m_minSizeForAntiAlias)
     , m_minSizeForSubpixel(src.m_minSizeForSubpixel)
 #endif
 {
-#if !OS(MACOSX)
-    querySystemForRenderStyle(FontDescription::subpixelPositioning());
+#if OS(WIN)
+    querySystemForRenderStyle();
 #endif
 }
 
-FontPlatformData::FontPlatformData(PassRefPtr<SkTypeface> tf, const char* family, float textSize, bool syntheticBold, bool syntheticItalic, FontOrientation orientation, bool subpixelTextPosition)
+FontPlatformData::FontPlatformData(PassRefPtr<SkTypeface> tf,
+    const char* family, float textSize, bool syntheticBold,
+    bool syntheticItalic, FontOrientation orientation)
     : m_typeface(tf)
 #if !OS(WIN)
     , m_family(family)
@@ -168,16 +142,18 @@ FontPlatformData::FontPlatformData(PassRefPtr<SkTypeface> tf, const char* family
     , m_syntheticBold(syntheticBold)
     , m_syntheticItalic(syntheticItalic)
     , m_orientation(orientation)
+#if OS(LINUX) || OS(ANDROID)
+    , m_style(FontRenderStyle::querySystem(m_family, m_textSize, m_typeface->style()))
+#endif
     , m_isHashTableDeletedValue(false)
 #if OS(WIN)
     , m_paintTextFlags(0)
-    , m_useSubpixelPositioning(subpixelTextPosition)
     , m_minSizeForAntiAlias(0)
     , m_minSizeForSubpixel(0)
 #endif
 {
-#if !OS(MACOSX)
-    querySystemForRenderStyle(subpixelTextPosition);
+#if OS(WIN)
+    querySystemForRenderStyle();
 #endif
 }
 
@@ -212,7 +188,7 @@ const FontPlatformData& FontPlatformData::operator=(const FontPlatformData& othe
     m_syntheticItalic = other.m_syntheticItalic;
     //m_harfBuzzFace = nullptr;
     m_orientation = other.m_orientation;
-#if !OS(MACOSX)
+#if OS(LINUX) || OS(ANDROID)
     m_style = other.m_style;
 #endif
 
@@ -220,7 +196,6 @@ const FontPlatformData& FontPlatformData::operator=(const FontPlatformData& othe
     m_paintTextFlags = 0;
     m_minSizeForAntiAlias = other.m_minSizeForAntiAlias;
     m_minSizeForSubpixel = other.m_minSizeForSubpixel;
-    m_useSubpixelPositioning = other.m_useSubpixelPositioning;
 #endif
 
     return *this;
@@ -241,7 +216,7 @@ bool FontPlatformData::operator==(const FontPlatformData& a) const
         && m_isHashTableDeletedValue == a.m_isHashTableDeletedValue
         && m_syntheticBold == a.m_syntheticBold
         && m_syntheticItalic == a.m_syntheticItalic
-#if !OS(MACOSX)
+#if OS(LINUX) || OS(ANDROID)
         && m_style == a.m_style
 #endif
         && m_orientation == a.m_orientation;
@@ -269,20 +244,13 @@ SkTypeface* FontPlatformData::typeface() const
 
 HarfBuzzFace* FontPlatformData::harfBuzzFace() const
 {
-#ifndef MINIBLINK_NO_HARFBUZZ
     if (!m_harfBuzzFace)
         m_harfBuzzFace = HarfBuzzFace::create(const_cast<FontPlatformData*>(this), uniqueID());
 
     return m_harfBuzzFace.get();
-#else
-	notImplemented();
-	return nullptr;
-#endif // MINIBLINK_NO_HARFBUZZ
 }
 
-#ifndef MINIBLINK_NO_HARFBUZZ
-static inline bool tableHasSpace(hb_face_t* face, hb_set_t* glyphs,
-    hb_tag_t tag, hb_codepoint_t space)
+static inline bool tableHasSpace(hb_face_t* face, hb_set_t* glyphs, hb_tag_t tag, hb_codepoint_t space)
 {
     unsigned count = hb_ot_layout_table_get_lookup_count(face, tag);
     for (unsigned i = 0; i < count; i++) {
@@ -293,15 +261,17 @@ static inline bool tableHasSpace(hb_face_t* face, hb_set_t* glyphs,
     }
     return false;
 }
-#endif // MINIBLINK_NO_HARFBUZZ
 
-bool FontPlatformData::hasSpaceInLigaturesOrKerning(
-    TypesettingFeatures features) const
+bool FontPlatformData::hasSpaceInLigaturesOrKerning(TypesettingFeatures features) const
 {
-#ifndef MINIBLINK_NO_HARFBUZZ
-    const HarfBuzzFace* hbFace = harfBuzzFace();
+    HarfBuzzFace* hbFace = harfBuzzFace();
     if (!hbFace)
-        return true;
+        return false;
+
+//     hb_font_t* font = hbFace->getScaledFont();
+//     ASSERT(font);
+//     hb_face_t* face = hb_font_get_face(font);
+//     ASSERT(face);
 
     hb_face_t* face = hbFace->face();
     ASSERT(face);
@@ -313,11 +283,11 @@ bool FontPlatformData::hasSpaceInLigaturesOrKerning(
     // will be rendering using a fallback font, which grantees that it cannot
     // affect the shape of the preceding word.
     if (!hb_font_get_glyph(font, spaceCharacter, 0, &space))
-        return true;
+        return false;
 
     if (!hb_ot_layout_has_substitution(face)
         && !hb_ot_layout_has_positioning(face)) {
-        return true;
+        return false;
     }
 
     bool foundSpaceInTable = false;
@@ -331,10 +301,6 @@ bool FontPlatformData::hasSpaceInLigaturesOrKerning(
     hb_font_destroy(font);
 
     return foundSpaceInTable;
-#else
-	notImplemented();
-	return false;
-#endif // MINIBLINK_NOT_IMPLEMENTED
 }
 
 unsigned FontPlatformData::hash() const
@@ -368,18 +334,13 @@ bool FontPlatformData::fontContainsCharacter(UChar32 character)
 
 PassRefPtr<OpenTypeVerticalData> FontPlatformData::verticalData() const
 {
-#ifndef MINIBLINK_NO_HARFBUZZ
     return FontCache::fontCache()->getVerticalData(typeface()->uniqueID(), *this);
-#else
-    return nullptr;
-#endif // MINIBLINK_NO_HARFBUZZ
 }
 
-PassRefPtr<SharedBuffer> FontPlatformData::openTypeTable(uint32_t table) const
+PassRefPtr<SharedBuffer> FontPlatformData::openTypeTable(SkFontTableTag tag) const
 {
     RefPtr<SharedBuffer> buffer;
 
-    SkFontTableTag tag = SkEndianSwap32(table);
     const size_t tableSize = m_typeface->getTableSize(tag);
     if (tableSize) {
         Vector<char> tableBuffer(tableSize);

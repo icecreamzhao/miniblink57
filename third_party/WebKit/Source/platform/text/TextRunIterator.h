@@ -30,10 +30,13 @@
 #define TextRunIterator_h
 
 #include "platform/text/TextRun.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class TextRunIterator {
+    DISALLOW_NEW();
+
 public:
     TextRunIterator()
         : m_textRun(0)
@@ -60,7 +63,11 @@ public:
     void increment() { m_offset++; }
     bool atEnd() const { return m_offset >= m_length; }
     UChar current() const { return (*m_textRun)[m_offset]; }
-    WTF::Unicode::Direction direction() const { return atEnd() ? WTF::Unicode::OtherNeutral : WTF::Unicode::direction(current()); }
+    WTF::Unicode::CharDirection direction() const
+    {
+        return atEnd() ? WTF::Unicode::OtherNeutral
+                       : WTF::Unicode::direction(current());
+    }
     bool atParagraphSeparator() const { return current() == '\n'; }
 
     bool operator==(const TextRunIterator& other)
@@ -75,7 +82,6 @@ private:
     unsigned m_offset;
     unsigned m_length;
 };
-
 
 } // namespace blink
 

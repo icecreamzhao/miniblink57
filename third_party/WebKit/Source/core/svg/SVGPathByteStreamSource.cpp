@@ -17,24 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGPathByteStreamSource.h"
 
 namespace blink {
-
-bool SVGPathByteStreamSource::hasMoreData() const
-{
-    return m_streamCurrent < m_streamEnd;
-}
-
-SVGPathSegType SVGPathByteStreamSource::peekSegmentType()
-{
-    ASSERT(hasMoreData());
-    ASSERT(m_streamCurrent + sizeof(unsigned short) <= m_streamEnd);
-    unsigned short commandBytes;
-    memcpy(&commandBytes, m_streamCurrent, sizeof(commandBytes));
-    return static_cast<SVGPathSegType>(commandBytes);
-}
 
 PathSegmentData SVGPathByteStreamSource::parseSegment()
 {
@@ -46,11 +31,11 @@ PathSegmentData SVGPathByteStreamSource::parseSegment()
     case PathSegCurveToCubicRel:
     case PathSegCurveToCubicAbs:
         segment.point1 = readFloatPoint();
-        /* fall through */
+    /* fall through */
     case PathSegCurveToCubicSmoothRel:
     case PathSegCurveToCubicSmoothAbs:
         segment.point2 = readFloatPoint();
-        /* fall through */
+    /* fall through */
     case PathSegMoveToRel:
     case PathSegMoveToAbs:
     case PathSegLineToRel:
@@ -76,8 +61,8 @@ PathSegmentData SVGPathByteStreamSource::parseSegment()
         break;
     case PathSegArcRel:
     case PathSegArcAbs: {
-        segment.point1 = readFloatPoint(); // rx and ry
-        segment.point2.setX(readFloat()); // angle
+        segment.arcRadii() = readFloatPoint();
+        segment.setArcAngle(readFloat());
         segment.arcLarge = readFlag();
         segment.arcSweep = readFlag();
         segment.targetPoint = readFloatPoint();
@@ -89,4 +74,4 @@ PathSegmentData SVGPathByteStreamSource::parseSegment()
     return segment;
 }
 
-}
+} // namespace blink

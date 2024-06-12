@@ -6,15 +6,18 @@
 #define EventDispatchForbiddenScope_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-#include "wtf/MainThread.h"
-#include "wtf/TemporaryChange.h"
+#include "wtf/AutoReset.h"
 
 namespace blink {
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 
 class EventDispatchForbiddenScope {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(EventDispatchForbiddenScope);
+
 public:
     EventDispatchForbiddenScope()
     {
@@ -37,19 +40,18 @@ public:
     }
 
     class AllowUserAgentEvents {
+        STACK_ALLOCATED();
+
     public:
         AllowUserAgentEvents()
-            : m_change(s_count, 0)
+            : m_change(&s_count, 0)
         {
             ASSERT(isMainThread());
         }
 
-        ~AllowUserAgentEvents()
-        {
-            ASSERT(!s_count);
-        }
+        ~AllowUserAgentEvents() { ASSERT(!s_count); }
 
-        TemporaryChange<unsigned> m_change;
+        AutoReset<unsigned> m_change;
     };
 
 private:
@@ -59,6 +61,9 @@ private:
 #else
 
 class EventDispatchForbiddenScope {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(EventDispatchForbiddenScope);
+
 public:
     EventDispatchForbiddenScope() { }
 
@@ -68,7 +73,7 @@ public:
     };
 };
 
-#endif // ENABLE(ASSERT)
+#endif // DCHECK_IS_ON()
 
 } // namespace blink
 

@@ -11,15 +11,17 @@
 
 namespace blink {
 
+class AddEventListenerOptions;
 class Document;
 class EventTarget;
 
-typedef HashCountedSet<EventTarget*> EventTargetSet;
+typedef HashCountedSet<UntracedMember<EventTarget>> EventTargetSet;
 
 // Registry for keeping track of event handlers. Note that only handlers on
 // documents that can be rendered or can receive input (i.e., are attached to a
 // FrameHost) are registered here.
-class CORE_EXPORT EventHandlerRegistry final : public NoBaseWillBeGarbageCollectedFinalized<EventHandlerRegistry> {
+class CORE_EXPORT EventHandlerRegistry final
+    : public GarbageCollectedFinalized<EventHandlerRegistry> {
 public:
     explicit EventHandlerRegistry(FrameHost&);
     virtual ~EventHandlerRegistry();
@@ -28,9 +30,13 @@ public:
     // multiple event types.
     enum EventHandlerClass {
         ScrollEvent,
-        WheelEvent,
-        TouchEvent,
-#if ENABLE(ASSERT)
+        WheelEventBlocking,
+        WheelEventPassive,
+        TouchStartOrMoveEventBlocking,
+        TouchStartOrMoveEventPassive,
+        TouchEndOrCancelEventBlocking,
+        TouchEndOrCancelEventPassive,
+#if DCHECK_IS_ON()
         // Additional event categories for verifying handler tracking logic.
         EventsForTesting,
 #endif
@@ -40,19 +46,23 @@ public:
     // Returns true if the FrameHost has event handlers of the specified class.
     bool hasEventHandlers(EventHandlerClass) const;
 
-    // Returns a set of EventTargets which have registered handlers of the given class.
+    // Returns a set of EventTargets which have registered handlers of the given
+    // class.
     const EventTargetSet* eventHandlerTargets(EventHandlerClass) const;
 
     // Registration and management of event handlers attached to EventTargets.
-    void didAddEventHandler(EventTarget&, const AtomicString& eventType);
+    void didAddEventHandler(EventTarget&,
+        const AtomicString& eventType,
+        const AddEventListenerOptions&);
     void didAddEventHandler(EventTarget&, EventHandlerClass);
-    void didRemoveEventHandler(EventTarget&, const AtomicString& eventType);
+    void didRemoveEventHandler(EventTarget&,
+        const AtomicString& eventType,
+        const AddEventListenerOptions&);
     void didRemoveEventHandler(EventTarget&, EventHandlerClass);
     void didRemoveAllEventHandlers(EventTarget&);
 
     void didMoveIntoFrameHost(EventTarget&);
     void didMoveOutOfFrameHost(EventTarget&);
-    static void didMoveBetweenFrameHosts(EventTarget&, FrameHost* oldFrameHost, FrameHost* newFrameHost);
 
     // Either |documentDetached| or |didMove{Into,OutOf,Between}FrameHosts| must
     // be called whenever the FrameHost that is associated with a registered event
@@ -71,11 +81,15 @@ private:
     };
 
     // Returns true if |eventType| belongs to a class this registry tracks.
-    static bool eventTypeToClass(const AtomicString& eventType, EventHandlerClass* result);
+    static bool eventTypeToClass(const AtomicString& eventType,
+        const AddEventListenerOptions&,
+        EventHandlerClass* result);
 
     // Returns true if the operation actually added a new target or completely
     // removed an existing one.
-    bool updateEventHandlerTargets(ChangeOperation, EventHandlerClass, EventTarget*);
+    bool updateEventHandlerTargets(ChangeOperation,
+        EventHandlerClass,
+        EventTarget*);
 
     // Called on the EventHandlerRegistry of the root Document to notify
     // clients when we have added the first handler or removed the last one for
@@ -90,15 +104,20 @@ private:
 
     // Record a change operation to a given event handler class and notify any
     // parent registry and other clients accordingly.
-    void updateEventHandlerOfType(ChangeOperation, const AtomicString& eventType, EventTarget*);
+    void updateEventHandlerOfType(ChangeOperation,
+        const AtomicString& eventType,
+        const AddEventListenerOptions&,
+        EventTarget*);
 
-    void updateEventHandlerInternal(ChangeOperation, EventHandlerClass, EventTarget*);
+    void updateEventHandlerInternal(ChangeOperation,
+        EventHandlerClass,
+        EventTarget*);
 
     void updateAllEventHandlers(ChangeOperation, EventTarget&);
 
     void checkConsistency() const;
 
-    FrameHost& m_frameHost;
+    Member<FrameHost> m_frameHost;
     EventTargetSet m_targets[EventHandlerClassCount];
 };
 

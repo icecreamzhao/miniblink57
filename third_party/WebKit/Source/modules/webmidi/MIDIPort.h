@@ -31,9 +31,12 @@
 #ifndef MIDIPort_h
 #define MIDIPort_h
 
+#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
-#include "core/dom/ActiveDOMObject.h"
+#include "bindings/core/v8/TraceWrapperMember.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/ExceptionCode.h"
+#include "media/midi/midi_service.mojom-blink.h"
 #include "modules/EventTargetModules.h"
 #include "modules/webmidi/MIDIAccessor.h"
 #include "platform/heap/Handle.h"
@@ -42,10 +45,12 @@ namespace blink {
 
 class MIDIAccess;
 
-class MIDIPort : public RefCountedGarbageCollectedEventTargetWithInlineData<MIDIPort>, public ActiveDOMObject {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MIDIPort);
+class MIDIPort : public EventTargetWithInlineData,
+                 public ActiveScriptWrappable<MIDIPort>,
+                 public ContextLifecycleObserver {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MIDIPort);
+    USING_GARBAGE_COLLECTED_MIXIN(MIDIPort);
+
 public:
     enum ConnectionState {
         ConnectionStateOpen,
@@ -53,10 +58,8 @@ public:
         ConnectionStatePending
     };
 
-    enum TypeCode {
-        TypeInput,
-        TypeOutput
-    };
+    enum TypeCode { TypeInput,
+        TypeOutput };
 
     ~MIDIPort() override { }
 
@@ -72,24 +75,37 @@ public:
     ScriptPromise close(ScriptState*);
 
     MIDIAccess* midiAccess() const { return m_access; }
-    MIDIAccessor::MIDIPortState getState() const { return m_state; }
-    void setState(MIDIAccessor::MIDIPortState);
+    midi::mojom::PortState getState() const { return m_state; }
+    void setState(midi::mojom::PortState);
     ConnectionState getConnection() const { return m_connection; }
 
     DECLARE_VIRTUAL_TRACE();
 
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+
     DEFINE_ATTRIBUTE_EVENT_LISTENER(statechange);
 
     // EventTarget
-    const AtomicString& interfaceName() const override { return EventTargetNames::MIDIPort; }
-    ExecutionContext* executionContext() const final;
+    const AtomicString& interfaceName() const override
+    {
+        return EventTargetNames::MIDIPort;
+    }
+    ExecutionContext* getExecutionContext() const final;
 
-    // ActiveDOMObject
-    bool hasPendingActivity() const override;
-    void stop() override;
+    // ScriptWrappable
+    bool hasPendingActivity() const final;
+
+    // ContextLifecycleObserver
+    void contextDestroyed(ExecutionContext*) override;
 
 protected:
-    MIDIPort(MIDIAccess*, const String& id, const String& manufacturer, const String& name, TypeCode, const String& version, MIDIAccessor::MIDIPortState);
+    MIDIPort(MIDIAccess*,
+        const String& id,
+        const String& manufacturer,
+        const String& name,
+        TypeCode,
+        const String& version,
+        midi::mojom::PortState);
 
     void open();
 
@@ -97,15 +113,15 @@ private:
     ScriptPromise accept(ScriptState*);
     ScriptPromise reject(ScriptState*, ExceptionCode, const String& message);
 
-    void setStates(MIDIAccessor::MIDIPortState, ConnectionState);
+    void setStates(midi::mojom::PortState, ConnectionState);
 
     String m_id;
     String m_manufacturer;
     String m_name;
     TypeCode m_type;
     String m_version;
-    Member<MIDIAccess> m_access;
-    MIDIAccessor::MIDIPortState m_state;
+    TraceWrapperMember<MIDIAccess> m_access;
+    midi::mojom::PortState m_state;
     ConnectionState m_connection;
 };
 

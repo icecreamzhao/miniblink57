@@ -29,10 +29,10 @@
 #define SVGComputedStyleDefs_h
 
 #include "core/CoreExport.h"
+#include "core/style/StylePath.h"
 #include "platform/Length.h"
 #include "platform/graphics/Color.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 #include "wtf/RefVector.h"
@@ -52,77 +52,96 @@ enum SVGPaintType {
     SVG_PAINTTYPE_URI
 };
 
-enum EBaselineShift {
-    BS_LENGTH, BS_SUB, BS_SUPER
-};
+enum EBaselineShift { BS_LENGTH,
+    BS_SUB,
+    BS_SUPER };
 
-enum ETextAnchor {
-    TA_START, TA_MIDDLE, TA_END
-};
+enum ETextAnchor { TA_START,
+    TA_MIDDLE,
+    TA_END };
 
-enum EColorInterpolation {
-    CI_AUTO, CI_SRGB, CI_LINEARRGB
-};
+enum EColorInterpolation { CI_AUTO,
+    CI_SRGB,
+    CI_LINEARRGB };
 
-enum EColorRendering {
-    CR_AUTO, CR_OPTIMIZESPEED, CR_OPTIMIZEQUALITY
-};
+enum EColorRendering { CR_AUTO,
+    CR_OPTIMIZESPEED,
+    CR_OPTIMIZEQUALITY };
 enum EShapeRendering {
-    SR_AUTO, SR_OPTIMIZESPEED, SR_CRISPEDGES, SR_GEOMETRICPRECISION
-};
-
-enum SVGWritingMode {
-    WM_LRTB, WM_LR, WM_RLTB, WM_RL, WM_TBRL, WM_TB
-};
-
-enum EGlyphOrientation {
-    GO_0DEG, GO_90DEG, GO_180DEG, GO_270DEG, GO_AUTO
+    SR_AUTO,
+    SR_OPTIMIZESPEED,
+    SR_CRISPEDGES,
+    SR_GEOMETRICPRECISION
 };
 
 enum EAlignmentBaseline {
-    AB_AUTO, AB_BASELINE, AB_BEFORE_EDGE, AB_TEXT_BEFORE_EDGE,
-    AB_MIDDLE, AB_CENTRAL, AB_AFTER_EDGE, AB_TEXT_AFTER_EDGE,
-    AB_IDEOGRAPHIC, AB_ALPHABETIC, AB_HANGING, AB_MATHEMATICAL
+    AB_AUTO,
+    AB_BASELINE,
+    AB_BEFORE_EDGE,
+    AB_TEXT_BEFORE_EDGE,
+    AB_MIDDLE,
+    AB_CENTRAL,
+    AB_AFTER_EDGE,
+    AB_TEXT_AFTER_EDGE,
+    AB_IDEOGRAPHIC,
+    AB_ALPHABETIC,
+    AB_HANGING,
+    AB_MATHEMATICAL
 };
 
 enum EDominantBaseline {
-    DB_AUTO, DB_USE_SCRIPT, DB_NO_CHANGE, DB_RESET_SIZE,
-    DB_IDEOGRAPHIC, DB_ALPHABETIC, DB_HANGING, DB_MATHEMATICAL,
-    DB_CENTRAL, DB_MIDDLE, DB_TEXT_AFTER_EDGE, DB_TEXT_BEFORE_EDGE
+    DB_AUTO,
+    DB_USE_SCRIPT,
+    DB_NO_CHANGE,
+    DB_RESET_SIZE,
+    DB_IDEOGRAPHIC,
+    DB_ALPHABETIC,
+    DB_HANGING,
+    DB_MATHEMATICAL,
+    DB_CENTRAL,
+    DB_MIDDLE,
+    DB_TEXT_AFTER_EDGE,
+    DB_TEXT_BEFORE_EDGE
 };
 
-enum EVectorEffect {
-    VE_NONE,
-    VE_NON_SCALING_STROKE
-};
+enum EVectorEffect { VE_NONE,
+    VE_NON_SCALING_STROKE };
 
-enum EBufferedRendering {
-    BR_AUTO,
+enum EBufferedRendering { BR_AUTO,
     BR_DYNAMIC,
-    BR_STATIC
-};
+    BR_STATIC };
 
-enum EMaskType {
-    MT_LUMINANCE,
-    MT_ALPHA
-};
+enum EMaskType { MT_LUMINANCE,
+    MT_ALPHA };
 
 enum EPaintOrderType {
-    PT_NONE    = 0,
-    PT_FILL    = 1,
-    PT_STROKE  = 2,
+    PT_NONE = 0,
+    PT_FILL = 1,
+    PT_STROKE = 2,
     PT_MARKERS = 3
 };
 
-const int kPaintOrderBitwidth = 2;
-typedef unsigned EPaintOrder;
-const unsigned PO_NORMAL = PT_FILL | PT_STROKE << 2 | PT_MARKERS << 4;
+enum EPaintOrder {
+    PaintOrderNormal = 0,
+    PaintOrderFillStrokeMarkers = 1,
+    PaintOrderFillMarkersStroke = 2,
+    PaintOrderStrokeFillMarkers = 3,
+    PaintOrderStrokeMarkersFill = 4,
+    PaintOrderMarkersFillStroke = 5,
+    PaintOrderMarkersStrokeFill = 6
+};
 
 // Inherited/Non-Inherited Style Datastructures
 class StyleFillData : public RefCounted<StyleFillData> {
 public:
-    static PassRefPtr<StyleFillData> create() { return adoptRef(new StyleFillData); }
-    PassRefPtr<StyleFillData> copy() const { return adoptRef(new StyleFillData(*this)); }
+    static PassRefPtr<StyleFillData> create()
+    {
+        return adoptRef(new StyleFillData);
+    }
+    PassRefPtr<StyleFillData> copy() const
+    {
+        return adoptRef(new StyleFillData(*this));
+    }
 
     bool operator==(const StyleFillData&) const;
     bool operator!=(const StyleFillData& other) const
@@ -144,13 +163,24 @@ private:
 };
 
 class UnzoomedLength {
+    DISALLOW_NEW();
+
 public:
-    explicit UnzoomedLength(const Length& length) : m_length(length) { }
+    explicit UnzoomedLength(const Length& length)
+        : m_length(length)
+    {
+    }
 
     bool isZero() const { return m_length.isZero(); }
 
-    bool operator==(const UnzoomedLength& other) const { return m_length == other.m_length; }
-    bool operator!=(const UnzoomedLength& other) const { return !operator==(other); }
+    bool operator==(const UnzoomedLength& other) const
+    {
+        return m_length == other.m_length;
+    }
+    bool operator!=(const UnzoomedLength& other) const
+    {
+        return !operator==(other);
+    }
 
     const Length& length() const { return m_length; }
 
@@ -197,8 +227,14 @@ private:
 
 class StyleStopData : public RefCounted<StyleStopData> {
 public:
-    static PassRefPtr<StyleStopData> create() { return adoptRef(new StyleStopData); }
-    PassRefPtr<StyleStopData> copy() const { return adoptRef(new StyleStopData(*this)); }
+    static PassRefPtr<StyleStopData> create()
+    {
+        return adoptRef(new StyleStopData);
+    }
+    PassRefPtr<StyleStopData> copy() const
+    {
+        return adoptRef(new StyleStopData(*this));
+    }
 
     bool operator==(const StyleStopData&) const;
     bool operator!=(const StyleStopData& other) const
@@ -217,8 +253,14 @@ private:
 // Note: the rule for this class is, *no inheritance* of these props
 class CORE_EXPORT StyleMiscData : public RefCounted<StyleMiscData> {
 public:
-    static PassRefPtr<StyleMiscData> create() { return adoptRef(new StyleMiscData); }
-    PassRefPtr<StyleMiscData> copy() const { return adoptRef(new StyleMiscData(*this)); }
+    static PassRefPtr<StyleMiscData> create()
+    {
+        return adoptRef(new StyleMiscData);
+    }
+    PassRefPtr<StyleMiscData> copy() const
+    {
+        return adoptRef(new StyleMiscData(*this));
+    }
 
     bool operator==(const StyleMiscData&) const;
     bool operator!=(const StyleMiscData& other) const
@@ -240,8 +282,14 @@ private:
 // Non-inherited resources
 class StyleResourceData : public RefCounted<StyleResourceData> {
 public:
-    static PassRefPtr<StyleResourceData> create() { return adoptRef(new StyleResourceData); }
-    PassRefPtr<StyleResourceData> copy() const { return adoptRef(new StyleResourceData(*this)); }
+    static PassRefPtr<StyleResourceData> create()
+    {
+        return adoptRef(new StyleResourceData);
+    }
+    PassRefPtr<StyleResourceData> copy() const
+    {
+        return adoptRef(new StyleResourceData(*this));
+    }
 
     bool operator==(const StyleResourceData&) const;
     bool operator!=(const StyleResourceData& other) const
@@ -249,8 +297,6 @@ public:
         return !(*this == other);
     }
 
-    AtomicString clipper;
-    AtomicString filter;
     AtomicString masker;
 
 private:
@@ -259,10 +305,17 @@ private:
 };
 
 // Inherited resources
-class StyleInheritedResourceData : public RefCounted<StyleInheritedResourceData> {
+class StyleInheritedResourceData
+    : public RefCounted<StyleInheritedResourceData> {
 public:
-    static PassRefPtr<StyleInheritedResourceData> create() { return adoptRef(new StyleInheritedResourceData); }
-    PassRefPtr<StyleInheritedResourceData> copy() const { return adoptRef(new StyleInheritedResourceData(*this)); }
+    static PassRefPtr<StyleInheritedResourceData> create()
+    {
+        return adoptRef(new StyleInheritedResourceData);
+    }
+    PassRefPtr<StyleInheritedResourceData> copy() const
+    {
+        return adoptRef(new StyleInheritedResourceData(*this));
+    }
 
     bool operator==(const StyleInheritedResourceData&) const;
     bool operator!=(const StyleInheritedResourceData& other) const
@@ -279,27 +332,32 @@ private:
     StyleInheritedResourceData(const StyleInheritedResourceData&);
 };
 
-// Positioning and sizing properties.
-class StyleLayoutData : public RefCounted<StyleLayoutData> {
-    public:
-        static PassRefPtr<StyleLayoutData> create() { return adoptRef(new StyleLayoutData); }
-        PassRefPtr<StyleLayoutData> copy() const;
-        bool operator==(const StyleLayoutData&) const;
-        bool operator!=(const StyleLayoutData& other) const
-        {
-            return !(*this == other);
-        }
-        Length cx;
-        Length cy;
-        Length x;
-        Length y;
-        Length r;
-        Length rx;
-        Length ry;
-    private:
-        StyleLayoutData();
-        StyleLayoutData(const StyleLayoutData&);
-    };
+// Geometry properties
+class StyleGeometryData : public RefCounted<StyleGeometryData> {
+public:
+    static PassRefPtr<StyleGeometryData> create()
+    {
+        return adoptRef(new StyleGeometryData);
+    }
+    PassRefPtr<StyleGeometryData> copy() const;
+    bool operator==(const StyleGeometryData&) const;
+    bool operator!=(const StyleGeometryData& other) const
+    {
+        return !(*this == other);
+    }
+    RefPtr<StylePath> d;
+    Length cx;
+    Length cy;
+    Length x;
+    Length y;
+    Length r;
+    Length rx;
+    Length ry;
+
+private:
+    StyleGeometryData();
+    StyleGeometryData(const StyleGeometryData&);
+};
 
 } // namespace blink
 

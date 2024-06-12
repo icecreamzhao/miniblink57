@@ -14,8 +14,8 @@
 
 namespace v8 {
 namespace internal {
-class Isolate;
-namespace wasm {
+    class Isolate;
+    namespace wasm {
 
 #define COMMA ,
 #define SPACE
@@ -25,21 +25,25 @@ namespace wasm {
 #define DECL_PARAM(feat, desc, val) bool p##feat
 #define DO_INIT(feat, desc, val) feat(p##feat)
 
-// Enabled or detected features.
-struct WasmFeatures {
-  FOREACH_WASM_FEATURE(DECL_FIELD, SPACE)
+        // Enabled or detected features.
+        struct WasmFeatures {
+            FOREACH_WASM_FEATURE(DECL_FIELD, SPACE)
 
-  constexpr WasmFeatures() = default;
+            constexpr WasmFeatures() = default;
 
-  explicit constexpr WasmFeatures(FOREACH_WASM_FEATURE(DECL_PARAM, COMMA))
-      : FOREACH_WASM_FEATURE(DO_INIT, COMMA) {}
-};
+            explicit constexpr WasmFeatures(FOREACH_WASM_FEATURE(DECL_PARAM, COMMA))
+                : FOREACH_WASM_FEATURE(DO_INIT, COMMA)
+            {
+            }
+        };
 
-static constexpr WasmFeatures kAllWasmFeatures{
-    FOREACH_WASM_FEATURE(JUST_TRUE, COMMA)};
+        static constexpr WasmFeatures kAllWasmFeatures {
+            FOREACH_WASM_FEATURE(JUST_TRUE, COMMA)
+        };
 
-static constexpr WasmFeatures kNoWasmFeatures{
-    FOREACH_WASM_FEATURE(JUST_FALSE, COMMA)};
+        static constexpr WasmFeatures kNoWasmFeatures {
+            FOREACH_WASM_FEATURE(JUST_FALSE, COMMA)
+        };
 
 #undef JUST_TRUE
 #undef JUST_FALSE
@@ -49,19 +53,19 @@ static constexpr WasmFeatures kNoWasmFeatures{
 #undef COMMA
 #undef SPACE
 
-static constexpr WasmFeatures kAsmjsWasmFeatures = kNoWasmFeatures;
+        static constexpr WasmFeatures kAsmjsWasmFeatures = kNoWasmFeatures;
 
-V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromFlags();
+        V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromFlags();
 
-// Enables features based on both commandline flags and the isolate.
-// Precondition: A valid context must be set in {isolate->context()}.
-V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromIsolate(Isolate* isolate);
+        // Enables features based on both commandline flags and the isolate.
+        // Precondition: A valid context must be set in {isolate->context()}.
+        V8_EXPORT_PRIVATE WasmFeatures WasmFeaturesFromIsolate(Isolate* isolate);
 
-V8_EXPORT_PRIVATE void UnionFeaturesInto(WasmFeatures* dst,
-                                         const WasmFeatures& src);
+        V8_EXPORT_PRIVATE void UnionFeaturesInto(WasmFeatures* dst,
+            const WasmFeatures& src);
 
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
+    } // namespace wasm
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_WASM_WASM_FEATURES_H_
+#endif // V8_WASM_WASM_FEATURES_H_

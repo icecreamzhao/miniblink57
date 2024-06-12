@@ -43,7 +43,9 @@
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 #include "third_party/WebKit/Source/wtf/RefCountedLeakCounter.h"
+#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 
+#define interface struct
 #define PURE = 0
 #include <Shlwapi.h>
 
@@ -87,7 +89,6 @@ PluginStream::PluginStream(PluginStreamClient* client, LocalFrame* frame, const 
 {
     ASSERT(m_instance);
 
-    m_resourceRequest.initialize();
     m_resourceRequest.toMutableResourceRequest() = resourceRequest;
 
     m_stream.url = 0;
@@ -110,7 +111,7 @@ PluginStream::~PluginStream()
     ASSERT(m_streamState != StreamStarted);
     ASSERT(!m_loader.get());
 
-    fastFree((char*)m_stream.url);
+    free((char*)m_stream.url);
 
     streams().remove(&m_stream);
 
@@ -136,7 +137,7 @@ void PluginStream::start()
     blink::WebLocalFrameImpl* localFrame = blink::WebLocalFrameImpl::fromFrame(m_frame);
     if (!localFrame || !localFrame->client())
         return;
-    localFrame->client()->willSendRequest(localFrame, blink::createUniqueIdentifier(), m_resourceRequest, blink::WebURLResponse());
+    localFrame->client()->willSendRequest(localFrame, m_resourceRequest);
 
     m_loader = adoptPtr(Platform::current()->createURLLoader());
     m_loader->loadAsynchronously(m_resourceRequest, this);
@@ -148,13 +149,6 @@ void PluginStream::stop()
 
     if (m_loadManually) {
         ASSERT(!m_loader);
-
-//         DocumentLoader* documentLoader = m_frame->loader().documentLoader();
-//         ASSERT(documentLoader);
-// 
-//         if (documentLoader->isLoadingMainResource())
-//             documentLoader->cancelMainResourceLoad(ResourceError::cancelledError(m_resourceRequest.url()));
-        
         return;
     }
 
@@ -182,11 +176,11 @@ void PluginStream::startStream()
     // format used when requesting the URL.
     if (protocolIsJavaScript(responseUrlUtf8.data())) {
         String decodeURL = WTF::ensureStringToUTF8String(decodeURLEscapeSequences(responseUrlUtf8.data()));
-        char* url = (char*)fastMalloc(decodeURL.length());
+        char* url = (char*)malloc(decodeURL.length());
         strncpy(url, (char*)decodeURL.characters8(), decodeURL.length());
         m_stream.url = url;
     } else
-        m_stream.url = fastStrDup(responseUrlUtf8.data());
+        m_stream.url = strdup(responseUrlUtf8.data());
 
     CString mimeTypeStr(m_resourceResponse.mimeType().utf8().c_str());
 
@@ -337,10 +331,11 @@ void PluginStream::destroyStream()
         // for requests made with NPN_PostURLNotify; see <rdar://5588807>
         if (m_loader)
             m_loader->setDefersLoading(true);
-        if (!newStreamCalled && m_quirks.contains(PluginQuirkFlashURLNotifyBug) &&
-            equalIgnoringCase(String(m_resourceRequest.httpMethod()), "POST")) {
+        if (!newStreamCalled && m_quirks.contains(PluginQuirkFlashURLNotifyBug) && equalIgnoringCase(String(m_resourceRequest.httpMethod()), "POST")) {
             m_transferMode = NP_NORMAL;
-            m_stream.url = "";
+            char* url = (char *)malloc(1);
+            url[0] = '\0';
+            m_stream.url = url;
             m_stream.notifyData = m_notifyData;
 
             static char emptyMimeType[] = "";
@@ -370,7 +365,7 @@ void PluginStream::destroyStream()
     }
 }
 
-void PluginStream::delayDeliveryTimerFired(blink::Timer<PluginStream>*)
+void PluginStream::delayDeliveryTimerFired(blink::TimerBase*)
 {
     deliverData();
 }
@@ -439,13 +434,13 @@ void PluginStream::sendJavaScriptStream(const KURL& requestURL, const CString& r
     WebURLResponse response(requestURL);
     response.setExpectedContentLength(resultString.length());
     response.setMIMEType(WebString::fromLatin1("text/plain"));
-    didReceiveResponse(0, response);
+    didReceiveResponse(response);
 
     if (m_streamState == StreamStopped)
         return;
 
     if (!resultString.isNull()) {
-        didReceiveData(0, resultString.data(), resultString.length(), 0);
+        didReceiveData(resultString.data(), resultString.length());
         if (m_streamState == StreamStopped)
             return;
     }
@@ -458,15 +453,15 @@ void PluginStream::sendJavaScriptStream(const KURL& requestURL, const CString& r
     destroyStream(resultString.isNull() ? NPRES_NETWORK_ERR : NPRES_DONE);
 }
 
-void PluginStream::willSendRequest(blink::WebURLLoader*, blink::WebURLRequest& newRequest, const blink::WebURLResponse& redirectResponse)
+bool PluginStream::willFollowRedirect(blink::WebURLRequest& newRequest, const blink::WebURLResponse& redirectResponse)
 {
     // FIXME: We should notify the plug-in with NPP_URLRedirectNotify here.
     //callback(WTF::move(request));
+    return false;
 }
 
-void PluginStream::didReceiveResponse(WebURLLoader* loader, const WebURLResponse& response)
+void PluginStream::didReceiveResponse(const WebURLResponse& response)
 {
-    ASSERT(loader == m_loader);
     ASSERT(m_streamState == StreamBeforeStarted);
 
     m_resourceResponse = response;
@@ -474,9 +469,8 @@ void PluginStream::didReceiveResponse(WebURLLoader* loader, const WebURLResponse
     startStream();
 }
 
-void PluginStream::didReceiveData(WebURLLoader* loader, const char* data, int dataLength, int encodedDataLength)
+void PluginStream::didReceiveData(const char* data, int dataLength)
 {
-    ASSERT(loader == m_loader);
     ASSERT(m_streamState == StreamStarted);
 
     // If the plug-in cancels the stream in deliverData it could be deleted, 
@@ -502,10 +496,8 @@ void PluginStream::didReceiveData(WebURLLoader* loader, const char* data, int da
     }
 }
 
-void PluginStream::didFail(WebURLLoader* loader, const WebURLError&)
+void PluginStream::didFail(const WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLengt)
 {
-    ASSERT(loader == m_loader);
-
     //LOG_PLUGIN_NET_ERROR();
 
     // destroyStream can result in our being deleted
@@ -519,9 +511,8 @@ void PluginStream::didFail(WebURLLoader* loader, const WebURLError&)
     }
 }
 
-void PluginStream::didFinishLoading(WebURLLoader* loader, double finishTime, int64_t totalEncodedDataLength)
+void PluginStream::didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength)
 {
-    ASSERT(loader == m_loader);
     ASSERT(m_streamState == StreamStarted);
 
     // destroyStream can result in our being deleted

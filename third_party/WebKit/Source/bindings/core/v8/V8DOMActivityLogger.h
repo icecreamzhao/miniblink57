@@ -32,8 +32,8 @@
 #define V8DOMActivityLogger_h
 
 #include "core/CoreExport.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 #include <v8.h>
 
 namespace blink {
@@ -41,13 +41,20 @@ namespace blink {
 class KURL;
 
 class CORE_EXPORT V8DOMActivityLogger {
+    USING_FAST_MALLOC(V8DOMActivityLogger);
+
 public:
     virtual ~V8DOMActivityLogger() { }
 
     virtual void logGetter(const String& apiName) { }
-    virtual void logSetter(const String& apiName, const v8::Local<v8::Value>& newValue) { }
-    virtual void logMethod(const String& apiName, int argc, const v8::Local<v8::Value>* argv) { }
-    virtual void logEvent(const String& eventName, int argc, const String* argv) { }
+    virtual void logSetter(const String& apiName,
+        const v8::Local<v8::Value>& newValue) { }
+    virtual void logMethod(const String& apiName,
+        int argc,
+        const v8::Local<v8::Value>* argv) { }
+    virtual void logEvent(const String& eventName, int argc, const String* argv)
+    {
+    }
 
     // Associates a logger with the world identified by worldId (worlId may be 0
     // identifying the main world) and extension ID. Extension ID is used to
@@ -60,8 +67,11 @@ public:
     // extensions and their activity loggers in the main world, we require an
     // extension ID. Otherwise, extension activities may be logged under
     // a wrong extension ID.
-    static void setActivityLogger(int worldId, const String&, PassOwnPtr<V8DOMActivityLogger>);
-    static V8DOMActivityLogger* activityLogger(int worldId, const String& extensionId);
+    static void setActivityLogger(int worldId,
+        const String&,
+        std::unique_ptr<V8DOMActivityLogger>);
+    static V8DOMActivityLogger* activityLogger(int worldId,
+        const String& extensionId);
     static V8DOMActivityLogger* activityLogger(int worldId, const KURL&);
 
     // Returns activity logger for current V8 context or 0.
@@ -69,7 +79,6 @@ public:
     // Returns activity logger for current V8 context if the context belongs to
     // an isolated world or 0.
     static V8DOMActivityLogger* currentActivityLoggerIfIsolatedWorld();
-
 };
 
 } // namespace blink

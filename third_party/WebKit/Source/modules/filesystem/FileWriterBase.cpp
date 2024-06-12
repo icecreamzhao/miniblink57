@@ -28,26 +28,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/filesystem/FileWriterBase.h"
 
 #include "core/events/ProgressEvent.h"
 #include "core/fileapi/Blob.h"
 #include "core/fileapi/FileError.h"
 #include "public/platform/WebFileWriter.h"
+#include <memory>
 
 namespace blink {
 
-FileWriterBase::~FileWriterBase()
-{
-}
+FileWriterBase::~FileWriterBase() { }
 
-void FileWriterBase::initialize(PassOwnPtr<WebFileWriter> writer, long long length)
+void FileWriterBase::initialize(std::unique_ptr<WebFileWriter> writer,
+    long long length)
 {
     ASSERT(!m_writer);
     ASSERT(length >= 0);
-    m_writer = writer;
+    m_writer = std::move(writer);
     m_length = length;
 }
 
@@ -65,6 +63,18 @@ void FileWriterBase::seekInternal(long long position)
     if (position < 0)
         position = 0;
     m_position = position;
+}
+
+void FileWriterBase::resetWriter()
+{
+    m_writer = nullptr;
+}
+
+void FileWriterBase::dispose()
+{
+    // Need to explicitly destroy m_writer in pre-finalizer, because otherwise it
+    // may attempt to call methods on the FileWriter before we are finalized.
+    resetWriter();
 }
 
 } // namespace blink

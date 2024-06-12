@@ -30,14 +30,15 @@
 
 namespace blink {
 
-    class PositionError;
+class PositionError;
 
-    class PositionErrorCallback : public GarbageCollectedFinalized<PositionErrorCallback> {
-    public:
-        virtual ~PositionErrorCallback() { }
-        DEFINE_INLINE_VIRTUAL_TRACE() { }
-        virtual void handleEvent(PositionError*) = 0;
-    };
+class PositionErrorCallback
+    : public GarbageCollectedFinalized<PositionErrorCallback> {
+public:
+    virtual ~PositionErrorCallback() { }
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
+    virtual void handleEvent(PositionError*) = 0;
+};
 
 } // namespace blink
 

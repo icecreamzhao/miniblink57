@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayMath.h"
 
 enum SkDisplayMath_Properties {
@@ -21,14 +20,14 @@ enum SkDisplayMath_Properties {
 };
 
 const SkScalar SkDisplayMath::gConstants[] = {
-    2.718281828f,   // E
-    2.302585093f,   // LN10
-    0.693147181f,   // LN2
-    0.434294482f,   // LOG10E
-    1.442695041f,   // LOG2E
-    3.141592654f,   // PI
-    0.707106781f,   // SQRT1_2
-    1.414213562f        // SQRT2
+    2.718281828f, // E
+    2.302585093f, // LN10
+    0.693147181f, // LN2
+    0.434294482f, // LOG10E
+    1.442695041f, // LOG2E
+    3.141592654f, // PI
+    0.707106781f, // SQRT1_2
+    1.414213562f // SQRT2
 };
 
 enum SkDisplayMath_Functions {
@@ -53,44 +52,44 @@ enum SkDisplayMath_Functions {
 };
 
 const SkFunctionParamType SkDisplayMath::fFunctionParameters[] = {
-    (SkFunctionParamType) SkType_Float, // abs
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // acos
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // asin
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // atan
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // atan2
-    (SkFunctionParamType) SkType_Float,
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // ceil
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // cos
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // exp
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // floor
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // log
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Array, // max
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Array, // min
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // pow
-    (SkFunctionParamType) SkType_Float,
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // random
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // round
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // sin
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // sqrt
-    (SkFunctionParamType) 0,
-    (SkFunctionParamType) SkType_Float, // tan
-    (SkFunctionParamType) 0
+    (SkFunctionParamType)SkType_Float, // abs
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // acos
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // asin
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // atan
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // atan2
+    (SkFunctionParamType)SkType_Float,
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // ceil
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // cos
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // exp
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // floor
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // log
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Array, // max
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Array, // min
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // pow
+    (SkFunctionParamType)SkType_Float,
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // random
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // round
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // sin
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // sqrt
+    (SkFunctionParamType)0,
+    (SkFunctionParamType)SkType_Float, // tan
+    (SkFunctionParamType)0
 };
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -129,9 +128,10 @@ const SkMemberInfo SkDisplayMath::fInfo[] = {
 DEFINE_GET_MEMBER(SkDisplayMath);
 
 void SkDisplayMath::executeFunction(SkDisplayable* target, int index,
-        SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
-        SkScriptValue* scriptValue) {
-    if (scriptValue == NULL)
+    SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
+    SkScriptValue* scriptValue)
+{
+    if (scriptValue == nullptr)
         return;
     SkASSERT(target == this);
     SkScriptValue* array = parameters.begin();
@@ -139,86 +139,88 @@ void SkDisplayMath::executeFunction(SkDisplayable* target, int index,
     SkScalar input = parameters[0].fOperand.fScalar;
     SkScalar scalarResult;
     switch (index) {
-        case SK_FUNCTION(abs):
-            scalarResult = SkScalarAbs(input);
-            break;
-        case SK_FUNCTION(acos):
-            scalarResult = SkScalarACos(input);
-            break;
-        case SK_FUNCTION(asin):
-            scalarResult = SkScalarASin(input);
-            break;
-        case SK_FUNCTION(atan):
-            scalarResult = SkScalarATan2(input, SK_Scalar1);
-            break;
-        case SK_FUNCTION(atan2):
-            scalarResult = SkScalarATan2(input, parameters[1].fOperand.fScalar);
-            break;
-        case SK_FUNCTION(ceil):
-            scalarResult = SkScalarCeilToScalar(input);
-            break;
-        case SK_FUNCTION(cos):
-            scalarResult = SkScalarCos(input);
-            break;
-        case SK_FUNCTION(exp):
-            scalarResult = SkScalarExp(input);
-            break;
-        case SK_FUNCTION(floor):
-            scalarResult = SkScalarFloorToScalar(input);
-            break;
-        case SK_FUNCTION(log):
-            scalarResult = SkScalarLog(input);
-            break;
-        case SK_FUNCTION(max):
-            scalarResult = -SK_ScalarMax;
-            while (array < end) {
-                scalarResult = SkMaxScalar(scalarResult, array->fOperand.fScalar);
-                array++;
-            }
-            break;
-        case SK_FUNCTION(min):
-            scalarResult = SK_ScalarMax;
-            while (array < end) {
-                scalarResult = SkMinScalar(scalarResult, array->fOperand.fScalar);
-                array++;
-            }
-            break;
-        case SK_FUNCTION(pow):
-            // not the greatest -- but use x^y = e^(y * ln(x))
-            scalarResult = SkScalarLog(input);
-            scalarResult = SkScalarMul(parameters[1].fOperand.fScalar, scalarResult);
-            scalarResult = SkScalarExp(scalarResult);
-            break;
-        case SK_FUNCTION(random):
-            scalarResult = fRandom.nextUScalar1();
-            break;
-        case SK_FUNCTION(round):
-            scalarResult = SkScalarRoundToScalar(input);
-            break;
-        case SK_FUNCTION(sin):
-            scalarResult = SkScalarSin(input);
-            break;
-        case SK_FUNCTION(sqrt): {
-            SkASSERT(parameters.count() == 1);
-            SkASSERT(type == SkType_Float);
-            scalarResult = SkScalarSqrt(input);
-            } break;
-        case SK_FUNCTION(tan):
-            scalarResult = SkScalarTan(input);
-            break;
-        default:
-            SkASSERT(0);
-            scalarResult = SK_ScalarNaN;
+    case SK_FUNCTION(abs):
+        scalarResult = SkScalarAbs(input);
+        break;
+    case SK_FUNCTION(acos):
+        scalarResult = SkScalarACos(input);
+        break;
+    case SK_FUNCTION(asin):
+        scalarResult = SkScalarASin(input);
+        break;
+    case SK_FUNCTION(atan):
+        scalarResult = SkScalarATan2(input, SK_Scalar1);
+        break;
+    case SK_FUNCTION(atan2):
+        scalarResult = SkScalarATan2(input, parameters[1].fOperand.fScalar);
+        break;
+    case SK_FUNCTION(ceil):
+        scalarResult = SkScalarCeilToScalar(input);
+        break;
+    case SK_FUNCTION(cos):
+        scalarResult = SkScalarCos(input);
+        break;
+    case SK_FUNCTION(exp):
+        scalarResult = SkScalarExp(input);
+        break;
+    case SK_FUNCTION(floor):
+        scalarResult = SkScalarFloorToScalar(input);
+        break;
+    case SK_FUNCTION(log):
+        scalarResult = SkScalarLog(input);
+        break;
+    case SK_FUNCTION(max):
+        scalarResult = -SK_ScalarMax;
+        while (array < end) {
+            scalarResult = SkMaxScalar(scalarResult, array->fOperand.fScalar);
+            array++;
+        }
+        break;
+    case SK_FUNCTION(min):
+        scalarResult = SK_ScalarMax;
+        while (array < end) {
+            scalarResult = SkMinScalar(scalarResult, array->fOperand.fScalar);
+            array++;
+        }
+        break;
+    case SK_FUNCTION(pow):
+        // not the greatest -- but use x^y = e^(y * ln(x))
+        scalarResult = SkScalarLog(input);
+        scalarResult = SkScalarMul(parameters[1].fOperand.fScalar, scalarResult);
+        scalarResult = SkScalarExp(scalarResult);
+        break;
+    case SK_FUNCTION(random):
+        scalarResult = fRandom.nextUScalar1();
+        break;
+    case SK_FUNCTION(round):
+        scalarResult = SkScalarRoundToScalar(input);
+        break;
+    case SK_FUNCTION(sin):
+        scalarResult = SkScalarSin(input);
+        break;
+    case SK_FUNCTION(sqrt): {
+        SkASSERT(parameters.count() == 1);
+        SkASSERT(type == SkType_Float);
+        scalarResult = SkScalarSqrt(input);
+    } break;
+    case SK_FUNCTION(tan):
+        scalarResult = SkScalarTan(input);
+        break;
+    default:
+        SkASSERT(0);
+        scalarResult = SK_ScalarNaN;
     }
     scriptValue->fOperand.fScalar = scalarResult;
     scriptValue->fType = SkType_Float;
 }
 
-const SkFunctionParamType* SkDisplayMath::getFunctionsParameters() {
+const SkFunctionParamType* SkDisplayMath::getFunctionsParameters()
+{
     return fFunctionParameters;
 }
 
-bool SkDisplayMath::getProperty(int index, SkScriptValue* value) const {
+bool SkDisplayMath::getProperty(int index, SkScriptValue* value) const
+{
     if ((unsigned)index < SK_ARRAY_COUNT(gConstants)) {
         value->fOperand.fScalar = gConstants[index];
         value->fType = SkType_Float;

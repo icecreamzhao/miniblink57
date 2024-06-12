@@ -32,7 +32,9 @@ void WebURLLoaderImpl::loadSynchronously(
     const blink::WebURLRequest& request,
     blink::WebURLResponse& response,
     blink::WebURLError& error,
-    blink::WebData& data)
+    blink::WebData& data,
+    int64_t& encodedDataLength,
+    int64_t& encodedBodyLength)
 {
     m_loaderWinINet = new net::WebURLLoaderWinINet(this);
     m_loaderWinINet->loadSynchronously(request, response, error, data);
@@ -62,12 +64,6 @@ void WebURLLoaderImpl::setDefersLoading(bool value)
 void WebURLLoaderImpl::didChangePriority(blink::WebURLRequest::Priority newPriority, int intraPriorityValue)
 {
 
-}
-
-bool WebURLLoaderImpl::attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threadedDataReceiver)
-{
-    DebugBreak();
-    return false;
 }
 
 void WebURLLoaderImpl::onWinINetWillBeDelete()

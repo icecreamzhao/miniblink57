@@ -31,9 +31,9 @@
 #ifndef DateTimeChooserImpl_h
 #define DateTimeChooserImpl_h
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/forms/DateTimeChooser.h"
 #include "core/page/PagePopupClient.h"
+#include <memory>
 
 namespace blink {
 
@@ -41,19 +41,25 @@ class ChromeClientImpl;
 class DateTimeChooserClient;
 class PagePopup;
 
-class DateTimeChooserImpl final : public DateTimeChooser, public PagePopupClient {
+class DateTimeChooserImpl final : public DateTimeChooser,
+                                  public PagePopupClient {
 public:
-    static PassRefPtr<DateTimeChooserImpl> create(ChromeClientImpl*, DateTimeChooserClient*, const DateTimeChooserParameters&);
+    static DateTimeChooserImpl* create(ChromeClientImpl*,
+        DateTimeChooserClient*,
+        const DateTimeChooserParameters&);
     ~DateTimeChooserImpl() override;
 
     // DateTimeChooser functions:
     void endChooser() override;
     AXObject* rootAXObject() override;
 
+    DECLARE_VIRTUAL_TRACE();
+
 private:
-    DateTimeChooserImpl(ChromeClientImpl*, DateTimeChooserClient*, const DateTimeChooserParameters&);
+    DateTimeChooserImpl(ChromeClientImpl*,
+        DateTimeChooserClient*,
+        const DateTimeChooserParameters&);
     // PagePopupClient functions:
-    IntSize contentSize() override;
     void writeDocument(SharedBuffer*) override;
     void selectFontsFromOwnerDocument(Document&) override { }
     Locale& locale() override;
@@ -63,15 +69,13 @@ private:
     Element& ownerElement() override;
     void didClosePopup() override;
 
-    ChromeClientImpl* m_chromeClient;
-    DateTimeChooserClient* m_client;
+    Member<ChromeClientImpl> m_chromeClient;
+    Member<DateTimeChooserClient> m_client;
     PagePopup* m_popup;
     DateTimeChooserParameters m_parameters;
-    OwnPtr<Locale> m_locale;
+    std::unique_ptr<Locale> m_locale;
 };
 
-}
-
-#endif // ENABLE(INPUT_MULTIPLE_FIELDS_UI)
+} // namespace blink
 
 #endif // DateTimeChooserImpl_h

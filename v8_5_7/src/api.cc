@@ -737,7 +737,7 @@ void RegisteredExtension::UnregisterAll() {
 }
 
 
-void RegisterExtension(Extension* that) {
+void V8CALL RegisterExtension(Extension* that) {
   RegisteredExtension* extension = new RegisteredExtension(that);
   RegisteredExtension::Register(extension);
 }
@@ -2046,6 +2046,12 @@ MaybeLocal<Value> Module::Evaluate(Local<Context> context) {
   has_pending_exception = !ToLocal(i::Module::Evaluate(self), &result);
   RETURN_ON_FAILED_EXECUTION(Value);
   RETURN_ESCAPED(result);
+}
+
+uint32_t ScriptCompiler::CachedDataVersionTag() {
+  return static_cast<uint32_t>(base::hash_combine(
+    /*internal::Version::Hash(),*/ internal::FlagList::Hash(),
+    static_cast<uint32_t>(internal::CpuFeatures::SupportedFeatures())));
 }
 
 MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
@@ -6798,7 +6804,7 @@ Local<v8::Symbol> v8::SymbolObject::ValueOf() const {
 
 
 MaybeLocal<v8::Value> v8::Date::New(Local<Context> context, double time) {
-  if (std::isnan(time)) {
+  if (std_isnan(time)) {
     // Introduce only canonical NaN value into the VM, to avoid signaling NaNs.
     time = std::numeric_limits<double>::quiet_NaN();
   }
@@ -6891,6 +6897,23 @@ v8::RegExp::Flags v8::RegExp::GetFlags() const {
   return RegExp::Flags(static_cast<int>(obj->GetFlags()));
 }
 
+
+Local<v8::Array> v8::Array::New(Isolate* isolate, Local<Value>* elements, size_t length) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Factory* factory = i_isolate->factory();
+  LOG_API(i_isolate, Array, New);
+  ENTER_V8(i_isolate);
+  int len = static_cast<int>(length);
+
+  i::Handle<i::FixedArray> result = factory->NewFixedArray(len);
+  for (int i = 0; i < len; i++) {
+    i::Handle<i::Object> element = Utils::OpenHandle(*elements[i]);
+    result->set(i, *element);
+  }
+
+  return Utils::ToLocal(
+    factory->NewJSArrayWithElements(result, i::FAST_ELEMENTS, len));
+}
 
 Local<v8::Array> v8::Array::New(Isolate* isolate, int length) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
@@ -7723,7 +7746,7 @@ Local<Private> v8::Private::ForApi(Isolate* isolate, Local<String> name) {
 
 Local<Number> v8::Number::New(Isolate* isolate, double value) {
   i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  if (std::isnan(value)) {
+  if (std_isnan(value)) {
     // Introduce only canonical NaN value into the VM, to avoid signaling NaNs.
     value = std::numeric_limits<double>::quiet_NaN();
   }
@@ -8625,10 +8648,9 @@ String::Utf8Value::~Utf8Value() {
   i::DeleteArray(str_);
 }
 
-
-String::Value::Value(v8::Local<v8::Value> obj) : str_(NULL), length_(0) {
+String::Value::Value(Isolate* iso, Local<v8::Value> obj) : str_(NULL), length_(0)  {
   if (obj.IsEmpty()) return;
-  i::Isolate* isolate = i::Isolate::Current();
+  i::Isolate* isolate = (i::Isolate*)iso;
   Isolate* v8_isolate = reinterpret_cast<Isolate*>(isolate);
   ENTER_V8(isolate);
   i::HandleScope scope(isolate);
@@ -8639,6 +8661,24 @@ String::Value::Value(v8::Local<v8::Value> obj) : str_(NULL), length_(0) {
   length_ = str->Length();
   str_ = i::NewArray<uint16_t>(length_ + 1);
   str->Write(str_);
+}
+
+String::Value::Value(v8::Local<v8::Value> obj) : str_(NULL), length_(0) {
+//   if (obj.IsEmpty()) return;
+//   i::Isolate* isolate = i::Isolate::Current();
+//   Isolate* v8_isolate = reinterpret_cast<Isolate*>(isolate);
+//   ENTER_V8(isolate);
+//   i::HandleScope scope(isolate);
+//   Local<Context> context = v8_isolate->GetCurrentContext();
+//   TryCatch try_catch(v8_isolate);
+//   Local<String> str;
+//   if (!obj->ToString(context).ToLocal(&str)) return;
+//   length_ = str->Length();
+//   str_ = i::NewArray<uint16_t>(length_ + 1);
+//   str->Write(str_);
+
+  i::Isolate* isolate = i::Isolate::Current();
+  Value((Isolate*)isolate, obj);
 }
 
 

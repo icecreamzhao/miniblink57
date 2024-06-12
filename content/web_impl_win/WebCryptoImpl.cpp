@@ -3,16 +3,19 @@
 
 namespace content {
 
-WebCryptoDigestorImpl::~WebCryptoDigestorImpl() {
+WebCryptoDigestorImpl::~WebCryptoDigestorImpl()
+{
 
 }
 
-bool WebCryptoDigestorImpl::consume(const unsigned char* data, unsigned dataSize) {
+bool WebCryptoDigestorImpl::consume(const unsigned char* data, unsigned dataSize)
+{
     m_data.append(data, dataSize);
     return true;
 }
 
-bool WebCryptoDigestorImpl::finish(unsigned char*& resultData, unsigned& resultDataSize) {
+bool WebCryptoDigestorImpl::finish(unsigned char*& resultData, unsigned& resultDataSize)
+{
     resultData = m_data.data();
     resultDataSize = m_data.size();
     return true;
@@ -22,22 +25,26 @@ WebCryptoImpl::WebCryptoImpl() {
 
 }
 
-blink::WebCryptoDigestor* WebCryptoImpl::createDigestor(blink::WebCryptoAlgorithmId algorithmId) {
-    return new WebCryptoDigestorImpl();
+std::unique_ptr<blink::WebCryptoDigestor> WebCryptoImpl::createDigestor(blink::WebCryptoAlgorithmId algorithmId)
+{
+    //return new WebCryptoDigestorImpl();
+    DebugBreak();
+    return nullptr;
+
 }
 
 }
 
 namespace blink {
   
-void WebCryptoResult::completeWithError(WebCryptoErrorType, const WebString&) 
-{
-    DebugBreak();
-}
-
-void WebCryptoResult::reset()
-{
-    DebugBreak();
-}
+// void WebCryptoResult::completeWithError(WebCryptoErrorType, const WebString&) 
+// {
+//     DebugBreak();
+// }
+// 
+// void WebCryptoResult::reset()
+// {
+//     DebugBreak();
+// }
 
 }

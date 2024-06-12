@@ -11,15 +11,15 @@
 
 namespace v8 {
 namespace internal {
-namespace compiler {
+    namespace compiler {
 
-class StoreStoreElimination final {
- public:
-  static void Run(JSGraph* js_graph, Zone* temp_zone);
-};
+        class StoreStoreElimination final {
+        public:
+            static void Run(JSGraph* js_graph, Zone* temp_zone);
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_STORE_STORE_ELIMINATION_H_
+#endif // V8_COMPILER_STORE_STORE_ELIMINATION_H_

@@ -26,7 +26,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/MediaQuery.h"
 
 #include "core/MediaTypeNames.h"
@@ -34,6 +33,7 @@
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "wtf/NonCopyingSort.h"
 #include "wtf/text/StringBuilder.h"
+#include <memory>
 
 namespace blink {
 
@@ -43,62 +43,69 @@ String MediaQuery::serialize() const
     StringBuilder result;
     switch (m_restrictor) {
     case MediaQuery::Only:
-        result.appendLiteral("only ");
+        result.append("only ");
         break;
     case MediaQuery::Not:
-        result.appendLiteral("not ");
+        result.append("not ");
         break;
     case MediaQuery::None:
         break;
     }
 
-    if (m_expressions->isEmpty()) {
+    if (m_expressions.isEmpty()) {
         result.append(m_mediaType);
         return result.toString();
     }
 
     if (m_mediaType != MediaTypeNames::all || m_restrictor != None) {
         result.append(m_mediaType);
-        result.appendLiteral(" and ");
+        result.append(" and ");
     }
 
-    result.append(m_expressions->at(0)->serialize());
-    for (size_t i = 1; i < m_expressions->size(); ++i) {
-        result.appendLiteral(" and ");
-        result.append(m_expressions->at(i)->serialize());
+    result.append(m_expressions.at(0)->serialize());
+    for (size_t i = 1; i < m_expressions.size(); ++i) {
+        result.append(" and ");
+        result.append(m_expressions.at(i)->serialize());
     }
     return result.toString();
 }
 
-static bool expressionCompare(const OwnPtrWillBeMember<MediaQueryExp>& a, const OwnPtrWillBeMember<MediaQueryExp>& b)
+static bool expressionCompare(const Member<MediaQueryExp>& a,
+    const Member<MediaQueryExp>& b)
 {
     return codePointCompare(a->serialize(), b->serialize()) < 0;
 }
 
-PassOwnPtrWillBeRawPtr<MediaQuery> MediaQuery::createNotAll()
+MediaQuery* MediaQuery::createNotAll()
 {
-    return adoptPtrWillBeNoop(new MediaQuery(MediaQuery::Not, MediaTypeNames::all, nullptr));
+    return new MediaQuery(MediaQuery::Not, MediaTypeNames::all,
+        ExpressionHeapVector());
 }
 
-MediaQuery::MediaQuery(Restrictor r, const String& mediaType, PassOwnPtrWillBeRawPtr<ExpressionHeapVector> expressions)
-    : m_restrictor(r)
-    , m_mediaType(attemptStaticStringCreation(mediaType.lower()))
-    , m_expressions(expressions)
+MediaQuery* MediaQuery::create(RestrictorType restrictor,
+    String mediaType,
+    ExpressionHeapVector expressions)
 {
-    if (!m_expressions) {
-        m_expressions = adoptPtrWillBeNoop(new ExpressionHeapVector);
-        return;
-    }
+    return new MediaQuery(restrictor, std::move(mediaType),
+        std::move(expressions));
+}
 
-    nonCopyingSort(m_expressions->begin(), m_expressions->end(), expressionCompare);
+MediaQuery::MediaQuery(RestrictorType restrictor,
+    String mediaType,
+    ExpressionHeapVector expressions)
+    : m_restrictor(restrictor)
+    , m_mediaType(attemptStaticStringCreation(mediaType.lower()))
+    , m_expressions(std::move(expressions))
+{
+    nonCopyingSort(m_expressions.begin(), m_expressions.end(), expressionCompare);
 
     // Remove all duplicated expressions.
     MediaQueryExp* key = 0;
-    for (int i = m_expressions->size() - 1; i >= 0; --i) {
-        MediaQueryExp* exp = m_expressions->at(i).get();
+    for (int i = m_expressions.size() - 1; i >= 0; --i) {
+        MediaQueryExp* exp = m_expressions.at(i).get();
 
         if (key && *exp == *key)
-            m_expressions->remove(i);
+            m_expressions.remove(i);
         else
             key = exp;
     }
@@ -107,16 +114,14 @@ MediaQuery::MediaQuery(Restrictor r, const String& mediaType, PassOwnPtrWillBeRa
 MediaQuery::MediaQuery(const MediaQuery& o)
     : m_restrictor(o.m_restrictor)
     , m_mediaType(o.m_mediaType)
-    , m_expressions(adoptPtrWillBeNoop(new ExpressionHeapVector(o.m_expressions->size())))
     , m_serializationCache(o.m_serializationCache)
 {
-    for (unsigned i = 0; i < m_expressions->size(); ++i)
-        (*m_expressions)[i] = o.m_expressions->at(i)->copy();
+    m_expressions.reserveInitialCapacity(o.m_expressions.size());
+    for (unsigned i = 0; i < o.m_expressions.size(); ++i)
+        m_expressions.push_back(o.m_expressions[i]->copy());
 }
 
-MediaQuery::~MediaQuery()
-{
-}
+MediaQuery::~MediaQuery() { }
 
 // http://dev.w3.org/csswg/cssom/#compare-media-queries
 bool MediaQuery::operator==(const MediaQuery& other) const
@@ -135,11 +140,7 @@ String MediaQuery::cssText() const
 
 DEFINE_TRACE(MediaQuery)
 {
-    // We don't support tracing of vectors of OwnPtrs (ie. OwnPtr<Vector<OwnPtr<MediaQuery>>>).
-    // Since this is a transitional object we are just ifdef'ing it out when oilpan is not enabled.
-#if ENABLE(OILPAN)
     visitor->trace(m_expressions);
-#endif
 }
 
-}
+} // namespace blink

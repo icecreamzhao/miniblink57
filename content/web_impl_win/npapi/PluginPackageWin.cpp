@@ -29,14 +29,15 @@
 #include "config.h"
 #include "content/web_impl_win/npapi/PluginPackage.h"
 
-#include "third_party/WebKit/Source/platform/MIMETypeRegistry.h"
 #include "content/web_impl_win/npapi/PluginDatabase.h"
 #include "content/web_impl_win/npapi/WebPluginImpl.h"
-#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
+#include "third_party/WebKit/Source/platform/network/mime/MIMETypeRegistry.h"
+//#include "third_party/WebKit/Source/bindings/core/v8/npruntime_impl.h"
 #include "third_party/WebKit/Source/wtf/text/CString.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 
 #define PURE = 0
+#define interface struct
 
 #include <Shlwapi.h>
 #include <string.h>
@@ -47,12 +48,18 @@ static String getVersionInfo(const LPVOID versionInfoData, const String& info)
 {
     LPVOID buffer;
     UINT bufferLength;
-    String subInfo = "\\StringfileInfo\\040904E4\\" + info;
+    String subInfo = "\\StringfileInfo\\040904E4\\" + info; // english
     bool retval = VerQueryValueW(versionInfoData,
         const_cast<UChar*>(subInfo.charactersWithNullTermination().data()),
         &buffer, &bufferLength);
-    if (!retval || bufferLength == 0)
-        return String();
+    if (!retval || bufferLength == 0) {
+        subInfo = "\\StringfileInfo\\080404b0\\" + info; // chinese
+        retval = VerQueryValueW(versionInfoData,
+            const_cast<UChar*>(subInfo.charactersWithNullTermination().data()),
+            &buffer, &bufferLength);
+        if (!retval || bufferLength == 0)
+            return String();
+    }
 
     // Subtract 1 from the length; we don't want the trailing null character.
     return String(reinterpret_cast<UChar*>(buffer), bufferLength - 1);
@@ -102,6 +109,7 @@ void PluginPackage::determineQuirks(const String& mimeType)
         m_quirks.add(PluginQuirkThrottleInvalidate);
         m_quirks.add(PluginQuirkThrottleWMUserPlusOneMessages);
         m_quirks.add(PluginQuirkFlashURLNotifyBug);
+        m_quirks.add(PluginQuirkEmulateIme);
     }
 
     if (name().contains("Microsoft") && name().contains("Windows Media")) {
@@ -337,15 +345,20 @@ bool PluginPackage::equal(const PluginPackage& a, const PluginPackage& b)
     if (a.m_mimeToExtensions.size() != b.m_mimeToExtensions.size())
         return false;
 
-    MIMEToExtensionsMap::const_iterator::Keys end = a.m_mimeToExtensions.end().keys();
-    for (MIMEToExtensionsMap::const_iterator::Keys it = a.m_mimeToExtensions.begin().keys(); it != end; ++it) {
-        if (!b.m_mimeToExtensions.contains(*it))
-            return false;
+//     MIMEToExtensionsMap::const_iterator::Keys end = a.m_mimeToExtensions.end().keys();
+//     for (MIMEToExtensionsMap::const_iterator::Keys it = a.m_mimeToExtensions.begin().keys(); it != end; ++it) {
+//         if (!b.m_mimeToExtensions.contains(*it))
+//             return false;
+//     }
+
+    MIMEToExtensionsMap::const_iterator::KeysIterator end = a.m_mimeToExtensions.end().keys();
+    for (MIMEToExtensionsMap::const_iterator::KeysIterator it = a.m_mimeToExtensions.begin().keys(); it != end; ++it) {
+        if (!b.m_mimeToExtensions.contains(*it)) 
+        return false;
     }
 
     return true;
 }
-
 uint16_t PluginPackage::NPVersion() const
 {
     return NP_VERSION_MINOR;

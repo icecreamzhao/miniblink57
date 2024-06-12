@@ -40,10 +40,11 @@ class HTMLDataListOptionsCollection;
 
 class CORE_EXPORT HTMLDataListElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    static PassRefPtrWillBeRawPtr<HTMLDataListElement> create(Document&);
 
-    PassRefPtrWillBeRawPtr<HTMLDataListOptionsCollection> options();
+public:
+    static HTMLDataListElement* create(Document&);
+
+    HTMLDataListOptionsCollection* options();
 
     void optionElementChildrenChanged();
 

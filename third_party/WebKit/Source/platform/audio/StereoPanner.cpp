@@ -2,12 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/StereoPanner.h"
-
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/AudioUtilities.h"
 #include "wtf/MathExtras.h"
@@ -21,28 +16,33 @@ namespace blink {
 // Implement equal-power panning algorithm for mono or stereo input.
 // See: http://webaudio.github.io/web-audio-api/#panning-algorithm
 
-StereoPanner::StereoPanner(float sampleRate) : Spatializer(PanningModelEqualPower)
-    , m_isFirstRender(true)
+std::unique_ptr<StereoPanner> StereoPanner::create(float sampleRate)
+{
+    return WTF::wrapUnique(new StereoPanner(sampleRate));
+}
+
+StereoPanner::StereoPanner(float sampleRate)
+    : m_isFirstRender(true)
     , m_pan(0.0)
 {
     // Convert smoothing time (50ms) to a per-sample time value.
-    m_smoothingConstant = AudioUtilities::discreteTimeConstantForSampleRate(SmoothingTimeConstant, sampleRate);
+    m_smoothingConstant = AudioUtilities::discreteTimeConstantForSampleRate(
+        SmoothingTimeConstant, sampleRate);
 }
 
-void StereoPanner::panWithSampleAccurateValues(const AudioBus* inputBus, AudioBus* outputBus, const float* panValues, size_t framesToProcess)
+void StereoPanner::panWithSampleAccurateValues(const AudioBus* inputBus,
+    AudioBus* outputBus,
+    const float* panValues,
+    size_t framesToProcess)
 {
-    bool isInputSafe = inputBus
-        && (inputBus->numberOfChannels() == 1 || inputBus->numberOfChannels() == 2)
-        && framesToProcess <= inputBus->length();
+    bool isInputSafe = inputBus && (inputBus->numberOfChannels() == 1 || inputBus->numberOfChannels() == 2) && framesToProcess <= inputBus->length();
     ASSERT(isInputSafe);
     if (!isInputSafe)
         return;
 
     unsigned numberOfInputChannels = inputBus->numberOfChannels();
 
-    bool isOutputSafe = outputBus
-        && outputBus->numberOfChannels() == 2
-        && framesToProcess <= outputBus->length();
+    bool isOutputSafe = outputBus && outputBus->numberOfChannels() == 2 && framesToProcess <= outputBus->length();
     ASSERT(isOutputSafe);
     if (!isOutputSafe)
         return;
@@ -90,20 +90,19 @@ void StereoPanner::panWithSampleAccurateValues(const AudioBus* inputBus, AudioBu
     }
 }
 
-void StereoPanner::panToTargetValue(const AudioBus* inputBus, AudioBus* outputBus, float panValue, size_t framesToProcess)
+void StereoPanner::panToTargetValue(const AudioBus* inputBus,
+    AudioBus* outputBus,
+    float panValue,
+    size_t framesToProcess)
 {
-    bool isInputSafe = inputBus
-        && (inputBus->numberOfChannels() == 1 || inputBus->numberOfChannels() == 2)
-        && framesToProcess <= inputBus->length();
+    bool isInputSafe = inputBus && (inputBus->numberOfChannels() == 1 || inputBus->numberOfChannels() == 2) && framesToProcess <= inputBus->length();
     ASSERT(isInputSafe);
     if (!isInputSafe)
         return;
 
     unsigned numberOfInputChannels = inputBus->numberOfChannels();
 
-    bool isOutputSafe = outputBus
-        && outputBus->numberOfChannels() == 2
-        && framesToProcess <= outputBus->length();
+    bool isOutputSafe = outputBus && outputBus->numberOfChannels() == 2 && framesToProcess <= outputBus->length();
     ASSERT(isOutputSafe);
     if (!isOutputSafe)
         return;
@@ -173,5 +172,3 @@ void StereoPanner::panToTargetValue(const AudioBus* inputBus, AudioBus* outputBu
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

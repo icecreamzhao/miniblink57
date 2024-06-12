@@ -29,31 +29,27 @@
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/FontFallbackList.h"
+#include "platform/fonts/FontFallbackPriority.h"
 #include "platform/fonts/SimpleFontData.h"
-#include "platform/fonts/TextBlob.h"
 #include "platform/text/TabSize.h"
 #include "platform/text/TextDirection.h"
 #include "platform/text/TextPath.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/CharacterNames.h"
 
-// "X11/X.h" defines Complex to 0 and conflicts
-// with Complex value in CodePath enum.
-#ifdef Complex
-#undef Complex
-#endif
-
 class SkCanvas;
 class SkPaint;
-class SkTextBlob;
 struct SkPoint;
 
 namespace blink {
 
+struct CharacterRange;
 class FloatPoint;
 class FloatRect;
+class FontFallbackIterator;
 class FontData;
 class FontMetrics;
 class FontSelector;
@@ -64,6 +60,8 @@ struct TextRunPaintInfo;
 struct GlyphData;
 
 class PLATFORM_EXPORT Font {
+    DISALLOW_NEW();
+
 public:
     Font();
     Font(const FontDescription&);
@@ -75,13 +73,14 @@ public:
     bool operator==(const Font& other) const;
     bool operator!=(const Font& other) const { return !(*this == other); }
 
-    const FontDescription& fontDescription() const { return m_fontDescription; }
+    const FontDescription& getFontDescription() const { return m_fontDescription; }
 
-    void update(PassRefPtrWillBeRawPtr<FontSelector>) const;
+    void update(FontSelector*) const;
 
-    enum CustomFontNotReadyAction { DoNotPaintIfFontNotReady, UseFallbackIfFontNotReady };
-    void drawText(SkCanvas*, const TextRunPaintInfo&, const FloatPoint&, float deviceScaleFactor, const SkPaint&) const;
-    void drawBidiText(SkCanvas*, const TextRunPaintInfo&, const FloatPoint&, CustomFontNotReadyAction, float deviceScaleFactor, const SkPaint&) const;
+    enum CustomFontNotReadyAction { DoNotPaintIfFontNotReady,
+        UseFallbackIfFontNotReady };
+    bool drawText(SkCanvas*, const TextRunPaintInfo&, const FloatPoint&, float deviceScaleFactor, const SkPaint&) const;
+    bool drawBidiText(SkCanvas*, const TextRunPaintInfo&, const FloatPoint&, CustomFontNotReadyAction, float deviceScaleFactor, const SkPaint&) const;
     void drawEmphasisMarks(SkCanvas*, const TextRunPaintInfo&, const AtomicString& mark, const FloatPoint&, float deviceScaleFactor, const SkPaint&) const;
 
     // Glyph bounds will be the minimum rect containing all glyph strokes, in coordinates using
@@ -90,10 +89,16 @@ public:
 
     int offsetForPosition(const TextRun&, float position, bool includePartialGlyphs) const;
     FloatRect selectionRectForText(const TextRun&, const FloatPoint&, int h, int from = 0, int to = -1, bool accountForGlyphBounds = false) const;
+    CharacterRange getCharacterRange(const TextRun&, unsigned from, unsigned to) const;
+    Vector<CharacterRange> individualCharacterRanges(const TextRun&) const;
 
     // Metrics that we query the FontFallbackList for.
-    const FontMetrics& fontMetrics() const { return primaryFont()->fontMetrics(); }
-    float spaceWidth() const { return primaryFont()->spaceWidth() + fontDescription().letterSpacing(); }
+    const FontMetrics& getFontMetrics() const
+    {
+        RELEASE_ASSERT(primaryFont());
+        return primaryFont()->getFontMetrics();
+    }
+    float spaceWidth() const { return primaryFont()->spaceWidth() + getFontDescription().letterSpacing(); }
     float tabWidth(const SimpleFontData&, const TabSize&, float position) const;
     float tabWidth(const TabSize& tabSize, float position) const { return tabWidth(*primaryFont(), tabSize, position); }
 
@@ -118,19 +123,16 @@ public:
         m_shapeWordByWordComputed = true;
     }
 
+    ShapeCache* shapeCache() const
+    {
+        return m_fontFallbackList->shapeCache(m_fontDescription);
+    }
+
 private:
     enum ForTextEmphasisOrNot { NotForTextEmphasis, ForTextEmphasis };
 
     // Returns the total advance.
     float buildGlyphBuffer(const TextRunPaintInfo&, GlyphBuffer&, const GlyphData* emphasisData = nullptr) const;
-    PassTextBlobPtr buildTextBlob(const GlyphBuffer&) const;
-    void paintGlyphs(SkCanvas*, const SkPaint&, const SimpleFontData*, const Glyph glyphs[], unsigned numGlyphs,
-        const SkPoint pos[], const FloatRect& textRect, float deviceScaleFactor) const;
-    void paintGlyphsHorizontal(SkCanvas*, const SkPaint&, const SimpleFontData*, const Glyph glyphs[], unsigned numGlyphs,
-        const SkScalar xpos[], SkScalar constY, const FloatRect& textRect, float deviceScaleFactor) const;
-    void drawGlyphs(SkCanvas*, const SkPaint&, const SimpleFontData*, const GlyphBuffer&, unsigned from, unsigned numGlyphs,
-        const FloatPoint&, const FloatRect& textRect, float deviceScaleFactor) const;
-    void drawTextBlob(SkCanvas*, const SkPaint&, const SkTextBlob*, const SkPoint& origin) const;
     void drawGlyphBuffer(SkCanvas*, const SkPaint&, const TextRunPaintInfo&, const GlyphBuffer&, const FloatPoint&, float deviceScaleFactor) const;
     float floatWidthForSimpleText(const TextRun&, HashSet<const SimpleFontData*>* fallbackFonts = 0, FloatRect* glyphBounds = 0) const;
     int offsetForPositionForSimpleText(const TextRun&, float position, bool includePartialGlyphs) const;
@@ -147,9 +149,11 @@ private:
     friend struct SimpleShaper;
 
 public:
-    FontSelector* fontSelector() const;
+    FontSelector* getFontSelector() const;
+    PassRefPtr<FontFallbackIterator> createFontFallbackIterator(
+        FontFallbackPriority) const;
 
-    void willUseFontData(UChar32) const;
+    void willUseFontData(const String& text) const;
 
     bool loadingCustomFonts() const;
     bool isFallbackValid() const;
@@ -164,7 +168,14 @@ private:
     mutable RefPtr<FontFallbackList> m_fontFallbackList;
     mutable unsigned m_canShapeWordByWord : 1;
     mutable unsigned m_shapeWordByWordComputed : 1;
+
+    // For accessing buildGlyphBuffer and retrieving fonts used in rendering a node.
+    friend class InspectorCSSAgent;
 };
+
+inline Font::~Font()
+{
+}
 
 inline const SimpleFontData* Font::primaryFont() const
 {
@@ -178,21 +189,21 @@ inline const FontData* Font::fontDataAt(unsigned index) const
     return m_fontFallbackList->fontDataAt(m_fontDescription, index);
 }
 
-inline FontSelector* Font::fontSelector() const
+inline FontSelector* Font::getFontSelector() const
 {
-    return m_fontFallbackList ? m_fontFallbackList->fontSelector() : 0;
+    return m_fontFallbackList ? m_fontFallbackList->getFontSelector() : 0;
 }
 
 inline float Font::tabWidth(const SimpleFontData& fontData, const TabSize& tabSize, float position) const
 {
     float baseTabWidth = tabSize.getPixelSize(fontData.spaceWidth());
     if (!baseTabWidth)
-        return fontDescription().letterSpacing();
+        return getFontDescription().letterSpacing();
     float distanceToTabStop = baseTabWidth - fmodf(position, baseTabWidth);
 
     // The smallest allowable tab space is letterSpacing() (but must be at least one layout unit).
     // if the distance to the next tab stop is less than that, advance an additional tab stop.
-    if (distanceToTabStop < std::max(fontDescription().letterSpacing(), LayoutUnit::epsilon()))
+    if (distanceToTabStop < std::max(getFontDescription().letterSpacing(), LayoutUnit::epsilon()))
         distanceToTabStop += baseTabWidth;
 
     return distanceToTabStop;

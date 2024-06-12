@@ -28,32 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediasource/SourceBufferList.h"
 
-#include "core/dom/ExecutionContext.h"
 #include "core/events/GenericEventQueue.h"
 #include "modules/EventModules.h"
 #include "modules/mediasource/SourceBuffer.h"
 
 namespace blink {
 
-SourceBufferList::SourceBufferList(ExecutionContext* context, GenericEventQueue* asyncEventQueue)
-    : m_executionContext(context)
+SourceBufferList::SourceBufferList(ExecutionContext* context,
+    GenericEventQueue* asyncEventQueue)
+    : ContextClient(context)
     , m_asyncEventQueue(asyncEventQueue)
 {
 }
 
-SourceBufferList::~SourceBufferList()
-{
-#if !ENABLE(OILPAN)
-    ASSERT(m_list.isEmpty());
-#endif
-}
+SourceBufferList::~SourceBufferList() { }
 
 void SourceBufferList::add(SourceBuffer* buffer)
 {
-    m_list.append(buffer);
+    m_list.push_back(buffer);
     scheduleEvent(EventTypeNames::addsourcebuffer);
 }
 
@@ -80,12 +74,12 @@ void SourceBufferList::clear()
 
 void SourceBufferList::scheduleEvent(const AtomicString& eventName)
 {
-    ASSERT(m_asyncEventQueue);
+    DCHECK(m_asyncEventQueue);
 
-    RefPtrWillBeRawPtr<Event> event = Event::create(eventName);
+    Event* event = Event::create(eventName);
     event->setTarget(this);
 
-    m_asyncEventQueue->enqueueEvent(event.release());
+    m_asyncEventQueue->enqueueEvent(event);
 }
 
 const AtomicString& SourceBufferList::interfaceName() const
@@ -93,17 +87,12 @@ const AtomicString& SourceBufferList::interfaceName() const
     return EventTargetNames::SourceBufferList;
 }
 
-ExecutionContext* SourceBufferList::executionContext() const
-{
-    return m_executionContext;
-}
-
 DEFINE_TRACE(SourceBufferList)
 {
-    visitor->trace(m_executionContext);
     visitor->trace(m_asyncEventQueue);
     visitor->trace(m_list);
-    RefCountedGarbageCollectedEventTargetWithInlineData<SourceBufferList>::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 } // namespace blink

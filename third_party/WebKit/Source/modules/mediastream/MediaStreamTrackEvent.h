@@ -10,22 +10,23 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef MediaStreamTrackEvent_h
 #define MediaStreamTrackEvent_h
 
 #include "modules/EventModules.h"
+#include "modules/mediastream/MediaStreamTrackEventInit.h"
 #include "wtf/text/AtomicString.h"
 
 namespace blink {
@@ -34,11 +35,14 @@ class MediaStreamTrack;
 
 class MediaStreamTrackEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     ~MediaStreamTrackEvent() override;
 
-    static PassRefPtrWillBeRawPtr<MediaStreamTrackEvent> create();
-    static PassRefPtrWillBeRawPtr<MediaStreamTrackEvent> create(const AtomicString& type, bool canBubble, bool cancelable, MediaStreamTrack*);
+    static MediaStreamTrackEvent* create(const AtomicString& type,
+        MediaStreamTrack*);
+    static MediaStreamTrackEvent* create(const AtomicString& type,
+        const MediaStreamTrackEventInit&);
 
     MediaStreamTrack* track() const;
 
@@ -48,10 +52,11 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    MediaStreamTrackEvent();
-    MediaStreamTrackEvent(const AtomicString& type, bool canBubble, bool cancelable, MediaStreamTrack*);
+    MediaStreamTrackEvent(const AtomicString& type, MediaStreamTrack*);
+    MediaStreamTrackEvent(const AtomicString& type,
+        const MediaStreamTrackEventInit&);
 
-    PersistentWillBeMember<MediaStreamTrack> m_track;
+    Member<MediaStreamTrack> m_track;
 };
 
 } // namespace blink

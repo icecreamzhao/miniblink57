@@ -28,52 +28,53 @@
 
 namespace v8 {
 namespace internal {
-namespace trap_handler {
+    namespace trap_handler {
 
 #if V8_TRAP_HANDLER_SUPPORTED
 
-// This function contains the platform independent portions of fault
-// classification.
-bool TryFindLandingPad(uintptr_t fault_addr, uintptr_t* landing_pad) {
-  // TODO(eholk): broad code range check
+        // This function contains the platform independent portions of fault
+        // classification.
+        bool TryFindLandingPad(uintptr_t fault_addr, uintptr_t* landing_pad)
+        {
+            // TODO(eholk): broad code range check
 
-  // Taking locks in the trap handler is risky because a fault in the trap
-  // handler itself could lead to a deadlock when attempting to acquire the
-  // lock again. We guard against this case with g_thread_in_wasm_code. The
-  // lock may only be taken when not executing Wasm code (an assert in
-  // MetadataLock's constructor ensures this). The trap handler will bail
-  // out before trying to take the lock if g_thread_in_wasm_code is not set.
-  MetadataLock lock_holder;
+            // Taking locks in the trap handler is risky because a fault in the trap
+            // handler itself could lead to a deadlock when attempting to acquire the
+            // lock again. We guard against this case with g_thread_in_wasm_code. The
+            // lock may only be taken when not executing Wasm code (an assert in
+            // MetadataLock's constructor ensures this). The trap handler will bail
+            // out before trying to take the lock if g_thread_in_wasm_code is not set.
+            MetadataLock lock_holder;
 
-  for (size_t i = 0; i < gNumCodeObjects; ++i) {
-    const CodeProtectionInfo* data = gCodeObjects[i].code_info;
-    if (data == nullptr) {
-      continue;
-    }
-    const Address base = data->base;
+            for (size_t i = 0; i < gNumCodeObjects; ++i) {
+                const CodeProtectionInfo* data = gCodeObjects[i].code_info;
+                if (data == nullptr) {
+                    continue;
+                }
+                const Address base = data->base;
 
-    if (fault_addr >= base && fault_addr < base + data->size) {
-      // Hurray, we found the code object. Check for protected addresses.
-      const ptrdiff_t offset = fault_addr - base;
+                if (fault_addr >= base && fault_addr < base + data->size) {
+                    // Hurray, we found the code object. Check for protected addresses.
+                    const ptrdiff_t offset = fault_addr - base;
 
-      for (unsigned i = 0; i < data->num_protected_instructions; ++i) {
-        if (data->instructions[i].instr_offset == offset) {
-          // Hurray again, we found the actual instruction.
-          *landing_pad = data->instructions[i].landing_offset + base;
+                    for (unsigned i = 0; i < data->num_protected_instructions; ++i) {
+                        if (data->instructions[i].instr_offset == offset) {
+                            // Hurray again, we found the actual instruction.
+                            *landing_pad = data->instructions[i].landing_offset + base;
 
-          gRecoveredTrapCount.store(
-              gRecoveredTrapCount.load(std::memory_order_relaxed) + 1,
-              std::memory_order_relaxed);
+                            gRecoveredTrapCount.store(
+                                gRecoveredTrapCount.load(std::memory_order_relaxed) + 1,
+                                std::memory_order_relaxed);
 
-          return true;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
-      }
-    }
-  }
-  return false;
-}
-#endif  // V8_TRAP_HANDLER_SUPPORTED
+#endif // V8_TRAP_HANDLER_SUPPORTED
 
-}  // namespace trap_handler
-}  // namespace internal
-}  // namespace v8
+    } // namespace trap_handler
+} // namespace internal
+} // namespace v8

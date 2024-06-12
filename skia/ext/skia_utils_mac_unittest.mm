@@ -2,11 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "skia/ext/skia_utils_mac.mm"
+#include "skia/ext/skia_utils_mac.h"
 
-#include "base/mac/mac_util.h"
+#import <AppKit/AppKit.h>
+
+#include "base/mac/foundation_util.h"
 #include "base/mac/scoped_nsobject.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "third_party/skia/include/core/SkCanvas.h"
+#include "ui/gfx/scoped_ns_graphics_context_save_gstate_mac.h"
 
 namespace {
 
@@ -15,24 +19,20 @@ class SkiaUtilsMacTest : public testing::Test {
   // Creates a red or blue bitmap.
   SkBitmap CreateSkBitmap(int width, int height, bool isred, bool tfbit);
 
-  // Creates a red or blue image.
-  NSImage* CreateNSImage(int width, int height, bool isred);
+  // Creates a red image.
+  NSImage* CreateNSImage(int width, int height);
 
   // Checks that the given bitmap rep is actually red or blue.
   void TestImageRep(NSBitmapImageRep* imageRep, bool isred);
 
-  // Checks that the given bitmap is actually red or blue.
-  void TestSkBitmap(const SkBitmap& bitmap, bool isred);
+  // Checks that the given bitmap is red.
+  void TestSkBitmap(const SkBitmap& bitmap);
 
   enum BitLockerTest {
     TestIdentity = 0,
     TestTranslate = 1,
     TestClip = 2,
     TestXClip = TestTranslate | TestClip,
-    TestNoBits = 4,
-    TestTranslateNoBits = TestTranslate | TestNoBits,
-    TestClipNoBits = TestClip | TestNoBits,
-    TestXClipNoBits = TestXClip | TestNoBits,
   };
   void RunBitLockerTest(BitLockerTest test);
 
@@ -57,16 +57,39 @@ SkBitmap SkiaUtilsMacTest::CreateSkBitmap(int width, int height,
   return bitmap;
 }
 
-NSImage* SkiaUtilsMacTest::CreateNSImage(int width, int height, bool isred) {
+NSImage* SkiaUtilsMacTest::CreateNSImage(int width, int height) {
+  base::scoped_nsobject<NSBitmapImageRep> bitmap([[NSBitmapImageRep alloc]
+      initWithBitmapDataPlanes:nil
+                    pixelsWide:width
+                    pixelsHigh:height
+                 bitsPerSample:8
+               samplesPerPixel:4
+                      hasAlpha:YES
+                      isPlanar:NO
+                colorSpaceName:NSCalibratedRGBColorSpace
+                  bitmapFormat:0
+                   bytesPerRow:4 * width
+                  bitsPerPixel:32]);
+
+  {
+    gfx::ScopedNSGraphicsContextSaveGState scopedGState;
+    [NSGraphicsContext
+        setCurrentContext:[NSGraphicsContext
+                              graphicsContextWithBitmapImageRep:bitmap]];
+
+    CGFloat comps[] = {1.0, 0.0, 0.0, 1.0};
+    NSColor* color =
+        [NSColor colorWithColorSpace:[NSColorSpace genericRGBColorSpace]
+                          components:comps
+                               count:4];
+    [color set];
+    NSRectFill(NSMakeRect(0, 0, width, height));
+  }
+
   base::scoped_nsobject<NSImage> image(
       [[NSImage alloc] initWithSize:NSMakeSize(width, height)]);
-  [image lockFocus];
-  if (isred)
-    [[NSColor colorWithDeviceRed:1.0 green:0.0 blue:0.0 alpha:1.0] set];
-  else
-    [[NSColor colorWithDeviceRed:0.0 green:0.0 blue:1.0 alpha:1.0] set];
-  NSRectFill(NSMakeRect(0, 0, width, height));
-  [image unlockFocus];
+  [image addRepresentation:bitmap];
+
   return [image.release() autorelease];
 }
 
@@ -96,23 +119,17 @@ void SkiaUtilsMacTest::TestImageRep(NSBitmapImageRep* imageRep, bool isred) {
   EXPECT_GT(alpha, 0.95);
 }
 
-void SkiaUtilsMacTest::TestSkBitmap(const SkBitmap& bitmap, bool isred) {
+void SkiaUtilsMacTest::TestSkBitmap(const SkBitmap& bitmap) {
   int x = bitmap.width() > 17 ? 17 : 0;
   int y = bitmap.height() > 17 ? 17 : 0;
   SkColor color = bitmap.getColor(x, y);
 
-  if (isred) {
-    EXPECT_EQ(255u, SkColorGetR(color));
-    EXPECT_EQ(0u, SkColorGetB(color));
-  } else {
-    EXPECT_EQ(0u, SkColorGetR(color));
-    EXPECT_EQ(255u, SkColorGetB(color));
-  }
+  EXPECT_EQ(255u, SkColorGetR(color));
+  EXPECT_EQ(0u, SkColorGetB(color));
   EXPECT_EQ(0u, SkColorGetG(color));
   EXPECT_EQ(255u, SkColorGetA(color));
 }
 
-// setBitmapDevice has been deprecated/removed. Is this test still useful?
 void SkiaUtilsMacTest::RunBitLockerTest(BitLockerTest test) {
   const unsigned width = 2;
   const unsigned height = 2;
@@ -133,18 +150,14 @@ void SkiaUtilsMacTest::RunBitLockerTest(BitLockerTest test) {
     canvas.clipRect(clipRect);
   }
   {
-    gfx::SkiaBitLocker bitLocker(&canvas);
+    SkIRect clip = SkIRect::MakeSize(canvas.getBaseLayerSize()).
+        makeOffset((test & TestTranslate) ? - (static_cast<int>(width)) / 2 : 0, 0);
+    skia::SkiaBitLocker bitLocker(&canvas, clip);
     CGContextRef cgContext = bitLocker.cgContext();
     CGColorRef testColor = CGColorGetConstantColor(kCGColorWhite);
     CGContextSetFillColorWithColor(cgContext, testColor);
     CGRect cgRect = {{0, 0}, {width, height}};
     CGContextFillRect(cgContext, cgRect);
-    if (test & TestNoBits) {
-      if (test & TestClip) {
-        SkRect clipRect = {0, height / 2, width, height};
-        canvas.clipRect(clipRect);
-      }
-    }
   }
   const unsigned results[][storageSize] = {
     {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF}, // identity
@@ -153,7 +166,7 @@ void SkiaUtilsMacTest::RunBitLockerTest(BitLockerTest test) {
     {0xFF333333, 0xFF666666, 0xFF999999, 0xFFFFFFFF}  // translate | clip
   };
   for (unsigned index = 0; index < storageSize; index++)
-    EXPECT_EQ(results[test & ~TestNoBits][index], bits[index]);
+    EXPECT_EQ(results[test][index], bits[index]);
 }
 
 void SkiaUtilsMacTest::ShapeHelper(int width, int height,
@@ -161,14 +174,16 @@ void SkiaUtilsMacTest::ShapeHelper(int width, int height,
   SkBitmap thing(CreateSkBitmap(width, height, isred, tfbit));
 
   // Confirm size
-  NSImage* image = gfx::SkBitmapToNSImage(thing);
+  NSImage* image = skia::SkBitmapToNSImage(thing);
   EXPECT_DOUBLE_EQ([image size].width, (double)width);
   EXPECT_DOUBLE_EQ([image size].height, (double)height);
 
   EXPECT_TRUE([[image representations] count] == 1);
   EXPECT_TRUE([[[image representations] lastObject]
       isKindOfClass:[NSBitmapImageRep class]]);
-  TestImageRep([[image representations] lastObject], isred);
+  TestImageRep(base::mac::ObjCCastStrict<NSBitmapImageRep>(
+                   [[image representations] lastObject]),
+               isred);
 }
 
 TEST_F(SkiaUtilsMacTest, BitmapToNSImage_RedSquare64x64) {
@@ -188,7 +203,7 @@ TEST_F(SkiaUtilsMacTest, BitmapToNSBitmapImageRep_BlueRectangle20x30) {
   int height = 30;
 
   SkBitmap bitmap(CreateSkBitmap(width, height, false, true));
-  NSBitmapImageRep* imageRep = gfx::SkBitmapToNSBitmapImageRep(bitmap);
+  NSBitmapImageRep* imageRep = skia::SkBitmapToNSBitmapImageRep(bitmap);
 
   EXPECT_DOUBLE_EQ(width, [imageRep size].width);
   EXPECT_DOUBLE_EQ(height, [imageRep size].height);
@@ -198,15 +213,15 @@ TEST_F(SkiaUtilsMacTest, BitmapToNSBitmapImageRep_BlueRectangle20x30) {
 TEST_F(SkiaUtilsMacTest, NSImageRepToSkBitmap) {
   int width = 10;
   int height = 15;
-  bool isred = true;
 
-  NSImage* image = CreateNSImage(width, height, isred);
+  NSImage* image = CreateNSImage(width, height);
   EXPECT_EQ(1u, [[image representations] count]);
-  NSBitmapImageRep* imageRep = [[image representations] lastObject];
-  NSColorSpace* colorSpace = [NSColorSpace deviceRGBColorSpace];
-  SkBitmap bitmap(gfx::NSImageRepToSkBitmapWithColorSpace(
+  NSBitmapImageRep* imageRep = base::mac::ObjCCastStrict<NSBitmapImageRep>(
+      [[image representations] lastObject]);
+  NSColorSpace* colorSpace = [NSColorSpace genericRGBColorSpace];
+  SkBitmap bitmap(skia::NSImageRepToSkBitmapWithColorSpace(
       imageRep, [image size], false, [colorSpace CGColorSpace]));
-  TestSkBitmap(bitmap, isred);
+  TestSkBitmap(bitmap);
 }
 
 TEST_F(SkiaUtilsMacTest, BitLocker_Identity) {
@@ -223,22 +238,6 @@ TEST_F(SkiaUtilsMacTest, BitLocker_Clip) {
 
 TEST_F(SkiaUtilsMacTest, BitLocker_XClip) {
   RunBitLockerTest(SkiaUtilsMacTest::TestXClip);
-}
-
-TEST_F(SkiaUtilsMacTest, BitLocker_NoBits) {
-  RunBitLockerTest(SkiaUtilsMacTest::TestNoBits);
-}
-
-TEST_F(SkiaUtilsMacTest, BitLocker_TranslateNoBits) {
-  RunBitLockerTest(SkiaUtilsMacTest::TestTranslateNoBits);
-}
-
-TEST_F(SkiaUtilsMacTest, BitLocker_ClipNoBits) {
-  RunBitLockerTest(SkiaUtilsMacTest::TestClipNoBits);
-}
-
-TEST_F(SkiaUtilsMacTest, BitLocker_XClipNoBits) {
-  RunBitLockerTest(SkiaUtilsMacTest::TestXClipNoBits);
 }
 
 }  // namespace

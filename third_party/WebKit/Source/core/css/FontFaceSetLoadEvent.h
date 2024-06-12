@@ -33,7 +33,6 @@
 
 #include "core/css/FontFace.h"
 #include "core/css/FontFaceSetLoadEventInit.h"
-#include "core/dom/DOMError.h"
 #include "core/events/Event.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
@@ -42,32 +41,31 @@ namespace blink {
 
 class FontFaceSetLoadEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<FontFaceSetLoadEvent> create()
+    static FontFaceSetLoadEvent* create(
+        const AtomicString& type,
+        const FontFaceSetLoadEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new FontFaceSetLoadEvent());
+        return new FontFaceSetLoadEvent(type, initializer);
     }
 
-    static PassRefPtrWillBeRawPtr<FontFaceSetLoadEvent> create(const AtomicString& type, const FontFaceSetLoadEventInit& initializer)
+    static FontFaceSetLoadEvent* createForFontFaces(
+        const AtomicString& type,
+        const FontFaceArray& fontfaces = FontFaceArray())
     {
-        return adoptRefWillBeNoop(new FontFaceSetLoadEvent(type, initializer));
+        return new FontFaceSetLoadEvent(type, fontfaces);
     }
 
-    static PassRefPtrWillBeRawPtr<FontFaceSetLoadEvent> createForFontFaces(const AtomicString& type, const FontFaceArray& fontfaces = FontFaceArray())
-    {
-        return adoptRefWillBeNoop(new FontFaceSetLoadEvent(type, fontfaces));
-    }
-
-    virtual ~FontFaceSetLoadEvent();
+    ~FontFaceSetLoadEvent() override;
 
     FontFaceArray fontfaces() const { return m_fontfaces; }
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    FontFaceSetLoadEvent();
     FontFaceSetLoadEvent(const AtomicString&, const FontFaceArray&);
     FontFaceSetLoadEvent(const AtomicString&, const FontFaceSetLoadEventInit&);
 

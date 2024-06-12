@@ -70,11 +70,16 @@
 #include "src/disassembler.h"
 #include "src/eh-frame.h"
 #endif
+#include "../v8_7_5/src/base/thread-local.h"
+
+namespace wke {
+extern bool g_enableSkipJsError;
+}
 
 namespace v8 {
 
 bool g_patchForCreateDataProperty = false; // 在属性访问器里调用CreateDataProperty会重入
-DWORD tlsPatchForCreateDataProperty = 0;
+base::ThreadLocalBoolean* s_tlsPatchForCreateDataProperty = nullptr;
 
 namespace internal {
 
@@ -117,6 +122,9 @@ MaybeHandle<JSReceiver> Object::ToObject(Isolate* isolate,
     int constructor_function_index =
         Handle<HeapObject>::cast(object)->map()->GetConstructorFunctionIndex();
     if (constructor_function_index == Map::kNoConstructorFunctionIndex) {
+      if (wke::g_enableSkipJsError)
+        return isolate->global_proxy();
+
       THROW_NEW_ERROR(isolate,
                       NewTypeError(MessageTemplate::kUndefinedOrNullToObject),
                       JSReceiver);
@@ -421,7 +429,7 @@ namespace {
 // TODO(bmeurer): Maybe we should introduce a marker interface Number,
 // where we put all these methods at some point?
 ComparisonResult NumberCompare(double x, double y) {
-  if (std::isnan(x) || std::isnan(y)) {
+  if (std_isnan(x) || std_isnan(y)) {
     return ComparisonResult::kUndefined;
   } else if (x < y) {
     return ComparisonResult::kLessThan;
@@ -435,8 +443,8 @@ ComparisonResult NumberCompare(double x, double y) {
 
 bool NumberEquals(double x, double y) {
   // Must check explicitly for NaN's on Windows, but -0 works fine.
-  if (std::isnan(x)) return false;
-  if (std::isnan(y)) return false;
+  if (std_isnan(x)) return false;
+  if (std_isnan(y)) return false;
   return x == y;
 }
 
@@ -2006,7 +2014,7 @@ Object* GetSimpleHash(Object* object) {
   }
   if (object->IsHeapNumber()) {
     double num = HeapNumber::cast(object)->value();
-    if (std::isnan(num)) return Smi::FromInt(Smi::kMaxValue);
+    if (std_isnan(num)) return Smi::FromInt(Smi::kMaxValue);
     if (i::IsMinusZero(num)) num = 0;
     if (IsSmiDouble(num)) {
       return Smi::FromInt(FastD2I(num))->GetHash();
@@ -2064,10 +2072,10 @@ bool Object::SameValue(Object* other) {
     double other_value = other->Number();
     // SameValue(NaN, NaN) is true.
     if (this_value != other_value) {
-      return std::isnan(this_value) && std::isnan(other_value);
+      return std_isnan(this_value) && std_isnan(other_value);
     }
     // SameValue(0.0, -0.0) is false.
-    return (std::signbit(this_value) == std::signbit(other_value));
+    return (std_signbit(this_value) == std_signbit(other_value));
   }
   if (IsString() && other->IsString()) {
     return String::cast(this)->Equals(String::cast(other));
@@ -2080,8 +2088,8 @@ bool Object::SameValue(Object* other) {
       float y = b->get_lane(i);
       // Implements the ES5 SameValue operation for floating point types.
       // http://www.ecma-international.org/ecma-262/6.0/#sec-samevalue
-      if (x != y && !(std::isnan(x) && std::isnan(y))) return false;
-      if (std::signbit(x) != std::signbit(y)) return false;
+      if (x != y && !(std_isnan(x) && std_isnan(y))) return false;
+      if (std_signbit(x) != std_signbit(y)) return false;
     }
     return true;
   } else if (IsSimd128Value() && other->IsSimd128Value()) {
@@ -2103,7 +2111,7 @@ bool Object::SameValueZero(Object* other) {
     double other_value = other->Number();
     // +0 == -0 is true
     return this_value == other_value ||
-           (std::isnan(this_value) && std::isnan(other_value));
+           (std_isnan(this_value) && std_isnan(other_value));
   }
   if (IsString() && other->IsString()) {
     return String::cast(this)->Equals(String::cast(other));
@@ -2116,7 +2124,7 @@ bool Object::SameValueZero(Object* other) {
       float y = b->get_lane(i);
       // Implements the ES6 SameValueZero operation for floating point types.
       // http://www.ecma-international.org/ecma-262/6.0/#sec-samevaluezero
-      if (x != y && !(std::isnan(x) && std::isnan(y))) return false;
+      if (x != y && !(std_isnan(x) && std_isnan(y))) return false;
       // SameValueZero doesn't distinguish between 0 and -0.
     }
     return true;
@@ -5869,9 +5877,9 @@ Maybe<bool> JSObject::DefineOwnPropertyIgnoreAttributes(
 
         // Special handling for AccessorInfo, which behaves like a data
         // property.
-        bool b = false;  ;// TlsAlloc(void);
-        if (0 != tlsPatchForCreateDataProperty)
-          b = (1 == (int)TlsGetValue(tlsPatchForCreateDataProperty));
+        bool b = false;
+        if (nullptr != s_tlsPatchForCreateDataProperty)
+            b = s_tlsPatchForCreateDataProperty->Get();
 
         if (accessors->IsAccessorInfo() && handling == DONT_FORCE_FIELD && !b) {
           PropertyAttributes current_attributes = it->property_attributes();
@@ -7028,9 +7036,13 @@ Maybe<bool> JSReceiver::CreateDataProperty(LookupIterator* it,
 Maybe<bool> JSObject::CreateDataProperty(LookupIterator* it,
                                          Handle<Object> value,
                                          ShouldThrow should_throw) {
-  if (0 == tlsPatchForCreateDataProperty)
-    tlsPatchForCreateDataProperty = TlsAlloc();
-  TlsSetValue(tlsPatchForCreateDataProperty, (LPVOID)1);
+//   if (0 == tlsPatchForCreateDataProperty)
+//     tlsPatchForCreateDataProperty = TlsAlloc();
+//   TlsSetValue(tlsPatchForCreateDataProperty, (LPVOID)1);
+  if (!s_tlsPatchForCreateDataProperty)
+    s_tlsPatchForCreateDataProperty = new base::ThreadLocalBoolean();
+  s_tlsPatchForCreateDataProperty->Set(true);
+
   DCHECK(it->GetReceiver()->IsJSObject());
   MAYBE_RETURN(JSReceiver::GetPropertyAttributes(it), Nothing<bool>());
   Handle<JSReceiver> receiver = Handle<JSReceiver>::cast(it->GetReceiver());
@@ -7056,7 +7068,9 @@ Maybe<bool> JSObject::CreateDataProperty(LookupIterator* it,
                             DefineOwnPropertyIgnoreAttributes(it, value, NONE),
                             Nothing<bool>());
 
-  TlsSetValue(tlsPatchForCreateDataProperty, (LPVOID)0);
+  //TlsSetValue(tlsPatchForCreateDataProperty, (LPVOID)0);
+  s_tlsPatchForCreateDataProperty->Set(false);
+
   return Just(true);
 }
 
@@ -19256,7 +19270,7 @@ MaybeHandle<JSDate> JSDate::New(Handle<JSFunction> constructor,
     tv = std::numeric_limits<double>::quiet_NaN();
   }
   Handle<Object> value = isolate->factory()->NewNumber(tv);
-  Handle<JSDate>::cast(result)->SetValue(*value, std::isnan(tv));
+  Handle<JSDate>::cast(result)->SetValue(*value, std_isnan(tv));
   return Handle<JSDate>::cast(result);
 }
 
@@ -19312,7 +19326,7 @@ Object* JSDate::DoGetField(FieldIndex index) {
   }
 
   double time = value()->Number();
-  if (std::isnan(time)) return GetIsolate()->heap()->nan_value();
+  if (std_isnan(time)) return GetIsolate()->heap()->nan_value();
 
   int64_t local_time_ms = date_cache->ToLocal(static_cast<int64_t>(time));
   int days = DateCache::DaysFromTime(local_time_ms);
@@ -19331,7 +19345,7 @@ Object* JSDate::GetUTCField(FieldIndex index,
                             DateCache* date_cache) {
   DCHECK(index >= kFirstUTCField);
 
-  if (std::isnan(value)) return GetIsolate()->heap()->nan_value();
+  if (std_isnan(value)) return GetIsolate()->heap()->nan_value();
 
   int64_t time_ms = static_cast<int64_t>(value);
 
@@ -19372,7 +19386,7 @@ Object* JSDate::GetUTCField(FieldIndex index,
 Handle<Object> JSDate::SetValue(Handle<JSDate> date, double v) {
   Isolate* const isolate = date->GetIsolate();
   Handle<Object> value = isolate->factory()->NewNumber(v);
-  bool value_is_nan = std::isnan(v);
+  bool value_is_nan = std_isnan(v);
   date->SetValue(*value, value_is_nan);
   return value;
 }

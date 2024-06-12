@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/credentialmanager/NavigatorCredentials.h"
 
 #include "core/dom/Document.h"
@@ -14,17 +13,14 @@
 namespace blink {
 
 NavigatorCredentials::NavigatorCredentials(Navigator& navigator)
-    : DOMWindowProperty(navigator.frame())
-{
-}
-
-NavigatorCredentials::~NavigatorCredentials()
+    : Supplement<Navigator>(navigator)
 {
 }
 
 NavigatorCredentials& NavigatorCredentials::from(Navigator& navigator)
 {
-    NavigatorCredentials* supplement = static_cast<NavigatorCredentials*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    NavigatorCredentials* supplement = static_cast<NavigatorCredentials*>(
+        Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorCredentials(navigator);
         provideTo(navigator, supplementName(), supplement);
@@ -44,7 +40,7 @@ CredentialsContainer* NavigatorCredentials::credentials(Navigator& navigator)
 
 CredentialsContainer* NavigatorCredentials::credentials()
 {
-    if (!m_credentialsContainer && frame())
+    if (!m_credentialsContainer)
         m_credentialsContainer = CredentialsContainer::create();
     return m_credentialsContainer.get();
 }
@@ -52,8 +48,7 @@ CredentialsContainer* NavigatorCredentials::credentials()
 DEFINE_TRACE(NavigatorCredentials)
 {
     visitor->trace(m_credentialsContainer);
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<Navigator>::trace(visitor);
 }
 
 } // namespace blink

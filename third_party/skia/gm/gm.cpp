@@ -9,7 +9,8 @@
 #include "SkShader.h"
 using namespace skiagm;
 
-GM::GM() {
+GM::GM()
+{
     fMode = kGM_Mode;
     fBGColor = SK_ColorWHITE;
     fCanvasIsDeferred = false;
@@ -17,14 +18,16 @@ GM::GM() {
     fStarterMatrix.reset();
 }
 
-GM::~GM() {}
+GM::~GM() { }
 
-void GM::draw(SkCanvas* canvas) {
+void GM::draw(SkCanvas* canvas)
+{
     this->drawBackground(canvas);
     this->drawContent(canvas);
 }
 
-void GM::drawContent(SkCanvas* canvas) {
+void GM::drawContent(SkCanvas* canvas)
+{
     if (!fHaveCalledOnceBeforeDraw) {
         fHaveCalledOnceBeforeDraw = true;
         this->onOnceBeforeDraw();
@@ -32,7 +35,8 @@ void GM::drawContent(SkCanvas* canvas) {
     this->onDraw(canvas);
 }
 
-void GM::drawBackground(SkCanvas* canvas) {
+void GM::drawBackground(SkCanvas* canvas)
+{
     if (!fHaveCalledOnceBeforeDraw) {
         fHaveCalledOnceBeforeDraw = true;
         this->onOnceBeforeDraw();
@@ -40,37 +44,43 @@ void GM::drawBackground(SkCanvas* canvas) {
     this->onDrawBackground(canvas);
 }
 
-const char* GM::getName() {
+const char* GM::getName()
+{
     if (fShortName.size() == 0) {
         fShortName = this->onShortName();
     }
     return fShortName.c_str();
 }
 
-void GM::setBGColor(SkColor color) {
+void GM::setBGColor(SkColor color)
+{
     fBGColor = color;
 }
 
-bool GM::animate(const SkAnimTimer& timer) {
+bool GM::animate(const SkAnimTimer& timer)
+{
     return this->onAnimate(timer);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-void GM::onDrawBackground(SkCanvas* canvas) {
+void GM::onDrawBackground(SkCanvas* canvas)
+{
     canvas->drawColor(fBGColor, SkXfermode::kSrc_Mode);
 }
 
-void GM::drawSizeBounds(SkCanvas* canvas, SkColor color) {
+void GM::drawSizeBounds(SkCanvas* canvas, SkColor color)
+{
     SkISize size = this->getISize();
     SkRect r = SkRect::MakeWH(SkIntToScalar(size.width()),
-                              SkIntToScalar(size.height()));
+        SkIntToScalar(size.height()));
     SkPaint paint;
     paint.setColor(color);
     canvas->drawRect(r, paint);
 }
 
-void GM::drawGpuOnlyMessage(SkCanvas* canvas) {
+void GM::DrawGpuOnlyMessage(SkCanvas* canvas)
+{
     SkBitmap bmp;
     bmp.allocN32Pixels(128, 64);
     SkCanvas bmpCanvas(bmp);
@@ -79,15 +89,15 @@ void GM::drawGpuOnlyMessage(SkCanvas* canvas) {
     paint.setAntiAlias(true);
     paint.setTextSize(20);
     paint.setColor(SK_ColorRED);
+    sk_tool_utils::set_portable_typeface(&paint);
     static const char kTxt[] = "GPU Only";
     bmpCanvas.drawText(kTxt, strlen(kTxt), 20, 40, paint);
     SkMatrix localM;
     localM.setRotate(35.f);
     localM.postTranslate(10.f, 0.f);
-    SkAutoTUnref<SkShader> shader(SkShader::CreateBitmapShader(bmp, SkShader::kMirror_TileMode,
-                                                               SkShader::kMirror_TileMode,
-                                                               &localM));
-    paint.setShader(shader);
+    paint.setShader(SkShader::MakeBitmapShader(bmp, SkShader::kMirror_TileMode,
+        SkShader::kMirror_TileMode,
+        &localM));
     paint.setFilterQuality(kMedium_SkFilterQuality);
     canvas->drawPaint(paint);
     return;
@@ -96,15 +106,17 @@ void GM::drawGpuOnlyMessage(SkCanvas* canvas) {
 // need to explicitly declare this, or we get some weird infinite loop llist
 template GMRegistry* GMRegistry::gHead;
 
-void skiagm::SimpleGM::onDraw(SkCanvas* canvas) {
+void skiagm::SimpleGM::onDraw(SkCanvas* canvas)
+{
     fDrawProc(canvas);
 }
 
-SkISize skiagm::SimpleGM::onISize() {
+SkISize skiagm::SimpleGM::onISize()
+{
     return fSize;
 }
 
-SkString skiagm::SimpleGM::onShortName() {
+SkString skiagm::SimpleGM::onShortName()
+{
     return fName;
 }
-

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkMask_DEFINED
 #define SkMask_DEFINED
 
@@ -17,22 +16,27 @@
     the 3-channel 3D format. These are passed to SkMaskFilter objects.
 */
 struct SkMask {
+    SkMask()
+        : fImage(nullptr)
+    {
+    }
+
     enum Format {
         kBW_Format, //!< 1bit per pixel mask (e.g. monochrome)
         kA8_Format, //!< 8bits per pixel mask (e.g. antialiasing)
         k3D_Format, //!< 3 8bit per pixl planes: alpha, mul, add
-        kARGB32_Format,         //!< SkPMColor
-        kLCD16_Format,          //!< 565 alpha for r/g/b
+        kARGB32_Format, //!< SkPMColor
+        kLCD16_Format, //!< 565 alpha for r/g/b
     };
 
     enum {
         kCountMaskFormats = kLCD16_Format + 1
     };
 
-    uint8_t*    fImage;
-    SkIRect     fBounds;
-    uint32_t    fRowBytes;
-    Format      fFormat;
+    uint8_t* fImage;
+    SkIRect fBounds;
+    uint32_t fRowBytes;
+    Format fFormat;
 
     /** Returns true if the mask is empty: i.e. it has an empty bounds.
      */
@@ -54,7 +58,8 @@ struct SkMask {
         Asserts that the mask is kBW_Format, and that x,y are in range.
         x,y are in the same coordiate space as fBounds.
     */
-    uint8_t* getAddr1(int x, int y) const {
+    uint8_t* getAddr1(int x, int y) const
+    {
         SkASSERT(kBW_Format == fFormat);
         SkASSERT(fBounds.contains(x, y));
         SkASSERT(fImage != NULL);
@@ -65,7 +70,8 @@ struct SkMask {
         Asserts that the mask is kA8_Format, and that x,y are in range.
         x,y are in the same coordiate space as fBounds.
     */
-    uint8_t* getAddr8(int x, int y) const {
+    uint8_t* getAddr8(int x, int y) const
+    {
         SkASSERT(kA8_Format == fFormat);
         SkASSERT(fBounds.contains(x, y));
         SkASSERT(fImage != NULL);
@@ -77,7 +83,8 @@ struct SkMask {
      *  this asserts that the mask's format is kLCD16_Format, and that (x,y)
      *  are contained in the mask's fBounds.
      */
-    uint16_t* getAddrLCD16(int x, int y) const {
+    uint16_t* getAddrLCD16(int x, int y) const
+    {
         SkASSERT(kLCD16_Format == fFormat);
         SkASSERT(fBounds.contains(x, y));
         SkASSERT(fImage != NULL);
@@ -90,7 +97,8 @@ struct SkMask {
      *  this asserts that the mask's format is 32bits, and that (x,y)
      *  are contained in the mask's fBounds.
      */
-    uint32_t* getAddr32(int x, int y) const {
+    uint32_t* getAddr32(int x, int y) const
+    {
         SkASSERT(kARGB32_Format == fFormat);
         SkASSERT(fBounds.contains(x, y));
         SkASSERT(fImage != NULL);
@@ -116,9 +124,9 @@ struct SkMask {
     static void FreeImage(void* image);
 
     enum CreateMode {
-        kJustComputeBounds_CreateMode,      //!< compute bounds and return
-        kJustRenderImage_CreateMode,        //!< render into preallocate mask
-        kComputeBoundsAndRenderImage_CreateMode  //!< compute bounds, alloc image and render into it
+        kJustComputeBounds_CreateMode, //!< compute bounds and return
+        kJustRenderImage_CreateMode, //!< render into preallocate mask
+        kComputeBoundsAndRenderImage_CreateMode //!< compute bounds, alloc image and render into it
     };
 };
 
@@ -132,11 +140,13 @@ struct SkMask {
  */
 class SkAutoMaskFreeImage {
 public:
-    SkAutoMaskFreeImage(uint8_t* maskImage) {
+    SkAutoMaskFreeImage(uint8_t* maskImage)
+    {
         fImage = maskImage;
     }
 
-    ~SkAutoMaskFreeImage() {
+    ~SkAutoMaskFreeImage()
+    {
         SkMask::FreeImage(fImage);
     }
 

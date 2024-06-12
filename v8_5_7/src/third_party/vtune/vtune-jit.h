@@ -68,7 +68,7 @@ namespace internal {
 using namespace v8;
 class VTUNEJITInterface {
  public:
-  static void event_handler(const v8::JitCodeEvent* event);
+  static void V8CALL event_handler(const v8::JitCodeEvent* event);
 
  private:
   //static Mutex* vtunemutex_;

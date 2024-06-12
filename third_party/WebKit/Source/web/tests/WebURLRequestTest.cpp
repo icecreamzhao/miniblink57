@@ -28,26 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebURLRequest.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
-class TestExtraData : public WebURLRequest::ExtraData {
-public:
-    explicit TestExtraData(bool* alive)
-        : m_alive(alive)
-    {
-        *alive = true;
-    }
+namespace {
 
-    ~TestExtraData() override { *m_alive = false; }
+    class TestExtraData : public WebURLRequest::ExtraData {
+    public:
+        explicit TestExtraData(bool* alive)
+            : m_alive(alive)
+        {
+            *alive = true;
+        }
 
-private:
-    bool* m_alive;
-};
+        ~TestExtraData() override { *m_alive = false; }
+
+    private:
+        bool* m_alive;
+    };
+
+} // anonymous namespace
 
 TEST(WebURLRequestTest, ExtraData)
 {
@@ -57,17 +60,16 @@ TEST(WebURLRequestTest, ExtraData)
         TestExtraData* extraData = new TestExtraData(&alive);
         EXPECT_TRUE(alive);
 
-        urlRequest.initialize();
         urlRequest.setExtraData(extraData);
-        EXPECT_EQ(extraData, urlRequest.extraData());
+        EXPECT_EQ(extraData, urlRequest.getExtraData());
         {
             WebURLRequest otherUrlRequest = urlRequest;
             EXPECT_TRUE(alive);
-            EXPECT_EQ(extraData, otherUrlRequest.extraData());
-            EXPECT_EQ(extraData, urlRequest.extraData());
+            EXPECT_EQ(extraData, otherUrlRequest.getExtraData());
+            EXPECT_EQ(extraData, urlRequest.getExtraData());
         }
         EXPECT_TRUE(alive);
-        EXPECT_EQ(extraData, urlRequest.extraData());
+        EXPECT_EQ(extraData, urlRequest.getExtraData());
     }
     EXPECT_FALSE(alive);
 }

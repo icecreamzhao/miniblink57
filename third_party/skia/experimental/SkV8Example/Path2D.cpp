@@ -13,12 +13,15 @@
 Global* Path2D::gGlobal = NULL;
 v8::Persistent<v8::ObjectTemplate> Path2D::gPath2DTemplate;
 
-void weakPath2DCallback(const v8::WeakCallbackData<v8::Object, Path2D>& args) {
+void weakPath2DCallback(const v8::WeakCallbackData<v8::Object, Path2D>& args)
+{
     delete args.GetParameter();
 }
 
 // Wraps an SkPath* in a Path2D object.
-Path2D::Path2D(SkPath* path) : path_(path) {
+Path2D::Path2D(SkPath* path)
+    : path_(path)
+{
     // Handle scope for temporary handles.
     v8::HandleScope handleScope(gGlobal->getIsolate());
 
@@ -31,8 +34,7 @@ Path2D::Path2D(SkPath* path) : path_(path) {
 
         gPath2DTemplate.Reset(gGlobal->getIsolate(), localTemplate);
     }
-    v8::Handle<v8::ObjectTemplate> templ =
-            v8::Local<v8::ObjectTemplate>::New(gGlobal->getIsolate(), gPath2DTemplate);
+    v8::Handle<v8::ObjectTemplate> templ = v8::Local<v8::ObjectTemplate>::New(gGlobal->getIsolate(), gPath2DTemplate);
 
     // Create an empty Path2D wrapper.
     v8::Local<v8::Object> result = templ->NewInstance();
@@ -48,7 +50,8 @@ Path2D::Path2D(SkPath* path) : path_(path) {
     this->handle_.Reset(gGlobal->getIsolate(), weak);
 }
 
-Path2D::~Path2D() {
+Path2D::~Path2D()
+{
     delete path_;
     handle_.Reset();
     gGlobal->getIsolate()->AdjustAmountOfExternalAllocatedMemory(-sizeof(SkPath));

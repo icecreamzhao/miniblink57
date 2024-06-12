@@ -8,21 +8,23 @@
 #ifndef SkXfermode_proccoeff_DEFINED
 #define SkXfermode_proccoeff_DEFINED
 
-#include "SkXfermode.h"
 #include "SkReadBuffer.h"
 #include "SkWriteBuffer.h"
+#include "SkXfermode.h"
 
 struct ProcCoeff {
-    SkXfermodeProc      fProc;
-    SkXfermode::Coeff   fSC;
-    SkXfermode::Coeff   fDC;
+    SkXfermodeProc fProc;
+    SkXfermodeProc4f fProc4f;
+    SkXfermode::Coeff fSC;
+    SkXfermode::Coeff fDC;
 };
 
-#define CANNOT_USE_COEFF    SkXfermode::Coeff(-1)
+#define CANNOT_USE_COEFF SkXfermode::Coeff(-1)
 
 class SK_API SkProcCoeffXfermode : public SkXfermode {
 public:
-    SkProcCoeffXfermode(const ProcCoeff& rec, Mode mode) {
+    SkProcCoeffXfermode(const ProcCoeff& rec, Mode mode)
+    {
         fMode = mode;
         fProc = rec.fProc;
         // these may be valid, or may be CANNOT_USE_COEFF
@@ -31,11 +33,11 @@ public:
     }
 
     void xfer32(SkPMColor dst[], const SkPMColor src[], int count,
-                const SkAlpha aa[]) const override;
+        const SkAlpha aa[]) const override;
     void xfer16(uint16_t dst[], const SkPMColor src[], int count,
-                const SkAlpha aa[]) const override;
+        const SkAlpha aa[]) const override;
     void xferA8(SkAlpha dst[], const SkPMColor src[], int count,
-                const SkAlpha aa[]) const override;
+        const SkAlpha aa[]) const override;
 
     bool asMode(Mode* mode) const override;
 
@@ -44,10 +46,9 @@ public:
     bool isOpaque(SkXfermode::SrcColorOpacity opacityType) const override;
 
 #if SK_SUPPORT_GPU
-    bool asFragmentProcessor(GrFragmentProcessor**, GrProcessorDataManager*,
-                             GrTexture* background) const override;
-
-    bool asXPFactory(GrXPFactory**) const override;
+    sk_sp<GrFragmentProcessor> makeFragmentProcessorForImageFilter(
+        sk_sp<GrFragmentProcessor>) const override;
+    sk_sp<GrXPFactory> asXPFactory() const override;
 #endif
 
     SK_TO_STRING_OVERRIDE()
@@ -61,9 +62,9 @@ protected:
     SkXfermodeProc getProc() const { return fProc; }
 
 private:
-    SkXfermodeProc  fProc;
-    Mode            fMode;
-    Coeff           fSrcCoeff, fDstCoeff;
+    SkXfermodeProc fProc;
+    Mode fMode;
+    Coeff fSrcCoeff, fDstCoeff;
 
     friend class SkXfermode;
 

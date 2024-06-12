@@ -24,7 +24,6 @@
  *
  */
 
-#include "config.h"
 #include "core/events/WindowEventContext.h"
 
 #include "core/dom/Document.h"
@@ -35,7 +34,9 @@
 
 namespace blink {
 
-WindowEventContext::WindowEventContext(Event& event, const NodeEventContext& topNodeEventContext)
+WindowEventContext::WindowEventContext(
+    Event& event,
+    const NodeEventContext& topNodeEventContext)
 {
     // We don't dispatch load events to the window. This quirk was originally
     // added because Mozilla doesn't propagate load events to the window object.
@@ -64,4 +65,4 @@ DEFINE_TRACE(WindowEventContext)
     visitor->trace(m_target);
 }
 
-}
+} // namespace blink

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/device_light/DeviceLightDispatcher.h"
 
 #include "modules/device_light/DeviceLightController.h"
@@ -12,8 +11,9 @@ namespace blink {
 
 DeviceLightDispatcher& DeviceLightDispatcher::instance()
 {
-    DEFINE_STATIC_LOCAL(Persistent<DeviceLightDispatcher>, deviceLightDispatcher, (new DeviceLightDispatcher()));
-    return *deviceLightDispatcher;
+    DEFINE_STATIC_LOCAL(DeviceLightDispatcher, deviceLightDispatcher,
+        (new DeviceLightDispatcher));
+    return deviceLightDispatcher;
 }
 
 DeviceLightDispatcher::DeviceLightDispatcher()
@@ -21,9 +21,7 @@ DeviceLightDispatcher::DeviceLightDispatcher()
 {
 }
 
-DeviceLightDispatcher::~DeviceLightDispatcher()
-{
-}
+DeviceLightDispatcher::~DeviceLightDispatcher() { }
 
 DEFINE_TRACE(DeviceLightDispatcher)
 {
@@ -32,12 +30,12 @@ DEFINE_TRACE(DeviceLightDispatcher)
 
 void DeviceLightDispatcher::startListening()
 {
-    Platform::current()->startListening(WebPlatformEventDeviceLight, this);
+    Platform::current()->startListening(WebPlatformEventTypeDeviceLight, this);
 }
 
 void DeviceLightDispatcher::stopListening()
 {
-    Platform::current()->stopListening(WebPlatformEventDeviceLight);
+    Platform::current()->stopListening(WebPlatformEventTypeDeviceLight);
     m_lastDeviceLightData = -1;
 }
 

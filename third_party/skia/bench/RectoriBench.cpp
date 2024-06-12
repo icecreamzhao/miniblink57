@@ -10,26 +10,28 @@
 #include "SkCanvas.h"
 #include "SkLayerDrawLooper.h"
 #include "SkPaint.h"
+#include "SkPath.h"
 #include "SkRandom.h"
 
 // This bench replicates a problematic use case of a draw looper used
 // to create an inner blurred rect
 class RectoriBench : public Benchmark {
 public:
-    RectoriBench() {}
+    RectoriBench() { }
 
 protected:
-
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "rectori";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkRandom Random;
 
         for (int i = 0; i < loops; i++) {
             SkScalar blurSigma = Random.nextRangeScalar(1.5f, 25.0f);
-            SkScalar size = Random.nextRangeScalar(20*blurSigma, 50*blurSigma);
+            SkScalar size = Random.nextRangeScalar(20 * blurSigma, 50 * blurSigma);
 
             SkScalar x = Random.nextRangeScalar(0.0f, W - size);
             SkScalar y = Random.nextRangeScalar(0.0f, H - size);
@@ -38,7 +40,7 @@ protected:
 
             SkRect outer(inner);
             // outer is always outset either 2x or 4x the blur radius (we go with 2x)
-            outer.outset(2*blurSigma, 2*blurSigma);
+            outer.outset(2 * blurSigma, 2 * blurSigma);
 
             SkPath p;
 
@@ -51,7 +53,7 @@ protected:
             SkScalar translate = 2.0f * size;
 
             SkPaint paint;
-            paint.setLooper(this->createLooper(-translate, blurSigma))->unref();
+            paint.setLooper(this->createLooper(-translate, blurSigma));
             paint.setColor(0xff000000 | Random.nextU());
             paint.setAntiAlias(true);
 
@@ -70,7 +72,8 @@ private:
         H = 480,
     };
 
-    SkLayerDrawLooper* createLooper(SkScalar xOff, SkScalar sigma) {
+    sk_sp<SkDrawLooper> createLooper(SkScalar xOff, SkScalar sigma)
+    {
         SkLayerDrawLooper::Builder looperBuilder;
 
         //-----------------------------------------------
@@ -78,27 +81,25 @@ private:
 
         // TODO: add a color filter to better match what is seen in the wild
         info.fPaintBits = /* SkLayerDrawLooper::kColorFilter_Bit |*/
-                          SkLayerDrawLooper::kMaskFilter_Bit;
+            SkLayerDrawLooper::kMaskFilter_Bit;
         info.fColorMode = SkXfermode::kDst_Mode;
         info.fOffset.set(xOff, 0);
         info.fPostTranslate = false;
 
         SkPaint* paint = looperBuilder.addLayer(info);
 
-        SkMaskFilter* mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                                    sigma,
-                                                    SkBlurMaskFilter::kHighQuality_BlurFlag);
-        paint->setMaskFilter(mf)->unref();
+        paint->setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle, sigma,
+            SkBlurMaskFilter::kHighQuality_BlurFlag));
 
         //-----------------------------------------------
         info.fPaintBits = 0;
         info.fOffset.set(0, 0);
 
         paint = looperBuilder.addLayer(info);
-        return looperBuilder.detachLooper();
+        return looperBuilder.detach();
     }
 
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return SkNEW_ARGS(RectoriBench, ()); )
+DEF_BENCH(return new RectoriBench();)

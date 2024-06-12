@@ -25,15 +25,16 @@
 #ifndef SVGPaintContext_h
 #define SVGPaintContext_h
 
-#include "core/layout/svg/LayoutSVGResourceClipper.h"
 #include "core/layout/svg/LayoutSVGResourcePaintServer.h"
-#include "core/paint/CompositingRecorder.h"
-#include "core/paint/FloatClipRecorder.h"
+#include "core/paint/ClipPathClipper.h"
+#include "core/paint/ObjectPaintProperties.h"
 #include "core/paint/PaintInfo.h"
-#include "core/paint/SVGClipPainter.h"
 #include "core/paint/SVGFilterPainter.h"
-#include "platform/graphics/paint/ClipPathRecorder.h"
+#include "core/paint/TransformRecorder.h"
+#include "platform/graphics/paint/CompositingRecorder.h"
+#include "platform/graphics/paint/ScopedPaintChunkProperties.h"
 #include "platform/transforms/AffineTransform.h"
+#include <memory>
 
 namespace blink {
 
@@ -42,62 +43,117 @@ class LayoutSVGResourceFilter;
 class LayoutSVGResourceMasker;
 class SVGResources;
 
+// This class hooks up the correct paint property transform node when spv2 is
+// enabled, and otherwise works like a TransformRecorder which emits Transform
+// display items for spv1.
+class SVGTransformContext : public TransformRecorder {
+    STACK_ALLOCATED();
+
+public:
+    SVGTransformContext(GraphicsContext& context,
+        const LayoutObject& object,
+        const AffineTransform& transform)
+        : TransformRecorder(context, object, transform)
+    {
+        if (RuntimeEnabledFeatures::slimmingPaintV2Enabled()) {
+            const auto* objectProperties = object.paintProperties();
+            if (!objectProperties)
+                return;
+            if (object.isSVGRoot()) {
+                // If a transform exists, we can rely on a layer existing to apply it.
+                DCHECK(!objectProperties || !objectProperties->transform() || object.hasLayer());
+                if (objectProperties->svgLocalToBorderBoxTransform()) {
+                    DCHECK(objectProperties->svgLocalToBorderBoxTransform()->matrix() == transform.toTransformationMatrix());
+                    auto& paintController = context.getPaintController();
+                    PaintChunkProperties properties(
+                        paintController.currentPaintChunkProperties());
+                    properties.propertyTreeState.setTransform(
+                        objectProperties->svgLocalToBorderBoxTransform());
+                    m_transformPropertyScope.emplace(paintController, object, properties);
+                }
+            } else {
+                DCHECK(object.isSVG());
+                // Should only be used by LayoutSVGRoot.
+                DCHECK(!objectProperties->svgLocalToBorderBoxTransform());
+
+                if (objectProperties->transform()) {
+                    DCHECK(objectProperties->transform()->matrix() == transform.toTransformationMatrix());
+                    auto& paintController = context.getPaintController();
+                    PaintChunkProperties properties(
+                        paintController.currentPaintChunkProperties());
+                    properties.propertyTreeState.setTransform(
+                        objectProperties->transform());
+                    m_transformPropertyScope.emplace(paintController, object, properties);
+                }
+            }
+        }
+    }
+
+private:
+    Optional<ScopedPaintChunkProperties> m_transformPropertyScope;
+};
+
 class SVGPaintContext {
     STACK_ALLOCATED();
+
 public:
-    SVGPaintContext(LayoutObject& object, const PaintInfo& paintInfo)
-        : m_object(&object)
+    SVGPaintContext(const LayoutObject& object, const PaintInfo& paintInfo)
+        : m_object(object)
         , m_paintInfo(paintInfo)
-        , m_originalPaintInfo(&paintInfo)
         , m_filter(nullptr)
-        , m_clipper(nullptr)
-        , m_clipperState(SVGClipPainter::ClipperNotApplied)
         , m_masker(nullptr)
-#if ENABLE(ASSERT)
-        , m_applyClipMaskAndFilterIfNecessaryCalled(false)
-#endif
-    { }
+    {
+    }
 
     ~SVGPaintContext();
 
-    PaintInfo& paintInfo() { return m_paintInfo; }
+    PaintInfo& paintInfo()
+    {
+        return m_filterPaintInfo ? *m_filterPaintInfo : m_paintInfo;
+    }
 
-    // Return true if these operations aren't necessary or if they are successfully applied.
+    // Return true if these operations aren't necessary or if they are
+    // successfully applied.
     bool applyClipMaskAndFilterIfNecessary();
 
-    static void paintSubtree(GraphicsContext*, LayoutObject*);
+    static void paintSubtree(GraphicsContext&, const LayoutObject*);
 
     // TODO(fs): This functions feels a bit misplaced (we don't want this to
     // turn into the new kitchen sink). Move it if a better location surfaces.
-    static bool paintForLayoutObject(const PaintInfo&, const ComputedStyle&, LayoutObject&, LayoutSVGResourceMode, SkPaint&, const AffineTransform* additionalPaintServerTransform = nullptr);
+    static bool paintForLayoutObject(
+        const PaintInfo&,
+        const ComputedStyle&,
+        const LayoutObject&,
+        LayoutSVGResourceMode,
+        SkPaint&,
+        const AffineTransform* additionalPaintServerTransform = nullptr);
 
 private:
     void applyCompositingIfNecessary();
+    void applyPaintPropertyState();
+    void applyClipIfNecessary();
 
-    // Return true if no clipping is necessary or if the clip is successfully applied.
-    bool applyClipIfNecessary(SVGResources*);
-
-    // Return true if no masking is necessary or if the mask is successfully applied.
+    // Return true if no masking is necessary or if the mask is successfully
+    // applied.
     bool applyMaskIfNecessary(SVGResources*);
 
-    // Return true if no filtering is necessary or if the filter is successfully applied.
+    // Return true if no filtering is necessary or if the filter is successfully
+    // applied.
     bool applyFilterIfNecessary(SVGResources*);
 
     bool isIsolationInstalled() const;
 
-    LayoutObject* m_object;
+    const LayoutObject& m_object;
     PaintInfo m_paintInfo;
-    const PaintInfo* m_originalPaintInfo;
+    std::unique_ptr<PaintInfo> m_filterPaintInfo;
     LayoutSVGResourceFilter* m_filter;
-    LayoutSVGResourceClipper* m_clipper;
-    SVGClipPainter::ClipperState m_clipperState;
     LayoutSVGResourceMasker* m_masker;
-    OwnPtr<FloatClipRecorder> m_clipRecorder;
-    OwnPtr<CompositingRecorder> m_compositingRecorder;
-    OwnPtr<ClipPathRecorder> m_clipPathRecorder;
-    OwnPtr<SVGFilterRecordingContext> m_filterRecordingContext;
-#if ENABLE(ASSERT)
-    bool m_applyClipMaskAndFilterIfNecessaryCalled;
+    std::unique_ptr<CompositingRecorder> m_compositingRecorder;
+    Optional<ClipPathClipper> m_clipPathClipper;
+    std::unique_ptr<SVGFilterRecordingContext> m_filterRecordingContext;
+    Optional<ScopedPaintChunkProperties> m_scopedPaintChunkProperties;
+#if DCHECK_IS_ON()
+    bool m_applyClipMaskAndFilterIfNecessaryCalled = false;
 #endif
 };
 

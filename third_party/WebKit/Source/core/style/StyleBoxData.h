@@ -25,6 +25,7 @@
 #ifndef StyleBoxData_h
 #define StyleBoxData_h
 
+#include "core/CoreExport.h"
 #include "core/style/ComputedStyleConstants.h"
 #include "platform/Length.h"
 #include "wtf/PassRefPtr.h"
@@ -32,16 +33,22 @@
 
 namespace blink {
 
-class StyleBoxData : public RefCounted<StyleBoxData> {
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
+class CORE_EXPORT StyleBoxData : public RefCounted<StyleBoxData> {
 public:
-    static PassRefPtr<StyleBoxData> create() { return adoptRef(new StyleBoxData); }
-    PassRefPtr<StyleBoxData> copy() const { return adoptRef(new StyleBoxData(*this)); }
+    static PassRefPtr<StyleBoxData> create()
+    {
+        return adoptRef(new StyleBoxData);
+    }
+    PassRefPtr<StyleBoxData> copy() const
+    {
+        return adoptRef(new StyleBoxData(*this));
+    }
 
     bool operator==(const StyleBoxData&) const;
-    bool operator!=(const StyleBoxData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleBoxData& o) const { return !(*this == o); }
 
     const Length& width() const { return m_width; }
     const Length& height() const { return m_height; }
@@ -58,7 +65,10 @@ public:
     bool hasAutoZIndex() const { return m_hasAutoZIndex; }
 
     EBoxSizing boxSizing() const { return static_cast<EBoxSizing>(m_boxSizing); }
-    EBoxDecorationBreak boxDecorationBreak() const { return static_cast<EBoxDecorationBreak>(m_boxDecorationBreak); }
+    EBoxDecorationBreak boxDecorationBreak() const
+    {
+        return static_cast<EBoxDecorationBreak>(m_boxDecorationBreak);
+    }
 
 private:
     friend class ComputedStyle;

@@ -27,14 +27,10 @@
  *
  */
 
-#include "config.h"
-
 #include "platform/graphics/ImageObserver.h"
 
 namespace blink {
 
-ImageObserver::~ImageObserver()
-{
-}
+ImageObserver::~ImageObserver() { }
 
 } // namespace blink

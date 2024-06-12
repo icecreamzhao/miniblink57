@@ -1,30 +1,31 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "gm.h"
 #include "SkRandom.h"
+#include "gm.h"
 
 namespace skiagm {
 
 class PointsGM : public GM {
 public:
-    PointsGM() {}
+    PointsGM() { }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("points");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(640, 490);
     }
 
-    static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand) {
+    static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand)
+    {
         for (size_t i = 0; i < n; i++) {
             // Compute these independently and store in variables, rather
             // than in the parameter-passing expression, to get consistent
@@ -35,11 +36,12 @@ protected:
         }
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(SK_Scalar1, SK_Scalar1);
 
         SkRandom rand;
-        SkPaint  p0, p1, p2, p3;
+        SkPaint p0, p1, p2, p3;
         const size_t n = 99;
 
         p0.setColor(SK_ColorRED);

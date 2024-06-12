@@ -29,7 +29,8 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT IdentityTransformOperation : public TransformOperation {
+class PLATFORM_EXPORT IdentityTransformOperation final
+    : public TransformOperation {
 public:
     static PassRefPtr<IdentityTransformOperation> create()
     {
@@ -51,15 +52,16 @@ private:
 
     void apply(TransformationMatrix&, const FloatSize&) const override { }
 
-    PassRefPtr<TransformOperation> blend(const TransformOperation*, double, bool = false) override
+    PassRefPtr<TransformOperation> blend(const TransformOperation*,
+        double,
+        bool = false) override
     {
         return this;
     }
 
-    IdentityTransformOperation()
-    {
-    }
+    PassRefPtr<TransformOperation> zoom(double factor) final { return this; }
 
+    IdentityTransformOperation() { }
 };
 
 } // namespace blink

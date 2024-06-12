@@ -28,23 +28,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/crypto/SubtleCrypto.h"
 
 #include "bindings/core/v8/Dictionary.h"
+#include "core/dom/DOMArrayBuffer.h"
+#include "core/dom/DOMArrayBufferView.h"
+#include "core/dom/DOMArrayPiece.h"
 #include "core/dom/ExecutionContext.h"
 #include "modules/crypto/CryptoHistograms.h"
 #include "modules/crypto/CryptoKey.h"
 #include "modules/crypto/CryptoResultImpl.h"
 #include "modules/crypto/NormalizeAlgorithm.h"
-#include "platform/JSONValues.h"
+#include "platform/json/JSONValues.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebCrypto.h"
 #include "public/platform/WebCryptoAlgorithm.h"
 
 namespace blink {
 
-static bool parseAlgorithm(const AlgorithmIdentifier& raw, WebCryptoOperation op, WebCryptoAlgorithm& algorithm, CryptoResult* result)
+static bool parseAlgorithm(const AlgorithmIdentifier& raw,
+    WebCryptoOperation op,
+    WebCryptoAlgorithm& algorithm,
+    CryptoResult* result)
 {
     AlgorithmError error;
     bool success = normalizeAlgorithm(raw, op, algorithm, &error);
@@ -56,7 +61,8 @@ static bool parseAlgorithm(const AlgorithmIdentifier& raw, WebCryptoOperation op
 static bool canAccessWebCrypto(ScriptState* scriptState, CryptoResult* result)
 {
     String errorMessage;
-    if (!scriptState->executionContext()->isPrivilegedContext(errorMessage, ExecutionContext::WebCryptoPrivilegeCheck)) {
+    if (!scriptState->getExecutionContext()->isSecureContext(
+            errorMessage, ExecutionContext::WebCryptoSecureContextCheck)) {
         result->completeWithError(WebCryptoErrorTypeNotSupported, errorMessage);
         return false;
     }
@@ -64,7 +70,9 @@ static bool canAccessWebCrypto(ScriptState* scriptState, CryptoResult* result)
     return true;
 }
 
-static bool copyStringProperty(const char* property, const Dictionary& source, JSONObject* destination)
+static bool copyStringProperty(const char* property,
+    const Dictionary& source,
+    JSONObject* destination)
 {
     String value;
     if (!DictionaryHelper::get(source, property, value))
@@ -73,28 +81,73 @@ static bool copyStringProperty(const char* property, const Dictionary& source, J
     return true;
 }
 
-static bool copySequenceOfStringProperty(const char* property, const Dictionary& source, JSONObject* destination)
+static bool copySequenceOfStringProperty(const char* property,
+    const Dictionary& source,
+    JSONObject* destination)
 {
     Vector<String> value;
     if (!DictionaryHelper::get(source, property, value))
         return false;
-    RefPtr<JSONArray> jsonArray = JSONArray::create();
+    std::unique_ptr<JSONArray> jsonArray = JSONArray::create();
     for (unsigned i = 0; i < value.size(); ++i)
         jsonArray->pushString(value[i]);
-    destination->setArray(property, jsonArray.release());
+    destination->setArray(property, std::move(jsonArray));
     return true;
 }
 
-// FIXME: At the time of writing this is not a part of the spec. It is based an
-// an unpublished editor's draft for:
-//   https://www.w3.org/Bugs/Public/show_bug.cgi?id=24963
-// See http://crbug.com/373917.
-static bool copyJwkDictionaryToJson(const Dictionary& dict, CString& jsonUtf8, CryptoResult* result)
+// Parses a JsonWebKey dictionary. On success writes the result to
+// |jsonUtf8| as a UTF8-encoded JSON octet string and returns true.
+// On failure sets an error on |result| and returns false.
+//
+// Note: The choice of output as an octet string is to facilitate interop
+// with the non-JWK formats, but does mean there is a second parsing step.
+// This design choice should be revisited after crbug.com/614385).
+//
+// Defined by the WebCrypto spec as:
+//
+//    dictionary JsonWebKey {
+//      DOMString kty;
+//      DOMString use;
+//      sequence<DOMString> key_ops;
+//      DOMString alg;
+//
+//      boolean ext;
+//
+//      DOMString crv;
+//      DOMString x;
+//      DOMString y;
+//      DOMString d;
+//      DOMString n;
+//      DOMString e;
+//      DOMString p;
+//      DOMString q;
+//      DOMString dp;
+//      DOMString dq;
+//      DOMString qi;
+//      sequence<RsaOtherPrimesInfo> oth;
+//      DOMString k;
+//    };
+//
+//    dictionary RsaOtherPrimesInfo {
+//      DOMString r;
+//      DOMString d;
+//      DOMString t;
+//    };
+static bool parseJsonWebKey(const Dictionary& dict,
+    WebVector<uint8_t>& jsonUtf8,
+    CryptoResult* result)
 {
-    RefPtr<JSONObject> jsonObject = JSONObject::create();
+    // TODO(eroman): This implementation is incomplete and not spec compliant:
+    //  * Properties need to be read in the definition order above
+    //  * Preserve the type of optional parameters (crbug.com/385376)
+    //  * Parse "oth" (crbug.com/441396)
+    //  * Fail with TypeError (not DataError) if the input does not conform
+    //    to a JsonWebKey
+    std::unique_ptr<JSONObject> jsonObject = JSONObject::create();
 
     if (!copyStringProperty("kty", dict, jsonObject.get())) {
-        result->completeWithError(WebCryptoErrorTypeData, "The required JWK member \"kty\" was missing");
+        result->completeWithError(WebCryptoErrorTypeData,
+            "The required JWK member \"kty\" was missing");
         return false;
     }
 
@@ -106,323 +159,633 @@ static bool copyJwkDictionaryToJson(const Dictionary& dict, CString& jsonUtf8, C
     if (DictionaryHelper::get(dict, "ext", ext))
         jsonObject->setBoolean("ext", ext);
 
-    const char* const propertyNames[] = { "d", "n", "e", "p", "q", "dp", "dq", "qi", "k", "crv", "x", "y" };
+    const char* const propertyNames[] = { "d", "n", "e", "p", "q", "dp",
+        "dq", "qi", "k", "crv", "x", "y" };
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(propertyNames); ++i)
         copyStringProperty(propertyNames[i], dict, jsonObject.get());
 
     String json = jsonObject->toJSONString();
-    jsonUtf8 = json.utf8();
+    jsonUtf8 = WebVector<uint8_t>(json.utf8().data(), json.utf8().length());
     return true;
 }
 
-SubtleCrypto::SubtleCrypto()
+static WebVector<uint8_t> copyBytes(const DOMArrayPiece& source)
 {
+    return WebVector<uint8_t>(static_cast<uint8_t*>(source.data()),
+        source.byteLength());
 }
 
-ScriptPromise SubtleCrypto::encrypt(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* key, const DOMArrayPiece& data)
+SubtleCrypto::SubtleCrypto() { }
+
+ScriptPromise SubtleCrypto::encrypt(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* key,
+    const BufferSource& rawData)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-encrypt
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationEncrypt, algorithm, result.get()))
+    // 14.3.1.2: Let data be the result of getting a copy of the bytes held by
+    //           the data parameter passed to the encrypt method.
+    WebVector<uint8_t> data = copyBytes(rawData);
+
+    // 14.3.1.3: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to "encrypt".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationEncrypt,
+            normalizedAlgorithm, result))
         return promise;
 
-    if (!key->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageEncrypt, result.get()))
+    // 14.3.1.8: If the name member of normalizedAlgorithm is not equal to the
+    //           name attribute of the [[algorithm]] internal slot of key then
+    //           throw an InvalidAccessError.
+    //
+    // 14.3.1.9: If the [[usages]] internal slot of key does not contain an
+    //           entry that is "encrypt", then throw an InvalidAccessError.
+    if (!key->canBeUsedForAlgorithm(normalizedAlgorithm, WebCryptoKeyUsageEncrypt,
+            result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, key->key());
-    Platform::current()->crypto()->encrypt(algorithm, key->key(), data.bytes(), data.byteLength(), result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, key->key());
+    Platform::current()->crypto()->encrypt(normalizedAlgorithm, key->key(),
+        std::move(data), result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::decrypt(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* key, const DOMArrayPiece& data)
+ScriptPromise SubtleCrypto::decrypt(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* key,
+    const BufferSource& rawData)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-decrypt
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDecrypt, algorithm, result.get()))
+    // 14.3.2.2: Let data be the result of getting a copy of the bytes held by
+    //           the data parameter passed to the decrypt method.
+    WebVector<uint8_t> data = copyBytes(rawData);
+
+    // 14.3.2.3: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to "decrypt".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDecrypt,
+            normalizedAlgorithm, result))
         return promise;
 
-    if (!key->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageDecrypt, result.get()))
+    // 14.3.2.8: If the name member of normalizedAlgorithm is not equal to the
+    //           name attribute of the [[algorithm]] internal slot of key then
+    //           throw an InvalidAccessError.
+    //
+    // 14.3.2.9: If the [[usages]] internal slot of key does not contain an
+    //           entry that is "decrypt", then throw an InvalidAccessError.
+    if (!key->canBeUsedForAlgorithm(normalizedAlgorithm, WebCryptoKeyUsageDecrypt,
+            result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, key->key());
-    Platform::current()->crypto()->decrypt(algorithm, key->key(), data.bytes(), data.byteLength(), result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, key->key());
+    Platform::current()->crypto()->decrypt(normalizedAlgorithm, key->key(),
+        std::move(data), result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::sign(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* key, const DOMArrayPiece& data)
+ScriptPromise SubtleCrypto::sign(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* key,
+    const BufferSource& rawData)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-sign
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationSign, algorithm, result.get()))
+    // 14.3.3.2: Let data be the result of getting a copy of the bytes held by
+    //           the data parameter passed to the sign method.
+    WebVector<uint8_t> data = copyBytes(rawData);
+
+    // 14.3.3.3: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to "sign".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationSign, normalizedAlgorithm,
+            result))
         return promise;
 
-    if (!key->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageSign, result.get()))
+    // 14.3.3.8: If the name member of normalizedAlgorithm is not equal to the
+    //           name attribute of the [[algorithm]] internal slot of key then
+    //           throw an InvalidAccessError.
+    //
+    // 14.3.3.9: If the [[usages]] internal slot of key does not contain an
+    //           entry that is "sign", then throw an InvalidAccessError.
+    if (!key->canBeUsedForAlgorithm(normalizedAlgorithm, WebCryptoKeyUsageSign,
+            result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, key->key());
-    Platform::current()->crypto()->sign(algorithm, key->key(), data.bytes(), data.byteLength(), result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, key->key());
+    Platform::current()->crypto()->sign(normalizedAlgorithm, key->key(),
+        std::move(data), result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::verifySignature(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* key, const DOMArrayPiece& signature, const DOMArrayPiece& data)
+ScriptPromise SubtleCrypto::verifySignature(
+    ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* key,
+    const BufferSource& rawSignature,
+    const BufferSource& rawData)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-verify
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationVerify, algorithm, result.get()))
+    // 14.3.4.2: Let signature be the result of getting a copy of the bytes
+    //           held by the signature parameter passed to the verify method.
+    WebVector<uint8_t> signature = copyBytes(rawSignature);
+
+    // 14.3.4.3: Let data be the result of getting a copy of the bytes held by
+    //           the data parameter passed to the verify method.
+    WebVector<uint8_t> data = copyBytes(rawData);
+
+    // 14.3.4.4: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to "verify".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationVerify,
+            normalizedAlgorithm, result))
         return promise;
 
-    if (!key->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageVerify, result.get()))
+    // 14.3.4.9: If the name member of normalizedAlgorithm is not equal to the
+    //           name attribute of the [[algorithm]] internal slot of key then
+    //           throw an InvalidAccessError.
+    //
+    // 14.3.4.10: If the [[usages]] internal slot of key does not contain an
+    //            entry that is "verify", then throw an InvalidAccessError.
+    if (!key->canBeUsedForAlgorithm(normalizedAlgorithm, WebCryptoKeyUsageVerify,
+            result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, key->key());
-    Platform::current()->crypto()->verifySignature(algorithm, key->key(), signature.bytes(), signature.byteLength(), data.bytes(), data.byteLength(), result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, key->key());
+    Platform::current()->crypto()->verifySignature(
+        normalizedAlgorithm, key->key(), std::move(signature), std::move(data),
+        result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::digest(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, const DOMArrayPiece& data)
+ScriptPromise SubtleCrypto::digest(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    const BufferSource& rawData)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-digest
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDigest, algorithm, result.get()))
+    // 14.3.5.2: Let data be the result of getting a copy of the bytes held
+    //              by the data parameter passed to the digest method.
+    WebVector<uint8_t> data = copyBytes(rawData);
+
+    // 14.3.5.3: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to "digest".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDigest,
+            normalizedAlgorithm, result))
         return promise;
 
-    histogramAlgorithm(scriptState->executionContext(), algorithm);
-    Platform::current()->crypto()->digest(algorithm, data.bytes(), data.byteLength(), result->result());
+    histogramAlgorithm(scriptState->getExecutionContext(), normalizedAlgorithm);
+    Platform::current()->crypto()->digest(normalizedAlgorithm, std::move(data),
+        result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::generateKey(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, bool extractable, const Vector<String>& rawKeyUsages)
+ScriptPromise SubtleCrypto::generateKey(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    bool extractable,
+    const Vector<String>& rawKeyUsages)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-generateKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyUsageMask keyUsages;
-    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result.get()))
+    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationGenerateKey, algorithm, result.get()))
+    // 14.3.6.2: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to
+    //           "generateKey".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationGenerateKey,
+            normalizedAlgorithm, result))
         return promise;
 
-    histogramAlgorithm(scriptState->executionContext(), algorithm);
-    Platform::current()->crypto()->generateKey(algorithm, extractable, keyUsages, result->result());
+    // NOTE: Steps (8) and (9) disallow empty usages on secret and private
+    // keys. This normative requirement is enforced by the platform
+    // implementation in the call below.
+
+    histogramAlgorithm(scriptState->getExecutionContext(), normalizedAlgorithm);
+    Platform::current()->crypto()->generateKey(normalizedAlgorithm, extractable,
+        keyUsages, result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::importKey(ScriptState* scriptState, const String& rawFormat, const ArrayBufferOrArrayBufferViewOrDictionary& keyData, const AlgorithmIdentifier& rawAlgorithm, bool extractable, const Vector<String>& rawKeyUsages)
+ScriptPromise SubtleCrypto::importKey(
+    ScriptState* scriptState,
+    const String& rawFormat,
+    const ArrayBufferOrArrayBufferViewOrDictionary& rawKeyData,
+    const AlgorithmIdentifier& rawAlgorithm,
+    bool extractable,
+    const Vector<String>& rawKeyUsages)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-importKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyFormat format;
-    if (!CryptoKey::parseFormat(rawFormat, format, result.get()))
+    if (!CryptoKey::parseFormat(rawFormat, format, result))
         return promise;
 
-    if (keyData.isDictionary()) {
-        if (format != WebCryptoKeyFormatJwk) {
-            result->completeWithError(WebCryptoErrorTypeData, "Key data must be a buffer for non-JWK formats");
+    WebCryptoKeyUsageMask keyUsages;
+    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result))
+        return promise;
+
+    // In the case of JWK keyData will hold the UTF8-encoded JSON for the
+    // JsonWebKey, otherwise it holds a copy of the BufferSource.
+    WebVector<uint8_t> keyData;
+
+    switch (format) {
+    // 14.3.9.2: If format is equal to the string "raw", "pkcs8", or "spki":
+    //
+    //  (1) If the keyData parameter passed to the importKey method is a
+    //      JsonWebKey dictionary, throw a TypeError.
+    //
+    //  (2) Let keyData be the result of getting a copy of the bytes held by
+    //      the keyData parameter passed to the importKey method.
+    case WebCryptoKeyFormatRaw:
+    case WebCryptoKeyFormatPkcs8:
+    case WebCryptoKeyFormatSpki:
+        if (rawKeyData.isArrayBuffer()) {
+            keyData = copyBytes(rawKeyData.getAsArrayBuffer());
+        } else if (rawKeyData.isArrayBufferView()) {
+            keyData = copyBytes(rawKeyData.getAsArrayBufferView());
+        } else {
+            result->completeWithError(
+                WebCryptoErrorTypeType,
+                "Key data must be a BufferSource for non-JWK formats");
             return promise;
         }
-    } else if (format == WebCryptoKeyFormatJwk) {
-        result->completeWithError(WebCryptoErrorTypeData, "Key data must be an object for JWK import");
-        return promise;
-    }
-
-    WebCryptoKeyUsageMask keyUsages;
-    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result.get()))
-        return promise;
-
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationImportKey, algorithm, result.get()))
-        return promise;
-
-    const unsigned char* ptr = nullptr;
-    unsigned len = 0;
-
-    CString jsonUtf8;
-    if (keyData.isArrayBuffer()) {
-        ptr = static_cast<const unsigned char*>(keyData.getAsArrayBuffer()->data());
-        len = keyData.getAsArrayBuffer()->byteLength();
-    } else if (keyData.isArrayBufferView()) {
-        ptr = static_cast<const unsigned char*>(keyData.getAsArrayBufferView()->baseAddress());
-        len = keyData.getAsArrayBufferView()->byteLength();
-    } else if (keyData.isDictionary()) {
-        if (!copyJwkDictionaryToJson(keyData.getAsDictionary(), jsonUtf8, result.get()))
+        break;
+    // 14.3.9.2: If format is equal to the string "jwk":
+    //
+    //  (1) If the keyData parameter passed to the importKey method is not a
+    //      JsonWebKey dictionary, throw a TypeError.
+    //
+    //  (2) Let keyData be the keyData parameter passed to the importKey
+    //      method.
+    case WebCryptoKeyFormatJwk:
+        if (rawKeyData.isDictionary()) {
+            // TODO(eroman): To match the spec error order, parsing of the
+            // JsonWebKey should be done earlier (at the WebIDL layer of
+            // parameter checking), regardless of the format being "jwk".
+            if (!parseJsonWebKey(rawKeyData.getAsDictionary(), keyData, result))
+                return promise;
+        } else {
+            result->completeWithError(WebCryptoErrorTypeType,
+                "Key data must be an object for JWK import");
             return promise;
-        ptr = reinterpret_cast<const unsigned char*>(jsonUtf8.data());
-        len = jsonUtf8.length();
+        }
+        break;
     }
-    histogramAlgorithm(scriptState->executionContext(), algorithm);
-    Platform::current()->crypto()->importKey(format, ptr, len, algorithm, extractable, keyUsages, result->result());
+
+    // 14.3.9.3: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to
+    //           "importKey".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationImportKey,
+            normalizedAlgorithm, result))
+        return promise;
+
+    histogramAlgorithm(scriptState->getExecutionContext(), normalizedAlgorithm);
+    Platform::current()->crypto()->importKey(format, std::move(keyData),
+        normalizedAlgorithm, extractable,
+        keyUsages, result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::exportKey(ScriptState* scriptState, const String& rawFormat, CryptoKey* key)
+ScriptPromise SubtleCrypto::exportKey(ScriptState* scriptState,
+    const String& rawFormat,
+    CryptoKey* key)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-exportKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyFormat format;
-    if (!CryptoKey::parseFormat(rawFormat, format, result.get()))
+    if (!CryptoKey::parseFormat(rawFormat, format, result))
         return promise;
 
+    // 14.3.10.6: If the [[extractable]] internal slot of key is false, then
+    //            throw an InvalidAccessError.
     if (!key->extractable()) {
-        result->completeWithError(WebCryptoErrorTypeInvalidAccess, "key is not extractable");
+        result->completeWithError(WebCryptoErrorTypeInvalidAccess,
+            "key is not extractable");
         return promise;
     }
 
-    histogramKey(scriptState->executionContext(), key->key());
-    Platform::current()->crypto()->exportKey(format, key->key(), result->result());
+    histogramKey(scriptState->getExecutionContext(), key->key());
+    Platform::current()->crypto()->exportKey(format, key->key(),
+        result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::wrapKey(ScriptState* scriptState, const String& rawFormat, CryptoKey* key, CryptoKey* wrappingKey, const AlgorithmIdentifier& rawWrapAlgorithm)
+ScriptPromise SubtleCrypto::wrapKey(
+    ScriptState* scriptState,
+    const String& rawFormat,
+    CryptoKey* key,
+    CryptoKey* wrappingKey,
+    const AlgorithmIdentifier& rawWrapAlgorithm)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-wrapKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyFormat format;
-    if (!CryptoKey::parseFormat(rawFormat, format, result.get()))
+    if (!CryptoKey::parseFormat(rawFormat, format, result))
         return promise;
 
-    WebCryptoAlgorithm wrapAlgorithm;
-    if (!parseAlgorithm(rawWrapAlgorithm, WebCryptoOperationWrapKey, wrapAlgorithm, result.get()))
+    // 14.3.11.2: Let normalizedAlgorithm be the result of normalizing an
+    //            algorithm, with alg set to algorithm and op set to "wrapKey".
+    //
+    // 14.3.11.3: If an error occurred, let normalizedAlgorithm be the result
+    //            of normalizing an algorithm, with alg set to algorithm and op
+    //            set to "encrypt".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawWrapAlgorithm, WebCryptoOperationWrapKey,
+            normalizedAlgorithm, result))
         return promise;
 
+    // 14.3.11.9: If the name member of normalizedAlgorithm is not equal to the
+    //            name attribute of the [[algorithm]] internal slot of
+    //            wrappingKey then throw an InvalidAccessError.
+    //
+    // 14.3.11.10: If the [[usages]] internal slot of wrappingKey does not
+    //             contain an entry that is "wrapKey", then throw an
+    //             InvalidAccessError.
+    if (!wrappingKey->canBeUsedForAlgorithm(normalizedAlgorithm,
+            WebCryptoKeyUsageWrapKey, result))
+        return promise;
+
+    // TODO(crbug.com/628416): The error from step 11
+    // (NotSupportedError) is thrown after step 12 which does not match
+    // the spec order.
+
+    // 14.3.11.12: If the [[extractable]] internal slot of key is false, then
+    //             throw an InvalidAccessError.
     if (!key->extractable()) {
-        result->completeWithError(WebCryptoErrorTypeInvalidAccess, "key is not extractable");
+        result->completeWithError(WebCryptoErrorTypeInvalidAccess,
+            "key is not extractable");
         return promise;
     }
 
-    if (!wrappingKey->canBeUsedForAlgorithm(wrapAlgorithm, WebCryptoKeyUsageWrapKey, result.get()))
-        return promise;
-
-    histogramAlgorithmAndKey(scriptState->executionContext(), wrapAlgorithm, wrappingKey->key());
-    histogramKey(scriptState->executionContext(), key->key());
-    Platform::current()->crypto()->wrapKey(format, key->key(), wrappingKey->key(), wrapAlgorithm, result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, wrappingKey->key());
+    histogramKey(scriptState->getExecutionContext(), key->key());
+    Platform::current()->crypto()->wrapKey(format, key->key(), wrappingKey->key(),
+        normalizedAlgorithm, result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::unwrapKey(ScriptState* scriptState, const String& rawFormat, const DOMArrayPiece& wrappedKey, CryptoKey* unwrappingKey, const AlgorithmIdentifier& rawUnwrapAlgorithm, const AlgorithmIdentifier& rawUnwrappedKeyAlgorithm, bool extractable, const Vector<String>& rawKeyUsages)
+ScriptPromise SubtleCrypto::unwrapKey(
+    ScriptState* scriptState,
+    const String& rawFormat,
+    const BufferSource& rawWrappedKey,
+    CryptoKey* unwrappingKey,
+    const AlgorithmIdentifier& rawUnwrapAlgorithm,
+    const AlgorithmIdentifier& rawUnwrappedKeyAlgorithm,
+    bool extractable,
+    const Vector<String>& rawKeyUsages)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-unwrapKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyFormat format;
-    if (!CryptoKey::parseFormat(rawFormat, format, result.get()))
+    if (!CryptoKey::parseFormat(rawFormat, format, result))
         return promise;
 
     WebCryptoKeyUsageMask keyUsages;
-    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result.get()))
+    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result))
         return promise;
 
-    WebCryptoAlgorithm unwrapAlgorithm;
-    if (!parseAlgorithm(rawUnwrapAlgorithm, WebCryptoOperationUnwrapKey, unwrapAlgorithm, result.get()))
+    // 14.3.12.2: Let wrappedKey be the result of getting a copy of the bytes
+    //            held by the wrappedKey parameter passed to the unwrapKey
+    //            method.
+    WebVector<uint8_t> wrappedKey = copyBytes(rawWrappedKey);
+
+    // 14.3.12.3: Let normalizedAlgorithm be the result of normalizing an
+    //            algorithm, with alg set to algorithm and op set to
+    //            "unwrapKey".
+    //
+    // 14.3.12.4: If an error occurred, let normalizedAlgorithm be the result
+    //            of normalizing an algorithm, with alg set to algorithm and op
+    //            set to "decrypt".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawUnwrapAlgorithm, WebCryptoOperationUnwrapKey,
+            normalizedAlgorithm, result))
         return promise;
 
-    WebCryptoAlgorithm unwrappedKeyAlgorithm;
-    if (!parseAlgorithm(rawUnwrappedKeyAlgorithm, WebCryptoOperationImportKey, unwrappedKeyAlgorithm, result.get()))
+    // 14.3.12.6: Let normalizedKeyAlgorithm be the result of normalizing an
+    //            algorithm, with alg set to unwrappedKeyAlgorithm and op set
+    //            to "importKey".
+    WebCryptoAlgorithm normalizedKeyAlgorithm;
+    if (!parseAlgorithm(rawUnwrappedKeyAlgorithm, WebCryptoOperationImportKey,
+            normalizedKeyAlgorithm, result))
         return promise;
 
-    if (!unwrappingKey->canBeUsedForAlgorithm(unwrapAlgorithm, WebCryptoKeyUsageUnwrapKey, result.get()))
+    // 14.3.12.11: If the name member of normalizedAlgorithm is not equal to
+    //             the name attribute of the [[algorithm]] internal slot of
+    //             unwrappingKey then throw an InvalidAccessError.
+    //
+    // 14.3.12.12: If the [[usages]] internal slot of unwrappingKey does not
+    //             contain an entry that is "unwrapKey", then throw an
+    //             InvalidAccessError.
+    if (!unwrappingKey->canBeUsedForAlgorithm(normalizedAlgorithm,
+            WebCryptoKeyUsageUnwrapKey, result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), unwrapAlgorithm, unwrappingKey->key());
-    histogramAlgorithm(scriptState->executionContext(), unwrappedKeyAlgorithm);
-    Platform::current()->crypto()->unwrapKey(format, wrappedKey.bytes(), wrappedKey.byteLength(), unwrappingKey->key(), unwrapAlgorithm, unwrappedKeyAlgorithm, extractable, keyUsages, result->result());
+    // NOTE: Step (16) disallows empty usages on secret and private keys. This
+    // normative requirement is enforced by the platform implementation in the
+    // call below.
+
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, unwrappingKey->key());
+    histogramAlgorithm(scriptState->getExecutionContext(),
+        normalizedKeyAlgorithm);
+    Platform::current()->crypto()->unwrapKey(
+        format, std::move(wrappedKey), unwrappingKey->key(), normalizedAlgorithm,
+        normalizedKeyAlgorithm, extractable, keyUsages, result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::deriveBits(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* baseKey, unsigned lengthBits)
+ScriptPromise SubtleCrypto::deriveBits(ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* baseKey,
+    unsigned lengthBits)
 {
-    RefPtrWillBeRawPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-deriveBits
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDeriveBits, algorithm, result.get()))
+    // 14.3.8.2: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to
+    //           "deriveBits".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDeriveBits,
+            normalizedAlgorithm, result))
         return promise;
 
-    if (!baseKey->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageDeriveBits, result.get()))
+    // 14.3.8.7: If the name member of normalizedAlgorithm is not equal to the
+    //           name attribute of the [[algorithm]] internal slot of baseKey
+    //           then throw an InvalidAccessError.
+    //
+    // 14.3.8.8: If the [[usages]] internal slot of baseKey does not contain an
+    //           entry that is "deriveBits", then throw an InvalidAccessError.
+    if (!baseKey->canBeUsedForAlgorithm(normalizedAlgorithm,
+            WebCryptoKeyUsageDeriveBits, result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, baseKey->key());
-    Platform::current()->crypto()->deriveBits(algorithm, baseKey->key(), lengthBits, result->result());
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, baseKey->key());
+    Platform::current()->crypto()->deriveBits(normalizedAlgorithm, baseKey->key(),
+        lengthBits, result->result());
     return promise;
 }
 
-ScriptPromise SubtleCrypto::deriveKey(ScriptState* scriptState, const AlgorithmIdentifier& rawAlgorithm, CryptoKey* baseKey, const AlgorithmIdentifier& rawDerivedKeyType, bool extractable, const Vector<String>& rawKeyUsages)
+ScriptPromise SubtleCrypto::deriveKey(
+    ScriptState* scriptState,
+    const AlgorithmIdentifier& rawAlgorithm,
+    CryptoKey* baseKey,
+    const AlgorithmIdentifier& rawDerivedKeyType,
+    bool extractable,
+    const Vector<String>& rawKeyUsages)
 {
-    RefPtr<CryptoResultImpl> result = CryptoResultImpl::create(scriptState);
+    // Method described by:
+    // https://w3c.github.io/webcrypto/Overview.html#SubtleCrypto-method-deriveKey
+
+    CryptoResultImpl* result = CryptoResultImpl::create(scriptState);
     ScriptPromise promise = result->promise();
 
-    if (!canAccessWebCrypto(scriptState, result.get()))
+    if (!canAccessWebCrypto(scriptState, result))
         return promise;
 
     WebCryptoKeyUsageMask keyUsages;
-    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result.get()))
+    if (!CryptoKey::parseUsageMask(rawKeyUsages, keyUsages, result))
         return promise;
 
-    WebCryptoAlgorithm algorithm;
-    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDeriveBits, algorithm, result.get()))
+    // 14.3.7.2: Let normalizedAlgorithm be the result of normalizing an
+    //           algorithm, with alg set to algorithm and op set to
+    //           "deriveBits".
+    WebCryptoAlgorithm normalizedAlgorithm;
+    if (!parseAlgorithm(rawAlgorithm, WebCryptoOperationDeriveBits,
+            normalizedAlgorithm, result))
         return promise;
 
-    if (!baseKey->canBeUsedForAlgorithm(algorithm, WebCryptoKeyUsageDeriveKey, result.get()))
+    // 14.3.7.4: Let normalizedDerivedKeyAlgorithm be the result of normalizing
+    //           an algorithm, with alg set to derivedKeyType and op set to
+    //           "importKey".
+    WebCryptoAlgorithm normalizedDerivedKeyAlgorithm;
+    if (!parseAlgorithm(rawDerivedKeyType, WebCryptoOperationImportKey,
+            normalizedDerivedKeyAlgorithm, result))
         return promise;
 
-    WebCryptoAlgorithm importAlgorithm;
-    if (!parseAlgorithm(rawDerivedKeyType, WebCryptoOperationImportKey, importAlgorithm, result.get()))
-        return promise;
-
+    // TODO(eroman): The description in the spec needs to be updated as
+    // it doesn't describe algorithm normalization for the Get Key
+    // Length parameters (https://github.com/w3c/webcrypto/issues/127)
+    // For now reference step 10 which is the closest.
+    //
+    // 14.3.7.10: If the name member of normalizedDerivedKeyAlgorithm does not
+    //            identify a registered algorithm that supports the get key length
+    //            operation, then throw a NotSupportedError.
     WebCryptoAlgorithm keyLengthAlgorithm;
-    if (!parseAlgorithm(rawDerivedKeyType, WebCryptoOperationGetKeyLength, keyLengthAlgorithm, result.get()))
+    if (!parseAlgorithm(rawDerivedKeyType, WebCryptoOperationGetKeyLength,
+            keyLengthAlgorithm, result))
         return promise;
 
-    histogramAlgorithmAndKey(scriptState->executionContext(), algorithm, baseKey->key());
-    histogramAlgorithm(scriptState->executionContext(), importAlgorithm);
-    Platform::current()->crypto()->deriveKey(algorithm, baseKey->key(), importAlgorithm, keyLengthAlgorithm, extractable, keyUsages, result->result());
+    // 14.3.7.11: If the name member of normalizedAlgorithm is not equal to the
+    //            name attribute of the [[algorithm]] internal slot of baseKey
+    //            then throw an InvalidAccessError.
+    //
+    // 14.3.7.12: If the [[usages]] internal slot of baseKey does not contain
+    //            an entry that is "deriveKey", then throw an InvalidAccessError.
+    if (!baseKey->canBeUsedForAlgorithm(normalizedAlgorithm,
+            WebCryptoKeyUsageDeriveKey, result))
+        return promise;
+
+    // NOTE: Step (16) disallows empty usages on secret and private keys. This
+    // normative requirement is enforced by the platform implementation in the
+    // call below.
+
+    histogramAlgorithmAndKey(scriptState->getExecutionContext(),
+        normalizedAlgorithm, baseKey->key());
+    histogramAlgorithm(scriptState->getExecutionContext(),
+        normalizedDerivedKeyAlgorithm);
+    Platform::current()->crypto()->deriveKey(
+        normalizedAlgorithm, baseKey->key(), normalizedDerivedKeyAlgorithm,
+        keyLengthAlgorithm, extractable, keyUsages, result->result());
     return promise;
 }
 

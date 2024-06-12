@@ -2,41 +2,50 @@ namespace="EventTarget"
 suffix="Modules"
 
 modules/battery/BatteryManager
+modules/bluetooth/BluetoothDevice
+modules/bluetooth/BluetoothRemoteGATTCharacteristic
 modules/compositorworker/CompositorWorker
 modules/compositorworker/CompositorWorkerGlobalScope
 modules/encryptedmedia/MediaKeySession
 modules/filesystem/FileWriter
+modules/imagecapture/ImageCapture
 modules/indexeddb/IDBDatabase
 modules/indexeddb/IDBOpenDBRequest
 modules/indexeddb/IDBRequest
 modules/indexeddb/IDBTransaction
+modules/mediarecorder/MediaRecorder
 modules/mediasource/MediaSource
 modules/mediasource/SourceBuffer
 modules/mediasource/SourceBufferList
+modules/mediastream/MediaDevices
 modules/mediastream/MediaStream
 modules/mediastream/MediaStreamTrack
 modules/mediastream/RTCDTMFSender
 modules/mediastream/RTCDataChannel
 modules/mediastream/RTCPeerConnection
-modules/navigatorconnect/ServicePortCollection
 modules/netinfo/NetworkInformation
 modules/notifications/Notification
+modules/payments/PaymentRequest
 modules/permissions/PermissionStatus
-modules/presentation/Presentation
 modules/presentation/PresentationAvailability
-modules/presentation/PresentationSession
+modules/presentation/PresentationConnection
+modules/presentation/PresentationConnectionList
+modules/presentation/PresentationRequest
+modules/remoteplayback/RemotePlayback
 modules/screen_orientation/ScreenOrientation
+modules/sensor/Sensor
 modules/serviceworkers/ServiceWorker
 modules/serviceworkers/ServiceWorkerContainer
 modules/serviceworkers/ServiceWorkerGlobalScope
 modules/serviceworkers/ServiceWorkerRegistration
-modules/serviceworkers/StashedPortCollection
 modules/speech/SpeechRecognition
 modules/speech/SpeechSynthesis
 modules/speech/SpeechSynthesisUtterance
-modules/webaudio/AudioContext Conditional=WEB_AUDIO
-modules/webaudio/AudioNode Conditional=WEB_AUDIO
+modules/vr/VRDisplay
+modules/webaudio/AudioContext
+modules/webaudio/AudioNode
 modules/webmidi/MIDIAccess
 modules/webmidi/MIDIInput
 modules/webmidi/MIDIPort
 modules/websockets/WebSocket ImplementedAs=DOMWebSocket
+modules/webusb/USB

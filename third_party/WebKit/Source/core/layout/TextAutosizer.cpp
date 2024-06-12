@@ -28,23 +28,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/TextAutosizer.h"
 
 #include "core/dom/Document.h"
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
-#include "core/frame/PinchViewport.h"
 #include "core/frame/Settings.h"
+#include "core/frame/VisualViewport.h"
 #include "core/html/HTMLTextAreaElement.h"
 #include "core/layout/LayoutBlock.h"
+#include "core/layout/LayoutInline.h"
 #include "core/layout/LayoutListItem.h"
 #include "core/layout/LayoutListMarker.h"
+#include "core/layout/LayoutTable.h"
 #include "core/layout/LayoutTableCell.h"
 #include "core/layout/LayoutView.h"
-#include "core/layout/line/InlineIterator.h"
+#include "core/layout/api/LayoutAPIShim.h"
+#include "core/layout/api/LayoutViewItem.h"
 #include "core/page/Page.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
+
+#ifdef TENCENT_CHANGES
+#include "core/HTMLNames.h"
+#include "core/css/resolver/StyleResolver.h"
+#endif
 
 #ifdef AUTOSIZING_DOM_DEBUG_INFO
 #include "core/dom/ExecutionContextTask.h"
@@ -52,10 +61,14 @@
 
 namespace blink {
 
+#ifdef TENCENT_CHANGES
+#define MAX_WIDTH_DIFFERENCE 200
+#endif
+
 #ifdef AUTOSIZING_DOM_DEBUG_INFO
 class WriteDebugInfoTask : public ExecutionContextTask {
 public:
-    WriteDebugInfoTask(PassRefPtrWillBeRawPtr<Element> element, AtomicString value)
+    WriteDebugInfoTask(Element* element, AtomicString value)
         : m_element(element)
         , m_value(value)
     {
@@ -67,11 +80,12 @@ public:
     }
 
 private:
-    RefPtrWillBePersistent<Element> m_element;
+    Persistent<Element> m_element;
     AtomicString m_value;
 };
 
-static void writeDebugInfo(LayoutObject* layoutObject, const AtomicString& output)
+static void writeDebugInfo(LayoutObject* layoutObject,
+    const AtomicString& output)
 {
     Node* node = layoutObject->node();
     if (!node)
@@ -80,11 +94,17 @@ static void writeDebugInfo(LayoutObject* layoutObject, const AtomicString& outpu
         node = toDocument(node)->documentElement();
     if (!node->isElementNode())
         return;
-    node->document().postTask(adoptPtr(new WriteDebugInfoTask(toElement(node), output)));
+    node->document().postTask(
+        BLINK_FROM_HERE,
+        WTF::wrapUnique(new WriteDebugInfoTask(toElement(node), output)));
 }
 
 void TextAutosizer::writeClusterDebugInfo(Cluster* cluster)
 {
+#ifdef TENCENT_CHANGES
+    int definiteLinesToAdd = 0;
+    int candidateLinesToAdd = 0;
+#endif
     String explanation = "";
     if (cluster->m_flags & SUPPRESSING) {
         explanation = "[suppressed]";
@@ -92,7 +112,12 @@ void TextAutosizer::writeClusterDebugInfo(Cluster* cluster)
         explanation = "[inherited]";
     } else if (cluster->m_supercluster) {
         explanation = "[supercluster]";
-    } else if (!clusterHasEnoughTextToAutosize(cluster)) {
+    } else if (!clusterHasEnoughTextToAutosize(cluster
+#ifdef TENCENT_CHANGES
+                   ,
+                   definiteLinesToAdd, candidateLinesToAdd
+#endif
+                   )) {
         explanation = "[insufficient-text]";
     } else {
         const LayoutBlock* widthProvider = clusterWidthProvider(cluster->m_root);
@@ -100,22 +125,58 @@ void TextAutosizer::writeClusterDebugInfo(Cluster* cluster)
             explanation = "[table-ancestor-limited]";
         } else {
             explanation = String::format("[from width %d of %s]",
-                static_cast<int>(widthFromBlock(widthProvider)), widthProvider->debugName().utf8().data());
+                static_cast<int>(widthFromBlock(widthProvider)),
+                widthProvider->debugName().utf8().data());
         }
     }
     String pageInfo = "";
     if (cluster->m_root->isLayoutView()) {
-        pageInfo = String::format("; pageinfo: bm %f * (lw %d / fw %d)",
-            m_pageInfo.m_baseMultiplier, m_pageInfo.m_layoutWidth, m_pageInfo.m_frameWidth);
+        pageInfo = String::format("; pageinfo: afsf %f * dsa %f * (lw %d / fw %d)",
+            m_pageInfo.m_accessibilityFontScaleFactor,
+            m_pageInfo.m_deviceScaleAdjustment,
+            m_pageInfo.m_layoutWidth, m_pageInfo.m_frameWidth);
     }
     float multiplier = cluster->m_flags & SUPPRESSING ? 1.0 : cluster->m_multiplier;
+#ifdef TENCENT_CHANGES
+    multiplier = cluster->m_flags & SUPPRESSING ? m_pageInfo.m_baseMultiplier : cluster->m_multiplier;
+    float styleMultiplier = 0;
+    if (cluster->m_root && cluster->m_root->style())
+        styleMultiplier = cluster->m_root->style()->textAutosizingMultiplier();
+    if (cluster->m_supercluster) {
+        writeDebugInfo(const_cast<LayoutBlock*>(cluster->m_root),
+            AtomicString(String::format("cluster: %f %s=%p %s renderstyle Multiplier: %f", multiplier,
+                explanation.utf8().data(), cluster->m_supercluster, pageInfo.utf8().data(), styleMultiplier)));
+
+    } else {
+        writeDebugInfo(const_cast<LayoutBlock*>(cluster->m_root),
+            AtomicString(String::format("cluster: %f %s%s renderstyle Multiplier: %f", multiplier,
+                explanation.utf8().data(), pageInfo.utf8().data(), styleMultiplier)));
+    }
+#else
     writeDebugInfo(const_cast<LayoutBlock*>(cluster->m_root),
         AtomicString(String::format("cluster: %f %s%s", multiplier,
-            explanation.utf8().data(), pageInfo.utf8().data())));
+            explanation.utf8().data(),
+            pageInfo.utf8().data())));
+#endif // TENCENT_CHANGES
+}
+
+#ifdef TENCENT_CHANGES
+void TextAutosizer::writeClusterDebugInfo(LayoutObject* renderer, float multiplier, bool applied)
+{
+    if (applied) {
+        writeDebugInfo(renderer,
+            AtomicString(String::format("applied, renderstyle Multiplier: %f", multiplier)));
+    } else {
+        writeDebugInfo(renderer,
+            AtomicString(String::format("not apply yet, renderstyle Multiplier: %f", multiplier)));
+    }
 }
 #endif
 
-static const LayoutObject* parentElementLayoutObject(const LayoutObject* layoutObject)
+#endif
+
+static LayoutObject* parentElementLayoutObject(
+    const LayoutObject* layoutObject)
 {
     // At style recalc, the layoutObject's parent may not be attached,
     // so we need to obtain this from the DOM tree.
@@ -143,13 +204,18 @@ static bool isPotentialClusterRoot(const LayoutObject* layoutObject)
 {
     // "Potential cluster roots" are the smallest unit for which we can
     // enable/disable text autosizing.
+    // - Must have children.
+    //   An exception is made for LayoutView which should create a root to
+    //   maintain consistency with documents that have no child nodes but may
+    //   still have LayoutObject children.
     // - Must not be inline, as different multipliers on one line looks terrible.
-    //   Exceptions are inline-block and alike elements (inline-table, -webkit-inline-*),
-    //   as they often contain entire multi-line columns of text.
+    //   Exceptions are inline-block and alike elements (inline-table,
+    //   -webkit-inline-*), as they often contain entire multi-line columns of
+    //   text.
     // - Must not be normal list items, as items in the same list should look
     //   consistent, unless they are floating or position:absolute/fixed.
     Node* node = layoutObject->generatingNode();
-    if (node && !node->hasChildren())
+    if (node && !node->hasChildren() && !layoutObject->isLayoutView())
         return false;
     if (!layoutObject->isLayoutBlock())
         return false;
@@ -166,16 +232,7 @@ static bool isIndependentDescendant(const LayoutBlock* layoutObject)
     ASSERT(isPotentialClusterRoot(layoutObject));
 
     LayoutBlock* containingBlock = layoutObject->containingBlock();
-    return layoutObject->isLayoutView()
-        || layoutObject->isFloating()
-        || layoutObject->isOutOfFlowPositioned()
-        || layoutObject->isTableCell()
-        || layoutObject->isTableCaption()
-        || layoutObject->isFlexibleBoxIncludingDeprecated()
-        || (containingBlock && containingBlock->isHorizontalWritingMode() != layoutObject->isHorizontalWritingMode())
-        || layoutObject->style()->isDisplayReplacedType()
-        || layoutObject->isTextArea()
-        || layoutObject->style()->userModify() != READ_ONLY;
+    return layoutObject->isLayoutView() || layoutObject->isFloating() || layoutObject->isOutOfFlowPositioned() || layoutObject->isTableCell() || layoutObject->isTableCaption() || layoutObject->isFlexibleBoxIncludingDeprecated() || (containingBlock && containingBlock->isHorizontalWritingMode() != layoutObject->isHorizontalWritingMode()) || layoutObject->style()->isDisplayReplacedType() || layoutObject->isTextArea() || layoutObject->style()->userModify() != READ_ONLY;
 }
 
 static bool blockIsRowOfLinks(const LayoutBlock* block)
@@ -217,16 +274,34 @@ static bool blockIsRowOfLinks(const LayoutBlock* block)
 
 static bool blockHeightConstrained(const LayoutBlock* block)
 {
-    // FIXME: Propagate constrainedness down the tree, to avoid inefficiently walking back up from each box.
+    // FIXME: Propagate constrainedness down the tree, to avoid inefficiently
+    // walking back up from each box.
     // FIXME: This code needs to take into account vertical writing modes.
-    // FIXME: Consider additional heuristics, such as ignoring fixed heights if the content is already overflowing before autosizing kicks in.
+    // FIXME: Consider additional heuristics, such as ignoring fixed heights if
+    // the content is already overflowing before autosizing kicks in.
+#ifdef TENCENT_CHANGES
+    if (block && block->node() && block->node()->hasTagName(HTMLNames::ulTag)) {
+        LayoutObject* child = block->firstChild();
+        while (child) {
+            if (child->isListItem()) {
+                const ComputedStyle& childStyle = child->styleRef();
+                if ((childStyle.height().isSpecified() || childStyle.maxHeight().isSpecified() || childStyle.hasOutOfFlowPosition())) {
+                    return true;
+                }
+            }
+            child = child->nextSibling();
+        }
+    }
+#endif
+
     for (; block; block = block->containingBlock()) {
         const ComputedStyle& style = block->styleRef();
-        if (style.overflowY() >= OSCROLL)
+        if (style.overflowY() >= EOverflow::Scroll)
             return false;
         if (style.height().isSpecified() || style.maxHeight().isSpecified() || block->isOutOfFlowPositioned()) {
-            // Some sites (e.g. wikipedia) set their html and/or body elements to height:100%,
-            // without intending to constrain the height of the content within them.
+            // Some sites (e.g. wikipedia) set their html and/or body elements to
+            // height:100%, without intending to constrain the height of the content
+            // within them.
             return !block->isDocumentElement() && !block->isBody() && !block->isLayoutView();
         }
         if (block->isFloating())
@@ -271,40 +346,71 @@ static bool blockSuppressesAutosizing(const LayoutBlock* block)
 
 static bool hasExplicitWidth(const LayoutBlock* block)
 {
-    // FIXME: This heuristic may need to be expanded to other ways a block can be wider or narrower
-    //        than its parent containing block.
+    // FIXME: This heuristic may need to be expanded to other ways a block can be
+    // wider or narrower than its parent containing block.
     return block->style() && block->style()->width().isSpecified();
+}
+
+static LayoutObject* getParent(const LayoutObject* object)
+{
+    LayoutObject* parent = nullptr;
+    // LayoutObject haven't added to layout tree yet
+    if (object->node() && object->node()->parentNode())
+        parent = object->node()->parentNode()->layoutObject();
+    return parent;
 }
 
 TextAutosizer::TextAutosizer(const Document* document)
     : m_document(document)
     , m_firstBlockToBeginLayout(nullptr)
-#if ENABLE(ASSERT)
-    , m_blocksThatHaveBegunLayout()
+    ,
+#if DCHECK_IS_ON()
+    m_blocksThatHaveBegunLayout()
+    ,
 #endif
-    , m_superclusters()
-    , m_clusterStack()
+    m_clusterStack()
     , m_fingerprintMapper()
     , m_pageInfo()
     , m_updatePageInfoDeferred(false)
 {
 }
 
-void TextAutosizer::record(const LayoutBlock* block)
+TextAutosizer::~TextAutosizer() { }
+
+void TextAutosizer::record(LayoutBlock* block)
 {
     if (!m_pageInfo.m_settingEnabled)
         return;
 
     ASSERT(!m_blocksThatHaveBegunLayout.contains(block));
-
-    if (!classifyBlock(block, INDEPENDENT | EXPLICIT_WIDTH))
+    if (!classifyBlock(block, INDEPENDENT | EXPLICIT_WIDTH)) {
+        // !everHadLayout() means the object hasn't layout yet
+        // which means this object is new added.
+        // We only deal with new added block here.
+        // If parent is new added, no need to check its children.
+        LayoutObject* parent = getParent(block);
+        if (!block->everHadLayout() && parent && parent->everHadLayout())
+            markSuperclusterForConsistencyCheck(parent);
         return;
+    }
 
     if (Fingerprint fingerprint = computeFingerprint(block))
         m_fingerprintMapper.addTentativeClusterRoot(block, fingerprint);
+
+    if (!block->everHadLayout())
+        markSuperclusterForConsistencyCheck(block);
 }
 
-void TextAutosizer::destroy(const LayoutBlock* block)
+void TextAutosizer::record(LayoutText* text)
+{
+    if (!text || !shouldHandleLayout())
+        return;
+    LayoutObject* parent = getParent(text);
+    if (parent && parent->everHadLayout())
+        markSuperclusterForConsistencyCheck(parent);
+}
+
+void TextAutosizer::destroy(LayoutBlock* block)
 {
     if (!m_pageInfo.m_settingEnabled && !m_fingerprintMapper.hasFingerprints())
         return;
@@ -315,21 +421,23 @@ void TextAutosizer::destroy(const LayoutBlock* block)
         // LayoutBlock with a fingerprint was destroyed during layout.
         // Clear the cluster stack and the supercluster map to avoid stale pointers.
         // Speculative fix for http://crbug.com/369485.
-        m_firstBlockToBeginLayout = 0;
+        m_firstBlockToBeginLayout = nullptr;
         m_clusterStack.clear();
-        m_superclusters.clear();
     }
 }
 
-TextAutosizer::BeginLayoutBehavior TextAutosizer::prepareForLayout(const LayoutBlock* block)
+TextAutosizer::BeginLayoutBehavior TextAutosizer::prepareForLayout(
+    LayoutBlock* block)
 {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     m_blocksThatHaveBegunLayout.add(block);
 #endif
 
     if (!m_firstBlockToBeginLayout) {
         m_firstBlockToBeginLayout = block;
         prepareClusterStack(block->parent());
+        if (block->isLayoutView())
+            checkSuperclusterConsistency();
     } else if (block == currentCluster()->m_root) {
         // Ignore beginLayout on the same block twice.
         // This can happen with paginated overflow.
@@ -339,36 +447,54 @@ TextAutosizer::BeginLayoutBehavior TextAutosizer::prepareForLayout(const LayoutB
     return ContinueLayout;
 }
 
-void TextAutosizer::prepareClusterStack(const LayoutObject* layoutObject)
+void TextAutosizer::prepareClusterStack(LayoutObject* layoutObject)
 {
     if (!layoutObject)
         return;
     prepareClusterStack(layoutObject->parent());
 
     if (layoutObject->isLayoutBlock()) {
-        const LayoutBlock* block = toLayoutBlock(layoutObject);
-#if ENABLE(ASSERT)
+        LayoutBlock* block = toLayoutBlock(layoutObject);
+#if DCHECK_IS_ON()
         m_blocksThatHaveBegunLayout.add(block);
 #endif
         if (Cluster* cluster = maybeCreateCluster(block))
-            m_clusterStack.append(adoptPtr(cluster));
+            m_clusterStack.push_back(WTF::wrapUnique(cluster));
     }
 }
 
-void TextAutosizer::beginLayout(LayoutBlock* block)
+void TextAutosizer::beginLayout(LayoutBlock* block,
+    SubtreeLayoutScope* layouter)
 {
     ASSERT(shouldHandleLayout());
 
     if (prepareForLayout(block) == StopLayout)
         return;
 
+    ASSERT(!m_clusterStack.isEmpty() || block->isLayoutView());
+
     if (Cluster* cluster = maybeCreateCluster(block))
-        m_clusterStack.append(adoptPtr(cluster));
+        m_clusterStack.push_back(WTF::wrapUnique(cluster));
+#ifdef TENCENT_CHANGES
+    //if <li> has height property, don't scale the text
+    else if (block->isListItem()
+        && blockHeightConstrained(block)
+        && !m_clusterStack.isEmpty()) {
+        Cluster* cluster = currentCluster();
+        if (cluster->m_root
+            && cluster->m_root == block->parent()
+            && (cluster->m_multiplier > 1.0f || cluster->m_multiplier == 0)) {
+            cluster->m_multiplier = 1.0f;
+        }
+    }
+#endif
+
+    ASSERT(!m_clusterStack.isEmpty());
 
     // Cells in auto-layout tables are handled separately by inflateAutoTable.
     bool isAutoTableCell = block->isTableCell() && !toLayoutTableCell(block)->table()->style()->isFixedTableLayout();
     if (!isAutoTableCell && !m_clusterStack.isEmpty())
-        inflate(block);
+        inflate(block, layouter);
 }
 
 void TextAutosizer::inflateAutoTable(LayoutTable* table)
@@ -381,18 +507,21 @@ void TextAutosizer::inflateAutoTable(LayoutTable* table)
     if (cluster->m_root != table)
         return;
 
-    // Pre-inflate cells that have enough text so that their inflated preferred widths will be used
-    // for column sizing.
-    for (LayoutObject* section = table->firstChild(); section; section = section->nextSibling()) {
+    // Pre-inflate cells that have enough text so that their inflated preferred
+    // widths will be used for column sizing.
+    for (LayoutObject* section = table->firstChild(); section;
+         section = section->nextSibling()) {
         if (!section->isTableSection())
             continue;
-        for (LayoutTableRow* row = toLayoutTableSection(section)->firstRow(); row; row = row->nextRow()) {
-            for (LayoutTableCell* cell = row->firstCell(); cell; cell = cell->nextCell()) {
+        for (LayoutTableRow* row = toLayoutTableSection(section)->firstRow(); row;
+             row = row->nextRow()) {
+            for (LayoutTableCell* cell = row->firstCell(); cell;
+                 cell = cell->nextCell()) {
                 if (!cell->needsLayout())
                     continue;
 
-                beginLayout(cell);
-                inflate(cell, DescendToInnerBlocks);
+                beginLayout(cell, nullptr);
+                inflate(cell, nullptr, DescendToInnerBlocks);
                 endLayout(cell);
             }
         }
@@ -404,21 +533,23 @@ void TextAutosizer::endLayout(LayoutBlock* block)
     ASSERT(shouldHandleLayout());
 
     if (block == m_firstBlockToBeginLayout) {
-        m_firstBlockToBeginLayout = 0;
+        m_firstBlockToBeginLayout = nullptr;
         m_clusterStack.clear();
-        m_superclusters.clear();
         m_stylesRetainedDuringLayout.clear();
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
         m_blocksThatHaveBegunLayout.clear();
 #endif
-    // Tables can create two layout scopes for the same block so the isEmpty
-    // check below is needed to guard against endLayout being called twice.
+        // Tables can create two layout scopes for the same block so the isEmpty
+        // check below is needed to guard against endLayout being called twice.
     } else if (!m_clusterStack.isEmpty() && currentCluster()->m_root == block) {
-        m_clusterStack.removeLast();
+        m_clusterStack.pop_back();
     }
 }
 
-float TextAutosizer::inflate(LayoutObject* parent, InflateBehavior behavior, float multiplier)
+float TextAutosizer::inflate(LayoutObject* parent,
+    SubtreeLayoutScope* layouter,
+    InflateBehavior behavior,
+    float multiplier)
 {
     Cluster* cluster = currentCluster();
     bool hasTextChild = false;
@@ -432,46 +563,49 @@ float TextAutosizer::inflate(LayoutObject* parent, InflateBehavior behavior, flo
     while (child) {
         if (child->isText()) {
             hasTextChild = true;
-            // We only calculate this multiplier on-demand to ensure the parent block of this text
-            // has entered layout.
+            // We only calculate this multiplier on-demand to ensure the parent block
+            // of this text has entered layout.
             if (!multiplier)
                 multiplier = cluster->m_flags & SUPPRESSING ? 1.0f : clusterMultiplier(cluster);
-            applyMultiplier(child, multiplier);
+            applyMultiplier(child, multiplier, layouter);
 
             // FIXME: Investigate why MarkOnlyThis is sufficient.
             if (parent->isLayoutInline())
                 child->setPreferredLogicalWidthsDirty(MarkOnlyThis);
         } else if (child->isLayoutInline()) {
-            multiplier = inflate(child, behavior, multiplier);
-        } else if (child->isLayoutBlock() && behavior == DescendToInnerBlocks
-            && !classifyBlock(child, INDEPENDENT | EXPLICIT_WIDTH | SUPPRESSING)) {
-            multiplier = inflate(child, behavior, multiplier);
+            multiplier = inflate(child, layouter, behavior, multiplier);
+        } else if (child->isLayoutBlock() && behavior == DescendToInnerBlocks && !classifyBlock(child, INDEPENDENT | EXPLICIT_WIDTH | SUPPRESSING)) {
+            multiplier = inflate(child, layouter, behavior, multiplier);
         }
         child = child->nextSibling();
     }
 
     if (hasTextChild) {
-        applyMultiplier(parent, multiplier); // Parent handles line spacing.
+        applyMultiplier(parent, multiplier,
+            layouter); // Parent handles line spacing.
     } else if (!parent->isListItem()) {
-        // For consistency, a block with no immediate text child should always have a
-        // multiplier of 1.
-        applyMultiplier(parent, 1);
+        // For consistency, a block with no immediate text child should always have
+        // a multiplier of 1.
+        applyMultiplier(parent, 1, layouter);
     }
 
     if (parent->isListItem()) {
         float multiplier = clusterMultiplier(cluster);
-        applyMultiplier(parent, multiplier);
+        applyMultiplier(parent, multiplier, layouter);
 
-        // The list item has to be treated special because we can have a tree such that you have
-        // a list item for a form inside it. The list marker then ends up inside the form and when
-        // we try to get the clusterMultiplier we have the wrong cluster root to work from and get
-        // the wrong value.
+        // The list item has to be treated special because we can have a tree such
+        // that you have a list item for a form inside it. The list marker then ends
+        // up inside the form and when we try to get the clusterMultiplier we have
+        // the wrong cluster root to work from and get the wrong value.
         LayoutListItem* item = toLayoutListItem(parent);
         if (LayoutListMarker* marker = item->marker()) {
-            applyMultiplier(marker, multiplier);
+            applyMultiplier(marker, multiplier, layouter);
             marker->setPreferredLogicalWidthsDirty(MarkOnlyThis);
         }
     }
+
+    if (m_pageInfo.m_hasAutosized)
+        UseCounter::count(*m_document, UseCounter::TextAutosizing);
 
     return multiplier;
 }
@@ -481,11 +615,52 @@ bool TextAutosizer::shouldHandleLayout() const
     return m_pageInfo.m_settingEnabled && m_pageInfo.m_pageNeedsAutosizing && !m_updatePageInfoDeferred;
 }
 
+bool TextAutosizer::pageNeedsAutosizing() const
+{
+    return m_pageInfo.m_pageNeedsAutosizing;
+}
+
+void TextAutosizer::markSuperclusterForConsistencyCheck(LayoutObject* object)
+{
+    if (!object || !shouldHandleLayout())
+        return;
+
+    Supercluster* lastSupercluster = nullptr;
+    LayoutBlock* block = nullptr;
+    while (object) {
+        if (object->isLayoutBlock()) {
+            block = toLayoutBlock(object);
+            if (block->isTableCell() || classifyBlock(block, INDEPENDENT | EXPLICIT_WIDTH)) {
+                // If supercluster hasn't been created yet, create one.
+                bool isNewEntry = false;
+                Supercluster* supercluster = m_fingerprintMapper.createSuperclusterIfNeeded(block, isNewEntry);
+                if (supercluster && supercluster->m_inheritParentMultiplier == DontInheritMultiplier) {
+                    if (supercluster->m_hasEnoughTextToAutosize == NotEnoughText) {
+                        m_fingerprintMapper.getPotentiallyInconsistentSuperclusters().add(
+                            supercluster);
+                    }
+                    return;
+                }
+                if (supercluster && (isNewEntry || supercluster->m_hasEnoughTextToAutosize == NotEnoughText))
+                    lastSupercluster = supercluster;
+            }
+        }
+        object = getParent(object);
+    }
+
+    // If we didn't add any supercluster, we should add one.
+    if (lastSupercluster) {
+        m_fingerprintMapper.getPotentiallyInconsistentSuperclusters().add(
+            lastSupercluster);
+    }
+}
+
 void TextAutosizer::updatePageInfoInAllFrames()
 {
     ASSERT(!m_document->frame() || m_document->frame()->isMainFrame());
 
-    for (Frame* frame = m_document->frame(); frame; frame = frame->tree().traverseNext()) {
+    for (Frame* frame = m_document->frame(); frame;
+         frame = frame->tree().traverseNext()) {
         if (!frame->isLocalFrame())
             continue;
 
@@ -509,8 +684,8 @@ void TextAutosizer::updatePageInfo()
     if (!m_pageInfo.m_settingEnabled || m_document->printing()) {
         m_pageInfo.m_pageNeedsAutosizing = false;
     } else {
-        LayoutView* layoutView = m_document->layoutView();
-        bool horizontalWritingMode = isHorizontalWritingMode(layoutView->style()->writingMode());
+        LayoutViewItem layoutViewItem = m_document->layoutViewItem();
+        bool horizontalWritingMode = isHorizontalWritingMode(layoutViewItem.style()->getWritingMode());
 
         // FIXME: With out-of-process iframes, the top frame can be remote and
         // doesn't have sizing information. Just return if this is the case.
@@ -518,7 +693,7 @@ void TextAutosizer::updatePageInfo()
         if (frame->isRemoteFrame())
             return;
 
-        LocalFrame* mainFrame = m_document->page()->deprecatedLocalMainFrame();
+        LocalFrame* mainFrame = toLocalFrame(frame);
         IntSize frameSize = m_document->settings()->textAutosizingWindowSizeOverride();
         if (frameSize.isEmpty())
             frameSize = windowSize();
@@ -528,29 +703,38 @@ void TextAutosizer::updatePageInfo()
         IntSize layoutSize = mainFrame->view()->layoutSize();
         m_pageInfo.m_layoutWidth = horizontalWritingMode ? layoutSize.width() : layoutSize.height();
 
-        // Compute the base font scale multiplier based on device and accessibility settings.
-        m_pageInfo.m_baseMultiplier = m_document->settings()->accessibilityFontScaleFactor();
-        // If the page has a meta viewport or @viewport, don't apply the device scale adjustment.
-        const ViewportDescription& viewportDescription = mainFrame->document()->viewportDescription();
-        if (!viewportDescription.isSpecifiedByAuthor()) {
-            float deviceScaleAdjustment = m_document->settings()->deviceScaleAdjustment();
-            m_pageInfo.m_baseMultiplier *= deviceScaleAdjustment;
+        // TODO(pdr): Accessibility should be moved out of the text autosizer. See:
+        // crbug.com/645717.
+        m_pageInfo.m_accessibilityFontScaleFactor = m_document->settings()->getAccessibilityFontScaleFactor();
+
+        // If the page has a meta viewport or @viewport, don't apply the device
+        // scale adjustment.
+        if (!mainFrame->document()->viewportDescription().isSpecifiedByAuthor()) {
+            m_pageInfo.m_deviceScaleAdjustment = m_document->settings()->getDeviceScaleAdjustment();
+        } else {
+            m_pageInfo.m_deviceScaleAdjustment = 1.0f;
         }
 
-        m_pageInfo.m_pageNeedsAutosizing = !!m_pageInfo.m_frameWidth
-            && (m_pageInfo.m_baseMultiplier * (static_cast<float>(m_pageInfo.m_layoutWidth) / m_pageInfo.m_frameWidth) > 1.0f);
+        // TODO(pdr): pageNeedsAutosizing should take into account whether
+        // text-size-adjust is used anywhere on the page because that also needs to
+        // trigger autosizing. See: crbug.com/646237.
+        m_pageInfo.m_pageNeedsAutosizing = !!m_pageInfo.m_frameWidth && (m_pageInfo.m_accessibilityFontScaleFactor * m_pageInfo.m_deviceScaleAdjustment * (static_cast<float>(m_pageInfo.m_layoutWidth) / m_pageInfo.m_frameWidth)
+#ifdef TENCENT_CHANGES
+                                               !=
+#else
+                                               >
+#endif
+                                               1.0f);
     }
 
     if (m_pageInfo.m_pageNeedsAutosizing) {
-        // If page info has changed, multipliers may have changed. Force a layout to recompute them.
-        if (m_pageInfo.m_frameWidth != previousPageInfo.m_frameWidth
-            || m_pageInfo.m_layoutWidth != previousPageInfo.m_layoutWidth
-            || m_pageInfo.m_baseMultiplier != previousPageInfo.m_baseMultiplier
-            || m_pageInfo.m_settingEnabled != previousPageInfo.m_settingEnabled)
+        // If page info has changed, multipliers may have changed. Force a layout to
+        // recompute them.
+        if (m_pageInfo.m_frameWidth != previousPageInfo.m_frameWidth || m_pageInfo.m_layoutWidth != previousPageInfo.m_layoutWidth || m_pageInfo.m_accessibilityFontScaleFactor != previousPageInfo.m_accessibilityFontScaleFactor || m_pageInfo.m_deviceScaleAdjustment != previousPageInfo.m_deviceScaleAdjustment || m_pageInfo.m_settingEnabled != previousPageInfo.m_settingEnabled)
             setAllTextNeedsLayout();
     } else if (previousPageInfo.m_hasAutosized) {
-        // If we are no longer autosizing the page, we won't do anything during the next layout.
-        // Set all the multipliers back to 1 now.
+        // If we are no longer autosizing the page, we won't do anything during the
+        // next layout. Set all the multipliers back to 1 now.
         resetMultipliers();
         m_pageInfo.m_hasAutosized = false;
     }
@@ -558,34 +742,45 @@ void TextAutosizer::updatePageInfo()
 
 IntSize TextAutosizer::windowSize() const
 {
-    Page * page = m_document->page();
+    Page* page = m_document->page();
     ASSERT(page);
-    return page->frameHost().pinchViewport().size();
+    return page->frameHost().visualViewport().size();
 }
 
 void TextAutosizer::resetMultipliers()
 {
-    LayoutObject* layoutObject = m_document->layoutView();
+    LayoutObject* layoutObject = LayoutAPIShim::layoutObjectFrom(m_document->layoutViewItem());
     while (layoutObject) {
         if (const ComputedStyle* style = layoutObject->style()) {
             if (style->textAutosizingMultiplier() != 1)
-                applyMultiplier(layoutObject, 1, LayoutNeeded);
+                applyMultiplier(layoutObject, 1, nullptr, LayoutNeeded);
         }
         layoutObject = layoutObject->nextInPreOrder();
     }
 }
 
-void TextAutosizer::setAllTextNeedsLayout()
+void TextAutosizer::setAllTextNeedsLayout(LayoutBlock* container)
 {
-    LayoutObject* layoutObject = m_document->layoutView();
-    while (layoutObject) {
-        if (layoutObject->isText())
-            layoutObject->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::TextAutosizing);
-        layoutObject = layoutObject->nextInPreOrder();
+    if (!container)
+        container = m_document->layoutView();
+    LayoutObject* object = container;
+    while (object) {
+        if (!object->everHadLayout()) {
+            // Object is new added node, so no need to deal with its children
+            object = object->nextInPreOrderAfterChildren(container);
+        } else {
+            if (object->isText()) {
+                object->setNeedsLayoutAndFullPaintInvalidation(
+                    LayoutInvalidationReason::TextAutosizing);
+            }
+            object = object->nextInPreOrder(container);
+        }
     }
 }
 
-TextAutosizer::BlockFlags TextAutosizer::classifyBlock(const LayoutObject* layoutObject, BlockFlags mask) const
+TextAutosizer::BlockFlags TextAutosizer::classifyBlock(
+    const LayoutObject* layoutObject,
+    BlockFlags mask) const
 {
     if (!layoutObject->isLayoutBlock())
         return 0;
@@ -600,7 +795,11 @@ TextAutosizer::BlockFlags TextAutosizer::classifyBlock(const LayoutObject* layou
         if ((mask & INDEPENDENT) && (isIndependentDescendant(block) || block->isTable()))
             flags |= INDEPENDENT;
 
-        if ((mask & EXPLICIT_WIDTH) && hasExplicitWidth(block))
+        if ((mask & EXPLICIT_WIDTH) && (hasExplicitWidth(block)
+#ifdef TENCENT_CHANGES
+                || blockIsWiderOrNarrowerDescendant(block, m_clusterStack.isEmpty() ? 0 : currentCluster())
+#endif
+                    ))
             flags |= EXPLICIT_WIDTH;
 
         if ((mask & SUPPRESSING) && blockSuppressesAutosizing(block))
@@ -609,13 +808,50 @@ TextAutosizer::BlockFlags TextAutosizer::classifyBlock(const LayoutObject* layou
     return flags;
 }
 
-bool TextAutosizer::clusterWouldHaveEnoughTextToAutosize(const LayoutBlock* root, const LayoutBlock* widthProvider)
+bool TextAutosizer::clusterWouldHaveEnoughTextToAutosize(
+    const LayoutBlock* root,
+#ifdef TENCENT_CHANGES
+    int& definiteLinesToAdd, int& candidateLinesToAdd,
+#endif
+    const LayoutBlock* widthProvider)
 {
     Cluster hypotheticalCluster(root, classifyBlock(root), nullptr);
-    return clusterHasEnoughTextToAutosize(&hypotheticalCluster, widthProvider);
+    return clusterHasEnoughTextToAutosize(&hypotheticalCluster,
+#ifdef TENCENT_CHANGES
+        definiteLinesToAdd, candidateLinesToAdd,
+#endif
+        widthProvider);
 }
 
-bool TextAutosizer::clusterHasEnoughTextToAutosize(Cluster* cluster, const LayoutBlock* widthProvider)
+#ifdef TENCENT_CHANGES
+static bool isTextInsideLink(const LayoutObject* obj)
+{
+    if (obj
+        && obj->isText()
+        && obj->parent()
+        && obj->parent()->style()
+        && obj->parent()->style()->insideLink() == EInsideLink::kNotInsideLink
+        && !obj->parent()->style()->isLink())
+        return false;
+
+    return true;
+}
+
+static bool isOnlyChildInABlock(const LayoutObject* obj)
+{
+    if (!obj)
+        return false;
+
+    return !obj->nextSibling() && !obj->previousSibling();
+}
+#endif
+
+bool TextAutosizer::clusterHasEnoughTextToAutosize(
+    Cluster* cluster,
+#ifdef TENCENT_CHANGES
+    int& definiteLinesToAdd, int& candidateLinesToAdd,
+#endif
+    const LayoutBlock* widthProvider)
 {
     if (cluster->m_hasEnoughTextToAutosize != UnknownAmountOfText)
         return cluster->m_hasEnoughTextToAutosize == HasEnoughText;
@@ -624,7 +860,8 @@ bool TextAutosizer::clusterHasEnoughTextToAutosize(Cluster* cluster, const Layou
     if (!widthProvider)
         widthProvider = clusterWidthProvider(root);
 
-    // TextAreas and user-modifiable areas get a free pass to autosize regardless of text content.
+    // TextAreas and user-modifiable areas get a free pass to autosize regardless
+    // of text content.
     if (root->isTextArea() || (root->style() && root->style()->userModify() != READ_ONLY)) {
         cluster->m_hasEnoughTextToAutosize = HasEnoughText;
         return true;
@@ -636,35 +873,103 @@ bool TextAutosizer::clusterHasEnoughTextToAutosize(Cluster* cluster, const Layou
     }
 
     // 4 lines of text is considered enough to autosize.
+#ifdef TENCENT_CHANGES
+    float blockWidth = widthFromBlock(widthProvider);
+    float minimumTextLengthToAutosize = blockWidth * 4;
+    float candidateTextWidth = 0;
+    LayoutObject* textBlockParent = nullptr;
+#else
     float minimumTextLengthToAutosize = widthFromBlock(widthProvider) * 4;
+#endif
 
     float length = 0;
     LayoutObject* descendant = root->firstChild();
     while (descendant) {
         if (descendant->isLayoutBlock()) {
+#ifdef TENCENT_CHANGES
+            bool parentSuppresses = cluster->m_flags & SUPPRESSING;
+            TextAutosizer::BlockFlags flag = classifyBlock(descendant, INDEPENDENT | SUPPRESSING);
+            if ((flag & INDEPENDENT) || !!(flag & SUPPRESSING) != parentSuppresses) {
+#else
             if (classifyBlock(descendant, INDEPENDENT | SUPPRESSING)) {
+#endif
                 descendant = descendant->nextInPreOrderAfterChildren(root);
                 continue;
             }
         } else if (descendant->isText()) {
-            // Note: Using text().stripWhiteSpace().length() instead of resolvedTextLength() because
-            // the lineboxes will not be built until layout. These values can be different.
+            // Note: Using text().stripWhiteSpace().length() instead of
+            // resolvedTextLength() because the lineboxes will not be built until
+            // layout. These values can be different.
             // Note: This is an approximation assuming each character is 1em wide.
+#ifdef TENCENT_CHANGES
+            float currentTextWidth = toLayoutText(descendant)->text().stripWhiteSpace().length();
+            length += currentTextWidth * descendant->style()->specifiedFontSize();
+#else
             length += toLayoutText(descendant)->text().stripWhiteSpace().length() * descendant->style()->specifiedFontSize();
+#endif
 
             if (length >= minimumTextLengthToAutosize) {
                 cluster->m_hasEnoughTextToAutosize = HasEnoughText;
                 return true;
             }
+#ifndef TENCENT_CHANGES
         }
         descendant = descendant->nextInPreOrder(root);
     }
+#else
+            else if (currentTextWidth > 0
+                && blockWidth > 490 //980/2
+                && !isTextInsideLink(descendant)
+                && descendant->parent()
+                && descendant->parent()->isLayoutBlock()) {
+                //490-200=290,if container is too narrow, don't effect the multiple
+                if (descendant->containingBlock()
+                    && descendant->containingBlock()->contentLogicalWidth().toFloat() < 490 - MAX_WIDTH_DIFFERENCE) {
+                    descendant = descendant->nextInPreOrder(root);
+                    continue;
+                }
+
+                // check is all the block content legal
+                //RenderBlock* parent = static_cast<RenderBlock*>(descendant->parent());
+                if (isOnlyChildInABlock(descendant)) {
+                    if (!(widthProvider && widthProvider->isTable() && descendant->isTableCell()))
+                        definiteLinesToAdd++;
+                    definiteLinesToAdd += (currentTextWidth / blockWidth);
+                } else {
+                    candidateTextWidth += currentTextWidth;
+                    textBlockParent = descendant->containingBlock();
+                }
+            }
+        } else if (descendant->isBR()
+            && textBlockParent != NULL
+            && descendant->containingBlock() == textBlockParent) {
+            if (candidateTextWidth > 0) {
+                definiteLinesToAdd++;
+                definiteLinesToAdd += (candidateTextWidth / blockWidth);
+                candidateTextWidth = 0;
+                textBlockParent = NULL;
+            }
+        }
+        descendant = descendant->nextInPreOrder(root);
+    }
+
+    if (candidateTextWidth > 0) {
+        candidateLinesToAdd++;
+        candidateLinesToAdd += (candidateTextWidth / blockWidth);
+    }
+
+    if (definiteLinesToAdd > 0) {
+        definiteLinesToAdd += candidateLinesToAdd;
+        candidateLinesToAdd = 0;
+    }
+#endif
 
     cluster->m_hasEnoughTextToAutosize = NotEnoughText;
     return false;
 }
 
-TextAutosizer::Fingerprint TextAutosizer::getFingerprint(const LayoutObject* layoutObject)
+TextAutosizer::Fingerprint TextAutosizer::getFingerprint(
+    LayoutObject* layoutObject)
 {
     Fingerprint result = m_fingerprintMapper.get(layoutObject);
     if (!result) {
@@ -674,23 +979,24 @@ TextAutosizer::Fingerprint TextAutosizer::getFingerprint(const LayoutObject* lay
     return result;
 }
 
-TextAutosizer::Fingerprint TextAutosizer::computeFingerprint(const LayoutObject* layoutObject)
+TextAutosizer::Fingerprint TextAutosizer::computeFingerprint(
+    const LayoutObject* layoutObject)
 {
     Node* node = layoutObject->generatingNode();
     if (!node || !node->isElementNode())
         return 0;
 
     FingerprintSourceData data;
-    if (const LayoutObject* parent = parentElementLayoutObject(layoutObject))
+    if (LayoutObject* parent = parentElementLayoutObject(layoutObject))
         data.m_parentHash = getFingerprint(parent);
 
     data.m_qualifiedNameHash = QualifiedNameHash::hash(toElement(node)->tagQName());
 
     if (const ComputedStyle* style = layoutObject->style()) {
-        data.m_packedStyleProperties = style->direction();
+        data.m_packedStyleProperties = static_cast<unsigned>(style->direction());
         data.m_packedStyleProperties |= (style->position() << 1);
-        data.m_packedStyleProperties |= (style->floating() << 4);
-        data.m_packedStyleProperties |= (style->display() << 6);
+        data.m_packedStyleProperties |= (static_cast<unsigned>(style->floating()) << 4);
+        data.m_packedStyleProperties |= (static_cast<unsigned>(style->display()) << 6);
         data.m_packedStyleProperties |= (style->width().type() << 11);
         // packedStyleProperties effectively using 15 bits now.
 
@@ -710,7 +1016,7 @@ TextAutosizer::Fingerprint TextAutosizer::computeFingerprint(const LayoutObject*
         sizeof data / sizeof(UChar));
 }
 
-TextAutosizer::Cluster* TextAutosizer::maybeCreateCluster(const LayoutBlock* block)
+TextAutosizer::Cluster* TextAutosizer::maybeCreateCluster(LayoutBlock* block)
 {
     BlockFlags flags = classifyBlock(block);
     if (!(flags & POTENTIAL_ROOT))
@@ -719,12 +1025,16 @@ TextAutosizer::Cluster* TextAutosizer::maybeCreateCluster(const LayoutBlock* blo
     Cluster* parentCluster = m_clusterStack.isEmpty() ? nullptr : currentCluster();
     ASSERT(parentCluster || block->isLayoutView());
 
-    // If a non-independent block would not alter the SUPPRESSING flag, it doesn't need to be a cluster.
+    // If a non-independent block would not alter the SUPPRESSING flag, it doesn't
+    // need to be a cluster.
     bool parentSuppresses = parentCluster && (parentCluster->m_flags & SUPPRESSING);
     if (!(flags & INDEPENDENT) && !(flags & EXPLICIT_WIDTH) && !!(flags & SUPPRESSING) == parentSuppresses)
         return nullptr;
 
-    Cluster* cluster = new Cluster(block, flags, parentCluster, getSupercluster(block));
+    bool isNewEntry = false;
+    Cluster* cluster = new Cluster(
+        block, flags, parentCluster,
+        m_fingerprintMapper.createSuperclusterIfNeeded(block, isNewEntry));
 #ifdef AUTOSIZING_DOM_DEBUG_INFO
     // Non-SUPPRESSING clusters are annotated in clusterMultiplier.
     if (flags & SUPPRESSING)
@@ -733,22 +1043,25 @@ TextAutosizer::Cluster* TextAutosizer::maybeCreateCluster(const LayoutBlock* blo
     return cluster;
 }
 
-TextAutosizer::Supercluster* TextAutosizer::getSupercluster(const LayoutBlock* block)
+TextAutosizer::Supercluster*
+TextAutosizer::FingerprintMapper::createSuperclusterIfNeeded(LayoutBlock* block,
+    bool& isNewEntry)
 {
-    Fingerprint fingerprint = m_fingerprintMapper.get(block);
+    Fingerprint fingerprint = get(block);
     if (!fingerprint)
         return nullptr;
 
-    BlockSet* roots = m_fingerprintMapper.getTentativeClusterRoots(fingerprint);
+    BlockSet* roots = getTentativeClusterRoots(fingerprint);
     if (!roots || roots->size() < 2 || !roots->contains(block))
         return nullptr;
 
-    SuperclusterMap::AddResult addResult = m_superclusters.add(fingerprint, PassOwnPtr<Supercluster>());
+    SuperclusterMap::AddResult addResult = m_superclusters.add(fingerprint, std::unique_ptr<Supercluster>());
+    isNewEntry = addResult.isNewEntry;
     if (!addResult.isNewEntry)
         return addResult.storedValue->value.get();
 
     Supercluster* supercluster = new Supercluster(roots);
-    addResult.storedValue->value = adoptPtr(supercluster);
+    addResult.storedValue->value = WTF::wrapUnique(supercluster);
     return supercluster;
 }
 
@@ -761,32 +1074,66 @@ float TextAutosizer::clusterMultiplier(Cluster* cluster)
     if (!(cluster->m_flags & INDEPENDENT) && isWiderOrNarrowerDescendant(cluster))
         cluster->m_flags |= WIDER_OR_NARROWER;
 
+#ifdef TENCENT_CHANGES
+    int definiteLinesToAdd = 0;
+    int candidateLinesToAdd = 0;
+#endif
+
     if (cluster->m_flags & (INDEPENDENT | WIDER_OR_NARROWER)) {
-        if (cluster->m_supercluster)
+        if (cluster->m_supercluster) {
             cluster->m_multiplier = superclusterMultiplier(cluster);
-        else if (clusterHasEnoughTextToAutosize(cluster))
+            cluster->m_supercluster->m_inheritParentMultiplier = DontInheritMultiplier;
+        } else if (clusterHasEnoughTextToAutosize(cluster
+#ifdef TENCENT_CHANGES
+                       ,
+                       definiteLinesToAdd, candidateLinesToAdd
+#endif
+                       ))
             cluster->m_multiplier = multiplierFromBlock(clusterWidthProvider(cluster->m_root));
         else
             cluster->m_multiplier = 1.0f;
     } else {
         cluster->m_multiplier = cluster->m_parent ? clusterMultiplier(cluster->m_parent) : 1.0f;
+        if (cluster->m_supercluster)
+            cluster->m_supercluster->m_inheritParentMultiplier = InheritMultiplier;
     }
 
 #ifdef AUTOSIZING_DOM_DEBUG_INFO
     writeClusterDebugInfo(cluster);
 #endif
 
+#ifdef TENCENT_CHANGES
+    Fingerprint fp = m_fingerprintMapper.get(cluster->m_root);
+    if (fp && !cluster->m_supercluster) {
+        updateFingerprintMapper(fp, cluster->m_multiplier);
+    }
+#endif
+
     ASSERT(cluster->m_multiplier);
     return cluster->m_multiplier;
 }
 
-bool TextAutosizer::superclusterHasEnoughTextToAutosize(Supercluster* supercluster, const LayoutBlock* widthProvider)
+bool TextAutosizer::superclusterHasEnoughTextToAutosize(
+    Supercluster* supercluster,
+    const LayoutBlock* widthProvider,
+    const bool skipLayoutedNodes)
 {
     if (supercluster->m_hasEnoughTextToAutosize != UnknownAmountOfText)
         return supercluster->m_hasEnoughTextToAutosize == HasEnoughText;
 
+#ifdef TENCENT_CHANGES
+    int definiteLinesToAdd = 0;
+    int candidateLinesToAdd = 0;
+#endif
+
     for (auto* root : *supercluster->m_roots) {
-        if (clusterWouldHaveEnoughTextToAutosize(root, widthProvider)) {
+        if (skipLayoutedNodes && !root->normalChildNeedsLayout())
+            continue;
+        if (clusterWouldHaveEnoughTextToAutosize(root,
+#ifdef TENCENT_CHANGES
+                definiteLinesToAdd, candidateLinesToAdd,
+#endif
+                widthProvider)) {
             supercluster->m_hasEnoughTextToAutosize = HasEnoughText;
             return true;
         }
@@ -800,14 +1147,23 @@ float TextAutosizer::superclusterMultiplier(Cluster* cluster)
     Supercluster* supercluster = cluster->m_supercluster;
     if (!supercluster->m_multiplier) {
         const LayoutBlock* widthProvider = maxClusterWidthProvider(cluster->m_supercluster, cluster->m_root);
-        supercluster->m_multiplier = superclusterHasEnoughTextToAutosize(supercluster, widthProvider)
-            ? multiplierFromBlock(widthProvider) : 1.0f;
+        RELEASE_ASSERT(widthProvider);
+        supercluster->m_multiplier = superclusterHasEnoughTextToAutosize(supercluster, widthProvider, false)
+            ? multiplierFromBlock(widthProvider)
+            : 1.0f;
+
+#ifdef TENCENT_CHANGES
+        Fingerprint fp = m_fingerprintMapper.get(cluster->m_root);
+        if (fp)
+            updateFingerprintMapper(fp, supercluster->m_multiplier);
+#endif
     }
     ASSERT(supercluster->m_multiplier);
     return supercluster->m_multiplier;
 }
 
-const LayoutBlock* TextAutosizer::clusterWidthProvider(const LayoutBlock* root) const
+const LayoutBlock* TextAutosizer::clusterWidthProvider(
+    const LayoutBlock* root) const
 {
     if (root->isTable() || root->isTableCell())
         return root;
@@ -815,10 +1171,17 @@ const LayoutBlock* TextAutosizer::clusterWidthProvider(const LayoutBlock* root) 
     return deepestBlockContainingAllText(root);
 }
 
-const LayoutBlock* TextAutosizer::maxClusterWidthProvider(const Supercluster* supercluster, const LayoutBlock* currentRoot) const
+const LayoutBlock* TextAutosizer::maxClusterWidthProvider(
+    Supercluster* supercluster,
+    const LayoutBlock* currentRoot) const
 {
-    const LayoutBlock* result = clusterWidthProvider(currentRoot);
-    float maxWidth = widthFromBlock(result);
+    const LayoutBlock* result = nullptr;
+    if (currentRoot)
+        result = clusterWidthProvider(currentRoot);
+
+    float maxWidth = 0;
+    if (result)
+        maxWidth = widthFromBlock(result);
 
     const BlockSet* roots = supercluster->m_roots;
     for (const auto* root : *roots) {
@@ -831,7 +1194,6 @@ const LayoutBlock* TextAutosizer::maxClusterWidthProvider(const Supercluster* su
             result = widthProvider;
         }
     }
-    RELEASE_ASSERT(result);
     return result;
 }
 
@@ -846,17 +1208,18 @@ float TextAutosizer::widthFromBlock(const LayoutBlock* block) const
     if (!block->containingBlock())
         return 0;
 
-    // Tables may be inflated before computing their preferred widths. Try several methods to
-    // obtain a width, and fall back on a containing block's width.
+    // Tables may be inflated before computing their preferred widths. Try several
+    // methods to obtain a width, and fall back on a containing block's width.
     for (; block; block = block->containingBlock()) {
         float width;
         Length specifiedWidth = block->isTableCell()
-            ? toLayoutTableCell(block)->styleOrColLogicalWidth() : block->style()->logicalWidth();
+            ? toLayoutTableCell(block)->styleOrColLogicalWidth()
+            : block->style()->logicalWidth();
         if (specifiedWidth.isFixed()) {
             if ((width = specifiedWidth.value()) > 0)
                 return width;
         }
-        if (specifiedWidth.hasPercent()) {
+        if (specifiedWidth.isPercentOrCalc()) {
             if (float containerWidth = block->containingBlock()->contentLogicalWidth().toFloat()) {
                 if ((width = floatValueForLength(specifiedWidth, containerWidth)) > 0)
                     return width;
@@ -870,19 +1233,26 @@ float TextAutosizer::widthFromBlock(const LayoutBlock* block) const
 
 float TextAutosizer::multiplierFromBlock(const LayoutBlock* block)
 {
-    // If block->needsLayout() is false, it does not need to be in m_blocksThatHaveBegunLayout.
-    // This can happen during layout of a positioned object if the cluster's DBCAT is deeper
-    // than the positioned object's containing block, and wasn't marked as needing layout.
+    // If block->needsLayout() is false, it does not need to be in
+    // m_blocksThatHaveBegunLayout. This can happen during layout of a positioned
+    // object if the cluster's DBCAT is deeper than the positioned object's
+    // containing block, and wasn't marked as needing layout.
     ASSERT(m_blocksThatHaveBegunLayout.contains(block) || !block->needsLayout());
 
     // Block width, in CSS pixels.
     float blockWidth = widthFromBlock(block);
-    float multiplier = m_pageInfo.m_frameWidth ? std::min(blockWidth, static_cast<float>(m_pageInfo.m_layoutWidth)) / m_pageInfo.m_frameWidth : 1.0f;
-
-    return std::max(m_pageInfo.m_baseMultiplier * multiplier, 1.0f);
+    float layoutWidth = std::min(blockWidth, static_cast<float>(m_pageInfo.m_layoutWidth));
+    float multiplier = m_pageInfo.m_frameWidth ? layoutWidth / m_pageInfo.m_frameWidth : 1.0f;
+    multiplier *= m_pageInfo.m_accessibilityFontScaleFactor * m_pageInfo.m_deviceScaleAdjustment;
+    return std::max(multiplier, 1.0f
+#ifdef TENCENT_CHANGES
+            * m_pageInfo.m_accessibilityFontScaleFactor * m_pageInfo.m_deviceScaleAdjustment
+#endif
+    );
 }
 
-const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(Cluster* cluster)
+const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(
+    Cluster* cluster) const
 {
     if (!cluster->m_deepestBlockContainingAllText)
         cluster->m_deepestBlockContainingAllText = deepestBlockContainingAllText(cluster->m_root);
@@ -891,7 +1261,8 @@ const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(Cluster* cluster
 }
 
 // FIXME: Refactor this to look more like TextAutosizer::deepestCommonAncestor.
-const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(const LayoutBlock* root) const
+const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(
+    const LayoutBlock* root) const
 {
     size_t firstDepth = 0;
     const LayoutObject* firstTextLeaf = findTextLeaf(root, firstDepth, First);
@@ -902,7 +1273,8 @@ const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(const LayoutBloc
     const LayoutObject* lastTextLeaf = findTextLeaf(root, lastDepth, Last);
     ASSERT(lastTextLeaf);
 
-    // Equalize the depths if necessary. Only one of the while loops below will get executed.
+    // Equalize the depths if necessary. Only one of the while loops below will
+    // get executed.
     const LayoutObject* firstNode = firstTextLeaf;
     const LayoutObject* lastNode = lastTextLeaf;
     while (firstDepth > lastDepth) {
@@ -914,7 +1286,8 @@ const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(const LayoutBloc
         --lastDepth;
     }
 
-    // Go up from both nodes until the parent is the same. Both pointers will point to the LCA then.
+    // Go up from both nodes until the parent is the same. Both pointers will
+    // point to the LCA then.
     while (firstNode != lastNode) {
         firstNode = firstNode->parent();
         lastNode = lastNode->parent();
@@ -923,10 +1296,11 @@ const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(const LayoutBloc
     if (firstNode->isLayoutBlock())
         return toLayoutBlock(firstNode);
 
-    // containingBlock() should never leave the cluster, since it only skips ancestors when finding
-    // the container of position:absolute/fixed blocks, and those cannot exist between a cluster and
-    // its text node's lowest common ancestor as isAutosizingCluster would have made them into their
-    // own independent cluster.
+    // containingBlock() should never leave the cluster, since it only skips
+    // ancestors when finding the container of position:absolute/fixed blocks, and
+    // those cannot exist between a cluster and its text node's lowest common
+    // ancestor as isAutosizingCluster would have made them into their own
+    // independent cluster.
     const LayoutBlock* containingBlock = firstNode->containingBlock();
     if (!containingBlock)
         return root;
@@ -935,7 +1309,10 @@ const LayoutBlock* TextAutosizer::deepestBlockContainingAllText(const LayoutBloc
     return containingBlock;
 }
 
-const LayoutObject* TextAutosizer::findTextLeaf(const LayoutObject* parent, size_t& depth, TextLeafSearch firstOrLast) const
+const LayoutObject* TextAutosizer::findTextLeaf(
+    const LayoutObject* parent,
+    size_t& depth,
+    TextLeafSearch firstOrLast) const
 {
     // List items are treated as text due to the marker.
     if (parent->isListItem())
@@ -945,25 +1322,53 @@ const LayoutObject* TextAutosizer::findTextLeaf(const LayoutObject* parent, size
         return parent;
 
     ++depth;
-    const LayoutObject* child = (firstOrLast == First) ? parent->slowFirstChild() : parent->slowLastChild();
+    const LayoutObject* child = (firstOrLast == First) ? parent->slowFirstChild()
+                                                       : parent->slowLastChild();
     while (child) {
-        // Note: At this point clusters may not have been created for these blocks so we cannot rely
-        //       on m_clusters. Instead, we use a best-guess about whether the block will become a cluster.
+        // Note: At this point clusters may not have been created for these blocks
+        // so we cannot rely on m_clusters. Instead, we use a best-guess about
+        // whether the block will become a cluster.
         if (!classifyBlock(child, INDEPENDENT)) {
             if (const LayoutObject* leaf = findTextLeaf(child, depth, firstOrLast))
                 return leaf;
         }
-        child = (firstOrLast == First) ? child->nextSibling() : child->previousSibling();
+        child = (firstOrLast == First) ? child->nextSibling()
+                                       : child->previousSibling();
     }
     --depth;
 
     return nullptr;
 }
 
-void TextAutosizer::applyMultiplier(LayoutObject* layoutObject, float multiplier, RelayoutBehavior relayoutBehavior)
+void TextAutosizer::applyMultiplier(LayoutObject* layoutObject,
+    float multiplier,
+    SubtreeLayoutScope* layouter,
+    RelayoutBehavior relayoutBehavior)
 {
     ASSERT(layoutObject);
     ComputedStyle& currentStyle = layoutObject->mutableStyleRef();
+#ifdef AUTOSIZING_DOM_DEBUG_INFO
+#ifdef TENCENT_CHANGES
+    Cluster* cluster = m_clusterStack.isEmpty() ? 0 : currentCluster();
+    if (cluster && cluster->m_root != layoutObject)
+        writeClusterDebugInfo(layoutObject, currentStyle->textAutosizingMultiplier(), false);
+#endif
+#endif
+    if (!currentStyle.getTextSizeAdjust().isAuto()) {
+        // The accessibility font scale factor is applied by the autosizer so we
+        // need to apply that scale factor on top of the text-size-adjust
+        // multiplier. Only apply the accessibility factor if the autosizer has
+        // determined a multiplier should be applied so that text-size-adjust:none
+        // does not cause a multiplier to be applied when it wouldn't be otherwise.
+        bool shouldApplyAccessibilityFontScaleFactor = multiplier > 1;
+        multiplier = currentStyle.getTextSizeAdjust().multiplier();
+        if (shouldApplyAccessibilityFontScaleFactor)
+            multiplier *= m_pageInfo.m_accessibilityFontScaleFactor;
+    } else if (multiplier < 1) {
+        // Unlike text-size-adjust, the text autosizer should only inflate fonts.
+        multiplier = 1;
+    }
+
     if (currentStyle.textAutosizingMultiplier() == multiplier)
         return;
 
@@ -974,21 +1379,35 @@ void TextAutosizer::applyMultiplier(LayoutObject* layoutObject, float multiplier
 
     switch (relayoutBehavior) {
     case AlreadyInLayout:
-        // Don't free currentStyle until the end of the layout pass. This allows other parts of the system
-        // to safely hold raw ComputedStyle* pointers during layout, e.g. BreakingContext::m_currentStyle.
-        m_stylesRetainedDuringLayout.append(&currentStyle);
+        // Don't free currentStyle until the end of the layout pass. This allows
+        // other parts of the system to safely hold raw ComputedStyle* pointers
+        // during layout, e.g. BreakingContext::m_currentStyle.
+        m_stylesRetainedDuringLayout.push_back(&currentStyle);
 
-        layoutObject->setStyleInternal(style.release());
-        layoutObject->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::TextAutosizing);
+        layoutObject->setStyleInternal(std::move(style));
+        DCHECK(!layouter || layoutObject->isDescendantOf(&layouter->root()));
+        layoutObject->setNeedsLayoutAndFullPaintInvalidation(
+            LayoutInvalidationReason::TextAutosizing, MarkContainerChain,
+            layouter);
         break;
 
     case LayoutNeeded:
-        layoutObject->setStyle(style.release());
+        DCHECK(!layouter);
+        layoutObject->setStyle(std::move(style));
         break;
     }
 
     if (multiplier != 1)
         m_pageInfo.m_hasAutosized = true;
+
+    layoutObject->clearBaseComputedStyle();
+
+#ifdef AUTOSIZING_DOM_DEBUG_INFO
+#ifdef TENCENT_CHANGES
+    if (cluster && cluster->m_root != layoutObject)
+        writeClusterDebugInfo(layoutObject, multiplier, true);
+#endif
+#endif
 }
 
 bool TextAutosizer::isWiderOrNarrowerDescendant(Cluster* cluster)
@@ -999,9 +1418,40 @@ bool TextAutosizer::isWiderOrNarrowerDescendant(Cluster* cluster)
 
     const LayoutBlock* parentDeepestBlockContainingAllText = deepestBlockContainingAllText(cluster->m_parent);
     ASSERT(m_blocksThatHaveBegunLayout.contains(cluster->m_root));
-    ASSERT(m_blocksThatHaveBegunLayout.contains(parentDeepestBlockContainingAllText));
+    ASSERT(m_blocksThatHaveBegunLayout.contains(
+        parentDeepestBlockContainingAllText));
 
     float contentWidth = cluster->m_root->contentLogicalWidth().toFloat();
+    float clusterTextWidth = parentDeepestBlockContainingAllText->contentLogicalWidth().toFloat();
+
+    // Clusters with a root that is wider than the deepestBlockContainingAllText
+    // of their parent autosize independently of their parent.
+    if (contentWidth > clusterTextWidth)
+        return true;
+
+    // Clusters with a root that is significantly narrower than the
+    // deepestBlockContainingAllText of their parent autosize independently of
+    // their parent.
+    static float narrowWidthDifference =
+#ifdef TENCENT_CHANGES
+        MAX_WIDTH_DIFFERENCE;
+#else
+        200;
+#endif
+    if (clusterTextWidth - contentWidth > narrowWidthDifference)
+        return true;
+
+    return false;
+}
+
+#ifdef TENCENT_CHANGES
+bool TextAutosizer::blockIsWiderOrNarrowerDescendant(const LayoutBlock* block, Cluster* cluster) const
+{
+    if (!block || !cluster)
+        return false;
+
+    const LayoutBlock* parentDeepestBlockContainingAllText = deepestBlockContainingAllText(cluster);
+    float contentWidth = block->contentLogicalWidth().toFloat();
     float clusterTextWidth = parentDeepestBlockContainingAllText->contentLogicalWidth().toFloat();
 
     // Clusters with a root that is wider than the deepestBlockContainingAllText of their parent
@@ -1011,29 +1461,47 @@ bool TextAutosizer::isWiderOrNarrowerDescendant(Cluster* cluster)
 
     // Clusters with a root that is significantly narrower than the deepestBlockContainingAllText of
     // their parent autosize independently of their parent.
-    static float narrowWidthDifference = 200;
+    static float narrowWidthDifference = MAX_WIDTH_DIFFERENCE;
     if (clusterTextWidth - contentWidth > narrowWidthDifference)
         return true;
 
     return false;
 }
+#endif
 
 TextAutosizer::Cluster* TextAutosizer::currentCluster() const
 {
-    ASSERT_WITH_SECURITY_IMPLICATION(!m_clusterStack.isEmpty());
-    return m_clusterStack.last().get();
+    SECURITY_DCHECK(!m_clusterStack.isEmpty());
+    return m_clusterStack.back().get();
 }
 
-#if ENABLE(ASSERT)
+TextAutosizer::Cluster::Cluster(const LayoutBlock* root,
+    BlockFlags flags,
+    Cluster* parent,
+    Supercluster* supercluster)
+    : m_root(root)
+    , m_flags(flags)
+    , m_deepestBlockContainingAllText(nullptr)
+    , m_parent(parent)
+    , m_multiplier(0)
+    , m_hasEnoughTextToAutosize(UnknownAmountOfText)
+    , m_supercluster(supercluster)
+    , m_hasTableAncestor(root->isTableCell() || (m_parent && m_parent->m_hasTableAncestor))
+{
+}
+
+#if DCHECK_IS_ON()
 void TextAutosizer::FingerprintMapper::assertMapsAreConsistent()
 {
-    // For each fingerprint -> block mapping in m_blocksForFingerprint we should have an associated
-    // map from block -> fingerprint in m_fingerprints.
+    // For each fingerprint -> block mapping in m_blocksForFingerprint we should
+    // have an associated map from block -> fingerprint in m_fingerprints.
     ReverseFingerprintMap::iterator end = m_blocksForFingerprint.end();
-    for (ReverseFingerprintMap::iterator fingerprintIt = m_blocksForFingerprint.begin(); fingerprintIt != end; ++fingerprintIt) {
+    for (ReverseFingerprintMap::iterator fingerprintIt = m_blocksForFingerprint.begin();
+         fingerprintIt != end; ++fingerprintIt) {
         Fingerprint fingerprint = fingerprintIt->key;
         BlockSet* blocks = fingerprintIt->value.get();
-        for (BlockSet::iterator blockIt = blocks->begin(); blockIt != blocks->end(); ++blockIt) {
+        for (BlockSet::iterator blockIt = blocks->begin(); blockIt != blocks->end();
+             ++blockIt) {
             const LayoutBlock* block = (*blockIt);
             ASSERT(m_fingerprints.get(block) == fingerprint);
         }
@@ -1041,30 +1509,33 @@ void TextAutosizer::FingerprintMapper::assertMapsAreConsistent()
 }
 #endif
 
-void TextAutosizer::FingerprintMapper::add(const LayoutObject* layoutObject, Fingerprint fingerprint)
+void TextAutosizer::FingerprintMapper::add(LayoutObject* layoutObject,
+    Fingerprint fingerprint)
 {
     remove(layoutObject);
 
     m_fingerprints.set(layoutObject, fingerprint);
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     assertMapsAreConsistent();
 #endif
 }
 
-void TextAutosizer::FingerprintMapper::addTentativeClusterRoot(const LayoutBlock* block, Fingerprint fingerprint)
+void TextAutosizer::FingerprintMapper::addTentativeClusterRoot(
+    LayoutBlock* block,
+    Fingerprint fingerprint)
 {
     add(block, fingerprint);
 
-    ReverseFingerprintMap::AddResult addResult = m_blocksForFingerprint.add(fingerprint, PassOwnPtr<BlockSet>());
+    ReverseFingerprintMap::AddResult addResult = m_blocksForFingerprint.add(fingerprint, std::unique_ptr<BlockSet>());
     if (addResult.isNewEntry)
-        addResult.storedValue->value = adoptPtr(new BlockSet);
+        addResult.storedValue->value = WTF::wrapUnique(new BlockSet);
     addResult.storedValue->value->add(block);
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     assertMapsAreConsistent();
 #endif
 }
 
-bool TextAutosizer::FingerprintMapper::remove(const LayoutObject* layoutObject)
+bool TextAutosizer::FingerprintMapper::remove(LayoutObject* layoutObject)
 {
     Fingerprint fingerprint = m_fingerprints.take(layoutObject);
     if (!fingerprint || !layoutObject->isLayoutBlock())
@@ -1076,25 +1547,55 @@ bool TextAutosizer::FingerprintMapper::remove(const LayoutObject* layoutObject)
 
     BlockSet& blocks = *blocksIter->value;
     blocks.remove(toLayoutBlock(layoutObject));
-    if (blocks.isEmpty())
+    if (blocks.isEmpty()) {
         m_blocksForFingerprint.remove(blocksIter);
-#if ENABLE(ASSERT)
+
+        SuperclusterMap::iterator superclusterIter = m_superclusters.find(fingerprint);
+
+        if (superclusterIter != m_superclusters.end()) {
+            Supercluster* supercluster = superclusterIter->value.get();
+            m_potentiallyInconsistentSuperclusters.remove(supercluster);
+            m_superclusters.remove(superclusterIter);
+        }
+    }
+#if DCHECK_IS_ON()
     assertMapsAreConsistent();
 #endif
     return true;
 }
 
-TextAutosizer::Fingerprint TextAutosizer::FingerprintMapper::get(const LayoutObject* layoutObject)
+TextAutosizer::Fingerprint TextAutosizer::FingerprintMapper::get(
+    const LayoutObject* layoutObject)
 {
     return m_fingerprints.get(layoutObject);
 }
 
-TextAutosizer::BlockSet* TextAutosizer::FingerprintMapper::getTentativeClusterRoots(Fingerprint fingerprint)
+TextAutosizer::BlockSet*
+TextAutosizer::FingerprintMapper::getTentativeClusterRoots(
+    Fingerprint fingerprint)
 {
     return m_blocksForFingerprint.get(fingerprint);
 }
 
-TextAutosizer::LayoutScope::LayoutScope(LayoutBlock* block)
+#ifdef TENCENT_CHANGES
+void TextAutosizer::FingerprintMapper::addMultiplier(Fingerprint fp, float multi)
+{
+    m_multipliers.remove(fp);
+    m_multipliers.set(fp, multi);
+}
+
+float TextAutosizer::FingerprintMapper::getMultiplier(Fingerprint fp)
+{
+    ReverseMultiplierMap::iterator multiplierIter = m_multipliers.find(fp);
+    if (multiplierIter == m_multipliers.end())
+        return 0.0f;
+
+    return m_multipliers.get(fp);
+}
+#endif
+
+TextAutosizer::LayoutScope::LayoutScope(LayoutBlock* block,
+    SubtreeLayoutScope* layouter)
     : m_textAutosizer(block->document().textAutosizer())
     , m_block(block)
 {
@@ -1102,9 +1603,9 @@ TextAutosizer::LayoutScope::LayoutScope(LayoutBlock* block)
         return;
 
     if (m_textAutosizer->shouldHandleLayout())
-        m_textAutosizer->beginLayout(m_block);
+        m_textAutosizer->beginLayout(m_block, layouter);
     else
-        m_textAutosizer = 0;
+        m_textAutosizer = nullptr;
 }
 
 TextAutosizer::LayoutScope::~LayoutScope()
@@ -1112,7 +1613,6 @@ TextAutosizer::LayoutScope::~LayoutScope()
     if (m_textAutosizer)
         m_textAutosizer->endLayout(m_block);
 }
-
 
 TextAutosizer::TableLayoutScope::TableLayoutScope(LayoutTable* table)
     : LayoutScope(table)
@@ -1141,8 +1641,11 @@ TextAutosizer::DeferUpdatePageInfo::~DeferUpdatePageInfo()
     }
 }
 
-float TextAutosizer::computeAutosizedFontSize(float specifiedSize, float multiplier)
+float TextAutosizer::computeAutosizedFontSize(float specifiedSize,
+    float multiplier)
 {
+    DCHECK_GE(multiplier, 0);
+
     // Somewhat arbitrary "pleasant" font size.
     const float pleasantSize = 16;
 
@@ -1159,7 +1662,9 @@ float TextAutosizer::computeAutosizedFontSize(float specifiedSize, float multipl
     const float gradientAfterPleasantSize = 0.5;
 
     float computedSize;
-    if (specifiedSize <= pleasantSize) {
+    // Skip linear backoff for multipliers that shrink the size or when the font
+    // sizes are small.
+    if (multiplier <= 1 || specifiedSize <= pleasantSize) {
         computedSize = multiplier * specifiedSize;
     } else {
         computedSize = multiplier * pleasantSize + gradientAfterPleasantSize * (specifiedSize - pleasantSize);
@@ -1168,6 +1673,88 @@ float TextAutosizer::computeAutosizedFontSize(float specifiedSize, float multipl
     }
     return computedSize;
 }
+
+void TextAutosizer::checkSuperclusterConsistency()
+{
+    HashSet<Supercluster*>& potentiallyInconsistentSuperclusters = m_fingerprintMapper.getPotentiallyInconsistentSuperclusters();
+    if (potentiallyInconsistentSuperclusters.isEmpty())
+        return;
+
+    for (Supercluster* supercluster : potentiallyInconsistentSuperclusters) {
+        if (HasEnoughText == supercluster->m_hasEnoughTextToAutosize)
+            continue;
+
+        float oldMultipiler = supercluster->m_multiplier;
+        supercluster->m_multiplier = 0;
+        supercluster->m_hasEnoughTextToAutosize = UnknownAmountOfText;
+        const LayoutBlock* widthProvider = maxClusterWidthProvider(supercluster, nullptr);
+        if (!widthProvider)
+            continue;
+
+        if (superclusterHasEnoughTextToAutosize(supercluster, widthProvider,
+                true)
+            == HasEnoughText) {
+            for (auto* root : *supercluster->m_roots) {
+                if (!root->everHadLayout())
+                    continue;
+
+                DCHECK(root);
+                setAllTextNeedsLayout(root);
+            }
+        } else {
+            supercluster->m_multiplier = oldMultipiler;
+        }
+    }
+    potentiallyInconsistentSuperclusters.clear();
+}
+
+#ifdef TENCENT_CHANGES
+bool TextAutosizer::checkTextAutoSizerConsistent()
+{
+    if (m_multiplierInconsistent.size() <= 0)
+        return false;
+
+    size_t size = m_multiplierInconsistent.size();
+    for (size_t i = 0; i < size; i++) {
+        Fingerprint fp = m_multiplierInconsistent[i];
+        BlockSet* roots = m_fingerprintMapper.getTentativeClusterRoots(fp);
+        if (roots) {
+            BlockSet::iterator end = roots->end();
+            for (BlockSet::iterator it = roots->begin(); it != end; ++it) {
+                LayoutBlock* rb = const_cast<LayoutBlock*>(*it);
+
+                LayoutObject* descendant = rb->firstChild();
+                while (descendant) {
+                    if (descendant->isText()) {
+                        LayoutObject* c = descendant->container();
+                        if (c)
+                            c->setNeedsLayout(LayoutInvalidationReason::TextAutosizing);
+                    }
+                    descendant = descendant->nextInPreOrder(rb);
+                }
+            }
+        }
+    }
+    m_multiplierInconsistent.clear();
+
+    return true;
+}
+
+void TextAutosizer::updateFingerprintMapper(Fingerprint fp, float multi)
+{
+    if (0 == fp)
+        return;
+
+    float multiplierReversed = m_fingerprintMapper.getMultiplier(fp);
+
+    if (multiplierReversed && multiplierReversed != multi) {
+        m_fingerprintMapper.addMultiplier(fp, multi);
+        m_multiplierInconsistent.append(fp);
+    } else if (!multiplierReversed) {
+        m_fingerprintMapper.addMultiplier(fp, multi);
+    }
+}
+#endif
 
 DEFINE_TRACE(TextAutosizer)
 {

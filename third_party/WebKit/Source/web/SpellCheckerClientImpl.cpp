@@ -24,13 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/SpellCheckerClientImpl.h"
 
-#include "core/dom/DocumentMarkerController.h"
 #include "core/dom/Element.h"
 #include "core/editing/Editor.h"
-#include "core/editing/SpellChecker.h"
+#include "core/editing/markers/DocumentMarkerController.h"
+#include "core/editing/spellcheck/SpellChecker.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
 #include "core/page/Page.h"
@@ -47,9 +46,7 @@ SpellCheckerClientImpl::SpellCheckerClientImpl(WebViewImpl* webview)
 {
 }
 
-SpellCheckerClientImpl::~SpellCheckerClientImpl()
-{
-}
+SpellCheckerClientImpl::~SpellCheckerClientImpl() { }
 
 bool SpellCheckerClientImpl::shouldSpellcheckByDefault()
 {
@@ -81,7 +78,7 @@ bool SpellCheckerClientImpl::shouldSpellcheckByDefault()
     return true;
 }
 
-bool SpellCheckerClientImpl::isContinuousSpellCheckingEnabled()
+bool SpellCheckerClientImpl::isSpellCheckingEnabled()
 {
     if (m_spellCheckThisFieldStatus == SpellCheckForcedOff)
         return false;
@@ -90,15 +87,17 @@ bool SpellCheckerClientImpl::isContinuousSpellCheckingEnabled()
     return shouldSpellcheckByDefault();
 }
 
-void SpellCheckerClientImpl::toggleContinuousSpellChecking()
+void SpellCheckerClientImpl::toggleSpellCheckingEnabled()
 {
-    if (isContinuousSpellCheckingEnabled()) {
+    if (isSpellCheckingEnabled()) {
         m_spellCheckThisFieldStatus = SpellCheckForcedOff;
         if (Page* page = m_webView->page()) {
-            for (Frame* frame = page->mainFrame(); frame; frame = frame->tree().traverseNext()) {
+            for (Frame* frame = page->mainFrame(); frame;
+                 frame = frame->tree().traverseNext()) {
                 if (!frame->isLocalFrame())
                     continue;
-                toLocalFrame(frame)->document()->markers().removeMarkers(DocumentMarker::MisspellingMarkers());
+                toLocalFrame(frame)->document()->markers().removeMarkers(
+                    DocumentMarker::MisspellingMarkers());
             }
         }
     } else {
@@ -115,19 +114,9 @@ void SpellCheckerClientImpl::toggleContinuousSpellChecking()
     }
 }
 
-bool SpellCheckerClientImpl::isGrammarCheckingEnabled()
-{
-    const LocalFrame* frame = toLocalFrame(m_webView->focusedCoreFrame());
-    return frame && frame->settings() && (frame->settings()->asynchronousSpellCheckingEnabled() || frame->settings()->unifiedTextCheckerEnabled());
-}
-
-bool SpellCheckerClientImpl::shouldEraseMarkersAfterChangeSelection(TextCheckingType type) const
-{
-    const Frame* frame = m_webView->focusedCoreFrame();
-    return !frame || !frame->settings() || (!frame->settings()->asynchronousSpellCheckingEnabled() && !frame->settings()->unifiedTextCheckerEnabled());
-}
-
-void SpellCheckerClientImpl::checkSpellingOfString(const String& text, int* misspellingLocation, int* misspellingLength)
+void SpellCheckerClientImpl::checkSpellingOfString(const String& text,
+    int* misspellingLocation,
+    int* misspellingLength)
 {
     // SpellCheckWord will write (0, 0) into the output vars, which is what our
     // caller expects if the word is spelled correctly.
@@ -136,7 +125,8 @@ void SpellCheckerClientImpl::checkSpellingOfString(const String& text, int* miss
 
     // Check to see if the provided text is spelled correctly.
     if (m_webView->spellCheckClient()) {
-        m_webView->spellCheckClient()->spellCheck(text, spellLocation, spellLength, 0);
+        m_webView->spellCheckClient()->checkSpelling(text, spellLocation,
+            spellLength, nullptr);
     } else {
         spellLocation = 0;
         spellLength = 0;
@@ -150,75 +140,31 @@ void SpellCheckerClientImpl::checkSpellingOfString(const String& text, int* miss
         *misspellingLength = spellLength;
 }
 
-void SpellCheckerClientImpl::requestCheckingOfString(PassRefPtrWillBeRawPtr<TextCheckingRequest> request)
+void SpellCheckerClientImpl::requestCheckingOfString(
+    TextCheckingRequest* request)
 {
-    if (m_webView->spellCheckClient()) {
-        const String& text = request->data().text();
-        const Vector<uint32_t>& markers = request->data().markers();
-        const Vector<unsigned>& markerOffsets = request->data().offsets();
-        m_webView->spellCheckClient()->requestCheckingOfText(text, markers, markerOffsets, new WebTextCheckingCompletionImpl(request));
-    }
-}
-
-String SpellCheckerClientImpl::getAutoCorrectSuggestionForMisspelledWord(const String& misspelledWord)
-{
-    if (!(isContinuousSpellCheckingEnabled() && m_webView->client()))
-        return String();
-
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    // Do not autocorrect words with capital letters in it except the
-    // first letter. This will remove cases changing "IMB" to "IBM".
-    for (size_t i = 1; i < misspelledWord.length(); i++) {
-        if (u_isupper(static_cast<UChar32>(misspelledWord[i])))
-            return String();
-    }
-#endif // MINIBLINK_NOT_IMPLEMENTED
-    notImplemented();
-
-    if (m_webView->spellCheckClient())
-        return m_webView->spellCheckClient()->autoCorrectWord(WebString(misspelledWord));
-    return String();
-}
-
-void SpellCheckerClientImpl::checkGrammarOfString(const String& text, WTF::Vector<GrammarDetail>& details, int* badGrammarLocation, int* badGrammarLength)
-{
-    if (badGrammarLocation)
-        *badGrammarLocation = -1;
-    if (badGrammarLength)
-        *badGrammarLength = 0;
-
     if (!m_webView->spellCheckClient())
         return;
-    WebVector<WebTextCheckingResult> webResults;
-    m_webView->spellCheckClient()->checkTextOfParagraph(text, WebTextCheckingTypeGrammar, &webResults);
-    if (!webResults.size())
-        return;
-
-    // Convert a list of WebTextCheckingResults to a list of GrammarDetails. If
-    // the converted vector of GrammarDetails has grammar errors, we set
-    // badGrammarLocation and badGrammarLength to tell WebKit that the input
-    // text has grammar errors.
-    for (size_t i = 0; i < webResults.size(); ++i) {
-        if (webResults[i].decoration == WebTextDecorationTypeGrammar) {
-            GrammarDetail detail;
-            detail.location = webResults[i].location;
-            detail.length = webResults[i].length;
-            detail.userDescription = webResults[i].replacement;
-            details.append(detail);
-        }
-    }
-    if (!details.size())
-        return;
-    if (badGrammarLocation)
-        *badGrammarLocation = 0;
-    if (badGrammarLength)
-        *badGrammarLength = text.length();
+    const String& text = request->data().text();
+    const Vector<uint32_t>& markers = request->data().markers();
+    const Vector<unsigned>& markerOffsets = request->data().offsets();
+    m_webView->spellCheckClient()->requestCheckingOfText(
+        text, markers, markerOffsets, new WebTextCheckingCompletionImpl(request));
 }
 
-void SpellCheckerClientImpl::updateSpellingUIWithMisspelledWord(const String& misspelledWord)
+void SpellCheckerClientImpl::cancelAllPendingRequests()
+{
+    if (!m_webView->spellCheckClient())
+        return;
+    m_webView->spellCheckClient()->cancelAllPendingRequests();
+}
+
+void SpellCheckerClientImpl::updateSpellingUIWithMisspelledWord(
+    const String& misspelledWord)
 {
     if (m_webView->spellCheckClient())
-        m_webView->spellCheckClient()->updateSpellingUIWithMisspelledWord(WebString(misspelledWord));
+        m_webView->spellCheckClient()->updateSpellingUIWithMisspelledWord(
+            WebString(misspelledWord));
 }
 
 void SpellCheckerClientImpl::showSpellingUI(bool show)

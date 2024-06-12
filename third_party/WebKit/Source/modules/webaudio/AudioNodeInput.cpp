@@ -10,25 +10,24 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
 #include "modules/webaudio/AudioNodeInput.h"
-
-#include "modules/webaudio/AudioContext.h"
 #include "modules/webaudio/AudioNodeOutput.h"
+#include "wtf/PtrUtil.h"
 #include <algorithm>
+#include <memory>
 
 namespace blink {
 
@@ -37,12 +36,12 @@ inline AudioNodeInput::AudioNodeInput(AudioHandler& handler)
     , m_handler(handler)
 {
     // Set to mono by default.
-    m_internalSummingBus = AudioBus::create(1, AudioHandler::ProcessingSizeInFrames);
+    m_internalSummingBus = AudioBus::create(1, AudioUtilities::kRenderQuantumFrames);
 }
 
-PassOwnPtr<AudioNodeInput> AudioNodeInput::create(AudioHandler& handler)
+std::unique_ptr<AudioNodeInput> AudioNodeInput::create(AudioHandler& handler)
 {
-    return adoptPtr(new AudioNodeInput(handler));
+    return WTF::wrapUnique(new AudioNodeInput(handler));
 }
 
 void AudioNodeInput::connect(AudioNodeOutput& output)
@@ -87,7 +86,7 @@ void AudioNodeInput::disconnect(AudioNodeOutput& output)
 void AudioNodeInput::disable(AudioNodeOutput& output)
 {
     ASSERT(deferredTaskHandler().isGraphOwner());
-    ASSERT(m_outputs.contains(&output));
+    DCHECK(m_outputs.contains(&output));
 
     m_disabledOutputs.add(&output);
     m_outputs.remove(&output);
@@ -100,11 +99,13 @@ void AudioNodeInput::disable(AudioNodeOutput& output)
 void AudioNodeInput::enable(AudioNodeOutput& output)
 {
     ASSERT(deferredTaskHandler().isGraphOwner());
-    ASSERT(m_disabledOutputs.contains(&output));
 
     // Move output from disabled list to active list.
     m_outputs.add(&output);
-    m_disabledOutputs.remove(&output);
+    if (m_disabledOutputs.size() > 0) {
+        DCHECK(m_disabledOutputs.contains(&output));
+        m_disabledOutputs.remove(&output);
+    }
     changedOutputs();
 
     // Propagate enabled state to outputs.
@@ -118,7 +119,7 @@ void AudioNodeInput::didUpdate()
 
 void AudioNodeInput::updateInternalBus()
 {
-    ASSERT(deferredTaskHandler().isAudioThread());
+    DCHECK(deferredTaskHandler().isAudioThread());
     ASSERT(deferredTaskHandler().isGraphOwner());
 
     unsigned numberOfInputChannels = numberOfChannels();
@@ -126,7 +127,8 @@ void AudioNodeInput::updateInternalBus()
     if (numberOfInputChannels == m_internalSummingBus->numberOfChannels())
         return;
 
-    m_internalSummingBus = AudioBus::create(numberOfInputChannels, AudioHandler::ProcessingSizeInFrames);
+    m_internalSummingBus = AudioBus::create(numberOfInputChannels,
+        AudioUtilities::kRenderQuantumFrames);
 }
 
 unsigned AudioNodeInput::numberOfChannels() const
@@ -135,12 +137,14 @@ unsigned AudioNodeInput::numberOfChannels() const
     if (mode == AudioHandler::Explicit)
         return handler().channelCount();
 
-    // Find the number of channels of the connection with the largest number of channels.
+    // Find the number of channels of the connection with the largest number of
+    // channels.
     unsigned maxChannels = 1; // one channel is the minimum allowed
 
     for (AudioNodeOutput* output : m_outputs) {
-        // Use output()->numberOfChannels() instead of output->bus()->numberOfChannels(),
-        // because the calling of AudioNodeOutput::bus() is not safe here.
+        // Use output()->numberOfChannels() instead of
+        // output->bus()->numberOfChannels(), because the calling of
+        // AudioNodeOutput::bus() is not safe here.
         maxChannels = std::max(maxChannels, output->numberOfChannels());
     }
 
@@ -152,7 +156,7 @@ unsigned AudioNodeInput::numberOfChannels() const
 
 AudioBus* AudioNodeInput::bus()
 {
-    ASSERT(deferredTaskHandler().isAudioThread());
+    DCHECK(deferredTaskHandler().isAudioThread());
 
     // Handle single connection specially to allow for in-place processing.
     if (numberOfRenderingConnections() == 1 && handler().internalChannelCountMode() == AudioHandler::Max)
@@ -164,19 +168,22 @@ AudioBus* AudioNodeInput::bus()
 
 AudioBus* AudioNodeInput::internalSummingBus()
 {
-    ASSERT(deferredTaskHandler().isAudioThread());
+    DCHECK(deferredTaskHandler().isAudioThread());
 
     return m_internalSummingBus.get();
 }
 
-void AudioNodeInput::sumAllConnections(AudioBus* summingBus, size_t framesToProcess)
+void AudioNodeInput::sumAllConnections(AudioBus* summingBus,
+    size_t framesToProcess)
 {
-    ASSERT(deferredTaskHandler().isAudioThread());
+    DCHECK(deferredTaskHandler().isAudioThread());
 
-    // We shouldn't be calling this method if there's only one connection, since it's less efficient.
-    ASSERT(numberOfRenderingConnections() > 1 || handler().internalChannelCountMode() != AudioHandler::Max);
+    // We shouldn't be calling this method if there's only one connection, since
+    // it's less efficient.
+    //    DCHECK(numberOfRenderingConnections() > 1 ||
+    //        handler().internalChannelCountMode() != AudioHandler::Max);
 
-    ASSERT(summingBus);
+    DCHECK(summingBus);
     if (!summingBus)
         return;
 
@@ -186,7 +193,7 @@ void AudioNodeInput::sumAllConnections(AudioBus* summingBus, size_t framesToProc
 
     for (unsigned i = 0; i < numberOfRenderingConnections(); ++i) {
         AudioNodeOutput* output = renderingOutput(i);
-        ASSERT(output);
+        DCHECK(output);
 
         // Render audio from this output.
         AudioBus* connectionBus = output->pull(0, framesToProcess);
@@ -198,7 +205,7 @@ void AudioNodeInput::sumAllConnections(AudioBus* summingBus, size_t framesToProc
 
 AudioBus* AudioNodeInput::pull(AudioBus* inPlaceBus, size_t framesToProcess)
 {
-    ASSERT(deferredTaskHandler().isAudioThread());
+    DCHECK(deferredTaskHandler().isAudioThread());
 
     // Handle single connection case.
     if (numberOfRenderingConnections() == 1 && handler().internalChannelCountMode() == AudioHandler::Max) {
@@ -211,7 +218,8 @@ AudioBus* AudioNodeInput::pull(AudioBus* inPlaceBus, size_t framesToProcess)
 
     if (!numberOfRenderingConnections()) {
         // At least, generate silence if we're not connected to anything.
-        // FIXME: if we wanted to get fancy, we could propagate a 'silent hint' here to optimize the downstream graph processing.
+        // FIXME: if we wanted to get fancy, we could propagate a 'silent hint' here
+        // to optimize the downstream graph processing.
         internalSummingBus->zero();
         return internalSummingBus;
     }
@@ -223,5 +231,3 @@ AudioBus* AudioNodeInput::pull(AudioBus* inPlaceBus, size_t framesToProcess)
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

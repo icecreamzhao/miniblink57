@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/shadow/PickerIndicatorElement.h"
 
 #include "core/events/Event.h"
@@ -47,24 +45,27 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline PickerIndicatorElement::PickerIndicatorElement(Document& document, PickerIndicatorOwner& pickerIndicatorOwner)
+inline PickerIndicatorElement::PickerIndicatorElement(
+    Document& document,
+    PickerIndicatorOwner& pickerIndicatorOwner)
     : HTMLDivElement(document)
     , m_pickerIndicatorOwner(&pickerIndicatorOwner)
 {
 }
 
-PassRefPtrWillBeRawPtr<PickerIndicatorElement> PickerIndicatorElement::create(Document& document, PickerIndicatorOwner& pickerIndicatorOwner)
+PickerIndicatorElement* PickerIndicatorElement::create(
+    Document& document,
+    PickerIndicatorOwner& pickerIndicatorOwner)
 {
-    RefPtrWillBeRawPtr<PickerIndicatorElement> element = adoptRefWillBeNoop(new PickerIndicatorElement(document, pickerIndicatorOwner));
-    element->setShadowPseudoId(AtomicString("-webkit-calendar-picker-indicator", AtomicString::ConstructFromLiteral));
+    PickerIndicatorElement* element = new PickerIndicatorElement(document, pickerIndicatorOwner);
+    element->setShadowPseudoId(AtomicString("-webkit-calendar-picker-indicator"));
     element->setAttribute(idAttr, ShadowElementNames::pickerIndicator());
-    return element.release();
+    return element;
 }
 
 PickerIndicatorElement::~PickerIndicatorElement()
 {
-    closePopup();
-    ASSERT(!m_chooser);
+    DCHECK(!m_chooser);
 }
 
 LayoutObject* PickerIndicatorElement::createLayoutObject(const ComputedStyle&)
@@ -136,7 +137,7 @@ void PickerIndicatorElement::openPopup()
 
 Element& PickerIndicatorElement::ownerElement() const
 {
-    ASSERT(m_pickerIndicatorOwner);
+    DCHECK(m_pickerIndicatorOwner);
     return m_pickerIndicatorOwner->pickerOwnerElement();
 }
 
@@ -147,10 +148,10 @@ void PickerIndicatorElement::closePopup()
     m_chooser->endChooser();
 }
 
-void PickerIndicatorElement::detach(const AttachContext& context)
+void PickerIndicatorElement::detachLayoutTree(const AttachContext& context)
 {
     closePopup();
-    HTMLDivElement::detach(context);
+    HTMLDivElement::detachLayoutTree(context);
 }
 
 AXObject* PickerIndicatorElement::popupRootAXObject() const
@@ -163,7 +164,8 @@ bool PickerIndicatorElement::isPickerIndicatorElement() const
     return true;
 }
 
-Node::InsertionNotificationRequest PickerIndicatorElement::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest PickerIndicatorElement::insertedInto(
+    ContainerNode* insertionPoint)
 {
     HTMLDivElement::insertedInto(insertionPoint);
     return InsertionShouldCallDidNotifySubtreeInsertions;
@@ -171,7 +173,7 @@ Node::InsertionNotificationRequest PickerIndicatorElement::insertedInto(Containe
 
 void PickerIndicatorElement::didNotifySubtreeInsertionsToDocument()
 {
-    if (!document().settings() || !document().settings()->accessibilityEnabled())
+    if (!document().settings() || !document().settings()->getAccessibilityEnabled())
         return;
     // Don't make this focusable if we are in layout tests in order to avoid to
     // break existing tests.
@@ -186,9 +188,9 @@ void PickerIndicatorElement::didNotifySubtreeInsertionsToDocument()
 DEFINE_TRACE(PickerIndicatorElement)
 {
     visitor->trace(m_pickerIndicatorOwner);
+    visitor->trace(m_chooser);
     HTMLDivElement::trace(visitor);
+    DateTimeChooserClient::trace(visitor);
 }
 
-}
-
-#endif
+} // namespace blink

@@ -20,13 +20,7 @@
  *
  */
 
-#include "config.h"
-#include <wtf/text/qt4/UnicodeQt4.h>
-
 #include "platform/fonts/UTF16TextIterator.h"
-
-//#include <unicode/unorm.h>
-
 
 using namespace WTF;
 using namespace Unicode;
@@ -51,23 +45,8 @@ UTF16TextIterator::UTF16TextIterator(const UChar* characters, int currentCharact
 {
 }
 
-bool UTF16TextIterator::consumeSlowCase(UChar32& character)
+bool UTF16TextIterator::isValidSurrogatePair(UChar32& character)
 {
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    if (character <= 0x30FE) {
-        // Deal with Hiragana and Katakana voiced and semi-voiced syllables.
-        // Normalize into composed form, and then look for glyph with base +
-        // combined mark.
-        if (UChar32 normalized = normalizeVoicingMarks()) {
-            character = normalized;
-            m_currentGlyphLength = 2;
-        }
-        return true;
-    }
-
-    if (!U16_IS_SURROGATE(character))
-        return true;
-
     // If we have a surrogate pair, make sure it starts with the high part.
     if (!U16_IS_SURROGATE_LEAD(character))
         return false;
@@ -81,56 +60,22 @@ bool UTF16TextIterator::consumeSlowCase(UChar32& character)
     UChar low = m_characters[1];
     if (!U16_IS_TRAIL(low))
         return false;
-
-    character = U16_GET_SUPPLEMENTARY(character, low);
-    m_currentGlyphLength = 2;
-//#endif // MINIBLINK_NOT_IMPLEMENTED
     return true;
 }
 
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-
-void UTF16TextIterator::consumeMultipleUChar()
+bool UTF16TextIterator::consumeSurrogatePair(UChar32& character)
 {
-    const UChar* markCharactersEnd = m_characters + m_currentGlyphLength;
-    int markLength = m_currentGlyphLength;
-    while (markCharactersEnd < m_charactersEnd) {
-        UChar32 nextCharacter;
-        int nextCharacterLength = 0;
-        U16_NEXT(markCharactersEnd, nextCharacterLength,
-            m_charactersEnd - markCharactersEnd, nextCharacter);
-        if (!(U_GET_GC_MASK(nextCharacter) & U_GC_M_MASK))
-            break;
-        markLength += nextCharacterLength;
-        markCharactersEnd += nextCharacterLength;
-    }
-    m_currentGlyphLength = markLength;
-}
+    ASSERT(U16_IS_SURROGATE(character));
 
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-
-UChar32 UTF16TextIterator::normalizeVoicingMarks()
-{
-    // According to http://www.unicode.org/Public/UNIDATA/UCD.html#Canonical_Combining_Class_Values
-    static const uint8_t hiraganaKatakanaVoicingMarksCombiningClass = 8;
-
-    if (m_offset + 1 >= m_endOffset)
-        return 0;
-
-    if (combiningClass(m_characters[1]) == hiraganaKatakanaVoicingMarksCombiningClass) {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-        // Normalize into composed form using 3.2 rules.
-        UChar normalizedCharacters[2] = { 0, 0 };
-        UErrorCode uStatus = U_ZERO_ERROR;
-        int32_t resultLength = unorm_normalize(m_characters, 2, UNORM_NFC,
-            UNORM_UNICODE_3_2, &normalizedCharacters[0], 2, &uStatus);
-        if (resultLength == 1 && !uStatus)
-            return normalizedCharacters[0];
-#endif // MINIBLINK_NOT_IMPLEMENTED
-        return '?';
+    if (!isValidSurrogatePair(character)) {
+        character = replacementCharacter;
+        return true;
     }
 
-    return 0;
+    UChar low = m_characters[1];
+    character = U16_GET_SUPPLEMENTARY(character, low);
+    m_currentGlyphLength = 2;
+    return true;
 }
 
-}
+} // namespace blink

@@ -39,14 +39,17 @@ class StyleRuleKeyframe;
 
 class StyleRuleKeyframes final : public StyleRuleBase {
 public:
-    static PassRefPtrWillBeRawPtr<StyleRuleKeyframes> create() { return adoptRefWillBeNoop(new StyleRuleKeyframes()); }
+    static StyleRuleKeyframes* create() { return new StyleRuleKeyframes(); }
 
     ~StyleRuleKeyframes();
 
-    const WillBeHeapVector<RefPtrWillBeMember<StyleRuleKeyframe>>& keyframes() const { return m_keyframes; }
+    const HeapVector<Member<StyleRuleKeyframe>>& keyframes() const
+    {
+        return m_keyframes;
+    }
 
-    void parserAppendKeyframe(PassRefPtrWillBeRawPtr<StyleRuleKeyframe>);
-    void wrapperAppendKeyframe(PassRefPtrWillBeRawPtr<StyleRuleKeyframe>);
+    void parserAppendKeyframe(StyleRuleKeyframe*);
+    void wrapperAppendKeyframe(StyleRuleKeyframe*);
     void wrapperRemoveKeyframe(unsigned);
 
     String name() const { return m_name; }
@@ -57,7 +60,7 @@ public:
 
     int findKeyframeIndex(const String& key) const;
 
-    PassRefPtrWillBeRawPtr<StyleRuleKeyframes> copy() const { return adoptRefWillBeNoop(new StyleRuleKeyframes(*this)); }
+    StyleRuleKeyframes* copy() const { return new StyleRuleKeyframes(*this); }
 
     DECLARE_TRACE_AFTER_DISPATCH();
 
@@ -68,7 +71,7 @@ private:
     StyleRuleKeyframes();
     explicit StyleRuleKeyframes(const StyleRuleKeyframes&);
 
-    WillBeHeapVector<RefPtrWillBeMember<StyleRuleKeyframe>> m_keyframes;
+    HeapVector<Member<StyleRuleKeyframe>> m_keyframes;
     AtomicString m_name;
     unsigned m_version : 31;
     unsigned m_isPrefixed : 1;
@@ -78,16 +81,20 @@ DEFINE_STYLE_RULE_TYPE_CASTS(Keyframes);
 
 class CSSKeyframesRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CSSKeyframesRule> create(StyleRuleKeyframes* rule, CSSStyleSheet* sheet)
+    static CSSKeyframesRule* create(StyleRuleKeyframes* rule,
+        CSSStyleSheet* sheet)
     {
-        return adoptRefWillBeNoop(new CSSKeyframesRule(rule, sheet));
+        return new CSSKeyframesRule(rule, sheet);
     }
 
-    virtual ~CSSKeyframesRule();
+    ~CSSKeyframesRule() override;
 
-    virtual String cssText() const override;
-    virtual void reattach(StyleRuleBase*) override;
+    StyleRuleKeyframes* keyframes() { return m_keyframesRule.get(); }
+
+    String cssText() const override;
+    void reattach(StyleRuleBase*) override;
 
     String name() const { return m_keyframesRule->name(); }
     void setName(const String&);
@@ -113,15 +120,15 @@ public:
 private:
     CSSKeyframesRule(StyleRuleKeyframes*, CSSStyleSheet* parent);
 
-    virtual CSSRule::Type type() const override { return KEYFRAMES_RULE; }
+    CSSRule::Type type() const override { return kKeyframesRule; }
 
-    RefPtrWillBeMember<StyleRuleKeyframes> m_keyframesRule;
-    mutable WillBeHeapVector<RefPtrWillBeMember<CSSKeyframeRule>> m_childRuleCSSOMWrappers;
-    mutable OwnPtrWillBeMember<CSSRuleList> m_ruleListCSSOMWrapper;
+    Member<StyleRuleKeyframes> m_keyframesRule;
+    mutable HeapVector<Member<CSSKeyframeRule>> m_childRuleCSSOMWrappers;
+    mutable Member<CSSRuleList> m_ruleListCSSOMWrapper;
     bool m_isPrefixed;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSKeyframesRule, KEYFRAMES_RULE);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSKeyframesRule, kKeyframesRule);
 
 } // namespace blink
 

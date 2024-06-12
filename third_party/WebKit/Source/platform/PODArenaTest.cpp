@@ -23,14 +23,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/PODArena.h"
 
 #include "platform/testing/ArenaTestHelpers.h"
-#include "wtf/FastMalloc.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/RefPtr.h"
 #include <algorithm>
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -38,20 +36,30 @@ using ArenaTestHelpers::TrackedAllocator;
 
 namespace {
 
-// A couple of simple structs to allocate.
-struct TestClass1 {
-    TestClass1()
-        : x(0), y(0), z(0), w(1) { }
+    // A couple of simple structs to allocate.
+    struct TestClass1 {
+        TestClass1()
+            : x(0)
+            , y(0)
+            , z(0)
+            , w(1)
+        {
+        }
 
-    float x, y, z, w;
-};
+        float x, y, z, w;
+    };
 
-struct TestClass2 {
-    TestClass2()
-        : a(1), b(2), c(3), d(4) { }
+    struct TestClass2 {
+        TestClass2()
+            : a(1)
+            , b(2)
+            , c(3)
+            , d(4)
+        {
+        }
 
-    float a, b, c, d;
-};
+        float a, b, c, d;
+    };
 
 } // anonymous namespace
 

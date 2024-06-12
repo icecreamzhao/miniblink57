@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,37 +5,41 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGGradient.h"
 #include "SkSVGParser.h"
 #include "SkSVGStop.h"
 
-SkSVGGradient::SkSVGGradient() {
+SkSVGGradient::SkSVGGradient()
+{
 }
 
-SkSVGElement* SkSVGGradient::getGradient() {
+SkSVGElement* SkSVGGradient::getGradient()
+{
     return this;
 }
 
-bool SkSVGGradient::isDef() {
+bool SkSVGGradient::isDef()
+{
     return true;
 }
 
-bool SkSVGGradient::isNotDef() {
+bool SkSVGGradient::isNotDef()
+{
     return false;
 }
 
-void SkSVGGradient::translate(SkSVGParser& parser, bool defState) {
+void SkSVGGradient::translate(SkSVGParser& parser, bool defState)
+{
     INHERITED::translate(parser, defState);
     // !!! no support for 'objectBoundingBox' yet
     bool first = true;
     bool addedFirst = false;
     bool addedLast = false;
     SkString offsets("[");
-    SkString* lastOffset = NULL;
+    SkString* lastOffset = nullptr;
     for (SkSVGElement** ptr = fChildren.begin(); ptr < fChildren.end(); ptr++) {
         SkASSERT((*ptr)->getType() == SkSVGType_Stop);
-        SkSVGStop* stop = (SkSVGStop*) *ptr;
+        SkSVGStop* stop = (SkSVGStop*)*ptr;
         if (first && stop->f_offset.equals("0") == false) {
             addedFirst = true;
             offsets.append("0,");
@@ -71,12 +74,14 @@ void SkSVGGradient::translate(SkSVGParser& parser, bool defState) {
         parser.translate(*(fChildren.end() - 1), defState);
 }
 
-void SkSVGGradient::translateGradientUnits(SkString& units) {
+void SkSVGGradient::translateGradientUnits(SkString& units)
+{
     // !!! no support for 'objectBoundingBox' yet
     SkASSERT(strcmp(units.c_str(), "userSpaceOnUse") == 0);
 }
 
-void SkSVGGradient::write(SkSVGParser& parser, SkString& baseColor) {
+void SkSVGGradient::write(SkSVGParser& parser, SkString& baseColor)
+{
     if (baseColor.c_str()[0] != '#')
         return;
     SkSVGPaint* saveHead = parser.fHead;
@@ -87,7 +92,7 @@ void SkSVGGradient::write(SkSVGParser& parser, SkString& baseColor) {
     f_id.append(baseColor.c_str() + 1);
     SkString originalColors;
     for (SkSVGElement** ptr = fChildren.begin(); ptr < fChildren.end(); ptr++) {
-        SkSVGStop* colorElement = (SkSVGStop*) *ptr;
+        SkSVGStop* colorElement = (SkSVGStop*)*ptr;
         SkString& color = colorElement->fPaintState.f_stopColor;
         originalColors.append(color);
         originalColors.appendUnichar(',');
@@ -103,7 +108,7 @@ void SkSVGGradient::write(SkSVGParser& parser, SkString& baseColor) {
     translate(parser, true);
     const char* originalPtr = originalColors.c_str(); // restore original gradient values
     for (SkSVGElement** ptr = fChildren.begin(); ptr < fChildren.end(); ptr++) {
-        SkSVGStop* color = (SkSVGStop*) *ptr;
+        SkSVGStop* color = (SkSVGStop*)*ptr;
         const char* originalEnd = strchr(originalPtr, ',');
         color->fPaintState.f_stopColor.set(originalPtr, originalEnd - originalPtr);
         originalPtr = originalEnd + 1;

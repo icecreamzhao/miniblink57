@@ -5,83 +5,15 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkString.h"
 #include "SkTypeface.h"
 #include "SkTypes.h"
-
-static const char* gFaces[] = {
-    "Times Roman",
-    "Hiragino Maru Gothic Pro",
-    "Papyrus",
-    "Helvetica",
-    "Courier New"
-};
-
-class TypefaceGM : public skiagm::GM {
-public:
-    TypefaceGM()
-        : fFaces(NULL) {
-    }
-
-    virtual ~TypefaceGM() {
-        if (fFaces) {
-            for (size_t i = 0; i < SK_ARRAY_COUNT(gFaces); i++) {
-                SkSafeUnref(fFaces[i]);
-            }
-            delete [] fFaces;
-        }
-    }
-
-protected:
-    void onOnceBeforeDraw() override {
-        fFaces = new SkTypeface*[SK_ARRAY_COUNT(gFaces)];
-        for (size_t i = 0; i < SK_ARRAY_COUNT(gFaces); i++) {
-            fFaces[i] = sk_tool_utils::create_portable_typeface(gFaces[i], SkTypeface::kNormal);
-        }
-    }
-
-    SkString onShortName() override {
-        return SkString("typeface");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkString text("Typefaces are fun!");
-        SkScalar y = 0;
-
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        for (int i = 0; i < (int)SK_ARRAY_COUNT(gFaces); i++) {
-            this->drawWithFace(text, i, y, paint, canvas);
-        }
-        // Now go backwards
-        for (int i = SK_ARRAY_COUNT(gFaces) - 1; i >= 0; i--) {
-            this->drawWithFace(text, i, y, paint, canvas);
-        }
-    }
-
-private:
-    void drawWithFace(const SkString& text, int i, SkScalar& y, SkPaint& paint,
-                      SkCanvas* canvas) {
-        paint.setTypeface(fFaces[i]);
-        y += paint.getFontMetrics(NULL);
-        canvas->drawText(text.c_str(), text.size(), 0, y, paint);
-    }
-
-    SkTypeface** fFaces;
-
-    typedef skiagm::GM INHERITED;
-};
-
-///////////////////////////////////////////////////////////////////////////////
+#include "gm.h"
 
 static void getGlyphPositions(const SkPaint& paint, const uint16_t glyphs[],
-                             int count, SkScalar x, SkScalar y, SkPoint pos[]) {
+    int count, SkScalar x, SkScalar y, SkPoint pos[])
+{
     SkASSERT(SkPaint::kGlyphID_TextEncoding == paint.getTextEncoding());
 
     SkAutoSTMalloc<128, SkScalar> widthStorage(count);
@@ -95,7 +27,8 @@ static void getGlyphPositions(const SkPaint& paint, const uint16_t glyphs[],
 }
 
 static void applyKerning(SkPoint pos[], const int32_t adjustments[], int count,
-                         const SkPaint& paint) {
+    const SkPaint& paint)
+{
     SkScalar scale = paint.getTextSize() / paint.getTypeface()->getUnitsPerEm();
 
     SkScalar globalAdj = 0;
@@ -106,7 +39,8 @@ static void applyKerning(SkPoint pos[], const int32_t adjustments[], int count,
 }
 
 static void drawKernText(SkCanvas* canvas, const void* text, size_t len,
-                         SkScalar x, SkScalar y, const SkPaint& paint) {
+    SkScalar x, SkScalar y, const SkPaint& paint)
+{
     SkTypeface* face = paint.getTypeface();
     if (!face) {
         canvas->drawText(text, len, x, y, paint);
@@ -140,7 +74,7 @@ static void drawKernText(SkCanvas* canvas, const void* text, size_t len,
 
 static const struct {
     const char* fName;
-    SkTypeface::Style   fStyle;
+    SkTypeface::Style fStyle;
 } gFaceStyles[] = {
     { "sans-serif", SkTypeface::kNormal },
     { "sans-serif", SkTypeface::kBold },
@@ -159,42 +93,44 @@ static const struct {
 static const int gFaceStylesCount = SK_ARRAY_COUNT(gFaceStyles);
 
 class TypefaceStylesGM : public skiagm::GM {
-    SkTypeface* fFaces[gFaceStylesCount];
+    sk_sp<SkTypeface> fFaces[gFaceStylesCount];
     bool fApplyKerning;
 
 public:
     TypefaceStylesGM(bool applyKerning)
-        : fApplyKerning(applyKerning) {
+        : fApplyKerning(applyKerning)
+    {
         memset(fFaces, 0, sizeof(fFaces));
     }
 
-    virtual ~TypefaceStylesGM() {
-        for (int i = 0; i < gFaceStylesCount; i++) {
-            SkSafeUnref(fFaces[i]);
-        }
-    }
-
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         for (int i = 0; i < gFaceStylesCount; i++) {
-            fFaces[i] = sk_tool_utils::create_portable_typeface(gFaceStyles[i].fName,
-                                                         gFaceStyles[i].fStyle);
+            fFaces[i] = SkTypeface::MakeFromName(
+                sk_tool_utils::platform_font_name(
+                    gFaceStyles[i].fName),
+                SkFontStyle::FromOldStyle(gFaceStyles[i].fStyle));
         }
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         SkString name("typefacestyles");
         if (fApplyKerning) {
             name.append("_kerning");
         }
+        name.append(sk_tool_utils::major_platform_os_name());
         return name;
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(640, 480);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTextSize(SkIntToScalar(30));
@@ -203,7 +139,7 @@ protected:
         const size_t textLen = strlen(text);
 
         SkScalar x = SkIntToScalar(10);
-        SkScalar dy = paint.getFontMetrics(NULL);
+        SkScalar dy = paint.getFontMetrics(nullptr);
         SkScalar y = dy;
 
         if (fApplyKerning) {
@@ -227,6 +163,5 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return new TypefaceGM; )
-DEF_GM( return new TypefaceStylesGM(false); )
-DEF_GM( return new TypefaceStylesGM(true); )
+DEF_GM(return new TypefaceStylesGM(false);)
+DEF_GM(return new TypefaceStylesGM(true);)

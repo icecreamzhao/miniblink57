@@ -27,64 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/FloatRoundedRect.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-void PrintTo(const FloatSize& size, std::ostream* os)
-{
-    *os << "FloatSize("
-        << size.width() << ", "
-        << size.height() << ")";
-}
-
-void PrintTo(const FloatRect& rect, std::ostream* os)
-{
-    *os << "FloatRect("
-        << rect.x() << ", "
-        << rect.y() << ", "
-        << rect.width() << ", "
-        << rect.height() << ")";
-}
-
-void PrintTo(const FloatRoundedRect::Radii& radii, std::ostream* os)
-{
-    *os << "FloatRoundedRect::Radii("
-        << ::testing::PrintToString(radii.topLeft()) << ", "
-        << ::testing::PrintToString(radii.topRight()) << ", "
-        << ::testing::PrintToString(radii.bottomRight()) << ", "
-        << ::testing::PrintToString(radii.bottomLeft()) << ")";
-}
-
-void PrintTo(const FloatRoundedRect& roundedRect, std::ostream* os)
-{
-    *os << "FloatRoundedRect("
-        << ::testing::PrintToString(roundedRect.rect()) << ", "
-        << ::testing::PrintToString(roundedRect.radii()) << ")";
-}
-
-#define TEST_INTERCEPTS(roundedRect, yCoordinate, expectedMinXIntercept, expectedMaxXIntercept) \
-{                                                                                               \
-    float minXIntercept;                                                                        \
-    float maxXIntercept;                                                                        \
-    EXPECT_TRUE(roundedRect.xInterceptsAtY(yCoordinate, minXIntercept, maxXIntercept));         \
-    EXPECT_FLOAT_EQ(expectedMinXIntercept, minXIntercept);                                      \
-    EXPECT_FLOAT_EQ(expectedMaxXIntercept, maxXIntercept);                                      \
-}
+#define TEST_INTERCEPTS(roundedRect, yCoordinate, expectedMinXIntercept,   \
+    expectedMaxXIntercept)                                                 \
+    {                                                                      \
+        float minXIntercept;                                               \
+        float maxXIntercept;                                               \
+        EXPECT_TRUE(roundedRect.xInterceptsAtY(yCoordinate, minXIntercept, \
+            maxXIntercept));                                               \
+        EXPECT_FLOAT_EQ(expectedMinXIntercept, minXIntercept);             \
+        EXPECT_FLOAT_EQ(expectedMaxXIntercept, maxXIntercept);             \
+    }
 
 TEST(FloatRoundedRectTest, zeroRadii)
 {
     FloatRoundedRect r = FloatRoundedRect(1, 2, 3, 4);
 
     EXPECT_EQ(FloatRect(1, 2, 3, 4), r.rect());
-    EXPECT_EQ(FloatSize(), r.radii().topLeft());
-    EXPECT_EQ(FloatSize(), r.radii().topRight());
-    EXPECT_EQ(FloatSize(), r.radii().bottomLeft());
-    EXPECT_EQ(FloatSize(), r.radii().bottomRight());
-    EXPECT_TRUE(r.radii().isZero());
+    EXPECT_EQ(FloatSize(), r.getRadii().topLeft());
+    EXPECT_EQ(FloatSize(), r.getRadii().topRight());
+    EXPECT_EQ(FloatSize(), r.getRadii().bottomLeft());
+    EXPECT_EQ(FloatSize(), r.getRadii().bottomRight());
+    EXPECT_TRUE(r.getRadii().isZero());
     EXPECT_FALSE(r.isRounded());
     EXPECT_FALSE(r.isEmpty());
 
@@ -103,24 +73,25 @@ TEST(FloatRoundedRectTest, zeroRadii)
     EXPECT_FALSE(r.xInterceptsAtY(1, minXIntercept, maxXIntercept));
     EXPECT_FALSE(r.xInterceptsAtY(7, minXIntercept, maxXIntercept));
 
-    // The FloatRoundedRect::expandRadii() function doesn't change radii FloatSizes that
-    // are <= zero. Same as RoundedRect::expandRadii().
+    // The FloatRoundedRect::expandRadii() function doesn't change radii
+    // FloatSizes that are <= zero. Same as RoundedRect::expandRadii().
     r.expandRadii(20);
     r.shrinkRadii(10);
-    EXPECT_TRUE(r.radii().isZero());
+    EXPECT_TRUE(r.getRadii().isZero());
 }
 
 TEST(FloatRoundedRectTest, circle)
 {
     FloatSize cornerRadii(50, 50);
-    FloatRoundedRect r(FloatRect(0, 0, 100, 100), cornerRadii, cornerRadii, cornerRadii, cornerRadii);
+    FloatRoundedRect r(FloatRect(0, 0, 100, 100), cornerRadii, cornerRadii,
+        cornerRadii, cornerRadii);
 
     EXPECT_EQ(FloatRect(0, 0, 100, 100), r.rect());
-    EXPECT_EQ(cornerRadii, r.radii().topLeft());
-    EXPECT_EQ(cornerRadii, r.radii().topRight());
-    EXPECT_EQ(cornerRadii, r.radii().bottomLeft());
-    EXPECT_EQ(cornerRadii, r.radii().bottomRight());
-    EXPECT_FALSE(r.radii().isZero());
+    EXPECT_EQ(cornerRadii, r.getRadii().topLeft());
+    EXPECT_EQ(cornerRadii, r.getRadii().topRight());
+    EXPECT_EQ(cornerRadii, r.getRadii().bottomLeft());
+    EXPECT_EQ(cornerRadii, r.getRadii().bottomRight());
+    EXPECT_FALSE(r.getRadii().isZero());
     EXPECT_TRUE(r.isRounded());
     EXPECT_FALSE(r.isEmpty());
 
@@ -143,8 +114,9 @@ TEST(FloatRoundedRectTest, circle)
 }
 
 /*
- * FloatRoundedRect geometry for this test. Corner radii are in parens, x and y intercepts
- * for the elliptical corners are noted. The rectangle itself is at 0,0 with width and height 100.
+ * FloatRoundedRect geometry for this test. Corner radii are in parens, x and y
+ * intercepts for the elliptical corners are noted. The rectangle itself is at
+ * 0,0 with width and height 100.
  *
  *         (10, 15)  x=10      x=90 (10, 20)
  *                (--+---------+--)
@@ -166,7 +138,9 @@ TEST(FloatRoundedRectTest, ellipticalCorners)
 
     FloatRoundedRect r(FloatRect(0, 0, 100, 100), cornerRadii);
 
-    EXPECT_EQ(r.radii(), FloatRoundedRect::Radii(FloatSize(10, 15), FloatSize(10, 20), FloatSize(25, 15), FloatSize(20, 30)));
+    EXPECT_EQ(r.getRadii(),
+        FloatRoundedRect::Radii(FloatSize(10, 15), FloatSize(10, 20),
+            FloatSize(25, 15), FloatSize(20, 30)));
     EXPECT_EQ(r, FloatRoundedRect(FloatRect(0, 0, 100, 100), cornerRadii));
 
     EXPECT_EQ(FloatRect(0, 0, 10, 15), r.topLeftCorner());
@@ -192,7 +166,9 @@ TEST(FloatRoundedRectTest, ellipticalCorners)
 TEST(FloatRoundedRectTest, radiusCenterRect)
 {
     FloatSize cornerRect(10, 10);
-    FloatRoundedRect r0(FloatRect(0, 0, 100, 50), FloatRoundedRect::Radii(cornerRect, cornerRect, cornerRect, cornerRect));
+    FloatRoundedRect r0(
+        FloatRect(0, 0, 100, 50),
+        FloatRoundedRect::Radii(cornerRect, cornerRect, cornerRect, cornerRect));
     EXPECT_EQ(FloatRect(10, 10, 80, 30), r0.radiusCenterRect());
 
     // "Degenerate" cases all return an empty rectangle.
@@ -201,10 +177,20 @@ TEST(FloatRoundedRectTest, radiusCenterRect)
     FloatRoundedRect r1(collapsedRect);
     EXPECT_TRUE(r1.radiusCenterRect().isEmpty());
 
-    FloatRoundedRect::Radii radiiWithTooLargeCorner(FloatSize(55, 55), FloatSize(), FloatSize(), FloatSize());
+    FloatRoundedRect::Radii radiiWithTooLargeCorner(
+        FloatSize(55, 55), FloatSize(), FloatSize(), FloatSize());
     FloatRoundedRect r2(FloatRect(0, 0, 100, 50), radiiWithTooLargeCorner);
     EXPECT_TRUE(r2.radiusCenterRect().isEmpty());
 }
 
-} // namespace blink
+TEST(FloatRoundedRectTest, ToString)
+{
+    FloatSize cornerRect(1, 2);
+    FloatRoundedRect roundedRect(
+        FloatRect(3, 5, 7, 11),
+        FloatRoundedRect::Radii(cornerRect, cornerRect, cornerRect, cornerRect));
+    EXPECT_EQ("3,5 7x11 radii:(tl:1x2; tr:1x2; bl:1x2; br:1x2)",
+        roundedRect.toString());
+}
 
+} // namespace blink

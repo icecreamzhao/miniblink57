@@ -4,8 +4,11 @@
 #ifndef TerminatedArray_h
 #define TerminatedArray_h
 
-#include "wtf/FastAllocBase.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/Allocator.h"
+#include "wtf/PtrUtil.h"
+#include "wtf/VectorTraits.h"
+#include "wtf/allocator/Partitions.h"
+#include <memory>
 
 namespace WTF {
 
@@ -13,15 +16,27 @@ namespace WTF {
 // element knows whether it is the last element in the sequence or not. For this
 // check type T must provide isLastInArray method.
 // TerminatedArray<T> can only be constructed by TerminatedArrayBuilder<T>.
-template<typename T>
+template <typename T>
 class TerminatedArray {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(TerminatedArray);
-public:
-    T& at(size_t index) { return reinterpret_cast<T*>(this)[index]; }
-    const T& at(size_t index) const { return reinterpret_cast<const T*>(this)[index]; }
 
-    template<typename U>
-    class iterator_base {
+public:
+    // When TerminatedArray::Allocator implementations grow the backing
+    // store, old is copied into the new and larger block.
+    static_assert(VectorTraits<T>::canCopyWithMemcpy,
+        "Array elements must be memory copyable");
+
+    T& at(size_t index) { return reinterpret_cast<T*>(this)[index]; }
+    const T& at(size_t index) const
+    {
+        return reinterpret_cast<const T*>(this)[index];
+    }
+
+    template <typename U>
+    class iterator_base final {
+        STACK_ALLOCATED();
+
     public:
         iterator_base& operator++()
         {
@@ -35,11 +50,20 @@ public:
 
         U& operator*() const { return *m_val; }
 
-        bool operator==(const iterator_base& other) const { return m_val == other.m_val; }
-        bool operator!=(const iterator_base& other) const { return !(*this == other); }
+        bool operator==(const iterator_base& other) const
+        {
+            return m_val == other.m_val;
+        }
+        bool operator!=(const iterator_base& other) const
+        {
+            return !(*this == other);
+        }
 
     private:
-        iterator_base(U* val) : m_val(val) { }
+        iterator_base(U* val)
+            : m_val(val)
+        {
+        }
 
         U* m_val;
 
@@ -50,7 +74,10 @@ public:
     typedef iterator_base<const T> const_iterator;
 
     iterator begin() { return iterator(reinterpret_cast<T*>(this)); }
-    const_iterator begin() const { return const_iterator(reinterpret_cast<const T*>(this)); }
+    const_iterator begin() const
+    {
+        return const_iterator(reinterpret_cast<const T*>(this));
+    }
 
     iterator end() { return iterator(0); }
     const_iterator end() const { return const_iterator(0); }
@@ -63,24 +90,32 @@ public:
         return count;
     }
 
-    // Match Allocator semantics to be able to use OwnPtr<TerminatedArray>.
-    void operator delete(void* p) { ::WTF::fastFree(p); }
+    // Match Allocator semantics to be able to use
+    // std::unique_ptr<TerminatedArray>.
+    void operator delete(void* p) { ::WTF::Partitions::fastFree(p); }
 
 private:
     // Allocator describes how TerminatedArrayBuilder should create new instances
     // of TerminateArray and manage their lifetimes.
     struct Allocator {
-        typedef PassOwnPtr<TerminatedArray> PassPtr;
-        typedef OwnPtr<TerminatedArray> Ptr;
+        STATIC_ONLY(Allocator);
+        using PassPtr = std::unique_ptr<TerminatedArray>;
+        using Ptr = std::unique_ptr<TerminatedArray>;
+
+        static PassPtr release(Ptr& ptr) { return ptr.release(); }
 
         static PassPtr create(size_t capacity)
         {
-            return adoptPtr(static_cast<TerminatedArray*>(fastMalloc(capacity * sizeof(T))));
+            return WTF::wrapUnique(
+                static_cast<TerminatedArray*>(WTF::Partitions::fastMalloc(
+                    capacity * sizeof(T), WTF_HEAP_PROFILER_TYPE_NAME(T))));
         }
 
-        static PassPtr resize(PassPtr ptr, size_t capacity)
+        static PassPtr resize(Ptr ptr, size_t capacity)
         {
-            return adoptPtr(static_cast<TerminatedArray*>(fastRealloc(ptr.leakPtr(), capacity * sizeof(T))));
+            return WTF::wrapUnique(static_cast<TerminatedArray*>(
+                WTF::Partitions::fastRealloc(ptr.release(), capacity * sizeof(T),
+                    WTF_HEAP_PROFILER_TYPE_NAME(T))));
         }
     };
 
@@ -88,7 +123,8 @@ private:
     // TerminatedArrayBuilder by pointer casting.
     TerminatedArray();
 
-    template<typename, template <typename> class> friend class TerminatedArrayBuilder;
+    template <typename, template <typename> class>
+    friend class TerminatedArrayBuilder;
 };
 
 } // namespace WTF

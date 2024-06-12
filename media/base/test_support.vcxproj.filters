@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="fake_audio_render_callback.cc" />
+    <None Include="fake_audio_render_callback.h" />
+    <CustomBuild Include="fake_audio_renderer_sink.cc" />
+    <None Include="fake_audio_renderer_sink.h" />
+    <CustomBuild Include="fake_demuxer_stream.cc" />
+    <None Include="fake_demuxer_stream.h" />
+    <CustomBuild Include="fake_media_resources.cc" />
+    <None Include="fake_media_resources.h" />
+    <CustomBuild Include="fake_single_thread_task_runner.cc" />
+    <None Include="fake_single_thread_task_runner.h" />
+    <CustomBuild Include="fake_text_track_stream.cc" />
+    <None Include="fake_text_track_stream.h" />
+    <None Include="gmock_callback_support.h" />
+    <CustomBuild Include="mock_audio_renderer_sink.cc" />
+    <None Include="mock_audio_renderer_sink.h" />
+    <CustomBuild Include="mock_demuxer_host.cc" />
+    <None Include="mock_demuxer_host.h" />
+    <CustomBuild Include="mock_filters.cc" />
+    <None Include="mock_filters.h" />
+    <CustomBuild Include="mock_media_log.cc" />
+    <None Include="mock_media_log.h" />
+    <CustomBuild Include="test_data_util.cc" />
+    <None Include="test_data_util.h" />
+    <CustomBuild Include="test_helpers.cc" />
+    <None Include="test_helpers.h" />
+    <None Include="test_random.h" />
+    <None Include="vector_math_testing.h" />
+  </ItemGroup>
+</Project>

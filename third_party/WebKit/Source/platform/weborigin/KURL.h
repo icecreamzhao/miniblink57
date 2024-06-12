@@ -55,6 +55,7 @@ enum ParsedURLStringTag { ParsedURLString };
 
 class KURL {
 public:
+    static void initialize();
     // Generates a URL which contains a null string.
     KURL() { invalidate(); }
 
@@ -65,11 +66,20 @@ public:
     KURL(ParsedURLStringTag, const String&);
     //KURL(ParsedURLStringTag, const URLString&);
 #if USE(GOOGLEURL)
-    KURL(WTF::HashTableDeletedValueType) : m_url(WTF::HashTableDeletedValue) { }
+    KURL(WTF::HashTableDeletedValueType)
+        : m_url(WTF::HashTableDeletedValue)
+    {
+    }
 #else
-    KURL(WTF::HashTableDeletedValueType) : m_string(WTF::HashTableDeletedValue) { }
+    KURL(WTF::HashTableDeletedValueType)
+        : m_string(WTF::HashTableDeletedValue)
+    {
+    }
 #endif
-    bool isHashTableDeletedValue() const { return string().isHashTableDeletedValue(); }
+    bool isHashTableDeletedValue() const
+    {
+        return string().isHashTableDeletedValue();
+    }
 
     // Resolves the relative URL with the given base URL. If provided, the
     // TextEncoding is used to encode non-ASCII characers. The base URL can be
@@ -87,6 +97,7 @@ public:
     // done with the same input.
     KURL(const CString& canonicalSpec, const url_parse::Parsed&, bool isValid);
 #endif
+    ~KURL();
 
     String strippedForUseAsReferrer() const;
     String strippedForUseAsHref() const;
@@ -116,10 +127,17 @@ public:
     bool canSetPathname() const { return isHierarchical(); }
 
 #if USE(GOOGLEURL)
-    const String& string() const { return m_url.string(); }
+    const String& string() const
+    {
+        return m_url.string();
+    }
     URLString urlString() const { return URLString(m_url.string()); }
 #else
-    const String& string() const;
+    const String& string() const
+    {
+        return m_string;
+    }
+    const String& getString() const { return m_string; }
     String getUTF8String() const;
     //URLString urlString() const { return URLString(m_string); }
 #endif
@@ -157,7 +175,7 @@ public:
 
     void removePort();
     void setPort(unsigned short);
-	void setPort(const String& port);
+    void setPort(const String& port);
 
     // Input is like "foo.com" or "foo.com:8000".
     void setHostAndPort(const String&);
@@ -195,26 +213,23 @@ public:
 
     bool isAboutBlankURL() const;
 
-    // Creates an isolated URL object suitable for sending to another thread.
-    static KURL createIsolated(ParsedURLStringTag, const String&);
-
 #if USE(CF)
     KURL(CFURLRef);
     CFURLRef createCFURL() const;
 #endif
 
-// #if PLATFORM(MAC) || (PLATFORM(QT) && USE(QTKIT))
-//     KURL(NSURL*);
-//     operator NSURL*() const;
-// #endif
-// #ifdef __OBJC__
-//     operator NSString*() const { return string(); }
-// #endif
-// 
-// #if PLATFORM(QT)
-//     KURL(const QUrl&);
-//     operator QUrl() const;
-// #endif
+    // #if PLATFORM(MAC) || (PLATFORM(QT) && USE(QTKIT))
+    //     KURL(NSURL*);
+    //     operator NSURL*() const;
+    // #endif
+    // #ifdef __OBJC__
+    //     operator NSString*() const { return string(); }
+    // #endif
+    //
+    // #if PLATFORM(QT)
+    //     KURL(const QUrl&);
+    //     operator QUrl() const;
+    // #endif
 
 #if USE(GOOGLEURL)
     // Getters for the parsed structure and its corresponding 8-bit string.
@@ -231,16 +246,17 @@ public:
 
     bool isHierarchical() const; // weolar
     bool isSafeToSendToAnotherThread() const;
+
 private:
     void invalidate();
-    
+
     static bool protocolIs(const String&, const char*);
 #if USE(GOOGLEURL)
     friend class KURLGooglePrivate;
-    void parse(const char* url, const String* originalString);  // KURLMac calls this.
-    void copyToBuffer(Vector<char, 512>& buffer) const;  // KURLCFNet uses this.
+    void parse(const char* url, const String* originalString); // KURLMac calls this.
+    void copyToBuffer(Vector<char, 512>& buffer) const; // KURLCFNet uses this.
     KURLGooglePrivate m_url;
-#else  // !USE(GOOGLEURL)
+#else // !USE(GOOGLEURL)
     void init(const KURL&, const String&, const TextEncoding&);
     void copyToBuffer(Vector<char, 512>& buffer) const;
 
@@ -251,7 +267,6 @@ private:
     void parse(const char* url, const String* originalString);
 
     String m_string;
-    mutable String m_utf16String;
     bool m_isValid : 1;
     bool m_protocolIsInHTTPFamily : 1;
 
@@ -265,6 +280,8 @@ private:
     int m_pathEnd;
     int m_queryEnd;
     int m_fragmentEnd;
+
+    mutable KURL* m_innerURL;
 #endif
 };
 
@@ -277,7 +294,7 @@ bool operator!=(const String&, const KURL&);
 
 bool equalIgnoringFragmentIdentifier(const KURL&, const KURL&);
 bool protocolHostAndPortAreEqual(const KURL&, const KURL&);
-    
+
 const KURL& blankURL();
 
 // Functions to do URL operations on strings.
@@ -391,17 +408,19 @@ inline unsigned KURL::pathAfterLastSlash() const
     return m_pathAfterLastSlash;
 }
 
-#endif  // !USE(GOOGLEURL)
+#endif // !USE(GOOGLEURL)
 
 } // namespace WebCore
 
 namespace WTF {
 
-    // KURLHash is the default hash for String
-    template<typename T> struct DefaultHash;
-    template<> struct DefaultHash<blink::KURL> {
-        typedef blink::KURLHash Hash;
-    };
+// KURLHash is the default hash for String
+template <typename T>
+struct DefaultHash;
+template <>
+struct DefaultHash<blink::KURL> {
+    typedef blink::KURLHash Hash;
+};
 
 } // namespace WTF
 

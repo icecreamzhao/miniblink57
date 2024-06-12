@@ -47,16 +47,14 @@ public:
 #endif
     }
     
-    void setUpBackend(SampleWindow* win, int msaaSampleCount) override {
+    void setUpBackend(SampleWindow* win, int msaaSampleCount, bool deepColor) override {
         SkASSERT(SkOSWindow::kNone_BackEndType == fBackend);
         
         fBackend = SkOSWindow::kNone_BackEndType;
         
 #if SK_SUPPORT_GPU
         switch (win->getDeviceType()) {
-            // these two don't use GL
             case SampleWindow::kRaster_DeviceType:
-            case SampleWindow::kPicture_DeviceType:
                 break;
             // these guys use the native backend
             case SampleWindow::kGPU_DeviceType:
@@ -67,7 +65,7 @@ public:
                 break;
         }
         SkOSWindow::AttachmentInfo info;
-        bool result = win->attach(fBackend, msaaSampleCount, &info);
+        bool result = win->attach(fBackend, msaaSampleCount, false, &info);
         if (!result) {
             SkDebugf("Failed to initialize GL");
             return;
@@ -76,9 +74,7 @@ public:
         
         SkASSERT(NULL == fCurIntf);
         switch (win->getDeviceType()) {
-            // these two don't use GL
             case SampleWindow::kRaster_DeviceType:
-            case SampleWindow::kPicture_DeviceType:
                 fCurIntf = NULL;
                 break;
             case SampleWindow::kGPU_DeviceType:
@@ -101,7 +97,7 @@ public:
             SkSafeUnref(fCurContext);
             SkSafeUnref(fCurIntf);
             SkDebugf("Failed to setup 3D");
-            win->detach();
+            win->release();
         }
 #endif // SK_SUPPORT_GPU
         // call windowSizeChanged to create the render target
@@ -119,7 +115,7 @@ public:
         SkSafeUnref(fCurRenderTarget);
         fCurRenderTarget = NULL;
 #endif
-        win->detach();
+        win->release();
         fBackend = SampleWindow::kNone_BackEndType;
     }
 
@@ -149,7 +145,7 @@ public:
         if (NULL != fCurContext) {
             SkOSWindow::AttachmentInfo info;
 
-            win->attach(fBackend, fMSAASampleCount, &info);
+            win->attach(fBackend, fMSAASampleCount, false, &info);
             
             glBindFramebuffer(GL_FRAMEBUFFER, fLayerFBO);
             GrBackendRenderTargetDesc desc;
@@ -161,7 +157,7 @@ public:
             desc.fStencilBits = info.fStencilBits;
 
             SkSafeUnref(fCurRenderTarget);
-            fCurRenderTarget = fCurContext->wrapBackendRenderTarget(desc);
+            fCurRenderTarget = fCurContext->textureProvider()->wrapBackendRenderTarget(desc);
         }
 #endif
     }
@@ -181,7 +177,11 @@ public:
         return NULL;
 #endif
     }
-    
+
+    int getColorBits() override {
+        return 24;
+    }
+
     bool isUsingGL() const { return SkOSWindow::kNone_BackEndType != fBackend; }
     
 private:
@@ -316,12 +316,26 @@ static FPSState gFPS;
         fRasterLayer.actions = newActions;
         [newActions release];
         
+        // rebuild argc and argv from process info
+        NSArray* arguments = [[NSProcessInfo processInfo] arguments];
+        int argc = [arguments count];
+        char** argv = new char*[argc];
+        for (int i = 0; i < argc; ++i) {
+            NSString* arg = [arguments objectAtIndex:i];
+            int strlen = [arg lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+            argv[i] = new char[strlen+1];
+            [arg getCString:argv[i] maxLength:strlen+1 encoding:NSUTF8StringEncoding];
+        }
+        
         fDevManager = new SkiOSDeviceManager(fGL.fFramebuffer);
-        static char* kDummyArgv = const_cast<char*>("dummyExecutableName");
-        fWind = new SampleWindow(self, 1, &kDummyArgv, fDevManager);
+        fWind = new SampleWindow(self, argc, argv, fDevManager);
 
-        fWind->resize(self.frame.size.width, self.frame.size.height,
-                      kN32_SkColorType);
+        fWind->resize(self.frame.size.width, self.frame.size.height);
+        
+        for (int i = 0; i < argc; ++i) {
+            delete [] argv[i];
+        }
+        delete [] argv;
     }
     return self;
 }

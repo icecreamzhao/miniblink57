@@ -5,8 +5,8 @@
 #ifndef GRIT_RESOURCE_MAP_STRUCT_
 #define GRIT_RESOURCE_MAP_STRUCT_
 struct GritResourceMap {
-  const char* const name;
-  int value;
+    const char* const name;
+    int value;
 };
 #endif // GRIT_RESOURCE_MAP_STRUCT_
 

@@ -5,20 +5,20 @@
  * found in the LICENSE file.
  */
 
+#include "DecodeFile.h"
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
 #include "SkTime.h"
+#include "SkUtils.h"
+#include "SkView.h"
+#include "SkXfermode.h"
 
 static const char* gNames[] = {
     "/skimages/background_01.png"
@@ -26,34 +26,35 @@ static const char* gNames[] = {
 
 class Filter2View : public SampleView {
 public:
-    SkBitmap*   fBitmaps;
-    int         fBitmapCount;
-    int         fCurrIndex;
+    SkBitmap* fBitmaps;
+    int fBitmapCount;
+    int fCurrIndex;
 
-    Filter2View() {
-        fBitmapCount = SK_ARRAY_COUNT(gNames)*2;
+    Filter2View()
+    {
+        fBitmapCount = SK_ARRAY_COUNT(gNames) * 2;
         fBitmaps = new SkBitmap[fBitmapCount];
 
-        for (int i = 0; i < fBitmapCount/2; i++) {
-            SkImageDecoder::DecodeFile(gNames[i], &fBitmaps[i], kN32_SkColorType,
-                                       SkImageDecoder::kDecodePixels_Mode, NULL);
+        for (int i = 0; i < fBitmapCount / 2; i++) {
+            decode_file(gNames[i], &fBitmaps[i]);
         }
-        for (int i = fBitmapCount/2; i < fBitmapCount; i++) {
-            SkImageDecoder::DecodeFile(gNames[i-fBitmapCount/2], &fBitmaps[i], kRGB_565_SkColorType,
-                                       SkImageDecoder::kDecodePixels_Mode, NULL);
+        for (int i = fBitmapCount / 2; i < fBitmapCount; i++) {
+            decode_file(gNames[i - fBitmapCount / 2], &fBitmaps[i], kRGB_565_SkColorType);
         }
         fCurrIndex = 0;
 
         this->setBGColor(SK_ColorGRAY);
     }
 
-    virtual ~Filter2View() {
+    virtual ~Filter2View()
+    {
         delete[] fBitmaps;
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SkString str("Filter/Dither ");
             str.append(gNames[fCurrIndex]);
@@ -63,7 +64,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         canvas->translate(SkIntToScalar(10), SkIntToScalar(50));
 
         const SkScalar W = SkIntToScalar(fBitmaps[0].width() + 1);
@@ -92,10 +94,10 @@ protected:
                         s.appendS32(paint.isDither());
                         s.append(" filter=");
                         s.appendS32(paint.getFilterQuality() != kNone_SkFilterQuality);
-                        canvas->drawText(s.c_str(), s.size(), x + W/2,
-                                         y - p.getTextSize(), p);
+                        canvas->drawText(s.c_str(), s.size(), x + W / 2,
+                            y - p.getTextSize(), p);
                     }
-                    if (k+j == 2) {
+                    if (k + j == 2) {
                         SkPaint p;
                         p.setAntiAlias(true);
                         p.setTextSize(SkIntToScalar(18));
@@ -103,7 +105,7 @@ protected:
                         s.append(" depth=");
                         s.appendS32(fBitmaps[i].colorType() == kRGB_565_SkColorType ? 16 : 32);
                         canvas->drawText(s.c_str(), s.size(), x + W + SkIntToScalar(4),
-                                         y + H/2, p);
+                            y + H / 2, p);
                     }
                 }
             }

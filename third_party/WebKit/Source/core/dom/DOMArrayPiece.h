@@ -7,7 +7,7 @@
 
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMArrayBufferView.h"
-#include "wtf/ArrayPiece.h"
+#include "wtf/typed_arrays/ArrayPiece.h"
 
 namespace blink {
 
@@ -23,6 +23,8 @@ class ArrayBufferOrArrayBufferView;
 // IMPORTANT: The data contained by ArrayPiece is NOT OWNED, so caution must be
 //            taken to ensure it is kept alive.
 class CORE_EXPORT DOMArrayPiece : public WTF::ArrayPiece {
+    DISALLOW_NEW();
+
 public:
     enum InitWithUnionOption {
         // Initialize this object as "null" when initialized with an union which
@@ -35,10 +37,15 @@ public:
 
     DOMArrayPiece() { }
     DOMArrayPiece(DOMArrayBuffer* buffer)
-        : ArrayPiece(buffer->buffer()) { }
+        : ArrayPiece(buffer->buffer())
+    {
+    }
     DOMArrayPiece(DOMArrayBufferView* view)
-        : ArrayPiece(view->view()) { }
-    DOMArrayPiece(const ArrayBufferOrArrayBufferView&, InitWithUnionOption = TreatNullAsNull);
+        : ArrayPiece(view->view())
+    {
+    }
+    DOMArrayPiece(const ArrayBufferOrArrayBufferView&,
+        InitWithUnionOption = TreatNullAsNull);
 
     bool operator==(const DOMArrayBuffer& other) const
     {

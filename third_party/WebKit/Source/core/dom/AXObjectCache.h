@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights
+ * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,27 +29,26 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/Document.h"
+#include <memory>
 
 typedef unsigned AXID;
 
 namespace blink {
 
 class AbstractInlineTextBox;
-class AXObject;
 class FrameView;
+class HTMLCanvasElement;
 class HTMLOptionElement;
 class HTMLSelectElement;
 class LayoutMenuList;
-class Page;
-class Widget;
+class LineLayoutItem;
 
-class CORE_EXPORT AXObjectCache : public NoBaseWillBeGarbageCollectedFinalized<AXObjectCache> {
+class CORE_EXPORT AXObjectCache
+    : public GarbageCollectedFinalized<AXObjectCache> {
     WTF_MAKE_NONCOPYABLE(AXObjectCache);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(AXObjectCache);
-public:
-    static PassOwnPtrWillBeRawPtr<AXObjectCache> create(Document&);
 
-    static AXObject* focusedUIElementForPage(const Page*);
+public:
+    static AXObjectCache* create(Document&);
 
     virtual ~AXObjectCache();
     DEFINE_INLINE_VIRTUAL_TRACE() { }
@@ -61,8 +61,12 @@ public:
         AXBlur,
         AXCheckedStateChanged,
         AXChildrenChanged,
+        AXClicked,
+        AXDocumentSelectionChanged,
+        AXExpandedChanged,
         AXFocusedUIElementChanged,
         AXHide,
+        AXHover,
         AXInvalidStatusChanged,
         AXLayoutComplete,
         AXLiveRegionChanged,
@@ -94,49 +98,61 @@ public:
     virtual void listboxOptionStateChanged(HTMLOptionElement*) = 0;
     virtual void listboxSelectedChildrenChanged(HTMLSelectElement*) = 0;
     virtual void listboxActiveIndexChanged(HTMLSelectElement*) = 0;
+    virtual void radiobuttonRemovedFromGroup(HTMLInputElement*) = 0;
 
     virtual void remove(LayoutObject*) = 0;
     virtual void remove(Node*) = 0;
-    virtual void remove(Widget*) = 0;
     virtual void remove(AbstractInlineTextBox*) = 0;
 
     virtual const Element* rootAXEditableElement(const Node*) = 0;
 
-    // Called by a node when text or a text equivalent (e.g. alt) attribute is changed.
+    // Called by a node when text or a text equivalent (e.g. alt) attribute is
+    // changed.
     virtual void textChanged(LayoutObject*) = 0;
-    // Called when a node has just been attached, so we can make sure we have the right subclass of AXObject.
+    // Called when a node has just been attached, so we can make sure we have the
+    // right subclass of AXObject.
     virtual void updateCacheAfterNodeIsAttached(Node*) = 0;
 
-    virtual void handleAttributeChanged(const QualifiedName& attrName, Element*) = 0;
-    virtual void handleFocusedUIElementChanged(Node* oldFocusedNode, Node* newFocusedNode) = 0;
+    virtual void handleAttributeChanged(const QualifiedName& attrName,
+        Element*)
+        = 0;
+    virtual void handleFocusedUIElementChanged(Node* oldFocusedNode,
+        Node* newFocusedNode)
+        = 0;
     virtual void handleInitialFocus() = 0;
     virtual void handleEditableTextContentChanged(Node*) = 0;
     virtual void handleTextFormControlChanged(Node*) = 0;
     virtual void handleValueChanged(Node*) = 0;
-    virtual void handleUpdateActiveMenuOption(LayoutMenuList*, int optionIndex) = 0;
+    virtual void handleUpdateActiveMenuOption(LayoutMenuList*,
+        int optionIndex)
+        = 0;
     virtual void didShowMenuListPopup(LayoutMenuList*) = 0;
     virtual void didHideMenuListPopup(LayoutMenuList*) = 0;
     virtual void handleLoadComplete(Document*) = 0;
     virtual void handleLayoutComplete(Document*) = 0;
+    virtual void handleClicked(Node*) = 0;
 
+    virtual void setCanvasObjectBounds(HTMLCanvasElement*,
+        Element*,
+        const LayoutRect&)
+        = 0;
 
-    virtual void setCanvasObjectBounds(Element*, const LayoutRect&) = 0;
-
-    virtual void inlineTextBoxesUpdated(LayoutObject*) = 0;
+    virtual void inlineTextBoxesUpdated(LineLayoutItem) = 0;
 
     // Called when the scroll offset changes.
     virtual void handleScrollPositionChanged(FrameView*) = 0;
     virtual void handleScrollPositionChanged(LayoutObject*) = 0;
 
     // Called when scroll bars are added / removed (as the view resizes).
-    virtual void handleScrollbarUpdate(FrameView*) = 0;
     virtual void handleLayoutComplete(LayoutObject*) = 0;
     virtual void handleScrolledToAnchor(const Node* anchorNode) = 0;
 
     virtual const AtomicString& computedRoleForNode(Node*) = 0;
     virtual String computedNameForNode(Node*) = 0;
 
-    typedef PassOwnPtrWillBeRawPtr<AXObjectCache> (*AXObjectCacheCreateFunction)(Document&);
+    virtual void onTouchAccessibilityHover(const IntPoint&) = 0;
+
+    typedef AXObjectCache* (*AXObjectCacheCreateFunction)(Document&);
     static void init(AXObjectCacheCreateFunction);
 
 protected:
@@ -147,9 +163,11 @@ private:
 };
 
 class CORE_EXPORT ScopedAXObjectCache {
+    USING_FAST_MALLOC(ScopedAXObjectCache);
     WTF_MAKE_NONCOPYABLE(ScopedAXObjectCache);
+
 public:
-    static PassOwnPtr<ScopedAXObjectCache> create(Document&);
+    static std::unique_ptr<ScopedAXObjectCache> create(Document&);
     ~ScopedAXObjectCache();
 
     AXObjectCache* get();
@@ -157,10 +175,10 @@ public:
 private:
     explicit ScopedAXObjectCache(Document&);
 
-    RefPtrWillBePersistent<Document> m_document;
-    OwnPtrWillBePersistent<AXObjectCache> m_cache;
+    Persistent<Document> m_document;
+    Persistent<AXObjectCache> m_cache;
 };
 
-}
+} // namespace blink
 
 #endif

@@ -42,7 +42,7 @@ public:
     WebMediaPlayerImpl(blink::WebLocalFrame* frame, const blink::WebURL& url, blink::WebMediaPlayerClient* client);
     virtual ~WebMediaPlayerImpl();
 
-    virtual void load(blink::WebMediaPlayer::LoadType, const blink::WebURL&, blink::WebMediaPlayer::CORSMode) override;
+    virtual void load(blink::WebMediaPlayer::LoadType, const blink::WebMediaPlayerSource&, blink::WebMediaPlayer::CORSMode) override;
 
     // Playback controls.
     virtual void play() override;
@@ -66,7 +66,7 @@ public:
     // methods of the WebCallbacks object, including constructors and
     // destructors, run in the same thread where the object is created
     // (i.e., the blink thread).
-    virtual void setSinkId(const blink::WebString& deviceId, blink::WebCallbacks<void, blink::WebSetSinkIdError>*) override;
+    virtual void setSinkId(const blink::WebString& deviceId, const blink::WebSecurityOrigin& origin, blink::WebSetSinkIdCallbacks*) override;
 
     // True if the loaded media has a playable video/audio track.
     virtual bool hasVideo() const override;
@@ -85,8 +85,8 @@ public:
     virtual double currentTime() const override;
 
     // Internal states of loading and network.
-    virtual blink::WebMediaPlayer::NetworkState networkState() const override;
-    virtual blink::WebMediaPlayer::ReadyState readyState() const override;
+    /*virtual*/ blink::WebMediaPlayer::NetworkState networkState() const /*override*/;
+    /*virtual*/ blink::WebMediaPlayer::ReadyState readyState() const /*override*/;
 
     virtual bool didLoadingProgress() override;
 
@@ -95,41 +95,41 @@ public:
 
     virtual double mediaTimeForTimeValue(double timeValue) const override;
 
-    virtual unsigned decodedFrameCount() const override;
-    virtual unsigned droppedFrameCount() const override;
-    virtual unsigned corruptedFrameCount() const override;
-    virtual unsigned audioDecodedByteCount() const override;
-    virtual unsigned videoDecodedByteCount() const override;
+    virtual unsigned int decodedFrameCount() const override;
+    virtual unsigned int droppedFrameCount() const override;
+    virtual unsigned int corruptedFrameCount() const override;
+    virtual size_t audioDecodedByteCount() const override;
+    virtual size_t videoDecodedByteCount() const override;
 
-    virtual void paint(blink::WebCanvas*, const blink::WebRect&, unsigned char alpha, SkXfermode::Mode) override;
+    virtual void paint(blink::WebCanvas*, const blink::WebRect&, SkPaint&) override;
     // Do a GPU-GPU textures copy if possible.
-    virtual bool copyVideoTextureToPlatformTexture(blink::WebGraphicsContext3D*, unsigned texture, unsigned internalFormat, unsigned type, bool premultiplyAlpha, bool flipY) override;
+    //virtual bool copyVideoTextureToPlatformTexture(blink::WebGraphicsContext3D*, unsigned texture, unsigned internalFormat, unsigned type, bool premultiplyAlpha, bool flipY) override;
 
-    virtual blink::WebAudioSourceProvider* audioSourceProvider() override;
+    /*virtual*/ blink::WebAudioSourceProvider* audioSourceProvider() /*override*/;
 
     // Returns whether keySystem is supported. If true, the result will be
     // reported by an event.
-    virtual blink::WebMediaPlayer::MediaKeyException generateKeyRequest(const blink::WebString& keySystem, const unsigned char* initData, unsigned initDataLength) override;
-    virtual blink::WebMediaPlayer::MediaKeyException addKey(const blink::WebString& keySystem, const unsigned char* key, unsigned keyLength, const unsigned char* initData, unsigned initDataLength, const blink::WebString& sessionId) override;
-    virtual blink::WebMediaPlayer::MediaKeyException cancelKeyRequest(const blink::WebString& keySystem, const blink::WebString& sessionId) override;
-    virtual void setContentDecryptionModule(blink::WebContentDecryptionModule* cdm, blink::WebContentDecryptionModuleResult result) override;
+//     virtual blink::WebMediaPlayer::MediaKeyException generateKeyRequest(const blink::WebString& keySystem, const unsigned char* initData, unsigned initDataLength) override;
+//     virtual blink::WebMediaPlayer::MediaKeyException addKey(const blink::WebString& keySystem, const unsigned char* key, unsigned keyLength, const unsigned char* initData, unsigned initDataLength, const blink::WebString& sessionId) override;
+//     virtual blink::WebMediaPlayer::MediaKeyException cancelKeyRequest(const blink::WebString& keySystem, const blink::WebString& sessionId) override;
+//     virtual void setContentDecryptionModule(blink::WebContentDecryptionModule* cdm, blink::WebContentDecryptionModuleResult result) override;
 
     // Sets the poster image URL.
     virtual void setPoster(const blink::WebURL& poster) override;
 
     // Instruct WebMediaPlayer to enter/exit fullscreen.
-    virtual void enterFullscreen() override;
+    /*virtual*/ void enterFullscreen() /*override*/;
 
     virtual void enabledAudioTracksChanged(const blink::WebVector<blink::WebMediaPlayer::TrackId>& enabledTrackIds) override;
     // |selectedTrackId| is null if no track is selected.
     virtual void selectedVideoTrackChanged(blink::WebMediaPlayer::TrackId* selectedTrackId) override;
 
-    virtual void setContentsToNativeWindowOffset(const blink::WebPoint& p) override;
-    virtual bool handleMouseEvent(const blink::WebMouseEvent& evt) override;
-    virtual bool handleKeyboardEvent(const blink::WebKeyboardEvent& evt) override;
+    /*virtual*/ void setContentsToNativeWindowOffset(const blink::WebPoint& p) /*override*/;
+    /*virtual*/ bool handleMouseEvent(const blink::WebMouseEvent& evt) /*override*/;
+    /*virtual*/ bool handleKeyboardEvent(const blink::WebKeyboardEvent& evt) /*override*/;
 
-    virtual void showMediaControls() override;
-    virtual void hideMediaControls() override;
+    /*virtual*/ void showMediaControls() /*override*/;
+    /*virtual*/ void hideMediaControls() /*override*/;
 
     void onLoad(blink::WebMediaPlayer::ReadyState readyState, bool* cancelNotifer);
 

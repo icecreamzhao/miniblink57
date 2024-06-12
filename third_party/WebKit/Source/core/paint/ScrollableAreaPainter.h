@@ -5,26 +5,43 @@
 #ifndef ScrollableAreaPainter_h
 #define ScrollableAreaPainter_h
 
+#include "platform/heap/Handle.h"
+
 namespace blink {
 
+class CullRect;
 class GraphicsContext;
 class IntPoint;
 class IntRect;
-class DeprecatedPaintLayerScrollableArea;
+class PaintLayerScrollableArea;
 
 class ScrollableAreaPainter {
-public:
-    ScrollableAreaPainter(DeprecatedPaintLayerScrollableArea& paintLayerScrollableArea) : m_scrollableArea(paintLayerScrollableArea) { }
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(ScrollableAreaPainter);
 
-    void paintResizer(GraphicsContext*, const IntPoint& paintOffset, const IntRect& damageRect);
-    void paintOverflowControls(GraphicsContext*, const IntPoint& paintOffset, const IntRect& damageRect, bool paintingOverlayControls);
-    void paintScrollCorner(GraphicsContext*, const IntPoint&, const IntRect& damageRect);
+public:
+    explicit ScrollableAreaPainter(
+        PaintLayerScrollableArea& paintLayerScrollableArea)
+        : m_scrollableArea(&paintLayerScrollableArea)
+    {
+    }
+
+    void paintResizer(GraphicsContext&,
+        const IntPoint& paintOffset,
+        const CullRect&);
+    void paintOverflowControls(GraphicsContext&,
+        const IntPoint& paintOffset,
+        const CullRect&,
+        bool paintingOverlayControls);
+    void paintScrollCorner(GraphicsContext&, const IntPoint&, const CullRect&);
 
 private:
-    void drawPlatformResizerImage(GraphicsContext*, IntRect resizerCornerRect);
-    bool overflowControlsIntersectRect(const IntRect& localRect) const;
+    void drawPlatformResizerImage(GraphicsContext&, IntRect resizerCornerRect);
+    bool overflowControlsIntersectRect(const CullRect&) const;
 
-    DeprecatedPaintLayerScrollableArea& m_scrollableArea;
+    PaintLayerScrollableArea& getScrollableArea() const;
+
+    Member<PaintLayerScrollableArea> m_scrollableArea;
 };
 
 } // namespace blink

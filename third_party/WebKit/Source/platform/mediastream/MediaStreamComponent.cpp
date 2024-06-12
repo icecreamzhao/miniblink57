@@ -29,45 +29,110 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/mediastream/MediaStreamComponent.h"
 
 #include "platform/UUID.h"
 #include "platform/audio/AudioBus.h"
+#include "platform/mediastream/MediaStreamCenter.h"
 #include "platform/mediastream/MediaStreamSource.h"
 #include "public/platform/WebAudioSourceProvider.h"
+#include "public/platform/WebMediaStreamTrack.h"
 
 namespace blink {
 
-PassRefPtr<MediaStreamComponent> MediaStreamComponent::create(PassRefPtr<MediaStreamSource> source)
+MediaStreamComponent* MediaStreamComponent::create(MediaStreamSource* source)
 {
-    return adoptRef(new MediaStreamComponent(createCanonicalUUIDString(), source));
+    return new MediaStreamComponent(createCanonicalUUIDString(), source);
 }
 
-PassRefPtr<MediaStreamComponent> MediaStreamComponent::create(const String& id, PassRefPtr<MediaStreamSource> source)
+MediaStreamComponent* MediaStreamComponent::create(const String& id,
+    MediaStreamSource* source)
 {
-    return adoptRef(new MediaStreamComponent(id, source));
+    return new MediaStreamComponent(id, source);
 }
 
-MediaStreamComponent::MediaStreamComponent(const String& id, PassRefPtr<MediaStreamSource> source)
+MediaStreamComponent::MediaStreamComponent(const String& id,
+    MediaStreamSource* source)
+    : MediaStreamComponent(id,
+        source,
+        true,
+        false,
+        WebMediaStreamTrack::ContentHintType::None)
+{
+}
+
+MediaStreamComponent::MediaStreamComponent(
+    const String& id,
+    MediaStreamSource* source,
+    bool enabled,
+    bool muted,
+    WebMediaStreamTrack::ContentHintType contentHint)
     : m_source(source)
     , m_id(id)
-    , m_enabled(true)
-    , m_muted(false)
+    , m_enabled(enabled)
+    , m_muted(muted)
+    , m_contentHint(contentHint)
 {
-    ASSERT(m_id.length());
+    DCHECK(m_id.length());
 }
 
-#if ENABLE(WEB_AUDIO)
-void MediaStreamComponent::AudioSourceProviderImpl::wrap(WebAudioSourceProvider* provider)
+MediaStreamComponent* MediaStreamComponent::clone() const
+{
+    MediaStreamComponent* clonedComponent = new MediaStreamComponent(
+        createCanonicalUUIDString(), source(), m_enabled, m_muted, m_contentHint);
+    // TODO(pbos): Clone |m_trackData| as well.
+    // TODO(pbos): Move properties from MediaStreamTrack here so that they are
+    // also cloned. Part of crbug:669212 since stopped is currently not carried
+    // over, nor is ended().
+    return clonedComponent;
+}
+
+void MediaStreamComponent::dispose()
+{
+    m_trackData.reset();
+}
+
+void MediaStreamComponent::AudioSourceProviderImpl::wrap(
+    WebAudioSourceProvider* provider)
 {
     MutexLocker locker(m_provideInputLock);
     m_webAudioSourceProvider = provider;
 }
 
-void MediaStreamComponent::AudioSourceProviderImpl::provideInput(AudioBus* bus, size_t framesToProcess)
+void MediaStreamComponent::getSettings(
+    WebMediaStreamTrack::Settings& settings)
 {
-    ASSERT(bus);
+    DCHECK(m_trackData);
+    m_trackData->getSettings(settings);
+}
+
+void MediaStreamComponent::setContentHint(
+    WebMediaStreamTrack::ContentHintType hint)
+{
+    switch (hint) {
+    case WebMediaStreamTrack::ContentHintType::None:
+        break;
+    case WebMediaStreamTrack::ContentHintType::AudioSpeech:
+    case WebMediaStreamTrack::ContentHintType::AudioMusic:
+        DCHECK_EQ(MediaStreamSource::TypeAudio, source()->type());
+        break;
+    case WebMediaStreamTrack::ContentHintType::VideoMotion:
+    case WebMediaStreamTrack::ContentHintType::VideoDetail:
+        DCHECK_EQ(MediaStreamSource::TypeVideo, source()->type());
+        break;
+    }
+    if (hint == m_contentHint)
+        return;
+    m_contentHint = hint;
+
+    MediaStreamCenter::instance().didSetContentHint(this);
+}
+
+void MediaStreamComponent::AudioSourceProviderImpl::provideInput(
+    AudioBus* bus,
+    size_t framesToProcess)
+{
+    DCHECK(bus);
     if (!bus)
         return;
 
@@ -85,7 +150,10 @@ void MediaStreamComponent::AudioSourceProviderImpl::provideInput(AudioBus* bus, 
 
     m_webAudioSourceProvider->provideInput(webAudioData, framesToProcess);
 }
-#endif // #if ENABLE(WEB_AUDIO)
+
+DEFINE_TRACE(MediaStreamComponent)
+{
+    visitor->trace(m_source);
+}
 
 } // namespace blink
-

@@ -60,20 +60,11 @@ public:
     {
     }
 
-    Type iconType() const
-    {
-        return m_iconType;
-    }
+    Type iconType() const { return m_iconType; }
 
-    const WebURL& iconURL() const
-    {
-        return m_iconURL;
-    }
+    const WebURL& iconURL() const { return m_iconURL; }
 
-    const WebVector<WebSize>& sizes() const
-    {
-        return m_sizes;
-    }
+    const WebVector<WebSize>& sizes() const { return m_sizes; }
 
 #if BLINK_IMPLEMENTATION
     WebIconURL(const IconURL& iconURL)
@@ -89,7 +80,6 @@ private:
     WebURL m_iconURL;
     WebVector<WebSize> m_sizes;
 };
-
 }
 
 #endif // WebIconURL_h

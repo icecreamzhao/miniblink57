@@ -19,8 +19,8 @@
 
 #include "unicode/utypes.h"
 
-#include "unicode/unistr.h"
 #include "unicode/locid.h"
+#include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
 
@@ -38,16 +38,19 @@ struct ListFormatData : public UMemory {
     UnicodeString middlePattern;
     UnicodeString endPattern;
 
-  ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
-      twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
+    ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end)
+        : twoPattern(two)
+        , startPattern(start)
+        , middlePattern(middle)
+        , endPattern(end)
+    {
+    }
 };
-
 
 /**
  * \file
  * \brief C++ API: API for formatting a list.
  */
-
 
 /**
  * An immutable class for formatting a list, using data from CLDR (or supplied
@@ -59,10 +62,9 @@ struct ListFormatData : public UMemory {
  * The ListFormatter class is not intended for public subclassing.
  * @stable ICU 50
  */
-class U_COMMON_API ListFormatter : public UObject{
+class U_COMMON_API ListFormatter : public UObject {
 
-  public:
-
+public:
     /**
      * Copy constructor.
      * @stable ICU 52
@@ -108,7 +110,7 @@ class U_COMMON_API ListFormatter : public UObject{
      * @internal
      */
     static ListFormatter* createInstance(const Locale& locale, const char* style, UErrorCode& errorCode);
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
     /**
      * Destructor.
@@ -116,7 +118,6 @@ class U_COMMON_API ListFormatter : public UObject{
      * @stable ICU 50
      */
     virtual ~ListFormatter();
-
 
     /**
      * Formats a list of strings.
@@ -136,25 +137,25 @@ class U_COMMON_API ListFormatter : public UObject{
       @internal for MeasureFormat
     */
     UnicodeString& format(
-            const UnicodeString items[],
-            int32_t n_items,
-            UnicodeString& appendTo,
-            int32_t index,
-            int32_t &offset,
-            UErrorCode& errorCode) const;
+        const UnicodeString items[],
+        int32_t n_items,
+        UnicodeString& appendTo,
+        int32_t index,
+        int32_t& offset,
+        UErrorCode& errorCode) const;
     /**
      * @internal constructor made public for testing.
      */
-    ListFormatter(const ListFormatData &data);
+    ListFormatter(const ListFormatData& data);
     /**
      * @internal constructor made public for testing.
      */
     ListFormatter(const ListFormatInternal* listFormatterInternal);
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
-  private:
+private:
     static void initializeHash(UErrorCode& errorCode);
-    static const ListFormatInternal* getListFormatInternal(const Locale& locale, const char *style, UErrorCode& errorCode);
+    static const ListFormatInternal* getListFormatInternal(const Locale& locale, const char* style, UErrorCode& errorCode);
 
     ListFormatter();
 

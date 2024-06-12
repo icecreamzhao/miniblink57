@@ -5,14 +5,15 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
-#include "SkRRect.h"
 #include "SkPath.h"
+#include "SkRRect.h"
+#include "gm.h"
 
 typedef void (*InsetProc)(const SkRRect&, SkScalar dx, SkScalar dy, SkRRect*);
 
-static void inset0(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
+static void inset0(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst)
+{
     SkRect r = src.rect();
 
     r.inset(dx, dy);
@@ -32,7 +33,8 @@ static void inset0(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
     dst->setRectRadii(r, radii);
 }
 
-static void inset1(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
+static void inset1(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst)
+{
     SkRect r = src.rect();
 
     r.inset(dx, dy);
@@ -48,7 +50,8 @@ static void inset1(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
     dst->setRectRadii(r, radii);
 }
 
-static void inset2(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
+static void inset2(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst)
+{
     SkRect r = src.rect();
 
     r.inset(dx, dy);
@@ -72,11 +75,13 @@ static void inset2(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
     dst->setRectRadii(r, radii);
 }
 
-static SkScalar prop(SkScalar radius, SkScalar newSize, SkScalar oldSize) {
+static SkScalar prop(SkScalar radius, SkScalar newSize, SkScalar oldSize)
+{
     return newSize * radius / oldSize;
 }
 
-static void inset3(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
+static void inset3(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst)
+{
     SkRect r = src.rect();
 
     r.inset(dx, dy);
@@ -96,7 +101,8 @@ static void inset3(const SkRRect& src, SkScalar dx, SkScalar dy, SkRRect* dst) {
     dst->setRectRadii(r, radii);
 }
 
-static void draw_rrect_color(SkCanvas* canvas, const SkRRect& rrect) {
+static void draw_rrect_color(SkCanvas* canvas, const SkRRect& rrect)
+{
     SkPaint paint;
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStroke_Style);
@@ -104,7 +110,7 @@ static void draw_rrect_color(SkCanvas* canvas, const SkRRect& rrect) {
     if (rrect.isRect()) {
         paint.setColor(SK_ColorRED);
     } else if (rrect.isOval()) {
-        paint.setColor(0xFF008800);
+        paint.setColor(sk_tool_utils::color_to_565(0xFF008800));
     } else if (rrect.isSimple()) {
         paint.setColor(SK_ColorBLUE);
     } else {
@@ -113,7 +119,8 @@ static void draw_rrect_color(SkCanvas* canvas, const SkRRect& rrect) {
     canvas->drawRRect(rrect, paint);
 }
 
-static void drawrr(SkCanvas* canvas, const SkRRect& rrect, InsetProc proc) {
+static void drawrr(SkCanvas* canvas, const SkRRect& rrect, InsetProc proc)
+{
     SkRRect rr;
     for (SkScalar d = -30; d <= 30; d += 5) {
         proc(rrect, d, d, &rr);
@@ -123,19 +130,21 @@ static void drawrr(SkCanvas* canvas, const SkRRect& rrect, InsetProc proc) {
 
 class RRectGM : public skiagm::GM {
 public:
-    RRectGM() {}
+    RRectGM() { }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("rrect");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(820, 710);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         static const InsetProc insetProcs[] = {
             inset0, inset1, inset2, inset3
         };
@@ -167,4 +176,4 @@ private:
     typedef GM INHERITED;
 };
 
-DEF_GM( return new RRectGM; )
+DEF_GM(return new RRectGM;)

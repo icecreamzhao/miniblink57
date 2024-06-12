@@ -18,20 +18,20 @@ namespace gin {
 //
 // TODO(abarth): Rename FileRunnerDelegate to TestRunnerDelegate.
 class FileRunnerDelegate : public ModuleRunnerDelegate {
- public:
-  FileRunnerDelegate();
-  ~FileRunnerDelegate() override;
+public:
+    FileRunnerDelegate();
+    ~FileRunnerDelegate() override;
 
- private:
-  // From ModuleRunnerDelegate:
-  void UnhandledException(ShellRunner* runner, TryCatch& try_catch) override;
+private:
+    // From ModuleRunnerDelegate:
+    void UnhandledException(ShellRunner* runner, TryCatch& try_catch) override;
 
-  DISALLOW_COPY_AND_ASSIGN(FileRunnerDelegate);
+    DISALLOW_COPY_AND_ASSIGN(FileRunnerDelegate);
 };
 
 void RunTestFromFile(const base::FilePath& path, FileRunnerDelegate* delegate,
-                     bool run_until_idle = true);
+    bool run_until_idle = true);
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_TEST_FILE_RUNNER_H_
+#endif // GIN_TEST_FILE_RUNNER_H_

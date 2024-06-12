@@ -16,7 +16,6 @@
 *   C version of UnicodeSet.
 */
 
-
 /**
  * \file
  * \brief C API: Unicode Set
@@ -27,9 +26,9 @@
 #ifndef __USET_H__
 #define __USET_H__
 
-#include "unicode/utypes.h"
-#include "unicode/uchar.h"
 #include "unicode/localpointer.h"
+#include "unicode/uchar.h"
+#include "unicode/utypes.h"
 
 #ifndef UCNV_H
 struct USet;
@@ -51,7 +50,7 @@ enum {
      * Ignore white space within patterns unless quoted or escaped.
      * @stable ICU 2.4
      */
-    USET_IGNORE_SPACE = 1,  
+    USET_IGNORE_SPACE = 1,
 
     /**
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
@@ -79,7 +78,7 @@ enum {
      *
      * @stable ICU 2.4
      */
-    USET_CASE_INSENSITIVE = 2,  
+    USET_CASE_INSENSITIVE = 2,
 
     /**
      * Enable case insensitive matching.  E.g., "[ab]" with this flag
@@ -210,7 +209,7 @@ enum {
      * Also provides padding for nice sizeof(USerializedSet).
      * @stable ICU 2.4
      */
-    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8
+    USET_SERIALIZED_STATIC_ARRAY_CAPACITY = 8
 };
 
 /**
@@ -223,7 +222,7 @@ typedef struct USerializedSet {
      * The serialized Unicode Set.
      * @stable ICU 2.4
      */
-    const uint16_t *array;
+    const uint16_t* array;
     /**
      * The length of the array that contains BMP characters.
      * @stable ICU 2.4
@@ -279,7 +278,7 @@ uset_open(UChar32 start, UChar32 end);
  */
 U_STABLE USet* U_EXPORT2
 uset_openPattern(const UChar* pattern, int32_t patternLength,
-                 UErrorCode* ec);
+    UErrorCode* ec);
 
 /**
  * Creates a set from the given pattern.  See the UnicodeSet class
@@ -294,8 +293,8 @@ uset_openPattern(const UChar* pattern, int32_t patternLength,
  */
 U_STABLE USet* U_EXPORT2
 uset_openPatternOptions(const UChar* pattern, int32_t patternLength,
-                 uint32_t options,
-                 UErrorCode* ec);
+    uint32_t options,
+    UErrorCode* ec);
 
 /**
  * Disposes of the storage used by a USet object.  This function should
@@ -334,8 +333,8 @@ U_NAMESPACE_END
  * @see uset_cloneAsThawed
  * @stable ICU 3.8
  */
-U_STABLE USet * U_EXPORT2
-uset_clone(const USet *set);
+U_STABLE USet* U_EXPORT2
+uset_clone(const USet* set);
 
 /**
  * Determines whether the set has been frozen (made immutable) or not.
@@ -347,7 +346,7 @@ uset_clone(const USet *set);
  * @stable ICU 3.8
  */
 U_STABLE UBool U_EXPORT2
-uset_isFrozen(const USet *set);
+uset_isFrozen(const USet* set);
 
 /**
  * Freeze the set (make it immutable).
@@ -364,7 +363,7 @@ uset_isFrozen(const USet *set);
  * @stable ICU 3.8
  */
 U_STABLE void U_EXPORT2
-uset_freeze(USet *set);
+uset_freeze(USet* set);
 
 /**
  * Clone the set and make the clone mutable.
@@ -376,8 +375,8 @@ uset_freeze(USet *set);
  * @see uset_clone
  * @stable ICU 3.8
  */
-U_STABLE USet * U_EXPORT2
-uset_cloneAsThawed(const USet *set);
+U_STABLE USet* U_EXPORT2
+uset_cloneAsThawed(const USet* set);
 
 /**
  * Causes the USet object to represent the range <code>start - end</code>.
@@ -390,7 +389,7 @@ uset_cloneAsThawed(const USet *set);
  */
 U_STABLE void U_EXPORT2
 uset_set(USet* set,
-         UChar32 start, UChar32 end);
+    UChar32 start, UChar32 end);
 
 /**
  * Modifies the set to represent the set specified by the given
@@ -413,11 +412,11 @@ uset_set(USet* set,
  *
  * @stable ICU 2.8
  */
-U_STABLE int32_t U_EXPORT2 
-uset_applyPattern(USet *set,
-                  const UChar *pattern, int32_t patternLength,
-                  uint32_t options,
-                  UErrorCode *status);
+U_STABLE int32_t U_EXPORT2
+uset_applyPattern(USet* set,
+    const UChar* pattern, int32_t patternLength,
+    uint32_t options,
+    UErrorCode* status);
 
 /**
  * Modifies the set to contain those code points which have the given value
@@ -443,7 +442,7 @@ uset_applyPattern(USet *set,
  */
 U_STABLE void U_EXPORT2
 uset_applyIntPropertyValue(USet* set,
-                           UProperty prop, int32_t value, UErrorCode* ec);
+    UProperty prop, int32_t value, UErrorCode* ec);
 
 /**
  * Modifies the set to contain those code points which have the
@@ -482,9 +481,9 @@ uset_applyIntPropertyValue(USet* set,
  */
 U_STABLE void U_EXPORT2
 uset_applyPropertyAlias(USet* set,
-                        const UChar *prop, int32_t propLength,
-                        const UChar *value, int32_t valueLength,
-                        UErrorCode* ec);
+    const UChar* prop, int32_t propLength,
+    const UChar* value, int32_t valueLength,
+    UErrorCode* ec);
 
 /**
  * Return true if the given position, in the given pattern, appears
@@ -496,8 +495,8 @@ uset_applyPropertyAlias(USet* set,
  * @stable ICU 3.2
  */
 U_STABLE UBool U_EXPORT2
-uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
-                      int32_t pos);
+uset_resemblesPattern(const UChar* pattern, int32_t patternLength,
+    int32_t pos);
 
 /**
  * Returns a string representation of this set.  If the result of
@@ -516,9 +515,9 @@ uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
  */
 U_STABLE int32_t U_EXPORT2
 uset_toPattern(const USet* set,
-               UChar* result, int32_t resultCapacity,
-               UBool escapeUnprintable,
-               UErrorCode* ec);
+    UChar* result, int32_t resultCapacity,
+    UBool escapeUnprintable,
+    UErrorCode* ec);
 
 /**
  * Adds the given character to the given USet.  After this call,
@@ -544,7 +543,7 @@ uset_add(USet* set, UChar32 c);
  * @stable ICU 2.6
  */
 U_STABLE void U_EXPORT2
-uset_addAll(USet* set, const USet *additionalSet);
+uset_addAll(USet* set, const USet* additionalSet);
 
 /**
  * Adds the given range of characters to the given USet.  After this call,
@@ -580,7 +579,7 @@ uset_addString(USet* set, const UChar* str, int32_t strLen);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-uset_addAllCodePoints(USet* set, const UChar *str, int32_t strLen);
+uset_addAllCodePoints(USet* set, const UChar* str, int32_t strLen);
 
 /**
  * Removes the given character from the given USet.  After this call,
@@ -859,9 +858,9 @@ uset_getItemCount(const USet* set);
  */
 U_STABLE int32_t U_EXPORT2
 uset_getItem(const USet* set, int32_t itemIndex,
-             UChar32* start, UChar32* end,
-             UChar* str, int32_t strCapacity,
-             UErrorCode* ec);
+    UChar32* start, UChar32* end,
+    UChar* str, int32_t strCapacity,
+    UErrorCode* ec);
 
 /**
  * Returns true if set1 contains all the characters and strings
@@ -885,7 +884,7 @@ uset_containsAll(const USet* set1, const USet* set2);
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
-uset_containsAllCodePoints(const USet* set, const UChar *str, int32_t strLen);
+uset_containsAllCodePoints(const USet* set, const UChar* str, int32_t strLen);
 
 /**
  * Returns true if set1 contains none of the characters and strings
@@ -929,7 +928,7 @@ uset_containsSome(const USet* set1, const USet* set2);
  * @see USetSpanCondition
  */
 U_STABLE int32_t U_EXPORT2
-uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition);
+uset_span(const USet* set, const UChar* s, int32_t length, USetSpanCondition spanCondition);
 
 /**
  * Returns the start of the trailing substring of the input string which
@@ -950,7 +949,7 @@ uset_span(const USet *set, const UChar *s, int32_t length, USetSpanCondition spa
  * @see USetSpanCondition
  */
 U_STABLE int32_t U_EXPORT2
-uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition spanCondition);
+uset_spanBack(const USet* set, const UChar* s, int32_t length, USetSpanCondition spanCondition);
 
 /**
  * Returns the length of the initial substring of the input string which
@@ -972,7 +971,7 @@ uset_spanBack(const USet *set, const UChar *s, int32_t length, USetSpanCondition
  * @see USetSpanCondition
  */
 U_STABLE int32_t U_EXPORT2
-uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition);
+uset_spanUTF8(const USet* set, const char* s, int32_t length, USetSpanCondition spanCondition);
 
 /**
  * Returns the start of the trailing substring of the input string which
@@ -993,7 +992,7 @@ uset_spanUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition 
  * @see USetSpanCondition
  */
 U_STABLE int32_t U_EXPORT2
-uset_spanBackUTF8(const USet *set, const char *s, int32_t length, USetSpanCondition spanCondition);
+uset_spanBackUTF8(const USet* set, const char* s, int32_t length, USetSpanCondition spanCondition);
 
 /**
  * Returns true if set1 contains all of the characters and strings
@@ -1121,6 +1120,6 @@ uset_getSerializedRangeCount(const USerializedSet* set);
  */
 U_STABLE UBool U_EXPORT2
 uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
-                        UChar32* pStart, UChar32* pEnd);
+    UChar32* pStart, UChar32* pEnd);
 
 #endif

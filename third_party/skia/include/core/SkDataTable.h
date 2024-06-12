@@ -8,10 +8,10 @@
 #ifndef SkDataTable_DEFINED
 #define SkDataTable_DEFINED
 
+#include "../private/SkTDArray.h"
 #include "SkChunkAlloc.h"
 #include "SkData.h"
 #include "SkString.h"
-#include "SkTDArray.h"
 
 /**
  *  Like SkData, SkDataTable holds an immutable data buffer. The data buffer is
@@ -46,7 +46,8 @@ public:
     const void* at(int index, size_t* size = NULL) const;
 
     template <typename T>
-    const T* atT(int index, size_t* size = NULL) const {
+    const T* atT(int index, size_t* size = NULL) const
+    {
         return reinterpret_cast<const T*>(this->at(index, size));
     }
 
@@ -54,7 +55,8 @@ public:
      *  Returns the index'th entry as a c-string, and assumes that the trailing
      *  null byte had been copied into the table as well.
      */
-    const char* atStr(int index) const {
+    const char* atStr(int index) const
+    {
         size_t size;
         const char* str = this->atT<const char>(index, &size);
         SkASSERT(strlen(str) + 1 == size);
@@ -74,8 +76,8 @@ public:
      *               ptrs[] array.
      *  @param count the number of array elements in ptrs[] and sizes[] to copy.
      */
-    static SkDataTable* NewCopyArrays(const void * const * ptrs,
-                                      const size_t sizes[], int count);
+    static SkDataTable* NewCopyArrays(const void* const* ptrs,
+        const size_t sizes[], int count);
 
     /**
      *  Return a new table that contains a copy of the data in array.
@@ -86,34 +88,34 @@ public:
      *               of bytes that will be copied is count * elemSize.
      */
     static SkDataTable* NewCopyArray(const void* array, size_t elemSize,
-                                     int count);
+        int count);
 
     static SkDataTable* NewArrayProc(const void* array, size_t elemSize,
-                                     int count, FreeProc proc, void* context);
+        int count, FreeProc proc, void* context);
 
 private:
     struct Dir {
         const void* fPtr;
-        uintptr_t   fSize;
+        uintptr_t fSize;
     };
 
-    int         fCount;
-    size_t      fElemSize;
+    int fCount;
+    size_t fElemSize;
     union {
-        const Dir*  fDir;
+        const Dir* fDir;
         const char* fElems;
     } fU;
 
-    FreeProc    fFreeProc;
-    void*       fFreeProcContext;
+    FreeProc fFreeProc;
+    void* fFreeProcContext;
 
     SkDataTable();
     SkDataTable(const void* array, size_t elemSize, int count,
-                FreeProc, void* context);
+        FreeProc, void* context);
     SkDataTable(const Dir*, int count, FreeProc, void* context);
     virtual ~SkDataTable();
 
-    friend class SkDataTableBuilder;    // access to Dir
+    friend class SkDataTableBuilder; // access to Dir
 
     typedef SkRefCnt INHERITED;
 };
@@ -127,14 +129,15 @@ public:
     SkDataTableBuilder(size_t minChunkSize);
     ~SkDataTableBuilder();
 
-    int  count() const { return fDir.count(); }
+    int count() const { return fDir.count(); }
     size_t minChunkSize() const { return fMinChunkSize; }
 
     /**
      *  Forget any previously appended entries, setting count() back to 0.
      */
     void reset(size_t minChunkSize);
-    void reset() {
+    void reset()
+    {
         this->reset(fMinChunkSize);
     }
 
@@ -147,7 +150,8 @@ public:
      *  Helper version of append() passes strlen() + 1 for the size,
      *  so the trailing-zero will be copied as well.
      */
-    void appendStr(const char str[]) {
+    void appendStr(const char str[])
+    {
         this->append(str, strlen(str) + 1);
     }
 
@@ -155,7 +159,8 @@ public:
      *  Helper version of append() passes string.size() + 1 for the size,
      *  so the trailing-zero will be copied as well.
      */
-    void appendString(const SkString& string) {
+    void appendString(const SkString& string)
+    {
         this->append(string.c_str(), string.size() + 1);
     }
 
@@ -168,8 +173,8 @@ public:
 
 private:
     SkTDArray<SkDataTable::Dir> fDir;
-    SkChunkAlloc*               fHeap;
-    size_t                      fMinChunkSize;
+    SkChunkAlloc* fHeap;
+    size_t fMinChunkSize;
 };
 
 #endif

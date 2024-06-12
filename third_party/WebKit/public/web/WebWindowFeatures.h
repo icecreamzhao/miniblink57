@@ -82,7 +82,6 @@ struct WebWindowFeatures {
     {
     }
 
-
 #if BLINK_IMPLEMENTATION
     WebWindowFeatures(const WindowFeatures& f)
         : x(f.x)

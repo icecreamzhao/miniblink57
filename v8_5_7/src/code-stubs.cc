@@ -3016,7 +3016,7 @@ bool ToBooleanICStub::UpdateStatus(Handle<Object> object) {
     DCHECK(!object->IsUndetectable());
     new_hints |= ToBooleanHint::kHeapNumber;
     double value = HeapNumber::cast(*object)->value();
-    to_boolean_value = value != 0 && !std::isnan(value);
+    to_boolean_value = value != 0 && !std_isnan(value);
   } else if (object->IsSimd128Value()) {
     new_hints |= ToBooleanHint::kSimdValue;
     to_boolean_value = true;

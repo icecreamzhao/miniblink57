@@ -34,8 +34,9 @@ class NodeListOrElement;
 
 class HTMLAllCollection final : public HTMLCollection {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLAllCollection> create(ContainerNode&, CollectionType);
+    static HTMLAllCollection* create(ContainerNode&, CollectionType);
     ~HTMLAllCollection() override;
 
     Element* namedItemWithIndex(const AtomicString& name, unsigned index) const;
@@ -45,7 +46,11 @@ private:
     explicit HTMLAllCollection(ContainerNode&);
 };
 
-DEFINE_TYPE_CASTS(HTMLAllCollection, LiveNodeListBase, collection, collection->type() == DocAll, collection.type() == DocAll);
+DEFINE_TYPE_CASTS(HTMLAllCollection,
+    LiveNodeListBase,
+    collection,
+    collection->type() == DocAll,
+    collection.type() == DocAll);
 
 } // namespace blink
 

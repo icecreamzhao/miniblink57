@@ -36,6 +36,7 @@
 #include "third_party/WebKit/public/platform/WebURLLoaderClient.h"
 #include "third_party/WebKit/public/platform/WebURLResponse.h"
 #include "third_party/WebKit/public/platform/WebURLRequest.h"
+#include "third_party/WebKit/public/platform/WebURLLoader.h"
 #include "third_party/npapi/bindings/npfunctions.h"
 #include "third_party/npapi/bindings/npapi.h"
 #include <wtf/HashMap.h>
@@ -44,6 +45,7 @@
 #include <wtf/text/CString.h>
 #include <wtf/text/StringHash.h>
 #include <wtf/text/WTFString.h>
+#include <wtf/OwnPtr.h>
 #include <vector>
 
 namespace blink {
@@ -93,11 +95,11 @@ private:
     void destroyStream();
 
     // WebURLLoaderClient
-    virtual void willSendRequest(blink::WebURLLoader*, blink::WebURLRequest& newRequest, const blink::WebURLResponse& redirectResponse) override;
-    virtual void didReceiveResponse(blink::WebURLLoader*, const blink::WebURLResponse&) override;
-    virtual void didReceiveData(blink::WebURLLoader*, const char* data, int dataLength, int encodedDataLength) override;
-    virtual void didFail(blink::WebURLLoader* loader, const blink::WebURLError&) override;
-    virtual void didFinishLoading(blink::WebURLLoader* loader, double finishTime, int64_t totalEncodedDataLength) override;
+    virtual bool willFollowRedirect(blink::WebURLRequest& newRequest, const blink::WebURLResponse& redirectResponse) override;
+    virtual void didReceiveResponse(const blink::WebURLResponse&) override;
+    virtual void didReceiveData(const char* data, int dataLength) override;
+    virtual void didFail(const blink::WebURLError&, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLengt) override;
+    virtual void didFinishLoading(double finishTime, int64_t totalEncodedDataLength, int64_t totalEncodedBodyLength) override;
     bool wantsAllStreams() const;
 
     blink::WebURLRequest m_resourceRequest;
@@ -112,7 +114,7 @@ private:
     bool m_loadManually;
 
     blink::Timer<PluginStream> m_delayDeliveryTimer;
-    void delayDeliveryTimerFired(blink::Timer<PluginStream>*);
+    void delayDeliveryTimerFired(blink::TimerBase*);
 
     OwnPtr<std::vector<char>> m_deliveryData;
 

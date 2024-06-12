@@ -24,32 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/text/TextCodec.h"
 
 #include "wtf/StringExtras.h"
 
 namespace WTF {
 
-TextCodec::~TextCodec()
-{
-}
+TextCodec::~TextCodec() { }
 
-int TextCodec::getUnencodableReplacement(unsigned codePoint, UnencodableHandling handling, UnencodableReplacementArray replacement)
+int TextCodec::getUnencodableReplacement(
+    unsigned codePoint,
+    UnencodableHandling handling,
+    UnencodableReplacementArray replacement)
 {
     switch (handling) {
-        case QuestionMarksForUnencodables:
-            replacement[0] = '?';
-            replacement[1] = 0;
-            return 1;
-        case EntitiesForUnencodables:
-            snprintf(replacement, sizeof(UnencodableReplacementArray), "&#%u;", codePoint);
-            return static_cast<int>(strlen(replacement));
-        case URLEncodedEntitiesForUnencodables:
-            snprintf(replacement, sizeof(UnencodableReplacementArray), "%%26%%23%u%%3B", codePoint);
-            return static_cast<int>(strlen(replacement));
+    case QuestionMarksForUnencodables:
+        replacement[0] = '?';
+        replacement[1] = 0;
+        return 1;
+    case EntitiesForUnencodables:
+        snprintf(replacement, sizeof(UnencodableReplacementArray), "&#%u;",
+            codePoint);
+        return static_cast<int>(strlen(replacement));
+    case URLEncodedEntitiesForUnencodables:
+        snprintf(replacement, sizeof(UnencodableReplacementArray),
+            "%%26%%23%u%%3B", codePoint);
+        return static_cast<int>(strlen(replacement));
+
+    case CSSEncodedEntitiesForUnencodables:
+        snprintf(replacement, sizeof(UnencodableReplacementArray), "\\%x ",
+            codePoint);
+        return static_cast<int>(strlen(replacement));
     }
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     replacement[0] = 0;
     return 0;
 }

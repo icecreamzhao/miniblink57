@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -10,10 +9,10 @@
 
 #if SK_SUPPORT_GPU
 
-#include "GrGpuResource.h"
-#include "GrGpuResourcePriv.h"
 #include "GrContext.h"
 #include "GrGpu.h"
+#include "GrGpuResource.h"
+#include "GrGpuResourcePriv.h"
 #include "GrResourceCache.h"
 #include "SkCanvas.h"
 
@@ -23,12 +22,14 @@ enum {
 
 class BenchResource : public GrGpuResource {
 public:
-    BenchResource (GrGpu* gpu)
-        : INHERITED(gpu, kCached_LifeCycle) {
-        this->registerWithCache();
+    BenchResource(GrGpu* gpu)
+        : INHERITED(gpu)
+    {
+        this->registerWithCache(SkBudgeted::kYes);
     }
 
-    static void ComputeKey(int i, int keyData32Count, GrUniqueKey* key) {
+    static void ComputeKey(int i, int keyData32Count, GrUniqueKey* key)
+    {
         static GrUniqueKey::Domain kDomain = GrUniqueKey::GenerateDomain();
         GrUniqueKey::Builder builder(key, kDomain, keyData32Count);
         for (int j = 0; j < keyData32Count; ++j) {
@@ -41,11 +42,12 @@ private:
     typedef GrGpuResource INHERITED;
 };
 
-static void populate_cache(GrGpu* gpu, int resourceCount, int keyData32Count) {
+static void populate_cache(GrGpu* gpu, int resourceCount, int keyData32Count)
+{
     for (int i = 0; i < resourceCount; ++i) {
         GrUniqueKey key;
         BenchResource::ComputeKey(i, keyData32Count, &key);
-        GrGpuResource* resource = SkNEW_ARGS(BenchResource, (gpu));
+        GrGpuResource* resource = new BenchResource(gpu);
         resource->resourcePriv().setUniqueKey(key);
         resource->unref();
     }
@@ -55,23 +57,28 @@ class GrResourceCacheBenchAdd : public Benchmark {
 public:
     GrResourceCacheBenchAdd(int keyData32Count)
         : fFullName("grresourcecache_add")
-        , fKeyData32Count(keyData32Count) {
+        , fKeyData32Count(keyData32Count)
+    {
         if (keyData32Count > 1) {
             fFullName.appendf("_%d", fKeyData32Count);
         }
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
+
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fFullName.c_str();
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkAutoTUnref<GrContext> context(GrContext::CreateMockContext());
-        if (NULL == context) {
+        if (nullptr == context) {
             return;
         }
         // Set the cache budget to be very large so no purging occurs.
@@ -101,21 +108,26 @@ class GrResourceCacheBenchFind : public Benchmark {
 public:
     GrResourceCacheBenchFind(int keyData32Count)
         : fFullName("grresourcecache_find")
-        , fKeyData32Count(keyData32Count) {
+        , fKeyData32Count(keyData32Count)
+    {
         if (keyData32Count > 1) {
             fFullName.appendf("_%d", fKeyData32Count);
         }
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
+
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fFullName.c_str();
     }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         fContext.reset(GrContext::CreateMockContext());
         if (!fContext) {
             return;
@@ -134,7 +146,8 @@ protected:
         populate_cache(gpu, CACHE_SIZE_COUNT, fKeyData32Count);
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         if (!fContext) {
             return;
         }
@@ -157,31 +170,31 @@ private:
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return new GrResourceCacheBenchAdd(1); )
+DEF_BENCH(return new GrResourceCacheBenchAdd(1);)
 #ifdef SK_RELEASE
 // Only on release because on debug the SkTDynamicHash validation is too slow.
-DEF_BENCH( return new GrResourceCacheBenchAdd(2); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(3); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(4); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(5); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(10); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(25); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(54); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(55); )
-DEF_BENCH( return new GrResourceCacheBenchAdd(56); )
+DEF_BENCH(return new GrResourceCacheBenchAdd(2);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(3);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(4);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(5);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(10);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(25);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(54);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(55);)
+DEF_BENCH(return new GrResourceCacheBenchAdd(56);)
 #endif
 
-DEF_BENCH( return new GrResourceCacheBenchFind(1); )
+DEF_BENCH(return new GrResourceCacheBenchFind(1);)
 #ifdef SK_RELEASE
-DEF_BENCH( return new GrResourceCacheBenchFind(2); )
-DEF_BENCH( return new GrResourceCacheBenchFind(3); )
-DEF_BENCH( return new GrResourceCacheBenchFind(4); )
-DEF_BENCH( return new GrResourceCacheBenchFind(5); )
-DEF_BENCH( return new GrResourceCacheBenchFind(10); )
-DEF_BENCH( return new GrResourceCacheBenchFind(25); )
-DEF_BENCH( return new GrResourceCacheBenchFind(54); )
-DEF_BENCH( return new GrResourceCacheBenchFind(55); )
-DEF_BENCH( return new GrResourceCacheBenchFind(56); )
+DEF_BENCH(return new GrResourceCacheBenchFind(2);)
+DEF_BENCH(return new GrResourceCacheBenchFind(3);)
+DEF_BENCH(return new GrResourceCacheBenchFind(4);)
+DEF_BENCH(return new GrResourceCacheBenchFind(5);)
+DEF_BENCH(return new GrResourceCacheBenchFind(10);)
+DEF_BENCH(return new GrResourceCacheBenchFind(25);)
+DEF_BENCH(return new GrResourceCacheBenchFind(54);)
+DEF_BENCH(return new GrResourceCacheBenchFind(55);)
+DEF_BENCH(return new GrResourceCacheBenchFind(56);)
 #endif
 
 #endif

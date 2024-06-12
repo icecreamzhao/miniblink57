@@ -28,34 +28,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableClipPathOperation.h"
 
 namespace blink {
 
-bool AnimatableClipPathOperation::usesDefaultInterpolationWith(const AnimatableValue* value) const
+bool AnimatableClipPathOperation::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
 {
     const AnimatableClipPathOperation* toOperation = toAnimatableClipPathOperation(value);
 
     if (m_operation->type() != ClipPathOperation::SHAPE || toOperation->m_operation->type() != ClipPathOperation::SHAPE)
         return true;
 
-    const BasicShape* fromShape = toShapeClipPathOperation(clipPathOperation())->basicShape();
-    const BasicShape* toShape = toShapeClipPathOperation(toOperation->clipPathOperation())->basicShape();
+    const BasicShape* fromShape = toShapeClipPathOperation(getClipPathOperation())->basicShape();
+    const BasicShape* toShape = toShapeClipPathOperation(toOperation->getClipPathOperation())
+                                    ->basicShape();
 
     return !fromShape->canBlend(toShape);
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableClipPathOperation::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableClipPathOperation::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     if (usesDefaultInterpolationWith(value))
         return defaultInterpolateTo(this, value, fraction);
 
     const AnimatableClipPathOperation* toOperation = toAnimatableClipPathOperation(value);
-    const BasicShape* fromShape = toShapeClipPathOperation(clipPathOperation())->basicShape();
-    const BasicShape* toShape = toShapeClipPathOperation(toOperation->clipPathOperation())->basicShape();
+    const BasicShape* fromShape = toShapeClipPathOperation(getClipPathOperation())->basicShape();
+    const BasicShape* toShape = toShapeClipPathOperation(toOperation->getClipPathOperation())
+                                    ->basicShape();
 
-    return AnimatableClipPathOperation::create(ShapeClipPathOperation::create(toShape->blend(fromShape, fraction)).get());
+    return AnimatableClipPathOperation::create(
+        ShapeClipPathOperation::create(toShape->blend(fromShape, fraction))
+            .get());
 }
 
 bool AnimatableClipPathOperation::equalTo(const AnimatableValue* value) const
@@ -64,4 +70,4 @@ bool AnimatableClipPathOperation::equalTo(const AnimatableValue* value) const
     return m_operation == operation || (m_operation && operation && *m_operation == *operation);
 }
 
-}
+} // namespace blink

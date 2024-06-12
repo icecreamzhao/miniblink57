@@ -28,7 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html#idl-def-SourceBuffer
+// https://www.w3.org/TR/media-source/#idl-def-SourceBuffer
 
 enum AppendMode {
     "segments",
@@ -36,15 +36,12 @@ enum AppendMode {
 };
 
 [
-    ActiveDOMObject,
-    NoInterfaceObject,
-    RuntimeEnabled=MediaSource,
-    TypeChecking=Interface,
+    ActiveScriptWrappable,
+    DependentLifetime,
 ] interface SourceBuffer : EventTarget {
 
     // Gets or sets the AppendMode.
-    // FIXME: Remove MediaSourceExperimental once mode attribute is implemented and stabilized. See http://crbug.com/249422.
-    [RaisesException=Setter, RuntimeEnabled=MediaSourceExperimental] attribute AppendMode mode;
+    [RaisesException=Setter] attribute AppendMode mode;
 
     readonly attribute boolean updating;
 
@@ -54,17 +51,24 @@ enum AppendMode {
     // Applies an offset to media segment timestamps.
     [RaisesException=Setter] attribute double timestampOffset;
 
+    [RuntimeEnabled=AudioVideoTracks] readonly attribute AudioTrackList audioTracks;
+    [RuntimeEnabled=AudioVideoTracks] readonly attribute VideoTrackList videoTracks;
+
     // Presentation timestamp for the start of append window.
     [RaisesException=Setter] attribute double appendWindowStart;
 
     // Presentation timestamp for the end of append window.
     [RaisesException=Setter] attribute unrestricted double appendWindowEnd;
 
+    attribute EventHandler onupdatestart;
+    attribute EventHandler onupdate;
+    attribute EventHandler onupdateend;
+    attribute EventHandler onerror;
+    attribute EventHandler onabort;
+
     // Append segment data.
     [RaisesException] void appendBuffer(ArrayBuffer data);
     [RaisesException] void appendBuffer(ArrayBufferView data);
-
-    [RaisesException, RuntimeEnabled=ExperimentalStream] void appendStream(Stream stream, optional unsigned long long maxSize);
 
     // Abort the current segment append sequence.
     [RaisesException] void abort();
@@ -74,4 +78,3 @@ enum AppendMode {
     // the initialization segment algorithm.
     [RaisesException=Setter, RuntimeEnabled=MediaSourceExperimental] attribute TrackDefaultList trackDefaults;
 };
-

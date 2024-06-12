@@ -54,10 +54,10 @@ public:
 private:
     // WebDevToolsFrontendClient implementation.
     // WebDevToolsAgentClient implementation.
-    void sendProtocolMessage(int callId,
+    void sendProtocolMessage(int sessionId, int callId,
         const blink::WebString& response,
         const blink::WebString& state) override;
-    blink::WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop() override;
+    blink::WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop() /*override*/;
     void willEnterDebugLoop() override;
     void didExitDebugLoop() override;
     void willEnterDebugLoopInRun();
@@ -74,6 +74,7 @@ private:
 
     friend class WebKitClientMessageLoopImpl;
     bool m_isAttached;
+    int m_sessionId;
     DevToolsClient* m_devToolsClient;
     int m_id;
     WebPage* m_page;

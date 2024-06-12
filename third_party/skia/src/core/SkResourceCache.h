@@ -14,7 +14,7 @@
 
 class SkCachedData;
 class SkDiscardableMemory;
-class SkMipMap;
+class SkTraceMemoryDump;
 
 /**
  *  Cache object for bitmaps (with possible scale in X Y as part of the key).
@@ -29,14 +29,19 @@ class SkMipMap;
 class SkResourceCache {
 public:
     struct Key {
-        // Call this to access your private contents. Must not use the address after calling init()
-        void* writableContents() { return this + 1; }
+        /** Key subclasses must call this after their own fields and data are initialized.
+         *  All fields and data must be tightly packed.
+         *  @param nameSpace must be unique per Key subclass.
+         *  @param sharedID == 0 means ignore this field, does not support group purging.
+         *  @param dataSize is size of fields and data of the subclass, must be a multiple of 4.
+         */
+        void init(void* nameSpace, uint64_t sharedID, size_t dataSize);
 
-        // must call this after your private data has been written.
-        // nameSpace must be unique per Key subclass.
-        // sharedID == 0 means ignore this field : does not support group purging.
-        // length must be a multiple of 4
-        void init(void* nameSpace, uint64_t sharedID, size_t length);
+        /** Returns the size of this key. */
+        size_t size() const
+        {
+            return fCount32 << 2;
+        }
 
         void* getNamespace() const { return fNamespace; }
         uint64_t getSharedID() const { return ((uint64_t)fSharedID_hi << 32) | fSharedID_lo; }
@@ -44,10 +49,11 @@ public:
         // This is only valid after having called init().
         uint32_t hash() const { return fHash; }
 
-        bool operator==(const Key& other) const {
+        bool operator==(const Key& other) const
+        {
             const uint32_t* a = this->as32();
             const uint32_t* b = other.as32();
-            for (int i = 0; i < fCount32; ++i) {  // (This checks fCount == other.fCount first.)
+            for (int i = 0; i < fCount32; ++i) { // (This checks fCount == other.fCount first.)
                 if (a[i] != b[i]) {
                     return false;
                 }
@@ -56,12 +62,12 @@ public:
         }
 
     private:
-        int32_t  fCount32;   // local + user contents count32
+        int32_t fCount32; // local + user contents count32
         uint32_t fHash;
         // split uint64_t into hi and lo so we don't force ourselves to pad on 32bit machines.
         uint32_t fSharedID_lo;
         uint32_t fSharedID_hi;
-        void*    fNamespace; // A unique namespace tag. This is hashed.
+        void* fNamespace; // A unique namespace tag. This is hashed.
         /* uint32_t fContents32[] */
 
         const uint32_t* as32() const { return (const uint32_t*)this; }
@@ -70,30 +76,37 @@ public:
     struct Rec {
         typedef SkResourceCache::Key Key;
 
-        Rec() {}
-        virtual ~Rec() {}
+        Rec() { }
+        virtual ~Rec() { }
 
         uint32_t getHash() const { return this->getKey().hash(); }
 
         virtual const Key& getKey() const = 0;
         virtual size_t bytesUsed() const = 0;
 
+        // for memory usage diagnostics
+        virtual const char* getCategory() const = 0;
+        virtual SkDiscardableMemory* diagnostic_only_getDiscardable() const { return nullptr; }
+
         // for SkTDynamicHash::Traits
         static uint32_t Hash(const Key& key) { return key.hash(); }
         static const Key& GetKey(const Rec& rec) { return rec.getKey(); }
 
     private:
-        Rec*    fNext;
-        Rec*    fPrev;
+        Rec* fNext;
+        Rec* fPrev;
 
         friend class SkResourceCache;
     };
 
     // Used with SkMessageBus
     struct PurgeSharedIDMessage {
-        PurgeSharedIDMessage(uint64_t sharedID) : fSharedID(sharedID) {}
+        PurgeSharedIDMessage(uint64_t sharedID)
+            : fSharedID(sharedID)
+        {
+        }
 
-        uint64_t    fSharedID;
+        uint64_t fSharedID;
     };
 
     typedef const Rec* ID;
@@ -112,7 +125,7 @@ public:
 
     /**
      *  Returns a locked/pinned SkDiscardableMemory instance for the specified
-     *  number of bytes, or NULL on failure.
+     *  number of bytes, or nullptr on failure.
      */
     typedef SkDiscardableMemory* (*DiscardableFactory)(size_t bytes);
 
@@ -133,6 +146,10 @@ public:
     static bool Find(const Key& key, FindVisitor, void* context);
     static void Add(Rec*);
 
+    typedef void (*Visitor)(const Rec&, void* context);
+    // Call the visitor for every Rec in the cache.
+    static void VisitAll(Visitor, void* context);
+
     static size_t GetTotalBytesUsed();
     static size_t GetTotalByteLimit();
     static size_t SetTotalByteLimit(size_t newLimit);
@@ -143,14 +160,21 @@ public:
 
     static void PurgeAll();
 
+    static void TestDumpMemoryStatistics();
+
+    /** Dump memory usage statistics of every Rec in the cache using the
+        SkTraceMemoryDump interface.
+     */
+    static void DumpMemoryStatistics(SkTraceMemoryDump* dump);
+
     /**
-     *  Returns the DiscardableFactory used by the global cache, or NULL.
+     *  Returns the DiscardableFactory used by the global cache, or nullptr.
      */
     static DiscardableFactory GetDiscardableFactory();
 
     /**
      * Use this allocator for bitmaps, so they can use ashmem when available.
-     * Returns NULL if the ResourceCache has not been initialized with a DiscardableFactory.
+     * Returns nullptr if the ResourceCache has not been initialized with a DiscardableFactory.
      */
     static SkBitmap::Allocator* GetAllocator();
 
@@ -194,6 +218,7 @@ public:
      */
     bool find(const Key&, FindVisitor, void* context);
     void add(Rec*);
+    void visitAll(Visitor, void* context);
 
     size_t getTotalBytesUsed() const { return fTotalBytesUsed; }
     size_t getTotalByteLimit() const { return fTotalByteLimit; }
@@ -218,7 +243,8 @@ public:
 
     void purgeSharedID(uint64_t sharedID);
 
-    void purgeAll() {
+    void purgeAll()
+    {
         this->purgeAsNeeded(true);
     }
 
@@ -233,20 +259,20 @@ public:
     void dump() const;
 
 private:
-    Rec*    fHead;
-    Rec*    fTail;
+    Rec* fHead;
+    Rec* fTail;
 
     class Hash;
-    Hash*   fHash;
+    Hash* fHash;
 
-    DiscardableFactory  fDiscardableFactory;
-    // the allocator is NULL or one that matches discardables
+    DiscardableFactory fDiscardableFactory;
+    // the allocator is nullptr or one that matches discardables
     SkBitmap::Allocator* fAllocator;
 
-    size_t  fTotalBytesUsed;
-    size_t  fTotalByteLimit;
-    size_t  fSingleAllocationByteLimit;
-    int     fCount;
+    size_t fTotalBytesUsed;
+    size_t fTotalByteLimit;
+    size_t fSingleAllocationByteLimit;
+    int fCount;
 
     SkMessageBus<PurgeSharedIDMessage>::Inbox fPurgeSharedIDInbox;
 
@@ -256,15 +282,17 @@ private:
     // linklist management
     void moveToHead(Rec*);
     void addToHead(Rec*);
-    void detach(Rec*);
+    void release(Rec*);
     void remove(Rec*);
 
-    void init();    // called by constructors
+    void init(); // called by constructors
 
 #ifdef SK_DEBUG
     void validate() const;
 #else
-    void validate() const {}
+    void validate() const
+    {
+    }
 #endif
 };
 #endif

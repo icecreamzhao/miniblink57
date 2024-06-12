@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/filesystem/FileWriterSync.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -42,16 +40,13 @@ namespace blink {
 
 void FileWriterSync::write(Blob* data, ExceptionState& exceptionState)
 {
+    ASSERT(data);
     ASSERT(writer());
-    ASSERT(m_complete);
-    if (!data) {
-        exceptionState.throwDOMException(TypeMismatchError, FileError::typeMismatchErrorMessage);
-        return;
-    }
+    DCHECK(m_complete);
 
     prepareForWrite();
     writer()->write(position(), data->uuid());
-    ASSERT(m_complete);
+    DCHECK(m_complete);
     if (m_error) {
         FileError::throwDOMException(exceptionState, m_error);
         return;
@@ -64,21 +59,23 @@ void FileWriterSync::write(Blob* data, ExceptionState& exceptionState)
 void FileWriterSync::seek(long long position, ExceptionState& exceptionState)
 {
     ASSERT(writer());
-    ASSERT(m_complete);
+    DCHECK(m_complete);
     seekInternal(position);
 }
 
-void FileWriterSync::truncate(long long offset, ExceptionState& exceptionState)
+void FileWriterSync::truncate(long long offset,
+    ExceptionState& exceptionState)
 {
     ASSERT(writer());
-    ASSERT(m_complete);
+    DCHECK(m_complete);
     if (offset < 0) {
-        exceptionState.throwDOMException(InvalidStateError, FileError::invalidStateErrorMessage);
+        exceptionState.throwDOMException(InvalidStateError,
+            FileError::invalidStateErrorMessage);
         return;
     }
     prepareForWrite();
     writer()->truncate(offset);
-    ASSERT(m_complete);
+    DCHECK(m_complete);
     if (m_error) {
         FileError::throwDOMException(exceptionState, m_error);
         return;
@@ -90,54 +87,40 @@ void FileWriterSync::truncate(long long offset, ExceptionState& exceptionState)
 
 void FileWriterSync::didWrite(long long bytes, bool complete)
 {
-    ASSERT(m_error == FileError::OK);
-    ASSERT(!m_complete);
-#if ENABLE(ASSERT)
+    DCHECK_EQ(FileError::kOK, m_error);
+    DCHECK(!m_complete);
     m_complete = complete;
-#else
-    ASSERT_UNUSED(complete, complete);
-#endif
 }
 
 void FileWriterSync::didTruncate()
 {
-    ASSERT(m_error == FileError::OK);
-    ASSERT(!m_complete);
-#if ENABLE(ASSERT)
+    DCHECK_EQ(FileError::kOK, m_error);
+    DCHECK(!m_complete);
     m_complete = true;
-#endif
 }
 
 void FileWriterSync::didFail(WebFileError error)
 {
-    ASSERT(m_error == FileError::OK);
+    DCHECK_EQ(FileError::kOK, m_error);
     m_error = static_cast<FileError::ErrorCode>(error);
-    ASSERT(!m_complete);
-#if ENABLE(ASSERT)
+    DCHECK(!m_complete);
     m_complete = true;
-#endif
 }
 
 FileWriterSync::FileWriterSync()
-    : m_error(FileError::OK)
-#if ENABLE(ASSERT)
+    : m_error(FileError::kOK)
     , m_complete(true)
-#endif
 {
 }
 
 void FileWriterSync::prepareForWrite()
 {
-    ASSERT(m_complete);
-    m_error = FileError::OK;
-#if ENABLE(ASSERT)
+    DCHECK(m_complete);
+    m_error = FileError::kOK;
     m_complete = false;
-#endif
 }
 
-FileWriterSync::~FileWriterSync()
-{
-}
+FileWriterSync::~FileWriterSync() { }
 
 DEFINE_TRACE(FileWriterSync)
 {

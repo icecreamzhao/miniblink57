@@ -10,41 +10,45 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef MediaStreamAudioSourceNode_h
 #define MediaStreamAudioSourceNode_h
 
-#if ENABLE(WEB_AUDIO)
-
 #include "modules/mediastream/MediaStream.h"
 #include "modules/webaudio/AudioSourceNode.h"
 #include "platform/audio/AudioSourceProvider.h"
 #include "platform/audio/AudioSourceProviderClient.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/Threading.h"
+#include <memory>
 
 namespace blink {
 
-class AudioContext;
+class BaseAudioContext;
+class MediaStreamAudioSourceOptions;
 
 class MediaStreamAudioSourceHandler final : public AudioHandler {
 public:
-    static PassRefPtr<MediaStreamAudioSourceHandler> create(AudioNode&, MediaStream&, MediaStreamTrack*, PassOwnPtr<AudioSourceProvider>);
+    static PassRefPtr<MediaStreamAudioSourceHandler> create(
+        AudioNode&,
+        MediaStream&,
+        MediaStreamTrack*,
+        std::unique_ptr<AudioSourceProvider>);
     ~MediaStreamAudioSourceHandler() override;
 
-    MediaStream* mediaStream() { return m_mediaStream.get(); }
+    MediaStream* getMediaStream() { return m_mediaStream.get(); }
 
     // AudioHandler
     void process(size_t framesToProcess) override;
@@ -53,10 +57,16 @@ public:
     // MediaStreamAudioSourceNode.
     void setFormat(size_t numberOfChannels, float sampleRate);
 
-    AudioSourceProvider* audioSourceProvider() const { return m_audioSourceProvider.get(); }
+    AudioSourceProvider* getAudioSourceProvider() const
+    {
+        return m_audioSourceProvider.get();
+    }
 
 private:
-    MediaStreamAudioSourceHandler(AudioNode&, MediaStream&, MediaStreamTrack*, PassOwnPtr<AudioSourceProvider>);
+    MediaStreamAudioSourceHandler(AudioNode&,
+        MediaStream&,
+        MediaStreamTrack*,
+        std::unique_ptr<AudioSourceProvider>);
     // As an audio source, we will never propagate silence.
     bool propagatesSilence() const override { return false; }
 
@@ -64,32 +74,42 @@ private:
     // MediaStreamAudioSourceNode.
     Persistent<MediaStream> m_mediaStream;
     Persistent<MediaStreamTrack> m_audioTrack;
-    OwnPtr<AudioSourceProvider> m_audioSourceProvider;
+    std::unique_ptr<AudioSourceProvider> m_audioSourceProvider;
 
     Mutex m_processLock;
 
     unsigned m_sourceNumberOfChannels;
 };
 
-class MediaStreamAudioSourceNode final : public AudioSourceNode, public AudioSourceProviderClient {
+class MediaStreamAudioSourceNode final : public AudioSourceNode,
+                                         public AudioSourceProviderClient {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(MediaStreamAudioSourceNode);
+
 public:
-    static MediaStreamAudioSourceNode* create(AudioContext&, MediaStream&, MediaStreamTrack*, PassOwnPtr<AudioSourceProvider>);
+    static MediaStreamAudioSourceNode* create(BaseAudioContext&,
+        MediaStream&,
+        ExceptionState&);
+    static MediaStreamAudioSourceNode* create(
+        BaseAudioContext*,
+        const MediaStreamAudioSourceOptions&,
+        ExceptionState&);
+
     DECLARE_VIRTUAL_TRACE();
     MediaStreamAudioSourceHandler& mediaStreamAudioSourceHandler() const;
 
-    MediaStream* mediaStream() const;
+    MediaStream* getMediaStream() const;
 
     // AudioSourceProviderClient functions:
     void setFormat(size_t numberOfChannels, float sampleRate) override;
 
 private:
-    MediaStreamAudioSourceNode(AudioContext&, MediaStream&, MediaStreamTrack*, PassOwnPtr<AudioSourceProvider>);
+    MediaStreamAudioSourceNode(BaseAudioContext&,
+        MediaStream&,
+        MediaStreamTrack*,
+        std::unique_ptr<AudioSourceProvider>);
 };
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
 
 #endif // MediaStreamAudioSourceNode_h

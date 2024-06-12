@@ -11,7 +11,8 @@
 #include "SkCanvas.h"
 #include "SkSurface.h"
 
-static SkBitmap make_bitmap() {
+static SkBitmap make_bitmap()
+{
     SkBitmap bm;
     bm.allocN32Pixels(5, 5);
 
@@ -26,16 +27,18 @@ static SkBitmap make_bitmap() {
 }
 
 class TextureDomainView : public SampleView {
-    SkBitmap    fBM;
+    SkBitmap fBM;
 
 public:
-    TextureDomainView(){
+    TextureDomainView()
+    {
         fBM = make_bitmap();
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Texture Domain");
             return true;
@@ -43,7 +46,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkRect srcRect;
         SkRect dstRect;
         SkPaint paint;
@@ -53,53 +57,51 @@ protected:
         // the constrained texture domain.
         srcRect.setXYWH(1, 1, 3, 3);
         dstRect.setXYWH(5, 5, 305, 305);
-        canvas->drawBitmapRectToRect(fBM, &srcRect, dstRect, &paint);
+        canvas->drawBitmapRect(fBM, srcRect, dstRect, &paint, SkCanvas::kStrict_SrcRectConstraint);
 
         // Test that bitmap draws across separate devices also respect
         // the constrainted texture domain.
         // Note:  GPU-backed bitmaps follow a different rendering path
         // when copying from one GPU device to another.
         SkImageInfo info = SkImageInfo::MakeN32(5, 5, kOpaque_SkAlphaType);
-        SkAutoTUnref<SkSurface> surface(canvas->newSurface(info));
+        auto surface(canvas->makeSurface(info));
 
         srcRect.setXYWH(1, 1, 3, 3);
         dstRect.setXYWH(1, 1, 3, 3);
-        surface->getCanvas()->drawBitmapRectToRect(fBM, &srcRect, dstRect,
-                                                   &paint);
+        surface->getCanvas()->drawBitmapRect(fBM, srcRect, dstRect, &paint,
+            SkCanvas::kStrict_SrcRectConstraint);
 
-        SkAutoTUnref<SkImage> image(surface->newImageSnapshot());
+        sk_sp<SkImage> image(surface->makeImageSnapshot());
 
         srcRect.setXYWH(1, 1, 3, 3);
         dstRect.setXYWH(405, 5, 305, 305);
-        canvas->drawImageRect(image, &srcRect, dstRect, &paint);
+        canvas->drawImageRect(image, srcRect, dstRect, &paint);
 
         // Test that bitmap blurring using a subrect
         // renders correctly
         srcRect.setXYWH(1, 1, 3, 3);
         dstRect.setXYWH(5, 405, 305, 305);
-        SkMaskFilter* mf = SkBlurMaskFilter::Create(
+        paint.setMaskFilter(SkBlurMaskFilter::Make(
             kNormal_SkBlurStyle,
             SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(5)),
-            SkBlurMaskFilter::kHighQuality_BlurFlag |
-            SkBlurMaskFilter::kIgnoreTransform_BlurFlag);
-        paint.setMaskFilter(mf)->unref();
-        canvas->drawImageRect(image, &srcRect, dstRect, &paint);
+            SkBlurMaskFilter::kHighQuality_BlurFlag | SkBlurMaskFilter::kIgnoreTransform_BlurFlag));
+        canvas->drawImageRect(image, srcRect, dstRect, &paint);
 
-        // Blur and a rotation + NULL src rect
+        // Blur and a rotation + nullptr src rect
         // This should not trigger the texture domain code
         // but it will test a code path in SkGpuDevice::drawBitmap
         // that handles blurs with rects transformed to non-
-        // orthogonal rects. It also tests the NULL src rect handling
-        mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                      SkBlurMask::ConvertRadiusToSigma(5),
-                                      SkBlurMaskFilter::kHighQuality_BlurFlag);
-        paint.setMaskFilter(mf)->unref();
+        // orthogonal rects. It also tests the nullptr src rect handling
+        paint.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
+            SkBlurMask::ConvertRadiusToSigma(5),
+            SkBlurMaskFilter::kHighQuality_BlurFlag));
 
         dstRect.setXYWH(-150, -150, 300, 300);
         canvas->translate(550, 550);
         canvas->rotate(45);
-        canvas->drawBitmapRectToRect(fBM, NULL, dstRect, &paint);
+        canvas->drawBitmapRect(fBM, dstRect, &paint);
     }
+
 private:
     typedef SkView INHERITED;
 };

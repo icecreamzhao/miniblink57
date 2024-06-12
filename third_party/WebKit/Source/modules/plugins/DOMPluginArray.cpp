@@ -14,10 +14,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA 02110-1301 USA
  */
 
-#include "config.h"
 #include "modules/plugins/DOMPluginArray.h"
 
 #include "core/frame/LocalFrame.h"
@@ -29,13 +29,13 @@
 namespace blink {
 
 DOMPluginArray::DOMPluginArray(LocalFrame* frame)
-    : DOMWindowProperty(frame)
+    : ContextClient(frame)
 {
 }
 
 DEFINE_TRACE(DOMPluginArray)
 {
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 unsigned DOMPluginArray::length() const
@@ -54,7 +54,7 @@ DOMPlugin* DOMPluginArray::item(unsigned index)
     const Vector<PluginInfo>& plugins = data->plugins();
     if (index >= plugins.size())
         return nullptr;
-    return DOMPlugin::create(data, m_frame, index);
+    return DOMPlugin::create(data, frame(), index);
 }
 
 DOMPlugin* DOMPluginArray::namedItem(const AtomicString& propertyName)
@@ -65,28 +65,25 @@ DOMPlugin* DOMPluginArray::namedItem(const AtomicString& propertyName)
     const Vector<PluginInfo>& plugins = data->plugins();
     for (unsigned i = 0; i < plugins.size(); ++i) {
         if (plugins[i].name == propertyName)
-            return DOMPlugin::create(data, m_frame, i);
+            return DOMPlugin::create(data, frame(), i);
     }
     return nullptr;
 }
 
 void DOMPluginArray::refresh(bool reload)
 {
-    if (!m_frame)
+    if (!frame())
         return;
     Page::refreshPlugins();
     if (reload)
-        m_frame->reload(FrameLoadTypeReload, ClientRedirect);
+        frame()->reload(FrameLoadTypeReload, ClientRedirectPolicy::ClientRedirect);
 }
 
 PluginData* DOMPluginArray::pluginData() const
 {
-    if (!m_frame)
+    if (!frame())
         return nullptr;
-    Page* page = m_frame->page();
-    if (!page)
-        return nullptr;
-    return page->pluginData();
+    return frame()->pluginData();
 }
 
 } // namespace blink

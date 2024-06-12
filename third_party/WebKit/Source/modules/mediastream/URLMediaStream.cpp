@@ -28,24 +28,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediastream/URLMediaStream.h"
 
 #include "core/dom/DOMURL.h"
+#include "core/frame/UseCounter.h"
 #include "modules/mediastream/MediaStream.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
-String URLMediaStream::createObjectURL(ExecutionContext* executionContext, MediaStream* stream)
+String URLMediaStream::createObjectURL(ExecutionContext* executionContext,
+    MediaStream* stream)
 {
-    // Since WebWorkers cannot obtain Stream objects, we should be on the main thread.
-    ASSERT(isMainThread());
+    // Since WebWorkers cannot obtain Stream objects, we should be on the main
+    // thread.
+    DCHECK(isMainThread());
+    DCHECK(executionContext);
+    DCHECK(stream);
 
-    if (!executionContext || !stream)
-        return String();
+    UseCounter::count(executionContext, UseCounter::CreateObjectURLMediaStream);
     return DOMURL::createPublicURL(executionContext, stream);
 }
-
 
 } // namespace blink

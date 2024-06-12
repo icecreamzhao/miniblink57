@@ -17,21 +17,22 @@
 //#define DUMP_TABLES
 //#define DUMP_TTC_TABLES
 
-#define kFontTableTag_head          SkSetFourByteTag('h', 'e', 'a', 'd')
-#define kFontTableTag_hhea          SkSetFourByteTag('h', 'h', 'e', 'a')
-#define kFontTableTag_maxp          SkSetFourByteTag('m', 'a', 'x', 'p')
+#define kFontTableTag_head SkSetFourByteTag('h', 'e', 'a', 'd')
+#define kFontTableTag_hhea SkSetFourByteTag('h', 'h', 'e', 'a')
+#define kFontTableTag_maxp SkSetFourByteTag('m', 'a', 'x', 'p')
 
 static const struct TagSize {
-    SkFontTableTag  fTag;
-    size_t          fSize;
+    SkFontTableTag fTag;
+    size_t fSize;
 } gKnownTableSizes[] = {
-    {   kFontTableTag_head,         54 },
-    {   kFontTableTag_hhea,         36 },
+    { kFontTableTag_head, 54 },
+    { kFontTableTag_hhea, 36 },
 };
 
 // Test that getUnitsPerEm() agrees with a direct lookup in the 'head' table
 // (if that table is available).
-static void test_unitsPerEm(skiatest::Reporter* reporter, SkTypeface* face) {
+static void test_unitsPerEm(skiatest::Reporter* reporter, const sk_sp<SkTypeface>& face)
+{
     int nativeUPEM = face->getUnitsPerEm();
 
     int tableUPEM = -1;
@@ -50,7 +51,8 @@ static void test_unitsPerEm(skiatest::Reporter* reporter, SkTypeface* face) {
 
 // Test that countGlyphs() agrees with a direct lookup in the 'maxp' table
 // (if that table is available).
-static void test_countGlyphs(skiatest::Reporter* reporter, SkTypeface* face) {
+static void test_countGlyphs(skiatest::Reporter* reporter, const sk_sp<SkTypeface>& face)
+{
     int nativeGlyphs = face->countGlyphs();
 
     int tableGlyphs = -1;
@@ -69,8 +71,8 @@ static void test_countGlyphs(skiatest::Reporter* reporter, SkTypeface* face) {
 
 // The following three are all the same code points in various encodings.
 // a中Яיו𝄞a𠮟
-static uint8_t utf8Chars[] = { 0x61, 0xE4,0xB8,0xAD, 0xD0,0xAF, 0xD7,0x99, 0xD7,0x95, 0xF0,0x9D,0x84,0x9E, 0x61, 0xF0,0xA0,0xAE,0x9F };
-static uint16_t utf16Chars[] = { 0x0061, 0x4E2D, 0x042F, 0x05D9, 0x05D5, 0xD834,0xDD1E, 0x0061, 0xD842,0xDF9F };
+static uint8_t utf8Chars[] = { 0x61, 0xE4, 0xB8, 0xAD, 0xD0, 0xAF, 0xD7, 0x99, 0xD7, 0x95, 0xF0, 0x9D, 0x84, 0x9E, 0x61, 0xF0, 0xA0, 0xAE, 0x9F };
+static uint16_t utf16Chars[] = { 0x0061, 0x4E2D, 0x042F, 0x05D9, 0x05D5, 0xD834, 0xDD1E, 0x0061, 0xD842, 0xDF9F };
 static uint32_t utf32Chars[] = { 0x00000061, 0x00004E2D, 0x0000042F, 0x000005D9, 0x000005D5, 0x0001D11E, 0x00000061, 0x00020B9F };
 
 struct CharsToGlyphs_TestData {
@@ -86,7 +88,8 @@ struct CharsToGlyphs_TestData {
 };
 
 // Test that SkPaint::textToGlyphs agrees with SkTypeface::charsToGlyphs.
-static void test_charsToGlyphs(skiatest::Reporter* reporter, SkTypeface* face) {
+static void test_charsToGlyphs(skiatest::Reporter* reporter, const sk_sp<SkTypeface>& face)
+{
     uint16_t paintGlyphIds[256];
     uint16_t faceGlyphIds[256];
 
@@ -105,14 +108,15 @@ static void test_charsToGlyphs(skiatest::Reporter* reporter, SkTypeface* face) {
             face->getFamilyName(&name);
             SkString a;
             a.appendf("%s, paintGlyphIds[%d] = %d, faceGlyphIds[%d] = %d, face = %s",
-                      test.name, i, (int)paintGlyphIds[i], i, (int)faceGlyphIds[i], name.c_str());
+                test.name, i, (int)paintGlyphIds[i], i, (int)faceGlyphIds[i], name.c_str());
             REPORTER_ASSERT_MESSAGE(reporter, paintGlyphIds[i] == faceGlyphIds[i], a.c_str());
         }
     }
 }
 
-static void test_fontstream(skiatest::Reporter* reporter, SkStream* stream, int ttcIndex) {
-    int n = SkFontStream::GetTableTags(stream, ttcIndex, NULL);
+static void test_fontstream(skiatest::Reporter* reporter, SkStream* stream, int ttcIndex)
+{
+    int n = SkFontStream::GetTableTags(stream, ttcIndex, nullptr);
     SkAutoTArray<SkFontTableTag> array(n);
 
     int n2 = SkFontStream::GetTableTags(stream, ttcIndex, array.get());
@@ -124,8 +128,8 @@ static void test_fontstream(skiatest::Reporter* reporter, SkStream* stream, int 
         SkFontTableTag t = array[i];
         str.appendUnichar((t >> 24) & 0xFF);
         str.appendUnichar((t >> 16) & 0xFF);
-        str.appendUnichar((t >>  8) & 0xFF);
-        str.appendUnichar((t >>  0) & 0xFF);
+        str.appendUnichar((t >> 8) & 0xFF);
+        str.appendUnichar((t >> 0) & 0xFF);
         SkDebugf("[%d:%d] '%s'\n", ttcIndex, i, str.c_str());
 #endif
         size_t size = SkFontStream::GetTableSize(stream, ttcIndex, array[i]);
@@ -137,7 +141,8 @@ static void test_fontstream(skiatest::Reporter* reporter, SkStream* stream, int 
     }
 }
 
-static void test_fontstream(skiatest::Reporter* reporter) {
+static void test_fontstream(skiatest::Reporter* reporter)
+{
     SkAutoTDelete<SkStreamAsset> stream(GetResourceAsStream("/fonts/test.ttc"));
     if (!stream) {
         SkDebugf("Skipping FontHostTest::test_fontstream\n");
@@ -153,23 +158,25 @@ static void test_fontstream(skiatest::Reporter* reporter) {
     }
 }
 
-static void test_symbolfont(skiatest::Reporter* reporter) {
-    SkAutoTUnref<SkTypeface> typeface(GetResourceAsTypeface("/fonts/SpiderSymbol.ttf"));
-    if (!typeface) {
+static void test_symbolfont(skiatest::Reporter* reporter)
+{
+    SkUnichar c = 0xf021;
+    uint16_t g;
+    SkPaint paint;
+    paint.setTypeface(MakeResourceAsTypeface("/fonts/SpiderSymbol.ttf"));
+    paint.setTextEncoding(SkPaint::kUTF32_TextEncoding);
+    paint.textToGlyphs(&c, 4, &g);
+
+    if (!paint.getTypeface()) {
         SkDebugf("Skipping FontHostTest::test_symbolfont\n");
         return;
     }
 
-    SkUnichar c = 0xf021;
-    uint16_t g;
-    SkPaint paint;
-    paint.setTypeface(typeface);
-    paint.setTextEncoding(SkPaint::kUTF32_TextEncoding);
-    paint.textToGlyphs(&c, 4, &g);
     REPORTER_ASSERT(reporter, g == 3);
 }
 
-static void test_tables(skiatest::Reporter* reporter, SkTypeface* face) {
+static void test_tables(skiatest::Reporter* reporter, const sk_sp<SkTypeface>& face)
+{
     if (false) { // avoid bit rot, suppress warning
         SkFontID fontID = face->uniqueID();
         REPORTER_ASSERT(reporter, fontID);
@@ -191,8 +198,8 @@ static void test_tables(skiatest::Reporter* reporter, SkTypeface* face) {
         char name[5];
         name[0] = (tags[i] >> 24) & 0xFF;
         name[1] = (tags[i] >> 16) & 0xFF;
-        name[2] = (tags[i] >>  8) & 0xFF;
-        name[3] = (tags[i] >>  0) & 0xFF;
+        name[2] = (tags[i] >> 8) & 0xFF;
+        name[3] = (tags[i] >> 0) & 0xFF;
         name[4] = 0;
         SkDebugf("%s %d\n", name, size);
 #endif
@@ -212,18 +219,24 @@ static void test_tables(skiatest::Reporter* reporter, SkTypeface* face) {
     }
 }
 
-static void test_tables(skiatest::Reporter* reporter) {
+static void test_tables(skiatest::Reporter* reporter)
+{
     static const char* const gNames[] = {
-        NULL,   // default font
-        "Helvetica", "Arial",
-        "Times", "Times New Roman",
-        "Courier", "Courier New",
-        "Terminal", "MS Sans Serif",
-        "Hiragino Mincho ProN", "MS PGothic",
+        nullptr, // default font
+        "Helvetica",
+        "Arial",
+        "Times",
+        "Times New Roman",
+        "Courier",
+        "Courier New",
+        "Terminal",
+        "MS Sans Serif",
+        "Hiragino Mincho ProN",
+        "MS PGothic",
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gNames); ++i) {
-        SkAutoTUnref<SkTypeface> face(SkTypeface::CreateFromName(gNames[i], SkTypeface::kNormal));
+        sk_sp<SkTypeface> face(SkTypeface::MakeFromName(gNames[i], SkFontStyle()));
         if (face) {
 #ifdef DUMP_TABLES
             SkDebugf("%s\n", gNames[i]);
@@ -240,47 +253,53 @@ static void test_tables(skiatest::Reporter* reporter) {
  * Verifies that the advance values returned by generateAdvance and
  * generateMetrics match.
  */
-static void test_advances(skiatest::Reporter* reporter) {
+static void test_advances(skiatest::Reporter* reporter)
+{
     static const char* const faces[] = {
-        NULL,   // default font
-        "Arial", "Times", "Times New Roman", "Helvetica", "Courier",
-        "Courier New", "Verdana", "monospace",
+        nullptr, // default font
+        "Arial",
+        "Times",
+        "Times New Roman",
+        "Helvetica",
+        "Courier",
+        "Courier New",
+        "Verdana",
+        "monospace",
     };
 
     static const struct {
-        SkPaint::Hinting    hinting;
-        unsigned            flags;
+        SkPaint::Hinting hinting;
+        unsigned flags;
     } settings[] = {
-        { SkPaint::kNo_Hinting,     0                               },
-        { SkPaint::kNo_Hinting,     SkPaint::kLinearText_Flag       },
-        { SkPaint::kNo_Hinting,     SkPaint::kSubpixelText_Flag     },
-        { SkPaint::kSlight_Hinting, 0                               },
-        { SkPaint::kSlight_Hinting, SkPaint::kLinearText_Flag       },
-        { SkPaint::kSlight_Hinting, SkPaint::kSubpixelText_Flag     },
-        { SkPaint::kNormal_Hinting, 0                               },
-        { SkPaint::kNormal_Hinting, SkPaint::kLinearText_Flag       },
-        { SkPaint::kNormal_Hinting, SkPaint::kSubpixelText_Flag     },
+        { SkPaint::kNo_Hinting, 0 },
+        { SkPaint::kNo_Hinting, SkPaint::kLinearText_Flag },
+        { SkPaint::kNo_Hinting, SkPaint::kSubpixelText_Flag },
+        { SkPaint::kSlight_Hinting, 0 },
+        { SkPaint::kSlight_Hinting, SkPaint::kLinearText_Flag },
+        { SkPaint::kSlight_Hinting, SkPaint::kSubpixelText_Flag },
+        { SkPaint::kNormal_Hinting, 0 },
+        { SkPaint::kNormal_Hinting, SkPaint::kLinearText_Flag },
+        { SkPaint::kNormal_Hinting, SkPaint::kSubpixelText_Flag },
     };
 
     static const struct {
-        SkScalar    fScaleX;
-        SkScalar    fSkewX;
+        SkScalar fScaleX;
+        SkScalar fSkewX;
     } gScaleRec[] = {
         { SK_Scalar1, 0 },
-        { SK_Scalar1/2, 0 },
+        { SK_Scalar1 / 2, 0 },
         // these two exercise obliquing (skew)
-        { SK_Scalar1, -SK_Scalar1/4 },
-        { SK_Scalar1/2, -SK_Scalar1/4 },
+        { SK_Scalar1, -SK_Scalar1 / 4 },
+        { SK_Scalar1 / 2, -SK_Scalar1 / 4 },
     };
 
     SkPaint paint;
     char txt[] = "long.text.with.lots.of.dots.";
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(faces); i++) {
-        SkAutoTUnref<SkTypeface> face(SkTypeface::CreateFromName(faces[i], SkTypeface::kNormal));
-        paint.setTypeface(face);
+        paint.setTypeface(SkTypeface::MakeFromName(faces[i], SkFontStyle()));
 
-        for (size_t j = 0; j  < SK_ARRAY_COUNT(settings); j++) {
+        for (size_t j = 0; j < SK_ARRAY_COUNT(settings); j++) {
             paint.setHinting(settings[j].hinting);
             paint.setLinearText((settings[j].flags & SkPaint::kLinearText_Flag) != 0);
             paint.setSubpixelText((settings[j].flags & SkPaint::kSubpixelText_Flag) != 0);
@@ -307,7 +326,8 @@ static void test_advances(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(FontHost, reporter) {
+DEF_TEST(FontHost, reporter)
+{
     test_tables(reporter);
     test_fontstream(reporter);
     test_advances(reporter);

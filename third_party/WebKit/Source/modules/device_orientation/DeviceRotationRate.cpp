@@ -23,12 +23,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/device_orientation/DeviceRotationRate.h"
 
 namespace blink {
 
-DeviceRotationRate::DeviceRotationRate(DeviceMotionData::RotationRate* rotationRate)
+DeviceRotationRate::DeviceRotationRate(
+    DeviceMotionData::RotationRate* rotationRate)
     : m_rotationRate(rotationRate)
 {
 }

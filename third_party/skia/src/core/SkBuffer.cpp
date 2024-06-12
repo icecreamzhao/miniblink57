@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,8 +5,9 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkBuffer.h"
+
+#include <string.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ void SkRBuffer::readNoSizeCheck(void* buffer, size_t size)
 const void* SkRBuffer::skip(size_t size)
 {
     const void* result = fPos;
-    readNoSizeCheck(NULL, size);
+    readNoSizeCheck(nullptr, size);
     return result;
 }
 
@@ -34,8 +34,9 @@ size_t SkRBuffer::skipToAlign4()
     return n;
 }
 
-bool SkRBufferWithSizeCheck::read(void* buffer, size_t size) {
-    fError = fError || (fPos + size > fStop);
+bool SkRBufferWithSizeCheck::read(void* buffer, size_t size)
+{
+    fError = fError || (size > static_cast<size_t>(fStop - fPos));
     if (!fError && (size > 0)) {
         readNoSizeCheck(buffer, size);
     }
@@ -45,8 +46,8 @@ bool SkRBufferWithSizeCheck::read(void* buffer, size_t size) {
 void* SkWBuffer::skip(size_t size)
 {
     void* result = fPos;
-    writeNoSizeCheck(NULL, size);
-    return fData == NULL ? NULL : result;
+    writeNoSizeCheck(nullptr, size);
+    return fData == nullptr ? nullptr : result;
 }
 
 void SkWBuffer::writeNoSizeCheck(const void* buffer, size_t size)
@@ -62,8 +63,7 @@ size_t SkWBuffer::padToAlign4()
     size_t pos = this->pos();
     size_t n = SkAlign4(pos) - pos;
 
-    if (n && fData)
-    {
+    if (n && fData) {
         char* p = fPos;
         char* stop = p + n;
         do {
@@ -82,7 +82,7 @@ size_t SkWBuffer::padToAlign4()
         SkASSERT(((size_t)buffer & 3) == 0);
     }
 #else
-    #define AssertBuffer32(buffer)
+#define AssertBuffer32(buffer)
 #endif
 
 void* sk_buffer_write_int32(void* buffer, int32_t value)

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawTextBox.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -17,7 +16,6 @@ enum SkDrawTextBox_Properties {
     SK_PROPERTY(spacingAlign),
     SK_PROPERTY(mode)
 };
-
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -36,10 +34,10 @@ DEFINE_GET_MEMBER(SkDrawTextBox);
 
 SkDrawTextBox::SkDrawTextBox()
 {
-    fSpacingMul     = SK_Scalar1;
-    fSpacingAdd     = 0;
-    spacingAlign    = SkTextBox::kStart_SpacingAlign;
-    mode            = SkTextBox::kLineBreak_Mode;
+    fSpacingMul = SK_Scalar1;
+    fSpacingAdd = 0;
+    spacingAlign = SkTextBox::kStart_SpacingAlign;
+    mode = SkTextBox::kLineBreak_Mode;
 }
 
 #ifdef SK_DUMP_ENABLED
@@ -69,9 +67,9 @@ bool SkDrawTextBox::setProperty(int index, SkScriptValue& scriptValue)
 
 bool SkDrawTextBox::draw(SkAnimateMaker& maker)
 {
-    SkTextBox   box;
-    box.setMode((SkTextBox::Mode) mode);
-    box.setSpacingAlign((SkTextBox::SpacingAlign) spacingAlign);
+    SkTextBox box;
+    box.setMode((SkTextBox::Mode)mode);
+    box.setSpacingAlign((SkTextBox::SpacingAlign)spacingAlign);
     box.setBox(fRect);
     box.setSpacing(fSpacingMul, fSpacingAdd);
     SkBoundableAuto boundable(this, maker);

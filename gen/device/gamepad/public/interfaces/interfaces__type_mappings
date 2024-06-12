@@ -1,0 +1,82 @@
+{
+  "c++": {
+    "device.mojom.GamepadVector": {
+      "hashable": false, 
+      "typename": "blink::WebGamepadVector", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }, 
+    "device.mojom.GamepadPose": {
+      "hashable": false, 
+      "typename": "blink::WebGamepadPose", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }, 
+    "device.mojom.GamepadQuaternion": {
+      "hashable": false, 
+      "typename": "blink::WebGamepadQuaternion", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": true, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }, 
+    "device.mojom.GamepadButton": {
+      "hashable": false, 
+      "typename": "blink::WebGamepadButton", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }, 
+    "device.mojom.Gamepad": {
+      "hashable": false, 
+      "typename": "blink::WebGamepad", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }, 
+    "device.mojom.GamepadHand": {
+      "hashable": false, 
+      "typename": "blink::WebGamepadHand", 
+      "traits_headers": [
+        "device/gamepad/public/interfaces/gamepad_struct_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "third_party/WebKit/public/platform/WebGamepad.h"
+      ]
+    }
+  }
+}

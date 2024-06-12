@@ -32,25 +32,37 @@
 #ifndef EventTarget_h
 #define EventTarget_h
 
+#include "bindings/core/v8/AddEventListenerOptionsOrBoolean.h"
+#include "bindings/core/v8/EventListenerOptionsOrBoolean.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
 #include "core/EventNames.h"
 #include "core/EventTargetNames.h"
 #include "core/EventTypeNames.h"
+#include "core/events/AddEventListenerOptionsResolved.h"
+#include "core/events/EventDispatchResult.h"
 #include "core/events/EventListenerMap.h"
+#include "core/frame/UseCounter.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/AtomicString.h"
+#include <memory>
 
 namespace blink {
 
-class LocalDOMWindow;
+class DOMWindow;
 class Event;
+class LocalDOMWindow;
 class ExceptionState;
 class MessagePort;
 class Node;
+class ServiceWorker;
 
 struct FiringEventIterator {
-    FiringEventIterator(const AtomicString& eventType, size_t& iterator, size_t& end)
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+    FiringEventIterator(const AtomicString& eventType,
+        size_t& iterator,
+        size_t& end)
         : eventType(eventType)
         , iterator(iterator)
         , end(end)
@@ -61,197 +73,247 @@ struct FiringEventIterator {
     size_t& iterator;
     size_t& end;
 };
-typedef Vector<FiringEventIterator, 1> FiringEventIteratorVector;
+using FiringEventIteratorVector = Vector<FiringEventIterator, 1>;
 
-struct CORE_EXPORT EventTargetData {
-    WTF_MAKE_NONCOPYABLE(EventTargetData); WTF_MAKE_FAST_ALLOCATED(EventTargetData);
+class CORE_EXPORT EventTargetData final
+    : public GarbageCollectedFinalized<EventTargetData> {
+    WTF_MAKE_NONCOPYABLE(EventTargetData);
+
 public:
     EventTargetData();
     ~EventTargetData();
 
+    DECLARE_TRACE();
+
     EventListenerMap eventListenerMap;
-    OwnPtr<FiringEventIteratorVector> firingEventIterators;
+    std::unique_ptr<FiringEventIteratorVector> firingEventIterators;
 };
 
 // This is the base class for all DOM event targets. To make your class an
 // EventTarget, follow these steps:
 // - Make your IDL interface inherit from EventTarget.
-//   Optionally add "attribute EventHandler onfoo;" attributes.
-// - Inherit from EventTargetWithInlineData (only in rare cases should you use
-//   EventTarget directly); or, if you want YourClass to be inherited from
-//   RefCountedGarbageCollected<YourClass> in addition to EventTargetWithInlineData,
-//   inherit from RefCountedGarbageCollectedEventTargetWithInlineData<YourClass>.
-// - In your class declaration, EventTargetWithInlineData (or
-//   RefCountedGarbageCollectedEventTargetWithInlineData<>) must come first in
+// - Inherit from EventTargetWithInlineData (only in rare cases should you
+//   use EventTarget directly).
+// - In your class declaration, EventTargetWithInlineData must come first in
 //   the base class list. If your class is non-final, classes inheriting from
 //   your class need to come first, too.
-// - Figure out if you now need to inherit from ActiveDOMObject as well.
-// - In your class declaration, you will typically use
-//   REFCOUNTED_EVENT_TARGET(YourClass) if YourClass is a RefCounted<>,
-//   or REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(OtherRefCounted<YourClass>)
-//   if YourClass uses a different kind of reference counting template such as
-//   RefCountedGarbageCollected<YourClass>.
-// - Make sure to include this header file in your .h file, or you will get
-//   very strange compiler errors.
 // - If you added an onfoo attribute, use DEFINE_ATTRIBUTE_EVENT_LISTENER(foo)
-//   in your class declaration.
-// - Override EventTarget::interfaceName() and executionContext(). The former
+//   in your class declaration. Add "attribute EventHandler onfoo;" to the IDL
+//   file.
+// - Override EventTarget::interfaceName() and getExecutionContext(). The former
 //   will typically return EventTargetNames::YourClassName. The latter will
-//   return ActiveDOMObject::executionContext (if you are an ActiveDOMObject)
+//   return SuspendableObject::executionContext (if you are an
+//   SuspendableObject)
 //   or the document you're in.
 // - Your trace() method will need to call EventTargetWithInlineData::trace
-//   or RefCountedGarbageCollectedEventTargetWithInlineData<YourClass>::trace,
 //   depending on the base class of your class.
-//
-// Optionally, add a FooEvent.idl class, but that's outside the scope of this
-// comment (and much more straightforward).
-class CORE_EXPORT EventTarget : public NoBaseWillBeGarbageCollectedFinalized<EventTarget>, public ScriptWrappable {
+// - EventTargets do not support EAGERLY_FINALIZE. You need to use
+//   a pre-finalizer instead.
+class CORE_EXPORT EventTarget : public GarbageCollectedFinalized<EventTarget>,
+                                public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     virtual ~EventTarget();
 
-#if !ENABLE(OILPAN)
-    void ref() { refEventTarget(); }
-    void deref() { derefEventTarget(); }
-#endif
-
     virtual const AtomicString& interfaceName() const = 0;
-    virtual ExecutionContext* executionContext() const = 0;
+    virtual ExecutionContext* getExecutionContext() const = 0;
 
     virtual Node* toNode();
-    virtual LocalDOMWindow* toDOMWindow();
+    virtual const DOMWindow* toDOMWindow() const;
+    virtual const LocalDOMWindow* toLocalDOMWindow() const;
+    virtual LocalDOMWindow* toLocalDOMWindow();
     virtual MessagePort* toMessagePort();
+    virtual ServiceWorker* toServiceWorker();
 
-    virtual bool addEventListener(const AtomicString& eventType, PassRefPtr<EventListener>, bool useCapture);
-    virtual bool removeEventListener(const AtomicString& eventType, PassRefPtr<EventListener>, bool useCapture);
+    bool addEventListener(const AtomicString& eventType,
+        EventListener*,
+        bool useCapture = false);
+    bool addEventListener(const AtomicString& eventType,
+        EventListener*,
+        const AddEventListenerOptionsOrBoolean&);
+    bool addEventListener(const AtomicString& eventType,
+        EventListener*,
+        AddEventListenerOptionsResolved&);
+
+    bool removeEventListener(const AtomicString& eventType,
+        const EventListener*,
+        bool useCapture = false);
+    bool removeEventListener(const AtomicString& eventType,
+        const EventListener*,
+        const EventListenerOptionsOrBoolean&);
+    bool removeEventListener(const AtomicString& eventType,
+        const EventListener*,
+        EventListenerOptions&);
     virtual void removeAllEventListeners();
-    virtual bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>);
-    bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>, ExceptionState&); // DOM API
+
+    DispatchEventResult dispatchEvent(Event*);
+
+    // dispatchEventForBindings is intended to only be called from
+    // javascript originated calls. This method will validate and may adjust
+    // the Event object before dispatching.
+    bool dispatchEventForBindings(Event*, ExceptionState&);
     virtual void uncaughtExceptionInEventHandler();
 
     // Used for legacy "onEvent" attribute APIs.
-    bool setAttributeEventListener(const AtomicString& eventType, PassRefPtr<EventListener>);
+    bool setAttributeEventListener(const AtomicString& eventType, EventListener*);
     EventListener* getAttributeEventListener(const AtomicString& eventType);
 
     bool hasEventListeners() const;
     bool hasEventListeners(const AtomicString& eventType) const;
     bool hasCapturingEventListeners(const AtomicString& eventType);
-    const EventListenerVector& getEventListeners(const AtomicString& eventType);
+    EventListenerVector* getEventListeners(const AtomicString& eventType);
     Vector<AtomicString> eventTypes();
 
-    bool fireEventListeners(Event*);
+    DispatchEventResult fireEventListeners(Event*);
+
+    static DispatchEventResult dispatchEventResult(const Event&);
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
+
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
     virtual bool keepEventInNode(Event*) { return false; }
 
 protected:
     EventTarget();
 
-    // Subclasses should likely not override these themselves; instead, they should subclass EventTargetWithInlineData.
+    virtual bool addEventListenerInternal(const AtomicString& eventType,
+        EventListener*,
+        const AddEventListenerOptionsResolved&);
+    virtual bool removeEventListenerInternal(const AtomicString& eventType,
+        const EventListener*,
+        const EventListenerOptions&);
+
+    // Called when an event listener has been successfully added.
+    virtual void addedEventListener(const AtomicString& eventType,
+        RegisteredEventListener&);
+
+    // Called when an event listener is removed. The original registration
+    // parameters of this event listener are available to be queried.
+    virtual void removedEventListener(const AtomicString& eventType,
+        const RegisteredEventListener&);
+
+    virtual DispatchEventResult dispatchEventInternal(Event*);
+
+    // Subclasses should likely not override these themselves; instead, they
+    // should subclass EventTargetWithInlineData.
     virtual EventTargetData* eventTargetData() = 0;
     virtual EventTargetData& ensureEventTargetData() = 0;
 
 private:
-#if !ENABLE(OILPAN)
-    // Subclasses should likely not override these themselves; instead, they should use the REFCOUNTED_EVENT_TARGET() macro.
-    virtual void refEventTarget() = 0;
-    virtual void derefEventTarget() = 0;
-#endif
-
     LocalDOMWindow* executingWindow();
-    void fireEventListeners(Event*, EventTargetData*, EventListenerVector&);
-    void countLegacyEvents(const AtomicString& legacyTypeName, EventListenerVector*, EventListenerVector*);
+    void setDefaultAddEventListenerOptions(const AtomicString& eventType,
+        AddEventListenerOptionsResolved&);
+
+    // UseCounts the event if it has the specified type. Returns true iff the
+    // event type matches.
+    bool checkTypeThenUseCount(const Event*,
+        const AtomicString&,
+        const UseCounter::Feature);
+
+    bool fireEventListeners(Event*, EventTargetData*, EventListenerVector&);
+    void countLegacyEvents(const AtomicString& legacyTypeName,
+        EventListenerVector*,
+        EventListenerVector*);
 
     bool clearAttributeEventListener(const AtomicString& eventType);
 
     friend class EventListenerIterator;
 };
 
-class CORE_EXPORT EventTargetWithInlineData : public EventTarget {
+// EventTargetData is a GCed object, so it should not be used as a part of
+// object. However, we intentionally use it as a part of object for performance,
+// assuming that no one extracts a pointer of
+// EventTargetWithInlineData::m_eventTargetData and store it to a Member etc.
+class GC_PLUGIN_IGNORE("513199") CORE_EXPORT EventTargetWithInlineData
+    : public EventTarget {
+public:
+    ~EventTargetWithInlineData() override { }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_eventTargetData);
+        EventTarget::trace(visitor);
+    }
+
 protected:
-    virtual EventTargetData* eventTargetData() override final { return &m_eventTargetData; }
-    virtual EventTargetData& ensureEventTargetData() override final { return m_eventTargetData; }
+    EventTargetData* eventTargetData() final { return &m_eventTargetData; }
+    EventTargetData& ensureEventTargetData() final { return m_eventTargetData; }
+
 private:
     EventTargetData m_eventTargetData;
 };
 
-// Base class for classes that wish to inherit from RefCountedGarbageCollected (in non-Oilpan world) and
-// EventTargetWithInlineData (in both worlds). For details about how to use this class template, see the comments for
-// EventTargetWithInlineData above.
-//
-// This class template exists to circumvent Oilpan's "leftmost class rule", where the Oilpan classes must come first in
-// the base class list to avoid memory offset adjustment. In non-Oilpan world, RefCountedGarbageCollected<T> must come
-// first, but in Oilpan world EventTargetWithInlineData needs to come first. This class templates does the required
-// #if-switch here, in order to avoid a lot of "#if ENABLE(OILPAN)"-s sprinkled in the derived classes.
-#if ENABLE(OILPAN)
-template <typename T>
-class RefCountedGarbageCollectedEventTargetWithInlineData : public EventTargetWithInlineData {
-public:
-    GC_PLUGIN_IGNORE("491488")
-    void* operator new(size_t size)
-    {
-        // If T is eagerly finalized, it needs to be allocated accordingly.
-        // Redefinition of the operator is needed to accomplish that, as otherwise
-        // it would be allocated using GarbageCollected<EventTarget>'s operator new.
-        // EventTarget is not eagerly finalized.
-        return allocateObject(size, IsEagerlyFinalizedType<T>::value);
-    }
-};
-#else
-template <typename T>
-class RefCountedGarbageCollectedEventTargetWithInlineData : public RefCountedGarbageCollected<T>, public EventTargetWithInlineData {
-public:
-    DEFINE_INLINE_VIRTUAL_TRACE() { EventTargetWithInlineData::trace(visitor); }
-};
-#endif
-
 // FIXME: These macros should be split into separate DEFINE and DECLARE
 // macros to avoid causing so many header includes.
-#define DEFINE_ATTRIBUTE_EVENT_LISTENER(attribute) \
-    EventListener* on##attribute() { return getAttributeEventListener(EventTypeNames::attribute); } \
-    void setOn##attribute(PassRefPtr<EventListener> listener) { setAttributeEventListener(EventTypeNames::attribute, listener); } \
+#define DEFINE_ATTRIBUTE_EVENT_LISTENER(attribute)                            \
+    EventListener* on##attribute()                                            \
+    {                                                                         \
+        return this->getAttributeEventListener(EventTypeNames::attribute);    \
+    }                                                                         \
+    void setOn##attribute(EventListener* listener)                            \
+    {                                                                         \
+        this->setAttributeEventListener(EventTypeNames::attribute, listener); \
+    }
 
-#define DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(attribute) \
-    static EventListener* on##attribute(EventTarget& eventTarget) { return eventTarget.getAttributeEventListener(EventTypeNames::attribute); } \
-    static void setOn##attribute(EventTarget& eventTarget, PassRefPtr<EventListener> listener) { eventTarget.setAttributeEventListener(EventTypeNames::attribute, listener); } \
-
-#define DEFINE_WINDOW_ATTRIBUTE_EVENT_LISTENER(attribute) \
-    EventListener* on##attribute() { return document().getWindowAttributeEventListener(EventTypeNames::attribute); } \
-    void setOn##attribute(PassRefPtr<EventListener> listener) { document().setWindowAttributeEventListener(EventTypeNames::attribute, listener); } \
-
-#define DEFINE_STATIC_WINDOW_ATTRIBUTE_EVENT_LISTENER(attribute) \
-    static EventListener* on##attribute(EventTarget& eventTarget) { \
-        if (Node* node = eventTarget.toNode()) \
-            return node->document().getWindowAttributeEventListener(EventTypeNames::attribute); \
-        ASSERT(eventTarget.toDOMWindow()); \
+#define DEFINE_STATIC_ATTRIBUTE_EVENT_LISTENER(attribute)                        \
+    static EventListener* on##attribute(EventTarget& eventTarget)                \
+    {                                                                            \
         return eventTarget.getAttributeEventListener(EventTypeNames::attribute); \
-    } \
-    static void setOn##attribute(EventTarget& eventTarget, PassRefPtr<EventListener> listener) { \
-        if (Node* node = eventTarget.toNode()) \
-            node->document().setWindowAttributeEventListener(EventTypeNames::attribute, listener); \
-        else { \
-            ASSERT(eventTarget.toDOMWindow()); \
-            eventTarget.setAttributeEventListener(EventTypeNames::attribute, listener); \
-        } \
+    }                                                                            \
+    static void setOn##attribute(EventTarget& eventTarget,                       \
+        EventListener* listener)                                                 \
+    {                                                                            \
+        eventTarget.setAttributeEventListener(EventTypeNames::attribute,         \
+            listener);                                                           \
     }
 
-#define DEFINE_MAPPED_ATTRIBUTE_EVENT_LISTENER(attribute, eventName) \
-    EventListener* on##attribute() { return getAttributeEventListener(EventTypeNames::eventName); } \
-    void setOn##attribute(PassRefPtr<EventListener> listener) { setAttributeEventListener(EventTypeNames::eventName, listener); } \
-
-#define DECLARE_FORWARDING_ATTRIBUTE_EVENT_LISTENER(recipient, attribute) \
-    EventListener* on##attribute(); \
-    void setOn##attribute(PassRefPtr<EventListener> listener);
-
-#define DEFINE_FORWARDING_ATTRIBUTE_EVENT_LISTENER(type, recipient, attribute) \
-    EventListener* type::on##attribute() { return recipient ? recipient->getAttributeEventListener(EventTypeNames::attribute) : 0; } \
-    void type::setOn##attribute(PassRefPtr<EventListener> listener) \
-    { \
-        if (recipient) \
-            recipient->setAttributeEventListener(EventTypeNames::attribute, listener); \
+#define DEFINE_WINDOW_ATTRIBUTE_EVENT_LISTENER(attribute)                     \
+    EventListener* on##attribute()                                            \
+    {                                                                         \
+        return document().getWindowAttributeEventListener(                    \
+            EventTypeNames::attribute);                                       \
+    }                                                                         \
+    void setOn##attribute(EventListener* listener)                            \
+    {                                                                         \
+        document().setWindowAttributeEventListener(EventTypeNames::attribute, \
+            listener);                                                        \
     }
 
+#define DEFINE_STATIC_WINDOW_ATTRIBUTE_EVENT_LISTENER(attribute)                 \
+    static EventListener* on##attribute(EventTarget& eventTarget)                \
+    {                                                                            \
+        if (Node* node = eventTarget.toNode())                                   \
+            return node->document().getWindowAttributeEventListener(             \
+                EventTypeNames::attribute);                                      \
+        DCHECK(eventTarget.toLocalDOMWindow());                                  \
+        return eventTarget.getAttributeEventListener(EventTypeNames::attribute); \
+    }                                                                            \
+    static void setOn##attribute(EventTarget& eventTarget,                       \
+        EventListener* listener)                                                 \
+    {                                                                            \
+        if (Node* node = eventTarget.toNode())                                   \
+            node->document().setWindowAttributeEventListener(                    \
+                EventTypeNames::attribute, listener);                            \
+        else {                                                                   \
+            DCHECK(eventTarget.toLocalDOMWindow());                              \
+            eventTarget.setAttributeEventListener(EventTypeNames::attribute,     \
+                listener);                                                       \
+        }                                                                        \
+    }
+
+#define DEFINE_MAPPED_ATTRIBUTE_EVENT_LISTENER(attribute, eventName)    \
+    EventListener* on##attribute()                                      \
+    {                                                                   \
+        return getAttributeEventListener(EventTypeNames::eventName);    \
+    }                                                                   \
+    void setOn##attribute(EventListener* listener)                      \
+    {                                                                   \
+        setAttributeEventListener(EventTypeNames::eventName, listener); \
+    }
+
+DISABLE_CFI_PERF
 inline bool EventTarget::hasEventListeners() const
 {
     // FIXME: We should have a const version of eventTargetData.
@@ -260,7 +322,9 @@ inline bool EventTarget::hasEventListeners() const
     return false;
 }
 
-inline bool EventTarget::hasEventListeners(const AtomicString& eventType) const
+DISABLE_CFI_PERF
+inline bool EventTarget::hasEventListeners(
+    const AtomicString& eventType) const
 {
     // FIXME: We should have const version of eventTargetData.
     if (const EventTargetData* d = const_cast<EventTarget*>(this)->eventTargetData())
@@ -268,7 +332,8 @@ inline bool EventTarget::hasEventListeners(const AtomicString& eventType) const
     return false;
 }
 
-inline bool EventTarget::hasCapturingEventListeners(const AtomicString& eventType)
+inline bool EventTarget::hasCapturingEventListeners(
+    const AtomicString& eventType)
 {
     EventTargetData* d = eventTargetData();
     if (!d)
@@ -277,26 +342,5 @@ inline bool EventTarget::hasCapturingEventListeners(const AtomicString& eventTyp
 }
 
 } // namespace blink
-
-// If the EventTarget class is RefCounted on non-oilpan builds,
-// use REFCOUNTED_EVENT_TARGET.
-// If the EventTarget class is RefCountedGarbageCollected on non-oilpan builds,
-// use REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET.
-#if ENABLE(OILPAN)
-#define DEFINE_EVENT_TARGET_REFCOUNTING(baseClass)
-#define REFCOUNTED_EVENT_TARGET(baseClass)
-#define REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(baseClass)
-#else // !ENABLE(OILPAN)
-#define DEFINE_EVENT_TARGET_REFCOUNTING(baseClass) \
-public: \
-    using baseClass::ref; \
-    using baseClass::deref; \
-private: \
-    virtual void refEventTarget() override final { ref(); } \
-    virtual void derefEventTarget() override final { deref(); } \
-    typedef int thisIsHereToForceASemiColonAfterThisEventTargetMacro
-#define REFCOUNTED_EVENT_TARGET(baseClass) DEFINE_EVENT_TARGET_REFCOUNTING(RefCounted<baseClass>)
-#define REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(baseClass) DEFINE_EVENT_TARGET_REFCOUNTING(RefCountedGarbageCollected<baseClass>)
-#endif // ENABLE(OILPAN)
 
 #endif // EventTarget_h

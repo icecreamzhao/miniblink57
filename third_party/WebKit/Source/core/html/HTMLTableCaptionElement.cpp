@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLTableCaptionElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -39,14 +38,18 @@ inline HTMLTableCaptionElement::HTMLTableCaptionElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLTableCaptionElement)
 
-void HTMLTableCaptionElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLTableCaptionElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == alignAttr) {
         if (!value.isEmpty())
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyCaptionSide, value);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyCaptionSide,
+                value);
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-}
+} // namespace blink

@@ -23,18 +23,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FETurbulence.h"
 
+#include "SkPaintImageFilter.h"
 #include "SkPerlinNoiseShader.h"
-#include "SkRectShaderImageFilter.h"
 #include "platform/graphics/filters/Filter.h"
-#include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
 
 namespace blink {
 
-FETurbulence::FETurbulence(Filter* filter, TurbulenceType type, float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, bool stitchTiles)
+FETurbulence::FETurbulence(Filter* filter,
+    TurbulenceType type,
+    float baseFrequencyX,
+    float baseFrequencyY,
+    int numOctaves,
+    float seed,
+    bool stitchTiles)
     : FilterEffect(filter)
     , m_type(type)
     , m_baseFrequencyX(baseFrequencyX)
@@ -45,9 +49,16 @@ FETurbulence::FETurbulence(Filter* filter, TurbulenceType type, float baseFreque
 {
 }
 
-PassRefPtrWillBeRawPtr<FETurbulence> FETurbulence::create(Filter* filter, TurbulenceType type, float baseFrequencyX, float baseFrequencyY, int numOctaves, float seed, bool stitchTiles)
+FETurbulence* FETurbulence::create(Filter* filter,
+    TurbulenceType type,
+    float baseFrequencyX,
+    float baseFrequencyY,
+    int numOctaves,
+    float seed,
+    bool stitchTiles)
 {
-    return adoptRefWillBeNoop(new FETurbulence(filter, type, baseFrequencyX, baseFrequencyY, numOctaves, seed, stitchTiles));
+    return new FETurbulence(filter, type, baseFrequencyX, baseFrequencyY,
+        numOctaves, seed, stitchTiles);
 }
 
 TurbulenceType FETurbulence::type() const
@@ -128,30 +139,37 @@ bool FETurbulence::setStitchTiles(bool stitch)
     return true;
 }
 
-SkShader* FETurbulence::createShader()
+sk_sp<SkShader> FETurbulence::createShader() const
 {
-    const SkISize size = SkISize::Make(effectBoundaries().width(), effectBoundaries().height());
+    const SkISize size = SkISize::Make(filterPrimitiveSubregion().width(),
+        filterPrimitiveSubregion().height());
     // Frequency should be scaled by page zoom, but not by primitiveUnits.
     // So we apply only the transform scale (as Filter::apply*Scale() do)
     // and not the target bounding box scale (as SVGFilter::apply*Scale()
     // would do). Note also that we divide by the scale since this is
     // a frequency, not a period.
-    float baseFrequencyX = m_baseFrequencyX / filter()->scale();
-    float baseFrequencyY = m_baseFrequencyY / filter()->scale();
-    return (type() == FETURBULENCE_TYPE_FRACTALNOISE) ?
-        SkPerlinNoiseShader::CreateFractalNoise(SkFloatToScalar(baseFrequencyX),
-            SkFloatToScalar(baseFrequencyY), numOctaves(), SkFloatToScalar(seed()),
-            stitchTiles() ? &size : 0) :
-        SkPerlinNoiseShader::CreateTurbulence(SkFloatToScalar(baseFrequencyX),
-            SkFloatToScalar(baseFrequencyY), numOctaves(), SkFloatToScalar(seed()),
-            stitchTiles() ? &size : 0);
+    float baseFrequencyX = m_baseFrequencyX / getFilter()->scale();
+    float baseFrequencyY = m_baseFrequencyY / getFilter()->scale();
+    return (type() == FETURBULENCE_TYPE_FRACTALNOISE)
+        ? SkPerlinNoiseShader::MakeFractalNoise(
+            SkFloatToScalar(baseFrequencyX),
+            SkFloatToScalar(baseFrequencyY), numOctaves(),
+            SkFloatToScalar(seed()), stitchTiles() ? &size : 0)
+        : SkPerlinNoiseShader::MakeTurbulence(
+            SkFloatToScalar(baseFrequencyX),
+            SkFloatToScalar(baseFrequencyY), numOctaves(),
+            SkFloatToScalar(seed()), stitchTiles() ? &size : 0);
 }
 
-PassRefPtr<SkImageFilter> FETurbulence::createImageFilter(SkiaImageFilterBuilder* builder)
+sk_sp<SkImageFilter> FETurbulence::createImageFilter()
 {
-    SkAutoTUnref<SkShader> shader(createShader());
-    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
-    return adoptRef(SkRectShaderImageFilter::Create(shader, &rect));
+    if (m_baseFrequencyX < 0 || m_baseFrequencyY < 0)
+        return createTransparentBlack();
+
+    SkPaint paint;
+    paint.setShader(createShader());
+    SkImageFilter::CropRect rect = getCropRect();
+    return SkPaintImageFilter::Make(paint, &rect);
 }
 
 static TextStream& operator<<(TextStream& ts, const TurbulenceType& type)
@@ -170,13 +188,15 @@ static TextStream& operator<<(TextStream& ts, const TurbulenceType& type)
     return ts;
 }
 
-TextStream& FETurbulence::externalRepresentation(TextStream& ts, int indent) const
+TextStream& FETurbulence::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[feTurbulence";
     FilterEffect::externalRepresentation(ts);
     ts << " type=\"" << type() << "\" "
-       << "baseFrequency=\"" << baseFrequencyX() << ", " << baseFrequencyY() << "\" "
+       << "baseFrequency=\"" << baseFrequencyX() << ", " << baseFrequencyY()
+       << "\" "
        << "seed=\"" << seed() << "\" "
        << "numOctaves=\"" << numOctaves() << "\" "
        << "stitchTiles=\"" << stitchTiles() << "\"]\n";

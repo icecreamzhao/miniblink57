@@ -19,7 +19,8 @@ class DrawBitmapAABench : public Benchmark {
 public:
     DrawBitmapAABench(bool doAA, const SkMatrix& matrix, const char name[])
         : fMatrix(matrix)
-        , fName("draw_bitmap_") {
+        , fName("draw_bitmap_")
+    {
 
         fPaint.setAntiAlias(doAA);
         // Most clients use filtering, so let's focus on this for now.
@@ -28,16 +29,19 @@ public:
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         fBitmap.allocN32Pixels(200, 200);
         fBitmap.eraseARGB(255, 0, 255, 0);
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         canvas->concat(fMatrix);
         for (int i = 0; i < loops; i++) {
             canvas->drawBitmap(fBitmap, 0, 0, &fPaint);
@@ -45,7 +49,7 @@ protected:
     }
 
 private:
-    SkPaint  fPaint;
+    SkPaint fPaint;
     SkMatrix fMatrix;
     SkString fName;
     SkBitmap fBitmap;
@@ -53,28 +57,26 @@ private:
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return new DrawBitmapAABench(false, SkMatrix::MakeScale(1), "ident"); )
+DEF_BENCH(return new DrawBitmapAABench(false, SkMatrix::MakeScale(1), "ident");)
 
-DEF_BENCH( return new DrawBitmapAABench(false, SkMatrix::MakeScale(1.17f), "scale"); )
+DEF_BENCH(return new DrawBitmapAABench(false, SkMatrix::MakeScale(1.17f), "scale");)
 
-DEF_BENCH( return new DrawBitmapAABench(false, SkMatrix::MakeTrans(17.5f, 17.5f), "translate"); )
-
-DEF_BENCH(
-    SkMatrix m;
-    m.reset();
-    m.preRotate(15);
-    return new DrawBitmapAABench(false, m, "rotate");
-)
-
-DEF_BENCH( return new DrawBitmapAABench(true, SkMatrix::MakeScale(1), "ident"); )
-
-DEF_BENCH( return new DrawBitmapAABench(true, SkMatrix::MakeScale(1.17f), "scale"); )
-
-DEF_BENCH( return new DrawBitmapAABench(true, SkMatrix::MakeTrans(17.5f, 17.5f), "translate"); )
+DEF_BENCH(return new DrawBitmapAABench(false, SkMatrix::MakeTrans(17.5f, 17.5f), "translate");)
 
 DEF_BENCH(
     SkMatrix m;
     m.reset();
     m.preRotate(15);
-    return new DrawBitmapAABench(true, m, "rotate");
-)
+    return new DrawBitmapAABench(false, m, "rotate");)
+
+DEF_BENCH(return new DrawBitmapAABench(true, SkMatrix::MakeScale(1), "ident");)
+
+DEF_BENCH(return new DrawBitmapAABench(true, SkMatrix::MakeScale(1.17f), "scale");)
+
+DEF_BENCH(return new DrawBitmapAABench(true, SkMatrix::MakeTrans(17.5f, 17.5f), "translate");)
+
+DEF_BENCH(
+    SkMatrix m;
+    m.reset();
+    m.preRotate(15);
+    return new DrawBitmapAABench(true, m, "rotate");)

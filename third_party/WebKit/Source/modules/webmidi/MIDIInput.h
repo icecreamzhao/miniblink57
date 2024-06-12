@@ -31,6 +31,7 @@
 #ifndef MIDIInput_h
 #define MIDIInput_h
 
+#include "media/midi/midi_service.mojom-blink.h"
 #include "modules/EventTargetModules.h"
 #include "modules/webmidi/MIDIAccessor.h"
 #include "modules/webmidi/MIDIPort.h"
@@ -41,23 +42,45 @@ class MIDIAccess;
 
 class MIDIInput final : public MIDIPort {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static MIDIInput* create(MIDIAccess*, const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState);
+    static MIDIInput* create(MIDIAccess*,
+        const String& id,
+        const String& manufacturer,
+        const String& name,
+        const String& version,
+        midi::mojom::PortState);
     ~MIDIInput() override { }
 
     EventListener* onmidimessage();
-    void setOnmidimessage(PassRefPtr<EventListener>);
+    void setOnmidimessage(EventListener*);
 
     // EventTarget
-    const AtomicString& interfaceName() const override { return EventTargetNames::MIDIInput; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventTargetNames::MIDIInput;
+    }
 
-    // |timeStamp| is a DOMHighResTimeStamp in the time coordinate system of performance.now().
-    void didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp);
+    // |timeStamp| is a DOMHighResTimeStamp in the time coordinate system of
+    // performance.now().
+    void didReceiveMIDIData(unsigned portIndex,
+        const unsigned char* data,
+        size_t length,
+        double timeStamp);
 
     DECLARE_VIRTUAL_TRACE();
 
+protected:
+    void addedEventListener(const AtomicString& eventType,
+        RegisteredEventListener&) override;
+
 private:
-    MIDIInput(MIDIAccess*, const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState);
+    MIDIInput(MIDIAccess*,
+        const String& id,
+        const String& manufacturer,
+        const String& name,
+        const String& version,
+        midi::mojom::PortState);
 };
 
 } // namespace blink

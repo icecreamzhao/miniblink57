@@ -33,13 +33,17 @@
 
 #include "platform/heap/Heap.h"
 #include "platform/heap/Visitor.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 template <typename T>
 class HeapLinkedStack : public GarbageCollected<HeapLinkedStack<T>> {
 public:
-    HeapLinkedStack() : m_size(0) { }
+    HeapLinkedStack()
+        : m_size(0)
+    {
+    }
 
     bool isEmpty();
 
@@ -110,8 +114,10 @@ inline size_t HeapLinkedStack<T>::size()
     return m_size;
 }
 
-template<typename T>
+template <typename T>
 class TraceEagerlyTrait<HeapLinkedStack<T>> {
+    STATIC_ONLY(TraceEagerlyTrait);
+
 public:
     static const bool value = TraceEagerlyTrait<T>::value;
 };

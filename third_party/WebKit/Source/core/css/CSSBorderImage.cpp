@@ -17,35 +17,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/CSSBorderImage.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<CSSValueList> createBorderImageValue(PassRefPtrWillBeRawPtr<CSSValue> image, PassRefPtrWillBeRawPtr<CSSValue> imageSlice,
-    PassRefPtrWillBeRawPtr<CSSValue> borderSlice, PassRefPtrWillBeRawPtr<CSSValue> outset, PassRefPtrWillBeRawPtr<CSSValue> repeat)
+CSSValueList* createBorderImageValue(CSSValue* image,
+    CSSValue* imageSlice,
+    CSSValue* borderSlice,
+    CSSValue* outset,
+    CSSValue* repeat)
 {
-    RefPtrWillBeRawPtr<CSSValueList> list = CSSValueList::createSpaceSeparated();
+    CSSValueList* list = CSSValueList::createSpaceSeparated();
     if (image)
-        list->append(image);
+        list->append(*image);
 
     if (borderSlice || outset) {
-        RefPtrWillBeRawPtr<CSSValueList> listSlash = CSSValueList::createSlashSeparated();
+        CSSValueList* listSlash = CSSValueList::createSlashSeparated();
         if (imageSlice)
-            listSlash->append(imageSlice);
+            listSlash->append(*imageSlice);
 
         if (borderSlice)
-            listSlash->append(borderSlice);
+            listSlash->append(*borderSlice);
 
         if (outset)
-            listSlash->append(outset);
+            listSlash->append(*outset);
 
-        list->append(listSlash);
-    } else if (imageSlice)
-        list->append(imageSlice);
+        list->append(*listSlash);
+    } else if (imageSlice) {
+        list->append(*imageSlice);
+    }
     if (repeat)
-        list->append(repeat);
-    return list.release();
+        list->append(*repeat);
+    return list;
 }
 
 } // namespace blink

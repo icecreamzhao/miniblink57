@@ -1,23 +1,25 @@
 
+#include "platform/text/IcuCharsetDetector.h"
 #include "config.h"
 #include <unicode/ucnv.h>
 #include <unicode/utypes.h>
-#include <wtf/FastMalloc.h>
-#include "platform/text/IcuCharsetDetector.h"
+#include <wtf/Allocator.h>
 
 #define BUFFER_SIZE 8192
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
-#define NEW_ARRAY(type,count) (type *) WTF::fastMalloc((count) * sizeof(type))
-#define DELETE_ARRAY(array) WTF::fastFree((void *) (array))
+#define NEW_ARRAY(type, count) (type*)WTF::Partitions::fastMalloc((count) * sizeof(type), "InputText")
+#define DELETE_ARRAY(array) WTF::Partitions::fastFree((void*)(array))
 
-InputText::InputText(UErrorCode &status)
-    : fInputBytes(NEW_ARRAY(uint8_t, BUFFER_SIZE)), // The text to be checked.  Markup will have been
+InputText::InputText(UErrorCode& status)
+    : fInputBytes(NEW_ARRAY(uint8_t, BUFFER_SIZE))
+    , // The text to be checked.  Markup will have been
     //   removed if appropriate.
-    fByteStats(NEW_ARRAY(int16_t, 256)),       // byte frequency statistics for the input text.
+    fByteStats(NEW_ARRAY(int16_t, 256))
+    , // byte frequency statistics for the input text.
     //   Value is percent, not absolute.
-    fDeclaredEncoding(0),
-    fRawInput(0),
-    fRawLength(0)
+    fDeclaredEncoding(0)
+    , fRawInput(0)
+    , fRawLength(0)
 {
     if (fInputBytes == NULL || fByteStats == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -31,11 +33,11 @@ InputText::~InputText()
     DELETE_ARRAY(fInputBytes);
 }
 
-void InputText::setText(const char *in, int32_t len)
+void InputText::setText(const char* in, int32_t len)
 {
     fInputLen = 0;
     fC1Bytes = FALSE;
-    fRawInput = (const uint8_t *)in;
+    fRawInput = (const uint8_t*)in;
     fRawLength = len == -1 ? (int32_t)strlen(in) : len;
 }
 
@@ -44,11 +46,12 @@ UBool InputText::isSet() const
     return fRawInput != NULL;
 }
 
-void InputText::MungeInput(UBool fStripTags) {
-    int     srci = 0;
-    int     dsti = 0;
+void InputText::MungeInput(UBool fStripTags)
+{
+    int srci = 0;
+    int dsti = 0;
     uint8_t b;
-    bool    inMarkup = FALSE;
+    bool inMarkup = FALSE;
     int32_t openTags = 0;
     int32_t badTags = 0;
 
@@ -89,9 +92,7 @@ void InputText::MungeInput(UBool fStripTags) {
     //    essentially nothing but markup abandon the markup stripping.
     //    Detection will have to work on the unstripped input.
     //
-    if (openTags < 5 || openTags / 5 < badTags ||
-        (fInputLen < 100 && fRawLength>600))
-    {
+    if (openTags < 5 || openTags / 5 < badTags || (fInputLen < 100 && fRawLength > 600)) {
         int32_t limit = fRawLength;
 
         if (limit > BUFFER_SIZE) {
@@ -129,22 +130,22 @@ CharsetRecog_UTF8::~CharsetRecog_UTF8()
     // nothing to do
 }
 
-const char *CharsetRecog_UTF8::getName() const
+const char* CharsetRecog_UTF8::getName() const
 {
     return "UTF-8";
 }
 
-UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
+UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch* results) const
+{
     bool hasBOM = FALSE;
     int32_t numValid = 0;
     int32_t numInvalid = 0;
-    const uint8_t *inputBytes = input->fRawInput;
+    const uint8_t* inputBytes = input->fRawInput;
     int32_t i;
     int32_t trailBytes = 0;
     int32_t confidence;
 
-    if (input->fRawLength >= 3 &&
-        inputBytes[0] == 0xEF && inputBytes[1] == 0xBB && inputBytes[2] == 0xBF) {
+    if (input->fRawLength >= 3 && inputBytes[0] == 0xEF && inputBytes[1] == 0xBB && inputBytes[2] == 0xBF) {
         hasBOM = TRUE;
     }
 
@@ -153,20 +154,17 @@ UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
         int32_t b = inputBytes[i];
 
         if ((b & 0x80) == 0) {
-            continue;   // ASCII
+            continue; // ASCII
         }
 
         // Hi bit on char found.  Figure out how long the sequence should be
         if ((b & 0x0E0) == 0x0C0) {
             trailBytes = 1;
-        }
-        else if ((b & 0x0F0) == 0x0E0) {
+        } else if ((b & 0x0F0) == 0x0E0) {
             trailBytes = 2;
-        }
-        else if ((b & 0x0F8) == 0xF0) {
+        } else if ((b & 0x0F8) == 0xF0) {
             trailBytes = 3;
-        }
-        else {
+        } else {
             numInvalid += 1;
             continue;
         }
@@ -191,7 +189,6 @@ UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
                 break;
             }
         }
-
     }
 
     // Cook up some sort of confidence score, based on presence of a BOM
@@ -199,22 +196,17 @@ UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
     confidence = 0;
     if (hasBOM && numInvalid == 0) {
         confidence = 100;
-    }
-    else if (hasBOM && numValid > numInvalid * 10) {
+    } else if (hasBOM && numValid > numInvalid * 10) {
         confidence = 80;
-    }
-    else if (numValid > 3 && numInvalid == 0) {
+    } else if (numValid > 3 && numInvalid == 0) {
         confidence = 100;
-    }
-    else if (numValid > 0 && numInvalid == 0) {
+    } else if (numValid > 0 && numInvalid == 0) {
         confidence = 80;
-    }
-    else if (numValid == 0 && numInvalid == 0) {
+    } else if (numValid == 0 && numInvalid == 0) {
         // Plain ASCII. Confidence must be > 10, it's more likely than UTF-16, which
         //              accepts ASCII with confidence = 10.
         confidence = 15;
-    }
-    else if (numValid > numInvalid * 10) {
+    } else if (numValid > numInvalid * 10) {
         // Probably corruput utf-8 data.  Valid sequences aren't likely by chance.
         confidence = 25;
     }
@@ -225,13 +217,16 @@ UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
 //////////////////////////////////////////////////////////////////////////
 
 CharsetMatch::CharsetMatch()
-    : textIn(NULL), confidence(0), fCharsetName(NULL), fLang(NULL)
+    : textIn(NULL)
+    , confidence(0)
+    , fCharsetName(NULL)
+    , fLang(NULL)
 {
     // nothing else to do.
 }
 
-void CharsetMatch::set(InputText *input, const CharsetRecognizer *cr, int32_t conf,
-    const char *csName, const char *lang)
+void CharsetMatch::set(InputText* input, const CharsetRecognizer* cr, int32_t conf,
+    const char* csName, const char* lang)
 {
     textIn = input;
     confidence = conf;
@@ -247,32 +242,35 @@ void CharsetMatch::set(InputText *input, const CharsetRecognizer *cr, int32_t co
     }
 }
 
-const char* CharsetMatch::getName()const
+const char* CharsetMatch::getName() const
 {
     return fCharsetName;
 }
 
-const char* CharsetMatch::getLanguage()const
+const char* CharsetMatch::getLanguage() const
 {
     return fLang;
 }
 
-int32_t CharsetMatch::getConfidence()const
+int32_t CharsetMatch::getConfidence() const
 {
     return confidence;
 }
 
-static CSRecognizerInfo **fCSRecognizers = NULL;
+static CSRecognizerInfo** fCSRecognizers = NULL;
 static int32_t fCSRecognizers_size = 0;
 
-CharsetDetector::CharsetDetector(UErrorCode &status)
-    : textIn(new InputText(status)), resultArray(NULL),
-    resultCount(0), fStripTags(FALSE), fFreshTextSet(FALSE),
-    fEnabledRecognizers(NULL)
+CharsetDetector::CharsetDetector(UErrorCode& status)
+    : textIn(new InputText(status))
+    , resultArray(NULL)
+    , resultCount(0)
+    , fStripTags(FALSE)
+    , fFreshTextSet(FALSE)
+    , fEnabledRecognizers(NULL)
 {
     setRecognizers(status);
 
-    resultArray = (CharsetMatch **)WTF::fastMalloc(sizeof(CharsetMatch *)*fCSRecognizers_size);
+    resultArray = (CharsetMatch**)WTF::Partitions::fastMalloc(sizeof(CharsetMatch*) * fCSRecognizers_size, "CharsetDetector");
 
     if (resultArray == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -297,20 +295,20 @@ CharsetDetector::~CharsetDetector()
         delete resultArray[i];
     }
 
-    WTF::fastFree(resultArray);
+    WTF::Partitions::fastFree(resultArray);
 
     if (fEnabledRecognizers) {
-        WTF::fastFree(fEnabledRecognizers);
+        WTF::Partitions::fastFree(fEnabledRecognizers);
     }
 }
 
-void CharsetDetector::setText(const char *in, int32_t len)
+void CharsetDetector::setText(const char* in, int32_t len)
 {
     textIn->setText(in, len);
     fFreshTextSet = TRUE;
 }
 
-const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
+const CharsetMatch* CharsetDetector::detect(UErrorCode& status)
 {
     int32_t maxMatchesFound = 0;
 
@@ -318,30 +316,28 @@ const CharsetMatch *CharsetDetector::detect(UErrorCode &status)
 
     if (maxMatchesFound > 0) {
         return resultArray[0];
-    }
-    else {
+    } else {
         return NULL;
     }
 }
 
-void CharsetDetector::setRecognizers(UErrorCode &status)
+void CharsetDetector::setRecognizers(UErrorCode& status)
 {
     static bool init = false;
     if (init)
         return;
     init = true;
 
-    CSRecognizerInfo *tempArray[] = {
+    CSRecognizerInfo* tempArray[] = {
         new CSRecognizerInfo(new CharsetRecog_UTF8(), TRUE),
     };
     int32_t rCount = ARRAY_SIZE(tempArray);
 
-    fCSRecognizers = NEW_ARRAY(CSRecognizerInfo *, rCount);
+    fCSRecognizers = NEW_ARRAY(CSRecognizerInfo*, rCount);
 
     if (fCSRecognizers == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    else {
+    } else {
         fCSRecognizers_size = rCount;
         for (int32_t r = 0; r < rCount; r += 1) {
             fCSRecognizers[r] = tempArray[r];
@@ -352,16 +348,15 @@ void CharsetDetector::setRecognizers(UErrorCode &status)
     }
 }
 
-const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound, UErrorCode &status)
+const CharsetMatch* const* CharsetDetector::detectAll(int32_t& maxMatchesFound, UErrorCode& status)
 {
     if (!textIn->isSet()) {
-        status = U_MISSING_RESOURCE_ERROR;// TODO:  Need to set proper status code for input text not set
+        status = U_MISSING_RESOURCE_ERROR; // TODO:  Need to set proper status code for input text not set
 
         return NULL;
-    }
-    else if (fFreshTextSet) {
-        CharsetRecognizer *csr;
-        int32_t            i;
+    } else if (fFreshTextSet) {
+        CharsetRecognizer* csr;
+        int32_t i;
 
         textIn->MungeInput(fStripTags);
 
@@ -375,9 +370,9 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
             }
         }
 
-//         if (resultCount > 1) {
-//             uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
-//         }
+        //         if (resultCount > 1) {
+        //             uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
+        //         }
         fFreshTextSet = FALSE;
     }
 

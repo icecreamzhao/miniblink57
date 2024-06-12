@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,10 +5,10 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkPerspIter_DEFINED
 #define SkPerspIter_DEFINED
 
+#include "SkFixed.h"
 #include "SkMatrix.h"
 
 class SkPerspIter {
@@ -35,14 +34,14 @@ public:
 
 private:
     enum {
-        kShift  = 4,
-        kCount  = (1 << kShift)
+        kShift = 4,
+        kCount = (1 << kShift)
     };
     const SkMatrix& fMatrix;
-    SkFixed         fStorage[kCount * 2];
-    SkFixed         fX, fY;
-    SkScalar        fSX, fSY;
-    int             fCount;
+    SkFixed fStorage[kCount * 2];
+    SkFixed fX, fY;
+    SkScalar fSX, fSY;
+    int fCount;
 };
 
 #endif

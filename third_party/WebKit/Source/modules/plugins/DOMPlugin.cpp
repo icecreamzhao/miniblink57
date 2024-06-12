@@ -13,10 +13,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA 02110-1301 USA
  */
 
-#include "config.h"
 #include "modules/plugins/DOMPlugin.h"
 
 #include "platform/plugins/PluginData.h"
@@ -25,19 +25,17 @@
 namespace blink {
 
 DOMPlugin::DOMPlugin(PluginData* pluginData, LocalFrame* frame, unsigned index)
-    : LocalFrameLifecycleObserver(frame)
+    : ContextClient(frame)
     , m_pluginData(pluginData)
     , m_index(index)
 {
 }
 
-DOMPlugin::~DOMPlugin()
-{
-}
+DOMPlugin::~DOMPlugin() { }
 
 DEFINE_TRACE(DOMPlugin)
 {
-    LocalFrameLifecycleObserver::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 String DOMPlugin::name() const

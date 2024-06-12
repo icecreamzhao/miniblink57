@@ -27,17 +27,24 @@
 #ifndef HTMLEntityParser_h
 #define HTMLEntityParser_h
 
+#include "core/CoreExport.h"
 #include "platform/text/SegmentedString.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class DecodedHTMLEntity {
+    STACK_ALLOCATED();
+
 private:
     // HTML entities contain at most four UTF-16 code units.
     static const unsigned kMaxLength = 4;
 
 public:
-    DecodedHTMLEntity() : length(0) { }
+    DecodedHTMLEntity()
+        : length(0)
+    {
+    }
 
     bool isEmpty() const { return !length; }
 
@@ -61,11 +68,15 @@ public:
     UChar data[kMaxLength];
 };
 
-bool consumeHTMLEntity(SegmentedString&, DecodedHTMLEntity& decodedEntity, bool& notEnoughCharacters, UChar additionalAllowedCharacter = '\0');
+CORE_EXPORT bool consumeHTMLEntity(SegmentedString&,
+    DecodedHTMLEntity& decodedEntity,
+    bool& notEnoughCharacters,
+    UChar additionalAllowedCharacter = '\0');
 
-// Used by the XML parser.  Not suitable for use in HTML parsing.  Use consumeHTMLEntity instead.
+// Used by the XML parser.  Not suitable for use in HTML parsing.  Use
+// consumeHTMLEntity instead.
 size_t decodeNamedEntityToUCharArray(const char*, UChar result[4]);
 
-}
+} // namespace blink
 
-#endif
+#endif // HTMLEntityParser_h

@@ -35,6 +35,7 @@
 #include "modules/webdatabase/SQLStatement.h"
 #include "modules/webdatabase/SQLTransactionStateMachine.h"
 #include "platform/heap/Handle.h"
+#include <memory>
 
 namespace blink {
 
@@ -50,24 +51,34 @@ class SQLValue;
 class ScriptValue;
 class VoidCallback;
 
-class SQLTransaction final
-    : public GarbageCollectedFinalized<SQLTransaction>
-    , public SQLTransactionStateMachine<SQLTransaction>
-    , public ScriptWrappable {
+class SQLTransaction final : public GarbageCollectedFinalized<SQLTransaction>,
+                             public SQLTransactionStateMachine<SQLTransaction>,
+                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static SQLTransaction* create(Database*, SQLTransactionCallback*,
-        VoidCallback* successCallback, SQLTransactionErrorCallback*, bool readOnly);
+    static SQLTransaction* create(Database*,
+        SQLTransactionCallback*,
+        VoidCallback* successCallback,
+        SQLTransactionErrorCallback*,
+        bool readOnly);
     ~SQLTransaction();
     DECLARE_TRACE();
 
     void performPendingCallback();
 
-    void executeSQL(const String& sqlStatement, const Vector<SQLValue>& arguments,
-        SQLStatementCallback*, SQLStatementErrorCallback*, ExceptionState&);
+    void executeSQL(const String& sqlStatement,
+        const Vector<SQLValue>& arguments,
+        SQLStatementCallback*,
+        SQLStatementErrorCallback*,
+        ExceptionState&);
     void executeSql(ScriptState*, const String& sqlStatement, ExceptionState&);
-    void executeSql(ScriptState*, const String& sqlStatement, const Nullable<Vector<ScriptValue>>& arguments,
-        SQLStatementCallback*, SQLStatementErrorCallback*, ExceptionState&);
+    void executeSql(ScriptState*,
+        const String& sqlStatement,
+        const Nullable<Vector<ScriptValue>>& arguments,
+        SQLStatementCallback*,
+        SQLStatementErrorCallback*,
+        ExceptionState&);
 
     Database* database() { return m_database.get(); }
 
@@ -81,8 +92,10 @@ public:
     void setBackend(SQLTransactionBackend*);
 
 private:
-    SQLTransaction(Database*, SQLTransactionCallback*,
-        VoidCallback* successCallback, SQLTransactionErrorCallback*,
+    SQLTransaction(Database*,
+        SQLTransactionCallback*,
+        VoidCallback* successCallback,
+        SQLTransactionErrorCallback*,
         bool readOnly);
 
     void clearCallbacks();
@@ -110,10 +123,9 @@ private:
     Member<SQLTransactionErrorCallback> m_errorCallback;
 
     bool m_executeSqlAllowed;
-    OwnPtr<SQLErrorData> m_transactionError;
+    std::unique_ptr<SQLErrorData> m_transactionError;
 
     bool m_readOnly;
-    int m_asyncOperationId;
 };
 
 } // namespace blink

@@ -31,11 +31,11 @@
 #ifndef ExceptionState_h
 #define ExceptionState_h
 
-#include "bindings/core/v8/OnStackObjectChecker.h"
 #include "bindings/core/v8/ScopedPersistent.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/V8ThrowException.h"
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/text/WTFString.h"
 #include <v8.h>
@@ -46,10 +46,15 @@ typedef int ExceptionCode;
 class ScriptPromiseResolver;
 class ScriptState;
 
+// ExceptionState is a scope-like class and provides a way to throw an exception
+// with an option to cancel it.  An exception message may be auto-generated.
+// You can convert an exception to a reject promise.
 class CORE_EXPORT ExceptionState {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(ExceptionState);
+
 public:
-    enum Context {
+    enum ContextType {
         ConstructionContext,
         ExecutionContext,
         DeletionContext,
@@ -60,42 +65,65 @@ public:
         IndexedGetterContext,
         IndexedSetterContext,
         IndexedDeletionContext,
-        UnknownContext, // FIXME: Remove this once we've flipped over to the new API.
+        UnknownContext, // FIXME: Remove this once we've flipped over to the new
+        // API.
     };
 
-    ExceptionState(Context context, const char* propertyName, const char* interfaceName, const v8::Local<v8::Object>& creationContext, v8::Isolate* isolate)
+    ExceptionState(v8::Isolate* isolate,
+        ContextType contextType,
+        const char* interfaceName,
+        const char* propertyName)
         : m_code(0)
-        , m_context(context)
+        , m_context(contextType)
         , m_propertyName(propertyName)
         , m_interfaceName(interfaceName)
-        , m_creationContext(creationContext)
-        , m_isolate(isolate) { }
+        , m_isolate(isolate)
+    {
+    }
 
-    ExceptionState(Context context, const char* interfaceName, const v8::Local<v8::Object>& creationContext, v8::Isolate* isolate)
-        : m_code(0)
-        , m_context(context)
-        , m_propertyName(0)
-        , m_interfaceName(interfaceName)
-        , m_creationContext(creationContext)
-        , m_isolate(isolate) { ASSERT(m_context == ConstructionContext || m_context == EnumerationContext || m_context == IndexedSetterContext || m_context == IndexedGetterContext || m_context == IndexedDeletionContext); }
+    ExceptionState(v8::Isolate* isolate,
+        ContextType contextType,
+        const char* interfaceName)
+        : ExceptionState(isolate, contextType, interfaceName, nullptr)
+    {
+#if DCHECK_IS_ON()
+        switch (m_context) {
+        case ConstructionContext:
+        case EnumerationContext:
+        case IndexedGetterContext:
+        case IndexedSetterContext:
+        case IndexedDeletionContext:
+            break;
+        default:
+            NOTREACHED();
+        }
+#endif // DCHECK_IS_ON()
+    }
 
-    virtual void throwDOMException(const ExceptionCode&, const String& message);
-    virtual void throwTypeError(const String& message);
-    virtual void throwSecurityError(const String& sanitizedMessage, const String& unsanitizedMessage = String());
+    ~ExceptionState()
+    {
+        if (!m_exception.isEmpty()) {
+            V8ThrowException::throwException(m_isolate,
+                m_exception.newLocal(m_isolate));
+        }
+    }
+
+    virtual void throwDOMException(ExceptionCode, const String& message);
     virtual void throwRangeError(const String& message);
+    virtual void throwSecurityError(const String& sanitizedMessage,
+        const String& unsanitizedMessage = String());
+    virtual void throwTypeError(const String& message);
+    virtual void rethrowV8Exception(v8::Local<v8::Value>);
 
-    bool hadException() const { return !m_exception.isEmpty() || m_code; }
+    bool hadException() const { return m_code; }
     void clearException();
 
     ExceptionCode code() const { return m_code; }
     const String& message() const { return m_message; }
-
-    bool throwIfNeeded()
+    v8::Local<v8::Value> getException()
     {
-        if (!hadException())
-            return false;
-        throwException();
-        return true;
+        DCHECK(!m_exception.isEmpty());
+        return m_exception.newLocal(m_isolate);
     }
 
     // This method clears out the exception which |this| has.
@@ -104,59 +132,98 @@ public:
     // This method clears out the exception which |this| has.
     void reject(ScriptPromiseResolver*);
 
-    Context context() const { return m_context; }
+    ContextType context() const { return m_context; }
     const char* propertyName() const { return m_propertyName; }
     const char* interfaceName() const { return m_interfaceName; }
 
-    void rethrowV8Exception(v8::Local<v8::Value> value)
-    {
-        setException(value);
-    }
-
-#if ENABLE(ASSERT)
-    OnStackObjectChecker& onStackObjectChecker() { return m_onStackObjectChecker; }
-#endif
+    String addExceptionContext(const String&) const;
 
 protected:
+    // An ExceptionCode for the case that an exception is rethrown.  In that
+    // case, we cannot determine an exception code.
+    static const int kRethrownException = UnknownError;
+
+    void setException(ExceptionCode, const String&, v8::Local<v8::Value>);
+
+private:
     ExceptionCode m_code;
-    Context m_context;
+    ContextType m_context;
     String m_message;
     const char* m_propertyName;
     const char* m_interfaceName;
-
-private:
-    void setException(v8::Local<v8::Value>);
-    void throwException();
-
-    String addExceptionContext(const String&) const;
-
+    // The exception is empty when it was thrown through
+    // DummyExceptionStateForTesting.
     ScopedPersistent<v8::Value> m_exception;
-    v8::Local<v8::Object> m_creationContext;
     v8::Isolate* m_isolate;
-#if ENABLE(ASSERT)
-    OnStackObjectChecker m_onStackObjectChecker;
-#endif
 };
 
-// Used if exceptions can/should not be directly thrown.
+// NonThrowableExceptionState never allow call sites to throw an exception.
+// Should be used if an exception must not be thrown.
 class CORE_EXPORT NonThrowableExceptionState final : public ExceptionState {
 public:
-    NonThrowableExceptionState(): ExceptionState(ExceptionState::UnknownContext, 0, 0, v8::Local<v8::Object>(), v8::Isolate::GetCurrent()) { }
-    void throwDOMException(const ExceptionCode&, const String& message) override;
-    void throwTypeError(const String& message = String()) override;
-    void throwSecurityError(const String& sanitizedMessage, const String& unsanitizedMessage = String()) override;
+    NonThrowableExceptionState();
+    NonThrowableExceptionState(const char*, int);
+
+    void throwDOMException(ExceptionCode, const String& message) override;
+    void throwTypeError(const String& message) override;
+    void throwSecurityError(const String& sanitizedMessage,
+        const String& unsanitizedMessage) override;
     void throwRangeError(const String& message) override;
+    void rethrowV8Exception(v8::Local<v8::Value>) override;
+    ExceptionState& returnThis() { return *this; }
+
+private:
+    const char* m_file;
+    const int m_line;
 };
 
-// Used if any exceptions thrown are ignorable.
-class CORE_EXPORT TrackExceptionState final : public ExceptionState {
+// Syntax sugar for NonThrowableExceptionState.
+// This can be used as a default value of an ExceptionState parameter like this:
+//
+//     Node* removeChild(Node*, ExceptionState& = ASSERT_NO_EXCEPTION);
+#if DCHECK_IS_ON()
+#define ASSERT_NO_EXCEPTION \
+    (::blink::NonThrowableExceptionState(__FILE__, __LINE__).returnThis())
+#else
+#define ASSERT_NO_EXCEPTION \
+    (::blink::DummyExceptionStateForTesting().returnThis())
+#endif
+
+// DummyExceptionStateForTesting ignores all thrown exceptions. You should not
+// use DummyExceptionStateForTesting in production code, where you need to
+// handle all exceptions properly. If you really need to ignore exceptions in
+// production code for some special reason, explicitly call clearException().
+class CORE_EXPORT DummyExceptionStateForTesting final : public ExceptionState {
 public:
-    TrackExceptionState(): ExceptionState(ExceptionState::UnknownContext, 0, 0, v8::Local<v8::Object>(), v8::Isolate::GetCurrent()) { }
-    void throwDOMException(const ExceptionCode&, const String& message) override;
-    void throwTypeError(const String& message = String()) override;
-    void throwSecurityError(const String& sanitizedMessage, const String& unsanitizedMessage = String()) override;
+    DummyExceptionStateForTesting()
+        : ExceptionState(nullptr,
+            ExceptionState::UnknownContext,
+            nullptr,
+            nullptr)
+    {
+    }
+    ~DummyExceptionStateForTesting()
+    {
+        // Prevent the base class throw an exception.
+        if (hadException()) {
+            clearException();
+        }
+    }
+    void throwDOMException(ExceptionCode, const String& message) override;
+    void throwTypeError(const String& message) override;
+    void throwSecurityError(const String& sanitizedMessage,
+        const String& unsanitizedMessage) override;
     void throwRangeError(const String& message) override;
+    void rethrowV8Exception(v8::Local<v8::Value>) override;
+    ExceptionState& returnThis() { return *this; }
 };
+
+// Syntax sugar for DummyExceptionStateForTesting.
+// This can be used as a default value of an ExceptionState parameter like this:
+//
+//     Node* removeChild(Node*, ExceptionState& = IGNORE_EXCEPTION_FOR_TESTING);
+#define IGNORE_EXCEPTION_FOR_TESTING \
+    (::blink::DummyExceptionStateForTesting().returnThis())
 
 } // namespace blink
 

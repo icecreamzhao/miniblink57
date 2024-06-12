@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/network/WebSocketHandshakeResponse.h"
 
 #include "platform/network/WebSocketHandshakeRequest.h"
@@ -37,13 +36,9 @@
 
 namespace blink {
 
-WebSocketHandshakeResponse::WebSocketHandshakeResponse()
-{
-}
+WebSocketHandshakeResponse::WebSocketHandshakeResponse() { }
 
-WebSocketHandshakeResponse::~WebSocketHandshakeResponse()
-{
-}
+WebSocketHandshakeResponse::~WebSocketHandshakeResponse() { }
 
 int WebSocketHandshakeResponse::statusCode() const
 {
@@ -71,7 +66,8 @@ const HTTPHeaderMap& WebSocketHandshakeResponse::headerFields() const
     return m_headerFields;
 }
 
-void WebSocketHandshakeResponse::addHeaderField(const AtomicString& name, const AtomicString& value)
+void WebSocketHandshakeResponse::addHeaderField(const AtomicString& name,
+    const AtomicString& value)
 {
     WebSocketHandshakeRequest::addAndMergeHeader(&m_headerFields, name, value);
 }

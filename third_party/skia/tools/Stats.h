@@ -12,13 +12,14 @@
 #include "SkTSort.h"
 
 #ifdef SK_BUILD_FOR_WIN
-    static const char* kBars[] = { ".", "o", "O" };
+static const char* kBars[] = { ".", "o", "O" };
 #else
-    static const char* kBars[] = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" };
+static const char* kBars[] = { "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" };
 #endif
 
 struct Stats {
-    Stats(const SkTArray<double>& samples) {
+    Stats(const SkTArray<double>& samples)
+    {
         int n = samples.count();
         if (!n) {
             min = max = mean = var = median = 0;
@@ -28,26 +29,30 @@ struct Stats {
         min = samples[0];
         max = samples[0];
         for (int i = 0; i < n; i++) {
-            if (samples[i] < min) { min = samples[i]; }
-            if (samples[i] > max) { max = samples[i]; }
+            if (samples[i] < min) {
+                min = samples[i];
+            }
+            if (samples[i] > max) {
+                max = samples[i];
+            }
         }
 
         double sum = 0.0;
-        for (int i = 0 ; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             sum += samples[i];
         }
         mean = sum / n;
 
         double err = 0.0;
-        for (int i = 0 ; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             err += (samples[i] - mean) * (samples[i] - mean);
         }
-        var = err / (n-1);
+        var = err / (n - 1);
 
         SkAutoTMalloc<double> sorted(n);
         memcpy(sorted.get(), samples.begin(), n * sizeof(double));
         SkTQSort(sorted.get(), sorted.get() + n - 1);
-        median = sorted[n/2];
+        median = sorted[n / 2];
 
         // Normalize samples to [min, max] in as many quanta as we have distinct bars to print.
         for (int i = 0; i < n; i++) {
@@ -62,17 +67,17 @@ struct Stats {
             s /= (max - min);
             s *= (SK_ARRAY_COUNT(kBars) - 1);
             const size_t bar = (size_t)(s + 0.5);
-            SK_ALWAYSBREAK(bar < SK_ARRAY_COUNT(kBars));
+            SkASSERT_RELEASE(bar < SK_ARRAY_COUNT(kBars));
             plot.append(kBars[bar]);
         }
     }
 
     double min;
     double max;
-    double mean;    // Estimate of population mean.
-    double var;     // Estimate of population variance.
+    double mean; // Estimate of population mean.
+    double var; // Estimate of population variance.
     double median;
-    SkString plot;  // A single-line bar chart (_not_ histogram) of the samples.
+    SkString plot; // A single-line bar chart (_not_ histogram) of the samples.
 };
 
-#endif//Stats_DEFINED
+#endif //Stats_DEFINED

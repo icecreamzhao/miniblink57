@@ -13,44 +13,44 @@
 namespace v8 {
 namespace internal {
 
-class JSRegExpStringIterator : public JSObject {
- public:
-  // [regexp]: the [[IteratingRegExp]] internal property.
-  DECL_ACCESSORS(iterating_regexp, Object)
+    class JSRegExpStringIterator : public JSObject {
+    public:
+        // [regexp]: the [[IteratingRegExp]] internal property.
+        DECL_ACCESSORS(iterating_regexp, Object)
 
-  // [string]: The [[IteratedString]] internal property.
-  DECL_ACCESSORS(iterating_string, String)
+        // [string]: The [[IteratedString]] internal property.
+        DECL_ACCESSORS(iterating_string, String)
 
-  DECL_INT_ACCESSORS(flags)
+        DECL_INT_ACCESSORS(flags)
 
-  // [boolean]: The [[Done]] internal property.
-  DECL_BOOLEAN_ACCESSORS(done)
+        // [boolean]: The [[Done]] internal property.
+        DECL_BOOLEAN_ACCESSORS(done)
 
-  // [boolean]: The [[Global]] internal property.
-  DECL_BOOLEAN_ACCESSORS(global)
+        // [boolean]: The [[Global]] internal property.
+        DECL_BOOLEAN_ACCESSORS(global)
 
-  // [boolean]: The [[Unicode]] internal property.
-  DECL_BOOLEAN_ACCESSORS(unicode)
+        // [boolean]: The [[Unicode]] internal property.
+        DECL_BOOLEAN_ACCESSORS(unicode)
 
-  DECL_CAST(JSRegExpStringIterator)
-  DECL_PRINTER(JSRegExpStringIterator)
-  DECL_VERIFIER(JSRegExpStringIterator)
+        DECL_CAST(JSRegExpStringIterator)
+        DECL_PRINTER(JSRegExpStringIterator)
+        DECL_VERIFIER(JSRegExpStringIterator)
 
-  // Layout description.
-  DEFINE_FIELD_OFFSET_CONSTANTS(
-    JSObject::kHeaderSize,
-    TORQUE_GENERATED_JSREG_EXP_STRING_ITERATOR_FIELDS)
+        // Layout description.
+        DEFINE_FIELD_OFFSET_CONSTANTS(
+            JSObject::kHeaderSize,
+            TORQUE_GENERATED_JSREG_EXP_STRING_ITERATOR_FIELDS)
 
-  static const int kDoneBit = 0;
-  static const int kGlobalBit = 1;
-  static const int kUnicodeBit = 2;
+        static const int kDoneBit = 0;
+        static const int kGlobalBit = 1;
+        static const int kUnicodeBit = 2;
 
-  OBJECT_CONSTRUCTORS(JSRegExpStringIterator, JSObject);
-};
+        OBJECT_CONSTRUCTORS(JSRegExpStringIterator, JSObject);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_JS_REGEXP_STRING_ITERATOR_H_
+#endif // V8_OBJECTS_JS_REGEXP_STRING_ITERATOR_H_

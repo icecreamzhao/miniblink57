@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Stefan Schimanski (1Stein@gmx.de)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2011 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
  *
  * This library is free software; you can redistribute it and/or
@@ -21,73 +22,76 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLObjectElement.h"
 
 #include "bindings/core/v8/ScriptEventListener.h"
 #include "core/HTMLNames.h"
 #include "core/dom/Attribute.h"
+#include "core/dom/Document.h"
 #include "core/dom/ElementTraversal.h"
 #include "core/dom/TagCollection.h"
 #include "core/dom/Text.h"
 #include "core/dom/shadow/ShadowRoot.h"
-#include "core/fetch/ImageResource.h"
+#include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
-#include "core/html/FormDataList.h"
-#include "core/html/HTMLDocument.h"
 #include "core/html/HTMLImageLoader.h"
 #include "core/html/HTMLMetaElement.h"
 #include "core/html/HTMLParamElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/layout/LayoutEmbeddedObject.h"
+#include "core/layout/api/LayoutEmbeddedItem.h"
+#include "core/loader/FrameLoaderClient.h"
 #include "core/plugins/PluginView.h"
-#include "platform/MIMETypeRegistry.h"
 #include "platform/Widget.h"
+#include "platform/network/mime/MIMETypeRegistry.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLObjectElement::HTMLObjectElement(Document& document, HTMLFormElement* form, bool createdByParser)
-    : HTMLPlugInElement(objectTag, document, createdByParser, ShouldNotPreferPlugInsForImages)
+inline HTMLObjectElement::HTMLObjectElement(Document& document,
+    bool createdByParser)
+    : HTMLPlugInElement(objectTag,
+        document,
+        createdByParser,
+        ShouldNotPreferPlugInsForImages)
     , m_useFallbackContent(false)
 {
-    associateByParser(form);
 }
 
-inline HTMLObjectElement::~HTMLObjectElement()
-{
-#if !ENABLE(OILPAN)
-    setForm(0);
-#endif
-}
+inline HTMLObjectElement::~HTMLObjectElement() { }
 
-PassRefPtrWillBeRawPtr<HTMLObjectElement> HTMLObjectElement::create(Document& document, HTMLFormElement* form, bool createdByParser)
+HTMLObjectElement* HTMLObjectElement::create(Document& document,
+    bool createdByParser)
 {
-    RefPtrWillBeRawPtr<HTMLObjectElement> element = adoptRefWillBeNoop(new HTMLObjectElement(document, form, createdByParser));
+    HTMLObjectElement* element = new HTMLObjectElement(document, createdByParser);
     element->ensureUserAgentShadowRoot();
-    return element.release();
+    return element;
 }
 
 DEFINE_TRACE(HTMLObjectElement)
 {
-    FormAssociatedElement::trace(visitor);
+    ListedElement::trace(visitor);
     HTMLPlugInElement::trace(visitor);
 }
 
 LayoutPart* HTMLObjectElement::existingLayoutPart() const
 {
-    return layoutPart(); // This will return 0 if the layoutObject is not a LayoutPart.
+    // This will return 0 if the layoutObject is not a LayoutPart.
+    return layoutPart();
 }
 
-bool HTMLObjectElement::isPresentationAttribute(const QualifiedName& name) const
+bool HTMLObjectElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == borderAttr)
         return true;
     return HTMLPlugInElement::isPresentationAttribute(name);
 }
 
-void HTMLObjectElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLObjectElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == borderAttr)
         applyBorderAttributeToStyle(value, style);
@@ -95,22 +99,25 @@ void HTMLObjectElement::collectStyleForPresentationAttribute(const QualifiedName
         HTMLPlugInElement::collectStyleForPresentationAttribute(name, value, style);
 }
 
-void HTMLObjectElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void HTMLObjectElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
+    const QualifiedName& name = params.name;
     if (name == formAttr) {
         formAttributeChanged();
     } else if (name == typeAttr) {
-        m_serviceType = value.lower();
+        m_serviceType = params.newValue.lower();
         size_t pos = m_serviceType.find(";");
         if (pos != kNotFound)
             m_serviceType = m_serviceType.left(pos);
-        // FIXME: What is the right thing to do here? Should we supress the
-        // reload stuff when a persistable widget-type is specified?
+        // TODO(schenney): crbug.com/572908 What is the right thing to do here?
+        // Should we suppress the reload stuff when a persistable widget-type is
+        // specified?
         reloadPluginOnAttributeChange(name);
         if (!layoutObject())
             requestPluginCreationWithoutLayoutObjectIfPossible();
     } else if (name == dataAttr) {
-        m_url = stripLeadingAndTrailingHTMLSpaces(value);
+        m_url = stripLeadingAndTrailingHTMLSpaces(params.newValue);
         if (layoutObject() && isImageType()) {
             setNeedsWidgetUpdate(true);
             if (!m_imageLoader)
@@ -120,17 +127,18 @@ void HTMLObjectElement::parseAttribute(const QualifiedName& name, const AtomicSt
             reloadPluginOnAttributeChange(name);
         }
     } else if (name == classidAttr) {
-        m_classId = value;
+        m_classId = params.newValue;
         reloadPluginOnAttributeChange(name);
     } else {
-        HTMLPlugInElement::parseAttribute(name, value);
+        HTMLPlugInElement::parseAttribute(params);
     }
 }
 
-static void mapDataParamToSrc(Vector<String>* paramNames, Vector<String>* paramValues)
+static void mapDataParamToSrc(Vector<String>* paramNames,
+    Vector<String>* paramValues)
 {
-    // Some plugins don't understand the "data" attribute of the OBJECT tag (i.e. Real and WMP
-    // require "src" attribute).
+    // Some plugins don't understand the "data" attribute of the OBJECT tag (i.e.
+    // Real and WMP require "src" attribute).
     int srcIndex = -1, dataIndex = -1;
     for (unsigned i = 0; i < paramNames->size(); ++i) {
         if (equalIgnoringCase((*paramNames)[i], "src"))
@@ -140,32 +148,39 @@ static void mapDataParamToSrc(Vector<String>* paramNames, Vector<String>* paramV
     }
 
     if (srcIndex == -1 && dataIndex != -1) {
-        paramNames->append("src");
-        paramValues->append((*paramValues)[dataIndex]);
+        paramNames->push_back("src");
+        paramValues->push_back((*paramValues)[dataIndex]);
     }
 }
 
-// FIXME: This function should not deal with url or serviceType!
-void HTMLObjectElement::parametersForPlugin(Vector<String>& paramNames, Vector<String>& paramValues, String& url, String& serviceType)
+// TODO(schenney): crbug.com/572908 This function should not deal with url or
+// serviceType!
+void HTMLObjectElement::parametersForPlugin(Vector<String>& paramNames,
+    Vector<String>& paramValues,
+    String& url,
+    String& serviceType)
 {
     HashSet<StringImpl*, CaseFoldingHash> uniqueParamNames;
     String urlParameter;
 
     // Scan the PARAM children and store their name/value pairs.
     // Get the URL and type from the params if we don't already have them.
-    for (HTMLParamElement* p = Traversal<HTMLParamElement>::firstChild(*this); p; p = Traversal<HTMLParamElement>::nextSibling(*p)) {
+    for (HTMLParamElement* p = Traversal<HTMLParamElement>::firstChild(*this); p;
+         p = Traversal<HTMLParamElement>::nextSibling(*p)) {
         String name = p->name();
         if (name.isEmpty())
             continue;
 
         uniqueParamNames.add(name.impl());
-        paramNames.append(p->name());
-        paramValues.append(p->value());
+        paramNames.push_back(p->name());
+        paramValues.push_back(p->value());
 
-        // FIXME: url adjustment does not belong in this function.
+        // TODO(schenney): crbug.com/572908 url adjustment does not belong in this
+        // function.
         if (url.isEmpty() && urlParameter.isEmpty() && (equalIgnoringCase(name, "src") || equalIgnoringCase(name, "movie") || equalIgnoringCase(name, "code") || equalIgnoringCase(name, "url")))
             urlParameter = stripLeadingAndTrailingHTMLSpaces(p->value());
-        // FIXME: serviceType calculation does not belong in this function.
+        // TODO(schenney): crbug.com/572908 serviceType calculation does not belong
+        // in this function.
         if (serviceType.isEmpty() && equalIgnoringCase(name, "type")) {
             serviceType = p->value();
             size_t pos = serviceType.find(";");
@@ -174,24 +189,27 @@ void HTMLObjectElement::parametersForPlugin(Vector<String>& paramNames, Vector<S
         }
     }
 
-    // When OBJECT is used for an applet via Sun's Java plugin, the CODEBASE attribute in the tag
-    // points to the Java plugin itself (an ActiveX component) while the actual applet CODEBASE is
-    // in a PARAM tag. See <http://java.sun.com/products/plugin/1.2/docs/tags.html>. This means
-    // we have to explicitly suppress the tag's CODEBASE attribute if there is none in a PARAM,
-    // else our Java plugin will misinterpret it. [4004531]
+    // When OBJECT is used for an applet via Sun's Java plugin, the CODEBASE
+    // attribute in the tag points to the Java plugin itself (an ActiveX
+    // component) while the actual applet CODEBASE is in a PARAM tag. See
+    // <http://java.sun.com/products/plugin/1.2/docs/tags.html>. This means we
+    // have to explicitly suppress the tag's CODEBASE attribute if there is none
+    // in a PARAM, else our Java plugin will misinterpret it. [4004531]
     String codebase;
     if (MIMETypeRegistry::isJavaAppletMIMEType(serviceType)) {
         codebase = "codebase";
-        uniqueParamNames.add(codebase.impl()); // pretend we found it in a PARAM already
+        uniqueParamNames.add(
+            codebase.impl()); // pretend we found it in a PARAM already
     }
 
-    // Turn the attributes of the <object> element into arrays, but don't override <param> values.
+    // Turn the attributes of the <object> element into arrays, but don't override
+    // <param> values.
     AttributeCollection attributes = this->attributes();
     for (const Attribute& attribute : attributes) {
         const AtomicString& name = attribute.name().localName();
         if (!uniqueParamNames.contains(name.impl())) {
-            paramNames.append(name.string());
-            paramValues.append(attribute.value().string());
+            paramNames.push_back(name.getString());
+            paramValues.push_back(attribute.value().getString());
         }
     }
 
@@ -209,11 +227,11 @@ void HTMLObjectElement::parametersForPlugin(Vector<String>& paramNames, Vector<S
     }
 }
 
-
 bool HTMLObjectElement::hasFallbackContent() const
 {
     for (Node* child = firstChild(); child; child = child->nextSibling()) {
-        // Ignore whitespace-only text, and <param> tags, any other content is fallback content.
+        // Ignore whitespace-only text, and <param> tags, any other content is
+        // fallback content.
         if (child->isTextNode()) {
             if (!toText(child)->containsOnlyWhitespace())
                 return true;
@@ -224,9 +242,9 @@ bool HTMLObjectElement::hasFallbackContent() const
     return false;
 }
 
-bool HTMLObjectElement::hasValidClassId()
+bool HTMLObjectElement::hasValidClassId() const
 {
-    if (MIMETypeRegistry::isJavaAppletMIMEType(m_serviceType) && classId().startsWith("java:", TextCaseInsensitive))
+    if (MIMETypeRegistry::isJavaAppletMIMEType(m_serviceType) && classId().startsWith("java:", TextCaseASCIIInsensitive))
         return true;
 
     // HTML5 says that fallback content should be rendered if a non-empty
@@ -234,7 +252,8 @@ bool HTMLObjectElement::hasValidClassId()
     return classId().isEmpty();
 }
 
-void HTMLObjectElement::reloadPluginOnAttributeChange(const QualifiedName& name)
+void HTMLObjectElement::reloadPluginOnAttributeChange(
+    const QualifiedName& name)
 {
     // Following,
     //   http://www.whatwg.org/specs/web-apps/current-work/#the-object-element
@@ -250,7 +269,7 @@ void HTMLObjectElement::reloadPluginOnAttributeChange(const QualifiedName& name)
     } else if (name == classidAttr) {
         needsInvalidation = true;
     } else {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
         needsInvalidation = false;
     }
     setNeedsWidgetUpdate(true);
@@ -258,22 +277,23 @@ void HTMLObjectElement::reloadPluginOnAttributeChange(const QualifiedName& name)
         lazyReattachIfNeeded();
 }
 
-// FIXME: This should be unified with HTMLEmbedElement::updateWidget and
-// moved down into HTMLPluginElement.cpp
+// TODO(schenney): crbug.com/572908 This should be unified with
+// HTMLEmbedElement::updateWidget and moved down into HTMLPluginElement.cpp
 void HTMLObjectElement::updateWidgetInternal()
 {
-    ASSERT(!layoutEmbeddedObject()->showsUnavailablePluginIndicator());
-    ASSERT(needsWidgetUpdate());
+    DCHECK(!layoutEmbeddedItem().showsUnavailablePluginIndicator());
+    DCHECK(needsWidgetUpdate());
     setNeedsWidgetUpdate(false);
-    // FIXME: This should ASSERT isFinishedParsingChildren() instead.
+    // TODO(schenney): crbug.com/572908 This should ASSERT
+    // isFinishedParsingChildren() instead.
     if (!isFinishedParsingChildren()) {
         dispatchErrorEvent();
         return;
     }
 
-    // FIXME: I'm not sure it's ever possible to get into updateWidget during a
-    // removal, but just in case we should avoid loading the frame to prevent
-    // security bugs.
+    // TODO(schenney): crbug.com/572908 I'm not sure it's ever possible to get
+    // into updateWidget during a removal, but just in case we should avoid
+    // loading the frame to prevent security bugs.
     if (!SubframeLoadingDisabler::canLoadFrame(*this)) {
         dispatchErrorEvent();
         return;
@@ -282,7 +302,8 @@ void HTMLObjectElement::updateWidgetInternal()
     String url = this->url();
     String serviceType = m_serviceType;
 
-    // FIXME: These should be joined into a PluginParameters class.
+    // TODO(schenney): crbug.com/572908 These should be joined into a
+    // PluginParameters class.
     Vector<String> paramNames;
     Vector<String> paramValues;
     parametersForPlugin(paramNames, paramValues, url, serviceType);
@@ -293,19 +314,20 @@ void HTMLObjectElement::updateWidgetInternal()
         return;
     }
 
-    // FIXME: Is it possible to get here without a layoutObject now that we don't have beforeload events?
+    // TODO(schenney): crbug.com/572908 Is it possible to get here without a
+    // layoutObject now that we don't have beforeload events?
     if (!layoutObject())
         return;
 
-    bool canRequest = true;
-    if (classId().isEmpty() || !requestObject(url, classId(), paramNames, paramValues)) {
-        canRequest = false;
+    // Overwrites the URL and MIME type of a Flash embed to use an HTML5 embed.
+    KURL overridenUrl = document().frame()->loader().client()->overrideFlashEmbedWithHTML(
+        document().completeURL(m_url));
+    if (!overridenUrl.isEmpty()) {
+        url = m_url = overridenUrl.getString();
+        serviceType = m_serviceType = "text/html";
     }
 
-    if (!canRequest)
-        canRequest = hasValidClassId() && requestObject(url, serviceType, paramNames, paramValues);
-
-    if (!canRequest) {
+    if (!hasValidClassId() || !requestObject(url, serviceType, paramNames, paramValues)) {
         if (!url.isEmpty())
             dispatchErrorEvent();
         if (hasFallbackContent())
@@ -313,22 +335,23 @@ void HTMLObjectElement::updateWidgetInternal()
     }
 }
 
-Node::InsertionNotificationRequest HTMLObjectElement::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLObjectElement::insertedInto(
+    ContainerNode* insertionPoint)
 {
     HTMLPlugInElement::insertedInto(insertionPoint);
-    FormAssociatedElement::insertedInto(insertionPoint);
+    ListedElement::insertedInto(insertionPoint);
     return InsertionDone;
 }
 
 void HTMLObjectElement::removedFrom(ContainerNode* insertionPoint)
 {
     HTMLPlugInElement::removedFrom(insertionPoint);
-    FormAssociatedElement::removedFrom(insertionPoint);
+    ListedElement::removedFrom(insertionPoint);
 }
 
 void HTMLObjectElement::childrenChanged(const ChildrenChange& change)
 {
-    if (inDocument() && !useFallbackContent()) {
+    if (isConnected() && !useFallbackContent()) {
         setNeedsWidgetUpdate(true);
         lazyReattachIfNeeded();
     }
@@ -337,9 +360,7 @@ void HTMLObjectElement::childrenChanged(const ChildrenChange& change)
 
 bool HTMLObjectElement::isURLAttribute(const Attribute& attribute) const
 {
-    return attribute.name() == codebaseAttr || attribute.name() == dataAttr
-        || (attribute.name() == usemapAttr && attribute.value()[0] != '#')
-        || HTMLPlugInElement::isURLAttribute(attribute);
+    return attribute.name() == codebaseAttr || attribute.name() == dataAttr || (attribute.name() == usemapAttr && attribute.value()[0] != '#') || HTMLPlugInElement::isURLAttribute(attribute);
 }
 
 bool HTMLObjectElement::hasLegalLinkAttribute(const QualifiedName& name) const
@@ -357,13 +378,13 @@ const AtomicString HTMLObjectElement::imageSourceURL() const
     return getAttribute(dataAttr);
 }
 
-// FIXME: Remove this hack.
+// TODO(schenney): crbug.com/572908 Remove this hack.
 void HTMLObjectElement::reattachFallbackContent()
 {
-    // This can happen inside of attach() in the middle of a recalcStyle so we need to
-    // reattach synchronously here.
+    // This can happen inside of attachLayoutTree() in the middle of a recalcStyle
+    // so we need to reattach synchronously here.
     if (document().inStyleRecalc())
-        reattach();
+        reattachLayoutTree();
     else
         lazyReattachIfAttached();
 }
@@ -373,14 +394,16 @@ void HTMLObjectElement::renderFallbackContent()
     if (useFallbackContent())
         return;
 
-    if (!inDocument())
+    if (!isConnected())
         return;
 
-    // Before we give up and use fallback content, check to see if this is a MIME type issue.
-    if (m_imageLoader && m_imageLoader->image() && m_imageLoader->image()->status() != Resource::LoadError) {
+    // Before we give up and use fallback content, check to see if this is a MIME
+    // type issue.
+    if (m_imageLoader && m_imageLoader->image() && m_imageLoader->image()->getStatus() != Resource::LoadError) {
         m_serviceType = m_imageLoader->image()->response().mimeType();
         if (!isImageType()) {
-            // If we don't think we have an image type anymore, then clear the image from the loader.
+            // If we don't think we have an image type anymore, then clear the image
+            // from the loader.
             m_imageLoader->setImage(0);
             reattachFallbackContent();
             return;
@@ -389,14 +412,17 @@ void HTMLObjectElement::renderFallbackContent()
 
     m_useFallbackContent = true;
 
-    // FIXME: Style gets recalculated which is suboptimal.
+    // TODO(schenney): crbug.com/572908 Style gets recalculated which is
+    // suboptimal.
     reattachFallbackContent();
 }
 
 bool HTMLObjectElement::isExposed() const
 {
     // http://www.whatwg.org/specs/web-apps/current-work/#exposed
-    for (HTMLObjectElement* ancestor = Traversal<HTMLObjectElement>::firstAncestor(*this); ancestor; ancestor = Traversal<HTMLObjectElement>::firstAncestor(*ancestor)) {
+    for (HTMLObjectElement* ancestor = Traversal<HTMLObjectElement>::firstAncestor(*this);
+         ancestor;
+         ancestor = Traversal<HTMLObjectElement>::firstAncestor(*ancestor)) {
         if (ancestor->isExposed())
             return false;
     }
@@ -413,13 +439,9 @@ bool HTMLObjectElement::containsJavaApplet() const
         return true;
 
     for (HTMLElement& child : Traversal<HTMLElement>::childrenOf(*this)) {
-        if (isHTMLParamElement(child)
-            && equalIgnoringCase(child.getNameAttribute(), "type")
-            && MIMETypeRegistry::isJavaAppletMIMEType(child.getAttribute(valueAttr).string()))
+        if (isHTMLParamElement(child) && equalIgnoringCase(child.getNameAttribute(), "type") && MIMETypeRegistry::isJavaAppletMIMEType(child.getAttribute(valueAttr).getString()))
             return true;
         if (isHTMLObjectElement(child) && toHTMLObjectElement(child).containsJavaApplet())
-            return true;
-        if (isHTMLAppletElement(child))
             return true;
     }
 
@@ -428,30 +450,13 @@ bool HTMLObjectElement::containsJavaApplet() const
 
 void HTMLObjectElement::didMoveToNewDocument(Document& oldDocument)
 {
-    FormAssociatedElement::didMoveToNewDocument(oldDocument);
+    ListedElement::didMoveToNewDocument(oldDocument);
     HTMLPlugInElement::didMoveToNewDocument(oldDocument);
-}
-
-bool HTMLObjectElement::appendFormData(FormDataList& encoding, bool)
-{
-    if (name().isEmpty())
-        return false;
-
-    // Widget is needed immediately to satisfy cases like
-    // LayoutTests/plugins/form-value.html.
-    Widget* widget = pluginWidgetForJSBindings();
-    if (!widget || !widget->isPluginView())
-        return false;
-    String value;
-    if (!toPluginView(widget)->getFormValue(value))
-        return false;
-    encoding.appendData(name(), value);
-    return true;
 }
 
 HTMLFormElement* HTMLObjectElement::formOwner() const
 {
-    return FormAssociatedElement::form();
+    return ListedElement::form();
 }
 
 bool HTMLObjectElement::isInteractiveContent() const
@@ -464,4 +469,14 @@ bool HTMLObjectElement::useFallbackContent() const
     return HTMLPlugInElement::useFallbackContent() || m_useFallbackContent;
 }
 
+bool HTMLObjectElement::willUseFallbackContentAtLayout() const
+{
+    return !hasValidClassId() && hasFallbackContent();
 }
+
+void HTMLObjectElement::associateWith(HTMLFormElement* form)
+{
+    associateByParser(form);
+};
+
+} // namespace blink

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,16 +5,16 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkMetaData.h"
 #include "SkRefCnt.h"
 
 struct PtrPair {
-    void*               fPtr;
+    void* fPtr;
     SkMetaData::PtrProc fProc;
 };
 
-void* SkMetaData::RefCntProc(void* ptr, bool doRef) {
+void* SkMetaData::RefCntProc(void* ptr, bool doRef)
+{
     SkASSERT(ptr);
     SkRefCnt* refcnt = reinterpret_cast<SkRefCnt*>(ptr);
 
@@ -27,11 +26,13 @@ void* SkMetaData::RefCntProc(void* ptr, bool doRef) {
     return ptr;
 }
 
-SkMetaData::SkMetaData() : fRec(NULL)
+SkMetaData::SkMetaData()
+    : fRec(nullptr)
 {
 }
 
-SkMetaData::SkMetaData(const SkMetaData& src) : fRec(NULL)
+SkMetaData::SkMetaData(const SkMetaData& src)
+    : fRec(nullptr)
 {
     *this = src;
 }
@@ -55,7 +56,7 @@ void SkMetaData::reset()
         Rec::Free(rec);
         rec = next;
     }
-    fRec = NULL;
+    fRec = nullptr;
 }
 
 SkMetaData& SkMetaData::operator=(const SkMetaData& src)
@@ -63,8 +64,7 @@ SkMetaData& SkMetaData::operator=(const SkMetaData& src)
     this->reset();
 
     const Rec* rec = src.fRec;
-    while (rec)
-    {
+    while (rec) {
         this->set(rec->name(), rec->data(), rec->fDataLen, (Type)rec->fType, rec->fDataCount);
         rec = rec->fNext;
     }
@@ -86,7 +86,7 @@ SkScalar* SkMetaData::setScalars(const char name[], int count, const SkScalar va
     SkASSERT(count > 0);
     if (count > 0)
         return (SkScalar*)this->set(name, values, sizeof(SkScalar), kScalar_Type, count);
-    return NULL;
+    return nullptr;
 }
 
 void SkMetaData::setString(const char name[], const char value[])
@@ -94,7 +94,8 @@ void SkMetaData::setString(const char name[], const char value[])
     (void)this->set(name, value, sizeof(char), kString_Type, SkToInt(strlen(value) + 1));
 }
 
-void SkMetaData::setPtr(const char name[], void* ptr, PtrProc proc) {
+void SkMetaData::setPtr(const char name[], void* ptr, PtrProc proc)
+{
     PtrPair pair = { ptr, proc };
     (void)this->set(name, &pair, sizeof(PtrPair), kPtr_Type, 1);
 }
@@ -104,7 +105,8 @@ void SkMetaData::setBool(const char name[], bool value)
     (void)this->set(name, &value, sizeof(bool), kBool_Type, 1);
 }
 
-void SkMetaData::setData(const char name[], const void* data, size_t byteCount) {
+void SkMetaData::setData(const char name[], const void* data, size_t byteCount)
+{
     (void)this->set(name, data, sizeof(char), kData_Type, SkToInt(byteCount));
 }
 
@@ -116,8 +118,8 @@ void* SkMetaData::set(const char name[], const void* data, size_t dataSize, Type
 
     (void)this->remove(name, type);
 
-    size_t  len = strlen(name);
-    Rec*    rec = Rec::Alloc(sizeof(Rec) + dataSize * count + len + 1);
+    size_t len = strlen(name);
+    Rec* rec = Rec::Alloc(sizeof(Rec) + dataSize * count + len + 1);
 
 #ifndef SK_DEBUG
     rec->fType = SkToU8(type);
@@ -145,8 +147,7 @@ void* SkMetaData::set(const char name[], const void* data, size_t dataSize, Type
 bool SkMetaData::findS32(const char name[], int32_t* value) const
 {
     const Rec* rec = this->find(name, kS32_Type);
-    if (rec)
-    {
+    if (rec) {
         SkASSERT(rec->fDataCount == 1);
         if (value)
             *value = *(const int32_t*)rec->data();
@@ -158,8 +159,7 @@ bool SkMetaData::findS32(const char name[], int32_t* value) const
 bool SkMetaData::findScalar(const char name[], SkScalar* value) const
 {
     const Rec* rec = this->find(name, kScalar_Type);
-    if (rec)
-    {
+    if (rec) {
         SkASSERT(rec->fDataCount == 1);
         if (value)
             *value = *(const SkScalar*)rec->data();
@@ -171,18 +171,18 @@ bool SkMetaData::findScalar(const char name[], SkScalar* value) const
 const SkScalar* SkMetaData::findScalars(const char name[], int* count, SkScalar values[]) const
 {
     const Rec* rec = this->find(name, kScalar_Type);
-    if (rec)
-    {
+    if (rec) {
         if (count)
             *count = rec->fDataCount;
         if (values)
             memcpy(values, rec->data(), rec->fDataCount * rec->fDataLen);
         return (const SkScalar*)rec->data();
     }
-    return NULL;
+    return nullptr;
 }
 
-bool SkMetaData::findPtr(const char name[], void** ptr, PtrProc* proc) const {
+bool SkMetaData::findPtr(const char name[], void** ptr, PtrProc* proc) const
+{
     const Rec* rec = this->find(name, kPtr_Type);
     if (rec) {
         SkASSERT(rec->fDataCount == 1);
@@ -201,15 +201,14 @@ bool SkMetaData::findPtr(const char name[], void** ptr, PtrProc* proc) const {
 const char* SkMetaData::findString(const char name[]) const
 {
     const Rec* rec = this->find(name, kString_Type);
-    SkASSERT(rec == NULL || rec->fDataLen == sizeof(char));
-    return rec ? (const char*)rec->data() : NULL;
+    SkASSERT(rec == nullptr || rec->fDataLen == sizeof(char));
+    return rec ? (const char*)rec->data() : nullptr;
 }
 
 bool SkMetaData::findBool(const char name[], bool* value) const
 {
     const Rec* rec = this->find(name, kBool_Type);
-    if (rec)
-    {
+    if (rec) {
         SkASSERT(rec->fDataCount == 1);
         if (value)
             *value = *(const bool*)rec->data();
@@ -218,7 +217,8 @@ bool SkMetaData::findBool(const char name[], bool* value) const
     return false;
 }
 
-const void* SkMetaData::findData(const char name[], size_t* length) const {
+const void* SkMetaData::findData(const char name[], size_t* length) const
+{
     const Rec* rec = this->find(name, kData_Type);
     if (rec) {
         SkASSERT(rec->fDataLen == sizeof(char));
@@ -227,24 +227,24 @@ const void* SkMetaData::findData(const char name[], size_t* length) const {
         }
         return rec->data();
     }
-    return NULL;
+    return nullptr;
 }
 
 const SkMetaData::Rec* SkMetaData::find(const char name[], Type type) const
 {
     const Rec* rec = fRec;
-    while (rec)
-    {
+    while (rec) {
         if (rec->fType == type && !strcmp(rec->name(), name))
             return rec;
         rec = rec->fNext;
     }
-    return NULL;
+    return nullptr;
 }
 
-bool SkMetaData::remove(const char name[], Type type) {
+bool SkMetaData::remove(const char name[], Type type)
+{
     Rec* rec = fRec;
-    Rec* prev = NULL;
+    Rec* prev = nullptr;
     while (rec) {
         Rec* next = rec->fNext;
         if (rec->fType == type && !strcmp(rec->name(), name)) {
@@ -294,22 +294,26 @@ bool SkMetaData::removeBool(const char name[])
     return this->remove(name, kBool_Type);
 }
 
-bool SkMetaData::removeData(const char name[]) {
+bool SkMetaData::removeData(const char name[])
+{
     return this->remove(name, kData_Type);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SkMetaData::Iter::Iter(const SkMetaData& metadata) {
+SkMetaData::Iter::Iter(const SkMetaData& metadata)
+{
     fRec = metadata.fRec;
 }
 
-void SkMetaData::Iter::reset(const SkMetaData& metadata) {
+void SkMetaData::Iter::reset(const SkMetaData& metadata)
+{
     fRec = metadata.fRec;
 }
 
-const char* SkMetaData::Iter::next(SkMetaData::Type* t, int* count) {
-    const char* name = NULL;
+const char* SkMetaData::Iter::next(SkMetaData::Type* t, int* count)
+{
+    const char* name = nullptr;
 
     if (fRec) {
         if (t) {
@@ -327,10 +331,12 @@ const char* SkMetaData::Iter::next(SkMetaData::Type* t, int* count) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SkMetaData::Rec* SkMetaData::Rec::Alloc(size_t size) {
+SkMetaData::Rec* SkMetaData::Rec::Alloc(size_t size)
+{
     return (Rec*)sk_malloc_throw(size);
 }
 
-void SkMetaData::Rec::Free(Rec* rec) {
+void SkMetaData::Rec::Free(Rec* rec)
+{
     sk_free(rec);
 }

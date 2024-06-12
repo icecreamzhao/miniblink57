@@ -26,9 +26,9 @@
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/LayoutRect.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/ListHashSet.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
@@ -36,8 +36,9 @@ namespace blink {
 class FloatRoundedRect;
 
 class CORE_EXPORT HitTestLocation {
-public:
+    DISALLOW_NEW();
 
+public:
     // Note that all points are in contents (aka "page") coordinate space for the
     // document that is being hit tested.
     HitTestLocation();
@@ -45,7 +46,11 @@ public:
     HitTestLocation(const FloatPoint&);
     HitTestLocation(const FloatPoint&, const FloatQuad&);
     // Pass non-zero padding values to perform a rect-based hit test.
-    HitTestLocation(const LayoutPoint& centerPoint, unsigned topPadding, unsigned rightPadding, unsigned bottomPadding, unsigned leftPadding);
+    HitTestLocation(const LayoutPoint& centerPoint,
+        unsigned topPadding,
+        unsigned rightPadding,
+        unsigned bottomPadding,
+        unsigned leftPadding);
     HitTestLocation(const HitTestLocation&, const LayoutSize& offset);
     HitTestLocation(const HitTestLocation&);
     ~HitTestLocation();
@@ -59,11 +64,11 @@ public:
     bool isRectilinear() const { return m_isRectilinear; }
     IntRect boundingBox() const { return m_boundingBox; }
 
-    static IntRect rectForPoint(const LayoutPoint&, unsigned topPadding, unsigned rightPadding, unsigned bottomPadding, unsigned leftPadding);
-    int topPadding() const { return roundedPoint().y() - m_boundingBox.y(); }
-    int rightPadding() const { return m_boundingBox.maxX() - roundedPoint().x() - 1; }
-    int bottomPadding() const { return m_boundingBox.maxY() - roundedPoint().y() - 1; }
-    int leftPadding() const { return roundedPoint().x() - m_boundingBox.x(); }
+    static IntRect rectForPoint(const LayoutPoint&,
+        unsigned topPadding,
+        unsigned rightPadding,
+        unsigned bottomPadding,
+        unsigned leftPadding);
 
     bool intersects(const LayoutRect&) const;
     bool intersects(const FloatRect&) const;
@@ -74,7 +79,7 @@ public:
     const FloatQuad& transformedRect() const { return m_transformedRect; }
 
 private:
-    template<typename RectType>
+    template <typename RectType>
     bool intersectsRect(const RectType&, const RectType& boundingBox) const;
     void move(const LayoutSize& offset);
 

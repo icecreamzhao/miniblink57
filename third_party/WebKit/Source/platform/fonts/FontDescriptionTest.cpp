@@ -23,21 +23,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/fonts/FontDescription.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/Vector.h"
 
 namespace blink {
-
 
 static inline void assertDescriptionMatchesMask(FontDescription& source, FontTraitsBitfield bitfield)
 {
     FontDescription target;
     target.setTraits(FontTraits(bitfield));
     EXPECT_EQ(source.style(), target.style());
-    EXPECT_EQ(source.variant(), target.variant());
     EXPECT_EQ(source.weight(), target.weight());
     EXPECT_EQ(source.stretch(), target.stretch());
 }
@@ -46,76 +43,110 @@ TEST(FontDescriptionTest, TestFontTraits)
 {
     FontDescription source;
     source.setStyle(FontStyleNormal);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeightNormal);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleNormal);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeightNormal);
     source.setStretch(FontStretchExtraCondensed);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight900);
     source.setStretch(FontStretchUltraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantSmallCaps);
     source.setWeight(FontWeight100);
     source.setStretch(FontStretchExtraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight900);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight800);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight700);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight600);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight500);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight400);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight300);
     source.setStretch(FontStretchUltraExpanded);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
 
     source.setStyle(FontStyleItalic);
-    source.setVariant(FontVariantNormal);
     source.setWeight(FontWeight200);
     source.setStretch(FontStretchNormal);
     assertDescriptionMatchesMask(source, source.traits().bitfield());
+}
+
+TEST(FontDescriptionTest, TestHashCollision)
+{
+    FontWeight weights[] = {
+        FontWeight100,
+        FontWeight200,
+        FontWeight300,
+        FontWeight400,
+        FontWeight500,
+        FontWeight600,
+        FontWeight700,
+        FontWeight800,
+        FontWeight900,
+    };
+    FontStretch stretches[] {
+        FontStretchUltraCondensed,
+        FontStretchExtraCondensed,
+        FontStretchCondensed,
+        FontStretchSemiCondensed,
+        FontStretchNormal,
+        FontStretchSemiExpanded,
+        FontStretchExpanded,
+        FontStretchExtraExpanded,
+        FontStretchUltraExpanded
+    };
+    FontStyle styles[] = {
+        FontStyleNormal,
+        FontStyleOblique,
+        FontStyleItalic
+    };
+
+    FontDescription source;
+    WTF::Vector<unsigned> hashes;
+    for (size_t i = 0; i < WTF_ARRAY_LENGTH(weights); i++) {
+        source.setWeight(weights[i]);
+        for (size_t j = 0; j < WTF_ARRAY_LENGTH(stretches); j++) {
+            source.setStretch(stretches[j]);
+            for (size_t k = 0; k < WTF_ARRAY_LENGTH(styles); k++) {
+                source.setStyle(styles[k]);
+                unsigned hash = source.styleHashWithoutFamilyList();
+                ASSERT_FALSE(hashes.contains(hash));
+                hashes.append(hash);
+            }
+        }
+    }
 }
 
 } // namespace blink

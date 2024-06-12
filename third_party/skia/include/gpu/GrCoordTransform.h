@@ -9,10 +9,10 @@
 #define GrCoordTransform_DEFINED
 
 #include "GrProcessor.h"
-#include "SkMatrix.h"
+#include "GrShaderVar.h"
 #include "GrTexture.h"
 #include "GrTypes.h"
-#include "GrShaderVar.h"
+#include "SkMatrix.h"
 
 /**
  * Coordinates available to GrProcessor subclasses for requesting transformations. Transformed
@@ -42,7 +42,11 @@ enum GrCoordSet {
  */
 class GrCoordTransform : SkNoncopyable {
 public:
-    GrCoordTransform() : fSourceCoords(kLocal_GrCoordSet) { SkDEBUGCODE(fInProcessor = false); }
+    GrCoordTransform()
+        : fSourceCoords(kLocal_GrCoordSet)
+    {
+        SkDEBUGCODE(fInProcessor = false);
+    }
 
     /**
      * Create a transformation that maps [0, 1] to a texture's boundaries. The precision is inferred
@@ -50,8 +54,9 @@ public:
      * be performed.
      */
     GrCoordTransform(GrCoordSet sourceCoords,
-                     const GrTexture* texture,
-                     GrTextureParams::FilterMode filter) {
+        const GrTexture* texture,
+        GrTextureParams::FilterMode filter)
+    {
         SkASSERT(texture);
         SkDEBUGCODE(fInProcessor = false);
         this->reset(sourceCoords, texture, filter);
@@ -62,7 +67,8 @@ public:
      * filter. The texture origin also implies whether a y-reversal should be performed.
      */
     GrCoordTransform(GrCoordSet sourceCoords, const SkMatrix& m,
-                     const GrTexture* texture, GrTextureParams::FilterMode filter) {
+        const GrTexture* texture, GrTextureParams::FilterMode filter)
+    {
         SkDEBUGCODE(fInProcessor = false);
         SkASSERT(texture);
         this->reset(sourceCoords, m, texture, filter);
@@ -72,13 +78,15 @@ public:
      * Create a transformation that applies the matrix to a coord set.
      */
     GrCoordTransform(GrCoordSet sourceCoords, const SkMatrix& m,
-                     GrSLPrecision precision = kDefault_GrSLPrecision) {
+        GrSLPrecision precision = kDefault_GrSLPrecision)
+    {
         SkDEBUGCODE(fInProcessor = false);
         this->reset(sourceCoords, m, precision);
     }
 
     void reset(GrCoordSet sourceCoords, const GrTexture* texture,
-               GrTextureParams::FilterMode filter) {
+        GrTextureParams::FilterMode filter)
+    {
         SkASSERT(!fInProcessor);
         SkASSERT(texture);
         this->reset(sourceCoords, MakeDivByTextureWHMatrix(texture), texture, filter);
@@ -86,9 +94,10 @@ public:
 
     void reset(GrCoordSet, const SkMatrix&, const GrTexture*, GrTextureParams::FilterMode filter);
     void reset(GrCoordSet sourceCoords, const SkMatrix& m,
-               GrSLPrecision precision = kDefault_GrSLPrecision);
+        GrSLPrecision precision = kDefault_GrSLPrecision);
 
-    GrCoordTransform& operator= (const GrCoordTransform& that) {
+    GrCoordTransform& operator=(const GrCoordTransform& that)
+    {
         SkASSERT(!fInProcessor);
         fSourceCoords = that.fSourceCoords;
         fMatrix = that.fMatrix;
@@ -101,16 +110,15 @@ public:
      * Access the matrix for editing. Note, this must be done before adding the transform to an
      * effect, since effects are immutable.
      */
-    SkMatrix* accessMatrix() {
+    SkMatrix* accessMatrix()
+    {
         SkASSERT(!fInProcessor);
         return &fMatrix;
     }
 
-    bool operator==(const GrCoordTransform& that) const {
-        return fSourceCoords == that.fSourceCoords &&
-               fMatrix.cheapEqualTo(that.fMatrix) &&
-               fReverseY == that.fReverseY &&
-               fPrecision == that.fPrecision;
+    bool operator==(const GrCoordTransform& that) const
+    {
+        return fSourceCoords == that.fSourceCoords && fMatrix.cheapEqualTo(that.fMatrix) && fReverseY == that.fReverseY && fPrecision == that.fPrecision;
     }
 
     bool operator!=(const GrCoordTransform& that) const { return !(*this == that); }
@@ -122,7 +130,8 @@ public:
 
     /** Useful for effects that want to insert a texture matrix that is implied by the texture
         dimensions */
-    static inline SkMatrix MakeDivByTextureWHMatrix(const GrTexture* texture) {
+    static inline SkMatrix MakeDivByTextureWHMatrix(const GrTexture* texture)
+    {
         SkASSERT(texture);
         SkMatrix mat;
         (void)mat.setIDiv(texture->width(), texture->height());
@@ -130,15 +139,16 @@ public:
     }
 
 private:
-    GrCoordSet              fSourceCoords;
-    SkMatrix                fMatrix;
-    bool                    fReverseY;
-    GrSLPrecision           fPrecision;
+    GrCoordSet fSourceCoords;
+    SkMatrix fMatrix;
+    bool fReverseY;
+    GrSLPrecision fPrecision;
     typedef SkNoncopyable INHERITED;
 
 #ifdef SK_DEBUG
 public:
     void setInProcessor() const { fInProcessor = true; }
+
 private:
     mutable bool fInProcessor;
 #endif

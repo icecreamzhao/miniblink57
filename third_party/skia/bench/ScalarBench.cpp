@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -12,13 +11,16 @@
 #include "SkString.h"
 
 class ScalarBench : public Benchmark {
-    SkString    fName;
+    SkString fName;
+
 public:
-    ScalarBench(const char name[])  {
+    ScalarBench(const char name[])
+    {
         fName.printf("scalar_%s", name);
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
@@ -27,11 +29,13 @@ public:
 protected:
     virtual int mulLoopCount() const { return 1; }
 
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int i = 0; i < loops; i++) {
             this->performTest();
         }
@@ -44,7 +48,9 @@ private:
 // having unknown values in our arrays can throw off the timing a lot, perhaps
 // handling NaN values is a lot slower. Anyway, this guy is just meant to put
 // reasonable values in our arrays.
-template <typename T> void init9(T array[9]) {
+template <typename T>
+void init9(T array[9])
+{
     SkRandom rand;
     for (int i = 0; i < 9; i++) {
         array[i] = rand.nextSScalar1();
@@ -53,17 +59,22 @@ template <typename T> void init9(T array[9]) {
 
 class FloatComparisonBench : public ScalarBench {
 public:
-    FloatComparisonBench() : INHERITED("compare_float") {
+    FloatComparisonBench()
+        : INHERITED("compare_float")
+    {
         init9(fArray);
     }
+
 protected:
     virtual int mulLoopCount() const { return 4; }
-    virtual void performTest() {
+    virtual void performTest()
+    {
         // xoring into a volatile prevents the compiler from optimizing these checks away.
         volatile bool junk = false;
         junk ^= (fArray[6] != 0.0f || fArray[7] != 0.0f || fArray[8] != 1.0f);
         junk ^= (fArray[2] != 0.0f || fArray[5] != 0.0f);
     }
+
 private:
     float fArray[9];
     typedef ScalarBench INHERITED;
@@ -72,20 +83,21 @@ private:
 class ForcedIntComparisonBench : public ScalarBench {
 public:
     ForcedIntComparisonBench()
-    : INHERITED("compare_forced_int") {
+        : INHERITED("compare_forced_int")
+    {
         init9(fArray);
     }
+
 protected:
     virtual int mulLoopCount() const { return 4; }
-    virtual void performTest() {
+    virtual void performTest()
+    {
         // xoring into a volatile prevents the compiler from optimizing these checks away.
         volatile int32_t junk = 0;
-        junk ^= (SkScalarAs2sCompliment(fArray[6]) |
-                 SkScalarAs2sCompliment(fArray[7]) |
-                (SkScalarAs2sCompliment(fArray[8]) - kPersp1Int));
-        junk ^= (SkScalarAs2sCompliment(fArray[2]) |
-                 SkScalarAs2sCompliment(fArray[5]));
+        junk ^= (SkScalarAs2sCompliment(fArray[6]) | SkScalarAs2sCompliment(fArray[7]) | (SkScalarAs2sCompliment(fArray[8]) - kPersp1Int));
+        junk ^= (SkScalarAs2sCompliment(fArray[2]) | SkScalarAs2sCompliment(fArray[5]));
     }
+
 private:
     static const int32_t kPersp1Int = 0x3f800000;
     SkScalar fArray[9];
@@ -94,15 +106,19 @@ private:
 
 class IsFiniteScalarBench : public ScalarBench {
 public:
-    IsFiniteScalarBench() : INHERITED("isfinite") {
+    IsFiniteScalarBench()
+        : INHERITED("isfinite")
+    {
         SkRandom rand;
         for (size_t i = 0; i < ARRAY_N; ++i) {
             fArray[i] = rand.nextSScalar1();
         }
     }
+
 protected:
     int mulLoopCount() const override { return 1; }
-    void performTest() override {
+    void performTest() override
+    {
         int sum = 0;
         for (size_t i = 0; i < ARRAY_N; ++i) {
             // We pass -fArray[i], so the compiler can't cheat and treat the
@@ -113,7 +129,8 @@ protected:
         this->doSomething(fArray, sum);
     }
 
-    virtual void doSomething(SkScalar array[], int sum) {}
+    virtual void doSomething(SkScalar array[], int sum) { }
+
 private:
     enum {
         ARRAY_N = 64
@@ -132,7 +149,8 @@ class RectBoundsBench : public Benchmark {
     SkPoint fPts[PTS];
 
 public:
-    RectBoundsBench() {
+    RectBoundsBench()
+    {
         SkRandom rand;
         for (int i = 0; i < PTS; ++i) {
             fPts[i].fX = rand.nextSScalar1();
@@ -140,16 +158,19 @@ public:
         }
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "rect_bounds";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkRect r;
         for (int i = 0; i < loops; ++i) {
             for (int i = 0; i < 1000; ++i) {
@@ -164,7 +185,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new FloatComparisonBench(); )
-DEF_BENCH( return new ForcedIntComparisonBench(); )
-DEF_BENCH( return new RectBoundsBench(); )
-DEF_BENCH( return new IsFiniteScalarBench(); )
+DEF_BENCH(return new FloatComparisonBench();)
+DEF_BENCH(return new ForcedIntComparisonBench();)
+DEF_BENCH(return new RectBoundsBench();)
+DEF_BENCH(return new IsFiniteScalarBench();)

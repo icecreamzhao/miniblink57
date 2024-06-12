@@ -15,8 +15,10 @@ namespace blink {
 class BatteryManager;
 class Navigator;
 
-class NavigatorBattery final : public GarbageCollected<NavigatorBattery>, public HeapSupplement<Navigator> {
+class NavigatorBattery final : public GarbageCollected<NavigatorBattery>,
+                               public Supplement<Navigator> {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorBattery);
+
 public:
     static NavigatorBattery& from(Navigator&);
 

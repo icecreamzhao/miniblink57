@@ -9,6 +9,7 @@
 #define SkCachedData_DEFINED
 
 #include "SkMutex.h"
+#include "SkTypes.h"
 
 class SkDiscardableMemory;
 
@@ -30,12 +31,17 @@ public:
     bool testing_only_isLocked() const { return fIsLocked; }
     bool testing_only_isInCache() const { return fInCache; }
 
+    SkDiscardableMemory* diagnostic_only_getDiscardable() const
+    {
+        return kDiscardableMemory_StorageType == fStorageType ? fStorage.fDM : nullptr;
+    }
+
 protected:
-    // called when fData changes. could be NULL.
-    virtual void onDataChange(void* oldData, void* newData) {}
+    // called when fData changes. could be nullptr.
+    virtual void onDataChange(void* oldData, void* newData) { }
 
 private:
-    SkMutex fMutex;     // could use a pool of these...
+    SkMutex fMutex; // could use a pool of these...
 
     enum StorageType {
         kDiscardableMemory_StorageType,
@@ -43,26 +49,27 @@ private:
     };
 
     union {
-        SkDiscardableMemory*    fDM;
-        void*                   fMalloc;
+        SkDiscardableMemory* fDM;
+        void* fMalloc;
     } fStorage;
-    void*       fData;
-    size_t      fSize;
-    int         fRefCnt;    // low-bit means we're owned by the cache
+    void* fData;
+    size_t fSize;
+    int fRefCnt; // low-bit means we're owned by the cache
     StorageType fStorageType;
-    bool        fInCache;
-    bool        fIsLocked;
+    bool fInCache;
+    bool fIsLocked;
 
     void internalRef(bool fromCache) const;
     void internalUnref(bool fromCache) const;
 
     void inMutexRef(bool fromCache);
-    bool inMutexUnref(bool fromCache);  // returns true if we should delete "this"
+    bool inMutexUnref(bool fromCache); // returns true if we should delete "this"
     void inMutexLock();
     void inMutexUnlock();
 
     // called whenever our fData might change (lock or unlock)
-    void setData(void* newData) {
+    void setData(void* newData)
+    {
         if (newData != fData) {
             // notify our subclasses of the change
             this->onDataChange(fData, newData);
@@ -76,10 +83,12 @@ public:
 #ifdef SK_DEBUG
     void validate() const;
 #else
-    void validate() const {}
+    void validate() const
+    {
+    }
 #endif
 
-   /*
+    /*
      *  Attaching a data to to a SkResourceCache (only one at a time) enables the data to be
      *  unlocked when the cache is the only owner, thus freeing it to be purged (assuming the
      *  data is backed by a SkDiscardableMemory).
@@ -88,7 +97,7 @@ public:
      *  ref's the data (typically from a find(key, visitor) call).
      *
      *  Thus the data will always be "locked" when a non-cache has a ref on it (whether or not
-     *  the lock succeeded to recover the memory -- check data() to see if it is NULL).
+     *  the lock succeeded to recover the memory -- check data() to see if it is nullptr).
      */
 
     /*

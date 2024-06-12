@@ -19,7 +19,7 @@ private:
 class WebCryptoImpl : public blink::WebCrypto {
 public:
     WebCryptoImpl();
-    virtual blink::WebCryptoDigestor* createDigestor(blink::WebCryptoAlgorithmId algorithmId) override;
+    virtual std::unique_ptr<blink::WebCryptoDigestor> createDigestor(blink::WebCryptoAlgorithmId algorithmId) override;
 
 private:
     WebCryptoDigestorImpl* m_webCryptoDigestorImpl;

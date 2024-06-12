@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkRasterizer_DEFINED
 #define SkRasterizer_DEFINED
 
@@ -23,16 +22,16 @@ public:
     /** Turn the path into a mask, respecting the specified local->device matrix.
     */
     bool rasterize(const SkPath& path, const SkMatrix& matrix,
-                   const SkIRect* clipBounds, SkMaskFilter* filter,
-                   SkMask* mask, SkMask::CreateMode mode) const;
+        const SkIRect* clipBounds, SkMaskFilter* filter,
+        SkMask* mask, SkMask::CreateMode mode) const;
 
     SK_DEFINE_FLATTENABLE_TYPE(SkRasterizer)
 
 protected:
-    SkRasterizer() {}
+    SkRasterizer() { }
     virtual bool onRasterize(const SkPath& path, const SkMatrix& matrix,
-                             const SkIRect* clipBounds,
-                             SkMask* mask, SkMask::CreateMode mode) const;
+        const SkIRect* clipBounds,
+        SkMask* mask, SkMask::CreateMode mode) const;
 
 private:
     typedef SkFlattenable INHERITED;

@@ -5,22 +5,22 @@
  * found in the LICENSE file.
  */
 
-#include "LazyDecodeBitmap.h"
+#include "SkCommandLineFlags.h"
+#include "SkData.h"
+#include "SkGraphics.h"
 #include "SkLua.h"
 #include "SkLuaCanvas.h"
-#include "SkPicture.h"
-#include "SkCommandLineFlags.h"
-#include "SkGraphics.h"
-#include "SkStream.h"
-#include "SkData.h"
-#include "picture_utils.h"
 #include "SkOSFile.h"
-#include "SkImageDecoder.h"
+#include "SkPicture.h"
+#include "SkStream.h"
+#include "picture_utils.h"
+
+#include <stdlib.h>
 
 extern "C" {
-    #include "lua.h"
-    #include "lualib.h"
-    #include "lauxlib.h"
+#include "lauxlib.h"
+#include "lua.h"
+#include "lualib.h"
 }
 
 static const char gStartCanvasFunc[] = "sk_scrape_startcanvas";
@@ -31,24 +31,25 @@ static const char gSummarizeFunc[] = "sk_scrape_summarize";
 // Example usage for the modulo flag:
 // for i in {0..5}; do lua_pictures --skpPath SKP_PATH -l YOUR_SCRIPT --modulo $i 6 &; done
 DEFINE_string(modulo, "", "[--modulo <remainder> <divisor>]: only run tests for which "
-              "testIndex %% divisor == remainder.");
+                          "testIndex %% divisor == remainder.");
 DEFINE_string2(skpPath, r, "", "Read this .skp file or .skp files from this dir");
 DEFINE_string2(luaFile, l, "", "File containing lua script to run");
 DEFINE_string2(headCode, s, "", "Optional lua code to call at beginning");
 DEFINE_string2(tailFunc, s, "", "Optional lua function to call at end");
 DEFINE_bool2(quiet, q, false, "Silence all non-error related output");
 
-static SkPicture* load_picture(const char path[]) {
+static sk_sp<SkPicture> load_picture(const char path[])
+{
     SkAutoTDelete<SkStream> stream(SkStream::NewFromFile(path));
-    SkPicture* pic = NULL;
     if (stream.get()) {
-        pic = SkPicture::CreateFromStream(stream.get(), &sk_tools::LazyDecodeBitmap);
+        return SkPicture::MakeFromStream(stream.get());
     }
-    return pic;
+    return nullptr;
 }
 
 static void call_canvas(lua_State* L, SkLuaCanvas* canvas,
-                        const char pictureFile[], const char funcName[]) {
+    const char pictureFile[], const char funcName[])
+{
     lua_getglobal(L, funcName);
     if (!lua_isfunction(L, -1)) {
         int t = lua_type(L, -1);
@@ -64,7 +65,8 @@ static void call_canvas(lua_State* L, SkLuaCanvas* canvas,
 }
 
 int tool_main(int argc, char** argv);
-int tool_main(int argc, char** argv) {
+int tool_main(int argc, char** argv)
+{
     SkCommandLineFlags::SetUsage("apply lua script to .skp files.");
     SkCommandLineFlags::Parse(argc, argv);
 
@@ -87,7 +89,7 @@ int tool_main(int argc, char** argv) {
 
     for (int i = 0; i < FLAGS_luaFile.count(); ++i) {
         SkAutoDataUnref data(SkData::NewFromFileName(FLAGS_luaFile[i]));
-        if (NULL == data.get()) {
+        if (nullptr == data.get()) {
             data.reset(SkData::NewEmpty());
         }
         if (!FLAGS_quiet) {
@@ -116,14 +118,14 @@ int tool_main(int argc, char** argv) {
         }
     }
 
-    for (int i = 0; i < FLAGS_skpPath.count(); i ++) {
+    for (int i = 0; i < FLAGS_skpPath.count(); i++) {
         SkTArray<SkString> paths;
         if (sk_isdir(FLAGS_skpPath[i])) {
             // Add all .skp in this directory.
             const SkString directory(FLAGS_skpPath[i]);
             SkString filename;
             SkOSFile::Iter iter(FLAGS_skpPath[i], "skp");
-            while(iter.next(&filename)) {
+            while (iter.next(&filename)) {
                 paths.push_back() = SkOSPath::Join(directory.c_str(), filename.c_str());
             }
         } else {
@@ -143,12 +145,12 @@ int tool_main(int argc, char** argv) {
                 SkDebugf("scraping %s %s\n", path, moduloStr.c_str());
             }
 
-            SkAutoTUnref<SkPicture> pic(load_picture(path));
+            auto pic(load_picture(path));
             if (pic.get()) {
                 SkAutoTUnref<SkLuaCanvas> canvas(
-                                    new SkLuaCanvas(SkScalarCeilToInt(pic->cullRect().width()), 
-                                                    SkScalarCeilToInt(pic->cullRect().height()),
-                                                    L.get(), gAccumulateFunc));
+                    new SkLuaCanvas(SkScalarCeilToInt(pic->cullRect().width()),
+                        SkScalarCeilToInt(pic->cullRect().height()),
+                        L.get(), gAccumulateFunc));
 
                 call_canvas(L.get(), canvas.get(), path, gStartCanvasFunc);
                 canvas->drawPicture(pic);
@@ -163,7 +165,8 @@ int tool_main(int argc, char** argv) {
 }
 
 #if !defined SK_BUILD_FOR_IOS
-int main(int argc, char * const argv[]) {
-    return tool_main(argc, (char**) argv);
+int main(int argc, char* const argv[])
+{
+    return tool_main(argc, (char**)argv);
 }
 #endif

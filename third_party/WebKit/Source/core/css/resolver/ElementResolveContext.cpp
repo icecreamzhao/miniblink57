@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +20,6 @@
  *
  */
 
-#include "config.h"
 #include "core/css/resolver/ElementResolveContext.h"
 
 #include "core/dom/LayoutTreeBuilderTraversal.h"
@@ -33,25 +33,32 @@ namespace blink {
 ElementResolveContext::ElementResolveContext(const Document& document)
     : m_element(nullptr)
     , m_parentNode(nullptr)
-    , m_rootElementStyle(document.documentElement() ? document.documentElement()->computedStyle() : document.computedStyle())
-    , m_elementLinkState(NotInsideLink)
+    , m_rootElementStyle(document.documentElement()
+              ? document.documentElement()->computedStyle()
+              : document.computedStyle())
+    , m_elementLinkState(EInsideLink::kNotInsideLink)
     , m_distributedToInsertionPoint(false)
 {
 }
 
 ElementResolveContext::ElementResolveContext(Element& element)
     : m_element(&element)
-    , m_elementLinkState(element.document().visitedLinkState().determineLinkState(element))
+    , m_elementLinkState(
+          element.document().visitedLinkState().determineLinkState(element))
     , m_distributedToInsertionPoint(false)
 {
     LayoutTreeBuilderTraversal::ParentDetails parentDetails;
-    m_parentNode = isActiveInsertionPoint(element) ? nullptr : LayoutTreeBuilderTraversal::parent(element, &parentDetails);
+    m_parentNode = element.isActiveSlotOrActiveInsertionPoint()
+        ? nullptr
+        : LayoutTreeBuilderTraversal::parent(element, &parentDetails);
     m_distributedToInsertionPoint = parentDetails.insertionPoint();
 
     const Document& document = element.document();
     Node* documentElement = document.documentElement();
     const ComputedStyle* documentStyle = document.computedStyle();
-    m_rootElementStyle = documentElement && element != documentElement ? documentElement->computedStyle() : documentStyle;
+    m_rootElementStyle = documentElement && element != documentElement
+        ? documentElement->computedStyle()
+        : documentStyle;
     if (!m_rootElementStyle)
         m_rootElementStyle = documentStyle;
 }

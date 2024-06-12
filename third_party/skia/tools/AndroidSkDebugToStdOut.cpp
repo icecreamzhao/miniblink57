@@ -15,7 +15,8 @@ extern bool gSkDebugToStdOut;
 // to stdout.
 class SendToStdOut {
 public:
-    SendToStdOut() {
+    SendToStdOut()
+    {
         gSkDebugToStdOut = true;
     }
 };

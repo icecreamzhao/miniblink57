@@ -35,6 +35,7 @@
 #include "WebCryptoAlgorithm.h"
 #include "WebCryptoKey.h"
 #include "WebVector.h"
+#include "base/logging.h"
 
 namespace blink {
 
@@ -59,12 +60,15 @@ public:
 
 class WebCryptoAesCbcParams : public WebCryptoAlgorithmParams {
 public:
-    WebCryptoAesCbcParams(const unsigned char* iv, unsigned ivSize)
-        : m_iv(iv, ivSize)
+    explicit WebCryptoAesCbcParams(WebVector<unsigned char> iv)
+        : m_iv(std::move(iv))
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeAesCbcParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeAesCbcParams;
+    }
 
     const WebVector<unsigned char>& iv() const { return m_iv; }
 
@@ -77,7 +81,7 @@ public:
     explicit WebCryptoAlgorithmParamsWithHash(const WebCryptoAlgorithm& hash)
         : m_hash(hash)
     {
-        BLINK_ASSERT(!hash.isNull());
+        DCHECK(!hash.isNull());
     }
 
     const WebCryptoAlgorithm& hash() const { return m_hash; }
@@ -88,14 +92,18 @@ private:
 
 class WebCryptoAesCtrParams : public WebCryptoAlgorithmParams {
 public:
-    WebCryptoAesCtrParams(unsigned char lengthBits, const unsigned char* counter, unsigned counterSize)
+    WebCryptoAesCtrParams(unsigned char lengthBits,
+        WebVector<unsigned char> counter)
         : WebCryptoAlgorithmParams()
-        , m_counter(counter, counterSize)
+        , m_counter(std::move(counter))
         , m_lengthBits(lengthBits)
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeAesCtrParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeAesCtrParams;
+    }
 
     const WebVector<unsigned char>& counter() const { return m_counter; }
     unsigned char lengthBits() const { return m_lengthBits; }
@@ -112,7 +120,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeAesKeyGenParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeAesKeyGenParams;
+    }
 
     unsigned short lengthBits() const { return m_lengthBits; }
 
@@ -122,7 +133,8 @@ private:
 
 class WebCryptoHmacImportParams : public WebCryptoAlgorithmParamsWithHash {
 public:
-    // FIXME: Remove this constructor once it is no longer used by Chromium. http://crbug.com/431085
+    // FIXME: Remove this constructor once it is no longer used by Chromium.
+    // http://crbug.com/431085
     explicit WebCryptoHmacImportParams(const WebCryptoAlgorithm& hash)
         : WebCryptoAlgorithmParamsWithHash(hash)
         , m_hasLengthBits(false)
@@ -130,15 +142,20 @@ public:
     {
     }
 
-    WebCryptoHmacImportParams(const WebCryptoAlgorithm& hash, bool hasLengthBits, unsigned lengthBits)
+    WebCryptoHmacImportParams(const WebCryptoAlgorithm& hash,
+        bool hasLengthBits,
+        unsigned lengthBits)
         : WebCryptoAlgorithmParamsWithHash(hash)
         , m_hasLengthBits(hasLengthBits)
         , m_optionalLengthBits(lengthBits)
     {
-        BLINK_ASSERT(hasLengthBits || !lengthBits);
+        DCHECK(hasLengthBits || !lengthBits);
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeHmacImportParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeHmacImportParams;
+    }
 
     bool hasLengthBits() const { return m_hasLengthBits; }
 
@@ -151,15 +168,20 @@ private:
 
 class WebCryptoHmacKeyGenParams : public WebCryptoAlgorithmParamsWithHash {
 public:
-    WebCryptoHmacKeyGenParams(const WebCryptoAlgorithm& hash, bool hasLengthBits, unsigned lengthBits)
+    WebCryptoHmacKeyGenParams(const WebCryptoAlgorithm& hash,
+        bool hasLengthBits,
+        unsigned lengthBits)
         : WebCryptoAlgorithmParamsWithHash(hash)
         , m_hasLengthBits(hasLengthBits)
         , m_optionalLengthBits(lengthBits)
     {
-        BLINK_ASSERT(hasLengthBits || !lengthBits);
+        DCHECK(hasLengthBits || !lengthBits);
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeHmacKeyGenParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeHmacKeyGenParams;
+    }
 
     bool hasLengthBits() const { return m_hasLengthBits; }
 
@@ -172,23 +194,33 @@ private:
 
 class WebCryptoAesGcmParams : public WebCryptoAlgorithmParams {
 public:
-    WebCryptoAesGcmParams(const unsigned char* iv, unsigned ivSize, bool hasAdditionalData, const unsigned char* additionalData, unsigned additionalDataSize, bool hasTagLengthBits, unsigned char tagLengthBits)
-        : m_iv(iv, ivSize)
+    WebCryptoAesGcmParams(WebVector<unsigned char> iv,
+        bool hasAdditionalData,
+        WebVector<unsigned char> additionalData,
+        bool hasTagLengthBits,
+        unsigned char tagLengthBits)
+        : m_iv(std::move(iv))
         , m_hasAdditionalData(hasAdditionalData)
-        , m_optionalAdditionalData(additionalData, additionalDataSize)
+        , m_optionalAdditionalData(std::move(additionalData))
         , m_hasTagLengthBits(hasTagLengthBits)
         , m_optionalTagLengthBits(tagLengthBits)
     {
-        BLINK_ASSERT(hasAdditionalData || !additionalDataSize);
-        BLINK_ASSERT(hasTagLengthBits || !tagLengthBits);
+        DCHECK(hasAdditionalData || m_optionalAdditionalData.isEmpty());
+        DCHECK(hasTagLengthBits || !tagLengthBits);
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeAesGcmParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeAesGcmParams;
+    }
 
     const WebVector<unsigned char>& iv() const { return m_iv; }
 
     bool hasAdditionalData() const { return m_hasAdditionalData; }
-    const WebVector<unsigned char>& optionalAdditionalData() const { return m_optionalAdditionalData; }
+    const WebVector<unsigned char>& optionalAdditionalData() const
+    {
+        return m_optionalAdditionalData;
+    }
 
     bool hasTagLengthBits() const { return m_hasTagLengthBits; }
     unsigned optionalTagLengthBits() const { return m_optionalTagLengthBits; }
@@ -208,24 +240,51 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeRsaHashedImportParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeRsaHashedImportParams;
+    }
 };
 
 class WebCryptoRsaHashedKeyGenParams : public WebCryptoAlgorithmParams {
 public:
-    explicit WebCryptoRsaHashedKeyGenParams(const WebCryptoAlgorithm& hash, unsigned modulusLengthBits, const unsigned char* publicExponent, unsigned publicExponentSize)
+    WebCryptoRsaHashedKeyGenParams(const WebCryptoAlgorithm& hash,
+        unsigned modulusLengthBits,
+        WebVector<unsigned char> publicExponent)
         : m_modulusLengthBits(modulusLengthBits)
-        , m_publicExponent(publicExponent, publicExponentSize)
+        , m_publicExponent(std::move(publicExponent))
         , m_hash(hash)
     {
-        BLINK_ASSERT(!hash.isNull());
+        DCHECK(!hash.isNull());
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeRsaHashedKeyGenParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeRsaHashedKeyGenParams;
+    }
 
     unsigned modulusLengthBits() const { return m_modulusLengthBits; }
-    const WebVector<unsigned char>& publicExponent() const { return m_publicExponent; }
+    const WebVector<unsigned char>& publicExponent() const
+    {
+        return m_publicExponent;
+    }
     const WebCryptoAlgorithm& hash() const { return m_hash; }
+
+    // Converts the public exponent (big-endian WebCrypto BigInteger),
+    // with or without leading zeros, to unsigned int. Returns true on success.
+    bool convertPublicExponentToUnsigned(unsigned& result) const
+    {
+        result = 0;
+        for (size_t i = 0; i < m_publicExponent.size(); ++i) {
+            size_t iReversed = m_publicExponent.size() - i - 1;
+
+            if (iReversed >= sizeof(result) && m_publicExponent[i])
+                return false; // Too large for unsigned int.
+
+            result |= m_publicExponent[i] << 8 * iReversed;
+        }
+        return true;
+    }
 
 private:
     const unsigned m_modulusLengthBits;
@@ -235,17 +294,23 @@ private:
 
 class WebCryptoRsaOaepParams : public WebCryptoAlgorithmParams {
 public:
-    WebCryptoRsaOaepParams(bool hasLabel, const unsigned char* label, unsigned labelSize)
+    WebCryptoRsaOaepParams(bool hasLabel, WebVector<unsigned char> label)
         : m_hasLabel(hasLabel)
-        , m_optionalLabel(label, labelSize)
+        , m_optionalLabel(std::move(label))
     {
-        BLINK_ASSERT(hasLabel || !labelSize);
+        DCHECK(hasLabel || m_optionalLabel.isEmpty());
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeRsaOaepParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeRsaOaepParams;
+    }
 
     bool hasLabel() const { return m_hasLabel; }
-    const WebVector<unsigned char>& optionalLabel() const { return m_optionalLabel; }
+    const WebVector<unsigned char>& optionalLabel() const
+    {
+        return m_optionalLabel;
+    }
 
 private:
     const bool m_hasLabel;
@@ -259,7 +324,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeRsaPssParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeRsaPssParams;
+    }
 
     unsigned saltLengthBytes() const { return m_saltLengthBytes; }
 
@@ -274,7 +342,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeEcdsaParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeEcdsaParams;
+    }
 };
 
 class WebCryptoEcKeyGenParams : public WebCryptoAlgorithmParams {
@@ -284,7 +355,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeEcKeyGenParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeEcKeyGenParams;
+    }
 
     WebCryptoNamedCurve namedCurve() const { return m_namedCurve; }
 
@@ -299,7 +373,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeEcKeyImportParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeEcKeyImportParams;
+    }
 
     WebCryptoNamedCurve namedCurve() const { return m_namedCurve; }
 
@@ -314,9 +391,12 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypeEcdhKeyDeriveParams; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypeEcdhKeyDeriveParams;
+    }
 
-    const WebCryptoKey publicKey() const { return m_publicKey; }
+    const WebCryptoKey& publicKey() const { return m_publicKey; }
 
 private:
     const WebCryptoKey m_publicKey;
@@ -329,7 +409,10 @@ public:
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const override { return WebCryptoAlgorithmParamsTypeAesDerivedKeyParams; }
+    virtual WebCryptoAlgorithmParamsType type() const override
+    {
+        return WebCryptoAlgorithmParamsTypeAesDerivedKeyParams;
+    }
 
     unsigned short lengthBits() const { return m_lengthBits; }
 
@@ -339,10 +422,12 @@ private:
 
 class WebCryptoHkdfParams : public WebCryptoAlgorithmParamsWithHash {
 public:
-    WebCryptoHkdfParams(const WebCryptoAlgorithm& hash, const unsigned char* salt, unsigned saltSize, const unsigned char* info, unsigned infoSize)
+    WebCryptoHkdfParams(const WebCryptoAlgorithm& hash,
+        WebVector<unsigned char> salt,
+        WebVector<unsigned char> info)
         : WebCryptoAlgorithmParamsWithHash(hash)
-        , m_salt(salt, saltSize)
-        , m_info(info, infoSize)
+        , m_salt(std::move(salt))
+        , m_info(std::move(info))
     {
     }
 
@@ -362,14 +447,19 @@ private:
 
 class WebCryptoPbkdf2Params : public WebCryptoAlgorithmParamsWithHash {
 public:
-    WebCryptoPbkdf2Params(const WebCryptoAlgorithm& hash, const unsigned char* salt, unsigned saltLength, unsigned iterations)
+    WebCryptoPbkdf2Params(const WebCryptoAlgorithm& hash,
+        WebVector<unsigned char> salt,
+        unsigned iterations)
         : WebCryptoAlgorithmParamsWithHash(hash)
-        , m_salt(salt, saltLength)
+        , m_salt(std::move(salt))
         , m_iterations(iterations)
     {
     }
 
-    virtual WebCryptoAlgorithmParamsType type() const { return WebCryptoAlgorithmParamsTypePbkdf2Params; }
+    virtual WebCryptoAlgorithmParamsType type() const
+    {
+        return WebCryptoAlgorithmParamsTypePbkdf2Params;
+    }
 
     const WebVector<unsigned char>& salt() const { return m_salt; }
     unsigned iterations() const { return m_iterations; }

@@ -31,11 +31,13 @@
 #ifndef WebScopedUserGesture_h
 #define WebScopedUserGesture_h
 
-#include "../platform/WebPrivateOwnPtr.h"
+#include "public/platform/WebCommon.h"
+#include <memory>
 
 namespace blink {
 
 class UserGestureIndicator;
+class WebLocalFrame;
 class WebUserGestureToken;
 
 // An instance of this class, while kept alive, will indicate that we are in
@@ -53,16 +55,12 @@ class WebUserGestureToken;
 // gesture.
 class WebScopedUserGesture {
 public:
-    explicit WebScopedUserGesture(const WebUserGestureToken& token) { initializeWithToken(token); }
-    WebScopedUserGesture() { initialize(); }
-    ~WebScopedUserGesture() { reset(); }
+    BLINK_EXPORT explicit WebScopedUserGesture(const WebUserGestureToken& token);
+    BLINK_EXPORT WebScopedUserGesture(WebLocalFrame*);
+    BLINK_EXPORT ~WebScopedUserGesture();
 
 private:
-    BLINK_EXPORT void initialize();
-    BLINK_EXPORT void initializeWithToken(const WebUserGestureToken&);
-    BLINK_EXPORT void reset();
-
-    WebPrivateOwnPtr<UserGestureIndicator> m_indicator;
+    std::unique_ptr<UserGestureIndicator> m_indicator;
 };
 
 } // namespace blink

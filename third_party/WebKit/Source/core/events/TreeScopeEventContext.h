@@ -31,94 +31,148 @@
 #include "core/dom/Node.h"
 #include "core/dom/TreeScope.h"
 #include "core/events/EventTarget.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
+class ContainerNode;
 class EventPath;
 class EventTarget;
-class Node;
-template <typename NodeType> class StaticNodeTypeList;
-typedef StaticNodeTypeList<Node> StaticNodeList;
+template <typename NodeType>
+class StaticNodeTypeList;
+using StaticNodeList = StaticNodeTypeList<Node>;
 class TouchEventContext;
 class TreeScope;
 
-class CORE_EXPORT TreeScopeEventContext final : public RefCountedWillBeGarbageCollected<TreeScopeEventContext> {
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(TreeScopeEventContext);
+class CORE_EXPORT TreeScopeEventContext final
+    : public GarbageCollected<TreeScopeEventContext> {
 public:
-    static PassRefPtrWillBeRawPtr<TreeScopeEventContext> create(TreeScope&);
+    static TreeScopeEventContext* create(TreeScope&);
     DECLARE_TRACE();
 
     TreeScope& treeScope() const { return *m_treeScope; }
-    Node& rootNode() const { return *m_rootNode; }
+    ContainerNode& rootNode() const { return m_treeScope->rootNode(); }
 
     EventTarget* target() const { return m_target.get(); }
-    void setTarget(PassRefPtrWillBeRawPtr<EventTarget>);
+    void setTarget(EventTarget*);
 
     EventTarget* relatedTarget() const { return m_relatedTarget.get(); }
-    void setRelatedTarget(PassRefPtrWillBeRawPtr<EventTarget>);
+    void setRelatedTarget(EventTarget*);
 
-    TouchEventContext* touchEventContext() const { return m_touchEventContext.get(); }
+    TouchEventContext* touchEventContext() const
+    {
+        return m_touchEventContext.get();
+    }
     TouchEventContext* ensureTouchEventContext();
 
-    WillBeHeapVector<RefPtrWillBeMember<EventTarget>>& ensureEventPath(EventPath&);
+    HeapVector<Member<EventTarget>>& ensureEventPath(EventPath&);
 
-    bool isInclusiveAncestorOf(const TreeScopeEventContext&);
-    void addChild(TreeScopeEventContext& child) { m_children.append(&child); }
+    bool isInclusiveAncestorOf(const TreeScopeEventContext&) const;
+    bool isDescendantOf(const TreeScopeEventContext&) const;
+#if DCHECK_IS_ON()
+    bool isExclusivePartOf(const TreeScopeEventContext&) const;
+#endif
+    void addChild(TreeScopeEventContext& child)
+    {
+        m_children.push_back(&child);
+    }
 
-    // For ancestor-descendant relationship check in Q(1).
+    // For ancestor-descendant relationship check in O(1).
     // Preprocessing takes O(N).
-    int calculatePrePostOrderNumber(int orderNumber);
+    int calculateTreeOrderAndSetNearestAncestorClosedTree(
+        int orderNumber,
+        TreeScopeEventContext* nearestAncestorClosedTreeScopeEventContext);
+
+    TreeScopeEventContext* containingClosedShadowTree() const
+    {
+        return m_containingClosedShadowTree.get();
+    }
 
 private:
     TreeScopeEventContext(TreeScope&);
 
-#if ENABLE(ASSERT)
-    bool isUnreachableNode(EventTarget&);
-#endif
+    void checkReachableNode(EventTarget&);
 
-    RawPtrWillBeMember<TreeScope> m_treeScope;
-    RefPtrWillBeMember<Node> m_rootNode; // Prevents TreeScope from being freed. TreeScope itself isn't RefCounted.
-    RefPtrWillBeMember<EventTarget> m_target;
-    RefPtrWillBeMember<EventTarget> m_relatedTarget;
-    OwnPtrWillBeMember<WillBeHeapVector<RefPtrWillBeMember<EventTarget>>> m_eventPath;
-    RefPtrWillBeMember<TouchEventContext> m_touchEventContext;
+    bool isUnclosedTreeOf(const TreeScopeEventContext& other);
 
-    WillBeHeapVector<RawPtrWillBeMember<TreeScopeEventContext>> m_children;
+    Member<TreeScope> m_treeScope;
+    Member<EventTarget> m_target;
+    Member<EventTarget> m_relatedTarget;
+    Member<HeapVector<Member<EventTarget>>> m_eventPath;
+    Member<TouchEventContext> m_touchEventContext;
+    Member<TreeScopeEventContext> m_containingClosedShadowTree;
+
+    HeapVector<Member<TreeScopeEventContext>> m_children;
     int m_preOrder;
     int m_postOrder;
 };
 
-#if ENABLE(ASSERT)
-inline bool TreeScopeEventContext::isUnreachableNode(EventTarget& target)
+#if DCHECK_IS_ON()
+inline void TreeScopeEventContext::checkReachableNode(EventTarget& target)
 {
+    if (!target.toNode())
+        return;
     // FIXME: Checks also for SVG elements.
-    return target.toNode() && !target.toNode()->isSVGElement() && !target.toNode()->treeScope().isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(treeScope());
+    if (target.toNode()->isSVGElement())
+        return;
+    DCHECK(
+        target.toNode()
+            ->treeScope()
+            .isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(treeScope()));
+}
+#else
+inline void TreeScopeEventContext::checkReachableNode(EventTarget&)
+{
 }
 #endif
 
-inline void TreeScopeEventContext::setTarget(PassRefPtrWillBeRawPtr<EventTarget> target)
+inline void TreeScopeEventContext::setTarget(EventTarget* target)
 {
-    ASSERT(target);
-    ASSERT(!isUnreachableNode(*target));
+    DCHECK(target);
+    checkReachableNode(*target);
     m_target = target;
 }
 
-inline void TreeScopeEventContext::setRelatedTarget(PassRefPtrWillBeRawPtr<EventTarget> relatedTarget)
+inline void TreeScopeEventContext::setRelatedTarget(
+    EventTarget* relatedTarget)
 {
-    ASSERT(relatedTarget);
-    ASSERT(!isUnreachableNode(*relatedTarget));
+    DCHECK(relatedTarget);
+    checkReachableNode(*relatedTarget);
     m_relatedTarget = relatedTarget;
 }
 
-inline bool TreeScopeEventContext::isInclusiveAncestorOf(const TreeScopeEventContext& other)
+inline bool TreeScopeEventContext::isInclusiveAncestorOf(
+    const TreeScopeEventContext& other) const
 {
-    ASSERT(m_preOrder != -1 && m_postOrder != -1 && other.m_preOrder != -1 && other.m_postOrder != -1);
+    DCHECK_NE(m_preOrder, -1);
+    DCHECK_NE(m_postOrder, -1);
+    DCHECK_NE(other.m_preOrder, -1);
+    DCHECK_NE(other.m_postOrder, -1);
     return m_preOrder <= other.m_preOrder && other.m_postOrder <= m_postOrder;
 }
 
+inline bool TreeScopeEventContext::isDescendantOf(
+    const TreeScopeEventContext& other) const
+{
+    DCHECK_NE(m_preOrder, -1);
+    DCHECK_NE(m_postOrder, -1);
+    DCHECK_NE(other.m_preOrder, -1);
+    DCHECK_NE(other.m_postOrder, -1);
+    return other.m_preOrder < m_preOrder && m_postOrder < other.m_postOrder;
 }
+
+#if DCHECK_IS_ON()
+inline bool TreeScopeEventContext::isExclusivePartOf(
+    const TreeScopeEventContext& other) const
+{
+    DCHECK_NE(m_preOrder, -1);
+    DCHECK_NE(m_postOrder, -1);
+    DCHECK_NE(other.m_preOrder, -1);
+    DCHECK_NE(other.m_postOrder, -1);
+    return (m_preOrder < other.m_preOrder && m_postOrder < other.m_preOrder) || (m_preOrder > other.m_preOrder && m_preOrder > other.m_postOrder);
+}
+#endif
+
+} // namespace blink
 
 #endif // TreeScopeEventContext_h

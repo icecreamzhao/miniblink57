@@ -24,36 +24,42 @@
  *
  */
 
-#include "config.h"
 #include "core/events/TextEvent.h"
 
 #include "core/dom/DocumentFragment.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<TextEvent> TextEvent::create()
+TextEvent* TextEvent::create()
 {
-    return adoptRefWillBeNoop(new TextEvent);
+    return new TextEvent;
 }
 
-PassRefPtrWillBeRawPtr<TextEvent> TextEvent::create(PassRefPtrWillBeRawPtr<AbstractView> view, const String& data, TextEventInputType inputType)
+TextEvent* TextEvent::create(AbstractView* view,
+    const String& data,
+    TextEventInputType inputType)
 {
-    return adoptRefWillBeNoop(new TextEvent(view, data, inputType));
+    return new TextEvent(view, data, inputType);
 }
 
-PassRefPtrWillBeRawPtr<TextEvent> TextEvent::createForPlainTextPaste(PassRefPtrWillBeRawPtr<AbstractView> view, const String& data, bool shouldSmartReplace)
+TextEvent* TextEvent::createForPlainTextPaste(AbstractView* view,
+    const String& data,
+    bool shouldSmartReplace)
 {
-    return adoptRefWillBeNoop(new TextEvent(view, data, nullptr, shouldSmartReplace, false));
+    return new TextEvent(view, data, nullptr, shouldSmartReplace, false);
 }
 
-PassRefPtrWillBeRawPtr<TextEvent> TextEvent::createForFragmentPaste(PassRefPtrWillBeRawPtr<AbstractView> view, PassRefPtrWillBeRawPtr<DocumentFragment> data, bool shouldSmartReplace, bool shouldMatchStyle)
+TextEvent* TextEvent::createForFragmentPaste(AbstractView* view,
+    DocumentFragment* data,
+    bool shouldSmartReplace,
+    bool shouldMatchStyle)
 {
-    return adoptRefWillBeNoop(new TextEvent(view, "", data, shouldSmartReplace, shouldMatchStyle));
+    return new TextEvent(view, "", data, shouldSmartReplace, shouldMatchStyle);
 }
 
-PassRefPtrWillBeRawPtr<TextEvent> TextEvent::createForDrop(PassRefPtrWillBeRawPtr<AbstractView> view, const String& data)
+TextEvent* TextEvent::createForDrop(AbstractView* view, const String& data)
 {
-    return adoptRefWillBeNoop(new TextEvent(view, data, TextEventInputDrop));
+    return new TextEvent(view, data, TextEventInputDrop);
 }
 
 TextEvent::TextEvent()
@@ -63,8 +69,17 @@ TextEvent::TextEvent()
 {
 }
 
-TextEvent::TextEvent(PassRefPtrWillBeRawPtr<AbstractView> view, const String& data, TextEventInputType inputType)
-    : UIEvent(EventTypeNames::textInput, true, true, view, 0)
+TextEvent::TextEvent(AbstractView* view,
+    const String& data,
+    TextEventInputType inputType)
+    : UIEvent(EventTypeNames::textInput,
+        true,
+        true,
+        ComposedMode::Composed,
+        TimeTicks::Now(),
+        view,
+        0,
+        nullptr)
     , m_inputType(inputType)
     , m_data(data)
     , m_pastingFragment(nullptr)
@@ -73,9 +88,19 @@ TextEvent::TextEvent(PassRefPtrWillBeRawPtr<AbstractView> view, const String& da
 {
 }
 
-TextEvent::TextEvent(PassRefPtrWillBeRawPtr<AbstractView> view, const String& data, PassRefPtrWillBeRawPtr<DocumentFragment> pastingFragment,
-                     bool shouldSmartReplace, bool shouldMatchStyle)
-    : UIEvent(EventTypeNames::textInput, true, true, view, 0)
+TextEvent::TextEvent(AbstractView* view,
+    const String& data,
+    DocumentFragment* pastingFragment,
+    bool shouldSmartReplace,
+    bool shouldMatchStyle)
+    : UIEvent(EventTypeNames::textInput,
+        true,
+        true,
+        ComposedMode::Composed,
+        TimeTicks::Now(),
+        view,
+        0,
+        nullptr)
     , m_inputType(TextEventInputPaste)
     , m_data(data)
     , m_pastingFragment(pastingFragment)
@@ -84,13 +109,15 @@ TextEvent::TextEvent(PassRefPtrWillBeRawPtr<AbstractView> view, const String& da
 {
 }
 
-TextEvent::~TextEvent()
-{
-}
+TextEvent::~TextEvent() { }
 
-void TextEvent::initTextEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView> view, const String& data)
+void TextEvent::initTextEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    AbstractView* view,
+    const String& data)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initUIEvent(type, canBubble, cancelable, view, 0);

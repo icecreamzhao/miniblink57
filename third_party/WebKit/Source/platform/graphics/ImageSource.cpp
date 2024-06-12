@@ -25,38 +25,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/ImageSource.h"
 
 #include "platform/graphics/DeferredImageDecoder.h"
 #include "platform/image-decoders/ImageDecoder.h"
+#include "third_party/skia/include/core/SkImage.h"
 
 namespace blink {
 
-ImageSource::ImageSource(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption gammaAndColorProfileOption)
-    : m_alphaOption(alphaOption)
-    , m_gammaAndColorProfileOption(gammaAndColorProfileOption)
+ImageSource::ImageSource()
+    : m_decoderColorBehavior(ColorBehavior::transformToGlobalTarget())
 {
 }
 
-ImageSource::~ImageSource()
-{
-}
+ImageSource::~ImageSource() { }
 
 size_t ImageSource::clearCacheExceptFrame(size_t clearExceptFrame)
 {
     return m_decoder ? m_decoder->clearCacheExceptFrame(clearExceptFrame) : 0;
 }
 
-void ImageSource::setData(SharedBuffer& data, bool allDataReceived)
+PassRefPtr<SharedBuffer> ImageSource::data()
 {
-    // Create a decoder by sniffing the encoded data. If insufficient data bytes are available to
-    // determine the encoded image type, no decoder is created.
-    if (!m_decoder)
-        m_decoder = DeferredImageDecoder::create(data, m_alphaOption, m_gammaAndColorProfileOption);
+    return m_decoder ? m_decoder->data() : nullptr;
+}
 
-    if (m_decoder)
-        m_decoder->setData(data, allDataReceived);
+bool ImageSource::setData(PassRefPtr<SharedBuffer> passData,
+    bool allDataReceived)
+{
+    RefPtr<SharedBuffer> data = passData;
+    m_allDataReceived = allDataReceived;
+
+    if (m_decoder) {
+        m_decoder->setData(std::move(data), allDataReceived);
+        // If the decoder is pre-instantiated, it means we've already validated the
+        // data/signature at some point.
+        return true;
+    }
+
+    m_decoder = DeferredImageDecoder::create(data, allDataReceived,
+        ImageDecoder::AlphaPremultiplied,
+        m_decoderColorBehavior);
+
+    // Insufficient data is not a failure.
+    return m_decoder || !ImageDecoder::hasSufficientDataToSniffImageType(*data);
 }
 
 String ImageSource::filenameExtension() const
@@ -71,22 +83,25 @@ bool ImageSource::isSizeAvailable()
 
 bool ImageSource::hasColorProfile() const
 {
-    return m_decoder && m_decoder->hasColorProfile();
+    return m_decoder && m_decoder->hasEmbeddedColorSpace();
 }
 
-IntSize ImageSource::size(RespectImageOrientationEnum shouldRespectOrientation) const
+IntSize ImageSource::size(
+    RespectImageOrientationEnum shouldRespectOrientation) const
 {
     return frameSizeAtIndex(0, shouldRespectOrientation);
 }
 
-IntSize ImageSource::frameSizeAtIndex(size_t index, RespectImageOrientationEnum shouldRespectOrientation) const
+IntSize ImageSource::frameSizeAtIndex(
+    size_t index,
+    RespectImageOrientationEnum shouldRespectOrientation) const
 {
     if (!m_decoder)
         return IntSize();
 
     IntSize size = m_decoder->frameSizeAtIndex(index);
     if ((shouldRespectOrientation == RespectImageOrientation) && m_decoder->orientationAtIndex(index).usesWidthAsHeight())
-        return IntSize(size.height(), size.width());
+        return size.transposedSize();
 
     return size;
 }
@@ -106,9 +121,24 @@ size_t ImageSource::frameCount() const
     return m_decoder ? m_decoder->frameCount() : 0;
 }
 
-bool ImageSource::createFrameAtIndex(size_t index, SkBitmap* bitmap)
+sk_sp<SkImage> ImageSource::createFrameAtIndex(
+    size_t index,
+    const ColorBehavior& colorBehavior)
 {
-    return m_decoder && m_decoder->createFrameAtIndex(index, bitmap);
+    if (!m_decoder)
+        return nullptr;
+
+    if (colorBehavior != m_decoderColorBehavior) {
+        m_decoder = DeferredImageDecoder::create(data(), m_allDataReceived,
+            ImageDecoder::AlphaPremultiplied,
+            colorBehavior);
+        m_decoderColorBehavior = colorBehavior;
+        // The data has already been validated, so changing the color behavior
+        // should always result in a valid decoder.
+        DCHECK(m_decoder);
+    }
+
+    return m_decoder->createFrameAtIndex(index);
 }
 
 float ImageSource::frameDurationAtIndex(size_t index) const
@@ -116,10 +146,10 @@ float ImageSource::frameDurationAtIndex(size_t index) const
     if (!m_decoder)
         return 0;
 
-    // Many annoying ads specify a 0 duration to make an image flash as quickly as possible.
-    // We follow Firefox's behavior and use a duration of 100 ms for any frames that specify
-    // a duration of <= 10 ms. See <rdar://problem/7689300> and <http://webkit.org/b/36082>
-    // for more information.
+    // Many annoying ads specify a 0 duration to make an image flash as quickly as
+    // possible. We follow Firefox's behavior and use a duration of 100 ms for any
+    // frames that specify a duration of <= 10 ms. See <rdar://problem/7689300>
+    // and <http://webkit.org/b/36082> for more information.
     const float duration = m_decoder->frameDurationAtIndex(index) / 1000.0f;
     if (duration < 0.011f)
         return 0.100f;
@@ -128,7 +158,8 @@ float ImageSource::frameDurationAtIndex(size_t index) const
 
 ImageOrientation ImageSource::orientationAtIndex(size_t index) const
 {
-    return m_decoder ? m_decoder->orientationAtIndex(index) : DefaultImageOrientation;
+    return m_decoder ? m_decoder->orientationAtIndex(index)
+                     : DefaultImageOrientation;
 }
 
 bool ImageSource::frameHasAlphaAtIndex(size_t index) const

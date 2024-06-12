@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawRectangle.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -36,23 +35,28 @@ const SkMemberInfo SkDrawRect::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawRect);
 
-SkDrawRect::SkDrawRect() : fParent(NULL) {
+SkDrawRect::SkDrawRect()
+    : fParent(nullptr)
+{
     fRect.setEmpty();
 }
 
-void SkDrawRect::dirty() {
+void SkDrawRect::dirty()
+{
     if (fParent)
         fParent->dirty();
 }
 
-bool SkDrawRect::draw(SkAnimateMaker& maker) {
+bool SkDrawRect::draw(SkAnimateMaker& maker)
+{
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawRect(fRect, *maker.fPaint);
     return false;
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkDrawRect::dump(SkAnimateMaker* maker) {
+void SkDrawRect::dump(SkAnimateMaker* maker)
+{
     dumpBase(maker);
     SkDebugf("left=\"%g\" top=\"%g\" right=\"%g\" bottom=\"%g\" />\n",
         SkScalarToFloat(fRect.fLeft), SkScalarToFloat(fRect.fTop), SkScalarToFloat(fRect.fRight),
@@ -60,53 +64,56 @@ void SkDrawRect::dump(SkAnimateMaker* maker) {
 }
 #endif
 
-SkDisplayable* SkDrawRect::getParent() const {
+SkDisplayable* SkDrawRect::getParent() const
+{
     return fParent;
 }
 
-bool SkDrawRect::getProperty(int index, SkScriptValue* value) const {
+bool SkDrawRect::getProperty(int index, SkScriptValue* value) const
+{
     SkScalar result;
     switch (index) {
-        case SK_PROPERTY(height):
-            result = fRect.height();
-            break;
-        case SK_PROPERTY(needsRedraw):
-            value->fType = SkType_Boolean;
-            value->fOperand.fS32 = fBounds.isEmpty() == false;
-            return true;
-        case SK_PROPERTY(width):
-            result = fRect.width();
-            break;
-        default:
-            SkASSERT(0);
-            return false;
+    case SK_PROPERTY(height):
+        result = fRect.height();
+        break;
+    case SK_PROPERTY(needsRedraw):
+        value->fType = SkType_Boolean;
+        value->fOperand.fS32 = fBounds.isEmpty() == false;
+        return true;
+    case SK_PROPERTY(width):
+        result = fRect.width();
+        break;
+    default:
+        SkASSERT(0);
+        return false;
     }
     value->fType = SkType_Float;
     value->fOperand.fScalar = result;
     return true;
 }
 
-
-bool SkDrawRect::setParent(SkDisplayable* parent) {
+bool SkDrawRect::setParent(SkDisplayable* parent)
+{
     fParent = parent;
     return false;
 }
 
-bool SkDrawRect::setProperty(int index, SkScriptValue& value) {
+bool SkDrawRect::setProperty(int index, SkScriptValue& value)
+{
     SkScalar scalar = value.fOperand.fScalar;
     switch (index) {
-        case SK_PROPERTY(height):
-            SkASSERT(value.fType == SkType_Float);
-            fRect.fBottom = scalar + fRect.fTop;
-            return true;
-        case SK_PROPERTY(needsRedraw):
-            return false;
-        case SK_PROPERTY(width):
-            SkASSERT(value.fType == SkType_Float);
-            fRect.fRight = scalar + fRect.fLeft;
-            return true;
-        default:
-            SkASSERT(0);
+    case SK_PROPERTY(height):
+        SkASSERT(value.fType == SkType_Float);
+        fRect.fBottom = scalar + fRect.fTop;
+        return true;
+    case SK_PROPERTY(needsRedraw):
+        return false;
+    case SK_PROPERTY(width):
+        SkASSERT(value.fType == SkType_Float);
+        fRect.fRight = scalar + fRect.fLeft;
+        return true;
+    default:
+        SkASSERT(0);
     }
     return false;
 }
@@ -123,20 +130,25 @@ const SkMemberInfo SkRoundRect::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRoundRect);
 
-SkRoundRect::SkRoundRect() : rx(0), ry(0) {
+SkRoundRect::SkRoundRect()
+    : rx(0)
+    , ry(0)
+{
 }
 
-bool SkRoundRect::draw(SkAnimateMaker& maker) {
+bool SkRoundRect::draw(SkAnimateMaker& maker)
+{
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawRoundRect(fRect, rx, ry, *maker.fPaint);
     return false;
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkRoundRect::dump(SkAnimateMaker* maker) {
+void SkRoundRect::dump(SkAnimateMaker* maker)
+{
     dumpBase(maker);
     SkDebugf("left=\"%g\" top=\"%g\" right=\"%g\" bottom=\"%g\" rx=\"%g\" ry=\"%g\" />\n",
-            SkScalarToFloat(fRect.fLeft), SkScalarToFloat(fRect.fTop), SkScalarToFloat(fRect.fRight),
-            SkScalarToFloat(fRect.fBottom), SkScalarToFloat(rx), SkScalarToFloat(ry));
+        SkScalarToFloat(fRect.fLeft), SkScalarToFloat(fRect.fTop), SkScalarToFloat(fRect.fRight),
+        SkScalarToFloat(fRect.fBottom), SkScalarToFloat(rx), SkScalarToFloat(ry));
 }
 #endif

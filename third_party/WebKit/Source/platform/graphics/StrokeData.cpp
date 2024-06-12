@@ -26,10 +26,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "config.h"
 #include "platform/graphics/StrokeData.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "third_party/skia/include/effects/SkDashPathEffect.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -44,17 +44,17 @@ void StrokeData::setLineDash(const DashArray& dashes, float dashOffset)
         // If no dash is set, revert to solid stroke
         // FIXME: do we need to set NoStroke in some cases?
         m_style = SolidStroke;
-        m_dash.clear();
+        m_dash.reset();
         return;
     }
 
     size_t count = !(dashLength % 2) ? dashLength : dashLength * 2;
-    OwnPtr<SkScalar[]> intervals = adoptArrayPtr(new SkScalar[count]);
+    std::unique_ptr<SkScalar[]> intervals = wrapArrayUnique(new SkScalar[count]);
 
     for (unsigned i = 0; i < count; i++)
         intervals[i] = dashes[i % dashLength];
 
-    m_dash = adoptRef(SkDashPathEffect::Create(intervals.get(), count, dashOffset));
+    m_dash = SkDashPathEffect::Make(intervals.get(), count, dashOffset);
 }
 
 void StrokeData::setupPaint(SkPaint* paint, int length) const
@@ -72,18 +72,18 @@ void StrokeData::setupPaintDashPathEffect(SkPaint* paint, int length) const
 {
     float width = m_thickness;
     if (m_dash) {
-        paint->setPathEffect(m_dash.get());
+        paint->setPathEffect(m_dash);
     } else {
         switch (m_style) {
         case NoStroke:
         case SolidStroke:
         case DoubleStroke:
-        case WavyStroke: // FIXME: https://code.google.com/p/chromium/issues/detail?id=229574
+        case WavyStroke: // FIXME: https://crbug.com/229574
             paint->setPathEffect(0);
             return;
         case DashedStroke:
             width = dashRatio * width;
-            // Fall through.
+        // Fall through.
         case DottedStroke:
             // Truncate the width, since we don't want fuzzy dots or dashes.
             int dashLength = static_cast<int>(width);
@@ -105,8 +105,8 @@ void StrokeData::setupPaintDashPathEffect(SkPaint* paint, int length) const
             }
             SkScalar dashLengthSk = SkIntToScalar(dashLength);
             SkScalar intervals[2] = { dashLengthSk, dashLengthSk };
-            RefPtr<SkDashPathEffect> pathEffect = adoptRef(SkDashPathEffect::Create(intervals, 2, SkIntToScalar(phase)));
-            paint->setPathEffect(pathEffect.get());
+            paint->setPathEffect(
+                SkDashPathEffect::Make(intervals, 2, SkIntToScalar(phase)));
         }
     }
 }

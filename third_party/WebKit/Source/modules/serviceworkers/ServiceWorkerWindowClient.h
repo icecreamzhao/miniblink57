@@ -10,20 +10,24 @@
 #include "modules/serviceworkers/ServiceWorkerClient.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class ScriptPromiseResolver;
 class ScriptState;
 
-class MODULES_EXPORT ServiceWorkerWindowClient final : public ServiceWorkerClient {
+class MODULES_EXPORT ServiceWorkerWindowClient final
+    : public ServiceWorkerClient {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     // To be used by CallbackPromiseAdapter.
-    typedef WebServiceWorkerClientInfo WebType;
+    using WebType = std::unique_ptr<WebServiceWorkerClientInfo>;
 
-    static ServiceWorkerWindowClient* take(ScriptPromiseResolver*, PassOwnPtr<WebType>);
+    static ServiceWorkerWindowClient* take(
+        ScriptPromiseResolver*,
+        std::unique_ptr<WebServiceWorkerClientInfo>);
 
     static ServiceWorkerWindowClient* create(const WebServiceWorkerClientInfo&);
     ~ServiceWorkerWindowClient() override;
@@ -32,6 +36,7 @@ public:
     String visibilityState() const;
     bool focused() const { return m_isFocused; }
     ScriptPromise focus(ScriptState*);
+    ScriptPromise navigate(ScriptState*, const String& url);
 
     DECLARE_VIRTUAL_TRACE();
 

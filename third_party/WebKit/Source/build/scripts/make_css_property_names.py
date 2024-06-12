@@ -14,10 +14,9 @@ HEADER_TEMPLATE = """
 #ifndef %(class_name)s_h
 #define %(class_name)s_h
 
-#include "core/css/parser/CSSParserMode.h"
-#include "wtf/HashFunctions.h"
-#include "wtf/HashTraits.h"
-#include <string.h>
+#include "core/CoreExport.h"
+#include "wtf/Assertions.h"
+#include <stddef.h>
 
 namespace WTF {
 class AtomicString;
@@ -28,6 +27,9 @@ namespace blink {
 
 enum CSSPropertyID {
     CSSPropertyInvalid = 0,
+    // This isn't a property, but we need to know the position of @apply rules in style rules
+    CSSPropertyApplyAtRule = 1,
+    CSSPropertyVariable = 2,
 %(property_enums)s
 };
 
@@ -42,9 +44,19 @@ const WTF::AtomicString& getPropertyNameAtomicString(CSSPropertyID);
 WTF::String getPropertyNameString(CSSPropertyID);
 WTF::String getJSPropertyName(CSSPropertyID);
 
+inline bool isCSSPropertyIDWithName(int id)
+{
+    return id >= firstCSSProperty && id <= lastUnresolvedCSSProperty;
+}
+
+inline bool isValidCSSPropertyID(CSSPropertyID id)
+{
+    return id != CSSPropertyInvalid;
+}
+
 inline CSSPropertyID convertToCSSPropertyID(int value)
 {
-    ASSERT((value >= firstCSSProperty && value <= lastCSSProperty) || value == CSSPropertyInvalid);
+    DCHECK(value >= CSSPropertyInvalid && value <= lastCSSProperty);
     return static_cast<CSSPropertyID>(value);
 }
 
@@ -57,18 +69,9 @@ inline bool isPropertyAlias(CSSPropertyID id) { return id & 512; }
 
 CSSPropertyID unresolvedCSSPropertyID(const WTF::String&);
 
-CSSPropertyID cssPropertyID(const WTF::String&);
+CSSPropertyID CORE_EXPORT cssPropertyID(const WTF::String&);
 
 } // namespace blink
-
-namespace WTF {
-template<> struct DefaultHash<blink::CSSPropertyID> { typedef IntHash<unsigned> Hash; };
-template<> struct HashTraits<blink::CSSPropertyID> : GenericHashTraits<blink::CSSPropertyID> {
-    static const bool emptyValueIsZero = true;
-    static void constructDeletedValue(blink::CSSPropertyID& slot, bool) { slot = static_cast<blink::CSSPropertyID>(blink::lastUnresolvedCSSProperty + 1); }
-    static bool isDeletedValue(blink::CSSPropertyID value) { return value == (blink::lastUnresolvedCSSProperty + 1); }
-};
-}
 
 #endif // %(class_name)s_h
 """
@@ -77,7 +80,6 @@ GPERF_TEMPLATE = """
 %%{
 %(license)s
 
-#include "config.h"
 #include "%(class_name)s.h"
 #include "core/css/HashTools.h"
 #include <string.h>
@@ -85,6 +87,13 @@ GPERF_TEMPLATE = """
 #include "wtf/ASCIICType.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/WTFString.h"
+
+#ifdef _MSC_VER
+// Disable the warnings from casting a 64-bit pointer to 32-bit long
+// warning C4302: 'type cast': truncation from 'char (*)[28]' to 'long'
+// warning C4311: 'type cast': pointer truncation from 'char (*)[18]' to 'long'
+#pragma warning(disable : 4302 4311)
+#endif
 
 namespace blink {
 static const char propertyNameStringsPool[] = {
@@ -119,28 +128,26 @@ const Property* findProperty(register const char* str, register unsigned int len
 
 const char* getPropertyName(CSSPropertyID id)
 {
-    ASSERT(id >= firstCSSProperty && id <= lastUnresolvedCSSProperty);
+    DCHECK(isCSSPropertyIDWithName(id));
     int index = id - firstCSSProperty;
     return propertyNameStringsPool + propertyNameStringsOffsets[index];
 }
 
 const AtomicString& getPropertyNameAtomicString(CSSPropertyID id)
 {
-    ASSERT(id >= firstCSSProperty && id <= lastUnresolvedCSSProperty);
+    DCHECK(isCSSPropertyIDWithName(id));
     int index = id - firstCSSProperty;
     static AtomicString* propertyStrings = new AtomicString[lastUnresolvedCSSProperty]; // Intentionally never destroyed.
     AtomicString& propertyString = propertyStrings[index];
-    if (propertyString.isNull()) {
-        const char* propertyName = propertyNameStringsPool + propertyNameStringsOffsets[index];
-        propertyString = AtomicString(propertyName, strlen(propertyName), AtomicString::ConstructFromLiteral);
-    }
+    if (propertyString.isNull())
+        propertyString = AtomicString(propertyNameStringsPool + propertyNameStringsOffsets[index]);
     return propertyString;
 }
 
 String getPropertyNameString(CSSPropertyID id)
 {
     // We share the StringImpl with the AtomicStrings.
-    return getPropertyNameAtomicString(id).string();
+    return getPropertyNameAtomicString(id).getString();
 }
 
 String getJSPropertyName(CSSPropertyID id)
@@ -203,7 +210,7 @@ class CSSPropertyNamesWriter(css_properties.CSSProperties):
         property_offsets = []
         property_names = []
         current_offset = 0
-        for enum_value in range(1, max(enum_value_to_name) + 1):
+        for enum_value in range(self._first_enum_value, max(enum_value_to_name) + 1):
             property_offsets.append(current_offset)
             if enum_value in enum_value_to_name:
                 name = enum_value_to_name[enum_value]

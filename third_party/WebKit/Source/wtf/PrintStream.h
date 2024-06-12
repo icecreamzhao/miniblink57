@@ -26,11 +26,12 @@
 #ifndef PrintStream_h
 #define PrintStream_h
 
-#include <stdarg.h>
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
+#include "wtf/Compiler.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/WTFExport.h"
+#include <stdarg.h>
 
 namespace WTF {
 
@@ -38,25 +39,29 @@ class CString;
 class String;
 
 class WTF_EXPORT PrintStream {
-    WTF_MAKE_FAST_ALLOCATED(PrintStream); WTF_MAKE_NONCOPYABLE(PrintStream);
+    USING_FAST_MALLOC(PrintStream);
+    WTF_MAKE_NONCOPYABLE(PrintStream);
+
 public:
     PrintStream();
     virtual ~PrintStream();
 
-    void printf(const char* format, ...) WTF_ATTRIBUTE_PRINTF(2, 3);
-    virtual void vprintf(const char* format, va_list) WTF_ATTRIBUTE_PRINTF(2, 0) = 0;
+    PRINTF_FORMAT(2, 3)
+    void printf(const char* format, ...);
+    PRINTF_FORMAT(2, 0)
+    virtual void vprintf(const char* format, va_list) = 0;
 
     // Typically a no-op for many subclasses of PrintStream, this is a hint that
     // the implementation should flush its buffers if it had not done so already.
     virtual void flush();
 
-    template<typename T>
+    template <typename T>
     void print(const T& value)
     {
         printInternal(*this, value);
     }
 
-    template<typename T1, typename... RemainingTypes>
+    template <typename T1, typename... RemainingTypes>
     void print(const T1& value1, const RemainingTypes&... values)
     {
         print(value1);
@@ -67,9 +72,18 @@ public:
 WTF_EXPORT void printInternal(PrintStream&, const char*);
 WTF_EXPORT void printInternal(PrintStream&, const CString&);
 WTF_EXPORT void printInternal(PrintStream&, const String&);
-inline void printInternal(PrintStream& out, char* value) { printInternal(out, static_cast<const char*>(value)); }
-inline void printInternal(PrintStream& out, CString& value) { printInternal(out, static_cast<const CString&>(value)); }
-inline void printInternal(PrintStream& out, String& value) { printInternal(out, static_cast<const String&>(value)); }
+inline void printInternal(PrintStream& out, char* value)
+{
+    printInternal(out, static_cast<const char*>(value));
+}
+inline void printInternal(PrintStream& out, CString& value)
+{
+    printInternal(out, static_cast<const CString&>(value));
+}
+inline void printInternal(PrintStream& out, String& value)
+{
+    printInternal(out, static_cast<const String&>(value));
+}
 WTF_EXPORT void printInternal(PrintStream&, bool);
 WTF_EXPORT void printInternal(PrintStream&, int);
 WTF_EXPORT void printInternal(PrintStream&, unsigned);
@@ -80,44 +94,44 @@ WTF_EXPORT void printInternal(PrintStream&, unsigned long long);
 WTF_EXPORT void printInternal(PrintStream&, float);
 WTF_EXPORT void printInternal(PrintStream&, double);
 
-template<typename T>
+template <typename T>
 void printInternal(PrintStream& out, const T& value)
 {
     value.dump(out);
 }
 
-#define MAKE_PRINT_ADAPTOR(Name, Type, function) \
-    class Name {                                 \
-    public:                                      \
-        Name(const Type& value)                  \
-            : m_value(value)                     \
-        {                                        \
-        }                                        \
-        void dump(PrintStream& out) const        \
-        {                                        \
-            function(out, m_value);              \
-        }                                        \
-    private:                                     \
-        Type m_value;                            \
+#define MAKE_PRINT_ADAPTOR(Name, Type, function)                      \
+    class Name final {                                                \
+        STACK_ALLOCATED();                                            \
+                                                                      \
+    public:                                                           \
+        Name(const Type& value)                                       \
+            : m_value(value)                                          \
+        {                                                             \
+        }                                                             \
+        void dump(PrintStream& out) const { function(out, m_value); } \
+                                                                      \
+    private:                                                          \
+        Type m_value;                                                 \
     }
 
-#define MAKE_PRINT_METHOD_ADAPTOR(Name, Type, method) \
-    class Name {                                 \
-    public:                                      \
-        Name(const Type& value)                  \
-            : m_value(value)                     \
-        {                                        \
-        }                                        \
-        void dump(PrintStream& out) const        \
-        {                                        \
-            m_value.method(out);                 \
-        }                                        \
-    private:                                     \
-        const Type& m_value;                     \
+#define MAKE_PRINT_METHOD_ADAPTOR(Name, Type, method)              \
+    class Name final {                                             \
+        STACK_ALLOCATED();                                         \
+                                                                   \
+    public:                                                        \
+        Name(const Type& value)                                    \
+            : m_value(value)                                       \
+        {                                                          \
+        }                                                          \
+        void dump(PrintStream& out) const { m_value.method(out); } \
+                                                                   \
+    private:                                                       \
+        const Type& m_value;                                       \
     }
 
-#define MAKE_PRINT_METHOD(Type, dumpMethod, method) \
-    MAKE_PRINT_METHOD_ADAPTOR(DumperFor_##method, Type, dumpMethod);    \
+#define MAKE_PRINT_METHOD(Type, dumpMethod, method)                  \
+    MAKE_PRINT_METHOD_ADAPTOR(DumperFor_##method, Type, dumpMethod); \
     DumperFor_##method method() const { return DumperFor_##method(*this); }
 
 // Use an adaptor-based dumper for characters to avoid situations where
@@ -126,34 +140,9 @@ void printInternal(PrintStream& out, const T& value)
 void dumpCharacter(PrintStream&, char);
 MAKE_PRINT_ADAPTOR(CharacterDump, char, dumpCharacter);
 
-template<typename T>
-class PointerDump {
-public:
-    PointerDump(const T* ptr)
-        : m_ptr(ptr)
-    {
-    }
-
-    void dump(PrintStream& out) const
-    {
-        if (m_ptr)
-            printInternal(out, *m_ptr);
-        else
-            out.print("(null)");
-    }
-private:
-    const T* m_ptr;
-};
-
-template<typename T>
-PointerDump<T> pointerDump(const T* ptr) { return PointerDump<T>(ptr); }
-
 } // namespace WTF
 
 using WTF::CharacterDump;
-using WTF::PointerDump;
 using WTF::PrintStream;
-using WTF::pointerDump;
 
 #endif // PrintStream_h
-

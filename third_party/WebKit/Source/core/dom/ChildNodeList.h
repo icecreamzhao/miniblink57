@@ -25,25 +25,30 @@
 #ifndef ChildNodeList_h
 #define ChildNodeList_h
 
+#include "core/dom/CollectionIndexCache.h"
 #include "core/dom/ContainerNode.h"
 #include "core/dom/NodeList.h"
-#include "core/html/CollectionIndexCache.h"
-#include "wtf/PassRefPtr.h"
 
 namespace blink {
 
 class ChildNodeList final : public NodeList {
 public:
-    static PassRefPtrWillBeRawPtr<ChildNodeList> create(ContainerNode& rootNode)
+    static ChildNodeList* create(ContainerNode& rootNode)
     {
-        return adoptRefWillBeNoop(new ChildNodeList(rootNode));
+        return new ChildNodeList(rootNode);
     }
 
     ~ChildNodeList() override;
 
     // DOM API.
-    unsigned length() const override { return m_collectionIndexCache.nodeCount(*this); }
-    Node* item(unsigned index) const override { return m_collectionIndexCache.nodeAt(*this, index); }
+    unsigned length() const override
+    {
+        return m_collectionIndexCache.nodeCount(*this);
+    }
+    Node* item(unsigned index) const override
+    {
+        return m_collectionIndexCache.nodeAt(*this, index);
+    }
 
     // Non-DOM API.
     void invalidateCache() { m_collectionIndexCache.invalidate(); }
@@ -55,8 +60,12 @@ public:
     bool canTraverseBackward() const { return true; }
     Node* traverseToFirst() const { return rootNode().firstChild(); }
     Node* traverseToLast() const { return rootNode().lastChild(); }
-    Node* traverseForwardToOffset(unsigned offset, Node& currentNode, unsigned& currentOffset) const;
-    Node* traverseBackwardToOffset(unsigned offset, Node& currentNode, unsigned& currentOffset) const;
+    Node* traverseForwardToOffset(unsigned offset,
+        Node& currentNode,
+        unsigned& currentOffset) const;
+    Node* traverseBackwardToOffset(unsigned offset,
+        Node& currentNode,
+        unsigned& currentOffset) const;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -66,11 +75,15 @@ private:
     bool isChildNodeList() const override { return true; }
     Node* virtualOwnerNode() const override;
 
-    RefPtrWillBeMember<ContainerNode> m_parent;
+    Member<ContainerNode> m_parent;
     mutable CollectionIndexCache<ChildNodeList, Node> m_collectionIndexCache;
 };
 
-DEFINE_TYPE_CASTS(ChildNodeList, NodeList, nodeList, nodeList->isChildNodeList(), nodeList.isChildNodeList());
+DEFINE_TYPE_CASTS(ChildNodeList,
+    NodeList,
+    nodeList,
+    nodeList->isChildNodeList(),
+    nodeList.isChildNodeList());
 
 } // namespace blink
 

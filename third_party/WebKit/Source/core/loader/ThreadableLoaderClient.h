@@ -34,27 +34,35 @@
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebDataConsumerHandle.h"
-#include "wtf/FastAllocBase.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
+class KURL;
 class ResourceError;
 class ResourceResponse;
 class ResourceTimingInfo;
 
 class CORE_EXPORT ThreadableLoaderClient {
     WTF_MAKE_NONCOPYABLE(ThreadableLoaderClient);
-public:
-    virtual void didSendData(unsigned long long /*bytesSent*/, unsigned long long /*totalBytesToBeSent*/) { }
 
-    virtual void didReceiveResponse(unsigned long /*identifier*/, const ResourceResponse&, PassOwnPtr<WebDataConsumerHandle>) { }
+public:
+    virtual void didSendData(unsigned long long /*bytesSent*/,
+        unsigned long long /*totalBytesToBeSent*/) { }
+    virtual void didReceiveRedirectTo(const KURL&) { }
+    virtual void didReceiveResponse(unsigned long /*identifier*/,
+        const ResourceResponse&,
+        std::unique_ptr<WebDataConsumerHandle>) { }
     virtual void didReceiveData(const char*, unsigned /*dataLength*/) { }
     virtual void didReceiveCachedMetadata(const char*, int /*dataLength*/) { }
-    virtual void didFinishLoading(unsigned long /*identifier*/, double /*finishTime*/) { }
+    virtual void didFinishLoading(unsigned long /*identifier*/,
+        double /*finishTime*/) { }
     virtual void didFail(const ResourceError&) { }
-    virtual void didFailAccessControlCheck(const ResourceError& error) { didFail(error); }
+    virtual void didFailAccessControlCheck(const ResourceError& error)
+    {
+        didFail(error);
+    }
     virtual void didFailRedirectCheck() { }
     virtual void didReceiveResourceTiming(const ResourceTimingInfo&) { }
 

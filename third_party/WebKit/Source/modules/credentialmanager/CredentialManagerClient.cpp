@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/credentialmanager/CredentialManagerClient.h"
 
 #include "bindings/core/v8/ScriptState.h"
@@ -12,18 +11,17 @@
 
 namespace blink {
 
-CredentialManagerClient::CredentialManagerClient(WebCredentialManagerClient* client)
+CredentialManagerClient::CredentialManagerClient(
+    WebCredentialManagerClient* client)
     : m_client(client)
 {
 }
 
-CredentialManagerClient::~CredentialManagerClient()
-{
-}
+CredentialManagerClient::~CredentialManagerClient() { }
 
 DEFINE_TRACE(CredentialManagerClient)
 {
-    WillBeHeapSupplement<Page>::trace(visitor);
+    Supplement<Page>::trace(visitor);
 }
 
 // static
@@ -33,7 +31,8 @@ const char* CredentialManagerClient::supplementName()
 }
 
 // static
-CredentialManagerClient* CredentialManagerClient::from(ExecutionContext* executionContext)
+CredentialManagerClient* CredentialManagerClient::from(
+    ExecutionContext* executionContext)
 {
     if (!executionContext->isDocument() || !toDocument(executionContext)->page())
         return 0;
@@ -43,40 +42,53 @@ CredentialManagerClient* CredentialManagerClient::from(ExecutionContext* executi
 // static
 CredentialManagerClient* CredentialManagerClient::from(Page* page)
 {
-    return static_cast<CredentialManagerClient*>(WillBeHeapSupplement<Page>::from(page, supplementName()));
+    return static_cast<CredentialManagerClient*>(
+        Supplement<Page>::from(page, supplementName()));
 }
 
-void provideCredentialManagerClientTo(Page& page, CredentialManagerClient* client)
+void provideCredentialManagerClientTo(Page& page,
+    CredentialManagerClient* client)
 {
-    CredentialManagerClient::provideTo(page, CredentialManagerClient::supplementName(), adoptPtrWillBeNoop(client));
+    CredentialManagerClient::provideTo(
+        page, CredentialManagerClient::supplementName(), client);
 }
 
-void CredentialManagerClient::dispatchFailedSignIn(const WebCredential& credential, WebCredentialManagerClient::NotificationCallbacks* callbacks)
+void CredentialManagerClient::dispatchFailedSignIn(
+    const WebCredential& credential,
+    WebCredentialManagerClient::NotificationCallbacks* callbacks)
 {
     if (!m_client)
         return;
     m_client->dispatchFailedSignIn(credential, callbacks);
 }
 
-void CredentialManagerClient::dispatchSignedIn(const WebCredential& credential, WebCredentialManagerClient::NotificationCallbacks* callbacks)
+void CredentialManagerClient::dispatchStore(
+    const WebCredential& credential,
+    WebCredentialManagerClient::NotificationCallbacks* callbacks)
 {
     if (!m_client)
         return;
-    m_client->dispatchSignedIn(credential, callbacks);
+    m_client->dispatchStore(credential, callbacks);
 }
 
-void CredentialManagerClient::dispatchRequireUserMediation(WebCredentialManagerClient::NotificationCallbacks* callbacks)
+void CredentialManagerClient::dispatchRequireUserMediation(
+    WebCredentialManagerClient::NotificationCallbacks* callbacks)
 {
     if (!m_client)
         return;
     m_client->dispatchRequireUserMediation(callbacks);
 }
 
-void CredentialManagerClient::dispatchRequest(bool zeroClickOnly, const WebVector<WebURL>& federations, WebCredentialManagerClient::RequestCallbacks* callbacks)
+void CredentialManagerClient::dispatchGet(
+    bool zeroClickOnly,
+    bool includePasswords,
+    const WebVector<WebURL>& federations,
+    WebCredentialManagerClient::RequestCallbacks* callbacks)
 {
     if (!m_client)
         return;
-    m_client->dispatchRequest(zeroClickOnly, federations, callbacks);
+    m_client->dispatchGet(zeroClickOnly, includePasswords, federations,
+        callbacks);
 }
 
 } // namespace blink

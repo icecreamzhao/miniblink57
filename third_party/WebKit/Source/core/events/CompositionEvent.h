@@ -34,35 +34,40 @@ namespace blink {
 
 class CompositionEvent final : public UIEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CompositionEvent> create()
+    static CompositionEvent* create() { return new CompositionEvent; }
+
+    static CompositionEvent* create(const AtomicString& type,
+        AbstractView* view,
+        const String& data)
     {
-        return adoptRefWillBeNoop(new CompositionEvent);
+        return new CompositionEvent(type, view, data);
     }
 
-    static PassRefPtrWillBeRawPtr<CompositionEvent> create(const AtomicString& type, PassRefPtrWillBeRawPtr<AbstractView> view, const String& data)
+    static CompositionEvent* create(const AtomicString& type,
+        const CompositionEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new CompositionEvent(type, view, data));
+        return new CompositionEvent(type, initializer);
     }
 
-    static PassRefPtrWillBeRawPtr<CompositionEvent> create(const AtomicString& type, const CompositionEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new CompositionEvent(type, initializer));
-    }
+    ~CompositionEvent() override;
 
-    virtual ~CompositionEvent();
-
-    void initCompositionEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView>, const String& data);
+    void initCompositionEvent(const AtomicString& type,
+        bool canBubble,
+        bool cancelable,
+        AbstractView*,
+        const String& data);
 
     String data() const { return m_data; }
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     CompositionEvent();
-    CompositionEvent(const AtomicString& type, PassRefPtrWillBeRawPtr<AbstractView>, const String&);
+    CompositionEvent(const AtomicString& type, AbstractView*, const String&);
     CompositionEvent(const AtomicString& type, const CompositionEventInit&);
 
     String m_data;

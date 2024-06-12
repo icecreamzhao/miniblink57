@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8HTMLAllCollection.h"
 
 #include "bindings/core/v8/V8Binding.h"
@@ -40,29 +39,41 @@
 
 namespace blink {
 
-template<class CallbackInfo>
-static v8::Local<v8::Value> getNamedItems(HTMLAllCollection* collection, AtomicString name, const CallbackInfo& info)
+template <class CallbackInfo>
+static v8::Local<v8::Value> getNamedItems(HTMLAllCollection* collection,
+    AtomicString name,
+    const CallbackInfo& info)
 {
-    WillBeHeapVector<RefPtrWillBeMember<Element>> namedItems;
+    HeapVector<Member<Element>> namedItems;
     collection->namedItems(name, namedItems);
 
     if (!namedItems.size())
         return v8Undefined();
 
     if (namedItems.size() == 1)
-        return toV8(namedItems.at(0).release(), info.Holder(), info.GetIsolate());
+        return ToV8(namedItems.at(0).release(), info.Holder(), info.GetIsolate());
 
     // FIXME: HTML5 specification says this should be a HTMLCollection.
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/common-dom-interfaces.html#htmlallcollection
-    return toV8(StaticElementList::adopt(namedItems), info.Holder(), info.GetIsolate());
+    return ToV8(StaticElementList::adopt(namedItems), info.Holder(),
+        info.GetIsolate());
 }
 
-template<class CallbackInfo>
-static v8::Local<v8::Value> getItem(HTMLAllCollection* collection, v8::Local<v8::Value> argument, const CallbackInfo& info)
+template <class CallbackInfo>
+static v8::Local<v8::Value> getItem(
+    HTMLAllCollection* collection,
+    v8::Local<v8::Value> argument,
+    const CallbackInfo& info,
+    UseCounter::Feature namedFeature,
+    UseCounter::Feature indexedFeature,
+    UseCounter::Feature indexedWithNonNumberFeature)
 {
     v8::Local<v8::Uint32> index;
-    if (!argument->ToArrayIndex(info.GetIsolate()->GetCurrentContext()).ToLocal(&index)) {
-        TOSTRING_DEFAULT(V8StringResource<>, name, argument, v8::Undefined(info.GetIsolate()));
+    if (!argument->ToArrayIndex(info.GetIsolate()->GetCurrentContext())
+             .ToLocal(&index)) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), namedFeature);
+        TOSTRING_DEFAULT(V8StringResource<>, name, argument,
+            v8::Undefined(info.GetIsolate()));
         v8::Local<v8::Value> result = getNamedItems(collection, name, info);
 
         if (result.IsEmpty())
@@ -71,35 +82,61 @@ static v8::Local<v8::Value> getItem(HTMLAllCollection* collection, v8::Local<v8:
         return result;
     }
 
-    RefPtrWillBeRawPtr<Element> result = collection->item(index->Value());
-    return toV8(result.release(), info.Holder(), info.GetIsolate());
+    UseCounter::count(currentExecutionContext(info.GetIsolate()), indexedFeature);
+    if (!argument->IsNumber()) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            indexedWithNonNumberFeature);
+    }
+    Element* result = collection->item(index->Value());
+    return ToV8(result, info.Holder(), info.GetIsolate());
 }
 
-void V8HTMLAllCollection::itemMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+void V8HTMLAllCollection::itemMethodCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
-    HTMLAllCollection* impl = V8HTMLAllCollection::toImpl(info.Holder());
-    v8SetReturnValue(info, getItem(impl, info[0], info));
-}
-
-void V8HTMLAllCollection::legacyCallCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-    if (info.Length() < 1)
-        return;
-
-    HTMLAllCollection* impl = V8HTMLAllCollection::toImpl(info.Holder());
-    Node& ownerNode = impl->ownerNode();
-
-    UseCounter::countIfNotPrivateScript(info.GetIsolate(), ownerNode.document(), UseCounter::DocumentAllLegacyCall);
-
-    if (info.Length() == 1) {
-        v8SetReturnValue(info, getItem(impl, info[0], info));
+    if (info.Length() < 1) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentAllItemNoArguments);
         return;
     }
+
+    HTMLAllCollection* impl = V8HTMLAllCollection::toImpl(info.Holder());
+    v8SetReturnValue(
+        info, getItem(impl, info[0], info, UseCounter::DocumentAllItemNamed, UseCounter::DocumentAllItemIndexed, UseCounter::DocumentAllItemIndexedWithNonNumber));
+}
+
+void V8HTMLAllCollection::legacyCallCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (info.Length() < 1) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentAllLegacyCallNoArguments);
+        return;
+    }
+
+    UseCounter::count(currentExecutionContext(info.GetIsolate()),
+        UseCounter::DocumentAllLegacyCall);
+
+    HTMLAllCollection* impl = V8HTMLAllCollection::toImpl(info.Holder());
+
+    if (info.Length() == 1) {
+        v8SetReturnValue(
+            info,
+            getItem(impl, info[0], info, UseCounter::DocumentAllLegacyCallNamed,
+                UseCounter::DocumentAllLegacyCallIndexed,
+                UseCounter::DocumentAllLegacyCallIndexedWithNonNumber));
+        return;
+    }
+
+    UseCounter::count(currentExecutionContext(info.GetIsolate()),
+        UseCounter::DocumentAllLegacyCallTwoArguments);
 
     // If there is a second argument it is the index of the item we want.
     TOSTRING_VOID(V8StringResource<>, name, info[0]);
     v8::Local<v8::Uint32> index;
-    if (!info[1]->ToArrayIndex(info.GetIsolate()->GetCurrentContext()).ToLocal(&index))
+    if (!info[1]
+             ->ToArrayIndex(info.GetIsolate()->GetCurrentContext())
+             .ToLocal(&index))
         return;
 
     if (Node* node = impl->namedItemWithIndex(name, index->Value())) {

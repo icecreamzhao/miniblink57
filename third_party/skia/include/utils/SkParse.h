@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkParse_DEFINED
 #define SkParse_DEFINED
 
@@ -26,7 +25,7 @@ public:
 
     static bool FindBool(const char str[], bool* value);
     // return the index of str in list[], or -1 if not found
-    static int  FindList(const char str[], const char list[]);
+    static int FindList(const char str[], const char list[]);
 #ifdef SK_SUPPORT_UNITTEST
     static void TestColor();
     static void UnitTest();

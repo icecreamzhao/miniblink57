@@ -5,29 +5,39 @@
 #ifndef EllipsisBoxPainter_h
 #define EllipsisBoxPainter_h
 
+#include "wtf/Allocator.h"
+
 namespace blink {
 
 struct PaintInfo;
 
 class EllipsisBox;
-class FloatPoint;
-class Font;
-class GraphicsContext;
 class LayoutPoint;
 class LayoutUnit;
 class ComputedStyle;
 
 class EllipsisBoxPainter {
-public:
-    EllipsisBoxPainter(EllipsisBox& ellipsisBox) : m_ellipsisBox(ellipsisBox) { }
+    STACK_ALLOCATED();
 
-    void paint(const PaintInfo&, const LayoutPoint&, LayoutUnit lineTop, LayoutUnit lineBottom);
+public:
+    EllipsisBoxPainter(const EllipsisBox& ellipsisBox)
+        : m_ellipsisBox(ellipsisBox)
+    {
+    }
+
+    void paint(const PaintInfo&,
+        const LayoutPoint&,
+        LayoutUnit lineTop,
+        LayoutUnit lineBottom);
 
 private:
-    void paintEllipsis(const PaintInfo&, const LayoutPoint& paintOffset, LayoutUnit lineTop, LayoutUnit lineBottom, const ComputedStyle&);
-    void paintSelection(GraphicsContext*, const LayoutPoint&, const ComputedStyle&, const Font&);
+    void paintEllipsis(const PaintInfo&,
+        const LayoutPoint& paintOffset,
+        LayoutUnit lineTop,
+        LayoutUnit lineBottom,
+        const ComputedStyle&);
 
-    EllipsisBox& m_ellipsisBox;
+    const EllipsisBox& m_ellipsisBox;
 };
 
 } // namespace blink

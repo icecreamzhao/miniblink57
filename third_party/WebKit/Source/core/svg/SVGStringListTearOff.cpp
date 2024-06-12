@@ -28,16 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/SVGStringListTearOff.h"
 
 #include "core/svg/SVGElement.h"
 
 namespace blink {
 
-SVGStringListTearOff::SVGStringListTearOff(PassRefPtrWillBeRawPtr<SVGStringList> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName)
-    : SVGPropertyTearOff<SVGStringList>(target, contextElement, propertyIsAnimVal, attributeName)
+SVGStringListTearOff::SVGStringListTearOff(
+    SVGStringList* target,
+    SVGElement* contextElement,
+    PropertyIsAnimValType propertyIsAnimVal,
+    const QualifiedName& attributeName)
+    : SVGPropertyTearOff<SVGStringList>(target,
+        contextElement,
+        propertyIsAnimVal,
+        attributeName)
 {
 }
 
+DEFINE_TRACE_WRAPPERS(SVGStringListTearOff)
+{
+    visitor->traceWrappers(contextElement());
+}
 }

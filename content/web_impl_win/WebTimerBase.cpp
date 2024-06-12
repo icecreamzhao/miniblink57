@@ -34,6 +34,7 @@
 
 #include "third_party/WebKit/Source/platform/Task.h"
 #include "ActivatingTimerCheck.h"
+#include "wtf/CurrentTime.h"
 
 namespace content {
 
@@ -156,8 +157,8 @@ public:
 
     void checkConsistency(int offset = 0) const
     {
-        ASSERT_UNUSED(offset, m_index + offset >= 0);
-        ASSERT_UNUSED(offset, m_index + offset <= static_cast<int>(timerHeap().size()));
+//         ASSERT_UNUSED(offset, m_index + offset >= 0);
+//         ASSERT_UNUSED(offset, m_index + offset <= static_cast<int>(timerHeap().size()));
     }
     
     std::vector<WebTimerBase*>& timerHeap() { return m_threadTimers->timerHeap(); }
@@ -266,7 +267,7 @@ void WebTimerBase::start(double nextFireInterval, double repeatInterval)
     ASSERT(m_thread == currentThread());
 
     m_repeatInterval = repeatInterval;
-    setNextFireTime(currentTime() + nextFireInterval, nullptr);
+    setNextFireTime(WTF::currentTime() + nextFireInterval, nullptr);
 }
 
 void WebTimerBase::stop()
@@ -418,7 +419,14 @@ void WebTimerBase::fireTimersInNestedEventLoop()
 
 void WebTimerBase::fired()
 {
+    std::string name = m_location.function_name();
+    //printf("WebTimerBase::fired begin %p, %x, %s\n", m_task, pthread_self(), name.c_str());
+    
+//     if (name == "continueJob") {
+//         __debugbreak();
+//     }
     m_task->run();
+    //printf("WebTimerBase::fired end %p, func name:%s\n", m_task, name.c_str());
 }
 
 } // namespace content

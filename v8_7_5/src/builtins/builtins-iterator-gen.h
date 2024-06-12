@@ -12,68 +12,72 @@
 namespace v8 {
 namespace internal {
 
-using compiler::Node;
+    using compiler::Node;
 
-class IteratorBuiltinsAssembler : public CodeStubAssembler,
-                                  public IteratorBuiltinsFromDSLAssembler {
- public:
-  explicit IteratorBuiltinsAssembler(compiler::CodeAssemblerState* state)
-      : CodeStubAssembler(state), IteratorBuiltinsFromDSLAssembler(state) {}
+    class IteratorBuiltinsAssembler : public CodeStubAssembler,
+                                      public IteratorBuiltinsFromDSLAssembler {
+    public:
+        explicit IteratorBuiltinsAssembler(compiler::CodeAssemblerState* state)
+            : CodeStubAssembler(state)
+            , IteratorBuiltinsFromDSLAssembler(state)
+        {
+        }
 
-  // Returns object[Symbol.iterator].
-  TNode<Object> GetIteratorMethod(Node* context, Node* object);
+        // Returns object[Symbol.iterator].
+        TNode<Object> GetIteratorMethod(Node* context, Node* object);
 
-  // https://tc39.github.io/ecma262/#sec-getiterator --- never used for
-  // @@asyncIterator.
-  IteratorRecord GetIterator(Node* context, Node* object,
-                             Label* if_exception = nullptr,
-                             Variable* exception = nullptr);
-  IteratorRecord GetIterator(Node* context, Node* object, Node* method,
-                             Label* if_exception = nullptr,
-                             Variable* exception = nullptr);
+        // https://tc39.github.io/ecma262/#sec-getiterator --- never used for
+        // @@asyncIterator.
+        IteratorRecord GetIterator(Node* context, Node* object,
+            Label* if_exception = nullptr,
+            Variable* exception = nullptr);
+        IteratorRecord GetIterator(Node* context, Node* object, Node* method,
+            Label* if_exception = nullptr,
+            Variable* exception = nullptr);
 
-  // https://tc39.github.io/ecma262/#sec-iteratorstep
-  // Returns `false` if the iterator is done, otherwise returns an
-  // iterator result.
-  // `fast_iterator_result_map` refers to the map for the JSIteratorResult
-  // object, loaded from the native context.
-  TNode<Object> IteratorStep(Node* context, const IteratorRecord& iterator,
-                             Label* if_done,
-                             Node* fast_iterator_result_map = nullptr,
-                             Label* if_exception = nullptr,
-                             Variable* exception = nullptr);
+        // https://tc39.github.io/ecma262/#sec-iteratorstep
+        // Returns `false` if the iterator is done, otherwise returns an
+        // iterator result.
+        // `fast_iterator_result_map` refers to the map for the JSIteratorResult
+        // object, loaded from the native context.
+        TNode<Object> IteratorStep(Node* context, const IteratorRecord& iterator,
+            Label* if_done,
+            Node* fast_iterator_result_map = nullptr,
+            Label* if_exception = nullptr,
+            Variable* exception = nullptr);
 
-  TNode<Object> IteratorStep(Node* context, const IteratorRecord& iterator,
-                             Node* fast_iterator_result_map, Label* if_done) {
-    return IteratorStep(context, iterator, if_done, fast_iterator_result_map);
-  }
+        TNode<Object> IteratorStep(Node* context, const IteratorRecord& iterator,
+            Node* fast_iterator_result_map, Label* if_done)
+        {
+            return IteratorStep(context, iterator, if_done, fast_iterator_result_map);
+        }
 
-  // https://tc39.github.io/ecma262/#sec-iteratorvalue
-  // Return the `value` field from an iterator.
-  // `fast_iterator_result_map` refers to the map for the JSIteratorResult
-  // object, loaded from the native context.
-  Node* IteratorValue(Node* context, Node* result,
-                      Node* fast_iterator_result_map = nullptr,
-                      Label* if_exception = nullptr,
-                      Variable* exception = nullptr);
+        // https://tc39.github.io/ecma262/#sec-iteratorvalue
+        // Return the `value` field from an iterator.
+        // `fast_iterator_result_map` refers to the map for the JSIteratorResult
+        // object, loaded from the native context.
+        Node* IteratorValue(Node* context, Node* result,
+            Node* fast_iterator_result_map = nullptr,
+            Label* if_exception = nullptr,
+            Variable* exception = nullptr);
 
-  // https://tc39.github.io/ecma262/#sec-iteratorclose
-  void IteratorCloseOnException(Node* context, const IteratorRecord& iterator,
-                                Label* if_exception, Variable* exception);
-  void IteratorCloseOnException(Node* context, const IteratorRecord& iterator,
-                                TNode<Object> exception);
+        // https://tc39.github.io/ecma262/#sec-iteratorclose
+        void IteratorCloseOnException(Node* context, const IteratorRecord& iterator,
+            Label* if_exception, Variable* exception);
+        void IteratorCloseOnException(Node* context, const IteratorRecord& iterator,
+            TNode<Object> exception);
 
-  // #sec-iterabletolist
-  // Build a JSArray by iterating over {iterable} using {iterator_fn},
-  // following the ECMAscript operation with the same name.
-  TNode<JSArray> IterableToList(TNode<Context> context, TNode<Object> iterable,
-                                TNode<Object> iterator_fn);
+        // #sec-iterabletolist
+        // Build a JSArray by iterating over {iterable} using {iterator_fn},
+        // following the ECMAscript operation with the same name.
+        TNode<JSArray> IterableToList(TNode<Context> context, TNode<Object> iterable,
+            TNode<Object> iterator_fn);
 
-  void FastIterableToList(TNode<Context> context, TNode<Object> iterable,
-                          TVariable<Object>* var_result, Label* slow);
-};
+        void FastIterableToList(TNode<Context> context, TNode<Object> iterable,
+            TVariable<Object>* var_result, Label* slow);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_BUILTINS_BUILTINS_ITERATOR_GEN_H_
+#endif // V8_BUILTINS_BUILTINS_ITERATOR_GEN_H_

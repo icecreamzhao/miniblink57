@@ -37,12 +37,13 @@ namespace blink {
 
 class WebSourceBufferClient;
 
+// Interface for actuating the media engine implementation of Media Source
+// extension's SourceBuffer. See also the mediasource module in Blink, and the
+// WebSourceBufferClient interface.
 class WebSourceBuffer {
 public:
-    enum AppendMode {
-        AppendModeSegments,
-        AppendModeSequence
-    };
+    enum AppendMode { AppendModeSegments,
+        AppendModeSequence };
 
     virtual ~WebSourceBuffer() { }
 
@@ -53,11 +54,31 @@ public:
     virtual bool setMode(AppendMode) = 0;
     virtual WebTimeRanges buffered() = 0;
 
-    // Appends data and runs the segment parser loop algorithm.
-    // The algorithm may update |*timestampOffset| if |timestampOffset| is not null.
-    virtual void append(const unsigned char* data, unsigned length, double* timestampOffset) = 0;
+    // Returns the highest buffered presentation timestamp of all buffered coded
+    // frames, or 0 if nothing is buffered.
+    virtual double highestPresentationTimestamp() = 0;
 
-    virtual void abort() = 0;
+    // Run coded frame eviction/garbage collection algorithm.
+    // |currentPlaybackTime| is HTMLMediaElement::currentTime. The algorithm
+    // will try to preserve data around current playback position.
+    // |newDataSize| is size of new data about to be appended to SourceBuffer.
+    // Could be zero for appendStream if stream size is unknown in advance.
+    // Returns false if buffer is still full after eviction.
+    virtual bool evictCodedFrames(double currentPlaybackTime,
+        size_t newDataSize)
+        = 0;
+
+    // Appends data and runs the segment parser loop algorithm.
+    // The algorithm may update |*timestampOffset| if |timestampOffset| is not
+    // null.
+    // Returns true on success, otherwise the append error algorithm needs to
+    // run with the decode error parameter set to true.
+    virtual bool append(const unsigned char* data,
+        unsigned length,
+        double* timestampOffset)
+        = 0;
+
+    virtual void resetParserState() = 0;
     virtual void remove(double start, double end) = 0;
     virtual bool setTimestampOffset(double) = 0;
 

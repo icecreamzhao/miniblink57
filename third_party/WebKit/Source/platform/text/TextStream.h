@@ -44,10 +44,15 @@ class LayoutPoint;
 class LayoutRect;
 class LayoutSize;
 
-class PLATFORM_EXPORT TextStream {
+class PLATFORM_EXPORT TextStream final {
+    STACK_ALLOCATED();
+
 public:
     struct FormatNumberRespectingIntegers {
-        FormatNumberRespectingIntegers(double number) : value(number) { }
+        FormatNumberRespectingIntegers(double number)
+            : value(number)
+        {
+        }
         double value;
     };
 
@@ -83,7 +88,7 @@ PLATFORM_EXPORT TextStream& operator<<(TextStream&, const LayoutSize&);
 
 PLATFORM_EXPORT void writeIndent(TextStream&, int indent);
 
-template<typename Item>
+template <typename Item>
 TextStream& operator<<(TextStream& ts, const Vector<Item>& vector)
 {
     ts << "[";
@@ -99,6 +104,6 @@ TextStream& operator<<(TextStream& ts, const Vector<Item>& vector)
     return ts;
 }
 
-}
+} // namespace blink
 
 #endif

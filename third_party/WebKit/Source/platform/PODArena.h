@@ -26,14 +26,15 @@
 #ifndef PODArena_h
 #define PODArena_h
 
-#include <stdint.h>
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-#include "wtf/FastMalloc.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
+#include "wtf/allocator/Partitions.h"
+#include <memory>
+#include <stdint.h>
 
 namespace blink {
 
@@ -50,6 +51,7 @@ public:
     public:
         virtual void* allocate(size_t size) = 0;
         virtual void free(void* ptr) = 0;
+
     protected:
         virtual ~Allocator() { }
         friend class WTF::RefCounted<Allocator>;
@@ -64,42 +66,43 @@ public:
             return adoptRef(new FastMallocAllocator);
         }
 
-        void* allocate(size_t size) override { return fastMalloc(size); }
-        void free(void* ptr) override { fastFree(ptr); }
+        void* allocate(size_t size) override
+        {
+            return WTF::Partitions::fastMalloc(size,
+                WTF_HEAP_PROFILER_TYPE_NAME(PODArena));
+        }
+        void free(void* ptr) override { WTF::Partitions::fastFree(ptr); }
 
     protected:
         FastMallocAllocator() { }
     };
 
     // Creates a new PODArena configured with a FastMallocAllocator.
-    static PassRefPtr<PODArena> create()
-    {
-        return adoptRef(new PODArena);
-    }
+    static PassRefPtr<PODArena> create() { return adoptRef(new PODArena); }
 
     // Creates a new PODArena configured with the given Allocator.
     static PassRefPtr<PODArena> create(PassRefPtr<Allocator> allocator)
     {
-        return adoptRef(new PODArena(allocator));
+        return adoptRef(new PODArena(std::move(allocator)));
     }
 
     // Allocates an object from the arena.
-    template<class T> T* allocateObject()
+    template <class T>
+    T* allocateObject()
     {
         return new (allocateBase<T>()) T();
     }
 
     // Allocates an object from the arena, calling a single-argument constructor.
-    template<class T, class Argument1Type> T* allocateObject(const Argument1Type& argument1)
+    template <class T, class Argument1Type>
+    T* allocateObject(const Argument1Type& argument1)
     {
         return new (allocateBase<T>()) T(argument1);
     }
 
     // The initial size of allocated chunks; increases as necessary to
     // satisfy large allocations. Mainly public for unit tests.
-    enum {
-        DefaultChunkSize = 16384
-    };
+    enum { DefaultChunkSize = 16384 };
 
 protected:
     friend class WTF::RefCounted<PODArena>;
@@ -107,21 +110,27 @@ protected:
     PODArena()
         : m_allocator(FastMallocAllocator::create())
         , m_current(0)
-        , m_currentChunkSize(DefaultChunkSize) { }
+        , m_currentChunkSize(DefaultChunkSize)
+    {
+    }
 
     explicit PODArena(PassRefPtr<Allocator> allocator)
         : m_allocator(allocator)
         , m_current(0)
-        , m_currentChunkSize(DefaultChunkSize) { }
+        , m_currentChunkSize(DefaultChunkSize)
+    {
+    }
 
     // Returns the alignment requirement for classes and structs on the
     // current platform.
-    template <class T> static size_t minAlignment()
+    template <class T>
+    static size_t minAlignment()
     {
         return WTF_ALIGN_OF(T);
     }
 
-    template<class T> void* allocateBase()
+    template <class T>
+    void* allocateBase()
     {
         void* ptr = 0;
         size_t roundedSize = roundUp(sizeof(T), minAlignment<T>());
@@ -131,8 +140,9 @@ protected:
         if (!ptr) {
             if (roundedSize > m_currentChunkSize)
                 m_currentChunkSize = roundedSize;
-            m_chunks.append(adoptPtr(new Chunk(m_allocator.get(), m_currentChunkSize)));
-            m_current = m_chunks.last().get();
+            m_chunks.push_back(
+                WTF::wrapUnique(new Chunk(m_allocator.get(), m_currentChunkSize)));
+            m_current = m_chunks.back().get();
             ptr = m_current->allocate(roundedSize);
         }
         return ptr;
@@ -147,7 +157,9 @@ protected:
 
     // Manages a chunk of memory and individual allocations out of it.
     class Chunk final {
+        USING_FAST_MALLOC(Chunk);
         WTF_MAKE_NONCOPYABLE(Chunk);
+
     public:
         // Allocates a block of memory of the given size from the passed
         // Allocator.
@@ -161,10 +173,7 @@ protected:
 
         // Frees the memory allocated from the Allocator in the
         // constructor.
-        ~Chunk()
-        {
-            m_allocator->free(m_base);
-        }
+        ~Chunk() { m_allocator->free(m_base); }
 
         // Returns a pointer to "size" bytes of storage, or 0 if this
         // Chunk could not satisfy the allocation.
@@ -192,7 +201,7 @@ protected:
     RefPtr<Allocator> m_allocator;
     Chunk* m_current;
     size_t m_currentChunkSize;
-    Vector<OwnPtr<Chunk>> m_chunks;
+    Vector<std::unique_ptr<Chunk>> m_chunks;
 };
 
 } // namespace blink

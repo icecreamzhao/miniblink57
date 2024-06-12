@@ -30,6 +30,8 @@
 // We reserve the V8_* prefix for macros defined in V8 public API and
 // assume there are no name conflicts with the embedder's code.
 
+#define V8CALL __cdecl
+
 #ifdef V8_OS_WIN
 
 // Setup for Windows DLL export/import. When building the V8 DLL the
@@ -283,7 +285,7 @@ class Local {
     return !operator==(that);
   }
 
-  template <class S> V8_INLINE static Local<T> Cast(Local<S> that) {
+  template <class S> V8_INLINE static Local<T> V8CALL Cast(Local<S> that) {
 #ifdef V8_ENABLE_CHECKS
     // If we're going to perform the type check then we have to check
     // that the handle isn't empty before doing the checked cast.
@@ -302,8 +304,8 @@ class Local {
    * The referee is kept alive by the local handle even when
    * the original handle is destroyed/disposed.
    */
-  V8_INLINE static Local<T> New(Isolate* isolate, Local<T> that);
-  V8_INLINE static Local<T> New(Isolate* isolate,
+  V8_INLINE static Local<T> V8CALL New(Isolate* isolate, Local<T> that);
+  V8_INLINE static Local<T> V8CALL New(Isolate* isolate,
                                 const PersistentBase<T>& that);
 
  private:
@@ -334,7 +336,7 @@ class Local {
   friend class ReturnValue;
 
   explicit V8_INLINE Local(T* that) : val_(that) {}
-  V8_INLINE static Local<T> New(Isolate* isolate, T* that);
+  V8_INLINE static Local<T> V8CALL New(Isolate* isolate, T* that);
   T* val_;
 };
 
@@ -412,7 +414,7 @@ static const int kInternalFieldsInWeakCallback = 2;
 template <typename T>
 class WeakCallbackInfo {
  public:
-  typedef void (*Callback)(const WeakCallbackInfo<T>& data);
+  typedef void (V8CALL*Callback)(const WeakCallbackInfo<T>& data);
 
   WeakCallbackInfo(Isolate* isolate, T* parameter,
                    void* internal_fields[kInternalFieldsInWeakCallback],
@@ -620,7 +622,7 @@ template <class T> class PersistentBase {
   friend class Object;
 
   explicit V8_INLINE PersistentBase(T* val) : val_(val) {}
-  V8_INLINE static T* New(Isolate* isolate, T* that);
+  V8_INLINE static T* V8CALL New(Isolate* isolate, T* that);
 
   T* val_;
 };
@@ -638,12 +640,12 @@ class NonCopyablePersistentTraits {
   typedef Persistent<T, NonCopyablePersistentTraits<T> > NonCopyablePersistent;
   static const bool kResetInDestructor = false;
   template<class S, class M>
-  V8_INLINE static void Copy(const Persistent<S, M>& source,
+  V8_INLINE static void V8CALL Copy(const Persistent<S, M>& source,
                              NonCopyablePersistent* dest) {
     Uncompilable<Object>();
   }
   // TODO(dcarney): come up with a good compile error here.
-  template<class O> V8_INLINE static void Uncompilable() {
+  template<class O> V8_INLINE static void V8CALL Uncompilable() {
     TYPE_CHECK(O, Primitive);
   }
 };
@@ -658,7 +660,7 @@ struct CopyablePersistentTraits {
   typedef Persistent<T, CopyablePersistentTraits<T> > CopyablePersistent;
   static const bool kResetInDestructor = true;
   template<class S, class M>
-  static V8_INLINE void Copy(const Persistent<S, M>& source,
+  static V8_INLINE void V8CALL Copy(const Persistent<S, M>& source,
                              CopyablePersistent* dest) {
     // do nothing, just allow copy
   }
@@ -861,7 +863,7 @@ class V8_EXPORT HandleScope {
   /**
    * Counts the number of allocated handles.
    */
-  static int NumberOfHandles(Isolate* isolate);
+  static int V8CALL NumberOfHandles(Isolate* isolate);
 
   V8_INLINE Isolate* GetIsolate() const {
     return reinterpret_cast<Isolate*>(isolate_);
@@ -877,12 +879,12 @@ class V8_EXPORT HandleScope {
 
   void Initialize(Isolate* isolate);
 
-  static internal::Object** CreateHandle(internal::Isolate* isolate,
+  static internal::Object** V8CALL CreateHandle(internal::Isolate* isolate,
                                          internal::Object* value);
 
  private:
   // Uses heap_object to obtain the current Isolate.
-  static internal::Object** CreateHandle(internal::HeapObject* heap_object,
+  static internal::Object** V8CALL CreateHandle(internal::HeapObject* heap_object,
                                          internal::Object* value);
 
   internal::Isolate* isolate_;
@@ -1071,7 +1073,7 @@ class V8_EXPORT Module {
    */
   int GetIdentityHash() const;
 
-  typedef MaybeLocal<Module> (*ResolveCallback)(Local<Context> context,
+  typedef MaybeLocal<Module> (V8CALL*ResolveCallback)(Local<Context> context,
                                                 Local<String> specifier,
                                                 Local<Module> referrer);
 
@@ -1100,13 +1102,13 @@ class V8_EXPORT Script {
    */
   static V8_DEPRECATE_SOON(
       "Use maybe version",
-      Local<Script> Compile(Local<String> source,
+      Local<Script> V8CALL Compile(Local<String> source,
                             ScriptOrigin* origin = nullptr));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> Compile(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> V8CALL Compile(
       Local<Context> context, Local<String> source,
       ScriptOrigin* origin = nullptr);
 
-  static Local<Script> V8_DEPRECATE_SOON("Use maybe version",
+  static Local<Script> V8CALL V8_DEPRECATE_SOON("Use maybe version",
                                          Compile(Local<String> source,
                                                  Local<String> file_name));
 
@@ -1313,10 +1315,10 @@ class V8_EXPORT ScriptCompiler {
    *   bound to a context).
    */
   static V8_DEPRECATED("Use maybe version",
-                       Local<UnboundScript> CompileUnbound(
+                       Local<UnboundScript> V8CALL CompileUnbound(
                            Isolate* isolate, Source* source,
                            CompileOptions options = kNoCompileOptions));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> CompileUnboundScript(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> V8CALL CompileUnboundScript(
       Isolate* isolate, Source* source,
       CompileOptions options = kNoCompileOptions);
 
@@ -1333,9 +1335,9 @@ class V8_EXPORT ScriptCompiler {
    */
   static V8_DEPRECATED(
       "Use maybe version",
-      Local<Script> Compile(Isolate* isolate, Source* source,
+      Local<Script> V8CALL Compile(Isolate* isolate, Source* source,
                             CompileOptions options = kNoCompileOptions));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> Compile(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> V8CALL Compile(
       Local<Context> context, Source* source,
       CompileOptions options = kNoCompileOptions);
 
@@ -1350,7 +1352,7 @@ class V8_EXPORT ScriptCompiler {
    * This API allows to start the streaming with as little data as possible, and
    * the remaining data (for example, the ScriptOrigin) is passed to Compile.
    */
-  static ScriptStreamingTask* StartStreamingScript(
+  static ScriptStreamingTask* V8CALL StartStreamingScript(
       Isolate* isolate, StreamedSource* source,
       CompileOptions options = kNoCompileOptions);
 
@@ -1362,11 +1364,11 @@ class V8_EXPORT ScriptCompiler {
    * during streaming, so the embedder needs to pass the full source here.
    */
   static V8_DEPRECATED("Use maybe version",
-                       Local<Script> Compile(Isolate* isolate,
+                       Local<Script> V8CALL Compile(Isolate* isolate,
                                              StreamedSource* source,
                                              Local<String> full_source_string,
                                              const ScriptOrigin& origin));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> Compile(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Script> V8CALL Compile(
       Local<Context> context, StreamedSource* source,
       Local<String> full_source_string, const ScriptOrigin& origin);
 
@@ -1388,7 +1390,7 @@ class V8_EXPORT ScriptCompiler {
    *   Alternatively, this tag can be stored alongside the cached data and
    *   compared when it is being used.
    */
-  static uint32_t CachedDataVersionTag();
+  static uint32_t V8CALL CachedDataVersionTag();
 
   /**
    * This is an unfinished experimental feature, and is only exposed
@@ -1400,7 +1402,7 @@ class V8_EXPORT ScriptCompiler {
    * Corresponds to the ParseModule abstract operation in the
    * ECMAScript specification.
    */
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Module> CompileModule(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Module> V8CALL CompileModule(
       Isolate* isolate, Source* source);
 
   /**
@@ -1414,19 +1416,19 @@ class V8_EXPORT ScriptCompiler {
    * example).
    */
   static V8_DEPRECATE_SOON("Use maybe version",
-                           Local<Function> CompileFunctionInContext(
+                           Local<Function> V8CALL CompileFunctionInContext(
                                Isolate* isolate, Source* source,
                                Local<Context> context, size_t arguments_count,
                                Local<String> arguments[],
                                size_t context_extension_count,
                                Local<Object> context_extensions[]));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Function> CompileFunctionInContext(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Function> V8CALL CompileFunctionInContext(
       Local<Context> context, Source* source, size_t arguments_count,
       Local<String> arguments[], size_t context_extension_count,
       Local<Object> context_extensions[]);
 
  private:
-  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> CompileUnboundInternal(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> V8CALL CompileUnboundInternal(
       Isolate* isolate, Source* source, CompileOptions options, bool is_module);
 };
 
@@ -1506,7 +1508,7 @@ class V8_EXPORT Message {
   bool IsOpaque() const;
 
   // TODO(1245381): Print to a string instead of on a FILE.
-  static void PrintCurrentStackTrace(Isolate* isolate, FILE* out);
+  static void V8CALL PrintCurrentStackTrace(Isolate* isolate, FILE* out);
 
   static const int kNoLineNumberInfo = 0;
   static const int kNoColumnInfo = 0;
@@ -1564,7 +1566,7 @@ class V8_EXPORT StackTrace {
    * \param options Enumerates the set of things we will capture for each
    *   StackFrame.
    */
-  static Local<StackTrace> CurrentStackTrace(
+  static Local<StackTrace> V8CALL CurrentStackTrace(
       Isolate* isolate,
       int frame_limit,
       StackTraceOptions options = kOverview);
@@ -1667,9 +1669,9 @@ class V8_EXPORT JSON {
    * \return The corresponding value if successfully parsed.
    */
   static V8_DEPRECATED("Use the maybe version taking context",
-                       Local<Value> Parse(Local<String> json_string));
+                       Local<Value> V8CALL Parse(Local<String> json_string));
   static V8_DEPRECATE_SOON("Use the maybe version taking context",
-                           MaybeLocal<Value> Parse(Isolate* isolate,
+                           MaybeLocal<Value> V8CALL Parse(Isolate* isolate,
                                                    Local<String> json_string));
   static V8_WARN_UNUSED_RESULT MaybeLocal<Value> Parse(
       Local<Context> context, Local<String> json_string);
@@ -1681,7 +1683,7 @@ class V8_EXPORT JSON {
    * \param json_object The JSON-serializable object to stringify.
    * \return The corresponding string if successfully stringified.
    */
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> Stringify(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL Stringify(
       Local<Context> context, Local<Object> json_object,
       Local<String> gap = Local<String>());
 };
@@ -1882,7 +1884,7 @@ class V8_EXPORT ValueDeserializer {
  */
 class V8_EXPORT NativeWeakMap : public Data {
  public:
-  static Local<NativeWeakMap> New(Isolate* isolate);
+  static Local<NativeWeakMap> V8CALL New(Isolate* isolate);
   void Set(Local<Value> key, Local<Value> value);
   Local<Value> Get(Local<Value> key);
   bool Has(Local<Value> key);
@@ -2226,7 +2228,7 @@ class V8_EXPORT Value : public Data {
   bool StrictEquals(Local<Value> that) const;
   bool SameValue(Local<Value> that) const;
 
-  template <class T> V8_INLINE static Value* Cast(T* value);
+  template <class T> V8_INLINE static Value* V8CALL Cast(T* value);
 
   Local<String> TypeOf(v8::Isolate*);
 
@@ -2253,11 +2255,11 @@ class V8_EXPORT Primitive : public Value { };
 class V8_EXPORT Boolean : public Primitive {
  public:
   bool Value() const;
-  V8_INLINE static Boolean* Cast(v8::Value* obj);
-  V8_INLINE static Local<Boolean> New(Isolate* isolate, bool value);
+  V8_INLINE static Boolean* V8CALL Cast(v8::Value* obj);
+  V8_INLINE static Local<Boolean> V8CALL New(Isolate* isolate, bool value);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2275,9 +2277,9 @@ class V8_EXPORT Name : public Primitive {
    */
   int GetIdentityHash();
 
-  V8_INLINE static Name* Cast(v8::Value* obj);
+  V8_INLINE static Name* V8CALL Cast(v8::Value* obj);
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2382,7 +2384,7 @@ class V8_EXPORT String : public Name {
   /**
    * A zero length string.
    */
-  V8_INLINE static v8::Local<v8::String> Empty(Isolate* isolate);
+  V8_INLINE static v8::Local<v8::String> V8CALL Empty(Isolate* isolate);
 
   /**
    * Returns true if the string is external
@@ -2494,7 +2496,7 @@ class V8_EXPORT String : public Name {
    */
   const ExternalOneByteStringResource* GetExternalOneByteStringResource() const;
 
-  V8_INLINE static String* Cast(v8::Value* obj);
+  V8_INLINE static String* V8CALL Cast(v8::Value* obj);
 
   // TODO(dcarney): remove with deprecation of New functions.
   enum NewStringType {
@@ -2505,39 +2507,39 @@ class V8_EXPORT String : public Name {
   /** Allocates a new string from UTF-8 data.*/
   static V8_DEPRECATE_SOON(
       "Use maybe version",
-      Local<String> NewFromUtf8(Isolate* isolate, const char* data,
+      Local<String> V8CALL NewFromUtf8(Isolate* isolate, const char* data,
                                 NewStringType type = kNormalString,
                                 int length = -1));
 
   /** Allocates a new string from UTF-8 data. Only returns an empty value when
    * length > kMaxLength. **/
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> NewFromUtf8(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL NewFromUtf8(
       Isolate* isolate, const char* data, v8::NewStringType type,
       int length = -1);
 
   /** Allocates a new string from Latin-1 data.*/
   static V8_DEPRECATED(
       "Use maybe version",
-      Local<String> NewFromOneByte(Isolate* isolate, const uint8_t* data,
+      Local<String> V8CALL NewFromOneByte(Isolate* isolate, const uint8_t* data,
                                    NewStringType type = kNormalString,
                                    int length = -1));
 
   /** Allocates a new string from Latin-1 data.  Only returns an empty value
    * when length > kMaxLength. **/
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> NewFromOneByte(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL NewFromOneByte(
       Isolate* isolate, const uint8_t* data, v8::NewStringType type,
       int length = -1);
 
   /** Allocates a new string from UTF-16 data.*/
   static V8_DEPRECATE_SOON(
       "Use maybe version",
-      Local<String> NewFromTwoByte(Isolate* isolate, const uint16_t* data,
+      Local<String> V8CALL NewFromTwoByte(Isolate* isolate, const uint16_t* data,
                                    NewStringType type = kNormalString,
                                    int length = -1));
 
   /** Allocates a new string from UTF-16 data. Only returns an empty value when
    * length > kMaxLength. **/
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> NewFromTwoByte(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL NewFromTwoByte(
       Isolate* isolate, const uint16_t* data, v8::NewStringType type,
       int length = -1);
 
@@ -2545,7 +2547,7 @@ class V8_EXPORT String : public Name {
    * Creates a new string by concatenating the left and the right strings
    * passed in as parameters.
    */
-  static Local<String> Concat(Local<String> left, Local<String> right);
+  static Local<String> V8CALL Concat(Local<String> left, Local<String> right);
 
   /**
    * Creates a new external string using the data defined in the given
@@ -2556,9 +2558,9 @@ class V8_EXPORT String : public Name {
    * destructor of the external string resource.
    */
   static V8_DEPRECATED("Use maybe version",
-                       Local<String> NewExternal(
+                       Local<String> V8CALL NewExternal(
                            Isolate* isolate, ExternalStringResource* resource));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> NewExternalTwoByte(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL NewExternalTwoByte(
       Isolate* isolate, ExternalStringResource* resource);
 
   /**
@@ -2582,9 +2584,9 @@ class V8_EXPORT String : public Name {
    */
   static V8_DEPRECATE_SOON(
       "Use maybe version",
-      Local<String> NewExternal(Isolate* isolate,
+      Local<String> V8CALL NewExternal(Isolate* isolate,
                                 ExternalOneByteStringResource* resource));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<String> NewExternalOneByte(
+  static V8_WARN_UNUSED_RESULT MaybeLocal<String> V8CALL NewExternalOneByte(
       Isolate* isolate, ExternalOneByteStringResource* resource);
 
   /**
@@ -2636,6 +2638,7 @@ class V8_EXPORT String : public Name {
    */
   class V8_EXPORT Value {
    public:
+    explicit Value(Isolate *isolate, Local<v8::Value> obj);
     explicit Value(Local<v8::Value> obj);
     ~Value();
     uint16_t* operator*() { return str_; }
@@ -2655,7 +2658,7 @@ class V8_EXPORT String : public Name {
   void VerifyExternalStringResourceBase(ExternalStringResourceBase* v,
                                         Encoding encoding) const;
   void VerifyExternalStringResource(ExternalStringResource* val) const;
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2668,7 +2671,7 @@ class V8_EXPORT Symbol : public Name {
   Local<Value> Name() const;
 
   // Create a symbol. If name is not empty, it will be used as the description.
-  static Local<Symbol> New(Isolate* isolate,
+  static Local<Symbol> V8CALL New(Isolate* isolate,
                            Local<String> name = Local<String>());
 
   // Access global symbol registry.
@@ -2676,23 +2679,23 @@ class V8_EXPORT Symbol : public Name {
   // they should only be used for statically fixed properties.
   // Also, there is only one global name space for the names used as keys.
   // To minimize the potential for clashes, use qualified names as keys.
-  static Local<Symbol> For(Isolate *isolate, Local<String> name);
+  static Local<Symbol> V8CALL For(Isolate *isolate, Local<String> name);
 
   // Retrieve a global symbol. Similar to |For|, but using a separate
   // registry that is not accessible by (and cannot clash with) JavaScript code.
-  static Local<Symbol> ForApi(Isolate *isolate, Local<String> name);
+  static Local<Symbol> V8CALL ForApi(Isolate *isolate, Local<String> name);
 
   // Well-known symbols
-  static Local<Symbol> GetIterator(Isolate* isolate);
-  static Local<Symbol> GetUnscopables(Isolate* isolate);
-  static Local<Symbol> GetToStringTag(Isolate* isolate);
-  static Local<Symbol> GetIsConcatSpreadable(Isolate* isolate);
+  static Local<Symbol> V8CALL GetIterator(Isolate* isolate);
+  static Local<Symbol> V8CALL GetUnscopables(Isolate* isolate);
+  static Local<Symbol> V8CALL GetToStringTag(Isolate* isolate);
+  static Local<Symbol> V8CALL GetIsConcatSpreadable(Isolate* isolate);
 
-  V8_INLINE static Symbol* Cast(v8::Value* obj);
+  V8_INLINE static Symbol* V8CALL Cast(v8::Value* obj);
 
  private:
   Symbol();
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2707,7 +2710,7 @@ class V8_EXPORT Private : public Data {
   Local<Value> Name() const;
 
   // Create a private symbol. If name is not empty, it will be the description.
-  static Local<Private> New(Isolate* isolate,
+  static Local<Private> V8CALL New(Isolate* isolate,
                             Local<String> name = Local<String>());
 
   // Retrieve a global private symbol. If a symbol with this name has not
@@ -2717,7 +2720,7 @@ class V8_EXPORT Private : public Data {
   // Also, there is only one global name space for the names used as keys.
   // To minimize the potential for clashes, use qualified names as keys,
   // e.g., "Class#property".
-  static Local<Private> ForApi(Isolate* isolate, Local<String> name);
+  static Local<Private> V8CALL ForApi(Isolate* isolate, Local<String> name);
 
  private:
   Private();
@@ -2730,11 +2733,11 @@ class V8_EXPORT Private : public Data {
 class V8_EXPORT Number : public Primitive {
  public:
   double Value() const;
-  static Local<Number> New(Isolate* isolate, double value);
-  V8_INLINE static Number* Cast(v8::Value* obj);
+  static Local<Number> V8CALL New(Isolate* isolate, double value);
+  V8_INLINE static Number* V8CALL Cast(v8::Value* obj);
  private:
   Number();
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2743,13 +2746,13 @@ class V8_EXPORT Number : public Primitive {
  */
 class V8_EXPORT Integer : public Number {
  public:
-  static Local<Integer> New(Isolate* isolate, int32_t value);
-  static Local<Integer> NewFromUnsigned(Isolate* isolate, uint32_t value);
+  static Local<Integer> V8CALL New(Isolate* isolate, int32_t value);
+  static Local<Integer> V8CALL NewFromUnsigned(Isolate* isolate, uint32_t value);
   int64_t Value() const;
-  V8_INLINE static Integer* Cast(v8::Value* obj);
+  V8_INLINE static Integer* V8CALL Cast(v8::Value* obj);
  private:
   Integer();
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2759,11 +2762,11 @@ class V8_EXPORT Integer : public Number {
 class V8_EXPORT Int32 : public Integer {
  public:
   int32_t Value() const;
-  V8_INLINE static Int32* Cast(v8::Value* obj);
+  V8_INLINE static Int32* V8CALL Cast(v8::Value* obj);
 
  private:
   Int32();
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -2773,11 +2776,11 @@ class V8_EXPORT Int32 : public Integer {
 class V8_EXPORT Uint32 : public Integer {
  public:
   uint32_t Value() const;
-  V8_INLINE static Uint32* Cast(v8::Value* obj);
+  V8_INLINE static Uint32* V8CALL Cast(v8::Value* obj);
 
  private:
   Uint32();
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 /**
@@ -2799,19 +2802,19 @@ enum PropertyAttribute {
  * setting|getting a particular property. See Object and ObjectTemplate's
  * method SetAccessor.
  */
-typedef void (*AccessorGetterCallback)(
+typedef void (V8CALL*AccessorGetterCallback)(
     Local<String> property,
     const PropertyCallbackInfo<Value>& info);
-typedef void (*AccessorNameGetterCallback)(
+typedef void (V8CALL*AccessorNameGetterCallback)(
     Local<Name> property,
     const PropertyCallbackInfo<Value>& info);
 
 
-typedef void (*AccessorSetterCallback)(
+typedef void (V8CALL*AccessorSetterCallback)(
     Local<String> property,
     Local<Value> value,
     const PropertyCallbackInfo<void>& info);
-typedef void (*AccessorNameSetterCallback)(
+typedef void (V8CALL*AccessorNameSetterCallback)(
     Local<Name> property,
     Local<Value> value,
     const PropertyCallbackInfo<void>& info);
@@ -3107,7 +3110,7 @@ class V8_EXPORT Object : public Value {
   int InternalFieldCount();
 
   /** Same as above, but works for Persistents */
-  V8_INLINE static int InternalFieldCount(
+  V8_INLINE static int V8CALL InternalFieldCount(
       const PersistentBase<Object>& object) {
     return object.val_->InternalFieldCount();
   }
@@ -3126,7 +3129,7 @@ class V8_EXPORT Object : public Value {
   V8_INLINE void* GetAlignedPointerFromInternalField(int index);
 
   /** Same as above, but works for Persistents */
-  V8_INLINE static void* GetAlignedPointerFromInternalField(
+  V8_INLINE static void* V8CALL GetAlignedPointerFromInternalField(
       const PersistentBase<Object>& object, int index) {
     return object.val_->GetAlignedPointerFromInternalField(index);
   }
@@ -3250,7 +3253,7 @@ class V8_EXPORT Object : public Value {
   Local<Context> CreationContext();
 
   /** Same as above, but works for Persistents */
-  V8_INLINE static Local<Context> CreationContext(
+  V8_INLINE static Local<Context> V8CALL CreationContext(
       const PersistentBase<Object>& object) {
     return object.val_->CreationContext();
   }
@@ -3294,13 +3297,13 @@ class V8_EXPORT Object : public Value {
    */
   V8_DEPRECATE_SOON("Keep track of isolate correctly", Isolate* GetIsolate());
 
-  static Local<Object> New(Isolate* isolate);
+  static Local<Object> V8CALL New(Isolate* isolate);
 
-  V8_INLINE static Object* Cast(Value* obj);
+  V8_INLINE static Object* V8CALL Cast(Value* obj);
 
  private:
   Object();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
   Local<Value> SlowGetInternalField(int index);
   void* SlowGetAlignedPointerFromInternalField(int index);
 };
@@ -3327,12 +3330,13 @@ class V8_EXPORT Array : public Object {
    * Creates a JavaScript array with the given length. If the length
    * is negative the returned array will have length 0.
    */
-  static Local<Array> New(Isolate* isolate, int length = 0);
+  static Local<Array> V8CALL New(Isolate* isolate, int length = 0);
+  static Local<Array> V8CALL New(Isolate* isolate, Local<Value>* elements, size_t length);
 
-  V8_INLINE static Array* Cast(Value* obj);
+  V8_INLINE static Array* V8CALL Cast(Value* obj);
  private:
   Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -3362,13 +3366,13 @@ class V8_EXPORT Map : public Object {
   /**
    * Creates a new empty Map.
    */
-  static Local<Map> New(Isolate* isolate);
+  static Local<Map> V8CALL New(Isolate* isolate);
 
-  V8_INLINE static Map* Cast(Value* obj);
+  V8_INLINE static Map* V8CALL Cast(Value* obj);
 
  private:
   Map();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -3394,13 +3398,13 @@ class V8_EXPORT Set : public Object {
   /**
    * Creates a new empty Set.
    */
-  static Local<Set> New(Isolate* isolate);
+  static Local<Set> V8CALL New(Isolate* isolate);
 
-  V8_INLINE static Set* Cast(Value* obj);
+  V8_INLINE static Set* V8CALL Cast(Value* obj);
 
  private:
   Set();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -3608,7 +3612,7 @@ class PropertyCallbackInfo {
 };
 
 
-typedef void (*FunctionCallback)(const FunctionCallbackInfo<Value>& info);
+typedef void (V8CALL*FunctionCallback)(const FunctionCallbackInfo<Value>& info);
 
 enum class ConstructorBehavior { kThrow, kAllow };
 
@@ -3621,13 +3625,13 @@ class V8_EXPORT Function : public Object {
    * Create a function in the current execution context
    * for a given FunctionCallback.
    */
-  static MaybeLocal<Function> New(
+  static MaybeLocal<Function> V8CALL New(
       Local<Context> context, FunctionCallback callback,
       Local<Value> data = Local<Value>(), int length = 0,
       ConstructorBehavior behavior = ConstructorBehavior::kAllow);
   static V8_DEPRECATE_SOON(
       "Use maybe version",
-      Local<Function> New(Isolate* isolate, FunctionCallback callback,
+      Local<Function> V8CALL New(Isolate* isolate, FunctionCallback callback,
                           Local<Value> data = Local<Value>(), int length = 0));
 
   V8_DEPRECATED("Use maybe version",
@@ -3699,12 +3703,12 @@ class V8_EXPORT Function : public Object {
   Local<Value> GetBoundFunction() const;
 
   ScriptOrigin GetScriptOrigin() const;
-  V8_INLINE static Function* Cast(Value* obj);
+  V8_INLINE static Function* V8CALL Cast(Value* obj);
   static const int kLineOffsetNotFound;
 
  private:
   Function();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -3719,8 +3723,8 @@ class V8_EXPORT Promise : public Object {
      * Create a new resolver, along with an associated promise in pending state.
      */
     static V8_DEPRECATE_SOON("Use maybe version",
-                             Local<Resolver> New(Isolate* isolate));
-    static V8_WARN_UNUSED_RESULT MaybeLocal<Resolver> New(
+                             Local<Resolver> V8CALL New(Isolate* isolate));
+    static V8_WARN_UNUSED_RESULT MaybeLocal<Resolver> V8CALL New(
         Local<Context> context);
 
     /**
@@ -3769,11 +3773,11 @@ class V8_EXPORT Promise : public Object {
    */
   bool HasHandler();
 
-  V8_INLINE static Promise* Cast(Value* obj);
+  V8_INLINE static Promise* V8CALL Cast(Value* obj);
 
  private:
   Promise();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 /**
@@ -3863,15 +3867,15 @@ class V8_EXPORT Proxy : public Object {
   /**
    * Creates a new Proxy for the target object.
    */
-  static MaybeLocal<Proxy> New(Local<Context> context,
+  static MaybeLocal<Proxy> V8CALL New(Local<Context> context,
                                Local<Object> local_target,
                                Local<Object> local_handler);
 
-  V8_INLINE static Proxy* Cast(Value* obj);
+  V8_INLINE static Proxy* V8CALL Cast(Value* obj);
 
  private:
   Proxy();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 class V8_EXPORT WasmCompiledModule : public Object {
@@ -3888,20 +3892,20 @@ class V8_EXPORT WasmCompiledModule : public Object {
 
   // If possible, deserialize the module, otherwise compile it from the provided
   // uncompiled bytes.
-  static MaybeLocal<WasmCompiledModule> DeserializeOrCompile(
+  static MaybeLocal<WasmCompiledModule> V8CALL DeserializeOrCompile(
       Isolate* isolate, const CallerOwnedBuffer& serialized_module,
       const CallerOwnedBuffer& wire_bytes);
-  V8_INLINE static WasmCompiledModule* Cast(Value* obj);
+  V8_INLINE static WasmCompiledModule* V8CALL Cast(Value* obj);
 
  private:
-  static MaybeLocal<WasmCompiledModule> Deserialize(
+  static MaybeLocal<WasmCompiledModule> V8CALL Deserialize(
       Isolate* isolate, const CallerOwnedBuffer& serialized_module,
       const CallerOwnedBuffer& wire_bytes);
-  static MaybeLocal<WasmCompiledModule> Compile(Isolate* isolate,
+  static MaybeLocal<WasmCompiledModule> V8CALL Compile(Isolate* isolate,
                                                 const uint8_t* start,
                                                 size_t length);
   WasmCompiledModule();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 #ifndef V8_ARRAY_BUFFER_INTERNAL_FIELD_COUNT
@@ -3960,7 +3964,7 @@ class V8_EXPORT ArrayBuffer : public Object {
      *
      * Caller takes ownership.
      */
-    static Allocator* NewDefaultAllocator();
+    static Allocator* V8CALL NewDefaultAllocator();
   };
 
   /**
@@ -3973,14 +3977,21 @@ class V8_EXPORT ArrayBuffer : public Object {
    */
   class V8_EXPORT Contents { // NOLINT
    public:
-    Contents() : data_(NULL), byte_length_(0) {}
+    Contents() : data_(NULL), byte_length_(0), deleter_(nullptr), deleter_data_(nullptr) {}
 
     void* Data() const { return data_; }
     size_t ByteLength() const { return byte_length_; }
 
+    using DeleterCallback = void (*)(void* buffer, size_t length, void* info);
+    DeleterCallback Deleter() const { return deleter_; }
+    void* DeleterData() const { return deleter_data_; }
+
    private:
     void* data_;
     size_t byte_length_;
+
+    DeleterCallback deleter_;
+    void* deleter_data_;
 
     friend class ArrayBuffer;
   };
@@ -3997,7 +4008,7 @@ class V8_EXPORT ArrayBuffer : public Object {
    * will be deallocated when it is garbage-collected,
    * unless the object is externalized.
    */
-  static Local<ArrayBuffer> New(Isolate* isolate, size_t byte_length);
+  static Local<ArrayBuffer> V8CALL New(Isolate* isolate, size_t byte_length);
 
   /**
    * Create a new ArrayBuffer over an existing memory block.
@@ -4005,7 +4016,7 @@ class V8_EXPORT ArrayBuffer : public Object {
    * The memory block will not be reclaimed when a created ArrayBuffer
    * is garbage-collected.
    */
-  static Local<ArrayBuffer> New(
+  static Local<ArrayBuffer> V8CALL New(
       Isolate* isolate, void* data, size_t byte_length,
       ArrayBufferCreationMode mode = ArrayBufferCreationMode::kExternalized);
 
@@ -4051,13 +4062,13 @@ class V8_EXPORT ArrayBuffer : public Object {
    */
   Contents GetContents();
 
-  V8_INLINE static ArrayBuffer* Cast(Value* obj);
+  V8_INLINE static ArrayBuffer* V8CALL Cast(Value* obj);
 
   static const int kInternalFieldCount = V8_ARRAY_BUFFER_INTERNAL_FIELD_COUNT;
 
  private:
   ArrayBuffer();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4103,14 +4114,14 @@ class V8_EXPORT ArrayBufferView : public Object {
    */
   bool HasBuffer() const;
 
-  V8_INLINE static ArrayBufferView* Cast(Value* obj);
+  V8_INLINE static ArrayBufferView* V8CALL Cast(Value* obj);
 
   static const int kInternalFieldCount =
       V8_ARRAY_BUFFER_VIEW_INTERNAL_FIELD_COUNT;
 
  private:
   ArrayBufferView();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4126,11 +4137,11 @@ class V8_EXPORT TypedArray : public ArrayBufferView {
    */
   size_t Length();
 
-  V8_INLINE static TypedArray* Cast(Value* obj);
+  V8_INLINE static TypedArray* V8CALL Cast(Value* obj);
 
  private:
   TypedArray();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4139,15 +4150,15 @@ class V8_EXPORT TypedArray : public ArrayBufferView {
  */
 class V8_EXPORT Uint8Array : public TypedArray {
  public:
-  static Local<Uint8Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Uint8Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                size_t byte_offset, size_t length);
-  static Local<Uint8Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Uint8Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                size_t byte_offset, size_t length);
-  V8_INLINE static Uint8Array* Cast(Value* obj);
+  V8_INLINE static Uint8Array* V8CALL Cast(Value* obj);
 
  private:
   Uint8Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4156,12 +4167,12 @@ class V8_EXPORT Uint8Array : public TypedArray {
  */
 class V8_EXPORT Uint8ClampedArray : public TypedArray {
  public:
-  static Local<Uint8ClampedArray> New(Local<ArrayBuffer> array_buffer,
+  static Local<Uint8ClampedArray> V8CALL New(Local<ArrayBuffer> array_buffer,
                                       size_t byte_offset, size_t length);
-  static Local<Uint8ClampedArray> New(
+  static Local<Uint8ClampedArray> V8CALL New(
       Local<SharedArrayBuffer> shared_array_buffer, size_t byte_offset,
       size_t length);
-  V8_INLINE static Uint8ClampedArray* Cast(Value* obj);
+  V8_INLINE static Uint8ClampedArray* V8CALL Cast(Value* obj);
 
  private:
   Uint8ClampedArray();
@@ -4173,15 +4184,15 @@ class V8_EXPORT Uint8ClampedArray : public TypedArray {
  */
 class V8_EXPORT Int8Array : public TypedArray {
  public:
-  static Local<Int8Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Int8Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                               size_t byte_offset, size_t length);
-  static Local<Int8Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Int8Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                               size_t byte_offset, size_t length);
-  V8_INLINE static Int8Array* Cast(Value* obj);
+  V8_INLINE static Int8Array* V8CALL Cast(Value* obj);
 
  private:
   Int8Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4190,15 +4201,15 @@ class V8_EXPORT Int8Array : public TypedArray {
  */
 class V8_EXPORT Uint16Array : public TypedArray {
  public:
-  static Local<Uint16Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Uint16Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                 size_t byte_offset, size_t length);
-  static Local<Uint16Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Uint16Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                 size_t byte_offset, size_t length);
-  V8_INLINE static Uint16Array* Cast(Value* obj);
+  V8_INLINE static Uint16Array* V8CALL Cast(Value* obj);
 
  private:
   Uint16Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4207,15 +4218,15 @@ class V8_EXPORT Uint16Array : public TypedArray {
  */
 class V8_EXPORT Int16Array : public TypedArray {
  public:
-  static Local<Int16Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Int16Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                size_t byte_offset, size_t length);
-  static Local<Int16Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Int16Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                size_t byte_offset, size_t length);
-  V8_INLINE static Int16Array* Cast(Value* obj);
+  V8_INLINE static Int16Array* V8CALL Cast(Value* obj);
 
  private:
   Int16Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4224,15 +4235,15 @@ class V8_EXPORT Int16Array : public TypedArray {
  */
 class V8_EXPORT Uint32Array : public TypedArray {
  public:
-  static Local<Uint32Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Uint32Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                 size_t byte_offset, size_t length);
-  static Local<Uint32Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Uint32Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                 size_t byte_offset, size_t length);
-  V8_INLINE static Uint32Array* Cast(Value* obj);
+  V8_INLINE static Uint32Array* V8CALL Cast(Value* obj);
 
  private:
   Uint32Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4241,15 +4252,15 @@ class V8_EXPORT Uint32Array : public TypedArray {
  */
 class V8_EXPORT Int32Array : public TypedArray {
  public:
-  static Local<Int32Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Int32Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                size_t byte_offset, size_t length);
-  static Local<Int32Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Int32Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                size_t byte_offset, size_t length);
-  V8_INLINE static Int32Array* Cast(Value* obj);
+  V8_INLINE static Int32Array* V8CALL Cast(Value* obj);
 
  private:
   Int32Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4258,15 +4269,15 @@ class V8_EXPORT Int32Array : public TypedArray {
  */
 class V8_EXPORT Float32Array : public TypedArray {
  public:
-  static Local<Float32Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Float32Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                  size_t byte_offset, size_t length);
-  static Local<Float32Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Float32Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                  size_t byte_offset, size_t length);
-  V8_INLINE static Float32Array* Cast(Value* obj);
+  V8_INLINE static Float32Array* V8CALL Cast(Value* obj);
 
  private:
   Float32Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4275,15 +4286,15 @@ class V8_EXPORT Float32Array : public TypedArray {
  */
 class V8_EXPORT Float64Array : public TypedArray {
  public:
-  static Local<Float64Array> New(Local<ArrayBuffer> array_buffer,
+  static Local<Float64Array> V8CALL New(Local<ArrayBuffer> array_buffer,
                                  size_t byte_offset, size_t length);
-  static Local<Float64Array> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<Float64Array> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                                  size_t byte_offset, size_t length);
-  V8_INLINE static Float64Array* Cast(Value* obj);
+  V8_INLINE static Float64Array* V8CALL Cast(Value* obj);
 
  private:
   Float64Array();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4292,15 +4303,15 @@ class V8_EXPORT Float64Array : public TypedArray {
  */
 class V8_EXPORT DataView : public ArrayBufferView {
  public:
-  static Local<DataView> New(Local<ArrayBuffer> array_buffer,
+  static Local<DataView> V8CALL New(Local<ArrayBuffer> array_buffer,
                              size_t byte_offset, size_t length);
-  static Local<DataView> New(Local<SharedArrayBuffer> shared_array_buffer,
+  static Local<DataView> V8CALL New(Local<SharedArrayBuffer> shared_array_buffer,
                              size_t byte_offset, size_t length);
-  V8_INLINE static DataView* Cast(Value* obj);
+  V8_INLINE static DataView* V8CALL Cast(Value* obj);
 
  private:
   DataView();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4347,7 +4358,7 @@ class V8_EXPORT SharedArrayBuffer : public Object {
    * will be deallocated when it is garbage-collected,
    * unless the object is externalized.
    */
-  static Local<SharedArrayBuffer> New(Isolate* isolate, size_t byte_length);
+  static Local<SharedArrayBuffer> V8CALL New(Isolate* isolate, size_t byte_length);
 
   /**
    * Create a new SharedArrayBuffer over an existing memory block.  The created
@@ -4355,7 +4366,7 @@ class V8_EXPORT SharedArrayBuffer : public Object {
    * specified. The memory block will not be reclaimed when a created
    * SharedArrayBuffer is garbage-collected.
    */
-  static Local<SharedArrayBuffer> New(
+  static Local<SharedArrayBuffer> V8CALL New(
       Isolate* isolate, void* data, size_t byte_length,
       ArrayBufferCreationMode mode = ArrayBufferCreationMode::kExternalized);
 
@@ -4393,13 +4404,13 @@ class V8_EXPORT SharedArrayBuffer : public Object {
    */
   Contents GetContents();
 
-  V8_INLINE static SharedArrayBuffer* Cast(Value* obj);
+  V8_INLINE static SharedArrayBuffer* V8CALL Cast(Value* obj);
 
   static const int kInternalFieldCount = V8_ARRAY_BUFFER_INTERNAL_FIELD_COUNT;
 
  private:
   SharedArrayBuffer();
-  static void CheckCast(Value* obj);
+  static void V8CALL CheckCast(Value* obj);
 };
 
 
@@ -4409,8 +4420,8 @@ class V8_EXPORT SharedArrayBuffer : public Object {
 class V8_EXPORT Date : public Object {
  public:
   static V8_DEPRECATE_SOON("Use maybe version.",
-                           Local<Value> New(Isolate* isolate, double time));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<Value> New(Local<Context> context,
+                           Local<Value> V8CALL New(Isolate* isolate, double time));
+  static V8_WARN_UNUSED_RESULT MaybeLocal<Value> V8CALL New(Local<Context> context,
                                                      double time);
 
   /**
@@ -4419,7 +4430,7 @@ class V8_EXPORT Date : public Object {
    */
   double ValueOf() const;
 
-  V8_INLINE static Date* Cast(v8::Value* obj);
+  V8_INLINE static Date* V8CALL Cast(v8::Value* obj);
 
   /**
    * Notification that the embedder has changed the time zone,
@@ -4433,10 +4444,10 @@ class V8_EXPORT Date : public Object {
    * This API should not be called more than needed as it will
    * negatively impact the performance of date operations.
    */
-  static void DateTimeConfigurationChangeNotification(Isolate* isolate);
+  static void V8CALL DateTimeConfigurationChangeNotification(Isolate* isolate);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4445,14 +4456,14 @@ class V8_EXPORT Date : public Object {
  */
 class V8_EXPORT NumberObject : public Object {
  public:
-  static Local<Value> New(Isolate* isolate, double value);
+  static Local<Value> V8CALL New(Isolate* isolate, double value);
 
   double ValueOf() const;
 
-  V8_INLINE static NumberObject* Cast(v8::Value* obj);
+  V8_INLINE static NumberObject* V8CALL Cast(v8::Value* obj);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4461,15 +4472,15 @@ class V8_EXPORT NumberObject : public Object {
  */
 class V8_EXPORT BooleanObject : public Object {
  public:
-  static Local<Value> New(Isolate* isolate, bool value);
-  V8_DEPRECATED("Pass an isolate", static Local<Value> New(bool value));
+  static Local<Value> V8CALL New(Isolate* isolate, bool value);
+  V8_DEPRECATED("Pass an isolate", static Local<Value> V8CALL New(bool value));
 
   bool ValueOf() const;
 
-  V8_INLINE static BooleanObject* Cast(v8::Value* obj);
+  V8_INLINE static BooleanObject* V8CALL Cast(v8::Value* obj);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4478,14 +4489,14 @@ class V8_EXPORT BooleanObject : public Object {
  */
 class V8_EXPORT StringObject : public Object {
  public:
-  static Local<Value> New(Local<String> value);
-  static Local<Value> New(Isolate *isolte, Local<String> value) { return New(value); };
-  Local<String> ValueOf() const;
+  static Local<Value> V8CALL New(Local<String> value);
+  static Local<Value> V8CALL New(Isolate *isolte, Local<String> value) { return New(value); };
+  Local<String> V8CALL ValueOf() const;
 
-  V8_INLINE static StringObject* Cast(v8::Value* obj);
+  V8_INLINE static StringObject* V8CALL Cast(v8::Value* obj);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4498,10 +4509,10 @@ class V8_EXPORT SymbolObject : public Object {
 
   Local<Symbol> ValueOf() const;
 
-  V8_INLINE static SymbolObject* Cast(v8::Value* obj);
+  V8_INLINE static SymbolObject* V8CALL Cast(v8::Value* obj);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4534,9 +4545,9 @@ class V8_EXPORT RegExp : public Object {
    * is equivalent to evaluating "/foo/gm".
    */
   static V8_DEPRECATE_SOON("Use maybe version",
-                           Local<RegExp> New(Local<String> pattern,
+                           Local<RegExp> V8CALL New(Local<String> pattern,
                                              Flags flags));
-  static V8_WARN_UNUSED_RESULT MaybeLocal<RegExp> New(Local<Context> context,
+  static V8_WARN_UNUSED_RESULT MaybeLocal<RegExp> V8CALL New(Local<Context> context,
                                                       Local<String> pattern,
                                                       Flags flags);
 
@@ -4551,10 +4562,10 @@ class V8_EXPORT RegExp : public Object {
    */
   Flags GetFlags() const;
 
-  V8_INLINE static RegExp* Cast(v8::Value* obj);
+  V8_INLINE static RegExp* V8CALL Cast(v8::Value* obj);
 
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4564,11 +4575,11 @@ class V8_EXPORT RegExp : public Object {
  */
 class V8_EXPORT External : public Value {
  public:
-  static Local<External> New(Isolate* isolate, void* value);
-  V8_INLINE static External* Cast(Value* obj);
+  static Local<External> V8CALL New(Isolate* isolate, void* value);
+  V8_INLINE static External* V8CALL Cast(Value* obj);
   void* Value() const;
  private:
-  static void CheckCast(v8::Value* obj);
+  static void V8CALL CheckCast(v8::Value* obj);
 };
 
 
@@ -4676,8 +4687,8 @@ class V8_EXPORT Template : public Data {
  * NamedProperty[Getter|Setter] are used as interceptors on object.
  * See ObjectTemplate::SetNamedPropertyHandler.
  */
-typedef void (*NamedPropertyGetterCallback)(
-    Local<String> property,
+typedef void (V8CALL*NamedPropertyGetterCallback)(
+    Local<Name> property, // String
     const PropertyCallbackInfo<Value>& info);
 
 
@@ -4685,8 +4696,8 @@ typedef void (*NamedPropertyGetterCallback)(
  * Returns the value if the setter intercepts the request.
  * Otherwise, returns an empty handle.
  */
-typedef void (*NamedPropertySetterCallback)(
-    Local<String> property,
+typedef void (V8CALL*NamedPropertySetterCallback)(
+    Local<Name> property,
     Local<Value> value,
     const PropertyCallbackInfo<Value>& info);
 
@@ -4696,8 +4707,8 @@ typedef void (*NamedPropertySetterCallback)(
  * The result is an integer encoding property attributes (like v8::None,
  * v8::DontEnum, etc.)
  */
-typedef void (*NamedPropertyQueryCallback)(
-    Local<String> property,
+typedef void (V8CALL*NamedPropertyQueryCallback)(
+    Local<Name> property,
     const PropertyCallbackInfo<Integer>& info);
 
 
@@ -4706,8 +4717,8 @@ typedef void (*NamedPropertyQueryCallback)(
  * The return value is true if the property could be deleted and false
  * otherwise.
  */
-typedef void (*NamedPropertyDeleterCallback)(
-    Local<String> property,
+typedef void (V8CALL*NamedPropertyDeleterCallback)(
+    Local<Name> property,
     const PropertyCallbackInfo<Boolean>& info);
 
 
@@ -4715,7 +4726,7 @@ typedef void (*NamedPropertyDeleterCallback)(
  * Returns an array containing the names of the properties the named
  * property getter intercepts.
  */
-typedef void (*NamedPropertyEnumeratorCallback)(
+typedef void (V8CALL*NamedPropertyEnumeratorCallback)(
     const PropertyCallbackInfo<Array>& info);
 
 
@@ -4758,7 +4769,7 @@ typedef void (*NamedPropertyEnumeratorCallback)(
  *
  * See also `ObjectTemplate::SetHandler`.
  */
-typedef void (*GenericNamedPropertyGetterCallback)(
+typedef void (V8CALL*GenericNamedPropertyGetterCallback)(
     Local<Name> property, const PropertyCallbackInfo<Value>& info);
 
 /**
@@ -4782,7 +4793,7 @@ typedef void (*GenericNamedPropertyGetterCallback)(
  * See also
  * `ObjectTemplate::SetHandler.`
  */
-typedef void (*GenericNamedPropertySetterCallback)(
+typedef void (V8CALL*GenericNamedPropertySetterCallback)(
     Local<Name> property, Local<Value> value,
     const PropertyCallbackInfo<Value>& info);
 
@@ -4807,7 +4818,7 @@ typedef void (*GenericNamedPropertySetterCallback)(
  * See also
  * `ObjectTemplate::SetHandler.`
  */
-typedef void (*GenericNamedPropertyQueryCallback)(
+typedef void (V8CALL*GenericNamedPropertyQueryCallback)(
     Local<Name> property, const PropertyCallbackInfo<Integer>& info);
 
 /**
@@ -4831,7 +4842,7 @@ typedef void (*GenericNamedPropertyQueryCallback)(
  *
  * See also `ObjectTemplate::SetHandler.`
  */
-typedef void (*GenericNamedPropertyDeleterCallback)(
+typedef void (V8CALL*GenericNamedPropertyDeleterCallback)(
     Local<Name> property, const PropertyCallbackInfo<Boolean>& info);
 
 
@@ -4839,7 +4850,7 @@ typedef void (*GenericNamedPropertyDeleterCallback)(
  * Returns an array containing the names of the properties the named
  * property getter intercepts.
  */
-typedef void (*GenericNamedPropertyEnumeratorCallback)(
+typedef void (V8CALL*GenericNamedPropertyEnumeratorCallback)(
     const PropertyCallbackInfo<Array>& info);
 
 /**
@@ -4862,7 +4873,7 @@ typedef void (*GenericNamedPropertyEnumeratorCallback)(
  *
  * See also `ObjectTemplate::SetHandler`.
  */
-typedef void (*GenericNamedPropertyDefinerCallback)(
+typedef void (V8CALL*GenericNamedPropertyDefinerCallback)(
     Local<Name> property, const PropertyDescriptor& desc,
     const PropertyCallbackInfo<Value>& info);
 
@@ -4885,20 +4896,20 @@ typedef void (*GenericNamedPropertyDefinerCallback)(
  *
  * See also `ObjectTemplate::SetHandler`.
  */
-typedef void (*GenericNamedPropertyDescriptorCallback)(
+typedef void (V8CALL*GenericNamedPropertyDescriptorCallback)(
     Local<Name> property, const PropertyCallbackInfo<Value>& info);
 
 /**
  * See `v8::GenericNamedPropertyGetterCallback`.
  */
-typedef void (*IndexedPropertyGetterCallback)(
+typedef void (V8CALL*IndexedPropertyGetterCallback)(
     uint32_t index,
     const PropertyCallbackInfo<Value>& info);
 
 /**
  * See `v8::GenericNamedPropertySetterCallback`.
  */
-typedef void (*IndexedPropertySetterCallback)(
+typedef void (V8CALL*IndexedPropertySetterCallback)(
     uint32_t index,
     Local<Value> value,
     const PropertyCallbackInfo<Value>& info);
@@ -4906,34 +4917,34 @@ typedef void (*IndexedPropertySetterCallback)(
 /**
  * See `v8::GenericNamedPropertyQueryCallback`.
  */
-typedef void (*IndexedPropertyQueryCallback)(
+typedef void (V8CALL*IndexedPropertyQueryCallback)(
     uint32_t index,
     const PropertyCallbackInfo<Integer>& info);
 
 /**
  * See `v8::GenericNamedPropertyDeleterCallback`.
  */
-typedef void (*IndexedPropertyDeleterCallback)(
+typedef void (V8CALL*IndexedPropertyDeleterCallback)(
     uint32_t index,
     const PropertyCallbackInfo<Boolean>& info);
 
 /**
  * See `v8::GenericNamedPropertyEnumeratorCallback`.
  */
-typedef void (*IndexedPropertyEnumeratorCallback)(
+typedef void (V8CALL*IndexedPropertyEnumeratorCallback)(
     const PropertyCallbackInfo<Array>& info);
 
 /**
  * See `v8::GenericNamedPropertyDefinerCallback`.
  */
-typedef void (*IndexedPropertyDefinerCallback)(
+typedef void (V8CALL*IndexedPropertyDefinerCallback)(
     uint32_t index, const PropertyDescriptor& desc,
     const PropertyCallbackInfo<Value>& info);
 
 /**
  * See `v8::GenericNamedPropertyDescriptorCallback`.
  */
-typedef void (*IndexedPropertyDescriptorCallback)(
+typedef void (V8CALL*IndexedPropertyDescriptorCallback)(
     uint32_t index, const PropertyCallbackInfo<Value>& info);
 
 /**
@@ -4952,7 +4963,7 @@ enum AccessType {
  * Returns true if the given context should be allowed to access the given
  * object.
  */
-typedef bool (*AccessCheckCallback)(Local<Context> accessing_context,
+typedef bool (V8CALL*AccessCheckCallback)(Local<Context> accessing_context,
                                     Local<Object> accessed_object,
                                     Local<Value> data);
 
@@ -5058,21 +5069,21 @@ typedef bool (*AccessCheckCallback)(Local<Context> accessing_context,
 class V8_EXPORT FunctionTemplate : public Template {
  public:
   /** Creates a function template.*/
-  static Local<FunctionTemplate> New(
+  static Local<FunctionTemplate> V8CALL New(
       Isolate* isolate, FunctionCallback callback = 0,
       Local<Value> data = Local<Value>(),
       Local<Signature> signature = Local<Signature>(), int length = 0,
       ConstructorBehavior behavior = ConstructorBehavior::kAllow);
 
   /** Get a template included in the snapshot by index. */
-  static MaybeLocal<FunctionTemplate> FromSnapshot(Isolate* isolate,
+  static MaybeLocal<FunctionTemplate> V8CALL FromSnapshot(Isolate* isolate,
                                                    size_t index);
 
   /**
    * Creates a function template with a fast handler. If a fast handler is set,
    * the callback cannot be null.
    */
-  static Local<FunctionTemplate> NewWithFastHandler(
+  static Local<FunctionTemplate> V8CALL NewWithFastHandler(
       Isolate* isolate, FunctionCallback callback,
       experimental::FastAccessorBuilder* fast_handler = nullptr,
       Local<Value> data = Local<Value>(),
@@ -5081,7 +5092,7 @@ class V8_EXPORT FunctionTemplate : public Template {
   /**
    * Creates a function template backed/cached by a private property.
    */
-  static Local<FunctionTemplate> NewWithCache(
+  static Local<FunctionTemplate> V8CALL NewWithCache(
       Isolate* isolate, FunctionCallback callback,
       Local<Private> cache_property, Local<Value> data = Local<Value>(),
       Local<Signature> signature = Local<Signature>(), int length = 0);
@@ -5327,13 +5338,13 @@ struct IndexedPropertyHandlerConfiguration {
 class V8_EXPORT ObjectTemplate : public Template {
  public:
   /** Creates an ObjectTemplate. */
-  static Local<ObjectTemplate> New(
+  static Local<ObjectTemplate> V8CALL New(
       Isolate* isolate,
       Local<FunctionTemplate> constructor = Local<FunctionTemplate>());
-  static V8_DEPRECATED("Use isolate version", Local<ObjectTemplate> New());
+  static V8_DEPRECATED("Use isolate version", Local<ObjectTemplate> V8CALL New());
 
   /** Get a template included in the snapshot by index. */
-  static MaybeLocal<ObjectTemplate> FromSnapshot(Isolate* isolate,
+  static MaybeLocal<ObjectTemplate> V8CALL FromSnapshot(Isolate* isolate,
                                                  size_t index);
 
   /** Creates a new instance of this template.*/
@@ -5530,7 +5541,7 @@ class V8_EXPORT ObjectTemplate : public Template {
 
  private:
   ObjectTemplate();
-  static Local<ObjectTemplate> New(internal::Isolate* isolate,
+  static Local<ObjectTemplate> V8CALL New(internal::Isolate* isolate,
                                    Local<FunctionTemplate> constructor);
   friend class FunctionTemplate;
 };
@@ -5541,7 +5552,7 @@ class V8_EXPORT ObjectTemplate : public Template {
  */
 class V8_EXPORT Signature : public Data {
  public:
-  static Local<Signature> New(
+  static Local<Signature> V8CALL New(
       Isolate* isolate,
       Local<FunctionTemplate> receiver = Local<FunctionTemplate>());
 
@@ -5556,7 +5567,7 @@ class V8_EXPORT Signature : public Data {
  */
 class V8_EXPORT AccessorSignature : public Data {
  public:
-  static Local<AccessorSignature> New(
+  static Local<AccessorSignature> V8CALL New(
       Isolate* isolate,
       Local<FunctionTemplate> receiver = Local<FunctionTemplate>());
 
@@ -5622,7 +5633,7 @@ class V8_EXPORT Extension {  // NOLINT
 };
 
 
-void V8_EXPORT RegisterExtension(Extension* extension);
+void V8_EXPORT V8CALL RegisterExtension(Extension* extension);
 
 
 // --- Statics ---
@@ -5697,15 +5708,15 @@ class V8_EXPORT ResourceConstraints {
 // --- Exceptions ---
 
 
-typedef void (*FatalErrorCallback)(const char* location, const char* message);
+typedef void (V8CALL*FatalErrorCallback)(const char* location, const char* message);
 
-typedef void (*OOMErrorCallback)(const char* location, bool is_heap_oom);
+typedef void (V8CALL*OOMErrorCallback)(const char* location, bool is_heap_oom);
 
-typedef void (*MessageCallback)(Local<Message> message, Local<Value> error);
+typedef void (V8CALL*MessageCallback)(Local<Message> message, Local<Value> error);
 
 // --- Tracing ---
 
-typedef void (*LogEventCallback)(const char* name, int event);
+typedef void (V8CALL*LogEventCallback)(const char* name, int event);
 
 /**
  * Create new error objects by calling the corresponding error object
@@ -5713,39 +5724,39 @@ typedef void (*LogEventCallback)(const char* name, int event);
  */
 class V8_EXPORT Exception {
  public:
-  static Local<Value> RangeError(Local<String> message);
-  static Local<Value> ReferenceError(Local<String> message);
-  static Local<Value> SyntaxError(Local<String> message);
-  static Local<Value> TypeError(Local<String> message);
-  static Local<Value> Error(Local<String> message);
+  static Local<Value> V8CALL RangeError(Local<String> message);
+  static Local<Value> V8CALL ReferenceError(Local<String> message);
+  static Local<Value> V8CALL SyntaxError(Local<String> message);
+  static Local<Value> V8CALL TypeError(Local<String> message);
+  static Local<Value> V8CALL Error(Local<String> message);
 
   /**
    * Creates an error message for the given exception.
    * Will try to reconstruct the original stack trace from the exception value,
    * or capture the current stack trace if not available.
    */
-  static Local<Message> CreateMessage(Isolate* isolate, Local<Value> exception);
+  static Local<Message> V8CALL CreateMessage(Isolate* isolate, Local<Value> exception);
   V8_DEPRECATED("Use version with an Isolate*",
-                static Local<Message> CreateMessage(Local<Value> exception));
+                static Local<Message> V8CALL CreateMessage(Local<Value> exception));
 
   /**
    * Returns the original stack trace that was captured at the creation time
    * of a given exception, or an empty handle if not available.
    */
-  static Local<StackTrace> GetStackTrace(Local<Value> exception);
+  static Local<StackTrace> V8CALL GetStackTrace(Local<Value> exception);
 };
 
 
 // --- Counters Callbacks ---
 
-typedef int* (*CounterLookupCallback)(const char* name);
+typedef int* (V8CALL*CounterLookupCallback)(const char* name);
 
-typedef void* (*CreateHistogramCallback)(const char* name,
+typedef void* (V8CALL*CreateHistogramCallback)(const char* name,
                                          int min,
                                          int max,
                                          size_t buckets);
 
-typedef void (*AddHistogramSampleCallback)(void* histogram, int sample);
+typedef void (V8CALL*AddHistogramSampleCallback)(void* histogram, int sample);
 
 // --- Memory Allocation Callback ---
 enum ObjectSpace {
@@ -5766,9 +5777,9 @@ enum ObjectSpace {
   };
 
 // --- Enter/Leave Script Callback ---
-typedef void (*BeforeCallEnteredCallback)(Isolate*);
-typedef void (*CallCompletedCallback)(Isolate*);
-typedef void (*DeprecatedCallCompletedCallback)();
+typedef void (V8CALL*BeforeCallEnteredCallback)(Isolate*);
+typedef void (V8CALL*CallCompletedCallback)(Isolate*);
+typedef void (V8CALL*DeprecatedCallCompletedCallback)();
 
 // --- Promise Reject Callback ---
 enum PromiseRejectEvent {
@@ -5801,11 +5812,11 @@ class PromiseRejectMessage {
   Local<StackTrace> stack_trace_;
 };
 
-typedef void (*PromiseRejectCallback)(PromiseRejectMessage message);
+typedef void (V8CALL*PromiseRejectCallback)(PromiseRejectMessage message);
 
 // --- Microtasks Callbacks ---
-typedef void (*MicrotasksCompletedCallback)(Isolate*);
-typedef void (*MicrotaskCallback)(void* data);
+typedef void (V8CALL*MicrotasksCompletedCallback)(Isolate*);
+typedef void (V8CALL*MicrotaskCallback)(void* data);
 
 
 /**
@@ -5837,17 +5848,17 @@ class V8_EXPORT MicrotasksScope {
   /**
    * Runs microtasks if no kRunMicrotasks scope is currently active.
    */
-  static void PerformCheckpoint(Isolate* isolate);
+  static void V8CALL PerformCheckpoint(Isolate* isolate);
 
   /**
    * Returns current depth of nested kRunMicrotasks scopes.
    */
-  static int GetCurrentDepth(Isolate* isolate);
+  static int V8CALL GetCurrentDepth(Isolate* isolate);
 
   /**
    * Returns true while microtasks are being executed.
    */
-  static bool IsRunningMicrotasks(Isolate* isolate);
+  static bool V8CALL IsRunningMicrotasks(Isolate* isolate);
 
   // Prevent copying.
   MicrotasksScope(const MicrotasksScope&) = delete;
@@ -5860,7 +5871,7 @@ class V8_EXPORT MicrotasksScope {
 
 
 // --- Failed Access Check Callback ---
-typedef void (*FailedAccessCheckCallback)(Local<Object> target,
+typedef void (V8CALL*FailedAccessCheckCallback)(Local<Object> target,
                                           AccessType type,
                                           Local<Value> data);
 
@@ -5870,7 +5881,7 @@ typedef void (*FailedAccessCheckCallback)(Local<Object> target,
  * Callback to check if code generation from strings is allowed. See
  * Context::AllowCodeGenerationFromStrings.
  */
-typedef bool (*AllowCodeGenerationFromStringsCallback)(Local<Context> context);
+typedef bool(V8CALL*AllowCodeGenerationFromStringsCallback)(Local<Context> context, Local<String> source);
 
 // --- Garbage Collection Callbacks ---
 
@@ -5911,9 +5922,9 @@ enum GCCallbackFlags {
   kGCCallbackFlagCollectAllExternalMemory = 1 << 5,
 };
 
-typedef void (*GCCallback)(GCType type, GCCallbackFlags flags);
+typedef void (V8CALL*GCCallback)(GCType type, GCCallbackFlags flags);
 
-typedef void (*InterruptCallback)(Isolate* isolate, void* data);
+typedef void (V8CALL*InterruptCallback)(Isolate* isolate, void* data);
 
 
 /**
@@ -6015,7 +6026,7 @@ class RetainedObjectInfo;
  *
  * \note the entry hook must not cause garbage collection.
  */
-typedef void (*FunctionEntryHook)(uintptr_t function,
+typedef void (V8CALL*FunctionEntryHook)(uintptr_t function,
                                   uintptr_t return_addr_location);
 
 /**
@@ -6119,7 +6130,7 @@ enum JitCodeEventOptions {
  *
  * \param event code add, move or removal event.
  */
-typedef void (*JitCodeEventHandler)(const JitCodeEvent* event);
+typedef void (V8CALL*JitCodeEventHandler)(const JitCodeEvent* event);
 
 
 /**
@@ -6234,13 +6245,13 @@ class V8_EXPORT EmbedderHeapTracer {
 /**
  * Callback to the embedder used in SnapshotCreator to handle internal fields.
  */
-typedef StartupData (*SerializeInternalFieldsCallback)(Local<Object> holder,
+typedef StartupData (V8CALL*SerializeInternalFieldsCallback)(Local<Object> holder,
                                                        int index);
 
 /**
  * Callback to the embedder used to deserialize internal fields.
  */
-typedef void (*DeserializeInternalFieldsCallback)(Local<Object> holder,
+typedef void (V8CALL*DeserializeInternalFieldsCallback)(Local<Object> holder,
                                                   int index,
                                                   StartupData payload);
 
@@ -6480,7 +6491,7 @@ class V8_EXPORT Isolate {
                   kMessageWarning,
   };
 
-  typedef void (*UseCounterCallback)(Isolate* isolate,
+  typedef void (V8CALL*UseCounterCallback)(Isolate* isolate,
                                      UseCounterFeature feature);
 
 
@@ -6493,7 +6504,7 @@ class V8_EXPORT Isolate {
    *
    * V8::Initialize() must have run prior to this.
    */
-  static Isolate* New(const CreateParams& params);
+  static Isolate* V8CALL New(const CreateParams& params);
 
   /**
    * Returns the entered isolate for the current thread or NULL in
@@ -6501,7 +6512,7 @@ class V8_EXPORT Isolate {
    *
    * This method must not be invoked before V8::Initialize() was invoked.
    */
-  static Isolate* GetCurrent();
+  static Isolate* V8CALL GetCurrent();
 
   /**
    * Custom callback used by embedders to help V8 determine if it should abort
@@ -6512,7 +6523,7 @@ class V8_EXPORT Isolate {
    * - the custom callback set returns true.
    * Otherwise, the custom callback will not be called and V8 will not abort.
    */
-  typedef bool (*AbortOnUncaughtExceptionCallback)(Isolate*);
+  typedef bool (V8CALL*AbortOnUncaughtExceptionCallback)(Isolate*);
   void SetAbortOnUncaughtExceptionCallback(
       AbortOnUncaughtExceptionCallback callback);
 
@@ -6576,7 +6587,7 @@ class V8_EXPORT Isolate {
    * Returns the maximum number of available embedder data slots. Valid slots
    * are in the range of 0 - GetNumberOfDataSlots() - 1.
    */
-  V8_INLINE static uint32_t GetNumberOfDataSlots();
+  V8_INLINE static uint32_t V8CALL GetNumberOfDataSlots();
 
   /**
    * Get statistics about the heap memory usage.
@@ -6740,7 +6751,7 @@ class V8_EXPORT Isolate {
   template<typename T, typename S>
   void SetReference(const Persistent<T>& parent, const Persistent<S>& child);
 
-  typedef void (*GCCallback)(Isolate* isolate, GCType type,
+  typedef void (V8CALL*GCCallback)(Isolate* isolate, GCType type,
                              GCCallbackFlags flags);
 
   /**
@@ -7189,7 +7200,7 @@ class V8_EXPORT StartupData {
  * EntropySource is used as a callback function when v8 needs a source
  * of entropy.
  */
-typedef bool (*EntropySource)(unsigned char* buffer, size_t length);
+typedef bool (V8CALL*EntropySource)(unsigned char* buffer, size_t length);
 
 /**
  * ReturnAddressLocationResolver is used as a callback function when v8 is
@@ -7204,7 +7215,7 @@ typedef bool (*EntropySource)(unsigned char* buffer, size_t length);
  *
  * \note The resolver function must not cause garbage collection.
  */
-typedef uintptr_t (*ReturnAddressLocationResolver)(
+typedef uintptr_t (V8CALL*ReturnAddressLocationResolver)(
     uintptr_t return_addr_location);
 
 
@@ -7216,21 +7227,21 @@ class V8_EXPORT V8 {
   /** Set the callback to invoke in case of fatal errors. */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void SetFatalErrorHandler(FatalErrorCallback that));
+      void V8CALL SetFatalErrorHandler(FatalErrorCallback that));
 
   /**
    * Set the callback to invoke to check if code generation from
    * strings should be allowed.
    */
   V8_INLINE static V8_DEPRECATED(
-      "Use isolate version", void SetAllowCodeGenerationFromStringsCallback(
+      "Use isolate version", void V8CALL SetAllowCodeGenerationFromStringsCallback(
                                  AllowCodeGenerationFromStringsCallback that));
 
   /**
   * Check if V8 is dead and therefore unusable.  This is the case after
   * fatal errors such as out-of-memory situations.
   */
-  V8_INLINE static V8_DEPRECATED("Use isolate version", bool IsDead());
+  V8_INLINE static V8_DEPRECATED("Use isolate version", bool V8CALL IsDead());
 
   /**
    * Hand startup data to V8, in case the embedder has chosen to build
@@ -7247,8 +7258,8 @@ class V8_EXPORT V8 {
    *   handled entirely on the embedders' side.
    * - The call will abort if the data is invalid.
    */
-  static void SetNativesDataBlob(StartupData* startup_blob);
-  static void SetSnapshotDataBlob(StartupData* startup_blob);
+  static void V8CALL SetNativesDataBlob(StartupData* startup_blob);
+  static void V8CALL SetSnapshotDataBlob(StartupData* startup_blob);
 
   /**
    * Bootstrap an isolate and a context from scratch to create a startup
@@ -7256,7 +7267,7 @@ class V8_EXPORT V8 {
    * Returns { NULL, 0 } on failure.
    * The caller acquires ownership of the data array in the return value.
    */
-  static StartupData CreateSnapshotDataBlob(const char* embedded_source = NULL);
+  static StartupData V8CALL CreateSnapshotDataBlob(const char* embedded_source = NULL);
 
   /**
    * Bootstrap an isolate and a context from the cold startup blob, run the
@@ -7266,7 +7277,7 @@ class V8_EXPORT V8 {
    * The caller acquires ownership of the data array in the return value.
    * The argument startup blob is untouched.
    */
-  static StartupData WarmUpSnapshotDataBlob(StartupData cold_startup_blob,
+  static StartupData V8CALL WarmUpSnapshotDataBlob(StartupData cold_startup_blob,
                                             const char* warmup_source);
 
   /**
@@ -7280,14 +7291,14 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      bool AddMessageListener(MessageCallback that,
+      bool V8CALL AddMessageListener(MessageCallback that,
                               Local<Value> data = Local<Value>()));
 
   /**
    * Remove all message listeners from the specified callback function.
    */
   V8_INLINE static V8_DEPRECATED(
-      "Use isolate version", void RemoveMessageListeners(MessageCallback that));
+      "Use isolate version", void V8CALL RemoveMessageListeners(MessageCallback that));
 
   /**
    * Tells V8 to capture current stack trace when uncaught exception occurs
@@ -7295,29 +7306,29 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void SetCaptureStackTraceForUncaughtExceptions(
+      void V8CALL SetCaptureStackTraceForUncaughtExceptions(
           bool capture, int frame_limit = 10,
           StackTrace::StackTraceOptions options = StackTrace::kOverview));
 
   /**
    * Sets V8 flags from a string.
    */
-  static void SetFlagsFromString(const char* str, int length);
+  static void V8CALL SetFlagsFromString(const char* str, int length);
 
   /**
    * Sets V8 flags from the command line.
    */
-  static void SetFlagsFromCommandLine(int* argc,
+  static void V8CALL SetFlagsFromCommandLine(int* argc,
                                       char** argv,
                                       bool remove_flags);
 
   /** Get the version string. */
-  static const char* GetVersion();
+  static const char* V8CALL GetVersion();
 
   /** Callback function for reporting failed access checks.*/
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void SetFailedAccessCheckCallbackFunction(FailedAccessCheckCallback));
+      void V8CALL SetFailedAccessCheckCallbackFunction(FailedAccessCheckCallback));
 
   /**
    * Enables the host application to receive a notification before a
@@ -7331,7 +7342,7 @@ class V8_EXPORT V8 {
    */
   static V8_DEPRECATED(
       "Use isolate version",
-      void AddGCPrologueCallback(GCCallback callback,
+      void V8CALL AddGCPrologueCallback(GCCallback callback,
                                  GCType gc_type_filter = kGCTypeAll));
 
   /**
@@ -7340,7 +7351,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void RemoveGCPrologueCallback(GCCallback callback));
+      void V8CALL RemoveGCPrologueCallback(GCCallback callback));
 
   /**
    * Enables the host application to receive a notification after a
@@ -7354,7 +7365,7 @@ class V8_EXPORT V8 {
    */
   static V8_DEPRECATED(
       "Use isolate version",
-      void AddGCEpilogueCallback(GCCallback callback,
+      void V8CALL AddGCEpilogueCallback(GCCallback callback,
                                  GCType gc_type_filter = kGCTypeAll));
 
   /**
@@ -7363,25 +7374,25 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void RemoveGCEpilogueCallback(GCCallback callback));
+      void V8CALL RemoveGCEpilogueCallback(GCCallback callback));
 
   /**
    * Initializes V8. This function needs to be called before the first Isolate
    * is created. It always returns true.
    */
-  static bool Initialize();
+  static bool V8CALL Initialize();
 
   /**
    * Allows the host application to provide a callback which can be used
    * as a source of entropy for random number generators.
    */
-  static void SetEntropySource(EntropySource source);
+  static void V8CALL SetEntropySource(EntropySource source);
 
   /**
    * Allows the host application to provide a callback that allows v8 to
    * cooperate with a profiler that rewrites return addresses on stack.
    */
-  static void SetReturnAddressLocationResolver(
+  static void V8CALL SetReturnAddressLocationResolver(
       ReturnAddressLocationResolver return_address_resolver);
 
   /**
@@ -7394,7 +7405,7 @@ class V8_EXPORT V8 {
    * \param isolate The isolate in which to terminate the current JS execution.
    */
   V8_INLINE static V8_DEPRECATED("Use isolate version",
-                                 void TerminateExecution(Isolate* isolate));
+                                 void V8CALL TerminateExecution(Isolate* isolate));
 
   /**
    * Is V8 terminating JavaScript execution.
@@ -7408,7 +7419,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      bool IsExecutionTerminating(Isolate* isolate = NULL));
+      bool V8CALL IsExecutionTerminating(Isolate* isolate = NULL));
 
   /**
    * Resume execution capability in the given isolate, whose execution
@@ -7427,7 +7438,7 @@ class V8_EXPORT V8 {
    * \param isolate The isolate in which to resume execution capability.
    */
   V8_INLINE static V8_DEPRECATED(
-      "Use isolate version", void CancelTerminateExecution(Isolate* isolate));
+      "Use isolate version", void V8CALL CancelTerminateExecution(Isolate* isolate));
 
   /**
    * Releases any resources used by v8 and stops any utility threads
@@ -7438,7 +7449,7 @@ class V8_EXPORT V8 {
    * a process, this should happen automatically.  It is only necessary
    * to use if the process needs the resources taken up by v8.
    */
-  static bool Dispose();
+  static bool V8CALL Dispose();
 
   /**
    * Iterates through all external resources referenced from current isolate
@@ -7447,7 +7458,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void VisitExternalResources(ExternalResourceVisitor* visitor));
+      void V8CALL VisitExternalResources(ExternalResourceVisitor* visitor));
 
   /**
    * Iterates through all the persistent handles in the current isolate's heap
@@ -7455,7 +7466,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void VisitHandlesWithClassIds(PersistentHandleVisitor* visitor));
+      void V8CALL VisitHandlesWithClassIds(PersistentHandleVisitor* visitor));
 
   /**
    * Iterates through all the persistent handles in isolate's heap that have
@@ -7463,7 +7474,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void VisitHandlesWithClassIds(Isolate* isolate,
+      void V8CALL VisitHandlesWithClassIds(Isolate* isolate,
                                     PersistentHandleVisitor* visitor));
 
   /**
@@ -7475,7 +7486,7 @@ class V8_EXPORT V8 {
    */
   V8_INLINE static V8_DEPRECATED(
       "Use isolate version",
-      void VisitHandlesForPartialDependence(Isolate* isolate,
+      void V8CALL VisitHandlesForPartialDependence(Isolate* isolate,
                                             PersistentHandleVisitor* visitor));
 
   /**
@@ -7487,7 +7498,7 @@ class V8_EXPORT V8 {
    */
   V8_DEPRECATE_SOON(
       "Use version with default location.",
-      static bool InitializeICU(const char* icu_data_file = nullptr));
+      static bool V8CALL InitializeICU(const char* icu_data_file = nullptr));
 
   /**
    * Initialize the ICU library bundled with V8. The embedder should only
@@ -7501,7 +7512,7 @@ class V8_EXPORT V8 {
    * Optionally, the location of the data file can be provided to override the
    * default.
    */
-  static bool InitializeICUDefaultLocation(const char* exec_path,
+  static bool V8CALL InitializeICUDefaultLocation(const char* exec_path,
                                            const char* icu_data_file = nullptr);
 
   /**
@@ -7520,53 +7531,53 @@ class V8_EXPORT V8 {
    *   This will read the blobs from the given data structures and will
    *   not perform any file IO.
    */
-  static void InitializeExternalStartupData(const char* directory_path);
-  static void InitializeExternalStartupData(const char* natives_blob,
+  static void V8CALL InitializeExternalStartupData(const char* directory_path);
+  static void V8CALL InitializeExternalStartupData(const char* natives_blob,
                                             const char* snapshot_blob);
   /**
    * Sets the v8::Platform to use. This should be invoked before V8 is
    * initialized.
    */
-  static void InitializePlatform(Platform* platform);
+  static void V8CALL InitializePlatform(Platform* platform);
 
   /**
    * Clears all references to the v8::Platform. This should be invoked after
    * V8 was disposed.
    */
-  static void ShutdownPlatform();
+  static void V8CALL ShutdownPlatform();
 
  private:
   V8();
 
-  static internal::Object** GlobalizeReference(internal::Isolate* isolate,
+  static internal::Object** V8CALL GlobalizeReference(internal::Isolate* isolate,
                                                internal::Object** handle);
-  static internal::Object** CopyPersistent(internal::Object** handle);
-  static void DisposeGlobal(internal::Object** global_handle);
-  static void MakeWeak(internal::Object** location, void* data,
+  static internal::Object** V8CALL CopyPersistent(internal::Object** handle);
+  static void V8CALL DisposeGlobal(internal::Object** global_handle);
+  static void V8CALL MakeWeak(internal::Object** location, void* data,
                        WeakCallbackInfo<void>::Callback weak_callback,
                        WeakCallbackType type);
-  static void MakeWeak(internal::Object** location, void* data,
+  static void V8CALL MakeWeak(internal::Object** location, void* data,
                        // Must be 0 or -1.
                        int internal_field_index1,
                        // Must be 1 or -1.
                        int internal_field_index2,
                        WeakCallbackInfo<void>::Callback weak_callback);
-  static void MakeWeak(internal::Object*** location_addr);
-  static void* ClearWeak(internal::Object** location);
-  static void Eternalize(Isolate* isolate,
+  static void V8CALL MakeWeak(internal::Object*** location_addr);
+  static void* V8CALL ClearWeak(internal::Object** location);
+  static void V8CALL Eternalize(Isolate* isolate,
                          Value* handle,
                          int* index);
-  static Local<Value> GetEternal(Isolate* isolate, int index);
+  static Local<Value> V8CALL GetEternal(Isolate* isolate, int index);
 
-  static void RegisterExternallyReferencedObject(internal::Object** object,
+  static void V8CALL RegisterExternallyReferencedObject(internal::Object** object,
                                                  internal::Isolate* isolate);
 
   template <class K, class V, class T>
   friend class PersistentValueMapBase;
 
-  static void FromJustIsNothing();
-  static void ToLocalEmpty();
-  static void InternalFieldOutOfBounds(int index);
+  static void V8CALL FromJustIsNothing();
+  static void V8CALL ToLocalEmpty();
+  static void V8CALL InternalFieldOutOfBounds(int index);
   template <class T> friend class Local;
   template <class T>
   friend class MaybeLocal;
@@ -7842,7 +7853,7 @@ class V8_EXPORT TryCatch {
    * UseAfterReturn is enabled, then the address returned will be the address
    * of the C++ try catch handler itself.
    */
-  static void* JSStackComparableAddress(v8::TryCatch* handler) {
+  static void* V8CALL JSStackComparableAddress(v8::TryCatch* handler) {
     if (handler == NULL) return NULL;
     return handler->js_stack_comparable_address_;
   }
@@ -7934,7 +7945,7 @@ class V8_EXPORT Context {
    * template. The state of the global object will be completely reset
    * and only object identify will remain.
    */
-  static Local<Context> New(
+  static Local<Context> V8CALL New(
       Isolate* isolate, ExtensionConfiguration* extensions = NULL,
       MaybeLocal<ObjectTemplate> global_template = MaybeLocal<ObjectTemplate>(),
       MaybeLocal<Value> global_object = MaybeLocal<Value>());
@@ -7954,7 +7965,7 @@ class V8_EXPORT Context {
    * \param global_object See v8::Context::New.
    */
 
-  static MaybeLocal<Context> FromSnapshot(
+  static MaybeLocal<Context> V8CALL FromSnapshot(
       Isolate* isolate, size_t context_snapshot_index,
       ExtensionConfiguration* extensions = nullptr,
       MaybeLocal<Value> global_object = MaybeLocal<Value>());
@@ -7976,7 +7987,7 @@ class V8_EXPORT Context {
    * It is possible, however, to create a new context from the global object
    * returned by this method.
    */
-  static MaybeLocal<Object> NewRemoteContext(
+  static MaybeLocal<Object> V8CALL NewRemoteContext(
       Isolate* isolate, Local<ObjectTemplate> global_template,
       MaybeLocal<Value> global_object = MaybeLocal<Value>());
 
@@ -8216,12 +8227,12 @@ class V8_EXPORT Locker {
    * Returns whether or not the locker for a given isolate, is locked by the
    * current thread.
    */
-  static bool IsLocked(Isolate* isolate);
+  static bool V8CALL IsLocked(Isolate* isolate);
 
   /**
    * Returns whether v8::Locker is being used by this V8 instance.
    */
-  static bool IsActive();
+  static bool V8CALL IsActive();
 
   // Disallow copying and assigning.
   Locker(const Locker&) = delete;
@@ -8268,17 +8279,17 @@ V8_INLINE internal::Object* IntToSmi(int value) {
 // Smi constants for 32-bit systems.
 template <> struct SmiTagging<4> {
   enum { kSmiShiftSize = 0, kSmiValueSize = 31 };
-  static int SmiShiftSize() { return kSmiShiftSize; }
-  static int SmiValueSize() { return kSmiValueSize; }
-  V8_INLINE static int SmiToInt(const internal::Object* value) {
+  static int V8CALL SmiShiftSize() { return kSmiShiftSize; }
+  static int V8CALL SmiValueSize() { return kSmiValueSize; }
+  V8_INLINE static int V8CALL SmiToInt(const internal::Object* value) {
     int shift_bits = kSmiTagSize + kSmiShiftSize;
     // Throw away top 32 bits and shift down (requires >> to be sign extending).
     return static_cast<int>(reinterpret_cast<intptr_t>(value)) >> shift_bits;
   }
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Object* V8CALL IntToSmi(int value) {
     return internal::IntToSmi<kSmiShiftSize>(value);
   }
-  V8_INLINE static bool IsValidSmi(intptr_t value) {
+  V8_INLINE static bool V8CALL IsValidSmi(intptr_t value) {
     // To be representable as an tagged small integer, the two
     // most-significant bits of 'value' must be either 00 or 11 due to
     // sign-extension. To check this we add 01 to the two
@@ -8297,17 +8308,17 @@ template <> struct SmiTagging<4> {
 // Smi constants for 64-bit systems.
 template <> struct SmiTagging<8> {
   enum { kSmiShiftSize = 31, kSmiValueSize = 32 };
-  static int SmiShiftSize() { return kSmiShiftSize; }
-  static int SmiValueSize() { return kSmiValueSize; }
-  V8_INLINE static int SmiToInt(const internal::Object* value) {
+  static int V8CALL SmiShiftSize() { return kSmiShiftSize; }
+  static int V8CALL SmiValueSize() { return kSmiValueSize; }
+  V8_INLINE static int V8CALL SmiToInt(const internal::Object* value) {
     int shift_bits = kSmiTagSize + kSmiShiftSize;
     // Shift down and throw away top 32 bits.
     return static_cast<int>(reinterpret_cast<intptr_t>(value) >> shift_bits);
   }
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Object* V8CALL IntToSmi(int value) {
     return internal::IntToSmi<kSmiShiftSize>(value);
   }
-  V8_INLINE static bool IsValidSmi(intptr_t value) {
+  V8_INLINE static bool V8CALL IsValidSmi(intptr_t value) {
     // To be representable as a long smi, the value must be a 32-bit integer.
     return (value == static_cast<int32_t>(value));
   }
@@ -8316,8 +8327,8 @@ template <> struct SmiTagging<8> {
 typedef SmiTagging<kApiPointerSize> PlatformSmiTagging;
 const int kSmiShiftSize = PlatformSmiTagging::kSmiShiftSize;
 const int kSmiValueSize = PlatformSmiTagging::kSmiValueSize;
-V8_INLINE static bool SmiValuesAre31Bits() { return kSmiValueSize == 31; }
-V8_INLINE static bool SmiValuesAre32Bits() { return kSmiValueSize == 32; }
+V8_INLINE static bool V8CALL SmiValuesAre31Bits() { return kSmiValueSize == 31; }
+V8_INLINE static bool V8CALL SmiValuesAre32Bits() { return kSmiValueSize == 32; }
 
 /**
  * This class exports constants and functionality from within v8 that
@@ -8378,31 +8389,31 @@ class Internals {
 
   static const uint32_t kNumIsolateDataSlots = 4;
 
-  V8_EXPORT static void CheckInitializedImpl(v8::Isolate* isolate);
-  V8_INLINE static void CheckInitialized(v8::Isolate* isolate) {
+  V8_EXPORT static void V8CALL CheckInitializedImpl(v8::Isolate* isolate);
+  V8_INLINE static void V8CALL CheckInitialized(v8::Isolate* isolate) {
 #ifdef V8_ENABLE_CHECKS
     CheckInitializedImpl(isolate);
 #endif
   }
 
-  V8_INLINE static bool HasHeapObjectTag(const internal::Object* value) {
+  V8_INLINE static bool V8CALL HasHeapObjectTag(const internal::Object* value) {
     return ((reinterpret_cast<intptr_t>(value) & kHeapObjectTagMask) ==
             kHeapObjectTag);
   }
 
-  V8_INLINE static int SmiValue(const internal::Object* value) {
+  V8_INLINE static int V8CALL SmiValue(const internal::Object* value) {
     return PlatformSmiTagging::SmiToInt(value);
   }
 
-  V8_INLINE static internal::Object* IntToSmi(int value) {
+  V8_INLINE static internal::Object* V8CALL IntToSmi(int value) {
     return PlatformSmiTagging::IntToSmi(value);
   }
 
-  V8_INLINE static bool IsValidSmi(intptr_t value) {
+  V8_INLINE static bool V8CALL IsValidSmi(intptr_t value) {
     return PlatformSmiTagging::IsValidSmi(value);
   }
 
-  V8_INLINE static int GetInstanceType(const internal::Object* obj) {
+  V8_INLINE static int V8CALL GetInstanceType(const internal::Object* obj) {
     typedef internal::Object O;
     O* map = ReadField<O*>(obj, kHeapObjectMapOffset);
     // Map::InstanceType is defined so that it will always be loaded into
@@ -8410,40 +8421,40 @@ class Internals {
     return ReadField<uint16_t>(map, kMapInstanceTypeAndBitFieldOffset) & 0xff;
   }
 
-  V8_INLINE static int GetOddballKind(const internal::Object* obj) {
+  V8_INLINE static int V8CALL GetOddballKind(const internal::Object* obj) {
     typedef internal::Object O;
     return SmiValue(ReadField<O*>(obj, kOddballKindOffset));
   }
 
-  V8_INLINE static bool IsExternalTwoByteString(int instance_type) {
+  V8_INLINE static bool V8CALL IsExternalTwoByteString(int instance_type) {
     int representation = (instance_type & kFullStringRepresentationMask);
     return representation == kExternalTwoByteRepresentationTag;
   }
 
-  V8_INLINE static uint8_t GetNodeFlag(internal::Object** obj, int shift) {
+  V8_INLINE static uint8_t V8CALL GetNodeFlag(internal::Object** obj, int shift) {
       uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
       return *addr & static_cast<uint8_t>(1U << shift);
   }
 
-  V8_INLINE static void UpdateNodeFlag(internal::Object** obj,
+  V8_INLINE static void V8CALL UpdateNodeFlag(internal::Object** obj,
                                        bool value, int shift) {
       uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
       uint8_t mask = static_cast<uint8_t>(1U << shift);
       *addr = static_cast<uint8_t>((*addr & ~mask) | (value << shift));
   }
 
-  V8_INLINE static uint8_t GetNodeState(internal::Object** obj) {
+  V8_INLINE static uint8_t V8CALL GetNodeState(internal::Object** obj) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     return *addr & kNodeStateMask;
   }
 
-  V8_INLINE static void UpdateNodeState(internal::Object** obj,
+  V8_INLINE static void V8CALL UpdateNodeState(internal::Object** obj,
                                         uint8_t value) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     *addr = static_cast<uint8_t>((*addr & ~kNodeStateMask) | value);
   }
 
-  V8_INLINE static void SetEmbedderData(v8::Isolate* isolate,
+  V8_INLINE static void V8CALL SetEmbedderData(v8::Isolate* isolate,
                                         uint32_t slot,
                                         void* data) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(isolate) +
@@ -8458,21 +8469,21 @@ class Internals {
     return *reinterpret_cast<void* const*>(addr);
   }
 
-  V8_INLINE static internal::Object** GetRoot(v8::Isolate* isolate,
+  V8_INLINE static internal::Object** V8CALL GetRoot(v8::Isolate* isolate,
                                               int index) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(isolate) + kIsolateRootsOffset;
     return reinterpret_cast<internal::Object**>(addr + index * kApiPointerSize);
   }
 
   template <typename T>
-  V8_INLINE static T ReadField(const internal::Object* ptr, int offset) {
+  V8_INLINE static T V8CALL ReadField(const internal::Object* ptr, int offset) {
     const uint8_t* addr =
         reinterpret_cast<const uint8_t*>(ptr) + offset - kHeapObjectTag;
     return *reinterpret_cast<const T*>(addr);
   }
 
   template <typename T>
-  V8_INLINE static T ReadEmbedderData(const v8::Context* context, int index) {
+  V8_INLINE static T V8CALL ReadEmbedderData(const v8::Context* context, int index) {
     typedef internal::Object O;
     typedef internal::Internals I;
     O* ctx = *reinterpret_cast<O* const*>(context);

@@ -25,22 +25,23 @@
 #define LayoutSVGResourceFilter_h
 
 #include "core/layout/svg/LayoutSVGResourceContainer.h"
-#include "core/svg/SVGFilterElement.h"
-#include "core/svg/graphics/filters/SVGFilter.h"
-#include "core/svg/graphics/filters/SVGFilterBuilder.h"
+#include "core/svg/SVGUnitTypes.h"
 
 namespace blink {
 
-class FilterData final : public NoBaseWillBeGarbageCollectedFinalized<FilterData> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(FilterData);
+class FilterEffect;
+class SVGFilterElement;
+class SVGFilterGraphNodeMap;
+
+class FilterData final : public GarbageCollected<FilterData> {
 public:
     /*
-     * The state transitions should follow the following:
-     * Initial -> RecordingContent -> ReadyToPaint -> PaintingFilter -> ReadyToPaint
-     *               |     ^                              |     ^
-     *               v     |                              v     |
-     *     RecordingContentCycleDetected            PaintingFilterCycle
-     */
+   * The state transitions should follow the following:
+   * Initial->RecordingContent->ReadyToPaint->PaintingFilter->ReadyToPaint
+   *              |     ^                       |     ^
+   *              v     |                       v     |
+   *     RecordingContentCycleDetected     PaintingFilterCycle
+   */
     enum FilterDataState {
         Initial,
         RecordingContent,
@@ -50,64 +51,72 @@ public:
         PaintingFilterCycleDetected
     };
 
-    static PassOwnPtrWillBeRawPtr<FilterData> create()
-    {
-        return adoptPtrWillBeNoop(new FilterData());
-    }
+    static FilterData* create() { return new FilterData(); }
 
     void dispose();
 
     DECLARE_TRACE();
 
-    RefPtrWillBeMember<SVGFilter> filter;
-    RefPtrWillBeMember<SVGFilterBuilder> builder;
+    Member<FilterEffect> lastEffect;
+    Member<SVGFilterGraphNodeMap> nodeMap;
     FilterDataState m_state;
 
 private:
-    FilterData() : m_state(Initial) { }
+    FilterData()
+        : m_state(Initial)
+    {
+    }
 };
 
 class LayoutSVGResourceFilter final : public LayoutSVGResourceContainer {
 public:
     explicit LayoutSVGResourceFilter(SVGFilterElement*);
+    ~LayoutSVGResourceFilter() override;
 
-    virtual ~LayoutSVGResourceFilter();
+    bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
 
-    virtual bool isChildAllowed(LayoutObject*, const ComputedStyle&) const override;
+    const char* name() const override { return "LayoutSVGResourceFilter"; }
+    bool isOfType(LayoutObjectType type) const override
+    {
+        return type == LayoutObjectSVGResourceFilter || LayoutSVGResourceContainer::isOfType(type);
+    }
 
-    virtual const char* name() const override { return "LayoutSVGResourceFilter"; }
-    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVGResourceFilter || LayoutSVGResourceContainer::isOfType(type); }
-
-    virtual void removeAllClientsFromCache(bool markForInvalidation = true) override;
-    virtual void removeClientFromCache(LayoutObject*, bool markForInvalidation = true) override;
+    void removeAllClientsFromCache(bool markForInvalidation = true) override;
+    void removeClientFromCache(LayoutObject*,
+        bool markForInvalidation = true) override;
 
     FloatRect resourceBoundingBox(const LayoutObject*);
 
-    PassRefPtrWillBeRawPtr<SVGFilterBuilder> buildPrimitives(SVGFilter*);
-
-    SVGUnitTypes::SVGUnitType filterUnits() const { return toSVGFilterElement(element())->filterUnits()->currentValue()->enumValue(); }
-    SVGUnitTypes::SVGUnitType primitiveUnits() const { return toSVGFilterElement(element())->primitiveUnits()->currentValue()->enumValue(); }
+    SVGUnitTypes::SVGUnitType filterUnits() const;
+    SVGUnitTypes::SVGUnitType primitiveUnits() const;
 
     void primitiveAttributeChanged(LayoutObject*, const QualifiedName&);
 
     static const LayoutSVGResourceType s_resourceType = FilterResourceType;
-    virtual LayoutSVGResourceType resourceType() const override { return s_resourceType; }
+    LayoutSVGResourceType resourceType() const override { return s_resourceType; }
 
-    FilterData* getFilterDataForLayoutObject(LayoutObject* object) { return m_filter.get(object); }
-    void setFilterDataForLayoutObject(LayoutObject* object, PassOwnPtrWillBeRawPtr<FilterData> filterData) { m_filter.set(object, filterData); }
+    FilterData* getFilterDataForLayoutObject(const LayoutObject* object)
+    {
+        return m_filter.get(const_cast<LayoutObject*>(object));
+    }
+    void setFilterDataForLayoutObject(LayoutObject* object,
+        FilterData* filterData)
+    {
+        m_filter.set(object, filterData);
+    }
 
 protected:
-    virtual void willBeDestroyed() override;
+    void willBeDestroyed() override;
 
 private:
     void disposeFilterMap();
 
-    using FilterMap = WillBePersistentHeapHashMap<LayoutObject*, OwnPtrWillBeMember<FilterData>>;
+    using FilterMap = PersistentHeapHashMap<LayoutObject*, Member<FilterData>>;
     FilterMap m_filter;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutSVGResourceFilter, isSVGResourceFilter());
 
-}
+} // namespace blink
 
 #endif

@@ -15,15 +15,16 @@
  */
 class TestLooper : public SkDrawLooper {
 public:
-
-    SkDrawLooper::Context* createContext(SkCanvas*, void* storage) const override {
-        return SkNEW_PLACEMENT(storage, TestDrawLooperContext);
+    SkDrawLooper::Context* createContext(SkCanvas*, void* storage) const override
+    {
+        return new (storage) TestDrawLooperContext;
     }
 
     size_t contextSize() const override { return sizeof(TestDrawLooperContext); }
 
 #ifndef SK_IGNORE_TO_STRING
-    void toString(SkString* str) const override {
+    void toString(SkString* str) const override
+    {
         str->append("TestLooper:");
     }
 #endif
@@ -33,10 +34,14 @@ public:
 private:
     class TestDrawLooperContext : public SkDrawLooper::Context {
     public:
-        TestDrawLooperContext() : fOnce(true) {}
-        virtual ~TestDrawLooperContext() {}
+        TestDrawLooperContext()
+            : fOnce(true)
+        {
+        }
+        virtual ~TestDrawLooperContext() { }
 
-        bool next(SkCanvas* canvas, SkPaint*) override {
+        bool next(SkCanvas* canvas, SkPaint*) override
+        {
             if (fOnce) {
                 fOnce = false;
                 canvas->translate(SkIntToScalar(10), 0);
@@ -44,14 +49,16 @@ private:
             }
             return false;
         }
+
     private:
         bool fOnce;
     };
 };
 
-SkFlattenable* TestLooper::CreateProc(SkReadBuffer&) { return SkNEW(TestLooper); }
+sk_sp<SkFlattenable> TestLooper::CreateProc(SkReadBuffer&) { return sk_make_sp<TestLooper>(); }
 
-static void test_drawBitmap(skiatest::Reporter* reporter) {
+static void test_drawBitmap(skiatest::Reporter* reporter)
+{
     SkBitmap src;
     src.allocN32Pixels(10, 10);
     src.eraseColor(SK_ColorWHITE);
@@ -61,7 +68,7 @@ static void test_drawBitmap(skiatest::Reporter* reporter) {
     dst.eraseColor(SK_ColorTRANSPARENT);
 
     SkCanvas canvas(dst);
-    SkPaint  paint;
+    SkPaint paint;
 
     // we are initially transparent
     REPORTER_ASSERT(reporter, 0 == *dst.getAddr32(5, 5));
@@ -82,12 +89,13 @@ static void test_drawBitmap(skiatest::Reporter* reporter) {
     // to the left. The test is to ensure that canvas' quickReject machinary
     // allows us through, even though sans-looper we would look like we should
     // be clipped out.
-    paint.setLooper(new TestLooper)->unref();
+    paint.setLooper(sk_make_sp<TestLooper>());
     canvas.drawBitmap(src, SkIntToScalar(-10), 0, &paint);
     REPORTER_ASSERT(reporter, 0xFFFFFFFF == *dst.getAddr32(5, 5));
 }
 
-static void test_layers(skiatest::Reporter* reporter) {
+static void test_layers(skiatest::Reporter* reporter)
+{
     SkCanvas canvas(100, 100);
 
     SkRect r = SkRect::MakeWH(10, 10);
@@ -98,12 +106,13 @@ static void test_layers(skiatest::Reporter* reporter) {
 
     // Test that saveLayer updates quickReject
     SkRect bounds = SkRect::MakeLTRB(50, 50, 70, 70);
-    canvas.saveLayer(&bounds, NULL);
+    canvas.saveLayer(&bounds, nullptr);
     REPORTER_ASSERT(reporter, true == canvas.quickReject(SkRect::MakeWH(10, 10)));
     REPORTER_ASSERT(reporter, false == canvas.quickReject(SkRect::MakeWH(60, 60)));
 }
 
-DEF_TEST(QuickReject, reporter) {
+DEF_TEST(QuickReject, reporter)
+{
     test_drawBitmap(reporter);
     test_layers(reporter);
 }

@@ -6,12 +6,12 @@
 
 namespace v8 {
 namespace internal {
-namespace torque {
+    namespace torque {
 
-DEFINE_CONTEXTUAL_VARIABLE(CurrentSourceFile)
-DEFINE_CONTEXTUAL_VARIABLE(CurrentSourcePosition)
-DEFINE_CONTEXTUAL_VARIABLE(SourceFileMap)
+        DEFINE_CONTEXTUAL_VARIABLE(CurrentSourceFile)
+        DEFINE_CONTEXTUAL_VARIABLE(CurrentSourcePosition)
+        DEFINE_CONTEXTUAL_VARIABLE(SourceFileMap)
 
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+    } // namespace torque
+} // namespace internal
+} // namespace v8

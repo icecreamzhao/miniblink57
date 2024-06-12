@@ -26,6 +26,7 @@
 #ifndef PODInterval_h
 #define PODInterval_h
 
+#include "platform/heap/Handle.h"
 #ifndef NDEBUG
 #include "wtf/text/StringBuilder.h"
 #endif
@@ -61,22 +62,26 @@ namespace blink {
 // available:
 //
 //   template<> struct ValueToString<T> {
-//       static String string(const T& t);
+//       static String toString(const T& t);
 //   };
 //   template<> struct ValueToString<UserData> {
-//       static String string(const UserData& t);
+//       static String toString(const UserData& t);
 //   };
 //
 // Note that this class requires a copy constructor and assignment
 // operator in order to be stored in the red-black tree.
 
+#include "wtf/Allocator.h"
+
 #ifndef NDEBUG
-template<class T>
+template <class T>
 struct ValueToString;
 #endif
 
-template<class T, class UserData = void*>
+template <class T, class UserData = void*>
 class PODInterval {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     // Constructor from endpoints. This constructor only works when the
     // UserData type is a pointer or other type which can be initialized
@@ -118,10 +123,7 @@ public:
 
     // Returns true if this interval is "less" than the other. The
     // comparison is performed on the low endpoints of the intervals.
-    bool operator<(const PODInterval& other) const
-    {
-        return low() < other.low();
-    }
+    bool operator<(const PODInterval& other) const { return low() < other.low(); }
 
     // Returns true if this interval is strictly equal to the other,
     // including comparison of the user data.
@@ -138,14 +140,14 @@ public:
     String toString() const
     {
         StringBuilder builder;
-        builder.appendLiteral("[PODInterval (");
-        builder.append(ValueToString<T>::string(low()));
-        builder.appendLiteral(", ");
-        builder.append(ValueToString<T>::string(high()));
-        builder.appendLiteral("), data=");
-        builder.append(ValueToString<UserData>::string(data()));
-        builder.appendLiteral(", maxHigh=");
-        builder.append(ValueToString<T>::string(maxHigh()));
+        builder.append("[PODInterval (");
+        builder.append(ValueToString<T>::toString(low()));
+        builder.append(", ");
+        builder.append(ValueToString<T>::toString(high()));
+        builder.append("), data=");
+        builder.append(ValueToString<UserData>::toString(data()));
+        builder.append(", maxHigh=");
+        builder.append(ValueToString<T>::toString(maxHigh()));
         builder.append(']');
         return builder.toString();
     }
@@ -154,6 +156,7 @@ public:
 private:
     T m_low;
     T m_high;
+    GC_PLUGIN_IGNORE("crbug.com/513116")
     UserData m_data;
     T m_maxHigh;
 };

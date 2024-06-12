@@ -1,0 +1,17 @@
+*{margin:0px;padding:0px;box-sizing:border-box;font-family:微软雅黑, "microsoft yahei", arial, "PingFang SC", helvetica, sans-serif;-moz-box-sizing:border-box; /* Firefox */-webkit-box-sizing:border-box; /* Safari */}
+
+html{overflow-y: scroll;}
+
+a{text-decoration:none;color:#282828}
+ul{list-style:none;}
+.color-text-1{color:#282828;}
+.color-text-2{color:#888888;}
+
+.ab{position: absolute}
+.re{position: relative}
+
+.inline-block{display: inline-block;}
+
+body{font-size:14px;}
+.none{display: none;}
+.left{float: left;}

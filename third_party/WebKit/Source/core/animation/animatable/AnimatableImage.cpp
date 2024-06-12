@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableImage.h"
 
 #include "core/css/CSSImageValue.h"
@@ -37,8 +36,8 @@
 
 namespace blink {
 
-// FIXME: Once cross-fade works on generated image types, remove this method.
-bool AnimatableImage::usesDefaultInterpolationWith(const AnimatableValue* value) const
+bool AnimatableImage::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
 {
     if (!m_value->isImageValue())
         return true;
@@ -47,7 +46,9 @@ bool AnimatableImage::usesDefaultInterpolationWith(const AnimatableValue* value)
     return false;
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableImage::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableImage::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     if (fraction <= 0 || fraction >= 1 || usesDefaultInterpolationWith(value))
         return defaultInterpolateTo(this, value, fraction);
@@ -55,9 +56,8 @@ PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableImage::interpolateTo(const Ani
     CSSValue* fromValue = toCSSValue();
     CSSValue* toValue = toAnimatableImage(value)->toCSSValue();
 
-    RefPtrWillBeRawPtr<CSSCrossfadeValue> crossfadeValue = CSSCrossfadeValue::create(fromValue, toValue);
-    crossfadeValue->setPercentage(CSSPrimitiveValue::create(fraction, CSSPrimitiveValue::CSS_NUMBER));
-    return create(crossfadeValue);
+    return create(CSSCrossfadeValue::create(
+        fromValue, toValue, CSSPrimitiveValue::create(fraction, CSSPrimitiveValue::UnitType::Number)));
 }
 
 bool AnimatableImage::equalTo(const AnimatableValue* value) const
@@ -65,4 +65,4 @@ bool AnimatableImage::equalTo(const AnimatableValue* value) const
     return m_value->equals(*toAnimatableImage(value)->m_value.get());
 }
 
-}
+} // namespace blink

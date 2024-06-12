@@ -47,19 +47,64 @@ HEADER_TEMPLATE = """%(license)s
 """
 
 
-def case_insensitive_matching(name):
-    return (name == ('HTMLEvents')
+# All events on the following whitelist are matched case-insensitively
+# in createEvent.
+#
+# https://dom.spec.whatwg.org/#dom-document-createevent
+def create_event_whitelist(name):
+    return (name == 'HTMLEvents'
             or name == 'Event'
             or name == 'Events'
             or name.startswith('UIEvent')
             or name.startswith('CustomEvent')
-            or name.startswith('MouseEvent'))
+            or name == 'KeyboardEvent'
+            or name == 'MessageEvent'
+            or name.startswith('MouseEvent')
+            or name == 'TouchEvent')
+
+
+# All events on the following whitelist are matched case-sensitively
+# in createEvent and are measured using UseCounter.
+#
+# TODO(foolip): All events on this list should either be added to the spec and
+# moved to the above whitelist (causing them to be matched case-insensitively)
+# or be deprecated/removed. https://crbug.com/569690
+def create_event_legacy_whitelist(name):
+    return (name == 'AnimationEvent'
+            or name == 'BeforeUnloadEvent'
+            or name == 'CloseEvent'
+            or name == 'CompositionEvent'
+            or name == 'DeviceMotionEvent'
+            or name == 'DeviceOrientationEvent'
+            or name == 'DragEvent'
+            or name == 'ErrorEvent'
+            or name == 'FocusEvent'
+            or name == 'HashChangeEvent'
+            or name == 'IDBVersionChangeEvent'
+            or name == 'KeyboardEvents'
+            or name == 'MutationEvent'
+            or name == 'MutationEvents'
+            or name == 'PageTransitionEvent'
+            or name == 'PopStateEvent'
+            or name == 'ProgressEvent'
+            or name == 'StorageEvent'
+            or name == 'SVGEvents'
+            or name == 'TextEvent'
+            or name == 'TrackEvent'
+            or name == 'TransitionEvent'
+            or name == 'WebGLContextEvent'
+            or name == 'WebKitAnimationEvent'
+            or name == 'WebKitTransitionEvent'
+            or name == 'WheelEvent')
+
+
+def measure_name(name):
+    return 'DocumentCreateEvent' + name
 
 
 class EventFactoryWriter(in_generator.Writer):
     defaults = {
         'ImplementedAs': None,
-        'Conditional': None,
         'RuntimeEnabled': None,
     }
     default_parameters = {
@@ -69,10 +114,11 @@ class EventFactoryWriter(in_generator.Writer):
     }
     filters = {
         'cpp_name': name_utilities.cpp_name,
-        'enable_conditional': name_utilities.enable_conditional_if_endif,
         'lower_first': name_utilities.lower_first,
-        'case_insensitive_matching': case_insensitive_matching,
         'script_name': name_utilities.script_name,
+        'create_event_whitelist': create_event_whitelist,
+        'create_event_legacy_whitelist': create_event_legacy_whitelist,
+        'measure_name': measure_name,
     }
 
     def __init__(self, in_file_path):
@@ -123,12 +169,11 @@ class EventFactoryWriter(in_generator.Writer):
                 subdir_name = 'modules'
             else:
                 subdir_name = 'core'
-            include = '#include "%(path)s"\n#include "bindings/%(subdir_name)s/v8/V8%(script_name)s.h"' % {
+            includes[cpp_name] = '#include "%(path)s"\n#include "bindings/%(subdir_name)s/v8/V8%(script_name)s.h"' % {
                 'path': self._headers_header_include_path(entry),
                 'script_name': name_utilities.script_name(entry),
                 'subdir_name': subdir_name,
             }
-            includes[cpp_name] = self.wrap_with_condition(include, entry['Conditional'])
         return includes.values()
 
     def generate_headers_header(self):

@@ -5,23 +5,18 @@
  * found in the LICENSE file.
  */
 
+#include "GrRecordReplaceDraw.h"
 #include "GrContext.h"
 #include "GrLayerCache.h"
-#include "GrRecordReplaceDraw.h"
 #include "SkBigPicture.h"
 #include "SkCanvasPriv.h"
-#include "SkGrPixelRef.h"
+#include "SkGr.h"
 #include "SkImage.h"
 #include "SkRecordDraw.h"
 #include "SkRecords.h"
 
-static inline void wrap_texture(GrTexture* texture, int width, int height, SkBitmap* result) {
-    SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
-    result->setInfo(info);
-    result->setPixelRef(SkNEW_ARGS(SkGrPixelRef, (info, texture)))->unref();
-}
-
-static inline void draw_replacement_bitmap(GrCachedLayer* layer, SkCanvas* canvas) {
+static inline void draw_replacement_bitmap(GrCachedLayer* layer, SkCanvas* canvas)
+{
 
     // Some image filter can totally filter away a layer (e.g., SkPictureImageFilter's with
     // no picture).
@@ -30,27 +25,28 @@ static inline void draw_replacement_bitmap(GrCachedLayer* layer, SkCanvas* canva
     }
 
     SkBitmap bm;
-    wrap_texture(layer->texture(),
-                 !layer->isAtlased() ? layer->rect().width()  : layer->texture()->width(),
-                 !layer->isAtlased() ? layer->rect().height() : layer->texture()->height(),
-                 &bm);
+    GrWrapTextureInBitmap(layer->texture(),
+        !layer->isAtlased() ? layer->rect().width() : layer->texture()->width(),
+        !layer->isAtlased() ? layer->rect().height() : layer->texture()->height(),
+        false,
+        &bm);
 
+    canvas->save();
+    canvas->setMatrix(SkMatrix::I());
     if (layer->isAtlased()) {
         const SkRect src = SkRect::Make(layer->rect());
         const SkRect dst = SkRect::Make(layer->srcIR());
 
         SkASSERT(layer->offset().isZero());
 
-        canvas->save();
-        canvas->setMatrix(SkMatrix::I());
-        canvas->drawBitmapRectToRect(bm, &src, dst, layer->paint());
-        canvas->restore();
+        canvas->drawBitmapRect(bm, src, dst, layer->paint(), SkCanvas::kStrict_SrcRectConstraint);
     } else {
-        canvas->drawSprite(bm,
-                           layer->srcIR().fLeft + layer->offset().fX,
-                           layer->srcIR().fTop + layer->offset().fY,
-                           layer->paint());
+        canvas->drawBitmap(bm,
+            SkIntToScalar(layer->srcIR().fLeft + layer->offset().fX),
+            SkIntToScalar(layer->srcIR().fTop + layer->offset().fY),
+            layer->paint());
     }
+    canvas->restore();
 }
 
 // Used by GrRecordReplaceDraw. It intercepts nested drawPicture calls and
@@ -58,13 +54,13 @@ static inline void draw_replacement_bitmap(GrCachedLayer* layer, SkCanvas* canva
 class ReplaceDraw : public SkRecords::Draw {
 public:
     ReplaceDraw(SkCanvas* canvas, GrLayerCache* layerCache,
-                SkPicture const* const drawablePicts[], int drawableCount,
-                const SkPicture* topLevelPicture,
-                const SkBigPicture* picture,
-                const SkMatrix& initialMatrix,
-                SkPicture::AbortCallback* callback,
-                const unsigned* opIndices, int numIndices)
-        : INHERITED(canvas, drawablePicts, NULL, drawableCount)
+        SkPicture const* const drawablePicts[], int drawableCount,
+        const SkPicture* topLevelPicture,
+        const SkBigPicture* picture,
+        const SkMatrix& initialMatrix,
+        SkPicture::AbortCallback* callback,
+        const int* opIndices, int numIndices)
+        : INHERITED(canvas, drawablePicts, nullptr, drawableCount)
         , fCanvas(canvas)
         , fLayerCache(layerCache)
         , fTopLevelPicture(topLevelPicture)
@@ -72,14 +68,16 @@ public:
         , fInitialMatrix(initialMatrix)
         , fCallback(callback)
         , fIndex(0)
-        , fNumReplaced(0) {
+        , fNumReplaced(0)
+    {
         fOpIndexStack.append(numIndices, opIndices);
     }
 
-    int draw() {
+    int draw()
+    {
         const SkBBoxHierarchy* bbh = fPicture->bbh();
         const SkRecord* record = fPicture->record();
-        if (NULL == record) {
+        if (nullptr == record) {
             return 0;
         }
 
@@ -103,16 +101,16 @@ public:
                     return fNumReplaced;
                 }
 
-                record->visit<void>(fOps[fIndex], *this);
+                record->visit(fOps[fIndex], *this);
             }
 
         } else {
-            for (fIndex = 0; fIndex < (int) record->count(); ++fIndex) {
+            for (fIndex = 0; fIndex < (int)record->count(); ++fIndex) {
                 if (fCallback && fCallback->abort()) {
                     return fNumReplaced;
                 }
 
-                record->visit<void>(fIndex, *this);
+                record->visit(fIndex, *this);
             }
         }
 
@@ -120,10 +118,13 @@ public:
     }
 
     // Same as Draw for all ops except DrawPicture and SaveLayer.
-    template <typename T> void operator()(const T& r) {
+    template <typename T>
+    void operator()(const T& r)
+    {
         this->INHERITED::operator()(r);
     }
-    void operator()(const SkRecords::DrawPicture& dp) {
+    void operator()(const SkRecords::DrawPicture& dp)
+    {
 
         int drawPictureOffset;
         if (fOps.count()) {
@@ -139,9 +140,9 @@ public:
         if (const SkBigPicture* bp = dp.picture->asSkBigPicture()) {
             // Draw sub-pictures with the same replacement list but a different picture
             ReplaceDraw draw(fCanvas, fLayerCache,
-                             this->drawablePicts(), this->drawableCount(),
-                             fTopLevelPicture, bp, fInitialMatrix, fCallback,
-                             fOpIndexStack.begin(), fOpIndexStack.count());
+                this->drawablePicts(), this->drawableCount(),
+                fTopLevelPicture, bp, fInitialMatrix, fCallback,
+                fOpIndexStack.begin(), fOpIndexStack.count());
             fNumReplaced += draw.draw();
         } else {
             // TODO: can we assume / assert this doesn't happen?
@@ -150,11 +151,12 @@ public:
 
         fOpIndexStack.pop();
     }
-    void operator()(const SkRecords::SaveLayer& sl) {
+    void operator()(const SkRecords::SaveLayer& sl)
+    {
 
         // For a saveLayer command, check if it can be replaced by a drawBitmap
         // call and, if so, draw it and then update the current op index accordingly.
-        unsigned startOffset;
+        int startOffset;
         if (fOps.count()) {
             startOffset = fOps[fIndex];
         } else {
@@ -164,9 +166,9 @@ public:
         fOpIndexStack.push(startOffset);
 
         GrCachedLayer* layer = fLayerCache->findLayer(fTopLevelPicture->uniqueID(),
-                                                      fInitialMatrix,
-                                                      fOpIndexStack.begin(),
-                                                      fOpIndexStack.count());
+            fInitialMatrix,
+            fOpIndexStack.begin(),
+            fOpIndexStack.count());
 
         if (layer) {
             fNumReplaced++;
@@ -192,35 +194,36 @@ public:
     }
 
 private:
-    SkCanvas*                 fCanvas;
-    GrLayerCache*             fLayerCache;
-    const SkPicture*          fTopLevelPicture;
-    const SkBigPicture*       fPicture;
-    const SkMatrix            fInitialMatrix;
+    SkCanvas* fCanvas;
+    GrLayerCache* fLayerCache;
+    const SkPicture* fTopLevelPicture;
+    const SkBigPicture* fPicture;
+    const SkMatrix fInitialMatrix;
     SkPicture::AbortCallback* fCallback;
 
-    SkTDArray<unsigned>       fOps;
-    int                       fIndex;
-    int                       fNumReplaced;
+    SkTDArray<int> fOps;
+    int fIndex;
+    int fNumReplaced;
 
     // The op code indices of all the enclosing drawPicture and saveLayer calls
-    SkTDArray<unsigned>       fOpIndexStack;
+    SkTDArray<int> fOpIndexStack;
 
     typedef Draw INHERITED;
 };
 
 int GrRecordReplaceDraw(const SkPicture* picture,
-                        SkCanvas* canvas,
-                        GrLayerCache* layerCache,
-                        const SkMatrix& initialMatrix,
-                        SkPicture::AbortCallback* callback) {
+    SkCanvas* canvas,
+    GrLayerCache* layerCache,
+    const SkMatrix& initialMatrix,
+    SkPicture::AbortCallback* callback)
+{
     SkAutoCanvasRestore saveRestore(canvas, true /*save now, restore at exit*/);
 
     if (const SkBigPicture* bp = picture->asSkBigPicture()) {
         // TODO: drawablePicts?
-        ReplaceDraw draw(canvas, layerCache, NULL, 0,
-                         bp, bp,
-                         initialMatrix, callback, NULL, 0);
+        ReplaceDraw draw(canvas, layerCache, nullptr, 0,
+            bp, bp,
+            initialMatrix, callback, nullptr, 0);
         return draw.draw();
     } else {
         // TODO: can we assume / assert this doesn't happen?

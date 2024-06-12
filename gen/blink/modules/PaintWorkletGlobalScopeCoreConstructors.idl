@@ -1,0 +1,25 @@
+partial interface PaintWorkletGlobalScope {
+    [RuntimeEnabled=CSSTypedOM] attribute CSSAngleValueConstructor CSSAngleValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSCalcLengthConstructor CSSCalcLength;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSImageValueConstructor CSSImageValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSKeywordValueConstructor CSSKeywordValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSLengthValueConstructor CSSLengthValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSMatrixTransformComponentConstructor CSSMatrixTransformComponent;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSNumberValueConstructor CSSNumberValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSPerspectiveConstructor CSSPerspective;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSPositionValueConstructor CSSPositionValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSResourceValueConstructor CSSResourceValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSRotationConstructor CSSRotation;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSScaleConstructor CSSScale;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSSimpleLengthConstructor CSSSimpleLength;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSSkewConstructor CSSSkew;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSStyleValueConstructor CSSStyleValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSTransformComponentConstructor CSSTransformComponent;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSTransformValueConstructor CSSTransformValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSTranslationConstructor CSSTranslation;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSURLImageValueConstructor CSSURLImageValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSUnparsedValueConstructor CSSUnparsedValue;
+    [RuntimeEnabled=CSSTypedOM] attribute CSSVariableReferenceValueConstructor CSSVariableReferenceValue;
+    [RuntimeEnabled=CSSTypedOM] attribute StylePropertyMapConstructor StylePropertyMap;
+    [RuntimeEnabled=Worklet] attribute WorkletGlobalScopeConstructor WorkletGlobalScope;
+};

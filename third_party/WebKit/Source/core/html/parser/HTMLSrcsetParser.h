@@ -33,6 +33,8 @@
 #define HTMLSrcsetParser_h
 
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
+#include "wtf/text/StringView.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -42,6 +44,8 @@ class Document;
 enum { UninitializedDescriptor = -1 };
 
 class DescriptorParsingResult {
+    STACK_ALLOCATED();
+
 public:
     DescriptorParsingResult()
         : m_density(UninitializedDescriptor)
@@ -54,13 +58,37 @@ public:
     bool hasWidth() const { return m_resourceWidth >= 0; }
     bool hasHeight() const { return m_resourceHeight >= 0; }
 
-    float density() const { ASSERT(hasDensity()); return m_density; }
-    unsigned resourceWidth() const { ASSERT(hasWidth()); return m_resourceWidth; }
-    unsigned resourceHeight() const { ASSERT(hasHeight()); return m_resourceHeight; }
+    float density() const
+    {
+        ASSERT(hasDensity());
+        return m_density;
+    }
+    unsigned getResourceWidth() const
+    {
+        ASSERT(hasWidth());
+        return m_resourceWidth;
+    }
+    unsigned resourceHeight() const
+    {
+        ASSERT(hasHeight());
+        return m_resourceHeight;
+    }
 
-    void setResourceWidth(int width) { ASSERT(width >= 0); m_resourceWidth = (unsigned)width; }
-    void setResourceHeight(int height) { ASSERT(height >= 0); m_resourceHeight = (unsigned)height; }
-    void setDensity(float densityToSet) { ASSERT(densityToSet >= 0); m_density = densityToSet; }
+    void setResourceWidth(int width)
+    {
+        ASSERT(width >= 0);
+        m_resourceWidth = (unsigned)width;
+    }
+    void setResourceHeight(int height)
+    {
+        ASSERT(height >= 0);
+        m_resourceHeight = (unsigned)height;
+    }
+    void setDensity(float densityToSet)
+    {
+        ASSERT(densityToSet >= 0);
+        m_density = densityToSet;
+    }
 
 private:
     float m_density;
@@ -69,11 +97,11 @@ private:
 };
 
 class ImageCandidate {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    enum OriginAttribute {
-        SrcsetOrigin,
-        SrcOrigin
-    };
+    enum OriginAttribute { SrcsetOrigin,
+        SrcOrigin };
 
     ImageCandidate()
         : m_density(1.0)
@@ -82,62 +110,60 @@ public:
     {
     }
 
-    ImageCandidate(const String& source, unsigned start, unsigned length, const DescriptorParsingResult& result, OriginAttribute originAttribute)
-        : m_string(source.createView(start, length))
-        , m_density(result.hasDensity()?result.density():UninitializedDescriptor)
-        , m_resourceWidth(result.hasWidth()?result.resourceWidth():UninitializedDescriptor)
+    ImageCandidate(const String& source,
+        unsigned start,
+        unsigned length,
+        const DescriptorParsingResult& result,
+        OriginAttribute originAttribute)
+        : m_source(source)
+        , m_string(source, start, length)
+        , m_density(result.hasDensity() ? result.density()
+                                        : UninitializedDescriptor)
+        , m_resourceWidth(result.hasWidth() ? result.getResourceWidth()
+                                            : UninitializedDescriptor)
         , m_originAttribute(originAttribute)
     {
     }
 
-    String toString() const
-    {
-        return String(m_string.toString());
-    }
+    String toString() const { return m_string.toString(); }
 
-    AtomicString url() const
-    {
-        return AtomicString(m_string.toString());
-    }
+    AtomicString url() const { return AtomicString(toString()); }
 
-    void setDensity(float factor)
-    {
-        m_density = factor;
-    }
+    void setDensity(float factor) { m_density = factor; }
 
-    float density() const
-    {
-        return m_density;
-    }
+    float density() const { return m_density; }
 
-    int resourceWidth() const
-    {
-        return m_resourceWidth;
-    }
+    int getResourceWidth() const { return m_resourceWidth; }
 
-    bool srcOrigin() const
-    {
-        return (m_originAttribute == SrcOrigin);
-    }
+    bool srcOrigin() const { return (m_originAttribute == SrcOrigin); }
 
-    inline bool isEmpty() const
-    {
-        return m_string.isEmpty();
-    }
+    inline bool isEmpty() const { return m_string.isEmpty(); }
 
 private:
+    String m_source; // Keep the StringView buffer alive.
     StringView m_string;
     float m_density;
     int m_resourceWidth;
     OriginAttribute m_originAttribute;
 };
 
-ImageCandidate bestFitSourceForSrcsetAttribute(float deviceScaleFactor, float sourceSize, const String& srcsetAttribute, Document* = nullptr);
+ImageCandidate bestFitSourceForSrcsetAttribute(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcsetAttribute,
+    Document* = nullptr);
 
-CORE_EXPORT ImageCandidate bestFitSourceForImageAttributes(float deviceScaleFactor, float sourceSize, const String& srcAttribute, const String& srcsetAttribute, Document* = nullptr);
+CORE_EXPORT ImageCandidate
+bestFitSourceForImageAttributes(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcAttribute,
+    const String& srcsetAttribute,
+    Document* = nullptr);
 
-String bestFitSourceForImageAttributes(float deviceScaleFactor, float sourceSize, const String& srcAttribute, ImageCandidate& srcsetImageCandidate);
+String bestFitSourceForImageAttributes(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcAttribute,
+    ImageCandidate& srcsetImageCandidate);
 
-}
+} // namespace blink
 
 #endif

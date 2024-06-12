@@ -26,16 +26,27 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef LineBoxList_h
 #define LineBoxList_h
 
-#include "core/layout/LayoutObject.h"
+#include "core/layout/api/HitTestAction.h"
+#include "wtf/Allocator.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
+class CullRect;
+class HitTestLocation;
+class HitTestResult;
 class InlineFlowBox;
+class LayoutPoint;
+class LayoutUnit;
+class LineLayoutBoxModel;
+class LineLayoutItem;
+
 class LineBoxList {
+    DISALLOW_NEW();
+
 public:
     LineBoxList()
         : m_firstLineBox(nullptr)
@@ -43,11 +54,14 @@ public:
     {
     }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     ~LineBoxList();
 #endif
 
-    InlineFlowBox* firstLineBox() const { return m_firstLineBox; }
+    InlineFlowBox* firstLineBox() const
+    {
+        return m_firstLineBox;
+    }
     InlineFlowBox* lastLineBox() const { return m_lastLineBox; }
 
     void checkConsistency() const;
@@ -62,14 +76,29 @@ public:
     void removeLineBox(InlineFlowBox*);
 
     void dirtyLineBoxes();
-    void dirtyLinesFromChangedChild(LayoutObject* parent, LayoutObject* child);
+    void dirtyLinesFromChangedChild(LineLayoutItem parent,
+        LineLayoutItem child,
+        bool canDirtyAncestors);
 
-    bool hitTest(LayoutBoxModelObject*, HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) const;
-    bool anyLineIntersectsRect(LayoutBoxModelObject*, const LayoutRect&, const LayoutPoint&) const;
-    bool lineIntersectsDirtyRect(LayoutBoxModelObject*, InlineFlowBox*, const PaintInfo&, const LayoutPoint&) const;
-    bool rangeIntersectsRect(LayoutBoxModelObject*, LayoutUnit logicalTop, LayoutUnit logicalBottom, const LayoutRect&, const LayoutPoint&) const;
+    bool hitTest(LineLayoutBoxModel,
+        HitTestResult&,
+        const HitTestLocation& locationInContainer,
+        const LayoutPoint& accumulatedOffset,
+        HitTestAction) const;
+    bool anyLineIntersectsRect(LineLayoutBoxModel,
+        const CullRect&,
+        const LayoutPoint&) const;
+    bool lineIntersectsDirtyRect(LineLayoutBoxModel,
+        InlineFlowBox*,
+        const CullRect&,
+        const LayoutPoint&) const;
 
 private:
+    bool rangeIntersectsRect(LineLayoutBoxModel,
+        LayoutUnit logicalTop,
+        LayoutUnit logicalBottom,
+        const CullRect&,
+        const LayoutPoint&) const;
 
     // For block flows, each box represents the root inline box for a line in the
     // paragraph.
@@ -78,8 +107,7 @@ private:
     InlineFlowBox* m_lastLineBox;
 };
 
-
-#if !ENABLE(ASSERT)
+#if !DCHECK_IS_ON()
 inline void LineBoxList::checkConsistency() const
 {
 }

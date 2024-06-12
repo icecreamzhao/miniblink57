@@ -39,20 +39,19 @@
 #include "core/css/CSSPrimitiveValue.h"
 #include "core/css/CSSValue.h"
 
-#include <iostream>
+#include <ostream>
 
 namespace testing {
 namespace internal {
 
-// gtest tests won't compile with clang when trying to EXPECT_EQ a class that
-// has the "template<typename T> operator T*()" private.
-// (See https://code.google.com/p/googletest/issues/detail?id=442)
-//
-// Work around is to define this custom IsNullLiteralHelper.
-char(&IsNullLiteralHelper(const blink::CSSValue&))[2];
-
+    // gtest tests won't compile with clang when trying to EXPECT_EQ a class that
+    // has the "template<typename T> operator T*()" private.
+    // (See https://code.google.com/p/googletest/issues/detail?id=442)
+    //
+    // Work around is to define this custom IsNullLiteralHelper.
+    char (&IsNullLiteralHelper(const blink::CSSValue&))[2];
 }
-}
+} // namespace testing
 
 namespace blink {
 
@@ -61,16 +60,20 @@ inline bool operator==(const CSSValue& a, const CSSValue& b)
     return a.equals(b);
 }
 
-inline void PrintTo(const CSSValue& cssValue, ::std::ostream* os, const char* typeName = "CSSValue")
+inline void PrintTo(const CSSValue& cssValue,
+    ::std::ostream* os,
+    const char* typeName = "CSSValue")
 {
     *os << typeName << "(" << cssValue.cssText().utf8().data() << ")";
 }
 
-inline void PrintTo(const CSSPrimitiveValue& cssValue, ::std::ostream* os, const char* typeName = "CSSPrimitiveValue")
+inline void PrintTo(const CSSPrimitiveValue& cssValue,
+    ::std::ostream* os,
+    const char* typeName = "CSSPrimitiveValue")
 {
     PrintTo(static_cast<const CSSValue&>(cssValue), os, typeName);
 }
 
-}
+} // namespace blink
 
 #endif

@@ -34,12 +34,10 @@ public:
         assign(o);
     }
 
-    ~WebContentDecryptionModuleResult()
-    {
-        reset();
-    }
+    ~WebContentDecryptionModuleResult() { reset(); }
 
-    WebContentDecryptionModuleResult& operator=(const WebContentDecryptionModuleResult& o)
+    WebContentDecryptionModuleResult& operator=(
+        const WebContentDecryptionModuleResult& o)
     {
         assign(o);
         return *this;
@@ -50,23 +48,30 @@ public:
     BLINK_PLATFORM_EXPORT void complete();
 
     // Called when a CDM is created.
-    BLINK_PLATFORM_EXPORT void completeWithContentDecryptionModule(WebContentDecryptionModule*);
+    BLINK_PLATFORM_EXPORT void completeWithContentDecryptionModule(
+        WebContentDecryptionModule*);
 
     // Called when the CDM completes a session operation.
     BLINK_PLATFORM_EXPORT void completeWithSession(SessionStatus);
 
     // Called when the operation fails.
-    BLINK_PLATFORM_EXPORT void completeWithError(WebContentDecryptionModuleException, unsigned long systemCode, const WebString& message);
+    BLINK_PLATFORM_EXPORT void completeWithError(
+        WebContentDecryptionModuleException,
+        unsigned long systemCode,
+        const WebString& message);
 
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT explicit WebContentDecryptionModuleResult(ContentDecryptionModuleResult*);
+    BLINK_PLATFORM_EXPORT explicit WebContentDecryptionModuleResult(
+        ContentDecryptionModuleResult*);
 #endif
 
 private:
     BLINK_PLATFORM_EXPORT void reset();
     BLINK_PLATFORM_EXPORT void assign(const WebContentDecryptionModuleResult&);
 
-    WebPrivatePtr<ContentDecryptionModuleResult> m_impl;
+    WebPrivatePtr<ContentDecryptionModuleResult,
+        WebPrivatePtrDestructionCrossThread>
+        m_impl;
 };
 
 } // namespace blink

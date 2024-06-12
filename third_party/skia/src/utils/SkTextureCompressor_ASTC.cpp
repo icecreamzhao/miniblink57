@@ -10,7 +10,7 @@
 
 #include "SkBlitter.h"
 #include "SkEndian.h"
-#include "SkMath.h"
+#include "SkMathPriv.h"
 
 // This table contains the weight values for each texel. This is used in determining
 // how to convert a 12x12 grid of alpha values into a 6x5 grid of index values. Since
@@ -40,115 +40,118 @@
 // a corner), then the extra texels are stored with -1's in the table.
 
 static const int8_t k6x5To12x12Table[30][60] = {
-{ 16, 0, 0, 9, 1, 0, 1, 2, 0, 10, 0, 1, 6, 1, 1, 1, 2, 1, 4, 0, 2, 2,
-  1, 2, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 7, 1, 0, 15, 2, 0, 10, 3, 0, 3, 4, 0, 4, 1, 1, 9, 2, 1, 6, 3, 1, 2,
-  4, 1, 2, 1, 2, 4, 2, 2, 3, 3, 2, 1, 4, 2, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 6, 3, 0, 13, 4, 0, 12, 5, 0, 4, 6, 0, 4, 3, 1, 8, 4, 1, 8, 5, 1, 3,
-  6, 1, 1, 3, 2, 3, 4, 2, 3, 5, 2, 1, 6, 2, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 4, 5, 0, 12, 6, 0, 13, 7, 0, 6, 8, 0, 2, 5, 1, 7, 6, 1, 8, 7, 1, 4,
-  8, 1, 1, 5, 2, 3, 6, 2, 3, 7, 2, 2, 8, 2, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 3, 7, 0, 10, 8, 0, 15, 9, 0, 7, 10, 0, 2, 7, 1, 6, 8, 1, 9, 9, 1, 4,
-  10, 1, 1, 7, 2, 2, 8, 2, 4, 9, 2, 2, 10, 2, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 9, 0, 9, 10, 0, 16, 11, 0, 1, 9, 1, 6, 10, 1, 10, 11, 1, 2, 10, 2, 4,
-  11, 2, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 6, 0, 1, 3, 1, 1, 12, 0, 2, 7, 1, 2, 1, 2, 2, 15, 0, 3, 8, 1, 3, 1,
-  2, 3, 9, 0, 4, 5, 1, 4, 1, 2, 4, 3, 0, 5, 2, 1, 5, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 3, 1, 1, 6, 2, 1, 4, 3, 1, 1, 4, 1, 5, 1, 2, 11, 2, 2, 7, 3, 2, 2,
-  4, 2, 7, 1, 3, 14, 2, 3, 9, 3, 3, 3, 4, 3, 4, 1, 4, 8, 2, 4, 6, 3,
-  4, 2, 4, 4, 1, 1, 5, 3, 2, 5, 2, 3, 5, 1, 4, 5}, // n = 20
-{ 2, 3, 1, 5, 4, 1, 4, 5, 1, 1, 6, 1, 5, 3, 2, 10, 4, 2, 9, 5, 2, 3,
-  6, 2, 6, 3, 3, 12, 4, 3, 11, 5, 3, 4, 6, 3, 3, 3, 4, 7, 4, 4, 7, 5,
-  4, 2, 6, 4, 1, 3, 5, 2, 4, 5, 2, 5, 5, 1, 6, 5}, // n = 20
-{ 2, 5, 1, 5, 6, 1, 5, 7, 1, 2, 8, 1, 3, 5, 2, 9, 6, 2, 10, 7, 2, 4,
-  8, 2, 4, 5, 3, 11, 6, 3, 12, 7, 3, 6, 8, 3, 2, 5, 4, 7, 6, 4, 7, 7,
-  4, 3, 8, 4, 1, 5, 5, 2, 6, 5, 2, 7, 5, 1, 8, 5}, // n = 20
-{ 1, 7, 1, 4, 8, 1, 6, 9, 1, 3, 10, 1, 2, 7, 2, 8, 8, 2, 11, 9, 2, 5,
-  10, 2, 3, 7, 3, 9, 8, 3, 14, 9, 3, 7, 10, 3, 2, 7, 4, 6, 8, 4, 8, 9,
-  4, 4, 10, 4, 1, 7, 5, 2, 8, 5, 3, 9, 5, 1, 10, 5}, // n = 20
-{ 3, 10, 1, 6, 11, 1, 1, 9, 2, 7, 10, 2, 12, 11, 2, 1, 9, 3, 8, 10, 3, 15,
-  11, 3, 1, 9, 4, 5, 10, 4, 9, 11, 4, 2, 10, 5, 3, 11, 5, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 0, 3, 1, 1, 3, 7, 0, 4, 4, 1, 4, 13, 0, 5, 7, 1, 5, 1, 2, 5, 13,
-  0, 6, 7, 1, 6, 1, 2, 6, 7, 0, 7, 4, 1, 7, 1, 0, 8, 1, 1, 8, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 2, 3, 1, 3, 3, 3, 1, 4, 7, 2, 4, 4, 3, 4, 1, 4, 4, 6, 1, 5, 12,
-  2, 5, 8, 3, 5, 2, 4, 5, 6, 1, 6, 12, 2, 6, 8, 3, 6, 2, 4, 6, 3, 1,
-  7, 7, 2, 7, 4, 3, 7, 1, 4, 7, 1, 2, 8, 1, 3, 8}, // n = 20
-{ 1, 4, 3, 1, 5, 3, 3, 3, 4, 6, 4, 4, 5, 5, 4, 2, 6, 4, 5, 3, 5, 11,
-  4, 5, 10, 5, 5, 3, 6, 5, 5, 3, 6, 11, 4, 6, 10, 5, 6, 3, 6, 6, 3, 3,
-  7, 6, 4, 7, 5, 5, 7, 2, 6, 7, 1, 4, 8, 1, 5, 8}, // n = 20
-{ 1, 6, 3, 1, 7, 3, 2, 5, 4, 5, 6, 4, 6, 7, 4, 3, 8, 4, 3, 5, 5, 10,
-  6, 5, 11, 7, 5, 5, 8, 5, 3, 5, 6, 10, 6, 6, 11, 7, 6, 5, 8, 6, 2, 5,
-  7, 5, 6, 7, 6, 7, 7, 3, 8, 7, 1, 6, 8, 1, 7, 8}, // n = 20
-{ 1, 8, 3, 1, 9, 3, 1, 7, 4, 4, 8, 4, 7, 9, 4, 3, 10, 4, 2, 7, 5, 8,
-  8, 5, 12, 9, 5, 6, 10, 5, 2, 7, 6, 8, 8, 6, 12, 9, 6, 6, 10, 6, 1, 7,
-  7, 4, 8, 7, 7, 9, 7, 3, 10, 7, 1, 8, 8, 1, 9, 8}, // n = 20
-{ 1, 10, 3, 1, 11, 3, 4, 10, 4, 7, 11, 4, 1, 9, 5, 7, 10, 5, 13, 11, 5, 1,
-  9, 6, 7, 10, 6, 13, 11, 6, 4, 10, 7, 7, 11, 7, 1, 10, 8, 1, 11, 8, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 3, 0, 6, 2, 1, 6, 9, 0, 7, 5, 1, 7, 1, 2, 7, 15, 0, 8, 8, 1, 8, 1,
-  2, 8, 12, 0, 9, 7, 1, 9, 1, 2, 9, 6, 0, 10, 3, 1, 10, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 1, 6, 3, 2, 6, 2, 3, 6, 1, 4, 6, 4, 1, 7, 8, 2, 7, 6, 3, 7, 2,
-  4, 7, 7, 1, 8, 14, 2, 8, 9, 3, 8, 3, 4, 8, 5, 1, 9, 11, 2, 9, 8, 3,
-  9, 2, 4, 9, 3, 1, 10, 6, 2, 10, 4, 3, 10, 1, 4, 10}, // n = 20
-{ 1, 3, 6, 2, 4, 6, 2, 5, 6, 1, 6, 6, 3, 3, 7, 7, 4, 7, 7, 5, 7, 2,
-  6, 7, 6, 3, 8, 12, 4, 8, 11, 5, 8, 4, 6, 8, 4, 3, 9, 10, 4, 9, 9, 5,
-  9, 3, 6, 9, 2, 3, 10, 5, 4, 10, 5, 5, 10, 2, 6, 10}, // n = 20
-{ 1, 5, 6, 2, 6, 6, 2, 7, 6, 1, 8, 6, 2, 5, 7, 7, 6, 7, 7, 7, 7, 3,
-  8, 7, 4, 5, 8, 11, 6, 8, 12, 7, 8, 6, 8, 8, 3, 5, 9, 9, 6, 9, 10, 7,
-  9, 5, 8, 9, 1, 5, 10, 4, 6, 10, 5, 7, 10, 2, 8, 10}, // n = 20
-{ 1, 7, 6, 2, 8, 6, 3, 9, 6, 1, 10, 6, 2, 7, 7, 6, 8, 7, 8, 9, 7, 4,
-  10, 7, 3, 7, 8, 9, 8, 8, 14, 9, 8, 7, 10, 8, 2, 7, 9, 7, 8, 9, 11, 9,
-  9, 5, 10, 9, 1, 7, 10, 4, 8, 10, 6, 9, 10, 3, 10, 10}, // n = 20
-{ 2, 10, 6, 3, 11, 6, 1, 9, 7, 5, 10, 7, 9, 11, 7, 1, 9, 8, 8, 10, 8, 15,
-  11, 8, 1, 9, 9, 7, 10, 9, 12, 11, 9, 3, 10, 10, 6, 11, 10, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 4, 0, 9, 2, 1, 9, 10, 0, 10, 6, 1, 10, 1, 2, 10, 16, 0, 11, 9, 1, 11, 1,
-  2, 11, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 2, 1, 9, 4, 2, 9, 2, 3, 9, 1, 4, 9, 4, 1, 10, 9, 2, 10, 6, 3, 10, 2,
-  4, 10, 7, 1, 11, 15, 2, 11, 10, 3, 11, 3, 4, 11, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 2, 3, 9, 3, 4, 9, 3, 5, 9, 1, 6, 9, 4, 3, 10, 8, 4, 10, 7, 5, 10, 2,
-  6, 10, 6, 3, 11, 13, 4, 11, 12, 5, 11, 4, 6, 11, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 5, 9, 3, 6, 9, 3, 7, 9, 1, 8, 9, 3, 5, 10, 8, 6, 10, 8, 7, 10, 4,
-  8, 10, 4, 5, 11, 12, 6, 11, 13, 7, 11, 6, 8, 11, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 1, 7, 9, 3, 8, 9, 4, 9, 9, 2, 10, 9, 2, 7, 10, 6, 8, 10, 9, 9, 10, 4,
-  10, 10, 3, 7, 11, 10, 8, 11, 15, 9, 11, 7, 10, 11, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0}, // n = 20
-{ 2, 10, 9, 4, 11, 9, 1, 9, 10, 6, 10, 10, 10, 11, 10, 1, 9, 11, 9, 10, 11, 16,
-  11, 11, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
-  0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0} // n = 20
+    { 16, 0, 0, 9, 1, 0, 1, 2, 0, 10, 0, 1, 6, 1, 1, 1, 2, 1, 4, 0, 2, 2,
+        1, 2, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 7, 1, 0, 15, 2, 0, 10, 3, 0, 3, 4, 0, 4, 1, 1, 9, 2, 1, 6, 3, 1, 2,
+        4, 1, 2, 1, 2, 4, 2, 2, 3, 3, 2, 1, 4, 2, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 6, 3, 0, 13, 4, 0, 12, 5, 0, 4, 6, 0, 4, 3, 1, 8, 4, 1, 8, 5, 1, 3,
+        6, 1, 1, 3, 2, 3, 4, 2, 3, 5, 2, 1, 6, 2, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 4, 5, 0, 12, 6, 0, 13, 7, 0, 6, 8, 0, 2, 5, 1, 7, 6, 1, 8, 7, 1, 4,
+        8, 1, 1, 5, 2, 3, 6, 2, 3, 7, 2, 2, 8, 2, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 3, 7, 0, 10, 8, 0, 15, 9, 0, 7, 10, 0, 2, 7, 1, 6, 8, 1, 9, 9, 1, 4,
+        10, 1, 1, 7, 2, 2, 8, 2, 4, 9, 2, 2, 10, 2, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 9, 0, 9, 10, 0, 16, 11, 0, 1, 9, 1, 6, 10, 1, 10, 11, 1, 2, 10, 2, 4,
+        11, 2, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 6, 0, 1, 3, 1, 1, 12, 0, 2, 7, 1, 2, 1, 2, 2, 15, 0, 3, 8, 1, 3, 1,
+        2, 3, 9, 0, 4, 5, 1, 4, 1, 2, 4, 3, 0, 5, 2, 1, 5, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 3, 1, 1, 6, 2, 1, 4, 3, 1, 1, 4, 1, 5, 1, 2, 11, 2, 2, 7, 3, 2, 2,
+        4, 2, 7, 1, 3, 14, 2, 3, 9, 3, 3, 3, 4, 3, 4, 1, 4, 8, 2, 4, 6, 3,
+        4, 2, 4, 4, 1, 1, 5, 3, 2, 5, 2, 3, 5, 1, 4, 5 }, // n = 20
+    { 2, 3, 1, 5, 4, 1, 4, 5, 1, 1, 6, 1, 5, 3, 2, 10, 4, 2, 9, 5, 2, 3,
+        6, 2, 6, 3, 3, 12, 4, 3, 11, 5, 3, 4, 6, 3, 3, 3, 4, 7, 4, 4, 7, 5,
+        4, 2, 6, 4, 1, 3, 5, 2, 4, 5, 2, 5, 5, 1, 6, 5 }, // n = 20
+    { 2, 5, 1, 5, 6, 1, 5, 7, 1, 2, 8, 1, 3, 5, 2, 9, 6, 2, 10, 7, 2, 4,
+        8, 2, 4, 5, 3, 11, 6, 3, 12, 7, 3, 6, 8, 3, 2, 5, 4, 7, 6, 4, 7, 7,
+        4, 3, 8, 4, 1, 5, 5, 2, 6, 5, 2, 7, 5, 1, 8, 5 }, // n = 20
+    { 1, 7, 1, 4, 8, 1, 6, 9, 1, 3, 10, 1, 2, 7, 2, 8, 8, 2, 11, 9, 2, 5,
+        10, 2, 3, 7, 3, 9, 8, 3, 14, 9, 3, 7, 10, 3, 2, 7, 4, 6, 8, 4, 8, 9,
+        4, 4, 10, 4, 1, 7, 5, 2, 8, 5, 3, 9, 5, 1, 10, 5 }, // n = 20
+    { 3, 10, 1, 6, 11, 1, 1, 9, 2, 7, 10, 2, 12, 11, 2, 1, 9, 3, 8, 10, 3, 15,
+        11, 3, 1, 9, 4, 5, 10, 4, 9, 11, 4, 2, 10, 5, 3, 11, 5, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 0, 3, 1, 1, 3, 7, 0, 4, 4, 1, 4, 13, 0, 5, 7, 1, 5, 1, 2, 5, 13,
+        0, 6, 7, 1, 6, 1, 2, 6, 7, 0, 7, 4, 1, 7, 1, 0, 8, 1, 1, 8, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 2, 3, 1, 3, 3, 3, 1, 4, 7, 2, 4, 4, 3, 4, 1, 4, 4, 6, 1, 5, 12,
+        2, 5, 8, 3, 5, 2, 4, 5, 6, 1, 6, 12, 2, 6, 8, 3, 6, 2, 4, 6, 3, 1,
+        7, 7, 2, 7, 4, 3, 7, 1, 4, 7, 1, 2, 8, 1, 3, 8 }, // n = 20
+    { 1, 4, 3, 1, 5, 3, 3, 3, 4, 6, 4, 4, 5, 5, 4, 2, 6, 4, 5, 3, 5, 11,
+        4, 5, 10, 5, 5, 3, 6, 5, 5, 3, 6, 11, 4, 6, 10, 5, 6, 3, 6, 6, 3, 3,
+        7, 6, 4, 7, 5, 5, 7, 2, 6, 7, 1, 4, 8, 1, 5, 8 }, // n = 20
+    { 1, 6, 3, 1, 7, 3, 2, 5, 4, 5, 6, 4, 6, 7, 4, 3, 8, 4, 3, 5, 5, 10,
+        6, 5, 11, 7, 5, 5, 8, 5, 3, 5, 6, 10, 6, 6, 11, 7, 6, 5, 8, 6, 2, 5,
+        7, 5, 6, 7, 6, 7, 7, 3, 8, 7, 1, 6, 8, 1, 7, 8 }, // n = 20
+    { 1, 8, 3, 1, 9, 3, 1, 7, 4, 4, 8, 4, 7, 9, 4, 3, 10, 4, 2, 7, 5, 8,
+        8, 5, 12, 9, 5, 6, 10, 5, 2, 7, 6, 8, 8, 6, 12, 9, 6, 6, 10, 6, 1, 7,
+        7, 4, 8, 7, 7, 9, 7, 3, 10, 7, 1, 8, 8, 1, 9, 8 }, // n = 20
+    { 1, 10, 3, 1, 11, 3, 4, 10, 4, 7, 11, 4, 1, 9, 5, 7, 10, 5, 13, 11, 5, 1,
+        9, 6, 7, 10, 6, 13, 11, 6, 4, 10, 7, 7, 11, 7, 1, 10, 8, 1, 11, 8, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 3, 0, 6, 2, 1, 6, 9, 0, 7, 5, 1, 7, 1, 2, 7, 15, 0, 8, 8, 1, 8, 1,
+        2, 8, 12, 0, 9, 7, 1, 9, 1, 2, 9, 6, 0, 10, 3, 1, 10, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 1, 6, 3, 2, 6, 2, 3, 6, 1, 4, 6, 4, 1, 7, 8, 2, 7, 6, 3, 7, 2,
+        4, 7, 7, 1, 8, 14, 2, 8, 9, 3, 8, 3, 4, 8, 5, 1, 9, 11, 2, 9, 8, 3,
+        9, 2, 4, 9, 3, 1, 10, 6, 2, 10, 4, 3, 10, 1, 4, 10 }, // n = 20
+    { 1, 3, 6, 2, 4, 6, 2, 5, 6, 1, 6, 6, 3, 3, 7, 7, 4, 7, 7, 5, 7, 2,
+        6, 7, 6, 3, 8, 12, 4, 8, 11, 5, 8, 4, 6, 8, 4, 3, 9, 10, 4, 9, 9, 5,
+        9, 3, 6, 9, 2, 3, 10, 5, 4, 10, 5, 5, 10, 2, 6, 10 }, // n = 20
+    { 1, 5, 6, 2, 6, 6, 2, 7, 6, 1, 8, 6, 2, 5, 7, 7, 6, 7, 7, 7, 7, 3,
+        8, 7, 4, 5, 8, 11, 6, 8, 12, 7, 8, 6, 8, 8, 3, 5, 9, 9, 6, 9, 10, 7,
+        9, 5, 8, 9, 1, 5, 10, 4, 6, 10, 5, 7, 10, 2, 8, 10 }, // n = 20
+    { 1, 7, 6, 2, 8, 6, 3, 9, 6, 1, 10, 6, 2, 7, 7, 6, 8, 7, 8, 9, 7, 4,
+        10, 7, 3, 7, 8, 9, 8, 8, 14, 9, 8, 7, 10, 8, 2, 7, 9, 7, 8, 9, 11, 9,
+        9, 5, 10, 9, 1, 7, 10, 4, 8, 10, 6, 9, 10, 3, 10, 10 }, // n = 20
+    { 2, 10, 6, 3, 11, 6, 1, 9, 7, 5, 10, 7, 9, 11, 7, 1, 9, 8, 8, 10, 8, 15,
+        11, 8, 1, 9, 9, 7, 10, 9, 12, 11, 9, 3, 10, 10, 6, 11, 10, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 4, 0, 9, 2, 1, 9, 10, 0, 10, 6, 1, 10, 1, 2, 10, 16, 0, 11, 9, 1, 11, 1,
+        2, 11, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 2, 1, 9, 4, 2, 9, 2, 3, 9, 1, 4, 9, 4, 1, 10, 9, 2, 10, 6, 3, 10, 2,
+        4, 10, 7, 1, 11, 15, 2, 11, 10, 3, 11, 3, 4, 11, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 2, 3, 9, 3, 4, 9, 3, 5, 9, 1, 6, 9, 4, 3, 10, 8, 4, 10, 7, 5, 10, 2,
+        6, 10, 6, 3, 11, 13, 4, 11, 12, 5, 11, 4, 6, 11, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 5, 9, 3, 6, 9, 3, 7, 9, 1, 8, 9, 3, 5, 10, 8, 6, 10, 8, 7, 10, 4,
+        8, 10, 4, 5, 11, 12, 6, 11, 13, 7, 11, 6, 8, 11, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 1, 7, 9, 3, 8, 9, 4, 9, 9, 2, 10, 9, 2, 7, 10, 6, 8, 10, 9, 9, 10, 4,
+        10, 10, 3, 7, 11, 10, 8, 11, 15, 9, 11, 7, 10, 11, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 }, // n = 20
+    { 2, 10, 9, 4, 11, 9, 1, 9, 10, 6, 10, 10, 10, 11, 10, 1, 9, 11, 9, 10, 11, 16,
+        11, 11, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0,
+        0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0 } // n = 20
 };
 
 // Returns the alpha value of a texel at position (x, y) from src.
 // (x, y) are assumed to be in the range [0, 12).
-inline uint8_t GetAlpha(const uint8_t *src, size_t rowBytes, int x, int y) {
+inline uint8_t GetAlpha(const uint8_t* src, size_t rowBytes, int x, int y)
+{
     SkASSERT(x >= 0 && x < 12);
     SkASSERT(y >= 0 && y < 12);
     SkASSERT(rowBytes >= 12);
-    return *(src + y*rowBytes + x);
+    return *(src + y * rowBytes + x);
 }
 
-inline uint8_t GetAlphaTranspose(const uint8_t *src, size_t rowBytes, int x, int y) {
+inline uint8_t GetAlphaTranspose(const uint8_t* src, size_t rowBytes, int x, int y)
+{
     return GetAlpha(src, rowBytes, y, x);
 }
 
 // Output the 16 bytes stored in top and bottom and advance the pointer. The bytes
 // are stored as the integers are represented in memory, so they should be swapped
 // if necessary.
-static inline void send_packing(uint8_t** dst, const uint64_t top, const uint64_t bottom) {
+static inline void send_packing(uint8_t** dst, const uint64_t top, const uint64_t bottom)
+{
     uint64_t* dst64 = reinterpret_cast<uint64_t*>(*dst);
     dst64[0] = top;
     dst64[1] = bottom;
@@ -159,13 +162,14 @@ static inline void send_packing(uint8_t** dst, const uint64_t top, const uint64_
 // k6x5To12x12Table and computing an index from the associated values.
 typedef uint8_t (*GetAlphaProc)(const uint8_t* src, size_t rowBytes, int x, int y);
 
-template<GetAlphaProc getAlphaProc>
-static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t rowBytes) {
+template <GetAlphaProc getAlphaProc>
+static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t rowBytes)
+{
     // Check for single color
     bool constant = true;
     const uint32_t firstInt = *(reinterpret_cast<const uint32_t*>(src));
     for (int i = 0; i < 12; ++i) {
-        const uint32_t *rowInt = reinterpret_cast<const uint32_t *>(src + i*rowBytes);
+        const uint32_t* rowInt = reinterpret_cast<const uint32_t*>(src + i * rowBytes);
         constant = constant && (rowInt[0] == firstInt);
         constant = constant && (rowInt[1] == firstInt);
         constant = constant && (rowInt[2] == firstInt);
@@ -190,10 +194,10 @@ static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t row
         int weightTot = 0;
         int alphaTot = 0;
         for (int w = 0; w < 20; ++w) {
-            const int8_t weight = k6x5To12x12Table[idx][w*3];
+            const int8_t weight = k6x5To12x12Table[idx][w * 3];
             if (weight > 0) {
-                const int x = k6x5To12x12Table[idx][w*3 + 1];
-                const int y = k6x5To12x12Table[idx][w*3 + 2];
+                const int x = k6x5To12x12Table[idx][w * 3 + 1];
+                const int y = k6x5To12x12Table[idx][w * 3 + 2];
                 weightTot += weight;
                 alphaTot += weight * getAlphaProc(src, rowBytes, x, y);
             } else {
@@ -217,7 +221,7 @@ static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t row
     //     - Single plane
     //     - Low-precision index values
     //     - Index range 0-7 (three bits per index)
-    // 2. Partitions: 0b00 
+    // 2. Partitions: 0b00
     //     - One partition
     // 3. Color Endpoint Mode: 0b0000
     //     - Direct luminance -- e0=(v0,v0,v0,0xFF); e1=(v1,v1,v1,0xFF);
@@ -232,7 +236,7 @@ static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t row
 
     for (int idx = 0; idx <= 20; ++idx) {
         const uint8_t index = indices[idx];
-        bottom |= static_cast<uint64_t>(index) << (61-(idx*3));
+        bottom |= static_cast<uint64_t>(index) << (61 - (idx * 3));
     }
 
     // index 21 straddles top and bottom
@@ -244,7 +248,7 @@ static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t row
 
     for (int idx = 22; idx < 30; ++idx) {
         const uint8_t index = indices[idx];
-        top |= static_cast<uint64_t>(index) << (59-(idx-22)*3);
+        top |= static_cast<uint64_t>(index) << (59 - (idx - 22) * 3);
     }
 
     // Reverse each 3-bit index since indices are read in reverse order...
@@ -257,7 +261,8 @@ static void compress_a8_astc_block(uint8_t** dst, const uint8_t* src, size_t row
     send_packing(dst, SkEndian_SwapLE64(top), SkEndian_SwapLE64(bottom));
 }
 
-inline void CompressA8ASTCBlockVertical(uint8_t* dst, const uint8_t* src) {
+inline void CompressA8ASTCBlockVertical(uint8_t* dst, const uint8_t* src)
+{
     compress_a8_astc_block<GetAlphaTranspose>(&dst, src, 12);
 }
 
@@ -270,7 +275,7 @@ inline void CompressA8ASTCBlockVertical(uint8_t* dst, const uint8_t* src) {
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-// Enable this to assert whenever a decoded block has invalid ASTC values. Otherwise, 
+// Enable this to assert whenever a decoded block has invalid ASTC values. Otherwise,
 // each invalid block will result in a disgusting magenta color.
 #define ASSERT_ASTC_DECODE_ERROR 0
 
@@ -279,17 +284,19 @@ inline void CompressA8ASTCBlockVertical(uint8_t* dst, const uint8_t* src) {
 // http://matthewarcus.wordpress.com/2012/11/18/reversing-a-64-bit-word/
 
 template <typename T, T m, int k>
-static inline T swap_bits(T p) {
-    T q = ((p>>k)^p) & m;
-    return p^q^(q<<k);
+static inline T swap_bits(T p)
+{
+    T q = ((p >> k) ^ p) & m;
+    return p ^ q ^ (q << k);
 }
 
-static inline uint64_t reverse64(uint64_t n) {
+static inline uint64_t reverse64(uint64_t n)
+{
     static const uint64_t m0 = 0x5555555555555555ULL;
     static const uint64_t m1 = 0x0300c0303030c303ULL;
     static const uint64_t m2 = 0x00c0300c03f0003fULL;
     static const uint64_t m3 = 0x00000ffc00003fffULL;
-    n = ((n>>1)&m0) | (n&m0)<<1;
+    n = ((n >> 1) & m0) | (n & m0) << 1;
     n = swap_bits<uint64_t, m1, 4>(n);
     n = swap_bits<uint64_t, m2, 8>(n);
     n = swap_bits<uint64_t, m3, 20>(n);
@@ -305,7 +312,8 @@ struct ASTCBlock {
 
     // Reverses the bits of an ASTC block, making the LSB of the
     // 128 bit block the MSB.
-    inline void reverse() {
+    inline void reverse()
+    {
         const uint64_t newLow = reverse64(this->fHigh);
         this->fHigh = reverse64(this->fLow);
         this->fLow = newLow;
@@ -315,9 +323,10 @@ struct ASTCBlock {
 // Writes the given color to every pixel in the block. This is used by void-extent
 // blocks (a special constant-color encoding of a block) and by the error function.
 static inline void write_constant_color(uint8_t* dst, int blockDimX, int blockDimY,
-                                        int dstRowBytes, SkColor color) {
+    int dstRowBytes, SkColor color)
+{
     for (int y = 0; y < blockDimY; ++y) {
-        SkColor *dstColors = reinterpret_cast<SkColor*>(dst);
+        SkColor* dstColors = reinterpret_cast<SkColor*>(dst);
         for (int x = 0; x < blockDimX; ++x) {
             dstColors[x] = color;
         }
@@ -328,7 +337,8 @@ static inline void write_constant_color(uint8_t* dst, int blockDimX, int blockDi
 // Sets the entire block to the ASTC "error" color, a disgusting magenta
 // that's not supposed to appear in natural images.
 static inline void write_error_color(uint8_t* dst, int blockDimX, int blockDimY,
-                                     int dstRowBytes) {
+    int dstRowBytes)
+{
     static const SkColor kASTCErrorColor = SkColorSetRGB(0xFF, 0, 0xFF);
 
 #if ASSERT_ASTC_DECODE_ERROR
@@ -342,7 +352,8 @@ static inline void write_error_color(uint8_t* dst, int blockDimX, int blockDimY,
 // 'from' and going up to but not including bit 'to'. 'from' starts
 // counting from the LSB, counting up to the MSB. Returns -1 on
 // error.
-static uint64_t read_astc_bits(const ASTCBlock &block, int from, int to) {
+static uint64_t read_astc_bits(const ASTCBlock& block, int from, int to)
+{
     SkASSERT(0 <= from && from <= 128);
     SkASSERT(0 <= to && to <= 128);
 
@@ -369,9 +380,7 @@ static uint64_t read_astc_bits(const ASTCBlock &block, int from, int to) {
         SkASSERT(nBits > (64 - from));
         const int nLow = 64 - from;
         const int nHigh = nBits - nLow;
-        result = 
-            ((block.fLow >> from) & ((1ULL << nLow) - 1)) |
-            ((block.fHigh & ((1ULL << nHigh) - 1)) << nLow);
+        result = ((block.fLow >> from) & ((1ULL << nLow) - 1)) | ((block.fHigh & ((1ULL << nHigh) - 1)) << nLow);
     }
 
     return result;
@@ -379,7 +388,8 @@ static uint64_t read_astc_bits(const ASTCBlock &block, int from, int to) {
 
 // Returns the number of bits needed to represent a number
 // in the given power-of-two range (excluding the power of two itself).
-static inline int bits_for_range(int x) {
+static inline int bits_for_range(int x)
+{
     SkASSERT(SkIsPow2(x));
     SkASSERT(0 != x);
     // Since we know it's a power of two, there should only be one bit set,
@@ -389,25 +399,28 @@ static inline int bits_for_range(int x) {
 }
 
 // Clamps an integer to the range [0, 255]
-static inline int clamp_byte(int x) {
+static inline int clamp_byte(int x)
+{
     return SkClampMax(x, 255);
 }
 
 // Helper function defined in the ASTC spec, section C.2.14
 // It transfers a few bits of precision from one value to another.
-static inline void bit_transfer_signed(int *a, int *b) {
+static inline void bit_transfer_signed(int* a, int* b)
+{
     *b >>= 1;
     *b |= *a & 0x80;
     *a >>= 1;
     *a &= 0x3F;
-    if ( (*a & 0x20) != 0 ) {
+    if ((*a & 0x20) != 0) {
         *a -= 0x40;
     }
 }
 
 // Helper function defined in the ASTC spec, section C.2.14
 // It uses the value in the blue channel to tint the red and green
-static inline SkColor blue_contract(int a, int r, int g, int b) {
+static inline SkColor blue_contract(int a, int r, int g, int b)
+{
     return SkColorSetARGB(a, (r + b) >> 1, (g + b) >> 1, b);
 }
 
@@ -417,7 +430,8 @@ static inline SkColor blue_contract(int a, int r, int g, int b) {
 // corresponds to the decode procedure for the following endpoint modes:
 //   kLDR_RGB_Direct_ColorEndpointMode
 //   kLDR_RGBA_Direct_ColorEndpointMode
-static inline void decode_rgba_direct(const int *v, SkColor *endpoints, bool isRGB) {
+static inline void decode_rgba_direct(const int* v, SkColor* endpoints, bool isRGB)
+{
 
     int v6 = 0xFF;
     int v7 = 0xFF;
@@ -444,7 +458,8 @@ static inline void decode_rgba_direct(const int *v, SkColor *endpoints, bool isR
 // corresponds to the decode procedure for the following endpoint modes:
 //   kLDR_RGB_BaseScale_ColorEndpointMode
 //   kLDR_RGB_BaseScaleWithAlpha_ColorEndpointMode
-static inline void decode_rgba_basescale(const int *v, SkColor *endpoints, bool isRGB) {
+static inline void decode_rgba_basescale(const int* v, SkColor* endpoints, bool isRGB)
+{
 
     int v4 = 0xFF;
     int v5 = 0xFF;
@@ -452,11 +467,11 @@ static inline void decode_rgba_basescale(const int *v, SkColor *endpoints, bool 
         v4 = v[4];
         v5 = v[5];
     }
-                  
+
     endpoints[0] = SkColorSetARGB(v4,
-                                  (v[0]*v[3]) >> 8,
-                                  (v[1]*v[3]) >> 8,
-                                  (v[2]*v[3]) >> 8);
+        (v[0] * v[3]) >> 8,
+        (v[1] * v[3]) >> 8,
+        (v[2] * v[3]) >> 8);
     endpoints[1] = SkColorSetARGB(v5, v[0], v[1], v[2]);
 }
 
@@ -468,7 +483,8 @@ static inline void decode_rgba_basescale(const int *v, SkColor *endpoints, bool 
 //   kLDR_RGBA_BaseOffset_ColorEndpointMode
 //
 // If isRGB is true, then treat this as if v6 and v7 are meant to encode full alpha values.
-static inline void decode_rgba_baseoffset(const int *v, SkColor *endpoints, bool isRGB) {
+static inline void decode_rgba_baseoffset(const int* v, SkColor* endpoints, bool isRGB)
+{
     int v0 = v[0];
     int v1 = v[1];
     int v2 = v[2];
@@ -510,16 +526,15 @@ static inline void decode_rgba_baseoffset(const int *v, SkColor *endpoints, bool
     }
 
     endpoints[0] = SkColorSetARGB(clamp_byte(c[0][0]),
-                                  clamp_byte(c[0][1]),
-                                  clamp_byte(c[0][2]),
-                                  clamp_byte(c[0][3]));
+        clamp_byte(c[0][1]),
+        clamp_byte(c[0][2]),
+        clamp_byte(c[0][3]));
 
     endpoints[1] = SkColorSetARGB(clamp_byte(c[1][0]),
-                                  clamp_byte(c[1][1]),
-                                  clamp_byte(c[1][2]),
-                                  clamp_byte(c[1][3]));
+        clamp_byte(c[1][1]),
+        clamp_byte(c[1][2]),
+        clamp_byte(c[1][3]));
 }
-
 
 // A helper class used to decode bit values from standard integer values.
 // We can't use this class with ASTCBlock because then it would need to
@@ -528,15 +543,20 @@ static inline void decode_rgba_baseoffset(const int *v, SkColor *endpoints, bool
 template <typename T>
 class SkTBits {
 public:
-    SkTBits(const T val) : fVal(val) { }
+    SkTBits(const T val)
+        : fVal(val)
+    {
+    }
 
     // Returns the bit at the given position
-    T operator [](const int idx) const {
+    T operator[](const int idx) const
+    {
         return (fVal >> idx) & 1;
     }
 
     // Returns the bits in the given range, inclusive
-    T operator ()(const int end, const int start) const {
+    T operator()(const int end, const int start) const
+    {
         SkASSERT(end >= start);
         return (fVal >> start) & ((1ULL << ((end - start) + 1)) - 1);
     }
@@ -546,7 +566,8 @@ private:
 };
 
 // This algorithm matches the trit block decoding in the spec (Table C.2.14)
-static void decode_trit_block(int* dst, int nBits, const uint64_t &block) {
+static void decode_trit_block(int* dst, int nBits, const uint64_t& block)
+{
 
     SkTBits<uint64_t> blockBits(block);
 
@@ -595,18 +616,13 @@ static void decode_trit_block(int* dst, int nBits, const uint64_t &block) {
     } else {
         SkASSERT(nBits < 8);
         m[0] = static_cast<int>(blockBits(nBits - 1, 0));
-        m[1] = static_cast<int>(blockBits(2*nBits - 1 + 2, nBits + 2));
-        m[2] = static_cast<int>(blockBits(3*nBits - 1 + 4, 2*nBits + 4));
-        m[3] = static_cast<int>(blockBits(4*nBits - 1 + 5, 3*nBits + 5));
-        m[4] = static_cast<int>(blockBits(5*nBits - 1 + 7, 4*nBits + 7));
+        m[1] = static_cast<int>(blockBits(2 * nBits - 1 + 2, nBits + 2));
+        m[2] = static_cast<int>(blockBits(3 * nBits - 1 + 4, 2 * nBits + 4));
+        m[3] = static_cast<int>(blockBits(4 * nBits - 1 + 5, 3 * nBits + 5));
+        m[4] = static_cast<int>(blockBits(5 * nBits - 1 + 7, 4 * nBits + 7));
     }
 
-    int T =
-        static_cast<int>(blockBits(nBits + 1, nBits)) |
-        (static_cast<int>(blockBits(2*nBits + 2 + 1, 2*nBits + 2)) << 2) |
-        (static_cast<int>(blockBits[3*nBits + 4] << 4)) |
-        (static_cast<int>(blockBits(4*nBits + 5 + 1, 4*nBits + 5)) << 5) |
-        (static_cast<int>(blockBits[5*nBits + 7] << 7));
+    int T = static_cast<int>(blockBits(nBits + 1, nBits)) | (static_cast<int>(blockBits(2 * nBits + 2 + 1, 2 * nBits + 2)) << 2) | (static_cast<int>(blockBits[3 * nBits + 4] << 4)) | (static_cast<int>(blockBits(4 * nBits + 5 + 1, 4 * nBits + 5)) << 5) | (static_cast<int>(blockBits[5 * nBits + 7] << 7));
 
     int t[5];
 
@@ -618,9 +634,11 @@ static void decode_trit_block(int* dst, int nBits, const uint64_t &block) {
     } else {
         C = Tbits(4, 0);
         if (Tbits(6, 5) == 0x3) {
-            t[4] = 2; t[3] = Tbits[7];
+            t[4] = 2;
+            t[3] = Tbits[7];
         } else {
-            t[4] = Tbits[7]; t[3] = Tbits(6, 5);
+            t[4] = Tbits[7];
+            t[3] = Tbits(6, 5);
         }
     }
 
@@ -655,7 +673,8 @@ static void decode_trit_block(int* dst, int nBits, const uint64_t &block) {
 }
 
 // This algorithm matches the quint block decoding in the spec (Table C.2.15)
-static void decode_quint_block(int* dst, int nBits, const uint64_t &block) {
+static void decode_quint_block(int* dst, int nBits, const uint64_t& block)
+{
     SkTBits<uint64_t> blockBits(block);
 
     // According to the spec, a quint block, which contains three values,
@@ -695,14 +714,11 @@ static void decode_quint_block(int* dst, int nBits, const uint64_t &block) {
     } else {
         SkASSERT(nBits < 8);
         m[0] = static_cast<int>(blockBits(nBits - 1, 0));
-        m[1] = static_cast<int>(blockBits(2*nBits - 1 + 3, nBits + 3));
-        m[2] = static_cast<int>(blockBits(3*nBits - 1 + 5, 2*nBits + 5));
+        m[1] = static_cast<int>(blockBits(2 * nBits - 1 + 3, nBits + 3));
+        m[2] = static_cast<int>(blockBits(3 * nBits - 1 + 5, 2 * nBits + 5));
     }
 
-    int Q =
-        static_cast<int>(blockBits(nBits + 2, nBits)) |
-        (static_cast<int>(blockBits(2*nBits + 3 + 1, 2*nBits + 3)) << 3) |
-        (static_cast<int>(blockBits(3*nBits + 5 + 1, 3*nBits + 5)) << 5);
+    int Q = static_cast<int>(blockBits(nBits + 2, nBits)) | (static_cast<int>(blockBits(2 * nBits + 3 + 1, 2 * nBits + 3)) << 3) | (static_cast<int>(blockBits(3 * nBits + 5 + 1, 3 * nBits + 5)) << 5);
 
     int q[3];
     SkTBits<int> Qbits(Q); // quantum?
@@ -759,17 +775,18 @@ static void decode_quint_block(int* dst, int nBits, const uint64_t &block) {
 //   sequence of blocks, each block contains 3 quints and 3 bit sequences, which
 //   decodes into 3 values.
 static bool decode_integer_sequence(
-    int* dst,                 // The array holding the destination bits
-    int dstSize,              // The maximum size of the array
-    int nVals,                // The number of values that we'd like to decode
-    const ASTCBlock &block,   // The block that we're decoding from
-    int startBit,             // The bit from which we're going to do the reading
-    int endBit,               // The bit at which we stop reading (not inclusive)
-    bool bReadForward,        // If true, then read LSB -> MSB, else read MSB -> LSB
-    int nBits,                // The number of bits representing this encoding
-    int nTrits,               // The number of trits representing this encoding
-    int nQuints               // The number of quints representing this encoding
-) {
+    int* dst, // The array holding the destination bits
+    int dstSize, // The maximum size of the array
+    int nVals, // The number of values that we'd like to decode
+    const ASTCBlock& block, // The block that we're decoding from
+    int startBit, // The bit from which we're going to do the reading
+    int endBit, // The bit at which we stop reading (not inclusive)
+    bool bReadForward, // If true, then read LSB -> MSB, else read MSB -> LSB
+    int nBits, // The number of bits representing this encoding
+    int nTrits, // The number of trits representing this encoding
+    int nQuints // The number of quints representing this encoding
+)
+{
     // If we want more values than we have, then fail.
     if (nVals > dstSize) {
         return false;
@@ -788,7 +805,7 @@ static bool decode_integer_sequence(
         if (nTrits > 0) {
             SkASSERT(0 == nQuints);
 
-            int endBlockBit = startBit + 8 + 5*nBits;
+            int endBlockBit = startBit + 8 + 5 * nBits;
             if (endBlockBit > endBit) {
                 endBlockBit = endBit;
             }
@@ -796,7 +813,7 @@ static bool decode_integer_sequence(
             // Trit blocks are three values large.
             int trits[5];
             decode_trit_block(trits, nBits, read_astc_bits(src, startBit, endBlockBit));
-            memcpy(dst, trits, SkMin32(nVals, 5)*sizeof(int));
+            memcpy(dst, trits, SkMin32(nVals, 5) * sizeof(int));
 
             dst += 5;
             nVals -= 5;
@@ -805,7 +822,7 @@ static bool decode_integer_sequence(
         } else if (nQuints > 0) {
             SkASSERT(0 == nTrits);
 
-            int endBlockBit = startBit + 7 + 3*nBits;
+            int endBlockBit = startBit + 7 + 3 * nBits;
             if (endBlockBit > endBit) {
                 endBlockBit = endBit;
             }
@@ -813,7 +830,7 @@ static bool decode_integer_sequence(
             // Quint blocks are three values large
             int quints[3];
             decode_quint_block(quints, nBits, read_astc_bits(src, startBit, endBlockBit));
-            memcpy(dst, quints, SkMin32(nVals, 3)*sizeof(int));
+            memcpy(dst, quints, SkMin32(nVals, 3) * sizeof(int));
 
             dst += 3;
             nVals -= 3;
@@ -840,7 +857,8 @@ static bool decode_integer_sequence(
 // Helper function that unquantizes some (seemingly random) generated
 // numbers... meant to match the ASTC hardware. This function is used
 // to unquantize both colors (Table C.2.16) and weights (Table C.2.26)
-static inline int unquantize_value(unsigned mask, int A, int B, int C, int D) {
+static inline int unquantize_value(unsigned mask, int A, int B, int C, int D)
+{
     int T = D * C + B;
     T = T ^ A;
     T = (A & mask) | (T >> 2);
@@ -851,9 +869,10 @@ static inline int unquantize_value(unsigned mask, int A, int B, int C, int D) {
 // Helper function to replicate the bits in x that represents an oldPrec
 // precision integer into a prec precision integer. For example:
 //   255 == replicate_bits(7, 3, 8);
-static inline int replicate_bits(int x, int oldPrec, int prec) {
+static inline int replicate_bits(int x, int oldPrec, int prec)
+{
     while (oldPrec < prec) {
-        const int toShift = SkMin32(prec-oldPrec, oldPrec);
+        const int toShift = SkMin32(prec - oldPrec, oldPrec);
         x = (x << toShift) | (x >> (oldPrec - toShift));
         oldPrec += toShift;
     }
@@ -865,14 +884,16 @@ static inline int replicate_bits(int x, int oldPrec, int prec) {
 
 // Returns the unquantized value of a color that's represented only as
 // a set of bits.
-static inline int unquantize_bits_color(int val, int nBits) {
+static inline int unquantize_bits_color(int val, int nBits)
+{
     return replicate_bits(val, nBits, 8);
 }
 
 // Returns the unquantized value of a color that's represented as a
 // trit followed by nBits bits. This algorithm follows the sequence
 // defined in section C.2.13 of the ASTC spec.
-static inline int unquantize_trit_color(int val, int nBits) {
+static inline int unquantize_trit_color(int val, int nBits)
+{
     SkASSERT(nBits > 0);
     SkASSERT(nBits < 7);
 
@@ -887,39 +908,34 @@ static inline int unquantize_trit_color(int val, int nBits) {
     int B = 0;
     const SkTBits<int> valBits(val);
     switch (nBits) {
-        case 1:
-            B = 0;
-            break;
-
-        case 2: {
-            const int b = valBits[1];
-            B = (b << 1) | (b << 2) | (b << 4) | (b << 8);
-        }
+    case 1:
+        B = 0;
         break;
 
-        case 3: {
-            const int cb = valBits(2, 1);
-            B = cb | (cb << 2) | (cb << 7);
-        }
-        break;
+    case 2: {
+        const int b = valBits[1];
+        B = (b << 1) | (b << 2) | (b << 4) | (b << 8);
+    } break;
 
-        case 4: {
-            const int dcb = valBits(3, 1);
-            B = dcb | (dcb << 6);
-        }
-        break;
+    case 3: {
+        const int cb = valBits(2, 1);
+        B = cb | (cb << 2) | (cb << 7);
+    } break;
 
-        case 5: {
-            const int edcb = valBits(4, 1);
-            B = (edcb << 5) | (edcb >> 2);
-        }
-        break;
+    case 4: {
+        const int dcb = valBits(3, 1);
+        B = dcb | (dcb << 6);
+    } break;
 
-        case 6: {
-            const int fedcb = valBits(5, 1);
-            B = (fedcb << 4) | (fedcb >> 4);
-        }
-        break;
+    case 5: {
+        const int edcb = valBits(4, 1);
+        B = (edcb << 5) | (edcb >> 2);
+    } break;
+
+    case 6: {
+        const int fedcb = valBits(5, 1);
+        B = (fedcb << 4) | (fedcb >> 4);
+    } break;
     }
 
     return unquantize_value(0x80, A, B, C, D);
@@ -928,7 +944,8 @@ static inline int unquantize_trit_color(int val, int nBits) {
 // Returns the unquantized value of a color that's represented as a
 // quint followed by nBits bits. This algorithm follows the sequence
 // defined in section C.2.13 of the ASTC spec.
-static inline int unquantize_quint_color(int val, int nBits) {
+static inline int unquantize_quint_color(int val, int nBits)
+{
     const int D = (val >> nBits) & 0x7;
     SkASSERT(D < 5);
 
@@ -943,33 +960,29 @@ static inline int unquantize_quint_color(int val, int nBits) {
     int B = 0;
     const SkTBits<int> valBits(val);
     switch (nBits) {
-        case 1:
-            B = 0;
-            break;
-
-        case 2: {
-            const int b = valBits[1];
-            B = (b << 2) | (b << 3) | (b << 8);
-        }
+    case 1:
+        B = 0;
         break;
 
-        case 3: {
-            const int cb = valBits(2, 1);
-            B = (cb >> 1) | (cb << 1) | (cb << 7);
-        }
-        break;
+    case 2: {
+        const int b = valBits[1];
+        B = (b << 2) | (b << 3) | (b << 8);
+    } break;
 
-        case 4: {
-            const int dcb = valBits(3, 1);
-            B = (dcb >> 1) | (dcb << 6);
-        }
-        break;
+    case 3: {
+        const int cb = valBits(2, 1);
+        B = (cb >> 1) | (cb << 1) | (cb << 7);
+    } break;
 
-        case 5: {
-            const int edcb = valBits(4, 1);
-            B = (edcb << 5) | (edcb >> 3);
-        }
-        break;
+    case 4: {
+        const int dcb = valBits(3, 1);
+        B = (dcb >> 1) | (dcb << 6);
+    } break;
+
+    case 5: {
+        const int edcb = valBits(4, 1);
+        B = (edcb << 5) | (edcb >> 3);
+    } break;
     }
 
     return unquantize_value(0x80, A, B, C, D);
@@ -977,7 +990,8 @@ static inline int unquantize_quint_color(int val, int nBits) {
 
 // This algorithm takes a list of integers, stored in vals, and unquantizes them
 // in place. This follows the algorithm laid out in section C.2.13 of the ASTC spec.
-static void unquantize_colors(int *vals, int nVals, int nBits, int nTrits, int nQuints) {
+static void unquantize_colors(int* vals, int nVals, int nBits, int nTrits, int nQuints)
+{
     for (int i = 0; i < nVals; ++i) {
         if (nTrits > 0) {
             SkASSERT(nQuints == 0);
@@ -994,14 +1008,15 @@ static void unquantize_colors(int *vals, int nVals, int nBits, int nTrits, int n
 
 // Returns an interpolated value between c0 and c1 based on the weight. This
 // follows the algorithm laid out in section C.2.19 of the ASTC spec.
-static int interpolate_channel(int c0, int c1, int weight) {
+static int interpolate_channel(int c0, int c1, int weight)
+{
     SkASSERT(0 <= c0 && c0 < 256);
     SkASSERT(0 <= c1 && c1 < 256);
 
     c0 = (c0 << 8) | c0;
     c1 = (c1 << 8) | c1;
 
-    const int result = ((c0*(64 - weight) + c1*weight + 32) / 64) >> 8;
+    const int result = ((c0 * (64 - weight) + c1 * weight + 32) / 64) >> 8;
 
     if (result > 255) {
         return 255;
@@ -1012,7 +1027,8 @@ static int interpolate_channel(int c0, int c1, int weight) {
 }
 
 // Returns an interpolated color between the two endpoints based on the weight.
-static SkColor interpolate_endpoints(const SkColor endpoints[2], int weight) {
+static SkColor interpolate_endpoints(const SkColor endpoints[2], int weight)
+{
     return SkColorSetARGB(
         interpolate_channel(SkColorGetA(endpoints[0]), SkColorGetA(endpoints[1]), weight),
         interpolate_channel(SkColorGetR(endpoints[0]), SkColorGetR(endpoints[1]), weight),
@@ -1029,7 +1045,8 @@ static SkColor interpolate_endpoints(const SkColor endpoints[2], int weight) {
 // 2: blue
 // 3: alpha
 static SkColor interpolate_dual_endpoints(
-    const SkColor endpoints[2], int weight0, int weight1, int plane) {
+    const SkColor endpoints[2], int weight0, int weight1, int plane)
+{
     int a = interpolate_channel(SkColorGetA(endpoints[0]), SkColorGetA(endpoints[1]), weight0);
     int r = interpolate_channel(SkColorGetR(endpoints[0]), SkColorGetR(endpoints[1]), weight0);
     int g = interpolate_channel(SkColorGetG(endpoints[0]), SkColorGetG(endpoints[1]), weight0);
@@ -1037,29 +1054,29 @@ static SkColor interpolate_dual_endpoints(
 
     switch (plane) {
 
-        case 0:
-            r = interpolate_channel(
-                SkColorGetR(endpoints[0]), SkColorGetR(endpoints[1]), weight1);
-            break;
+    case 0:
+        r = interpolate_channel(
+            SkColorGetR(endpoints[0]), SkColorGetR(endpoints[1]), weight1);
+        break;
 
-        case 1:
-            g = interpolate_channel(
-                SkColorGetG(endpoints[0]), SkColorGetG(endpoints[1]), weight1);
-            break;
+    case 1:
+        g = interpolate_channel(
+            SkColorGetG(endpoints[0]), SkColorGetG(endpoints[1]), weight1);
+        break;
 
-        case 2:
-            b = interpolate_channel(
-                SkColorGetB(endpoints[0]), SkColorGetB(endpoints[1]), weight1);
-            break;
+    case 2:
+        b = interpolate_channel(
+            SkColorGetB(endpoints[0]), SkColorGetB(endpoints[1]), weight1);
+        break;
 
-        case 3:
-            a = interpolate_channel(
-                SkColorGetA(endpoints[0]), SkColorGetA(endpoints[1]), weight1);
-            break;
+    case 3:
+        a = interpolate_channel(
+            SkColorGetA(endpoints[0]), SkColorGetA(endpoints[1]), weight1);
+        break;
 
-        default:
-            SkDEBUGFAIL("Plane should be 0-3");
-            break;
+    default:
+        SkDEBUGFAIL("Plane should be 0-3");
+        break;
     }
 
     return SkColorSetARGB(a, r, g, b);
@@ -1072,47 +1089,51 @@ static SkColor interpolate_dual_endpoints(
 // 4x4, 5x4, 5x5, 6x5, 6x6, 8x5, 8x6, 8x8, 10x5, 10x6, 10x8, 10x10, 12x10, 12x12
 
 struct ASTCDecompressionData {
-    ASTCDecompressionData(int dimX, int dimY) : fDimX(dimX), fDimY(dimY) { }
-    const int   fDimX;      // the X dimension of the decompressed block
-    const int   fDimY;      // the Y dimension of the decompressed block
-    ASTCBlock   fBlock;     // the block data
-    int         fBlockMode; // the block header that contains the block mode.
+    ASTCDecompressionData(int dimX, int dimY)
+        : fDimX(dimX)
+        , fDimY(dimY)
+    {
+    }
+    const int fDimX; // the X dimension of the decompressed block
+    const int fDimY; // the Y dimension of the decompressed block
+    ASTCBlock fBlock; // the block data
+    int fBlockMode; // the block header that contains the block mode.
 
     bool fDualPlaneEnabled; // is this block compressing dual weight planes?
-    int  fDualPlane;        // the independent plane in dual plane mode.
+    int fDualPlane; // the independent plane in dual plane mode.
 
-    bool fVoidExtent;       // is this block a single color?
-    bool fError;            // does this block have an error encoding?
+    bool fVoidExtent; // is this block a single color?
+    bool fError; // does this block have an error encoding?
 
-    int  fWeightDimX;       // the x dimension of the weight grid
-    int  fWeightDimY;       // the y dimension of the weight grid
+    int fWeightDimX; // the x dimension of the weight grid
+    int fWeightDimY; // the y dimension of the weight grid
 
-    int  fWeightBits;       // the number of bits used for each weight value
-    int  fWeightTrits;      // the number of trits used for each weight value
-    int  fWeightQuints;     // the number of quints used for each weight value
+    int fWeightBits; // the number of bits used for each weight value
+    int fWeightTrits; // the number of trits used for each weight value
+    int fWeightQuints; // the number of quints used for each weight value
 
-    int  fPartCount;        // the number of partitions in this block
-    int  fPartIndex;        // the partition index: only relevant if fPartCount > 0
+    int fPartCount; // the number of partitions in this block
+    int fPartIndex; // the partition index: only relevant if fPartCount > 0
 
     // CEM values can be anything in the range 0-15, and each corresponds to a different
     // mode that represents the color data. We only support LDR modes.
     enum ColorEndpointMode {
-        kLDR_Luminance_Direct_ColorEndpointMode          = 0,
-        kLDR_Luminance_BaseOffset_ColorEndpointMode      = 1,
-        kHDR_Luminance_LargeRange_ColorEndpointMode      = 2,
-        kHDR_Luminance_SmallRange_ColorEndpointMode      = 3,
-        kLDR_LuminanceAlpha_Direct_ColorEndpointMode     = 4,
+        kLDR_Luminance_Direct_ColorEndpointMode = 0,
+        kLDR_Luminance_BaseOffset_ColorEndpointMode = 1,
+        kHDR_Luminance_LargeRange_ColorEndpointMode = 2,
+        kHDR_Luminance_SmallRange_ColorEndpointMode = 3,
+        kLDR_LuminanceAlpha_Direct_ColorEndpointMode = 4,
         kLDR_LuminanceAlpha_BaseOffset_ColorEndpointMode = 5,
-        kLDR_RGB_BaseScale_ColorEndpointMode             = 6,
-        kHDR_RGB_BaseScale_ColorEndpointMode             = 7,
-        kLDR_RGB_Direct_ColorEndpointMode                = 8,
-        kLDR_RGB_BaseOffset_ColorEndpointMode            = 9,
-        kLDR_RGB_BaseScaleWithAlpha_ColorEndpointMode    = 10,
-        kHDR_RGB_ColorEndpointMode                       = 11,
-        kLDR_RGBA_Direct_ColorEndpointMode               = 12,
-        kLDR_RGBA_BaseOffset_ColorEndpointMode           = 13,
-        kHDR_RGB_LDRAlpha_ColorEndpointMode              = 14,
-        kHDR_RGB_HDRAlpha_ColorEndpointMode              = 15
+        kLDR_RGB_BaseScale_ColorEndpointMode = 6,
+        kHDR_RGB_BaseScale_ColorEndpointMode = 7,
+        kLDR_RGB_Direct_ColorEndpointMode = 8,
+        kLDR_RGB_BaseOffset_ColorEndpointMode = 9,
+        kLDR_RGB_BaseScaleWithAlpha_ColorEndpointMode = 10,
+        kHDR_RGB_ColorEndpointMode = 11,
+        kLDR_RGBA_Direct_ColorEndpointMode = 12,
+        kLDR_RGBA_BaseOffset_ColorEndpointMode = 13,
+        kHDR_RGB_LDRAlpha_ColorEndpointMode = 14,
+        kHDR_RGB_HDRAlpha_ColorEndpointMode = 15
     };
     static const int kMaxColorEndpointModes = 16;
 
@@ -1120,23 +1141,26 @@ struct ASTCDecompressionData {
     static const int kMaxPartitions = 4;
     ColorEndpointMode fCEM[kMaxPartitions];
 
-    int  fColorStartBit;    // The bit position of the first bit of the color data
-    int  fColorEndBit;      // The bit position of the last *possible* bit of the color data
+    int fColorStartBit; // The bit position of the first bit of the color data
+    int fColorEndBit; // The bit position of the last *possible* bit of the color data
 
     // Returns the number of partitions for this block.
-    int numPartitions() const {
+    int numPartitions() const
+    {
         return fPartCount;
     }
 
     // Returns the total number of weight values that are stored in this block
-    int numWeights() const {
+    int numWeights() const
+    {
         return fWeightDimX * fWeightDimY * (fDualPlaneEnabled ? 2 : 1);
     }
 
 #ifdef SK_DEBUG
     // Returns the maximum value that any weight can take. We really only use
     // this function for debugging.
-    int maxWeightValue() const {
+    int maxWeightValue() const
+    {
         int maxVal = (1 << fWeightBits);
         if (fWeightTrits > 0) {
             SkASSERT(0 == fWeightQuints);
@@ -1151,17 +1175,16 @@ struct ASTCDecompressionData {
 
     // The number of bits needed to represent the texel weight data. This
     // comes from the 'data size determination' section of the ASTC spec (C.2.22)
-    int numWeightBits() const {
+    int numWeightBits() const
+    {
         const int nWeights = this->numWeights();
-        return
-            ((nWeights*8*fWeightTrits + 4) / 5) +
-            ((nWeights*7*fWeightQuints + 2) / 3) +
-            (nWeights*fWeightBits);
+        return ((nWeights * 8 * fWeightTrits + 4) / 5) + ((nWeights * 7 * fWeightQuints + 2) / 3) + (nWeights * fWeightBits);
     }
 
     // Returns the number of color values stored in this block. The number of
     // values stored is directly a function of the color endpoint modes.
-    int numColorValues() const {
+    int numColorValues() const
+    {
         int numValues = 0;
         for (int i = 0; i < this->numPartitions(); ++i) {
             int cemInt = static_cast<int>(fCEM[i]);
@@ -1174,8 +1197,9 @@ struct ASTCDecompressionData {
     // Figures out the number of bits available for color values, and fills
     // in the maximum encoding that will fit the number of color values that
     // we need. Returns false on error. (See section C.2.22 of the spec)
-    bool getColorValueEncoding(int *nBits, int *nTrits, int *nQuints) const {
-        if (NULL == nBits || NULL == nTrits || NULL == nQuints) {
+    bool getColorValueEncoding(int* nBits, int* nTrits, int* nQuints) const
+    {
+        if (nullptr == nBits || nullptr == nTrits || nullptr == nQuints) {
             return false;
         }
 
@@ -1201,21 +1225,18 @@ struct ASTCDecompressionData {
             if (SkIsPow2(range)) {
                 bits = bits_for_range(range);
                 valid = true;
-            } else if ((range % 3) == 0 && SkIsPow2(range/3)) {
+            } else if ((range % 3) == 0 && SkIsPow2(range / 3)) {
                 trits = 1;
-                bits = bits_for_range(range/3);
+                bits = bits_for_range(range / 3);
                 valid = true;
-            } else if ((range % 5) == 0 && SkIsPow2(range/5)) {
+            } else if ((range % 5) == 0 && SkIsPow2(range / 5)) {
                 quints = 1;
-                bits = bits_for_range(range/5);
+                bits = bits_for_range(range / 5);
                 valid = true;
             }
 
             if (valid) {
-                const int actualColorBits =
-                    ((nColorVals*8*trits + 4) / 5) +
-                    ((nColorVals*7*quints + 2) / 3) +
-                    (nColorVals*bits);
+                const int actualColorBits = ((nColorVals * 8 * trits + 4) / 5) + ((nColorVals * 7 * quints + 2) / 3) + (nColorVals * bits);
                 if (actualColorBits <= colorBits) {
                     *nTrits = trits;
                     *nQuints = quints;
@@ -1230,105 +1251,97 @@ struct ASTCDecompressionData {
 
     // Converts the sequence of color values into endpoints. The algorithm here
     // corresponds to the values determined by section C.2.14 of the ASTC spec
-    void colorEndpoints(SkColor endpoints[4][2], const int* colorValues) const {
+    void colorEndpoints(SkColor endpoints[4][2], const int* colorValues) const
+    {
         for (int i = 0; i < this->numPartitions(); ++i) {
             switch (fCEM[i]) {
-                case kLDR_Luminance_Direct_ColorEndpointMode: {
-                    const int* v = colorValues;
-                    endpoints[i][0] = SkColorSetARGB(0xFF, v[0], v[0], v[0]);
-                    endpoints[i][1] = SkColorSetARGB(0xFF, v[1], v[1], v[1]);
+            case kLDR_Luminance_Direct_ColorEndpointMode: {
+                const int* v = colorValues;
+                endpoints[i][0] = SkColorSetARGB(0xFF, v[0], v[0], v[0]);
+                endpoints[i][1] = SkColorSetARGB(0xFF, v[1], v[1], v[1]);
 
-                    colorValues += 2;
-                }
+                colorValues += 2;
+            } break;
+
+            case kLDR_Luminance_BaseOffset_ColorEndpointMode: {
+                const int* v = colorValues;
+                const int L0 = (v[0] >> 2) | (v[1] & 0xC0);
+                const int L1 = clamp_byte(L0 + (v[1] & 0x3F));
+
+                endpoints[i][0] = SkColorSetARGB(0xFF, L0, L0, L0);
+                endpoints[i][1] = SkColorSetARGB(0xFF, L1, L1, L1);
+
+                colorValues += 2;
+            } break;
+
+            case kLDR_LuminanceAlpha_Direct_ColorEndpointMode: {
+                const int* v = colorValues;
+
+                endpoints[i][0] = SkColorSetARGB(v[2], v[0], v[0], v[0]);
+                endpoints[i][1] = SkColorSetARGB(v[3], v[1], v[1], v[1]);
+
+                colorValues += 4;
+            } break;
+
+            case kLDR_LuminanceAlpha_BaseOffset_ColorEndpointMode: {
+                int v0 = colorValues[0];
+                int v1 = colorValues[1];
+                int v2 = colorValues[2];
+                int v3 = colorValues[3];
+
+                bit_transfer_signed(&v1, &v0);
+                bit_transfer_signed(&v3, &v2);
+
+                endpoints[i][0] = SkColorSetARGB(v2, v0, v0, v0);
+                endpoints[i][1] = SkColorSetARGB(
+                    clamp_byte(v3 + v2),
+                    clamp_byte(v1 + v0),
+                    clamp_byte(v1 + v0),
+                    clamp_byte(v1 + v0));
+
+                colorValues += 4;
+            } break;
+
+            case kLDR_RGB_BaseScale_ColorEndpointMode: {
+                decode_rgba_basescale(colorValues, endpoints[i], true);
+                colorValues += 4;
+            } break;
+
+            case kLDR_RGB_Direct_ColorEndpointMode: {
+                decode_rgba_direct(colorValues, endpoints[i], true);
+                colorValues += 6;
+            } break;
+
+            case kLDR_RGB_BaseOffset_ColorEndpointMode: {
+                decode_rgba_baseoffset(colorValues, endpoints[i], true);
+                colorValues += 6;
+            } break;
+
+            case kLDR_RGB_BaseScaleWithAlpha_ColorEndpointMode: {
+                decode_rgba_basescale(colorValues, endpoints[i], false);
+                colorValues += 6;
+            } break;
+
+            case kLDR_RGBA_Direct_ColorEndpointMode: {
+                decode_rgba_direct(colorValues, endpoints[i], false);
+                colorValues += 8;
+            } break;
+
+            case kLDR_RGBA_BaseOffset_ColorEndpointMode: {
+                decode_rgba_baseoffset(colorValues, endpoints[i], false);
+                colorValues += 8;
+            } break;
+
+            default:
+                SkDEBUGFAIL("HDR mode unsupported! This should be caught sooner.");
                 break;
-
-                case kLDR_Luminance_BaseOffset_ColorEndpointMode: {
-                    const int* v = colorValues;
-                    const int L0 = (v[0] >> 2) | (v[1] & 0xC0);
-                    const int L1 = clamp_byte(L0 + (v[1] & 0x3F));
-
-                    endpoints[i][0] = SkColorSetARGB(0xFF, L0, L0, L0);
-                    endpoints[i][1] = SkColorSetARGB(0xFF, L1, L1, L1);
-
-                    colorValues += 2;
-                }
-                break;
-
-                case kLDR_LuminanceAlpha_Direct_ColorEndpointMode: {
-                    const int* v = colorValues;
-                    
-                    endpoints[i][0] = SkColorSetARGB(v[2], v[0], v[0], v[0]);
-                    endpoints[i][1] = SkColorSetARGB(v[3], v[1], v[1], v[1]);
-
-                    colorValues += 4;
-                }
-                break;
-
-                case kLDR_LuminanceAlpha_BaseOffset_ColorEndpointMode: {
-                    int v0 = colorValues[0];
-                    int v1 = colorValues[1];
-                    int v2 = colorValues[2];
-                    int v3 = colorValues[3];
-
-                    bit_transfer_signed(&v1, &v0);
-                    bit_transfer_signed(&v3, &v2);
-                    
-                    endpoints[i][0] = SkColorSetARGB(v2, v0, v0, v0);
-                    endpoints[i][1] = SkColorSetARGB(
-                        clamp_byte(v3+v2),
-                        clamp_byte(v1+v0),
-                        clamp_byte(v1+v0),
-                        clamp_byte(v1+v0));
-
-                    colorValues += 4;
-                }
-                break;
-
-                case kLDR_RGB_BaseScale_ColorEndpointMode: {
-                    decode_rgba_basescale(colorValues, endpoints[i], true);
-                    colorValues += 4;
-                }
-                break;
-
-                case kLDR_RGB_Direct_ColorEndpointMode: {
-                    decode_rgba_direct(colorValues, endpoints[i], true);
-                    colorValues += 6;
-                }
-                break;
-
-                case kLDR_RGB_BaseOffset_ColorEndpointMode: {
-                    decode_rgba_baseoffset(colorValues, endpoints[i], true);
-                    colorValues += 6;
-                }
-                break;
-
-                case kLDR_RGB_BaseScaleWithAlpha_ColorEndpointMode: {
-                    decode_rgba_basescale(colorValues, endpoints[i], false);
-                    colorValues += 6;
-                }
-                break;
-
-                case kLDR_RGBA_Direct_ColorEndpointMode: {
-                    decode_rgba_direct(colorValues, endpoints[i], false);
-                    colorValues += 8;
-                }
-                break;
-
-                case kLDR_RGBA_BaseOffset_ColorEndpointMode: {
-                    decode_rgba_baseoffset(colorValues, endpoints[i], false);
-                    colorValues += 8;
-                }
-                break;
-
-                default:
-                    SkDEBUGFAIL("HDR mode unsupported! This should be caught sooner.");
-                    break;
             }
         }
     }
 
     // Follows the procedure from section C.2.17 of the ASTC specification
-    int unquantizeWeight(int x) const {
+    int unquantizeWeight(int x) const
+    {
         SkASSERT(x <= this->maxWeightValue());
 
         const int D = (x >> fWeightBits) & 0x7;
@@ -1340,73 +1353,66 @@ struct ASTCDecompressionData {
         if (fWeightTrits > 0) {
             SkASSERT(0 == fWeightQuints);
             switch (fWeightBits) {
-                case 0: {
-                    // x is a single trit
-                    SkASSERT(x < 3);
+            case 0: {
+                // x is a single trit
+                SkASSERT(x < 3);
 
-                    static const int kUnquantizationTable[3] = { 0, 32, 63 };
-                    T = kUnquantizationTable[x];
-                }
+                static const int kUnquantizationTable[3] = { 0, 32, 63 };
+                T = kUnquantizationTable[x];
+            } break;
+
+            case 1: {
+                const int B = 0;
+                const int C = 50;
+                T = unquantize_value(0x20, A, B, C, D);
+            } break;
+
+            case 2: {
+                const int b = xbits[1];
+                const int B = b | (b << 2) | (b << 6);
+                const int C = 23;
+                T = unquantize_value(0x20, A, B, C, D);
+            } break;
+
+            case 3: {
+                const int cb = xbits(2, 1);
+                const int B = cb | (cb << 5);
+                const int C = 11;
+                T = unquantize_value(0x20, A, B, C, D);
+            } break;
+
+            default:
+                SkDEBUGFAIL("Too many bits for trit encoding");
                 break;
-
-                case 1: {
-                    const int B = 0;
-                    const int C = 50;
-                    T = unquantize_value(0x20, A, B, C, D);
-                }
-                break;
-
-                case 2: {
-                    const int b = xbits[1];
-                    const int B = b | (b << 2) | (b << 6);
-                    const int C = 23;
-                    T = unquantize_value(0x20, A, B, C, D);
-                }
-                break;
-
-                case 3: {
-                    const int cb = xbits(2, 1);
-                    const int B = cb | (cb << 5);
-                    const int C = 11;
-                    T = unquantize_value(0x20, A, B, C, D);
-                }
-                break;
-
-                default:
-                    SkDEBUGFAIL("Too many bits for trit encoding");
-                    break;
             }
 
         } else if (fWeightQuints > 0) {
             SkASSERT(0 == fWeightTrits);
             switch (fWeightBits) {
-                case 0: {
-                    // x is a single quint
-                    SkASSERT(x < 5);
+            case 0: {
+                // x is a single quint
+                SkASSERT(x < 5);
 
-                    static const int kUnquantizationTable[5] = { 0, 16, 32, 47, 63 };
-                    T = kUnquantizationTable[x];
-                }
+                static const int kUnquantizationTable[5] = { 0, 16, 32, 47, 63 };
+                T = kUnquantizationTable[x];
+            } break;
+
+            case 1: {
+                const int B = 0;
+                const int C = 28;
+                T = unquantize_value(0x20, A, B, C, D);
+            } break;
+
+            case 2: {
+                const int b = xbits[1];
+                const int B = (b << 1) | (b << 6);
+                const int C = 13;
+                T = unquantize_value(0x20, A, B, C, D);
+            } break;
+
+            default:
+                SkDEBUGFAIL("Too many bits for quint encoding");
                 break;
-
-                case 1: {
-                    const int B = 0;
-                    const int C = 28;
-                    T = unquantize_value(0x20, A, B, C, D);
-                }
-                break;
-
-                case 2: {
-                    const int b = xbits[1];
-                    const int B = (b << 1) | (b << 6);
-                    const int C = 13;
-                    T = unquantize_value(0x20, A, B, C, D);
-                }
-                break;
-
-                default:
-                    SkDEBUGFAIL("Too many bits for quint encoding");
-                    break;
             }
         } else {
             SkASSERT(0 == fWeightTrits);
@@ -1430,10 +1436,11 @@ struct ASTCDecompressionData {
     // Returns the weight at the associated index. If the index is out of bounds, it
     // returns zero. It also chooses the weight appropriately based on the given dual
     // plane.
-    int getWeight(const int* unquantizedWeights, int idx, bool dualPlane) const {
+    int getWeight(const int* unquantizedWeights, int idx, bool dualPlane) const
+    {
         const int maxIdx = (fDualPlaneEnabled ? 2 : 1) * fWeightDimX * fWeightDimY - 1;
         if (fDualPlaneEnabled) {
-            const int effectiveIdx = 2*idx + (dualPlane ? 1 : 0);
+            const int effectiveIdx = 2 * idx + (dualPlane ? 1 : 0);
             if (effectiveIdx > maxIdx) {
                 return 0;
             }
@@ -1453,15 +1460,16 @@ struct ASTCDecompressionData {
     // weight is computed by sampling the texel weight grid (it's usually not 1-1), and
     // then applying a bilerp. The algorithm outlined here follows the algorithm
     // defined in section C.2.18 of the ASTC spec.
-    int infillWeight(const int* unquantizedValues, int s, int t, bool dualPlane) const {
-        const int Ds = (1024 + fDimX/2) / (fDimX - 1);
-        const int Dt = (1024 + fDimY/2) / (fDimY - 1);
+    int infillWeight(const int* unquantizedValues, int s, int t, bool dualPlane) const
+    {
+        const int Ds = (1024 + fDimX / 2) / (fDimX - 1);
+        const int Dt = (1024 + fDimY / 2) / (fDimY - 1);
 
         const int cs = Ds * s;
         const int ct = Dt * t;
 
-        const int gs = (cs*(fWeightDimX - 1) + 32) >> 6;
-        const int gt = (ct*(fWeightDimY - 1) + 32) >> 6;
+        const int gs = (cs * (fWeightDimX - 1) + 32) >> 6;
+        const int gt = (ct * (fWeightDimY - 1) + 32) >> 6;
 
         const int js = gs >> 4;
         const int jt = gt >> 4;
@@ -1469,18 +1477,18 @@ struct ASTCDecompressionData {
         const int fs = gs & 0xF;
         const int ft = gt & 0xF;
 
-        const int idx = js + jt*fWeightDimX;
+        const int idx = js + jt * fWeightDimX;
         const int p00 = this->getWeight(unquantizedValues, idx, dualPlane);
         const int p01 = this->getWeight(unquantizedValues, idx + 1, dualPlane);
         const int p10 = this->getWeight(unquantizedValues, idx + fWeightDimX, dualPlane);
         const int p11 = this->getWeight(unquantizedValues, idx + fWeightDimX + 1, dualPlane);
 
-        const int w11 = (fs*ft + 8) >> 4;
+        const int w11 = (fs * ft + 8) >> 4;
         const int w10 = ft - w11;
         const int w01 = fs - w11;
         const int w00 = 16 - fs - ft + w11;
 
-        const int weight = (p00*w00 + p01*w01 + p10*w10 + p11*w11 + 8) >> 4;
+        const int weight = (p00 * w00 + p01 * w01 + p10 * w10 + p11 * w11 + 8) >> 4;
         SkASSERT(weight <= 64);
         return weight;
     }
@@ -1488,10 +1496,11 @@ struct ASTCDecompressionData {
     // Unquantizes the decoded texel weights as described in section C.2.17 of
     // the ASTC specification. Additionally, it populates texelWeights with
     // the expanded weight grid, which is computed according to section C.2.18
-    void texelWeights(int texelWeights[2][12][12], const int* texelValues) const {
+    void texelWeights(int texelWeights[2][12][12], const int* texelValues) const
+    {
         // Unquantized texel weights...
-        int unquantizedValues[144*2]; // 12x12 blocks with dual plane decoding...
-        SkASSERT(this->numWeights() <= 144*2);
+        int unquantizedValues[144 * 2]; // 12x12 blocks with dual plane decoding...
+        SkASSERT(this->numWeights() <= 144 * 2);
 
         // Unquantize the weights and cache them
         for (int j = 0; j < this->numWeights(); ++j) {
@@ -1511,7 +1520,8 @@ struct ASTCDecompressionData {
 
     // Returns the partition for the texel located at position (x, y).
     // Adapted from C.2.21 of the ASTC specification
-    int getPartition(int x, int y) const {
+    int getPartition(int x, int y) const
+    {
         const int partitionCount = this->numPartitions();
         int seed = fPartIndex;
         if ((fDimX * fDimY) < 31) {
@@ -1522,50 +1532,72 @@ struct ASTCDecompressionData {
         seed += (partitionCount - 1) * 1024;
 
         uint32_t p = seed;
-        p ^= p >> 15;  p -= p << 17;  p += p << 7; p += p <<  4;
-        p ^= p >>  5;  p += p << 16;  p ^= p >> 7; p ^= p >> 3;
-        p ^= p <<  6;  p ^= p >> 17;
+        p ^= p >> 15;
+        p -= p << 17;
+        p += p << 7;
+        p += p << 4;
+        p ^= p >> 5;
+        p += p << 16;
+        p ^= p >> 7;
+        p ^= p >> 3;
+        p ^= p << 6;
+        p ^= p >> 17;
 
         uint32_t rnum = p;
-        uint8_t seed1  =  rnum        & 0xF;
-        uint8_t seed2  = (rnum >>  4) & 0xF;
-        uint8_t seed3  = (rnum >>  8) & 0xF;
-        uint8_t seed4  = (rnum >> 12) & 0xF;
-        uint8_t seed5  = (rnum >> 16) & 0xF;
-        uint8_t seed6  = (rnum >> 20) & 0xF;
-        uint8_t seed7  = (rnum >> 24) & 0xF;
-        uint8_t seed8  = (rnum >> 28) & 0xF;
-        uint8_t seed9  = (rnum >> 18) & 0xF;
+        uint8_t seed1 = rnum & 0xF;
+        uint8_t seed2 = (rnum >> 4) & 0xF;
+        uint8_t seed3 = (rnum >> 8) & 0xF;
+        uint8_t seed4 = (rnum >> 12) & 0xF;
+        uint8_t seed5 = (rnum >> 16) & 0xF;
+        uint8_t seed6 = (rnum >> 20) & 0xF;
+        uint8_t seed7 = (rnum >> 24) & 0xF;
+        uint8_t seed8 = (rnum >> 28) & 0xF;
+        uint8_t seed9 = (rnum >> 18) & 0xF;
         uint8_t seed10 = (rnum >> 22) & 0xF;
         uint8_t seed11 = (rnum >> 26) & 0xF;
         uint8_t seed12 = ((rnum >> 30) | (rnum << 2)) & 0xF;
 
-        seed1 *= seed1;     seed2 *= seed2;
-        seed3 *= seed3;     seed4 *= seed4;
-        seed5 *= seed5;     seed6 *= seed6;
-        seed7 *= seed7;     seed8 *= seed8;
-        seed9 *= seed9;     seed10 *= seed10;
-        seed11 *= seed11;   seed12 *= seed12;
+        seed1 *= seed1;
+        seed2 *= seed2;
+        seed3 *= seed3;
+        seed4 *= seed4;
+        seed5 *= seed5;
+        seed6 *= seed6;
+        seed7 *= seed7;
+        seed8 *= seed8;
+        seed9 *= seed9;
+        seed10 *= seed10;
+        seed11 *= seed11;
+        seed12 *= seed12;
 
         int sh1, sh2, sh3;
         if (0 != (seed & 1)) {
-            sh1 = (0 != (seed & 2))? 4 : 5;
-            sh2 = (partitionCount == 3)? 6 : 5;
+            sh1 = (0 != (seed & 2)) ? 4 : 5;
+            sh2 = (partitionCount == 3) ? 6 : 5;
         } else {
-            sh1 = (partitionCount==3)? 6 : 5;
-            sh2 = (0 != (seed & 2))? 4 : 5;
+            sh1 = (partitionCount == 3) ? 6 : 5;
+            sh2 = (0 != (seed & 2)) ? 4 : 5;
         }
-        sh3 = (0 != (seed & 0x10))? sh1 : sh2;
+        sh3 = (0 != (seed & 0x10)) ? sh1 : sh2;
 
-        seed1 >>= sh1; seed2  >>= sh2; seed3  >>= sh1; seed4  >>= sh2;
-        seed5 >>= sh1; seed6  >>= sh2; seed7  >>= sh1; seed8  >>= sh2;
-        seed9 >>= sh3; seed10 >>= sh3; seed11 >>= sh3; seed12 >>= sh3;
+        seed1 >>= sh1;
+        seed2 >>= sh2;
+        seed3 >>= sh1;
+        seed4 >>= sh2;
+        seed5 >>= sh1;
+        seed6 >>= sh2;
+        seed7 >>= sh1;
+        seed8 >>= sh2;
+        seed9 >>= sh3;
+        seed10 >>= sh3;
+        seed11 >>= sh3;
+        seed12 >>= sh3;
 
         const int z = 0;
-        int a = seed1*x + seed2*y + seed11*z + (rnum >> 14);
-        int b = seed3*x + seed4*y + seed12*z + (rnum >> 10);
-        int c = seed5*x + seed6*y + seed9 *z + (rnum >>  6);
-        int d = seed7*x + seed8*y + seed10*z + (rnum >>  2);
+        int a = seed1 * x + seed2 * y + seed11 * z + (rnum >> 14);
+        int b = seed3 * x + seed4 * y + seed12 * z + (rnum >> 10);
+        int c = seed5 * x + seed6 * y + seed9 * z + (rnum >> 6);
+        int d = seed7 * x + seed8 * y + seed10 * z + (rnum >> 2);
 
         a &= 0x3F;
         b &= 0x3F;
@@ -1594,8 +1626,9 @@ struct ASTCDecompressionData {
     // Performs the proper interpolation of the texel based on the
     // endpoints and weights.
     SkColor getTexel(const SkColor endpoints[4][2],
-                     const int weights[2][12][12],
-                     int x, int y) const {
+        const int weights[2][12][12],
+        int x, int y) const
+    {
         int part = 0;
         if (this->numPartitions() > 1) {
             part = this->getPartition(x, y);
@@ -1620,7 +1653,8 @@ struct ASTCDecompressionData {
         return result;
     }
 
-    void decode() {
+    void decode()
+    {
         // First decode the block mode.
         this->decodeBlockMode();
 
@@ -1642,7 +1676,8 @@ struct ASTCDecompressionData {
     // Decodes the dual plane based on the given bit location. The final
     // location, if the dual plane is enabled, is also the end of our color data.
     // This function is only meant to be used from this->decodeColorData()
-    void decodeDualPlane(int bitLoc) {
+    void decodeDualPlane(int bitLoc)
+    {
         if (fDualPlaneEnabled) {
             fDualPlane = static_cast<int>(read_astc_bits(fBlock, bitLoc - 2, bitLoc));
             fColorEndBit = bitLoc - 2;
@@ -1652,7 +1687,8 @@ struct ASTCDecompressionData {
     }
 
     // Decodes the color information based on the ASTC spec.
-    void decodeColorData() {
+    void decodeColorData()
+    {
 
         // By default, the last color bit is at the end of the texel weights
         const int lastWeight = 128 - this->numWeightBits();
@@ -1669,7 +1705,7 @@ struct ASTCDecompressionData {
             this->decodeDualPlane(dualPlaneBitLoc);
 
             return;
-        } 
+        }
 
         // If we have more than one partition, then we need to make
         // room for the partition index.
@@ -1680,8 +1716,7 @@ struct ASTCDecompressionData {
         const int baseCEM = static_cast<int>(read_astc_bits(fBlock, 23, 25));
         if (0 == baseCEM) {
 
-            const ColorEndpointMode sameCEM =
-                static_cast<ColorEndpointMode>(read_astc_bits(fBlock, 25, 29));
+            const ColorEndpointMode sameCEM = static_cast<ColorEndpointMode>(read_astc_bits(fBlock, 25, 29));
 
             for (int i = 0; i < kMaxPartitions; ++i) {
                 fCEM[i] = sameCEM;
@@ -1691,26 +1726,26 @@ struct ASTCDecompressionData {
             this->decodeDualPlane(dualPlaneBitLoc);
 
             return;
-        } 
+        }
 
         // Move the dual plane selector bits down based on how many
         // partitions the block contains.
         switch (this->numPartitions()) {
-            case 2:
-                dualPlaneBitLoc -= 2;
-                break;
+        case 2:
+            dualPlaneBitLoc -= 2;
+            break;
 
-            case 3:
-                dualPlaneBitLoc -= 5;
-                break;
+        case 3:
+            dualPlaneBitLoc -= 5;
+            break;
 
-            case 4:
-                dualPlaneBitLoc -= 8;
-                break;
+        case 4:
+            dualPlaneBitLoc -= 8;
+            break;
 
-            default:
-                SkDEBUGFAIL("Internal ASTC decoding error.");
-                break;
+        default:
+            SkDEBUGFAIL("Internal ASTC decoding error.");
+            break;
         }
 
         // The rest of the CEM config will be between the dual plane bit selector
@@ -1743,7 +1778,7 @@ struct ASTCDecompressionData {
         SkASSERT(baseCEM > 0);
         for (int i = 0; i < this->numPartitions(); ++i) {
             int cem = (baseCEM - 1) * 4;
-            cem += (0 == C[i])? 0 : 4;
+            cem += (0 == C[i]) ? 0 : 4;
             cem += M[i];
 
             SkASSERT(cem < 16);
@@ -1756,7 +1791,7 @@ struct ASTCDecompressionData {
 
     // Decodes the block mode. This function determines whether or not we use
     // dual plane encoding, the size of the texel weight grid, and the number of
-    // bits, trits and quints that are used to encode it. For more information, 
+    // bits, trits and quints that are used to encode it. For more information,
     // see section C.2.10 of the ASTC spec.
     //
     // For 2D blocks, the Block Mode field is laid out as follows:
@@ -1784,7 +1819,8 @@ struct ASTCDecompressionData {
     //        R is a three bit value whose LSB is R0 and MSB is R1
     // Width, Height - dimensions of the texel weight grid (determined by A and B)
 
-    void decodeBlockMode() {
+    void decodeBlockMode()
+    {
         const int blockMode = static_cast<int>(read_astc_bits(fBlock, 0, 11));
 
         // Check for special void extent encoding
@@ -1809,33 +1845,33 @@ struct ASTCDecompressionData {
             highPrecision = (blockMode >> 9) & 0x1;
 
             switch (bitsSevenAndEight) {
-                default:
-                case 0:
-                    fWeightDimX = 12;
-                    fWeightDimY = A + 2;
-                    break;
+            default:
+            case 0:
+                fWeightDimX = 12;
+                fWeightDimY = A + 2;
+                break;
 
-                case 1:
-                    fWeightDimX = A + 2;
-                    fWeightDimY = 12;
-                    break;
+            case 1:
+                fWeightDimX = A + 2;
+                fWeightDimY = 12;
+                break;
 
-                case 2:
-                    fWeightDimX = A + 6;
-                    fWeightDimY = B + 6;
-                    fDualPlaneEnabled = false;
-                    highPrecision = false;
-                    break;
+            case 2:
+                fWeightDimX = A + 6;
+                fWeightDimY = B + 6;
+                fDualPlaneEnabled = false;
+                highPrecision = false;
+                break;
 
-                case 3:
-                    if (0 == A) {
-                        fWeightDimX = 6;
-                        fWeightDimY = 10;
-                    } else {
-                        fWeightDimX = 10;
-                        fWeightDimY = 6;
-                    }
-                    break;
+            case 3:
+                if (0 == A) {
+                    fWeightDimX = 6;
+                    fWeightDimY = 10;
+                } else {
+                    fWeightDimX = 10;
+                    fWeightDimY = 6;
+                }
+                break;
             }
         } else { // (blockMode & 0x3) != 0
             R = ((blockMode & 0x3) << 1) | ((blockMode & 0x10) >> 4);
@@ -1850,27 +1886,27 @@ struct ASTCDecompressionData {
             highPrecision = (blockMode >> 9) & 0x1;
 
             switch (bitsTwoAndThree) {
-                case 0:
-                    fWeightDimX = B + 4;
-                    fWeightDimY = A + 2;
-                    break;
-                case 1:
-                    fWeightDimX = B + 8;
-                    fWeightDimY = A + 2;
-                    break;
-                case 2:
+            case 0:
+                fWeightDimX = B + 4;
+                fWeightDimY = A + 2;
+                break;
+            case 1:
+                fWeightDimX = B + 8;
+                fWeightDimY = A + 2;
+                break;
+            case 2:
+                fWeightDimX = A + 2;
+                fWeightDimY = B + 8;
+                break;
+            case 3:
+                if ((B & 0x2) == 0) {
                     fWeightDimX = A + 2;
-                    fWeightDimY = B + 8;
-                    break;
-                case 3:
-                    if ((B & 0x2) == 0) {
-                        fWeightDimX = A + 2;
-                        fWeightDimY = (B & 1) + 6;
-                    } else {
-                        fWeightDimX = (B & 1) + 2;
-                        fWeightDimY = A + 2;
-                    }
-                    break;
+                    fWeightDimY = (B & 1) + 6;
+                } else {
+                    fWeightDimX = (B & 1) + 2;
+                    fWeightDimY = A + 2;
+                }
+                break;
             }
         }
 
@@ -1881,22 +1917,18 @@ struct ASTCDecompressionData {
             fError = true;
         } else {
             static const int kBitAllocationTable[2][6][3] = {
-                {
-                    {  1, 0, 0 },
-                    {  0, 1, 0 },
-                    {  2, 0, 0 },
-                    {  0, 0, 1 },
-                    {  1, 1, 0 },
-                    {  3, 0, 0 }
-                },
-                {
-                    {  1, 0, 1 },
-                    {  2, 1, 0 },
-                    {  4, 0, 0 },
-                    {  2, 0, 1 },
-                    {  3, 1, 0 },
-                    {  5, 0, 0 }
-                }
+                { { 1, 0, 0 },
+                    { 0, 1, 0 },
+                    { 2, 0, 0 },
+                    { 0, 0, 1 },
+                    { 1, 1, 0 },
+                    { 3, 0, 0 } },
+                { { 1, 0, 1 },
+                    { 2, 1, 0 },
+                    { 4, 0, 0 },
+                    { 2, 0, 1 },
+                    { 3, 1, 0 },
+                    { 5, 0, 0 } }
             };
 
             fWeightBits = kBitAllocationTable[highPrecision][R - 2][0];
@@ -1907,7 +1939,8 @@ struct ASTCDecompressionData {
 };
 
 // Reads an ASTC block from the given pointer.
-static inline void read_astc_block(ASTCDecompressionData *dst, const uint8_t* src) {
+static inline void read_astc_block(ASTCDecompressionData* dst, const uint8_t* src)
+{
     const uint64_t* qword = reinterpret_cast<const uint64_t*>(src);
     dst->fBlock.fLow = SkEndian_SwapLE64(qword[0]);
     dst->fBlock.fHigh = SkEndian_SwapLE64(qword[1]);
@@ -1916,7 +1949,8 @@ static inline void read_astc_block(ASTCDecompressionData *dst, const uint8_t* sr
 
 // Take a known void-extent block, and write out the values as a constant color.
 static void decompress_void_extent(uint8_t* dst, int dstRowBytes,
-                                   const ASTCDecompressionData &data) {
+    const ASTCDecompressionData& data)
+{
     // The top 64 bits contain 4 16-bit RGBA values.
     int a = (static_cast<int>(read_astc_bits(data.fBlock, 112, 128)) + 255) >> 8;
     int b = (static_cast<int>(read_astc_bits(data.fBlock, 96, 112)) + 255) >> 8;
@@ -1929,7 +1963,8 @@ static void decompress_void_extent(uint8_t* dst, int dstRowBytes,
 // Decompresses a single ASTC block. It's assumed that data.fDimX and data.fDimY are
 // set and that the block has already been decoded (i.e. data.decode() has been called)
 static void decompress_astc_block(uint8_t* dst, int dstRowBytes,
-                                  const ASTCDecompressionData &data) {
+    const ASTCDecompressionData& data)
+{
     if (data.fError) {
         write_error_color(dst, data.fDimX, data.fDimY, dstRowBytes);
         return;
@@ -2010,18 +2045,21 @@ static void decompress_astc_block(uint8_t* dst, int dstRowBytes,
 // blitter for the ASTC format. The static functions required to be in this
 // struct are documented in SkTextureCompressor_Blitter.h
 struct CompressorASTC {
-    static inline void CompressA8Vertical(uint8_t* dst, const uint8_t* src) {
+    static inline void CompressA8Vertical(uint8_t* dst, const uint8_t* src)
+    {
         compress_a8_astc_block<GetAlphaTranspose>(&dst, src, 12);
     }
 
     static inline void CompressA8Horizontal(uint8_t* dst, const uint8_t* src,
-                                            int srcRowBytes) {
+        int srcRowBytes)
+    {
         compress_a8_astc_block<GetAlpha>(&dst, src, srcRowBytes);
     }
 
 #if PEDANTIC_BLIT_RECT
     static inline void UpdateBlock(uint8_t* dst, const uint8_t* src, int srcRowBytes,
-                                   const uint8_t* mask) {
+        const uint8_t* mask)
+    {
         // TODO: krajcevski
         // This is kind of difficult for ASTC because the weight values are calculated
         // as an average of the actual weights. The best we can do is decompress the
@@ -2039,7 +2077,8 @@ struct CompressorASTC {
 namespace SkTextureCompressor {
 
 bool CompressA8To12x12ASTC(uint8_t* dst, const uint8_t* src,
-                           int width, int height, size_t rowBytes) {
+    int width, int height, size_t rowBytes)
+{
     if (width < 0 || ((width % 12) != 0) || height < 0 || ((height % 12) != 0)) {
         return false;
     }
@@ -2047,7 +2086,7 @@ bool CompressA8To12x12ASTC(uint8_t* dst, const uint8_t* src,
     uint8_t** dstPtr = &dst;
     for (int y = 0; y < height; y += 12) {
         for (int x = 0; x < width; x += 12) {
-            compress_a8_astc_block<GetAlpha>(dstPtr, src + y*rowBytes + x, rowBytes);
+            compress_a8_astc_block<GetAlpha>(dstPtr, src + y * rowBytes + x, rowBytes);
         }
     }
 
@@ -2055,9 +2094,10 @@ bool CompressA8To12x12ASTC(uint8_t* dst, const uint8_t* src,
 }
 
 SkBlitter* CreateASTCBlitter(int width, int height, void* outputBuffer,
-                             SkTBlitterAllocator* allocator) {
+    SkTBlitterAllocator* allocator)
+{
     if ((width % 12) != 0 || (height % 12) != 0) {
-        return NULL;
+        return nullptr;
     }
 
     // Memset the output buffer to an encoding that decodes to zero. We must do this
@@ -2067,18 +2107,18 @@ SkBlitter* CreateASTCBlitter(int width, int height, void* outputBuffer,
     // will decode to zero provided we have the right header. We use the encoding
     // from recognizing all zero blocks from above.
     const int nBlocks = (width * height / 144);
-    uint8_t *dst = reinterpret_cast<uint8_t *>(outputBuffer);
+    uint8_t* dst = reinterpret_cast<uint8_t*>(outputBuffer);
     for (int i = 0; i < nBlocks; ++i) {
         send_packing(&dst, SkTEndian_SwapLE64(0x0000000001FE000173ULL), 0);
     }
 
     return allocator->createT<
-        SkTCompressedAlphaBlitter<12, 16, CompressorASTC>, int, int, void* >
-        (width, height, outputBuffer);
+        SkTCompressedAlphaBlitter<12, 16, CompressorASTC>, int, int, void*>(width, height, outputBuffer);
 }
 
 void DecompressASTC(uint8_t* dst, int dstRowBytes, const uint8_t* src,
-                    int width, int height, int blockDimX, int blockDimY) {
+    int width, int height, int blockDimX, int blockDimY)
+{
     // ASTC is encoded in what they call "raster order", so that the first
     // block is the bottom-left block in the image, and the first pixel
     // is the bottom-left pixel of the image
@@ -2087,7 +2127,7 @@ void DecompressASTC(uint8_t* dst, int dstRowBytes, const uint8_t* src,
     ASTCDecompressionData data(blockDimX, blockDimY);
     for (int y = 0; y < height; y += blockDimY) {
         dst -= blockDimY * dstRowBytes;
-        SkColor *colorPtr = reinterpret_cast<SkColor*>(dst);
+        SkColor* colorPtr = reinterpret_cast<SkColor*>(dst);
         for (int x = 0; x < width; x += blockDimX) {
             read_astc_block(&data, src);
             decompress_astc_block(reinterpret_cast<uint8_t*>(colorPtr + x), dstRowBytes, data);
@@ -2098,4 +2138,4 @@ void DecompressASTC(uint8_t* dst, int dstRowBytes, const uint8_t* src,
     }
 }
 
-}  // SkTextureCompressor
+} // SkTextureCompressor

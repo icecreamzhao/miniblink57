@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/CSSMediaRule.h"
 
 #include "core/css/StyleRule.h"
@@ -29,17 +28,11 @@
 namespace blink {
 
 CSSMediaRule::CSSMediaRule(StyleRuleMedia* mediaRule, CSSStyleSheet* parent)
-    : CSSGroupingRule(mediaRule, parent)
+    : CSSConditionRule(mediaRule, parent)
 {
 }
 
-CSSMediaRule::~CSSMediaRule()
-{
-#if !ENABLE(OILPAN)
-    if (m_mediaCSSOMWrapper)
-        m_mediaCSSOMWrapper->clearParentRule();
-#endif
-}
+CSSMediaRule::~CSSMediaRule() { }
 
 MediaQuerySet* CSSMediaRule::mediaQueries() const
 {
@@ -49,21 +42,28 @@ MediaQuerySet* CSSMediaRule::mediaQueries() const
 String CSSMediaRule::cssText() const
 {
     StringBuilder result;
-    result.appendLiteral("@media ");
+    result.append("@media ");
     if (mediaQueries()) {
         result.append(mediaQueries()->mediaText());
         result.append(' ');
     }
-    result.appendLiteral("{ \n");
+    result.append("{\n");
     appendCSSTextForItems(result);
     result.append('}');
     return result.toString();
 }
 
+String CSSMediaRule::conditionText() const
+{
+    if (!mediaQueries())
+        return String();
+    return mediaQueries()->mediaText();
+}
+
 MediaList* CSSMediaRule::media() const
 {
     if (!mediaQueries())
-        return 0;
+        return nullptr;
     if (!m_mediaCSSOMWrapper)
         m_mediaCSSOMWrapper = MediaList::create(mediaQueries(), const_cast<CSSMediaRule*>(this));
     return m_mediaCSSOMWrapper.get();
@@ -71,7 +71,7 @@ MediaList* CSSMediaRule::media() const
 
 void CSSMediaRule::reattach(StyleRuleBase* rule)
 {
-    CSSGroupingRule::reattach(rule);
+    CSSConditionRule::reattach(rule);
     if (m_mediaCSSOMWrapper && mediaQueries())
         m_mediaCSSOMWrapper->reattach(mediaQueries());
 }
@@ -79,6 +79,6 @@ void CSSMediaRule::reattach(StyleRuleBase* rule)
 DEFINE_TRACE(CSSMediaRule)
 {
     visitor->trace(m_mediaCSSOMWrapper);
-    CSSGroupingRule::trace(visitor);
+    CSSConditionRule::trace(visitor);
 }
 } // namespace blink

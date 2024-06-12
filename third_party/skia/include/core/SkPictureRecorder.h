@@ -8,14 +8,14 @@
 #ifndef SkPictureRecorder_DEFINED
 #define SkPictureRecorder_DEFINED
 
-#include "../../src/core/SkMiniRecorder.h"
+#include "../private/SkMiniRecorder.h"
 #include "SkBBHFactory.h"
 #include "SkPicture.h"
 #include "SkRefCnt.h"
 
 #ifdef SK_BUILD_FOR_ANDROID_FRAMEWORK
 namespace android {
-    class Picture;
+class Picture;
 };
 #endif
 
@@ -35,9 +35,9 @@ public:
         // information should also be extracted at the same time.
         kComputeSaveLayerInfo_RecordFlag = 0x01,
 
-        // If you call drawPicture() on the recording canvas, this flag forces
-        // that to use SkPicture::playback() immediately rather than (e.g.) reffing the picture.
-        kPlaybackDrawPicture_RecordFlag  = 0x02,
+        // If you call drawPicture() or drawDrawable() on the recording canvas, this flag forces
+        // that object to playback its contents immediately rather than reffing the object.
+        kPlaybackDrawPicture_RecordFlag = 0x02,
     };
 
     /** Returns the canvas that records the drawing commands.
@@ -48,12 +48,13 @@ public:
         @return the canvas.
     */
     SkCanvas* beginRecording(const SkRect& bounds,
-                             SkBBHFactory* bbhFactory = NULL,
-                             uint32_t recordFlags = 0);
+        SkBBHFactory* bbhFactory = NULL,
+        uint32_t recordFlags = 0);
 
     SkCanvas* beginRecording(SkScalar width, SkScalar height,
-                             SkBBHFactory* bbhFactory = NULL,
-                             uint32_t recordFlags = 0) {
+        SkBBHFactory* bbhFactory = NULL,
+        uint32_t recordFlags = 0)
+    {
         return this->beginRecording(SkRect::MakeWH(width, height), bbhFactory, recordFlags);
     }
 
@@ -72,7 +73,7 @@ public:
      *  reflect their current state, but will not contain a live reference to the drawables
      *  themselves.
      */
-    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture();
+    sk_sp<SkPicture> finishRecordingAsPicture();
 
     /**
      *  Signal that the caller is done recording, and update the cull rect to use for bounding
@@ -83,7 +84,7 @@ public:
      *                  and subsequent culling operations.
      *  @return the picture containing the recorded content.
      */
-    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture(const SkRect& cullRect);
+    sk_sp<SkPicture> finishRecordingAsPictureWithCull(const SkRect& cullRect);
 
     /**
      *  Signal that the caller is done recording. This invalidates the canvas returned by
@@ -95,10 +96,23 @@ public:
      *  and therefore this drawable will reflect the current state of those nested drawables anytime
      *  it is drawn or a new picture is snapped from it (by calling drawable->newPictureSnapshot()).
      */
-    SkDrawable* SK_WARN_UNUSED_RESULT endRecordingAsDrawable();
+    sk_sp<SkDrawable> finishRecordingAsDrawable();
 
-    // Legacy API -- use endRecordingAsPicture instead.
+#ifdef SK_SUPPORT_LEGACY_PICTURE_PTR
+    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture()
+    {
+        return this->finishRecordingAsPicture().release();
+    }
+    SkPicture* SK_WARN_UNUSED_RESULT endRecordingAsPicture(const SkRect& cullRect)
+    {
+        return this->finishRecordingAsPictureWithCull(cullRect).release();
+    }
+    SkDrawable* SK_WARN_UNUSED_RESULT endRecordingAsDrawable()
+    {
+        return this->finishRecordingAsDrawable().release();
+    }
     SkPicture* SK_WARN_UNUSED_RESULT endRecording() { return this->endRecordingAsPicture(); }
+#endif
 
 private:
     void reset();
@@ -112,13 +126,13 @@ private:
     friend class SkPictureRecorderReplayTester; // for unit testing
     void partialReplay(SkCanvas* canvas) const;
 
-    bool                          fActivelyRecording;
-    uint32_t                      fFlags;
-    SkRect                        fCullRect;
+    bool fActivelyRecording;
+    uint32_t fFlags;
+    SkRect fCullRect;
     SkAutoTUnref<SkBBoxHierarchy> fBBH;
-    SkAutoTUnref<SkRecorder>      fRecorder;
-    SkAutoTUnref<SkRecord>        fRecord;
-    SkMiniRecorder                fMiniRecorder;
+    SkAutoTUnref<SkRecorder> fRecorder;
+    SkAutoTUnref<SkRecord> fRecord;
+    SkMiniRecorder fMiniRecorder;
 
     typedef SkNoncopyable INHERITED;
 };

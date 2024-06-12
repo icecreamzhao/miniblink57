@@ -5,43 +5,50 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkColorMatrixFilter.h"
 #include "SkGradientShader.h"
 #include "SkImage.h"
+#include "gm.h"
 
 #define WIDTH 500
 #define HEIGHT 500
 
-static void set_color_matrix(SkPaint* paint, const SkColorMatrix& matrix) {
-    paint->setColorFilter(SkColorMatrixFilter::Create(matrix))->unref();
+static void set_color_matrix(SkPaint* paint, const SkColorMatrix& matrix)
+{
+    paint->setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(matrix.fMat));
 }
 
-static void set_array(SkPaint* paint, const SkScalar array[]) {
-    paint->setColorFilter(SkColorMatrixFilter::Create(array))->unref();
+static void set_array(SkPaint* paint, const SkScalar array[])
+{
+    paint->setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(array));
 }
 
 class ColorMatrixGM : public skiagm::GM {
 public:
-    ColorMatrixGM() {
+    ColorMatrixGM()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFF808080));
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("colormatrix");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(WIDTH, HEIGHT);
     }
-    
-    void onOnceBeforeDraw() override {
-        fSolidImg.reset(CreateSolidBitmap(64, 64));
-        fTransparentImg.reset(CreateTransparentBitmap(64, 64));
+
+    void onOnceBeforeDraw() override
+    {
+        fSolidImg = CreateSolidBitmap(64, 64);
+        fTransparentImg = CreateTransparentBitmap(64, 64);
     }
 
-    static SkImage* CreateSolidBitmap(int width, int height) {
+    static sk_sp<SkImage> CreateSolidBitmap(int width, int height)
+    {
         SkBitmap bm;
         bm.allocN32Pixels(width, height);
         SkCanvas canvas(bm);
@@ -51,34 +58,37 @@ protected:
                 SkPaint paint;
                 paint.setColor(SkColorSetARGB(255, x * 255 / width, y * 255 / height, 0));
                 canvas.drawRect(SkRect::MakeXYWH(SkIntToScalar(x),
-                    SkIntToScalar(y), SK_Scalar1, SK_Scalar1), paint);
+                                    SkIntToScalar(y), SK_Scalar1, SK_Scalar1),
+                    paint);
             }
         }
-        return SkImage::NewFromBitmap(bm);
+        return SkImage::MakeFromBitmap(bm);
     }
 
     // creates a bitmap with shades of transparent gray.
-    static SkImage* CreateTransparentBitmap(int width, int height) {
+    static sk_sp<SkImage> CreateTransparentBitmap(int width, int height)
+    {
         SkBitmap bm;
         bm.allocN32Pixels(width, height);
         SkCanvas canvas(bm);
         canvas.clear(0x0);
 
-        SkPoint pts[] = {{0, 0}, {SkIntToScalar(width), SkIntToScalar(height)}};
-        SkColor colors[] = {0x00000000, 0xFFFFFFFF};
+        SkPoint pts[] = { { 0, 0 }, { SkIntToScalar(width), SkIntToScalar(height) } };
+        SkColor colors[] = { 0x00000000, 0xFFFFFFFF };
         SkPaint paint;
-        paint.setShader(SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                                       SkShader::kClamp_TileMode))->unref();
+        paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, 2,
+            SkShader::kClamp_TileMode));
         canvas.drawRect(SkRect::MakeWH(SkIntToScalar(width), SkIntToScalar(height)), paint);
-        return SkImage::NewFromBitmap(bm);
+        return SkImage::MakeFromBitmap(bm);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         SkColorMatrix matrix;
 
         paint.setXfermodeMode(SkXfermode::kSrc_Mode);
-        const SkImage* bmps[] = { fSolidImg, fTransparentImg };
+        const SkImage* bmps[] = { fSolidImg.get(), fTransparentImg.get() };
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(bmps); ++i) {
             matrix.setIdentity();
@@ -125,10 +135,26 @@ protected:
             SkScalar s255 = SkIntToScalar(255);
             // Move red into alpha, set color to white
             SkScalar data[20] = {
-                0,  0, 0, 0, s255,
-                0,  0, 0, 0, s255,
-                0,  0, 0, 0, s255,
-                s1, 0, 0, 0, 0,
+                0,
+                0,
+                0,
+                0,
+                s255,
+                0,
+                0,
+                0,
+                0,
+                s255,
+                0,
+                0,
+                0,
+                0,
+                s255,
+                s1,
+                0,
+                0,
+                0,
+                0,
             };
 
             set_array(&paint, data);
@@ -139,10 +165,9 @@ protected:
     }
 
 private:
-    SkAutoTUnref<SkImage>   fSolidImg;
-    SkAutoTUnref<SkImage>   fTransparentImg;
+    sk_sp<SkImage> fSolidImg;
+    sk_sp<SkImage> fTransparentImg;
 
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return new ColorMatrixGM; )
-
+DEF_GM(return new ColorMatrixGM;)

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{84DDC045-28F7-BEA6-75F7-FC4A3D09C3A8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>shared_memory_support</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..;../build/Release/gen;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;MEDIA_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="base/audio_bus.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/audio_bus.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/audio_bus.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/audio_bus.h" />
+    <CustomBuild Include="base/audio_latency.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/audio_latency.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/audio_latency.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/audio_latency.h" />
+    <CustomBuild Include="base/audio_parameters.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/audio_parameters.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/audio_parameters.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/audio_parameters.h" />
+    <CustomBuild Include="base/audio_point.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/audio_point.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/audio_point.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/audio_point.h" />
+    <None Include="base/audio_sample_types.h" />
+    <CustomBuild Include="base/channel_layout.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/channel_layout.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/channel_layout.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/channel_layout.h" />
+    <None Include="base/limits.h" />
+    <None Include="base/media_export.h" />
+    <CustomBuild Include="base/vector_math.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/shared_memory_support/vector_math.obj</Command>
+      <Outputs>$(OutDir)obj/media/shared_memory_support/vector_math.obj</Outputs>
+    </CustomBuild>
+    <None Include="base/vector_math.h" />
+    <None Include="base/vector_math_testing.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/shared_memory_support.lib" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/shared_memory_support.lib" />
+  </Target>
+</Project>

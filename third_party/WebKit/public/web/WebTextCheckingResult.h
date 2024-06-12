@@ -49,7 +49,11 @@ struct WebTextCheckingResult {
     {
     }
 
-    WebTextCheckingResult(WebTextDecorationType decoration, int location, int length, const WebString& replacement = WebString(), uint32_t hash = 0)
+    WebTextCheckingResult(WebTextDecorationType decoration,
+        int location,
+        int length,
+        const WebString& replacement = WebString(),
+        uint32_t hash = 0)
         : decoration(decoration)
         , location(location)
         , length(length)

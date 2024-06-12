@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,24 +5,25 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkBlurMask.h"
 #include "SkBlurDrawLooper.h"
+#include "SkBlurMask.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkPathMeasure.h"
 
-#define REPEAT_COUNT    1
+#define REPEAT_COUNT 1
 
-static void textStrokePath(SkCanvas* canvas) {
+static void textStrokePath(SkCanvas* canvas)
+{
     SkPaint paint;
-    SkPath  path;
-    SkRect  rect;
+    SkPath path;
+    SkRect rect;
 
     canvas->save();
-    canvas->scale(SkIntToScalar(250),SkIntToScalar(250));
+    canvas->scale(SkIntToScalar(250), SkIntToScalar(250));
 
-    rect.set(0.0f,  0.21f,
-             0.78f, 0.99f);
+    rect.set(0.0f, 0.21f,
+        0.78f, 0.99f);
 
     path.addArc(rect, SkIntToScalar(280), SkIntToScalar(350));
 
@@ -35,27 +35,26 @@ static void textStrokePath(SkCanvas* canvas) {
 
     canvas->drawPath(path, paint);
 
-    paint.setLooper(SkBlurDrawLooper::Create(SK_ColorBLACK,
-                                             SkBlurMask::ConvertRadiusToSigma(0.002f),
-                                             0.0f,
-                                             0.0f))->unref();
+    paint.setLooper(SkBlurDrawLooper::Make(SK_ColorBLACK, SkBlurMask::ConvertRadiusToSigma(0.002f),
+        0.0f, 0.0f));
 
     const char* text = "DRAWING STROKED TEXT WITH A BLUR ON A PATH";
-    size_t      len = strlen(text);
+    size_t len = strlen(text);
 
     canvas->drawTextOnPathHV(text, len, path, 0,
-                             -0.025f, paint);
+        -0.025f, paint);
     canvas->restore();
 }
 
-static void textPathMatrix(SkCanvas* canvas) {
+static void textPathMatrix(SkCanvas* canvas)
+{
     SkPaint paint;
-    SkPath  path;
+    SkPath path;
     SkMatrix matrix;
 
     path.moveTo(SkIntToScalar(050), SkIntToScalar(200));
     path.quadTo(SkIntToScalar(250), SkIntToScalar(000),
-                SkIntToScalar(450), SkIntToScalar(200));
+        SkIntToScalar(450), SkIntToScalar(200));
 
     paint.setAntiAlias(true);
 
@@ -66,12 +65,12 @@ static void textPathMatrix(SkCanvas* canvas) {
     paint.setTextAlign(SkPaint::kRight_Align);
 
     const char* text = "Reflection";
-    size_t      len = strlen(text);
+    size_t len = strlen(text);
 
-    SkPathMeasure   meas(path, false);
+    SkPathMeasure meas(path, false);
     SkScalar pathLen = meas.getLength();
 
-    canvas->drawTextOnPath(text, len, path, NULL, paint);
+    canvas->drawTextOnPath(text, len, path, nullptr, paint);
 
     paint.setColor(SK_ColorRED);
     matrix.setScale(-SK_Scalar1, SK_Scalar1);
@@ -90,14 +89,15 @@ static void textPathMatrix(SkCanvas* canvas) {
 
 class TextOnPathView : public SampleView {
 public:
-    SkPath      fPath;
-    SkScalar    fHOffset;
+    SkPath fPath;
+    SkScalar fHOffset;
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         SkRect r;
         r.set(SkIntToScalar(100), SkIntToScalar(100),
-              SkIntToScalar(300), SkIntToScalar(300));
+            SkIntToScalar(300), SkIntToScalar(300));
         fPath.addOval(r);
         fPath.offset(SkIntToScalar(-50), SkIntToScalar(-50));
 
@@ -105,7 +105,8 @@ protected:
     }
 
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Text On Path");
             return true;
@@ -113,28 +114,29 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTextSize(SkIntToScalar(48));
 
         const char* text = "Hamburgefons";
-        size_t      len = strlen(text);
+        size_t len = strlen(text);
 
         for (int j = 0; j < REPEAT_COUNT; j++) {
             SkScalar x = fHOffset;
 
             paint.setColor(SK_ColorBLACK);
             canvas->drawTextOnPathHV(text, len, fPath,
-                                     x, paint.getTextSize()/2, paint);
+                x, paint.getTextSize() / 2, paint);
 
             paint.setColor(SK_ColorRED);
             canvas->drawTextOnPathHV(text, len, fPath,
-                                     x + SkIntToScalar(50), 0, paint);
+                x + SkIntToScalar(50), 0, paint);
 
             paint.setColor(SK_ColorBLUE);
             canvas->drawTextOnPathHV(text, len, fPath,
-                         x + SkIntToScalar(100), -paint.getTextSize()/2, paint);
+                x + SkIntToScalar(100), -paint.getTextSize() / 2, paint);
         }
 
         paint.setColor(SK_ColorGREEN);
@@ -148,16 +150,18 @@ protected:
         textPathMatrix(canvas);
 
         if (REPEAT_COUNT > 1)
-            this->inval(NULL);
+            this->inval(nullptr);
     }
 
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override {
+    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override
+    {
         fHints += 1;
-        this->inval(NULL);
+        this->inval(nullptr);
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 
-    bool onClick(Click* click) override {
+    bool onClick(Click* click) override
+    {
         return this->INHERITED::onClick(click);
     }
 
@@ -168,7 +172,8 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-static SkView* MyFactory() {
+static SkView* MyFactory()
+{
     return new TextOnPathView;
 }
 

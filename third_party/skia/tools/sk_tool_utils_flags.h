@@ -13,4 +13,4 @@
 DECLARE_bool(portableFonts);
 DECLARE_bool(resourceFonts);
 
-#endif  // sk_tool_utils_flags_DEFINED
+#endif // sk_tool_utils_flags_DEFINED

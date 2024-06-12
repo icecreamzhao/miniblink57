@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,12 +6,13 @@
  */
 #include "SampleCode.h"
 #include "SkCanvas.h"
+#include "SkLayer.h"
 #include "SkPaint.h"
 #include "SkView.h"
-#include "SkLayer.h"
 
 #include "SkMatrix44.h"
-static void test_inv(const char label[], const SkMatrix44& mat) {
+static void test_inv(const char label[], const SkMatrix44& mat)
+{
     SkDebugf("%s\n", label);
     mat.dump();
 
@@ -37,46 +37,48 @@ static void test_inv(const char label[], const SkMatrix44& mat) {
 }
 
 static void test_map(SkScalar x0, SkScalar y0, SkScalar z0,
-                     const SkMatrix44& mat,
-                     SkScalar x1, SkScalar y1, SkScalar z1) {
+    const SkMatrix44& mat,
+    SkScalar x1, SkScalar y1, SkScalar z1)
+{
     SkVector4 src, dst;
     src.set(x0, y0, z0);
     dst = mat * src;
     SkDebugf("map: src: %g %g %g dst: %g %g %g (%g) expected: %g %g %g match: %d\n",
-             x0, y0, z0,
-             dst.fData[0], dst.fData[1], dst.fData[2], dst.fData[3],
-             x1, y1, z1,
-             dst.fData[0] == x1 && dst.fData[1] == y1 && dst.fData[2] == z1);
+        x0, y0, z0,
+        dst.fData[0], dst.fData[1], dst.fData[2], dst.fData[3],
+        x1, y1, z1,
+        dst.fData[0] == x1 && dst.fData[1] == y1 && dst.fData[2] == z1);
 }
 
 static void test_33(const SkMatrix44& mat,
-                    SkScalar x0, SkScalar x1, SkScalar x2,
-                    SkScalar y0, SkScalar y1, SkScalar y2) {
+    SkScalar x0, SkScalar x1, SkScalar x2,
+    SkScalar y0, SkScalar y1, SkScalar y2)
+{
     SkMatrix dst = mat;
-    if (dst[0] != x0 || dst[1] != x1 || dst[2] != x2 ||
-        dst[3] != y0 || dst[4] != y1 || dst[5] != y2) {
+    if (dst[0] != x0 || dst[1] != x1 || dst[2] != x2 || dst[3] != y0 || dst[4] != y1 || dst[5] != y2) {
         SkString str;
         dst.toString(&str);
         SkDebugf("3x3: expected 3x3 [%g %g %g] [%g %g %g] bug got %s\n",
-                 x0, x1, x2, y0, y1, y2, str.c_str());
+            x0, x1, x2, y0, y1, y2, str.c_str());
     }
 }
 
-static void test44() {
+static void test44()
+{
     SkMatrix44 m0, m1, m2;
 
     test_inv("identity", m0);
-    m0.setTranslate(2,3,4);
+    m0.setTranslate(2, 3, 4);
     test_inv("translate", m0);
-    m0.setScale(2,3,4);
+    m0.setScale(2, 3, 4);
     test_inv("scale", m0);
     m0.postTranslate(5, 6, 7);
     test_inv("postTranslate", m0);
-    m0.setScale(2,3,4);
+    m0.setScale(2, 3, 4);
     m1.setTranslate(5, 6, 7);
     m0.setConcat(m0, m1);
     test_inv("postTranslate2", m0);
-    m0.setScale(2,3,4);
+    m0.setScale(2, 3, 4);
     m0.preTranslate(5, 6, 7);
     test_inv("preTranslate", m0);
 
@@ -111,7 +113,8 @@ static void test44() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void dump_layers(const SkLayer* layer, int tab = 0) {
+static void dump_layers(const SkLayer* layer, int tab = 0)
+{
     SkMatrix matrix;
     SkString matrixStr;
 
@@ -122,8 +125,8 @@ static void dump_layers(const SkLayer* layer, int tab = 0) {
         SkDebugf(" ");
     }
     SkDebugf("layer=%p parent=%p size=[%g %g] transform=%s\n",
-             layer, layer->getParent(), layer->getWidth(), layer->getHeight(),
-             matrixStr.c_str());
+        layer, layer->getParent(), layer->getWidth(), layer->getHeight(),
+        matrixStr.c_str());
     for (int i = 0; i < layer->countChildren(); i++) {
         dump_layers(layer->getChild(i), tab + 4);
     }
@@ -131,10 +134,14 @@ static void dump_layers(const SkLayer* layer, int tab = 0) {
 
 class TestLayer : public SkLayer {
 public:
-    TestLayer(SkColor c) : fColor(c) {}
+    TestLayer(SkColor c)
+        : fColor(c)
+    {
+    }
 
 protected:
-    virtual void onDraw(SkCanvas* canvas, SkScalar opacity) {
+    virtual void onDraw(SkCanvas* canvas, SkScalar opacity)
+    {
         SkRect r;
         r.set(0, 0, this->getWidth(), this->getHeight());
 
@@ -153,8 +160,10 @@ class SkLayerView : public SkView {
 private:
     SkLayer* fRootLayer;
     SkLayer* fLastChild;
+
 public:
-    SkLayerView() {
+    SkLayerView()
+    {
         test44();
         static const int W = 600;
         static const int H = 440;
@@ -182,8 +191,8 @@ public:
 
         SkLayer* child = new TestLayer(0xFFDD8844);
         child->setSize(120, 80);
-        child->setPosition(fRootLayer->getWidth()/2 - child->getWidth()/2,
-                           fRootLayer->getHeight()/2 - child->getHeight()/2);
+        child->setPosition(fRootLayer->getWidth() / 2 - child->getWidth() / 2,
+            fRootLayer->getHeight() / 2 - child->getHeight() / 2);
         child->setAnchorPoint(SK_ScalarHalf, SK_ScalarHalf);
         {
             SkMatrix m;
@@ -199,16 +208,18 @@ public:
             fRootLayer->setMatrix(matrix);
         }
 
-//        dump_layers(fRootLayer);
+        //        dump_layers(fRootLayer);
     }
 
-    virtual ~SkLayerView() {
+    virtual ~SkLayerView()
+    {
         SkSafeUnref(fRootLayer);
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "SkLayer");
             return true;
@@ -216,7 +227,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDraw(SkCanvas* canvas) {
+    virtual void onDraw(SkCanvas* canvas)
+    {
         canvas->drawColor(SK_ColorWHITE);
 
         canvas->translate(20, 20);

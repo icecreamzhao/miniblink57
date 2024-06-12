@@ -28,20 +28,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableTransform.h"
+
+#include "platform/animation/AnimationUtilities.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<AnimatableTransform> AnimatableTransform::create(const TransformOperations& transform)
+PassRefPtr<AnimatableTransform> AnimatableTransform::create(
+    const TransformOperations& transform,
+    double zoom)
 {
-    return adoptRefWillBeNoop(new AnimatableTransform(transform));
+    return adoptRef(new AnimatableTransform(transform, zoom));
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableTransform::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableTransform::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
-    const AnimatableTransform* transform = toAnimatableTransform(value);
-    return AnimatableTransform::create(transform->m_transform.blend(m_transform, fraction));
+    const AnimatableTransform& transform = toAnimatableTransform(*value);
+    return AnimatableTransform::create(
+        transform.m_transform.blend(m_transform, fraction),
+        blend(m_zoom, transform.m_zoom, fraction));
 }
 
 bool AnimatableTransform::equalTo(const AnimatableValue* value) const
@@ -50,4 +57,3 @@ bool AnimatableTransform::equalTo(const AnimatableValue* value) const
 }
 
 } // namespace blink
-

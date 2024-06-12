@@ -8,11 +8,12 @@
 #ifndef GrTRecorder_DEFINED
 #define GrTRecorder_DEFINED
 
-#include "SkTemplates.h"
 #include "SkTypes.h"
 
-template<typename TBase, typename TAlign> class GrTRecorder;
-template<typename TItem> struct GrTRecorderAllocWrapper;
+template <typename TBase, typename TAlign>
+class GrTRecorder;
+template <typename TItem>
+struct GrTRecorderAllocWrapper;
 
 /**
  * Records a list of items with a common base type, optional associated data, and
@@ -43,7 +44,8 @@ template<typename TItem> struct GrTRecorderAllocWrapper;
  *                This should be the largest known alignment requirement for all objects
  *                that may be stored in the list.
  */
-template<typename TBase, typename TAlign> class GrTRecorder : SkNoncopyable {
+template <typename TBase, typename TAlign>
+class GrTRecorder : SkNoncopyable {
 public:
     class Iter;
     class ReverseIter;
@@ -55,20 +57,24 @@ public:
                                   and after calls to reset().
      */
     GrTRecorder(int initialSizeInBytes)
-        : fHeadBlock(MemBlock::Alloc(LengthOf(initialSizeInBytes), NULL)),
-          fTailBlock(fHeadBlock),
-          fLastItem(NULL) {}
+        : fHeadBlock(MemBlock::Alloc(LengthOf(initialSizeInBytes), nullptr))
+        , fTailBlock(fHeadBlock)
+        , fLastItem(nullptr)
+    {
+    }
 
-    ~GrTRecorder() {
+    ~GrTRecorder()
+    {
         this->reset();
         MemBlock::Free(fHeadBlock);
     }
 
     bool empty() { return !fLastItem; }
 
-    TBase& back() {
+    TBase& back()
+    {
         SkASSERT(!this->empty());
-        return *fLastItem;
+        return *reinterpret_cast<TBase*>(fLastItem);
     }
 
     /**
@@ -91,49 +97,57 @@ public:
      *
      * @return The item's associated data.
      */
-    template<typename TItem> static const void* GetDataForItem(const TItem* item) {
+    template <typename TItem>
+    static const void* GetDataForItem(const TItem* item)
+    {
         const TAlign* ptr = reinterpret_cast<const TAlign*>(item);
         return &ptr[length_of<TItem>::kValue];
     }
-    template<typename TItem> static void* GetDataForItem(TItem* item) {
+    template <typename TItem>
+    static void* GetDataForItem(TItem* item)
+    {
         TAlign* ptr = reinterpret_cast<TAlign*>(item);
         return &ptr[length_of<TItem>::kValue];
     }
 
 private:
-    template<typename TItem> struct length_of {
+    template <typename TItem>
+    struct length_of {
         enum { kValue = (sizeof(TItem) + sizeof(TAlign) - 1) / sizeof(TAlign) };
     };
     static int LengthOf(int bytes) { return (bytes + sizeof(TAlign) - 1) / sizeof(TAlign); }
 
     struct Header {
         int fTotalLength; // The length of an entry including header, item, and data in TAligns.
-        int fPrevLength;  // Same but for the previous entry. Used for iterating backwards.
+        int fPrevLength; // Same but for the previous entry. Used for iterating backwards.
     };
-    template<typename TItem> TItem* alloc_back(int dataLength);
+    template <typename TItem>
+    void* alloc_back(int dataLength);
 
     struct MemBlock : SkNoncopyable {
-        /** Allocates a new block and appends it to prev if not NULL. The length param is in units
+        /** Allocates a new block and appends it to prev if not nullptr. The length param is in units
             of TAlign. */
-        static MemBlock* Alloc(int length, MemBlock* prev) {
+        static MemBlock* Alloc(int length, MemBlock* prev)
+        {
             MemBlock* block = reinterpret_cast<MemBlock*>(
                 sk_malloc_throw(sizeof(TAlign) * (length_of<MemBlock>::kValue + length)));
             block->fLength = length;
             block->fBack = 0;
-            block->fNext = NULL;
+            block->fNext = nullptr;
             block->fPrev = prev;
             if (prev) {
-                SkASSERT(NULL == prev->fNext);
+                SkASSERT(nullptr == prev->fNext);
                 prev->fNext = block;
             }
             return block;
         }
 
         // Frees from this block forward. Also adjusts prev block's next ptr.
-        static void Free(MemBlock* block) {
+        static void Free(MemBlock* block)
+        {
             if (block && block->fPrev) {
                 SkASSERT(block->fPrev->fNext == block);
-                block->fPrev->fNext = NULL;
+                block->fPrev->fNext = nullptr;
             }
             while (block) {
                 MemBlock* next = block->fNext;
@@ -142,25 +156,27 @@ private:
             }
         }
 
-        TAlign& operator [](int i) {
+        TAlign& operator[](int i)
+        {
             return reinterpret_cast<TAlign*>(this)[length_of<MemBlock>::kValue + i];
         }
 
-        int       fLength; // Length in units of TAlign of the block.
-        int       fBack;   // Offset, in TAligns, to unused portion of the memory block.
+        int fLength; // Length in units of TAlign of the block.
+        int fBack; // Offset, in TAligns, to unused portion of the memory block.
         MemBlock* fNext;
         MemBlock* fPrev;
     };
     MemBlock* const fHeadBlock;
     MemBlock* fTailBlock;
 
-    TBase*    fLastItem;
+    void* fLastItem; // really a ptr to TBase
 
-    template<typename TItem> friend struct GrTRecorderAllocWrapper;
+    template <typename TItem>
+    friend struct GrTRecorderAllocWrapper;
 
     template <typename UBase, typename UAlign, typename UItem>
     friend void* operator new(size_t, GrTRecorder<UBase, UAlign>&,
-                              const GrTRecorderAllocWrapper<UItem>&);
+        const GrTRecorderAllocWrapper<UItem>&);
 
     friend class Iter;
     friend class ReverseIter;
@@ -168,20 +184,21 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template<typename TBase, typename TAlign>
-void GrTRecorder<TBase, TAlign>::pop_back() {
+template <typename TBase, typename TAlign>
+void GrTRecorder<TBase, TAlign>::pop_back()
+{
     SkASSERT(fLastItem);
     Header* header = reinterpret_cast<Header*>(
         reinterpret_cast<TAlign*>(fLastItem) - length_of<Header>::kValue);
     fTailBlock->fBack -= header->fTotalLength;
-    fLastItem->~TBase();
+    reinterpret_cast<TBase*>(fLastItem)->~TBase();
 
     int lastItemLength = header->fPrevLength;
 
     if (!header->fPrevLength) {
         // We popped the first entry in the recorder.
         SkASSERT(0 == fTailBlock->fBack);
-        fLastItem = NULL;
+        fLastItem = nullptr;
         return;
     }
     while (!fTailBlock->fBack) {
@@ -190,13 +207,13 @@ void GrTRecorder<TBase, TAlign>::pop_back() {
         fTailBlock = fTailBlock->fPrev;
         SkASSERT(fTailBlock);
     }
-    fLastItem = reinterpret_cast<TBase*>(
-        &(*fTailBlock)[fTailBlock->fBack - lastItemLength + length_of<Header>::kValue]);
+    fLastItem = &(*fTailBlock)[fTailBlock->fBack - lastItemLength + length_of<Header>::kValue];
 }
 
-template<typename TBase, typename TAlign>
-template<typename TItem>
-TItem* GrTRecorder<TBase, TAlign>::alloc_back(int dataLength) {
+template <typename TBase, typename TAlign>
+template <typename TItem>
+void* GrTRecorder<TBase, TAlign>::alloc_back(int dataLength)
+{
     // Find the header of the previous entry and get its length. We need to store that in the new
     // header for backwards iteration (pop_back()).
     int prevLength = 0;
@@ -221,8 +238,7 @@ TItem* GrTRecorder<TBase, TAlign>::alloc_back(int dataLength) {
     }
 
     Header* header = reinterpret_cast<Header*>(&(*fTailBlock)[fTailBlock->fBack]);
-    TItem* rawPtr = reinterpret_cast<TItem*>(
-                        &(*fTailBlock)[fTailBlock->fBack + length_of<Header>::kValue]);
+    void* rawPtr = &(*fTailBlock)[fTailBlock->fBack + length_of<Header>::kValue];
 
     header->fTotalLength = totalLength;
     header->fPrevLength = prevLength;
@@ -250,12 +266,18 @@ TItem* GrTRecorder<TBase, TAlign>::alloc_back(int dataLength) {
  *        iter->doSomething();
  *    }
  */
-template<typename TBase, typename TAlign>
+template <typename TBase, typename TAlign>
 class GrTRecorder<TBase, TAlign>::Iter {
 public:
-    Iter(GrTRecorder& recorder) : fBlock(recorder.fHeadBlock), fPosition(0), fItem(NULL) {}
+    Iter(GrTRecorder& recorder)
+        : fBlock(recorder.fHeadBlock)
+        , fPosition(0)
+        , fItem(nullptr)
+    {
+    }
 
-    bool next() {
+    bool next()
+    {
         while (fPosition >= fBlock->fBack) {
             SkASSERT(fPosition == fBlock->fBack);
             if (!fBlock->fNext) {
@@ -271,7 +293,8 @@ public:
         return true;
     }
 
-    TBase* get() const {
+    TBase* get() const
+    {
         SkASSERT(fItem);
         return fItem;
     }
@@ -280,8 +303,8 @@ public:
 
 private:
     MemBlock* fBlock;
-    int       fPosition;
-    TBase*    fItem;
+    int fPosition;
+    TBase* fItem;
 };
 
 /**
@@ -294,18 +317,20 @@ private:
  *        reverseIter->doSomething();
  *    } while (reverseIter.previous());
  */
-template<typename TBase, typename TAlign>
+template <typename TBase, typename TAlign>
 class GrTRecorder<TBase, TAlign>::ReverseIter {
 public:
     ReverseIter(GrTRecorder& recorder)
-        : fBlock(recorder.fTailBlock),
-          fItem(&recorder.back()) {
+        : fBlock(recorder.fTailBlock)
+        , fItem(&recorder.back())
+    {
         Header* lastHeader = reinterpret_cast<Header*>(
             reinterpret_cast<TAlign*>(fItem) - length_of<Header>::kValue);
         fPosition = fBlock->fBack - lastHeader->fTotalLength;
     }
 
-    bool previous() {
+    bool previous()
+    {
         Header* header = reinterpret_cast<Header*>(&(*fBlock)[fPosition]);
 
         while (0 == fPosition) {
@@ -329,12 +354,13 @@ public:
 
 private:
     MemBlock* fBlock;
-    int       fPosition;
-    TBase*    fItem;
+    int fPosition;
+    TBase* fItem;
 };
 
-template<typename TBase, typename TAlign>
-void GrTRecorder<TBase, TAlign>::reset() {
+template <typename TBase, typename TAlign>
+void GrTRecorder<TBase, TAlign>::reset()
+{
     Iter iter(*this);
     while (iter.next()) {
         iter->~TBase();
@@ -347,7 +373,7 @@ void GrTRecorder<TBase, TAlign>::reset() {
         MemBlock::Free(fTailBlock->fNext);
     } else if (fTailBlock->fNext) {
         MemBlock::Free(fTailBlock->fNext->fNext);
-        fTailBlock->fNext->fNext = NULL;
+        fTailBlock->fNext->fNext = nullptr;
     }
 
     for (MemBlock* block = fHeadBlock; block; block = block->fNext) {
@@ -355,33 +381,41 @@ void GrTRecorder<TBase, TAlign>::reset() {
     }
 
     fTailBlock = fHeadBlock;
-    fLastItem = NULL;
+    fLastItem = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template<typename TItem> struct GrTRecorderAllocWrapper {
-    GrTRecorderAllocWrapper() : fDataLength(0) {}
+template <typename TItem>
+struct GrTRecorderAllocWrapper {
+    GrTRecorderAllocWrapper()
+        : fDataLength(0)
+    {
+    }
 
     template <typename TBase, typename TAlign>
     GrTRecorderAllocWrapper(const GrTRecorder<TBase, TAlign>&, int sizeOfData)
-        : fDataLength(GrTRecorder<TBase, TAlign>::LengthOf(sizeOfData)) {}
+        : fDataLength(GrTRecorder<TBase, TAlign>::LengthOf(sizeOfData))
+    {
+    }
 
     const int fDataLength;
 };
 
 template <typename TBase, typename TAlign, typename TItem>
 void* operator new(size_t size, GrTRecorder<TBase, TAlign>& recorder,
-                   const GrTRecorderAllocWrapper<TItem>& wrapper) {
+    const GrTRecorderAllocWrapper<TItem>& wrapper)
+{
     SkASSERT(size == sizeof(TItem));
     return recorder.template alloc_back<TItem>(wrapper.fDataLength);
 }
 
 template <typename TBase, typename TAlign, typename TItem>
-void operator delete(void*, GrTRecorder<TBase, TAlign>&, const GrTRecorderAllocWrapper<TItem>&) {
+void operator delete(void*, GrTRecorder<TBase, TAlign>&, const GrTRecorderAllocWrapper<TItem>&)
+{
     // We only provide an operator delete to work around compiler warnings that can come
     // up for an unmatched operator new when compiling with exceptions.
-    SK_CRASH();
+    SK_ABORT("Invalid Operation");
 }
 
 #define GrNEW_APPEND_TO_RECORDER(recorder, type_name, args) \

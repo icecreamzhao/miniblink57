@@ -45,7 +45,6 @@ struct WebPopupMenuInfo {
     bool rightAligned;
     bool allowMultipleSelection;
 };
-
 }
 
 #endif

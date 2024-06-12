@@ -8,7 +8,7 @@
 #ifndef SkPicturePlayback_DEFINED
 #define SkPicturePlayback_DEFINED
 
-#include "SkPictureFlat.h"  // for DrawType
+#include "SkPictureFlat.h" // for DrawType
 
 class SkBitmap;
 class SkCanvas;
@@ -16,15 +16,15 @@ class SkPaint;
 class SkPictureData;
 
 // The basic picture playback class replays the provided picture into a canvas.
-class SkPicturePlayback : SkNoncopyable {
+class SkPicturePlayback final : SkNoncopyable {
 public:
     SkPicturePlayback(const SkPictureData* data)
         : fPictureData(data)
-        , fCurOffset(0) {
+        , fCurOffset(0)
+    {
     }
-    virtual ~SkPicturePlayback() { }
 
-    virtual void draw(SkCanvas* canvas, SkPicture::AbortCallback*);
+    void draw(SkCanvas* canvas, SkPicture::AbortCallback*, const SkReadBuffer* buffer);
 
     // TODO: remove the curOp calls after cleaning up GrGatherDevice
     // Return the ID of the operation currently being executed when playing
@@ -38,18 +38,22 @@ protected:
     // The offset of the current operation when within the draw method
     size_t fCurOffset;
 
-    void handleOp(SkReader32* reader,
-                  DrawType op,
-                  uint32_t size,
-                  SkCanvas* canvas,
-                  const SkMatrix& initialMatrix);
+    void handleOp(SkReadBuffer* reader,
+        DrawType op,
+        uint32_t size,
+        SkCanvas* canvas,
+        const SkMatrix& initialMatrix);
 
-    static DrawType ReadOpAndSize(SkReader32* reader, uint32_t* size);
+    static DrawType ReadOpAndSize(SkReadBuffer* reader, uint32_t* size);
 
     class AutoResetOpID {
     public:
-        AutoResetOpID(SkPicturePlayback* playback) : fPlayback(playback) { }
-        ~AutoResetOpID() {
+        AutoResetOpID(SkPicturePlayback* playback)
+            : fPlayback(playback)
+        {
+        }
+        ~AutoResetOpID()
+        {
             if (fPlayback) {
                 fPlayback->resetOpID();
             }

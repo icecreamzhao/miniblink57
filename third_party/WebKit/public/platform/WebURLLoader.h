@@ -33,11 +33,16 @@
 
 #include "WebCommon.h"
 #include "WebURLRequest.h"
+#include <stdint.h>
+
+namespace base {
+class SingleThreadTaskRunner;
+} // namespace base
 
 namespace blink {
 
 class WebData;
-class WebThreadedDataReceiver;
+class WebTaskRunner;
 class WebURLLoaderClient;
 class WebURLResponse;
 struct WebURLError;
@@ -45,19 +50,22 @@ struct WebURLError;
 class WebURLLoader {
 public:
     // The WebURLLoader may be deleted in a call to its client.
-    virtual ~WebURLLoader() {}
+    virtual ~WebURLLoader() { }
 
     // Load the request synchronously, returning results directly to the
     // caller upon completion.  There is no mechanism to interrupt a
     // synchronous load!!
     virtual void loadSynchronously(const WebURLRequest&,
-        WebURLResponse&, WebURLError&, WebData& data) = 0;
+        WebURLResponse&,
+        WebURLError&,
+        WebData&,
+        int64_t& encodedDataLength,
+        int64_t& encodedBodyLength) = 0;
 
     // Load the request asynchronously, sending notifications to the given
     // client.  The client will receive no further notifications if the
     // loader is disposed before it completes its work.
-    virtual void loadAsynchronously(const WebURLRequest&,
-        WebURLLoaderClient*) = 0;
+    virtual void loadAsynchronously(const WebURLRequest&, WebURLLoaderClient*) = 0;
 
     // Cancels an asynchronous load.  This will appear as a load error to
     // the client.
@@ -70,14 +78,16 @@ public:
     // its previous value. For example, a preload request starts with low
     // priority, but may increase when the resource is needed for rendering.
     virtual void didChangePriority(WebURLRequest::Priority newPriority) { }
-    virtual void didChangePriority(WebURLRequest::Priority newPriority, int intraPriorityValue) { didChangePriority(newPriority); }
+    virtual void didChangePriority(WebURLRequest::Priority newPriority, int intraPriorityValue)
+    {
+        didChangePriority(newPriority);
+    }
 
-    // Try to attach the given data receiver which from this point will receive data
-    // on its thread (provided by WebThreadedDataReceiver::backgroundThread(),
-    // rather than the WebURLLoaderClient. If successful, ownership
-    // of the data receiver is assumed by the WebURLLoader and the receiver should
-    // be deleted on the main thread when no longer needed.
-    virtual bool attachThreadedDataReceiver(WebThreadedDataReceiver*) { return false; }
+    // Sets the task runner for which any loading tasks should be posted on.
+    // Use WebTaskRunner version when it's called from core or module directory,
+    // since we don't directly expose base to them.
+    BLINK_PLATFORM_EXPORT void setLoadingTaskRunner(WebTaskRunner*);
+    virtual void setLoadingTaskRunner(base::SingleThreadTaskRunner*) = 0;
 };
 
 } // namespace blink

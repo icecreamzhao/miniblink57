@@ -14,9 +14,10 @@
 
 class RefClass : public SkRefCnt {
 public:
-    
-
-    RefClass(int n) : fN(n) {}
+    RefClass(int n)
+        : fN(n)
+    {
+    }
     int get() const { return fN; }
 
 private:
@@ -25,7 +26,8 @@ private:
     typedef SkRefCnt INHERITED;
 };
 
-static void test_autounref(skiatest::Reporter* reporter) {
+static void test_autounref(skiatest::Reporter* reporter)
+{
     RefClass obj(0);
     REPORTER_ASSERT(reporter, obj.unique());
 
@@ -33,10 +35,10 @@ static void test_autounref(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, &obj == tmp.get());
     REPORTER_ASSERT(reporter, obj.unique());
 
-    REPORTER_ASSERT(reporter, &obj == tmp.detach());
+    REPORTER_ASSERT(reporter, &obj == tmp.release());
     REPORTER_ASSERT(reporter, obj.unique());
-    REPORTER_ASSERT(reporter, NULL == tmp.detach());
-    REPORTER_ASSERT(reporter, NULL == tmp.get());
+    REPORTER_ASSERT(reporter, nullptr == tmp.release());
+    REPORTER_ASSERT(reporter, nullptr == tmp.get());
 
     obj.ref();
     REPORTER_ASSERT(reporter, !obj.unique());
@@ -46,18 +48,19 @@ static void test_autounref(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, obj.unique());
 }
 
-static void test_autostarray(skiatest::Reporter* reporter) {
+static void test_autostarray(skiatest::Reporter* reporter)
+{
     RefClass obj0(0);
     RefClass obj1(1);
     REPORTER_ASSERT(reporter, obj0.unique());
     REPORTER_ASSERT(reporter, obj1.unique());
 
     {
-        SkAutoSTArray<2, SkAutoTUnref<RefClass> > tmp;
+        SkAutoSTArray<2, SkAutoTUnref<RefClass>> tmp;
         REPORTER_ASSERT(reporter, 0 == tmp.count());
 
-        tmp.reset(0);   // test out reset(0) when already at 0
-        tmp.reset(4);   // this should force a new allocation
+        tmp.reset(0); // test out reset(0) when already at 0
+        tmp.reset(4); // this should force a new allocation
         REPORTER_ASSERT(reporter, 4 == tmp.count());
         tmp[0].reset(SkRef(&obj0));
         tmp[1].reset(SkRef(&obj1));
@@ -70,7 +73,7 @@ static void test_autostarray(skiatest::Reporter* reporter) {
         REPORTER_ASSERT(reporter, obj0.unique());
         REPORTER_ASSERT(reporter, obj1.unique());
 
-        tmp.reset(2);   // this should use the preexisting allocation
+        tmp.reset(2); // this should use the preexisting allocation
         REPORTER_ASSERT(reporter, 2 == tmp.count());
         tmp[0].reset(SkRef(&obj0));
         tmp[1].reset(SkRef(&obj1));
@@ -82,7 +85,7 @@ static void test_autostarray(skiatest::Reporter* reporter) {
 
     {
         // test out allocating ctor (this should allocate new memory)
-        SkAutoSTArray<2, SkAutoTUnref<RefClass> > tmp(4);
+        SkAutoSTArray<2, SkAutoTUnref<RefClass>> tmp(4);
         REPORTER_ASSERT(reporter, 4 == tmp.count());
 
         tmp[0].reset(SkRef(&obj0));
@@ -95,13 +98,13 @@ static void test_autostarray(skiatest::Reporter* reporter) {
         REPORTER_ASSERT(reporter, obj0.unique());
         REPORTER_ASSERT(reporter, obj1.unique());
 
-        tmp.reset(2);   // this should use the preexisting storage
+        tmp.reset(2); // this should use the preexisting storage
         tmp[0].reset(SkRef(&obj0));
         tmp[1].reset(SkRef(&obj1));
         REPORTER_ASSERT(reporter, !obj0.unique());
         REPORTER_ASSERT(reporter, !obj1.unique());
 
-        tmp.reset(4);   // this should force a new malloc
+        tmp.reset(4); // this should force a new malloc
         REPORTER_ASSERT(reporter, obj0.unique());
         REPORTER_ASSERT(reporter, obj1.unique());
 
@@ -117,11 +120,12 @@ static void test_autostarray(skiatest::Reporter* reporter) {
 
 /////////////////////////////////////////////////////////////////////////////
 
-#define kSEARCH_COUNT   91
+#define kSEARCH_COUNT 91
 
-static void test_search(skiatest::Reporter* reporter) {
-    int         i, array[kSEARCH_COUNT];
-    SkRandom    rand;
+static void test_search(skiatest::Reporter* reporter)
+{
+    int i, array[kSEARCH_COUNT];
+    SkRandom rand;
 
     for (i = 0; i < kSEARCH_COUNT; i++) {
         array[i] = rand.nextS();
@@ -130,7 +134,7 @@ static void test_search(skiatest::Reporter* reporter) {
     SkTHeapSort<int>(array, kSEARCH_COUNT);
     // make sure we got sorted properly
     for (i = 1; i < kSEARCH_COUNT; i++) {
-        REPORTER_ASSERT(reporter, array[i-1] <= array[i]);
+        REPORTER_ASSERT(reporter, array[i - 1] <= array[i]);
     }
 
     // make sure we can find all of our values
@@ -147,7 +151,7 @@ static void test_search(skiatest::Reporter* reporter) {
 
         if (index >= 0) {
             REPORTER_ASSERT(reporter,
-                            index < kSEARCH_COUNT && array[index] == value);
+                index < kSEARCH_COUNT && array[index] == value);
         } else {
             index = ~index;
             REPORTER_ASSERT(reporter, index <= kSEARCH_COUNT);
@@ -164,7 +168,8 @@ static void test_search(skiatest::Reporter* reporter) {
     }
 }
 
-static void test_utf16(skiatest::Reporter* reporter) {
+static void test_utf16(skiatest::Reporter* reporter)
+{
     static const SkUnichar gUni[] = {
         0x10000, 0x18080, 0x20202, 0xFFFFF, 0x101234
     };
@@ -183,35 +188,36 @@ static void test_utf16(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(Utils, reporter) {
+DEF_TEST(Utils, reporter)
+{
     static const struct {
         const char* fUtf8;
-        SkUnichar   fUni;
+        SkUnichar fUni;
     } gTest[] = {
-        { "a",                  'a' },
-        { "\x7f",               0x7f },
-        { "\xC2\x80",           0x80 },
-        { "\xC3\x83",           (3 << 6) | 3    },
-        { "\xDF\xBF",           0x7ff },
-        { "\xE0\xA0\x80",       0x800 },
-        { "\xE0\xB0\xB8",       0xC38 },
-        { "\xE3\x83\x83",       (3 << 12) | (3 << 6) | 3    },
-        { "\xEF\xBF\xBF",       0xFFFF },
-        { "\xF0\x90\x80\x80",   0x10000 },
-        { "\xF3\x83\x83\x83",   (3 << 18) | (3 << 12) | (3 << 6) | 3    }
+        { "a", 'a' },
+        { "\x7f", 0x7f },
+        { "\xC2\x80", 0x80 },
+        { "\xC3\x83", (3 << 6) | 3 },
+        { "\xDF\xBF", 0x7ff },
+        { "\xE0\xA0\x80", 0x800 },
+        { "\xE0\xB0\xB8", 0xC38 },
+        { "\xE3\x83\x83", (3 << 12) | (3 << 6) | 3 },
+        { "\xEF\xBF\xBF", 0xFFFF },
+        { "\xF0\x90\x80\x80", 0x10000 },
+        { "\xF3\x83\x83\x83", (3 << 18) | (3 << 12) | (3 << 6) | 3 }
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gTest); i++) {
         const char* p = gTest[i].fUtf8;
-        int         n = SkUTF8_CountUnichars(p);
-        SkUnichar   u0 = SkUTF8_ToUnichar(gTest[i].fUtf8);
-        SkUnichar   u1 = SkUTF8_NextUnichar(&p);
+        int n = SkUTF8_CountUnichars(p);
+        SkUnichar u0 = SkUTF8_ToUnichar(gTest[i].fUtf8);
+        SkUnichar u1 = SkUTF8_NextUnichar(&p);
 
         REPORTER_ASSERT(reporter, n == 1);
         REPORTER_ASSERT(reporter, u0 == u1);
         REPORTER_ASSERT(reporter, u0 == gTest[i].fUni);
         REPORTER_ASSERT(reporter,
-                        p - gTest[i].fUtf8 == (int)strlen(gTest[i].fUtf8));
+            p - gTest[i].fUtf8 == (int)strlen(gTest[i].fUtf8));
     }
 
     test_utf16(reporter);

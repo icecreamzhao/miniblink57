@@ -31,23 +31,44 @@
 #ifndef SVGAnimatedTransformList_h
 #define SVGAnimatedTransformList_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGTransformListTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-// SVG Spec: http://www.w3.org/TR/SVG11/coords.html#InterfaceSVGAnimatedTransformList
-class SVGAnimatedTransformList final : public SVGAnimatedProperty<SVGTransformList> {
+// SVG Spec:
+// http://www.w3.org/TR/SVG11/coords.html#InterfaceSVGAnimatedTransformList
+class SVGAnimatedTransformList final
+    : public SVGAnimatedProperty<SVGTransformList>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGAnimatedTransformList> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGTransformList> initialValue)
+    static SVGAnimatedTransformList* create(
+        SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        CSSPropertyID cssPropertyId = CSSPropertyInvalid)
     {
-        return adoptRefWillBeNoop(new SVGAnimatedTransformList(contextElement, attributeName, initialValue));
+        return new SVGAnimatedTransformList(contextElement, attributeName,
+            cssPropertyId);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
+    {
+        visitor->traceWrappers(contextElement());
     }
 
 protected:
-    SVGAnimatedTransformList(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGTransformList> initialValue)
-        : SVGAnimatedProperty<SVGTransformList>(contextElement, attributeName, initialValue) { }
+    SVGAnimatedTransformList(SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        CSSPropertyID cssPropertyId)
+        : SVGAnimatedProperty<SVGTransformList>(contextElement,
+            attributeName,
+            SVGTransformList::create(),
+            cssPropertyId)
+    {
+    }
 };
 
 } // namespace blink

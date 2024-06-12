@@ -12,18 +12,18 @@
 #define GIN_EXPORT __declspec(dllexport)
 #else
 #define GIN_EXPORT __declspec(dllimport)
-#endif  // defined(GIN_IMPLEMENTATION)
+#endif // defined(GIN_IMPLEMENTATION)
 
-#else  // defined(WIN32)
+#else // defined(WIN32)
 #if defined(GIN_IMPLEMENTATION)
 #define GIN_EXPORT __attribute__((visibility("default")))
 #else
 #define GIN_EXPORT
-#endif  // defined(GIN_IMPLEMENTATION)
+#endif // defined(GIN_IMPLEMENTATION)
 #endif
 
-#else  // defined(COMPONENT_BUILD)
+#else // defined(COMPONENT_BUILD)
 #define GIN_EXPORT
 #endif
 
-#endif  // GIN_GIN_EXPORT_H_
+#endif // GIN_GIN_EXPORT_H_

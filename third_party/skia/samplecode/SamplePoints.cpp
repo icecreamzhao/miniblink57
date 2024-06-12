@@ -6,32 +6,31 @@
  */
 
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
 #include "SkTime.h"
 #include "SkTypeface.h"
+#include "SkUtils.h"
+#include "SkView.h"
 #include "SkXfermode.h"
 
 #include "SkStream.h"
-#include "SkXMLParser.h"
 
 class PointsView : public SampleView {
 public:
-    PointsView() {}
+    PointsView() { }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Points");
             return true;
@@ -39,16 +38,18 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand) {
+    static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand)
+    {
         for (size_t i = 0; i < n; i++)
             pts[i].set(rand->nextUScalar1() * 640, rand->nextUScalar1() * 480);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         canvas->translate(SK_Scalar1, SK_Scalar1);
 
         SkRandom rand;
-        SkPaint  p0, p1, p2, p3;
+        SkPaint p0, p1, p2, p3;
         const size_t n = 99;
 
         p0.setColor(SK_ColorRED);
@@ -72,7 +73,6 @@ protected:
     }
 
 private:
-
     typedef SampleView INHERITED;
 };
 

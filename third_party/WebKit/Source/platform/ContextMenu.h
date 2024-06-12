@@ -34,18 +34,20 @@
 namespace blink {
 
 class PLATFORM_EXPORT ContextMenu {
-    WTF_MAKE_NONCOPYABLE(ContextMenu); WTF_MAKE_FAST_ALLOCATED(ContextMenu);
+    WTF_MAKE_NONCOPYABLE(ContextMenu);
+    USING_FAST_MALLOC(ContextMenu);
+
 public:
     ContextMenu() { }
     const ContextMenuItem* itemWithAction(unsigned) const;
     const Vector<ContextMenuItem>& items() const { return m_items; }
-    void appendItem(const ContextMenuItem& item) { m_items.append(item); }
-    void removeLastItem() { m_items.removeLast(); }
+    void appendItem(const ContextMenuItem& item) { m_items.push_back(item); }
+    void removeLastItem() { m_items.pop_back(); }
 
 private:
     Vector<ContextMenuItem> m_items;
 };
 
-}
+} // namespace blink
 
 #endif // ContextMenu_h

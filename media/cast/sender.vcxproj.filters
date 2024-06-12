@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sender">
+      <UniqueIdentifier>{23349CB6-4066-C05B-598E-D52D89F8964E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cast_sender.h" />
+    <CustomBuild Include="cast_sender_impl.cc" />
+    <None Include="cast_sender_impl.h" />
+    <CustomBuild Include="sender/audio_encoder.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/audio_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/audio_sender.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/audio_sender.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/congestion_control.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/congestion_control.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/external_video_encoder.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/external_video_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/fake_software_video_encoder.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/fake_software_video_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/frame_sender.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/frame_sender.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/performance_metrics_overlay.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/performance_metrics_overlay.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/sender_encoded_frame.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/sender_encoded_frame.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/size_adaptable_video_encoder_base.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/size_adaptable_video_encoder_base.h">
+      <Filter>sender</Filter>
+    </None>
+    <None Include="sender/software_video_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/video_encoder.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/video_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/video_encoder_impl.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/video_encoder_impl.h">
+      <Filter>sender</Filter>
+    </None>
+    <None Include="sender/video_frame_factory.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/video_sender.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/video_sender.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/vp8_encoder.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/vp8_encoder.h">
+      <Filter>sender</Filter>
+    </None>
+    <CustomBuild Include="sender/vp8_quantizer_parser.cc">
+      <Filter>sender</Filter>
+    </CustomBuild>
+    <None Include="sender/vp8_quantizer_parser.h">
+      <Filter>sender</Filter>
+    </None>
+  </ItemGroup>
+</Project>

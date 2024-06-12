@@ -5,5 +5,7 @@
 // https://notifications.spec.whatwg.org/#notificationevent
 
 dictionary NotificationEventInit : ExtendableEventInit {
-    Notification notification;
+    required Notification notification;
+    DOMString action = "";
+    [RuntimeEnabled=NotificationInlineReplies] DOMString? reply = "";
 };

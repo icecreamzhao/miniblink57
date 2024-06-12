@@ -18,15 +18,15 @@
 #ifndef SCHRITER_H
 #define SCHRITER_H
 
-#include "unicode/utypes.h"
 #include "unicode/chariter.h"
 #include "unicode/uchriter.h"
+#include "unicode/utypes.h"
 
 /**
  * \file 
  * \brief C++ API: String Character Iterator
  */
- 
+
 U_NAMESPACE_BEGIN
 /**
  * A concrete subclass of CharacterIterator that iterates over the
@@ -42,16 +42,16 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
-  /**
+    /**
    * Create an iterator over the UnicodeString referred to by "textStr".
    * The UnicodeString object is copied.
    * The iteration range is the whole string, and the starting position is 0.
    * @param textStr The unicode string used to create an iterator
    * @stable ICU 2.0
    */
-  StringCharacterIterator(const UnicodeString& textStr);
+    StringCharacterIterator(const UnicodeString& textStr);
 
-  /**
+    /**
    * Create an iterator over the UnicodeString referred to by "textStr".
    * The iteration range is the whole string, and the starting
    * position is specified by "textPos".  If "textPos" is outside the valid
@@ -60,10 +60,10 @@ public:
    * @param textPos The starting position of the iteration
    * @stable ICU 2.0
    */
-  StringCharacterIterator(const UnicodeString&    textStr,
-              int32_t              textPos);
+    StringCharacterIterator(const UnicodeString& textStr,
+        int32_t textPos);
 
-  /**
+    /**
    * Create an iterator over the UnicodeString referred to by "textStr".
    * The UnicodeString object is copied.
    * The iteration range begins with the code unit specified by
@@ -79,12 +79,12 @@ public:
    * @param textPos    The starting position of the iteration
    * @stable ICU 2.0
    */
-  StringCharacterIterator(const UnicodeString&    textStr,
-              int32_t              textBegin,
-              int32_t              textEnd,
-              int32_t              textPos);
+    StringCharacterIterator(const UnicodeString& textStr,
+        int32_t textBegin,
+        int32_t textEnd,
+        int32_t textPos);
 
-  /**
+    /**
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
    * same as "that"'s current position.
@@ -92,15 +92,15 @@ public:
    * @param that The StringCharacterIterator to be copied
    * @stable ICU 2.0
    */
-  StringCharacterIterator(const StringCharacterIterator&  that);
+    StringCharacterIterator(const StringCharacterIterator& that);
 
-  /**
+    /**
    * Destructor.
    * @stable ICU 2.0
    */
-  virtual ~StringCharacterIterator();
+    virtual ~StringCharacterIterator();
 
-  /**
+    /**
    * Assignment operator.  *this is altered to iterate over the same
    * range of the same string as "that", and refers to the same
    * character within that string as "that" does.
@@ -108,10 +108,10 @@ public:
    * @return the newly created object.
    * @stable ICU 2.0
    */
-  StringCharacterIterator&
-  operator=(const StringCharacterIterator&    that);
+    StringCharacterIterator&
+    operator=(const StringCharacterIterator& that);
 
-  /**
+    /**
    * Returns true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.
    * @param that The ForwardCharacterIterator to be compared for equality
@@ -119,68 +119,67 @@ public:
    * same string and are pointing at the same character.
    * @stable ICU 2.0
    */
-  virtual UBool          operator==(const ForwardCharacterIterator& that) const;
+    virtual UBool operator==(const ForwardCharacterIterator& that) const;
 
-  /**
+    /**
    * Returns a new StringCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.
    * @return the newly cloned object.
    * @stable ICU 2.0
    */
-  virtual CharacterIterator* clone(void) const;
+    virtual CharacterIterator* clone(void) const;
 
-  /**
+    /**
    * Sets the iterator to iterate over the provided string.
    * @param newText The string to be iterated over
    * @stable ICU 2.0
    */
-  void setText(const UnicodeString& newText);
+    void setText(const UnicodeString& newText);
 
-  /**
+    /**
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
    * @param result Receives a copy of the text under iteration.
    * @stable ICU 2.0
    */
-  virtual void            getText(UnicodeString& result);
+    virtual void getText(UnicodeString& result);
 
-  /**
+    /**
    * Return a class ID for this object (not really public)
    * @return a class ID for this object.
    * @stable ICU 2.0
    */
-  virtual UClassID         getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const;
 
-  /**
+    /**
    * Return a class ID for this class (not really public)
    * @return a class ID for this class
    * @stable ICU 2.0
    */
-  static UClassID   U_EXPORT2 getStaticClassID(void);
+    static UClassID U_EXPORT2 getStaticClassID(void);
 
 protected:
-  /**
+    /**
    * Default constructor, iteration over empty string.
    * @stable ICU 2.0
    */
-  StringCharacterIterator();
+    StringCharacterIterator();
 
-  /**
+    /**
    * Sets the iterator to iterate over the provided string.
    * @param newText The string to be iterated over
    * @param newTextLength The length of the String
    * @stable ICU 2.0
    */
-  void setText(const UChar* newText, int32_t newTextLength);
+    void setText(const UChar* newText, int32_t newTextLength);
 
-  /**
+    /**
    * Copy of the iterated string object.
    * @stable ICU 2.0
    */
-  UnicodeString            text;
-
+    UnicodeString text;
 };
 
 U_NAMESPACE_END

@@ -7,40 +7,12 @@
 
 namespace blink {
 
-
-
 namespace InspectorInstrumentation {
 
-CORE_EXPORT bool forcePseudoStateImpl(InstrumentingAgents*, Element*, CSSSelector::PseudoType);
-
-inline bool forcePseudoState(Element* element, CSSSelector::PseudoType pseudoState)
-{   
-    FAST_RETURN_IF_NO_FRONTENDS(false);
-    if (InstrumentingAgents* agents = instrumentingAgentsFor(element))
-        return forcePseudoStateImpl(agents, element, pseudoState);
-    return false;
-}
-
-CORE_EXPORT bool shouldPauseDedicatedWorkerOnStartImpl(InstrumentingAgents*);
-
-inline bool shouldPauseDedicatedWorkerOnStart(ExecutionContext* context)
-{   
-    FAST_RETURN_IF_NO_FRONTENDS(false);
-    if (InstrumentingAgents* agents = instrumentingAgentsFor(context))
-        return shouldPauseDedicatedWorkerOnStartImpl(agents);
-    return false;
-}
-
-CORE_EXPORT bool shouldForceCORSPreflightImpl(InstrumentingAgents*);
-
-inline bool shouldForceCORSPreflight(Document* paramDocument)
-{   
-    FAST_RETURN_IF_NO_FRONTENDS(false);
-    if (InstrumentingAgents* agents = instrumentingAgentsFor(paramDocument))
-        return shouldForceCORSPreflightImpl(agents);
-    return false;
-}
-
+    CORE_EXPORT bool forcePseudoState(Element*, CSSSelector::PseudoType);
+    CORE_EXPORT bool shouldWaitForDebuggerOnWorkerStart(ExecutionContext*);
+    CORE_EXPORT bool shouldForceCORSPreflight(Document*);
+    CORE_EXPORT bool shouldBlockRequest(LocalFrame*, const ResourceRequest&);
 } // namespace InspectorInstrumentation
 
 } // namespace blink

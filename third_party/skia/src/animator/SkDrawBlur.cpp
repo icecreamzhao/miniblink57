@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawBlur.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -22,12 +21,14 @@ DEFINE_GET_MEMBER(SkDrawBlur);
 
 SkDrawBlur::SkDrawBlur()
     : fSigma(-1)
-    , fBlurStyle(kNormal_SkBlurStyle) {
+    , fBlurStyle(kNormal_SkBlurStyle)
+{
 }
 
-SkMaskFilter* SkDrawBlur::getMaskFilter() {
+SkMaskFilter* SkDrawBlur::getMaskFilter()
+{
     if (fSigma <= 0) {
-        return NULL;
+        return nullptr;
     }
-    return SkBlurMaskFilter::Create((SkBlurStyle)fBlurStyle, fSigma);
+    return SkBlurMaskFilter::Make((SkBlurStyle)fBlurStyle, fSigma).release();
 }

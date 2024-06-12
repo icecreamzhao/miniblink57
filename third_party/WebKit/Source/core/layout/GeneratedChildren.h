@@ -15,14 +15,14 @@ namespace blink {
 // This correctly prevents form controls from having such layoutObjects.
 static bool canHaveGeneratedChildren(const LayoutObject& layoutObject)
 {
-    // FIXME: LayoutMedia::layout makes assumptions about what children are allowed
-    // so we can't support generated content.
+    // FIXME: LayoutMedia::layout makes assumptions about what children are
+    // allowed so we can't support generated content.
     if (layoutObject.isMedia() || layoutObject.isTextControl() || layoutObject.isMenuList())
         return false;
 
-    // Input elements can't have generated children, but button elements can. We'll
-    // write the code assuming any other button types that might emerge in the future
-    // can also have children.
+    // Input elements can't have generated children, but button elements can.
+    // We'll write the code assuming any other button types that might emerge in
+    // the future can also have children.
     if (layoutObject.isLayoutButton())
         return !isHTMLInputElement(*layoutObject.node());
 

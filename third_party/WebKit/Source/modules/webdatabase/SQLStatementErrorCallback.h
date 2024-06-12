@@ -36,13 +36,14 @@ namespace blink {
 class SQLTransaction;
 class SQLError;
 
-class SQLStatementErrorCallback : public GarbageCollectedFinalized<SQLStatementErrorCallback> {
+class SQLStatementErrorCallback
+    : public GarbageCollectedFinalized<SQLStatementErrorCallback> {
 public:
     virtual ~SQLStatementErrorCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
     virtual bool handleEvent(SQLTransaction*, SQLError*) = 0;
 };
 
-}
+} // namespace blink
 
 #endif // SQLStatementErrorCallback_h

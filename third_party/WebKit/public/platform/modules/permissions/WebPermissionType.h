@@ -14,6 +14,10 @@ enum WebPermissionType {
     WebPermissionTypePushNotifications,
     WebPermissionTypeMidi,
     WebPermissionTypeMidiSysEx,
+    WebPermissionTypeDurableStorage,
+    WebPermissionTypeBackgroundSync,
+
+    WebPermissionTypeLast,
 };
 
 } // namespace blink

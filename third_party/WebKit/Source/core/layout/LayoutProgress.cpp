@@ -18,8 +18,6 @@
  *
  */
 
-#include "config.h"
-
 #include "core/layout/LayoutProgress.h"
 
 #include "core/html/HTMLProgressElement.h"
@@ -29,7 +27,7 @@
 
 namespace blink {
 
-LayoutProgress::LayoutProgress(HTMLElement* element)
+LayoutProgress::LayoutProgress(HTMLProgressElement* element)
     : LayoutBlockFlow(element)
     , m_position(HTMLProgressElement::InvalidPosition)
     , m_animationStartTime(0)
@@ -40,9 +38,7 @@ LayoutProgress::LayoutProgress(HTMLElement* element)
 {
 }
 
-LayoutProgress::~LayoutProgress()
-{
-}
+LayoutProgress::~LayoutProgress() { }
 
 void LayoutProgress::willBeDestroyed()
 {
@@ -67,20 +63,32 @@ void LayoutProgress::updateFromElement()
 
 double LayoutProgress::animationProgress() const
 {
-    return m_animating ? (fmod((currentTime() - m_animationStartTime), m_animationDuration) / m_animationDuration) : 0;
+    return m_animating ? (fmod((currentTime() - m_animationStartTime),
+                              m_animationDuration)
+               / m_animationDuration)
+                       : 0;
 }
 
 bool LayoutProgress::isDeterminate() const
 {
-    return (HTMLProgressElement::IndeterminatePosition != position()
-        && HTMLProgressElement::InvalidPosition != position());
+    return (HTMLProgressElement::IndeterminatePosition != position() && HTMLProgressElement::InvalidPosition != position());
 }
 
-void LayoutProgress::animationTimerFired(Timer<LayoutProgress>*)
+bool LayoutProgress::isAnimationTimerActive() const
+{
+    return m_animationTimer.isActive();
+}
+
+bool LayoutProgress::isAnimating() const
+{
+    return m_animating;
+}
+
+void LayoutProgress::animationTimerFired(TimerBase*)
 {
     setShouldDoFullPaintInvalidation();
     if (!m_animationTimer.isActive() && m_animating)
-        m_animationTimer.startOneShot(m_animationRepeatInterval, FROM_HERE);
+        m_animationTimer.startOneShot(m_animationRepeatInterval, BLINK_FROM_HERE);
 }
 
 void LayoutProgress::updateAnimationState()
@@ -88,14 +96,14 @@ void LayoutProgress::updateAnimationState()
     m_animationDuration = LayoutTheme::theme().animationDurationForProgressBar();
     m_animationRepeatInterval = LayoutTheme::theme().animationRepeatIntervalForProgressBar();
 
-    bool animating = style()->hasAppearance() && m_animationDuration > 0;
+    bool animating = !isDeterminate() && style()->hasAppearance() && m_animationDuration > 0;
     if (animating == m_animating)
         return;
 
     m_animating = animating;
     if (m_animating) {
         m_animationStartTime = currentTime();
-        m_animationTimer.startOneShot(m_animationRepeatInterval, FROM_HERE);
+        m_animationTimer.startOneShot(m_animationRepeatInterval, BLINK_FROM_HERE);
     } else {
         m_animationTimer.stop();
     }
@@ -103,14 +111,7 @@ void LayoutProgress::updateAnimationState()
 
 HTMLProgressElement* LayoutProgress::progressElement() const
 {
-    if (!node())
-        return nullptr;
-
-    if (isHTMLProgressElement(*node()))
-        return toHTMLProgressElement(node());
-
-    ASSERT(node()->shadowHost());
-    return toHTMLProgressElement(node()->shadowHost());
+    return toHTMLProgressElement(node());
 }
 
 } // namespace blink

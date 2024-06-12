@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayBounds.h"
 #include "SkAnimateMaker.h"
 
@@ -21,10 +20,13 @@ const SkMemberInfo SkDisplayBounds::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDisplayBounds);
 
-SkDisplayBounds::SkDisplayBounds() : inval(false) {
+SkDisplayBounds::SkDisplayBounds()
+    : inval(false)
+{
 }
 
-bool SkDisplayBounds::draw(SkAnimateMaker& maker) {
+bool SkDisplayBounds::draw(SkAnimateMaker& maker)
+{
     maker.fDisplayList.fUnionBounds = SkToBool(inval);
     maker.fDisplayList.fDrawBounds = false;
     fBounds.setEmpty();

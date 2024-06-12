@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "base/logging.h"
-//#include "base/trace_event/trace_event.h"
 #include "skia/ext/analysis_canvas.h"
+#include "base/logging.h"
+#include "base/trace_event/trace_event.h"
 #include "third_party/skia/include/core/SkDraw.h"
 #include "third_party/skia/include/core/SkPath.h"
 #include "third_party/skia/include/core/SkRRect.h"
@@ -14,7 +14,8 @@ namespace {
 
 const int kNoLayer = -1;
 
-bool ActsLikeClear(SkXfermode::Mode mode, unsigned src_alpha) {
+bool ActsLikeClear(SkXfermode::Mode mode, unsigned src_alpha)
+{
     switch (mode) {
     case SkXfermode::kClear_Mode:
         return true;
@@ -31,7 +32,8 @@ bool ActsLikeClear(SkXfermode::Mode mode, unsigned src_alpha) {
     }
 }
 
-bool IsSolidColorPaint(const SkPaint& paint) {
+bool IsSolidColorPaint(const SkPaint& paint)
+{
     SkXfermode::Mode xfermode;
 
     // getXfermode can return a NULL, but that is handled
@@ -43,20 +45,13 @@ bool IsSolidColorPaint(const SkPaint& paint) {
     // - Alpha is 1.0, style is fill, and there are no special effects
     // - Xfer mode is either kSrc or kSrcOver (kSrcOver is equivalent
     //   to kSrc if source alpha is 1.0, which is already checked).
-    return (paint.getAlpha() == 255 &&
-        !paint.getShader() &&
-        !paint.getLooper() &&
-        !paint.getMaskFilter() &&
-        !paint.getColorFilter() &&
-        !paint.getImageFilter() &&
-        paint.getStyle() == SkPaint::kFill_Style &&
-        (xfermode == SkXfermode::kSrc_Mode ||
-            xfermode == SkXfermode::kSrcOver_Mode));
+    return (paint.getAlpha() == 255 && !paint.getShader() && !paint.getLooper() && !paint.getMaskFilter() && !paint.getColorFilter() && !paint.getImageFilter() && paint.getStyle() == SkPaint::kFill_Style && (xfermode == SkXfermode::kSrc_Mode || xfermode == SkXfermode::kSrcOver_Mode));
 }
 
 // Returns true if the specified drawn_rect will cover the entire canvas, and
 // that the canvas is not clipped (i.e. it covers ALL of the canvas).
-bool IsFullQuad(SkCanvas* canvas, const SkRect& drawn_rect) {
+bool IsFullQuad(SkCanvas* canvas, const SkRect& drawn_rect)
+{
     if (!canvas->isClipRect())
         return false;
 
@@ -65,7 +60,7 @@ bool IsFullQuad(SkCanvas* canvas, const SkRect& drawn_rect) {
         return false;
 
     // if the clip is smaller than the canvas, we're partly clipped, so abort.
-    if (!clip_irect.contains(SkIRect::MakeSize(canvas->getDeviceSize())))
+    if (!clip_irect.contains(SkIRect::MakeSize(canvas->getBaseLayerSize())))
         return false;
 
     const SkMatrix& matrix = canvas->getTotalMatrix();
@@ -85,20 +80,23 @@ bool IsFullQuad(SkCanvas* canvas, const SkRect& drawn_rect) {
 
 namespace skia {
 
-void AnalysisCanvas::SetForceNotSolid(bool flag) {
+void AnalysisCanvas::SetForceNotSolid(bool flag)
+{
     is_forced_not_solid_ = flag;
     if (is_forced_not_solid_)
         is_solid_color_ = false;
 }
 
-void AnalysisCanvas::SetForceNotTransparent(bool flag) {
+void AnalysisCanvas::SetForceNotTransparent(bool flag)
+{
     is_forced_not_transparent_ = flag;
     if (is_forced_not_transparent_)
         is_transparent_ = false;
 }
 
-void AnalysisCanvas::onDrawPaint(const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPaint");
+void AnalysisCanvas::onDrawPaint(const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPaint");
     SkRect rect;
     if (getClipBounds(&rect))
         drawRect(rect, paint);
@@ -107,26 +105,29 @@ void AnalysisCanvas::onDrawPaint(const SkPaint& paint) {
 void AnalysisCanvas::onDrawPoints(SkCanvas::PointMode mode,
     size_t count,
     const SkPoint points[],
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPoints");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPoints");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
 }
 
-void AnalysisCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawRect");
+void AnalysisCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawRect");
     // This recreates the early-exit logic in SkCanvas.cpp.
     SkRect scratch;
-    if (paint.canComputeFastBounds() &&
-        quickReject(paint.computeFastBounds(rect, &scratch))) {
-        //TRACE_EVENT_INSTANT0("disabled-by-default-skia", "Quick reject.", TRACE_EVENT_SCOPE_THREAD);
+    if (paint.canComputeFastBounds() && quickReject(paint.computeFastBounds(rect, &scratch))) {
+        TRACE_EVENT_INSTANT0("disabled-by-default-skia", "Quick reject.",
+            TRACE_EVENT_SCOPE_THREAD);
         return;
     }
 
     // An extra no-op check SkCanvas.cpp doesn't do.
     if (paint.nothingToDraw()) {
-        //TRACE_EVENT_INSTANT0("disabled-by-default-skia", "Nothing to draw.", TRACE_EVENT_SCOPE_THREAD);
+        TRACE_EVENT_INSTANT0("disabled-by-default-skia", "Nothing to draw.",
+            TRACE_EVENT_SCOPE_THREAD);
         return;
     }
 
@@ -144,9 +145,7 @@ void AnalysisCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint) {
     // not src, then this canvas will not be transparent.
     //
     // In all other cases, we keep the current transparent value
-    if (does_cover_canvas &&
-        !is_forced_not_transparent_ &&
-        ActsLikeClear(xfermode, paint.getAlpha())) {
+    if (does_cover_canvas && !is_forced_not_transparent_ && ActsLikeClear(xfermode, paint.getAlpha())) {
         is_transparent_ = true;
     } else if (paint.getAlpha() != 0 || xfermode != SkXfermode::kSrc_Mode) {
         is_transparent_ = false;
@@ -166,15 +165,17 @@ void AnalysisCanvas::onDrawRect(const SkRect& rect, const SkPaint& paint) {
     ++draw_op_count_;
 }
 
-void AnalysisCanvas::onDrawOval(const SkRect& oval, const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawOval");
+void AnalysisCanvas::onDrawOval(const SkRect& oval, const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawOval");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
 }
 
-void AnalysisCanvas::onDrawRRect(const SkRRect& rr, const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawRRect");
+void AnalysisCanvas::onDrawRRect(const SkRRect& rr, const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawRRect");
     // This should add the SkRRect to an SkPath, and call
     // drawPath, but since drawPath ignores the SkPath, just
     // do the same work here.
@@ -183,8 +184,9 @@ void AnalysisCanvas::onDrawRRect(const SkRRect& rr, const SkPaint& paint) {
     ++draw_op_count_;
 }
 
-void AnalysisCanvas::onDrawPath(const SkPath& path, const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPath");
+void AnalysisCanvas::onDrawPath(const SkPath& path, const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPath");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -193,8 +195,9 @@ void AnalysisCanvas::onDrawPath(const SkPath& path, const SkPaint& paint) {
 void AnalysisCanvas::onDrawBitmap(const SkBitmap& bitmap,
     SkScalar left,
     SkScalar top,
-    const SkPaint*) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmap");
+    const SkPaint*)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmap");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -204,8 +207,9 @@ void AnalysisCanvas::onDrawBitmapRect(const SkBitmap&,
     const SkRect* src,
     const SkRect& dst,
     const SkPaint* paint,
-    DrawBitmapRectFlags) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmapRect");
+    SrcRectConstraint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmapRect");
     // Call drawRect to determine transparency,
     // but reset solid color to false.
     SkPaint tmpPaint;
@@ -219,8 +223,9 @@ void AnalysisCanvas::onDrawBitmapRect(const SkBitmap&,
 void AnalysisCanvas::onDrawBitmapNine(const SkBitmap& bitmap,
     const SkIRect& center,
     const SkRect& dst,
-    const SkPaint* paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmapNine");
+    const SkPaint* paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawBitmapNine");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -229,8 +234,9 @@ void AnalysisCanvas::onDrawBitmapNine(const SkBitmap& bitmap,
 void AnalysisCanvas::onDrawImage(const SkImage*,
     SkScalar left,
     SkScalar top,
-    const SkPaint*) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawImage");
+    const SkPaint*)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawImage");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -239,9 +245,10 @@ void AnalysisCanvas::onDrawImage(const SkImage*,
 void AnalysisCanvas::onDrawImageRect(const SkImage*,
     const SkRect* src,
     const SkRect& dst,
-    const SkPaint* paint
-    ) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawImageRect");
+    const SkPaint* paint,
+    SrcRectConstraint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawImageRect");
     // Call drawRect to determine transparency,
     // but reset solid color to false.
     SkPaint tmpPaint;
@@ -252,22 +259,13 @@ void AnalysisCanvas::onDrawImageRect(const SkImage*,
     ++draw_op_count_;
 }
 
-void AnalysisCanvas::onDrawSprite(const SkBitmap& bitmap,
-    int left,
-    int top,
-    const SkPaint* paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawSprite");
-    is_solid_color_ = false;
-    is_transparent_ = false;
-    ++draw_op_count_;
-}
-
 void AnalysisCanvas::onDrawText(const void* text,
     size_t len,
     SkScalar x,
     SkScalar y,
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawText");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawText");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -276,8 +274,9 @@ void AnalysisCanvas::onDrawText(const void* text,
 void AnalysisCanvas::onDrawPosText(const void* text,
     size_t byteLength,
     const SkPoint pos[],
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPosText");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPosText");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -287,8 +286,9 @@ void AnalysisCanvas::onDrawPosTextH(const void* text,
     size_t byteLength,
     const SkScalar xpos[],
     SkScalar constY,
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPosTextH");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawPosTextH");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -298,8 +298,9 @@ void AnalysisCanvas::onDrawTextOnPath(const void* text,
     size_t len,
     const SkPath& path,
     const SkMatrix* matrix,
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawTextOnPath");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawTextOnPath");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -308,8 +309,9 @@ void AnalysisCanvas::onDrawTextOnPath(const void* text,
 void AnalysisCanvas::onDrawTextBlob(const SkTextBlob* blob,
     SkScalar x,
     SkScalar y,
-    const SkPaint &paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawTextBlob");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawTextBlob");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -317,8 +319,9 @@ void AnalysisCanvas::onDrawTextBlob(const SkTextBlob* blob,
 
 void AnalysisCanvas::onDrawDRRect(const SkRRect& outer,
     const SkRRect& inner,
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawDRRect");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawDRRect");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -332,8 +335,9 @@ void AnalysisCanvas::onDrawVertices(SkCanvas::VertexMode,
     SkXfermode* xmode,
     const uint16_t indices[],
     int index_count,
-    const SkPaint& paint) {
-    //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawVertices");
+    const SkPaint& paint)
+{
+    TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::onDrawVertices");
     is_solid_color_ = false;
     is_transparent_ = false;
     ++draw_op_count_;
@@ -341,28 +345,31 @@ void AnalysisCanvas::onDrawVertices(SkCanvas::VertexMode,
 
 // Needed for now, since SkCanvas requires a bitmap, even if it is not backed
 // by any pixels
-static SkBitmap MakeEmptyBitmap(int width, int height) {
+static SkBitmap MakeEmptyBitmap(int width, int height)
+{
     SkBitmap bitmap;
     bitmap.setInfo(SkImageInfo::MakeUnknown(width, height));
     return bitmap;
 }
 
 AnalysisCanvas::AnalysisCanvas(int width, int height)
-    : INHERITED(MakeEmptyBitmap(width, height)),
-    saved_stack_size_(0),
-    force_not_solid_stack_level_(kNoLayer),
-    force_not_transparent_stack_level_(kNoLayer),
-    is_forced_not_solid_(false),
-    is_forced_not_transparent_(false),
-    is_solid_color_(true),
-    color_(SK_ColorTRANSPARENT),
-    is_transparent_(true),
-    draw_op_count_(0) {
+    : INHERITED(MakeEmptyBitmap(width, height))
+    , saved_stack_size_(0)
+    , force_not_solid_stack_level_(kNoLayer)
+    , force_not_transparent_stack_level_(kNoLayer)
+    , is_forced_not_solid_(false)
+    , is_forced_not_transparent_(false)
+    , is_solid_color_(true)
+    , color_(SK_ColorTRANSPARENT)
+    , is_transparent_(true)
+    , draw_op_count_(0)
+{
 }
 
-AnalysisCanvas::~AnalysisCanvas() {}
+AnalysisCanvas::~AnalysisCanvas() { }
 
-bool AnalysisCanvas::GetColorIfSolid(SkColor* color) const {
+bool AnalysisCanvas::GetColorIfSolid(SkColor* color) const
+{
     if (is_transparent_) {
         *color = SK_ColorTRANSPARENT;
         return true;
@@ -374,13 +381,15 @@ bool AnalysisCanvas::GetColorIfSolid(SkColor* color) const {
     return false;
 }
 
-bool AnalysisCanvas::abort() {
+bool AnalysisCanvas::abort()
+{
     // Early out as soon as we have more than one draw op.
     // TODO(vmpstr): Investigate if 1 is the correct metric here. We need to
     // balance the amount of time we spend analyzing vs how many tiles would be
     // solid if the number was higher.
     if (draw_op_count_ > 1) {
-        //TRACE_EVENT0("disabled-by-default-skia", "AnalysisCanvas::abort() -- aborting");
+        TRACE_EVENT0("disabled-by-default-skia",
+            "AnalysisCanvas::abort() -- aborting");
         // We have to reset solid/transparent state to false since we don't
         // know whether consequent operations will make this false.
         is_solid_color_ = false;
@@ -390,7 +399,8 @@ bool AnalysisCanvas::abort() {
     return false;
 }
 
-void AnalysisCanvas::OnComplexClip() {
+void AnalysisCanvas::OnComplexClip()
+{
     // complex clips can make our calls to IsFullQuad invalid (ie have false
     // positives). As a precaution, force the setting to be non-solid
     // and non-transparent until we pop this
@@ -406,25 +416,29 @@ void AnalysisCanvas::OnComplexClip() {
 
 void AnalysisCanvas::onClipRect(const SkRect& rect,
     SkRegion::Op op,
-    ClipEdgeStyle edge_style) {
+    ClipEdgeStyle edge_style)
+{
     INHERITED::onClipRect(rect, op, edge_style);
 }
 
 void AnalysisCanvas::onClipPath(const SkPath& path,
     SkRegion::Op op,
-    ClipEdgeStyle edge_style) {
+    ClipEdgeStyle edge_style)
+{
     OnComplexClip();
     INHERITED::onClipRect(path.getBounds(), op, edge_style);
 }
 
 void AnalysisCanvas::onClipRRect(const SkRRect& rrect,
     SkRegion::Op op,
-    ClipEdgeStyle edge_style) {
+    ClipEdgeStyle edge_style)
+{
     OnComplexClip();
     INHERITED::onClipRect(rrect.getBounds(), op, edge_style);
 }
 
-void AnalysisCanvas::onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op) {
+void AnalysisCanvas::onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op)
+{
     const ClipEdgeStyle edge_style = kHard_ClipEdgeStyle;
     if (deviceRgn.isRect()) {
         onClipRect(SkRect::MakeFromIRect(deviceRgn.getBounds()), op, edge_style);
@@ -435,27 +449,27 @@ void AnalysisCanvas::onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op) {
         SkRect::MakeFromIRect(deviceRgn.getBounds()), op, edge_style);
 }
 
-void AnalysisCanvas::willSave() {
+void AnalysisCanvas::willSave()
+{
     ++saved_stack_size_;
     INHERITED::willSave();
 }
 
-SkCanvas::SaveLayerStrategy AnalysisCanvas::willSaveLayer(
-    const SkRect* bounds,
-    const SkPaint* paint,
-    SkCanvas::SaveFlags flags) {
+SkCanvas::SaveLayerStrategy AnalysisCanvas::getSaveLayerStrategy(
+    const SaveLayerRec& rec)
+{
+    const SkPaint* paint = rec.fPaint;
 
     ++saved_stack_size_;
 
-    SkIRect canvas_ibounds = SkIRect::MakeSize(this->getDeviceSize());
+    SkIRect canvas_ibounds = SkIRect::MakeSize(this->getBaseLayerSize());
     SkRect canvas_bounds;
     canvas_bounds.set(canvas_ibounds);
 
     // If after we draw to the saved layer, we have to blend with the current
     // layer, then we can conservatively say that the canvas will not be of
     // solid color.
-    if ((paint && !IsSolidColorPaint(*paint)) ||
-        (bounds && !bounds->contains(canvas_bounds))) {
+    if ((paint && !IsSolidColorPaint(*paint)) || (rec.fBounds && !rec.fBounds->contains(canvas_bounds))) {
         if (force_not_solid_stack_level_ == kNoLayer) {
             force_not_solid_stack_level_ = saved_stack_size_;
             SetForceNotSolid(true);
@@ -475,13 +489,14 @@ SkCanvas::SaveLayerStrategy AnalysisCanvas::willSaveLayer(
         }
     }
 
-    INHERITED::willSaveLayer(bounds, paint, flags);
+    INHERITED::getSaveLayerStrategy(rec);
     // Actually saving a layer here could cause a new bitmap to be created
     // and real rendering to occur.
     return kNoLayer_SaveLayerStrategy;
 }
 
-void AnalysisCanvas::willRestore() {
+void AnalysisCanvas::willRestore()
+{
     DCHECK(saved_stack_size_);
     if (saved_stack_size_) {
         --saved_stack_size_;
@@ -498,6 +513,4 @@ void AnalysisCanvas::willRestore() {
     INHERITED::willRestore();
 }
 
-}  // namespace skia
-
-
+} // namespace skia

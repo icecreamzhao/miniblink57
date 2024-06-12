@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebCache.h"
 
 #include "core/fetch/MemoryCache.h"
@@ -38,20 +37,18 @@ namespace blink {
 // A helper method for coverting a MemoryCache::TypeStatistic to a
 // WebCache::ResourceTypeStat.
 static void ToResourceTypeStat(const MemoryCache::TypeStatistic& from,
-                               WebCache::ResourceTypeStat& to)
+    WebCache::ResourceTypeStat& to)
 {
-    to.count = static_cast<size_t>(from.count);
-    to.size = static_cast<size_t>(from.size);
-    to.liveSize = static_cast<size_t>(from.liveSize);
-    to.decodedSize = static_cast<size_t>(from.decodedSize);
+    to.count = from.count;
+    to.size = from.size;
+    to.decodedSize = from.decodedSize;
 }
 
-void WebCache::setCapacities(
-    size_t minDeadCapacity, size_t maxDeadCapacity, size_t capacity)
+void WebCache::setCapacity(size_t capacity)
 {
     MemoryCache* cache = memoryCache();
     if (cache)
-        cache->setCapacities(static_cast<unsigned>(minDeadCapacity), static_cast<unsigned>(maxDeadCapacity), static_cast<unsigned>(capacity));
+        cache->setCapacity(static_cast<unsigned>(capacity));
 }
 
 void WebCache::clear()
@@ -63,15 +60,12 @@ void WebCache::clear()
 
 void WebCache::getUsageStats(UsageStats* result)
 {
-    ASSERT(result);
+    DCHECK(result);
 
     MemoryCache* cache = memoryCache();
     if (cache) {
-        result->minDeadCapacity = cache->minDeadCapacity();
-        result->maxDeadCapacity = cache->maxDeadCapacity();
         result->capacity = cache->capacity();
-        result->liveSize = cache->liveSize();
-        result->deadSize = cache->deadSize();
+        result->size = cache->size();
     } else
         memset(result, 0, sizeof(UsageStats));
 }
@@ -86,15 +80,9 @@ void WebCache::getResourceTypeStats(ResourceTypeStats* result)
         ToResourceTypeStat(stats.scripts, result->scripts);
         ToResourceTypeStat(stats.xslStyleSheets, result->xslStyleSheets);
         ToResourceTypeStat(stats.fonts, result->fonts);
+        ToResourceTypeStat(stats.other, result->other);
     } else
         memset(result, 0, sizeof(WebCache::ResourceTypeStats));
 }
 
-void WebCache::pruneAll()
-{
-    MemoryCache* cache = memoryCache();
-    if (cache)
-        cache->pruneAll();
-}
-
-}  // namespace blink
+} // namespace blink

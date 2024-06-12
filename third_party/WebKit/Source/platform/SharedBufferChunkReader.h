@@ -32,6 +32,8 @@
 #define SharedBufferChunkReader_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
@@ -39,10 +41,15 @@ namespace blink {
 
 class SharedBuffer;
 
-class PLATFORM_EXPORT SharedBufferChunkReader {
+class PLATFORM_EXPORT SharedBufferChunkReader final {
+    DISALLOW_NEW();
+    WTF_MAKE_NONCOPYABLE(SharedBufferChunkReader);
+
 public:
-    SharedBufferChunkReader(SharedBuffer*, const Vector<char>& separator);
-    SharedBufferChunkReader(SharedBuffer*, const char* separator);
+    SharedBufferChunkReader(PassRefPtr<const SharedBuffer>,
+        const Vector<char>& separator);
+    SharedBufferChunkReader(PassRefPtr<const SharedBuffer>,
+        const char* separator);
 
     void setSeparator(const Vector<char>&);
     void setSeparator(const char*);
@@ -53,12 +60,14 @@ public:
     // Returns a null string when the end of the buffer has been reached.
     String nextChunkAsUTF8StringWithLatin1Fallback(bool includeSeparator = false);
 
-    // Reads size bytes at the current location in the buffer, without changing the buffer position.
-    // Returns the number of bytes read. That number might be less than the specified size if the end of the buffer was reached.
+    // Reads size bytes at the current location in the buffer, without changing
+    // the buffer position.
+    // Returns the number of bytes read. That number might be less than the
+    // specified size if the end of the buffer was reached.
     size_t peek(Vector<char>&, size_t);
 
 private:
-    SharedBuffer* m_buffer;
+    RefPtr<const SharedBuffer> m_buffer;
     size_t m_bufferPosition;
     const char* m_segment;
     size_t m_segmentLength;
@@ -68,6 +77,6 @@ private:
     size_t m_separatorIndex;
 };
 
-}
+} // namespace blink
 
 #endif

@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webmidi/MIDIPort.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
@@ -36,24 +35,29 @@
 #include "modules/webmidi/MIDIAccess.h"
 #include "modules/webmidi/MIDIConnectionEvent.h"
 
+using midi::mojom::PortState;
+
 namespace blink {
 
-using PortState = MIDIAccessor::MIDIPortState;
-
-MIDIPort::MIDIPort(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, TypeCode type, const String& version, PortState state)
-    : ActiveDOMObject(access->executionContext())
+MIDIPort::MIDIPort(MIDIAccess* access,
+    const String& id,
+    const String& manufacturer,
+    const String& name,
+    TypeCode type,
+    const String& version,
+    PortState state)
+    : ContextLifecycleObserver(access->getExecutionContext())
     , m_id(id)
     , m_manufacturer(manufacturer)
     , m_name(name)
     , m_type(type)
     , m_version(version)
-    , m_access(access)
+    , m_access(this, access)
     , m_connection(ConnectionStateClosed)
 {
-    ASSERT(access);
-    ASSERT(type == TypeInput || type == TypeOutput);
-    ASSERT(state == PortState::MIDIPortStateDisconnected
-        || state == PortState::MIDIPortStateConnected);
+    DCHECK(access);
+    DCHECK(type == TypeInput || type == TypeOutput);
+    DCHECK(state == PortState::DISCONNECTED || state == PortState::CONNECTED);
     m_state = state;
 }
 
@@ -73,9 +77,12 @@ String MIDIPort::connection() const
 String MIDIPort::state() const
 {
     switch (m_state) {
-    case PortState::MIDIPortStateDisconnected:
+    case PortState::DISCONNECTED:
         return "disconnected";
-    case PortState::MIDIPortStateConnected:
+    case PortState::CONNECTED:
+        return "connected";
+    case PortState::OPENED:
+        NOTREACHED();
         return "connected";
     }
     return emptyString();
@@ -111,40 +118,43 @@ ScriptPromise MIDIPort::close(ScriptState* scriptState)
 void MIDIPort::setState(PortState state)
 {
     switch (state) {
-    case PortState::MIDIPortStateDisconnected:
+    case PortState::DISCONNECTED:
         switch (m_connection) {
         case ConnectionStateOpen:
         case ConnectionStatePending:
-            setStates(PortState::MIDIPortStateDisconnected, ConnectionStatePending);
+            setStates(PortState::DISCONNECTED, ConnectionStatePending);
             break;
         case ConnectionStateClosed:
             // Will do nothing.
-            setStates(PortState::MIDIPortStateDisconnected, ConnectionStateClosed);
+            setStates(PortState::DISCONNECTED, ConnectionStateClosed);
             break;
         }
         break;
-    case PortState::MIDIPortStateConnected:
+    case PortState::CONNECTED:
         switch (m_connection) {
         case ConnectionStateOpen:
-            ASSERT_NOT_REACHED();
+            NOTREACHED();
             break;
         case ConnectionStatePending:
             // We do not use |setStates| in order not to dispatch events twice.
             // |open| calls |setStates|.
-            m_state = PortState::MIDIPortStateConnected;
+            m_state = PortState::CONNECTED;
             open();
             break;
         case ConnectionStateClosed:
-            setStates(PortState::MIDIPortStateConnected, ConnectionStateClosed);
+            setStates(PortState::CONNECTED, ConnectionStateClosed);
             break;
         }
+        break;
+    case PortState::OPENED:
+        NOTREACHED();
         break;
     }
 }
 
-ExecutionContext* MIDIPort::executionContext() const
+ExecutionContext* MIDIPort::getExecutionContext() const
 {
-    return m_access->executionContext();
+    return m_access->getExecutionContext();
 }
 
 bool MIDIPort::hasPendingActivity() const
@@ -154,7 +164,7 @@ bool MIDIPort::hasPendingActivity() const
     return m_connection != ConnectionStateClosed;
 }
 
-void MIDIPort::stop()
+void MIDIPort::contextDestroyed(ExecutionContext*)
 {
     // Should be "closed" to assume there are no pending activities.
     m_connection = ConnectionStateClosed;
@@ -163,37 +173,51 @@ void MIDIPort::stop()
 DEFINE_TRACE(MIDIPort)
 {
     visitor->trace(m_access);
-    RefCountedGarbageCollectedEventTargetWithInlineData<MIDIPort>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
+}
+
+DEFINE_TRACE_WRAPPERS(MIDIPort)
+{
+    visitor->traceWrappers(m_access);
+    EventTargetWithInlineData::traceWrappers(visitor);
 }
 
 void MIDIPort::open()
 {
     switch (m_state) {
-    case PortState::MIDIPortStateDisconnected:
+    case PortState::DISCONNECTED:
         setStates(m_state, ConnectionStatePending);
         break;
-    case PortState::MIDIPortStateConnected:
+    case PortState::CONNECTED:
         // TODO(toyoshim): Add blink API to perform a real open and close
         // operation.
         setStates(m_state, ConnectionStateOpen);
+        break;
+    case PortState::OPENED:
+        NOTREACHED();
         break;
     }
 }
 
 ScriptPromise MIDIPort::accept(ScriptState* scriptState)
 {
-    return ScriptPromise::cast(scriptState, toV8(this, scriptState->context()->Global(), scriptState->isolate()));
+    return ScriptPromise::cast(
+        scriptState,
+        ToV8(this, scriptState->context()->Global(), scriptState->isolate()));
 }
 
-ScriptPromise MIDIPort::reject(ScriptState* scriptState, ExceptionCode ec, const String& message)
+ScriptPromise MIDIPort::reject(ScriptState* scriptState,
+    ExceptionCode ec,
+    const String& message)
 {
-    return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(ec, message));
+    return ScriptPromise::rejectWithDOMException(
+        scriptState, DOMException::create(ec, message));
 }
 
 void MIDIPort::setStates(PortState state, ConnectionState connection)
 {
-    ASSERT(state != PortState::MIDIPortStateDisconnected || connection != ConnectionStateOpen);
+    DCHECK(state != PortState::DISCONNECTED || connection != ConnectionStateOpen);
     if (m_state == state && m_connection == connection)
         return;
     m_state = state;

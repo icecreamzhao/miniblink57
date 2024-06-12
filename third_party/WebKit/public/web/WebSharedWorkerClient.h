@@ -32,6 +32,7 @@
 #define WebSharedWorkerClient_h
 
 #include "public/platform/WebMessagePortChannel.h"
+#include "public/web/WebDevToolsAgentClient.h"
 
 namespace blink {
 
@@ -42,7 +43,6 @@ class WebNotificationPresenter;
 class WebSecurityOrigin;
 class WebServiceWorkerNetworkProvider;
 class WebString;
-class WebWorker;
 class WebWorkerContentSettingsClientProxy;
 
 // Provides an interface back to the in-page script object for a worker.
@@ -66,19 +66,37 @@ public:
 
     // Called on the main webkit thread in the worker process during
     // initialization.
-    virtual WebApplicationCacheHost* createApplicationCacheHost(WebApplicationCacheHostClient*) = 0;
+    virtual WebApplicationCacheHost* createApplicationCacheHost(
+        WebApplicationCacheHostClient*)
+        = 0;
 
     // Called on the main thread during initialization.
     // WebWorkerContentSettingsClientProxy should not retain the given
     // WebSecurityOrigin, as the proxy instance is passed to worker thread
     // while WebSecurityOrigin is not thread safe.
-    virtual WebWorkerContentSettingsClientProxy* createWorkerContentSettingsClientProxy(const WebSecurityOrigin& origin) { return nullptr; }
+    virtual WebWorkerContentSettingsClientProxy*
+    createWorkerContentSettingsClientProxy(const WebSecurityOrigin& origin)
+    {
+        return nullptr;
+    }
 
     // Called on the main thread during initialization.
     // Ownership of the returned object is transferred to the caller.
-    virtual WebServiceWorkerNetworkProvider* createServiceWorkerNetworkProvider(WebDataSource*) { return nullptr; }
+    virtual WebServiceWorkerNetworkProvider* createServiceWorkerNetworkProvider(
+        WebDataSource*)
+    {
+        return nullptr;
+    }
 
-    virtual void sendDevToolsMessage(int callId, const WebString& message, const WebString& state) { }
+    virtual void sendDevToolsMessage(int sessionId,
+        int callId,
+        const WebString& message,
+        const WebString& state) { }
+    virtual WebDevToolsAgentClient::WebKitClientMessageLoop*
+    createDevToolsMessageLoop()
+    {
+        return nullptr;
+    }
 };
 
 } // namespace blink

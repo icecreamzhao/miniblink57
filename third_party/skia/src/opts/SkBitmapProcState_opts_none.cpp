@@ -5,8 +5,8 @@
  * found in the LICENSE file.
  */
 
-#include "SkBitmapScaler.h"
 #include "SkBitmapProcState.h"
+#include "SkBitmapScaler.h"
 
 /*  A platform may optionally overwrite any of these with accelerated
     versions. On input, these will already have valid function pointers,
@@ -21,7 +21,7 @@
  */
 
 // empty implementation just uses default supplied function pointers
-void SkBitmapProcState::platformProcs() {}
+void SkBitmapProcState::platformProcs() { }
 
 // empty implementation just uses default supplied function pointers
-void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) {}
+void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) { }

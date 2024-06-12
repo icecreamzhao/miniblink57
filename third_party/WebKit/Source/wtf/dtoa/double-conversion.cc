@@ -25,11 +25,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "config.h"
-
-#include <limits.h>
-#include <math.h>
-
 #include "double-conversion.h"
 
 #include "bignum-dtoa.h"
@@ -38,29 +33,33 @@
 #include "fixed-dtoa.h"
 #include "strtod.h"
 #include "utils.h"
+#include <limits.h>
+#include <math.h>
 
 namespace WTF {
 
 namespace double_conversion {
 
-    const DoubleToStringConverter& DoubleToStringConverter::EcmaScriptConverter() {
+    const DoubleToStringConverter& DoubleToStringConverter::EcmaScriptConverter()
+    {
         int flags = UNIQUE_ZERO | EMIT_POSITIVE_EXPONENT_SIGN;
         static DoubleToStringConverter converter(flags,
-                                                 "Infinity",
-                                                 "NaN",
-                                                 'e',
-                                                 -6, 21,
-                                                 6, 0);
+            "Infinity",
+            "NaN",
+            'e',
+            -6, 21,
+            6, 0);
         return converter;
     }
 
-
     bool DoubleToStringConverter::HandleSpecialValues(
-                                                      double value,
-                                                      StringBuilder* result_builder) const {
+        double value,
+        StringBuilder* result_builder) const
+    {
         Double double_inspect(value);
         if (double_inspect.IsInfinite()) {
-            if (infinity_symbol_ == NULL) return false;
+            if (infinity_symbol_ == NULL)
+                return false;
             if (value < 0) {
                 result_builder->AddCharacter('-');
             }
@@ -68,24 +67,25 @@ namespace double_conversion {
             return true;
         }
         if (double_inspect.IsNan()) {
-            if (nan_symbol_ == NULL) return false;
+            if (nan_symbol_ == NULL)
+                return false;
             result_builder->AddString(nan_symbol_);
             return true;
         }
         return false;
     }
 
-
     void DoubleToStringConverter::CreateExponentialRepresentation(
-                                                                  const char* decimal_digits,
-                                                                  int length,
-                                                                  int exponent,
-                                                                  StringBuilder* result_builder) const {
+        const char* decimal_digits,
+        int length,
+        int exponent,
+        StringBuilder* result_builder) const
+    {
         ASSERT(length != 0);
         result_builder->AddCharacter(decimal_digits[0]);
         if (length != 1) {
             result_builder->AddCharacter('.');
-            result_builder->AddSubstring(&decimal_digits[1], length-1);
+            result_builder->AddSubstring(&decimal_digits[1], length - 1);
         }
         result_builder->AddCharacter(exponent_character_);
         if (exponent < 0) {
@@ -110,16 +110,16 @@ namespace double_conversion {
             exponent /= 10;
         }
         result_builder->AddSubstring(&buffer[first_char_pos],
-                                     kMaxExponentLength - first_char_pos);
+            kMaxExponentLength - first_char_pos);
     }
 
-
     void DoubleToStringConverter::CreateDecimalRepresentation(
-                                                              const char* decimal_digits,
-                                                              int length,
-                                                              int decimal_point,
-                                                              int digits_after_point,
-                                                              StringBuilder* result_builder) const {
+        const char* decimal_digits,
+        int length,
+        int decimal_point,
+        int digits_after_point,
+        StringBuilder* result_builder) const
+    {
         // Create a representation that is padded with zeros if needed.
         if (decimal_point <= 0) {
             // "0.00000decimal_rep".
@@ -147,7 +147,7 @@ namespace double_conversion {
             result_builder->AddCharacter('.');
             ASSERT(length - decimal_point <= digits_after_point);
             result_builder->AddSubstring(&decimal_digits[decimal_point],
-                                         length - decimal_point);
+                length - decimal_point);
             int remaining_digits = digits_after_point - (length - decimal_point);
             result_builder->AddPadding('0', remaining_digits);
         }
@@ -161,9 +161,9 @@ namespace double_conversion {
         }
     }
 
-
     bool DoubleToStringConverter::ToShortest(double value,
-                                             StringBuilder* result_builder) const {
+        StringBuilder* result_builder) const
+    {
         if (Double(value).IsSpecial()) {
             return HandleSpecialValues(value, result_builder);
         }
@@ -175,7 +175,7 @@ namespace double_conversion {
         int decimal_rep_length;
 
         DoubleToAscii(value, SHORTEST, 0, decimal_rep, kDecimalRepCapacity,
-                      &sign, &decimal_rep_length, &decimal_point);
+            &sign, &decimal_rep_length, &decimal_point);
 
         bool unique_zero = (flags_ & UNIQUE_ZERO) != 0;
         if (sign && (value != 0.0 || !unique_zero)) {
@@ -183,23 +183,22 @@ namespace double_conversion {
         }
 
         int exponent = decimal_point - 1;
-        if ((decimal_in_shortest_low_ <= exponent) &&
-            (exponent < decimal_in_shortest_high_)) {
+        if ((decimal_in_shortest_low_ <= exponent) && (exponent < decimal_in_shortest_high_)) {
             CreateDecimalRepresentation(decimal_rep, decimal_rep_length,
-                                        decimal_point,
-                                        Max(0, decimal_rep_length - decimal_point),
-                                        result_builder);
+                decimal_point,
+                Max(0, decimal_rep_length - decimal_point),
+                result_builder);
         } else {
             CreateExponentialRepresentation(decimal_rep, decimal_rep_length, exponent,
-                                            result_builder);
+                result_builder);
         }
         return true;
     }
 
-
     bool DoubleToStringConverter::ToFixed(double value,
-                                          int requested_digits,
-                                          StringBuilder* result_builder) const {
+        int requested_digits,
+        StringBuilder* result_builder) const
+    {
         ASSERT(kMaxFixedDigitsBeforePoint == 60);
         const double kFirstNonFixed = 1e60;
 
@@ -207,20 +206,21 @@ namespace double_conversion {
             return HandleSpecialValues(value, result_builder);
         }
 
-        if (requested_digits > kMaxFixedDigitsAfterPoint) return false;
-        if (value >= kFirstNonFixed || value <= -kFirstNonFixed) return false;
+        if (requested_digits > kMaxFixedDigitsAfterPoint)
+            return false;
+        if (value >= kFirstNonFixed || value <= -kFirstNonFixed)
+            return false;
 
         // Find a sufficiently precise decimal representation of n.
         int decimal_point;
         bool sign;
         // Add space for the '\0' byte.
-        const int kDecimalRepCapacity =
-        kMaxFixedDigitsBeforePoint + kMaxFixedDigitsAfterPoint + 1;
+        const int kDecimalRepCapacity = kMaxFixedDigitsBeforePoint + kMaxFixedDigitsAfterPoint + 1;
         char decimal_rep[kDecimalRepCapacity];
         int decimal_rep_length;
         DoubleToAscii(value, FIXED, requested_digits,
-                      decimal_rep, kDecimalRepCapacity,
-                      &sign, &decimal_rep_length, &decimal_point);
+            decimal_rep, kDecimalRepCapacity,
+            &sign, &decimal_rep_length, &decimal_point);
 
         bool unique_zero = ((flags_ & UNIQUE_ZERO) != 0);
         if (sign && (value != 0.0 || !unique_zero)) {
@@ -228,21 +228,23 @@ namespace double_conversion {
         }
 
         CreateDecimalRepresentation(decimal_rep, decimal_rep_length, decimal_point,
-                                    requested_digits, result_builder);
+            requested_digits, result_builder);
         return true;
     }
 
-
     bool DoubleToStringConverter::ToExponential(
-                                                double value,
-                                                int requested_digits,
-                                                StringBuilder* result_builder) const {
+        double value,
+        int requested_digits,
+        StringBuilder* result_builder) const
+    {
         if (Double(value).IsSpecial()) {
             return HandleSpecialValues(value, result_builder);
         }
 
-        if (requested_digits < -1) return false;
-        if (requested_digits > kMaxExponentialDigits) return false;
+        if (requested_digits < -1)
+            return false;
+        if (requested_digits > kMaxExponentialDigits)
+            return false;
 
         int decimal_point;
         bool sign;
@@ -254,12 +256,12 @@ namespace double_conversion {
 
         if (requested_digits == -1) {
             DoubleToAscii(value, SHORTEST, 0,
-                          decimal_rep, kDecimalRepCapacity,
-                          &sign, &decimal_rep_length, &decimal_point);
+                decimal_rep, kDecimalRepCapacity,
+                &sign, &decimal_rep_length, &decimal_point);
         } else {
             DoubleToAscii(value, PRECISION, requested_digits + 1,
-                          decimal_rep, kDecimalRepCapacity,
-                          &sign, &decimal_rep_length, &decimal_point);
+                decimal_rep, kDecimalRepCapacity,
+                &sign, &decimal_rep_length, &decimal_point);
             ASSERT(decimal_rep_length <= requested_digits + 1);
 
             for (int i = decimal_rep_length; i < requested_digits + 1; ++i) {
@@ -275,16 +277,16 @@ namespace double_conversion {
 
         int exponent = decimal_point - 1;
         CreateExponentialRepresentation(decimal_rep,
-                                        decimal_rep_length,
-                                        exponent,
-                                        result_builder);
+            decimal_rep_length,
+            exponent,
+            result_builder);
         return true;
     }
 
-
     bool DoubleToStringConverter::ToPrecision(double value,
-                                              int precision,
-                                              StringBuilder* result_builder) const {
+        int precision,
+        StringBuilder* result_builder) const
+    {
         if (Double(value).IsSpecial()) {
             return HandleSpecialValues(value, result_builder);
         }
@@ -302,8 +304,8 @@ namespace double_conversion {
         int decimal_rep_length;
 
         DoubleToAscii(value, PRECISION, precision,
-                      decimal_rep, kDecimalRepCapacity,
-                      &sign, &decimal_rep_length, &decimal_point);
+            decimal_rep, kDecimalRepCapacity,
+            &sign, &decimal_rep_length, &decimal_point);
         ASSERT(decimal_rep_length <= precision);
 
         bool unique_zero = ((flags_ & UNIQUE_ZERO) != 0);
@@ -316,50 +318,51 @@ namespace double_conversion {
         int exponent = decimal_point - 1;
 
         int extra_zero = ((flags_ & EMIT_TRAILING_ZERO_AFTER_POINT) != 0) ? 1 : 0;
-        if ((-decimal_point + 1 > max_leading_padding_zeroes_in_precision_mode_) ||
-            (decimal_point - precision + extra_zero >
-             max_trailing_padding_zeroes_in_precision_mode_)) {
-                // Fill buffer to contain 'precision' digits.
-                // Usually the buffer is already at the correct length, but 'DoubleToAscii'
-                // is allowed to return less characters.
-                for (int i = decimal_rep_length; i < precision; ++i) {
-                    decimal_rep[i] = '0';
-                }
-
-                CreateExponentialRepresentation(decimal_rep,
-                                                precision,
-                                                exponent,
-                                                result_builder);
-            } else {
-                CreateDecimalRepresentation(decimal_rep, decimal_rep_length, decimal_point,
-                                            Max(0, precision - decimal_point),
-                                            result_builder);
+        if ((-decimal_point + 1 > max_leading_padding_zeroes_in_precision_mode_) || (decimal_point - precision + extra_zero > max_trailing_padding_zeroes_in_precision_mode_)) {
+            // Fill buffer to contain 'precision' digits.
+            // Usually the buffer is already at the correct length, but 'DoubleToAscii'
+            // is allowed to return less characters.
+            for (int i = decimal_rep_length; i < precision; ++i) {
+                decimal_rep[i] = '0';
             }
+
+            CreateExponentialRepresentation(decimal_rep,
+                precision,
+                exponent,
+                result_builder);
+        } else {
+            CreateDecimalRepresentation(decimal_rep, decimal_rep_length, decimal_point,
+                Max(0, precision - decimal_point),
+                result_builder);
+        }
         return true;
     }
 
-
     static BignumDtoaMode DtoaToBignumDtoaMode(
-                                               DoubleToStringConverter::DtoaMode dtoa_mode) {
+        DoubleToStringConverter::DtoaMode dtoa_mode)
+    {
         switch (dtoa_mode) {
-            case DoubleToStringConverter::SHORTEST:  return BIGNUM_DTOA_SHORTEST;
-            case DoubleToStringConverter::FIXED:     return BIGNUM_DTOA_FIXED;
-            case DoubleToStringConverter::PRECISION: return BIGNUM_DTOA_PRECISION;
-            default:
-                UNREACHABLE();
-                return BIGNUM_DTOA_SHORTEST;  // To silence compiler.
+        case DoubleToStringConverter::SHORTEST:
+            return BIGNUM_DTOA_SHORTEST;
+        case DoubleToStringConverter::FIXED:
+            return BIGNUM_DTOA_FIXED;
+        case DoubleToStringConverter::PRECISION:
+            return BIGNUM_DTOA_PRECISION;
+        default:
+            UNREACHABLE();
+            return BIGNUM_DTOA_SHORTEST; // To silence compiler.
         }
     }
 
-
     void DoubleToStringConverter::DoubleToAscii(double v,
-                                                DtoaMode mode,
-                                                int requested_digits,
-                                                char* buffer,
-                                                int buffer_length,
-                                                bool* sign,
-                                                int* length,
-                                                int* point) {
+        DtoaMode mode,
+        int requested_digits,
+        char* buffer,
+        int buffer_length,
+        bool* sign,
+        int* length,
+        int* point)
+    {
         Vector<char> vector(buffer, buffer_length);
         ASSERT(!Double(v).IsSpecial());
         ASSERT(mode == SHORTEST || requested_digits >= 0);
@@ -387,28 +390,28 @@ namespace double_conversion {
 
         bool fast_worked;
         switch (mode) {
-            case SHORTEST:
-                fast_worked = FastDtoa(v, FAST_DTOA_SHORTEST, 0, vector, length, point);
-                break;
-            case FIXED:
-                fast_worked = FastFixedDtoa(v, requested_digits, vector, length, point);
-                break;
-            case PRECISION:
-                fast_worked = FastDtoa(v, FAST_DTOA_PRECISION, requested_digits,
-                                       vector, length, point);
-                break;
-            default:
-                UNREACHABLE();
-                fast_worked = false;
+        case SHORTEST:
+            fast_worked = FastDtoa(v, FAST_DTOA_SHORTEST, 0, vector, length, point);
+            break;
+        case FIXED:
+            fast_worked = FastFixedDtoa(v, requested_digits, vector, length, point);
+            break;
+        case PRECISION:
+            fast_worked = FastDtoa(v, FAST_DTOA_PRECISION, requested_digits,
+                vector, length, point);
+            break;
+        default:
+            UNREACHABLE();
+            fast_worked = false;
         }
-        if (fast_worked) return;
+        if (fast_worked)
+            return;
 
         // If the fast dtoa didn't succeed use the slower bignum version.
         BignumDtoaMode bignum_mode = DtoaToBignumDtoaMode(mode);
         BignumDtoa(v, bignum_mode, requested_digits, vector, length, point);
         vector[*length] = '\0';
     }
-
 
     // Maximum number of significant digits in decimal representation.
     // The longest possible double in decimal representation is
@@ -419,16 +422,16 @@ namespace double_conversion {
     // we don't need to preserve all the digits.
     const int kMaxSignificantDigits = 772;
 
-
-    static double SignedZero(bool sign) {
+    static double SignedZero(bool sign)
+    {
         return sign ? -0.0 : 0.0;
     }
 
-
     double StringToDoubleConverter::StringToDouble(
-                                                   const char* input,
-                                                   size_t length,
-                                                   size_t* processed_characters_count) {
+        const char* input,
+        size_t length,
+        size_t* processed_characters_count)
+    {
         const char* current = input;
         const char* end = input + length;
 
@@ -441,11 +444,12 @@ namespace double_conversion {
         // 'parsing_done'.
         // 4. 'current' is not dereferenced after the 'parsing_done' label.
         // 5. Code before 'parsing_done' may rely on 'current != end'.
-        if (current == end) return 0.0;
+        if (current == end)
+            return 0.0;
 
         // The longest form of simplified number is: "-<significant digits>.1eXXX\0".
         const int kBufferSize = kMaxSignificantDigits + 10;
-        char buffer[kBufferSize];  // NOLINT: size is known at compile time.
+        char buffer[kBufferSize]; // NOLINT: size is known at compile time.
         int buffer_pos = 0;
 
         // Exponent will be adjusted if insignificant digits of the integer part
@@ -459,7 +463,8 @@ namespace double_conversion {
         if (*current == '+' || *current == '-') {
             sign = (*current == '-');
             ++current;
-            if (current == end) return 0.0;
+            if (current == end)
+                return 0.0;
         }
 
         bool leading_zero = false;
@@ -489,11 +494,12 @@ namespace double_conversion {
                 buffer[buffer_pos++] = static_cast<char>(*current);
                 significant_digits++;
             } else {
-                insignificant_digits++;  // Move the digit into the exponential part.
+                insignificant_digits++; // Move the digit into the exponential part.
                 nonzero_digit_dropped = nonzero_digit_dropped || *current != '0';
             }
             ++current;
-            if (current == end) goto parsing_done;
+            if (current == end)
+                goto parsing_done;
         }
 
         if (*current == '.') {
@@ -515,7 +521,7 @@ namespace double_conversion {
                         *processed_characters_count = current - input;
                         return SignedZero(sign);
                     }
-                    exponent--;  // Move this 0 into the exponent.
+                    exponent--; // Move this 0 into the exponent.
                 }
             }
 
@@ -531,7 +537,8 @@ namespace double_conversion {
                     nonzero_digit_dropped = nonzero_digit_dropped || *current != '0';
                 }
                 ++current;
-                if (current == end) goto parsing_done;
+                if (current == end)
+                    goto parsing_done;
             }
         }
 
@@ -598,9 +605,9 @@ namespace double_conversion {
 
         double converted = Strtod(Vector<const char>(buffer, buffer_pos), exponent);
         *processed_characters_count = current - input;
-        return sign? -converted: converted;
+        return sign ? -converted : converted;
     }
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF

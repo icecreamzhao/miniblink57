@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,41 +6,50 @@
  */
 #include "SkBoundaryPatch.h"
 
-SkBoundaryPatch::SkBoundaryPatch() : fBoundary(NULL) {}
+SkBoundaryPatch::SkBoundaryPatch()
+    : fBoundary(nullptr)
+{
+}
 
-SkBoundaryPatch::~SkBoundaryPatch() {
+SkBoundaryPatch::~SkBoundaryPatch()
+{
     SkSafeUnref(fBoundary);
 }
 
-SkBoundary* SkBoundaryPatch::setBoundary(SkBoundary* b) {
+SkBoundary* SkBoundaryPatch::setBoundary(SkBoundary* b)
+{
     SkRefCnt_SafeAssign(fBoundary, b);
     return b;
 }
 
-static SkPoint SkMakePoint(SkScalar x, SkScalar y) {
+static SkPoint SkMakePoint(SkScalar x, SkScalar y)
+{
     SkPoint pt;
     pt.set(x, y);
     return pt;
 }
 
-static SkPoint SkPointInterp(const SkPoint& a, const SkPoint& b, SkScalar t) {
+static SkPoint SkPointInterp(const SkPoint& a, const SkPoint& b, SkScalar t)
+{
     return SkMakePoint(SkScalarInterp(a.fX, b.fX, t),
-                       SkScalarInterp(a.fY, b.fY, t));
+        SkScalarInterp(a.fY, b.fY, t));
 }
 
-SkPoint SkBoundaryPatch::eval(SkScalar unitU, SkScalar unitV) {
+SkPoint SkBoundaryPatch::eval(SkScalar unitU, SkScalar unitV)
+{
     SkBoundary* b = fBoundary;
     SkPoint u = SkPointInterp(b->eval(SkBoundary::kLeft, SK_Scalar1 - unitV),
-                              b->eval(SkBoundary::kRight, unitV),
-                              unitU);
+        b->eval(SkBoundary::kRight, unitV),
+        unitU);
     SkPoint v = SkPointInterp(b->eval(SkBoundary::kTop, unitU),
-                              b->eval(SkBoundary::kBottom, SK_Scalar1 - unitU),
-                              unitV);
+        b->eval(SkBoundary::kBottom, SK_Scalar1 - unitU),
+        unitV);
     return SkMakePoint(SkScalarAve(u.fX, v.fX),
-                       SkScalarAve(u.fY, v.fY));
+        SkScalarAve(u.fY, v.fY));
 }
 
-bool SkBoundaryPatch::evalPatch(SkPoint verts[], int rows, int cols) {
+bool SkBoundaryPatch::evalPatch(SkPoint verts[], int rows, int cols)
+{
     if (rows < 2 || cols < 2) {
         return false;
     }
@@ -62,18 +70,20 @@ bool SkBoundaryPatch::evalPatch(SkPoint verts[], int rows, int cols) {
 
 #include "SkGeometry.h"
 
-SkPoint SkLineBoundary::eval(Edge e, SkScalar t) {
+SkPoint SkLineBoundary::eval(Edge e, SkScalar t)
+{
     SkASSERT((unsigned)e < 4);
     return SkPointInterp(fPts[e], fPts[(e + 1) & 3], t);
 }
 
-SkPoint SkCubicBoundary::eval(Edge e, SkScalar t) {
+SkPoint SkCubicBoundary::eval(Edge e, SkScalar t)
+{
     SkASSERT((unsigned)e < 4);
 
     // ensure our 4th cubic wraps to the start of the first
     fPts[12] = fPts[0];
 
     SkPoint loc;
-    SkEvalCubicAt(&fPts[e * 3], t, &loc, NULL, NULL);
+    SkEvalCubicAt(&fPts[e * 3], t, &loc, nullptr, nullptr);
     return loc;
 }

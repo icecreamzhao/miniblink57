@@ -15,24 +15,25 @@
 
 namespace v8 {
 namespace internal {
-namespace torque {
+    namespace torque {
 
-class FileVisitor {
- public:
-  TypeVector GetTypeVector(const std::vector<TypeExpression*>& v) {
-    TypeVector result;
-    for (TypeExpression* t : v) {
-      result.push_back(Declarations::GetType(t));
-    }
-    return result;
-  }
+        class FileVisitor {
+        public:
+            TypeVector GetTypeVector(const std::vector<TypeExpression*>& v)
+            {
+                TypeVector result;
+                for (TypeExpression* t : v) {
+                    result.push_back(Declarations::GetType(t));
+                }
+                return result;
+            }
 
- protected:
-  Signature MakeSignature(const CallableNodeSignature* signature);
-};
+        protected:
+            Signature MakeSignature(const CallableNodeSignature* signature);
+        };
 
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+    } // namespace torque
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TORQUE_FILE_VISITOR_H_
+#endif // V8_TORQUE_FILE_VISITOR_H_

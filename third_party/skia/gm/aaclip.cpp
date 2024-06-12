@@ -5,15 +5,16 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
+#include "gm.h"
 
 /** Draw a 2px border around the target, then red behind the target;
     set the clip to match the target, then draw >> the target in blue.
 */
 
-static void draw(SkCanvas* canvas, SkRect& target, int x, int y) {
+static void draw(SkCanvas* canvas, SkRect& target, int x, int y)
+{
     SkPaint borderPaint;
     borderPaint.setColor(SkColorSetRGB(0x0, 0xDD, 0x0));
     borderPaint.setAntiAlias(true);
@@ -36,22 +37,26 @@ static void draw(SkCanvas* canvas, SkRect& target, int x, int y) {
     canvas->restore();
 }
 
-static void draw_square(SkCanvas* canvas, int x, int y) {
-    SkRect target (SkRect::MakeWH(10 * SK_Scalar1, 10 * SK_Scalar1));
+static void draw_square(SkCanvas* canvas, int x, int y)
+{
+    SkRect target(SkRect::MakeWH(10 * SK_Scalar1, 10 * SK_Scalar1));
     draw(canvas, target, x, y);
 }
 
-static void draw_column(SkCanvas* canvas, int x, int y) {
-    SkRect target (SkRect::MakeWH(1 * SK_Scalar1, 10 * SK_Scalar1));
+static void draw_column(SkCanvas* canvas, int x, int y)
+{
+    SkRect target(SkRect::MakeWH(1 * SK_Scalar1, 10 * SK_Scalar1));
     draw(canvas, target, x, y);
 }
 
-static void draw_bar(SkCanvas* canvas, int x, int y) {
-    SkRect target (SkRect::MakeWH(10 * SK_Scalar1, 1 * SK_Scalar1));
+static void draw_bar(SkCanvas* canvas, int x, int y)
+{
+    SkRect target(SkRect::MakeWH(10 * SK_Scalar1, 1 * SK_Scalar1));
     draw(canvas, target, x, y);
 }
 
-static void draw_rect_tests(SkCanvas* canvas) {
+static void draw_rect_tests(SkCanvas* canvas)
+{
     draw_square(canvas, 10, 10);
     draw_column(canvas, 30, 10);
     draw_bar(canvas, 10, 30);
@@ -66,20 +71,23 @@ static void draw_rect_tests(SkCanvas* canvas) {
 
 class AAClipGM : public skiagm::GM {
 public:
-    AAClipGM() {
-
+    AAClipGM()
+    {
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("aaclip");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(240, 120);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         // Initial pixel-boundary-aligned draw
         draw_rect_tests(canvas);
 
@@ -105,25 +113,27 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-DEF_GM( return SkNEW(AAClipGM); )
+DEF_GM(return new AAClipGM;)
 
 /////////////////////////////////////////////////////////////////////////
 
 #ifdef SK_BUILD_FOR_MAC
 
-static SkCanvas* make_canvas(const SkBitmap& bm) {
+static SkCanvas* make_canvas(const SkBitmap& bm)
+{
     const SkImageInfo& info = bm.info();
     if (info.bytesPerPixel() == 4) {
         return SkCanvas::NewRasterDirectN32(info.width(), info.height(),
-                                            (SkPMColor*)bm.getPixels(),
-                                            bm.rowBytes());
+            (SkPMColor*)bm.getPixels(),
+            bm.rowBytes());
     } else {
-        return SkNEW_ARGS(SkCanvas, (bm));
+        return new SkCanvas(bm);
     }
 }
 
 #include "SkCGUtils.h"
-static void test_image(SkCanvas* canvas, const SkImageInfo& info) {
+static void test_image(SkCanvas* canvas, const SkImageInfo& info)
+{
     SkBitmap bm;
     bm.allocPixels(info);
 
@@ -140,7 +150,7 @@ static void test_image(SkCanvas* canvas, const SkImageInfo& info) {
     newc->drawCircle(50, 50, 49, paint);
     canvas->drawBitmap(bm, 10, 10);
 
-    CGImageRef image = SkCreateCGImageRefWithColorspace(bm, NULL);
+    CGImageRef image = SkCreateCGImageRefWithColorspace(bm, nullptr);
 
     SkBitmap bm2;
     SkCreateBitmapFromCGImage(&bm2, image);
@@ -151,18 +161,21 @@ static void test_image(SkCanvas* canvas, const SkImageInfo& info) {
 
 class CGImageGM : public skiagm::GM {
 public:
-    CGImageGM() {}
+    CGImageGM() { }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("cgimage");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(800, 250);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         const struct {
             SkColorType fCT;
             SkAlphaType fAT;
@@ -190,59 +203,65 @@ private:
 };
 
 #if 0 // Disabled pending fix from reed@
-DEF_GM( return SkNEW(CGImageGM); )
+DEF_GM( return new CGImageGM; )
 #endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-// skbug.com/3716
+// https://bug.skia.org/3716
 class ClipCubicGM : public skiagm::GM {
     const SkScalar W = 100;
     const SkScalar H = 240;
 
     SkPath fVPath, fHPath;
+
 public:
-    ClipCubicGM() {
+    ClipCubicGM()
+    {
         fVPath.moveTo(W, 0);
-        fVPath.cubicTo(W, H-10, 0, 10, 0, H);
-    
+        fVPath.cubicTo(W, H - 10, 0, 10, 0, H);
+
         SkMatrix pivot;
-        pivot.setRotate(90, W/2, H/2);
+        pivot.setRotate(90, W / 2, H / 2);
         fVPath.transform(pivot, &fHPath);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("clipcubic");
     }
-    
-    SkISize onISize() override {
+
+    SkISize onISize() override
+    {
         return SkISize::Make(400, 410);
     }
 
-    void doDraw(SkCanvas* canvas, const SkPath& path) {
+    void doDraw(SkCanvas* canvas, const SkPath& path)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
-        
-        paint.setColor(0xFFCCCCCC);
+
+        paint.setColor(sk_tool_utils::color_to_565(0xFFCCCCCC));
         canvas->drawPath(path, paint);
-        
+
         paint.setColor(SK_ColorRED);
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawPath(path, paint);
     }
 
-    void drawAndClip(SkCanvas* canvas, const SkPath& path, SkScalar dx, SkScalar dy) {
+    void drawAndClip(SkCanvas* canvas, const SkPath& path, SkScalar dx, SkScalar dy)
+    {
         SkAutoCanvasRestore acr(canvas, true);
 
-        SkRect r = SkRect::MakeXYWH(0, H/4, W, H/2);
+        SkRect r = SkRect::MakeXYWH(0, H / 4, W, H / 2);
         SkPaint paint;
-        paint.setColor(0xFF8888FF);
+        paint.setColor(sk_tool_utils::color_to_565(0xFF8888FF));
 
         canvas->drawRect(r, paint);
         this->doDraw(canvas, path);
-        
+
         canvas->translate(dx, dy);
 
         canvas->drawRect(r, paint);
@@ -250,15 +269,15 @@ protected:
         this->doDraw(canvas, path);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(80, 10);
         this->drawAndClip(canvas, fVPath, 200, 0);
         canvas->translate(0, 200);
         this->drawAndClip(canvas, fHPath, 200, 0);
     }
-    
+
 private:
     typedef skiagm::GM INHERITED;
 };
-DEF_GM( return SkNEW(ClipCubicGM); )
-
+DEF_GM(return new ClipCubicGM;)

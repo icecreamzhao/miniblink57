@@ -23,10 +23,9 @@
 
 #ifdef U_HIDE_OBSOLETE_API
 
-#    if U_DISABLE_RENAMING
-#    else
-#    endif /* U_DISABLE_RENAMING */
+#if U_DISABLE_RENAMING
+#else
+#endif /* U_DISABLE_RENAMING */
 
 #endif /* U_HIDE_OBSOLETE_API */
 #endif /* UOBSLETE_H */
-

@@ -28,29 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
 
-#include "core/dom/DOMError.h"
-#include "core/dom/ExceptionCode.h"
+#include "modules/quota/DOMError.h"
 
 namespace blink {
 
-DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(StorageUsageCallback* usageCallback, StorageErrorCallback* errorCallback)
+DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(
+    StorageUsageCallback* usageCallback,
+    StorageErrorCallback* errorCallback)
     : m_usageCallback(usageCallback)
     , m_errorCallback(errorCallback)
 {
 }
 
-DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(StorageQuotaCallback* quotaCallback, StorageErrorCallback* errorCallback)
+DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(
+    StorageQuotaCallback* quotaCallback,
+    StorageErrorCallback* errorCallback)
     : m_quotaCallback(quotaCallback)
     , m_errorCallback(errorCallback)
 {
 }
 
-DeprecatedStorageQuotaCallbacksImpl::~DeprecatedStorageQuotaCallbacksImpl()
-{
-}
+DeprecatedStorageQuotaCallbacksImpl::~DeprecatedStorageQuotaCallbacksImpl() { }
 
 DEFINE_TRACE(DeprecatedStorageQuotaCallbacksImpl)
 {
@@ -60,13 +60,17 @@ DEFINE_TRACE(DeprecatedStorageQuotaCallbacksImpl)
     StorageQuotaCallbacks::trace(visitor);
 }
 
-void DeprecatedStorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes)
+void DeprecatedStorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(
+    unsigned long long usageInBytes,
+    unsigned long long quotaInBytes)
 {
     if (m_usageCallback)
         m_usageCallback->handleEvent(usageInBytes, quotaInBytes);
 }
 
-void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes)
+void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(
+    unsigned long long usageInBytes,
+    unsigned long long grantedQuotaInBytes)
 {
     if (m_quotaCallback)
         m_quotaCallback->handleEvent(grantedQuotaInBytes);
@@ -75,7 +79,8 @@ void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(unsigned long lon
 void DeprecatedStorageQuotaCallbacksImpl::didFail(WebStorageQuotaError error)
 {
     if (m_errorCallback)
-        m_errorCallback->handleEvent(DOMError::create(static_cast<ExceptionCode>(error)));
+        m_errorCallback->handleEvent(
+            DOMError::create(static_cast<ExceptionCode>(error)));
 }
 
 } // namespace blink

@@ -24,12 +24,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/DOMURLUtils.h"
 
+#include "bindings/core/v8/ExceptionState.h"
 #include "platform/weborigin/KnownPorts.h"
 
 namespace blink {
+
+DOMURLUtils::~DOMURLUtils() { }
 
 void DOMURLUtils::setHref(const String& value)
 {
@@ -118,6 +120,12 @@ void DOMURLUtils::setPathname(const String& value)
 
 void DOMURLUtils::setSearch(const String& value)
 {
+    setSearchInternal(value);
+}
+
+void DOMURLUtils::setSearchInternal(const String& value)
+{
+    DCHECK(!m_isInUpdate);
     KURL kurl = url();
     if (!kurl.isValid())
         return;
@@ -142,7 +150,8 @@ void DOMURLUtils::setHash(const String& value)
     // FIXME: have KURL handle the clearing of the fragment component
     // on the same input.
     if (value[0] == '#')
-        kurl.setFragmentIdentifier(value.length() == 1 ? String() : value.substring(1));
+        kurl.setFragmentIdentifier(value.length() == 1 ? String()
+                                                       : value.substring(1));
     else
         kurl.setFragmentIdentifier(value.isEmpty() ? String() : value);
 

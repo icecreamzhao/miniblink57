@@ -11,10 +11,9 @@
 namespace ots {
 
 struct OpenTypeVHEA {
-  OpenTypeMetricsHeader header;
+    OpenTypeMetricsHeader header;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_VHEA_H_
-
+#endif // OTS_VHEA_H_

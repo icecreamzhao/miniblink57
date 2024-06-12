@@ -23,14 +23,11 @@
  * DAMAGE.
  */
 
-#include "config.h"
 #include "modules/gamepad/GamepadList.h"
 
 namespace blink {
 
-GamepadList::GamepadList()
-{
-}
+GamepadList::GamepadList() { }
 
 void GamepadList::set(unsigned index, Gamepad* gamepad)
 {

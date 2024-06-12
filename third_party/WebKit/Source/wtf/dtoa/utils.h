@@ -44,9 +44,7 @@
 // the output of the division with the expected result. (Inlining must be
 // disabled.)
 // On Linux,x86 89255e-22 != Div_double(89255.0/1e22)
-#if defined(_M_X64) || defined(__x86_64__) || \
-defined(__ARMEL__) || defined(__aarch64__) || \
-defined(__MIPSEL__)
+#if defined(_M_X64) || defined(__x86_64__) || defined(__ARMEL__) || defined(__aarch64__) || defined(__MIPSEL__)
 #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
 #elif defined(_M_IX86) || defined(__i386__)
 #if defined(_WIN32)
@@ -54,18 +52,17 @@ defined(__MIPSEL__)
 #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
 #else
 #undef DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS
-#endif  // _WIN32
+#endif // _WIN32
 #else
 #error Target architecture was not detected as supported by Double-Conversion.
 #endif
-
 
 #if defined(_WIN32) && !defined(__MINGW32__)
 
 typedef signed char int8_t;
 typedef unsigned char uint8_t;
-typedef short int16_t;  // NOLINT
-typedef unsigned short uint16_t;  // NOLINT
+typedef short int16_t; // NOLINT
+typedef unsigned short uint16_t; // NOLINT
 typedef int int32_t;
 typedef unsigned int uint32_t;
 typedef __int64 int64_t;
@@ -83,21 +80,19 @@ typedef unsigned __int64 uint64_t;
 //      write UINT64_2PART_C(0x12345678,90123456);
 #define UINT64_2PART_C(a, b) (((static_cast<uint64_t>(a) << 32) + 0x##b##u))
 
-
 // The expression ARRAY_SIZE(a) is a compile-time constant of type
 // size_t which represents the number of elements of the given
 // array. You should only use ARRAY_SIZE on statically allocated
 // arrays.
-#define ARRAY_SIZE(a)                                   \
-((sizeof(a) / sizeof(*(a))) /                         \
-static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+#define ARRAY_SIZE(a) \
+    ((sizeof(a) / sizeof(*(a))) / static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
 // A macro to disallow the evil copy constructor and operator= functions
 // This should be used in the private: declarations for a class
 #ifndef DISALLOW_COPY_AND_ASSIGN
-#define DISALLOW_COPY_AND_ASSIGN(TypeName)      \
-TypeName(const TypeName&);                    \
-void operator=(const TypeName&)
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+    TypeName(const TypeName&);             \
+    void operator=(const TypeName&)
 #endif // DISALLOW_COPY_AND_ASSIGN
 
 // A macro to disallow all the implicit constructors, namely the
@@ -107,8 +102,8 @@ void operator=(const TypeName&)
 // that wants to prevent anyone from instantiating it. This is
 // especially useful for classes containing only static methods.
 #define DISALLOW_IMPLICIT_CONSTRUCTORS(TypeName) \
-TypeName() = delete;                             \
-DISALLOW_COPY_AND_ASSIGN(TypeName)
+    TypeName() = delete;                         \
+    DISALLOW_COPY_AND_ASSIGN(TypeName)
 
 namespace WTF {
 
@@ -118,19 +113,20 @@ namespace double_conversion {
 
     // Returns the maximum of the two parameters.
     template <typename T>
-    static T Max(T a, T b) {
+    static T Max(T a, T b)
+    {
         return a < b ? b : a;
     }
 
-
     // Returns the minimum of the two parameters.
     template <typename T>
-    static T Min(T a, T b) {
+    static T Min(T a, T b)
+    {
         return a < b ? a : b;
     }
 
-
-    inline int StrLength(const char* string) {
+    inline int StrLength(const char* string)
+    {
         size_t length = strlen(string);
         ASSERT(length == static_cast<size_t>(static_cast<int>(length)));
         return static_cast<int>(length);
@@ -140,14 +136,22 @@ namespace double_conversion {
     template <typename T>
     class Vector {
     public:
-        Vector() : start_(NULL), length_(0) {}
-        Vector(T* data, int length) : start_(data), length_(length) {
+        Vector()
+            : start_(NULL)
+            , length_(0)
+        {
+        }
+        Vector(T* data, int length)
+            : start_(data)
+            , length_(length)
+        {
             ASSERT(length == 0 || (length > 0 && data != NULL));
         }
 
         // Returns a vector using the same backing storage as this one,
         // spanning from and including 'from', to but not including 'to'.
-        Vector<T> SubVector(int from, int to) {
+        Vector<T> SubVector(int from, int to)
+        {
             ASSERT(to <= length_);
             ASSERT(from < to);
             ASSERT(0 <= from);
@@ -163,9 +167,10 @@ namespace double_conversion {
         // Returns the pointer to the start of the data in the vector.
         T* start() const { return start_; }
 
-        // Access individual vector elements - checks bounds in debug mode.
-        T& operator[](int index) const {
-            ASSERT(0 <= index && index < length_);
+        // Access individual vector elements.
+        T& operator[](int index) const
+        {
+            RELEASE_ASSERT(0 <= index && index < length_);
             return start_[index];
         }
 
@@ -178,21 +183,28 @@ namespace double_conversion {
         int length_;
     };
 
-
     // Helper class for building result strings in a character buffer. The
     // purpose of the class is to use safe operations that checks the
     // buffer bounds on all operations in debug mode.
     class StringBuilder {
     public:
         StringBuilder(char* buffer, int size)
-        : buffer_(buffer, size), position_(0) { }
+            : buffer_(buffer, size)
+            , position_(0)
+        {
+        }
 
-        ~StringBuilder() { if (!is_finalized()) Finalize(); }
+        ~StringBuilder()
+        {
+            if (!is_finalized())
+                Finalize();
+        }
 
         int size() const { return buffer_.length(); }
 
         // Get the current position in the builder.
-        int position() const {
+        int position() const
+        {
             ASSERT(!is_finalized());
             return position_;
         }
@@ -211,7 +223,8 @@ namespace double_conversion {
         // Add a single character to the builder. It is not allowed to add
         // 0-characters; use the Finalize() method to terminate the string
         // instead.
-        void AddCharacter(char c) {
+        void AddCharacter(char c)
+        {
             ASSERT(c != '\0');
             ASSERT(!is_finalized() && position_ < buffer_.length());
             buffer_[position_++] = c;
@@ -219,30 +232,33 @@ namespace double_conversion {
 
         // Add an entire string to the builder. Uses strlen() internally to
         // compute the length of the input string.
-        void AddString(const char* s) {
+        void AddString(const char* s)
+        {
             AddSubstring(s, StrLength(s));
         }
 
         // Add the first 'n' characters of the given string 's' to the
         // builder. The input string must have enough characters.
-        void AddSubstring(const char* s, int n) {
+        void AddSubstring(const char* s, int n)
+        {
             ASSERT(!is_finalized() && position_ + n < buffer_.length());
             ASSERT_WITH_SECURITY_IMPLICATION(static_cast<size_t>(n) <= strlen(s));
             memcpy(&buffer_[position_], s, n * kCharSize);
             position_ += n;
         }
 
-
         // Add character padding to the builder. If count is non-positive,
         // nothing is added to the builder.
-        void AddPadding(char c, int count) {
+        void AddPadding(char c, int count)
+        {
             for (int i = 0; i < count; i++) {
                 AddCharacter(c);
             }
         }
 
         // Finalize the string by 0-terminating it and returning the buffer.
-        char* Finalize() {
+        char* Finalize()
+        {
             ASSERT(!is_finalized() && position_ < buffer_.length());
             buffer_[position_] = '\0';
             // Make sure nobody managed to add a 0-character to the
@@ -287,7 +303,8 @@ namespace double_conversion {
     // enough that it can no longer see that you have cast one pointer type to
     // another thus avoiding the warning.
     template <class Dest, class Source>
-    inline Dest BitCast(const Source& source) {
+    inline Dest BitCast(const Source& source)
+    {
         // Compile time assertion: sizeof(Dest) == sizeof(Source)
         // A compile error here means your Dest and Source have different sizes.
         static_assert(sizeof(Dest) == sizeof(Source), "sizes should be equal");
@@ -298,12 +315,13 @@ namespace double_conversion {
     }
 
     template <class Dest, class Source>
-    inline Dest BitCast(Source* source) {
+    inline Dest BitCast(Source* source)
+    {
         return BitCast<Dest>(reinterpret_cast<uintptr_t>(source));
     }
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF
 
-#endif  // DOUBLE_CONVERSION_UTILS_H_
+#endif // DOUBLE_CONVERSION_UTILS_H_

@@ -31,34 +31,39 @@
 #ifndef SVGListPropertyTearOffHelper_h
 #define SVGListPropertyTearOffHelper_h
 
-#include "bindings/core/v8/ExceptionState.h"
 #include "core/svg/properties/SVGPropertyTearOff.h"
-#include "wtf/HashMap.h"
 #include "wtf/TypeTraits.h"
 
 namespace blink {
 
-template<typename ItemProperty>
+template <typename ItemProperty>
 class ListItemPropertyTraits {
+    STATIC_ONLY(ListItemPropertyTraits);
+
 public:
     typedef ItemProperty ItemPropertyType;
     typedef typename ItemPropertyType::TearOffType ItemTearOffType;
 
-    static PassRefPtrWillBeRawPtr<ItemPropertyType> getValueForInsertionFromTearOff(PassRefPtrWillBeRawPtr<ItemTearOffType> passNewItem, SVGElement* contextElement, const QualifiedName& attributeName)
+    static ItemPropertyType* getValueForInsertionFromTearOff(
+        ItemTearOffType* newItem,
+        SVGElement* contextElement,
+        const QualifiedName& attributeName)
     {
-        RefPtrWillBeRawPtr<ItemTearOffType> newItem = passNewItem;
-
         // |newItem| is immutable, OR
-        // |newItem| belongs to a SVGElement, but it does not belong to an animated list
-        // (for example: "textElement.x.baseVal.appendItem(rectElement.width.baseVal)")
-        // Spec: If newItem is already in a list, then a new object is created with the same values as newItem and this item is inserted into the list.
+        // |newItem| belongs to a SVGElement, but it does not belong to an animated
+        // list, e.g. "textElement.x.baseVal.appendItem(rectElement.width.baseVal)"
+        // Spec: If newItem is already in a list, then a new object is created with
+        // the same values as newItem and this item is inserted into the list.
         // Otherwise, newItem itself is inserted into the list.
         if (newItem->isImmutable() || newItem->target()->ownerList() || newItem->contextElement()) {
             // We have to copy the incoming |newItem|,
-            // Otherwise we'll end up having two tearoffs that operate on the same SVGProperty. Consider the example below:
-            // SVGRectElements SVGAnimatedLength 'width' property baseVal points to the same tear off object
-            // that's inserted into SVGTextElements SVGAnimatedLengthList 'x'. textElement.x.baseVal.getItem(0).value += 150 would
-            // mutate the rectElement width _and_ the textElement x list. That's obviously wrong, take care of that.
+            // Otherwise we'll end up having two tearoffs that operate on the same
+            // SVGProperty. Consider the example below: SVGRectElements
+            // SVGAnimatedLength 'width' property baseVal points to the same tear off
+            // object that's inserted into SVGTextElements SVGAnimatedLengthList 'x'.
+            // textElement.x.baseVal.getItem(0).value += 150 would mutate the
+            // rectElement width _and_ the textElement x list. That's obviously wrong,
+            // take care of that.
             return newItem->target()->clone();
         }
 
@@ -66,13 +71,17 @@ public:
         return newItem->target();
     }
 
-    static PassRefPtrWillBeRawPtr<ItemTearOffType> createTearOff(PassRefPtrWillBeRawPtr<ItemPropertyType> value, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName)
+    static ItemTearOffType* createTearOff(ItemPropertyType* value,
+        SVGElement* contextElement,
+        PropertyIsAnimValType propertyIsAnimVal,
+        const QualifiedName& attributeName)
     {
-        return ItemTearOffType::create(value, contextElement, propertyIsAnimVal, attributeName);
+        return ItemTearOffType::create(value, contextElement, propertyIsAnimVal,
+            attributeName);
     }
 };
 
-template<typename Derived, typename ListProperty>
+template <typename Derived, typename ListProperty>
 class SVGListPropertyTearOffHelper : public SVGPropertyTearOff<ListProperty> {
 public:
     typedef ListProperty ListPropertyType;
@@ -83,140 +92,139 @@ public:
     // SVG*List DOM interface:
 
     // WebIDL requires "unsigned long" type instead of size_t.
-    unsigned long length()
-    {
-        return toDerived()->target()->length();
-    }
+    unsigned long length() { return toDerived()->target()->length(); }
 
     void clear(ExceptionState& exceptionState)
     {
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return;
         }
-
         toDerived()->target()->clear();
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> initialize(PassRefPtrWillBeRawPtr<ItemTearOffType> passItem, ExceptionState& exceptionState)
+    ItemTearOffType* initialize(ItemTearOffType* item,
+        ExceptionState& exceptionState)
     {
-        RefPtrWillBeRawPtr<ItemTearOffType> item = passItem;
-
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return nullptr;
         }
-
-        ASSERT(item);
-
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->initialize(getValueForInsertionFromTearOff(item));
+        DCHECK(item);
+        ItemPropertyType* value = toDerived()->target()->initialize(
+            getValueForInsertionFromTearOff(item));
         toDerived()->commitChange();
-
-        return createItemTearOff(value.release());
+        return createItemTearOff(value);
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> getItem(unsigned long index, ExceptionState& exceptionState)
+    ItemTearOffType* getItem(unsigned long index,
+        ExceptionState& exceptionState)
     {
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->getItem(index, exceptionState);
-        return createItemTearOff(value.release());
+        ItemPropertyType* value = toDerived()->target()->getItem(index, exceptionState);
+        return createItemTearOff(value);
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> insertItemBefore(PassRefPtrWillBeRawPtr<ItemTearOffType> passItem, unsigned long index, ExceptionState& exceptionState)
+    ItemTearOffType* insertItemBefore(ItemTearOffType* item,
+        unsigned long index,
+        ExceptionState& exceptionState)
     {
-        RefPtrWillBeRawPtr<ItemTearOffType> item = passItem;
-
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return nullptr;
         }
-
-        ASSERT(item);
-
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->insertItemBefore(getValueForInsertionFromTearOff(item), index);
+        DCHECK(item);
+        ItemPropertyType* value = toDerived()->target()->insertItemBefore(
+            getValueForInsertionFromTearOff(item), index);
         toDerived()->commitChange();
-
-        return createItemTearOff(value.release());
+        return createItemTearOff(value);
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> replaceItem(PassRefPtrWillBeRawPtr<ItemTearOffType> passItem, unsigned long index, ExceptionState& exceptionState)
+    ItemTearOffType* replaceItem(ItemTearOffType* item,
+        unsigned long index,
+        ExceptionState& exceptionState)
     {
-        RefPtrWillBeRawPtr<ItemTearOffType> item = passItem;
-
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return nullptr;
         }
-
-        ASSERT(item);
-
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->replaceItem(getValueForInsertionFromTearOff(item), index, exceptionState);
+        DCHECK(item);
+        ItemPropertyType* value = toDerived()->target()->replaceItem(
+            getValueForInsertionFromTearOff(item), index, exceptionState);
         toDerived()->commitChange();
-
-        return createItemTearOff(value.release());
+        return createItemTearOff(value);
     }
 
-    bool anonymousIndexedSetter(unsigned index, PassRefPtrWillBeRawPtr<ItemTearOffType> passItem, ExceptionState& exceptionState)
+    bool anonymousIndexedSetter(unsigned index,
+        ItemTearOffType* item,
+        ExceptionState& exceptionState)
     {
-        replaceItem(passItem, index, exceptionState);
+        replaceItem(item, index, exceptionState);
         return true;
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> removeItem(unsigned long index, ExceptionState& exceptionState)
+    ItemTearOffType* removeItem(unsigned long index,
+        ExceptionState& exceptionState)
     {
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return nullptr;
         }
-
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->removeItem(index, exceptionState);
+        ItemPropertyType* value = toDerived()->target()->removeItem(index, exceptionState);
         toDerived()->commitChange();
-
-        return createItemTearOff(value.release());
+        return createItemTearOff(value);
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> appendItem(PassRefPtrWillBeRawPtr<ItemTearOffType> passItem, ExceptionState& exceptionState)
+    ItemTearOffType* appendItem(ItemTearOffType* item,
+        ExceptionState& exceptionState)
     {
-        RefPtrWillBeRawPtr<ItemTearOffType> item = passItem;
-
         if (toDerived()->isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);
             return nullptr;
         }
-
-        ASSERT(item);
-
-        RefPtrWillBeRawPtr<ItemPropertyType> value = toDerived()->target()->appendItem(getValueForInsertionFromTearOff(item));
+        DCHECK(item);
+        ItemPropertyType* value = toDerived()->target()->appendItem(
+            getValueForInsertionFromTearOff(item));
         toDerived()->commitChange();
-
-        return createItemTearOff(value.release());
+        return createItemTearOff(value);
     }
 
 protected:
-    SVGListPropertyTearOffHelper(PassRefPtrWillBeRawPtr<ListPropertyType> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
-        : SVGPropertyTearOff<ListPropertyType>(target, contextElement, propertyIsAnimVal, attributeName)
+    SVGListPropertyTearOffHelper(
+        ListPropertyType* target,
+        SVGElement* contextElement,
+        PropertyIsAnimValType propertyIsAnimVal,
+        const QualifiedName& attributeName = QualifiedName::null())
+        : SVGPropertyTearOff<ListPropertyType>(target,
+            contextElement,
+            propertyIsAnimVal,
+            attributeName)
     {
     }
 
-    PassRefPtrWillBeRawPtr<ItemPropertyType> getValueForInsertionFromTearOff(PassRefPtrWillBeRawPtr<ItemTearOffType> passNewItem)
+    ItemPropertyType* getValueForInsertionFromTearOff(ItemTearOffType* newItem)
     {
-        return ItemTraits::getValueForInsertionFromTearOff(passNewItem, toDerived()->contextElement(), toDerived()->attributeName());
+        return ItemTraits::getValueForInsertionFromTearOff(
+            newItem, toDerived()->contextElement(), toDerived()->attributeName());
     }
 
-    PassRefPtrWillBeRawPtr<ItemTearOffType> createItemTearOff(PassRefPtrWillBeRawPtr<ItemPropertyType> value)
+    ItemTearOffType* createItemTearOff(ItemPropertyType* value)
     {
         if (!value)
             return nullptr;
 
         if (value->ownerList() == toDerived()->target())
-            return ItemTraits::createTearOff(value, toDerived()->contextElement(), toDerived()->propertyIsAnimVal(), toDerived()->attributeName());
+            return ItemTraits::createTearOff(value, toDerived()->contextElement(),
+                toDerived()->propertyIsAnimVal(),
+                toDerived()->attributeName());
 
-        return ItemTraits::createTearOff(value, 0, PropertyIsNotAnimVal, QualifiedName::null());
+        return ItemTraits::createTearOff(value, 0, PropertyIsNotAnimVal,
+            QualifiedName::null());
     }
 
 private:
     Derived* toDerived() { return static_cast<Derived*>(this); }
 };
 
-}
+} // namespace blink
 
 #endif // SVGListPropertyTearOffHelper_h

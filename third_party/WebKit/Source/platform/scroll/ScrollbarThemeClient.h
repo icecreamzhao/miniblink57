@@ -30,9 +30,7 @@
 #include "platform/geometry/IntPoint.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/IntSize.h"
-#include "platform/graphics/paint/DisplayItemClient.h"
 #include "platform/scroll/ScrollTypes.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -57,11 +55,12 @@ public:
     virtual void invalidate() = 0;
     virtual void invalidateRect(const IntRect&) = 0;
 
-    virtual ScrollbarOverlayStyle scrollbarOverlayStyle() const = 0;
+    virtual ScrollbarOverlayColorTheme getScrollbarOverlayColorTheme() const = 0;
     virtual void getTickmarks(Vector<IntRect>&) const = 0;
     virtual bool isScrollableAreaActive() const = 0;
 
-    virtual IntPoint convertFromContainingWindow(const IntPoint& windowPoint) = 0;
+    virtual IntPoint convertFromRootFrame(
+        const IntPoint& pointInRootFrame) const = 0;
 
     virtual bool isCustomScrollbar() const = 0;
     virtual ScrollbarOrientation orientation() const = 0;
@@ -78,20 +77,15 @@ public:
     virtual ScrollbarPart hoveredPart() const = 0;
 
     virtual void styleChanged() = 0;
+    virtual void setScrollbarsHidden(bool) = 0;
 
     virtual bool enabled() const = 0;
     virtual void setEnabled(bool) = 0;
 
     virtual bool isOverlayScrollbar() const = 0;
 
-    virtual bool isAlphaLocked() const = 0;
-    virtual void setIsAlphaLocked(bool) = 0;
-
     virtual float elasticOverscroll() const = 0;
     virtual void setElasticOverscroll(float) = 0;
-
-    virtual DisplayItemClient displayItemClient() const = 0;
-    virtual String debugName() const = 0;
 
 protected:
     virtual ~ScrollbarThemeClient() { }

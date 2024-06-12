@@ -439,8 +439,9 @@ void _NPN_UnregisterObject(NPObject* npObject)
 
             // Remove the JS references to the object.
             forgetV8ObjectForNPObject(sub_object);
-
+#if ENABLE(ASSERT)
             ASSERT(set->size() < size);
+#endif
         }
         delete set;
         rootObjectMap().remove(npObject);

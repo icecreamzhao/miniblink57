@@ -11,13 +11,14 @@
 namespace v8 {
 namespace internal {
 
-V8_EXPORT_PRIVATE void FlushInstructionCache(void* start, size_t size);
-V8_EXPORT_PRIVATE V8_INLINE void FlushInstructionCache(Address start,
-                                                       size_t size) {
-  return FlushInstructionCache(reinterpret_cast<void*>(start), size);
-}
+    V8_EXPORT_PRIVATE void FlushInstructionCache(void* start, size_t size);
+    V8_EXPORT_PRIVATE V8_INLINE void FlushInstructionCache(Address start,
+        size_t size)
+    {
+        return FlushInstructionCache(reinterpret_cast<void*>(start), size);
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_FLUSH_INSTRUCTION_CACHE_H_
+#endif // V8_FLUSH_INSTRUCTION_CACHE_H_

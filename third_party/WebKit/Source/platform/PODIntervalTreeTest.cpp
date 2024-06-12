@@ -25,15 +25,12 @@
 
 // Tests for the interval tree class.
 
-#include "config.h"
 #include "platform/PODIntervalTree.h"
 
-#include "platform/Logging.h"
 #include "platform/testing/TreeTestHelpers.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
-
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -41,14 +38,14 @@ using TreeTestHelpers::initRandom;
 using TreeTestHelpers::nextRandom;
 
 #ifndef NDEBUG
-template<>
+template <>
 struct ValueToString<float> {
-    static String string(const float& value) { return String::number(value); }
+    static String toString(const float& value) { return String::number(value); }
 };
 
-template<>
+template <>
 struct ValueToString<void*> {
-    static String string(void* const& value)
+    static String toString(void* const& value)
     {
         return String::format("0x%p", value);
     }
@@ -87,9 +84,9 @@ TEST(PODIntervalTreeTest, TestQueryAgainstZeroSizeInterval)
 }
 
 #ifndef NDEBUG
-template<>
+template <>
 struct ValueToString<int*> {
-    static String string(int* const& value)
+    static String toString(int* const& value)
     {
         return String::format("0x%p", value);
     }
@@ -118,21 +115,24 @@ TEST(PODIntervalTreeTest, TestDuplicateElementInsertion)
 
 namespace {
 
-struct UserData1 {
-public:
-    UserData1()
-        : a(0), b(1) { }
+    struct UserData1 {
+    public:
+        UserData1()
+            : a(0)
+            , b(1)
+        {
+        }
 
-    float a;
-    int b;
-};
+        float a;
+        int b;
+    };
 
 } // anonymous namespace
 
 #ifndef NDEBUG
-template<>
+template <>
 struct ValueToString<UserData1> {
-    static String string(const UserData1& value)
+    static String toString(const UserData1& value)
     {
         return String("[UserData1 a=") + String::number(value.a) + " b=" + String::number(value.b) + "]";
     }
@@ -165,31 +165,39 @@ TEST(PODIntervalTreeTest, TestQueryingOfComplexUserData)
 
 namespace {
 
-class EndpointType1 {
-public:
-    explicit EndpointType1(int value)
-        : m_value(value) { }
+    class EndpointType1 {
+    public:
+        explicit EndpointType1(int value)
+            : m_value(value)
+        {
+        }
 
-    int value() const { return m_value; }
+        int value() const { return m_value; }
 
-    bool operator<(const EndpointType1& other) const { return m_value < other.m_value; }
-    bool operator==(const EndpointType1& other) const { return m_value == other.m_value; }
+        bool operator<(const EndpointType1& other) const
+        {
+            return m_value < other.m_value;
+        }
+        bool operator==(const EndpointType1& other) const
+        {
+            return m_value == other.m_value;
+        }
 
-private:
-    int m_value;
-    // These operators should not be called by the interval tree.
-    bool operator>(const EndpointType1& other);
-    bool operator<=(const EndpointType1& other);
-    bool operator>=(const EndpointType1& other);
-    bool operator!=(const EndpointType1& other);
-};
+    private:
+        int m_value;
+        // These operators should not be called by the interval tree.
+        bool operator>(const EndpointType1& other);
+        bool operator<=(const EndpointType1& other);
+        bool operator>=(const EndpointType1& other);
+        bool operator!=(const EndpointType1& other);
+    };
 
 } // anonymous namespace
 
 #ifndef NDEBUG
-template<>
+template <>
 struct ValueToString<EndpointType1> {
-    static String string(const EndpointType1& value)
+    static String toString(const EndpointType1& value)
     {
         return String("[EndpointType1 value=") + String::number(value.value()) + "]";
     }
@@ -208,75 +216,85 @@ TEST(PODIntervalTreeTest, TestTreeDoesNotRequireMostOperators)
 // #define DEBUG_INSERTION_AND_DELETION_TEST
 
 #ifndef NDEBUG
-template<>
+template <>
 struct ValueToString<int> {
-    static String string(const int& value) { return String::number(value); }
+    static String toString(const int& value) { return String::number(value); }
 };
 #endif
 
 namespace {
 
-void InsertionAndDeletionTest(int32_t seed, int treeSize)
-{
-    initRandom(seed);
-    int maximumValue = treeSize;
-    // Build the tree
-    PODIntervalTree<int> tree;
-    Vector<PODInterval<int>> addedElements;
-    Vector<PODInterval<int>> removedElements;
-    for (int i = 0; i < treeSize; i++) {
-        int left = nextRandom(maximumValue);
-        int length = nextRandom(maximumValue);
-        PODInterval<int> interval(left, left + length);
-        tree.add(interval);
+    void InsertionAndDeletionTest(int32_t seed, int treeSize)
+    {
+        initRandom(seed);
+        int maximumValue = treeSize;
+        // Build the tree
+        PODIntervalTree<int> tree;
+        Vector<PODInterval<int>> addedElements;
+        Vector<PODInterval<int>> removedElements;
+        for (int i = 0; i < treeSize; i++) {
+            int left = nextRandom(maximumValue);
+            int length = nextRandom(maximumValue);
+            PODInterval<int> interval(left, left + length);
+            tree.add(interval);
 #ifdef DEBUG_INSERTION_AND_DELETION_TEST
-        WTF_LOG_ERROR("*** Adding element %s", ValueToString<PODInterval<int>>::string(interval).ascii().data());
+            DLOG(ERROR) << "*** Adding element "
+                        << ValueToString<PODInterval<int>>::string(interval);
 #endif
-        addedElements.append(interval);
-    }
-    // Churn the tree's contents.
-    // First remove half of the elements in random order.
-    for (int i = 0; i < treeSize / 2; i++) {
-        int index = nextRandom(addedElements.size());
-#ifdef DEBUG_INSERTION_AND_DELETION_TEST
-        WTF_LOG_ERROR("*** Removing element %s", ValueToString<PODInterval<int>>::string(addedElements[index]).ascii().data());
-#endif
-        ASSERT_TRUE(tree.contains(addedElements[index])) << "Test failed for seed " << seed;
-        tree.remove(addedElements[index]);
-        removedElements.append(addedElements[index]);
-        addedElements.remove(index);
-        ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
-    }
-    // Now randomly add or remove elements.
-    for (int i = 0; i < 2 * treeSize; i++) {
-        bool add = false;
-        if (!addedElements.size())
-            add = true;
-        else if (!removedElements.size())
-            add = false;
-        else
-            add = (nextRandom(2) == 1);
-        if (add) {
-            int index = nextRandom(removedElements.size());
-#ifdef DEBUG_INSERTION_AND_DELETION_TEST
-            WTF_LOG_ERROR("*** Adding element %s", ValueToString<PODInterval<int>>::string(removedElements[index]).ascii().data());
-#endif
-            tree.add(removedElements[index]);
-            addedElements.append(removedElements[index]);
-            removedElements.remove(index);
-        } else {
+            addedElements.push_back(interval);
+        }
+        // Churn the tree's contents.
+        // First remove half of the elements in random order.
+        for (int i = 0; i < treeSize / 2; i++) {
             int index = nextRandom(addedElements.size());
 #ifdef DEBUG_INSERTION_AND_DELETION_TEST
-            WTF_LOG_ERROR("*** Removing element %s", ValueToString<PODInterval<int>>::string(addedElements[index]).ascii().data());
+            DLOG(ERROR) << "*** Removing element "
+                        << ValueToString<PODInterval<int>>::string(
+                               addedElements[index]);
 #endif
-            ASSERT_TRUE(tree.contains(addedElements[index])) << "Test failed for seed " << seed;
-            ASSERT_TRUE(tree.remove(addedElements[index])) << "Test failed for seed " << seed;
-            removedElements.append(addedElements[index]);
+            ASSERT_TRUE(tree.contains(addedElements[index])) << "Test failed for seed "
+                                                             << seed;
+            tree.remove(addedElements[index]);
+            removedElements.push_back(addedElements[index]);
             addedElements.remove(index);
+            ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
         }
-        ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
+        // Now randomly add or remove elements.
+        for (int i = 0; i < 2 * treeSize; i++) {
+            bool add = false;
+            if (!addedElements.size())
+                add = true;
+            else if (!removedElements.size())
+                add = false;
+            else
+                add = (nextRandom(2) == 1);
+            if (add) {
+                int index = nextRandom(removedElements.size());
+#ifdef DEBUG_INSERTION_AND_DELETION_TEST
+                DLOG(ERROR) << "*** Adding element "
+                            << ValueToString<PODInterval<int>>::string(
+                                   removedElements[index]);
+#endif
+                tree.add(removedElements[index]);
+                addedElements.push_back(removedElements[index]);
+                removedElements.remove(index);
+            } else {
+                int index = nextRandom(addedElements.size());
+#ifdef DEBUG_INSERTION_AND_DELETION_TEST
+                DLOG(ERROR) << "*** Removing element "
+                            << ValueToString<PODInterval<int>>::string(
+                                   addedElements[index]);
+#endif
+                ASSERT_TRUE(tree.contains(addedElements[index]))
+                    << "Test failed for seed " << seed;
+                ASSERT_TRUE(tree.remove(addedElements[index])) << "Test failed for seed "
+                                                               << seed;
+                removedElements.push_back(addedElements[index]);
+                addedElements.remove(index);
+            }
+            ASSERT_TRUE(tree.checkInvariants()) << "Test failed for seed " << seed;
+        }
     }
-}
 
 } // anonymous namespace
 
@@ -331,7 +349,8 @@ TEST(PODIntervalTreeTest, RandomDeletionAndInsertionRegressionTest3)
 
 TEST(PODIntervalTreeTest, RandomDeletionAndInsertionRegressionTest4)
 {
-    // Even further reduced test case for RandomDeletionAndInsertionRegressionTest3.
+    // Even further reduced test case for
+    // RandomDeletionAndInsertionRegressionTest3.
     PODIntervalTree<int> tree;
     tree.add(tree.createInterval(0, 5));
     ASSERT_TRUE(tree.checkInvariants());

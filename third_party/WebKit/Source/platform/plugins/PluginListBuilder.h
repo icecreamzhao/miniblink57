@@ -33,17 +33,26 @@
 
 #include "platform/plugins/PluginData.h"
 #include "public/platform/WebPluginListBuilder.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class PluginListBuilder final : public WebPluginListBuilder {
+    DISALLOW_NEW();
+
 public:
-    PluginListBuilder(Vector<PluginInfo>* results) : m_results(results) { }
+    PluginListBuilder(Vector<PluginInfo>* results)
+        : m_results(results)
+    {
+    }
 
     // WebPluginListBuilder methods:
-    void addPlugin(const WebString& name, const WebString& description, const WebString& fileName) override;
-    void addMediaTypeToLastPlugin(const WebString& name, const WebString& description) override;
+    void addPlugin(const WebString& name,
+        const WebString& description,
+        const WebString& fileName) override;
+    void addMediaTypeToLastPlugin(const WebString& name,
+        const WebString& description) override;
     void addFileExtensionToLastMediaType(const WebString& extension) override;
 
 private:

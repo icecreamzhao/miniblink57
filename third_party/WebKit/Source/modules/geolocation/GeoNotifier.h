@@ -19,9 +19,13 @@ class PositionError;
 
 class GeoNotifier : public GarbageCollectedFinalized<GeoNotifier> {
 public:
-    static GeoNotifier* create(Geolocation* geolocation, PositionCallback* positionCallback, PositionErrorCallback* positionErrorCallback, const PositionOptions& options)
+    static GeoNotifier* create(Geolocation* geolocation,
+        PositionCallback* positionCallback,
+        PositionErrorCallback* positionErrorCallback,
+        const PositionOptions& options)
     {
-        return new GeoNotifier(geolocation, positionCallback, positionErrorCallback, options);
+        return new GeoNotifier(geolocation, positionCallback, positionErrorCallback,
+            options);
     }
     DECLARE_TRACE();
 
@@ -46,10 +50,13 @@ public:
     // Runs the error callback if there is a fatal error. Otherwise, if a
     // cached position must be used, registers itself for receiving one.
     // Otherwise, the notifier has expired, and its error callback is run.
-    void timerFired(Timer<GeoNotifier>*);
+    void timerFired(TimerBase*);
 
 private:
-    GeoNotifier(Geolocation*, PositionCallback*, PositionErrorCallback*, const PositionOptions&);
+    GeoNotifier(Geolocation*,
+        PositionCallback*,
+        PositionErrorCallback*,
+        const PositionOptions&);
 
     Member<Geolocation> m_geolocation;
     Member<PositionCallback> m_successCallback;

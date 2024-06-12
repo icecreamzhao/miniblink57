@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebData.h"
 
 #include "platform/SharedBuffer.h"
@@ -64,12 +63,12 @@ const char* WebData::data() const
     return m_private->data();
 }
 
-WebData::WebData(const PassRefPtr<SharedBuffer>& buffer)
+WebData::WebData(PassRefPtr<SharedBuffer> buffer)
     : m_private(buffer)
 {
 }
 
-WebData& WebData::operator=(const PassRefPtr<SharedBuffer>& buffer)
+WebData& WebData::operator=(PassRefPtr<SharedBuffer> buffer)
 {
     m_private = buffer;
     return *this;

@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/SQLResultSetRowList.h"
 
 #include "bindings/core/v8/ScriptValue.h"
@@ -46,10 +45,13 @@ unsigned SQLResultSetRowList::length() const
     return m_result.size() / m_columns.size();
 }
 
-ScriptValue SQLResultSetRowList::item(ScriptState* scriptState, unsigned index, ExceptionState& exceptionState)
+ScriptValue SQLResultSetRowList::item(ScriptState* scriptState,
+    unsigned index,
+    ExceptionState& exceptionState)
 {
     if (index >= length()) {
-        exceptionState.throwDOMException(IndexSizeError, ExceptionMessages::indexExceedsMaximumBound<unsigned>("index", index, length()));
+        exceptionState.throwDOMException(
+            IndexSizeError, ExceptionMessages::indexExceedsMaximumBound<unsigned>("index", index, length()));
         return ScriptValue();
     }
 
@@ -58,7 +60,8 @@ ScriptValue SQLResultSetRowList::item(ScriptState* scriptState, unsigned index, 
 
     Vector<std::pair<String, SQLValue>> dataArray;
     for (unsigned i = 0; i < numColumns; ++i)
-        dataArray.append(std::make_pair(m_columns[i], m_result[valuesIndex + i]));
+        dataArray.push_back(
+            std::make_pair(m_columns[i], m_result[valuesIndex + i]));
 
     return ScriptValue::from(scriptState, dataArray);
 }

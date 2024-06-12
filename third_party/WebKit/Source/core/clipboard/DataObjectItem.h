@@ -42,30 +42,42 @@ namespace blink {
 
 class Blob;
 
-class CORE_EXPORT DataObjectItem : public GarbageCollectedFinalized<DataObjectItem> {
+class CORE_EXPORT DataObjectItem
+    : public GarbageCollectedFinalized<DataObjectItem> {
 public:
-    enum Kind {
-        StringKind,
-        FileKind
-    };
+    enum ItemKind { StringKind,
+        FileKind };
 
-    static DataObjectItem* createFromString(const String& type, const String& data);
+    static DataObjectItem* createFromString(const String& type,
+        const String& data);
     static DataObjectItem* createFromFile(File*);
+    // File with non-empty filesystem ID can be converted into FileEntry by using
+    // webkitGetAsEntry.
+    static DataObjectItem* createFromFileWithFileSystemId(
+        File*,
+        const String& fileSystemId);
     static DataObjectItem* createFromURL(const String& url, const String& title);
-    static DataObjectItem* createFromHTML(const String& html, const KURL& baseURL);
-    static DataObjectItem* createFromSharedBuffer(const String& filename, PassRefPtr<SharedBuffer>);
-    static DataObjectItem* createFromPasteboard(const String& type, uint64_t sequenceNumber);
+    static DataObjectItem* createFromHTML(const String& html,
+        const KURL& baseURL);
+    static DataObjectItem* createFromSharedBuffer(const String& filename,
+        PassRefPtr<SharedBuffer>);
+    static DataObjectItem* createFromPasteboard(const String& type,
+        uint64_t sequenceNumber);
 
-    Kind kind() const { return m_kind; }
+    ItemKind kind() const { return m_kind; }
     String type() const { return m_type; }
     String getAsString() const;
     Blob* getAsFile() const;
 
-    // Used to support legacy DataTransfer APIs and renderer->browser serialization.
+    // Used to support legacy DataTransfer APIs and renderer->browser
+    // serialization.
     PassRefPtr<SharedBuffer> sharedBuffer() const { return m_sharedBuffer; }
     String title() const { return m_title; }
     KURL baseURL() const { return m_baseURL; }
     bool isFilename() const;
+
+    bool hasFileSystemId() const;
+    String fileSystemId() const;
 
     DECLARE_TRACE();
 
@@ -75,11 +87,11 @@ private:
         InternalSource,
     };
 
-    DataObjectItem(Kind, const String& type);
-    DataObjectItem(Kind, const String& type, uint64_t sequenceNumber);
+    DataObjectItem(ItemKind, const String& type);
+    DataObjectItem(ItemKind, const String& type, uint64_t sequenceNumber);
 
     DataSource m_source;
-    Kind m_kind;
+    ItemKind m_kind;
     String m_type;
 
     String m_data;
@@ -90,6 +102,7 @@ private:
     KURL m_baseURL;
 
     uint64_t m_sequenceNumber; // Only valid when m_source == PasteboardSource
+    String m_fileSystemId; // Only valid when m_file is backed by FileEntry.
 };
 
 } // namespace blink

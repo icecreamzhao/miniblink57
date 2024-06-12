@@ -34,22 +34,22 @@
 static const int kNumR11EACPalettes = 16;
 static const int kR11EACPaletteSize = 8;
 static const int kR11EACModifierPalettes[kNumR11EACPalettes][kR11EACPaletteSize] = {
-    {-3, -6, -9, -15, 2, 5, 8, 14},
-    {-3, -7, -10, -13, 2, 6, 9, 12},
-    {-2, -5, -8, -13, 1, 4, 7, 12},
-    {-2, -4, -6, -13, 1, 3, 5, 12},
-    {-3, -6, -8, -12, 2, 5, 7, 11},
-    {-3, -7, -9, -11, 2, 6, 8, 10},
-    {-4, -7, -8, -11, 3, 6, 7, 10},
-    {-3, -5, -8, -11, 2, 4, 7, 10},
-    {-2, -6, -8, -10, 1, 5, 7, 9},
-    {-2, -5, -8, -10, 1, 4, 7, 9},
-    {-2, -4, -8, -10, 1, 3, 7, 9},
-    {-2, -5, -7, -10, 1, 4, 6, 9},
-    {-3, -4, -7, -10, 2, 3, 6, 9},
-    {-1, -2, -3, -10, 0, 1, 2, 9},
-    {-4, -6, -8, -9, 3, 5, 7, 8},
-    {-3, -5, -7, -9, 2, 4, 6, 8}
+    { -3, -6, -9, -15, 2, 5, 8, 14 },
+    { -3, -7, -10, -13, 2, 6, 9, 12 },
+    { -2, -5, -8, -13, 1, 4, 7, 12 },
+    { -2, -4, -6, -13, 1, 3, 5, 12 },
+    { -3, -6, -8, -12, 2, 5, 7, 11 },
+    { -3, -7, -9, -11, 2, 6, 8, 10 },
+    { -4, -7, -8, -11, 3, 6, 7, 10 },
+    { -3, -5, -8, -11, 2, 4, 7, 10 },
+    { -2, -6, -8, -10, 1, 5, 7, 9 },
+    { -2, -5, -8, -10, 1, 4, 7, 9 },
+    { -2, -4, -8, -10, 1, 3, 7, 9 },
+    { -2, -5, -7, -10, 1, 4, 6, 9 },
+    { -3, -4, -7, -10, 2, 3, 6, 9 },
+    { -1, -2, -3, -10, 0, 1, 2, 9 },
+    { -4, -6, -8, -9, 3, 5, 7, 8 },
+    { -3, -5, -7, -9, 2, 4, 6, 8 }
 };
 
 #if COMPRESS_R11_EAC_SLOW
@@ -57,7 +57,8 @@ static const int kR11EACModifierPalettes[kNumR11EACPalettes][kR11EACPaletteSize]
 // Pack the base codeword, palette, and multiplier into the 64 bits necessary
 // to decode it.
 static uint64_t pack_r11eac_block(uint16_t base_cw, uint16_t palette, uint16_t multiplier,
-                                  uint64_t indices) {
+    uint64_t indices)
+{
     SkASSERT(palette < 16);
     SkASSERT(multiplier < 16);
     SkASSERT(indices < (static_cast<uint64_t>(1) << 48));
@@ -70,9 +71,10 @@ static uint64_t pack_r11eac_block(uint16_t base_cw, uint16_t palette, uint16_t m
 
 // Given a base codeword, a modifier, and a multiplier, compute the proper
 // pixel value in the range [0, 2047].
-static uint16_t compute_r11eac_pixel(int base_cw, int modifier, int multiplier) {
+static uint16_t compute_r11eac_pixel(int base_cw, int modifier, int multiplier)
+{
     int ret = (base_cw * 8 + 4) + (modifier * multiplier * 8);
-    return (ret > 2047)? 2047 : ((ret < 0)? 0 : ret);
+    return (ret > 2047) ? 2047 : ((ret < 0) ? 0 : ret);
 }
 
 // Compress a block into R11 EAC format.
@@ -81,7 +83,8 @@ static uint16_t compute_r11eac_pixel(int base_cw, int modifier, int multiplier) 
 // 2. Choose a multiplier based roughly on the size of the span of block values
 // 3. Iterate through each palette and choose the one with the most accurate
 // modifiers.
-static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[16]) {
+static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[16])
+{
     // Find the center of the data...
     uint16_t bmin = block[0];
     uint16_t bmax = block[0];
@@ -102,8 +105,8 @@ static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[1
     uint16_t cblock[16];
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            int srcIdx = i*4+j;
-            int dstIdx = j*4+i;
+            int srcIdx = i * 4 + j;
+            int dstIdx = j * 4 + i;
             cblock[dstIdx] = (block[srcIdx] << 3) | (block[srcIdx] >> 5);
         }
     }
@@ -113,7 +116,7 @@ static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[1
     uint64_t bestIndices = 0;
     uint16_t bestPalette = 0;
     for (uint16_t paletteIdx = 0; paletteIdx < kNumR11EACPalettes; ++paletteIdx) {
-        const int *palette = kR11EACModifierPalettes[paletteIdx];
+        const int* palette = kR11EACModifierPalettes[paletteIdx];
 
         // Iterate through each pixel to find the best palette index
         // and update the indices with the choice. Also store the error
@@ -125,8 +128,7 @@ static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[1
 
             // Iterate through each palette value to find the best index
             // for this particular pixel for this particular palette.
-            uint16_t bestPixelError =
-                abs_diff(pixel, compute_r11eac_pixel(center, palette[0], multiplier));
+            uint16_t bestPixelError = abs_diff(pixel, compute_r11eac_pixel(center, palette[0], multiplier));
             int bestIndex = 0;
             for (int i = 1; i < kR11EACPaletteSize; ++i) {
                 const uint16_t p = compute_r11eac_pixel(center, palette[i], multiplier);
@@ -184,26 +186,27 @@ static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[1
 //    Hence, we need to convert the indices with the following mapping:
 //      From: 0 1 2 3 4 5 6 7
 //      To:   3 2 1 0 4 5 6 7
-static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[16]) {
+static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[16])
+{
     uint64_t retVal = static_cast<uint64_t>(0x8490) << 48;
-    for(int i = 0; i < 4; ++i) {
-        for(int j = 0; j < 4; ++j) {
-            const int shift = 45-3*(j*4+i);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            const int shift = 45 - 3 * (j * 4 + i);
             SkASSERT(shift <= 45);
-            const uint64_t idx = block[i*4+j] >> 5;
+            const uint64_t idx = block[i * 4 + j] >> 5;
             SkASSERT(idx < 8);
 
             // !SPEED! This is slightly faster than having an if-statement.
-            switch(idx) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    retVal |= (3-idx) << shift;
-                    break;
-                default:
-                    retVal |= idx << shift;
-                    break;
+            switch (idx) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                retVal |= (3 - idx) << shift;
+                break;
+            default:
+                retVal |= idx << shift;
+                break;
             }
         }
     }
@@ -213,7 +216,8 @@ static inline uint64_t compress_heterogeneous_r11eac_block(const uint8_t block[1
 #endif // COMPRESS_R11_EAC_FAST
 
 #if (COMPRESS_R11_EAC_SLOW) || (COMPRESS_R11_EAC_FAST)
-static uint64_t compress_r11eac_block(const uint8_t block[16]) {
+static uint64_t compress_r11eac_block(const uint8_t block[16])
+{
     // Are all blocks a solid color?
     bool solid = true;
     for (int i = 1; i < 16; ++i) {
@@ -224,44 +228,44 @@ static uint64_t compress_r11eac_block(const uint8_t block[16]) {
     }
 
     if (solid) {
-        switch(block[0]) {
-            // Fully transparent? We know the encoding...
-            case 0:
-                // (0x0020 << 48) produces the following:
-                // basw_cw: 0
-                // mod: 0, palette: {-3, -6, -9, -15, 2, 5, 8, 14}
-                // multiplier: 2
-                // mod_val: -3
-                //
-                // this gives the following formula:
-                // clamp[0, 2047](0*8+4+(-3)*2*8) = 0
-                // 
-                // Furthermore, it is impervious to endianness:
-                // 0x0020000000002000ULL
-                // Will produce one pixel with index 2, which gives:
-                // clamp[0, 2047](0*8+4+(-9)*2*8) = 0
-                return 0x0020000000002000ULL;
+        switch (block[0]) {
+        // Fully transparent? We know the encoding...
+        case 0:
+            // (0x0020 << 48) produces the following:
+            // basw_cw: 0
+            // mod: 0, palette: {-3, -6, -9, -15, 2, 5, 8, 14}
+            // multiplier: 2
+            // mod_val: -3
+            //
+            // this gives the following formula:
+            // clamp[0, 2047](0*8+4+(-3)*2*8) = 0
+            //
+            // Furthermore, it is impervious to endianness:
+            // 0x0020000000002000ULL
+            // Will produce one pixel with index 2, which gives:
+            // clamp[0, 2047](0*8+4+(-9)*2*8) = 0
+            return 0x0020000000002000ULL;
 
-            // Fully opaque? We know this encoding too...
-            case 255:
-            
-                // -1 produces the following:
-                // basw_cw: 255
-                // mod: 15, palette: {-3, -5, -7, -9, 2, 4, 6, 8}
-                // mod_val: 8
-                //
-                // this gives the following formula:
-                // clamp[0, 2047](255*8+4+8*8*8) = clamp[0, 2047](2556) = 2047
-                return 0xFFFFFFFFFFFFFFFFULL;
+        // Fully opaque? We know this encoding too...
+        case 255:
 
-            default:
-                // !TODO! krajcevski:
-                // This will probably never happen, since we're using this format
-                // primarily for compressing alpha maps. Usually the only
-                // non-fullly opaque or fully transparent blocks are not a solid
-                // intermediate color. If we notice that they are, then we can
-                // add another optimization...
-                break;
+            // -1 produces the following:
+            // basw_cw: 255
+            // mod: 15, palette: {-3, -5, -7, -9, 2, 4, 6, 8}
+            // mod_val: 8
+            //
+            // this gives the following formula:
+            // clamp[0, 2047](255*8+4+8*8*8) = clamp[0, 2047](2556) = 2047
+            return 0xFFFFFFFFFFFFFFFFULL;
+
+        default:
+            // !TODO! krajcevski:
+            // This will probably never happen, since we're using this format
+            // primarily for compressing alpha maps. Usually the only
+            // non-fullly opaque or fully transparent blocks are not a solid
+            // intermediate color. If we notice that they are, then we can
+            // add another optimization...
+            break;
         }
     }
 
@@ -275,8 +279,9 @@ static uint64_t compress_r11eac_block(const uint8_t block[16]) {
 typedef uint64_t (*A84x4To64BitProc)(const uint8_t block[]);
 
 static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
-                                     int width, int height, size_t rowBytes,
-                                     A84x4To64BitProc proc) {
+    int width, int height, size_t rowBytes,
+    A84x4To64BitProc proc)
+{
     // Make sure that our data is well-formed enough to be considered for compression
     if (0 == width || 0 == height || (width % 4) != 0 || (height % 4) != 0) {
         return false;
@@ -291,7 +296,7 @@ static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
         for (int x = 0; x < blocksX; ++x) {
             // Load block
             for (int k = 0; k < 4; ++k) {
-                memcpy(block + k*4, src + k*rowBytes + 4*x, 4);
+                memcpy(block + k * 4, src + k * rowBytes + 4 * x, 4);
             }
 
             // Compress it
@@ -303,7 +308,7 @@ static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
 
     return true;
 }
-#endif  // (COMPRESS_R11_EAC_SLOW) || (COMPRESS_R11_EAC_FAST)
+#endif // (COMPRESS_R11_EAC_SLOW) || (COMPRESS_R11_EAC_FAST)
 
 // This function converts an integer containing four bytes of alpha
 // values into an integer containing four bytes of indices into R11 EAC.
@@ -319,7 +324,8 @@ static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
 // add three.
 //
 // Most of the voodoo in this function comes from Hacker's Delight, section 2-18
-static inline uint32_t convert_indices(uint32_t x) {
+static inline uint32_t convert_indices(uint32_t x)
+{
     // Take the top three bits...
     x = SkTextureCompressor::ConvertToThreeBitIndex(x);
 
@@ -345,13 +351,15 @@ static inline uint32_t convert_indices(uint32_t x) {
 }
 
 #if COMPRESS_R11_EAC_FASTEST
-template<unsigned shift>
-static inline uint64_t swap_shift(uint64_t x, uint64_t mask) {
+template <unsigned shift>
+static inline uint64_t swap_shift(uint64_t x, uint64_t mask)
+{
     const uint64_t t = (x ^ (x >> shift)) & mask;
     return x ^ t ^ (t << shift);
 }
 
-static inline uint64_t interleave6(uint64_t topRows, uint64_t bottomRows) {
+static inline uint64_t interleave6(uint64_t topRows, uint64_t bottomRows)
+{
     // If our 3-bit block indices are laid out as:
     // a b c d
     // e f g h
@@ -394,7 +402,7 @@ static inline uint64_t interleave6(uint64_t topRows, uint64_t bottomRows) {
 
     x = swap_shift<6>(x, 0xFC0000ULL);
 
-#if defined (SK_CPU_BENDIAN)
+#if defined(SK_CPU_BENDIAN)
     // x: 00 00 00 00 00 00 00 00 b f l p a e i m c g k o d h j n
 
     x = swap_shift<36>(x, 0x3FULL);
@@ -410,7 +418,7 @@ static inline uint64_t interleave6(uint64_t topRows, uint64_t bottomRows) {
     x = swap_shift<36>(x, 0xFC0ULL);
 
     // x: 00 00 00 00 00 00 00 00 a e i m d h l p b f j n c g k o
-    
+
     x = (x & (0xFFFULL << 36)) | ((x & 0xFFFFFFULL) << 12) | ((x >> 24) & 0xFFFULL);
 #endif
 
@@ -421,12 +429,13 @@ static inline uint64_t interleave6(uint64_t topRows, uint64_t bottomRows) {
 // This function follows the same basic procedure as compress_heterogeneous_r11eac_block
 // above when COMPRESS_R11_EAC_FAST is defined, but it avoids a few loads/stores and
 // tries to optimize where it can using SIMD.
-static uint64_t compress_r11eac_block_fast(const uint8_t* src, size_t rowBytes) {
+static uint64_t compress_r11eac_block_fast(const uint8_t* src, size_t rowBytes)
+{
     // Store each row of alpha values in an integer
     const uint32_t alphaRow1 = *(reinterpret_cast<const uint32_t*>(src));
     const uint32_t alphaRow2 = *(reinterpret_cast<const uint32_t*>(src + rowBytes));
-    const uint32_t alphaRow3 = *(reinterpret_cast<const uint32_t*>(src + 2*rowBytes));
-    const uint32_t alphaRow4 = *(reinterpret_cast<const uint32_t*>(src + 3*rowBytes));
+    const uint32_t alphaRow3 = *(reinterpret_cast<const uint32_t*>(src + 2 * rowBytes));
+    const uint32_t alphaRow4 = *(reinterpret_cast<const uint32_t*>(src + 3 * rowBytes));
 
     // Check for solid blocks. The explanations for these values
     // can be found in the comments of compress_r11eac_block above
@@ -462,7 +471,8 @@ static uint64_t compress_r11eac_block_fast(const uint8_t* src, size_t rowBytes) 
 }
 
 static bool compress_a8_to_r11eac_fast(uint8_t* dst, const uint8_t* src,
-                                       int width, int height, size_t rowBytes) {
+    int width, int height, size_t rowBytes)
+{
     // Make sure that our data is well-formed enough to be considered for compression
     if (0 == width || 0 == height || (width % 4) != 0 || (height % 4) != 0) {
         return false;
@@ -475,7 +485,7 @@ static bool compress_a8_to_r11eac_fast(uint8_t* dst, const uint8_t* src,
     for (int y = 0; y < blocksY; ++y) {
         for (int x = 0; x < blocksX; ++x) {
             // Compress it
-            *encPtr = compress_r11eac_block_fast(src + 4*x, rowBytes);
+            *encPtr = compress_r11eac_block_fast(src + 4 * x, rowBytes);
             ++encPtr;
         }
         src += 4 * rowBytes;
@@ -496,19 +506,12 @@ static bool compress_a8_to_r11eac_fast(uint8_t* dst, const uint8_t* src,
 // blitter, then each integer will be a column of indices, and hence can be efficiently
 // packed. This function takes the bottom three bits of each byte and places them in
 // the least significant 12 bits of the resulting integer.
-static inline uint32_t pack_indices_vertical(uint32_t x) {
-#if defined (SK_CPU_BENDIAN)
-    return 
-        (x & 7) |
-        ((x >> 5) & (7 << 3)) |
-        ((x >> 10) & (7 << 6)) |
-        ((x >> 15) & (7 << 9));
+static inline uint32_t pack_indices_vertical(uint32_t x)
+{
+#if defined(SK_CPU_BENDIAN)
+    return (x & 7) | ((x >> 5) & (7 << 3)) | ((x >> 10) & (7 << 6)) | ((x >> 15) & (7 << 9));
 #else
-    return 
-        ((x >> 24) & 7) |
-        ((x >> 13) & (7 << 3)) |
-        ((x >> 2) & (7 << 6)) |
-        ((x << 9) & (7 << 9));
+    return ((x >> 24) & 7) | ((x >> 13) & (7 << 3)) | ((x >> 2) & (7 << 6)) | ((x << 9) & (7 << 9));
 #endif
 }
 
@@ -516,7 +519,8 @@ static inline uint32_t pack_indices_vertical(uint32_t x) {
 // alpha values. Each column is assumed to be loaded from top to bottom, and hence
 // must first be converted to indices and then packed into the resulting 64-bit
 // integer.
-inline void compress_block_vertical(uint8_t* dstPtr, const uint8_t *block) {
+inline void compress_block_vertical(uint8_t* dstPtr, const uint8_t* block)
+{
 
     const uint32_t* src = reinterpret_cast<const uint32_t*>(block);
     uint64_t* dst = reinterpret_cast<uint64_t*>(dstPtr);
@@ -526,16 +530,13 @@ inline void compress_block_vertical(uint8_t* dstPtr, const uint8_t *block) {
     const uint32_t alphaColumn2 = src[2];
     const uint32_t alphaColumn3 = src[3];
 
-    if (alphaColumn0 == alphaColumn1 &&
-        alphaColumn2 == alphaColumn3 &&
-        alphaColumn0 == alphaColumn2) {
+    if (alphaColumn0 == alphaColumn1 && alphaColumn2 == alphaColumn3 && alphaColumn0 == alphaColumn2) {
 
         if (0 == alphaColumn0) {
             // Transparent
             *dst = 0x0020000000002000ULL;
             return;
-        }
-        else if (0xFFFFFFFF == alphaColumn0) {
+        } else if (0xFFFFFFFF == alphaColumn0) {
             // Opaque
             *dst = 0xFFFFFFFFFFFFFFFFULL;
             return;
@@ -552,22 +553,20 @@ inline void compress_block_vertical(uint8_t* dstPtr, const uint8_t *block) {
     const uint32_t packedIndexColumn2 = pack_indices_vertical(indexColumn2);
     const uint32_t packedIndexColumn3 = pack_indices_vertical(indexColumn3);
 
-    *dst = SkEndian_SwapBE64(0x8490000000000000ULL |
-                             (static_cast<uint64_t>(packedIndexColumn0) << 36) |
-                             (static_cast<uint64_t>(packedIndexColumn1) << 24) |
-                             static_cast<uint64_t>(packedIndexColumn2 << 12) |
-                             static_cast<uint64_t>(packedIndexColumn3));
+    *dst = SkEndian_SwapBE64(0x8490000000000000ULL | (static_cast<uint64_t>(packedIndexColumn0) << 36) | (static_cast<uint64_t>(packedIndexColumn1) << 24) | static_cast<uint64_t>(packedIndexColumn2 << 12) | static_cast<uint64_t>(packedIndexColumn3));
 }
 
-static inline int get_r11_eac_index(uint64_t block, int x, int y) {
+static inline int get_r11_eac_index(uint64_t block, int x, int y)
+{
     SkASSERT(x >= 0 && x < 4);
     SkASSERT(y >= 0 && y < 4);
-    const int idx = x*4 + y;
-    return (block >> ((15-idx)*3)) & 0x7;
+    const int idx = x * 4 + y;
+    return (block >> ((15 - idx) * 3)) & 0x7;
 }
 
-static void decompress_r11_eac_block(uint8_t* dst, int dstRowBytes, const uint8_t* src) {
-    const uint64_t block = SkEndian_SwapBE64(*(reinterpret_cast<const uint64_t *>(src)));
+static void decompress_r11_eac_block(uint8_t* dst, int dstRowBytes, const uint8_t* src)
+{
+    const uint64_t block = SkEndian_SwapBE64(*(reinterpret_cast<const uint64_t*>(src)));
 
     const int base_cw = (block >> 56) & 0xFF;
     const int mod = (block >> 52) & 0xF;
@@ -578,7 +577,7 @@ static void decompress_r11_eac_block(uint8_t* dst, int dstRowBytes, const uint8_
     for (int j = 0; j < 4; ++j) {
         for (int i = 0; i < 4; ++i) {
             const int idx = get_r11_eac_index(block, i, j);
-            const int val = base_cw*8 + 4 + palette[idx]*mod*8;
+            const int val = base_cw * 8 + 4 + palette[idx] * mod * 8;
             if (val < 0) {
                 dst[i] = 0;
             } else if (val > 2047) {
@@ -595,18 +594,21 @@ static void decompress_r11_eac_block(uint8_t* dst, int dstRowBytes, const uint8_
 // blitter for the R11 EAC format. The static functions required to be in this
 // struct are documented in SkTextureCompressor_Blitter.h
 struct CompressorR11EAC {
-    static inline void CompressA8Vertical(uint8_t* dst, const uint8_t* src) {
+    static inline void CompressA8Vertical(uint8_t* dst, const uint8_t* src)
+    {
         compress_block_vertical(dst, src);
     }
 
     static inline void CompressA8Horizontal(uint8_t* dst, const uint8_t* src,
-                                            int srcRowBytes) {
+        int srcRowBytes)
+    {
         *(reinterpret_cast<uint64_t*>(dst)) = compress_r11eac_block_fast(src, srcRowBytes);
     }
 
 #if PEDANTIC_BLIT_RECT
     static inline void UpdateBlock(uint8_t* dst, const uint8_t* src, int srcRowBytes,
-                                   const uint8_t* mask) {
+        const uint8_t* mask)
+    {
         // TODO: krajcevski
         // The implementation of this function should be similar to that of LATC, since
         // the R11EAC indices directly correspond to pixel values.
@@ -619,7 +621,8 @@ struct CompressorR11EAC {
 
 namespace SkTextureCompressor {
 
-bool CompressA8ToR11EAC(uint8_t* dst, const uint8_t* src, int width, int height, size_t rowBytes) {
+bool CompressA8ToR11EAC(uint8_t* dst, const uint8_t* src, int width, int height, size_t rowBytes)
+{
 
 #if (COMPRESS_R11_EAC_SLOW) || (COMPRESS_R11_EAC_FAST)
 
@@ -635,36 +638,37 @@ bool CompressA8ToR11EAC(uint8_t* dst, const uint8_t* src, int width, int height,
 }
 
 SkBlitter* CreateR11EACBlitter(int width, int height, void* outputBuffer,
-                               SkTBlitterAllocator* allocator) {
+    SkTBlitterAllocator* allocator)
+{
 
     if ((width % 4) != 0 || (height % 4) != 0) {
-        return NULL;
+        return nullptr;
     }
 
     // Memset the output buffer to an encoding that decodes to zero. We must do this
     // in order to avoid having uninitialized values in the buffer if the blitter
     // decides not to write certain scanlines (and skip entire rows of blocks).
     // In the case of R11, we use the encoding from recognizing all zero pixels from above.
-    const int nBlocks = (width * height / 16);  // 4x4 pixel blocks.
-    uint64_t *dst = reinterpret_cast<uint64_t *>(outputBuffer);
+    const int nBlocks = (width * height / 16); // 4x4 pixel blocks.
+    uint64_t* dst = reinterpret_cast<uint64_t*>(outputBuffer);
     for (int i = 0; i < nBlocks; ++i) {
         *dst = 0x0020000000002000ULL;
         ++dst;
     }
 
     return allocator->createT<
-        SkTCompressedAlphaBlitter<4, 8, CompressorR11EAC>, int, int, void*>
-        (width, height, outputBuffer);
+        SkTCompressedAlphaBlitter<4, 8, CompressorR11EAC>, int, int, void*>(width, height, outputBuffer);
 }
 
-void DecompressR11EAC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height) {
+void DecompressR11EAC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height)
+{
     for (int j = 0; j < height; j += 4) {
         for (int i = 0; i < width; i += 4) {
             decompress_r11_eac_block(dst + i, dstRowBytes, src);
             src += 8;
         }
         dst += 4 * dstRowBytes;
-    }    
+    }
 }
 
-}  // namespace SkTextureCompressor
+} // namespace SkTextureCompressor

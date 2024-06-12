@@ -9,24 +9,23 @@
 #define skdiff_utils_DEFINED
 
 #include "skdiff.h"
-#include "SkImageDecoder.h"
 
 class SkBitmap;
 class SkData;
 class SkString;
 
-/** Returns true if the two buffers passed in are both non-NULL,
+/** Returns true if the two buffers passed in are both non-nullptr,
  *  have the same length, and contain exactly the same byte values.
  */
 bool are_buffers_equal(SkData* skdata1, SkData* skdata2);
 
 /** Reads the file at the given path and returns its complete contents as an
- *  SkData object (or returns NULL on error).
+ *  SkData object (or returns nullptr on error).
  */
 SkData* read_file(const char* file_path);
 
 /** Decodes the fileBits into the resource.fBitmap. Returns false on failure. */
-bool get_bitmap(SkData* fileBits, DiffResource& resource, SkImageDecoder::Mode mode);
+bool get_bitmap(SkData* fileBits, DiffResource& resource, bool sizeOnly);
 
 /** Writes the bitmap as a PNG to the path specified. */
 bool write_bitmap(const SkString& path, const SkBitmap& bitmap);
@@ -45,9 +44,9 @@ SkString filename_to_white_filename(const SkString& filename);
  *  If !outputDir.isEmpty(), writes out difference and white images.
  */
 void create_and_write_diff_image(DiffRecord* drp,
-                                 DiffMetricProc dmp,
-                                 const int colorThreshold,
-                                 const SkString& outputDir,
-                                 const SkString& filename);
+    DiffMetricProc dmp,
+    const int colorThreshold,
+    const SkString& outputDir,
+    const SkString& filename);
 
 #endif

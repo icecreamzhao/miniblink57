@@ -28,26 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 #include "core/svg/SVGElement.h"
 
 namespace blink {
 
-SVGAnimatedPropertyBase::SVGAnimatedPropertyBase(AnimatedPropertyType type, SVGElement* contextElement, const QualifiedName& attributeName)
+SVGAnimatedPropertyBase::SVGAnimatedPropertyBase(
+    AnimatedPropertyType type,
+    SVGElement* contextElement,
+    const QualifiedName& attributeName,
+    CSSPropertyID cssPropertyId)
     : m_type(type)
-    , m_isReadOnly(false)
+    , m_cssPropertyId(cssPropertyId)
     , m_contextElement(contextElement)
     , m_attributeName(attributeName)
 {
-    ASSERT(m_contextElement);
-    ASSERT(m_attributeName != QualifiedName::null());
+    DCHECK(m_contextElement);
+    DCHECK(m_attributeName != QualifiedName::null());
+    DCHECK_EQ(this->type(), type);
+    DCHECK_EQ(this->cssPropertyId(), cssPropertyId);
 }
 
-SVGAnimatedPropertyBase::~SVGAnimatedPropertyBase()
-{
-}
+SVGAnimatedPropertyBase::~SVGAnimatedPropertyBase() { }
 
 void SVGAnimatedPropertyBase::animationEnded()
 {

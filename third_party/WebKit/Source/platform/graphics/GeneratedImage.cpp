@@ -28,48 +28,51 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/GeneratedImage.h"
 
 #include "platform/geometry/FloatRect.h"
-#include "platform/graphics/paint/SkPictureBuilder.h"
+#include "platform/graphics/GraphicsContext.h"
+#include "platform/graphics/paint/PaintController.h"
+#include "third_party/skia/include/core/SkImage.h"
 #include "third_party/skia/include/core/SkPicture.h"
 
 namespace blink {
 
-void GeneratedImage::computeIntrinsicDimensions(Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio)
-{
-    Image::computeIntrinsicDimensions(intrinsicWidth, intrinsicHeight, intrinsicRatio);
-    intrinsicRatio = FloatSize();
-}
-
-void GeneratedImage::drawPattern(GraphicsContext* destContext, const FloatRect& srcRect, const FloatSize& scale,
-    const FloatPoint& phase, SkXfermode::Mode compositeOp, const FloatRect& destRect,
-    const IntSize& repeatSpacing)
+void GeneratedImage::drawPattern(GraphicsContext& destContext,
+    const FloatRect& srcRect,
+    const FloatSize& scale,
+    const FloatPoint& phase,
+    SkBlendMode compositeOp,
+    const FloatRect& destRect,
+    const FloatSize& repeatSpacing)
 {
     FloatRect tileRect = srcRect;
-    tileRect.expand(repeatSpacing);
+    tileRect.expand(FloatSize(repeatSpacing));
 
-    SkPictureBuilder builder(tileRect, nullptr, destContext);
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled())
-        builder.context().beginRecording(tileRect);
-    drawTile(&builder.context(), srcRect);
-    RefPtr<const SkPicture> tilePicture = builder.endRecording();
+    std::unique_ptr<PaintController> paintController = PaintController::create();
+    GraphicsContext context(*paintController);
+    context.beginRecording(tileRect);
+    drawTile(context, srcRect);
+    sk_sp<SkPicture> tilePicture = context.endRecording();
 
-    AffineTransform patternTransform;
-    patternTransform.translate(phase.x(), phase.y());
-    patternTransform.scale(scale.width(), scale.height());
-    patternTransform.translate(tileRect.x(), tileRect.y());
+    SkMatrix patternMatrix = SkMatrix::MakeTrans(phase.x(), phase.y());
+    patternMatrix.preScale(scale.width(), scale.height());
+    patternMatrix.preTranslate(tileRect.x(), tileRect.y());
 
-    RefPtr<Pattern> picturePattern = Pattern::createPicturePattern(tilePicture);
-    picturePattern->setPatternSpaceTransform(patternTransform);
+    RefPtr<Pattern> picturePattern = Pattern::createPicturePattern(std::move(tilePicture));
 
-    SkPaint fillPaint = destContext->fillPaint();
-    fillPaint.setShader(picturePattern->shader());
+    SkPaint fillPaint = destContext.fillPaint();
+    picturePattern->applyToPaint(fillPaint, patternMatrix);
     fillPaint.setColor(SK_ColorBLACK);
-    fillPaint.setXfermodeMode(compositeOp);
+    fillPaint.setBlendMode(compositeOp);
 
-    destContext->drawRect(destRect, fillPaint);
+    destContext.drawRect(destRect, fillPaint);
+}
+
+sk_sp<SkImage> GeneratedImage::imageForCurrentFrame(
+    const ColorBehavior& colorBehavior)
+{
+    return nullptr;
 }
 
 } // namespace blink

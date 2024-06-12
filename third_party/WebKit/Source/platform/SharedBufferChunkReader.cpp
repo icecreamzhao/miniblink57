@@ -28,14 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/SharedBufferChunkReader.h"
 
 #include "platform/SharedBuffer.h"
 
 namespace blink {
 
-SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const Vector<char>& separator)
+SharedBufferChunkReader::SharedBufferChunkReader(
+    PassRefPtr<const SharedBuffer> buffer,
+    const Vector<char>& separator)
     : m_buffer(buffer)
     , m_bufferPosition(0)
     , m_segment(0)
@@ -47,7 +48,9 @@ SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const Vec
 {
 }
 
-SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const char* separator)
+SharedBufferChunkReader::SharedBufferChunkReader(
+    PassRefPtr<const SharedBuffer> buffer,
+    const char* separator)
     : m_buffer(buffer)
     , m_bufferPosition(0)
     , m_segment(0)
@@ -70,7 +73,8 @@ void SharedBufferChunkReader::setSeparator(const char* separator)
     m_separator.append(separator, strlen(separator));
 }
 
-bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparator)
+bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk,
+    bool includeSeparator)
 {
     if (m_reachedEndOfFile)
         return false;
@@ -81,11 +85,11 @@ bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparat
             char currentCharacter = m_segment[m_segmentIndex++];
             if (currentCharacter != m_separator[m_separatorIndex]) {
                 if (m_separatorIndex > 0) {
-                    ASSERT_WITH_SECURITY_IMPLICATION(m_separatorIndex <= m_separator.size());
+                    SECURITY_DCHECK(m_separatorIndex <= m_separator.size());
                     chunk.append(m_separator.data(), m_separatorIndex);
                     m_separatorIndex = 0;
                 }
-                chunk.append(currentCharacter);
+                chunk.push_back(currentCharacter);
                 continue;
             }
             m_separatorIndex++;
@@ -112,13 +116,16 @@ bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparat
     return false;
 }
 
-String SharedBufferChunkReader::nextChunkAsUTF8StringWithLatin1Fallback(bool includeSeparator)
+String SharedBufferChunkReader::nextChunkAsUTF8StringWithLatin1Fallback(
+    bool includeSeparator)
 {
     Vector<char> data;
     if (!nextChunk(data, includeSeparator))
         return String();
 
-    return data.size() ? String::fromUTF8WithLatin1Fallback(data.data(), data.size()) : emptyString();
+    return data.size()
+        ? String::fromUTF8WithLatin1Fallback(data.data(), data.size())
+        : emptyString();
 }
 
 size_t SharedBufferChunkReader::peek(Vector<char>& data, size_t requestedSize)
@@ -147,4 +154,4 @@ size_t SharedBufferChunkReader::peek(Vector<char>& data, size_t requestedSize)
     return readBytesCount;
 }
 
-}
+} // namespace blink

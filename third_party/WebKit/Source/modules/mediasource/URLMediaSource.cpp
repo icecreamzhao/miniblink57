@@ -28,22 +28,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediasource/URLMediaSource.h"
 
 #include "core/dom/DOMURL.h"
+#include "core/frame/UseCounter.h"
 #include "modules/mediasource/MediaSource.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
-String URLMediaSource::createObjectURL(ExecutionContext* executionContext, MediaSource* source)
+String URLMediaSource::createObjectURL(ExecutionContext* executionContext,
+    MediaSource* source)
 {
-    // Since WebWorkers cannot obtain MediaSource objects, we should be on the main thread.
-    ASSERT(isMainThread());
+    // Since WebWorkers cannot obtain MediaSource objects, we should be on the
+    // main thread.
+    DCHECK(isMainThread());
+    DCHECK(executionContext);
+    DCHECK(source);
 
-    if (!executionContext)
-        return String();
+    UseCounter::count(executionContext, UseCounter::CreateObjectURLMediaSource);
     return DOMURL::createPublicURL(executionContext, source);
 }
 

@@ -1,4 +1,4 @@
-﻿// Copyright 2015 The Chromium Authors. All rights reserved.
+// Copyright 2015 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -14,23 +14,40 @@ namespace blink {
 
 class CSSCustomPropertyDeclaration : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSCustomPropertyDeclaration> create(const AtomicString& name, PassRefPtr<CSSVariableData> value)
+    static CSSCustomPropertyDeclaration* create(
+        const AtomicString& name,
+        PassRefPtr<CSSVariableData> value)
     {
-        return adoptRefWillBeNoop(new CSSCustomPropertyDeclaration(name, value));
+        return new CSSCustomPropertyDeclaration(name, std::move(value));
     }
 
-    static PassRefPtrWillBeRawPtr<CSSCustomPropertyDeclaration> create(const AtomicString& name, CSSValueID id)
+    static CSSCustomPropertyDeclaration* create(const AtomicString& name,
+        CSSValueID id)
     {
-        return adoptRefWillBeNoop(new CSSCustomPropertyDeclaration(name, id));
+        return new CSSCustomPropertyDeclaration(name, id);
     }
 
     const AtomicString& name() const { return m_name; }
     CSSVariableData* value() const { return m_value.get(); }
-    CSSValueID id() const { return m_valueId; }
 
-    bool equals(const CSSCustomPropertyDeclaration& other) const { return this == &other; }
+    bool isInherit(bool isInheritedProperty) const
+    {
+        return m_valueId == CSSValueInherit || (isInheritedProperty && m_valueId == CSSValueUnset);
+    }
+    bool isInitial(bool isInheritedProperty) const
+    {
+        return m_valueId == CSSValueInitial || (!isInheritedProperty && m_valueId == CSSValueUnset);
+    }
+
+    String customCSSText() const;
+
+    bool equals(const CSSCustomPropertyDeclaration& other) const
+    {
+        return this == &other;
+    }
 
     DECLARE_TRACE_AFTER_DISPATCH();
+
 private:
     CSSCustomPropertyDeclaration(const AtomicString& name, CSSValueID id)
         : CSSValue(CustomPropertyDeclarationClass)
@@ -41,11 +58,12 @@ private:
         ASSERT(id == CSSValueInherit || id == CSSValueInitial || id == CSSValueUnset);
     }
 
-    CSSCustomPropertyDeclaration(const AtomicString& name, PassRefPtr<CSSVariableData> value)
+    CSSCustomPropertyDeclaration(const AtomicString& name,
+        PassRefPtr<CSSVariableData> value)
         : CSSValue(CustomPropertyDeclarationClass)
         , m_name(name)
         , m_value(value)
-        , m_valueId(CSSValueInternalVariableValue)
+        , m_valueId(CSSValueInvalid)
     {
     }
 
@@ -54,7 +72,8 @@ private:
     CSSValueID m_valueId;
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSCustomPropertyDeclaration, isCustomPropertyDeclaration());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSCustomPropertyDeclaration,
+    isCustomPropertyDeclaration());
 
 } // namespace blink
 

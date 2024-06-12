@@ -6,27 +6,84 @@
 #define ScriptForbiddenScope_h
 
 #include "platform/PlatformExport.h"
-#include "wtf/Assertions.h"
-#include "wtf/TemporaryChange.h"
+#include "wtf/Allocator.h"
+#include "wtf/AutoReset.h"
+#include "wtf/Optional.h"
 
 namespace blink {
 
-class PLATFORM_EXPORT ScriptForbiddenScope {
-public:
-    ScriptForbiddenScope();
-    ~ScriptForbiddenScope();
+// Scoped disabling of script execution on the main thread,
+// and only to be used by the main thread.
+class PLATFORM_EXPORT ScriptForbiddenScope final {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(ScriptForbiddenScope);
 
-    class PLATFORM_EXPORT AllowUserAgentScript {
+public:
+    ScriptForbiddenScope() { enter(); }
+    ~ScriptForbiddenScope() { exit(); }
+
+    class PLATFORM_EXPORT AllowUserAgentScript final {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(AllowUserAgentScript);
+
     public:
-        AllowUserAgentScript();
-        ~AllowUserAgentScript();
+        AllowUserAgentScript()
+        {
+            if (isMainThread())
+                m_change.emplace(&s_scriptForbiddenCount, 0);
+        }
+        ~AllowUserAgentScript()
+        {
+            DCHECK(!isMainThread() || !s_scriptForbiddenCount);
+        }
+
     private:
-        TemporaryChange<unsigned> m_change;
+        Optional<AutoReset<unsigned>> m_change;
     };
 
-    static void enter();
-    static void exit();
-    static bool isScriptForbidden();
+    static void enter()
+    {
+        DCHECK(isMainThread());
+        ++s_scriptForbiddenCount;
+    }
+    static void exit()
+    {
+        DCHECK(s_scriptForbiddenCount);
+        --s_scriptForbiddenCount;
+    }
+    static bool isScriptForbidden()
+    {
+        return isMainThread() && s_scriptForbiddenCount;
+    }
+
+private:
+    static unsigned s_scriptForbiddenCount;
+};
+
+// Scoped disabling of script execution on the main thread,
+// if called on the main thread.
+//
+// No effect when used by from other threads -- simplifies
+// call sites that might be used by multiple threads to have
+// this scope object perform the is-main-thread check on
+// its behalf.
+class PLATFORM_EXPORT ScriptForbiddenIfMainThreadScope final {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(ScriptForbiddenIfMainThreadScope);
+
+public:
+    ScriptForbiddenIfMainThreadScope()
+    {
+        m_IsMainThread = isMainThread();
+        if (m_IsMainThread)
+            ScriptForbiddenScope::enter();
+    }
+    ~ScriptForbiddenIfMainThreadScope()
+    {
+        if (m_IsMainThread)
+            ScriptForbiddenScope::exit();
+    }
+    bool m_IsMainThread;
 };
 
 } // namespace blink

@@ -14,9 +14,11 @@ namespace blink {
 class Document;
 class ProcessingInstruction;
 
-class DocumentXSLT final : public NoBaseWillBeGarbageCollected<DocumentXSLT>, public WillBeHeapSupplement<Document> {
+class DocumentXSLT final : public GarbageCollected<DocumentXSLT>,
+                           public Supplement<Document> {
     WTF_MAKE_NONCOPYABLE(DocumentXSLT);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DocumentXSLT);
+    USING_GARBAGE_COLLECTED_MIXIN(DocumentXSLT);
+
 public:
     Document* transformSourceDocument()
     {
@@ -25,28 +27,30 @@ public:
 
     void setTransformSourceDocument(Document* document)
     {
-        ASSERT(document);
+        DCHECK(document);
         m_transformSourceDocument = document;
     }
 
-    static DocumentXSLT& from(WillBeHeapSupplementable<Document>&);
+    static DocumentXSLT& from(Document&);
     static const char* supplementName();
 
     // The following static methods don't use any instance of DocumentXSLT.
     // They are just using DocumentXSLT namespace.
     static void applyXSLTransform(Document&, ProcessingInstruction*);
     static ProcessingInstruction* findXSLStyleSheet(Document&);
-    static bool processingInstructionInsertedIntoDocument(Document&, ProcessingInstruction*);
-    static bool processingInstructionRemovedFromDocument(Document&, ProcessingInstruction*);
+    static bool processingInstructionInsertedIntoDocument(Document&,
+        ProcessingInstruction*);
+    static bool processingInstructionRemovedFromDocument(Document&,
+        ProcessingInstruction*);
     static bool sheetLoaded(Document&, ProcessingInstruction*);
     static bool hasTransformSourceDocument(Document&);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    DocumentXSLT();
+    explicit DocumentXSLT(Document&);
 
-    RefPtrWillBeMember<Document> m_transformSourceDocument;
+    Member<Document> m_transformSourceDocument;
 };
 
 } // namespace blink

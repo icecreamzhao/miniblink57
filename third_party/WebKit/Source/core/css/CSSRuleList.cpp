@@ -19,42 +19,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/CSSRuleList.h"
 
 #include "core/css/CSSRule.h"
 
 namespace blink {
 
-CSSRuleList::~CSSRuleList()
-{
-}
-
-StaticCSSRuleList::StaticCSSRuleList()
-#if !ENABLE(OILPAN)
-    : m_refCount(1)
-#endif
-{
-}
-
-StaticCSSRuleList::~StaticCSSRuleList()
-{
-}
-
-#if !ENABLE(OILPAN)
-void StaticCSSRuleList::deref()
-{
-    ASSERT(m_refCount);
-    if (!--m_refCount)
-        delete this;
-}
-#endif
+StaticCSSRuleList::StaticCSSRuleList() { }
 
 DEFINE_TRACE(StaticCSSRuleList)
 {
     visitor->trace(m_rules);
     CSSRuleList::trace(visitor);
 }
-
 
 } // namespace blink

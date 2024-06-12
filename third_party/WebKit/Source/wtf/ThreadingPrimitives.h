@@ -31,8 +31,8 @@
 #ifndef ThreadingPrimitives_h
 #define ThreadingPrimitives_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-#include "wtf/FastAllocBase.h"
 #include "wtf/Locker.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/WTFExport.h"
@@ -41,16 +41,16 @@
 #include <windows.h>
 #endif
 
-#if USE(PTHREADS)
+#if OS(POSIX)
 #include <pthread.h>
 #endif
 
 namespace WTF {
 
-#if USE(PTHREADS)
+#if OS(POSIX)
 struct PlatformMutex {
     pthread_mutex_t m_internalMutex;
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     size_t m_recursionCount;
 #endif
 };
@@ -77,14 +77,19 @@ typedef void* PlatformCondition;
 #endif
 
 class WTF_EXPORT MutexBase {
-    WTF_MAKE_NONCOPYABLE(MutexBase); WTF_MAKE_FAST_ALLOCATED(MutexBase);
+    WTF_MAKE_NONCOPYABLE(MutexBase);
+    USING_FAST_MALLOC(MutexBase);
+
 public:
     ~MutexBase();
 
     void lock();
     void unlock();
-#if ENABLE(ASSERT)
-    bool locked() { return m_mutex.m_recursionCount > 0; }
+#if DCHECK_IS_ON()
+    bool locked()
+    {
+        return m_mutex.m_recursionCount > 0;
+    }
 #endif
 
 public:
@@ -98,22 +103,34 @@ protected:
 
 class WTF_EXPORT Mutex : public MutexBase {
 public:
-    Mutex() : MutexBase(false) { }
+    Mutex()
+        : MutexBase(false)
+    {
+    }
     bool tryLock();
 };
 
 class WTF_EXPORT RecursiveMutex : public MutexBase {
 public:
-    RecursiveMutex() : MutexBase(true) { }
+    RecursiveMutex()
+        : MutexBase(true)
+    {
+    }
     bool tryLock();
 };
 
 typedef Locker<MutexBase> MutexLocker;
 
-class MutexTryLocker {
+class MutexTryLocker final {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(MutexTryLocker);
+
 public:
-    MutexTryLocker(Mutex& mutex) : m_mutex(mutex), m_locked(mutex.tryLock()) { }
+    MutexTryLocker(Mutex& mutex)
+        : m_mutex(mutex)
+        , m_locked(mutex.tryLock())
+    {
+    }
     ~MutexTryLocker()
     {
         if (m_locked)
@@ -127,15 +144,19 @@ private:
     bool m_locked;
 };
 
-class WTF_EXPORT ThreadCondition {
+class WTF_EXPORT ThreadCondition final {
+    USING_FAST_MALLOC(ThreadCondition); // Only HeapTest.cpp requires.
     WTF_MAKE_NONCOPYABLE(ThreadCondition);
+
 public:
     ThreadCondition();
     ~ThreadCondition();
 
     void wait(MutexBase&);
-    // Returns true if the condition was signaled before absoluteTime, false if the absoluteTime was reached or is in the past.
-    // The absoluteTime is in seconds, starting on January 1, 1970. The time is assumed to use the same time zone as WTF::currentTime().
+    // Returns true if the condition was signaled before absoluteTime, false if
+    // the absoluteTime was reached or is in the past.
+    // The absoluteTime is in seconds, starting on January 1, 1970. The time is
+    // assumed to use the same time zone as WTF::currentTime().
     bool timedWait(MutexBase&, double absoluteTime);
     void signal();
     void broadcast();
@@ -145,18 +166,20 @@ private:
 };
 
 #if OS(WIN)
-// The absoluteTime is in seconds, starting on January 1, 1970. The time is assumed to use the same time zone as WTF::currentTime().
-// Returns an interval in milliseconds suitable for passing to one of the Win32 wait functions (e.g., ::WaitForSingleObject).
+// The absoluteTime is in seconds, starting on January 1, 1970. The time is
+// assumed to use the same time zone as WTF::currentTime().
+// Returns an interval in milliseconds suitable for passing to one of the Win32
+// wait functions (e.g., ::WaitForSingleObject).
 DWORD absoluteTimeToWaitTimeoutInterval(double absoluteTime);
 #endif
 
 } // namespace WTF
 
-using WTF::MutexBase;
 using WTF::Mutex;
-using WTF::RecursiveMutex;
+using WTF::MutexBase;
 using WTF::MutexLocker;
 using WTF::MutexTryLocker;
+using WTF::RecursiveMutex;
 using WTF::ThreadCondition;
 
 #if OS(WIN)

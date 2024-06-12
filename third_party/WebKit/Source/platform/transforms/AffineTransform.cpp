@@ -25,23 +25,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/transforms/AffineTransform.h"
 
-#include "platform/FloatConversion.h"
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "wtf/MathExtras.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
 AffineTransform::AffineTransform()
 {
-    setMatrix(1, 0, 0, 1, 0, 0);
+    const Transform identity = IDENTITY_TRANSFORM;
+    setMatrix(identity);
 }
 
-AffineTransform::AffineTransform(double a, double b, double c, double d, double e, double f)
+AffineTransform::AffineTransform(double a,
+    double b,
+    double c,
+    double d,
+    double e,
+    double f)
 {
     setMatrix(a, b, c, d, e, f);
 }
@@ -51,7 +56,12 @@ void AffineTransform::makeIdentity()
     setMatrix(1, 0, 0, 1, 0, 0);
 }
 
-void AffineTransform::setMatrix(double a, double b, double c, double d, double e, double f)
+void AffineTransform::setMatrix(double a,
+    double b,
+    double c,
+    double d,
+    double e,
+    double f)
 {
     m_transform[0] = a;
     m_transform[1] = b;
@@ -63,19 +73,27 @@ void AffineTransform::setMatrix(double a, double b, double c, double d, double e
 
 bool AffineTransform::isIdentity() const
 {
-    return (m_transform[0] == 1 && m_transform[1] == 0
-         && m_transform[2] == 0 && m_transform[3] == 1
-         && m_transform[4] == 0 && m_transform[5] == 0);
+    return (m_transform[0] == 1 && m_transform[1] == 0 && m_transform[2] == 0 && m_transform[3] == 1 && m_transform[4] == 0 && m_transform[5] == 0);
+}
+
+double AffineTransform::xScaleSquared() const
+{
+    return m_transform[0] * m_transform[0] + m_transform[1] * m_transform[1];
 }
 
 double AffineTransform::xScale() const
 {
-    return sqrt(m_transform[0] * m_transform[0] + m_transform[1] * m_transform[1]);
+    return sqrt(xScaleSquared());
+}
+
+double AffineTransform::yScaleSquared() const
+{
+    return m_transform[2] * m_transform[2] + m_transform[3] * m_transform[3];
 }
 
 double AffineTransform::yScale() const
 {
-    return sqrt(m_transform[2] * m_transform[2] + m_transform[3] * m_transform[3]);
+    return sqrt(yScaleSquared());
 }
 
 double AffineTransform::det() const
@@ -105,29 +123,58 @@ AffineTransform AffineTransform::inverse() const
     result.m_transform[1] = -m_transform[1] / determinant;
     result.m_transform[2] = -m_transform[2] / determinant;
     result.m_transform[3] = m_transform[0] / determinant;
-    result.m_transform[4] = (m_transform[2] * m_transform[5]
-                           - m_transform[3] * m_transform[4]) / determinant;
-    result.m_transform[5] = (m_transform[1] * m_transform[4]
-                           - m_transform[0] * m_transform[5]) / determinant;
+    result.m_transform[4] = (m_transform[2] * m_transform[5] - m_transform[3] * m_transform[4]) / determinant;
+    result.m_transform[5] = (m_transform[1] * m_transform[4] - m_transform[0] * m_transform[5]) / determinant;
 
     return result;
 }
 
+namespace {
 
-// Multiplies this AffineTransform by the provided AffineTransform - i.e.
-// this = this * other;
+    // res = t1 * t2
+    inline void doMultiply(const AffineTransform& t1,
+        const AffineTransform& t2,
+        AffineTransform* res)
+    {
+        res->setA(t1.a() * t2.a() + t1.c() * t2.b());
+        res->setB(t1.b() * t2.a() + t1.d() * t2.b());
+        res->setC(t1.a() * t2.c() + t1.c() * t2.d());
+        res->setD(t1.b() * t2.c() + t1.d() * t2.d());
+        res->setE(t1.a() * t2.e() + t1.c() * t2.f() + t1.e());
+        res->setF(t1.b() * t2.e() + t1.d() * t2.f() + t1.f());
+    }
+
+} // anonymous namespace
+
 AffineTransform& AffineTransform::multiply(const AffineTransform& other)
 {
+    if (other.isIdentityOrTranslation()) {
+        if (other.m_transform[4] || other.m_transform[5])
+            translate(other.m_transform[4], other.m_transform[5]);
+        return *this;
+    }
+
     AffineTransform trans;
-
-    trans.m_transform[0] = other.m_transform[0] * m_transform[0] + other.m_transform[1] * m_transform[2];
-    trans.m_transform[1] = other.m_transform[0] * m_transform[1] + other.m_transform[1] * m_transform[3];
-    trans.m_transform[2] = other.m_transform[2] * m_transform[0] + other.m_transform[3] * m_transform[2];
-    trans.m_transform[3] = other.m_transform[2] * m_transform[1] + other.m_transform[3] * m_transform[3];
-    trans.m_transform[4] = other.m_transform[4] * m_transform[0] + other.m_transform[5] * m_transform[2] + m_transform[4];
-    trans.m_transform[5] = other.m_transform[4] * m_transform[1] + other.m_transform[5] * m_transform[3] + m_transform[5];
-
+    doMultiply(*this, other, &trans);
     setMatrix(trans.m_transform);
+
+    return *this;
+}
+
+AffineTransform& AffineTransform::preMultiply(const AffineTransform& other)
+{
+    if (other.isIdentityOrTranslation()) {
+        if (other.m_transform[4] || other.m_transform[5]) {
+            m_transform[4] += other.m_transform[4];
+            m_transform[5] += other.m_transform[5];
+        }
+        return *this;
+    }
+
+    AffineTransform trans;
+    doMultiply(other, *this, &trans);
+    setMatrix(trans.m_transform);
+
     return *this;
 }
 
@@ -243,7 +290,7 @@ FloatPoint AffineTransform::mapPoint(const FloatPoint& point) const
     double x2, y2;
     map(point.x(), point.y(), x2, y2);
 
-    return FloatPoint(narrowPrecisionToFloat(x2), narrowPrecisionToFloat(y2));
+    return FloatPoint(clampTo<float>(x2), clampTo<float>(y2));
 }
 
 IntSize AffineTransform::mapSize(const IntSize& size) const
@@ -259,10 +306,10 @@ FloatSize AffineTransform::mapSize(const FloatSize& size) const
     double width2 = size.width() * xScale();
     double height2 = size.height() * yScale();
 
-    return FloatSize(narrowPrecisionToFloat(width2), narrowPrecisionToFloat(height2));
+    return FloatSize(clampTo<float>(width2), clampTo<float>(height2));
 }
 
-IntRect AffineTransform::mapRect(const IntRect &rect) const
+IntRect AffineTransform::mapRect(const IntRect& rect) const
 {
     return enclosingIntRect(mapRect(FloatRect(rect)));
 }
@@ -274,7 +321,8 @@ FloatRect AffineTransform::mapRect(const FloatRect& rect) const
             return rect;
 
         FloatRect mappedRect(rect);
-        mappedRect.move(narrowPrecisionToFloat(m_transform[4]), narrowPrecisionToFloat(m_transform[5]));
+        mappedRect.move(clampTo<float>(m_transform[4]),
+            clampTo<float>(m_transform[5]));
         return mappedRect;
     }
 
@@ -290,7 +338,8 @@ FloatQuad AffineTransform::mapQuad(const FloatQuad& q) const
 {
     if (isIdentityOrTranslation()) {
         FloatQuad mappedQuad(q);
-        mappedQuad.move(narrowPrecisionToFloat(m_transform[4]), narrowPrecisionToFloat(m_transform[5]));
+        mappedQuad.move(clampTo<float>(m_transform[4]),
+            clampTo<float>(m_transform[5]));
         return mappedQuad;
     }
 
@@ -305,7 +354,7 @@ FloatQuad AffineTransform::mapQuad(const FloatQuad& q) const
 TransformationMatrix AffineTransform::toTransformationMatrix() const
 {
     return TransformationMatrix(m_transform[0], m_transform[1], m_transform[2],
-                                m_transform[3], m_transform[4], m_transform[5]);
+        m_transform[3], m_transform[4], m_transform[5]);
 }
 
 bool AffineTransform::decompose(DecomposedType& decomp) const
@@ -361,4 +410,31 @@ void AffineTransform::recompose(const DecomposedType& decomp)
     this->scale(decomp.scaleX, decomp.scaleY);
 }
 
+String AffineTransform::toString(bool asMatrix) const
+{
+    if (asMatrix) {
+        // Return as a matrix in row-major order.
+        return String::format("[%lg,%lg,%lg,\n%lg,%lg,%lg]", a(), c(), e(), b(),
+            d(), f());
+    }
+
+    if (isIdentity())
+        return "identity";
+
+    AffineTransform::DecomposedType decomposition;
+    decompose(decomposition);
+
+    if (isIdentityOrTranslation())
+        return String::format("translation(%lg,%lg)", decomposition.translateX,
+            decomposition.translateY);
+
+    return String::format(
+        "translation(%lg,%lg), scale(%lg,%lg), angle(%lgdeg), "
+        "remainder(%lg,%lg,%lg,%lg)",
+        decomposition.translateX, decomposition.translateY, decomposition.scaleX,
+        decomposition.scaleY, rad2deg(decomposition.angle),
+        decomposition.remainderA, decomposition.remainderB,
+        decomposition.remainderC, decomposition.remainderD);
 }
+
+} // namespace blink

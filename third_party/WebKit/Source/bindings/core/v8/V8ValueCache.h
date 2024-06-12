@@ -28,6 +28,7 @@
 
 #include "bindings/core/v8/V8GlobalValueMap.h"
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
@@ -37,14 +38,25 @@
 
 namespace blink {
 
-class StringCacheMapTraits : public V8GlobalValueMapTraits<StringImpl*, v8::String, v8::kWeakWithParameter> {
+class StringCacheMapTraits
+    : public V8GlobalValueMapTraits<StringImpl*,
+          v8::String,
+          v8::kWeakWithParameter> {
+    STATIC_ONLY(StringCacheMapTraits);
+
 public:
     // Weak traits:
     typedef StringImpl WeakCallbackDataType;
-    typedef v8::GlobalValueMap<StringImpl*, v8::String, StringCacheMapTraits> MapType;
+    typedef v8::GlobalValueMap<StringImpl*, v8::String, StringCacheMapTraits>
+        MapType;
 
     static WeakCallbackDataType* WeakCallbackParameter(
-        MapType* map, StringImpl* key, v8::Local<v8::String>& value) { return key; }
+        MapType* map,
+        StringImpl* key,
+        v8::Local<v8::String>& value)
+    {
+        return key;
+    }
     static void DisposeCallbackData(WeakCallbackDataType* callbackData) { }
 
     static MapType* MapFromWeakCallbackInfo(
@@ -58,17 +70,24 @@ public:
 
     static void OnWeakCallback(const v8::WeakCallbackInfo<WeakCallbackDataType>&);
 
-    static void Dispose(v8::Isolate*, v8::Global<v8::String> value, StringImpl* key);
+    static void Dispose(v8::Isolate*,
+        v8::Global<v8::String> value,
+        StringImpl* key);
     static void DisposeWeak(const v8::WeakCallbackInfo<WeakCallbackDataType>&);
 };
 
-
 class CORE_EXPORT StringCache {
+    USING_FAST_MALLOC(StringCache);
     WTF_MAKE_NONCOPYABLE(StringCache);
-public:
-    explicit StringCache(v8::Isolate* isolate) : m_stringCache(isolate) { }
 
-    v8::Local<v8::String> v8ExternalString(v8::Isolate* isolate, StringImpl* stringImpl)
+public:
+    explicit StringCache(v8::Isolate* isolate)
+        : m_stringCache(isolate)
+    {
+    }
+
+    v8::Local<v8::String> v8ExternalString(v8::Isolate* isolate,
+        StringImpl* stringImpl)
     {
         ASSERT(stringImpl);
         if (m_lastStringImpl.get() == stringImpl)
@@ -76,7 +95,8 @@ public:
         return v8ExternalStringSlow(isolate, stringImpl);
     }
 
-    void setReturnValueFromString(v8::ReturnValue<v8::Value> returnValue, StringImpl* stringImpl)
+    void setReturnValueFromString(v8::ReturnValue<v8::Value> returnValue,
+        StringImpl* stringImpl)
     {
         ASSERT(stringImpl);
         if (m_lastStringImpl.get() == stringImpl)
@@ -92,7 +112,8 @@ public:
 private:
     v8::Local<v8::String> v8ExternalStringSlow(v8::Isolate*, StringImpl*);
     void setReturnValueFromStringSlow(v8::ReturnValue<v8::Value>, StringImpl*);
-    v8::Local<v8::String> createStringAndInsertIntoCache(v8::Isolate*, StringImpl*);
+    v8::Local<v8::String> createStringAndInsertIntoCache(v8::Isolate*,
+        StringImpl*);
     void InvalidateLastString();
 
     StringCacheMapTraits::MapType m_stringCache;

@@ -25,7 +25,6 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -35,24 +34,27 @@ class CSSRuleList;
 class CSSStyleSheet;
 class StyleRuleBase;
 
-class CSSRule : public RefCountedWillBeGarbageCollectedFinalized<CSSRule>, public ScriptWrappable {
+class CORE_EXPORT CSSRule : public GarbageCollectedFinalized<CSSRule>,
+                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     virtual ~CSSRule() { }
 
     enum Type {
-        STYLE_RULE = 1,
-        CHARSET_RULE = 2,
-        IMPORT_RULE = 3,
-        MEDIA_RULE = 4,
-        FONT_FACE_RULE = 5,
-        PAGE_RULE = 6,
-        KEYFRAMES_RULE = 7,
-        WEBKIT_KEYFRAMES_RULE = KEYFRAMES_RULE,
-        KEYFRAME_RULE = 8,
-        WEBKIT_KEYFRAME_RULE = KEYFRAME_RULE,
-        SUPPORTS_RULE = 12,
-        VIEWPORT_RULE = 15,
+        kStyleRule = 1,
+        kCharsetRule = 2,
+        kImportRule = 3,
+        kMediaRule = 4,
+        kFontFaceRule = 5,
+        kPageRule = 6,
+        kKeyframesRule = 7,
+        kWebkitKeyframesRule = kKeyframesRule,
+        kKeyframeRule = 8,
+        kWebkitKeyframeRule = kKeyframeRule,
+        kNamespaceRule = 10,
+        kSupportsRule = 12,
+        kViewportRule = 15,
     };
 
     virtual Type type() const = 0;
@@ -61,31 +63,26 @@ public:
 
     virtual CSSRuleList* cssRules() const { return 0; }
 
-    void setParentStyleSheet(CSSStyleSheet* styleSheet)
-    {
-        m_parentIsRule = false;
-        m_parentStyleSheet = styleSheet;
-    }
+    void setParentStyleSheet(CSSStyleSheet*);
 
-    void setParentRule(CSSRule* rule)
-    {
-        m_parentIsRule = true;
-        m_parentRule = rule;
-    }
+    void setParentRule(CSSRule*);
 
     DECLARE_VIRTUAL_TRACE();
 
     CSSStyleSheet* parentStyleSheet() const
     {
         if (m_parentIsRule)
-            return m_parentRule ? m_parentRule->parentStyleSheet() : 0;
+            return m_parentRule ? m_parentRule->parentStyleSheet() : nullptr;
         return m_parentStyleSheet;
     }
 
-    CSSRule* parentRule() const { return m_parentIsRule ? m_parentRule : 0; }
+    CSSRule* parentRule() const
+    {
+        return m_parentIsRule ? m_parentRule : nullptr;
+    }
 
-    // NOTE: Just calls notImplemented().
-    void setCSSText(const String&);
+    // The CSSOM spec states that "setting the cssText attribute must do nothing."
+    void setCSSText(const String&) { }
 
 protected:
     CSSRule(CSSStyleSheet* parent)
@@ -96,9 +93,12 @@ protected:
     }
 
     bool hasCachedSelectorText() const { return m_hasCachedSelectorText; }
-    void setHasCachedSelectorText(bool hasCachedSelectorText) const { m_hasCachedSelectorText = hasCachedSelectorText; }
+    void setHasCachedSelectorText(bool hasCachedSelectorText) const
+    {
+        m_hasCachedSelectorText = hasCachedSelectorText;
+    }
 
-    const CSSParserContext& parserContext() const;
+    const CSSParserContext* parserContext() const;
 
 private:
     mutable unsigned char m_hasCachedSelectorText : 1;
@@ -111,8 +111,9 @@ private:
     };
 };
 
-#define DEFINE_CSS_RULE_TYPE_CASTS(ToType, TYPE_NAME) \
-    DEFINE_TYPE_CASTS(ToType, CSSRule, rule, rule->type() == CSSRule::TYPE_NAME, rule.type() == CSSRule::TYPE_NAME)
+#define DEFINE_CSS_RULE_TYPE_CASTS(ToType, TYPE_NAME)                            \
+    DEFINE_TYPE_CASTS(ToType, CSSRule, rule, rule->type() == CSSRule::TYPE_NAME, \
+        rule.type() == CSSRule::TYPE_NAME)
 
 } // namespace blink
 

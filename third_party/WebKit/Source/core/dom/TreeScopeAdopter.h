@@ -2,9 +2,11 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All
+ * rights reserved.
  * Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies)
- * Copyright (C) 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2011 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -33,29 +35,36 @@ class TreeScope;
 
 class TreeScopeAdopter {
     STACK_ALLOCATED();
+
 public:
     TreeScopeAdopter(Node& toAdopt, TreeScope& newScope);
 
-    void execute() const { moveTreeToNewScope(*m_toAdopt); }
+    void execute() const;
     bool needsScopeChange() const { return m_oldScope != m_newScope; }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     static void ensureDidMoveToNewDocumentWasCalled(Document&);
 #else
-    static void ensureDidMoveToNewDocumentWasCalled(Document&) { }
+    static void ensureDidMoveToNewDocumentWasCalled(Document&)
+    {
+    }
 #endif
 
 private:
     void updateTreeScope(Node&) const;
     void moveTreeToNewScope(Node&) const;
-    void moveTreeToNewDocument(Node&, Document& oldDocument, Document& newDocument) const;
-    void moveNodeToNewDocument(Node&, Document& oldDocument, Document& newDocument) const;
+    void moveTreeToNewDocument(Node&,
+        Document& oldDocument,
+        Document& newDocument) const;
+    void moveNodeToNewDocument(Node&,
+        Document& oldDocument,
+        Document& newDocument) const;
     TreeScope& oldScope() const { return *m_oldScope; }
     TreeScope& newScope() const { return *m_newScope; }
 
-    RawPtrWillBeMember<Node> m_toAdopt;
-    RawPtrWillBeMember<TreeScope> m_newScope;
-    RawPtrWillBeMember<TreeScope> m_oldScope;
+    Member<Node> m_toAdopt;
+    Member<TreeScope> m_newScope;
+    Member<TreeScope> m_oldScope;
 };
 
 inline TreeScopeAdopter::TreeScopeAdopter(Node& toAdopt, TreeScope& newScope)
@@ -65,6 +74,6 @@ inline TreeScopeAdopter::TreeScopeAdopter(Node& toAdopt, TreeScope& newScope)
 {
 }
 
-}
+} // namespace blink
 
 #endif

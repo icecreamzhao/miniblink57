@@ -34,23 +34,19 @@
 namespace blink {
 
 struct WebIDBMetadata {
-    enum {
-        NoIntVersion = -1
-    };
+    enum { NoVersion = -1 };
     struct Index;
     struct ObjectStore;
 
     WebString name;
-    // FIXME: Both version members need to be present while we support both the
-    // old setVersion and new upgradeneeded API. Once we no longer support
-    // setVersion, WebString version can be removed.
-    WebString version;
-    long long intVersion;
+    long long version;
     long long id;
     long long maxObjectStoreId;
     WebVector<ObjectStore> objectStores;
     WebIDBMetadata()
-        : intVersion(NoIntVersion) { }
+        : version(NoVersion)
+    {
+    }
 
     struct ObjectStore {
         WebString name;
@@ -61,7 +57,9 @@ struct WebIDBMetadata {
         WebVector<Index> indexes;
         ObjectStore()
             : keyPath(WebIDBKeyPath::createNull())
-            , autoIncrement(false) { }
+            , autoIncrement(false)
+        {
+        }
     };
 
     struct Index {
@@ -73,9 +71,10 @@ struct WebIDBMetadata {
         Index()
             : keyPath(WebIDBKeyPath::createNull())
             , unique(false)
-            , multiEntry(false) { }
+            , multiEntry(false)
+        {
+        }
     };
-
 };
 
 } // namespace blink

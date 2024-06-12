@@ -8,11 +8,7 @@
 #include "Benchmark.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
-#include "SkString.h"
-
-static void make_path(SkPath& path) {
-    #include "BigPathBench.inc"
-}
+#include "sk_tool_utils.h"
 
 enum Align {
     kLeft_Align,
@@ -24,13 +20,16 @@ const char* gAlignName[] = { "left", "middle", "right" };
 
 // Inspired by crbug.com/455429
 class BigPathBench : public Benchmark {
-    SkPath      fPath;
-    SkString    fName;
-    Align       fAlign;
-    bool        fRound;
+    SkPath fPath;
+    SkString fName;
+    Align fAlign;
+    bool fRound;
 
 public:
-    BigPathBench(Align align, bool round) : fAlign(align), fRound(round) {
+    BigPathBench(Align align, bool round)
+        : fAlign(align)
+        , fRound(round)
+    {
         fName.printf("bigpath_%s", gAlignName[fAlign]);
         if (round) {
             fName.append("_round");
@@ -38,19 +37,23 @@ public:
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    SkIPoint onGetSize() override {
+    SkIPoint onGetSize() override
+    {
         return SkIPoint::Make(640, 100);
     }
 
-    void onPreDraw() override {
-        make_path(fPath);
+    void onDelayedSetup() override
+    {
+        sk_tool_utils::make_big_path(fPath);
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -62,14 +65,14 @@ protected:
 
         const SkRect r = fPath.getBounds();
         switch (fAlign) {
-            case kLeft_Align:
-                canvas->translate(-r.left(), 0);
-                break;
-            case kMiddle_Align:
-                break;
-            case kRight_Align:
-                canvas->translate(640 - r.right(), 0);
-                break;
+        case kLeft_Align:
+            canvas->translate(-r.left(), 0);
+            break;
+        case kMiddle_Align:
+            break;
+        case kRight_Align:
+            canvas->translate(640 - r.right(), 0);
+            break;
         }
 
         for (int i = 0; i < loops; i++) {
@@ -81,11 +84,10 @@ private:
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return new BigPathBench(kLeft_Align,     false); )
-DEF_BENCH( return new BigPathBench(kMiddle_Align,   false); )
-DEF_BENCH( return new BigPathBench(kRight_Align,    false); )
+DEF_BENCH(return new BigPathBench(kLeft_Align, false);)
+DEF_BENCH(return new BigPathBench(kMiddle_Align, false);)
+DEF_BENCH(return new BigPathBench(kRight_Align, false);)
 
-DEF_BENCH( return new BigPathBench(kLeft_Align,     true); )
-DEF_BENCH( return new BigPathBench(kMiddle_Align,   true); )
-DEF_BENCH( return new BigPathBench(kRight_Align,    true); )
-
+DEF_BENCH(return new BigPathBench(kLeft_Align, true);)
+DEF_BENCH(return new BigPathBench(kMiddle_Align, true);)
+DEF_BENCH(return new BigPathBench(kRight_Align, true);)

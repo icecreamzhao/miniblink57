@@ -7,27 +7,43 @@
 
 #include "src/torque/ast.h"
 #include "src/torque/contextual.h"
+#include "src/torque/server-data.h"
 #include "src/torque/source-positions.h"
 #include "src/torque/utils.h"
 
 namespace v8 {
 namespace internal {
-namespace torque {
+    namespace torque {
 
-struct TorqueCompilerOptions {
-  std::string output_directory;
-  bool verbose;
-  bool collect_language_server_data;
-  bool abort_on_lint_errors;
-};
+        struct TorqueCompilerOptions {
+            std::string output_directory;
+            bool verbose;
+            bool collect_language_server_data;
+            bool abort_on_lint_errors;
+        };
 
-V8_EXPORT_PRIVATE void CompileTorque(const std::string& source,
-                                     TorqueCompilerOptions options);
-void CompileTorque(std::vector<std::string> files,
-                   TorqueCompilerOptions options);
+        struct TorqueCompilerResult {
+            // Map translating SourceIds to filenames. This field is
+            // set on errors, so the SourcePosition of the error can be
+            // resolved.
+            SourceFileMap source_file_map;
 
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+            // Eagerly collected data needed for the LanguageServer.
+            // Set the corresponding options flag to enable.
+            LanguageServerData language_server_data;
 
-#endif  // V8_TORQUE_TORQUE_COMPILER_H_
+            // If any error occurred during either parsing or compilation,
+            // this field will be set.
+            base::Optional<TorqueError> error;
+        };
+
+        V8_EXPORT_PRIVATE TorqueCompilerResult
+        CompileTorque(const std::string& source, TorqueCompilerOptions options);
+        TorqueCompilerResult CompileTorque(std::vector<std::string> files,
+            TorqueCompilerOptions options);
+
+    } // namespace torque
+} // namespace internal
+} // namespace v8
+
+#endif // V8_TORQUE_TORQUE_COMPILER_H_

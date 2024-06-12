@@ -5,15 +5,17 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
+#include "SkPath.h"
+#include "gm.h"
 
 #define WIDTH 400
 #define HEIGHT 600
 
 namespace {
 // Concave test
-void test_concave(SkCanvas* canvas, const SkPaint& paint) {
+void test_concave(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->translate(0, 0);
     path.moveTo(SkIntToScalar(20), SkIntToScalar(20));
@@ -24,7 +26,8 @@ void test_concave(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Reverse concave test
-void test_reverse_concave(SkCanvas* canvas, const SkPaint& paint) {
+void test_reverse_concave(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 0);
@@ -37,7 +40,8 @@ void test_reverse_concave(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Bowtie (intersection)
-void test_bowtie(SkCanvas* canvas, const SkPaint& paint) {
+void test_bowtie(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 0);
@@ -50,7 +54,8 @@ void test_bowtie(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // "fake" bowtie (concave, but no intersection)
-void test_fake_bowtie(SkCanvas* canvas, const SkPaint& paint) {
+void test_fake_bowtie(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(300, 0);
@@ -65,7 +70,8 @@ void test_fake_bowtie(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Fish test (intersection/concave)
-void test_fish(SkCanvas* canvas, const SkPaint& paint) {
+void test_fish(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(0, 100);
@@ -80,7 +86,8 @@ void test_fish(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Collinear edges
-void test_collinear_edges(SkCanvas* canvas, const SkPaint& paint) {
+void test_collinear_edges(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 100);
@@ -93,7 +100,8 @@ void test_collinear_edges(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Square polygon with a square hole.
-void test_hole(SkCanvas* canvas, const SkPaint& paint) {
+void test_hole(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 100);
@@ -110,7 +118,8 @@ void test_hole(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Star test (self-intersecting)
-void test_star(SkCanvas* canvas, const SkPaint& paint) {
+void test_star(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(300, 100);
@@ -125,7 +134,8 @@ void test_star(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Stairstep with repeated vert (intersection)
-void test_stairstep(SkCanvas* canvas, const SkPaint& paint) {
+void test_stairstep(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(0, 200);
@@ -139,7 +149,8 @@ void test_stairstep(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 
-void test_stairstep2(SkCanvas* canvas, const SkPaint& paint) {
+void test_stairstep2(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 200);
@@ -153,7 +164,8 @@ void test_stairstep2(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Overlapping segments
-void test_overlapping(SkCanvas* canvas, const SkPaint& paint) {
+void test_overlapping(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 200);
@@ -165,48 +177,73 @@ void test_overlapping(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 
+// Two "island" triangles inside a containing rect.
+// This exercises the partnering code in the tessellator.
+void test_partners(SkCanvas* canvas, const SkPaint& paint)
+{
+    SkPath path;
+    canvas->save();
+    canvas->translate(300, 200);
+    path.moveTo(20, 80);
+    path.lineTo(80, 80);
+    path.lineTo(80, 20);
+    path.lineTo(20, 20);
+    path.moveTo(30, 30);
+    path.lineTo(45, 50);
+    path.lineTo(30, 70);
+    path.moveTo(70, 30);
+    path.lineTo(70, 70);
+    path.lineTo(55, 50);
+    canvas->drawPath(path, paint);
+    canvas->restore();
+}
+
 // Monotone test 1 (point in the middle)
-void test_monotone_1(SkCanvas* canvas, const SkPaint& paint) {
+void test_monotone_1(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(0, 300);
     path.moveTo(SkIntToScalar(20), SkIntToScalar(20));
     path.quadTo(SkIntToScalar(20), SkIntToScalar(50),
-                SkIntToScalar(80), SkIntToScalar(50));
+        SkIntToScalar(80), SkIntToScalar(50));
     path.quadTo(SkIntToScalar(20), SkIntToScalar(50),
-                SkIntToScalar(20), SkIntToScalar(80));
+        SkIntToScalar(20), SkIntToScalar(80));
     canvas->drawPath(path, paint);
     canvas->restore();
 }
 
 // Monotone test 2 (point at the top)
-void test_monotone_2(SkCanvas* canvas, const SkPaint& paint) {
+void test_monotone_2(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 300);
     path.moveTo(SkIntToScalar(20), SkIntToScalar(20));
     path.lineTo(SkIntToScalar(80), SkIntToScalar(30));
     path.quadTo(SkIntToScalar(20), SkIntToScalar(20),
-                SkIntToScalar(20), SkIntToScalar(80));
+        SkIntToScalar(20), SkIntToScalar(80));
     canvas->drawPath(path, paint);
     canvas->restore();
 }
 
 // Monotone test 3 (point at the bottom)
-void test_monotone_3(SkCanvas* canvas, const SkPaint& paint) {
+void test_monotone_3(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 300);
     path.moveTo(SkIntToScalar(20), SkIntToScalar(80));
     path.lineTo(SkIntToScalar(80), SkIntToScalar(70));
     path.quadTo(SkIntToScalar(20), SkIntToScalar(80),
-                SkIntToScalar(20), SkIntToScalar(20));
+        SkIntToScalar(20), SkIntToScalar(20));
     canvas->drawPath(path, paint);
     canvas->restore();
 }
 
 // Monotone test 4 (merging of two monotones)
-void test_monotone_4(SkCanvas* canvas, const SkPaint& paint) {
+void test_monotone_4(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(300, 300);
@@ -221,7 +258,8 @@ void test_monotone_4(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Monotone test 5 (aborted merging of two monotones)
-void test_monotone_5(SkCanvas* canvas, const SkPaint& paint) {
+void test_monotone_5(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(0, 400);
@@ -233,7 +271,8 @@ void test_monotone_5(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 // Degenerate intersection test
-void test_degenerate(SkCanvas* canvas, const SkPaint& paint) {
+void test_degenerate(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 400);
@@ -247,7 +286,8 @@ void test_degenerate(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 // Two triangles with a coincident edge.
-void test_coincident_edge(SkCanvas* canvas, const SkPaint& paint) {
+void test_coincident_edge(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 400);
@@ -265,7 +305,8 @@ void test_coincident_edge(SkCanvas* canvas, const SkPaint& paint) {
 }
 // Bowtie with a coincident triangle (one triangle vertex coincident with the
 // bowtie's intersection).
-void test_bowtie_coincident_triangle(SkCanvas* canvas, const SkPaint& paint) {
+void test_bowtie_coincident_triangle(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(300, 400);
@@ -281,7 +322,8 @@ void test_bowtie_coincident_triangle(SkCanvas* canvas, const SkPaint& paint) {
 }
 
 // Coincident edges (big ones first, coincident vert on top).
-void test_coincident_edges_1(SkCanvas* canvas, const SkPaint& paint) {
+void test_coincident_edges_1(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(0, 500);
@@ -295,7 +337,8 @@ void test_coincident_edges_1(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 // Coincident edges (small ones first, coincident vert on top).
-void test_coincident_edges_2(SkCanvas* canvas, const SkPaint& paint) {
+void test_coincident_edges_2(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(100, 500);
@@ -309,7 +352,8 @@ void test_coincident_edges_2(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 // Coincident edges (small ones first, coincident vert on bottom).
-void test_coincident_edges_3(SkCanvas* canvas, const SkPaint& paint) {
+void test_coincident_edges_3(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(200, 500);
@@ -323,7 +367,8 @@ void test_coincident_edges_3(SkCanvas* canvas, const SkPaint& paint) {
     canvas->restore();
 }
 // Coincident edges (big ones first, coincident vert on bottom).
-void test_coincident_edges_4(SkCanvas* canvas, const SkPaint& paint) {
+void test_coincident_edges_4(SkCanvas* canvas, const SkPaint& paint)
+{
     SkPath path;
     canvas->save();
     canvas->translate(300, 500);
@@ -341,18 +386,21 @@ void test_coincident_edges_4(SkCanvas* canvas, const SkPaint& paint) {
 
 class ConcavePathsGM : public skiagm::GM {
 public:
-    ConcavePathsGM() {}
+    ConcavePathsGM() { }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("concavepaths");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(WIDTH, HEIGHT);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
 
         paint.setAntiAlias(true);
@@ -369,6 +417,7 @@ protected:
         test_stairstep(canvas, paint);
         test_stairstep2(canvas, paint);
         test_overlapping(canvas, paint);
+        test_partners(canvas, paint);
         test_monotone_1(canvas, paint);
         test_monotone_2(canvas, paint);
         test_monotone_3(canvas, paint);
@@ -387,5 +436,4 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-static skiagm::GM* F0(void*) { return new ConcavePathsGM; }
-static skiagm::GMRegistry R0(F0);
+DEF_GM(return new ConcavePathsGM;)

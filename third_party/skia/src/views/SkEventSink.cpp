@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkEventSink.h"
 #include "SkMutex.h"
@@ -14,23 +12,27 @@
 
 class SkEventSink_Globals {
 public:
-    SkEventSink_Globals() {
+    SkEventSink_Globals()
+    {
         fNextSinkID = 0;
-        fSinkHead = NULL;
+        fSinkHead = nullptr;
     }
 
-    SkMutex         fSinkMutex;
-    SkEventSinkID   fNextSinkID;
-    SkEventSink*    fSinkHead;
+    SkMutex fSinkMutex;
+    SkEventSinkID fNextSinkID;
+    SkEventSink* fSinkHead;
 };
 
-static SkEventSink_Globals& getGlobals() {
+static SkEventSink_Globals& getGlobals()
+{
     // leak this, so we don't incur any shutdown perf hit
     static SkEventSink_Globals* gGlobals = new SkEventSink_Globals;
     return *gGlobals;
 }
 
-SkEventSink::SkEventSink() : fTagHead(NULL) {
+SkEventSink::SkEventSink()
+    : fTagHead(nullptr)
+{
     SkEventSink_Globals& globals = getGlobals();
 
     globals.fSinkMutex.acquire();
@@ -42,7 +44,8 @@ SkEventSink::SkEventSink() : fTagHead(NULL) {
     globals.fSinkMutex.release();
 }
 
-SkEventSink::~SkEventSink() {
+SkEventSink::~SkEventSink()
+{
     SkEventSink_Globals& globals = getGlobals();
 
     if (fTagHead)
@@ -51,7 +54,7 @@ SkEventSink::~SkEventSink() {
     globals.fSinkMutex.acquire();
 
     SkEventSink* sink = globals.fSinkHead;
-    SkEventSink* prev = NULL;
+    SkEventSink* prev = nullptr;
 
     for (;;) {
         SkEventSink* next = sink->fNextSink;
@@ -69,38 +72,45 @@ SkEventSink::~SkEventSink() {
     globals.fSinkMutex.release();
 }
 
-bool SkEventSink::doEvent(const SkEvent& evt) {
+bool SkEventSink::doEvent(const SkEvent& evt)
+{
     return this->onEvent(evt);
 }
 
-bool SkEventSink::doQuery(SkEvent* evt) {
+bool SkEventSink::doQuery(SkEvent* evt)
+{
     SkASSERT(evt);
     return this->onQuery(evt);
 }
 
-bool SkEventSink::onEvent(const SkEvent&) {
+bool SkEventSink::onEvent(const SkEvent&)
+{
     return false;
 }
 
-bool SkEventSink::onQuery(SkEvent*) {
+bool SkEventSink::onQuery(SkEvent*)
+{
     return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SkTagList* SkEventSink::findTagList(U8CPU tag) const {
-    return fTagHead ? SkTagList::Find(fTagHead, tag) : NULL;
+SkTagList* SkEventSink::findTagList(U8CPU tag) const
+{
+    return fTagHead ? SkTagList::Find(fTagHead, tag) : nullptr;
 }
 
-void SkEventSink::addTagList(SkTagList* rec) {
+void SkEventSink::addTagList(SkTagList* rec)
+{
     SkASSERT(rec);
-    SkASSERT(fTagHead == NULL || SkTagList::Find(fTagHead, rec->fTag) == NULL);
+    SkASSERT(fTagHead == nullptr || SkTagList::Find(fTagHead, rec->fTag) == nullptr);
 
     rec->fNext = fTagHead;
     fTagHead = rec;
 }
 
-void SkEventSink::removeTagList(U8CPU tag) {
+void SkEventSink::removeTagList(U8CPU tag)
+{
     if (fTagHead) {
         SkTagList::DeleteTag(&fTagHead, tag);
     }
@@ -109,7 +119,8 @@ void SkEventSink::removeTagList(U8CPU tag) {
 ///////////////////////////////////////////////////////////////////////////////
 
 struct SkListenersTagList : SkTagList {
-    SkListenersTagList(U16CPU count) : SkTagList(kListeners_SkTagList)
+    SkListenersTagList(U16CPU count)
+        : SkTagList(kListeners_SkTagList)
     {
         fExtra16 = SkToU16(count);
         fIDs = (SkEventSinkID*)sk_malloc_throw(count * sizeof(SkEventSinkID));
@@ -130,7 +141,7 @@ struct SkListenersTagList : SkTagList {
         return -1;
     }
 
-    SkEventSinkID*  fIDs;
+    SkEventSinkID* fIDs;
 };
 
 void SkEventSink::addListenerID(SkEventSinkID id)
@@ -139,19 +150,17 @@ void SkEventSink::addListenerID(SkEventSinkID id)
         return;
 
     SkListenersTagList* prev = (SkListenersTagList*)this->findTagList(kListeners_SkTagList);
-    int                 count = 0;
+    int count = 0;
 
-    if (prev)
-    {
+    if (prev) {
         if (prev->find(id) >= 0)
             return;
         count = prev->countListners();
     }
 
-    SkListenersTagList* next = SkNEW_ARGS(SkListenersTagList, (count + 1));
+    SkListenersTagList* next = new SkListenersTagList(count + 1);
 
-    if (prev)
-    {
+    if (prev) {
         memcpy(next->fIDs, prev->fIDs, count * sizeof(SkEventSinkID));
         this->removeTagList(kListeners_SkTagList);
     }
@@ -162,7 +171,7 @@ void SkEventSink::addListenerID(SkEventSinkID id)
 void SkEventSink::copyListeners(const SkEventSink& sink)
 {
     SkListenersTagList* sinkList = (SkListenersTagList*)sink.findTagList(kListeners_SkTagList);
-    if (sinkList == NULL)
+    if (sinkList == nullptr)
         return;
     SkASSERT(sinkList->countListners() > 0);
     const SkEventSinkID* iter = sinkList->fIDs;
@@ -178,18 +187,16 @@ void SkEventSink::removeListenerID(SkEventSinkID id)
 
     SkListenersTagList* list = (SkListenersTagList*)this->findTagList(kListeners_SkTagList);
 
-    if (list == NULL)
+    if (list == nullptr)
         return;
 
     int index = list->find(id);
-    if (index >= 0)
-    {
+    if (index >= 0) {
         int count = list->countListners();
         SkASSERT(count > 0);
         if (count == 1)
             this->removeTagList(kListeners_SkTagList);
-        else
-        {
+        else {
             // overwrite without resize/reallocating our struct (for speed)
             list->fIDs[index] = list->fIDs[count - 1];
             list->fExtra16 = SkToU16(count - 1);
@@ -199,17 +206,18 @@ void SkEventSink::removeListenerID(SkEventSinkID id)
 
 bool SkEventSink::hasListeners() const
 {
-    return this->findTagList(kListeners_SkTagList) != NULL;
+    return this->findTagList(kListeners_SkTagList) != nullptr;
 }
 
-void SkEventSink::postToListeners(const SkEvent& evt, SkMSec delay) {
+void SkEventSink::postToListeners(const SkEvent& evt, SkMSec delay)
+{
     SkListenersTagList* list = (SkListenersTagList*)this->findTagList(kListeners_SkTagList);
     if (list) {
         SkASSERT(list->countListners() > 0);
         const SkEventSinkID* iter = list->fIDs;
         const SkEventSinkID* stop = iter + list->countListners();
         while (iter < stop) {
-            SkEvent* copy = SkNEW_ARGS(SkEvent, (evt));
+            SkEvent* copy = new SkEvent(evt);
             copy->setTargetID(*iter++)->postDelay(delay);
         }
     }
@@ -217,7 +225,8 @@ void SkEventSink::postToListeners(const SkEvent& evt, SkMSec delay) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SkEventSink::EventResult SkEventSink::DoEvent(const SkEvent& evt) {
+SkEventSink::EventResult SkEventSink::DoEvent(const SkEvent& evt)
+{
     SkEvent::Proc proc = evt.getTargetProc();
     if (proc) {
         return proc(evt) ? kHandled_EventResult : kNotHandled_EventResult;
@@ -236,28 +245,27 @@ SkEventSink* SkEventSink::FindSink(SkEventSinkID sinkID)
     if (sinkID == 0)
         return 0;
 
-    SkEventSink_Globals&    globals = getGlobals();
-    SkAutoMutexAcquire      ac(globals.fSinkMutex);
-    SkEventSink*            sink = globals.fSinkHead;
+    SkEventSink_Globals& globals = getGlobals();
+    SkAutoMutexAcquire ac(globals.fSinkMutex);
+    SkEventSink* sink = globals.fSinkHead;
 
-    while (sink)
-    {
+    while (sink) {
         if (sink->getSinkID() == sinkID)
             return sink;
         sink = sink->fNextSink;
     }
-    return NULL;
+    return nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-#if 0   // experimental, not tested
+#if 0 // experimental, not tested
 
 #include "SkMutex.h"
 #include "SkTDict.h"
 
-#define kMinStringBufferSize    128
+#define kMinStringBufferSize 128
 SK_DECLARE_STATIC_MUTEX(gNamedSinkMutex);
 static SkTDict<SkEventSinkID>   gNamedSinkIDs(kMinStringBufferSize);
 

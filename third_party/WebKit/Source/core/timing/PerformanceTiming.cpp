@@ -28,26 +28,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/timing/PerformanceTiming.h"
 
 #include "bindings/core/v8/ScriptValue.h"
 #include "bindings/core/v8/V8ObjectBuilder.h"
+#include "core/css/CSSTiming.h"
 #include "core/dom/Document.h"
+#include "core/dom/DocumentParserTiming.h"
 #include "core/dom/DocumentTiming.h"
 #include "core/frame/LocalFrame.h"
 #include "core/loader/DocumentLoadTiming.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
+#include "core/paint/PaintTiming.h"
+#include "core/timing/PerformanceBase.h"
 #include "platform/network/ResourceLoadTiming.h"
 #include "platform/network/ResourceResponse.h"
 
+// Legacy support for NT1(https://www.w3.org/TR/navigation-timing/).
 namespace blink {
 
 static unsigned long long toIntegerMilliseconds(double seconds)
 {
     ASSERT(seconds >= 0);
-    return static_cast<unsigned long long>(seconds * 1000.0);
+    double clampedSeconds = PerformanceBase::clampTimeResolution(seconds);
+    return static_cast<unsigned long long>(clampedSeconds * 1000.0);
 }
 
 static double toDoubleSeconds(unsigned long long integerMilliseconds)
@@ -56,7 +61,7 @@ static double toDoubleSeconds(unsigned long long integerMilliseconds)
 }
 
 PerformanceTiming::PerformanceTiming(LocalFrame* frame)
-    : DOMWindowProperty(frame)
+    : ContextClient(frame)
 {
 }
 
@@ -132,8 +137,9 @@ unsigned long long PerformanceTiming::domainLookupStart() const
     if (!timing)
         return fetchStart();
 
-    // This will be zero when a DNS request is not performed.
-    // Rather than exposing a special value that indicates no DNS, we "backfill" with fetchStart.
+    // This will be zero when a DNS request is not performed.  Rather than
+    // exposing a special value that indicates no DNS, we "backfill" with
+    // fetchStart.
     double dnsStart = timing->dnsStart();
     if (dnsStart == 0.0)
         return fetchStart();
@@ -147,8 +153,9 @@ unsigned long long PerformanceTiming::domainLookupEnd() const
     if (!timing)
         return domainLookupStart();
 
-    // This will be zero when a DNS request is not performed.
-    // Rather than exposing a special value that indicates no DNS, we "backfill" with domainLookupStart.
+    // This will be zero when a DNS request is not performed.  Rather than
+    // exposing a special value that indicates no DNS, we "backfill" with
+    // domainLookupStart.
     double dnsEnd = timing->dnsEnd();
     if (dnsEnd == 0.0)
         return domainLookupStart();
@@ -166,14 +173,16 @@ unsigned long long PerformanceTiming::connectStart() const
     if (!timing)
         return domainLookupEnd();
 
-    // connectStart will be zero when a network request is not made.
-    // Rather than exposing a special value that indicates no new connection, we "backfill" with domainLookupEnd.
+    // connectStart will be zero when a network request is not made.  Rather than
+    // exposing a special value that indicates no new connection, we "backfill"
+    // with domainLookupEnd.
     double connectStart = timing->connectStart();
     if (connectStart == 0.0 || loader->response().connectionReused())
         return domainLookupEnd();
 
-    // ResourceLoadTiming's connect phase includes DNS, however Navigation Timing's
-    // connect phase should not. So if there is DNS time, trim it from the start.
+    // ResourceLoadTiming's connect phase includes DNS, however Navigation
+    // Timing's connect phase should not. So if there is DNS time, trim it from
+    // the start.
     if (timing->dnsEnd() > 0.0 && timing->dnsEnd() > connectStart)
         connectStart = timing->dnsEnd();
 
@@ -190,8 +199,9 @@ unsigned long long PerformanceTiming::connectEnd() const
     if (!timing)
         return connectStart();
 
-    // connectEnd will be zero when a network request is not made.
-    // Rather than exposing a special value that indicates no new connection, we "backfill" with connectStart.
+    // connectEnd will be zero when a network request is not made.  Rather than
+    // exposing a special value that indicates no new connection, we "backfill"
+    // with connectStart.
     double connectEnd = timing->connectEnd();
     if (connectEnd == 0.0 || loader->response().connectionReused())
         return connectStart();
@@ -274,7 +284,8 @@ unsigned long long PerformanceTiming::domContentLoadedEventStart() const
     if (!timing)
         return 0;
 
-    return monotonicTimeToIntegerMilliseconds(timing->domContentLoadedEventStart());
+    return monotonicTimeToIntegerMilliseconds(
+        timing->domContentLoadedEventStart());
 }
 
 unsigned long long PerformanceTiming::domContentLoadedEventEnd() const
@@ -322,24 +333,186 @@ unsigned long long PerformanceTiming::firstLayout() const
     return monotonicTimeToIntegerMilliseconds(timing->firstLayout());
 }
 
+unsigned long long PerformanceTiming::firstPaint() const
+{
+    const PaintTiming* timing = paintTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->firstPaint());
+}
+
+unsigned long long PerformanceTiming::firstTextPaint() const
+{
+    const PaintTiming* timing = paintTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->firstTextPaint());
+}
+
+unsigned long long PerformanceTiming::firstImagePaint() const
+{
+    const PaintTiming* timing = paintTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->firstImagePaint());
+}
+
+unsigned long long PerformanceTiming::firstContentfulPaint() const
+{
+    const PaintTiming* timing = paintTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->firstContentfulPaint());
+}
+
+unsigned long long PerformanceTiming::firstMeaningfulPaint() const
+{
+    const PaintTiming* timing = paintTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->firstMeaningfulPaint());
+}
+
+unsigned long long PerformanceTiming::parseStart() const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->parserStart());
+}
+
+unsigned long long PerformanceTiming::parseStop() const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return monotonicTimeToIntegerMilliseconds(timing->parserStop());
+}
+
+unsigned long long PerformanceTiming::parseBlockedOnScriptLoadDuration() const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(timing->parserBlockedOnScriptLoadDuration());
+}
+
+unsigned long long
+PerformanceTiming::parseBlockedOnScriptLoadFromDocumentWriteDuration() const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(
+        timing->parserBlockedOnScriptLoadFromDocumentWriteDuration());
+}
+
+unsigned long long PerformanceTiming::parseBlockedOnScriptExecutionDuration()
+    const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(
+        timing->parserBlockedOnScriptExecutionDuration());
+}
+
+unsigned long long
+PerformanceTiming::parseBlockedOnScriptExecutionFromDocumentWriteDuration()
+    const
+{
+    const DocumentParserTiming* timing = documentParserTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(
+        timing->parserBlockedOnScriptExecutionFromDocumentWriteDuration());
+}
+
+unsigned long long PerformanceTiming::authorStyleSheetParseDurationBeforeFCP()
+    const
+{
+    const CSSTiming* timing = cssTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(
+        timing->authorStyleSheetParseDurationBeforeFCP());
+}
+
+unsigned long long PerformanceTiming::updateStyleDurationBeforeFCP() const
+{
+    const CSSTiming* timing = cssTiming();
+    if (!timing)
+        return 0;
+
+    return toIntegerMilliseconds(timing->updateDurationBeforeFCP());
+}
+
 DocumentLoader* PerformanceTiming::documentLoader() const
 {
-    if (!m_frame)
+    if (!frame())
         return nullptr;
 
-    return m_frame->loader().documentLoader();
+    return frame()->loader().documentLoader();
 }
 
 const DocumentTiming* PerformanceTiming::documentTiming() const
 {
-    if (!m_frame)
+    if (!frame())
         return nullptr;
 
-    Document* document = m_frame->document();
+    Document* document = frame()->document();
     if (!document)
         return nullptr;
 
     return &document->timing();
+}
+
+const PaintTiming* PerformanceTiming::paintTiming() const
+{
+    if (!frame())
+        return nullptr;
+
+    Document* document = frame()->document();
+    if (!document)
+        return nullptr;
+
+    return &PaintTiming::from(*document);
+}
+
+const CSSTiming* PerformanceTiming::cssTiming() const
+{
+    if (!frame())
+        return nullptr;
+
+    Document* document = frame()->document();
+    if (!document)
+        return nullptr;
+
+    return &CSSTiming::from(*document);
+}
+
+const DocumentParserTiming* PerformanceTiming::documentParserTiming() const
+{
+    if (!frame())
+        return nullptr;
+
+    Document* document = frame()->document();
+    if (!document)
+        return nullptr;
+
+    return &DocumentParserTiming::from(*document);
 }
 
 DocumentLoadTiming* PerformanceTiming::documentLoadTiming() const
@@ -360,7 +533,8 @@ ResourceLoadTiming* PerformanceTiming::resourceLoadTiming() const
     return loader->response().resourceLoadTiming();
 }
 
-ScriptValue PerformanceTiming::toJSONForBinding(ScriptState* scriptState) const
+ScriptValue PerformanceTiming::toJSONForBinding(
+    ScriptState* scriptState) const
 {
     V8ObjectBuilder result(scriptState);
     result.addNumber("navigationStart", navigationStart());
@@ -387,28 +561,32 @@ ScriptValue PerformanceTiming::toJSONForBinding(ScriptState* scriptState) const
     return result.scriptValue();
 }
 
-unsigned long long PerformanceTiming::monotonicTimeToIntegerMilliseconds(double monotonicSeconds) const
+unsigned long long PerformanceTiming::monotonicTimeToIntegerMilliseconds(
+    double monotonicSeconds) const
 {
     ASSERT(monotonicSeconds >= 0);
     const DocumentLoadTiming* timing = documentLoadTiming();
     if (!timing)
         return 0;
 
-    return toIntegerMilliseconds(timing->monotonicTimeToPseudoWallTime(monotonicSeconds));
+    return toIntegerMilliseconds(
+        timing->monotonicTimeToPseudoWallTime(monotonicSeconds));
 }
 
-double PerformanceTiming::integerMillisecondsToMonotonicTime(unsigned long long integerMilliseconds) const
+double PerformanceTiming::integerMillisecondsToMonotonicTime(
+    unsigned long long integerMilliseconds) const
 {
     const DocumentLoadTiming* timing = documentLoadTiming();
     if (!timing)
         return 0;
 
-    return timing->pseudoWallTimeToMonotonicTime(toDoubleSeconds(integerMilliseconds));
+    return timing->pseudoWallTimeToMonotonicTime(
+        toDoubleSeconds(integerMilliseconds));
 }
 
 DEFINE_TRACE(PerformanceTiming)
 {
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 } // namespace blink

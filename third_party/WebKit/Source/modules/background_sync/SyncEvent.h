@@ -7,7 +7,6 @@
 
 #include "modules/EventModules.h"
 #include "modules/background_sync/SyncEventInit.h"
-#include "modules/background_sync/SyncRegistration.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/AtomicString.h"
@@ -17,34 +16,36 @@ namespace blink {
 
 class MODULES_EXPORT SyncEvent final : public ExtendableEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SyncEvent> create()
+    static SyncEvent* create(const AtomicString& type,
+        const String& tag,
+        bool lastChance,
+        WaitUntilObserver* observer)
     {
-        return adoptRefWillBeNoop(new SyncEvent);
+        return new SyncEvent(type, tag, lastChance, observer);
     }
-    static PassRefPtrWillBeRawPtr<SyncEvent> create(const AtomicString& type, SyncRegistration* syncRegistration, WaitUntilObserver* observer)
+    static SyncEvent* create(const AtomicString& type,
+        const SyncEventInit& init)
     {
-        return adoptRefWillBeNoop(new SyncEvent(type, syncRegistration, observer));
-    }
-    static PassRefPtrWillBeRawPtr<SyncEvent> create(const AtomicString& type, const SyncEventInit& init)
-    {
-        return adoptRefWillBeNoop(new SyncEvent(type, init));
+        return new SyncEvent(type, init);
     }
 
     ~SyncEvent() override;
 
     const AtomicString& interfaceName() const override;
 
-    SyncRegistration* registration();
+    String tag();
+    bool lastChance();
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    SyncEvent();
-    SyncEvent(const AtomicString& type, SyncRegistration*, WaitUntilObserver*);
+    SyncEvent(const AtomicString& type, const String&, bool, WaitUntilObserver*);
     SyncEvent(const AtomicString& type, const SyncEventInit&);
 
-    PersistentWillBeMember<SyncRegistration> m_syncRegistration;
+    String m_tag;
+    bool m_lastChance;
 };
 
 } // namespace blink

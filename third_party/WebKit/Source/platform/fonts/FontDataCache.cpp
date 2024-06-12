@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/fonts/FontDataCache.h"
 
 #include "platform/fonts/SimpleFontData.h"
@@ -54,14 +53,17 @@ PassRefPtr<SimpleFontData> FontDataCache::get(const FontPlatformData* platformDa
     // do not have a reproduction for the crash that an empty typeface()
     // causes downstream from here.
     if (!platformData->typeface()) {
-        WTF_LOG_ERROR("Empty typeface() in FontPlatformData when accessing FontDataCache.");
+        DLOG(ERROR) << "Empty typeface() in FontPlatformData when accessing FontDataCache.";
         return nullptr;
     }
 
-    Cache::iterator result = m_cache.find(*platformData);
+    Cache::iterator result = m_cache.find(platformData);
     if (result == m_cache.end()) {
-        pair<RefPtr<SimpleFontData>, unsigned> newValue(SimpleFontData::create(*platformData), shouldRetain == Retain ? 1 : 0);
-        m_cache.set(*platformData, newValue);
+        std::pair<RefPtr<SimpleFontData>, unsigned> newValue(SimpleFontData::create(*platformData), shouldRetain == Retain ? 1 : 0);
+        // The new SimpleFontData takes a copy of the incoming FontPlatformData object. The incoming key may be
+        // temporary. So, for cache storage, take the address of the newly created FontPlatformData that is copied an
+        // owned by SimpleFontData.
+        m_cache.set(&newValue.first->platformData(), newValue);
         if (shouldRetain == DoNotRetain)
             m_inactiveFontData.add(newValue.first);
         return newValue.first.release();
@@ -85,14 +87,14 @@ PassRefPtr<SimpleFontData> FontDataCache::get(const FontPlatformData* platformDa
 
 bool FontDataCache::contains(const FontPlatformData* fontPlatformData) const
 {
-    return m_cache.contains(*fontPlatformData);
+    return m_cache.contains(fontPlatformData);
 }
 
 void FontDataCache::release(const SimpleFontData* fontData)
 {
     ASSERT(!fontData->isCustomFont());
 
-    Cache::iterator it = m_cache.find(fontData->platformData());
+    Cache::iterator it = m_cache.find(&(fontData->platformData()));
     ASSERT(it != m_cache.end());
     if (it == m_cache.end())
         return;
@@ -136,7 +138,7 @@ bool FontDataCache::purgeLeastRecentlyUsed(int count)
     ListHashSet<RefPtr<SimpleFontData>>::iterator it = m_inactiveFontData.begin();
     for (int i = 0; i < count && it != end; ++it, ++i) {
         RefPtr<SimpleFontData>& fontData = *it.get();
-        m_cache.remove(fontData->platformData());
+        m_cache.remove(&(fontData->platformData()));
         // We should not delete SimpleFontData here because deletion can modify m_inactiveFontData. See http://trac.webkit.org/changeset/44011
         fontDataToDelete.append(fontData);
     }

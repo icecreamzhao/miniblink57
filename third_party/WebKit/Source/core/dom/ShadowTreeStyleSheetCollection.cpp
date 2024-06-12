@@ -3,8 +3,10 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
+ * rights reserved.
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
@@ -24,13 +26,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/ShadowTreeStyleSheetCollection.h"
 
 #include "core/HTMLNames.h"
 #include "core/css/CSSStyleSheet.h"
 #include "core/css/resolver/StyleResolver.h"
 #include "core/dom/Element.h"
+#include "core/dom/StyleChangeReason.h"
 #include "core/dom/StyleEngine.h"
 #include "core/dom/StyleSheetCandidate.h"
 #include "core/dom/shadow/ShadowRoot.h"
@@ -40,60 +42,40 @@ namespace blink {
 
 using namespace HTMLNames;
 
-ShadowTreeStyleSheetCollection::ShadowTreeStyleSheetCollection(ShadowRoot& shadowRoot)
+ShadowTreeStyleSheetCollection::ShadowTreeStyleSheetCollection(
+    ShadowRoot& shadowRoot)
     : TreeScopeStyleSheetCollection(shadowRoot)
 {
 }
 
-void ShadowTreeStyleSheetCollection::collectStyleSheets(StyleEngine& engine, StyleSheetCollection& collection)
+void ShadowTreeStyleSheetCollection::collectStyleSheets(
+    StyleEngine& masterEngine,
+    StyleSheetCollection& collection)
 {
     for (Node* n : m_styleSheetCandidateNodes) {
         StyleSheetCandidate candidate(*n);
-        ASSERT(!candidate.isXSL());
-
-        if (!candidate.isCSSStyle())
-            continue;
+        DCHECK(!candidate.isXSL());
 
         StyleSheet* sheet = candidate.sheet();
         if (!sheet)
             continue;
 
-        // FIXME: clarify how PREFERRED or ALTERNATE works in shadow trees.
-        // Should we set preferred/selected stylesheets name in shadow trees and
-        // use the name in document?
-        if (candidate.hasPreferrableName(engine.preferredStylesheetSetName()))
-            engine.selectStylesheetSetName(candidate.title());
-
         collection.appendSheetForList(sheet);
-        if (candidate.canBeActivated(engine.preferredStylesheetSetName()))
-            collection.appendActiveStyleSheet(toCSSStyleSheet(sheet));
-    }
-}
-
-void ShadowTreeStyleSheetCollection::updateActiveStyleSheets(StyleEngine& engine, StyleResolverUpdateMode updateMode)
-{
-    StyleSheetCollection collection;
-    collectStyleSheets(engine, collection);
-
-    StyleSheetChange change;
-    analyzeStyleSheetChange(updateMode, collection, change);
-
-    if (StyleResolver* styleResolver = engine.resolver()) {
-        if (change.styleResolverUpdateType != Additive) {
-            // We should not destroy StyleResolver when we find any stylesheet update in a shadow tree.
-            // In this case, we will reset rulesets created from style elements in the shadow tree.
-            styleResolver->resetAuthorStyle(treeScope());
-            styleResolver->removePendingAuthorStyleSheets(m_activeAuthorStyleSheets);
-            styleResolver->lazyAppendAuthorStyleSheets(0, collection.activeAuthorStyleSheets());
-        } else {
-            styleResolver->lazyAppendAuthorStyleSheets(m_activeAuthorStyleSheets.size(), collection.activeAuthorStyleSheets());
+        if (candidate.canBeActivated(nullAtom)) {
+            CSSStyleSheet* cssSheet = toCSSStyleSheet(sheet);
+            collection.appendActiveStyleSheet(
+                std::make_pair(cssSheet, masterEngine.ruleSetForSheet(*cssSheet)));
         }
     }
-    if (change.requiresFullStyleRecalc)
-        toShadowRoot(treeScope().rootNode()).host()->setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::ActiveStylesheetsUpdate));
-
-    collection.swap(*this);
-    updateUsesRemUnits();
 }
 
+void ShadowTreeStyleSheetCollection::updateActiveStyleSheets(
+    StyleEngine& masterEngine)
+{
+    // StyleSheetCollection is GarbageCollected<>, allocate it on the heap.
+    StyleSheetCollection* collection = StyleSheetCollection::create();
+    collectStyleSheets(masterEngine, *collection);
+    applyActiveStyleSheetChanges(*collection);
 }
+
+} // namespace blink

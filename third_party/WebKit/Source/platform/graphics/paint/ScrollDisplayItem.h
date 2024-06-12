@@ -7,45 +7,58 @@
 
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/paint/DisplayItem.h"
-#include "wtf/FastAllocBase.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-class PLATFORM_EXPORT BeginScrollDisplayItem : public PairedBeginDisplayItem {
+class PLATFORM_EXPORT BeginScrollDisplayItem final
+    : public PairedBeginDisplayItem {
 public:
-    BeginScrollDisplayItem(const DisplayItemClientWrapper& client, Type type, const IntSize& currentOffset)
-        : PairedBeginDisplayItem(client, type)
+    BeginScrollDisplayItem(const DisplayItemClient& client,
+        Type type,
+        const IntSize& currentOffset)
+        : PairedBeginDisplayItem(client, type, sizeof(*this))
         , m_currentOffset(currentOffset)
     {
         ASSERT(isScrollType(type));
     }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
+
+    const IntSize& currentOffset() const { return m_currentOffset; }
 
 private:
 #ifndef NDEBUG
     void dumpPropertiesAsDebugString(WTF::StringBuilder&) const final;
 #endif
+    bool equals(const DisplayItem& other) const final
+    {
+        return DisplayItem::equals(other) && m_currentOffset == static_cast<const BeginScrollDisplayItem&>(other).m_currentOffset;
+    }
 
     const IntSize m_currentOffset;
 };
 
-class PLATFORM_EXPORT EndScrollDisplayItem : public PairedEndDisplayItem {
+class PLATFORM_EXPORT EndScrollDisplayItem final : public PairedEndDisplayItem {
 public:
-    EndScrollDisplayItem(const DisplayItemClientWrapper& client, Type type)
-        : PairedEndDisplayItem(client, type)
+    EndScrollDisplayItem(const DisplayItemClient& client, Type type)
+        : PairedEndDisplayItem(client, type, sizeof(*this))
     {
         ASSERT(isEndScrollType(type));
     }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
 
 private:
-#if ENABLE(ASSERT)
-    bool isEndAndPairedWith(DisplayItem::Type otherType) const final { return DisplayItem::isScrollType(otherType); }
+#if DCHECK_IS_ON()
+    bool isEndAndPairedWith(DisplayItem::Type otherType) const final
+    {
+        return DisplayItem::isScrollType(otherType);
+    }
 #endif
 };
 

@@ -1341,7 +1341,7 @@ bool CodeGenerationFromStringsAllowed(Isolate* isolate,
   } else {
     // Callback set. Let it decide if code generation is allowed.
     VMState<EXTERNAL> state(isolate);
-    return callback(v8::Utils::ToLocal(context));
+    return callback(v8::Utils::ToLocal(context), v8::Local<v8::String>());
   }
 }
 

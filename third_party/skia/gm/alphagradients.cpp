@@ -5,40 +5,43 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
+#include "gm.h"
 
 class AlphaGradientsGM : public skiagm::GM {
 public:
-    AlphaGradientsGM() {}
+    AlphaGradientsGM() { }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("alphagradients");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(640, 480);
     }
 
     static void draw_grad(SkCanvas* canvas, const SkRect& r,
-                          SkColor c0, SkColor c1, bool doPreMul) {
+        SkColor c0, SkColor c1, bool doPreMul)
+    {
         SkColor colors[] = { c0, c1 };
         SkPoint pts[] = { { r.fLeft, r.fTop }, { r.fRight, r.fBottom } };
         SkPaint paint;
         uint32_t flags = doPreMul ? SkGradientShader::kInterpolateColorsInPremul_Flag : 0;
-        SkShader* s = SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                                     SkShader::kClamp_TileMode, flags, NULL);
-        paint.setShader(s)->unref();
+        paint.setShader(SkGradientShader::MakeLinear(pts, colors, nullptr, 2,
+            SkShader::kClamp_TileMode, flags, nullptr));
         canvas->drawRect(r, paint);
 
-        paint.setShader(NULL);
+        paint.setShader(nullptr);
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawRect(r, paint);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         static const struct {
             SkColor fColor0;
             SkColor fColor1;
@@ -76,4 +79,4 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-DEF_GM( return SkNEW(AlphaGradientsGM); )
+DEF_GM(return new AlphaGradientsGM;)

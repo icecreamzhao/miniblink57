@@ -22,12 +22,11 @@
 
 [
     SetWrapperReferenceTo(NodeFilter filter),
-    WillBeGarbageCollected,
 ] interface TreeWalker {
     [SameObject] readonly attribute Node root;
     readonly attribute unsigned long whatToShow;
     readonly attribute NodeFilter? filter;
-    [RaisesException=Setter] attribute Node currentNode;
+    attribute Node currentNode;
 
     [RaisesException] Node? parentNode();
     [RaisesException] Node? firstChild();

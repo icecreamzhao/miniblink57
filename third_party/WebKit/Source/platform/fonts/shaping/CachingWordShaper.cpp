@@ -23,124 +23,110 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MINIBLINK_NO_HARFBUZZ
-#include "config.h"
 #include "platform/fonts/shaping/CachingWordShaper.h"
 
+#include "platform/fonts/CharacterRange.h"
 #include "platform/fonts/SimpleFontData.h"
-#ifndef MINIBLINK_NO_HARFBUZZ
 #include "platform/fonts/shaping/CachingWordShapeIterator.h"
 #include "platform/fonts/shaping/HarfBuzzShaper.h"
 #include "platform/fonts/shaping/ShapeCache.h"
-#endif
+#include "platform/fonts/shaping/ShapeResultBuffer.h"
 #include "wtf/text/CharacterNames.h"
 
 namespace blink {
-
-CachingWordShaper::CachingWordShaper()
-{
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    m_shapeCache = new ShapeCache();
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-}
-
-CachingWordShaper::~CachingWordShaper()
-{
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    delete m_shapeCache;
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-}
-
-void CachingWordShaper::clear()
-{
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    if (m_shapeCache)
-        m_shapeCache->clear();
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-}
 
 float CachingWordShaper::width(const Font* font, const TextRun& run,
     HashSet<const SimpleFontData*>* fallbackFonts,
     FloatRect* glyphBounds)
 {
     float width = 0;
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    RefPtr<ShapeResult> wordResult;
-    CachingWordShapeIterator iterator(m_shapeCache, run, font, fallbackFonts);
+    RefPtr<const ShapeResult> wordResult;
+    CachingWordShapeIterator iterator(m_shapeCache, run, font);
     while (iterator.next(&wordResult)) {
         if (wordResult) {
+            if (glyphBounds) {
+                FloatRect adjustedBounds = wordResult->bounds();
+                // Translate glyph bounds to the current glyph position which
+                // is the total width before this glyph.
+                adjustedBounds.setX(adjustedBounds.x() + width);
+                glyphBounds->unite(adjustedBounds);
+            }
             width += wordResult->width();
-            if (glyphBounds)
-                glyphBounds->unite(wordResult->bounds());
+            if (fallbackFonts)
+                wordResult->fallbackFonts(fallbackFonts, font->primaryFont());
         }
     }
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-//     notImplemented();
+
     return width;
 }
 
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
 static inline float shapeResultsForRun(ShapeCache* shapeCache, const Font* font,
     const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts,
-    Vector<RefPtr<ShapeResult>>* results)
+    ShapeResultBuffer* resultsBuffer)
 {
-    CachingWordShapeIterator iterator(shapeCache, run, font, fallbackFonts);
-    RefPtr<ShapeResult> wordResult;
+    CachingWordShapeIterator iterator(shapeCache, run, font);
+    RefPtr<const ShapeResult> wordResult;
     float totalWidth = 0;
     while (iterator.next(&wordResult)) {
         if (wordResult) {
-            results->append(wordResult);
             totalWidth += wordResult->width();
+            if (fallbackFonts)
+                wordResult->fallbackFonts(fallbackFonts, font->primaryFont());
+            resultsBuffer->appendResult(wordResult.release());
         }
     }
     return totalWidth;
 }
-//#endif // MINIBLINK_NOT_IMPLEMENTED
+
+int CachingWordShaper::offsetForPosition(const Font* font, const TextRun& run, float targetX, bool includePartialGlyphs)
+{
+    ShapeResultBuffer buffer;
+    shapeResultsForRun(m_shapeCache, font, run, nullptr, &buffer);
+
+    return buffer.offsetForPosition(run, targetX, includePartialGlyphs);
+}
 
 float CachingWordShaper::fillGlyphBuffer(const Font* font, const TextRun& run,
     HashSet<const SimpleFontData*>* fallbackFonts,
     GlyphBuffer* glyphBuffer, unsigned from, unsigned to)
 {
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    Vector<RefPtr<ShapeResult>> results;
-    shapeResultsForRun(m_shapeCache, font, run, fallbackFonts, &results);
+    ShapeResultBuffer buffer;
+    shapeResultsForRun(m_shapeCache, font, run, fallbackFonts, &buffer);
 
-    return ShapeResult::fillGlyphBuffer(results, glyphBuffer, run, from, to);
-// #endif // MINIBLINK_NOT_IMPLEMENTED
-//     notImplemented();
-//     return 0;
+    return buffer.fillGlyphBuffer(glyphBuffer, run, from, to);
 }
 
 float CachingWordShaper::fillGlyphBufferForTextEmphasis(const Font* font,
     const TextRun& run, const GlyphData* emphasisData, GlyphBuffer* glyphBuffer,
     unsigned from, unsigned to)
 {
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    Vector<RefPtr<ShapeResult>> results;
-    shapeResultsForRun(m_shapeCache, font, run, nullptr, &results);
+    ShapeResultBuffer buffer;
+    shapeResultsForRun(m_shapeCache, font, run, nullptr, &buffer);
 
-    return ShapeResult::fillGlyphBufferForTextEmphasis(results, glyphBuffer,
-        run, emphasisData, from, to);
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-//     notImplemented();
-//     return 0;
+    return buffer.fillGlyphBufferForTextEmphasis(glyphBuffer, run, emphasisData, from, to);
 }
 
-FloatRect CachingWordShaper::selectionRect(const Font* font, const TextRun& run,
-    const FloatPoint& point, int height, unsigned from, unsigned to)
+CharacterRange CachingWordShaper::getCharacterRange(const Font* font,
+    const TextRun& run, unsigned from, unsigned to)
 {
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-    Vector<RefPtr<ShapeResult>> results;
-    float totalWidth = shapeResultsForRun(m_shapeCache, font, run, nullptr,
-        &results);
+    ShapeResultBuffer buffer;
+    float totalWidth = shapeResultsForRun(m_shapeCache, font, run, nullptr, &buffer);
 
-    return ShapeResult::selectionRect(results, run.direction(), totalWidth,
-        point, height, from, to);
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-//     notImplemented();
-//     return FloatRect();
+    return buffer.getCharacterRange(run.direction(), totalWidth, from, to);
+}
+
+Vector<CharacterRange> CachingWordShaper::individualCharacterRanges(const Font* font, const TextRun& run)
+{
+    ShapeResultBuffer buffer;
+    float totalWidth = shapeResultsForRun(m_shapeCache, font, run, nullptr, &buffer);
+
+    auto ranges = buffer.individualCharacterRanges(run.direction(), totalWidth);
+    // The shaper can fail to return glyph metrics for all characters (see
+    // crbug.com/613915 and crbug.com/615661) so add empty ranges to ensure all
+    // characters have an associated range.
+    while (ranges.size() < static_cast<unsigned>(run.length()))
+        ranges.append(CharacterRange(0, 0));
+    return ranges;
 }
 
 }; // namespace blink
-
-#endif

@@ -19,20 +19,21 @@
  *
  */
 
-#include "config.h"
 #include "ThreadSpecific.h"
 
 #if OS(WIN)
 
 #include "StdLibExtras.h"
 #include "ThreadingPrimitives.h"
+#include "wtf/Allocator.h"
 #include "wtf/DoublyLinkedList.h"
 
 namespace WTF {
 
 static DoublyLinkedList<PlatformThreadSpecificKey>& destructorsList()
 {
-    DEFINE_STATIC_LOCAL(DoublyLinkedList<PlatformThreadSpecificKey>, staticList, ());
+    DEFINE_STATIC_LOCAL(DoublyLinkedList<PlatformThreadSpecificKey>, staticList,
+        ());
     return staticList;
 }
 
@@ -42,11 +43,15 @@ static Mutex& destructorsMutex()
     return staticMutex;
 }
 
-class PlatformThreadSpecificKey : public DoublyLinkedListNode<PlatformThreadSpecificKey> {
+class PlatformThreadSpecificKey
+    : public DoublyLinkedListNode<PlatformThreadSpecificKey> {
+    USING_FAST_MALLOC(PlatformThreadSpecificKey);
+    WTF_MAKE_NONCOPYABLE(PlatformThreadSpecificKey);
+
 public:
     friend class DoublyLinkedListNode<PlatformThreadSpecificKey>;
 
-    PlatformThreadSpecificKey(void (*destructor)(void *))
+    PlatformThreadSpecificKey(void (*destructor)(void*))
         : m_destructor(destructor)
     {
         m_tlsKey = TlsAlloc();
@@ -54,22 +59,19 @@ public:
             CRASH();
     }
 
-    ~PlatformThreadSpecificKey()
-    {
-        TlsFree(m_tlsKey);
-    }
+    ~PlatformThreadSpecificKey() { TlsFree(m_tlsKey); }
 
     void setValue(void* data) { TlsSetValue(m_tlsKey, data); }
     void* value() { return TlsGetValue(m_tlsKey); }
 
     void callDestructor()
     {
-       if (void* data = value())
+        if (void* data = value())
             m_destructor(data);
     }
 
 private:
-    void (*m_destructor)(void *);
+    void (*m_destructor)(void*);
     DWORD m_tlsKey;
     PlatformThreadSpecificKey* m_prev;
     PlatformThreadSpecificKey* m_next;
@@ -87,7 +89,8 @@ DWORD* tlsKeys()
     return keys;
 }
 
-void threadSpecificKeyCreate(ThreadSpecificKey* key, void (*destructor)(void *))
+void threadSpecificKeyCreate(ThreadSpecificKey* key,
+    void (*destructor)(void*))
 {
     *key = new PlatformThreadSpecificKey(destructor);
 
@@ -115,7 +118,9 @@ void* threadSpecificGet(ThreadSpecificKey key)
 void ThreadSpecificThreadExit()
 {
     for (long i = 0; i < tlsKeyCount(); i++) {
-        // The layout of ThreadSpecific<T>::Data does not depend on T. So we are safe to do the static cast to ThreadSpecific<int> in order to access its data member.
+        // The layout of ThreadSpecific<T>::Data does not depend on T. So we are
+        // safe to do the static cast to ThreadSpecific<int> in order to access its
+        // data member.
         ThreadSpecific<int>::Data* data = static_cast<ThreadSpecific<int>::Data*>(TlsGetValue(tlsKeys()[i]));
         if (data)
             data->destructor(data);

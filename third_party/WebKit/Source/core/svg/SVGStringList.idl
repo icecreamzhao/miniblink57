@@ -23,14 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/SVG2/types.html#InterfaceSVGStringList
+// https://svgwg.org/svg2-draft/types.html#InterfaceSVGStringList
 
 [
-    TypeChecking=Interface,
     SetWrapperReferenceTo(SVGElement contextElement),
     ImplementedAs=SVGStringListTearOff,
-    RuntimeEnabled=SVG1DOM,
-    WillBeGarbageCollected,
 ] interface SVGStringList {
     readonly attribute unsigned long length;
     [ImplementedAs=length] readonly attribute unsigned long numberOfItems;

@@ -28,8 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef WebAXEnums_h
-#define WebAXEnums_h
+#ifndef WebAXEnums_11h
+#define WebAXEnums_11h
 
 namespace blink {
 
@@ -44,8 +44,12 @@ enum WebAXEvent {
     WebAXEventBlur,
     WebAXEventCheckedStateChanged,
     WebAXEventChildrenChanged,
+    WebAXEventClicked,
+    WebAXEventDocumentSelectionChanged,
+    WebAXEventExpandedChanged,
     WebAXEventFocus,
     WebAXEventHide,
+    WebAXEventHover,
     WebAXEventInvalidStatusChanged,
     WebAXEventLayoutComplete,
     WebAXEventLiveRegionChanged,
@@ -73,11 +77,13 @@ enum WebAXEvent {
 // Enforced in AssertMatchingEnums.cpp.
 enum WebAXRole {
     WebAXRoleUnknown = 0,
+    WebAXRoleAbbr,
     WebAXRoleAlertDialog,
     WebAXRoleAlert,
     WebAXRoleAnnotation,
     WebAXRoleApplication,
     WebAXRoleArticle,
+    WebAXRoleAudio,
     WebAXRoleBanner,
     WebAXRoleBlockquote,
     WebAXRoleBusyIndicator,
@@ -105,6 +111,7 @@ enum WebAXRole {
     WebAXRoleDiv,
     WebAXRoleDocument,
     WebAXRoleEmbeddedObject,
+    WebAXRoleFeed,
     WebAXRoleFigcaption,
     WebAXRoleFigure,
     WebAXRoleFooter,
@@ -122,6 +129,7 @@ enum WebAXRole {
     WebAXRoleInputTime,
     WebAXRoleLabel,
     WebAXRoleLegend,
+    WebAXRoleLineBreak,
     WebAXRoleLink,
     WebAXRoleListBoxOption,
     WebAXRoleListBox,
@@ -179,6 +187,7 @@ enum WebAXRole {
     WebAXRoleTab,
     WebAXRoleTableHeaderContainer,
     WebAXRoleTable,
+    WebAXRoleTerm,
     WebAXRoleTextField,
     WebAXRoleTime,
     WebAXRoleTimer,
@@ -188,8 +197,8 @@ enum WebAXRole {
     WebAXRoleTreeItem,
     WebAXRoleTree,
     WebAXRoleUserInterfaceTooltip,
+    WebAXRoleVideo,
     WebAXRoleWebArea,
-    WebAXRoleLineBreak,
     WebAXRoleWindow,
 };
 
@@ -203,7 +212,6 @@ enum WebAXState {
     WebAXStateFocused,
     WebAXStateHaspopup,
     WebAXStateHovered,
-    WebAXStateIndeterminate,
     WebAXStateInvisible,
     WebAXStateLinked,
     WebAXStateMultiline,
@@ -217,6 +225,18 @@ enum WebAXState {
     WebAXStateSelected,
     WebAXStateVertical,
     WebAXStateVisited,
+};
+
+enum class WebAXSupportedAction {
+    None = 0,
+    Activate,
+    Check,
+    Click,
+    Jump,
+    Open,
+    Press,
+    Select,
+    Uncheck
 };
 
 enum WebAXTextDirection {
@@ -253,6 +273,17 @@ enum WebAXOrientation {
     WebAXOrientationHorizontal,
 };
 
+enum WebAXAriaCurrentState {
+    WebAXAriaCurrentStateUndefined = 0,
+    WebAXAriaCurrentStateFalse,
+    WebAXAriaCurrentStateTrue,
+    WebAXAriaCurrentStatePage,
+    WebAXAriaCurrentStateStep,
+    WebAXAriaCurrentStateLocation,
+    WebAXAriaCurrentStateDate,
+    WebAXAriaCurrentStateTime
+};
+
 // Only used by HTML form controls and any other element that has
 // an aria-invalid attribute specified.
 enum WebAXInvalidState {
@@ -262,6 +293,12 @@ enum WebAXInvalidState {
     WebAXInvalidStateSpelling,
     WebAXInvalidStateGrammar,
     WebAXInvalidStateOther
+};
+
+enum WebAXMarkerType {
+    WebAXMarkerTypeSpelling = 1 << 0,
+    WebAXMarkerTypeGrammar = 1 << 1,
+    WebAXMarkerTypeTextMatch = 1 << 2
 };
 
 // Used for exposing text attributes.
@@ -277,18 +314,30 @@ enum WebAXTextStyle {
 // because on some platforms this determines how the accessible name
 // is exposed.
 enum WebAXNameFrom {
+    WebAXNameFromUninitialized = -1,
     WebAXNameFromAttribute = 0,
+    WebAXNameFromCaption,
     WebAXNameFromContents,
     WebAXNameFromPlaceholder,
     WebAXNameFromRelatedElement,
+    WebAXNameFromValue,
+    WebAXNameFromTitle,
 };
 
 // The source of the accessible description of an element. This is needed
 // because on some platforms this determines how the accessible description
 // is exposed.
 enum WebAXDescriptionFrom {
-    WebAXDescriptionFromPlaceholder,
-    WebAXDescriptionFromRelatedElement
+    WebAXDescriptionFromUninitialized = -1,
+    WebAXDescriptionFromAttribute = 0,
+    WebAXDescriptionFromContents,
+    WebAXDescriptionFromRelatedElement,
+};
+
+// Text affinity for the start or end of a selection.
+enum WebAXTextAffinity {
+    WebAXTextAffinityUpstream,
+    WebAXTextAffinityDownstream
 };
 
 } // namespace blink

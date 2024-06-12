@@ -47,20 +47,29 @@ class ScriptState;
 class StorageErrorCallback;
 class StorageQuotaCallback;
 
-class StorageQuotaClient : public WillBeHeapSupplement<Page> {
+class StorageQuotaClient : public Supplement<Page> {
     WTF_MAKE_NONCOPYABLE(StorageQuotaClient);
+
 public:
     StorageQuotaClient() { }
     virtual ~StorageQuotaClient() { }
 
-    virtual void requestQuota(ExecutionContext*, WebStorageQuotaType, unsigned long long newQuotaInBytes, StorageQuotaCallback*, StorageErrorCallback*) = 0;
-    virtual ScriptPromise requestPersistentQuota(ScriptState*, unsigned long long newQuotaInBytes) = 0;
+    virtual void requestQuota(ExecutionContext*,
+        WebStorageQuotaType,
+        unsigned long long newQuotaInBytes,
+        StorageQuotaCallback*,
+        StorageErrorCallback*)
+        = 0;
+    virtual ScriptPromise requestPersistentQuota(
+        ScriptState*,
+        unsigned long long newQuotaInBytes)
+        = 0;
 
     static const char* supplementName();
     static StorageQuotaClient* from(ExecutionContext*);
 };
 
-MODULES_EXPORT void provideStorageQuotaClientTo(Page&, PassOwnPtrWillBeRawPtr<StorageQuotaClient>);
+MODULES_EXPORT void provideStorageQuotaClientTo(Page&, StorageQuotaClient*);
 
 } // namespace blink
 

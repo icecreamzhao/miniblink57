@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,27 +5,41 @@
  * found in the LICENSE file.
  */
 
-
 #include "GrRenderTarget.h"
 
 #include "GrContext.h"
 #include "GrDrawContext.h"
+#include "GrDrawTarget.h"
 #include "GrGpu.h"
 #include "GrRenderTargetPriv.h"
 #include "GrStencilAttachment.h"
 
-void GrRenderTarget::discard() {
+GrRenderTarget::~GrRenderTarget()
+{
+    if (fLastDrawTarget) {
+        fLastDrawTarget->clearRT();
+    }
+    SkSafeUnref(fLastDrawTarget);
+}
+
+void GrRenderTarget::discard()
+{
     // go through context so that all necessary flushing occurs
     GrContext* context = this->getContext();
-    GrDrawContext* drawContext = context ? context->drawContext() : NULL;
+    if (!context) {
+        return;
+    }
+
+    sk_sp<GrDrawContext> drawContext(context->drawContext(sk_ref_sp(this)));
     if (!drawContext) {
         return;
     }
 
-    drawContext->discard(this);
+    drawContext->discard();
 }
 
-void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect) {
+void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect)
+{
     if (kCanResolve_ResolveType == getResolveType()) {
         if (rect) {
             fResolveRect.join(*rect);
@@ -39,7 +52,8 @@ void GrRenderTarget::flagAsNeedingResolve(const SkIRect* rect) {
     }
 }
 
-void GrRenderTarget::overrideResolveRect(const SkIRect rect) {
+void GrRenderTarget::overrideResolveRect(const SkIRect rect)
+{
     fResolveRect = rect;
     if (fResolveRect.isEmpty()) {
         fResolveRect.setLargestInverted();
@@ -50,30 +64,69 @@ void GrRenderTarget::overrideResolveRect(const SkIRect rect) {
     }
 }
 
-void GrRenderTarget::onRelease() {
-    this->renderTargetPriv().didAttachStencilAttachment(NULL);
+void GrRenderTarget::onRelease()
+{
+    SkSafeSetNull(fStencilAttachment);
 
     INHERITED::onRelease();
 }
 
-void GrRenderTarget::onAbandon() {
-    this->renderTargetPriv().didAttachStencilAttachment(NULL);
+void GrRenderTarget::onAbandon()
+{
+    SkSafeSetNull(fStencilAttachment);
+
+    // The contents of this renderTarget are gone/invalid. It isn't useful to point back
+    // the creating drawTarget.
+    this->setLastDrawTarget(nullptr);
 
     INHERITED::onAbandon();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+void GrRenderTarget::setLastDrawTarget(GrDrawTarget* dt)
+{
+    if (fLastDrawTarget) {
+        // The non-MDB world never closes so we can't check this condition
+#ifdef ENABLE_MDB
+        SkASSERT(fLastDrawTarget->isClosed());
+#endif
+        fLastDrawTarget->clearRT();
+    }
 
-void GrRenderTargetPriv::didAttachStencilAttachment(GrStencilAttachment* stencilAttachment) {
-    SkRefCnt_SafeAssign(fRenderTarget->fStencilAttachment, stencilAttachment);
+    SkRefCnt_SafeAssign(fLastDrawTarget, dt);
 }
 
-GrStencilAttachment* GrRenderTargetPriv::attachStencilAttachment() const {
-    if (fRenderTarget->fStencilAttachment) {
-        return fRenderTarget->fStencilAttachment;
+///////////////////////////////////////////////////////////////////////////////
+
+bool GrRenderTargetPriv::attachStencilAttachment(GrStencilAttachment* stencil)
+{
+    if (!stencil && !fRenderTarget->fStencilAttachment) {
+        // No need to do any work since we currently don't have a stencil attachment and
+        // we're not acctually adding one.
+        return true;
     }
-    if (!fRenderTarget->wasDestroyed() && fRenderTarget->canAttemptStencilAttachment()) {
-        fRenderTarget->getGpu()->attachStencilAttachmentToRenderTarget(fRenderTarget);
+    fRenderTarget->fStencilAttachment = stencil;
+    if (!fRenderTarget->completeStencilAttachment()) {
+        SkSafeSetNull(fRenderTarget->fStencilAttachment);
+        return false;
     }
-    return fRenderTarget->fStencilAttachment;
+    return true;
+}
+
+int GrRenderTargetPriv::numStencilBits() const
+{
+    return fRenderTarget->fStencilAttachment ? fRenderTarget->fStencilAttachment->bits() : 0;
+}
+
+const GrGpu::MultisampleSpecs&
+GrRenderTargetPriv::getMultisampleSpecs(const GrStencilSettings& stencil) const
+{
+    return fRenderTarget->getGpu()->getMultisampleSpecs(fRenderTarget, stencil);
+}
+
+GrRenderTarget::SampleConfig GrRenderTarget::ComputeSampleConfig(const GrCaps& caps,
+    int sampleCnt)
+{
+    return (caps.usesMixedSamples() && sampleCnt > 0)
+        ? GrRenderTarget::kStencil_SampleConfig
+        : GrRenderTarget::kUnified_SampleConfig;
 }

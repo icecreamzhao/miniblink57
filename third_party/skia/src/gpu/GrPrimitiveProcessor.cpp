@@ -14,16 +14,16 @@
  * that indicates the source of the input coords.
  */
 enum {
-    kMatrixTypeKeyBits   = 1,
-    kMatrixTypeKeyMask   = (1 << kMatrixTypeKeyBits) - 1,
+    kMatrixTypeKeyBits = 1,
+    kMatrixTypeKeyMask = (1 << kMatrixTypeKeyBits) - 1,
 
-    kPrecisionBits       = 2,
-    kPrecisionShift      = kMatrixTypeKeyBits,
+    kPrecisionBits = 2,
+    kPrecisionShift = kMatrixTypeKeyBits,
 
     kPositionCoords_Flag = (1 << (kPrecisionShift + kPrecisionBits)),
-    kDeviceCoords_Flag   = kPositionCoords_Flag + kPositionCoords_Flag,
+    kDeviceCoords_Flag = kPositionCoords_Flag + kPositionCoords_Flag,
 
-    kTransformKeyBits    = kMatrixTypeKeyBits + kPrecisionBits + 2,
+    kTransformKeyBits = kMatrixTypeKeyBits + kPrecisionBits + 2,
 };
 
 GR_STATIC_ASSERT(kHigh_GrSLPrecision < (1 << kPrecisionBits));
@@ -32,14 +32,16 @@ GR_STATIC_ASSERT(kHigh_GrSLPrecision < (1 << kPrecisionBits));
  * We specialize the vertex code for each of these matrix types.
  */
 enum MatrixType {
-    kNoPersp_MatrixType  = 0,
-    kGeneral_MatrixType  = 1,
+    kNoPersp_MatrixType = 0,
+    kGeneral_MatrixType = 1,
 };
 
 uint32_t
-GrPrimitiveProcessor::getTransformKey(const SkTArray<const GrCoordTransform*, true>& coords) const {
+GrPrimitiveProcessor::getTransformKey(const SkTArray<const GrCoordTransform*, true>& coords,
+    int numCoords) const
+{
     uint32_t totalKey = 0;
-    for (int t = 0; t < coords.count(); ++t) {
+    for (int t = 0; t < numCoords; ++t) {
         uint32_t key = 0;
         const GrCoordTransform* coordTransform = coords[t];
         if (coordTransform->getMatrix().hasPerspective()) {
@@ -48,8 +50,7 @@ GrPrimitiveProcessor::getTransformKey(const SkTArray<const GrCoordTransform*, tr
             key |= kNoPersp_MatrixType;
         }
 
-        if (kLocal_GrCoordSet == coordTransform->sourceCoords() &&
-            !this->hasExplicitLocalCoords()) {
+        if (kLocal_GrCoordSet == coordTransform->sourceCoords() && !this->hasExplicitLocalCoords()) {
             key |= kPositionCoords_Flag;
         } else if (kDevice_GrCoordSet == coordTransform->sourceCoords()) {
             key |= kDeviceCoords_Flag;

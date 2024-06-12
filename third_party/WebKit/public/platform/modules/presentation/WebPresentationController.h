@@ -9,9 +9,19 @@
 
 namespace blink {
 
-class WebPresentationSessionClient;
+struct WebPresentationSessionInfo;
 class WebString;
-enum class WebPresentationSessionState;
+
+enum class WebPresentationConnectionCloseReason { Error = 0,
+    Closed,
+    WentAway };
+
+enum class WebPresentationConnectionState {
+    Connecting = 0,
+    Connected,
+    Closed,
+    Terminated,
+};
 
 // The delegate Blink provides to WebPresentationClient in order to get updates.
 class BLINK_PLATFORM_EXPORT WebPresentationController {
@@ -20,16 +30,29 @@ public:
 
     // Called when the presentation session is started by the embedder using
     // the default presentation URL and id.
-    virtual void didStartDefaultSession(WebPresentationSessionClient*) = 0;
+    virtual void didStartDefaultSession(const WebPresentationSessionInfo&) = 0;
 
     // Called when the state of a session changes.
-    virtual void didChangeSessionState(WebPresentationSessionClient*, WebPresentationSessionState) = 0;
+    virtual void didChangeSessionState(const WebPresentationSessionInfo&,
+        WebPresentationConnectionState)
+        = 0;
+
+    // Called when a connection closes.
+    virtual void didCloseConnection(const WebPresentationSessionInfo&,
+        WebPresentationConnectionCloseReason,
+        const WebString& message)
+        = 0;
 
     // Called when a text message of a session is received.
-    virtual void didReceiveSessionTextMessage(WebPresentationSessionClient*, const WebString& message) = 0;
+    virtual void didReceiveSessionTextMessage(const WebPresentationSessionInfo&,
+        const WebString& message)
+        = 0;
 
     // Called when a binary message of a session is received.
-    virtual void didReceiveSessionBinaryMessage(WebPresentationSessionClient*, const uint8_t* data, size_t length) = 0;
+    virtual void didReceiveSessionBinaryMessage(const WebPresentationSessionInfo&,
+        const uint8_t* data,
+        size_t length)
+        = 0;
 };
 
 } // namespace blink

@@ -23,12 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/inspector/IdentifiersFactory.h"
 
 #include "core/dom/WeakIdentifierMap.h"
 #include "core/frame/LocalFrame.h"
+#include "core/inspector/InspectedFrames.h"
 #include "core/loader/DocumentLoader.h"
+#include "public/platform/Platform.h"
 #include "wtf/Assertions.h"
 #include "wtf/text/StringBuilder.h"
 
@@ -36,32 +37,15 @@ namespace blink {
 
 namespace {
 
-static long s_lastUsedIdentifier = 0;
-
-// static
-String& processIdPrefix()
-{
-    DEFINE_STATIC_LOCAL(String, s_processIdPrefix, ());
-    return s_processIdPrefix;
-}
+    volatile int s_lastUsedIdentifier = 0;
 
 } // namespace
-
-
-// static
-void IdentifiersFactory::setProcessId(long processId)
-{
-    StringBuilder builder;
-    builder.appendNumber(processId);
-    builder.append('.');
-    ASSERT(processIdPrefix().isEmpty() || processIdPrefix() == builder.toString());
-    processIdPrefix() = builder.toString();
-}
 
 // static
 String IdentifiersFactory::createIdentifier()
 {
-    return addProcessIdPrefixTo(++s_lastUsedIdentifier);
+    int identifier = atomicIncrement(&s_lastUsedIdentifier);
+    return addProcessIdPrefixTo(identifier);
 }
 
 // static
@@ -77,43 +61,63 @@ String IdentifiersFactory::frameId(LocalFrame* frame)
 }
 
 // static
-LocalFrame* IdentifiersFactory::frameById(const String& frameId)
+LocalFrame* IdentifiersFactory::frameById(InspectedFrames* inspectedFrames,
+    const String& frameId)
 {
     bool ok;
     int id = removeProcessIdPrefixFrom(frameId, &ok);
-    return ok ? WeakIdentifierMap<LocalFrame>::lookup(id) : nullptr;
+    if (!ok)
+        return nullptr;
+    LocalFrame* frame = WeakIdentifierMap<LocalFrame>::lookup(id);
+    return frame && inspectedFrames->contains(frame) ? frame : nullptr;
 }
 
 // static
 String IdentifiersFactory::loaderId(DocumentLoader* loader)
 {
-    return addProcessIdPrefixTo(WeakIdentifierMap<DocumentLoader>::identifier(loader));
+    return addProcessIdPrefixTo(
+        WeakIdentifierMap<DocumentLoader>::identifier(loader));
 }
 
 // static
-DocumentLoader* IdentifiersFactory::loaderById(const String& loaderId)
+DocumentLoader* IdentifiersFactory::loaderById(InspectedFrames* inspectedFrames,
+    const String& loaderId)
 {
     bool ok;
     int id = removeProcessIdPrefixFrom(loaderId, &ok);
-    return ok ? WeakIdentifierMap<DocumentLoader>::lookup(id) : nullptr;
+    if (!ok)
+        return nullptr;
+    DocumentLoader* loader = WeakIdentifierMap<DocumentLoader>::lookup(id);
+    LocalFrame* frame = loader->frame();
+    return frame && inspectedFrames->contains(frame) ? loader : nullptr;
 }
 
 // static
 String IdentifiersFactory::addProcessIdPrefixTo(int id)
 {
-    ASSERT(!processIdPrefix().isEmpty());
-    return processIdPrefix() + String::number(id);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        uint32_t, s_processId,
+        new uint32_t(Platform::current()->getUniqueIdForProcess()));
+
+    StringBuilder builder;
+
+    builder.appendNumber(s_processId);
+    builder.append('.');
+    builder.appendNumber(id);
+
+    return builder.toString();
 }
 
 // static
 int IdentifiersFactory::removeProcessIdPrefixFrom(const String& id, bool* ok)
 {
-    if (id.length() < processIdPrefix().length()) {
+    size_t dotIndex = id.find('.');
+
+    if (dotIndex == kNotFound) {
         *ok = false;
         return 0;
     }
-    return id.substring(processIdPrefix().length()).toInt(ok);
+    return id.substring(dotIndex + 1).toInt(ok);
 }
 
 } // namespace blink
-

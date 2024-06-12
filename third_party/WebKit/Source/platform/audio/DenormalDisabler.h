@@ -10,21 +10,23 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef DenormalDisabler_h
 #define DenormalDisabler_h
 
+#include "wtf/Allocator.h"
 #include "wtf/CPU.h"
 #include "wtf/MathExtras.h"
 #include <float.h>
@@ -51,23 +53,20 @@ namespace blink {
 
 #if HAVE(DENORMAL)
 class DenormalDisabler {
+    DISALLOW_NEW();
+
 public:
     DenormalDisabler()
-            : m_savedCSR(0)
+        : m_savedCSR(0)
     {
         disableDenormals();
     }
 
-    ~DenormalDisabler()
-    {
-        restoreState();
-    }
+    ~DenormalDisabler() { restoreState(); }
 
     // This is a nop if we can flush denormals to zero in hardware.
-    static inline float flushDenormalFloatToZero(float f)
-    {
-        return f;
-    }
+    static inline float flushDenormalFloatToZero(float f) { return f; }
+
 private:
     unsigned m_savedCSR;
 
@@ -78,22 +77,22 @@ private:
         setCSR(m_savedCSR | 0x8040);
     }
 
-    inline void restoreState()
-    {
-        setCSR(m_savedCSR);
-    }
+    inline void restoreState() { setCSR(m_savedCSR); }
 
     inline int getCSR()
     {
         int result;
-        asm volatile("stmxcsr %0" : "=m" (result));
+        asm volatile("stmxcsr %0"
+                     : "=m"(result));
         return result;
     }
 
     inline void setCSR(int a)
     {
         int temp = a;
-        asm volatile("ldmxcsr %0" : : "m" (temp));
+        asm volatile("ldmxcsr %0"
+                     :
+                     : "m"(temp));
     }
 
 #elif OS(WIN) && COMPILER(MSVC)
@@ -116,22 +115,22 @@ private:
     inline void disableDenormals()
     {
         m_savedCSR = getStatusWord();
-        // Bit 24 is the flush-to-zero mode control bit. Setting it to 1 flushes denormals to 0.
+        // Bit 24 is the flush-to-zero mode control bit. Setting it to 1 flushes
+        // denormals to 0.
         setStatusWord(m_savedCSR | (1 << 24));
     }
 
-    inline void restoreState()
-    {
-        setStatusWord(m_savedCSR);
-    }
+    inline void restoreState() { setStatusWord(m_savedCSR); }
 
     inline int getStatusWord()
     {
         int result;
 #if CPU(ARM64)
-        asm volatile("mrs %[result], FPCR" : [result] "=r" (result));
+        asm volatile("mrs %x[result], FPCR"
+                     : [result] "=r"(result));
 #else
-        asm volatile("vmrs %[result], FPSCR" : [result] "=r" (result));
+        asm volatile("vmrs %[result], FPSCR"
+                     : [result] "=r"(result));
 #endif
         return result;
     }
@@ -139,14 +138,17 @@ private:
     inline void setStatusWord(int a)
     {
 #if CPU(ARM64)
-        asm volatile("msr FPCR, %[src]" : : [src] "r" (a));
+        asm volatile("msr FPCR, %x[src]"
+                     :
+                     : [src] "r"(a));
 #else
-        asm volatile("vmsr FPSCR, %[src]" : : [src] "r" (a));
+        asm volatile("vmsr FPSCR, %[src]"
+                     :
+                     : [src] "r"(a));
 #endif
     }
 
 #endif
-
 };
 
 #else

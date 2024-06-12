@@ -29,34 +29,45 @@
 #ifndef AudioArray_h
 #define AudioArray_h
 
-#include <string.h>
-#include "wtf/FastMalloc.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
+#include "wtf/allocator/Partitions.h"
+#include "wtf/build_config.h"
+#include <string.h>
 
 namespace blink {
 
-template<typename T>
+template <typename T>
 class AudioArray {
+    USING_FAST_MALLOC(AudioArray);
+    WTF_MAKE_NONCOPYABLE(AudioArray);
+
 public:
-    AudioArray() : m_allocation(nullptr), m_alignedData(nullptr), m_size(0) { }
-    explicit AudioArray(size_t n) : m_allocation(nullptr), m_alignedData(nullptr), m_size(0)
+    AudioArray()
+        : m_allocation(nullptr)
+        , m_alignedData(nullptr)
+        , m_size(0)
+    {
+    }
+    explicit AudioArray(size_t n)
+        : m_allocation(nullptr)
+        , m_alignedData(nullptr)
+        , m_size(0)
     {
         allocate(n);
     }
 
-    ~AudioArray()
-    {
-        fastFree(m_allocation);
-    }
+    ~AudioArray() { WTF::Partitions::fastFree(m_allocation); }
 
-    // It's OK to call allocate() multiple times, but data will *not* be copied from an initial allocation
-    // if re-allocated. Allocations are zero-initialized.
+    // It's OK to call allocate() multiple times, but data will *not* be copied
+    // from an initial allocation if re-allocated. Allocations are
+    // zero-initialized.
     void allocate(size_t n)
     {
-        // Although n is a size_t, its true limit is max unsigned because we use unsigned in zeroRange()
-        // and copyToRange(). Also check for integer overflow.
-        if (n > std::numeric_limits<unsigned>::max() / sizeof(T))
-            CRASH();
+        // Although n is a size_t, its true limit is max unsigned because we use
+        // unsigned in zeroRange() and copyToRange(). Also check for integer
+        // overflow.
+        RELEASE_ASSERT(n <= std::numeric_limits<unsigned>::max() / sizeof(T));
 
         unsigned initialSize = sizeof(T) * n;
 
@@ -67,7 +78,7 @@ public:
 #endif
 
         if (m_allocation)
-            fastFree(m_allocation);
+            WTF::Partitions::fastFree(m_allocation);
 
         bool isAllocationGood = false;
 
@@ -77,12 +88,13 @@ public:
             static size_t extraAllocationBytes = 0;
 
             // Again, check for integer overflow.
-            if (initialSize + extraAllocationBytes < initialSize)
-                CRASH();
+            RELEASE_ASSERT(initialSize + extraAllocationBytes >= initialSize);
 
-            T* allocation = static_cast<T*>(fastMalloc(initialSize + extraAllocationBytes));
-            if (!allocation)
-                CRASH();
+            T* allocation = static_cast<T*>(WTF::Partitions::fastMalloc(
+                initialSize + extraAllocationBytes,
+                WTF_HEAP_PROFILER_TYPE_NAME(AudioArray<T>)));
+            RELEASE_ASSERT(allocation);
+
             T* alignedData = alignedAddress(allocation, alignment);
 
             if (alignedData == allocation || extraAllocationBytes == alignment) {
@@ -92,8 +104,9 @@ public:
                 isAllocationGood = true;
                 zero();
             } else {
-                extraAllocationBytes = alignment; // always allocate extra after the first alignment failure.
-                fastFree(allocation);
+                // always allocate extra after the first alignment failure.
+                extraAllocationBytes = alignment;
+                WTF::Partitions::fastFree(allocation);
             }
         }
     }
@@ -106,7 +119,7 @@ public:
     {
         // Note that although it is a size_t, m_size is now guaranteed to be
         // no greater than max unsigned. This guarantee is enforced in allocate().
-        ASSERT_WITH_SECURITY_IMPLICATION(i < size());
+        SECURITY_DCHECK(i < size());
         return data()[i];
     }
 

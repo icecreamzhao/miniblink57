@@ -19,14 +19,16 @@
  *
  */
 
-#include "config.h"
 #include "platform/transforms/MatrixTransformOperation.h"
 
 #include <algorithm>
 
 namespace blink {
 
-PassRefPtr<TransformOperation> MatrixTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
+PassRefPtr<TransformOperation> MatrixTransformOperation::blend(
+    const TransformOperation* from,
+    double progress,
+    bool blendToIdentity)
 {
     if (from && !from->isSameType(*this))
         return this;
@@ -44,7 +46,13 @@ PassRefPtr<TransformOperation> MatrixTransformOperation::blend(const TransformOp
         std::swap(fromT, toT);
 
     toT.blend(fromT, progress);
-    return MatrixTransformOperation::create(toT.a(), toT.b(), toT.c(), toT.d(), toT.e(), toT.f());
+    return MatrixTransformOperation::create(toT.a(), toT.b(), toT.c(), toT.d(),
+        toT.e(), toT.f());
+}
+
+PassRefPtr<TransformOperation> MatrixTransformOperation::zoom(double factor)
+{
+    return create(m_a, m_b, m_c, m_d, m_e * factor, m_f * factor);
 }
 
 } // namespace blink

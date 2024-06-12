@@ -14,7 +14,8 @@ struct TestMessage {
 };
 DECLARE_SKMESSAGEBUS_MESSAGE(TestMessage)
 
-DEF_TEST(MessageBus, r) {
+DEF_TEST(MessageBus, r)
+{
     // Register two inboxes to receive all TestMessages.
     SkMessageBus<TestMessage>::Inbox inbox1, inbox2;
 

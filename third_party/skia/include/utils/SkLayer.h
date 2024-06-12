@@ -6,16 +6,15 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkLayer_DEFINED
 #define SkLayer_DEFINED
 
-#include "SkRefCnt.h"
-#include "SkTDArray.h"
+#include "../private/SkTDArray.h"
 #include "SkColor.h"
 #include "SkMatrix.h"
 #include "SkPoint.h"
 #include "SkRect.h"
+#include "SkRefCnt.h"
 #include "SkSize.h"
 
 class SkCanvas;
@@ -23,8 +22,6 @@ class SkCanvas;
 class SkLayer : public SkRefCnt {
 
 public:
-    
-
     SkLayer();
     SkLayer(const SkLayer&);
     virtual ~SkLayer();
@@ -101,7 +98,8 @@ public:
     // paint method
 
     void draw(SkCanvas*, SkScalar opacity);
-    void draw(SkCanvas* canvas) {
+    void draw(SkCanvas* canvas)
+    {
         this->draw(canvas, SK_Scalar1);
     }
 
@@ -113,14 +111,14 @@ private:
         kInheritFromRootTransform_Flag = 0x01
     };
 
-    SkLayer*    fParent;
-    SkScalar    m_opacity;
-    SkSize      m_size;
-    SkPoint     m_position;
-    SkPoint     m_anchorPoint;
-    SkMatrix    fMatrix;
-    SkMatrix    fChildrenMatrix;
-    uint32_t    fFlags;
+    SkLayer* fParent;
+    SkScalar m_opacity;
+    SkSize m_size;
+    SkPoint m_position;
+    SkPoint m_anchorPoint;
+    SkMatrix fMatrix;
+    SkMatrix fChildrenMatrix;
+    uint32_t fFlags;
 
     SkTDArray<SkLayer*> m_children;
 

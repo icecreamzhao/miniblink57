@@ -18,23 +18,23 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(Microtask, Struct)
-OBJECT_CONSTRUCTORS_IMPL(CallbackTask, Microtask)
-OBJECT_CONSTRUCTORS_IMPL(CallableTask, Microtask)
+    OBJECT_CONSTRUCTORS_IMPL(Microtask, Struct)
+    OBJECT_CONSTRUCTORS_IMPL(CallbackTask, Microtask)
+    OBJECT_CONSTRUCTORS_IMPL(CallableTask, Microtask)
 
-CAST_ACCESSOR(Microtask)
-CAST_ACCESSOR(CallbackTask)
-CAST_ACCESSOR(CallableTask)
+    CAST_ACCESSOR(Microtask)
+    CAST_ACCESSOR(CallbackTask)
+    CAST_ACCESSOR(CallableTask)
 
-ACCESSORS(CallableTask, callable, JSReceiver, kCallableOffset)
-ACCESSORS(CallableTask, context, Context, kContextOffset)
+    ACCESSORS(CallableTask, callable, JSReceiver, kCallableOffset)
+    ACCESSORS(CallableTask, context, Context, kContextOffset)
 
-ACCESSORS(CallbackTask, callback, Foreign, kCallbackOffset)
-ACCESSORS(CallbackTask, data, Foreign, kDataOffset)
+    ACCESSORS(CallbackTask, callback, Foreign, kCallbackOffset)
+    ACCESSORS(CallbackTask, data, Foreign, kDataOffset)
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_MICROTASK_INL_H_
+#endif // V8_OBJECTS_MICROTASK_INL_H_

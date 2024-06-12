@@ -38,10 +38,15 @@ namespace blink {
 
 class Document;
 
-class VideoPlaybackQuality : public GarbageCollected<VideoPlaybackQuality>, public ScriptWrappable {
+class VideoPlaybackQuality : public GarbageCollected<VideoPlaybackQuality>,
+                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static VideoPlaybackQuality* create(const Document&, unsigned totalVideoFrames, unsigned droppedVideoFrames, unsigned corruptedVideoFrames);
+    static VideoPlaybackQuality* create(const Document&,
+        unsigned totalVideoFrames,
+        unsigned droppedVideoFrames,
+        unsigned corruptedVideoFrames);
 
     double creationTime() const { return m_creationTime; }
     unsigned totalVideoFrames() const { return m_totalVideoFrames; }
@@ -51,7 +56,10 @@ public:
     DEFINE_INLINE_TRACE() { }
 
 private:
-    VideoPlaybackQuality(const Document&, unsigned totalVideoFrames, unsigned droppedVideoFrames, unsigned corruptedVideoFrames);
+    VideoPlaybackQuality(const Document&,
+        unsigned totalVideoFrames,
+        unsigned droppedVideoFrames,
+        unsigned corruptedVideoFrames);
 
     double m_creationTime;
     unsigned m_totalVideoFrames;

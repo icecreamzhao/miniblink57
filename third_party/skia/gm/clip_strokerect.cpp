@@ -5,26 +5,29 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
+#include "gm.h"
 
 class ClipStrokeRectGM : public skiagm::GM {
 public:
-    ClipStrokeRectGM() {
-
+    ClipStrokeRectGM()
+    {
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("clip_strokerect");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(200, 400);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint p;
         p.setColor(SK_ColorRED);
         p.setAntiAlias(true);
@@ -67,5 +70,4 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-DEF_GM( return SkNEW(ClipStrokeRectGM); )
-
+DEF_GM(return new ClipStrokeRectGM;)

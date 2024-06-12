@@ -28,7 +28,7 @@
 #ifndef DatabaseContext_h
 #define DatabaseContext_h
 
-#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
@@ -38,21 +38,20 @@ class DatabaseThread;
 class ExecutionContext;
 class SecurityOrigin;
 
-class DatabaseContext final
-    : public GarbageCollectedFinalized<DatabaseContext>
-    , public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DatabaseContext);
+class DatabaseContext final : public GarbageCollectedFinalized<DatabaseContext>,
+                              public ContextLifecycleObserver {
+    USING_GARBAGE_COLLECTED_MIXIN(DatabaseContext);
+
 public:
     friend class DatabaseManager;
 
     static DatabaseContext* create(ExecutionContext*);
 
-    ~DatabaseContext() override;
+    ~DatabaseContext();
     DECLARE_VIRTUAL_TRACE();
 
-    // For life-cycle management (inherited from ActiveDOMObject):
-    void contextDestroyed() override;
-    void stop() override;
+    // For life-cycle management (inherited from ContextLifecycleObserver):
+    void contextDestroyed(ExecutionContext*) override;
 
     DatabaseContext* backend();
     DatabaseThread* databaseThread();
@@ -64,14 +63,15 @@ public:
 
     bool allowDatabaseAccess() const;
 
-    SecurityOrigin* securityOrigin() const;
+    SecurityOrigin* getSecurityOrigin() const;
     bool isContextThread() const;
 
 private:
     explicit DatabaseContext(ExecutionContext*);
 
     Member<DatabaseThread> m_databaseThread;
-    bool m_hasOpenDatabases; // This never changes back to false, even after the database thread is closed.
+    bool m_hasOpenDatabases; // This never changes back to false, even after the
+        // database thread is closed.
     bool m_hasRequestedTermination;
 };
 

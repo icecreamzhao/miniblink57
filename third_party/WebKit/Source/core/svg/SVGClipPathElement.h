@@ -22,7 +22,6 @@
 #define SVGClipPathElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedEnumeration.h"
 #include "core/svg/SVGGraphicsElement.h"
 #include "core/svg/SVGUnitTypes.h"
@@ -34,9 +33,13 @@ class LayoutObject;
 
 class SVGClipPathElement final : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGClipPathElement);
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* clipPathUnits() { return m_clipPathUnits.get(); }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* clipPathUnits()
+    {
+        return m_clipPathUnits.get();
+    }
 
     bool supportsFocus() const override { return false; }
 
@@ -52,7 +55,7 @@ private:
 
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_clipPathUnits;
+    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_clipPathUnits;
 };
 
 } // namespace blink

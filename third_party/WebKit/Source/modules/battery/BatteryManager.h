@@ -5,22 +5,25 @@
 #ifndef BatteryManager_h
 #define BatteryManager_h
 
+#include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseProperty.h"
-#include "core/dom/ActiveDOMObject.h"
 #include "core/dom/ContextLifecycleObserver.h"
+#include "core/dom/SuspendableObject.h"
 #include "core/frame/PlatformEventController.h"
 #include "modules/EventTargetModules.h"
+#include "modules/battery/battery_status.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class BatteryStatus;
-
-class BatteryManager final : public RefCountedGarbageCollectedEventTargetWithInlineData<BatteryManager>, public ActiveDOMObject, public PlatformEventController {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(BatteryManager);
+class BatteryManager final : public EventTargetWithInlineData,
+                             public ActiveScriptWrappable<BatteryManager>,
+                             public SuspendableObject,
+                             public PlatformEventController {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(BatteryManager);
+    USING_GARBAGE_COLLECTED_MIXIN(BatteryManager);
+
 public:
     static BatteryManager* create(ExecutionContext*);
     ~BatteryManager() override;
@@ -29,8 +32,14 @@ public:
     ScriptPromise startRequest(ScriptState*);
 
     // EventTarget implementation.
-    const WTF::AtomicString& interfaceName() const override { return EventTargetNames::BatteryManager; }
-    ExecutionContext* executionContext() const override { return ContextLifecycleObserver::executionContext(); }
+    const WTF::AtomicString& interfaceName() const override
+    {
+        return EventTargetNames::BatteryManager;
+    }
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextLifecycleObserver::getExecutionContext();
+    }
 
     bool charging();
     double chargingTime();
@@ -48,20 +57,24 @@ public:
     void unregisterWithDispatcher() override;
     bool hasLastData() override;
 
-    // ActiveDOMObject implementation.
+    // SuspendableObject implementation.
     void suspend() override;
     void resume() override;
-    void stop() override;
-    bool hasPendingActivity() const override;
+    void contextDestroyed(ExecutionContext*) override;
+
+    // ScriptWrappable implementation.
+    bool hasPendingActivity() const final;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit BatteryManager(ExecutionContext*);
 
-    using BatteryProperty = ScriptPromiseProperty<Member<BatteryManager>, Member<BatteryManager>, Member<DOMException>>;
+    using BatteryProperty = ScriptPromiseProperty<Member<BatteryManager>,
+        Member<BatteryManager>,
+        Member<DOMException>>;
     Member<BatteryProperty> m_batteryProperty;
-    Member<BatteryStatus> m_batteryStatus;
+    BatteryStatus m_batteryStatus;
 };
 
 } // namespace blink

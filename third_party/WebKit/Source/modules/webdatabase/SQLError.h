@@ -30,57 +30,79 @@
 #define SQLError_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
 class SQLErrorData {
+    USING_FAST_MALLOC(SQLErrorData);
+
 public:
-    static PassOwnPtr<SQLErrorData> create(unsigned code, const String& message)
+    static std::unique_ptr<SQLErrorData> create(unsigned code,
+        const String& message)
     {
-        return adoptPtr(new SQLErrorData(code, message));
+        return WTF::wrapUnique(new SQLErrorData(code, message));
     }
 
-    static PassOwnPtr<SQLErrorData> create(unsigned code, const char* message, int sqliteCode, const char* sqliteMessage)
+    static std::unique_ptr<SQLErrorData> create(unsigned code,
+        const char* message,
+        int sqliteCode,
+        const char* sqliteMessage)
     {
-        return create(code, String::format("%s (%d %s)", message, sqliteCode, sqliteMessage));
+        return create(
+            code, String::format("%s (%d %s)", message, sqliteCode, sqliteMessage));
     }
 
-    static PassOwnPtr<SQLErrorData> create(const SQLErrorData& data)
+    static std::unique_ptr<SQLErrorData> create(const SQLErrorData& data)
     {
         return create(data.code(), data.message());
     }
 
-    SQLErrorData(const SQLErrorData& data) : m_code(data.m_code), m_message(data.m_message.isolatedCopy()) { }
+    SQLErrorData(const SQLErrorData& data)
+        : m_code(data.m_code)
+        , m_message(data.m_message.isolatedCopy())
+    {
+    }
 
     unsigned code() const { return m_code; }
     String message() const { return m_message.isolatedCopy(); }
 
 private:
-    SQLErrorData(unsigned code, const String& message) : m_code(code), m_message(message.isolatedCopy()) { }
+    SQLErrorData(unsigned code, const String& message)
+        : m_code(code)
+        , m_message(message.isolatedCopy())
+    {
+    }
 
     unsigned m_code;
     String m_message;
 };
 
-class SQLError : public GarbageCollectedFinalized<SQLError>, public ScriptWrappable {
+class SQLError final : public GarbageCollectedFinalized<SQLError>,
+                       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static SQLError* create(const SQLErrorData& data) { return new SQLError(data); }
+    static SQLError* create(const SQLErrorData& data)
+    {
+        return new SQLError(data);
+    }
     DEFINE_INLINE_TRACE() { }
 
     unsigned code() const { return m_data.code(); }
     String message() const { return m_data.message(); }
 
     enum SQLErrorCode {
-        UNKNOWN_ERR = 0,
-        DATABASE_ERR = 1,
-        VERSION_ERR = 2,
-        TOO_LARGE_ERR = 3,
-        QUOTA_ERR = 4,
-        SYNTAX_ERR = 5,
-        CONSTRAINT_ERR = 6,
-        TIMEOUT_ERR = 7
+        kUnknownErr = 0,
+        kDatabaseErr = 1,
+        kVersionErr = 2,
+        kTooLargeErr = 3,
+        kQuotaErr = 4,
+        kSyntaxErr = 5,
+        kConstraintErr = 6,
+        kTimeoutErr = 7
     };
 
     static const char quotaExceededErrorMessage[];
@@ -89,7 +111,9 @@ public:
 
 private:
     explicit SQLError(const SQLErrorData& data)
-        : m_data(data) { }
+        : m_data(data)
+    {
+    }
 
     const SQLErrorData m_data;
 };

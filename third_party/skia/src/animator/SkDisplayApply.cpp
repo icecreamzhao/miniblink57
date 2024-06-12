@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayApply.h"
 #include "SkAnimateActive.h"
 #include "SkAnimateMaker.h"
@@ -38,7 +37,7 @@ const SkMemberInfo SkApply::fInfo[] = {
     SK_MEMBER(begin, MSec),
     SK_MEMBER(dontDraw, Boolean),
     SK_MEMBER(dynamicScope, String),
-    SK_MEMBER(interval, MSec),  // recommended redraw interval
+    SK_MEMBER(interval, MSec), // recommended redraw interval
     SK_MEMBER(mode, ApplyMode),
 #if 0
     SK_MEMBER(pickup, Boolean),
@@ -55,13 +54,30 @@ const SkMemberInfo SkApply::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkApply);
 
-SkApply::SkApply() : begin(0), dontDraw(false), interval((SkMSec) -1), mode((Mode) -1), /*pickup(false), */
-    restore(false), scope(NULL), steps(-1), transition((Transition) -1), fActive(NULL), /*fCurrentScope(NULL),*/
-    fLastTime(0), fAppended(false), fContainsScope(false), fDeleteScope(false), fEmbedded(false),
-    fEnabled(false), fEnabling(false) {
+SkApply::SkApply()
+    : begin(0)
+    , dontDraw(false)
+    , interval((SkMSec)-1)
+    , mode((Mode)-1)
+    , /*pickup(false), */
+    restore(false)
+    , scope(nullptr)
+    , steps(-1)
+    , transition((Transition)-1)
+    , fActive(nullptr)
+    , /*fCurrentScope(nullptr),*/
+    fLastTime(0)
+    , fAppended(false)
+    , fContainsScope(false)
+    , fDeleteScope(false)
+    , fEmbedded(false)
+    , fEnabled(false)
+    , fEnabling(false)
+{
 }
 
-SkApply::~SkApply() {
+SkApply::~SkApply()
+{
     for (SkADrawable** curPtr = fScopes.begin(); curPtr < fScopes.end(); curPtr++)
         delete *curPtr;
     if (fDeleteScope)
@@ -70,8 +86,9 @@ SkApply::~SkApply() {
     delete fActive;
 }
 
-void SkApply::activate(SkAnimateMaker& maker) {
-    if (fActive != NULL) {
+void SkApply::activate(SkAnimateMaker& maker)
+{
+    if (fActive != nullptr) {
         if (fActive->fDrawIndex == 0 && fActive->fDrawMax == 0)
             return; // if only one use, nothing more to do
         if (restore == false)
@@ -91,8 +108,9 @@ void SkApply::activate(SkAnimateMaker& maker) {
     }
 }
 
-void SkApply::append(SkApply* apply) {
-    if (fActive == NULL)
+void SkApply::append(SkApply* apply)
+{
+    if (fActive == nullptr)
         return;
     int oldCount = fActive->fAnimators.count();
     fActive->append(apply);
@@ -105,13 +123,13 @@ void SkApply::append(SkApply* apply) {
 }
 
 void SkApply::applyValues(int animatorIndex, SkOperand* values, int count,
-     SkDisplayTypes valuesType, SkMSec time)
+    SkDisplayTypes valuesType, SkMSec time)
 {
     SkAnimateBase* animator = fActive->fAnimators[animatorIndex];
-    const SkMemberInfo * info = animator->fFieldInfo;
+    const SkMemberInfo* info = animator->fFieldInfo;
     SkASSERT(animator);
-    SkASSERT(info != NULL);
-    SkDisplayTypes type = (SkDisplayTypes) info->fType;
+    SkASSERT(info != nullptr);
+    SkDisplayTypes type = (SkDisplayTypes)info->fType;
     SkDisplayable* target = getTarget(animator);
     if (animator->hasExecute() || type == SkType_MemberFunction || type == SkType_MemberProperty) {
         SkDisplayable* executor = animator->hasExecute() ? animator : target;
@@ -123,7 +141,7 @@ void SkApply::applyValues(int animatorIndex, SkOperand* values, int count,
                 temp.fOperand = values[index];
                 *typedValues.append() = temp;
             }
-            executor->executeFunction(target, info->functionIndex(), typedValues, info->getType(), NULL);
+            executor->executeFunction(target, info->functionIndex(), typedValues, info->getType(), nullptr);
         } else {
             SkScriptValue scriptValue;
             scriptValue.fOperand = values[0];
@@ -142,7 +160,7 @@ void SkApply::applyValues(int animatorIndex, SkOperand* values, int count,
                 SkASSERT(count == 1);
             }
         }
-//      SkASSERT(type == SkType_ARGB || type == SkType_String ||info->isSettable());
+        //      SkASSERT(type == SkType_ARGB || type == SkType_String ||info->isSettable());
         if (type == SkType_String || type == SkType_DynamicString)
             info->setString(target, values->fString);
         else if (type == SkType_Drawable || type == SkType_Displayable)
@@ -152,7 +170,8 @@ void SkApply::applyValues(int animatorIndex, SkOperand* values, int count,
     }
 }
 
-bool SkApply::contains(SkDisplayable* child) {
+bool SkApply::contains(SkDisplayable* child)
+{
     for (SkADrawable** curPtr = fScopes.begin(); curPtr < fScopes.end(); curPtr++) {
         if (*curPtr == child || (*curPtr)->contains(child))
             return true;
@@ -160,31 +179,34 @@ bool SkApply::contains(SkDisplayable* child) {
     return fDeleteScope && scope == child;
 }
 
-SkDisplayable* SkApply::deepCopy(SkAnimateMaker* maker) {
+SkDisplayable* SkApply::deepCopy(SkAnimateMaker* maker)
+{
     SkADrawable* saveScope = scope;
-    scope = NULL;
-    SkApply* result = (SkApply*) INHERITED::deepCopy(maker);
+    scope = nullptr;
+    SkApply* result = (SkApply*)INHERITED::deepCopy(maker);
     result->scope = scope = saveScope;
     SkAnimateBase** end = fAnimators.end();
     for (SkAnimateBase** animPtr = fAnimators.begin(); animPtr < end; animPtr++) {
-        SkAnimateBase* anim = (SkAnimateBase*) (*animPtr)->deepCopy(maker);
+        SkAnimateBase* anim = (SkAnimateBase*)(*animPtr)->deepCopy(maker);
         *result->fAnimators.append() = anim;
         maker->helperAdd(anim);
     }
     return result;
 }
 
-void SkApply::disable() {
+void SkApply::disable()
+{
     //!!! this is the right thing to do, but has bad side effects because of other problems
     // currently, if an apply is in a g and scopes a statement in another g, it ends up as members
     // of both containers. The disabling here incorrectly disables both instances
     // maybe the fEnabled flag needs to be moved to the fActive data so that both
     // instances are not affected.
-//  fEnabled = false;
+    //  fEnabled = false;
 }
 
-bool SkApply::draw(SkAnimateMaker& maker) {
-    if (scope ==NULL)
+bool SkApply::draw(SkAnimateMaker& maker)
+{
+    if (scope == nullptr)
         return false;
     if (scope->isApply() || scope->isDrawable() == false)
         return false;
@@ -196,8 +218,8 @@ bool SkApply::draw(SkAnimateMaker& maker) {
         return fActive->draw();
     bool result = interpolate(maker, maker.getInTime());
     if (dontDraw == false) {
-//      if (scope->isDrawable())
-            result |= scope->draw(maker);
+        //      if (scope->isDrawable())
+        result |= scope->draw(maker);
     }
     if (restore) {
         for (int index = 0; index < fActive->fAnimators.count(); index++)
@@ -208,16 +230,17 @@ bool SkApply::draw(SkAnimateMaker& maker) {
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkApply::dump(SkAnimateMaker* maker) {
+void SkApply::dump(SkAnimateMaker* maker)
+{
     dumpBase(maker);
     if (dynamicScope.isEmpty() == false)
         SkDebugf("dynamicScope=\"%s\" ", dynamicScope.c_str());
     if (dontDraw)
         SkDebugf("dontDraw=\"true\" ");
     if (begin != 0) //perhaps we want this no matter what?
-        SkDebugf("begin=\"%g\" ", (float) begin/1000.0f);   //is this correct?
-    if (interval != (SkMSec) -1)
-        SkDebugf("interval=\"%g\" ", (float) interval/1000.0f);
+        SkDebugf("begin=\"%g\" ", (float)begin / 1000.0f); //is this correct?
+    if (interval != (SkMSec)-1)
+        SkDebugf("interval=\"%g\" ", (float)interval / 1000.0f);
     if (steps != -1)
         SkDebugf("steps=\"%d\" ", steps);
     if (restore)
@@ -226,8 +249,7 @@ void SkApply::dump(SkAnimateMaker* maker) {
         SkDebugf("transition=\"reverse\" ");
     if (mode == kMode_immediate) {
         SkDebugf("mode=\"immediate\" ");
-    }
-    else if (mode == kMode_create) {
+    } else if (mode == kMode_create) {
         SkDebugf("mode=\"create\" ");
     }
     bool closedYet = false;
@@ -241,15 +263,15 @@ void SkApply::dump(SkAnimateMaker* maker) {
         scope->dump(maker);
     }
     int index;
-//  if (fActive) {
-        for (index = 0; index < fAnimators.count(); index++) {
-            if (closedYet == false) {
-                SkDebugf(">\n");
-                closedYet = true;
-            }
-            SkAnimateBase* animator = fAnimators[index];
-            animator->dump(maker);
-//      }
+    //  if (fActive) {
+    for (index = 0; index < fAnimators.count(); index++) {
+        if (closedYet == false) {
+            SkDebugf(">\n");
+            closedYet = true;
+        }
+        SkAnimateBase* animator = fAnimators[index];
+        animator->dump(maker);
+        //      }
     }
     SkDisplayList::fIndent -= 4;
     SkDisplayList::fDumpIndex = save;
@@ -260,9 +282,10 @@ void SkApply::dump(SkAnimateMaker* maker) {
 }
 #endif
 
-bool SkApply::enable(SkAnimateMaker& maker) {
+bool SkApply::enable(SkAnimateMaker& maker)
+{
     fEnabled = true;
-    bool initialized = fActive != NULL;
+    bool initialized = fActive != nullptr;
     if (dynamicScope.size() > 0)
         enableDynamic(maker);
     if (maker.fError.hasError())
@@ -275,8 +298,8 @@ bool SkApply::enable(SkAnimateMaker& maker) {
         animator->fResetPending = animator->fReset;
     }
     if (scope && scope->isApply())
-        ((SkApply*) scope)->setEmbedded();
-/*  if (mode == kMode_once) {
+        ((SkApply*)scope)->setEmbedded();
+    /*  if (mode == kMode_once) {
         if (scope) {
             activate(maker);
             interpolate(maker, maker.fEnableTime);
@@ -284,14 +307,14 @@ bool SkApply::enable(SkAnimateMaker& maker) {
         }
         return true;
     }*/
-    if ((mode == kMode_immediate || mode == kMode_create) && scope == NULL)
-        return false;   // !!! error?
+    if ((mode == kMode_immediate || mode == kMode_create) && scope == nullptr)
+        return false; // !!! error?
     bool enableMe = scope && (scope->hasEnable() || scope->isApply() || scope->isDrawable() == false);
     if ((mode == kMode_immediate && enableMe) || mode == kMode_create)
-        activate(maker);    // for non-drawables like post, prime them here
+        activate(maker); // for non-drawables like post, prime them here
     if (mode == kMode_immediate && enableMe)
         fActive->enable();
-    if (mode == kMode_create && scope != NULL) {
+    if (mode == kMode_create && scope != nullptr) {
         enableCreate(maker);
         return true;
     }
@@ -311,15 +334,15 @@ bool SkApply::enable(SkAnimateMaker& maker) {
     debugOut.appendS32(maker.fEnableTime - maker.fDebugTimeBase);
     SkDebugf("%s\n", debugOut.c_str());
 #endif
-    if (scope == NULL || scope->isApply() || scope->getType() == SkType_Movie || scope->isDrawable() == false) {
-        activate(maker);    // for non-drawables like post, prime them here
+    if (scope == nullptr || scope->isApply() || scope->getType() == SkType_Movie || scope->isDrawable() == false) {
+        activate(maker); // for non-drawables like post, prime them here
         if (initialized) {
             append(this);
         }
         fEnabling = true;
         interpolate(maker, maker.fEnableTime);
         fEnabling = false;
-        if (scope != NULL && dontDraw == false)
+        if (scope != nullptr && dontDraw == false)
             scope->enable(maker);
         return true;
     } else if (initialized && restore == false)
@@ -332,15 +355,15 @@ bool SkApply::enable(SkAnimateMaker& maker) {
         return true;
     }
 #endif
-//  start here;
+    //  start here;
     // now that one apply might embed another, only the parent apply should replace the scope
     // or get appended to the display list
     // similarly, an apply added by an add immediate has already been located in the display list
     // and should not get moved or added again here
     if (fEmbedded) {
-        return false;   // already added to display list by embedder
+        return false; // already added to display list by embedder
     }
-    drawable = (SkADrawable*) scope;
+    drawable = (SkADrawable*)scope;
     SkTDDrawableArray* parentList;
     SkTDDrawableArray* grandList;
     SkGroup* parentGroup;
@@ -350,7 +373,7 @@ bool SkApply::enable(SkAnimateMaker& maker) {
         goto append;
     else if (fContainsScope) {
         if ((*parentList)[old] != this || restore) {
-append:
+        append:
             if (parentGroup)
                 parentGroup->markCopySize(old);
             if (parentList->count() < 10000) {
@@ -364,11 +387,11 @@ append:
     } else {
         SkASSERT(old < parentList->count());
         if ((*parentList)[old]->isApply()) {
-            SkApply* apply = (SkApply*) (*parentList)[old];
-            if (apply != this && apply->fActive == NULL)
+            SkApply* apply = (SkApply*)(*parentList)[old];
+            if (apply != this && apply->fActive == nullptr)
                 apply->activate(maker);
             apply->append(this);
-            parentGroup = NULL;
+            parentGroup = nullptr;
         } else {
             if (parentGroup)
                 parentGroup->markCopySize(old);
@@ -376,8 +399,8 @@ append:
             SkGroup* pGroup;
             int oldApply = displayList.findGroup(this, &parentList, &pGroup, &thisGroup, &grandList);
             if (oldApply >= 0) {
-                (*parentList)[oldApply] = (SkADrawable*) SkDisplayType::CreateInstance(&maker, SkType_Apply);
-                parentGroup = NULL;
+                (*parentList)[oldApply] = (SkADrawable*)SkDisplayType::CreateInstance(&maker, SkType_Apply);
+                parentGroup = nullptr;
                 fDeleteScope = true;
             }
             *newApplyLocation = this;
@@ -390,19 +413,20 @@ append:
     return true;
 }
 
-void SkApply::enableCreate(SkAnimateMaker& maker) {
+void SkApply::enableCreate(SkAnimateMaker& maker)
+{
     SkString newID;
     for (int step = 0; step <= steps; step++) {
         fLastTime = step * SK_MSec1;
         bool success = maker.computeID(scope, this, &newID);
         if (success == false)
             return;
-        if (maker.find(newID.c_str(), NULL))
+        if (maker.find(newID.c_str(), nullptr))
             continue;
-        SkApply* copy = (SkApply*) deepCopy(&maker); // work on copy of animator state
+        SkApply* copy = (SkApply*)deepCopy(&maker); // work on copy of animator state
         if (mode == kMode_create)
-            copy->mode = (Mode) -1;
-        SkADrawable* copyScope = copy->scope = (SkADrawable*) scope->deepCopy(&maker);
+            copy->mode = (Mode)-1;
+        SkADrawable* copyScope = copy->scope = (SkADrawable*)scope->deepCopy(&maker);
         *fScopes.append() = copyScope;
         if (copyScope->resolveIDs(maker, scope, this)) {
             step = steps; // quit
@@ -422,45 +446,47 @@ void SkApply::enableCreate(SkAnimateMaker& maker) {
     }
 }
 
-void SkApply::enableDynamic(SkAnimateMaker& maker) {
+void SkApply::enableDynamic(SkAnimateMaker& maker)
+{
     SkASSERT(mode != kMode_create); // create + dynamic are not currently compatible
     SkDisplayable* newScope;
     bool success = SkAnimatorScript::EvaluateDisplayable(maker, this, dynamicScope.c_str(),
         &newScope);
     if (success && scope != newScope) {
-        SkTDDrawableArray* pList, * gList;
-        SkGroup* pGroup = NULL, * found = NULL;
+        SkTDDrawableArray *pList, *gList;
+        SkGroup *pGroup = nullptr, *found = nullptr;
         int old = maker.fDisplayList.findGroup(scope, &pList, &pGroup, &found, &gList);
         if (pList && old >= 0 && (*pList)[old]->isApply() && (*pList)[old] != this) {
             if (fAppended == false) {
-                if (found != NULL) {
+                if (found != nullptr) {
                     SkDisplayable* oldChild = (*pList)[old];
                     if (oldChild->isApply() && found->copySet(old)) {
                         found->markCopyClear(old);
-    //                  delete oldChild;
+                        //                  delete oldChild;
                     }
                 }
                 (*pList)[old] = scope;
             } else
                 pList->remove(old);
         }
-        scope = (SkADrawable*) newScope;
+        scope = (SkADrawable*)newScope;
         onEndElement(maker);
     }
     maker.removeActive(fActive);
     delete fActive;
-    fActive = NULL;
+    fActive = nullptr;
 }
 
-void SkApply::endSave(int index) {
+void SkApply::endSave(int index)
+{
     SkAnimateBase* animate = fActive->fAnimators[index];
     const SkMemberInfo* info = animate->fFieldInfo;
-    SkDisplayTypes type = (SkDisplayTypes) info->fType;
+    SkDisplayTypes type = (SkDisplayTypes)info->fType;
     if (type == SkType_MemberFunction)
         return;
     SkDisplayable* target = getTarget(animate);
     size_t size = info->getSize(target);
-    int count = (int) (size / sizeof(SkScalar));
+    int count = (int)(size / sizeof(SkScalar));
     int activeIndex = fActive->fDrawIndex + index;
     SkOperand* last = new SkOperand[count];
     SkAutoTDelete<SkOperand> autoLast(last);
@@ -471,7 +497,7 @@ void SkApply::endSave(int index) {
             info->setValue(target, fActive->fSaveRestore[activeIndex], count);
     } else {
         SkScriptValue scriptValue;
-        SkDEBUGCODE(bool success = ) target->getProperty(info->propertyIndex(), &scriptValue);
+        SkDEBUGCODE(bool success =) target->getProperty(info->propertyIndex(), &scriptValue);
         SkASSERT(success == true);
         last[0] = scriptValue.fOperand;
         scriptValue.fOperand = fActive->fSaveRestore[activeIndex][0];
@@ -482,38 +508,42 @@ void SkApply::endSave(int index) {
         memcpy(save, last, count * sizeof(SkOperand));
 }
 
-bool SkApply::getProperty(int index, SkScriptValue* value) const {
+bool SkApply::getProperty(int index, SkScriptValue* value) const
+{
     switch (index) {
-        case SK_PROPERTY(step):
-            value->fType = SkType_Int;
-            value->fOperand.fS32 = fLastTime / SK_MSec1;
-            break;
-        case SK_PROPERTY(steps):
-            value->fType = SkType_Int;
-            value->fOperand.fS32 = steps;
-            break;
-        case SK_PROPERTY(time):
-            value->fType = SkType_MSec;
-            value->fOperand.fS32 = fLastTime;
-            break;
-        default:
-    //      SkASSERT(0);
-            return false;
+    case SK_PROPERTY(step):
+        value->fType = SkType_Int;
+        value->fOperand.fS32 = fLastTime / SK_MSec1;
+        break;
+    case SK_PROPERTY(steps):
+        value->fType = SkType_Int;
+        value->fOperand.fS32 = steps;
+        break;
+    case SK_PROPERTY(time):
+        value->fType = SkType_MSec;
+        value->fOperand.fS32 = fLastTime;
+        break;
+    default:
+        //      SkASSERT(0);
+        return false;
     }
     return true;
 }
 
-void SkApply::getStep(SkScriptValue* value) {
+void SkApply::getStep(SkScriptValue* value)
+{
     getProperty(SK_PROPERTY(step), value);
 }
 
-SkADrawable* SkApply::getTarget(SkAnimateBase* animate) {
+SkADrawable* SkApply::getTarget(SkAnimateBase* animate)
+{
     if (animate->fTargetIsScope == false || mode != kMode_create)
         return animate->fTarget;
     return scope;
 }
 
-bool SkApply::hasDelayedAnimator() const {
+bool SkApply::hasDelayedAnimator() const
+{
     SkAnimateBase* const* animEnd = fAnimators.end();
     for (SkAnimateBase* const* animPtr = fAnimators.begin(); animPtr < animEnd; animPtr++) {
         SkAnimateBase* const animator = *animPtr;
@@ -523,33 +553,35 @@ bool SkApply::hasDelayedAnimator() const {
     return false;
 }
 
-bool SkApply::hasEnable() const {
+bool SkApply::hasEnable() const
+{
     return true;
 }
 
-bool SkApply::inactivate(SkAnimateMaker& maker) {
-    if (fActive == NULL)
+bool SkApply::inactivate(SkAnimateMaker& maker)
+{
+    if (fActive == nullptr)
         return false;
     maker.removeActive(fActive);
     delete fActive;
-    fActive = NULL;
+    fActive = nullptr;
     return true;
 }
 
 #ifdef SK_DEBUG
-SkMSec lastTime = (SkMSec) -1;
+SkMSec lastTime = (SkMSec)-1;
 #endif
 
-bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime) {
-    if (fActive == NULL)
+bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime)
+{
+    if (fActive == nullptr)
         return false;
     bool result = false;
 #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
     SkMSec time = maker.getAppTime();
-    if (lastTime == (SkMSec) -1)
+    if (lastTime == (SkMSec)-1)
         lastTime = rawTime - 1;
-    if (fActive != NULL &&
-        strcmp(id, "a3") == 0 && rawTime > lastTime) {
+    if (fActive != nullptr && strcmp(id, "a3") == 0 && rawTime > lastTime) {
         lastTime += 1000;
         SkString debugOut;
         debugOut.appendS32(time - maker.fDebugTimeBase);
@@ -572,15 +604,15 @@ bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime) {
         if (animate->fChanged) {
             animate->fChanged = false;
             animate->fStart = rawTime;
-    //      SkTypedArray values;
-    //      int count = animate->fValues.count();
-    //      values.setCount(count);
-    //      memcpy(values.begin(), animate->fValues.begin(), sizeof(SkOperand) * count);
+            //      SkTypedArray values;
+            //      int count = animate->fValues.count();
+            //      values.setCount(count);
+            //      memcpy(values.begin(), animate->fValues.begin(), sizeof(SkOperand) * count);
             animate->onEndElement(maker);
-    //      if (memcmp(values.begin(), animate->fValues.begin(), sizeof(SkOperand) * count) != 0) {
-                fActive->append(this);
-                fActive->start();
-    //      }
+            //      if (memcmp(values.begin(), animate->fValues.begin(), sizeof(SkOperand) * count) != 0) {
+            fActive->append(this);
+            fActive->start();
+            //      }
         }
         SkMSec time = fActive->getTime(rawTime, inner);
         SkActive::SkState& state = fActive->fState[inner];
@@ -605,11 +637,11 @@ bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime) {
                         continue;
                 }
             } else if (innerTime == 0) {
-                    if (animate->fResetPending) {
-                        innerTime = state.fBegin + state.fDuration;
-                        animate->fResetPending = false;
-                    } else
-                        continue;
+                if (animate->fResetPending) {
+                    innerTime = state.fBegin + state.fDuration;
+                    animate->fResetPending = false;
+                } else
+                    continue;
             }
         }
         int count = animate->components();
@@ -617,19 +649,18 @@ bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime) {
         SkInterpolatorBase::Result interpResult = fActive->fInterpolators[inner]->timeToValues(
             innerTime, values.get());
         result |= (interpResult != SkInterpolatorBase::kFreezeEnd_Result);
-        if (((transition != SkApply::kTransition_reverse && interpResult == SkInterpolatorBase::kFreezeEnd_Result) ||
-                (transition == SkApply::kTransition_reverse && fLastTime == 0)) && state.fUnpostedEndEvent) {
-//          SkDEBUGF(("interpolate: post on end\n"));
+        if (((transition != SkApply::kTransition_reverse && interpResult == SkInterpolatorBase::kFreezeEnd_Result) || (transition == SkApply::kTransition_reverse && fLastTime == 0)) && state.fUnpostedEndEvent) {
+            //          SkDEBUGF(("interpolate: post on end\n"));
             state.fUnpostedEndEvent = false;
             maker.postOnEnd(animate, state.fBegin + state.fDuration);
-            maker.fAdjustedStart = 0;    // !!! left over from synchronizing animation days, undoubtably out of date (and broken)
+            maker.fAdjustedStart = 0; // !!! left over from synchronizing animation days, undoubtably out of date (and broken)
         }
         if (animate->formula.size() > 0) {
             if (fLastTime > animate->dur)
                 fLastTime = animate->dur;
             SkTypedArray formulaValues;
             formulaValues.setCount(count);
-            SkDEBUGCODE(bool success = ) animate->fFieldInfo->setValue(maker, &formulaValues, 0, 0, NULL,
+            SkDEBUGCODE(bool success =) animate->fFieldInfo->setValue(maker, &formulaValues, 0, 0, nullptr,
                 animate->getValuesType(), animate->formula);
             SkASSERT(success);
             if (restore)
@@ -644,8 +675,9 @@ bool SkApply::interpolate(SkAnimateMaker& maker, SkMSec rawTime) {
     return result;
 }
 
-void SkApply::initialize() {
-    if (scope == NULL)
+void SkApply::initialize()
+{
+    if (scope == nullptr)
         return;
     if (scope->isApply() || scope->isDrawable() == false)
         return;
@@ -656,7 +688,7 @@ void SkApply::onEndElement(SkAnimateMaker& maker)
 {
     SkADrawable* scopePtr = scope;
     while (scopePtr && scopePtr->isApply()) {
-        SkApply* scopedApply = (SkApply*) scopePtr;
+        SkApply* scopedApply = (SkApply*)scopePtr;
         if (scopedApply->scope == this) {
             maker.setErrorCode(SkDisplayXMLParserError::kApplyScopesItself);
             return;
@@ -665,31 +697,33 @@ void SkApply::onEndElement(SkAnimateMaker& maker)
     }
     if (mode == kMode_create)
         return;
-    if (scope != NULL && steps >= 0 && scope->isApply() == false && scope->isDrawable())
+    if (scope != nullptr && steps >= 0 && scope->isApply() == false && scope->isDrawable())
         scope->setSteps(steps);
     for (SkAnimateBase** animPtr = fAnimators.begin(); animPtr < fAnimators.end(); animPtr++) {
         SkAnimateBase* anim = *animPtr;
         //for reusing apply statements with dynamic scope
-        if (anim->fTarget == NULL || anim->fTargetIsScope) {
+        if (anim->fTarget == nullptr || anim->fTargetIsScope) {
             anim->fTargetIsScope = true;
             if (scope)
                 anim->fTarget = scope;
             else
                 anim->setTarget(maker);
-            anim->onEndElement(maker);  // allows animate->fFieldInfo to be set
+            anim->onEndElement(maker); // allows animate->fFieldInfo to be set
         }
-        if (scope != NULL && steps >= 0 && anim->fTarget != scope && anim->fTarget->isDrawable())
+        if (scope != nullptr && steps >= 0 && anim->fTarget != scope && anim->fTarget->isDrawable())
             anim->fTarget->setSteps(steps);
     }
 }
 
-const SkMemberInfo* SkApply::preferredChild(SkDisplayTypes type) {
+const SkMemberInfo* SkApply::preferredChild(SkDisplayTypes type)
+{
     SkASSERT(SkDisplayType::IsAnimate(type) == false);
     fContainsScope = true;
     return getMember("scope"); // !!! cwap! need to refer to member through enum like kScope instead
 }
 
-void SkApply::refresh(SkAnimateMaker& maker) {
+void SkApply::refresh(SkAnimateMaker& maker)
+{
     for (SkAnimateBase** animPtr = fAnimators.begin(); animPtr < fAnimators.end(); animPtr++) {
         SkAnimateBase* animate = *animPtr;
         animate->onEndElement(maker);
@@ -698,17 +732,19 @@ void SkApply::refresh(SkAnimateMaker& maker) {
         fActive->resetInterpolators();
 }
 
-void SkApply::reset() {
+void SkApply::reset()
+{
     if (fActive)
         fActive->resetState();
 }
 
-bool SkApply::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply) { //   replace to/formula strings in animators of the form xxx.step with the step value, if xxx.step is in scope
+bool SkApply::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply)
+{ //   replace to/formula strings in animators of the form xxx.step with the step value, if xxx.step is in scope
     if (resolveField(maker, apply, &dynamicScope) == false)
-        return true;    // failed
+        return true; // failed
     SkAnimateBase** endPtr = fAnimators.end();
-    SkAnimateBase** origPtr = ((SkApply*) original)->fAnimators.begin();
-    for (SkAnimateBase** animPtr = fAnimators.begin(); animPtr < endPtr; ) {
+    SkAnimateBase** origPtr = ((SkApply*)original)->fAnimators.begin();
+    for (SkAnimateBase** animPtr = fAnimators.begin(); animPtr < endPtr;) {
         SkAnimateBase* animator = *animPtr++;
         maker.resolveID(animator, *origPtr++);
         if (resolveField(maker, this, &animator->target) == false)
@@ -720,12 +756,13 @@ bool SkApply::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply
         if (resolveField(maker, this, &animator->formula) == false)
             return true;
     }
-//  setEmbedded();
+    //  setEmbedded();
     onEndElement(maker);
     return false; // succeeded
 }
 
-bool SkApply::resolveField(SkAnimateMaker& maker, SkDisplayable* parent, SkString* str) {
+bool SkApply::resolveField(SkAnimateMaker& maker, SkDisplayable* parent, SkString* str)
+{
     const char* script = str->c_str();
     if (str->startsWith("#string:") == false)
         return true;
@@ -733,22 +770,23 @@ bool SkApply::resolveField(SkAnimateMaker& maker, SkDisplayable* parent, SkStrin
     return SkAnimatorScript::EvaluateString(maker, this, parent, script, str);
 }
 
-void SkApply::save(int index) {
+void SkApply::save(int index)
+{
     SkAnimateBase* animate = fActive->fAnimators[index];
-    const SkMemberInfo * info = animate->fFieldInfo;
+    const SkMemberInfo* info = animate->fFieldInfo;
     SkDisplayable* target = getTarget(animate);
-//  if (animate->hasExecute())
-//      info = animate->getResolvedInfo();
-    SkDisplayTypes type = (SkDisplayTypes) info->fType;
+    //  if (animate->hasExecute())
+    //      info = animate->getResolvedInfo();
+    SkDisplayTypes type = (SkDisplayTypes)info->fType;
     if (type == SkType_MemberFunction)
         return; // nothing to save
     size_t size = info->getSize(target);
-    int count = (int) (size / sizeof(SkScalar));
+    int count = (int)(size / sizeof(SkScalar));
     bool useLast = true;
-// !!! this all may be unneeded, at least in the dynamic case ??
+    // !!! this all may be unneeded, at least in the dynamic case ??
     int activeIndex = fActive->fDrawIndex + index;
     SkTDOperandArray last;
-    if (fActive->fSaveRestore[activeIndex] == NULL) {
+    if (fActive->fSaveRestore[activeIndex] == nullptr) {
         fActive->fSaveRestore[activeIndex] = new SkOperand[count];
         useLast = false;
     } else {
@@ -761,7 +799,7 @@ void SkApply::save(int index) {
             info->setValue(target, last.begin(), count);
     } else {
         SkScriptValue scriptValue;
-        SkDEBUGCODE(bool success = ) target->getProperty(info->propertyIndex(), &scriptValue);
+        SkDEBUGCODE(bool success =) target->getProperty(info->propertyIndex(), &scriptValue);
         SkASSERT(success == true);
         SkASSERT(scriptValue.fType == SkType_Float);
         fActive->fSaveRestore[activeIndex][0] = scriptValue.fOperand;
@@ -772,32 +810,35 @@ void SkApply::save(int index) {
             target->setProperty(info->propertyIndex(), scriptValue);
         }
     }
-// !!!  end of unneeded
+    // !!!  end of unneeded
 }
 
-bool SkApply::setProperty(int index, SkScriptValue& scriptValue) {
+bool SkApply::setProperty(int index, SkScriptValue& scriptValue)
+{
     switch (index) {
-        case SK_PROPERTY(animator): {
-            SkAnimateBase* animate = (SkAnimateBase*) scriptValue.fOperand.fDisplayable;
-            SkASSERT(animate->isAnimate());
-            *fAnimators.append() = animate;
-            return true;
-        }
-        case SK_PROPERTY(steps):
-            steps = scriptValue.fOperand.fS32;
-            if (fActive)
-                fActive->setSteps(steps);
-            return true;
+    case SK_PROPERTY(animator): {
+        SkAnimateBase* animate = (SkAnimateBase*)scriptValue.fOperand.fDisplayable;
+        SkASSERT(animate->isAnimate());
+        *fAnimators.append() = animate;
+        return true;
+    }
+    case SK_PROPERTY(steps):
+        steps = scriptValue.fOperand.fS32;
+        if (fActive)
+            fActive->setSteps(steps);
+        return true;
     }
     return false;
 }
 
-void SkApply::setSteps(int _steps) {
+void SkApply::setSteps(int _steps)
+{
     steps = _steps;
 }
 
 #ifdef SK_DEBUG
-void SkApply::validate() {
+void SkApply::validate()
+{
     if (fActive)
         fActive->validate();
 }

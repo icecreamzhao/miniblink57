@@ -6,19 +6,24 @@
 
 namespace gin {
 
-Runner::Runner() : weak_factory_(this) {
+Runner::Runner()
+    : weak_factory_(this)
+{
 }
 
-Runner::~Runner() {
+Runner::~Runner()
+{
 }
 
 Runner::Scope::Scope(Runner* runner)
-    : isolate_scope_(runner->GetContextHolder()->isolate()),
-      handle_scope_(runner->GetContextHolder()->isolate()),
-      scope_(runner->GetContextHolder()->context()) {
+    : isolate_scope_(runner->GetContextHolder()->isolate())
+    , handle_scope_(runner->GetContextHolder()->isolate())
+    , scope_(runner->GetContextHolder()->context())
+{
 }
 
-Runner::Scope::~Scope() {
+Runner::Scope::~Scope()
+{
 }
 
-}  // namespace gin
+} // namespace gin

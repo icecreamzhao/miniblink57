@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayMath_DEFINED
 #define SkDisplayMath_DEFINED
 
@@ -16,16 +15,16 @@
 
 class SkDisplayMath : public SkDisplayable {
     DECLARE_DISPLAY_MEMBER_INFO(Math);
-    void executeFunction(SkDisplayable* , int index,
+    void executeFunction(SkDisplayable*, int index,
         SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
-        SkScriptValue* ) override;
+        SkScriptValue*) override;
     const SkFunctionParamType* getFunctionsParameters() override;
     bool getProperty(int index, SkScriptValue* value) const override;
+
 private:
     mutable SkRandom fRandom;
     static const SkScalar gConstants[];
     static const SkFunctionParamType fFunctionParameters[];
-
 };
 
 #endif // SkDisplayMath_DEFINED

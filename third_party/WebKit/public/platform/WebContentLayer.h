@@ -37,21 +37,6 @@ public:
 
     // The WebContentLayer has ownership of this wrapper.
     virtual WebLayer* layer() = 0;
-
-    // Set to true if the backside of this layer's contents should be visible when composited.
-    // Defaults to false.
-    virtual void setDoubleSided(bool) = 0;
-
-    // Allow the compositor to determine the scale at which the layer should
-    // be rasterized based on the layer's hierarchy and transform. This defaults
-    // to false.
-    virtual void setAutomaticallyComputeRasterScale(bool) { }
-
-    // Set to draw a system-defined checkerboard if the compositor would otherwise draw a tile in this layer
-    // and the actual contents are unavailable. If false, the compositor will draw the layer's background color
-    // for these tiles.
-    // Defaults to false.
-    virtual void setDrawCheckerboardForMissingTiles(bool) = 0;
 };
 
 } // namespace blink

@@ -29,29 +29,42 @@
  */
 
 /*
- * There are numerous academic and practical works on how to implement pthread_cond_wait/pthread_cond_signal/pthread_cond_broadcast
- * functions on Win32. Here is one example: http://www.cs.wustl.edu/~schmidt/win32-cv-1.html which is widely credited as a 'starting point'
- * of modern attempts. There are several more or less proven implementations, one in Boost C++ library (http://www.boost.org) and another
+ * There are numerous academic and practical works on how to implement
+ * pthread_cond_wait/pthread_cond_signal/pthread_cond_broadcast
+ * functions on Win32. Here is one example:
+ * http://www.cs.wustl.edu/~schmidt/win32-cv-1.html which is widely credited as
+ * a 'starting point' of modern attempts. There are several more or less proven
+ * implementations, one in Boost C++ library (http://www.boost.org) and another
  * in pthreads-win32 (http://sourceware.org/pthreads-win32/).
  *
- * The number of articles and discussions is the evidence of significant difficulties in implementing these primitives correctly.
- * The brief search of revisions, ChangeLog entries, discussions in comp.programming.threads and other places clearly documents
- * numerous pitfalls and performance problems the authors had to overcome to arrive to the suitable implementations.
- * Optimally, WebKit would use one of those supported/tested libraries directly. To roll out our own implementation is impractical,
- * if even for the lack of sufficient testing. However, a faithful reproduction of the code from one of the popular supported
- * libraries seems to be a good compromise.
+ * The number of articles and discussions is the evidence of significant
+ * difficulties in implementing these primitives correctly.  The brief search
+ * of revisions, ChangeLog entries, discussions in comp.programming.threads and
+ * other places clearly documents numerous pitfalls and performance problems
+ * the authors had to overcome to arrive to the suitable implementations.
+ * Optimally, WebKit would use one of those supported/tested libraries
+ * directly.  To roll out our own implementation is impractical, if even for
+ * the lack of sufficient testing. However, a faithful reproduction of the code
+ * from one of the popular supported libraries seems to be a good compromise.
  *
- * The early Boost implementation (http://www.boxbackup.org/trac/browser/box/nick/win/lib/win32/boost_1_32_0/libs/thread/src/condition.cpp?rev=30)
- * is identical to pthreads-win32 (http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32).
- * Current Boost uses yet another (although seemingly equivalent) algorithm which came from their 'thread rewrite' effort.
+ * The early Boost implementation
+ * (http://www.boxbackup.org/trac/browser/box/nick/win/lib/win32/boost_1_32_0/libs/thread/src/condition.cpp?rev=30)
+ * is identical to pthreads-win32
+ * (http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32).
+ * Current Boost uses yet another (although seemingly equivalent) algorithm
+ * which came from their 'thread rewrite' effort.
  *
- * This file includes timedWait/signal/broadcast implementations translated to WebKit coding style from the latest algorithm by
- * Alexander Terekhov and Louis Thomas, as captured here: http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32
- * It replaces the implementation of their previous algorithm, also documented in the same source above.
- * The naming and comments are left very close to original to enable easy cross-check.
+ * This file includes timedWait/signal/broadcast implementations translated to
+ * WebKit coding style from the latest algorithm by Alexander Terekhov and
+ * Louis Thomas, as captured here:
+ * http://sourceware.org/cgi-bin/cvsweb.cgi/pthreads/pthread_cond_wait.c?rev=1.10&content-type=text/x-cvsweb-markup&cvsroot=pthreads-win32
+ * It replaces the implementation of their previous algorithm, also documented
+ * in the same source above.  The naming and comments are left very close to
+ * original to enable easy cross-check.
  *
- * The corresponding Pthreads-win32 License is included below, and CONTRIBUTORS file which it refers to is added to
- * source directory (as CONTRIBUTORS.pthreads-win32).
+ * The corresponding Pthreads-win32 License is included below, and CONTRIBUTORS
+ * file which it refers to is added to source directory (as
+ * CONTRIBUTORS.pthreads-win32).
  */
 
 /*
@@ -83,30 +96,26 @@
  *      59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "config.h"
-#include "Threading.h"
+#include "wtf/Threading.h"
 
 #if OS(WIN)
 
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/HashMap.h"
-#include "wtf/MainThread.h"
 #include "wtf/MathExtras.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/ThreadSpecific.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/WTFThreadData.h"
-#include "wtf/dtoa.h"
-#include "wtf/dtoa/cached-powers.h"
+#include "wtf/dtoa/double-conversion.h"
 #include <errno.h>
 #include <process.h>
 #include <windows.h>
 
 namespace WTF {
 
-// THREADNAME_INFO comes from <http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx>.
+// THREADNAME_INFO comes from
+// <http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx>.
 #pragma pack(push, 8)
 typedef struct tagTHREADNAME_INFO {
     DWORD dwType; // must be 0x1000
@@ -118,9 +127,18 @@ typedef struct tagTHREADNAME_INFO {
 
 static Mutex* atomicallyInitializedStaticMutex;
 
+namespace internal {
+
+    ThreadIdentifier currentThreadSyscall()
+    {
+        return static_cast<ThreadIdentifier>(GetCurrentThreadId());
+    }
+
+} // namespace internal
+
 void lockAtomicallyInitializedStaticMutex()
 {
-    ASSERT(atomicallyInitializedStaticMutex);
+    DCHECK(atomicallyInitializedStaticMutex);
     atomicallyInitializedStaticMutex->lock();
 }
 
@@ -132,15 +150,14 @@ void unlockAtomicallyInitializedStaticMutex()
 void initializeThreading()
 {
     // This should only be called once.
-    ASSERT(!atomicallyInitializedStaticMutex);
+    DCHECK(!atomicallyInitializedStaticMutex);
 
-    // StringImpl::empty() does not construct its static string in a threadsafe fashion,
-    // so ensure it has been initialized from here.
+    // StringImpl::empty() does not construct its static string in a threadsafe
+    // fashion, so ensure it has been initialized from here.
     StringImpl::empty();
     StringImpl::empty16Bit();
     atomicallyInitializedStaticMutex = new Mutex;
     wtfThreadData();
-    s_dtoaP5Mutex = new Mutex;
     initializeDates();
     // Force initialization of static DoubleToStringConverter converter variable
     // inside EcmaScriptConverter function while we are in single thread mode.
@@ -149,7 +166,7 @@ void initializeThreading()
 
 ThreadIdentifier currentThread()
 {
-    return static_cast<ThreadIdentifier>(GetCurrentThreadId());
+    return wtfThreadData().threadId();
 }
 
 MutexBase::MutexBase(bool recursive)
@@ -171,7 +188,7 @@ void MutexBase::lock()
 
 void MutexBase::unlock()
 {
-    ASSERT(m_mutex.m_recursionCount);
+    DCHECK(m_mutex.m_recursionCount);
     --m_mutex.m_recursionCount;
     LeaveCriticalSection(&m_mutex.m_internalMutex);
 }
@@ -186,7 +203,7 @@ bool Mutex::tryLock()
     // owned this mutex (see e.g., IconDatabase::getOrCreateIconRecord)
     DWORD result = TryEnterCriticalSection(&m_mutex.m_internalMutex);
 
-    if (result != 0) {       // We got the lock
+    if (result != 0) { // We got the lock
         // If this thread already had the lock, we must unlock and return
         // false since this is a non-recursive mutex. This is to mimic the
         // behavior of POSIX's pthread_mutex_trylock. We don't do this
@@ -216,14 +233,15 @@ bool RecursiveMutex::tryLock()
     return true;
 }
 
-bool PlatformCondition::timedWait(PlatformMutex& mutex, DWORD durationMilliseconds)
+bool PlatformCondition::timedWait(PlatformMutex& mutex,
+    DWORD durationMilliseconds)
 {
     // Enter the wait state.
     DWORD res = WaitForSingleObject(m_blockLock, INFINITE);
-    ASSERT_UNUSED(res, res == WAIT_OBJECT_0);
+    DCHECK_EQ(res, WAIT_OBJECT_0);
     ++m_waitersBlocked;
     res = ReleaseSemaphore(m_blockLock, 1, 0);
-    ASSERT_UNUSED(res, res);
+    DCHECK(res);
 
     --mutex.m_recursionCount;
     LeaveCriticalSection(&mutex.m_internalMutex);
@@ -232,33 +250,33 @@ bool PlatformCondition::timedWait(PlatformMutex& mutex, DWORD durationMillisecon
     bool timedOut = (WaitForSingleObject(m_blockQueue, durationMilliseconds) == WAIT_TIMEOUT);
 
     res = WaitForSingleObject(m_unblockLock, INFINITE);
-    ASSERT_UNUSED(res, res == WAIT_OBJECT_0);
+    DCHECK_EQ(res, WAIT_OBJECT_0);
 
     int signalsLeft = m_waitersToUnblock;
 
-    if (m_waitersToUnblock)
+    if (m_waitersToUnblock) {
         --m_waitersToUnblock;
-    else if (++m_waitersGone == (INT_MAX / 2)) { // timeout/canceled or spurious semaphore
-        // timeout or spurious wakeup occured, normalize the m_waitersGone count
-        // this may occur if many calls to wait with a timeout are made and
-        // no call to notify_* is made
+    } else if (++m_waitersGone == (INT_MAX / 2)) {
+        // timeout/canceled or spurious semaphore timeout or spurious wakeup
+        // occured, normalize the m_waitersGone count this may occur if many
+        // calls to wait with a timeout are made and no call to notify_* is made
         res = WaitForSingleObject(m_blockLock, INFINITE);
-        ASSERT_UNUSED(res, res == WAIT_OBJECT_0);
+        DCHECK_EQ(res, WAIT_OBJECT_0);
         m_waitersBlocked -= m_waitersGone;
         res = ReleaseSemaphore(m_blockLock, 1, 0);
-        ASSERT_UNUSED(res, res);
+        DCHECK(res);
         m_waitersGone = 0;
     }
 
     res = ReleaseMutex(m_unblockLock);
-    ASSERT_UNUSED(res, res);
+    DCHECK(res);
 
     if (signalsLeft == 1) {
         res = ReleaseSemaphore(m_blockLock, 1, 0); // Open the gate.
-        ASSERT_UNUSED(res, res);
+        DCHECK(res);
     }
 
-    EnterCriticalSection (&mutex.m_internalMutex);
+    EnterCriticalSection(&mutex.m_internalMutex);
     ++mutex.m_recursionCount;
 
     return !timedOut;
@@ -269,12 +287,12 @@ void PlatformCondition::signal(bool unblockAll)
     unsigned signalsToIssue = 0;
 
     DWORD res = WaitForSingleObject(m_unblockLock, INFINITE);
-    ASSERT_UNUSED(res, res == WAIT_OBJECT_0);
+    DCHECK_EQ(res, WAIT_OBJECT_0);
 
     if (m_waitersToUnblock) { // the gate is already closed
         if (!m_waitersBlocked) { // no-op
             res = ReleaseMutex(m_unblockLock);
-            ASSERT_UNUSED(res, res);
+            DCHECK(res);
             return;
         }
 
@@ -289,7 +307,7 @@ void PlatformCondition::signal(bool unblockAll)
         }
     } else if (m_waitersBlocked > m_waitersGone) {
         res = WaitForSingleObject(m_blockLock, INFINITE); // Close the gate.
-        ASSERT_UNUSED(res, res == WAIT_OBJECT_0);
+        DCHECK_EQ(res, WAIT_OBJECT_0);
         if (m_waitersGone != 0) {
             m_waitersBlocked -= m_waitersGone;
             m_waitersGone = 0;
@@ -305,16 +323,16 @@ void PlatformCondition::signal(bool unblockAll)
         }
     } else { // No-op.
         res = ReleaseMutex(m_unblockLock);
-        ASSERT_UNUSED(res, res);
+        DCHECK(res);
         return;
     }
 
     res = ReleaseMutex(m_unblockLock);
-    ASSERT_UNUSED(res, res);
+    DCHECK(res);
 
     if (signalsToIssue) {
         res = ReleaseSemaphore(m_blockQueue, signalsToIssue, 0);
-        ASSERT_UNUSED(res, res);
+        DCHECK(res);
     }
 }
 
@@ -336,14 +354,21 @@ ThreadCondition::ThreadCondition()
             CloseHandle(m_condition.m_blockQueue);
         if (m_condition.m_unblockLock)
             CloseHandle(m_condition.m_unblockLock);
+
+        m_condition.m_blockLock = nullptr;
+        m_condition.m_blockQueue = nullptr;
+        m_condition.m_unblockLock = nullptr;
     }
 }
 
 ThreadCondition::~ThreadCondition()
 {
-    CloseHandle(m_condition.m_blockLock);
-    CloseHandle(m_condition.m_blockQueue);
-    CloseHandle(m_condition.m_unblockLock);
+    if (m_condition.m_blockLock)
+        CloseHandle(m_condition.m_blockLock);
+    if (m_condition.m_blockQueue)
+        CloseHandle(m_condition.m_blockQueue);
+    if (m_condition.m_unblockLock)
+        CloseHandle(m_condition.m_unblockLock);
 }
 
 void ThreadCondition::wait(MutexBase& mutex)
@@ -356,8 +381,8 @@ bool ThreadCondition::timedWait(MutexBase& mutex, double absoluteTime)
     DWORD interval = absoluteTimeToWaitTimeoutInterval(absoluteTime);
 
     if (!interval) {
-        // Consider the wait to have timed out, even if our condition has already been signaled, to
-        // match the pthreads implementation.
+        // Consider the wait to have timed out, even if our condition has already
+        // been signaled, to match the pthreads implementation.
         return false;
     }
 
@@ -382,14 +407,15 @@ DWORD absoluteTimeToWaitTimeoutInterval(double absoluteTime)
     if (absoluteTime < currentTime)
         return 0;
 
-    // Time is too far in the future (and would overflow unsigned long) - wait forever.
+    // Time is too far in the future (and would overflow unsigned long) - wait
+    // forever.
     if (absoluteTime - currentTime > static_cast<double>(INT_MAX) / 1000.0)
         return INFINITE;
 
     return static_cast<DWORD>((absoluteTime - currentTime) * 1000.0);
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 static bool s_threadCreated = false;
 
 bool isAtomicallyInitializedStaticMutexLockHeld()

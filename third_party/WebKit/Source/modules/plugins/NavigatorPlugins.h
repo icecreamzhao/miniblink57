@@ -5,7 +5,7 @@
 #ifndef NavigatorPlugins_h
 #define NavigatorPlugins_h
 
-#include "core/frame/DOMWindowProperty.h"
+#include "core/frame/Navigator.h"
 #include "platform/Supplementable.h"
 
 namespace blink {
@@ -15,13 +15,13 @@ class DOMPluginArray;
 class LocalFrame;
 class Navigator;
 
-class NavigatorPlugins final : public GarbageCollectedFinalized<NavigatorPlugins>, public HeapSupplement<Navigator>, public DOMWindowProperty {
+class NavigatorPlugins final : public GarbageCollected<NavigatorPlugins>,
+                               public Supplement<Navigator> {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorPlugins);
+
 public:
     static NavigatorPlugins& from(Navigator&);
     static NavigatorPlugins* toNavigatorPlugins(Navigator&);
-
-    virtual ~NavigatorPlugins();
 
     static DOMPluginArray* plugins(Navigator&);
     static DOMMimeTypeArray* mimeTypes(Navigator&);
@@ -36,7 +36,6 @@ private:
 
     DOMPluginArray* plugins(LocalFrame*) const;
     DOMMimeTypeArray* mimeTypes(LocalFrame*) const;
-    bool javaEnabled(LocalFrame*) const;
 
     mutable Member<DOMPluginArray> m_plugins;
     mutable Member<DOMMimeTypeArray> m_mimeTypes;

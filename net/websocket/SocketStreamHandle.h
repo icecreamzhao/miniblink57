@@ -60,6 +60,7 @@ public:
     void threadFunction();
     void mainThreadRun();
     void mainThreadReadData();
+    void mainThreadFail();
 
     int getId() const { return m_id;}
 
@@ -71,7 +72,7 @@ private:
     
     bool readData(CURL*);
     bool sendData(CURL*);
-    bool waitForAvailableData(CURL*, long long selectTimeout);
+    int waitForAvailableData(CURL*, long long selectTimeout);
 
     void startThread();
     void stopThread();
@@ -115,10 +116,10 @@ private:
 
     ThreadIdentifier m_workerThread;
     long m_stopThread;
-    WTF::Mutex m_mutexSend;
-    WTF::Mutex m_mutexReceive;
-    Deque<OwnPtr<SocketData>> m_sendData;
-    Deque<OwnPtr<SocketData>> m_receiveData;
+    WTF::RecursiveMutex m_mutexSend;
+    WTF::RecursiveMutex m_mutexReceive;
+    Deque<SocketData*> m_sendData;
+    Deque<SocketData*> m_receiveData;
     int m_readDataTaskCount;
     int m_id;
 };

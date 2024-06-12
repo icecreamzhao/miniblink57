@@ -1,0 +1,6 @@
+../../content/public/android/junit/src/org/chromium/content/browser/input/RangeTest.java
+../../content/public/android/junit/src/org/chromium/content/browser/input/TextInputStateTest.java
+../../content/public/android/junit/src/org/chromium/content/browser/input/ThreadedInputConnectionFactoryTest.java
+../../content/public/android/junit/src/org/chromium/content/browser/input/ThreadedInputConnectionTest.java
+../../content/public/android/junit/src/org/chromium/content/browser/picker/DateDialogNormalizerTest.java
+../../content/public/android/junit/src/org/chromium/content/browser/BindingManagerImplTest.java

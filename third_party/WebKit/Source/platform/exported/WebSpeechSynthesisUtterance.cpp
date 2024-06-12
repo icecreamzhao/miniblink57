@@ -23,8 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "public/platform/WebSpeechSynthesisUtterance.h"
 
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
@@ -33,18 +31,21 @@
 
 namespace blink {
 
-WebSpeechSynthesisUtterance::WebSpeechSynthesisUtterance(PlatformSpeechSynthesisUtterance* utterance)
+WebSpeechSynthesisUtterance::WebSpeechSynthesisUtterance(
+    PlatformSpeechSynthesisUtterance* utterance)
     : m_private(utterance)
 {
 }
 
-WebSpeechSynthesisUtterance& WebSpeechSynthesisUtterance::operator=(PlatformSpeechSynthesisUtterance* utterance)
+WebSpeechSynthesisUtterance& WebSpeechSynthesisUtterance::operator=(
+    PlatformSpeechSynthesisUtterance* utterance)
 {
     m_private = utterance;
     return *this;
 }
 
-void WebSpeechSynthesisUtterance::assign(const WebSpeechSynthesisUtterance& other)
+void WebSpeechSynthesisUtterance::assign(
+    const WebSpeechSynthesisUtterance& other)
 {
     m_private = other.m_private;
 }
@@ -54,7 +55,8 @@ void WebSpeechSynthesisUtterance::reset()
     m_private.reset();
 }
 
-WebSpeechSynthesisUtterance::operator PlatformSpeechSynthesisUtterance*() const
+WebSpeechSynthesisUtterance::operator PlatformSpeechSynthesisUtterance*()
+    const
 {
     return m_private.get();
 }
@@ -71,7 +73,8 @@ WebString WebSpeechSynthesisUtterance::lang() const
 
 WebString WebSpeechSynthesisUtterance::voice() const
 {
-    return m_private->voice() ? WebString(m_private->voice()->name()) : WebString();
+    return m_private->voice() ? WebString(m_private->voice()->name())
+                              : WebString();
 }
 
 float WebSpeechSynthesisUtterance::volume() const

@@ -6,4 +6,4 @@
 
 typedef SkReadBuffer SkOrderedReadBuffer;
 
-#endif//SkOrderedReadBuffer_DEFINED
+#endif //SkOrderedReadBuffer_DEFINED

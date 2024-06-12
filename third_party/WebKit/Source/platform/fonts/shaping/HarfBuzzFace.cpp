@@ -42,7 +42,8 @@
 #include "SkPoint.h"
 #include "SkRect.h"
 #include "SkTypeface.h"
-#include "SkUtils.h"
+//#include "SkUtils.h"
+#include "third_party/skia/include/private/SkFixed.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontPlatformData.h"
 #include "platform/fonts/SimpleFontData.h"
@@ -261,7 +262,7 @@ static hb_position_t harfBuzzGetGlyphVerticalAdvance(hb_font_t* hbFont, void* fo
     HarfBuzzFontData* hbFontData = reinterpret_cast<HarfBuzzFontData*>(fontData);
     const OpenTypeVerticalData* verticalData = hbFontData->m_simpleFontData->verticalData();
     if (!verticalData)
-        return SkiaScalarToHarfBuzzPosition(hbFontData->m_simpleFontData->fontMetrics().height());
+        return SkiaScalarToHarfBuzzPosition(hbFontData->m_simpleFontData->getFontMetrics().height());
 
     Glyph theGlyph = glyph;
     float advanceHeight = -verticalData->advanceHeight(hbFontData->m_simpleFontData.get(), theGlyph);
@@ -319,6 +320,12 @@ static hb_font_funcs_t* harfBuzzSkiaGetFontFuncs()
 }
 
 #if !OS(MACOSX)
+
+void __cdecl hbDestroyFuncWrap(void *user_data)
+{
+    free(user_data);
+}
+
 static hb_blob_t* harfBuzzSkiaGetTable(hb_face_t* face, hb_tag_t tag, void* userData)
 {
     SkTypeface* typeface = reinterpret_cast<SkTypeface*>(userData);
@@ -328,20 +335,20 @@ static hb_blob_t* harfBuzzSkiaGetTable(hb_face_t* face, hb_tag_t tag, void* user
         return 0;
     }
 
-    char* buffer = reinterpret_cast<char*>(fastMalloc(tableSize));
+    char* buffer = reinterpret_cast<char*>(malloc(tableSize));
     if (!buffer)
         return 0;
     size_t actualSize = typeface->getTableData(tag, 0, tableSize, buffer);
     if (tableSize != actualSize) {
-        fastFree(buffer);
+        free(buffer);
         return 0;
     }
 
-    return hb_blob_create(const_cast<char*>(buffer), tableSize, HB_MEMORY_MODE_WRITABLE, buffer, fastFree);
+    return hb_blob_create(const_cast<char*>(buffer), tableSize, HB_MEMORY_MODE_WRITABLE, buffer, hbDestroyFuncWrap);
 }
 #endif
 
-static void destroyHarfBuzzFontData(void* userData)
+static void __cdecl destroyHarfBuzzFontData(void* userData)
 {
     HarfBuzzFontData* hbFontData = reinterpret_cast<HarfBuzzFontData*>(userData);
     delete hbFontData;

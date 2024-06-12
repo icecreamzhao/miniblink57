@@ -23,31 +23,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/speech/SpeechSynthesisUtterance.h"
+
+#include "core/dom/ExecutionContext.h"
 
 namespace blink {
 
-SpeechSynthesisUtterance* SpeechSynthesisUtterance::create(ExecutionContext* context, const String& text)
+SpeechSynthesisUtterance* SpeechSynthesisUtterance::create(
+    ExecutionContext* context,
+    const String& text)
 {
     return new SpeechSynthesisUtterance(context, text);
 }
 
-SpeechSynthesisUtterance::SpeechSynthesisUtterance(ExecutionContext* context, const String& text)
-    : ContextLifecycleObserver(context)
+SpeechSynthesisUtterance::SpeechSynthesisUtterance(ExecutionContext* context,
+    const String& text)
+    : ContextClient(context)
     , m_platformUtterance(PlatformSpeechSynthesisUtterance::create(this))
 {
     m_platformUtterance->setText(text);
 }
 
-SpeechSynthesisUtterance::~SpeechSynthesisUtterance()
-{
-}
-
-ExecutionContext* SpeechSynthesisUtterance::executionContext() const
-{
-    return ContextLifecycleObserver::executionContext();
-}
+SpeechSynthesisUtterance::~SpeechSynthesisUtterance() { }
 
 const AtomicString& SpeechSynthesisUtterance::interfaceName() const
 {
@@ -61,8 +58,9 @@ SpeechSynthesisVoice* SpeechSynthesisUtterance::voice() const
 
 void SpeechSynthesisUtterance::setVoice(SpeechSynthesisVoice* voice)
 {
-    // Cache our own version of the SpeechSynthesisVoice so that we don't have to do some lookup
-    // to go from the platform voice back to the speech synthesis voice in the read property.
+    // Cache our own version of the SpeechSynthesisVoice so that we don't have to
+    // do some lookup to go from the platform voice back to the speech synthesis
+    // voice in the read property.
     m_voice = voice;
 
     if (voice)
@@ -73,8 +71,8 @@ DEFINE_TRACE(SpeechSynthesisUtterance)
 {
     visitor->trace(m_platformUtterance);
     visitor->trace(m_voice);
-    RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesisUtterance>::trace(visitor);
-    ContextLifecycleObserver::trace(visitor);
+    ContextClient::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
 }
 
 } // namespace blink

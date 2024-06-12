@@ -27,9 +27,7 @@
 
 [
     Constructor,
-    GarbageCollected,
     Measure,
-    TypeChecking=Interface,
 ] interface XPathEvaluator {
     [Measure, RaisesException] XPathExpression createExpression(DOMString expression, optional XPathNSResolver? resolver = null);
 

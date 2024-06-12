@@ -11,17 +11,19 @@ namespace {
 
 SkFontMgr* g_default_fontmgr;
 
-}  // namespace
+} // namespace
 
-void SetDefaultSkiaFactory(SkFontMgr* fontmgr) {
-  g_default_fontmgr = fontmgr;
+void SetDefaultSkiaFactory(SkFontMgr* fontmgr)
+{
+    g_default_fontmgr = fontmgr;
 }
 
-SK_API SkFontMgr* SkFontMgr::Factory() {
-  // This will be set when DirectWrite is in use, and an SkFontMgr has been
-  // created with the pre-sandbox warmed up one. Otherwise, we fallback to a
-  // GDI SkFontMgr which is used in the browser.
-  if (g_default_fontmgr)
-    return SkRef(g_default_fontmgr);
-  return SkFontMgr_New_GDI();
+SK_API SkFontMgr* SkFontMgr::Factory()
+{
+    // This will be set when DirectWrite is in use, and an SkFontMgr has been
+    // created with the pre-sandbox warmed up one. Otherwise, we fallback to a
+    // GDI SkFontMgr which is used in the browser.
+    if (g_default_fontmgr)
+        return SkRef(g_default_fontmgr);
+    return SkFontMgr_New_GDI();
 }

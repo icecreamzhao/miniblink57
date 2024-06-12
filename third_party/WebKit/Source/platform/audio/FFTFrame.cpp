@@ -26,18 +26,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/FFTFrame.h"
-
 #include "platform/audio/VectorMath.h"
-#include "platform/Logging.h"
 #include "wtf/MathExtras.h"
-#include "wtf/OwnPtr.h"
-
+#include "wtf/PtrUtil.h"
 #include <complex>
+#include <memory>
 
 #ifndef NDEBUG
 #include <stdio.h>
@@ -55,13 +49,17 @@ void FFTFrame::doPaddedFFT(const float* data, size_t dataSize)
     doFFT(paddedResponse.data());
 }
 
-PassOwnPtr<FFTFrame> FFTFrame::createInterpolatedFrame(const FFTFrame& frame1, const FFTFrame& frame2, double x)
+std::unique_ptr<FFTFrame> FFTFrame::createInterpolatedFrame(
+    const FFTFrame& frame1,
+    const FFTFrame& frame2,
+    double x)
 {
-    OwnPtr<FFTFrame> newFrame = adoptPtr(new FFTFrame(frame1.fftSize()));
+    std::unique_ptr<FFTFrame> newFrame = WTF::wrapUnique(new FFTFrame(frame1.fftSize()));
 
     newFrame->interpolateFrequencyComponents(frame1, frame2, x);
 
-    // In the time-domain, the 2nd half of the response must be zero, to avoid circular convolution aliasing...
+    // In the time-domain, the 2nd half of the response must be zero, to avoid
+    // circular convolution aliasing...
     int fftSize = newFrame->fftSize();
     AudioFloatArray buffer(fftSize);
     newFrame->doInverseFFT(buffer.data());
@@ -70,10 +68,12 @@ PassOwnPtr<FFTFrame> FFTFrame::createInterpolatedFrame(const FFTFrame& frame1, c
     // Put back into frequency domain.
     newFrame->doFFT(buffer.data());
 
-    return newFrame.release();
+    return newFrame;
 }
 
-void FFTFrame::interpolateFrequencyComponents(const FFTFrame& frame1, const FFTFrame& frame2, double interp)
+void FFTFrame::interpolateFrequencyComponents(const FFTFrame& frame1,
+    const FFTFrame& frame2,
+    double interp)
 {
     // FIXME : with some work, this method could be optimized
 
@@ -117,7 +117,7 @@ void FFTFrame::interpolateFrequencyComponents(const FFTFrame& frame1, const FFTF
         double magdbdiff = mag1db - mag2db;
 
         // Empirical tweak to retain higher-frequency zeroes
-        double threshold =  (i > 16) ? 5.0 : 2.0;
+        double threshold = (i > 16) ? 5.0 : 2.0;
 
         if (magdbdiff < -threshold && mag1db < 0.0) {
             s1 = pow(s1, 0.75);
@@ -186,7 +186,7 @@ double FFTFrame::extractAverageGroupDelay()
 
     int halfSize = fftSize() / 2;
 
-    const double kSamplePhaseDelay = (twoPiDouble) / double(fftSize());
+    const double samplePhaseDelay = (twoPiDouble) / static_cast<double>(fftSize());
 
     // Calculate weighted average group delay
     for (int i = 0; i < halfSize; i++) {
@@ -207,9 +207,10 @@ double FFTFrame::extractAverageGroupDelay()
         weightSum += mag;
     }
 
-    // Note how we invert the phase delta wrt frequency since this is how group delay is defined
+    // Note how we invert the phase delta wrt frequency since this is how group
+    // delay is defined
     double ave = aveSum / weightSum;
-    double aveSampleDelay = -ave / kSamplePhaseDelay;
+    double aveSampleDelay = -ave / samplePhaseDelay;
 
     // Leave 20 sample headroom (for leading edge of impulse)
     if (aveSampleDelay > 20.0)
@@ -231,9 +232,9 @@ void FFTFrame::addConstantGroupDelay(double sampleFrameDelay)
     float* realP = realData();
     float* imagP = imagData();
 
-    const double kSamplePhaseDelay = (twoPiDouble) / double(fftSize());
+    const double samplePhaseDelay = (twoPiDouble) / static_cast<double>(fftSize());
 
-    double phaseAdj = -sampleFrameDelay * kSamplePhaseDelay;
+    double phaseAdj = -sampleFrameDelay * samplePhaseDelay;
 
     // Add constant group delay
     for (int i = 1; i < halfSize; i++) {
@@ -272,5 +273,3 @@ void FFTFrame::multiply(const FFTFrame& frame)
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

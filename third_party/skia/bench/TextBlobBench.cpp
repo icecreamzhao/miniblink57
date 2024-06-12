@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2015 Google Inc.
  *
@@ -24,37 +23,38 @@
  */
 class TextBlobBench : public Benchmark {
 public:
-    TextBlobBench()
-        : fTypeface(NULL) {
-    }
+    TextBlobBench() { }
 
 protected:
-    void onPreDraw() override {
-        fTypeface.reset(sk_tool_utils::create_portable_typeface("Times", SkTypeface::kNormal));
+    void onDelayedSetup() override
+    {
+        fTypeface = sk_tool_utils::create_portable_typeface("serif", SkFontStyle());
         // make textblob
         SkPaint paint;
         paint.setTypeface(fTypeface);
         const char* text = "Hello blob!";
         SkTDArray<uint16_t> glyphs;
         size_t len = strlen(text);
-        glyphs.append(paint.textToGlyphs(text, len, NULL));
+        glyphs.append(paint.textToGlyphs(text, len, nullptr));
         paint.textToGlyphs(text, len, glyphs.begin());
 
         SkTextBlobBuilder builder;
 
         paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
         const SkTextBlobBuilder::RunBuffer& run = builder.allocRun(paint, glyphs.count(), 10, 10,
-                                                                   NULL);
+            nullptr);
         memcpy(run.glyphs, glyphs.begin(), glyphs.count() * sizeof(uint16_t));
 
         fBlob.reset(builder.build());
     }
 
-    const char* onGetName() {
+    const char* onGetName() override
+    {
         return "TextBlobBench";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPaint paint;
 
         // To ensure maximum caching, we just redraw the blob at the same place everytime
@@ -64,12 +64,11 @@ protected:
     }
 
 private:
-
     SkAutoTUnref<const SkTextBlob> fBlob;
-    SkTDArray<uint16_t>      fGlyphs;
-    SkAutoTUnref<SkTypeface> fTypeface;
+    SkTDArray<uint16_t> fGlyphs;
+    sk_sp<SkTypeface> fTypeface;
 
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return new TextBlobBench(); )
+DEF_BENCH(return new TextBlobBench();)

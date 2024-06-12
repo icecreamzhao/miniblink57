@@ -40,19 +40,23 @@ class XPathNSResolver;
 class XPathResult;
 
 namespace XPath {
-class Expression;
+    class Expression;
 }
 
-class XPathExpression : public GarbageCollected<XPathExpression>, public ScriptWrappable {
+class XPathExpression : public GarbageCollected<XPathExpression>,
+                        public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    static XPathExpression* create()
-    {
-        return new XPathExpression;
-    }
 
-    static XPathExpression* createExpression(const String& expression, XPathNSResolver*, ExceptionState&);
-    XPathResult* evaluate(Node* contextNode, unsigned short type, const ScriptValue&, ExceptionState&);
+public:
+    static XPathExpression* create() { return new XPathExpression; }
+
+    static XPathExpression* createExpression(const String& expression,
+        XPathNSResolver*,
+        ExceptionState&);
+    XPathResult* evaluate(Node* contextNode,
+        unsigned short type,
+        const ScriptValue&,
+        ExceptionState&);
 
     DECLARE_TRACE();
 

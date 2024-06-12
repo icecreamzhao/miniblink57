@@ -35,13 +35,14 @@ namespace blink {
 
 class FileWriterBase;
 
-class FileWriterBaseCallback : public GarbageCollectedFinalized<FileWriterBaseCallback> {
+class FileWriterBaseCallback
+    : public GarbageCollectedFinalized<FileWriterBaseCallback> {
 public:
     virtual ~FileWriterBaseCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
     virtual void handleEvent(FileWriterBase*) = 0;
 };
 
-} // namespace
+} // namespace blink
 
 #endif // FileWriterBaseCallback_h

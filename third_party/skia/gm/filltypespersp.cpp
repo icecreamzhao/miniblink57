@@ -1,21 +1,24 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "gm.h"
+
 #include "SkGradientShader.h"
+#include "SkPath.h"
+#include "gm.h"
 
 namespace skiagm {
 
 class FillTypePerspGM : public GM {
     SkPath fPath;
-public:
-    FillTypePerspGM() {}
 
-    void makePath() {
+public:
+    FillTypePerspGM() { }
+
+    void makePath()
+    {
         if (fPath.isEmpty()) {
             const SkScalar radius = SkIntToScalar(45);
             fPath.addCircle(SkIntToScalar(50), SkIntToScalar(50), radius);
@@ -24,17 +27,19 @@ public:
     }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("filltypespersp");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(835, 840);
     }
 
     void showPath(SkCanvas* canvas, int x, int y, SkPath::FillType ft,
-                  SkScalar scale, const SkPaint& paint) {
+        SkScalar scale, const SkPaint& paint)
+    {
         const SkRect r = { 0, 0, SkIntToScalar(150), SkIntToScalar(150) };
 
         canvas->save();
@@ -49,55 +54,55 @@ protected:
         canvas->restore();
     }
 
-    void showFour(SkCanvas* canvas, SkScalar scale, bool aa) {
+    void showFour(SkCanvas* canvas, SkScalar scale, bool aa)
+    {
         SkPaint paint;
         SkPoint center = SkPoint::Make(SkIntToScalar(100), SkIntToScalar(100));
-        SkColor colors[] = {SK_ColorBLUE, SK_ColorRED, SK_ColorGREEN};
-        SkScalar pos[] = {0, SK_ScalarHalf, SK_Scalar1};
-        SkShader* s = SkGradientShader::CreateRadial(center,
-                                                     SkIntToScalar(100),
-                                                     colors,
-                                                     pos,
-                                                     SK_ARRAY_COUNT(colors),
-                                                     SkShader::kClamp_TileMode);
-        paint.setShader(s)->unref();
+        SkColor colors[] = { SK_ColorBLUE, SK_ColorRED, SK_ColorGREEN };
+        SkScalar pos[] = { 0, SK_ScalarHalf, SK_Scalar1 };
+        paint.setShader(SkGradientShader::MakeRadial(center,
+            SkIntToScalar(100),
+            colors,
+            pos,
+            SK_ARRAY_COUNT(colors),
+            SkShader::kClamp_TileMode));
         paint.setAntiAlias(aa);
 
-        showPath(canvas,   0,   0, SkPath::kWinding_FillType,
-                 scale, paint);
-        showPath(canvas, 200,   0, SkPath::kEvenOdd_FillType,
-                 scale, paint);
-        showPath(canvas,  00, 200, SkPath::kInverseWinding_FillType,
-                 scale, paint);
+        showPath(canvas, 0, 0, SkPath::kWinding_FillType,
+            scale, paint);
+        showPath(canvas, 200, 0, SkPath::kEvenOdd_FillType,
+            scale, paint);
+        showPath(canvas, 00, 200, SkPath::kInverseWinding_FillType,
+            scale, paint);
         showPath(canvas, 200, 200, SkPath::kInverseEvenOdd_FillType,
-                 scale, paint);
+            scale, paint);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         this->makePath();
 
         // do perspective drawPaint as the background;
         SkPaint bkgnrd;
         SkPoint center = SkPoint::Make(SkIntToScalar(100),
-                                       SkIntToScalar(100));
-        SkColor colors[] = {SK_ColorBLACK, SK_ColorCYAN,
-                            SK_ColorYELLOW, SK_ColorWHITE};
-        SkScalar pos[] = {0, SK_ScalarHalf / 2,
-                          3 * SK_ScalarHalf / 2, SK_Scalar1};
-        SkShader* s = SkGradientShader::CreateRadial(center,
-                                                     SkIntToScalar(1000),
-                                                     colors,
-                                                     pos,
-                                                     SK_ARRAY_COUNT(colors),
-                                                     SkShader::kClamp_TileMode);
-        bkgnrd.setShader(s)->unref();
+            SkIntToScalar(100));
+        SkColor colors[] = { SK_ColorBLACK, SK_ColorCYAN,
+            SK_ColorYELLOW, SK_ColorWHITE };
+        SkScalar pos[] = { 0, SK_ScalarHalf / 2,
+            3 * SK_ScalarHalf / 2, SK_Scalar1 };
+        bkgnrd.setShader(SkGradientShader::MakeRadial(center,
+            SkIntToScalar(1000),
+            colors,
+            pos,
+            SK_ARRAY_COUNT(colors),
+            SkShader::kClamp_TileMode));
         canvas->save();
-            canvas->translate(SkIntToScalar(100), SkIntToScalar(100));
-            SkMatrix mat;
-            mat.reset();
-            mat.setPerspY(SK_Scalar1 / 1000);
-            canvas->concat(mat);
-            canvas->drawPaint(bkgnrd);
+        canvas->translate(SkIntToScalar(100), SkIntToScalar(100));
+        SkMatrix mat;
+        mat.reset();
+        mat.setPerspY(SK_Scalar1 / 1000);
+        canvas->concat(mat);
+        canvas->drawPaint(bkgnrd);
         canvas->restore();
 
         // draw the paths in perspective
@@ -108,7 +113,7 @@ protected:
         canvas->concat(persp);
 
         canvas->translate(SkIntToScalar(20), SkIntToScalar(20));
-        const SkScalar scale = SkIntToScalar(5)/4;
+        const SkScalar scale = SkIntToScalar(5) / 4;
 
         showFour(canvas, SK_Scalar1, false);
         canvas->translate(SkIntToScalar(450), 0);

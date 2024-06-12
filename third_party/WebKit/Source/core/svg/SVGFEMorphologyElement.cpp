@@ -17,32 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGFEMorphologyElement.h"
 
 #include "core/SVGNames.h"
-#include "platform/graphics/filters/FilterEffect.h"
-#include "core/svg/SVGParserUtilities.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
 
 namespace blink {
 
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<MorphologyOperatorType>()
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<MorphologyOperatorType>()
 {
     DEFINE_STATIC_LOCAL(SVGEnumerationStringEntries, entries, ());
     if (entries.isEmpty()) {
-        entries.append(SVGEnumerationBase::StringEntry(FEMORPHOLOGY_OPERATOR_ERODE, "erode"));
-        entries.append(SVGEnumerationBase::StringEntry(FEMORPHOLOGY_OPERATOR_DILATE, "dilate"));
+        entries.push_back(std::make_pair(FEMORPHOLOGY_OPERATOR_ERODE, "erode"));
+        entries.push_back(std::make_pair(FEMORPHOLOGY_OPERATOR_DILATE, "dilate"));
     }
     return entries;
 }
 
 inline SVGFEMorphologyElement::SVGFEMorphologyElement(Document& document)
     : SVGFilterPrimitiveStandardAttributes(SVGNames::feMorphologyTag, document)
-    , m_radius(SVGAnimatedNumberOptionalNumber::create(this, SVGNames::radiusAttr))
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
-    , m_svgOperator(SVGAnimatedEnumeration<MorphologyOperatorType>::create(this, SVGNames::operatorAttr, FEMORPHOLOGY_OPERATOR_ERODE))
+    , m_radius(
+          SVGAnimatedNumberOptionalNumber::create(this, SVGNames::radiusAttr))
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
+    , m_svgOperator(SVGAnimatedEnumeration<MorphologyOperatorType>::create(
+          this,
+          SVGNames::operatorAttr,
+          FEMORPHOLOGY_OPERATOR_ERODE))
 {
     addToPropertyMap(m_radius);
     addToPropertyMap(m_in1);
@@ -59,23 +61,26 @@ DEFINE_TRACE(SVGFEMorphologyElement)
 
 DEFINE_NODE_FACTORY(SVGFEMorphologyElement)
 
-bool SVGFEMorphologyElement::setFilterEffectAttribute(FilterEffect* effect, const QualifiedName& attrName)
+bool SVGFEMorphologyElement::setFilterEffectAttribute(
+    FilterEffect* effect,
+    const QualifiedName& attrName)
 {
     FEMorphology* morphology = static_cast<FEMorphology*>(effect);
     if (attrName == SVGNames::operatorAttr)
-        return morphology->setMorphologyOperator(m_svgOperator->currentValue()->enumValue());
+        return morphology->setMorphologyOperator(
+            m_svgOperator->currentValue()->enumValue());
     if (attrName == SVGNames::radiusAttr) {
         // Both setRadius functions should be evaluated separately.
         bool isRadiusXChanged = morphology->setRadiusX(radiusX()->currentValue()->value());
         bool isRadiusYChanged = morphology->setRadiusY(radiusY()->currentValue()->value());
         return isRadiusXChanged || isRadiusYChanged;
     }
-
-    ASSERT_NOT_REACHED();
-    return false;
+    return SVGFilterPrimitiveStandardAttributes::setFilterEffectAttribute(
+        effect, attrName);
 }
 
-void SVGFEMorphologyElement::svgAttributeChanged(const QualifiedName& attrName)
+void SVGFEMorphologyElement::svgAttributeChanged(
+    const QualifiedName& attrName)
 {
     if (attrName == SVGNames::operatorAttr || attrName == SVGNames::radiusAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
@@ -92,21 +97,26 @@ void SVGFEMorphologyElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-PassRefPtrWillBeRawPtr<FilterEffect> SVGFEMorphologyElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
+FilterEffect* SVGFEMorphologyElement::build(SVGFilterBuilder* filterBuilder,
+    Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
-    float xRadius = radiusX()->currentValue()->value();
-    float yRadius = radiusY()->currentValue()->value();
+    FilterEffect* input1 = filterBuilder->getEffectById(
+        AtomicString(m_in1->currentValue()->value()));
 
     if (!input1)
         return nullptr;
 
-    if (xRadius < 0 || yRadius < 0)
-        return nullptr;
-
-    RefPtrWillBeRawPtr<FilterEffect> effect = FEMorphology::create(filter, m_svgOperator->currentValue()->enumValue(), xRadius, yRadius);
-    effect->inputEffects().append(input1);
-    return effect.release();
+    // "A negative or zero value disables the effect of the given filter
+    // primitive (i.e., the result is the filter input image)."
+    // https://drafts.fxtf.org/filters/#element-attrdef-femorphology-radius
+    //
+    // (This is handled by FEMorphology)
+    float xRadius = radiusX()->currentValue()->value();
+    float yRadius = radiusY()->currentValue()->value();
+    FilterEffect* effect = FEMorphology::create(
+        filter, m_svgOperator->currentValue()->enumValue(), xRadius, yRadius);
+    effect->inputEffects().push_back(input1);
+    return effect;
 }
 
 } // namespace blink

@@ -26,110 +26,112 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/PageOverlay.h"
 
 #include "core/frame/FrameHost.h"
-#include "core/frame/Settings.h"
-#include "core/page/Page.h"
+#include "core/frame/LocalFrame.h"
+#include "core/frame/VisualViewport.h"
+#include "core/page/scrolling/ScrollingCoordinator.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/GraphicsLayer.h"
 #include "platform/graphics/GraphicsLayerClient.h"
+#include "platform/scroll/MainThreadScrollingReason.h"
 #include "public/platform/WebLayer.h"
-#include "public/web/WebPageOverlay.h"
 #include "public/web/WebViewClient.h"
-#include "web/WebDevToolsAgentImpl.h"
-#include "web/WebGraphicsContextImpl.h"
-#include "web/WebViewImpl.h"
+//#include "web/WebDevToolsAgentImpl.h"
+#include "web/WebFrameWidgetImpl.h"
+#include "web/WebLocalFrameImpl.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-PassOwnPtr<PageOverlay> PageOverlay::create(WebViewImpl* viewImpl, WebPageOverlay* overlay)
+std::unique_ptr<PageOverlay> PageOverlay::create(
+    WebLocalFrameImpl* frameImpl,
+    std::unique_ptr<PageOverlay::Delegate> delegate)
 {
-    return adoptPtr(new PageOverlay(viewImpl, overlay));
+    return WTF::wrapUnique(new PageOverlay(frameImpl, std::move(delegate)));
 }
 
-PageOverlay::PageOverlay(WebViewImpl* viewImpl, WebPageOverlay* overlay)
-    : m_viewImpl(viewImpl)
-    , m_overlay(overlay)
-    , m_zOrder(0)
+PageOverlay::PageOverlay(WebLocalFrameImpl* frameImpl,
+    std::unique_ptr<PageOverlay::Delegate> delegate)
+    : m_frameImpl(frameImpl)
+    , m_delegate(std::move(delegate))
 {
 }
 
-void PageOverlay::clear()
+PageOverlay::~PageOverlay()
 {
-    invalidateWebFrame();
+    if (!m_layer)
+        return;
 
-    if (m_layer) {
-        m_layer->removeFromParent();
-        if (WebDevToolsAgentImpl* devTools = m_viewImpl->mainFrameDevToolsAgentImpl())
-            devTools->didRemovePageOverlay(m_layer.get());
-        m_layer = nullptr;
-    }
+    m_layer->removeFromParent();
+    //   if (WebDevToolsAgentImpl* devTools = m_frameImpl->devToolsAgentImpl())
+    //     devTools->didRemovePageOverlay(m_layer.get());
+    m_layer = nullptr;
 }
 
 void PageOverlay::update()
 {
-    invalidateWebFrame();
+    if (!m_frameImpl->frameWidget()->isAcceleratedCompositingActive())
+        return;
+
+    LocalFrame* frame = m_frameImpl->frame();
+    if (!frame)
+        return;
 
     if (!m_layer) {
-        m_layer = GraphicsLayer::create(m_viewImpl->graphicsLayerFactory(), this);
+        m_layer = GraphicsLayer::create(this);
         m_layer->setDrawsContent(true);
 
-        if (WebDevToolsAgentImpl* devTools = m_viewImpl->mainFrameDevToolsAgentImpl())
-            devTools->willAddPageOverlay(m_layer.get());
+        //     if (WebDevToolsAgentImpl* devTools = m_frameImpl->devToolsAgentImpl())
+        //       devTools->willAddPageOverlay(m_layer.get());
 
-        // This is required for contents of overlay to stay in sync with the page while scrolling.
+        // This is required for contents of overlay to stay in sync with the page
+        // while scrolling.
         WebLayer* platformLayer = m_layer->platformLayer();
-        platformLayer->setShouldScrollOnMainThread(true);
+        platformLayer->addMainThreadScrollingReasons(
+            MainThreadScrollingReason::kPageOverlay);
+        if (frame->isMainFrame()) {
+            frame->host()->visualViewport().containerLayer()->addChild(m_layer.get());
+        } else {
+            toWebFrameWidgetImpl(m_frameImpl->frameWidget())
+                ->rootGraphicsLayer()
+                ->addChild(m_layer.get());
+        }
     }
 
-    FloatSize size;
-    if (m_viewImpl->page())
-        size = m_viewImpl->page()->frameHost().pinchViewport().visibleSize();
-    if (size != m_layer->size()) {
-        // Triggers re-adding to root layer to ensure that we are on top of
-        // scrollbars.
-        m_layer->removeFromParent();
+    FloatSize size(frame->host()->visualViewport().size());
+    if (size != m_layer->size())
         m_layer->setSize(size);
-    }
 
-    m_viewImpl->setOverlayLayer(m_layer.get());
     m_layer->setNeedsDisplay();
 }
 
-void PageOverlay::paintWebFrame(GraphicsContext& gc)
+LayoutRect PageOverlay::visualRect() const
 {
-    WebGraphicsContextImpl contextWrapper(gc, *this, DisplayItem::PageOverlay);
-    m_overlay->paintPageOverlay(&contextWrapper, expandedIntSize(m_layer->size()));
+    DCHECK(m_layer.get());
+    return LayoutRect(FloatPoint(), m_layer->size());
 }
 
-void PageOverlay::paintContents(const GraphicsLayer*, GraphicsContext& gc, GraphicsLayerPaintingPhase, const IntRect& inClip)
+IntRect PageOverlay::computeInterestRect(const GraphicsLayer* graphicsLayer,
+    const IntRect&) const
 {
-    paintWebFrame(gc);
+    return IntRect(IntPoint(), expandedIntSize(m_layer->size()));
 }
 
-String PageOverlay::debugName(const GraphicsLayer*)
+void PageOverlay::paintContents(const GraphicsLayer* graphicsLayer,
+    GraphicsContext& gc,
+    GraphicsLayerPaintingPhase phase,
+    const IntRect& interestRect) const
+{
+    DCHECK(m_layer);
+    m_delegate->paintPageOverlay(*this, gc, interestRect.size());
+}
+
+String PageOverlay::debugName(const GraphicsLayer*) const
 {
     return "WebViewImpl Page Overlay Content Layer";
-}
-
-void PageOverlay::invalidateWebFrame()
-{
-    // WebPageOverlay does the actual painting of the overlay.
-    // Here we just make sure to invalidate.
-    if (!m_viewImpl->isAcceleratedCompositingActive()) {
-        // FIXME: able to invalidate a smaller rect.
-        // FIXME: Is it important to just invalidate a smaller rect given that
-        // this is not on a critical codepath? In order to do so, we'd
-        // have to take scrolling into account.
-        WebSize size = m_viewImpl->size();
-        if (m_viewImpl->page())
-            size = expandedIntSize(m_viewImpl->page()->frameHost().pinchViewport().visibleSize());
-        WebRect damagedRect(0, 0, size.width, size.height);
-        if (m_viewImpl->client())
-            m_viewImpl->client()->didInvalidateRect(damagedRect);
-    }
 }
 
 } // namespace blink

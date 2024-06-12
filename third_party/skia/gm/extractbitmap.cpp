@@ -5,16 +5,16 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkBitmap.h"
 #include "SkCanvas.h"
-#include "SkDevice.h"
 #include "SkString.h"
 #include "SkSurface.h"
+#include "gm.h"
 
 namespace skiagm {
 
-static void create_bitmap(SkBitmap* bitmap) {
+static void create_bitmap(SkBitmap* bitmap)
+{
     const int W = 100;
     const int H = 100;
     bitmap->allocN32Pixels(W, H);
@@ -23,24 +23,27 @@ static void create_bitmap(SkBitmap* bitmap) {
     canvas.drawColor(SK_ColorRED);
     SkPaint paint;
     paint.setColor(SK_ColorBLUE);
-    canvas.drawCircle(SkIntToScalar(W)/2, SkIntToScalar(H)/2, SkIntToScalar(W)/2, paint);
+    canvas.drawCircle(SkIntToScalar(W) / 2, SkIntToScalar(H) / 2, SkIntToScalar(W) / 2, paint);
 }
 
 class ExtractBitmapGM : public GM {
 public:
-    ExtractBitmapGM() {}
+    ExtractBitmapGM() { }
 
 protected:
     // overrides from SkEventSink
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("extractbitmap");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(600, 600);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkBitmap bitmap;
         create_bitmap(&bitmap);
         int x = bitmap.width() / 2;

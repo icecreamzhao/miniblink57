@@ -16,110 +16,123 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(Name, HeapObject)
-OBJECT_CONSTRUCTORS_IMPL(Symbol, Name)
+    OBJECT_CONSTRUCTORS_IMPL(Name, HeapObject)
+    OBJECT_CONSTRUCTORS_IMPL(Symbol, Name)
 
-CAST_ACCESSOR(Name)
-CAST_ACCESSOR(Symbol)
+    CAST_ACCESSOR(Name)
+    CAST_ACCESSOR(Symbol)
 
-ACCESSORS(Symbol, name, Object, kNameOffset)
-INT_ACCESSORS(Symbol, flags, kFlagsOffset)
-BIT_FIELD_ACCESSORS(Symbol, flags, is_private, Symbol::IsPrivateBit)
-BIT_FIELD_ACCESSORS(Symbol, flags, is_well_known_symbol,
-                    Symbol::IsWellKnownSymbolBit)
-BIT_FIELD_ACCESSORS(Symbol, flags, is_public, Symbol::IsPublicBit)
-BIT_FIELD_ACCESSORS(Symbol, flags, is_interesting_symbol,
-                    Symbol::IsInterestingSymbolBit)
+    ACCESSORS(Symbol, name, Object, kNameOffset)
+    INT_ACCESSORS(Symbol, flags, kFlagsOffset)
+    BIT_FIELD_ACCESSORS(Symbol, flags, is_private, Symbol::IsPrivateBit)
+    BIT_FIELD_ACCESSORS(Symbol, flags, is_well_known_symbol,
+        Symbol::IsWellKnownSymbolBit)
+    BIT_FIELD_ACCESSORS(Symbol, flags, is_public, Symbol::IsPublicBit)
+    BIT_FIELD_ACCESSORS(Symbol, flags, is_interesting_symbol,
+        Symbol::IsInterestingSymbolBit)
 
-bool Symbol::is_private_name() const {
-  bool value = Symbol::IsPrivateNameBit::decode(flags());
-  DCHECK_IMPLIES(value, is_private());
-  return value;
-}
+    bool Symbol::is_private_name() const
+    {
+        bool value = Symbol::IsPrivateNameBit::decode(flags());
+        DCHECK_IMPLIES(value, is_private());
+        return value;
+    }
 
-void Symbol::set_is_private_name() {
-  // TODO(gsathya): Re-order the bits to have these next to each other
-  // and just do the bit shifts once.
-  set_flags(Symbol::IsPrivateBit::update(flags(), true));
-  set_flags(Symbol::IsPrivateNameBit::update(flags(), true));
-}
+    void Symbol::set_is_private_name()
+    {
+        // TODO(gsathya): Re-order the bits to have these next to each other
+        // and just do the bit shifts once.
+        set_flags(Symbol::IsPrivateBit::update(flags(), true));
+        set_flags(Symbol::IsPrivateNameBit::update(flags(), true));
+    }
 
-bool Name::IsUniqueName() const {
-  uint32_t type = map()->instance_type();
-  bool result = (type & (kIsNotStringMask | kIsNotInternalizedMask)) !=
-                (kStringTag | kNotInternalizedTag);
-  SLOW_DCHECK(result == HeapObject::IsUniqueName());
-  return result;
-}
+    bool Name::IsUniqueName() const
+    {
+        uint32_t type = map()->instance_type();
+        bool result = (type & (kIsNotStringMask | kIsNotInternalizedMask)) != (kStringTag | kNotInternalizedTag);
+        SLOW_DCHECK(result == HeapObject::IsUniqueName());
+        return result;
+    }
 
-uint32_t Name::hash_field() {
-  return READ_UINT32_FIELD(*this, kHashFieldOffset);
-}
+    uint32_t Name::hash_field()
+    {
+        return READ_UINT32_FIELD(*this, kHashFieldOffset);
+    }
 
-void Name::set_hash_field(uint32_t value) {
-  WRITE_UINT32_FIELD(*this, kHashFieldOffset, value);
-}
+    void Name::set_hash_field(uint32_t value)
+    {
+        WRITE_UINT32_FIELD(*this, kHashFieldOffset, value);
+    }
 
-bool Name::Equals(Name other) {
-  if (other == *this) return true;
-  if ((this->IsInternalizedString() && other->IsInternalizedString()) ||
-      this->IsSymbol() || other->IsSymbol()) {
-    return false;
-  }
-  return String::cast(*this)->SlowEquals(String::cast(other));
-}
+    bool Name::Equals(Name other)
+    {
+        if (other == *this)
+            return true;
+        if ((this->IsInternalizedString() && other->IsInternalizedString()) || this->IsSymbol() || other->IsSymbol()) {
+            return false;
+        }
+        return String::cast(*this)->SlowEquals(String::cast(other));
+    }
 
-bool Name::Equals(Isolate* isolate, Handle<Name> one, Handle<Name> two) {
-  if (one.is_identical_to(two)) return true;
-  if ((one->IsInternalizedString() && two->IsInternalizedString()) ||
-      one->IsSymbol() || two->IsSymbol()) {
-    return false;
-  }
-  return String::SlowEquals(isolate, Handle<String>::cast(one),
-                            Handle<String>::cast(two));
-}
+    bool Name::Equals(Isolate* isolate, Handle<Name> one, Handle<Name> two)
+    {
+        if (one.is_identical_to(two))
+            return true;
+        if ((one->IsInternalizedString() && two->IsInternalizedString()) || one->IsSymbol() || two->IsSymbol()) {
+            return false;
+        }
+        return String::SlowEquals(isolate, Handle<String>::cast(one),
+            Handle<String>::cast(two));
+    }
 
-bool Name::IsHashFieldComputed(uint32_t field) {
-  return (field & kHashNotComputedMask) == 0;
-}
+    bool Name::IsHashFieldComputed(uint32_t field)
+    {
+        return (field & kHashNotComputedMask) == 0;
+    }
 
-bool Name::HasHashCode() { return IsHashFieldComputed(hash_field()); }
+    bool Name::HasHashCode() { return IsHashFieldComputed(hash_field()); }
 
-uint32_t Name::Hash() {
-  // Fast case: has hash code already been computed?
-  uint32_t field = hash_field();
-  if (IsHashFieldComputed(field)) return field >> kHashShift;
-  // Slow case: compute hash code and set it. Has to be a string.
-  return String::cast(*this)->ComputeAndSetHash();
-}
+    uint32_t Name::Hash()
+    {
+        // Fast case: has hash code already been computed?
+        uint32_t field = hash_field();
+        if (IsHashFieldComputed(field))
+            return field >> kHashShift;
+        // Slow case: compute hash code and set it. Has to be a string.
+        return String::cast(*this)->ComputeAndSetHash();
+    }
 
-bool Name::IsInterestingSymbol() const {
-  return IsSymbol() && Symbol::cast(*this)->is_interesting_symbol();
-}
+    bool Name::IsInterestingSymbol() const
+    {
+        return IsSymbol() && Symbol::cast(*this)->is_interesting_symbol();
+    }
 
-bool Name::IsPrivate() {
-  return this->IsSymbol() && Symbol::cast(*this)->is_private();
-}
+    bool Name::IsPrivate()
+    {
+        return this->IsSymbol() && Symbol::cast(*this)->is_private();
+    }
 
-bool Name::IsPrivateName() {
-  bool is_private_name =
-      this->IsSymbol() && Symbol::cast(*this)->is_private_name();
-  DCHECK_IMPLIES(is_private_name, IsPrivate());
-  return is_private_name;
-}
+    bool Name::IsPrivateName()
+    {
+        bool is_private_name = this->IsSymbol() && Symbol::cast(*this)->is_private_name();
+        DCHECK_IMPLIES(is_private_name, IsPrivate());
+        return is_private_name;
+    }
 
-bool Name::AsArrayIndex(uint32_t* index) {
-  return IsString() && String::cast(*this)->AsArrayIndex(index);
-}
+    bool Name::AsArrayIndex(uint32_t* index)
+    {
+        return IsString() && String::cast(*this)->AsArrayIndex(index);
+    }
 
-// static
-bool Name::ContainsCachedArrayIndex(uint32_t hash) {
-  return (hash & Name::kDoesNotContainCachedArrayIndexMask) == 0;
-}
+    // static
+    bool Name::ContainsCachedArrayIndex(uint32_t hash)
+    {
+        return (hash & Name::kDoesNotContainCachedArrayIndexMask) == 0;
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_NAME_INL_H_
+#endif // V8_OBJECTS_NAME_INL_H_

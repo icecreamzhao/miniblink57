@@ -20,7 +20,8 @@
  *      contain SkPATH_SEPARATOR.
  */
 static void test_dir_with_file(skiatest::Reporter* reporter, SkString dir,
-                               SkString filename) {
+    SkString filename)
+{
     // If filename contains SkPATH_SEPARATOR, the tests will fail.
     SkASSERT(!filename.contains(SkPATH_SEPARATOR));
 
@@ -62,7 +63,8 @@ static void test_dir_with_file(skiatest::Reporter* reporter, SkString dir,
     REPORTER_ASSERT(reporter, basename.equals(filename));
 }
 
-DEF_TEST(OSPath, reporter) {
+DEF_TEST(OSPath, reporter)
+{
     SkString dir("dir");
     SkString filename("file");
     test_dir_with_file(reporter, dir, filename);
@@ -86,8 +88,8 @@ DEF_TEST(OSPath, reporter) {
     SkString baseOfDir = SkOSPath::Basename(dir.c_str());
     REPORTER_ASSERT(reporter, baseOfDir.size() == 0);
 
-    // Basename of NULL is an empty string.
-    SkString empty = SkOSPath::Basename(NULL);
+    // Basename of nullptr is an empty string.
+    SkString empty = SkOSPath::Basename(nullptr);
     REPORTER_ASSERT(reporter, empty.size() == 0);
 
     // File in root dir
@@ -99,7 +101,7 @@ DEF_TEST(OSPath, reporter) {
     filename.reset();
     test_dir_with_file(reporter, dir, filename);
 
-    // Test that NULL can be used for the directory and filename.
-    SkString emptyPath = SkOSPath::Join(NULL, NULL);
+    // Test that nullptr can be used for the directory and filename.
+    SkString emptyPath = SkOSPath::Join(nullptr, nullptr);
     REPORTER_ASSERT(reporter, emptyPath.isEmpty());
 }

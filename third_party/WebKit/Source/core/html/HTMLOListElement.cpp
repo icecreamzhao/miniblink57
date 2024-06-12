@@ -20,12 +20,12 @@
  *
  */
 
-#include "config.h"
 #include "core/html/HTMLOListElement.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
 #include "core/HTMLNames.h"
+#include "core/html/parser/HTMLParserIdioms.h"
 #include "core/layout/LayoutListItem.h"
 
 namespace blink {
@@ -44,50 +44,60 @@ inline HTMLOListElement::HTMLOListElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLOListElement)
 
-bool HTMLOListElement::isPresentationAttribute(const QualifiedName& name) const
+bool HTMLOListElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == typeAttr)
         return true;
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLOListElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLOListElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == typeAttr) {
         if (value == "a")
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueLowerAlpha);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
+                CSSValueLowerAlpha);
         else if (value == "A")
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueUpperAlpha);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
+                CSSValueUpperAlpha);
         else if (value == "i")
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueLowerRoman);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
+                CSSValueLowerRoman);
         else if (value == "I")
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueUpperRoman);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
+                CSSValueUpperRoman);
         else if (value == "1")
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType, CSSValueDecimal);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyListStyleType,
+                CSSValueDecimal);
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-void HTMLOListElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void HTMLOListElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == startAttr) {
+    if (params.name == startAttr) {
         int oldStart = start();
-        bool canParse;
-        int parsedStart = value.toInt(&canParse);
+        int parsedStart = 0;
+        bool canParse = parseHTMLInteger(params.newValue, parsedStart);
         m_hasExplicitStart = canParse;
         m_start = canParse ? parsedStart : 0xBADBEEF;
         if (oldStart == start())
             return;
         updateItemValues();
-    } else if (name == reversedAttr) {
-        bool reversed = !value.isNull();
+    } else if (params.name == reversedAttr) {
+        bool reversed = !params.newValue.isNull();
         if (reversed == m_isReversed)
             return;
         m_isReversed = reversed;
         updateItemValues();
     } else {
-        HTMLElement::parseAttribute(name, value);
+        HTMLElement::parseAttribute(params);
     }
 }
 
@@ -110,4 +120,4 @@ void HTMLOListElement::recalculateItemCount()
     m_shouldRecalculateItemCount = false;
 }
 
-}
+} // namespace blink

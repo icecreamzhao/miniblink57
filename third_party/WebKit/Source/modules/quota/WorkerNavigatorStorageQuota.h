@@ -31,7 +31,6 @@
 #ifndef WorkerNavigatorStorageQuota_h
 #define WorkerNavigatorStorageQuota_h
 
-#include "core/frame/DOMWindowProperty.h"
 #include "core/workers/WorkerNavigator.h"
 #include "modules/quota/DeprecatedStorageQuota.h"
 #include "platform/Supplementable.h"
@@ -39,15 +38,19 @@
 
 namespace blink {
 
-class WorkerNavigatorStorageQuota final : public GarbageCollected<WorkerNavigatorStorageQuota>, public HeapSupplement<WorkerNavigator> {
+class StorageManager;
+
+class WorkerNavigatorStorageQuota final
+    : public GarbageCollected<WorkerNavigatorStorageQuota>,
+      public Supplement<WorkerNavigator> {
     USING_GARBAGE_COLLECTED_MIXIN(WorkerNavigatorStorageQuota);
+
 public:
     static WorkerNavigatorStorageQuota& from(WorkerNavigator&);
 
-    static DeprecatedStorageQuota* webkitTemporaryStorage(WorkerNavigator&);
-    static DeprecatedStorageQuota* webkitPersistentStorage(WorkerNavigator&);
-    DeprecatedStorageQuota* webkitTemporaryStorage() const;
-    DeprecatedStorageQuota* webkitPersistentStorage() const;
+    static StorageManager* storage(WorkerNavigator&);
+
+    StorageManager* storage() const;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -55,8 +58,7 @@ private:
     explicit WorkerNavigatorStorageQuota();
     static const char* supplementName();
 
-    mutable Member<DeprecatedStorageQuota> m_temporaryStorage;
-    mutable Member<DeprecatedStorageQuota> m_persistentStorage;
+    mutable Member<StorageManager> m_storageManager;
 };
 
 } // namespace blink

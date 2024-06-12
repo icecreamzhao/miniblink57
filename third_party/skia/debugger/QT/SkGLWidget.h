@@ -6,43 +6,41 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKGLWIDGET_H_
 #define SKGLWIDGET_H_
 
 #if SK_SUPPORT_GPU
 
-#include <QtOpenGL/QGLWidget>
+#include "GrContext.h"
+#include "GrRenderTarget.h"
 #include "SkDebugCanvas.h"
 #include "SkDebugger.h"
-#include "SkDevice.h"
 #include "SkGpuDevice.h"
-#include "GrContext.h"
 #include "gl/GrGLInterface.h"
 #include "gl/GrGLUtil.h"
-#include "GrRenderTarget.h"
+#include <QtOpenGL/QGLWidget>
 
 class SkGLWidget : public QGLWidget {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     SkGLWidget(SkDebugger* debugger);
 
     ~SkGLWidget();
 
-    void updateImage() {
+    void updateImage()
+    {
         this->updateGL();
     }
     void setSampleCount(int sampleCount);
 
-signals:
+Q_SIGNALS:
     void drawComplete();
 
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
-
 
 private:
     void createRenderTarget();

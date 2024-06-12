@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebTextCheckingResult.h"
 
 #include "platform/text/TextCheckerClient.h"
@@ -48,7 +47,7 @@ WebTextCheckingResult::operator TextCheckingResult() const
         detail.location = 0;
         detail.length = length;
         detail.userDescription = replacement;
-        result.details.append(detail);
+        result.details.push_back(detail);
     }
 
     return result;

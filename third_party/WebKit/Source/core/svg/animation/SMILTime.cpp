@@ -23,17 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "core/svg/animation/SMILTime.h"
 
 #include <float.h>
 
 using namespace blink;
 
-SMILTime blink::operator*(const SMILTime& a,  const SMILTime& b)
+SMILTime blink::operator*(const SMILTime& a, const SMILTime& b)
 {
-    // Equal operators have to be used instead of negation here to make NaN work as well.
+    // Equal operators have to be used instead of negation here to make NaN work
+    // as well.
     if (a.value() == 0 || b.value() == 0)
         return SMILTime(0);
     return a.value() * b.value();

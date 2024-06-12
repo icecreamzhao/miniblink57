@@ -16,4 +16,3 @@ enum CrossOriginAttributeValue {
 } // namespace blink
 
 #endif
-

@@ -1,31 +1,32 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "sk_tool_utils.h"
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
-#include "SkDevice.h"
 #include "SkPaint.h"
 #include "SkShader.h"
+#include "SkView.h"
+#include "sk_tool_utils.h"
 
-static int inflate5To8(int x) {
+static int inflate5To8(int x)
+{
     return (x << 3) | (x >> 2);
 }
 
-static int trunc5(int x) {
+static int trunc5(int x)
+{
     return x >> 3;
 }
 
 #define SK_R16_BITS 5
 
 #ifdef SK_DEBUG
-static int round5_slow(int x) {
+static int round5_slow(int x)
+{
     int orig = x & 7;
     int fake = x >> 5;
     int trunc = x >> 3;
@@ -42,7 +43,8 @@ static int round5_slow(int x) {
 }
 #endif
 
-static int round5_fast(int x) {
+static int round5_fast(int x)
+{
     int result = x + 3 - (x >> 5) + (x >> 7);
     result >>= 3;
 #ifdef SK_DEBUG
@@ -54,7 +56,8 @@ static int round5_fast(int x) {
     return result;
 }
 
-static void test_5bits() {
+static void test_5bits()
+{
     int e0 = 0;
     int e1 = 0;
     int e2 = 0;
@@ -71,9 +74,8 @@ static void test_5bits() {
         int err0 = i - v0;
         int err1 = i - v1;
         int err2 = i - v2;
-        SkDebugf("--- %3d : trunc=%3d (%2d) round:%3d (%2d) \n"/*new:%d (%2d)\n"*/, i,
-                 v0, err0, v1, err1, v2, err2);
-
+        SkDebugf("--- %3d : trunc=%3d (%2d) round:%3d (%2d) \n" /*new:%d (%2d)\n"*/, i,
+            v0, err0, v1, err1, v2, err2);
 
         e0 += err0;
         e1 += err1;
@@ -85,7 +87,8 @@ static void test_5bits() {
     SkDebugf("--- trunc: %d %d  round: %d %d new: %d %d\n", e0, ae0, e1, ae1, e2, ae2);
 }
 
-static SkBitmap createBitmap(int n) {
+static SkBitmap createBitmap(int n)
+{
     SkBitmap bitmap;
     bitmap.allocN32Pixels(n, n);
     bitmap.eraseColor(SK_ColorTRANSPARENT);
@@ -101,7 +104,7 @@ static SkBitmap createBitmap(int n) {
     paint.setColor(SK_ColorRED);
     canvas.drawOval(r, paint);
 
-    r.inset(SK_Scalar1*n/4, SK_Scalar1*n/4);
+    r.inset(SK_Scalar1 * n / 4, SK_Scalar1 * n / 4);
     paint.setXfermodeMode(SkXfermode::kSrc_Mode);
     paint.setColor(0x800000FF);
     canvas.drawOval(r, paint);
@@ -111,28 +114,27 @@ static SkBitmap createBitmap(int n) {
 
 class ColorFilterView : public SampleView {
     SkBitmap fBitmap;
-    SkShader* fShader;
+    sk_sp<SkShader> fShader;
     enum {
         N = 64
     };
+
 public:
-    ColorFilterView() {
+    ColorFilterView()
+    {
         fBitmap = createBitmap(N);
         fShader = sk_tool_utils::create_checkerboard_shader(
-                0xFFCCCCCC, 0xFFFFFFFF, 12);
+            0xFFCCCCCC, 0xFFFFFFFF, 12);
 
         if (false) { // avoid bit rot, suppress warning
             test_5bits();
         }
     }
 
-    virtual ~ColorFilterView() {
-        fShader->unref();
-    }
-
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ColorFilter");
             return true;
@@ -140,13 +142,15 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawBackground(SkCanvas* canvas) {
+    virtual void onDrawBackground(SkCanvas* canvas)
+    {
         SkPaint paint;
         paint.setShader(fShader);
         canvas->drawPaint(paint);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         if (false) {
             SkPaint p;
             p.setAntiAlias(true);
@@ -188,12 +192,10 @@ protected:
 
         for (size_t y = 0; y < SK_ARRAY_COUNT(gColors); y++) {
             for (size_t x = 0; x < SK_ARRAY_COUNT(gModes); x++) {
-                SkColorFilter* cf = SkColorFilter::CreateModeFilter(gColors[y], gModes[x]);
-                SkSafeUnref(paint.setColorFilter(cf));
+                paint.setColorFilter(SkColorFilter::MakeModeFilter(gColors[y], gModes[x]));
                 canvas->drawBitmap(fBitmap, x * N * 1.25f, y * N * scale, &paint);
             }
         }
-
     }
 
 private:

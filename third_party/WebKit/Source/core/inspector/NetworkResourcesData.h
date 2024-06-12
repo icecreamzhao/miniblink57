@@ -29,7 +29,6 @@
 #ifndef NetworkResourcesData_h
 #define NetworkResourcesData_h
 
-#include "core/dom/ContextLifecycleObserver.h"
 #include "core/html/parser/TextResourceDecoder.h"
 #include "core/inspector/InspectorPageAgent.h"
 #include "platform/blob/BlobData.h"
@@ -37,55 +36,67 @@
 #include "platform/weborigin/KURL.h"
 #include "wtf/Deque.h"
 #include "wtf/HashMap.h"
-#include "wtf/RefCounted.h"
+#include "wtf/Vector.h"
+#include "wtf/text/AtomicString.h"
 #include "wtf/text/WTFString.h"
-
 
 namespace blink {
 
+class EncodedFormData;
 class ExecutionContext;
 class Resource;
-class FormData;
 class ResourceResponse;
 class SharedBuffer;
 class TextResourceDecoder;
 
-class XHRReplayData final
-    : public RefCountedWillBeGarbageCollectedFinalized<XHRReplayData>
-    , public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(XHRReplayData);
+class XHRReplayData final : public GarbageCollectedFinalized<XHRReplayData> {
 public:
-    static PassRefPtrWillBeRawPtr<XHRReplayData> create(ExecutionContext*, const AtomicString& method, const KURL&, bool async, PassRefPtr<FormData>, bool includeCredentials);
+    static XHRReplayData* create(ExecutionContext*,
+        const AtomicString& method,
+        const KURL&,
+        bool async,
+        PassRefPtr<EncodedFormData>,
+        bool includeCredentials);
 
     void addHeader(const AtomicString& key, const AtomicString& value);
     const AtomicString& method() const { return m_method; }
     const KURL& url() const { return m_url; }
     bool async() const { return m_async; }
-    PassRefPtr<FormData> formData() const { return m_formData; }
+    PassRefPtr<EncodedFormData> formData() const { return m_formData; }
     const HTTPHeaderMap& headers() const { return m_headers; }
     bool includeCredentials() const { return m_includeCredentials; }
+    ExecutionContext* getExecutionContext() const { return m_executionContext; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    XHRReplayData(ExecutionContext*, const AtomicString& method, const KURL&, bool async, PassRefPtr<FormData>, bool includeCredentials);
+    XHRReplayData(ExecutionContext*,
+        const AtomicString& method,
+        const KURL&,
+        bool async,
+        PassRefPtr<EncodedFormData>,
+        bool includeCredentials);
 
+    Member<ExecutionContext> m_executionContext;
     AtomicString m_method;
     KURL m_url;
     bool m_async;
-    RefPtr<FormData> m_formData;
+    RefPtr<EncodedFormData> m_formData;
     HTTPHeaderMap m_headers;
     bool m_includeCredentials;
 };
 
-class NetworkResourcesData {
-    WTF_MAKE_FAST_ALLOCATED(NetworkResourcesData);
+class NetworkResourcesData final
+    : public GarbageCollectedFinalized<NetworkResourcesData> {
 public:
-    class ResourceData {
-        WTF_MAKE_FAST_ALLOCATED(ResourceData);
+    class ResourceData final : public GarbageCollectedFinalized<ResourceData> {
         friend class NetworkResourcesData;
+
     public:
-        ResourceData(const String& requestId, const String& loaderId);
+        ResourceData(NetworkResourcesData*,
+            const String& requestId,
+            const String& loaderId,
+            const KURL&);
 
         String requestId() const { return m_requestId; }
         String loaderId() const { return m_loaderId; }
@@ -93,8 +104,7 @@ public:
         String frameId() const { return m_frameId; }
         void setFrameId(const String& frameId) { m_frameId = frameId; }
 
-        KURL url() const { return m_url; }
-        void setUrl(const KURL& url) { m_url = url; }
+        KURL requestedURL() const { return m_requestedURL; }
 
         bool hasContent() const { return !m_content.isNull(); }
         String content() const { return m_content; }
@@ -102,49 +112,80 @@ public:
 
         bool base64Encoded() const { return m_base64Encoded; }
 
-        unsigned removeContent();
+        size_t removeContent();
         bool isContentEvicted() const { return m_isContentEvicted; }
-        unsigned evictContent();
+        size_t evictContent();
 
         InspectorPageAgent::ResourceType type() const { return m_type; }
         void setType(InspectorPageAgent::ResourceType type) { m_type = type; }
 
         int httpStatusCode() const { return m_httpStatusCode; }
-        void setHTTPStatusCode(int httpStatusCode) { m_httpStatusCode = httpStatusCode; }
+        void setHTTPStatusCode(int httpStatusCode)
+        {
+            m_httpStatusCode = httpStatusCode;
+        }
 
         String mimeType() const { return m_mimeType; }
         void setMimeType(const String& mimeType) { m_mimeType = mimeType; }
 
         String textEncodingName() const { return m_textEncodingName; }
-        void setTextEncodingName(const String& textEncodingName) { m_textEncodingName = textEncodingName; }
-
-        TextResourceDecoder* decoder() const { return m_decoder.get(); }
-        void setDecoder(PassOwnPtr<TextResourceDecoder> decoder) { m_decoder = decoder; }
+        void setTextEncodingName(const String& textEncodingName)
+        {
+            m_textEncodingName = textEncodingName;
+        }
 
         PassRefPtr<SharedBuffer> buffer() const { return m_buffer; }
         void setBuffer(PassRefPtr<SharedBuffer> buffer) { m_buffer = buffer; }
 
-        Resource* cachedResource() const { return m_cachedResource; }
-        void setResource(Resource* cachedResource) { m_cachedResource = cachedResource; }
+        Resource* cachedResource() const { return m_cachedResource.get(); }
+        void setResource(Resource*);
 
         XHRReplayData* xhrReplayData() const { return m_xhrReplayData.get(); }
-        void setXHRReplayData(XHRReplayData* xhrReplayData) { m_xhrReplayData = xhrReplayData; }
+        void setXHRReplayData(XHRReplayData* xhrReplayData)
+        {
+            m_xhrReplayData = xhrReplayData;
+        }
 
-        BlobDataHandle* downloadedFileBlob() const { return m_downloadedFileBlob.get(); }
-        void setDownloadedFileBlob(PassRefPtr<BlobDataHandle> blob) { m_downloadedFileBlob = blob; }
+        BlobDataHandle* downloadedFileBlob() const
+        {
+            return m_downloadedFileBlob.get();
+        }
+        void setDownloadedFileBlob(PassRefPtr<BlobDataHandle> blob)
+        {
+            m_downloadedFileBlob = blob;
+        }
+
+        int rawHeaderSize() const { return m_rawHeaderSize; }
+        void setRawHeaderSize(int size) { m_rawHeaderSize = size; }
+
+        Vector<AtomicString> certificate() { return m_certificate; }
+        void setCertificate(const Vector<AtomicString>& certificate)
+        {
+            m_certificate = certificate;
+        }
+        int pendingEncodedDataLength() const { return m_pendingEncodedDataLength; }
+        void clearPendingEncodedDataLength() { m_pendingEncodedDataLength = 0; }
+        void addPendingEncodedDataLength(int encodedDataLength)
+        {
+            m_pendingEncodedDataLength += encodedDataLength;
+        }
+
+        DECLARE_TRACE();
 
     private:
-        bool hasData() const { return m_dataBuffer; }
+        bool hasData() const { return m_dataBuffer.get(); }
         size_t dataLength() const;
         void appendData(const char* data, size_t dataLength);
         size_t decodeDataToContent();
+        void clearWeakMembers(Visitor*);
 
+        Member<NetworkResourcesData> m_networkResourcesData;
         String m_requestId;
         String m_loaderId;
         String m_frameId;
-        KURL m_url;
+        KURL m_requestedURL;
         String m_content;
-        RefPtrWillBePersistent<XHRReplayData> m_xhrReplayData;
+        Member<XHRReplayData> m_xhrReplayData;
         bool m_base64Encoded;
         RefPtr<SharedBuffer> m_dataBuffer;
         bool m_isContentEvicted;
@@ -153,35 +194,59 @@ public:
 
         String m_mimeType;
         String m_textEncodingName;
-        OwnPtr<TextResourceDecoder> m_decoder;
+        int m_rawHeaderSize;
+        int m_pendingEncodedDataLength;
 
         RefPtr<SharedBuffer> m_buffer;
-        Resource* m_cachedResource;
+        WeakMember<Resource> m_cachedResource;
         RefPtr<BlobDataHandle> m_downloadedFileBlob;
+        Vector<AtomicString> m_certificate;
     };
 
-    NetworkResourcesData();
-
+    static NetworkResourcesData* create(size_t totalBufferSize,
+        size_t resourceBufferSize)
+    {
+        return new NetworkResourcesData(totalBufferSize, resourceBufferSize);
+    }
     ~NetworkResourcesData();
 
-    void resourceCreated(const String& requestId, const String& loaderId);
-    void responseReceived(const String& requestId, const String& frameId, const ResourceResponse&);
-    void setResourceType(const String& requestId, InspectorPageAgent::ResourceType);
+    void resourceCreated(const String& requestId,
+        const String& loaderId,
+        const KURL&);
+    void responseReceived(const String& requestId,
+        const String& frameId,
+        const ResourceResponse&);
+    void setResourceType(const String& requestId,
+        InspectorPageAgent::ResourceType);
     InspectorPageAgent::ResourceType resourceType(const String& requestId);
-    void setResourceContent(const String& requestId, const String& content, bool base64Encoded = false);
-    void maybeAddResourceData(const String& requestId, const char* data, size_t dataLength);
+    void setResourceContent(const String& requestId,
+        const String& content,
+        bool base64Encoded = false);
+    void maybeAddResourceData(const String& requestId,
+        const char* data,
+        size_t dataLength);
     void maybeDecodeDataToContent(const String& requestId);
     void addResource(const String& requestId, Resource*);
     ResourceData const* data(const String& requestId);
-    Vector<String> removeResource(Resource*);
     void clear(const String& preservedLoaderId = String());
 
-    void setResourcesDataSizeLimits(size_t maximumResourcesContentSize, size_t maximumSingleResourceContentSize);
+    void setResourcesDataSizeLimits(size_t maximumResourcesContentSize,
+        size_t maximumSingleResourceContentSize);
     void setXHRReplayData(const String& requestId, XHRReplayData*);
     XHRReplayData* xhrReplayData(const String& requestId);
-    Vector<ResourceData*> resources();
+    void setCertificate(const String& requestId,
+        const Vector<AtomicString>& certificate);
+    HeapVector<Member<ResourceData>> resources();
+
+    int getAndClearPendingEncodedDataLength(const String& requestId);
+    void addPendingEncodedDataLength(const String& requestId,
+        int encodedDataLength);
+
+    DECLARE_TRACE();
 
 private:
+    NetworkResourcesData(size_t totalBufferSize, size_t resourceBufferSize);
+
     ResourceData* resourceDataForRequestId(const String& requestId);
     void ensureNoDataForRequestId(const String& requestId);
     bool ensureFreeSpace(size_t);
@@ -190,7 +255,7 @@ private:
 
     typedef HashMap<String, String> ReusedRequestIds;
     ReusedRequestIds m_reusedXHRReplayDataRequestIds;
-    typedef HashMap<String, ResourceData*> ResourceDataMap;
+    typedef HeapHashMap<String, Member<ResourceData>> ResourceDataMap;
     ResourceDataMap m_requestIdToResourceDataMap;
     size_t m_contentSize;
     size_t m_maximumResourcesContentSize;
@@ -198,6 +263,5 @@ private:
 };
 
 } // namespace blink
-
 
 #endif // !defined(NetworkResourcesData_h)

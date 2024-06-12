@@ -24,23 +24,19 @@
 #define SpotLightSource_h
 
 #include "platform/graphics/filters/LightSource.h"
-#include <algorithm>
+#include "wtf/MathExtras.h"
 
 namespace blink {
 
-class PLATFORM_EXPORT SpotLightSource : public LightSource {
+class PLATFORM_EXPORT SpotLightSource final : public LightSource {
 public:
     static PassRefPtr<SpotLightSource> create(const FloatPoint3D& position,
-        const FloatPoint3D& direction, float specularExponent, float limitingConeAngle)
+        const FloatPoint3D& direction,
+        float specularExponent,
+        float limitingConeAngle)
     {
-        return adoptRef(new SpotLightSource(position, direction, specularExponent, limitingConeAngle));
-    }
-
-    PassRefPtr<LightSource> create(const FloatPoint3D& scale, const FloatSize& offset) const override
-    {
-        FloatPoint3D position(m_position.x() * scale.x() - offset.width(), m_position.y() * scale.y() - offset.height(), m_position.z() * scale.z());
-        FloatPoint3D direction(m_direction.x() * scale.x() - offset.width(), m_direction.y() * scale.y() - offset.height(), m_direction.z() * scale.z());
-        return adoptRef(new SpotLightSource(position, direction, m_specularExponent, m_limitingConeAngle));
+        return adoptRef(new SpotLightSource(position, direction, specularExponent,
+            limitingConeAngle));
     }
 
     const FloatPoint3D& position() const { return m_position; }
@@ -57,12 +53,14 @@ public:
     TextStream& externalRepresentation(TextStream&) const override;
 
 private:
-    SpotLightSource(const FloatPoint3D& position, const FloatPoint3D& direction,
-        float specularExponent, float limitingConeAngle)
+    SpotLightSource(const FloatPoint3D& position,
+        const FloatPoint3D& direction,
+        float specularExponent,
+        float limitingConeAngle)
         : LightSource(LS_SPOT)
         , m_position(position)
         , m_direction(direction)
-        , m_specularExponent(std::min(std::max(specularExponent, 1.0f), 128.0f))
+        , m_specularExponent(clampTo(specularExponent, 1.0f, 128.0f))
         , m_limitingConeAngle(limitingConeAngle)
     {
     }

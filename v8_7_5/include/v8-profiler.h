@@ -7,7 +7,7 @@
 
 #include <unordered_set>
 #include <vector>
-#include "v8.h"  // NOLINT(build/include)
+#include "v8.h" // NOLINT(build/include)
 
 /**
  * Profiler support for the V8 JavaScript engine.
@@ -19,13 +19,12 @@ struct HeapStatsUpdate;
 
 typedef uint32_t SnapshotObjectId;
 
-
 struct CpuProfileDeoptFrame {
-  int script_id;
-  size_t position;
+    int script_id;
+    size_t position;
 };
 
-}  // namespace v8
+} // namespace v8
 
 #ifdef V8_OS_WIN
 template class V8_EXPORT std::vector<v8::CpuProfileDeoptFrame>;
@@ -34,12 +33,12 @@ template class V8_EXPORT std::vector<v8::CpuProfileDeoptFrame>;
 namespace v8 {
 
 struct V8_EXPORT CpuProfileDeoptInfo {
-  /** A pointer to a static string owned by v8. */
-  const char* deopt_reason;
-  std::vector<CpuProfileDeoptFrame> stack;
+    /** A pointer to a static string owned by v8. */
+    const char* deopt_reason;
+    std::vector<CpuProfileDeoptFrame> stack;
 };
 
-}  // namespace v8
+} // namespace v8
 
 #ifdef V8_OS_WIN
 template class V8_EXPORT std::vector<v8::CpuProfileDeoptInfo>;
@@ -49,20 +48,23 @@ namespace v8 {
 
 // TickSample captures the information collected for each sample.
 struct V8_EXPORT TickSample {
-  // Internal profiling (with --prof + tools/$OS-tick-processor) wants to
-  // include the runtime function we're calling. Externally exposed tick
-  // samples don't care.
-  enum RecordCEntryFrame { kIncludeCEntryFrame, kSkipCEntryFrame };
+    // Internal profiling (with --prof + tools/$OS-tick-processor) wants to
+    // include the runtime function we're calling. Externally exposed tick
+    // samples don't care.
+    enum RecordCEntryFrame { kIncludeCEntryFrame,
+        kSkipCEntryFrame };
 
-  TickSample()
-      : state(OTHER),
-        pc(nullptr),
-        external_callback_entry(nullptr),
-        frames_count(0),
-        has_external_callback(false),
-        update_stats(true) {}
+    TickSample()
+        : state(OTHER)
+        , pc(nullptr)
+        , external_callback_entry(nullptr)
+        , frames_count(0)
+        , has_external_callback(false)
+        , update_stats(true)
+    {
+    }
 
-  /**
+    /**
    * Initialize a tick sample from the isolate.
    * \param isolate The isolate.
    * \param state Execution state.
@@ -74,10 +76,10 @@ struct V8_EXPORT TickSample {
    *                                with |state| argument. Otherwise the method
    *                                will use provided register |state| as is.
    */
-  void Init(Isolate* isolate, const v8::RegisterState& state,
-            RecordCEntryFrame record_c_entry_frame, bool update_stats,
-            bool use_simulator_reg_state = true);
-  /**
+    void Init(Isolate* isolate, const v8::RegisterState& state,
+        RecordCEntryFrame record_c_entry_frame, bool update_stats,
+        bool use_simulator_reg_state = true);
+    /**
    * Get a call stack sample from the isolate.
    * \param isolate The isolate.
    * \param state Register state.
@@ -97,185 +99,203 @@ struct V8_EXPORT TickSample {
    *                      when the JS thread is paused or interrupted.
    *                      Otherwise the behavior is undefined.
    */
-  static bool GetStackSample(Isolate* isolate, v8::RegisterState* state,
-                             RecordCEntryFrame record_c_entry_frame,
-                             void** frames, size_t frames_limit,
-                             v8::SampleInfo* sample_info,
-                             bool use_simulator_reg_state = true);
-  StateTag state;  // The state of the VM.
-  void* pc;        // Instruction pointer.
-  union {
-    void* tos;  // Top stack value (*sp).
-    void* external_callback_entry;
-  };
-  static const unsigned kMaxFramesCountLog2 = 8;
-  static const unsigned kMaxFramesCount = (1 << kMaxFramesCountLog2) - 1;
-  void* stack[kMaxFramesCount];                 // Call stack.
-  unsigned frames_count : kMaxFramesCountLog2;  // Number of captured frames.
-  bool has_external_callback : 1;
-  bool update_stats : 1;  // Whether the sample should update aggregated stats.
+    static bool GetStackSample(Isolate* isolate, v8::RegisterState* state,
+        RecordCEntryFrame record_c_entry_frame,
+        void** frames, size_t frames_limit,
+        v8::SampleInfo* sample_info,
+        bool use_simulator_reg_state = true);
+    StateTag state; // The state of the VM.
+    void* pc; // Instruction pointer.
+    union {
+        void* tos; // Top stack value (*sp).
+        void* external_callback_entry;
+    };
+    static const unsigned kMaxFramesCountLog2 = 8;
+    static const unsigned kMaxFramesCount = (1 << kMaxFramesCountLog2) - 1;
+    void* stack[kMaxFramesCount]; // Call stack.
+    unsigned frames_count : kMaxFramesCountLog2; // Number of captured frames.
+    bool has_external_callback : 1;
+    bool update_stats : 1; // Whether the sample should update aggregated stats.
 };
 
 /**
  * CpuProfileNode represents a node in a call graph.
  */
 class V8_EXPORT CpuProfileNode {
- public:
-  struct LineTick {
-    /** The 1-based number of the source line where the function originates. */
-    int line;
+public:
+    struct LineTick {
+        /** The 1-based number of the source line where the function originates. */
+        int line;
 
-    /** The count of samples associated with the source line. */
-    unsigned int hit_count;
-  };
+        /** The count of samples associated with the source line. */
+        unsigned int hit_count;
+    };
 
-  /** Returns function name (empty string for anonymous functions.) */
-  Local<String> GetFunctionName() const;
+    // An annotation hinting at the source of a CpuProfileNode.
+    enum SourceType {
+        // User-supplied script with associated resource information.
+        kScript = 0,
+        // Native scripts and provided builtins.
+        kBuiltin = 1,
+        // Callbacks into native code.
+        kCallback = 2,
+        // VM-internal functions or state.
+        kInternal = 3,
+        // A node that failed to symbolize.
+        kUnresolved = 4,
+    }; // weolar
 
-  /**
+    /** Returns function name (empty string for anonymous functions.) */
+    Local<String> GetFunctionName() const;
+
+    /**
    * Returns function name (empty string for anonymous functions.)
    * The string ownership is *not* passed to the caller. It stays valid until
    * profile is deleted. The function is thread safe.
    */
-  const char* GetFunctionNameStr() const;
+    const char* GetFunctionNameStr() const;
 
-  /** Returns id of the script where function is located. */
-  int GetScriptId() const;
+    /** Returns id of the script where function is located. */
+    int GetScriptId() const;
 
-  /** Returns resource name for script from where the function originates. */
-  Local<String> GetScriptResourceName() const;
+    /** Returns resource name for script from where the function originates. */
+    Local<String> GetScriptResourceName() const;
 
-  /**
+    /**
    * Returns resource name for script from where the function originates.
    * The string ownership is *not* passed to the caller. It stays valid until
    * profile is deleted. The function is thread safe.
    */
-  const char* GetScriptResourceNameStr() const;
+    const char* GetScriptResourceNameStr() const;
 
-  /**
+    /**
    * Return true if the script from where the function originates is flagged as
    * being shared cross-origin.
    */
-  bool IsScriptSharedCrossOrigin() const;
+    bool IsScriptSharedCrossOrigin() const;
 
-  /**
+    /**
    * Returns the number, 1-based, of the line where the function originates.
    * kNoLineNumberInfo if no line number information is available.
    */
-  int GetLineNumber() const;
+    int GetLineNumber() const;
 
-  /**
+    /**
    * Returns 1-based number of the column where the function originates.
    * kNoColumnNumberInfo if no column number information is available.
    */
-  int GetColumnNumber() const;
+    int GetColumnNumber() const;
 
-  /**
+    /**
    * Returns the number of the function's source lines that collect the samples.
    */
-  unsigned int GetHitLineCount() const;
+    unsigned int GetHitLineCount() const;
 
-  /** Returns the set of source lines that collect the samples.
+    /** Returns the set of source lines that collect the samples.
    *  The caller allocates buffer and responsible for releasing it.
    *  True if all available entries are copied, otherwise false.
    *  The function copies nothing if buffer is not large enough.
    */
-  bool GetLineTicks(LineTick* entries, unsigned int length) const;
+    bool GetLineTicks(LineTick* entries, unsigned int length) const;
 
-  /** Returns bailout reason for the function
+    /** Returns bailout reason for the function
     * if the optimization was disabled for it.
     */
-  const char* GetBailoutReason() const;
+    const char* GetBailoutReason() const;
 
-  /**
+    /**
     * Returns the count of samples where the function was currently executing.
     */
-  unsigned GetHitCount() const;
+    unsigned GetHitCount() const;
 
-  /** Returns function entry UID. */
-  V8_DEPRECATE_SOON(
-      "Use GetScriptId, GetLineNumber, and GetColumnNumber instead.",
-      unsigned GetCallUid() const);
+    /** Returns function entry UID. */
+    V8_DEPRECATE_SOON(
+        "Use GetScriptId, GetLineNumber, and GetColumnNumber instead.",
+        unsigned GetCallUid() const);
 
-  /** Returns id of the node. The id is unique within the tree */
-  unsigned GetNodeId() const;
+    /** Returns id of the node. The id is unique within the tree */
+    unsigned GetNodeId() const;
 
-  /** Returns child nodes count of the node. */
-  int GetChildrenCount() const;
+    /**
+   * Gets the type of the source which the node was captured from.
+   */
+    SourceType GetSourceType() const;
 
-  /** Retrieves a child node by index. */
-  const CpuProfileNode* GetChild(int index) const;
+    /** Returns child nodes count of the node. */
+    int GetChildrenCount() const;
 
-  /** Retrieves the ancestor node, or null if the root. */
-  const CpuProfileNode* GetParent() const;
+    /** Retrieves a child node by index. */
+    const CpuProfileNode* GetChild(int index) const;
 
-  /** Retrieves deopt infos for the node. */
-  const std::vector<CpuProfileDeoptInfo>& GetDeoptInfos() const;
+    /** Retrieves the ancestor node, or null if the root. */
+    const CpuProfileNode* GetParent() const;
 
-  static const int kNoLineNumberInfo = Message::kNoLineNumberInfo;
-  static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
+    /** Retrieves deopt infos for the node. */
+    const std::vector<CpuProfileDeoptInfo>& GetDeoptInfos() const;
+
+    static const int kNoLineNumberInfo = Message::kNoLineNumberInfo;
+    static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
-
 
 /**
  * CpuProfile contains a CPU profile in a form of top-down call tree
  * (from main() down to functions that do all the work).
  */
 class V8_EXPORT CpuProfile {
- public:
-  /** Returns CPU profile title. */
-  Local<String> GetTitle() const;
+public:
+    /** Returns CPU profile title. */
+    Local<String> GetTitle() const;
 
-  /** Returns the root node of the top down call tree. */
-  const CpuProfileNode* GetTopDownRoot() const;
+    /** Returns the root node of the top down call tree. */
+    const CpuProfileNode* GetTopDownRoot() const;
 
-  /**
+    /**
    * Returns number of samples recorded. The samples are not recorded unless
    * |record_samples| parameter of CpuProfiler::StartCpuProfiling is true.
    */
-  int GetSamplesCount() const;
+    int GetSamplesCount() const;
 
-  /**
+    /**
    * Returns profile node corresponding to the top frame the sample at
    * the given index.
    */
-  const CpuProfileNode* GetSample(int index) const;
+    const CpuProfileNode* GetSample(int index) const;
 
-  /**
+    /**
    * Returns the timestamp of the sample. The timestamp is the number of
    * microseconds since some unspecified starting point.
    * The point is equal to the starting point used by GetStartTime.
    */
-  int64_t GetSampleTimestamp(int index) const;
+    int64_t GetSampleTimestamp(int index) const;
 
-  /**
+    /**
    * Returns time when the profile recording was started (in microseconds)
    * since some unspecified starting point.
    */
-  int64_t GetStartTime() const;
+    int64_t GetStartTime() const;
 
-  /**
+    /**
    * Returns time when the profile recording was stopped (in microseconds)
    * since some unspecified starting point.
    * The point is equal to the starting point used by GetStartTime.
    */
-  int64_t GetEndTime() const;
+    int64_t GetEndTime() const;
 
-  /**
+    /**
    * Deletes the profile and removes it from CpuProfiler's list.
    * All pointers to nodes previously returned become invalid.
    */
-  void Delete();
+    void Delete();
 };
 
 enum CpuProfilingMode {
-  // In the resulting CpuProfile tree, intermediate nodes in a stack trace
-  // (from the root to a leaf) will have line numbers that point to the start
-  // line of the function, rather than the line of the callsite of the child.
-  kLeafNodeLineNumbers,
-  // In the resulting CpuProfile tree, nodes are separated based on the line
-  // number of their callsite in their parent.
-  kCallerLineNumbers,
+    // In the resulting CpuProfile tree, intermediate nodes in a stack trace
+    // (from the root to a leaf) will have line numbers that point to the start
+    // line of the function, rather than the line of the callsite of the child.
+    kLeafNodeLineNumbers,
+    // In the resulting CpuProfile tree, nodes are separated based on the line
+    // number of their callsite in their parent.
+    kCallerLineNumbers,
 };
 
 /**
@@ -283,34 +303,43 @@ enum CpuProfilingMode {
  * profiler can be created using v8::CpuProfiler::New method.
  */
 class V8_EXPORT CpuProfiler {
- public:
-  /**
+public:
+    /**
    * Creates a new CPU profiler for the |isolate|. The isolate must be
    * initialized. The profiler object must be disposed after use by calling
    * |Dispose| method.
    */
-  static CpuProfiler* New(Isolate* isolate);
+    static CpuProfiler* New(Isolate* isolate);
 
-  /**
+    /**
    * Synchronously collect current stack sample in all profilers attached to
    * the |isolate|. The call does not affect number of ticks recorded for
    * the current top node.
    */
-  static void CollectSample(Isolate* isolate);
+    static void CollectSample(Isolate* isolate);
 
-  /**
+    /**
    * Disposes the CPU profiler object.
    */
-  void Dispose();
+    void Dispose();
 
-  /**
+    /**
    * Changes default CPU profiler sampling interval to the specified number
    * of microseconds. Default interval is 1000us. This method must be called
    * when there are no profiles being recorded.
    */
-  void SetSamplingInterval(int us);
+    void SetSamplingInterval(int us);
 
-  /**
+    /**
+   * Sets whether or not the profiler should prioritize consistency of sample
+   * periodicity on Windows. Disabling this can greatly reduce CPU usage, but
+   * may result in greater variance in sample timings from the platform's
+   * scheduler. Defaults to enabled. This method must be called when there are
+   * no profiles being recorded.
+   */
+    void SetUsePreciseSampling(bool);
+
+    /**
    * Starts collecting CPU profile. Title may be an empty string. It
    * is allowed to have several profiles being collected at
    * once. Attempts to start collecting several profiles with the same
@@ -321,199 +350,196 @@ class V8_EXPORT CpuProfiler {
    * |record_samples| parameter controls whether individual samples should
    * be recorded in addition to the aggregated tree.
    */
-  void StartProfiling(Local<String> title, CpuProfilingMode mode,
-                      bool record_samples = false);
-  /**
+    void StartProfiling(Local<String> title, CpuProfilingMode mode,
+        bool record_samples = false);
+    /**
    * The same as StartProfiling above, but the CpuProfilingMode defaults to
    * kLeafNodeLineNumbers mode, which was the previous default behavior of the
    * profiler.
    */
-  void StartProfiling(Local<String> title, bool record_samples = false);
+    void StartProfiling(Local<String> title, bool record_samples = false);
 
-  /**
+    /**
    * Stops collecting CPU profile with a given title and returns it.
    * If the title given is empty, finishes the last profile started.
    */
-  CpuProfile* StopProfiling(Local<String> title);
+    CpuProfile* StopProfiling(Local<String> title);
 
-  /**
+    /**
    * Force collection of a sample. Must be called on the VM thread.
    * Recording the forced sample does not contribute to the aggregated
    * profile statistics.
    */
-  V8_DEPRECATED("Use static CollectSample(Isolate*) instead.",
-                void CollectSample());
+    V8_DEPRECATED("Use static CollectSample(Isolate*) instead.",
+        void CollectSample());
 
-  /**
+    /**
    * Tells the profiler whether the embedder is idle.
    */
-  V8_DEPRECATED("Use Isolate::SetIdle(bool) instead.",
-                void SetIdle(bool is_idle));
+    V8_DEPRECATED("Use Isolate::SetIdle(bool) instead.",
+        void SetIdle(bool is_idle));
 
-  /**
+    /**
    * Generate more detailed source positions to code objects. This results in
    * better results when mapping profiling samples to script source.
    */
-  static void UseDetailedSourcePositionsForProfiling(Isolate* isolate);
+    static void UseDetailedSourcePositionsForProfiling(Isolate* isolate);
 
- private:
-  CpuProfiler();
-  ~CpuProfiler();
-  CpuProfiler(const CpuProfiler&);
-  CpuProfiler& operator=(const CpuProfiler&);
+private:
+    CpuProfiler();
+    ~CpuProfiler();
+    CpuProfiler(const CpuProfiler&);
+    CpuProfiler& operator=(const CpuProfiler&);
 };
-
 
 /**
  * HeapSnapshotEdge represents a directed connection between heap
  * graph nodes: from retainers to retained nodes.
  */
 class V8_EXPORT HeapGraphEdge {
- public:
-  enum Type {
-    kContextVariable = 0,  // A variable from a function context.
-    kElement = 1,          // An element of an array.
-    kProperty = 2,         // A named object property.
-    kInternal = 3,         // A link that can't be accessed from JS,
-                           // thus, its name isn't a real property name
-                           // (e.g. parts of a ConsString).
-    kHidden = 4,           // A link that is needed for proper sizes
-                           // calculation, but may be hidden from user.
-    kShortcut = 5,         // A link that must not be followed during
-                           // sizes calculation.
-    kWeak = 6              // A weak reference (ignored by the GC).
-  };
+public:
+    enum Type {
+        kContextVariable = 0, // A variable from a function context.
+        kElement = 1, // An element of an array.
+        kProperty = 2, // A named object property.
+        kInternal = 3, // A link that can't be accessed from JS,
+        // thus, its name isn't a real property name
+        // (e.g. parts of a ConsString).
+        kHidden = 4, // A link that is needed for proper sizes
+        // calculation, but may be hidden from user.
+        kShortcut = 5, // A link that must not be followed during
+        // sizes calculation.
+        kWeak = 6 // A weak reference (ignored by the GC).
+    };
 
-  /** Returns edge type (see HeapGraphEdge::Type). */
-  Type GetType() const;
+    /** Returns edge type (see HeapGraphEdge::Type). */
+    Type GetType() const;
 
-  /**
+    /**
    * Returns edge name. This can be a variable name, an element index, or
    * a property name.
    */
-  Local<Value> GetName() const;
+    Local<Value> GetName() const;
 
-  /** Returns origin node. */
-  const HeapGraphNode* GetFromNode() const;
+    /** Returns origin node. */
+    const HeapGraphNode* GetFromNode() const;
 
-  /** Returns destination node. */
-  const HeapGraphNode* GetToNode() const;
+    /** Returns destination node. */
+    const HeapGraphNode* GetToNode() const;
 };
-
 
 /**
  * HeapGraphNode represents a node in a heap graph.
  */
 class V8_EXPORT HeapGraphNode {
- public:
-  enum Type {
-    kHidden = 0,         // Hidden node, may be filtered when shown to user.
-    kArray = 1,          // An array of elements.
-    kString = 2,         // A string.
-    kObject = 3,         // A JS object (except for arrays and strings).
-    kCode = 4,           // Compiled code.
-    kClosure = 5,        // Function closure.
-    kRegExp = 6,         // RegExp.
-    kHeapNumber = 7,     // Number stored in the heap.
-    kNative = 8,         // Native object (not from V8 heap).
-    kSynthetic = 9,      // Synthetic object, usually used for grouping
-                         // snapshot items together.
-    kConsString = 10,    // Concatenated string. A pair of pointers to strings.
-    kSlicedString = 11,  // Sliced string. A fragment of another string.
-    kSymbol = 12,        // A Symbol (ES6).
-    kBigInt = 13         // BigInt.
-  };
+public:
+    enum Type {
+        kHidden = 0, // Hidden node, may be filtered when shown to user.
+        kArray = 1, // An array of elements.
+        kString = 2, // A string.
+        kObject = 3, // A JS object (except for arrays and strings).
+        kCode = 4, // Compiled code.
+        kClosure = 5, // Function closure.
+        kRegExp = 6, // RegExp.
+        kHeapNumber = 7, // Number stored in the heap.
+        kNative = 8, // Native object (not from V8 heap).
+        kSynthetic = 9, // Synthetic object, usually used for grouping
+        // snapshot items together.
+        kConsString = 10, // Concatenated string. A pair of pointers to strings.
+        kSlicedString = 11, // Sliced string. A fragment of another string.
+        kSymbol = 12, // A Symbol (ES6).
+        kBigInt = 13 // BigInt.
+    };
 
-  /** Returns node type (see HeapGraphNode::Type). */
-  Type GetType() const;
+    /** Returns node type (see HeapGraphNode::Type). */
+    Type GetType() const;
 
-  /**
+    /**
    * Returns node name. Depending on node's type this can be the name
    * of the constructor (for objects), the name of the function (for
    * closures), string value, or an empty string (for compiled code).
    */
-  Local<String> GetName() const;
+    Local<String> GetName() const;
 
-  /**
+    /**
    * Returns node id. For the same heap object, the id remains the same
    * across all snapshots.
    */
-  SnapshotObjectId GetId() const;
+    SnapshotObjectId GetId() const;
 
-  /** Returns node's own size, in bytes. */
-  size_t GetShallowSize() const;
+    /** Returns node's own size, in bytes. */
+    size_t GetShallowSize() const;
 
-  /** Returns child nodes count of the node. */
-  int GetChildrenCount() const;
+    /** Returns child nodes count of the node. */
+    int GetChildrenCount() const;
 
-  /** Retrieves a child by index. */
-  const HeapGraphEdge* GetChild(int index) const;
+    /** Retrieves a child by index. */
+    const HeapGraphEdge* GetChild(int index) const;
 };
-
 
 /**
  * An interface for exporting data from V8, using "push" model.
  */
-class V8_EXPORT OutputStream {  // NOLINT
- public:
-  enum WriteResult {
-    kContinue = 0,
-    kAbort = 1
-  };
-  virtual ~OutputStream() = default;
-  /** Notify about the end of stream. */
-  virtual void EndOfStream() = 0;
-  /** Get preferred output chunk size. Called only once. */
-  virtual int GetChunkSize() { return 1024; }
-  /**
+class V8_EXPORT OutputStream { // NOLINT
+public:
+    enum WriteResult {
+        kContinue = 0,
+        kAbort = 1
+    };
+    virtual ~OutputStream() = default;
+    /** Notify about the end of stream. */
+    virtual void EndOfStream() = 0;
+    /** Get preferred output chunk size. Called only once. */
+    virtual int GetChunkSize() { return 1024; }
+    /**
    * Writes the next chunk of snapshot data into the stream. Writing
    * can be stopped by returning kAbort as function result. EndOfStream
    * will not be called in case writing was aborted.
    */
-  virtual WriteResult WriteAsciiChunk(char* data, int size) = 0;
-  /**
+    virtual WriteResult WriteAsciiChunk(char* data, int size) = 0;
+    /**
    * Writes the next chunk of heap stats data into the stream. Writing
    * can be stopped by returning kAbort as function result. EndOfStream
    * will not be called in case writing was aborted.
    */
-  virtual WriteResult WriteHeapStatsChunk(HeapStatsUpdate* data, int count) {
-    return kAbort;
-  }
+    virtual WriteResult WriteHeapStatsChunk(HeapStatsUpdate* data, int count)
+    {
+        return kAbort;
+    }
 };
-
 
 /**
  * HeapSnapshots record the state of the JS heap at some moment.
  */
 class V8_EXPORT HeapSnapshot {
- public:
-  enum SerializationFormat {
-    kJSON = 0  // See format description near 'Serialize' method.
-  };
+public:
+    enum SerializationFormat {
+        kJSON = 0 // See format description near 'Serialize' method.
+    };
 
-  /** Returns the root node of the heap graph. */
-  const HeapGraphNode* GetRoot() const;
+    /** Returns the root node of the heap graph. */
+    const HeapGraphNode* GetRoot() const;
 
-  /** Returns a node by its id. */
-  const HeapGraphNode* GetNodeById(SnapshotObjectId id) const;
+    /** Returns a node by its id. */
+    const HeapGraphNode* GetNodeById(SnapshotObjectId id) const;
 
-  /** Returns total nodes count in the snapshot. */
-  int GetNodesCount() const;
+    /** Returns total nodes count in the snapshot. */
+    int GetNodesCount() const;
 
-  /** Returns a node by index. */
-  const HeapGraphNode* GetNode(int index) const;
+    /** Returns a node by index. */
+    const HeapGraphNode* GetNode(int index) const;
 
-  /** Returns a max seen JS object Id. */
-  SnapshotObjectId GetMaxSnapshotJSObjectId() const;
+    /** Returns a max seen JS object Id. */
+    SnapshotObjectId GetMaxSnapshotJSObjectId() const;
 
-  /**
+    /**
    * Deletes the snapshot and removes it from HeapProfiler's list.
    * All pointers to nodes, edges and paths previously returned become
    * invalid.
    */
-  void Delete();
+    void Delete();
 
-  /**
+    /**
    * Prepare a serialized representation of the snapshot. The result
    * is written into the stream provided in chunks of specified size.
    * The total length of the serialized snapshot is unknown in
@@ -539,143 +565,141 @@ class V8_EXPORT HeapSnapshot {
    * Nodes reference strings, other nodes, and edges by their indexes
    * in corresponding arrays.
    */
-  void Serialize(OutputStream* stream,
-                 SerializationFormat format = kJSON) const;
+    void Serialize(OutputStream* stream,
+        SerializationFormat format = kJSON) const;
 };
-
 
 /**
  * An interface for reporting progress and controlling long-running
  * activities.
  */
-class V8_EXPORT ActivityControl {  // NOLINT
- public:
-  enum ControlOption {
-    kContinue = 0,
-    kAbort = 1
-  };
-  virtual ~ActivityControl() = default;
-  /**
+class V8_EXPORT ActivityControl { // NOLINT
+public:
+    enum ControlOption {
+        kContinue = 0,
+        kAbort = 1
+    };
+    virtual ~ActivityControl() = default;
+    /**
    * Notify about current progress. The activity can be stopped by
    * returning kAbort as the callback result.
    */
-  virtual ControlOption ReportProgressValue(int done, int total) = 0;
+    virtual ControlOption ReportProgressValue(int done, int total) = 0;
 };
-
 
 /**
  * AllocationProfile is a sampled profile of allocations done by the program.
  * This is structured as a call-graph.
  */
 class V8_EXPORT AllocationProfile {
- public:
-  struct Allocation {
-    /**
+public:
+    struct Allocation {
+        /**
      * Size of the sampled allocation object.
      */
-    size_t size;
+        size_t size;
 
-    /**
+        /**
      * The number of objects of such size that were sampled.
      */
-    unsigned int count;
-  };
+        unsigned int count;
+    };
 
-  /**
+    /**
    * Represents a node in the call-graph.
    */
-  struct Node {
-    /**
+    struct Node {
+        /**
      * Name of the function. May be empty for anonymous functions or if the
      * script corresponding to this function has been unloaded.
      */
-    Local<String> name;
+        Local<String> name;
 
-    /**
+        /**
      * Name of the script containing the function. May be empty if the script
      * name is not available, or if the script has been unloaded.
      */
-    Local<String> script_name;
+        Local<String> script_name;
 
-    /**
+        /**
      * id of the script where the function is located. May be equal to
      * v8::UnboundScript::kNoScriptId in cases where the script doesn't exist.
      */
-    int script_id;
+        int script_id;
 
-    /**
+        /**
      * Start position of the function in the script.
      */
-    int start_position;
+        int start_position;
 
-    /**
+        /**
      * 1-indexed line number where the function starts. May be
      * kNoLineNumberInfo if no line number information is available.
      */
-    int line_number;
+        int line_number;
 
-    /**
+        /**
      * 1-indexed column number where the function starts. May be
      * kNoColumnNumberInfo if no line number information is available.
      */
-    int column_number;
+        int column_number;
 
-    /**
+        /**
      * Unique id of the node.
      */
-    uint32_t node_id;
+        uint32_t node_id;
 
-    /**
+        /**
      * List of callees called from this node for which we have sampled
      * allocations. The lifetime of the children is scoped to the containing
      * AllocationProfile.
      */
-    std::vector<Node*> children;
+        std::vector<Node*> children;
 
-    /**
+        /**
      * List of self allocations done by this node in the call-graph.
      */
-    std::vector<Allocation> allocations;
-  };
+        std::vector<Allocation> allocations;
+    };
 
-  /**
+    /**
    * Represent a single sample recorded for an allocation.
    */
-  struct Sample {
-    /**
+    struct Sample {
+        /**
      * id of the node in the profile tree.
      */
-    uint32_t node_id;
+        uint32_t node_id;
 
-    /**
+        /**
      * Size of the sampled allocation object.
      */
-    size_t size;
+        size_t size;
 
-    /**
+        /**
      * The number of objects of such size that were sampled.
      */
-    unsigned int count;
+        unsigned int count;
 
-    /**
+        /**
      * Unique time-ordered id of the allocation sample. Can be used to track
      * what samples were added or removed between two snapshots.
      */
-    uint64_t sample_id;
-  };
+        uint64_t sample_id;
+    };
 
-  /**
+    /**
    * Returns the root node of the call-graph. The root node corresponds to an
    * empty JS call-stack. The lifetime of the returned Node* is scoped to the
    * containing AllocationProfile.
    */
-  virtual Node* GetRootNode() = 0;
-  virtual const std::vector<Sample>& GetSamples() = 0;
+    virtual Node* GetRootNode() = 0;
+    virtual const std::vector<Sample>& GetSamples() = 0;
 
-  virtual ~AllocationProfile() = default;
+    virtual ~AllocationProfile() = default;
 
-  static const int kNoLineNumberInfo = Message::kNoLineNumberInfo;
-  static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
+    static const int kNoLineNumberInfo = Message::kNoLineNumberInfo;
+    static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
 
 /**
@@ -693,45 +717,45 @@ class V8_EXPORT AllocationProfile {
  *    graph->V8Node(value).
  */
 class V8_EXPORT EmbedderGraph {
- public:
-  class Node {
-   public:
-    Node() = default;
-    virtual ~Node() = default;
-    virtual const char* Name() = 0;
-    virtual size_t SizeInBytes() = 0;
-    /**
+public:
+    class Node {
+    public:
+        Node() = default;
+        virtual ~Node() = default;
+        virtual const char* Name() = 0;
+        virtual size_t SizeInBytes() = 0;
+        /**
      * The corresponding V8 wrapper node if not null.
      * During heap snapshot generation the embedder node and the V8 wrapper
      * node will be merged into one node to simplify retaining paths.
      */
-    virtual Node* WrapperNode() { return nullptr; }
-    virtual bool IsRootNode() { return false; }
-    /** Must return true for non-V8 nodes. */
-    virtual bool IsEmbedderNode() { return true; }
-    /**
+        virtual Node* WrapperNode() { return nullptr; }
+        virtual bool IsRootNode() { return false; }
+        /** Must return true for non-V8 nodes. */
+        virtual bool IsEmbedderNode() { return true; }
+        /**
      * Optional name prefix. It is used in Chrome for tagging detached nodes.
      */
-    virtual const char* NamePrefix() { return nullptr; }
+        virtual const char* NamePrefix() { return nullptr; }
 
-   private:
-    Node(const Node&) = delete;
-    Node& operator=(const Node&) = delete;
-  };
+    private:
+        Node(const Node&) = delete;
+        Node& operator=(const Node&) = delete;
+    };
 
-  /**
+    /**
    * Returns a node corresponding to the given V8 value. Ownership is not
    * transferred. The result pointer is valid while the graph is alive.
    */
-  virtual Node* V8Node(const v8::Local<v8::Value>& value) = 0;
+    virtual Node* V8Node(const v8::Local<v8::Value>& value) = 0;
 
-  /**
+    /**
    * Adds the given node to the graph and takes ownership of the node.
    * Returns a raw pointer to the node that is valid while the graph is alive.
    */
-  virtual Node* AddNode(std::unique_ptr<Node> node) = 0;
+    virtual Node* AddNode(std::unique_ptr<Node> node) = 0;
 
-  /**
+    /**
    * Adds an edge that represents a strong reference from the given
    * node |from| to the given node |to|. The nodes must be added to the graph
    * before calling this function.
@@ -739,87 +763,97 @@ class V8_EXPORT EmbedderGraph {
    * If name is nullptr, the edge will have auto-increment indexes, otherwise
    * it will be named accordingly.
    */
-  virtual void AddEdge(Node* from, Node* to, const char* name = nullptr) = 0;
+    virtual void AddEdge(Node* from, Node* to, const char* name = nullptr) = 0;
 
-  virtual ~EmbedderGraph() = default;
+    virtual ~EmbedderGraph() = default;
 };
+
+class V8_EXPORT RetainedObjectInfo;
 
 /**
  * Interface for controlling heap profiling. Instance of the
  * profiler can be retrieved using v8::Isolate::GetHeapProfiler.
  */
 class V8_EXPORT HeapProfiler {
- public:
-  enum SamplingFlags {
-    kSamplingNoFlags = 0,
-    kSamplingForceGC = 1 << 0,
-  };
+public:
+    enum SamplingFlags {
+        kSamplingNoFlags = 0,
+        kSamplingForceGC = 1 << 0,
+    };
 
-  /**
+    /**
+  * Callback function invoked for obtaining RetainedObjectInfo for
+  * the given JavaScript wrapper object. It is prohibited to enter V8
+  * while the callback is running: only getters on the handle and
+  * GetPointerFromInternalField on the objects are allowed.
+  */
+    typedef RetainedObjectInfo* (*WrapperInfoCallback)(uint16_t class_id, Local<Value> wrapper);
+
+    /**
    * Callback function invoked during heap snapshot generation to retrieve
    * the embedder object graph. The callback should use graph->AddEdge(..) to
    * add references between the objects.
    * The callback must not trigger garbage collection in V8.
    */
-  typedef void (*BuildEmbedderGraphCallback)(v8::Isolate* isolate,
-                                             v8::EmbedderGraph* graph,
-                                             void* data);
+    typedef void (*BuildEmbedderGraphCallback)(v8::Isolate* isolate,
+        v8::EmbedderGraph* graph,
+        void* data);
 
-  /** Returns the number of snapshots taken. */
-  int GetSnapshotCount();
+    /** Returns the number of snapshots taken. */
+    int GetSnapshotCount();
 
-  /** Returns a snapshot by index. */
-  const HeapSnapshot* GetHeapSnapshot(int index);
+    /** Returns a snapshot by index. */
+    const HeapSnapshot* GetHeapSnapshot(int index);
 
-  /**
+    /**
    * Returns SnapshotObjectId for a heap object referenced by |value| if
    * it has been seen by the heap profiler, kUnknownObjectId otherwise.
    */
-  SnapshotObjectId GetObjectId(Local<Value> value);
+    SnapshotObjectId GetObjectId(Local<Value> value);
 
-  /**
+    /**
    * Returns heap object with given SnapshotObjectId if the object is alive,
    * otherwise empty handle is returned.
    */
-  Local<Value> FindObjectById(SnapshotObjectId id);
+    Local<Value> FindObjectById(SnapshotObjectId id);
 
-  /**
+    /**
    * Clears internal map from SnapshotObjectId to heap object. The new objects
    * will not be added into it unless a heap snapshot is taken or heap object
    * tracking is kicked off.
    */
-  void ClearObjectIds();
+    void ClearObjectIds();
 
-  /**
+    /**
    * A constant for invalid SnapshotObjectId. GetSnapshotObjectId will return
    * it in case heap profiler cannot find id  for the object passed as
    * parameter. HeapSnapshot::GetNodeById will always return NULL for such id.
    */
-  static const SnapshotObjectId kUnknownObjectId = 0;
+    static const SnapshotObjectId kUnknownObjectId = 0;
 
-  /**
+    /**
    * Callback interface for retrieving user friendly names of global objects.
    */
-  class ObjectNameResolver {
-   public:
-    /**
+    class ObjectNameResolver {
+    public:
+        /**
      * Returns name to be used in the heap snapshot for given node. Returned
      * string must stay alive until snapshot collection is completed.
      */
-    virtual const char* GetName(Local<Object> object) = 0;
+        virtual const char* GetName(Local<Object> object) = 0;
 
-   protected:
-    virtual ~ObjectNameResolver() = default;
-  };
+    protected:
+        virtual ~ObjectNameResolver() = default;
+    };
 
-  /**
+    /**
    * Takes a heap snapshot and returns it.
    */
-  const HeapSnapshot* TakeHeapSnapshot(
-      ActivityControl* control = nullptr,
-      ObjectNameResolver* global_object_name_resolver = nullptr);
+    const HeapSnapshot* TakeHeapSnapshot(
+        ActivityControl* control = nullptr,
+        ObjectNameResolver* global_object_name_resolver = nullptr);
 
-  /**
+    /**
    * Starts tracking of heap objects population statistics. After calling
    * this method, all heap objects relocations done by the garbage collector
    * are being registered.
@@ -828,9 +862,9 @@ class V8_EXPORT HeapProfiler {
    * allocation in the heap will be recorded and reported as part of
    * HeapSnapshot.
    */
-  void StartTrackingHeapObjects(bool track_allocations = false);
+    void StartTrackingHeapObjects(bool track_allocations = false);
 
-  /**
+    /**
    * Adds a new time interval entry to the aggregated statistics array. The
    * time interval entry contains information on the current heap objects
    * population size. The method also updates aggregated statistics and
@@ -843,17 +877,17 @@ class V8_EXPORT HeapProfiler {
    * StartTrackingHeapObjects must be called before the first call to this
    * method.
    */
-  SnapshotObjectId GetHeapStats(OutputStream* stream,
-                                int64_t* timestamp_us = nullptr);
+    SnapshotObjectId GetHeapStats(OutputStream* stream,
+        int64_t* timestamp_us = nullptr);
 
-  /**
+    /**
    * Stops tracking of heap objects population statistics, cleans up all
    * collected data. StartHeapObjectsTracking must be called again prior to
    * calling GetHeapStats next time.
    */
-  void StopTrackingHeapObjects();
+    void StopTrackingHeapObjects();
 
-  /**
+    /**
    * Starts gathering a sampling heap profile. A sampling heap profile is
    * similar to tcmalloc's heap profiler and Go's mprof. It samples object
    * allocations and builds an online 'sampling' heap profile. At any point in
@@ -880,46 +914,131 @@ class V8_EXPORT HeapProfiler {
    *
    * Returns false if a sampling heap profiler is already running.
    */
-  bool StartSamplingHeapProfiler(uint64_t sample_interval = 512 * 1024,
-                                 int stack_depth = 16,
-                                 SamplingFlags flags = kSamplingNoFlags);
+    bool StartSamplingHeapProfiler(uint64_t sample_interval = 512 * 1024,
+        int stack_depth = 16,
+        SamplingFlags flags = kSamplingNoFlags);
 
-  /**
+    /**
    * Stops the sampling heap profile and discards the current profile.
    */
-  void StopSamplingHeapProfiler();
+    void StopSamplingHeapProfiler();
 
-  /**
+    /**
    * Returns the sampled profile of allocations allocated (and still live) since
    * StartSamplingHeapProfiler was called. The ownership of the pointer is
    * transferred to the caller. Returns nullptr if sampling heap profiler is not
    * active.
    */
-  AllocationProfile* GetAllocationProfile();
+    AllocationProfile* GetAllocationProfile();
 
-  /**
+    /**
    * Deletes all snapshots taken. All previously returned pointers to
    * snapshots and their contents become invalid after this call.
    */
-  void DeleteAllHeapSnapshots();
+    void DeleteAllHeapSnapshots();
 
-  void AddBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback,
-                                     void* data);
-  void RemoveBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback,
-                                        void* data);
+    /** Binds a callback to embedder's class ID. */
+    void SetWrapperClassInfoProvider(uint16_t class_id, WrapperInfoCallback callback); // weolar
 
-  /**
+    void AddBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback,
+        void* data);
+    void RemoveBuildEmbedderGraphCallback(BuildEmbedderGraphCallback callback,
+        void* data);
+
+    /**
    * Default value of persistent handle class ID. Must not be used to
    * define a class. Can be used to reset a class of a persistent
    * handle.
    */
-  static const uint16_t kPersistentHandleNoClassId = 0;
+    static const uint16_t kPersistentHandleNoClassId = 0;
 
- private:
-  HeapProfiler();
-  ~HeapProfiler();
-  HeapProfiler(const HeapProfiler&);
-  HeapProfiler& operator=(const HeapProfiler&);
+private:
+    HeapProfiler();
+    ~HeapProfiler();
+    HeapProfiler(const HeapProfiler&);
+    HeapProfiler& operator=(const HeapProfiler&);
+};
+
+/**
+* Interface for providing information about embedder's objects
+* held by global handles. This information is reported in two ways:
+*
+*  1. When calling AddObjectGroup, an embedder may pass
+*     RetainedObjectInfo instance describing the group.  To collect
+*     this information while taking a heap snapshot, V8 calls GC
+*     prologue and epilogue callbacks.
+*
+*  2. When a heap snapshot is collected, V8 additionally
+*     requests RetainedObjectInfos for persistent handles that
+*     were not previously reported via AddObjectGroup.
+*
+* Thus, if an embedder wants to provide information about native
+* objects for heap snapshots, it can do it in a GC prologue
+* handler, and / or by assigning wrapper class ids in the following way:
+*
+*  1. Bind a callback to class id by calling SetWrapperClassInfoProvider.
+*  2. Call SetWrapperClassId on certain persistent handles.
+*
+* V8 takes ownership of RetainedObjectInfo instances passed to it and
+* keeps them alive only during snapshot collection. Afterwards, they
+* are freed by calling the Dispose class function.
+*/
+class V8_EXPORT RetainedObjectInfo { // NOLINT
+public:
+    /** Called by V8 when it no longer needs an instance. */
+    virtual void Dispose() = 0;
+
+    /** Returns whether two instances are equivalent. */
+    virtual bool IsEquivalent(RetainedObjectInfo* other) = 0;
+
+    /**
+    * Returns hash value for the instance. Equivalent instances
+    * must have the same hash value.
+    */
+    virtual intptr_t GetHash() = 0;
+
+    /**
+    * Returns human-readable label. It must be a null-terminated UTF-8
+    * encoded string. V8 copies its contents during a call to GetLabel.
+    */
+    virtual const char* GetLabel() = 0;
+
+    /**
+    * Returns human-readable group label. It must be a null-terminated UTF-8
+    * encoded string. V8 copies its contents during a call to GetGroupLabel.
+    * Heap snapshot generator will collect all the group names, create
+    * top level entries with these names and attach the objects to the
+    * corresponding top level group objects. There is a default
+    * implementation which is required because embedders don't have their
+    * own implementation yet.
+    */
+    virtual const char* GetGroupLabel()
+    {
+        return GetLabel();
+    }
+
+    /**
+    * Returns element count in case if a global handle retains
+    * a subgraph by holding one of its nodes.
+    */
+    virtual intptr_t GetElementCount()
+    {
+        return -1;
+    }
+
+    /** Returns embedder's object size in bytes. */
+    virtual intptr_t GetSizeInBytes()
+    {
+        return -1;
+    }
+
+protected:
+    RetainedObjectInfo() { }
+    virtual ~RetainedObjectInfo() { }
+
+private:
+    RetainedObjectInfo(const RetainedObjectInfo&);
+    RetainedObjectInfo& operator=(const RetainedObjectInfo&);
 };
 
 /**
@@ -927,34 +1046,38 @@ class V8_EXPORT HeapProfiler {
  * See HeapProfiler::GetHeapStats.
  */
 struct HeapStatsUpdate {
-  HeapStatsUpdate(uint32_t index, uint32_t count, uint32_t size)
-    : index(index), count(count), size(size) { }
-  uint32_t index;  // Index of the time interval that was changed.
-  uint32_t count;  // New value of count field for the interval with this index.
-  uint32_t size;  // New value of size field for the interval with this index.
+    HeapStatsUpdate(uint32_t index, uint32_t count, uint32_t size)
+        : index(index)
+        , count(count)
+        , size(size)
+    {
+    }
+    uint32_t index; // Index of the time interval that was changed.
+    uint32_t count; // New value of count field for the interval with this index.
+    uint32_t size; // New value of size field for the interval with this index.
 };
 
 #define CODE_EVENTS_LIST(V) \
-  V(Builtin)                \
-  V(Callback)               \
-  V(Eval)                   \
-  V(Function)               \
-  V(InterpretedFunction)    \
-  V(Handler)                \
-  V(BytecodeHandler)        \
-  V(LazyCompile)            \
-  V(RegExp)                 \
-  V(Script)                 \
-  V(Stub)
+    V(Builtin)              \
+    V(Callback)             \
+    V(Eval)                 \
+    V(Function)             \
+    V(InterpretedFunction)  \
+    V(Handler)              \
+    V(BytecodeHandler)      \
+    V(LazyCompile)          \
+    V(RegExp)               \
+    V(Script)               \
+    V(Stub)
 
 /**
  * Note that this enum may be extended in the future. Please include a default
  * case if this enum is used in a switch statement.
  */
 enum CodeEventType {
-  kUnknownType = 0
+    kUnknownType = 0
 #define V(Name) , k##Name##Type
-  CODE_EVENTS_LIST(V)
+    CODE_EVENTS_LIST(V)
 #undef V
 };
 
@@ -962,50 +1085,49 @@ enum CodeEventType {
  * Representation of a code creation event
  */
 class V8_EXPORT CodeEvent {
- public:
-  uintptr_t GetCodeStartAddress();
-  size_t GetCodeSize();
-  Local<String> GetFunctionName();
-  Local<String> GetScriptName();
-  int GetScriptLine();
-  int GetScriptColumn();
-  /**
+public:
+    uintptr_t GetCodeStartAddress();
+    size_t GetCodeSize();
+    Local<String> GetFunctionName();
+    Local<String> GetScriptName();
+    int GetScriptLine();
+    int GetScriptColumn();
+    /**
    * NOTE (mmarchini): We can't allocate objects in the heap when we collect
    * existing code, and both the code type and the comment are not stored in the
    * heap, so we return those as const char*.
    */
-  CodeEventType GetCodeType();
-  const char* GetComment();
+    CodeEventType GetCodeType();
+    const char* GetComment();
 
-  static const char* GetCodeEventTypeName(CodeEventType code_event_type);
+    static const char* GetCodeEventTypeName(CodeEventType code_event_type);
 };
 
 /**
  * Interface to listen to code creation events.
  */
 class V8_EXPORT CodeEventHandler {
- public:
-  /**
+public:
+    /**
    * Creates a new listener for the |isolate|. The isolate must be initialized.
    * The listener object must be disposed after use by calling |Dispose| method.
    * Multiple listeners can be created for the same isolate.
    */
-  explicit CodeEventHandler(Isolate* isolate);
-  virtual ~CodeEventHandler();
+    explicit CodeEventHandler(Isolate* isolate);
+    virtual ~CodeEventHandler();
 
-  virtual void Handle(CodeEvent* code_event) = 0;
+    virtual void Handle(CodeEvent* code_event) = 0;
 
-  void Enable();
-  void Disable();
+    void Enable();
+    void Disable();
 
- private:
-  CodeEventHandler();
-  CodeEventHandler(const CodeEventHandler&);
-  CodeEventHandler& operator=(const CodeEventHandler&);
-  void* internal_listener_;
+private:
+    CodeEventHandler();
+    CodeEventHandler(const CodeEventHandler&);
+    CodeEventHandler& operator=(const CodeEventHandler&);
+    void* internal_listener_;
 };
 
-}  // namespace v8
+} // namespace v8
 
-
-#endif  // V8_V8_PROFILER_H_
+#endif // V8_V8_PROFILER_H_

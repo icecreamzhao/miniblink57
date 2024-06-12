@@ -28,4 +28,4 @@
 #error Unknown architecture.
 #endif
 
-#endif  // V8_REGISTER_ARCH_H_
+#endif // V8_REGISTER_ARCH_H_

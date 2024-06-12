@@ -28,25 +28,25 @@
 
 namespace blink {
 
-enum EUnicodeBidi {
-    UBNormal,
-    Embed,
-    Override,
-    Isolate,
-    Plaintext,
-    IsolateOverride,
+enum class UnicodeBidi : unsigned {
+    kNormal,
+    kEmbed,
+    kBidiOverride,
+    kIsolate,
+    kPlaintext,
+    kIsolateOverride,
 };
 
-inline bool isIsolated(const EUnicodeBidi& unicodeBidi)
+inline bool isIsolated(const UnicodeBidi& unicodeBidi)
 {
-    return unicodeBidi == Isolate || unicodeBidi == IsolateOverride || unicodeBidi == Plaintext;
+    return unicodeBidi == UnicodeBidi::kIsolate || unicodeBidi == UnicodeBidi::kIsolateOverride || unicodeBidi == UnicodeBidi::kPlaintext;
 }
 
-inline bool isOverride(EUnicodeBidi unicodeBidi)
+inline bool isOverride(UnicodeBidi unicodeBidi)
 {
-    return unicodeBidi == Override || unicodeBidi == IsolateOverride;
+    return unicodeBidi == UnicodeBidi::kBidiOverride || unicodeBidi == UnicodeBidi::kIsolateOverride;
 }
 
-}
+} // namespace blink
 
 #endif

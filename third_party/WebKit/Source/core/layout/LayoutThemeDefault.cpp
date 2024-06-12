@@ -22,69 +22,54 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutThemeDefault.h"
 
 #include "core/CSSValueKeywords.h"
-#include "core/layout/LayoutObject.h"
-#include "core/layout/LayoutProgress.h"
 #include "core/layout/LayoutThemeFontProvider.h"
 #include "core/paint/MediaControlsPainter.h"
+#include "core/style/ComputedStyle.h"
+#include "platform/HostWindow.h"
 #include "platform/LayoutTestSupport.h"
 #include "platform/PlatformResourceLoader.h"
 #include "platform/graphics/Color.h"
-#include "platform/scroll/ScrollbarTheme.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebThemeEngine.h"
+#include "wtf/text/StringBuilder.h"
 
 namespace blink {
-
-enum PaddingType {
-    TopPadding,
-    RightPadding,
-    BottomPadding,
-    LeftPadding
-};
-
-static const int styledMenuListInternalPadding[4] = { 1, 4, 1, 4 };
 
 // These values all match Safari/Win.
 static const float defaultControlFontPixelSize = 13;
 static const float defaultCancelButtonSize = 9;
 static const float minCancelButtonSize = 5;
 static const float maxCancelButtonSize = 21;
-static const float defaultSearchFieldResultsDecorationSize = 13;
-static const float minSearchFieldResultsDecorationSize = 9;
-static const float maxSearchFieldResultsDecorationSize = 30;
 
 static bool useMockTheme()
 {
-    return LayoutTestSupport::isRunningLayoutTest();
+    return LayoutTestSupport::isMockThemeEnabledForTest();
 }
 
 unsigned LayoutThemeDefault::m_activeSelectionBackgroundColor = 0xff1e90ff;
-unsigned LayoutThemeDefault::m_activeSelectionForegroundColor = Color::white; // Color::black;
+unsigned LayoutThemeDefault::m_activeSelectionForegroundColor = Color::black;
 unsigned LayoutThemeDefault::m_inactiveSelectionBackgroundColor = 0xffc8c8c8;
 unsigned LayoutThemeDefault::m_inactiveSelectionForegroundColor = 0xff323232;
 
 double LayoutThemeDefault::m_caretBlinkInterval;
 
 LayoutThemeDefault::LayoutThemeDefault()
+    : LayoutTheme(nullptr)
+    , m_painter(*this)
 {
     m_caretBlinkInterval = LayoutTheme::caretBlinkInterval();
 }
 
-LayoutThemeDefault::~LayoutThemeDefault()
-{
-}
+LayoutThemeDefault::~LayoutThemeDefault() { }
 
-bool LayoutThemeDefault::supportsFocusRing(const ComputedStyle& style) const
+bool LayoutThemeDefault::themeDrawsFocusRing(const ComputedStyle& style) const
 {
     if (useMockTheme()) {
         // Don't use focus rings for buttons when mocking controls.
-        return style.appearance() == ButtonPart
-            || style.appearance() == PushButtonPart
-            || style.appearance() == SquareButtonPart;
+        return style.appearance() == ButtonPart || style.appearance() == PushButtonPart || style.appearance() == SquareButtonPart;
     }
 
     // This causes Blink to draw the focus rings for us.
@@ -109,13 +94,17 @@ Color LayoutThemeDefault::systemColor(CSSValueID cssValueId) const
 // Use the Windows style sheets to match their metrics.
 String LayoutThemeDefault::extraDefaultStyleSheet()
 {
-    return LayoutTheme::extraDefaultStyleSheet()
-        + loadResourceAsASCIIString("themeWin.css")
-        + loadResourceAsASCIIString("themeChromiumSkia.css")
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-        + loadResourceAsASCIIString("themeInputMultipleFields.css")
-#endif
-        + loadResourceAsASCIIString("themeChromium.css");
+    String extraStyleSheet = LayoutTheme::extraDefaultStyleSheet();
+    String multipleFieldsStyleSheet = RuntimeEnabledFeatures::inputMultipleFieldsUIEnabled()
+        ? loadResourceAsASCIIString("themeInputMultipleFields.css")
+        : String();
+    String windowsStyleSheet = loadResourceAsASCIIString("themeWin.css");
+    StringBuilder builder;
+    builder.reserveCapacity(extraStyleSheet.length() + multipleFieldsStyleSheet.length() + windowsStyleSheet.length());
+    builder.append(extraStyleSheet);
+    builder.append(multipleFieldsStyleSheet);
+    builder.append(windowsStyleSheet);
+    return builder.toString();
 }
 
 String LayoutThemeDefault::extraQuirksStyleSheet()
@@ -185,9 +174,10 @@ int LayoutThemeDefault::sliderTickOffsetFromTrackCenter() const
     return -16;
 }
 
-void LayoutThemeDefault::adjustSliderThumbSize(ComputedStyle& style, Element* element) const
+void LayoutThemeDefault::adjustSliderThumbSize(ComputedStyle& style) const
 {
-    IntSize size = Platform::current()->themeEngine()->getSize(WebThemeEngine::PartSliderThumb);
+    IntSize size = Platform::current()->themeEngine()->getSize(
+        WebThemeEngine::PartSliderThumb);
 
     // FIXME: Mock theme doesn't handle zoomed sliders.
     float zoomLevel = useMockTheme() ? 1 : style.effectiveZoom();
@@ -202,13 +192,7 @@ void LayoutThemeDefault::adjustSliderThumbSize(ComputedStyle& style, Element* el
     }
 }
 
-void LayoutThemeDefault::setCaretBlinkInterval(double interval)
-{
-    m_caretBlinkInterval = interval;
-}
-
-void LayoutThemeDefault::setSelectionColors(
-    unsigned activeBackgroundColor,
+void LayoutThemeDefault::setSelectionColors(unsigned activeBackgroundColor,
     unsigned activeForegroundColor,
     unsigned inactiveBackgroundColor,
     unsigned inactiveForegroundColor)
@@ -245,12 +229,15 @@ void LayoutThemeDefault::setRadioSize(ComputedStyle& style) const
     setSizeIfAuto(style, size);
 }
 
-void LayoutThemeDefault::adjustInnerSpinButtonStyle(ComputedStyle& style, Element*) const
+void LayoutThemeDefault::adjustInnerSpinButtonStyle(
+    ComputedStyle& style) const
 {
-    IntSize size = Platform::current()->themeEngine()->getSize(WebThemeEngine::PartInnerSpinButton);
+    IntSize size = Platform::current()->themeEngine()->getSize(
+        WebThemeEngine::PartInnerSpinButton);
 
-    style.setWidth(Length(size.width(), Fixed));
-    style.setMinWidth(Length(size.width(), Fixed));
+    float zoomLevel = style.effectiveZoom();
+    style.setWidth(Length(size.width() * zoomLevel, Fixed));
+    style.setMinWidth(Length(size.width() * zoomLevel, Fixed));
 }
 
 bool LayoutThemeDefault::shouldOpenPickerWithF4Key() const
@@ -258,10 +245,12 @@ bool LayoutThemeDefault::shouldOpenPickerWithF4Key() const
     return true;
 }
 
-bool LayoutThemeDefault::shouldUseFallbackTheme(const ComputedStyle& style) const
+bool LayoutThemeDefault::shouldUseFallbackTheme(
+    const ComputedStyle& style) const
 {
     if (useMockTheme()) {
-        // The mock theme can't handle zoomed controls, so we fall back to the "fallback" theme.
+        // The mock theme can't handle zoomed controls, so we fall back to the
+        // "fallback" theme.
         ControlPart part = style.appearance();
         if (part == CheckboxPart || part == RadioPart)
             return style.effectiveZoom() != 1;
@@ -280,19 +269,14 @@ Color LayoutThemeDefault::platformFocusRingColor() const
     return focusRingColor;
 }
 
-double LayoutThemeDefault::caretBlinkInterval() const
+void LayoutThemeDefault::systemFont(CSSValueID systemFontID,
+    FontStyle& fontStyle,
+    FontWeight& fontWeight,
+    float& fontSize,
+    AtomicString& fontFamily) const
 {
-    // Disable the blinking caret in layout test mode, as it introduces
-    // a race condition for the pixel tests. http://b/1198440
-    if (LayoutTestSupport::isRunningLayoutTest())
-        return 0;
-
-    return m_caretBlinkInterval;
-}
-
-void LayoutThemeDefault::systemFont(CSSValueID systemFontID, FontStyle& fontStyle, FontWeight& fontWeight, float& fontSize, AtomicString& fontFamily) const
-{
-    LayoutThemeFontProvider::systemFont(systemFontID, fontStyle, fontWeight, fontSize, fontFamily);
+    LayoutThemeFontProvider::systemFont(systemFontID, fontStyle, fontWeight,
+        fontSize, fontFamily);
 }
 
 int LayoutThemeDefault::minimumMenuListSize(const ComputedStyle& style) const
@@ -312,7 +296,7 @@ IntRect center(const IntRect& original, int width, int height)
     return IntRect(x, y, width, height);
 }
 
-void LayoutThemeDefault::adjustButtonStyle(ComputedStyle& style, Element*) const
+void LayoutThemeDefault::adjustButtonStyle(ComputedStyle& style) const
 {
     if (style.appearance() == PushButtonPart) {
         // Ignore line-height.
@@ -320,67 +304,104 @@ void LayoutThemeDefault::adjustButtonStyle(ComputedStyle& style, Element*) const
     }
 }
 
-void LayoutThemeDefault::adjustSearchFieldStyle(ComputedStyle& style, Element*) const
+void LayoutThemeDefault::adjustSearchFieldStyle(ComputedStyle& style) const
 {
     // Ignore line-height.
     style.setLineHeight(ComputedStyle::initialLineHeight());
 }
 
-void LayoutThemeDefault::adjustSearchFieldCancelButtonStyle(ComputedStyle& style, Element*) const
+void LayoutThemeDefault::adjustSearchFieldCancelButtonStyle(
+    ComputedStyle& style) const
 {
     // Scale the button size based on the font size
     float fontScale = style.fontSize() / defaultControlFontPixelSize;
-    int cancelButtonSize = lroundf(std::min(std::max(minCancelButtonSize, defaultCancelButtonSize * fontScale), maxCancelButtonSize));
+    int cancelButtonSize = lroundf(std::min(
+        std::max(minCancelButtonSize, defaultCancelButtonSize * fontScale),
+        maxCancelButtonSize));
     style.setWidth(Length(cancelButtonSize, Fixed));
     style.setHeight(Length(cancelButtonSize, Fixed));
 }
 
-void LayoutThemeDefault::adjustSearchFieldDecorationStyle(ComputedStyle& style, Element*) const
-{
-    IntSize emptySize(1, 11);
-    style.setWidth(Length(emptySize.width(), Fixed));
-    style.setHeight(Length(emptySize.height(), Fixed));
-}
-
-void LayoutThemeDefault::adjustSearchFieldResultsDecorationStyle(ComputedStyle& style, Element*) const
-{
-    // Scale the decoration size based on the font size
-    float fontScale = style.fontSize() / defaultControlFontPixelSize;
-    int magnifierSize = lroundf(std::min(std::max(minSearchFieldResultsDecorationSize, defaultSearchFieldResultsDecorationSize * fontScale),
-        maxSearchFieldResultsDecorationSize));
-    style.setWidth(Length(magnifierSize, Fixed));
-    style.setHeight(Length(magnifierSize, Fixed));
-}
-
-void LayoutThemeDefault::adjustMenuListStyle(ComputedStyle& style, Element*) const
+void LayoutThemeDefault::adjustMenuListStyle(ComputedStyle& style,
+    Element*) const
 {
     // Height is locked to auto on all browsers.
     style.setLineHeight(ComputedStyle::initialLineHeight());
 }
 
-void LayoutThemeDefault::adjustMenuListButtonStyle(ComputedStyle& style, Element* e) const
+void LayoutThemeDefault::adjustMenuListButtonStyle(ComputedStyle& style,
+    Element* e) const
 {
     adjustMenuListStyle(style, e);
 }
 
-int LayoutThemeDefault::popupInternalPaddingLeft(const ComputedStyle& style) const
+// The following internal paddings are in addition to the user-supplied padding.
+// Matches the Firefox behavior.
+
+int LayoutThemeDefault::popupInternalPaddingStart(
+    const ComputedStyle& style) const
 {
-    return menuListInternalPadding(style, LeftPadding);
+    return menuListInternalPadding(style, 4);
 }
 
-int LayoutThemeDefault::popupInternalPaddingRight(const ComputedStyle& style) const
+int LayoutThemeDefault::popupInternalPaddingEnd(
+    const HostWindow* host,
+    const ComputedStyle& style) const
 {
-    return menuListInternalPadding(style, RightPadding);
+    if (style.appearance() == NoControlPart)
+        return 0;
+    return 1 * style.effectiveZoom() + clampedMenuListArrowPaddingSize(host, style);
 }
 
-int LayoutThemeDefault::popupInternalPaddingTop(const ComputedStyle& style) const
+int LayoutThemeDefault::popupInternalPaddingTop(
+    const ComputedStyle& style) const
 {
-    return menuListInternalPadding(style, TopPadding);
+    return menuListInternalPadding(style, 1);
 }
 
-int LayoutThemeDefault::popupInternalPaddingBottom(const ComputedStyle& style) const
+int LayoutThemeDefault::popupInternalPaddingBottom(
+    const ComputedStyle& style) const
 {
-    return menuListInternalPadding(style, BottomPadding);
+    return menuListInternalPadding(style, 1);
+}
+
+int LayoutThemeDefault::menuListArrowWidthInDIP() const
+{
+    int width = Platform::current()
+                    ->themeEngine()
+                    ->getSize(WebThemeEngine::PartScrollbarUpArrow)
+                    .width;
+    return width > 0 ? width : 15;
+}
+
+float LayoutThemeDefault::clampedMenuListArrowPaddingSize(
+    const HostWindow* host,
+    const ComputedStyle& style) const
+{
+    if (m_cachedMenuListArrowPaddingSize > 0 && style.effectiveZoom() == m_cachedMenuListArrowZoomLevel)
+        return m_cachedMenuListArrowPaddingSize;
+    m_cachedMenuListArrowZoomLevel = style.effectiveZoom();
+    int originalSize = menuListArrowWidthInDIP();
+    int scaledSize = host ? host->windowToViewportScalar(originalSize) : originalSize;
+    // The result should not be samller than the scrollbar thickness in order to
+    // secure space for scrollbar in popup.
+    float deviceScale = 1.0f * scaledSize / originalSize;
+    float size;
+    if (m_cachedMenuListArrowZoomLevel < deviceScale) {
+        size = scaledSize;
+    } else {
+        // The value should be zoomed though scrollbars aren't scaled by zoom.
+        // crbug.com/432795.
+        size = originalSize * m_cachedMenuListArrowZoomLevel;
+    }
+    m_cachedMenuListArrowPaddingSize = size;
+    return size;
+}
+
+void LayoutThemeDefault::didChangeThemeEngine()
+{
+    m_cachedMenuListArrowZoomLevel = 0;
+    m_cachedMenuListArrowPaddingSize = 0;
 }
 
 // static
@@ -389,32 +410,12 @@ void LayoutThemeDefault::setDefaultFontSize(int fontSize)
     LayoutThemeFontProvider::setDefaultFontSize(fontSize);
 }
 
-int LayoutThemeDefault::menuListArrowPadding() const
+int LayoutThemeDefault::menuListInternalPadding(const ComputedStyle& style,
+    int padding) const
 {
-    return ScrollbarTheme::theme()->scrollbarThickness();
-}
-
-int LayoutThemeDefault::menuListInternalPadding(const ComputedStyle& style, int paddingType) const
-{
-    // This internal padding is in addition to the user-supplied padding.
-    // Matches the FF behavior.
-    int padding = styledMenuListInternalPadding[paddingType];
-
-    // Reserve the space for right arrow here. The rest of the padding is
-    // set by adjustMenuListStyle, since PopMenuWin.cpp uses the padding from
-    // LayoutMenuList to lay out the individual items in the popup.
-    // If the MenuList actually has appearance "NoAppearance", then that means
-    // we don't draw a button, so don't reserve space for it.
-    const int barType = style.direction() == LTR ? RightPadding : LeftPadding;
-    if (paddingType == barType && style.appearance() != NoControlPart)
-        padding += menuListArrowPadding();
-
-    return padding;
-}
-
-bool LayoutThemeDefault::shouldShowPlaceholderWhenFocused() const
-{
-    return true;
+    if (style.appearance() == NoControlPart)
+        return 0;
+    return padding * style.effectiveZoom();
 }
 
 //

@@ -2,19 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/encryptedmedia/EncryptedMediaUtils.h"
 
 namespace blink {
 
 namespace {
 
-const char kTemporary[] = "temporary";
-const char kPersistentLicense[] = "persistent-license";
+    const char kTemporary[] = "temporary";
+    const char kPersistentLicense[] = "persistent-license";
 
 } // namespace
 
-WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(const String& initDataType)
+WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(
+    const String& initDataType)
 {
     if (initDataType == "cenc")
         return WebEncryptedMediaInitDataType::Cenc;
@@ -27,7 +27,8 @@ WebEncryptedMediaInitDataType EncryptedMediaUtils::convertToInitDataType(const S
     return WebEncryptedMediaInitDataType::Unknown;
 }
 
-String EncryptedMediaUtils::convertFromInitDataType(WebEncryptedMediaInitDataType initDataType)
+String EncryptedMediaUtils::convertFromInitDataType(
+    WebEncryptedMediaInitDataType initDataType)
 {
     switch (initDataType) {
     case WebEncryptedMediaInitDataType::Cenc:
@@ -42,11 +43,12 @@ String EncryptedMediaUtils::convertFromInitDataType(WebEncryptedMediaInitDataTyp
         return String();
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return String();
 }
 
-WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(const String& sessionType)
+WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(
+    const String& sessionType)
 {
     if (sessionType == kTemporary)
         return WebEncryptedMediaSessionType::Temporary;
@@ -57,7 +59,8 @@ WebEncryptedMediaSessionType EncryptedMediaUtils::convertToSessionType(const Str
     return WebEncryptedMediaSessionType::Unknown;
 }
 
-String EncryptedMediaUtils::convertFromSessionType(WebEncryptedMediaSessionType sessionType)
+String EncryptedMediaUtils::convertFromSessionType(
+    WebEncryptedMediaSessionType sessionType)
 {
     switch (sessionType) {
     case WebEncryptedMediaSessionType::Temporary:
@@ -68,11 +71,11 @@ String EncryptedMediaUtils::convertFromSessionType(WebEncryptedMediaSessionType 
     case WebEncryptedMediaSessionType::PersistentReleaseMessage:
     case WebEncryptedMediaSessionType::Unknown:
         // Chromium should not use Unknown.
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
         return String();
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return String();
 }
 

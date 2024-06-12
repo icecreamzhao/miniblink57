@@ -27,6 +27,7 @@
 #define GraphicsLayerClient_h
 
 #include "platform/PlatformExport.h"
+#include "platform/geometry/LayoutSize.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -42,36 +43,50 @@ enum GraphicsLayerPaintingPhaseFlags {
     GraphicsLayerPaintOverflowContents = (1 << 3),
     GraphicsLayerPaintCompositedScroll = (1 << 4),
     GraphicsLayerPaintChildClippingMask = (1 << 5),
-    GraphicsLayerPaintAllWithOverflowClip = (GraphicsLayerPaintBackground | GraphicsLayerPaintForeground | GraphicsLayerPaintMask)
+    GraphicsLayerPaintAncestorClippingMask = (1 << 6),
+    GraphicsLayerPaintDecoration = (1 << 7),
+    GraphicsLayerPaintAllWithOverflowClip = (GraphicsLayerPaintBackground | GraphicsLayerPaintForeground | GraphicsLayerPaintMask | GraphicsLayerPaintDecoration)
 };
 typedef unsigned GraphicsLayerPaintingPhase;
 
 enum {
     LayerTreeNormal = 0,
-    LayerTreeIncludesDebugInfo = 1 << 0, // Dump extra debugging info like layer addresses.
-    LayerTreeIncludesPaintInvalidationRects = 1 << 1,
+    // Dump extra debugging info like layer addresses.
+    LayerTreeIncludesDebugInfo = 1 << 0,
+    LayerTreeIncludesPaintInvalidations = 1 << 1,
     LayerTreeIncludesPaintingPhases = 1 << 2,
     LayerTreeIncludesRootLayer = 1 << 3,
     LayerTreeIncludesClipAndScrollParents = 1 << 4,
-    LayerTreeIncludesScrollBlocksOn = 1 << 5,
-    LayerTreeIncludesPaintInvalidationObjects = 1 << 6,
-    LayerTreeIncludesCompositingReasons = 1 << 7,
+    LayerTreeIncludesCompositingReasons = 1 << 5,
+    // Outputs all layers as a layer tree. The default is output children
+    // (excluding the root) as a layer list, in paint (preorder) order.
+    OutputAsLayerTree = 1 << 6,
 };
 typedef unsigned LayerTreeFlags;
 
 class PLATFORM_EXPORT GraphicsLayerClient {
 public:
-    virtual ~GraphicsLayerClient() {}
+    virtual ~GraphicsLayerClient() { }
 
-    // Callback for when compositor animation started.
-    virtual void notifyAnimationStarted(const GraphicsLayer*, double monotonicTime, int group) { }
+    virtual void invalidateTargetElementForTesting() { }
 
-    virtual void paintContents(const GraphicsLayer*, GraphicsContext&, GraphicsLayerPaintingPhase, const IntRect& inClip) = 0;
-    virtual bool isTrackingPaintInvalidations() const { return false; }
+    virtual IntRect computeInterestRect(
+        const GraphicsLayer*,
+        const IntRect& previousInterestRect) const = 0;
+    virtual LayoutSize subpixelAccumulation() const { return LayoutSize(); }
+    // Returns whether the client needs to be repainted with respect to the given
+    // graphics layer.
+    virtual bool needsRepaint(const GraphicsLayer&) const = 0;
+    virtual void paintContents(const GraphicsLayer*,
+        GraphicsContext&,
+        GraphicsLayerPaintingPhase,
+        const IntRect& interestRect) const = 0;
 
-    virtual String debugName(const GraphicsLayer*) = 0;
+    virtual bool isTrackingRasterInvalidations() const { return false; }
 
-#if ENABLE(ASSERT)
+    virtual String debugName(const GraphicsLayer*) const = 0;
+
+#if DCHECK_IS_ON()
     // CompositedLayerMapping overrides this to verify that it is not
     // currently painting contents. An ASSERT fails, if it is.
     // This is executed in GraphicsLayer construction and destruction

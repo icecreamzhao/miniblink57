@@ -1,0 +1,11 @@
+../../components/sync/android/java/src/org/chromium/components/sync/AndroidSyncSettings.java
+../../components/sync/android/java/src/org/chromium/components/sync/ModelTypeHelper.java
+../../components/sync/android/java/src/org/chromium/components/sync/PassphraseType.java
+../../components/sync/android/java/src/org/chromium/components/sync/SyncConstants.java
+../../components/sync/android/java/src/org/chromium/components/sync/SyncContentResolverDelegate.java
+../../components/sync/android/java/src/org/chromium/components/sync/SystemSyncContentResolverDelegate.java
+../../components/sync/android/java/src/org/chromium/components/sync/notifier/InvalidationClientNameGenerator.java
+../../components/sync/android/java/src/org/chromium/components/sync/notifier/InvalidationClientNameProvider.java
+../../components/sync/android/java/src/org/chromium/components/sync/notifier/InvalidationIntentProtocol.java
+../../components/sync/android/java/src/org/chromium/components/sync/notifier/InvalidationPreferences.java
+../../components/sync/android/java/src/org/chromium/components/sync/notifier/RandomizedInvalidationClientNameGenerator.java

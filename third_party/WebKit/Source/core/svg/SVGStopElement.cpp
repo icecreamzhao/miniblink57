@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGStopElement.h"
 
 #include "core/layout/svg/LayoutSVGGradientStop.h"
@@ -27,7 +26,9 @@ namespace blink {
 
 inline SVGStopElement::SVGStopElement(Document& document)
     : SVGElement(SVGNames::stopTag, document)
-    , m_offset(SVGAnimatedNumber::create(this, SVGNames::offsetAttr, SVGNumberAcceptPercentage::create()))
+    , m_offset(SVGAnimatedNumber::create(this,
+          SVGNames::offsetAttr,
+          SVGNumberAcceptPercentage::create()))
 {
     addToPropertyMap(m_offset);
 }
@@ -66,9 +67,10 @@ bool SVGStopElement::layoutObjectIsNeeded(const ComputedStyle&)
 Color SVGStopElement::stopColorIncludingOpacity() const
 {
     const ComputedStyle* style = layoutObject() ? layoutObject()->style() : nullptr;
-    // FIXME: This check for null style exists to address Bug WK 90814, a rare crash condition in
-    // which the layoutObject or style is null. This entire class is scheduled for removal (Bug WK 86941)
-    // and we will tolerate this null check until then.
+    // FIXME: This check for null style exists to address Bug WK 90814, a rare
+    // crash condition in which the layoutObject or style is null. This entire
+    // class is scheduled for removal (Bug WK 86941) and we will tolerate this
+    // null check until then.
     if (!style)
         return Color(Color::transparent); // Transparent black.
 

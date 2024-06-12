@@ -26,10 +26,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/DatabaseAuthorizer.h"
 
-#include <sqlite3.h>
+#include "third_party/sqlite/sqlite3.h"
 
 namespace blink {
 

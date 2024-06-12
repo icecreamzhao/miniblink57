@@ -12,34 +12,34 @@
 namespace ots {
 
 struct OpenTypeVDMXRatioRecord {
-  uint8_t charset;
-  uint8_t x_ratio;
-  uint8_t y_start_ratio;
-  uint8_t y_end_ratio;
+    uint8_t charset;
+    uint8_t x_ratio;
+    uint8_t y_start_ratio;
+    uint8_t y_end_ratio;
 };
 
 struct OpenTypeVDMXVTable {
-  uint16_t y_pel_height;
-  int16_t y_max;
-  int16_t y_min;
+    uint16_t y_pel_height;
+    int16_t y_max;
+    int16_t y_min;
 };
 
 struct OpenTypeVDMXGroup {
-  uint16_t recs;
-  uint8_t startsz;
-  uint8_t endsz;
-  std::vector<OpenTypeVDMXVTable> entries;
+    uint16_t recs;
+    uint8_t startsz;
+    uint8_t endsz;
+    std::vector<OpenTypeVDMXVTable> entries;
 };
 
 struct OpenTypeVDMX {
-  uint16_t version;
-  uint16_t num_recs;
-  uint16_t num_ratios;
-  std::vector<OpenTypeVDMXRatioRecord> rat_ranges;
-  std::vector<uint16_t> offsets;
-  std::vector<OpenTypeVDMXGroup> groups;
+    uint16_t version;
+    uint16_t num_recs;
+    uint16_t num_ratios;
+    std::vector<OpenTypeVDMXRatioRecord> rat_ranges;
+    std::vector<uint16_t> offsets;
+    std::vector<OpenTypeVDMXGroup> groups;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_VDMX_H_
+#endif // OTS_VDMX_H_

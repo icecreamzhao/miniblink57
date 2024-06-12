@@ -28,13 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "WTF.h"
+#include "wtf/WTF.h"
 
-#include "wtf/ArrayBufferContents.h"
 #include "wtf/Assertions.h"
-#include "wtf/FastMalloc.h"
-#include "wtf/Partitions.h"
+#include "wtf/Functional.h"
+#include "wtf/Threading.h"
+#include "wtf/allocator/Partitions.h"
+#include "wtf/text/AtomicString.h"
+#include "wtf/text/StringStatics.h"
+#include "wtf/typed_arrays/ArrayBufferContents.h"
 
 namespace WTF {
 
@@ -42,41 +44,43 @@ extern void initializeThreading();
 
 bool s_initialized;
 bool s_shutdown;
+void (*s_callOnMainThreadFunction)(MainThreadFunction, void*);
+ThreadIdentifier s_mainThreadIdentifier;
 
-static void maxObservedSizeFunction(size_t sizeInMB)
+namespace internal {
+
+    void callOnMainThread(MainThreadFunction* function, void* context)
+    {
+        (*s_callOnMainThreadFunction)(function, context);
+    }
+
+} // namespace internal
+
+bool isMainThread()
 {
-//     const size_t supportedMaxSizeInMB = 4 * 1024;
-//     if (sizeInMB >= supportedMaxSizeInMB)
-//         sizeInMB = supportedMaxSizeInMB - 1;
-// 
-//     // Send a UseCounter only when we see the highest memory usage
-//     // we've ever seen.
-//     DEFINE_STATIC_LOCAL(EnumerationHistogram, committedSizeHistogram, ("PartitionAlloc.CommittedSize", supportedMaxSizeInMB));
-//     committedSizeHistogram.count(sizeInMB);
+    return currentThread() == s_mainThreadIdentifier;
 }
 
-void initialize(TimeFunction currentTimeFunction, TimeFunction monotonicallyIncreasingTimeFunction, TimeFunction systemTraceTimeFunction, HistogramEnumerationFunction histogramEnumerationFunction, AdjustAmountOfExternalAllocatedMemoryFunction adjustAmountOfExternalAllocatedMemoryFunction)
+void initialize(void (*callOnMainThreadFunction)(MainThreadFunction, void*))
 {
-    // WTF, and Blink in general, cannot handle being re-initialized, even if shutdown first.
-    // Make that explicit here.
-    ASSERT(!s_initialized);
-    ASSERT(!s_shutdown);
+    // WTF, and Blink in general, cannot handle being re-initialized, even if
+    // shutdown first.  Make that explicit here.
+    RELEASE_ASSERT(!s_initialized);
+    RELEASE_ASSERT(!s_shutdown);
     s_initialized = true;
-    setCurrentTimeFunction(currentTimeFunction);
-    setMonotonicallyIncreasingTimeFunction(monotonicallyIncreasingTimeFunction);
-    setSystemTraceTimeFunction(systemTraceTimeFunction);
-    Partitions::initialize(maxObservedSizeFunction);
-    //Partitions::setHistogramEnumeration(histogramEnumerationFunction);
-    ArrayBufferContents::setAdjustAmoutOfExternalAllocatedMemoryFunction(adjustAmountOfExternalAllocatedMemoryFunction);
     initializeThreading();
+
+    s_callOnMainThreadFunction = callOnMainThreadFunction;
+    s_mainThreadIdentifier = currentThread();
+    AtomicString::init();
+    StringStatics::init();
 }
 
 void shutdown()
 {
-    ASSERT(s_initialized);
-    ASSERT(!s_shutdown);
+    RELEASE_ASSERT(s_initialized);
+    RELEASE_ASSERT(!s_shutdown);
     s_shutdown = true;
-    Partitions::shutdown();
 }
 
 bool isShutdown()

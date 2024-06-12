@@ -8,33 +8,36 @@
 #include "SampleCode.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
+#include "SkPath.h"
 #include "SkRandom.h"
 #include "SkView.h"
 
 // Generates y values for the chart plots.
-static void gen_data(SkScalar yAvg, SkScalar ySpread, int count, SkTDArray<SkScalar>* dataPts) {
+static void gen_data(SkScalar yAvg, SkScalar ySpread, int count, SkTDArray<SkScalar>* dataPts)
+{
     dataPts->setCount(count);
     static SkRandom gRandom;
     for (int i = 0; i < count; ++i) {
         (*dataPts)[i] = gRandom.nextRangeScalar(yAvg - SkScalarHalf(ySpread),
-                                                yAvg + SkScalarHalf(ySpread));
+            yAvg + SkScalarHalf(ySpread));
     }
 }
 
 // Generates a path to stroke along the top of each plot and a fill path for the area below each
 // plot. The fill path is bounded below by the bottomData plot points or a horizontal line at
-// yBase if bottomData == NULL.
+// yBase if bottomData == nullptr.
 // The plots are animated by rotating the data points by leftShift.
 static void gen_paths(const SkTDArray<SkScalar>& topData,
-                      const SkTDArray<SkScalar>* bottomData,
-                      SkScalar yBase,
-                      SkScalar xLeft, SkScalar xDelta,
-                      int leftShift,
-                      SkPath* plot, SkPath* fill) {
+    const SkTDArray<SkScalar>* bottomData,
+    SkScalar yBase,
+    SkScalar xLeft, SkScalar xDelta,
+    int leftShift,
+    SkPath* plot, SkPath* fill)
+{
     plot->rewind();
     fill->rewind();
     plot->incReserve(topData.count());
-    if (NULL == bottomData) {
+    if (nullptr == bottomData) {
         fill->incReserve(topData.count() + 2);
     } else {
         fill->incReserve(2 * topData.count());
@@ -82,13 +85,15 @@ static void gen_paths(const SkTDArray<SkScalar>& topData,
 // filling
 class ChartView : public SampleView {
 public:
-    ChartView() {
+    ChartView()
+    {
         fShift = 0;
         fSize.set(-1, -1);
     }
 
 protected:
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Chart");
             return true;
@@ -96,7 +101,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         bool sizeChanged = false;
         if (canvas->getDeviceSize() != fSize) {
             fSize = canvas->getDeviceSize();
@@ -141,16 +147,16 @@ protected:
         fillPaint.setAntiAlias(true);
         fillPaint.setStyle(SkPaint::kFill_Style);
 
-        SkTDArray<SkScalar>* prevData = NULL;
+        SkTDArray<SkScalar>* prevData = nullptr;
         for (int i = 0; i < kNumGraphs; ++i) {
             gen_paths(fData[i],
-                      prevData,
-                      height,
-                      0,
-                      SkIntToScalar(kPixelsPerTick),
-                      fShift,
-                      &plotPath,
-                      &fillPath);
+                prevData,
+                height,
+                0,
+                SkIntToScalar(kPixelsPerTick),
+                fShift,
+                &plotPath,
+                &fillPath);
 
             // Make the fills partially transparent
             fillPaint.setColor((gColors[i] & 0x00ffffff) | 0x80000000);
@@ -163,7 +169,7 @@ protected:
         }
 
         fShift += kShiftPerFrame;
-        this->inval(NULL);
+        this->inval(nullptr);
     }
 
 private:
@@ -172,8 +178,8 @@ private:
         kPixelsPerTick = 3,
         kShiftPerFrame = 1,
     };
-    int                 fShift;
-    SkISize             fSize;
+    int fShift;
+    SkISize fSize;
     SkTDArray<SkScalar> fData[kNumGraphs];
     typedef SampleView INHERITED;
 };

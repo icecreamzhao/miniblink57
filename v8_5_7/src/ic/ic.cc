@@ -36,6 +36,10 @@
 #include "src/tracing/trace-event.h"
 #include "src/tracing/tracing-category-observer.h"
 
+namespace wke {
+extern bool g_enableSkipJsError;
+}
+
 namespace v8 {
 namespace internal {
 
@@ -665,6 +669,18 @@ void IC::ConfigureVectorState(MapHandleList* maps,
 }
 
 
+v8::Object* CreateFixErrObj(v8::Isolate* isolate) {
+  v8::Local<v8::Context> ctx = (isolate)->GetCurrentContext();
+  v8::Local<v8::Object> global = ctx->Global();
+
+  v8::MaybeLocal<v8::String> prop = v8::String::NewFromUtf8(isolate, "fixErrObj", v8::NewStringType::kNormal, -1);
+  v8::Local<v8::String> propLocal = prop.ToLocalChecked();
+
+  v8::MaybeLocal<Value> val = global->Get(ctx, propLocal);
+  v8::Local<Value> ret = val.ToLocalChecked();
+  return v8::Object::Cast(*ret);
+}
+
 MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
   // If the object is undefined or null it's illegal to try to get any
   // of its properties; throw a TypeError in that case.
@@ -676,7 +692,10 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
       PatchCache(name, slow_stub());
       TRACE_IC("LoadIC", name);
     }
-    return TypeError(MessageTemplate::kNonObjectPropertyLoad, object, name);
+    if (wke::g_enableSkipJsError)
+      object = Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate())); // weolar
+    else
+      return TypeError(MessageTemplate::kNonObjectPropertyLoad, object, name);
   }
 
   bool use_ic = MigrateDeprecated(object) ? false : FLAG_use_ic;
@@ -705,7 +724,10 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
       return result;
     }
   }
-  return ReferenceError(name);
+  if (wke::g_enableSkipJsError)
+    return Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate()));
+  else
+    return ReferenceError(name);
 }
 
 MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name) {
@@ -1625,7 +1647,7 @@ static Handle<Object> TryConvertKey(Handle<Object> key, Isolate* isolate) {
   // non-smi keys of keyed loads/stores to a smi or a string.
   if (key->IsHeapNumber()) {
     double value = Handle<HeapNumber>::cast(key)->value();
-    if (std::isnan(value)) {
+    if (std_isnan(value)) {
       key = isolate->factory()->nan_string();
     } else {
       int int_value = FastD2I(value);
@@ -1883,7 +1905,11 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       PatchCache(name, slow_stub());
       TRACE_IC("StoreIC", name);
     }
-    return TypeError(MessageTemplate::kNonObjectPropertyStore, object, name);
+
+    if (wke::g_enableSkipJsError)
+      object = Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate())); // weolar
+    else
+      return TypeError(MessageTemplate::kNonObjectPropertyStore, object, name);
   }
 
   if (state() != UNINITIALIZED) {
@@ -3253,6 +3279,9 @@ RUNTIME_FUNCTION(Runtime_LoadPropertyWithInterceptor) {
   if (!ic.ShouldThrowReferenceError()) {
     return isolate->heap()->undefined_value();
   }
+
+  if (wke::g_enableSkipJsError)
+    return isolate->heap()->undefined_value();
 
   // Throw a reference error.
   THROW_NEW_ERROR_RETURN_FAILURE(

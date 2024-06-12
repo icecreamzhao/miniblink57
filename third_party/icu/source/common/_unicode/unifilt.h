@@ -86,9 +86,9 @@ public:
      * @stable ICU 2.4
      */
     virtual UMatchDegree matches(const Replaceable& text,
-                                 int32_t& offset,
-                                 int32_t limit,
-                                 UBool incremental);
+        int32_t& offset,
+        int32_t limit,
+        UBool incremental);
 
     /**
      * UnicodeFunctor API.  Nothing to do.
@@ -104,13 +104,12 @@ public:
     static UClassID U_EXPORT2 getStaticClassID();
 
 protected:
-
     /*
      * Since this class has pure virtual functions,
      * a constructor can't be used.
      * @stable ICU 2.0
      */
-/*    UnicodeFilter();*/
+    /*    UnicodeFilter();*/
 };
 
 /*inline UnicodeFilter::UnicodeFilter() {}*/

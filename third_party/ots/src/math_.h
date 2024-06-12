@@ -10,16 +10,16 @@
 namespace ots {
 
 struct OpenTypeMATH {
-  OpenTypeMATH()
-      : data(NULL),
-        length(0) {
-  }
+    OpenTypeMATH()
+        : data(NULL)
+        , length(0)
+    {
+    }
 
-  const uint8_t *data;
-  size_t length;
+    const uint8_t* data;
+    size_t length;
 };
 
-}  // namespace ots
+} // namespace ots
 
 #endif
-

@@ -31,58 +31,88 @@
 #ifndef MixedContentChecker_h
 #define MixedContentChecker_h
 
+#include "base/gtest_prod_util.h"
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "platform/network/ResourceRequest.h"
+#include "public/platform/WebMixedContentContextType.h"
 #include "public/platform/WebURLRequest.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class FrameLoaderClient;
+class Frame;
 class LocalFrame;
 class KURL;
+class ResourceResponse;
 class SecurityOrigin;
 
 class CORE_EXPORT MixedContentChecker final {
     WTF_MAKE_NONCOPYABLE(MixedContentChecker);
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
-    enum ReportingStatus { SendReport, SuppressReport };
-    static bool shouldBlockFetch(LocalFrame*, WebURLRequest::RequestContext, WebURLRequest::FrameType, const KURL&, ReportingStatus = SendReport);
-    static bool shouldBlockFetch(LocalFrame* frame, const ResourceRequest& request, const KURL& url, ReportingStatus status = SendReport)
+    enum ReportingStatus { SendReport,
+        SuppressReport };
+    static bool shouldBlockFetch(LocalFrame*,
+        WebURLRequest::RequestContext,
+        WebURLRequest::FrameType,
+        ResourceRequest::RedirectStatus,
+        const KURL&,
+        ReportingStatus = SendReport);
+    static bool shouldBlockFetch(LocalFrame* frame,
+        const ResourceRequest& request,
+        const KURL& url,
+        ReportingStatus status = SendReport)
     {
-        return shouldBlockFetch(frame, request.requestContext(), request.frameType(), url, status);
+        return shouldBlockFetch(frame, request.requestContext(),
+            request.frameType(), request.redirectStatus(), url,
+            status);
     }
 
-    static bool shouldBlockWebSocket(LocalFrame*, const KURL&, ReportingStatus = SendReport);
+    static bool shouldBlockWebSocket(LocalFrame*,
+        const KURL&,
+        ReportingStatus = SendReport);
 
     static bool isMixedContent(SecurityOrigin*, const KURL&);
-    static bool isMixedFormAction(LocalFrame*, const KURL&, ReportingStatus = SendReport);
+    static bool isMixedFormAction(LocalFrame*,
+        const KURL&,
+        ReportingStatus = SendReport);
 
-    static void checkMixedPrivatePublic(LocalFrame*, const AtomicString& resourceIPAddress);
+    static void checkMixedPrivatePublic(LocalFrame*,
+        const AtomicString& resourceIPAddress);
+
+    static WebMixedContentContextType contextTypeForInspector(
+        LocalFrame*,
+        const ResourceRequest&);
+
+    // Returns the frame that should be considered the effective frame
+    // for a mixed content check for the given frame type.
+    static Frame* effectiveFrameForFrameType(LocalFrame*,
+        WebURLRequest::FrameType);
+
+    static void handleCertificateError(LocalFrame*,
+        const ResourceResponse&,
+        WebURLRequest::FrameType,
+        WebURLRequest::RequestContext);
 
 private:
-    enum MixedContentType {
-        Display,
-        Execution,
-        WebSocket,
-        Submission
-    };
+    FRIEND_TEST_ALL_PREFIXES(MixedContentCheckerTest, HandleCertificateError);
 
-    enum ContextType {
-        ContextTypeBlockable,
-        ContextTypeOptionallyBlockable,
-        ContextTypeShouldBeBlockable,
-    };
+    static Frame* inWhichFrameIsContentMixed(Frame*,
+        WebURLRequest::FrameType,
+        const KURL&);
 
-    static LocalFrame* inWhichFrameIsContentMixed(LocalFrame*, WebURLRequest::FrameType, const KURL&);
-
-    static ContextType contextTypeFromContext(WebURLRequest::RequestContext);
-    static const char* typeNameFromContext(WebURLRequest::RequestContext);
-    static void logToConsoleAboutFetch(LocalFrame*, const KURL&, WebURLRequest::RequestContext, bool allowed);
-    static void logToConsoleAboutWebSocket(LocalFrame*, const KURL&, bool allowed);
-    static void count(LocalFrame*, WebURLRequest::RequestContext);
+    static void logToConsoleAboutFetch(LocalFrame*,
+        const KURL&,
+        const KURL&,
+        WebURLRequest::RequestContext,
+        bool allowed);
+    static void logToConsoleAboutWebSocket(LocalFrame*,
+        const KURL&,
+        const KURL&,
+        bool allowed);
+    static void count(Frame*, WebURLRequest::RequestContext);
 };
 
 } // namespace blink

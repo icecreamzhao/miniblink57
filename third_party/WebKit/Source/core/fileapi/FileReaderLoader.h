@@ -34,12 +34,14 @@
 #include "core/CoreExport.h"
 #include "core/fileapi/FileError.h"
 #include "core/loader/ThreadableLoaderClient.h"
+#include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/ArrayBufferBuilder.h"
 #include "wtf/Forward.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/TextEncoding.h"
 #include "wtf/text/WTFString.h"
+#include "wtf/typed_arrays/ArrayBufferBuilder.h"
+#include <memory>
 
 namespace blink {
 
@@ -47,12 +49,12 @@ class BlobDataHandle;
 class DOMArrayBuffer;
 class ExecutionContext;
 class FileReaderLoaderClient;
-class Stream;
 class TextResourceDecoder;
 class ThreadableLoader;
 
 class CORE_EXPORT FileReaderLoader final : public ThreadableLoaderClient {
-    WTF_MAKE_FAST_ALLOCATED(FileReaderLoader);
+    USING_FAST_MALLOC(FileReaderLoader);
+
 public:
     enum ReadType {
         ReadAsArrayBuffer,
@@ -62,27 +64,30 @@ public:
         ReadByClient
     };
 
-    // If client is given, do the loading asynchronously. Otherwise, load synchronously.
-    static PassOwnPtr<FileReaderLoader> create(ReadType readType, FileReaderLoaderClient* client)
+    // If client is given, do the loading asynchronously. Otherwise, load
+    // synchronously.
+    static std::unique_ptr<FileReaderLoader> create(
+        ReadType readType,
+        FileReaderLoaderClient* client)
     {
-        return adoptPtr(new FileReaderLoader(readType, client));
+        return WTF::wrapUnique(new FileReaderLoader(readType, client));
     }
 
-    FileReaderLoader(ReadType, FileReaderLoaderClient*);
-    virtual ~FileReaderLoader();
+    ~FileReaderLoader() override;
 
     void start(ExecutionContext*, PassRefPtr<BlobDataHandle>);
-    void start(ExecutionContext*, const Stream&, unsigned readSize);
     void cancel();
 
     // ThreadableLoaderClient
-    virtual void didReceiveResponse(unsigned long, const ResourceResponse&, PassOwnPtr<WebDataConsumerHandle>) override;
-    virtual void didReceiveData(const char*, unsigned) override;
-    virtual void didFinishLoading(unsigned long, double) override;
-    virtual void didFail(const ResourceError&) override;
+    void didReceiveResponse(unsigned long,
+        const ResourceResponse&,
+        std::unique_ptr<WebDataConsumerHandle>) override;
+    void didReceiveData(const char*, unsigned) override;
+    void didFinishLoading(unsigned long, double) override;
+    void didFail(const ResourceError&) override;
 
+    DOMArrayBuffer* arrayBufferResult();
     String stringResult();
-    PassRefPtr<DOMArrayBuffer> arrayBufferResult() const;
 
     // Returns the total bytes received. Bytes ignored by m_rawData won't be
     // counted.
@@ -105,8 +110,8 @@ public:
     void setDataType(const String& dataType) { m_dataType = dataType; }
 
 private:
-    void startInternal(ExecutionContext&, const Stream*, PassRefPtr<BlobDataHandle>);
-    void terminate();
+    FileReaderLoader(ReadType, FileReaderLoaderClient*);
+
     void cleanup();
 
     void failed(FileError::ErrorCode);
@@ -121,16 +126,16 @@ private:
     String m_dataType;
 
     KURL m_urlForReading;
-    bool m_urlForReadingIsStream;
-    RefPtr<ThreadableLoader> m_loader;
+    Persistent<ThreadableLoader> m_loader;
 
-    OwnPtr<ArrayBufferBuilder> m_rawData;
+    std::unique_ptr<ArrayBufferBuilder> m_rawData;
     bool m_isRawDataConverted;
 
+    Persistent<DOMArrayBuffer> m_arrayBufferResult;
     String m_stringResult;
 
     // The decoder used to decode the text data.
-    OwnPtr<TextResourceDecoder> m_decoder;
+    std::unique_ptr<TextResourceDecoder> m_decoder;
 
     bool m_finishedLoading;
     long long m_bytesLoaded;

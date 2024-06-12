@@ -6,16 +6,15 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKCANVASWIDGET_H_
 #define SKCANVASWIDGET_H_
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include "SkStream.h"
-#include "SkRasterWidget.h"
-#include "SkGLWidget.h"
 #include "SkDebugger.h"
+#include "SkGLWidget.h"
+#include "SkRasterWidget.h"
+#include "SkStream.h"
+#include <QHBoxLayout>
+#include <QWidget>
 
 class SkCanvasWidget : public QWidget {
     Q_OBJECT
@@ -28,7 +27,7 @@ public:
     enum WidgetType {
         kRaster_8888_WidgetType = 1 << 0,
 #if SK_SUPPORT_GPU
-        kGPU_WidgetType         = 1 << 1,
+        kGPU_WidgetType = 1 << 1,
 #endif
     };
 
@@ -49,14 +48,14 @@ public:
         kIn_ZoomCommand,
         kOut_ZoomCommand,
     };
-public slots:
+public Q_SLOTS:
     /**
      *  Zooms in or out (see ZoomCommandTypes) by the standard zoom factor
      *  with the transformation centered in the middle of the widget.
      */
     void zoom(int zoomCommand);
 
-signals:
+Q_SIGNALS:
     void scaleFactorChanged(float newScaleFactor);
     void commandChanged(int newCommand);
     void hitChanged(int hit);
@@ -81,6 +80,5 @@ private:
 
     void snapWidgetTransform();
 };
-
 
 #endif /* SKCANVASWIDGET_H_ */

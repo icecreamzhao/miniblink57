@@ -1,0 +1,57 @@
+﻿  autofit.c
+  ftbase.c
+  ftbbox.c
+  ftbdf.c
+  ftbitmap.c
+  ftcid.c
+  ftfstype.c
+  ftgasp.c
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afblue.c(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afblue.c(257,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+  ftglyph.c
+  ftgxval.c
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+  ftinit.c
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+G:\mycode\mb\third_party\freetype\src\src\autofit\afscript.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\autofit\autofit.c)
+  ftmm.c
+  ftotval.c
+  ftpatent.c
+  ftpfr.c
+  ftstroke.c
+  ftsynth.c
+  ftsystem.c
+  fttype1.c
+  ftwinfnt.c
+  bdf.c
+  ftcache.c
+  cff.c
+  type1cid.c
+  ftgzip.c
+  ftlzw.c
+  pcf.c
+  pfr.c
+  psaux.c
+  pshinter.c
+  psmodule.c
+  raster.c
+  sfnt.c
+  smooth.c
+  truetype.c
+  type1.c
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcolr.c(127,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcolr.c(136,40): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(121,40): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(153,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(174,50): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttcpal.c(195,57): warning C4018: “>”: 有符号/无符号不匹配 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\sfnt\ttload.c(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\sfnt\sfnt.c)
+G:\mycode\mb\third_party\freetype\src\src\truetype\ttobjs.c(1035,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 ..\..\..\src\truetype\truetype.c)
+  type42.c
+  winfnt.c
+G:\mycode\mb\third_party\freetype\src\src\truetype\ttgxvar.c(2170): warning C4701: 使用了可能未初始化的局部变量“fvar_head”
+  ftdebug.c
+  freetype.vcxproj -> G:\mycode\mb\third_party\freetype\src\builds\windows\vc2010\..\..\..\objs\Win32\Release Static\freetype.lib

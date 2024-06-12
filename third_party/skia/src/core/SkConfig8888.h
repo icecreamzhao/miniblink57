@@ -15,11 +15,11 @@ class SkColorTable;
 struct SkPixelInfo {
     SkColorType fColorType;
     SkAlphaType fAlphaType;
-    size_t      fRowBytes;
+    size_t fRowBytes;
 
     static bool CopyPixels(const SkImageInfo& dstInfo, void* dstPixels, size_t dstRowBytes,
-                           const SkImageInfo& srcInfo, const void* srcPixels, size_t srcRowBytes,
-                           SkColorTable* srcCTable = NULL);
+        const SkImageInfo& srcInfo, const void* srcPixels, size_t srcRowBytes,
+        SkColorTable* srcCTable = nullptr);
 };
 
 struct SkDstPixelInfo : SkPixelInfo {
@@ -35,7 +35,8 @@ struct SkSrcPixelInfo : SkPixelInfo {
 };
 
 static inline void SkRectMemcpy(void* dst, size_t dstRB, const void* src, size_t srcRB,
-                                size_t bytesPerRow, int rowCount) {
+    size_t bytesPerRow, int rowCount)
+{
     SkASSERT(bytesPerRow <= srcRB);
     SkASSERT(bytesPerRow <= dstRB);
     for (int i = 0; i < rowCount; ++i) {

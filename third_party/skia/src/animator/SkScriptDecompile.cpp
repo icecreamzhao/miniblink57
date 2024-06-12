@@ -6,12 +6,14 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkScript2.h"
 
 #ifdef SK_DEBUG
 
-#define TypeOpName(op) {SkScriptEngine2::op, #op }
+#define TypeOpName(op)           \
+    {                            \
+        SkScriptEngine2::op, #op \
+    }
 
 static const struct OpName {
     SkScriptEngine2::TypeOp fOp;
@@ -87,7 +89,10 @@ static const struct OpName {
 
 static size_t gOpNamesSize = sizeof(gOpNames) / sizeof(gOpNames[0]);
 
-#define OperandName(op) {SkOperand2::op, #op }
+#define OperandName(op)     \
+    {                       \
+        SkOperand2::op, #op \
+    }
 
 static const struct OperName {
     SkOperand2::OpType fType;
@@ -104,28 +109,30 @@ static const struct OperName {
 static size_t gOperandNamesSize = sizeof(gOperandNames) / sizeof(gOperandNames[0]);
 
 // check to see that there are no missing or duplicate entries
-void SkScriptEngine2::ValidateDecompileTable() {
+void SkScriptEngine2::ValidateDecompileTable()
+{
     SkScriptEngine2::TypeOp op = SkScriptEngine2::kNop;
     size_t index;
     for (index = 0; index < gOpNamesSize; index++) {
         SkASSERT(gOpNames[index].fOp == op);
-        op = (SkScriptEngine2::TypeOp) (op + 1);
+        op = (SkScriptEngine2::TypeOp)(op + 1);
     }
     index = 0;
     SkOperand2::OpType type = SkOperand2::kNoType;
     SkASSERT(gOperandNames[index].fType == type);
-    for (; index < gOperandNamesSize - 1; ) {
-        type = (SkOperand2::OpType) (1 << index);
+    for (; index < gOperandNamesSize - 1;) {
+        type = (SkOperand2::OpType)(1 << index);
         SkASSERT(gOperandNames[++index].fType == type);
     }
 }
 
-void SkScriptEngine2::decompile(const unsigned char* start, size_t length) {
+void SkScriptEngine2::decompile(const unsigned char* start, size_t length)
+{
     SkASSERT(length > 0);
     const unsigned char* opCode = start;
     do {
         SkASSERT((size_t)(opCode - start) < length);
-        SkScriptEngine2::TypeOp op = (SkScriptEngine2::TypeOp) *opCode++;
+        SkScriptEngine2::TypeOp op = (SkScriptEngine2::TypeOp)*opCode++;
         SkASSERT((size_t)op < gOpNamesSize);
         SkDebugf("%d: %s", opCode - start - 1, gOpNames[op].fName);
         switch (op) {
@@ -134,7 +141,7 @@ void SkScriptEngine2::decompile(const unsigned char* start, size_t length) {
             memcpy(&index, opCode, sizeof(index));
             opCode += sizeof(index);
             SkDebugf(" index: %d", index);
-            } break;
+        } break;
         case SkScriptEngine2::kFunctionCall:
         case SkScriptEngine2::kMemberOp:
         case SkScriptEngine2::kPropertyOp: {
@@ -142,32 +149,32 @@ void SkScriptEngine2::decompile(const unsigned char* start, size_t length) {
             memcpy(&ref, opCode, sizeof(ref));
             opCode += sizeof(ref);
             SkDebugf(" ref: %d", ref);
-            } break;
+        } break;
         case SkScriptEngine2::kIntegerAccumulator:
         case SkScriptEngine2::kIntegerOperand: {
             int32_t integer;
             memcpy(&integer, opCode, sizeof(integer));
             opCode += sizeof(int32_t);
             SkDebugf(" integer: %d", integer);
-            } break;
+        } break;
         case SkScriptEngine2::kScalarAccumulator:
         case SkScriptEngine2::kScalarOperand: {
             SkScalar scalar;
             memcpy(&scalar, opCode, sizeof(scalar));
             opCode += sizeof(SkScalar);
             SkDebugf(" scalar: %g", SkScalarToFloat(scalar));
-            } break;
+        } break;
         case SkScriptEngine2::kStringAccumulator:
         case SkScriptEngine2::kStringOperand: {
             int size;
             SkString* strPtr = new SkString();
             memcpy(&size, opCode, sizeof(size));
             opCode += sizeof(size);
-            strPtr->set((char*) opCode, size);
+            strPtr->set((char*)opCode, size);
             opCode += size;
             SkDebugf(" string: %s", strPtr->c_str());
             delete strPtr;
-            } break;
+        } break;
         case SkScriptEngine2::kBoxToken: {
             SkOperand2::OpType type;
             memcpy(&type, opCode, sizeof(type));
@@ -179,13 +186,13 @@ void SkScriptEngine2::decompile(const unsigned char* start, size_t length) {
                 while (type != 0) {
                     SkASSERT(index + 1 < gOperandNamesSize);
                     if (type & (1 << index)) {
-                        type = (SkOperand2::OpType) (type & ~(1 << index));
+                        type = (SkOperand2::OpType)(type & ~(1 << index));
                         SkDebugf(" type: %s", gOperandNames[index + 1].fName);
                     }
                     index++;
                 }
             }
-            } break;
+        } break;
         case SkScriptEngine2::kIfOp:
         case SkScriptEngine2::kLogicalAndInt:
         case SkScriptEngine2::kElseOp:
@@ -194,15 +201,15 @@ void SkScriptEngine2::decompile(const unsigned char* start, size_t length) {
             memcpy(&size, opCode, sizeof(size));
             opCode += sizeof(size);
             SkDebugf(" offset (address): %d (%d)", size, opCode - start + size);
-            } break;
+        } break;
         case SkScriptEngine2::kEnd:
             goto done;
         case SkScriptEngine2::kNop:
-                SkASSERT(0);
+            SkASSERT(0);
         default:
             break;
-    }
-    SkDebugf("\n");
+        }
+        SkDebugf("\n");
     } while (true);
 done:
     SkDebugf("\n");

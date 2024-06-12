@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2008 Nikolas Zimmermann <zimmermann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -31,10 +32,15 @@
 
 namespace blink {
 
-class CORE_EXPORT HTMLScriptElement final : public HTMLElement, public ScriptLoaderClient {
+class CORE_EXPORT HTMLScriptElement final : public HTMLElement,
+                                            public ScriptLoaderClient {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLScriptElement> create(Document&, bool wasInsertedByParser, bool alreadyStarted = false);
+    static HTMLScriptElement* create(Document&,
+        bool wasInsertedByParser,
+        bool alreadyStarted = false,
+        bool createdDuringDocumentWrite = false);
 
     String text() { return textFromChildren(); }
     void setText(const String&);
@@ -46,13 +52,20 @@ public:
 
     ScriptLoader* loader() const { return m_loader.get(); }
 
+    // ScriptLoaderClient
+    AtomicString nonce() const override { return m_nonce; }
+    void setNonce(const String& nonce) override { m_nonce = AtomicString(nonce); }
+    void clearNonce() override { m_nonce = emptyAtom; }
+
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    HTMLScriptElement(Document&, bool wasInsertedByParser, bool alreadyStarted);
+    HTMLScriptElement(Document&,
+        bool wasInsertedByParser,
+        bool alreadyStarted,
+        bool createdDuringDocumentWrite);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
-    void attributeWillChange(const QualifiedName&, const AtomicString& oldValue, const AtomicString& newValue) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void didNotifySubtreeInsertionsToDocument() override;
     void childrenChanged(const ChildrenChange&) override;
@@ -74,9 +87,10 @@ private:
 
     void dispatchLoadEvent() override;
 
-    PassRefPtrWillBeRawPtr<Element> cloneElementWithoutAttributesAndChildren() override;
+    Element* cloneElementWithoutAttributesAndChildren() override;
 
-    OwnPtrWillBeMember<ScriptLoader> m_loader;
+    Member<ScriptLoader> m_loader;
+    AtomicString m_nonce;
 };
 
 } // namespace blink

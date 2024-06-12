@@ -27,11 +27,9 @@
  */
 
 [
-    GarbageCollected,
     Exposed=(Window,Worker)
 ] interface Crypto {
     [RaisesException, MeasureAs=CryptoGetRandomValues] ArrayBufferView getRandomValues(ArrayBufferView array);
 
     readonly attribute SubtleCrypto subtle;
 };
-

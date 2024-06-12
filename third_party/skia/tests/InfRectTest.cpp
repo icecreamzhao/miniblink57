@@ -9,16 +9,18 @@
 #include "SkRect.h"
 #include "Test.h"
 
-static float make_zero() {
+static float make_zero()
+{
     return sk_float_sin(0);
 }
 
 struct RectCenter {
-    SkIRect  fRect;
+    SkIRect fRect;
     SkIPoint fCenter;
 };
 
-static void test_center(skiatest::Reporter* reporter) {
+static void test_center(skiatest::Reporter* reporter)
+{
     static const RectCenter gData[] = {
         { { 0, 0, 0, 0 }, { 0, 0 } },
         { { 0, 0, 1, 1 }, { 0, 0 } },
@@ -28,9 +30,9 @@ static void test_center(skiatest::Reporter* reporter) {
     };
     for (size_t index = 0; index < SK_ARRAY_COUNT(gData); ++index) {
         REPORTER_ASSERT(reporter,
-                        gData[index].fRect.centerX() == gData[index].fCenter.x());
+            gData[index].fRect.centerX() == gData[index].fCenter.x());
         REPORTER_ASSERT(reporter,
-                        gData[index].fRect.centerY() == gData[index].fCenter.y());
+            gData[index].fRect.centerY() == gData[index].fCenter.y());
     }
 
     SkRandom rand;
@@ -38,7 +40,7 @@ static void test_center(skiatest::Reporter* reporter) {
         SkIRect r;
 
         r.set(rand.nextS() >> 2, rand.nextS() >> 2,
-              rand.nextS() >> 2, rand.nextS() >> 2);
+            rand.nextS() >> 2, rand.nextS() >> 2);
         int cx = r.centerX();
         int cy = r.centerY();
         REPORTER_ASSERT(reporter, ((r.left() + r.right()) >> 1) == cx);
@@ -47,7 +49,8 @@ static void test_center(skiatest::Reporter* reporter) {
 }
 
 static void check_invalid(skiatest::Reporter* reporter,
-                          SkScalar l, SkScalar t, SkScalar r, SkScalar b) {
+    SkScalar l, SkScalar t, SkScalar r, SkScalar b)
+{
     SkRect rect;
     rect.set(l, t, r, b);
     REPORTER_ASSERT(reporter, !rect.isFinite());
@@ -55,8 +58,9 @@ static void check_invalid(skiatest::Reporter* reporter,
 
 // Tests that isFinite() will reject any rect with +/-inf values
 // as one of its coordinates.
-DEF_TEST(InfRect, reporter) {
-    float inf = 1 / make_zero();    // infinity
+DEF_TEST(InfRect, reporter)
+{
+    float inf = 1 / make_zero(); // infinity
     float nan = inf * 0;
     SkASSERT(!(nan == nan));
     SkScalar small = SkIntToScalar(10);

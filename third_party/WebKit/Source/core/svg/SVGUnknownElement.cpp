@@ -28,12 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/SVGUnknownElement.h"
 
 namespace blink {
 
-inline SVGUnknownElement::SVGUnknownElement(const QualifiedName& tagName, Document& document)
+inline SVGUnknownElement::SVGUnknownElement(const QualifiedName& tagName,
+    Document& document)
     : SVGElement(tagName, document)
 {
 }

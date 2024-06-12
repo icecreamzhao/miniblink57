@@ -7,6 +7,7 @@
 
 #include "gm.h"
 
+#include "../src/fonts/SkRandomScalerContext.h"
 #include "Resources.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
@@ -14,7 +15,6 @@
 #include "SkSurface.h"
 #include "SkTextBlob.h"
 #include "SkTypeface.h"
-#include "../src/fonts/SkRandomScalerContext.h"
 
 #if SK_SUPPORT_GPU
 
@@ -28,7 +28,8 @@ public:
     TextBlobRandomFont() { }
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         SkTextBlobBuilder builder;
 
         const char* text = "The quick brown fox jumps over the lazy dog.";
@@ -39,13 +40,12 @@ protected:
         paint.setLCDRenderText(true);
 
         // Setup our random scaler context
-        SkAutoTUnref<SkTypeface> orig(sk_tool_utils::create_portable_typeface("sans-serif",
-                                                                              SkTypeface::kBold));
-        if (NULL == orig) {
-            orig.reset(SkTypeface::RefDefault());
+        sk_sp<SkTypeface> orig(sk_tool_utils::create_portable_typeface(
+            "sans-serif", SkFontStyle::FromOldStyle(SkTypeface::kBold)));
+        if (nullptr == orig) {
+            orig = SkTypeface::MakeDefault();
         }
-        SkAutoTUnref<SkTypeface> random(SkNEW_ARGS(SkRandomTypeface, (orig, paint, false)));
-        paint.setTypeface(random);
+        paint.setTypeface(sk_make_sp<SkRandomTypeface>(orig, paint, false));
 
         SkRect bounds;
         paint.measureText(text, strlen(text), &bounds);
@@ -65,30 +65,50 @@ protected:
         offset += bounds.height();
         sk_tool_utils::add_to_text_blob(&builder, bigtext2, paint, 0, offset);
 
+        // color emoji
+        sk_sp<SkTypeface> origEmoji = sk_tool_utils::emoji_typeface();
+        const char* osName = sk_tool_utils::platform_os_name();
+        // The mac emoji string will break us
+        if (origEmoji && (!strcmp(osName, "Android") || !strcmp(osName, "Ubuntu"))) {
+            const char* emojiText = sk_tool_utils::emoji_sample_text();
+            paint.measureText(emojiText, strlen(emojiText), &bounds);
+            offset += bounds.height();
+            paint.setTypeface(sk_make_sp<SkRandomTypeface>(orig, paint, false));
+            sk_tool_utils::add_to_text_blob(&builder, emojiText, paint, 0, offset);
+        }
+
         // build
         fBlob.reset(builder.build());
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("textblobrandomfont");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         // This GM exists to test a specific feature of the GPU backend.
-        if (NULL == canvas->getGrContext()) {
-            this->drawGpuOnlyMessage(canvas);
+        if (nullptr == canvas->getGrContext()) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
 
         canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorWHITE));
 
-        SkImageInfo info = SkImageInfo::MakeN32Premul(kWidth, kHeight);
-        SkSurfaceProps props(0, kUnknown_SkPixelGeometry);
-        SkAutoTUnref<SkSurface> surface(canvas->newSurface(info, &props));
+        SkImageInfo info = SkImageInfo::MakeN32(kWidth, kHeight, kPremul_SkAlphaType,
+            sk_ref_sp(canvas->imageInfo().colorSpace()));
+        SkSurfaceProps canvasProps(SkSurfaceProps::kLegacyFontHost_InitType);
+        uint32_t gammaCorrect = canvas->getProps(&canvasProps)
+            ? canvasProps.flags() & SkSurfaceProps::kGammaCorrect_Flag
+            : 0;
+        SkSurfaceProps props(gammaCorrect, kUnknown_SkPixelGeometry);
+        auto surface(canvas->makeSurface(info, &props));
         if (surface) {
             SkPaint paint;
             paint.setAntiAlias(true);
@@ -134,6 +154,6 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(TextBlobRandomFont); )
+DEF_GM(return new TextBlobRandomFont;)
 }
 #endif

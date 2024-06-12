@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FEMorphology.h"
 
 #include "SkMorphologyImageFilter.h"
@@ -32,17 +31,23 @@
 
 namespace blink {
 
-FEMorphology::FEMorphology(Filter* filter, MorphologyOperatorType type, float radiusX, float radiusY)
+FEMorphology::FEMorphology(Filter* filter,
+    MorphologyOperatorType type,
+    float radiusX,
+    float radiusY)
     : FilterEffect(filter)
     , m_type(type)
-    , m_radiusX(radiusX)
-    , m_radiusY(radiusY)
+    , m_radiusX(std::max(0.0f, radiusX))
+    , m_radiusY(std::max(0.0f, radiusY))
 {
 }
 
-PassRefPtrWillBeRawPtr<FEMorphology> FEMorphology::create(Filter* filter, MorphologyOperatorType type, float radiusX, float radiusY)
+FEMorphology* FEMorphology::create(Filter* filter,
+    MorphologyOperatorType type,
+    float radiusX,
+    float radiusY)
 {
-    return adoptRefWillBeNoop(new FEMorphology(filter, type, radiusX, radiusY));
+    return new FEMorphology(filter, type, radiusX, radiusY);
 }
 
 MorphologyOperatorType FEMorphology::morphologyOperator() const
@@ -65,6 +70,7 @@ float FEMorphology::radiusX() const
 
 bool FEMorphology::setRadiusX(float radiusX)
 {
+    radiusX = std::max(0.0f, radiusX);
     if (m_radiusX == radiusX)
         return false;
     m_radiusX = radiusX;
@@ -76,34 +82,37 @@ float FEMorphology::radiusY() const
     return m_radiusY;
 }
 
-FloatRect FEMorphology::mapRect(const FloatRect& rect, bool)
-{
-    FloatRect result = rect;
-    result.inflateX(filter()->applyHorizontalScale(m_radiusX));
-    result.inflateY(filter()->applyVerticalScale(m_radiusY));
-    return result;
-}
-
 bool FEMorphology::setRadiusY(float radiusY)
 {
+    radiusY = std::max(0.0f, radiusY);
     if (m_radiusY == radiusY)
         return false;
     m_radiusY = radiusY;
     return true;
 }
 
-PassRefPtr<SkImageFilter> FEMorphology::createImageFilter(SkiaImageFilterBuilder* builder)
+FloatRect FEMorphology::mapEffect(const FloatRect& rect) const
 {
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
-    SkScalar radiusX = SkFloatToScalar(filter()->applyHorizontalScale(m_radiusX));
-    SkScalar radiusY = SkFloatToScalar(filter()->applyVerticalScale(m_radiusY));
-    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
-    if (m_type == FEMORPHOLOGY_OPERATOR_DILATE)
-        return adoptRef(SkDilateImageFilter::Create(radiusX, radiusY, input.get(), &rect));
-    return adoptRef(SkErodeImageFilter::Create(radiusX, radiusY, input.get(), &rect));
+    FloatRect result = rect;
+    result.inflateX(getFilter()->applyHorizontalScale(m_radiusX));
+    result.inflateY(getFilter()->applyVerticalScale(m_radiusY));
+    return result;
 }
 
-static TextStream& operator<<(TextStream& ts, const MorphologyOperatorType& type)
+sk_sp<SkImageFilter> FEMorphology::createImageFilter()
+{
+    sk_sp<SkImageFilter> input(
+        SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
+    int radiusX = clampTo<int>(getFilter()->applyHorizontalScale(m_radiusX));
+    int radiusY = clampTo<int>(getFilter()->applyVerticalScale(m_radiusY));
+    SkImageFilter::CropRect rect = getCropRect();
+    if (m_type == FEMORPHOLOGY_OPERATOR_DILATE)
+        return SkDilateImageFilter::Make(radiusX, radiusY, std::move(input), &rect);
+    return SkErodeImageFilter::Make(radiusX, radiusY, std::move(input), &rect);
+}
+
+static TextStream& operator<<(TextStream& ts,
+    const MorphologyOperatorType& type)
 {
     switch (type) {
     case FEMORPHOLOGY_OPERATOR_UNKNOWN:
@@ -119,13 +128,14 @@ static TextStream& operator<<(TextStream& ts, const MorphologyOperatorType& type
     return ts;
 }
 
-TextStream& FEMorphology::externalRepresentation(TextStream& ts, int indent) const
+TextStream& FEMorphology::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[feMorphology";
     FilterEffect::externalRepresentation(ts);
     ts << " operator=\"" << morphologyOperator() << "\" "
-        << "radius=\"" << radiusX() << ", " << radiusY() << "\"]\n";
+       << "radius=\"" << radiusX() << ", " << radiusY() << "\"]\n";
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     return ts;
 }

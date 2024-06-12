@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableLengthBoxAndBool.h"
 
 #include "core/animation/animatable/AnimatableLength.h"
@@ -36,31 +35,34 @@
 
 namespace blink {
 
-static bool sidesHaveSameUnits(const AnimatableValue* sideA, const AnimatableValue* sideB)
+static bool sidesHaveSameUnits(const AnimatableValue* sideA,
+    const AnimatableValue* sideB)
 {
     if (!sideA->isLength() || !sideB->isLength())
         return false;
     return toAnimatableLength(sideA)->hasSameUnits(toAnimatableLength(sideB));
 }
 
-// This is only used by *-image-slice properties which cannot interpolate between numbers and percentages.
-// Numbers are internally represented by pixels on the ComputedStyle so we must manually type check both sides.
-bool AnimatableLengthBoxAndBool::usesDefaultInterpolationWith(const AnimatableValue* value) const
+// This is only used by *-image-slice properties which cannot interpolate
+// between numbers and percentages. Numbers are internally represented by pixels
+// on the ComputedStyle so we must manually type check both sides.
+bool AnimatableLengthBoxAndBool::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
 {
     const AnimatableLengthBoxAndBool* lengthBoxAndBool = toAnimatableLengthBoxAndBool(value);
     if (lengthBoxAndBool->flag() != flag())
         return true;
     if (!box()->isLengthBox() || !lengthBoxAndBool->box()->isLengthBox())
-        return AnimatableValue::usesDefaultInterpolation(box(), lengthBoxAndBool->box());
+        return AnimatableValue::usesDefaultInterpolation(box(),
+            lengthBoxAndBool->box());
     const AnimatableLengthBox* boxA = toAnimatableLengthBox(box());
     const AnimatableLengthBox* boxB = toAnimatableLengthBox(lengthBoxAndBool->box());
-    return !sidesHaveSameUnits(boxA->left(), boxB->left())
-        || !sidesHaveSameUnits(boxA->right(), boxB->right())
-        || !sidesHaveSameUnits(boxA->top(), boxB->top())
-        || !sidesHaveSameUnits(boxA->bottom(), boxB->bottom());
+    return !sidesHaveSameUnits(boxA->left(), boxB->left()) || !sidesHaveSameUnits(boxA->right(), boxB->right()) || !sidesHaveSameUnits(boxA->top(), boxB->top()) || !sidesHaveSameUnits(boxA->bottom(), boxB->bottom());
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableLengthBoxAndBool::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableLengthBoxAndBool::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     const AnimatableLengthBoxAndBool* lengthBoxAndBool = toAnimatableLengthBoxAndBool(value);
     if (usesDefaultInterpolationWith(lengthBoxAndBool))
@@ -76,10 +78,4 @@ bool AnimatableLengthBoxAndBool::equalTo(const AnimatableValue* value) const
     return box()->equals(lengthBox->box()) && flag() == lengthBox->flag();
 }
 
-DEFINE_TRACE(AnimatableLengthBoxAndBool)
-{
-    visitor->trace(m_box);
-    AnimatableValue::trace(visitor);
-}
-
-}
+} // namespace blink

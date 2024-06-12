@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights
+ * reserved.
  *           (C) 2006 Alexey Proskuryakov (ap@nypop.com)
  *
  * This library is free software; you can redistribute it and/or
@@ -22,25 +23,21 @@
  *
  */
 
-#include "config.h"
 #include "core/html/HTMLFormElement.h"
 
+#include "bindings/core/v8/RadioNodeListOrElement.h"
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/ScriptEventListener.h"
-#include "bindings/core/v8/UnionTypesCore.h"
-#include "bindings/core/v8/V8DOMActivityLogger.h"
 #include "core/HTMLNames.h"
 #include "core/dom/Attribute.h"
 #include "core/dom/Document.h"
 #include "core/dom/ElementTraversal.h"
-#include "core/dom/IdTargetObserverRegistry.h"
 #include "core/dom/NodeListsNodeData.h"
-#include "core/events/AutocompleteErrorEvent.h"
 #include "core/events/Event.h"
-#include "core/events/GenericEventQueue.h"
 #include "core/events/ScopedEventQueue.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/LocalFrame.h"
+#include "core/frame/RemoteFrame.h"
 #include "core/frame/UseCounter.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/html/HTMLCollection.h"
@@ -52,11 +49,15 @@
 #include "core/html/RadioNodeList.h"
 #include "core/html/forms/FormController.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "core/layout/LayoutTextControl.h"
+#include "core/layout/LayoutObject.h"
+#include "core/loader/FormSubmission.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "core/loader/MixedContentChecker.h"
+#include "core/loader/NavigationScheduler.h"
 #include "platform/UserGestureIndicator.h"
+#include "public/platform/WebInsecureRequestPolicy.h"
+#include "wtf/AutoReset.h"
 #include "wtf/text/AtomicString.h"
 #include <limits>
 
@@ -66,47 +67,31 @@ using namespace HTMLNames;
 
 HTMLFormElement::HTMLFormElement(Document& document)
     : HTMLElement(formTag, document)
-#if !ENABLE(OILPAN)
-    , m_weakPtrFactory(this)
-#endif
-    , m_associatedElementsAreDirty(false)
+    , m_listedElementsAreDirty(false)
     , m_imageElementsAreDirty(false)
     , m_hasElementsAssociatedByParser(false)
+    , m_hasElementsAssociatedByFormAttribute(false)
     , m_didFinishParsingChildren(false)
-    , m_wasUserSubmitted(false)
-    , m_isSubmittingOrInUserJSSubmitEvent(false)
-    , m_shouldSubmit(false)
     , m_isInResetFunction(false)
     , m_wasDemoted(false)
-    , m_pendingAutocompleteEventsQueue(GenericEventQueue::create(this))
 {
 }
 
-PassRefPtrWillBeRawPtr<HTMLFormElement> HTMLFormElement::create(Document& document)
+HTMLFormElement* HTMLFormElement::create(Document& document)
 {
     UseCounter::count(document, UseCounter::FormElement);
-    return adoptRefWillBeNoop(new HTMLFormElement(document));
+    return new HTMLFormElement(document);
 }
 
-HTMLFormElement::~HTMLFormElement()
-{
-#if !ENABLE(OILPAN)
-    // With Oilpan, either removedFrom is called or the document and
-    // form controller are dead as well and there is no need to remove
-    // this form element from it.
-    document().formController().willDeleteForm(this);
-#endif
-}
+HTMLFormElement::~HTMLFormElement() { }
 
 DEFINE_TRACE(HTMLFormElement)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_pastNamesMap);
     visitor->trace(m_radioButtonGroupScope);
-    visitor->trace(m_associatedElements);
+    visitor->trace(m_listedElements);
     visitor->trace(m_imageElements);
-    visitor->trace(m_pendingAutocompleteEventsQueue);
-#endif
+    visitor->trace(m_plannedNavigation);
     HTMLElement::trace(visitor);
 }
 
@@ -117,7 +102,8 @@ bool HTMLFormElement::matchesValidityPseudoClasses() const
 
 bool HTMLFormElement::isValidElement()
 {
-    return !checkInvalidControlsAndCollectUnhandled(0, CheckValidityDispatchNoEvent);
+    return !checkInvalidControlsAndCollectUnhandled(0,
+        CheckValidityDispatchNoEvent);
 }
 
 bool HTMLFormElement::layoutObjectIsNeeded(const ComputedStyle& style)
@@ -129,45 +115,31 @@ bool HTMLFormElement::layoutObjectIsNeeded(const ComputedStyle& style)
     if (!node || !node->layoutObject())
         return HTMLElement::layoutObjectIsNeeded(style);
     LayoutObject* parentLayoutObject = node->layoutObject();
-    // FIXME: Shouldn't we also check for table caption (see |formIsTablePart| below).
+    // FIXME: Shouldn't we also check for table caption (see |formIsTablePart|
+    // below).
     // FIXME: This check is not correct for Shadow DOM.
-    bool parentIsTableElementPart = (parentLayoutObject->isTable() && isHTMLTableElement(*node))
-        || (parentLayoutObject->isTableRow() && isHTMLTableRowElement(*node))
-        || (parentLayoutObject->isTableSection() && node->hasTagName(tbodyTag))
-        || (parentLayoutObject->isLayoutTableCol() && node->hasTagName(colTag))
-        || (parentLayoutObject->isTableCell() && isHTMLTableRowElement(*node));
+    bool parentIsTableElementPart = (parentLayoutObject->isTable() && isHTMLTableElement(*node)) || (parentLayoutObject->isTableRow() && isHTMLTableRowElement(*node)) || (parentLayoutObject->isTableSection() && node->hasTagName(tbodyTag)) || (parentLayoutObject->isLayoutTableCol() && node->hasTagName(colTag)) || (parentLayoutObject->isTableCell() && isHTMLTableRowElement(*node));
 
     if (!parentIsTableElementPart)
         return true;
 
     EDisplay display = style.display();
-    bool formIsTablePart = display == TABLE || display == INLINE_TABLE || display == TABLE_ROW_GROUP
-        || display == TABLE_HEADER_GROUP || display == TABLE_FOOTER_GROUP || display == TABLE_ROW
-        || display == TABLE_COLUMN_GROUP || display == TABLE_COLUMN || display == TABLE_CELL
-        || display == TABLE_CAPTION;
+    bool formIsTablePart = display == EDisplay::Table || display == EDisplay::InlineTable || display == EDisplay::TableRowGroup || display == EDisplay::TableHeaderGroup || display == EDisplay::TableFooterGroup || display == EDisplay::TableRow || display == EDisplay::TableColumnGroup || display == EDisplay::TableColumn || display == EDisplay::TableCell || display == EDisplay::TableCaption;
 
     return formIsTablePart;
 }
 
-Node::InsertionNotificationRequest HTMLFormElement::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest HTMLFormElement::insertedInto(
+    ContainerNode* insertionPoint)
 {
-    if (insertionPoint->inDocument()) {
-        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
-        if (activityLogger) {
-            Vector<String> argv;
-            argv.append("form");
-            argv.append(fastGetAttribute(methodAttr));
-            argv.append(fastGetAttribute(actionAttr));
-            activityLogger->logEvent("blinkAddElement", argv.size(), argv.data());
-        }
-    }
     HTMLElement::insertedInto(insertionPoint);
-    if (insertionPoint->inDocument())
+    logAddElementIfIsolatedWorldAndInDocument("form", methodAttr, actionAttr);
+    if (insertionPoint->isConnected())
         this->document().didAssociateFormControl(this);
     return InsertionDone;
 }
 
-template<class T>
+template <class T>
 void notifyFormRemovedFromTree(const T& elements, Node& root)
 {
     for (const auto& element : elements)
@@ -180,38 +152,38 @@ void HTMLFormElement::removedFrom(ContainerNode* insertionPoint)
     // attribute becuse IdTargetObserver handles it.
     if (m_hasElementsAssociatedByParser) {
         Node& root = NodeTraversal::highestAncestorOrSelf(*this);
-        if (!m_associatedElementsAreDirty) {
-            FormAssociatedElement::List elements(associatedElements());
+        if (!m_listedElementsAreDirty) {
+            ListedElement::List elements(listedElements());
             notifyFormRemovedFromTree(elements, root);
         } else {
-            FormAssociatedElement::List elements;
-            collectAssociatedElements(NodeTraversal::highestAncestorOrSelf(*insertionPoint), elements);
+            ListedElement::List elements;
+            collectListedElements(
+                NodeTraversal::highestAncestorOrSelf(*insertionPoint), elements);
             notifyFormRemovedFromTree(elements, root);
-            collectAssociatedElements(root, elements);
+            collectListedElements(root, elements);
             notifyFormRemovedFromTree(elements, root);
         }
 
         if (!m_imageElementsAreDirty) {
-            WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>> images(imageElements());
+            HeapVector<Member<HTMLImageElement>> images(imageElements());
             notifyFormRemovedFromTree(images, root);
         } else {
-            WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>> images;
-            collectImageElements(NodeTraversal::highestAncestorOrSelf(*insertionPoint), images);
+            HeapVector<Member<HTMLImageElement>> images;
+            collectImageElements(
+                NodeTraversal::highestAncestorOrSelf(*insertionPoint), images);
             notifyFormRemovedFromTree(images, root);
             collectImageElements(root, images);
             notifyFormRemovedFromTree(images, root);
         }
     }
-#if ENABLE(OILPAN)
     document().formController().willDeleteForm(this);
-#endif
     HTMLElement::removedFrom(insertionPoint);
 }
 
 void HTMLFormElement::handleLocalEvents(Event& event)
 {
     Node* targetNode = event.target()->toNode();
-    if (event.eventPhase() != Event::CAPTURING_PHASE && targetNode && targetNode != this && (event.type() == EventTypeNames::submit || event.type() == EventTypeNames::reset)) {
+    if (event.eventPhase() != Event::kCapturingPhase && targetNode && targetNode != this && (event.type() == EventTypeNames::submit || event.type() == EventTypeNames::reset)) {
         event.stopPropagation();
         return;
     }
@@ -220,10 +192,9 @@ void HTMLFormElement::handleLocalEvents(Event& event)
 
 unsigned HTMLFormElement::length() const
 {
-    const FormAssociatedElement::List& elements = associatedElements();
     unsigned len = 0;
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        if (elements[i]->isEnumeratable())
+    for (const auto& element : listedElements()) {
+        if (element->isEnumeratable())
             ++len;
     }
     return len;
@@ -234,16 +205,15 @@ HTMLElement* HTMLFormElement::item(unsigned index)
     return elements()->item(index);
 }
 
-void HTMLFormElement::submitImplicitly(Event* event, bool fromImplicitSubmissionTrigger)
+void HTMLFormElement::submitImplicitly(Event* event,
+    bool fromImplicitSubmissionTrigger)
 {
     int submissionTriggerCount = 0;
     bool seenDefaultButton = false;
-    const FormAssociatedElement::List& elements = associatedElements();
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        FormAssociatedElement* formAssociatedElement = elements[i];
-        if (!formAssociatedElement->isFormControlElement())
+    for (const auto& element : listedElements()) {
+        if (!element->isFormControlElement())
             continue;
-        HTMLFormControlElement* control = toHTMLFormControlElement(formAssociatedElement);
+        HTMLFormControlElement* control = toHTMLFormControlElement(element);
         if (!seenDefaultButton && control->canBeSuccessfulSubmitButton()) {
             if (fromImplicitSubmissionTrigger)
                 seenDefaultButton = true;
@@ -260,97 +230,122 @@ void HTMLFormElement::submitImplicitly(Event* event, bool fromImplicitSubmission
         }
     }
     if (fromImplicitSubmissionTrigger && submissionTriggerCount == 1)
-        prepareForSubmission(event);
-}
-
-// FIXME: Consolidate this and similar code in FormSubmission.cpp.
-static inline HTMLFormControlElement* submitElementFromEvent(const Event* event)
-{
-    for (Node* node = event->target()->toNode(); node; node = node->parentOrShadowHostNode()) {
-        if (node->isElementNode() && toElement(node)->isFormControlElement())
-            return toHTMLFormControlElement(node);
-    }
-    return 0;
+        prepareForSubmission(event, nullptr);
 }
 
 bool HTMLFormElement::validateInteractively()
 {
-    const FormAssociatedElement::List& elements = associatedElements();
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        if (elements[i]->isFormControlElement())
-            toHTMLFormControlElement(elements[i])->hideVisibleValidationMessage();
+    UseCounter::count(document(), UseCounter::FormValidationStarted);
+    for (const auto& element : listedElements()) {
+        if (element->isFormControlElement())
+            toHTMLFormControlElement(element)->hideVisibleValidationMessage();
     }
 
-    WillBeHeapVector<RefPtrWillBeMember<HTMLFormControlElement>> unhandledInvalidControls;
-    if (!checkInvalidControlsAndCollectUnhandled(&unhandledInvalidControls, CheckValidityDispatchInvalidEvent))
+    HeapVector<Member<HTMLFormControlElement>> unhandledInvalidControls;
+    if (!checkInvalidControlsAndCollectUnhandled(
+            &unhandledInvalidControls, CheckValidityDispatchInvalidEvent))
         return true;
+    UseCounter::count(document(), UseCounter::FormValidationAbortedSubmission);
     // Because the form has invalid controls, we abort the form submission and
     // show a validation message on a focusable form control.
 
     // Needs to update layout now because we'd like to call isFocusable(), which
     // has !layoutObject()->needsLayout() assertion.
-    document().updateLayoutIgnorePendingStylesheets();
+    document().updateStyleAndLayoutIgnorePendingStylesheets();
 
-    RefPtrWillBeRawPtr<HTMLFormElement> protector(this);
     // Focus on the first focusable control and show a validation message.
-    for (unsigned i = 0; i < unhandledInvalidControls.size(); ++i) {
-        HTMLFormControlElement* unhandled = unhandledInvalidControls[i].get();
+    for (const auto& unhandled : unhandledInvalidControls) {
         if (unhandled->isFocusable()) {
             unhandled->showValidationMessage();
+            UseCounter::count(document(), UseCounter::FormValidationShowedMessage);
             break;
         }
     }
     // Warn about all of unfocusable controls.
     if (document().frame()) {
-        for (unsigned i = 0; i < unhandledInvalidControls.size(); ++i) {
-            HTMLFormControlElement* unhandled = unhandledInvalidControls[i].get();
+        for (const auto& unhandled : unhandledInvalidControls) {
             if (unhandled->isFocusable())
                 continue;
-            String message("An invalid form control with name='%name' is not focusable.");
+            String message(
+                "An invalid form control with name='%name' is not focusable.");
             message.replace("%name", unhandled->name());
-            document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, ErrorMessageLevel, message));
+            document().addConsoleMessage(ConsoleMessage::create(
+                RenderingMessageSource, ErrorMessageLevel, message));
         }
     }
     return false;
 }
 
-void HTMLFormElement::prepareForSubmission(Event* event)
+void HTMLFormElement::prepareForSubmission(
+    Event* event,
+    HTMLFormControlElement* submitButton)
 {
-    RefPtrWillBeRawPtr<HTMLFormElement> protector(this);
     LocalFrame* frame = document().frame();
-    if (!frame || m_isSubmittingOrInUserJSSubmitEvent)
+    if (!frame || m_isSubmitting || m_inUserJSSubmitEvent)
         return;
 
+    if (document().isSandboxed(SandboxForms)) {
+        document().addConsoleMessage(ConsoleMessage::create(
+            SecurityMessageSource, ErrorMessageLevel,
+            "Blocked form submission to '" + m_attributes.action() + "' because the form's frame is sandboxed and the 'allow-forms' "
+                                                                     "permission is not set."));
+        return;
+    }
+
+    // https://github.com/whatwg/html/issues/2253
+    for (const auto& element : listedElements()) {
+        if (element->isFormControlElement() && toHTMLFormControlElement(element)->blocksFormSubmission()) {
+            UseCounter::count(document(),
+                UseCounter::FormSubmittedWithUnclosedFormControl);
+            if (RuntimeEnabledFeatures::unclosedFormControlIsInvalidEnabled()) {
+                String tagName = toHTMLFormControlElement(element)->tagName();
+                document().addConsoleMessage(ConsoleMessage::create(
+                    SecurityMessageSource, ErrorMessageLevel,
+                    "Form submission failed, as the <" + tagName + "> element named "
+                                                                   "'"
+                        + element->name() + "' was implicitly closed by reaching "
+                                            "the end of the file. Please add an explicit end tag "
+                                            "('</"
+                        + tagName + ">')"));
+                dispatchEvent(Event::create(EventTypeNames::error));
+                return;
+            }
+        }
+    }
+
     bool skipValidation = !document().page() || noValidate();
-    ASSERT(event);
-    HTMLFormControlElement* submitElement = submitElementFromEvent(event);
-    if (submitElement && submitElement->formNoValidate())
+    DCHECK(event);
+    if (submitButton && submitButton->formNoValidate())
         skipValidation = true;
 
+    UseCounter::count(document(), UseCounter::FormSubmissionStarted);
     // Interactive validation must be done before dispatching the submit event.
     if (!skipValidation && !validateInteractively())
         return;
 
-    m_isSubmittingOrInUserJSSubmitEvent = true;
-    m_shouldSubmit = false;
-
-    frame->loader().client()->dispatchWillSendSubmitEvent(this);
-
-    if (dispatchEvent(Event::createCancelableBubble(EventTypeNames::submit)))
-        m_shouldSubmit = true;
-
-    m_isSubmittingOrInUserJSSubmitEvent = false;
-
-    if (m_shouldSubmit)
-        submit(event, true, true);
+    bool shouldSubmit;
+    {
+        AutoReset<bool> submitEventHandlerScope(&m_inUserJSSubmitEvent, true);
+        frame->loader().client()->dispatchWillSendSubmitEvent(this);
+        shouldSubmit = dispatchEvent(Event::createCancelableBubble(EventTypeNames::submit)) == DispatchEventResult::NotCanceled;
+    }
+    if (shouldSubmit) {
+        m_plannedNavigation = nullptr;
+        submit(event, submitButton);
+    }
+    if (!m_plannedNavigation)
+        return;
+    AutoReset<bool> submitScope(&m_isSubmitting, true);
+    scheduleFormSubmission(m_plannedNavigation);
+    m_plannedNavigation = nullptr;
 }
 
 void HTMLFormElement::submitFromJavaScript()
 {
-    submit(0, false, UserGestureIndicator::processingUserGesture());
+    submit(nullptr, nullptr);
 }
 
-void HTMLFormElement::submitDialog(PassRefPtrWillBeRawPtr<FormSubmission> formSubmission)
+void HTMLFormElement::submitDialog(FormSubmission* formSubmission)
 {
     for (Node* node = this; node; node = node->parentOrShadowHostNode()) {
         if (isHTMLDialogElement(*node)) {
@@ -360,78 +355,95 @@ void HTMLFormElement::submitDialog(PassRefPtrWillBeRawPtr<FormSubmission> formSu
     }
 }
 
-void HTMLFormElement::submit(Event* event, bool activateSubmitButton, bool processingUserGesture)
+void HTMLFormElement::submit(Event* event,
+    HTMLFormControlElement* submitButton)
 {
     FrameView* view = document().view();
     LocalFrame* frame = document().frame();
     if (!view || !frame || !frame->page())
         return;
 
-    if (m_isSubmittingOrInUserJSSubmitEvent) {
-        m_shouldSubmit = true;
+    // https://html.spec.whatwg.org/multipage/forms.html#form-submission-algorithm
+    // 2. If form document is not connected, has no associated browsing context,
+    // or its active sandboxing flag set has its sandboxed forms browsing
+    // context flag set, then abort these steps without doing anything.
+    if (!isConnected()) {
+        document().addConsoleMessage(ConsoleMessage::create(
+            JSMessageSource, WarningMessageLevel,
+            "Form submission canceled because the form is not connected"));
         return;
     }
 
-    m_isSubmittingOrInUserJSSubmitEvent = true;
-    m_wasUserSubmitted = processingUserGesture;
+    if (m_isSubmitting)
+        return;
 
-    RefPtrWillBeRawPtr<HTMLFormControlElement> firstSuccessfulSubmitButton = nullptr;
-    bool needButtonActivation = activateSubmitButton; // do we need to activate a submit button?
+    // Delay dispatching 'close' to dialog until done submitting.
+    EventQueueScope scopeForDialogClose;
+    AutoReset<bool> submitScope(&m_isSubmitting, true);
 
-    const FormAssociatedElement::List& elements = associatedElements();
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        FormAssociatedElement* associatedElement = elements[i];
-        if (!associatedElement->isFormControlElement())
-            continue;
-        if (needButtonActivation) {
-            HTMLFormControlElement* control = toHTMLFormControlElement(associatedElement);
-            if (control->isActivatedSubmit())
-                needButtonActivation = false;
-            else if (firstSuccessfulSubmitButton == 0 && control->isSuccessfulSubmitButton())
-                firstSuccessfulSubmitButton = control;
+    if (event && !submitButton) {
+        // In a case of implicit submission without a submit button, 'submit'
+        // event handler might add a submit button. We search for a submit
+        // button again.
+        // TODO(tkent): Do we really need to activate such submit button?
+        for (const auto& listedElement : listedElements()) {
+            if (!listedElement->isFormControlElement())
+                continue;
+            HTMLFormControlElement* control = toHTMLFormControlElement(listedElement);
+            DCHECK(!control->isActivatedSubmit());
+            if (control->isSuccessfulSubmitButton()) {
+                submitButton = control;
+                break;
+            }
         }
     }
 
-    if (needButtonActivation && firstSuccessfulSubmitButton)
-        firstSuccessfulSubmitButton->setActivatedSubmit(true);
-
-    RefPtrWillBeRawPtr<FormSubmission> formSubmission = FormSubmission::create(this, m_attributes, event);
-    EventQueueScope scopeForDialogClose; // Delay dispatching 'close' to dialog until done submitting.
-    if (formSubmission->method() == FormSubmission::DialogMethod)
-        submitDialog(formSubmission.release());
-    else
-        scheduleFormSubmission(formSubmission.release());
-
-    if (needButtonActivation && firstSuccessfulSubmitButton)
-        firstSuccessfulSubmitButton->setActivatedSubmit(false);
-
-    m_shouldSubmit = false;
-    m_isSubmittingOrInUserJSSubmitEvent = false;
+    FormSubmission* formSubmission = FormSubmission::create(this, m_attributes, event, submitButton);
+    if (formSubmission->method() == FormSubmission::DialogMethod) {
+        submitDialog(formSubmission);
+    } else if (m_inUserJSSubmitEvent) {
+        // Need to postpone the submission in order to make this cancelable by
+        // another submission request.
+        m_plannedNavigation = formSubmission;
+    } else {
+        // This runs JavaScript code if action attribute value is javascript:
+        // protocol.
+        scheduleFormSubmission(formSubmission);
+    }
 }
 
-void HTMLFormElement::scheduleFormSubmission(PassRefPtrWillBeRawPtr<FormSubmission> submission)
+void HTMLFormElement::scheduleFormSubmission(FormSubmission* submission)
 {
-    ASSERT(submission->method() == FormSubmission::PostMethod || submission->method() == FormSubmission::GetMethod);
-    ASSERT(submission->data());
-    ASSERT(submission->form());
+    DCHECK(submission->method() == FormSubmission::PostMethod || submission->method() == FormSubmission::GetMethod);
+    DCHECK(submission->data());
+    DCHECK(submission->form());
     if (submission->action().isEmpty())
         return;
     if (document().isSandboxed(SandboxForms)) {
-        // FIXME: This message should be moved off the console once a solution to https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
-        document().addConsoleMessage(ConsoleMessage::create(SecurityMessageSource, ErrorMessageLevel, "Blocked form submission to '" + submission->action().elidedString() + "' because the form's frame is sandboxed and the 'allow-forms' permission is not set."));
+        // FIXME: This message should be moved off the console once a solution to
+        // https://bugs.webkit.org/show_bug.cgi?id=103274 exists.
+        document().addConsoleMessage(ConsoleMessage::create(
+            SecurityMessageSource, ErrorMessageLevel,
+            "Blocked form submission to '" + submission->action().elidedString() + "' because the form's frame is sandboxed and the 'allow-forms' "
+                                                                                   "permission is not set."));
+        return;
+    }
+
+    if (!document().contentSecurityPolicy()->allowFormAction(
+            submission->action())) {
         return;
     }
 
     if (protocolIsJavaScript(submission->action())) {
-        if (!document().contentSecurityPolicy()->allowFormAction(submission->action()))
-            return;
-        document().frame()->script().executeScriptIfJavaScriptURL(submission->action());
+        document().frame()->script().executeScriptIfJavaScriptURL(
+            submission->action(), this);
         return;
     }
 
-    Frame* targetFrame = document().frame()->findFrameForNavigation(submission->target(), *document().frame());
+    Frame* targetFrame = document().frame()->findFrameForNavigation(
+        submission->target(), *document().frame());
     if (!targetFrame) {
-        if (!LocalDOMWindow::allowPopUp(*document().frame()) && !UserGestureIndicator::processingUserGesture())
+        if (!LocalDOMWindow::allowPopUp(*document().frame()) && !UserGestureIndicator::utilizeUserGesture())
             return;
         targetFrame = document().frame();
     } else {
@@ -441,12 +453,22 @@ void HTMLFormElement::scheduleFormSubmission(PassRefPtrWillBeRawPtr<FormSubmissi
         return;
 
     UseCounter::count(document(), UseCounter::FormsSubmitted);
-    if (MixedContentChecker::isMixedFormAction(document().frame(), submission->action()))
-        UseCounter::count(document().frame(), UseCounter::MixedContentFormsSubmitted);
+    if (MixedContentChecker::isMixedFormAction(document().frame(),
+            submission->action()))
+        UseCounter::count(document().frame(),
+            UseCounter::MixedContentFormsSubmitted);
 
-    // FIXME: Plumb form submission for remote frames.
-    if (targetFrame->isLocalFrame())
-        toLocalFrame(targetFrame)->navigationScheduler().scheduleFormSubmission(&document(), submission);
+    // TODO(lukasza): Investigate if the code below can uniformly handle remote
+    // and local frames (i.e. by calling virtual Frame::navigate from a timer).
+    // See also https://goo.gl/95d2KA.
+    if (targetFrame->isLocalFrame()) {
+        toLocalFrame(targetFrame)
+            ->navigationScheduler()
+            .scheduleFormSubmission(&document(), submission);
+    } else {
+        FrameLoadRequest frameLoadRequest = submission->createFrameLoadRequest(&document());
+        toRemoteFrame(targetFrame)->navigate(frameLoadRequest);
+    }
 }
 
 void HTMLFormElement::reset()
@@ -457,109 +479,66 @@ void HTMLFormElement::reset()
 
     m_isInResetFunction = true;
 
-    if (!dispatchEvent(Event::createCancelableBubble(EventTypeNames::reset))) {
+    if (dispatchEvent(Event::createCancelableBubble(EventTypeNames::reset)) != DispatchEventResult::NotCanceled) {
         m_isInResetFunction = false;
         return;
     }
 
-    const FormAssociatedElement::List& elements = associatedElements();
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        if (elements[i]->isFormControlElement())
-            toHTMLFormControlElement(elements[i])->reset();
+    // Copy the element list because |reset()| implementation can update DOM
+    // structure.
+    ListedElement::List elements(listedElements());
+    for (const auto& element : elements) {
+        if (element->isFormControlElement())
+            toHTMLFormControlElement(element)->reset();
     }
 
     m_isInResetFunction = false;
 }
 
-void HTMLFormElement::requestAutocomplete()
+void HTMLFormElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    String errorMessage;
-
-    if (!document().frame())
-        errorMessage = "requestAutocomplete: form is not owned by a displayed document.";
-    else if (!shouldAutocomplete())
-        errorMessage = "requestAutocomplete: form autocomplete attribute is set to off.";
-    else if (!UserGestureIndicator::processingUserGesture())
-        errorMessage = "requestAutocomplete: must be called in response to a user gesture.";
-
-    if (!errorMessage.isEmpty()) {
-        document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, LogMessageLevel, errorMessage));
-        finishRequestAutocomplete(AutocompleteResultErrorDisabled);
-    } else {
-        document().frame()->loader().client()->didRequestAutocomplete(this);
-    }
-}
-
-void HTMLFormElement::finishRequestAutocomplete(AutocompleteResult result)
-{
-    RefPtrWillBeRawPtr<Event> event = nullptr;
-    if (result == AutocompleteResultSuccess)
-        event = Event::createBubble(EventTypeNames::autocomplete);
-    else if (result == AutocompleteResultErrorDisabled)
-        event = AutocompleteErrorEvent::create("disabled");
-    else if (result == AutocompleteResultErrorCancel)
-        event = AutocompleteErrorEvent::create("cancel");
-    else if (result == AutocompleteResultErrorInvalid)
-        event = AutocompleteErrorEvent::create("invalid");
-    else
-        ASSERT_NOT_REACHED();
-
-    event->setTarget(this);
-    m_pendingAutocompleteEventsQueue->enqueueEvent(event.release());
-}
-
-void HTMLFormElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
-{
+    const QualifiedName& name = params.name;
     if (name == actionAttr) {
-        m_attributes.parseAction(value);
-        // If the new action attribute is pointing to insecure "action" location from a secure page
-        // it is marked as "passive" mixed content.
-        KURL actionURL = document().completeURL(m_attributes.action().isEmpty() ? document().url().string() : m_attributes.action());
+        m_attributes.parseAction(params.newValue);
+        logUpdateAttributeIfIsolatedWorldAndInDocument("form", params);
+
+        // If we're not upgrading insecure requests, and the new action attribute is
+        // pointing to an insecure "action" location from a secure page it is marked
+        // as "passive" mixed content.
+        if (document().getInsecureRequestPolicy() & kUpgradeInsecureRequests)
+            return;
+        KURL actionURL = document().completeURL(m_attributes.action().isEmpty()
+                ? document().url().getString()
+                : m_attributes.action());
         if (MixedContentChecker::isMixedFormAction(document().frame(), actionURL))
-            UseCounter::count(document().frame(), UseCounter::MixedContentFormPresent);
+            UseCounter::count(document().frame(),
+                UseCounter::MixedContentFormPresent);
     } else if (name == targetAttr) {
-        m_attributes.setTarget(value);
+        m_attributes.setTarget(params.newValue);
     } else if (name == methodAttr) {
-        m_attributes.updateMethodType(value);
+        m_attributes.updateMethodType(params.newValue);
     } else if (name == enctypeAttr) {
-        m_attributes.updateEncodingType(value);
+        m_attributes.updateEncodingType(params.newValue);
     } else if (name == accept_charsetAttr) {
-        m_attributes.setAcceptCharset(value);
-    } else if (name == onautocompleteAttr) {
-        setAttributeEventListener(EventTypeNames::autocomplete, createAttributeEventListener(this, name, value, eventParameterName()));
-    } else if (name == onautocompleteerrorAttr) {
-        setAttributeEventListener(EventTypeNames::autocompleteerror, createAttributeEventListener(this, name, value, eventParameterName()));
+        m_attributes.setAcceptCharset(params.newValue);
     } else {
-        HTMLElement::parseAttribute(name, value);
+        HTMLElement::parseAttribute(params);
     }
 }
 
-void HTMLFormElement::attributeWillChange(const QualifiedName& name, const AtomicString& oldValue, const AtomicString& newValue)
+void HTMLFormElement::associate(ListedElement& e)
 {
-    if (name == actionAttr && inDocument()) {
-        V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
-        if (activityLogger) {
-            Vector<String> argv;
-            argv.append("form");
-            argv.append(actionAttr.toString());
-            argv.append(oldValue);
-            argv.append(newValue);
-            activityLogger->logEvent("blinkSetAttribute", argv.size(), argv.data());
-        }
-    }
-    HTMLElement::attributeWillChange(name, oldValue, newValue);
+    m_listedElementsAreDirty = true;
+    m_listedElements.clear();
+    if (toHTMLElement(e).fastHasAttribute(formAttr))
+        m_hasElementsAssociatedByFormAttribute = true;
 }
 
-void HTMLFormElement::associate(FormAssociatedElement& e)
+void HTMLFormElement::disassociate(ListedElement& e)
 {
-    m_associatedElementsAreDirty = true;
-    m_associatedElements.clear();
-}
-
-void HTMLFormElement::disassociate(FormAssociatedElement& e)
-{
-    m_associatedElementsAreDirty = true;
-    m_associatedElements.clear();
+    m_listedElementsAreDirty = true;
+    m_listedElements.clear();
     removeFromPastNamesMap(toHTMLElement(e));
 }
 
@@ -586,13 +565,6 @@ void HTMLFormElement::disassociate(HTMLImageElement& e)
     removeFromPastNamesMap(e);
 }
 
-#if !ENABLE(OILPAN)
-WeakPtr<HTMLFormElement> HTMLFormElement::createWeakPtr()
-{
-    return m_weakPtrFactory.createWeakPtr();
-}
-#endif
-
 void HTMLFormElement::didAssociateByParser()
 {
     if (!m_didFinishParsingChildren)
@@ -601,59 +573,67 @@ void HTMLFormElement::didAssociateByParser()
     UseCounter::count(document(), UseCounter::FormAssociationByParser);
 }
 
-PassRefPtrWillBeRawPtr<HTMLFormControlsCollection> HTMLFormElement::elements()
+HTMLFormControlsCollection* HTMLFormElement::elements()
 {
     return ensureCachedCollection<HTMLFormControlsCollection>(FormControls);
 }
 
-void HTMLFormElement::collectAssociatedElements(Node& root, FormAssociatedElement::List& elements) const
+void HTMLFormElement::collectListedElements(
+    Node& root,
+    ListedElement::List& elements) const
 {
     elements.clear();
     for (HTMLElement& element : Traversal<HTMLElement>::startsAfter(root)) {
-        FormAssociatedElement* associatedElement = 0;
+        ListedElement* listedElement = 0;
         if (element.isFormControlElement())
-            associatedElement = toHTMLFormControlElement(&element);
+            listedElement = toHTMLFormControlElement(&element);
         else if (isHTMLObjectElement(element))
-            associatedElement = toHTMLObjectElement(&element);
+            listedElement = toHTMLObjectElement(&element);
         else
             continue;
-        if (associatedElement->form()== this)
-            elements.append(associatedElement);
+        if (listedElement->form() == this)
+            elements.push_back(listedElement);
     }
 }
 
 // This function should be const conceptually. However we update some fields
 // because of lazy evaluation.
-const FormAssociatedElement::List& HTMLFormElement::associatedElements() const
+const ListedElement::List& HTMLFormElement::listedElements() const
 {
-    if (!m_associatedElementsAreDirty)
-        return m_associatedElements;
+    if (!m_listedElementsAreDirty)
+        return m_listedElements;
     HTMLFormElement* mutableThis = const_cast<HTMLFormElement*>(this);
     Node* scope = mutableThis;
     if (m_hasElementsAssociatedByParser)
         scope = &NodeTraversal::highestAncestorOrSelf(*mutableThis);
-    if (inDocument() && treeScope().idTargetObserverRegistry().hasObservers(fastGetAttribute(idAttr)))
+    if (isConnected() && m_hasElementsAssociatedByFormAttribute)
         scope = &treeScope().rootNode();
-    ASSERT(scope);
-    collectAssociatedElements(*scope, mutableThis->m_associatedElements);
-    mutableThis->m_associatedElementsAreDirty = false;
-    return m_associatedElements;
+    DCHECK(scope);
+    collectListedElements(*scope, mutableThis->m_listedElements);
+    mutableThis->m_listedElementsAreDirty = false;
+    return m_listedElements;
 }
 
-void HTMLFormElement::collectImageElements(Node& root, WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>>& elements)
+void HTMLFormElement::collectImageElements(
+    Node& root,
+    HeapVector<Member<HTMLImageElement>>& elements)
 {
     elements.clear();
-    for (HTMLImageElement& image : Traversal<HTMLImageElement>::startsAfter(root)) {
+    for (HTMLImageElement& image :
+        Traversal<HTMLImageElement>::startsAfter(root)) {
         if (image.formOwner() == this)
-            elements.append(&image);
+            elements.push_back(&image);
     }
 }
 
-const WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>>& HTMLFormElement::imageElements()
+const HeapVector<Member<HTMLImageElement>>& HTMLFormElement::imageElements()
 {
     if (!m_imageElementsAreDirty)
         return m_imageElements;
-    collectImageElements(m_hasElementsAssociatedByParser ? NodeTraversal::highestAncestorOrSelf(*this) : *this, m_imageElements);
+    collectImageElements(m_hasElementsAssociatedByParser
+            ? NodeTraversal::highestAncestorOrSelf(*this)
+            : *this,
+        m_imageElements);
     m_imageElementsAreDirty = false;
     return m_imageElements;
 }
@@ -668,9 +648,10 @@ bool HTMLFormElement::noValidate() const
     return fastHasAttribute(novalidateAttr);
 }
 
-// FIXME: This function should be removed because it does not do the same thing as the
-// JavaScript binding for action, which treats action as a URL attribute. Last time I
-// (Darin Adler) removed this, someone added it back, so I am leaving it in for now.
+// FIXME: This function should be removed because it does not do the same thing
+// as the JavaScript binding for action, which treats action as a URL attribute.
+// Last time I (Darin Adler) removed this, someone added it back, so I am
+// leaving it in for now.
 const AtomicString& HTMLFormElement::action() const
 {
     return getAttribute(actionAttr);
@@ -691,44 +672,39 @@ void HTMLFormElement::setMethod(const AtomicString& value)
     setAttribute(methodAttr, value);
 }
 
-bool HTMLFormElement::wasUserSubmitted() const
+HTMLFormControlElement* HTMLFormElement::findDefaultButton() const
 {
-    return m_wasUserSubmitted;
-}
-
-HTMLFormControlElement* HTMLFormElement::defaultButton() const
-{
-    const FormAssociatedElement::List& elements = associatedElements();
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        if (!elements[i]->isFormControlElement())
+    for (const auto& element : listedElements()) {
+        if (!element->isFormControlElement())
             continue;
-        HTMLFormControlElement* control = toHTMLFormControlElement(elements[i]);
-        if (control->isSuccessfulSubmitButton())
+        HTMLFormControlElement* control = toHTMLFormControlElement(element);
+        if (control->canBeSuccessfulSubmitButton())
             return control;
     }
-
-    return 0;
+    return nullptr;
 }
 
 bool HTMLFormElement::checkValidity()
 {
-    return !checkInvalidControlsAndCollectUnhandled(0, CheckValidityDispatchInvalidEvent);
+    return !checkInvalidControlsAndCollectUnhandled(
+        0, CheckValidityDispatchInvalidEvent);
 }
 
-bool HTMLFormElement::checkInvalidControlsAndCollectUnhandled(WillBeHeapVector<RefPtrWillBeMember<HTMLFormControlElement>>* unhandledInvalidControls, CheckValidityEventBehavior eventBehavior)
+bool HTMLFormElement::checkInvalidControlsAndCollectUnhandled(
+    HeapVector<Member<HTMLFormControlElement>>* unhandledInvalidControls,
+    CheckValidityEventBehavior eventBehavior)
 {
-    RefPtrWillBeRawPtr<HTMLFormElement> protector(this);
-    // Copy associatedElements because event handlers called from
-    // HTMLFormControlElement::checkValidity() might change associatedElements.
-    const FormAssociatedElement::List& associatedElements = this->associatedElements();
-    WillBeHeapVector<RefPtrWillBeMember<FormAssociatedElement>> elements;
-    elements.reserveCapacity(associatedElements.size());
-    for (unsigned i = 0; i < associatedElements.size(); ++i)
-        elements.append(associatedElements[i]);
+    // Copy listedElements because event handlers called from
+    // HTMLFormControlElement::checkValidity() might change listedElements.
+    const ListedElement::List& listedElements = this->listedElements();
+    HeapVector<Member<ListedElement>> elements;
+    elements.reserveCapacity(listedElements.size());
+    for (const auto& element : listedElements)
+        elements.push_back(element);
     int invalidControlsCount = 0;
-    for (unsigned i = 0; i < elements.size(); ++i) {
-        if (elements[i]->form() == this && elements[i]->isFormControlElement()) {
-            HTMLFormControlElement* control = toHTMLFormControlElement(elements[i].get());
+    for (const auto& element : elements) {
+        if (element->form() == this && element->isFormControlElement()) {
+            HTMLFormControlElement* control = toHTMLFormControlElement(element);
             if (control->isSubmittableElement() && !control->checkValidity(unhandledInvalidControls, eventBehavior) && control->formOwner() == this) {
                 ++invalidControlsCount;
                 if (!unhandledInvalidControls && eventBehavior == CheckValidityDispatchNoEvent)
@@ -744,32 +720,34 @@ bool HTMLFormElement::reportValidity()
     return validateInteractively();
 }
 
-Element* HTMLFormElement::elementFromPastNamesMap(const AtomicString& pastName)
+Element* HTMLFormElement::elementFromPastNamesMap(
+    const AtomicString& pastName)
 {
     if (pastName.isEmpty() || !m_pastNamesMap)
         return 0;
     Element* element = m_pastNamesMap->get(pastName);
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     if (!element)
         return 0;
-    ASSERT_WITH_SECURITY_IMPLICATION(toHTMLElement(element)->formOwner() == this);
+    SECURITY_DCHECK(toHTMLElement(element)->formOwner() == this);
     if (isHTMLImageElement(*element)) {
-        ASSERT_WITH_SECURITY_IMPLICATION(imageElements().find(element) != kNotFound);
+        SECURITY_DCHECK(imageElements().find(element) != kNotFound);
     } else if (isHTMLObjectElement(*element)) {
-        ASSERT_WITH_SECURITY_IMPLICATION(associatedElements().find(toHTMLObjectElement(element)) != kNotFound);
+        SECURITY_DCHECK(listedElements().find(toHTMLObjectElement(element)) != kNotFound);
     } else {
-        ASSERT_WITH_SECURITY_IMPLICATION(associatedElements().find(toHTMLFormControlElement(element)) != kNotFound);
+        SECURITY_DCHECK(listedElements().find(toHTMLFormControlElement(element)) != kNotFound);
     }
 #endif
     return element;
 }
 
-void HTMLFormElement::addToPastNamesMap(Element* element, const AtomicString& pastName)
+void HTMLFormElement::addToPastNamesMap(Element* element,
+    const AtomicString& pastName)
 {
     if (pastName.isEmpty())
         return;
     if (!m_pastNamesMap)
-        m_pastNamesMap = adoptPtrWillBeNoop(new PastNamesMap);
+        m_pastNamesMap = new PastNamesMap;
     m_pastNamesMap->set(pastName, element);
 }
 
@@ -785,16 +763,18 @@ void HTMLFormElement::removeFromPastNamesMap(HTMLElement& element)
     }
 }
 
-void HTMLFormElement::getNamedElements(const AtomicString& name, WillBeHeapVector<RefPtrWillBeMember<Element>>& namedItems)
+void HTMLFormElement::getNamedElements(
+    const AtomicString& name,
+    HeapVector<Member<Element>>& namedItems)
 {
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#dom-form-nameditem
     elements()->namedItems(name, namedItems);
 
     Element* elementFromPast = elementFromPastNamesMap(name);
-    if (namedItems.size() && namedItems.first() != elementFromPast) {
-        addToPastNamesMap(namedItems.first().get(), name);
+    if (namedItems.size() && namedItems.front() != elementFromPast) {
+        addToPastNamesMap(namedItems.front().get(), name);
     } else if (elementFromPast && namedItems.isEmpty()) {
-        namedItems.append(elementFromPast);
+        namedItems.push_back(elementFromPast);
         UseCounter::count(document(), UseCounter::FormNameAccessForPastNamesMap);
     }
 }
@@ -811,19 +791,22 @@ void HTMLFormElement::finishParsingChildren()
     m_didFinishParsingChildren = true;
 }
 
-void HTMLFormElement::copyNonAttributePropertiesFromElement(const Element& source)
+void HTMLFormElement::copyNonAttributePropertiesFromElement(
+    const Element& source)
 {
     m_wasDemoted = static_cast<const HTMLFormElement&>(source).m_wasDemoted;
     HTMLElement::copyNonAttributePropertiesFromElement(source);
 }
 
-void HTMLFormElement::anonymousNamedGetter(const AtomicString& name, RadioNodeListOrElement& returnValue)
+void HTMLFormElement::anonymousNamedGetter(
+    const AtomicString& name,
+    RadioNodeListOrElement& returnValue)
 {
     // Call getNamedElements twice, first time check if it has a value
     // and let HTMLFormElement update its cache.
     // See issue: 867404
     {
-        WillBeHeapVector<RefPtrWillBeMember<Element>> elements;
+        HeapVector<Member<Element>> elements;
         getNamedElements(name, elements);
         if (elements.isEmpty())
             return;
@@ -831,16 +814,28 @@ void HTMLFormElement::anonymousNamedGetter(const AtomicString& name, RadioNodeLi
 
     // Second call may return different results from the first call,
     // but if the first the size cannot be zero.
-    WillBeHeapVector<RefPtrWillBeMember<Element>> elements;
+    HeapVector<Member<Element>> elements;
     getNamedElements(name, elements);
-    ASSERT(!elements.isEmpty());
+    DCHECK(!elements.isEmpty());
 
+    bool onlyMatchImg = !elements.isEmpty() && isHTMLImageElement(*elements.front());
+    if (onlyMatchImg) {
+        UseCounter::count(document(), UseCounter::FormNameAccessForImageElement);
+        // The following code has performance impact, but it should be small
+        // because <img> access via <form> name getter is rarely used.
+        for (auto& element : elements) {
+            if (isHTMLImageElement(*element) && !element->isDescendantOf(this)) {
+                UseCounter::count(
+                    document(), UseCounter::FormNameAccessForNonDescendantImageElement);
+                break;
+            }
+        }
+    }
     if (elements.size() == 1) {
         returnValue.setElement(elements.at(0));
         return;
     }
 
-    bool onlyMatchImg = !elements.isEmpty() && isHTMLImageElement(*elements.first());
     returnValue.setRadioNodeList(radioNodeList(name, onlyMatchImg));
 }
 
@@ -851,4 +846,15 @@ void HTMLFormElement::setDemoted(bool demoted)
     m_wasDemoted = demoted;
 }
 
-} // namespace
+void HTMLFormElement::invalidateDefaultButtonStyle() const
+{
+    for (const auto& control : listedElements()) {
+        if (!control->isFormControlElement())
+            continue;
+        if (toHTMLFormControlElement(control)->canBeSuccessfulSubmitButton())
+            toHTMLFormControlElement(control)->pseudoStateChanged(
+                CSSSelector::PseudoDefault);
+    }
+}
+
+} // namespace blink

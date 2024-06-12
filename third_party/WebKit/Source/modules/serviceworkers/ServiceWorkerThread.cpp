@@ -28,39 +28,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/serviceworkers/ServiceWorkerThread.h"
 
+#include "core/workers/WorkerBackingThread.h"
 #include "core/workers/WorkerThreadStartupData.h"
 #include "modules/serviceworkers/ServiceWorkerGlobalScope.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-PassRefPtr<ServiceWorkerThread> ServiceWorkerThread::create(PassRefPtr<WorkerLoaderProxy> workerLoaderProxy, WorkerReportingProxy& workerReportingProxy)
+std::unique_ptr<ServiceWorkerThread> ServiceWorkerThread::create(
+    PassRefPtr<WorkerLoaderProxy> workerLoaderProxy,
+    WorkerReportingProxy& workerReportingProxy)
 {
-    return adoptRef(new ServiceWorkerThread(workerLoaderProxy, workerReportingProxy));
+    return WTF::wrapUnique(new ServiceWorkerThread(std::move(workerLoaderProxy),
+        workerReportingProxy));
 }
 
-ServiceWorkerThread::ServiceWorkerThread(PassRefPtr<WorkerLoaderProxy> workerLoaderProxy, WorkerReportingProxy& workerReportingProxy)
-    : WorkerThread(workerLoaderProxy, workerReportingProxy)
+ServiceWorkerThread::ServiceWorkerThread(
+    PassRefPtr<WorkerLoaderProxy> workerLoaderProxy,
+    WorkerReportingProxy& workerReportingProxy)
+    : WorkerThread(std::move(workerLoaderProxy), workerReportingProxy)
+    , m_workerBackingThread(
+          WorkerBackingThread::create("ServiceWorker Thread"))
 {
 }
 
-ServiceWorkerThread::~ServiceWorkerThread()
+ServiceWorkerThread::~ServiceWorkerThread() { }
+
+void ServiceWorkerThread::clearWorkerBackingThread()
 {
+    m_workerBackingThread = nullptr;
 }
 
-PassRefPtrWillBeRawPtr<WorkerGlobalScope> ServiceWorkerThread::createWorkerGlobalScope(PassOwnPtr<WorkerThreadStartupData> startupData)
+WorkerOrWorkletGlobalScope* ServiceWorkerThread::createWorkerGlobalScope(
+    std::unique_ptr<WorkerThreadStartupData> startupData)
 {
-    return ServiceWorkerGlobalScope::create(this, startupData);
-}
-
-WebThreadSupportingGC& ServiceWorkerThread::backingThread()
-{
-    if (!m_thread)
-        m_thread = WebThreadSupportingGC::create("ServiceWorker Thread");
-    return *m_thread.get();
+    return ServiceWorkerGlobalScope::create(this, std::move(startupData));
 }
 
 } // namespace blink

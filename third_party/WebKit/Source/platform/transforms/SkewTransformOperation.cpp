@@ -19,32 +19,37 @@
  *
  */
 
-#include "config.h"
 #include "platform/transforms/SkewTransformOperation.h"
 
 #include "platform/animation/AnimationUtilities.h"
 
 namespace blink {
 
-PassRefPtr<TransformOperation> SkewTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
+PassRefPtr<TransformOperation> SkewTransformOperation::blend(
+    const TransformOperation* from,
+    double progress,
+    bool blendToIdentity)
 {
     if (from && !from->canBlendWith(*this))
         return this;
 
     if (blendToIdentity)
-        return SkewTransformOperation::create(blink::blend(m_angleX, 0.0, progress), blink::blend(m_angleY, 0.0, progress), m_type);
+        return SkewTransformOperation::create(blink::blend(m_angleX, 0.0, progress),
+            blink::blend(m_angleY, 0.0, progress),
+            m_type);
 
     const SkewTransformOperation* fromOp = static_cast<const SkewTransformOperation*>(from);
     double fromAngleX = fromOp ? fromOp->m_angleX : 0;
     double fromAngleY = fromOp ? fromOp->m_angleY : 0;
-    return SkewTransformOperation::create(blink::blend(fromAngleX, m_angleX, progress), blink::blend(fromAngleY, m_angleY, progress), m_type);
+    return SkewTransformOperation::create(
+        blink::blend(fromAngleX, m_angleX, progress),
+        blink::blend(fromAngleY, m_angleY, progress), m_type);
 }
 
-bool SkewTransformOperation::canBlendWith(const TransformOperation& other) const
+bool SkewTransformOperation::canBlendWith(
+    const TransformOperation& other) const
 {
-    return other.type() == Skew
-        || other.type() == SkewX
-        || other.type() == SkewY;
+    return other.type() == Skew || other.type() == SkewX || other.type() == SkewY;
 }
 
 } // namespace blink

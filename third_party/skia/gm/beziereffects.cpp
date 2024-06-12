@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -12,18 +11,19 @@
 
 #if SK_SUPPORT_GPU
 
-#include "GrBatchTarget.h"
 #include "GrContext.h"
+#include "GrDrawContextPriv.h"
 #include "GrPathUtils.h"
 #include "GrTest.h"
-#include "GrTestBatch.h"
 #include "SkColorPriv.h"
-#include "SkDevice.h"
 #include "SkGeometry.h"
+
+#include "batches/GrTestBatch.h"
 
 #include "effects/GrBezierEffect.h"
 
-static inline SkScalar eval_line(const SkPoint& p, const SkScalar lineEq[3], SkScalar sign) {
+static inline SkScalar eval_line(const SkPoint& p, const SkScalar lineEq[3], SkScalar sign)
+{
     return sign * (lineEq[0] * p.fX + lineEq[1] * p.fY + lineEq[2]);
 }
 
@@ -31,67 +31,50 @@ namespace skiagm {
 
 class BezierCubicOrConicTestBatch : public GrTestBatch {
 public:
-    struct Geometry : public GrTestBatch::Geometry {
-        SkRect fBounds;
-    };
+    DEFINE_BATCH_CLASS_ID
 
     const char* name() const override { return "BezierCubicOrConicTestBatch"; }
 
-    static GrBatch* Create(const GrGeometryProcessor* gp, const Geometry& geo,
-                           const SkScalar klmEqs[9], SkScalar sign) {
-        return SkNEW_ARGS(BezierCubicOrConicTestBatch, (gp, geo, klmEqs, sign));
-    }
-
-private:
-    BezierCubicOrConicTestBatch(const GrGeometryProcessor* gp, const Geometry& geo,
-                                const SkScalar klmEqs[9], SkScalar sign)
-        : INHERITED(gp, geo.fBounds) {
+    BezierCubicOrConicTestBatch(sk_sp<GrGeometryProcessor> gp, const SkRect& bounds,
+        GrColor color, const SkScalar klmEqs[9], SkScalar sign)
+        : INHERITED(ClassID(), bounds, color)
+        , fGeometryProcessor(std::move(gp))
+    {
         for (int i = 0; i < 9; i++) {
             fKlmEqs[i] = klmEqs[i];
         }
-
-        fGeometry = geo;
         fSign = sign;
     }
 
+private:
     struct Vertex {
         SkPoint fPosition;
-        float   fKLM[4]; // The last value is ignored. The effect expects a vec4f.
+        float fKLM[4]; // The last value is ignored. The effect expects a vec4f.
     };
 
-    Geometry* geoData(int index) override {
-        SkASSERT(0 == index);
-        return &fGeometry;
-    }
-
-    const Geometry* geoData(int index) const override {
-        SkASSERT(0 == index);
-        return &fGeometry;
-    }
-
-    void onGenerateGeometry(GrBatchTarget* batchTarget, const GrPipeline* pipeline) override {
+    void onPrepareDraws(Target* target) const override
+    {
         QuadHelper helper;
-        size_t vertexStride = this->geometryProcessor()->getVertexStride();
+        size_t vertexStride = fGeometryProcessor->getVertexStride();
         SkASSERT(vertexStride == sizeof(Vertex));
-        Vertex* verts = reinterpret_cast<Vertex*>(helper.init(batchTarget, vertexStride, 1));
+        Vertex* verts = reinterpret_cast<Vertex*>(helper.init(target, vertexStride, 1));
         if (!verts) {
             return;
         }
-
-        verts[0].fPosition.setRectFan(fGeometry.fBounds.fLeft, fGeometry.fBounds.fTop,
-                                      fGeometry.fBounds.fRight, fGeometry.fBounds.fBottom,
-                                      sizeof(Vertex));
+        const SkRect& bounds = this->bounds();
+        verts[0].fPosition.setRectFan(bounds.fLeft, bounds.fTop, bounds.fRight, bounds.fBottom,
+            sizeof(Vertex));
         for (int v = 0; v < 4; ++v) {
             verts[v].fKLM[0] = eval_line(verts[v].fPosition, fKlmEqs + 0, fSign);
             verts[v].fKLM[1] = eval_line(verts[v].fPosition, fKlmEqs + 3, fSign);
             verts[v].fKLM[2] = eval_line(verts[v].fPosition, fKlmEqs + 6, 1.f);
         }
-        helper.issueDraw(batchTarget);
+        helper.recordDraw(target, fGeometryProcessor.get());
     }
 
-    Geometry fGeometry;
     SkScalar fKlmEqs[9];
     SkScalar fSign;
+    sk_sp<GrGeometryProcessor> fGeometryProcessor;
 
     static const int kVertsPerCubic = 4;
     static const int kIndicesPerCubic = 6;
@@ -104,85 +87,81 @@ private:
  */
 class BezierCubicEffects : public GM {
 public:
-    BezierCubicEffects() {
+    BezierCubicEffects()
+    {
         this->setBGColor(0xFFFFFFFF);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("bezier_cubic_effects");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(800, 800);
     }
 
-    void onDraw(SkCanvas* canvas) override {
-        GrRenderTarget* rt = canvas->internal_private_accessTopLayerRenderTarget();
-        if (NULL == rt) {
-            this->drawGpuOnlyMessage(canvas);
+    void onDraw(SkCanvas* canvas) override
+    {
+        GrDrawContext* drawContext = canvas->internal_private_accessTopLayerDrawContext();
+        if (!drawContext) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
-        GrContext* context = rt->getContext();
-        if (NULL == context) {
+
+        GrContext* context = canvas->getGrContext();
+        if (!context) {
             return;
         }
 
         struct Vertex {
             SkPoint fPosition;
-            float   fKLM[4]; // The last value is ignored. The effect expects a vec4f.
+            float fKLM[4]; // The last value is ignored. The effect expects a vec4f.
         };
 
         static const int kNumCubics = 15;
         SkRandom rand;
 
         // Mult by 3 for each edge effect type
-        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumCubics*3)));
-        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumCubics*3) / numCols);
-        SkScalar w = SkIntToScalar(rt->width()) / numCols;
-        SkScalar h = SkIntToScalar(rt->height()) / numRows;
+        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumCubics * 3)));
+        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumCubics * 3) / numCols);
+        SkScalar w = SkIntToScalar(drawContext->width()) / numCols;
+        SkScalar h = SkIntToScalar(drawContext->height()) / numRows;
         int row = 0;
         int col = 0;
         static const GrColor color = 0xff000000;
 
         for (int i = 0; i < kNumCubics; ++i) {
             SkPoint baseControlPts[] = {
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)}
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) }
             };
-            for(int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
-                SkAutoTUnref<GrGeometryProcessor> gp;
-                {   // scope to contain GrTestTarget
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    if (NULL == tt.target()) {
-                        continue;
-                    }
-                    GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
-                    gp.reset(GrCubicEffect::Create(color, SkMatrix::I(), et,
-                                                   *tt.target()->caps()));
-                    if (!gp) {
-                        continue;
-                    }
+            for (int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
+                sk_sp<GrGeometryProcessor> gp;
+                GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
+                gp = GrCubicEffect::Make(color, SkMatrix::I(), et, *context->caps());
+                if (!gp) {
+                    continue;
                 }
-
                 SkScalar x = SkScalarMul(col, w);
                 SkScalar y = SkScalarMul(row, h);
                 SkPoint controlPts[] = {
-                    {x + baseControlPts[0].fX, y + baseControlPts[0].fY},
-                    {x + baseControlPts[1].fX, y + baseControlPts[1].fY},
-                    {x + baseControlPts[2].fX, y + baseControlPts[2].fY},
-                    {x + baseControlPts[3].fX, y + baseControlPts[3].fY}
+                    { x + baseControlPts[0].fX, y + baseControlPts[0].fY },
+                    { x + baseControlPts[1].fX, y + baseControlPts[1].fY },
+                    { x + baseControlPts[2].fX, y + baseControlPts[2].fY },
+                    { x + baseControlPts[3].fX, y + baseControlPts[3].fY }
                 };
                 SkPoint chopped[10];
                 SkScalar klmEqs[9];
                 SkScalar klmSigns[3];
                 int cnt = GrPathUtils::chopCubicAtLoopIntersection(controlPts,
-                                                                   chopped,
-                                                                   klmEqs,
-                                                                   klmSigns);
+                    chopped,
+                    klmEqs,
+                    klmSigns);
 
                 SkPaint ctrlPtPaint;
                 ctrlPtPaint.setColor(rand.nextU() | 0xFF000000);
@@ -215,21 +194,13 @@ protected:
                     boundsPaint.setStyle(SkPaint::kStroke_Style);
                     canvas->drawRect(bounds, boundsPaint);
 
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    SkASSERT(tt.target());
+                    GrPaint grPaint;
+                    grPaint.setXPFactory(GrPorterDuffXPFactory::Make(SkXfermode::kSrc_Mode));
 
-                    GrPipelineBuilder pipelineBuilder;
-                    pipelineBuilder.setRenderTarget(rt);
+                    SkAutoTUnref<GrDrawBatch> batch(
+                        new BezierCubicOrConicTestBatch(gp, bounds, color, klmEqs, klmSigns[c]));
 
-                    BezierCubicOrConicTestBatch::Geometry geometry;
-                    geometry.fColor = color;
-                    geometry.fBounds = bounds;
-
-                    SkAutoTUnref<GrBatch> batch(
-                            BezierCubicOrConicTestBatch::Create(gp, geometry, klmEqs, klmSigns[c]));
-
-                    tt.target()->drawBatch(&pipelineBuilder, batch);
+                    drawContext->drawContextPriv().testingOnly_drawBatch(grPaint, batch);
                 }
                 ++col;
                 if (numCols == col) {
@@ -251,77 +222,74 @@ private:
  */
 class BezierConicEffects : public GM {
 public:
-    BezierConicEffects() {
+    BezierConicEffects()
+    {
         this->setBGColor(0xFFFFFFFF);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("bezier_conic_effects");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(800, 800);
     }
 
-
-    void onDraw(SkCanvas* canvas) override {
-        GrRenderTarget* rt = canvas->internal_private_accessTopLayerRenderTarget();
-        if (NULL == rt) {
-            this->drawGpuOnlyMessage(canvas);
+    void onDraw(SkCanvas* canvas) override
+    {
+        GrDrawContext* drawContext = canvas->internal_private_accessTopLayerDrawContext();
+        if (!drawContext) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
-        GrContext* context = rt->getContext();
-        if (NULL == context) {
+
+        GrContext* context = canvas->getGrContext();
+        if (!context) {
             return;
         }
 
         struct Vertex {
             SkPoint fPosition;
-            float   fKLM[4]; // The last value is ignored. The effect expects a vec4f.
+            float fKLM[4]; // The last value is ignored. The effect expects a vec4f.
         };
 
         static const int kNumConics = 10;
         SkRandom rand;
 
         // Mult by 3 for each edge effect type
-        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumConics*3)));
-        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumConics*3) / numCols);
-        SkScalar w = SkIntToScalar(rt->width()) / numCols;
-        SkScalar h = SkIntToScalar(rt->height()) / numRows;
+        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumConics * 3)));
+        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumConics * 3) / numCols);
+        SkScalar w = SkIntToScalar(drawContext->width()) / numCols;
+        SkScalar h = SkIntToScalar(drawContext->height()) / numRows;
         int row = 0;
         int col = 0;
         static const GrColor color = 0xff000000;
 
         for (int i = 0; i < kNumConics; ++i) {
             SkPoint baseControlPts[] = {
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)}
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) }
             };
             SkScalar weight = rand.nextRangeF(0.f, 2.f);
-            for(int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
-                SkAutoTUnref<GrGeometryProcessor> gp;
-                {   // scope to contain GrTestTarget
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    if (NULL == tt.target()) {
-                        continue;
-                    }
-                    GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
-                    gp.reset(GrConicEffect::Create(color, SkMatrix::I(), et,
-                                                   *tt.target()->caps(), SkMatrix::I(), false));
-                    if (!gp) {
-                        continue;
-                    }
+            for (int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
+                sk_sp<GrGeometryProcessor> gp;
+                GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
+                gp = GrConicEffect::Make(color, SkMatrix::I(), et,
+                    *context->caps(), SkMatrix::I(), false);
+                if (!gp) {
+                    continue;
                 }
 
                 SkScalar x = SkScalarMul(col, w);
                 SkScalar y = SkScalarMul(row, h);
                 SkPoint controlPts[] = {
-                    {x + baseControlPts[0].fX, y + baseControlPts[0].fY},
-                    {x + baseControlPts[1].fX, y + baseControlPts[1].fY},
-                    {x + baseControlPts[2].fX, y + baseControlPts[2].fY}
+                    { x + baseControlPts[0].fX, y + baseControlPts[0].fY },
+                    { x + baseControlPts[1].fX, y + baseControlPts[1].fY },
+                    { x + baseControlPts[2].fX, y + baseControlPts[2].fY }
                 };
                 SkConic dst[4];
                 SkScalar klmEqs[9];
@@ -360,21 +328,13 @@ protected:
                     boundsPaint.setStyle(SkPaint::kStroke_Style);
                     canvas->drawRect(bounds, boundsPaint);
 
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    SkASSERT(tt.target());
+                    GrPaint grPaint;
+                    grPaint.setXPFactory(GrPorterDuffXPFactory::Make(SkXfermode::kSrc_Mode));
 
-                    GrPipelineBuilder pipelineBuilder;
-                    pipelineBuilder.setRenderTarget(rt);
+                    SkAutoTUnref<GrDrawBatch> batch(
+                        new BezierCubicOrConicTestBatch(gp, bounds, color, klmEqs, 1.f));
 
-                    BezierCubicOrConicTestBatch::Geometry geometry;
-                    geometry.fColor = color;
-                    geometry.fBounds = bounds;
-
-                    SkAutoTUnref<GrBatch> batch(
-                            BezierCubicOrConicTestBatch::Create(gp, geometry, klmEqs, 1.f));
-
-                    tt.target()->drawBatch(&pipelineBuilder, batch);
+                    drawContext->drawContextPriv().testingOnly_drawBatch(grPaint, batch);
                 }
                 ++col;
                 if (numCols == col) {
@@ -391,7 +351,8 @@ private:
     // found along the curve segment it will return 1 and
     // dst[0] is the original conic. If it returns 2 the dst[0]
     // and dst[1] are the two new conics.
-    int split_conic(const SkPoint src[3], SkConic dst[2], const SkScalar weight) {
+    int split_conic(const SkPoint src[3], SkConic dst[2], const SkScalar weight)
+    {
         SkScalar t = SkFindQuadMaxCurvature(src);
         if (t == 0) {
             if (dst) {
@@ -411,7 +372,8 @@ private:
     // Calls split_conic on the entire conic and then once more on each subsection.
     // Most cases will result in either 1 conic (chop point is not within t range)
     // or 3 points (split once and then one subsection is split again).
-    int chop_conic(const SkPoint src[3], SkConic dst[4], const SkScalar weight) {
+    int chop_conic(const SkPoint src[3], SkConic dst[4], const SkScalar weight)
+    {
         SkConic dstTemp[2];
         int conicCnt = split_conic(src, dstTemp, weight);
         if (2 == conicCnt) {
@@ -430,57 +392,41 @@ private:
 
 class BezierQuadTestBatch : public GrTestBatch {
 public:
-    struct Geometry : public GrTestBatch::Geometry {
-        SkRect fBounds;
-    };
-
+    DEFINE_BATCH_CLASS_ID
     const char* name() const override { return "BezierQuadTestBatch"; }
 
-    static GrBatch* Create(const GrGeometryProcessor* gp, const Geometry& geo,
-                           const GrPathUtils::QuadUVMatrix& devToUV) {
-        return SkNEW_ARGS(BezierQuadTestBatch, (gp, geo, devToUV));
+    BezierQuadTestBatch(sk_sp<GrGeometryProcessor> gp, const SkRect& bounds, GrColor color,
+        const GrPathUtils::QuadUVMatrix& devToUV)
+        : INHERITED(ClassID(), bounds, color)
+        , fDevToUV(devToUV)
+        , fGeometryProcessor(std::move(gp))
+    {
     }
 
 private:
-    BezierQuadTestBatch(const GrGeometryProcessor* gp, const Geometry& geo,
-                        const GrPathUtils::QuadUVMatrix& devToUV)
-        : INHERITED(gp, geo.fBounds)
-        , fGeometry(geo)
-        , fDevToUV(devToUV) {
-    }
-
     struct Vertex {
         SkPoint fPosition;
-        float   fKLM[4]; // The last value is ignored. The effect expects a vec4f.
+        float fKLM[4]; // The last value is ignored. The effect expects a vec4f.
     };
 
-    Geometry* geoData(int index) override {
-        SkASSERT(0 == index);
-        return &fGeometry;
-    }
-
-    const Geometry* geoData(int index) const override {
-        SkASSERT(0 == index);
-        return &fGeometry;
-    }
-
-    void onGenerateGeometry(GrBatchTarget* batchTarget, const GrPipeline* pipeline) override {
+    void onPrepareDraws(Target* target) const override
+    {
         QuadHelper helper;
-        size_t vertexStride = this->geometryProcessor()->getVertexStride();
+        size_t vertexStride = fGeometryProcessor->getVertexStride();
         SkASSERT(vertexStride == sizeof(Vertex));
-        Vertex* verts = reinterpret_cast<Vertex*>(helper.init(batchTarget, vertexStride, 1));
+        Vertex* verts = reinterpret_cast<Vertex*>(helper.init(target, vertexStride, 1));
         if (!verts) {
             return;
         }
-        verts[0].fPosition.setRectFan(fGeometry.fBounds.fLeft, fGeometry.fBounds.fTop,
-                                      fGeometry.fBounds.fRight, fGeometry.fBounds.fBottom,
-                                      sizeof(Vertex));
+        const SkRect& bounds = this->bounds();
+        verts[0].fPosition.setRectFan(bounds.fLeft, bounds.fTop, bounds.fRight, bounds.fBottom,
+            sizeof(Vertex));
         fDevToUV.apply<4, sizeof(Vertex), sizeof(SkPoint)>(verts);
-        helper.issueDraw(batchTarget);
+        helper.recordDraw(target, fGeometryProcessor.get());
     }
 
-    Geometry fGeometry;
     GrPathUtils::QuadUVMatrix fDevToUV;
+    sk_sp<GrGeometryProcessor> fGeometryProcessor;
 
     static const int kVertsPerCubic = 4;
     static const int kIndicesPerCubic = 6;
@@ -493,75 +439,72 @@ private:
  */
 class BezierQuadEffects : public GM {
 public:
-    BezierQuadEffects() {
+    BezierQuadEffects()
+    {
         this->setBGColor(0xFFFFFFFF);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("bezier_quad_effects");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(800, 800);
     }
 
-
-    void onDraw(SkCanvas* canvas) override {
-        GrRenderTarget* rt = canvas->internal_private_accessTopLayerRenderTarget();
-        if (NULL == rt) {
-            this->drawGpuOnlyMessage(canvas);
+    void onDraw(SkCanvas* canvas) override
+    {
+        GrDrawContext* drawContext = canvas->internal_private_accessTopLayerDrawContext();
+        if (!drawContext) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
-        GrContext* context = rt->getContext();
-        if (NULL == context) {
+
+        GrContext* context = canvas->getGrContext();
+        if (!context) {
             return;
         }
 
         struct Vertex {
             SkPoint fPosition;
-            float   fUV[4]; // The last two values are ignored. The effect expects a vec4f.
+            float fUV[4]; // The last two values are ignored. The effect expects a vec4f.
         };
 
         static const int kNumQuads = 5;
         SkRandom rand;
 
-        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumQuads*3)));
-        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumQuads*3) / numCols);
-        SkScalar w = SkIntToScalar(rt->width()) / numCols;
-        SkScalar h = SkIntToScalar(rt->height()) / numRows;
+        int numCols = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(kNumQuads * 3)));
+        int numRows = SkScalarCeilToInt(SkIntToScalar(kNumQuads * 3) / numCols);
+        SkScalar w = SkIntToScalar(drawContext->width()) / numCols;
+        SkScalar h = SkIntToScalar(drawContext->height()) / numRows;
         int row = 0;
         int col = 0;
         static const GrColor color = 0xff000000;
 
         for (int i = 0; i < kNumQuads; ++i) {
             SkPoint baseControlPts[] = {
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)},
-                {rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h)}
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) },
+                { rand.nextRangeF(0.f, w), rand.nextRangeF(0.f, h) }
             };
-            for(int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
-                SkAutoTUnref<GrGeometryProcessor> gp;
-                {   // scope to contain GrTestTarget
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    if (NULL == tt.target()) {
-                        continue;
-                    }
-                    GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
-                    gp.reset(GrQuadEffect::Create(color, SkMatrix::I(), et,
-                                                  *tt.target()->caps(), SkMatrix::I(), false));
-                    if (!gp) {
-                        continue;
-                    }
+            for (int edgeType = 0; edgeType < kGrProcessorEdgeTypeCnt; ++edgeType) {
+                sk_sp<GrGeometryProcessor> gp;
+                GrPrimitiveEdgeType et = (GrPrimitiveEdgeType)edgeType;
+                gp = GrQuadEffect::Make(color, SkMatrix::I(), et,
+                    *context->caps(), SkMatrix::I(), false);
+                if (!gp) {
+                    continue;
                 }
 
                 SkScalar x = SkScalarMul(col, w);
                 SkScalar y = SkScalarMul(row, h);
                 SkPoint controlPts[] = {
-                    {x + baseControlPts[0].fX, y + baseControlPts[0].fY},
-                    {x + baseControlPts[1].fX, y + baseControlPts[1].fY},
-                    {x + baseControlPts[2].fX, y + baseControlPts[2].fY}
+                    { x + baseControlPts[0].fX, y + baseControlPts[0].fY },
+                    { x + baseControlPts[1].fX, y + baseControlPts[1].fY },
+                    { x + baseControlPts[2].fX, y + baseControlPts[2].fY }
                 };
                 SkPoint chopped[5];
                 int cnt = SkChopQuadAtMaxCurvature(controlPts, chopped);
@@ -597,22 +540,15 @@ protected:
                     boundsPaint.setStyle(SkPaint::kStroke_Style);
                     canvas->drawRect(bounds, boundsPaint);
 
-                    GrTestTarget tt;
-                    context->getTestTarget(&tt);
-                    SkASSERT(tt.target());
-
-                    GrPipelineBuilder pipelineBuilder;
-                    pipelineBuilder.setRenderTarget(rt);
+                    GrPaint grPaint;
+                    grPaint.setXPFactory(GrPorterDuffXPFactory::Make(SkXfermode::kSrc_Mode));
 
                     GrPathUtils::QuadUVMatrix DevToUV(pts);
 
-                    BezierQuadTestBatch::Geometry geometry;
-                    geometry.fColor = color;
-                    geometry.fBounds = bounds;
+                    SkAutoTUnref<GrDrawBatch> batch(
+                        new BezierQuadTestBatch(gp, bounds, color, DevToUV));
 
-                    SkAutoTUnref<GrBatch> batch(BezierQuadTestBatch::Create(gp, geometry, DevToUV));
-
-                    tt.target()->drawBatch(&pipelineBuilder, batch);
+                    drawContext->drawContextPriv().testingOnly_drawBatch(grPaint, batch);
                 }
                 ++col;
                 if (numCols == col) {
@@ -627,10 +563,9 @@ private:
     typedef GM INHERITED;
 };
 
-DEF_GM( return SkNEW(BezierCubicEffects); )
-DEF_GM( return SkNEW(BezierConicEffects); )
-DEF_GM( return SkNEW(BezierQuadEffects); )
-
+DEF_GM(return new BezierCubicEffects;)
+DEF_GM(return new BezierConicEffects;)
+DEF_GM(return new BezierQuadEffects;)
 }
 
 #endif

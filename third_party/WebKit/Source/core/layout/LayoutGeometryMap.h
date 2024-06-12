@@ -28,55 +28,73 @@
 
 #include "core/CoreExport.h"
 #include "core/layout/LayoutGeometryMapStep.h"
-#include "core/layout/LayoutObject.h"
+#include "core/layout/MapCoordinatesFlags.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/geometry/LayoutSize.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-class DeprecatedPaintLayer;
+class PaintLayer;
 class LayoutBoxModelObject;
+class LayoutObject;
 class TransformationMatrix;
 class TransformState;
 
-// Can be used while walking the layout tree to cache data about offsets and transforms.
+// Can be used while walking the layout tree to cache data about offsets and
+// transforms.
 class CORE_EXPORT LayoutGeometryMap {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(LayoutGeometryMap);
+
 public:
     LayoutGeometryMap(MapCoordinatesFlags = UseTransforms);
     ~LayoutGeometryMap();
 
-    MapCoordinatesFlags mapCoordinatesFlags() const { return m_mapCoordinatesFlags; }
+    MapCoordinatesFlags getMapCoordinatesFlags() const
+    {
+        return m_mapCoordinatesFlags;
+    }
 
     FloatRect absoluteRect(const FloatRect& rect) const
     {
-        return mapToContainer(rect, 0).boundingBox();
+        return mapToAncestor(rect, 0).boundingBox();
     }
 
-    // Map to a container. Will assert that the container has been pushed onto this map.
-    // A null container maps through the LayoutView (including its scale transform, if any).
-    // If the container is the LayoutView, the scroll offset is applied, but not the scale.
-    FloatPoint mapToContainer(const FloatPoint&, const LayoutBoxModelObject*) const;
-    FloatQuad mapToContainer(const FloatRect&, const LayoutBoxModelObject*) const;
+    // Map to an ancestor. Will assert that the ancestor has been pushed onto this
+    // map. A null ancestor maps through the LayoutView (including its scale
+    // transform, if any). If the ancestor is the LayoutView, the scroll offset is
+    // applied, but not the scale.
+    FloatQuad mapToAncestor(const FloatRect&, const LayoutBoxModelObject*) const;
 
     // Called by code walking the layout or layer trees.
-    void pushMappingsToAncestor(const DeprecatedPaintLayer*, const DeprecatedPaintLayer* ancestorLayer);
-    void popMappingsToAncestor(const DeprecatedPaintLayer*);
-    void pushMappingsToAncestor(const LayoutObject*, const LayoutBoxModelObject* ancestorLayoutObject);
-    void popMappingsToAncestor(const LayoutBoxModelObject*);
+    void pushMappingsToAncestor(const PaintLayer*,
+        const PaintLayer* ancestorLayer);
+    void popMappingsToAncestor(const PaintLayer*);
+    void pushMappingsToAncestor(const LayoutObject*,
+        const LayoutBoxModelObject* ancestorLayoutObject);
 
-    // The following methods should only be called by layoutObjects inside a call to pushMappingsToAncestor().
+    // The following methods should only be called by layoutObjects inside a call
+    // to pushMappingsToAncestor().
 
-    // Push geometry info between this layoutObject and some ancestor. The ancestor must be its container() or some
-    // stacking context between the layoutObject and its container.
-    void push(const LayoutObject*, const LayoutSize&, bool accumulatingTransform = false, bool isNonUniform = false, bool isFixedPosition = false, bool hasTransform = false, LayoutSize offsetForFixedPosition = LayoutSize());
-    void push(const LayoutObject*, const TransformationMatrix&, bool accumulatingTransform = false, bool isNonUniform = false, bool isFixedPosition = false, bool hasTransform = false, LayoutSize offsetForFixedPosition = LayoutSize());
+    // Push geometry info between this layoutObject and some ancestor. The
+    // ancestor must be its container() or some stacking context between the
+    // layoutObject and its container.
+    void push(const LayoutObject*,
+        const LayoutSize&,
+        GeometryInfoFlags = 0,
+        LayoutSize offsetForFixedPosition = LayoutSize());
+    void push(const LayoutObject*,
+        const TransformationMatrix&,
+        GeometryInfoFlags = 0,
+        LayoutSize offsetForFixedPosition = LayoutSize());
 
 private:
-    void mapToContainer(TransformState&, const LayoutBoxModelObject* container = nullptr) const;
+    void popMappingsToAncestor(const LayoutBoxModelObject*);
+    void mapToAncestor(TransformState&,
+        const LayoutBoxModelObject* ancestor = nullptr) const;
 
     void stepInserted(const LayoutGeometryMapStep&);
     void stepRemoved(const LayoutGeometryMapStep&);
@@ -89,7 +107,7 @@ private:
     void dumpSteps() const;
 #endif
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     bool isTopmostLayoutView(const LayoutObject*) const;
 #endif
 

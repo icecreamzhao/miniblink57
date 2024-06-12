@@ -28,12 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-[
-    GarbageCollected,
-    NoInterfaceObject,
-    RuntimeEnabled=MediaSource,
-] interface SourceBufferList : EventTarget {
+interface SourceBufferList : EventTarget {
     readonly attribute unsigned long length;
+    attribute EventHandler onaddsourcebuffer;
+    attribute EventHandler onremovesourcebuffer;
     [ImplementedAs=item] getter SourceBuffer (unsigned long index);
 };
-

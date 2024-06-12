@@ -7,6 +7,7 @@
 
 #include "platform/animation/TimingFunction.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -14,22 +15,38 @@ namespace blink {
 struct Timing;
 
 class CSSTimingData {
+    USING_FAST_MALLOC(CSSTimingData);
+
 public:
     ~CSSTimingData() { }
 
     const Vector<double>& delayList() const { return m_delayList; }
     const Vector<double>& durationList() const { return m_durationList; }
-    const Vector<RefPtr<TimingFunction>>& timingFunctionList() const { return m_timingFunctionList; }
+    const Vector<RefPtr<TimingFunction>>& timingFunctionList() const
+    {
+        return m_timingFunctionList;
+    }
 
     Vector<double>& delayList() { return m_delayList; }
     Vector<double>& durationList() { return m_durationList; }
-    Vector<RefPtr<TimingFunction>>& timingFunctionList() { return m_timingFunctionList; }
+    Vector<RefPtr<TimingFunction>>& timingFunctionList()
+    {
+        return m_timingFunctionList;
+    }
 
     static double initialDelay() { return 0; }
     static double initialDuration() { return 0; }
-    static PassRefPtr<TimingFunction> initialTimingFunction() { return CubicBezierTimingFunction::preset(CubicBezierTimingFunction::Ease); }
+    static PassRefPtr<TimingFunction> initialTimingFunction()
+    {
+        return CubicBezierTimingFunction::preset(
+            CubicBezierTimingFunction::EaseType::EASE);
+    }
 
-    template <class T> static const T& getRepeated(const Vector<T>& v, size_t index) { return v[index % v.size()]; }
+    template <class T>
+    static const T& getRepeated(const Vector<T>& v, size_t index)
+    {
+        return v[index % v.size()];
+    }
 
 protected:
     CSSTimingData();

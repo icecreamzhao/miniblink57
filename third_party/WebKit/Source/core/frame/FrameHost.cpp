@@ -28,93 +28,180 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/frame/FrameHost.h"
 
+#include "core/frame/BrowserControls.h"
 #include "core/frame/EventHandlerRegistry.h"
 #include "core/frame/FrameView.h"
-#include "core/frame/TopControls.h"
+#include "core/frame/PageScaleConstraints.h"
+#include "core/frame/PageScaleConstraintsSet.h"
+#include "core/frame/VisualViewport.h"
 #include "core/inspector/ConsoleMessageStorage.h"
 #include "core/page/Page.h"
+#include "core/page/scrolling/OverscrollController.h"
+#include "core/page/scrolling/TopDocumentRootScrollerController.h"
+#include "public/platform/Platform.h"
+#include "public/platform/WebScheduler.h"
 
 namespace blink {
 
-PassOwnPtrWillBeRawPtr<FrameHost> FrameHost::create(Page& page)
+FrameHost* FrameHost::create(Page& page)
 {
-    return adoptPtrWillBeNoop(new FrameHost(page));
+    return new FrameHost(page);
 }
 
 FrameHost::FrameHost(Page& page)
     : m_page(&page)
-    , m_topControls(TopControls::create(*this))
+    , m_browserControls(BrowserControls::create(*this))
     , m_pageScaleConstraintsSet(PageScaleConstraintsSet::create())
-    , m_pinchViewport(PinchViewport::create(*this))
-    , m_eventHandlerRegistry(adoptPtrWillBeNoop(new EventHandlerRegistry(*this)))
-    , m_consoleMessageStorage(ConsoleMessageStorage::create())
+    , m_visualViewport(VisualViewport::create(*this))
+    , m_overscrollController(
+          OverscrollController::create(*m_visualViewport,
+              m_page->chromeClient()))
+    , m_eventHandlerRegistry(new EventHandlerRegistry(*this))
+    , m_consoleMessageStorage(new ConsoleMessageStorage())
+    , m_globalRootScrollerController(
+          TopDocumentRootScrollerController::create(*this))
     , m_subframeCount(0)
 {
 }
 
 // Explicitly in the .cpp to avoid default constructor in .h
-FrameHost::~FrameHost()
+FrameHost::~FrameHost() { }
+
+Page& FrameHost::page()
 {
+    return *m_page;
 }
 
-Settings& FrameHost::settings() const
+const Page& FrameHost::page() const
+{
+    return *m_page;
+}
+
+Settings& FrameHost::settings()
 {
     return m_page->settings();
 }
 
-ChromeClient& FrameHost::chromeClient() const
+const Settings& FrameHost::settings() const
+{
+    return m_page->settings();
+}
+
+ChromeClient& FrameHost::chromeClient()
 {
     return m_page->chromeClient();
 }
 
-UseCounter& FrameHost::useCounter() const
+const ChromeClient& FrameHost::chromeClient() const
+{
+    return m_page->chromeClient();
+}
+
+UseCounter& FrameHost::useCounter()
 {
     return m_page->useCounter();
 }
 
-float FrameHost::deviceScaleFactor() const
+const UseCounter& FrameHost::useCounter() const
+{
+    return m_page->useCounter();
+}
+
+Deprecation& FrameHost::deprecation()
+{
+    return m_page->deprecation();
+}
+
+const Deprecation& FrameHost::deprecation() const
+{
+    return m_page->deprecation();
+}
+
+float FrameHost::deviceScaleFactorDeprecated() const
 {
     return m_page->deviceScaleFactor();
 }
 
-TopControls& FrameHost::topControls() const
+BrowserControls& FrameHost::browserControls()
 {
-    return *m_topControls;
+    return *m_browserControls;
 }
 
-PinchViewport& FrameHost::pinchViewport() const
+const BrowserControls& FrameHost::browserControls() const
 {
-    return *m_pinchViewport;
+    return *m_browserControls;
 }
 
-PageScaleConstraintsSet& FrameHost::pageScaleConstraintsSet() const
+OverscrollController& FrameHost::overscrollController()
+{
+    return *m_overscrollController;
+}
+
+const OverscrollController& FrameHost::overscrollController() const
+{
+    return *m_overscrollController;
+}
+
+VisualViewport& FrameHost::visualViewport()
+{
+    return *m_visualViewport;
+}
+
+const VisualViewport& FrameHost::visualViewport() const
+{
+    return *m_visualViewport;
+}
+
+PageScaleConstraintsSet& FrameHost::pageScaleConstraintsSet()
 {
     return *m_pageScaleConstraintsSet;
 }
 
-EventHandlerRegistry& FrameHost::eventHandlerRegistry() const
+const PageScaleConstraintsSet& FrameHost::pageScaleConstraintsSet() const
+{
+    return *m_pageScaleConstraintsSet;
+}
+
+EventHandlerRegistry& FrameHost::eventHandlerRegistry()
 {
     return *m_eventHandlerRegistry;
 }
 
-ConsoleMessageStorage& FrameHost::consoleMessageStorage() const
+const EventHandlerRegistry& FrameHost::eventHandlerRegistry() const
+{
+    return *m_eventHandlerRegistry;
+}
+
+ConsoleMessageStorage& FrameHost::consoleMessageStorage()
 {
     return *m_consoleMessageStorage;
+}
+
+const ConsoleMessageStorage& FrameHost::consoleMessageStorage() const
+{
+    return *m_consoleMessageStorage;
+}
+
+TopDocumentRootScrollerController& FrameHost::globalRootScrollerController()
+    const
+{
+    return *m_globalRootScrollerController;
 }
 
 DEFINE_TRACE(FrameHost)
 {
     visitor->trace(m_page);
-    visitor->trace(m_topControls);
-    visitor->trace(m_pinchViewport);
+    visitor->trace(m_browserControls);
+    visitor->trace(m_visualViewport);
+    visitor->trace(m_overscrollController);
     visitor->trace(m_eventHandlerRegistry);
     visitor->trace(m_consoleMessageStorage);
+    visitor->trace(m_globalRootScrollerController);
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 void checkFrameCountConsistency(int expectedFrameCount, Frame* frame)
 {
     ASSERT(expectedFrameCount >= 0);
@@ -129,7 +216,7 @@ void checkFrameCountConsistency(int expectedFrameCount, Frame* frame)
 
 int FrameHost::subframeCount() const
 {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     checkFrameCountConsistency(m_subframeCount + 1, m_page->mainFrame());
 #endif
     return m_subframeCount;
@@ -159,7 +246,8 @@ void FrameHost::setDefaultPageScaleLimits(float minScale, float maxScale)
     rootView->setNeedsLayout();
 }
 
-void FrameHost::setUserAgentPageScaleConstraints(PageScaleConstraints newConstraints)
+void FrameHost::setUserAgentPageScaleConstraints(
+    const PageScaleConstraints& newConstraints)
 {
     if (newConstraints == pageScaleConstraintsSet().userAgentConstraints())
         return;
@@ -177,4 +265,4 @@ void FrameHost::setUserAgentPageScaleConstraints(PageScaleConstraints newConstra
     rootView->setNeedsLayout();
 }
 
-}
+} // namespace blink

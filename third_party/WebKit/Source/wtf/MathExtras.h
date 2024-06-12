@@ -26,18 +26,25 @@
 #ifndef WTF_MathExtras_h
 #define WTF_MathExtras_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/CPU.h"
 #include <cmath>
+#include <cstddef>
 #include <limits>
 
 #if COMPILER(MSVC)
+// Make math.h behave like other platforms.
+#define _USE_MATH_DEFINES
+// Even if math.h was already included, including math.h again with
+// _USE_MATH_DEFINES adds the extra defines.
+#include <math.h>
 #include <stdint.h>
 #endif
 
 #if OS(OPENBSD)
-#include <sys/types.h>
 #include <machine/ieee.h>
+#include <sys/types.h>
 #endif
 
 const double piDouble = M_PI;
@@ -52,27 +59,13 @@ const float piOverFourFloat = static_cast<float>(M_PI_4);
 const double twoPiDouble = piDouble * 2.0;
 const float twoPiFloat = piFloat * 2.0f;
 
-#if OS(ANDROID) || COMPILER(MSVC)
-// ANDROID and MSVC's math.h does not currently supply log2 or log2f.
-inline double log2(double num)
-{
-    // This constant is roughly M_LN2, which is not provided by default on Windows and Android.
-    return log(num) / 0.693147180559945309417232121458176568;
-}
-
-inline float log2f(float num)
-{
-    // This constant is roughly M_LN2, which is not provided by default on Windows and Android.
-    return logf(num) / 0.693147180559945309417232121458176568f;
-}
-#endif
-
 #if COMPILER(MSVC)
 
 // VS2013 has most of the math functions now, but we still need to work
 // around various differences in behavior of Inf.
 
-// Work around a bug in Win, where atan2(+-infinity, +-infinity) yields NaN instead of specific values.
+// Work around a bug in Win, where atan2(+-infinity, +-infinity) yields NaN
+// instead of specific values.
 inline double wtf_atan2(double x, double y)
 {
     double posInf = std::numeric_limits<double>::infinity();
@@ -95,11 +88,19 @@ inline double wtf_atan2(double x, double y)
     return result;
 }
 
-// Work around a bug in the Microsoft CRT, where fmod(x, +-infinity) yields NaN instead of x.
-inline double wtf_fmod(double x, double y) { return (!std::isinf(x) && std::isinf(y)) ? x : fmod(x, y); }
+// Work around a bug in the Microsoft CRT, where fmod(x, +-infinity) yields NaN
+// instead of x.
+inline double wtf_fmod(double x, double y)
+{
+    return (!std_isinf(x) && std_isinf(y)) ? x : fmod(x, y);
+}
 
-// Work around a bug in the Microsoft CRT, where pow(NaN, 0) yields NaN instead of 1.
-inline double wtf_pow(double x, double y) { return y == 0 ? 1 : pow(x, y); }
+// Work around a bug in the Microsoft CRT, where pow(NaN, 0) yields NaN instead
+// of 1.
+inline double wtf_pow(double x, double y)
+{
+    return y == 0 ? 1 : pow(x, y);
+}
 
 #define atan2(x, y) wtf_atan2(x, y)
 #define fmod(x, y) wtf_fmod(x, y)
@@ -107,27 +108,87 @@ inline double wtf_pow(double x, double y) { return y == 0 ? 1 : pow(x, y); }
 
 #endif // COMPILER(MSVC)
 
-inline double deg2rad(double d)  { return d * piDouble / 180.0; }
-inline double rad2deg(double r)  { return r * 180.0 / piDouble; }
-inline double deg2grad(double d) { return d * 400.0 / 360.0; }
-inline double grad2deg(double g) { return g * 360.0 / 400.0; }
-inline double turn2deg(double t) { return t * 360.0; }
-inline double deg2turn(double d) { return d / 360.0; }
-inline double rad2grad(double r) { return r * 200.0 / piDouble; }
-inline double grad2rad(double g) { return g * piDouble / 200.0; }
-inline double turn2grad(double t) { return t * 400; }
-inline double grad2turn(double g) { return g / 400; }
+inline double deg2rad(double d)
+{
+    return d * piDouble / 180.0;
+}
+inline double rad2deg(double r)
+{
+    return r * 180.0 / piDouble;
+}
+inline double deg2grad(double d)
+{
+    return d * 400.0 / 360.0;
+}
+inline double grad2deg(double g)
+{
+    return g * 360.0 / 400.0;
+}
+inline double turn2deg(double t)
+{
+    return t * 360.0;
+}
+inline double deg2turn(double d)
+{
+    return d / 360.0;
+}
+inline double rad2grad(double r)
+{
+    return r * 200.0 / piDouble;
+}
+inline double grad2rad(double g)
+{
+    return g * piDouble / 200.0;
+}
+inline double turn2grad(double t)
+{
+    return t * 400;
+}
+inline double grad2turn(double g)
+{
+    return g / 400;
+}
 
-inline float deg2rad(float d)  { return d * piFloat / 180.0f; }
-inline float rad2deg(float r)  { return r * 180.0f / piFloat; }
-inline float deg2grad(float d) { return d * 400.0f / 360.0f; }
-inline float grad2deg(float g) { return g * 360.0f / 400.0f; }
-inline float turn2deg(float t) { return t * 360.0f; }
-inline float deg2turn(float d) { return d / 360.0f; }
-inline float rad2grad(float r) { return r * 200.0f / piFloat; }
-inline float grad2rad(float g) { return g * piFloat / 200.0f; }
-inline float turn2grad(float t) { return t * 400; }
-inline float grad2turn(float g) { return g / 400; }
+inline float deg2rad(float d)
+{
+    return d * piFloat / 180.0f;
+}
+inline float rad2deg(float r)
+{
+    return r * 180.0f / piFloat;
+}
+inline float deg2grad(float d)
+{
+    return d * 400.0f / 360.0f;
+}
+inline float grad2deg(float g)
+{
+    return g * 360.0f / 400.0f;
+}
+inline float turn2deg(float t)
+{
+    return t * 360.0f;
+}
+inline float deg2turn(float d)
+{
+    return d / 360.0f;
+}
+inline float rad2grad(float r)
+{
+    return r * 200.0f / piFloat;
+}
+inline float grad2rad(float g)
+{
+    return g * piFloat / 200.0f;
+}
+inline float turn2grad(float t)
+{
+    return t * 400;
+}
+inline float grad2turn(float g)
+{
+    return g / 400;
+}
 
 // clampTo() is implemented by templated helper classes (to allow for partial
 // template specialization) as well as several helper functions.
@@ -137,7 +198,10 @@ inline float grad2turn(float g) { return g / 400; }
 //     unsigned warnings
 // (2) The default type promotions/conversions are sufficient to handle things
 //     correctly
-template<typename LimitType, typename ValueType> inline LimitType clampToDirectComparison(ValueType value, LimitType min, LimitType max)
+template <typename LimitType, typename ValueType>
+inline LimitType clampToDirectComparison(ValueType value,
+    LimitType min,
+    LimitType max)
 {
     if (value >= max)
         return max;
@@ -156,18 +220,29 @@ template<typename LimitType, typename ValueType> inline LimitType clampToDirectC
 // order to only compile the clampToDirectComparison() code for cases where it
 // will actually be used; this prevents the compiler from emitting warnings
 // about unsafe code (even though we wouldn't actually be executing that code).
-template<bool canUseDirectComparison, typename LimitType, typename ValueType> class ClampToNonLongLongHelper;
-template<typename LimitType, typename ValueType> class ClampToNonLongLongHelper<true, LimitType, ValueType> {
+template <bool canUseDirectComparison, typename LimitType, typename ValueType>
+class ClampToNonLongLongHelper;
+template <typename LimitType, typename ValueType>
+class ClampToNonLongLongHelper<true, LimitType, ValueType> {
+    STATIC_ONLY(ClampToNonLongLongHelper);
+
 public:
-    static inline LimitType clampTo(ValueType value, LimitType min, LimitType max)
+    static inline LimitType clampTo(ValueType value,
+        LimitType min,
+        LimitType max)
     {
         return clampToDirectComparison(value, min, max);
     }
 };
 
-template<typename LimitType, typename ValueType> class ClampToNonLongLongHelper<false, LimitType, ValueType> {
+template <typename LimitType, typename ValueType>
+class ClampToNonLongLongHelper<false, LimitType, ValueType> {
+    STATIC_ONLY(ClampToNonLongLongHelper);
+
 public:
-    static inline LimitType clampTo(ValueType value, LimitType min, LimitType max)
+    static inline LimitType clampTo(ValueType value,
+        LimitType min,
+        LimitType max)
     {
         const double doubleValue = static_cast<double>(value);
         if (doubleValue >= static_cast<double>(max))
@@ -176,16 +251,21 @@ public:
             return min;
         // If the limit type is integer, we might get better performance by
         // casting |value| (as opposed to |doubleValue|) to the limit type.
-        return std::numeric_limits<LimitType>::is_integer ? static_cast<LimitType>(value) : static_cast<LimitType>(doubleValue);
+        return std::numeric_limits<LimitType>::is_integer
+            ? static_cast<LimitType>(value)
+            : static_cast<LimitType>(doubleValue);
     }
 };
 
 // The unspecialized version of this templated class handles clamping to
 // anything other than [unsigned] long long int limits.  It simply uses the
 // class above to toggle between the "fast" and "safe" clamp implementations.
-template<typename LimitType, typename ValueType> class ClampToHelper {
+template <typename LimitType, typename ValueType>
+class ClampToHelper {
 public:
-    static inline LimitType clampTo(ValueType value, LimitType min, LimitType max)
+    static inline LimitType clampTo(ValueType value,
+        LimitType min,
+        LimitType max)
     {
         // We only use clampToDirectComparison() when the integerness and
         // signedness of the two types matches.
@@ -201,7 +281,8 @@ public:
         // produce warnings about comparing signed vs. unsigned, which are apt
         // since negative signed values will be converted to large unsigned ones
         // and we'll get incorrect results.
-        return ClampToNonLongLongHelper<std::numeric_limits<LimitType>::is_integer == std::numeric_limits<ValueType>::is_integer && std::numeric_limits<LimitType>::is_signed == std::numeric_limits<ValueType>::is_signed, LimitType, ValueType>::clampTo(value, min, max);
+        return ClampToNonLongLongHelper < std::numeric_limits<LimitType>::is_integer == std::numeric_limits<ValueType>::is_integer && std::numeric_limits<LimitType>::is_signed == std::numeric_limits<ValueType>::is_signed,
+               LimitType, ValueType > ::clampTo(value, min, max);
     }
 };
 
@@ -210,15 +291,21 @@ public:
 // limit type.  But that cast is undefined if |value| is floating point and
 // outside the representable range of the limit type, so we also have to check
 // for that case explicitly.
-template<typename ValueType> class ClampToHelper<long long int, ValueType> {
+template <typename ValueType>
+class ClampToHelper<long long int, ValueType> {
+    STATIC_ONLY(ClampToHelper);
+
 public:
-    static inline long long int clampTo(ValueType value, long long int min, long long int max)
+    static inline long long int clampTo(ValueType value,
+        long long int min,
+        long long int max)
     {
         if (!std::numeric_limits<ValueType>::is_integer) {
             if (value > 0) {
                 if (static_cast<double>(value) >= static_cast<double>(std::numeric_limits<long long int>::max()))
                     return max;
-            } else if (static_cast<double>(value) <= static_cast<double>(std::numeric_limits<long long int>::min())) {
+            } else if (static_cast<double>(value) <= static_cast<double>(
+                           std::numeric_limits<long long int>::min())) {
                 return min;
             }
         }
@@ -231,9 +318,14 @@ public:
 
 // This specialization handles the case where the above partial specialization
 // would be potentially incorrect.
-template<> class ClampToHelper<long long int, unsigned long long int> {
+template <>
+class ClampToHelper<long long int, unsigned long long int> {
+    STATIC_ONLY(ClampToHelper);
+
 public:
-    static inline long long int clampTo(unsigned long long int value, long long int min, long long int max)
+    static inline long long int clampTo(unsigned long long int value,
+        long long int min,
+        long long int max)
     {
         if (max <= 0 || value >= static_cast<unsigned long long int>(max))
             return max;
@@ -245,31 +337,57 @@ public:
 // This is similar to the partial specialization that clamps to long long int,
 // but because the lower-bound check is done for integer value types as well, we
 // don't need a <unsigned long long int, long long int> full specialization.
-template<typename ValueType> class ClampToHelper<unsigned long long int, ValueType> {
+template <typename ValueType>
+class ClampToHelper<unsigned long long int, ValueType> {
+    STATIC_ONLY(ClampToHelper);
+
 public:
-    static inline unsigned long long int clampTo(ValueType value, unsigned long long int min, unsigned long long int max)
+    static inline unsigned long long int clampTo(ValueType value,
+        unsigned long long int min,
+        unsigned long long int max)
     {
         if (value <= 0)
             return min;
         if (!std::numeric_limits<ValueType>::is_integer) {
-            if (static_cast<double>(value) >= static_cast<double>(std::numeric_limits<unsigned long long int>::max()))
+            if (static_cast<double>(value) >= static_cast<double>(
+                    std::numeric_limits<unsigned long long int>::max()))
                 return max;
         }
-        return clampToDirectComparison(static_cast<unsigned long long int>(value), min, max);
+        return clampToDirectComparison(static_cast<unsigned long long int>(value),
+            min, max);
     }
 };
 
-template<typename T> inline T defaultMaximumForClamp() { return std::numeric_limits<T>::max(); }
+template <typename T>
+inline T defaultMaximumForClamp()
+{
+    return std::numeric_limits<T>::max();
+}
 // This basically reimplements C++11's std::numeric_limits<T>::lowest().
-template<typename T> inline T defaultMinimumForClamp() { return std::numeric_limits<T>::min(); }
-template<> inline float defaultMinimumForClamp<float>() { return -std::numeric_limits<float>::max(); }
-template<> inline double defaultMinimumForClamp<double>() { return -std::numeric_limits<double>::max(); }
+template <typename T>
+inline T defaultMinimumForClamp()
+{
+    return std::numeric_limits<T>::min();
+}
+template <>
+inline float defaultMinimumForClamp<float>()
+{
+    return -std::numeric_limits<float>::max();
+}
+template <>
+inline double defaultMinimumForClamp<double>()
+{
+    return -std::numeric_limits<double>::max();
+}
 
 // And, finally, the actual function for people to call.
-template<typename LimitType, typename ValueType> inline LimitType clampTo(ValueType value, LimitType min = defaultMinimumForClamp<LimitType>(), LimitType max = defaultMaximumForClamp<LimitType>())
+template <typename LimitType, typename ValueType>
+inline LimitType clampTo(ValueType value,
+    LimitType min = defaultMinimumForClamp<LimitType>(),
+    LimitType max = defaultMaximumForClamp<LimitType>())
 {
-    ASSERT(!std::isnan(static_cast<double>(value)));
-    ASSERT(min <= max); // This also ensures |min| and |max| aren't NaN.
+    DCHECK(!/*std::*/isnan(static_cast<double>(value)));
+    DCHECK_LE(min, max); // This also ensures |min| and |max| aren't NaN.
     return ClampToHelper<LimitType, ValueType>::clampTo(value, min, max);
 }
 
@@ -290,18 +408,18 @@ inline size_t lowestCommonMultiple(size_t a, size_t b)
 
 #ifndef UINT64_C
 #if COMPILER(MSVC)
-#define UINT64_C(c) c ## ui64
+#define UINT64_C(c) c##ui64
 #else
-#define UINT64_C(c) c ## ull
+#define UINT64_C(c) c##ull
 #endif
 #endif
 
 // Calculate d % 2^{64}.
 inline void doubleToInteger(double d, unsigned long long& value)
 {
-    if (std::isnan(d) || std::isinf(d))
+    if (/*std::*/isnan(d) || /*std::*/isinf(d)) {
         value = 0;
-    else {
+    } else {
         // -2^{64} < fmodValue < 2^{64}.
         double fmodValue = fmod(trunc(d), std::numeric_limits<unsigned long long>::max() + 1.0);
         if (fmodValue >= 0) {
@@ -312,7 +430,9 @@ inline void doubleToInteger(double d, unsigned long long& value)
             // -2^{64} < fmodValue < 0.
             // 0 < fmodValueInUnsignedLongLong < 2^{64}. This cast causes no loss.
             unsigned long long fmodValueInUnsignedLongLong = static_cast<unsigned long long>(-fmodValue);
-            // -1 < (std::numeric_limits<unsigned long long>::max() - fmodValueInUnsignedLongLong) < 2^{64} - 1.
+            // -1 < (std::numeric_limits<unsigned long long>::max() -
+            //       fmodValueInUnsignedLongLong)
+            //    < 2^{64} - 1.
             // 0 < value < 2^{64}.
             value = std::numeric_limits<unsigned long long>::max() - fmodValueInUnsignedLongLong + 1;
         }

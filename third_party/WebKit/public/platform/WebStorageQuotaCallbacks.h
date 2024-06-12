@@ -58,11 +58,15 @@ public:
 #endif
 
     // Callback for WebFrameClient::queryStorageUsageAndQuota.
-    BLINK_PLATFORM_EXPORT void didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes);
+    BLINK_PLATFORM_EXPORT void didQueryStorageUsageAndQuota(
+        unsigned long long usageInBytes,
+        unsigned long long quotaInBytes);
 
     // Callback for WebFrameClient::requestStorageQuota.
     // This may return a smaller amount of quota than the requested.
-    BLINK_PLATFORM_EXPORT void didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes);
+    BLINK_PLATFORM_EXPORT void didGrantStorageQuota(
+        unsigned long long usageInBytes,
+        unsigned long long grantedQuotaInBytes);
 
     BLINK_PLATFORM_EXPORT void didFail(WebStorageQuotaError);
 

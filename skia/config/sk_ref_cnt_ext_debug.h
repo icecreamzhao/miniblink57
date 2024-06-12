@@ -9,40 +9,67 @@
 #error Only one SkRefCnt should be used.
 #endif
 
+#include <atomic>
+
+class SkRefCnt;
+
+namespace WTF {
+void adopted(const SkRefCnt*);
+void requireAdoption(const SkRefCnt*);
+}
+
 // Alternate implementation of SkRefCnt for Chromium debug builds
 class SK_API SkRefCnt : public SkRefCntBase {
 public:
-  SkRefCnt() : flags_(0) {}
-  void ref() const { SkASSERT(flags_ != AdoptionRequired_Flag); SkRefCntBase::ref(); }
-  void adopted() const { flags_ |= Adopted_Flag; }
-  void requireAdoption() const { flags_ |= AdoptionRequired_Flag; }
-  void deref() const { SkRefCntBase::unref(); }
-private:
-  enum {
-    Adopted_Flag = 0x1,
-    AdoptionRequired_Flag = 0x2,
-  };
+    SkRefCnt();
+    ~SkRefCnt() override;
+    void ref() const
+    {
+        SkASSERT(flags_.load() != AdoptionRequired_Flag);
+        SkRefCntBase::ref();
+    }
+    void deref() const { SkRefCntBase::unref(); }
 
-  mutable int flags_;
+private:
+    void adopted() const { flags_ |= Adopted_Flag; }
+    void requireAdoption() const { flags_ |= AdoptionRequired_Flag; }
+
+    enum {
+        Adopted_Flag = 0x1,
+        AdoptionRequired_Flag = 0x2,
+    };
+
+    mutable std::atomic<int> flags_;
+
+    friend void WTF::adopted(const SkRefCnt*);
+    friend void WTF::requireAdoption(const SkRefCnt*);
 };
+
+inline SkRefCnt::SkRefCnt()
+    : flags_(0)
+{
+}
+
+inline SkRefCnt::~SkRefCnt() { }
 
 // Bootstrap for Blink's WTF::RefPtr
 
 namespace WTF {
-  inline void adopted(const SkRefCnt* object) {
+inline void adopted(const SkRefCnt* object)
+{
     if (!object)
-      return;
+        return;
     object->adopted();
-  }
-  inline void requireAdoption(const SkRefCnt* object) {
+}
+inline void requireAdoption(const SkRefCnt* object)
+{
     if (!object)
-      return;
+        return;
     object->requireAdoption();
-  }
+}
 };
 
 using WTF::adopted;
 using WTF::requireAdoption;
 
 #endif
-

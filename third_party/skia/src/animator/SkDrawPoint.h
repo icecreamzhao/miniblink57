@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawPoint_DEFINED
 #define SkDrawPoint_DEFINED
 
@@ -17,6 +16,7 @@
 struct Sk_Point {
     DECLARE_NO_VIRTUALS_MEMBER_INFO(_Point);
     Sk_Point();
+
 private:
     SkPoint fPoint;
 };
@@ -24,7 +24,8 @@ private:
 class SkDrawPoint : public SkDisplayable {
     DECLARE_MEMBER_INFO(DrawPoint);
     SkDrawPoint();
-    void getBounds(SkRect* ) override;
+    void getBounds(SkRect*) override;
+
 private:
     SkPoint fPoint;
     typedef SkDisplayable INHERITED;

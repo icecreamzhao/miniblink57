@@ -10,38 +10,41 @@
 #include "SkPictureRecorder.h"
 #include "SkString.h"
 
-
 SkDebugger::SkDebugger()
-    : fPicture(NULL)
-    , fIndex(-1) {
+    : fPicture(nullptr)
+    , fIndex(-1)
+{
     // Create this some other dynamic way?
     fDebugCanvas = new SkDebugCanvas(0, 0);
 }
 
-SkDebugger::~SkDebugger() {
+SkDebugger::~SkDebugger()
+{
     // Need to inherit from SkRef object in order for following to work
     SkSafeUnref(fDebugCanvas);
     SkSafeUnref(fPicture);
 }
 
-void SkDebugger::loadPicture(SkPicture* picture) {
+void SkDebugger::loadPicture(SkPicture* picture)
+{
     SkRefCnt_SafeAssign(fPicture, picture);
 
     delete fDebugCanvas;
-    fDebugCanvas = new SkDebugCanvas(SkScalarCeilToInt(this->pictureCull().width()), 
-                                     SkScalarCeilToInt(this->pictureCull().height()));
+    fDebugCanvas = new SkDebugCanvas(SkScalarCeilToInt(this->pictureCull().width()),
+        SkScalarCeilToInt(this->pictureCull().height()));
     fDebugCanvas->setPicture(picture);
     picture->playback(fDebugCanvas);
-    fDebugCanvas->setPicture(NULL);
+    fDebugCanvas->setPicture(nullptr);
     fIndex = fDebugCanvas->getSize() - 1;
 }
 
-SkPicture* SkDebugger::copyPicture() {
+sk_sp<SkPicture> SkDebugger::copyPicture()
+{
     // We can't just call clone here since we want to removed the "deleted"
     // commands. Playing back will strip those out.
     SkPictureRecorder recorder;
-    SkCanvas* canvas = recorder.beginRecording(this->pictureCull().width(), 
-                                               this->pictureCull().height());
+    SkCanvas* canvas = recorder.beginRecording(this->pictureCull().width(),
+        this->pictureCull().height());
 
     bool vizMode = fDebugCanvas->getMegaVizMode();
     fDebugCanvas->setMegaVizMode(false);
@@ -56,13 +59,14 @@ SkPicture* SkDebugger::copyPicture() {
     fDebugCanvas->setOverdrawViz(overDraw);
     fDebugCanvas->setAllowSimplifyClip(pathOps);
 
-    return recorder.endRecording();
+    return recorder.finishRecordingAsPicture();
 }
 
 void SkDebugger::getOverviewText(const SkTDArray<double>* typeTimes,
-                                 double totTime,
-                                 SkString* overview,
-                                 int numRuns) {
+    double totTime,
+    SkString* overview,
+    int numRuns)
+{
     const SkTDArray<SkDrawCommand*>& commands = this->getDrawCommands();
 
     SkTDArray<int> counts;
@@ -83,19 +87,19 @@ void SkDebugger::getOverviewText(const SkTDArray<double>* typeTimes,
     for (int i = 0; i < SkDrawCommand::kOpTypeCount; ++i) {
         if (0 == counts[i]) {
             // if there were no commands of this type then they should've consumed no time
-            SkASSERT(NULL == typeTimes || 0.0 == (*typeTimes)[i]);
+            SkASSERT(nullptr == typeTimes || 0.0 == (*typeTimes)[i]);
             continue;
         }
 
-        overview->append(SkDrawCommand::GetCommandString((SkDrawCommand::OpType) i));
+        overview->append(SkDrawCommand::GetCommandString((SkDrawCommand::OpType)i));
         overview->append(": ");
         overview->appendS32(counts[i]);
         if (typeTimes && totTime >= 0.0) {
             overview->append(" - ");
-            overview->appendf("%.2f", (*typeTimes)[i]/(float)numRuns);
+            overview->appendf("%.2f", (*typeTimes)[i] / (float)numRuns);
             overview->append("ms");
             overview->append(" - ");
-            double percent = 100.0*(*typeTimes)[i]/totTime;
+            double percent = 100.0 * (*typeTimes)[i] / totTime;
             overview->appendf("%.2f", percent);
             overview->append("%");
 #ifdef SK_DEBUG
@@ -109,15 +113,15 @@ void SkDebugger::getOverviewText(const SkTDArray<double>* typeTimes,
 #ifdef SK_DEBUG
     if (typeTimes) {
         SkASSERT(SkScalarNearlyEqual(SkDoubleToScalar(totPercent),
-                                     SkDoubleToScalar(100.0)));
+            SkDoubleToScalar(100.0)));
         SkASSERT(SkScalarNearlyEqual(SkDoubleToScalar(tempSum),
-                                     SkDoubleToScalar(totTime)));
+            SkDoubleToScalar(totTime)));
     }
 #endif
 
     if (totTime > 0.0) {
         overview->append("Total Time: ");
-        overview->appendf("%.2f", totTime/(float)numRuns);
+        overview->appendf("%.2f", totTime / (float)numRuns);
         overview->append("ms");
 #ifdef SK_DEBUG
         overview->append(" ");
@@ -144,6 +148,7 @@ void SkDebugger::getOverviewText(const SkTDArray<double>* typeTimes,
     overview->append("<br/>");
 }
 
-void SkDebugger::getClipStackText(SkString* clipStack) {
+void SkDebugger::getClipStackText(SkString* clipStack)
+{
     clipStack->set(fDebugCanvas->clipStackData());
 }

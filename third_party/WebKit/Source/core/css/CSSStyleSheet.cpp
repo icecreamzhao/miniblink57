@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/CSSStyleSheet.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -32,10 +31,12 @@
 #include "core/css/StyleRule.h"
 #include "core/css/StyleSheetContents.h"
 #include "core/css/parser/CSSParser.h"
+#include "core/css/parser/CSSParserContext.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/Node.h"
-#include "core/frame/UseCounter.h"
+#include "core/dom/StyleEngine.h"
+#include "core/frame/Deprecation.h"
 #include "core/html/HTMLStyleElement.h"
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/svg/SVGStyleElement.h"
@@ -46,9 +47,9 @@ namespace blink {
 
 class StyleSheetCSSRuleList final : public CSSRuleList {
 public:
-    static PassOwnPtrWillBeRawPtr<StyleSheetCSSRuleList> create(CSSStyleSheet* sheet)
+    static StyleSheetCSSRuleList* create(CSSStyleSheet* sheet)
     {
-        return adoptPtrWillBeNoop(new StyleSheetCSSRuleList(sheet));
+        return new StyleSheetCSSRuleList(sheet);
     }
 
     DEFINE_INLINE_VIRTUAL_TRACE()
@@ -58,120 +59,99 @@ public:
     }
 
 private:
-    StyleSheetCSSRuleList(CSSStyleSheet* sheet) : m_styleSheet(sheet) { }
-
-#if !ENABLE(OILPAN)
-    virtual void ref() override { m_styleSheet->ref(); }
-    virtual void deref() override { m_styleSheet->deref(); }
-#endif
-
-    virtual unsigned length() const override { return m_styleSheet->length(); }
-    virtual CSSRule* item(unsigned index) const override { return m_styleSheet->item(index); }
-
-    virtual CSSStyleSheet* styleSheet() const override { return m_styleSheet; }
-
-    RawPtrWillBeMember<CSSStyleSheet> m_styleSheet;
-};
-
-#if ENABLE(ASSERT)
-static bool isAcceptableCSSStyleSheetParent(Node* parentNode)
-{
-    // Only these nodes can be parents of StyleSheets, and they need to call
-    // clearOwnerNode() when moved out of document.
-    // Destruction of the style sheet counts as being "moved out of the
-    // document", but only in the non-oilpan version of blink. I.e. don't call
-    // clearOwnerNode() in the owner's destructor in oilpan.
-    return !parentNode
-        || parentNode->isDocumentNode()
-        || isHTMLLinkElement(*parentNode)
-        || isHTMLStyleElement(*parentNode)
-        || isSVGStyleElement(*parentNode)
-        || parentNode->nodeType() == Node::PROCESSING_INSTRUCTION_NODE;
-}
-#endif
-
-PassRefPtrWillBeRawPtr<CSSStyleSheet> CSSStyleSheet::create(PassRefPtrWillBeRawPtr<StyleSheetContents> sheet, CSSImportRule* ownerRule)
-{
-    return adoptRefWillBeNoop(new CSSStyleSheet(sheet, ownerRule));
-}
-
-PassRefPtrWillBeRawPtr<CSSStyleSheet> CSSStyleSheet::create(PassRefPtrWillBeRawPtr<StyleSheetContents> sheet, Node* ownerNode)
-{
-    return adoptRefWillBeNoop(new CSSStyleSheet(sheet, ownerNode, false, TextPosition::minimumPosition()));
-}
-
-PassRefPtrWillBeRawPtr<CSSStyleSheet> CSSStyleSheet::createInline(PassRefPtrWillBeRawPtr<StyleSheetContents> sheet, Node* ownerNode, const TextPosition& startPosition)
-{
-    ASSERT(sheet);
-    return adoptRefWillBeNoop(new CSSStyleSheet(sheet, ownerNode, true, startPosition));
-}
-
-PassRefPtrWillBeRawPtr<CSSStyleSheet> CSSStyleSheet::createInline(Node* ownerNode, const KURL& baseURL, const TextPosition& startPosition, const String& encoding)
-{
-    CSSParserContext parserContext(ownerNode->document(), 0, baseURL, encoding);
-    RefPtrWillBeRawPtr<StyleSheetContents> sheet = StyleSheetContents::create(baseURL.string(), parserContext);
-    return adoptRefWillBeNoop(new CSSStyleSheet(sheet.release(), ownerNode, true, startPosition));
-}
-
-CSSStyleSheet::CSSStyleSheet(PassRefPtrWillBeRawPtr<StyleSheetContents> contents, CSSImportRule* ownerRule)
-    : m_contents(contents)
-    , m_isInlineStylesheet(false)
-    , m_isDisabled(false)
-    , m_ownerNode(nullptr)
-    , m_ownerRule(ownerRule)
-    , m_startPosition(TextPosition::minimumPosition())
-    , m_loadCompleted(false)
-{
-    m_contents->registerClient(this);
-}
-
-CSSStyleSheet::CSSStyleSheet(PassRefPtrWillBeRawPtr<StyleSheetContents> contents, Node* ownerNode, bool isInlineStylesheet, const TextPosition& startPosition)
-    : m_contents(contents)
-    , m_isInlineStylesheet(isInlineStylesheet)
-    , m_isDisabled(false)
-    , m_ownerNode(ownerNode)
-    , m_ownerRule(nullptr)
-    , m_startPosition(startPosition)
-    , m_loadCompleted(false)
-{
-    ASSERT(isAcceptableCSSStyleSheetParent(ownerNode));
-    m_contents->registerClient(this);
-}
-
-CSSStyleSheet::~CSSStyleSheet()
-{
-    // With oilpan the parent style sheet pointer is strong and the sheet and
-    // its RuleCSSOMWrappers die together and we don't need to clear them here.
-    // Also with oilpan the StyleSheetContents client pointers are weak and
-    // therefore do not need to be cleared here.
-#if !ENABLE(OILPAN)
-    // For style rules outside the document, .parentStyleSheet can become null even if the style rule
-    // is still observable from JavaScript. This matches the behavior of .parentNode for nodes, but
-    // it's not ideal because it makes the CSSOM's behavior depend on the timing of garbage collection.
-    for (unsigned i = 0; i < m_childRuleCSSOMWrappers.size(); ++i) {
-        if (m_childRuleCSSOMWrappers[i])
-            m_childRuleCSSOMWrappers[i]->setParentStyleSheet(0);
+    StyleSheetCSSRuleList(CSSStyleSheet* sheet)
+        : m_styleSheet(sheet)
+    {
     }
 
-    if (m_mediaCSSOMWrapper)
-        m_mediaCSSOMWrapper->clearParentStyleSheet();
+    unsigned length() const override { return m_styleSheet->length(); }
+    CSSRule* item(unsigned index) const override
+    {
+        return m_styleSheet->item(index);
+    }
 
-    m_contents->unregisterClient(this);
-#endif
+    CSSStyleSheet* styleSheet() const override { return m_styleSheet; }
+
+    Member<CSSStyleSheet> m_styleSheet;
+};
+
+#if DCHECK_IS_ON()
+static bool isAcceptableCSSStyleSheetParent(const Node& parentNode)
+{
+    // Only these nodes can be parents of StyleSheets, and they need to call
+    // clearOwnerNode() when moved out of document. Note that destructor of
+    // the nodes don't call clearOwnerNode() with Oilpan.
+    return parentNode.isDocumentNode() || isHTMLLinkElement(parentNode) || isHTMLStyleElement(parentNode) || isSVGStyleElement(parentNode) || parentNode.getNodeType() == Node::kProcessingInstructionNode;
 }
+#endif
+
+CSSStyleSheet* CSSStyleSheet::create(StyleSheetContents* sheet,
+    CSSImportRule* ownerRule)
+{
+    return new CSSStyleSheet(sheet, ownerRule);
+}
+
+CSSStyleSheet* CSSStyleSheet::create(StyleSheetContents* sheet,
+    Node& ownerNode)
+{
+    return new CSSStyleSheet(sheet, ownerNode, false,
+        TextPosition::minimumPosition());
+}
+
+CSSStyleSheet* CSSStyleSheet::createInline(StyleSheetContents* sheet,
+    Node& ownerNode,
+    const TextPosition& startPosition)
+{
+    DCHECK(sheet);
+    return new CSSStyleSheet(sheet, ownerNode, true, startPosition);
+}
+
+CSSStyleSheet* CSSStyleSheet::createInline(Node& ownerNode,
+    const KURL& baseURL,
+    const TextPosition& startPosition,
+    const String& encoding)
+{
+    CSSParserContext* parserContext = CSSParserContext::create(ownerNode.document(), baseURL, encoding);
+    StyleSheetContents* sheet = StyleSheetContents::create(baseURL.getString(), parserContext);
+    return new CSSStyleSheet(sheet, ownerNode, true, startPosition);
+}
+
+CSSStyleSheet::CSSStyleSheet(StyleSheetContents* contents,
+    CSSImportRule* ownerRule)
+    : m_contents(contents)
+    , m_ownerRule(ownerRule)
+    , m_startPosition(TextPosition::minimumPosition())
+{
+    m_contents->registerClient(this);
+}
+
+CSSStyleSheet::CSSStyleSheet(StyleSheetContents* contents,
+    Node& ownerNode,
+    bool isInlineStylesheet,
+    const TextPosition& startPosition)
+    : m_contents(contents)
+    , m_isInlineStylesheet(isInlineStylesheet)
+    , m_ownerNode(&ownerNode)
+    , m_startPosition(startPosition)
+{
+#if DCHECK_IS_ON()
+    DCHECK(isAcceptableCSSStyleSheetParent(ownerNode));
+#endif
+    m_contents->registerClient(this);
+}
+
+CSSStyleSheet::~CSSStyleSheet() { }
 
 void CSSStyleSheet::willMutateRules()
 {
     // If we are the only client it is safe to mutate.
-    if (m_contents->clientSize() <= 1 && !m_contents->isInMemoryCache()) {
+    if (!m_contents->isUsedFromTextCache() && !m_contents->isReferencedFromResource()) {
         m_contents->clearRuleSet();
-        if (Document* document = ownerDocument())
-            m_contents->removeSheetFromCache(document);
         m_contents->setMutable();
         return;
     }
     // Only cacheable stylesheets should have multiple clients.
-    ASSERT(m_contents->isCacheable());
+    DCHECK(m_contents->isCacheableForStyleElement() || m_contents->isCacheableForResource());
 
     // Copy-on-write.
     m_contents->unregisterClient(this);
@@ -186,22 +166,26 @@ void CSSStyleSheet::willMutateRules()
 
 void CSSStyleSheet::didMutateRules()
 {
-    ASSERT(m_contents->isMutable());
-    ASSERT(m_contents->clientSize() <= 1);
+    DCHECK(m_contents->isMutable());
+    DCHECK_LE(m_contents->clientSize(), 1u);
 
-    didMutate(PartialRuleUpdate);
+    Document* owner = ownerDocument();
+    if (!owner)
+        return;
+    if (ownerNode() && ownerNode()->isConnected()) {
+        owner->styleEngine().setNeedsActiveStyleUpdate(ownerNode()->treeScope());
+        if (StyleResolver* resolver = owner->styleEngine().resolver())
+            resolver->invalidateMatchedPropertiesCache();
+    }
 }
 
-void CSSStyleSheet::didMutate(StyleSheetUpdateType updateType)
+void CSSStyleSheet::didMutate()
 {
     Document* owner = ownerDocument();
     if (!owner)
         return;
-
-    // Need FullStyleUpdate when insertRule or deleteRule,
-    // because StyleSheetCollection::analyzeStyleSheetChange cannot detect partial rule update.
-    StyleResolverUpdateMode updateMode = updateType != PartialRuleUpdate ? AnalyzedStyleUpdate : FullStyleUpdate;
-    owner->modifiedStyleSheet(this, updateMode);
+    if (ownerNode() && ownerNode()->isConnected())
+        owner->styleEngine().setNeedsActiveStyleUpdate(ownerNode()->treeScope());
 }
 
 void CSSStyleSheet::reattachChildRuleCSSOMWrappers()
@@ -222,12 +206,22 @@ void CSSStyleSheet::setDisabled(bool disabled)
     didMutate();
 }
 
-void CSSStyleSheet::setMediaQueries(PassRefPtrWillBeRawPtr<MediaQuerySet> mediaQueries)
+void CSSStyleSheet::setMediaQueries(MediaQuerySet* mediaQueries)
 {
     m_mediaQueries = mediaQueries;
     if (m_mediaCSSOMWrapper && m_mediaQueries)
         m_mediaCSSOMWrapper->reattach(m_mediaQueries.get());
+}
 
+bool CSSStyleSheet::matchesMediaQueries(const MediaQueryEvaluator& evaluator)
+{
+    m_viewportDependentMediaQueryResults.clear();
+    m_deviceDependentMediaQueryResults.clear();
+
+    if (!m_mediaQueries)
+        return true;
+    return evaluator.eval(m_mediaQueries, &m_viewportDependentMediaQueryResults,
+        &m_deviceDependentMediaQueryResults);
 }
 
 unsigned CSSStyleSheet::length() const
@@ -239,13 +233,13 @@ CSSRule* CSSStyleSheet::item(unsigned index)
 {
     unsigned ruleCount = length();
     if (index >= ruleCount)
-        return 0;
+        return nullptr;
 
     if (m_childRuleCSSOMWrappers.isEmpty())
         m_childRuleCSSOMWrappers.grow(ruleCount);
-    ASSERT(m_childRuleCSSOMWrappers.size() == ruleCount);
+    DCHECK_EQ(m_childRuleCSSOMWrappers.size(), ruleCount);
 
-    RefPtrWillBeMember<CSSRule>& cssRule = m_childRuleCSSOMWrappers[index];
+    Member<CSSRule>& cssRule = m_childRuleCSSOMWrappers[index];
     if (!cssRule)
         cssRule = m_contents->ruleAt(index)->createCSSOMWrapper(this);
     return cssRule.get();
@@ -253,7 +247,7 @@ CSSRule* CSSStyleSheet::item(unsigned index)
 
 void CSSStyleSheet::clearOwnerNode()
 {
-    didMutate(EntireStyleSheetUpdate);
+    didMutate();
     if (m_ownerNode)
         m_contents->unregisterClient(this);
     m_ownerNode = nullptr;
@@ -269,65 +263,81 @@ bool CSSStyleSheet::canAccessRules() const
     Document* document = ownerDocument();
     if (!document)
         return true;
-    if (document->securityOrigin()->canRequest(baseURL))
+    if (document->getSecurityOrigin()->canRequestNoSuborigin(baseURL))
         return true;
-    if (m_allowRuleAccessFromOrigin && document->securityOrigin()->canAccess(m_allowRuleAccessFromOrigin.get()))
+    if (m_allowRuleAccessFromOrigin && document->getSecurityOrigin()->canAccessCheckSuborigins(m_allowRuleAccessFromOrigin.get()))
         return true;
     return false;
 }
 
-PassRefPtrWillBeRawPtr<CSSRuleList> CSSStyleSheet::rules()
+CSSRuleList* CSSStyleSheet::rules()
 {
     return cssRules();
 }
 
-unsigned CSSStyleSheet::insertRule(const String& ruleString, unsigned index, ExceptionState& exceptionState)
+unsigned CSSStyleSheet::insertRule(const String& ruleString,
+    unsigned index,
+    ExceptionState& exceptionState)
 {
-    ASSERT(m_childRuleCSSOMWrappers.isEmpty() || m_childRuleCSSOMWrappers.size() == m_contents->ruleCount());
+    DCHECK(m_childRuleCSSOMWrappers.isEmpty() || m_childRuleCSSOMWrappers.size() == m_contents->ruleCount());
 
     if (index > length()) {
-        exceptionState.throwDOMException(IndexSizeError, "The index provided (" + String::number(index) + ") is larger than the maximum index (" + String::number(length()) + ").");
+        exceptionState.throwDOMException(
+            IndexSizeError, "The index provided (" + String::number(index) + ") is larger than the maximum index (" + String::number(length()) + ").");
         return 0;
     }
-    CSSParserContext context(m_contents->parserContext(), UseCounter::getFrom(this));
-    RefPtrWillBeRawPtr<StyleRuleBase> rule = CSSParser::parseRule(context, m_contents.get(), ruleString);
+    const CSSParserContext* context = CSSParserContext::createWithStyleSheet(m_contents->parserContext(), this);
+    StyleRuleBase* rule = CSSParser::parseRule(context, m_contents.get(), ruleString);
 
-    // FIXME: @namespace rules have special handling in the CSSOM spec, but it
-    // mostly doesn't make sense since we don't support CSSNamespaceRule
-    if (!rule || rule->isNamespaceRule()) {
-        exceptionState.throwDOMException(SyntaxError, "Failed to parse the rule '" + ruleString + "'.");
+    if (!rule) {
+        exceptionState.throwDOMException(
+            SyntaxError, "Failed to parse the rule '" + ruleString + "'.");
         return 0;
     }
     RuleMutationScope mutationScope(this);
 
     bool success = m_contents->wrapperInsertRule(rule, index);
     if (!success) {
-        exceptionState.throwDOMException(HierarchyRequestError, "Failed to insert the rule.");
+        if (rule->isNamespaceRule())
+            exceptionState.throwDOMException(InvalidStateError,
+                "Failed to insert the rule");
+        else
+            exceptionState.throwDOMException(HierarchyRequestError,
+                "Failed to insert the rule.");
         return 0;
     }
     if (!m_childRuleCSSOMWrappers.isEmpty())
-        m_childRuleCSSOMWrappers.insert(index, RefPtrWillBeMember<CSSRule>(nullptr));
+        m_childRuleCSSOMWrappers.insert(index, Member<CSSRule>(nullptr));
 
     return index;
 }
 
-unsigned CSSStyleSheet::insertRule(const String& rule, ExceptionState& exceptionState)
+unsigned CSSStyleSheet::insertRule(const String& rule,
+    ExceptionState& exceptionState)
 {
-    UseCounter::countDeprecation(callingExecutionContext(V8PerIsolateData::mainThreadIsolate()), UseCounter::CSSStyleSheetInsertRuleOptionalArg);
+    Deprecation::countDeprecation(
+        currentExecutionContext(V8PerIsolateData::mainThreadIsolate()),
+        UseCounter::CSSStyleSheetInsertRuleOptionalArg);
     return insertRule(rule, 0, exceptionState);
 }
 
 void CSSStyleSheet::deleteRule(unsigned index, ExceptionState& exceptionState)
 {
-    ASSERT(m_childRuleCSSOMWrappers.isEmpty() || m_childRuleCSSOMWrappers.size() == m_contents->ruleCount());
+    DCHECK(m_childRuleCSSOMWrappers.isEmpty() || m_childRuleCSSOMWrappers.size() == m_contents->ruleCount());
 
     if (index >= length()) {
-        exceptionState.throwDOMException(IndexSizeError, "The index provided (" + String::number(index) + ") is larger than the maximum index (" + String::number(length() - 1) + ").");
+        exceptionState.throwDOMException(
+            IndexSizeError, "The index provided (" + String::number(index) + ") is larger than the maximum index (" + String::number(length() - 1) + ").");
         return;
     }
     RuleMutationScope mutationScope(this);
 
-    m_contents->wrapperDeleteRule(index);
+    bool success = m_contents->wrapperDeleteRule(index);
+    if (!success) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "Failed to delete rule");
+        return;
+    }
 
     if (!m_childRuleCSSOMWrappers.isEmpty()) {
         if (m_childRuleCSSOMWrappers[index])
@@ -336,11 +346,14 @@ void CSSStyleSheet::deleteRule(unsigned index, ExceptionState& exceptionState)
     }
 }
 
-int CSSStyleSheet::addRule(const String& selector, const String& style, int index, ExceptionState& exceptionState)
+int CSSStyleSheet::addRule(const String& selector,
+    const String& style,
+    int index,
+    ExceptionState& exceptionState)
 {
     StringBuilder text;
     text.append(selector);
-    text.appendLiteral(" { ");
+    text.append(" { ");
     text.append(style);
     if (!style.isEmpty())
         text.append(' ');
@@ -351,13 +364,14 @@ int CSSStyleSheet::addRule(const String& selector, const String& style, int inde
     return -1;
 }
 
-int CSSStyleSheet::addRule(const String& selector, const String& style, ExceptionState& exceptionState)
+int CSSStyleSheet::addRule(const String& selector,
+    const String& style,
+    ExceptionState& exceptionState)
 {
     return addRule(selector, style, length(), exceptionState);
 }
 
-
-PassRefPtrWillBeRawPtr<CSSRuleList> CSSStyleSheet::cssRules()
+CSSRuleList* CSSStyleSheet::cssRules()
 {
     if (!canAccessRules())
         return nullptr;
@@ -384,16 +398,17 @@ bool CSSStyleSheet::isLoading() const
 MediaList* CSSStyleSheet::media() const
 {
     if (!m_mediaQueries)
-        return 0;
+        return nullptr;
 
     if (!m_mediaCSSOMWrapper)
-        m_mediaCSSOMWrapper = MediaList::create(m_mediaQueries.get(), const_cast<CSSStyleSheet*>(this));
+        m_mediaCSSOMWrapper = MediaList::create(m_mediaQueries.get(),
+            const_cast<CSSStyleSheet*>(this));
     return m_mediaCSSOMWrapper.get();
 }
 
 CSSStyleSheet* CSSStyleSheet::parentStyleSheet() const
 {
-    return m_ownerRule ? m_ownerRule->parentStyleSheet() : 0;
+    return m_ownerRule ? m_ownerRule->parentStyleSheet() : nullptr;
 }
 
 Document* CSSStyleSheet::ownerDocument() const
@@ -401,22 +416,18 @@ Document* CSSStyleSheet::ownerDocument() const
     const CSSStyleSheet* root = this;
     while (root->parentStyleSheet())
         root = root->parentStyleSheet();
-    return root->ownerNode() ? &root->ownerNode()->document() : 0;
+    return root->ownerNode() ? &root->ownerNode()->document() : nullptr;
 }
 
-void CSSStyleSheet::setAllowRuleAccessFromOrigin(PassRefPtr<SecurityOrigin> allowedOrigin)
+void CSSStyleSheet::setAllowRuleAccessFromOrigin(
+    PassRefPtr<SecurityOrigin> allowedOrigin)
 {
     m_allowRuleAccessFromOrigin = allowedOrigin;
 }
 
-void CSSStyleSheet::clearChildRuleCSSOMWrappers()
-{
-    m_childRuleCSSOMWrappers.clear();
-}
-
 bool CSSStyleSheet::sheetLoaded()
 {
-    ASSERT(m_ownerNode);
+    DCHECK(m_ownerNode);
     setLoadCompleted(m_ownerNode->sheetLoaded());
     return m_loadCompleted;
 }
@@ -440,10 +451,21 @@ void CSSStyleSheet::setLoadCompleted(bool completed)
         m_contents->clientLoadStarted(this);
 }
 
+void CSSStyleSheet::setText(const String& text)
+{
+    m_childRuleCSSOMWrappers.clear();
+
+    CSSStyleSheet::RuleMutationScope mutationScope(this);
+    m_contents->clearRules();
+    m_contents->parseString(text);
+}
+
 DEFINE_TRACE(CSSStyleSheet)
 {
     visitor->trace(m_contents);
     visitor->trace(m_mediaQueries);
+    visitor->trace(m_viewportDependentMediaQueryResults);
+    visitor->trace(m_deviceDependentMediaQueryResults);
     visitor->trace(m_ownerNode);
     visitor->trace(m_ownerRule);
     visitor->trace(m_mediaCSSOMWrapper);

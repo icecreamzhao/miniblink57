@@ -27,14 +27,14 @@
 #ifndef DocumentStyleSheetCollector_h
 #define DocumentStyleSheetCollector_h
 
+#include "bindings/core/v8/TraceWrapperMember.h"
+#include "core/css/ActiveStyleSheets.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashSet.h"
-#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class CSSStyleSheet;
 class Document;
 class StyleSheet;
 class StyleSheetCollection;
@@ -44,35 +44,44 @@ class DocumentStyleSheetCollector {
     // it's unhealthy to have it anywhere but on the stack, where stack
     // scanning will keep them alive.
     STACK_ALLOCATED();
+
 public:
     friend class ImportedDocumentStyleSheetCollector;
 
-    DocumentStyleSheetCollector(WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>& sheetsForList, WillBeHeapVector<RefPtrWillBeMember<CSSStyleSheet>>& activeList, WillBeHeapHashSet<RawPtrWillBeMember<Document>>&);
+    DocumentStyleSheetCollector(StyleSheetCollection*,
+        HeapVector<Member<StyleSheet>>*,
+        HeapHashSet<Member<Document>>*);
     ~DocumentStyleSheetCollector();
 
-    void appendActiveStyleSheets(const WillBeHeapVector<RefPtrWillBeMember<CSSStyleSheet>>&);
-    void appendActiveStyleSheet(CSSStyleSheet*);
+    void appendActiveStyleSheet(const ActiveStyleSheet&);
     void appendSheetForList(StyleSheet*);
 
-    bool hasVisited(Document* document) const { return m_visitedDocuments.contains(document); }
-    void willVisit(Document* document) { m_visitedDocuments.add(document); }
+    bool hasVisited(Document* document) const
+    {
+        return m_visitedDocuments->contains(document);
+    }
+    void willVisit(Document* document) { m_visitedDocuments->add(document); }
 
 private:
-    WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>& m_styleSheetsForStyleSheetList;
-    WillBeHeapVector<RefPtrWillBeMember<CSSStyleSheet>>& m_activeAuthorStyleSheets;
-    WillBeHeapHashSet<RawPtrWillBeMember<Document>>& m_visitedDocuments;
+    Member<StyleSheetCollection> m_collection;
+    HeapVector<Member<StyleSheet>>* m_styleSheetsForStyleSheetList;
+    HeapHashSet<Member<Document>>* m_visitedDocuments;
 };
 
-class ActiveDocumentStyleSheetCollector final : public DocumentStyleSheetCollector {
+class ActiveDocumentStyleSheetCollector final
+    : public DocumentStyleSheetCollector {
 public:
     ActiveDocumentStyleSheetCollector(StyleSheetCollection&);
+
 private:
-    WillBeHeapHashSet<RawPtrWillBeMember<Document>> m_visitedDocuments;
+    HeapHashSet<Member<Document>> m_visitedDocuments;
 };
 
-class ImportedDocumentStyleSheetCollector final : public DocumentStyleSheetCollector {
+class ImportedDocumentStyleSheetCollector final
+    : public DocumentStyleSheetCollector {
 public:
-    ImportedDocumentStyleSheetCollector(DocumentStyleSheetCollector&, WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>&);
+    ImportedDocumentStyleSheetCollector(DocumentStyleSheetCollector&,
+        HeapVector<Member<StyleSheet>>&);
 };
 
 } // namespace blink

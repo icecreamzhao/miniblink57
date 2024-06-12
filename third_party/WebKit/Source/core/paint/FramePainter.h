@@ -5,26 +5,38 @@
 #ifndef FramePainter_h
 #define FramePainter_h
 
+#include "core/paint/PaintPhase.h"
+#include "platform/heap/Handle.h"
+
 namespace blink {
 
+class CullRect;
 class FrameView;
 class GraphicsContext;
 class IntRect;
 class Scrollbar;
 
 class FramePainter {
-public:
-    FramePainter(FrameView& frameView) : m_frameView(frameView) { }
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(FramePainter);
 
-    void paint(GraphicsContext*, const IntRect&);
-    void paintScrollbars(GraphicsContext*, const IntRect&);
-    void paintContents(GraphicsContext*, const IntRect& damageRect);
-    void paintScrollCorner(GraphicsContext*, const IntRect& cornerRect);
+public:
+    explicit FramePainter(const FrameView& frameView)
+        : m_frameView(&frameView)
+    {
+    }
+
+    void paint(GraphicsContext&, const GlobalPaintFlags, const CullRect&);
+    void paintScrollbars(GraphicsContext&, const IntRect&);
+    void paintContents(GraphicsContext&, const GlobalPaintFlags, const IntRect&);
+    void paintScrollCorner(GraphicsContext&, const IntRect& cornerRect);
 
 private:
-    void paintScrollbar(GraphicsContext*, Scrollbar*, const IntRect&);
+    void paintScrollbar(GraphicsContext&, Scrollbar&, const IntRect&);
 
-    FrameView& m_frameView;
+    const FrameView& frameView();
+
+    Member<const FrameView> m_frameView;
     static bool s_inPaintContents;
 };
 

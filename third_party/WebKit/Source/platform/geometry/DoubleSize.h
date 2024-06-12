@@ -7,6 +7,8 @@
 
 #include "platform/geometry/FloatSize.h"
 #include "platform/geometry/IntSize.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 #include "wtf/MathExtras.h"
 
 namespace blink {
@@ -14,11 +16,29 @@ namespace blink {
 class LayoutSize;
 
 class PLATFORM_EXPORT DoubleSize {
+    DISALLOW_NEW();
+
 public:
-    DoubleSize() : m_width(0), m_height(0) { }
-    DoubleSize(double width, double height) : m_width(width), m_height(height) { }
-    DoubleSize(const IntSize& p) : m_width(p.width()), m_height(p.height()) { }
-    DoubleSize(const FloatSize& s) : m_width(s.width()), m_height(s.height()) { }
+    DoubleSize()
+        : m_width(0)
+        , m_height(0)
+    {
+    }
+    DoubleSize(double width, double height)
+        : m_width(width)
+        , m_height(height)
+    {
+    }
+    DoubleSize(const IntSize& p)
+        : m_width(p.width())
+        , m_height(p.height())
+    {
+    }
+    DoubleSize(const FloatSize& s)
+        : m_width(s.width())
+        , m_height(s.height())
+    {
+    }
     explicit DoubleSize(const LayoutSize&);
 
     double width() const { return m_width; }
@@ -43,10 +63,9 @@ public:
         m_height = m_height * heightScale;
     }
 
-    void scale(float scale)
-    {
-        this->scale(scale, scale);
-    }
+    void scale(float scale) { this->scale(scale, scale); }
+
+    String toString() const;
 
 private:
     double m_width, m_height;
@@ -88,23 +107,30 @@ inline bool operator!=(const DoubleSize& a, const DoubleSize& b)
 
 inline IntSize flooredIntSize(const DoubleSize& p)
 {
-    return IntSize(clampTo<int>(floor(p.width())), clampTo<int>(floor(p.height())));
+    return IntSize(clampTo<int>(floor(p.width())),
+        clampTo<int>(floor(p.height())));
 }
 
 inline IntSize roundedIntSize(const DoubleSize& p)
 {
-    return IntSize(clampTo<int>(roundf(p.width())), clampTo<int>(roundf(p.height())));
+    return IntSize(clampTo<int>(roundf(p.width())),
+        clampTo<int>(roundf(p.height())));
 }
 
 inline IntSize expandedIntSize(const DoubleSize& p)
 {
-    return IntSize(clampTo<int>(ceilf(p.width())), clampTo<int>(ceilf(p.height())));
+    return IntSize(clampTo<int>(ceilf(p.width())),
+        clampTo<int>(ceilf(p.height())));
 }
 
 inline FloatSize toFloatSize(const DoubleSize& p)
 {
     return FloatSize(p.width(), p.height());
 }
+
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const DoubleSize&, std::ostream*);
 
 } // namespace blink
 

@@ -28,13 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/filesystem/DataTransferItemFileSystem.h"
 
+#include "bindings/core/v8/ScriptState.h"
 #include "core/clipboard/DataObject.h"
 #include "core/clipboard/DataTransfer.h"
 #include "core/clipboard/DataTransferItem.h"
-#include "core/dom/ExecutionContext.h"
 #include "core/fileapi/File.h"
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DOMFileSystem.h"
@@ -48,9 +47,10 @@
 namespace blink {
 
 // static
-Entry* DataTransferItemFileSystem::webkitGetAsEntry(ExecutionContext* executionContext, DataTransferItem& item)
+Entry* DataTransferItemFileSystem::webkitGetAsEntry(ScriptState* scriptState,
+    DataTransferItem& item)
 {
-    if (!item.dataObjectItem()->isFilename())
+    if (!item.getDataObjectItem()->isFilename())
         return 0;
 
     // For dragged files getAsFile must be pretty lightweight.
@@ -60,16 +60,20 @@ Entry* DataTransferItemFileSystem::webkitGetAsEntry(ExecutionContext* executionC
         return 0;
     ASSERT(file->isFile());
 
-    DOMFileSystem* domFileSystem = DraggedIsolatedFileSystemImpl::getDOMFileSystem(item.dataTransfer()->dataObject(), executionContext);
+    DOMFileSystem* domFileSystem = DraggedIsolatedFileSystemImpl::getDOMFileSystem(
+        item.getDataTransfer()->dataObject(),
+        scriptState->getExecutionContext(), *item.getDataObjectItem());
     if (!domFileSystem) {
         // IsolatedFileSystem may not be enabled.
         return 0;
     }
 
-    // The dropped entries are mapped as top-level entries in the isolated filesystem.
+    // The dropped entries are mapped as top-level entries in the isolated
+    // filesystem.
     String virtualPath = DOMFilePath::append("/", toFile(file)->name());
 
-    // FIXME: This involves synchronous file operation. Consider passing file type data when we dispatch drag event.
+    // FIXME: This involves synchronous file operation. Consider passing file type
+    // data when we dispatch drag event.
     FileMetadata metadata;
     if (!getFileMetadata(toFile(file)->path(), metadata))
         return 0;

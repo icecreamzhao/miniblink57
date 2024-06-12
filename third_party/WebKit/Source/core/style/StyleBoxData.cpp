@@ -19,7 +19,6 @@
  *
  */
 
-#include "config.h"
 #include "core/style/StyleBoxData.h"
 
 #include "core/style/ComputedStyle.h"
@@ -32,7 +31,8 @@ struct SameSizeAsStyleBoxData : public RefCounted<SameSizeAsStyleBoxData> {
     uint32_t bitfields;
 };
 
-static_assert(sizeof(StyleBoxData) == sizeof(SameSizeAsStyleBoxData), "StyleBoxData should stay small");
+static_assert(sizeof(StyleBoxData) == sizeof(SameSizeAsStyleBoxData),
+    "StyleBoxData should stay small");
 
 StyleBoxData::StyleBoxData()
     : m_minWidth(ComputedStyle::initialMinSize())
@@ -41,8 +41,8 @@ StyleBoxData::StyleBoxData()
     , m_maxHeight(ComputedStyle::initialMaxSize())
     , m_zIndex(0)
     , m_hasAutoZIndex(true)
-    , m_boxSizing(CONTENT_BOX)
-    , m_boxDecorationBreak(DSLICE)
+    , m_boxSizing(static_cast<unsigned>(ComputedStyle::initialBoxSizing()))
+    , m_boxDecorationBreak(BoxDecorationBreakSlice)
 {
 }
 
@@ -64,17 +64,7 @@ StyleBoxData::StyleBoxData(const StyleBoxData& o)
 
 bool StyleBoxData::operator==(const StyleBoxData& o) const
 {
-    return m_width == o.m_width
-        && m_height == o.m_height
-        && m_minWidth == o.m_minWidth
-        && m_maxWidth == o.m_maxWidth
-        && m_minHeight == o.m_minHeight
-        && m_maxHeight == o.m_maxHeight
-        && m_verticalAlign == o.m_verticalAlign
-        && m_zIndex == o.m_zIndex
-        && m_hasAutoZIndex == o.m_hasAutoZIndex
-        && m_boxSizing == o.m_boxSizing
-        && m_boxDecorationBreak == o.m_boxDecorationBreak;
+    return m_width == o.m_width && m_height == o.m_height && m_minWidth == o.m_minWidth && m_maxWidth == o.m_maxWidth && m_minHeight == o.m_minHeight && m_maxHeight == o.m_maxHeight && m_verticalAlign == o.m_verticalAlign && m_zIndex == o.m_zIndex && m_hasAutoZIndex == o.m_hasAutoZIndex && m_boxSizing == o.m_boxSizing && m_boxDecorationBreak == o.m_boxDecorationBreak;
 }
 
 } // namespace blink

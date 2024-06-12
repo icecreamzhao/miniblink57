@@ -5,20 +5,21 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrGLProgram_DEFINED
 #define GrGLProgram_DEFINED
 
-#include "builders/GrGLProgramBuilder.h"
 #include "GrGLContext.h"
+#include "GrGLProgramDataManager.h"
 #include "GrGLProgramDesc.h"
 #include "GrGLTexture.h"
-#include "GrGLProgramDataManager.h"
+#include "glsl/GrGLSLProgramDataManager.h"
+#include "glsl/GrGLSLUniformHandler.h"
 
 #include "SkString.h"
 #include "SkXfermode.h"
 
-class GrGLProcessor;
+#include "builders/GrGLProgramBuilder.h"
+
 class GrGLInstalledProcessors;
 class GrGLProgramBuilder;
 class GrPipeline;
@@ -34,11 +35,9 @@ class GrPipeline;
  */
 class GrGLProgram : public SkRefCnt {
 public:
-    
+    typedef GrGLSLProgramBuilder::BuiltinUniformHandles BuiltinUniformHandles;
 
-    typedef GrGLProgramBuilder::BuiltinUniformHandles BuiltinUniformHandles;
-
-    virtual ~GrGLProgram();
+    ~GrGLProgram();
 
     /**
      * Call to abandon GL objects owned by this program.
@@ -58,14 +57,15 @@ public:
      * them.
      */
     struct RenderTargetState {
-        SkISize         fRenderTargetSize;
+        SkISize fRenderTargetSize;
         GrSurfaceOrigin fRenderTargetOrigin;
 
         RenderTargetState() { this->invalidate(); }
-        void invalidate() {
+        void invalidate()
+        {
             fRenderTargetSize.fWidth = -1;
             fRenderTargetSize.fHeight = -1;
-            fRenderTargetOrigin = (GrSurfaceOrigin) -1;
+            fRenderTargetOrigin = (GrSurfaceOrigin)-1;
         }
 
         /**
@@ -73,9 +73,10 @@ public:
          * coords. Assuming the transformed position, pos, is a homogeneous vec3, the vec, v, is
          * applied as such:
          * pos.x = dot(v.xy, pos.xz)
-         * pos.y = dot(v.zq, pos.yz)
+         * pos.y = dot(v.zw, pos.yz)
          */
-        void getRTAdjustmentVec(GrGLfloat* destVec) {
+        void getRTAdjustmentVec(float* destVec)
+        {
             destVec[0] = 2.f / fRenderTargetSize.fWidth;
             destVec[1] = -1.f;
             if (kBottomLeft_GrSurfaceOrigin == fRenderTargetOrigin) {
@@ -89,63 +90,61 @@ public:
     };
 
     /**
-     * This function uploads uniforms, calls each GrGLProcessor's setData, and retrieves the
+     * This function uploads uniforms, calls each GrGL*Processor's setData, and retrieves the
      * textures that need to be bound on each unit. It is the caller's responsibility to ensure
      * the program is bound before calling, and to bind the outgoing textures to their respective
      * units upon return. (Each index in the array corresponds to its matching GL texture unit.)
      */
-    void setData(const GrPrimitiveProcessor&, const GrPipeline&, const GrBatchTracker&,
-                 SkTArray<const GrTextureAccess*>* textureBindings);
+    void setData(const GrPrimitiveProcessor&, const GrPipeline&);
+
+    /**
+     * This function retrieves the textures that need to be used by each GrGL*Processor, and
+     * ensures that any textures requiring mipmaps have their mipmaps correctly built.
+     */
+    void generateMipmaps(const GrPrimitiveProcessor&, const GrPipeline&);
 
 protected:
-    typedef GrGLProgramDataManager::UniformHandle UniformHandle;
+    typedef GrGLSLProgramDataManager::UniformHandle UniformHandle;
     typedef GrGLProgramDataManager::UniformInfoArray UniformInfoArray;
+    typedef GrGLProgramDataManager::VaryingInfoArray VaryingInfoArray;
 
     GrGLProgram(GrGLGpu*,
-                const GrProgramDesc&,
-                const BuiltinUniformHandles&,
-                GrGLuint programID,
-                const UniformInfoArray&,
-                GrGLInstalledGeoProc* geometryProcessor,
-                GrGLInstalledXferProc* xferProcessor,
-                GrGLInstalledFragProcs* fragmentProcessors,
-                SkTArray<UniformHandle>* passSamplerUniforms);
+        const GrProgramDesc&,
+        const BuiltinUniformHandles&,
+        GrGLuint programID,
+        const UniformInfoArray&,
+        const SkTArray<GrGLSampler>&,
+        const VaryingInfoArray&, // used for NVPR only currently
+        GrGLSLPrimitiveProcessor* geometryProcessor,
+        GrGLSLXferProcessor* xferProcessor,
+        const GrGLSLFragProcs& fragmentProcessors);
 
-    // A templated helper to loop over effects, set the transforms(via subclass) and bind textures
-    void setFragmentData(const GrPrimitiveProcessor&, const GrPipeline&,
-                         SkTArray<const GrTextureAccess*>* textureBindings);
-    virtual void setTransformData(const GrPrimitiveProcessor&,
-                                  const GrPendingFragmentStage&,
-                                  int index,
-                                  GrGLInstalledFragProc*);
-
-    /*
-     * Legacy NVPR needs a hook here to flush path tex gen settings.
-     * TODO when legacy nvpr is removed, remove this call.
-     */
-    virtual void didSetData() {}
+    // A helper to loop over effects, set the transforms (via subclass) and bind textures
+    void setFragmentData(const GrPrimitiveProcessor&, const GrPipeline&, int* nextSamplerIdx);
+    void setTransformData(const GrPrimitiveProcessor&, const GrFragmentProcessor&, int index);
 
     // Helper for setData() that sets the view matrix and loads the render target height uniform
     void setRenderTargetState(const GrPrimitiveProcessor&, const GrPipeline&);
-    virtual void onSetRenderTargetState(const GrPrimitiveProcessor&, const GrPipeline&);
+
+    // Helper for setData() that binds textures and texel buffers to the appropriate texture units
+    void bindTextures(const GrProcessor&, bool allowSRGBInputs, int* nextSamplerIdx);
+
+    // Helper for generateMipmaps() that ensures mipmaps are up to date
+    void generateMipmaps(const GrProcessor&, bool allowSRGBInputs);
 
     // these reflect the current values of uniforms (GL uniform values travel with program)
     RenderTargetState fRenderTargetState;
-    GrColor fColor;
-    uint8_t fCoverage;
-    int fDstTextureUnit;
     BuiltinUniformHandles fBuiltinUniformHandles;
     GrGLuint fProgramID;
 
     // the installed effects
-    SkAutoTDelete<GrGLInstalledGeoProc> fGeometryProcessor;
-    SkAutoTDelete<GrGLInstalledXferProc> fXferProcessor;
-    SkAutoTUnref<GrGLInstalledFragProcs> fFragmentProcessors;
+    SkAutoTDelete<GrGLSLPrimitiveProcessor> fGeometryProcessor;
+    SkAutoTDelete<GrGLSLXferProcessor> fXferProcessor;
+    GrGLSLFragProcs fFragmentProcessors;
 
     GrProgramDesc fDesc;
     GrGLGpu* fGpu;
     GrGLProgramDataManager fProgramDataManager;
-    SkTArray<UniformHandle> fSamplerUniforms;
 
     friend class GrGLProgramBuilder;
 

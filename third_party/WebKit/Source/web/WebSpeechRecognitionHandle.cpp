@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebSpeechRecognitionHandle.h"
 
 #include "modules/speech/SpeechRecognition.h"
@@ -35,22 +34,26 @@ void WebSpeechRecognitionHandle::reset()
     m_private.reset();
 }
 
-void WebSpeechRecognitionHandle::assign(const WebSpeechRecognitionHandle& other)
+void WebSpeechRecognitionHandle::assign(
+    const WebSpeechRecognitionHandle& other)
 {
     m_private = other.m_private;
 }
 
-bool WebSpeechRecognitionHandle::equals(const WebSpeechRecognitionHandle& other) const
+bool WebSpeechRecognitionHandle::equals(
+    const WebSpeechRecognitionHandle& other) const
 {
     return m_private.get() == other.m_private.get();
 }
 
-bool WebSpeechRecognitionHandle::lessThan(const WebSpeechRecognitionHandle& other) const
+bool WebSpeechRecognitionHandle::lessThan(
+    const WebSpeechRecognitionHandle& other) const
 {
     return m_private.get() < other.m_private.get();
 }
 
-WebSpeechRecognitionHandle::WebSpeechRecognitionHandle(SpeechRecognition* speechRecognition)
+WebSpeechRecognitionHandle::WebSpeechRecognitionHandle(
+    SpeechRecognition* speechRecognition)
     : m_private(speechRecognition)
 {
 }

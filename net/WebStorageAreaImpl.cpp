@@ -2,6 +2,7 @@
 #include "net/WebStorageAreaImpl.h"
 
 #include "third_party/WebKit/public/web/WebStorageEventDispatcher.h"
+#include "third_party/WebKit/public/platform/WebSecurityOrigin.h"
 #include "third_party/WebKit/public/platform/WebURL.h"
 #include "third_party/WebKit/Source/platform/weborigin/KURL.h"
 #include "third_party/WebKit/Source/wtf/text/StringBuilder.h"
@@ -22,7 +23,7 @@ static String buildOriginString(const blink::KURL& pageUrl)
     }
 
     builder.append(pageUrl.protocol());
-    builder.appendLiteral("://");
+    builder.append("://");
     builder.append(pageUrl.host());
 
     if (pageUrl.hasPort()) {
@@ -42,7 +43,7 @@ static String buildOriginLocalFileNameString(const blink::KURL& pageUrl)
     }
 
     builder.append(pageUrl.protocol());
-    builder.appendLiteral("_");
+    builder.append("_");
     builder.append(pageUrl.host());
 
     if (pageUrl.hasPort()) {
@@ -54,43 +55,46 @@ static String buildOriginLocalFileNameString(const blink::KURL& pageUrl)
 }
 
 //static char* kLocalStorageDirectoryName = "LocalStorage";
-static char* kLocalStorageExtensionName = ".localstorage";
+static const char* kLocalStorageExtensionName = ".localstorage";
 
-static char* kSeparator = "--mb-sep--\n";
+static const char* kSeparator = "--mb-sep--\n";
 static size_t kSeparatorLength = 11;
 
-static char* kEmptySeprator = "--mb-ept--";// (char)0x1f;
+static const char* kEmptySeprator = "--mb-ept--";// (char)0x1f;
 static size_t kEmptySepratorLength = 10;
+
+HashSet<String>* WebStorageAreaImpl::s_cachedPath = nullptr;
 
 static String buildLocalStorageDirectoryPath(const String& localPath)
 {
-//     String localStoragePath;
-//     localStoragePath = localPath;
-//     localStoragePath.append(kLocalStorageDirectoryName);
-//     return localStoragePath;
-    return localPath;
+    return WTF::ensureStringToUTF8String(localPath);
 }
 
 static String buildLocalStorageFileNameString(const String& localPath, const blink::KURL& originUrl)
 {
     String localStoragePath;
     localStoragePath.append(buildLocalStorageDirectoryPath(localPath));
-    localStoragePath.append('\\');
+
+    if (localStoragePath.length() > 0) {
+        UChar c = localStoragePath.characters8()[localStoragePath.length() - 1];
+        if ('\\' != c && '/' != c)
+            localStoragePath.append(kPlatformFilePathSeparator);
+    }
+
     localStoragePath.append(buildOriginLocalFileNameString(originUrl));
     localStoragePath.append(kLocalStorageExtensionName);
 
     return localStoragePath;
 }
 
-WebStorageAreaImpl::WebStorageAreaImpl(/*const String& localPath, */net::DOMStorageMap* cachedArea, const blink::WebString& origin, bool isLocal)
+WebStorageAreaImpl::WebStorageAreaImpl(net::DOMStorageMap* cachedArea, const blink::WebSecurityOrigin& origin, bool isLocal, WebStorageNamespaceImpl* storageNamespace)
     : m_cachedArea(cachedArea)
     , m_isLocal(isLocal)
     , m_delaySaveTimer(this, &WebStorageAreaImpl::delaySaveTimerFired)
     , m_iteratorIndex(UINT_MAX)
+    , m_storageNamespace(storageNamespace)
 {
-    m_origin = (String)origin;
-    
-    //loadFromFile(localPath);
+    m_origin = (String)origin.toString();
 }
 
 WebStorageAreaImpl::~WebStorageAreaImpl()
@@ -128,6 +132,22 @@ void WebStorageAreaImpl::loadFromBufferImpl(const Vector<char>& buffer, const bl
         isKey = !isKey;
         i += kSeparatorLength;
     }
+
+    //////////////////////////////////////////////////////////////////////////
+//     DOMStorageMap::iterator it1 = m_cachedArea->begin();
+//     for (; it1 != m_cachedArea->end(); ++it1) {
+//         String path = it1->key;
+//         HashMap<String, String>* pageStorageArea2 = it1->value;
+//         HashMap<String, String>::iterator itor2 = pageStorageArea2->begin();
+//         for (; itor2 != pageStorageArea2->end(); ++itor2) {
+//             String keyStr = itor2->key;
+//             String valueStr = itor2->value;
+// 
+//             String output = String::format("WebStorageAreaImpl::loadFromBufferImpl: %s , %s , %s\n", path.utf8().data(), keyStr.utf8().data(), valueStr.utf8().data());
+//             OutputDebugStringA(output.utf8().data());
+//         }
+//     }
+    //////////////////////////////////////////////////////////////////////////
 }
 
 void WebStorageAreaImpl::loadFromFile(const String& localPath)
@@ -135,18 +155,20 @@ void WebStorageAreaImpl::loadFromFile(const String& localPath)
     if (!m_isLocal)
         return;
 
-    m_localPath = localPath;
-
-    static bool isFirstLoad = true;
-    if (!isFirstLoad)
-        return;
-    isFirstLoad = false;
+    m_localPath = WTF::ensureUTF16String(localPath);
 
     blink::KURL originUrl(blink::ParsedURLString, m_origin);
     if (!originUrl.isValid())
         return;
 
     String localStoragePath = buildLocalStorageFileNameString(localPath, originUrl);
+
+    if (!s_cachedPath)
+        s_cachedPath = new HashSet<String>();
+    HashSet<String>::iterator it = s_cachedPath->find(localStoragePath);
+    if (it != s_cachedPath->end())
+        return;
+    s_cachedPath->add(localStoragePath);
 
     net::PlatformFileHandle handle = openFile(localStoragePath, net::OpenForRead);
     if (!net::isHandleValid(handle))
@@ -173,7 +195,7 @@ void WebStorageAreaImpl::loadFromFile(const String& localPath)
     net::closeFile(handle);
 }
 
-void WebStorageAreaImpl::delaySaveTimerFired(blink::Timer<WebStorageAreaImpl>*)
+void WebStorageAreaImpl::delaySaveTimerFired(blink::TimerBase*)
 {
     if (!m_isLocal)
         return;
@@ -306,15 +328,7 @@ blink::WebString WebStorageAreaImpl::getItem(const blink::WebString& key)
     HashMap<String, String>* pageStorageArea = it->value;
     size_t size = pageStorageArea->size();
 
-//     HashMap<String, String>::iterator itor = pageStorageArea->begin();
-//     for (; itor != pageStorageArea->end(); ++itor) {
-//         String keyStr = itor->key;
-//         String valueStr = itor->value;
-// 
-//         String output = String::format("WebStorageAreaImpl::getItem: %s , %s\n", keyStr.utf8().data(), valueStr.utf8().data());
-//         OutputDebugStringA(output.utf8().data());
-//     }
-
+    HashMap<String, String>::iterator itor = pageStorageArea->begin();
     HashMap<String, String>::iterator keyValueIt = pageStorageArea->find(keyString);
     if (keyValueIt == pageStorageArea->end())
         return blink::WebString();
@@ -419,10 +433,9 @@ void WebStorageAreaImpl::dispatchStorageEvent(const String& key, const String& o
         return;
 
     if (m_isLocal) {
-        blink::WebStorageEventDispatcher::dispatchLocalStorageEvent(key, oldValue, newValue, blink::KURL(blink::ParsedURLString, m_origin), pageUrl, nullptr, true);
+        blink::WebStorageEventDispatcher::dispatchLocalStorageEvent(key, oldValue, newValue, blink::KURL(blink::ParsedURLString, m_origin), pageUrl, nullptr);
     } else {
-        blink::WebStorageNamespace* webStorageNamespace = ((content::BlinkPlatformImpl*)blink::Platform::current())->createSessionStorageNamespace();
-        blink::WebStorageEventDispatcher::dispatchSessionStorageEvent(key, oldValue, newValue, blink::KURL(blink::ParsedURLString, m_origin), pageUrl, *webStorageNamespace, nullptr, true);
+        blink::WebStorageEventDispatcher::dispatchSessionStorageEvent(key, oldValue, newValue, blink::KURL(blink::ParsedURLString, m_origin), pageUrl, *m_storageNamespace, nullptr);
     }
 }
 

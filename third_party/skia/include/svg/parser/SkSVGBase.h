@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkSVGBase_DEFINED
 #define SkSVGBase_DEFINED
 

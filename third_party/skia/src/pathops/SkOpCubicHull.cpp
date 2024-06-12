@@ -6,7 +6,8 @@
  */
 #include "SkPathOpsCubic.h"
 
-static bool rotate(const SkDCubic& cubic, int zero, int index, SkDCubic& rotPath) {
+static bool rotate(const SkDCubic& cubic, int zero, int index, SkDCubic& rotPath)
+{
     double dy = cubic[index].fY - cubic[zero].fY;
     double dx = cubic[index].fX - cubic[zero].fX;
     if (approximately_zero(dy)) {
@@ -35,9 +36,9 @@ static bool rotate(const SkDCubic& cubic, int zero, int index, SkDCubic& rotPath
     return true;
 }
 
-
 // Returns 0 if negative, 1 if zero, 2 if positive
-static int side(double x) {
+static int side(double x)
+{
     return (x > 0) + (x >= 0);
 }
 
@@ -52,13 +53,13 @@ static int side(double x) {
 
    The indices returned in order describe the convex hull.
 */
-int SkDCubic::convexHull(char order[4]) const {
+int SkDCubic::convexHull(char order[4]) const
+{
     size_t index;
     // find top point
     size_t yMin = 0;
     for (index = 1; index < 4; ++index) {
-        if (fPts[yMin].fY > fPts[index].fY || (fPts[yMin].fY == fPts[index].fY
-                && fPts[yMin].fX > fPts[index].fX)) {
+        if (fPts[yMin].fY > fPts[index].fY || (fPts[yMin].fY == fPts[index].fY && fPts[yMin].fX > fPts[index].fX)) {
             yMin = index;
         }
     }
@@ -97,7 +98,7 @@ int SkDCubic::convexHull(char order[4]) const {
                         order[2] = 1;
                         return 3;
                     }
-                    // one of the control points may be very nearly but not exactly equal -- 
+                    // one of the control points may be very nearly but not exactly equal --
                     double dist1_0 = fPts[1].distanceSquared(fPts[0]);
                     double dist1_3 = fPts[1].distanceSquared(fPts[3]);
                     double dist2_0 = fPts[2].distanceSquared(fPts[0]);
@@ -140,7 +141,7 @@ int SkDCubic::convexHull(char order[4]) const {
     }
     int midSides = side(midPath[yMin].fY - midPath[least].fY);
     midSides ^= side(midPath[midX].fY - midPath[least].fY);
-    if (midSides != 2) {  // if mid point is not between
+    if (midSides != 2) { // if mid point is not between
         order[2] = most;
         return 3; // result is a triangle
     }

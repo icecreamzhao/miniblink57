@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8Document.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -41,27 +40,30 @@
 #include "core/dom/Document.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/LocalFrame.h"
+#include "core/frame/UseCounter.h"
 #include "core/html/HTMLAllCollection.h"
 #include "core/html/HTMLCollection.h"
 #include "core/html/HTMLIFrameElement.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/RefPtr.h"
 #include "wtf/StdLibExtras.h"
+#include <memory>
 
 namespace blink {
 
 // HTMLDocument ----------------------------------------------------------------
 
-void V8Document::openMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+void V8Document::openMethodCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     Document* document = V8Document::toImpl(info.Holder());
 
     if (info.Length() > 2) {
-        RefPtrWillBeRawPtr<LocalFrame> frame = document->frame();
+        LocalFrame* frame = document->frame();
         if (!frame)
             return;
         // Fetch the global object for the frame.
-        v8::Local<v8::Context> context = toV8Context(frame.get(), DOMWrapperWorld::current(info.GetIsolate()));
+        v8::Local<v8::Context> context = toV8Context(frame, DOMWrapperWorld::current(info.GetIsolate()));
         // Bail out if we cannot get the context.
         if (context.IsEmpty())
             return;
@@ -73,24 +75,54 @@ void V8Document::openMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& inf
             return;
         // If the open property is not a function throw a type error.
         if (!function->IsFunction()) {
-            V8ThrowException::throwTypeError(info.GetIsolate(), "open is not a function");
+            V8ThrowException::throwTypeError(info.GetIsolate(),
+                "open is not a function");
             return;
         }
         // Wrap up the arguments and call the function.
-        OwnPtr<v8::Local<v8::Value>[]> params = adoptArrayPtr(new v8::Local<v8::Value>[info.Length()]);
+        std::unique_ptr<v8::Local<v8::Value>[]> params = wrapArrayUnique(new v8::Local<v8::Value>[info.Length()]);
         for (int i = 0; i < info.Length(); i++)
             params[i] = info[i];
 
-        v8SetReturnValue(info, frame->script().callFunction(v8::Local<v8::Function>::Cast(function), global, info.Length(), params.get()));
+        v8SetReturnValue(
+            info, V8ScriptRunner::callFunction(v8::Local<v8::Function>::Cast(function), frame->document(), global, info.Length(), params.get(), info.GetIsolate()));
         return;
     }
 
-    ExceptionState exceptionState(ExceptionState::ExecutionContext, "open", "Document", info.Holder(), info.GetIsolate());
-    document->open(callingDOMWindow(info.GetIsolate())->document(), exceptionState);
-    if (exceptionState.throwIfNeeded())
-        return;
+    ExceptionState exceptionState(
+        info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "open");
+    document->open(enteredDOMWindow(info.GetIsolate())->document(),
+        exceptionState);
 
     v8SetReturnValue(info, info.Holder());
+}
+
+void V8Document::createTouchMethodPrologueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    Document*)
+{
+    v8::Local<v8::Value> v8Window = info[0];
+    if (isUndefinedOrNull(v8Window)) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentCreateTouchWindowNull);
+    } else if (!toDOMWindow(info.GetIsolate(), v8Window)) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentCreateTouchWindowWrongType);
+    }
+
+    v8::Local<v8::Value> v8Target = info[1];
+    if (isUndefinedOrNull(v8Target)) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentCreateTouchTargetNull);
+    } else if (!toEventTarget(info.GetIsolate(), v8Target)) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentCreateTouchTargetWrongType);
+    }
+
+    if (info.Length() < 7) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::DocumentCreateTouchLessThanSevenArguments);
+    }
 }
 
 } // namespace blink

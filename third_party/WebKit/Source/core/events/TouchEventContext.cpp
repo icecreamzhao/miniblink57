@@ -24,7 +24,6 @@
  *
  */
 
-#include "config.h"
 #include "core/events/TouchEventContext.h"
 
 #include "core/dom/TouchList.h"
@@ -33,9 +32,9 @@
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<TouchEventContext> TouchEventContext::create()
+TouchEventContext* TouchEventContext::create()
 {
-    return adoptRefWillBeNoop(new TouchEventContext);
+    return new TouchEventContext;
 }
 
 TouchEventContext::TouchEventContext()
@@ -45,11 +44,9 @@ TouchEventContext::TouchEventContext()
 {
 }
 
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(TouchEventContext)
-
 void TouchEventContext::handleLocalEvents(Event& event) const
 {
-    ASSERT(event.isTouchEvent());
+    DCHECK(event.isTouchEvent());
     TouchEvent& touchEvent = toTouchEvent(event);
     touchEvent.setTouches(m_touches);
     touchEvent.setTargetTouches(m_targetTouches);
@@ -63,4 +60,4 @@ DEFINE_TRACE(TouchEventContext)
     visitor->trace(m_changedTouches);
 }
 
-}
+} // namespace blink

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayRandom_DEFINED
 #define SkDisplayRandom_DEFINED
 
@@ -26,10 +25,11 @@ class SkDisplayRandom : public SkDisplayable {
     DECLARE_DISPLAY_MEMBER_INFO(Random);
     SkDisplayRandom();
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
     bool getProperty(int index, SkScriptValue* value) const override;
-    bool setProperty(int index, SkScriptValue& ) override;
+    bool setProperty(int index, SkScriptValue&) override;
+
 private:
     SkScalar blend;
     SkScalar min;

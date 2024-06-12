@@ -34,15 +34,14 @@ class ExceptionState;
 
 class HTMLTableSectionElement final : public HTMLTablePartElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLTableSectionElement);
 
-    PassRefPtrWillBeRawPtr<HTMLElement> insertRow(int index, ExceptionState&);
+    HTMLElement* insertRow(int index, ExceptionState&);
     void deleteRow(int index, ExceptionState&);
 
-    int numRows() const;
-
-    PassRefPtrWillBeRawPtr<HTMLCollection> rows();
+    HTMLCollection* rows();
 
 private:
     HTMLTableSectionElement(const QualifiedName& tagName, Document&);

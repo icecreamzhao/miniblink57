@@ -31,21 +31,23 @@
 
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/DynamicsCompressorKernel.h"
-#include "platform/audio/ZeroPole.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class AudioBus;
 
-// DynamicsCompressor implements a flexible audio dynamics compression effect such as
-// is commonly used in musical production and game audio. It lowers the volume
-// of the loudest parts of the signal and raises the volume of the softest parts,
-// making the sound richer, fuller, and more controlled.
+// DynamicsCompressor implements a flexible audio dynamics compression effect
+// such as is commonly used in musical production and game audio. It lowers the
+// volume of the loudest parts of the signal and raises the volume of the
+// softest parts, making the sound richer, fuller, and more controlled.
 
 class PLATFORM_EXPORT DynamicsCompressor {
+    USING_FAST_MALLOC(DynamicsCompressor);
     WTF_MAKE_NONCOPYABLE(DynamicsCompressor);
+
 public:
     enum {
         ParamThreshold,
@@ -69,7 +71,9 @@ public:
 
     DynamicsCompressor(float sampleRate, unsigned numberOfChannels);
 
-    void process(const AudioBus* sourceBus, AudioBus* destinationBus, unsigned framesToProcess);
+    void process(const AudioBus* sourceBus,
+        AudioBus* destinationBus,
+        unsigned framesToProcess);
     void reset();
     void setNumberOfChannels(unsigned);
 
@@ -80,7 +84,10 @@ public:
     float nyquist() const { return m_sampleRate / 2; }
 
     double tailTime() const { return 0; }
-    double latencyTime() const { return m_compressor.latencyFrames() / static_cast<double>(sampleRate()); }
+    double latencyTime() const
+    {
+        return m_compressor.latencyFrames() / static_cast<double>(sampleRate());
+    }
 
 protected:
     unsigned m_numberOfChannels;
@@ -96,8 +103,8 @@ protected:
     float m_lastAnchor;
     float m_lastFilterStageGain;
 
-    OwnPtr<const float*[]> m_sourceChannels;
-    OwnPtr<float*[]> m_destinationChannels;
+    std::unique_ptr<const float*[]> m_sourceChannels;
+    std::unique_ptr<float*[]> m_destinationChannels;
 
     // The core compressor.
     DynamicsCompressorKernel m_compressor;

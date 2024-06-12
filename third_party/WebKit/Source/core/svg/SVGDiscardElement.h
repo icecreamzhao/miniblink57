@@ -37,22 +37,24 @@ namespace blink {
 
 class SVGDiscardElement final : public SVGSMILElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGDiscardElement);
 
     bool isSVGDiscardElement() const override { return true; }
+
 private:
     explicit SVGDiscardElement(Document&);
 
     void resetAnimatedType() override { }
     void clearAnimatedType() override { }
     void applyResultsToTarget() override { }
-    bool hasValidAttributeType() override;
-    bool hasValidAttributeName() override;
     void animationAttributeChanged() override { }
 
     void startedActiveInterval() override { }
-    void updateAnimation(float percent, unsigned repeat, SVGSMILElement* resultElement) override { }
+    void updateAnimation(float percent,
+        unsigned repeat,
+        SVGSMILElement* resultElement) override { }
 };
 
 } // namespace blink

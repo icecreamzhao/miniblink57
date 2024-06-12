@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -8,26 +7,28 @@
 
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
+#include "SkParsePath.h"
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkParsePath.h"
 #include "SkTime.h"
 #include "SkTypeface.h"
+#include "SkUtils.h"
+#include "SkView.h"
+#include "SkXfermode.h"
 
 #include "SkGeometry.h"
 
+#include <stdlib.h>
+
 // http://code.google.com/p/skia/issues/detail?id=32
-static void test_cubic() {
+static void test_cubic()
+{
     SkPoint src[4] = {
         { 556.25000f, 523.03003f },
         { 556.23999f, 522.96002f },
@@ -35,7 +36,7 @@ static void test_cubic() {
         { 556.21997f, 522.82001f }
     };
     SkPoint dst[11];
-    dst[10].set(42, -42);   // one past the end, that we don't clobber these
+    dst[10].set(42, -42); // one past the end, that we don't clobber these
     SkScalar tval[] = { 0.33333334f, 0.99999994f };
 
     SkChopCubicAt(src, dst, tval, 2);
@@ -47,30 +48,20 @@ static void test_cubic() {
 #endif
 }
 
-static void test_cubic2() {
+static void test_cubic2()
+{
     const char* str = "M2242 -590088L-377758 9.94099e+07L-377758 9.94099e+07L2242 -590088Z";
     SkPath path;
     SkParsePath::FromSVGString(str, &path);
 
     {
-#ifdef SK_BUILD_FOR_WIN
-        // windows doesn't have strtof
-        float x = (float)strtod("9.94099e+07", NULL);
-#else
-        float x = strtof("9.94099e+07", NULL);
-#endif
-        int ix = (int)x;
-        int fx = (int)(x * 65536);
-        int ffx = SkScalarToFixed(x);
-        SkDebugf("%g %x %x %x\n", x, ix, fx, ffx);
-
         SkRect r = path.getBounds();
         SkIRect ir;
         r.round(&ir);
         SkDebugf("[%g %g %g %g] [%x %x %x %x]\n",
-                SkScalarToDouble(r.fLeft), SkScalarToDouble(r.fTop),
-                SkScalarToDouble(r.fRight), SkScalarToDouble(r.fBottom),
-                ir.fLeft, ir.fTop, ir.fRight, ir.fBottom);
+            SkScalarToDouble(r.fLeft), SkScalarToDouble(r.fTop),
+            SkScalarToDouble(r.fRight), SkScalarToDouble(r.fBottom),
+            ir.fLeft, ir.fTop, ir.fRight, ir.fBottom);
     }
 
     SkBitmap bitmap;
@@ -84,18 +75,21 @@ static void test_cubic2() {
 
 class PathView : public SampleView {
     SkScalar fPrevSecs;
+
 public:
     SkScalar fDStroke, fStroke, fMinStroke, fMaxStroke;
     SkPath fPath[6];
     bool fShowHairline;
     bool fOnce;
 
-    PathView() {
+    PathView()
+    {
         fPrevSecs = 0;
         fOnce = false;
     }
 
-    void init() {
+    void init()
+    {
         if (fOnce) {
             return;
         }
@@ -142,7 +136,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Paths");
             return true;
@@ -150,7 +145,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void drawPath(SkCanvas* canvas, const SkPath& path, SkPaint::Join j) {
+    void drawPath(SkCanvas* canvas, const SkPath& path, SkPaint::Join j)
+    {
         SkPaint paint;
 
         paint.setAntiAlias(true);
@@ -159,7 +155,7 @@ protected:
         paint.setStrokeWidth(fStroke);
 
         if (fShowHairline) {
-            SkPath  fill;
+            SkPath fill;
 
             paint.getFillPath(path, &fill);
             paint.setStrokeWidth(0);
@@ -173,7 +169,8 @@ protected:
         canvas->drawPath(path, paint);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         this->init();
         canvas->translate(50, 50);
 
@@ -194,8 +191,9 @@ protected:
             canvas->translate(0, 200);
         }
     }
-    
-    bool onAnimate(const SkAnimTimer& timer) override {
+
+    bool onAnimate(const SkAnimTimer& timer) override
+    {
         SkScalar currSecs = timer.scaled(100);
         SkScalar delta = currSecs - fPrevSecs;
         fPrevSecs = currSecs;
@@ -207,16 +205,17 @@ protected:
         return true;
     }
 
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override {
+    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override
+    {
         fShowHairline = !fShowHairline;
-        this->inval(NULL);
+        this->inval(nullptr);
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 
 private:
     typedef SampleView INHERITED;
 };
-DEF_SAMPLE( return new PathView; )
+DEF_SAMPLE(return new PathView;)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -227,6 +226,7 @@ DEF_SAMPLE( return new PathView; )
 class ArcToView : public SampleView {
     bool fDoFrame, fDoArcTo, fDoCorner, fDoConic;
     SkPaint fPtsPaint, fArcToPaint, fSkeletonPaint, fCornerPaint;
+
 public:
     enum {
         N = 4
@@ -234,14 +234,17 @@ public:
     SkPoint fPts[N];
 
     ArcToView()
-        : fDoFrame(false), fDoArcTo(false), fDoCorner(false), fDoConic(false)
+        : fDoFrame(false)
+        , fDoArcTo(false)
+        , fDoCorner(false)
+        , fDoConic(false)
     {
         SkRandom rand;
         for (int i = 0; i < N; ++i) {
             fPts[i].fX = 20 + rand.nextUScalar1() * 640;
             fPts[i].fY = 20 + rand.nextUScalar1() * 480;
         }
-        
+
         const SkScalar rad = 50;
 
         fPtsPaint.setAntiAlias(true);
@@ -252,27 +255,29 @@ public:
         fArcToPaint.setStyle(SkPaint::kStroke_Style);
         fArcToPaint.setStrokeWidth(9);
         fArcToPaint.setColor(0x800000FF);
-        fArcToPaint.setPathEffect(SkArcToPathEffect::Create(rad))->unref();
+        fArcToPaint.setPathEffect(SkArcToPathEffect::Make(rad));
 
         fCornerPaint.setAntiAlias(true);
         fCornerPaint.setStyle(SkPaint::kStroke_Style);
         fCornerPaint.setStrokeWidth(13);
         fCornerPaint.setColor(SK_ColorGREEN);
-        fCornerPaint.setPathEffect(SkCornerPathEffect::Create(rad*2))->unref();
+        fCornerPaint.setPathEffect(SkCornerPathEffect::Make(rad * 2));
 
         fSkeletonPaint.setAntiAlias(true);
         fSkeletonPaint.setStyle(SkPaint::kStroke_Style);
         fSkeletonPaint.setColor(SK_ColorRED);
     }
 
-    void toggle(bool& value) {
+    void toggle(bool& value)
+    {
         value = !value;
-        this->inval(NULL);
+        this->inval(nullptr);
     }
 
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ArcTo");
             return true;
@@ -280,17 +285,27 @@ protected:
         SkUnichar uni;
         if (SampleCode::CharQ(*evt, &uni)) {
             switch (uni) {
-                case '1': this->toggle(fDoFrame); return true;
-                case '2': this->toggle(fDoArcTo); return true;
-                case '3': this->toggle(fDoCorner); return true;
-                case '4': this->toggle(fDoConic); return true;
-                default: break;
+            case '1':
+                this->toggle(fDoFrame);
+                return true;
+            case '2':
+                this->toggle(fDoArcTo);
+                return true;
+            case '3':
+                this->toggle(fDoCorner);
+                return true;
+            case '4':
+                this->toggle(fDoConic);
+                return true;
+            default:
+                break;
             }
         }
         return this->INHERITED::onQuery(evt);
     }
-    
-    void makePath(SkPath* path) {
+
+    void makePath(SkPath* path)
+    {
         path->moveTo(fPts[0]);
         for (int i = 1; i < N; ++i) {
             path->lineTo(fPts[i]);
@@ -300,7 +315,8 @@ protected:
         }
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         canvas->drawPoints(SkCanvas::kPoints_PointMode, N, fPts, fPtsPaint);
 
         SkPath path;
@@ -316,18 +332,20 @@ protected:
         canvas->drawPath(path, fSkeletonPaint);
     }
 
-    bool onClick(Click* click) override {
+    bool onClick(Click* click) override
+    {
         int32_t index;
         if (click->fMeta.findS32("index", &index)) {
             SkASSERT((unsigned)index < N);
             fPts[index] = click->fCurr;
-            this->inval(NULL);
+            this->inval(nullptr);
             return true;
         }
         return false;
     }
 
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override {
+    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override
+    {
         const SkScalar tol = 4;
         const SkRect r = SkRect::MakeXYWH(x - tol, y - tol, tol * 2, tol * 2);
         for (int i = 0; i < N; ++i) {
@@ -343,5 +361,4 @@ protected:
 private:
     typedef SampleView INHERITED;
 };
-DEF_SAMPLE( return new ArcToView; )
-
+DEF_SAMPLE(return new ArcToView;)

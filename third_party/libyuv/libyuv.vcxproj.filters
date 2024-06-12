@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{882A7C1D-17D6-E17D-2881-F3658AB049AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\libyuv">
+      <UniqueIdentifier>{CEE204A6-3D36-B8D8-AFCD-B3D881BC3BDF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{DA2023F0-71E4-A00C-1CFD-FD2374E50D28}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include/libyuv.h">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include/libyuv/basic_types.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/compare.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/convert.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/convert_argb.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/convert_from.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/convert_from_argb.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/cpu_id.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/mjpeg_decoder.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/planar_functions.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/rotate.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/rotate_argb.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/rotate_row.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/row.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/scale.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/scale_argb.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/scale_row.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/version.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <None Include="include/libyuv/video_common.h">
+      <Filter>include\libyuv</Filter>
+    </None>
+    <CustomBuild Include="source/compare.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/compare_common.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/compare_gcc.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/compare_win.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_argb.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_from.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_from_argb.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_jpeg.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_to_argb.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/convert_to_i420.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/cpu_id.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/mjpeg_decoder.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/mjpeg_validate.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/planar_functions.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_any.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_argb.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_common.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_mips.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_gcc.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/rotate_win.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/row_any.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/row_common.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/row_mips.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/row_gcc.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/row_win.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_any.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_argb.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_common.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_mips.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_gcc.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/scale_win.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+    <CustomBuild Include="source/video_common.cc">
+      <Filter>source</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

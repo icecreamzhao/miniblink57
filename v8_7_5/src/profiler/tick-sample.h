@@ -12,18 +12,18 @@
 namespace v8 {
 namespace internal {
 
-class Isolate;
+    class Isolate;
 
-struct TickSample : public v8::TickSample {
-  void Init(Isolate* isolate, const v8::RegisterState& state,
+    struct TickSample : public v8::TickSample {
+        void Init(Isolate* isolate, const v8::RegisterState& state,
             RecordCEntryFrame record_c_entry_frame, bool update_stats,
             bool use_simulator_reg_state = true);
-  base::TimeTicks timestamp;
+        base::TimeTicks timestamp;
 
-  void print() const;
-};
+        void print() const;
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_PROFILER_TICK_SAMPLE_H_
+#endif // V8_PROFILER_TICK_SAMPLE_H_

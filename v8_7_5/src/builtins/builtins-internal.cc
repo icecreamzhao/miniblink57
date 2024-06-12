@@ -11,23 +11,26 @@
 namespace v8 {
 namespace internal {
 
-BUILTIN(Illegal) {
-  UNREACHABLE();
-}
+    BUILTIN(Illegal)
+    {
+        UNREACHABLE();
+    }
 
-BUILTIN(EmptyFunction) { return ReadOnlyRoots(isolate).undefined_value(); }
+    BUILTIN(EmptyFunction) { return ReadOnlyRoots(isolate).undefined_value(); }
 
-BUILTIN(UnsupportedThrower) {
-  HandleScope scope(isolate);
-  THROW_NEW_ERROR_RETURN_FAILURE(isolate,
-                                 NewError(MessageTemplate::kUnsupported));
-}
+    BUILTIN(UnsupportedThrower)
+    {
+        HandleScope scope(isolate);
+        THROW_NEW_ERROR_RETURN_FAILURE(isolate,
+            NewError(MessageTemplate::kUnsupported));
+    }
 
-BUILTIN(StrictPoisonPillThrower) {
-  HandleScope scope(isolate);
-  THROW_NEW_ERROR_RETURN_FAILURE(
-      isolate, NewTypeError(MessageTemplate::kStrictPoisonPill));
-}
+    BUILTIN(StrictPoisonPillThrower)
+    {
+        HandleScope scope(isolate);
+        THROW_NEW_ERROR_RETURN_FAILURE(
+            isolate, NewTypeError(MessageTemplate::kStrictPoisonPill));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

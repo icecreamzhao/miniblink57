@@ -94,8 +94,8 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
-    static const Normalizer2 *
-    getNFCInstance(UErrorCode &errorCode);
+    static const Normalizer2*
+    getNFCInstance(UErrorCode& errorCode);
 
     /**
      * Returns a Normalizer2 instance for Unicode NFD normalization.
@@ -108,8 +108,8 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
-    static const Normalizer2 *
-    getNFDInstance(UErrorCode &errorCode);
+    static const Normalizer2*
+    getNFDInstance(UErrorCode& errorCode);
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKC normalization.
@@ -122,8 +122,8 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
-    static const Normalizer2 *
-    getNFKCInstance(UErrorCode &errorCode);
+    static const Normalizer2*
+    getNFKCInstance(UErrorCode& errorCode);
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKD normalization.
@@ -136,8 +136,8 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
-    static const Normalizer2 *
-    getNFKDInstance(UErrorCode &errorCode);
+    static const Normalizer2*
+    getNFKDInstance(UErrorCode& errorCode);
 
     /**
      * Returns a Normalizer2 instance for Unicode NFKC_Casefold normalization.
@@ -150,8 +150,8 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 49
      */
-    static const Normalizer2 *
-    getNFKCCasefoldInstance(UErrorCode &errorCode);
+    static const Normalizer2*
+    getNFKCCasefoldInstance(UErrorCode& errorCode);
 
     /**
      * Returns a Normalizer2 instance which uses the specified data file
@@ -174,11 +174,11 @@ public:
      * @return the requested Normalizer2, if successful
      * @stable ICU 4.4
      */
-    static const Normalizer2 *
-    getInstance(const char *packageName,
-                const char *name,
-                UNormalization2Mode mode,
-                UErrorCode &errorCode);
+    static const Normalizer2*
+    getInstance(const char* packageName,
+        const char* name,
+        UNormalization2Mode mode,
+        UErrorCode& errorCode);
 
     /**
      * Returns the normalized form of the source string.
@@ -191,7 +191,8 @@ public:
      * @stable ICU 4.4
      */
     UnicodeString
-    normalize(const UnicodeString &src, UErrorCode &errorCode) const {
+    normalize(const UnicodeString& src, UErrorCode& errorCode) const
+    {
         UnicodeString result;
         normalize(src, result, errorCode);
         return result;
@@ -209,10 +210,10 @@ public:
      * @return dest
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    normalize(const UnicodeString &src,
-              UnicodeString &dest,
-              UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    normalize(const UnicodeString& src,
+        UnicodeString& dest,
+        UErrorCode& errorCode) const = 0;
     /**
      * Appends the normalized form of the second string to the first string
      * (merging them at the boundary) and returns the first string.
@@ -227,10 +228,10 @@ public:
      * @return first
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
-                             UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first,
+        const UnicodeString& second,
+        UErrorCode& errorCode) const = 0;
     /**
      * Appends the second string to the first string
      * (merging them at the boundary) and returns the first string.
@@ -245,10 +246,10 @@ public:
      * @return first
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    append(UnicodeString &first,
-           const UnicodeString &second,
-           UErrorCode &errorCode) const = 0;
+    virtual UnicodeString&
+    append(UnicodeString& first,
+        const UnicodeString& second,
+        UErrorCode& errorCode) const = 0;
 
     /**
      * Gets the decomposition mapping of c.
@@ -264,7 +265,7 @@ public:
      * @stable ICU 4.6
      */
     virtual UBool
-    getDecomposition(UChar32 c, UnicodeString &decomposition) const = 0;
+    getDecomposition(UChar32 c, UnicodeString& decomposition) const = 0;
 
     /**
      * Gets the raw decomposition mapping of c.
@@ -291,7 +292,7 @@ public:
      * @stable ICU 49
      */
     virtual UBool
-    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
+    getRawDecomposition(UChar32 c, UnicodeString& decomposition) const;
 
     /**
      * Performs pairwise composition of a & b and returns the composite if there is one.
@@ -337,7 +338,7 @@ public:
      * @stable ICU 4.4
      */
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const = 0;
+    isNormalized(const UnicodeString& s, UErrorCode& errorCode) const = 0;
 
     /**
      * Tests if the string is normalized.
@@ -355,7 +356,7 @@ public:
      * @stable ICU 4.4
      */
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const = 0;
+    quickCheck(const UnicodeString& s, UErrorCode& errorCode) const = 0;
 
     /**
      * Returns the end of the normalized substring of the input string.
@@ -380,7 +381,7 @@ public:
      * @stable ICU 4.4
      */
     virtual int32_t
-    spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const = 0;
+    spanQuickCheckYes(const UnicodeString& s, UErrorCode& errorCode) const = 0;
 
     /**
      * Tests if the character always has a normalization boundary before it,
@@ -452,8 +453,11 @@ public:
      * @param filterSet UnicodeSet which determines the characters to be normalized
      * @stable ICU 4.4
      */
-    FilteredNormalizer2(const Normalizer2 &n2, const UnicodeSet &filterSet) :
-            norm2(n2), set(filterSet) {}
+    FilteredNormalizer2(const Normalizer2& n2, const UnicodeSet& filterSet)
+        : norm2(n2)
+        , set(filterSet)
+    {
+    }
 
     /**
      * Destructor.
@@ -474,10 +478,10 @@ public:
      * @return dest
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    normalize(const UnicodeString &src,
-              UnicodeString &dest,
-              UErrorCode &errorCode) const;
+    virtual UnicodeString&
+    normalize(const UnicodeString& src,
+        UnicodeString& dest,
+        UErrorCode& errorCode) const;
     /**
      * Appends the normalized form of the second string to the first string
      * (merging them at the boundary) and returns the first string.
@@ -492,10 +496,10 @@ public:
      * @return first
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
-                             UErrorCode &errorCode) const;
+    virtual UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first,
+        const UnicodeString& second,
+        UErrorCode& errorCode) const;
     /**
      * Appends the second string to the first string
      * (merging them at the boundary) and returns the first string.
@@ -510,10 +514,10 @@ public:
      * @return first
      * @stable ICU 4.4
      */
-    virtual UnicodeString &
-    append(UnicodeString &first,
-           const UnicodeString &second,
-           UErrorCode &errorCode) const;
+    virtual UnicodeString&
+    append(UnicodeString& first,
+        const UnicodeString& second,
+        UErrorCode& errorCode) const;
 
     /**
      * Gets the decomposition mapping of c.
@@ -527,7 +531,7 @@ public:
      * @stable ICU 4.6
      */
     virtual UBool
-    getDecomposition(UChar32 c, UnicodeString &decomposition) const;
+    getDecomposition(UChar32 c, UnicodeString& decomposition) const;
 
     /**
      * Gets the raw decomposition mapping of c.
@@ -541,7 +545,7 @@ public:
      * @stable ICU 49
      */
     virtual UBool
-    getRawDecomposition(UChar32 c, UnicodeString &decomposition) const;
+    getRawDecomposition(UChar32 c, UnicodeString& decomposition) const;
 
     /**
      * Performs pairwise composition of a & b and returns the composite if there is one.
@@ -579,7 +583,7 @@ public:
      * @stable ICU 4.4
      */
     virtual UBool
-    isNormalized(const UnicodeString &s, UErrorCode &errorCode) const;
+    isNormalized(const UnicodeString& s, UErrorCode& errorCode) const;
     /**
      * Tests if the string is normalized.
      * For details see the Normalizer2 base class documentation.
@@ -592,7 +596,7 @@ public:
      * @stable ICU 4.4
      */
     virtual UNormalizationCheckResult
-    quickCheck(const UnicodeString &s, UErrorCode &errorCode) const;
+    quickCheck(const UnicodeString& s, UErrorCode& errorCode) const;
     /**
      * Returns the end of the normalized substring of the input string.
      * For details see the Normalizer2 base class documentation.
@@ -605,7 +609,7 @@ public:
      * @stable ICU 4.4
      */
     virtual int32_t
-    spanQuickCheckYes(const UnicodeString &s, UErrorCode &errorCode) const;
+    spanQuickCheckYes(const UnicodeString& s, UErrorCode& errorCode) const;
 
     /**
      * Tests if the character always has a normalization boundary before it,
@@ -635,24 +639,25 @@ public:
      * @stable ICU 4.4
      */
     virtual UBool isInert(UChar32 c) const;
+
 private:
-    UnicodeString &
-    normalize(const UnicodeString &src,
-              UnicodeString &dest,
-              USetSpanCondition spanCondition,
-              UErrorCode &errorCode) const;
+    UnicodeString&
+    normalize(const UnicodeString& src,
+        UnicodeString& dest,
+        USetSpanCondition spanCondition,
+        UErrorCode& errorCode) const;
 
-    UnicodeString &
-    normalizeSecondAndAppend(UnicodeString &first,
-                             const UnicodeString &second,
-                             UBool doNormalize,
-                             UErrorCode &errorCode) const;
+    UnicodeString&
+    normalizeSecondAndAppend(UnicodeString& first,
+        const UnicodeString& second,
+        UBool doNormalize,
+        UErrorCode& errorCode) const;
 
-    const Normalizer2 &norm2;
-    const UnicodeSet &set;
+    const Normalizer2& norm2;
+    const UnicodeSet& set;
 };
 
 U_NAMESPACE_END
 
-#endif  // !UCONFIG_NO_NORMALIZATION
-#endif  // __NORMALIZER2_H__
+#endif // !UCONFIG_NO_NORMALIZATION
+#endif // __NORMALIZER2_H__

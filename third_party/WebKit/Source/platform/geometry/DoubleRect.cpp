@@ -2,24 +2,30 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/geometry/DoubleRect.h"
 
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-DoubleRect::DoubleRect(const IntRect& r) : m_location(r.location()), m_size(r.size())
+DoubleRect::DoubleRect(const IntRect& r)
+    : m_location(r.location())
+    , m_size(r.size())
 {
 }
 
-DoubleRect::DoubleRect(const FloatRect& r) : m_location(r.location()), m_size(r.size())
+DoubleRect::DoubleRect(const FloatRect& r)
+    : m_location(r.location())
+    , m_size(r.size())
 {
 }
 
-DoubleRect::DoubleRect(const LayoutRect& r) : m_location(r.location()), m_size(r.size())
+DoubleRect::DoubleRect(const LayoutRect& r)
+    : m_location(r.location())
+    , m_size(r.size())
 {
 }
 
@@ -54,5 +60,10 @@ void DoubleRect::scale(float sx, float sy)
     m_size.setHeight(height() * sy);
 }
 
+String DoubleRect::toString() const
+{
+    return String::format("%s %s", location().toString().ascii().data(),
+        size().toString().ascii().data());
+}
 
 } // namespace blink

@@ -1,3 +1,10 @@
+/*
+ * Copyright 2014 Google Inc.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
 #include "nanomsg/src/nn.h"
 #include "nanomsg/src/pipeline.h"
 #include "nanomsg/src/reqrep.h"
@@ -17,27 +24,31 @@ __SK_FORCE_IMAGE_DECODER_LINKING;
 
 // To keep things simple, PictureHeader is fixed-size POD.
 struct PictureHeader {
-    SkMatrix         matrix;
-    SkRect           clip;
+    SkMatrix matrix;
+    SkRect clip;
     SkXfermode::Mode xfermode;
-    pid_t            pid;
-    uint8_t          alpha;
+    pid_t pid;
+    uint8_t alpha;
 
     PictureHeader()
         : matrix(SkMatrix::I())
         , clip(SkRect::MakeLargest())
         , xfermode(SkXfermode::kSrcOver_Mode)
         , pid(getpid())
-        , alpha(0xFF) {}
+        , alpha(0xFF)
+    {
+    }
 };
 
 // A little adaptor: nn_iovec wants a non-const pointer for no obvious reason.
-static struct nn_iovec create_iov(const void* ptr, size_t size) {
+static struct nn_iovec create_iov(const void* ptr, size_t size)
+{
     struct nn_iovec iov = { const_cast<void*>(ptr), size };
     return iov;
 }
 
-static void send_picture(int socket, const PictureHeader& header, const SkData& skp) {
+static void send_picture(int socket, const PictureHeader& header, const SkData& skp)
+{
     // Vectored IO lets us send header and skp contiguously without first
     // copying them to a contiguous buffer.
     struct nn_iovec iov[] = {
@@ -47,23 +58,24 @@ static void send_picture(int socket, const PictureHeader& header, const SkData& 
 
     struct nn_msghdr msg;
     sk_bzero(&msg, sizeof(msg));
-    msg.msg_iov    = iov;
+    msg.msg_iov = iov;
     msg.msg_iovlen = SK_ARRAY_COUNT(iov);
 
-    nn_sendmsg(socket, &msg, 0/*flags*/);
+    nn_sendmsg(socket, &msg, 0 /*flags*/);
 }
 
-static SkPicture* recv_picture(int socket, PictureHeader* header) {
-    static const size_t hSize = sizeof(*header);  // It's easy to slip up and use sizeof(header).
+static sk_sp<SkPicture> recv_picture(int socket, PictureHeader* header)
+{
+    static const size_t hSize = sizeof(*header); // It's easy to slip up and use sizeof(header).
 
     void* msg;
-    int size = nn_recv(socket, &msg, NN_MSG, 0/*flags*/);
+    int size = nn_recv(socket, &msg, NN_MSG, 0 /*flags*/);
     SkDebugf("%d bytes", size);
 
     // msg is first a fixed-size header, then an .skp.
     memcpy(header, msg, hSize);
     SkMemoryStream stream((uint8_t*)msg + hSize, size - hSize);
-    SkPicture* pic = SkPicture::CreateFromStream(&stream);
+    sk_sp<SkPicture> pic = SkPicture::MakeFromStream(&stream);
 
     SkDebugf(" from proccess %d:", header->pid);
 
@@ -71,7 +83,8 @@ static SkPicture* recv_picture(int socket, PictureHeader* header) {
     return pic;
 }
 
-static void client(const char* skpPath, const char* dataEndpoint) {
+static void client(const char* skpPath, const char* dataEndpoint)
+{
     // Read the .skp.
     SkAutoTUnref<const SkData> skp(SkData::NewFromFileName(skpPath));
     if (!skp) {
@@ -79,7 +92,7 @@ static void client(const char* skpPath, const char* dataEndpoint) {
         exit(1);
     }
     SkMemoryStream stream(skp->data(), skp->size());
-    SkAutoTUnref<SkPicture> picture(SkPicture::CreateFromStream(&stream));
+    sk_sp<SkPicture> picture(SkPicture::MakeFromStream(&stream));
 
     PictureHeader header;
     SkRandom rand(picture->cullRect().width() * picture->cullRect().height());
@@ -87,7 +100,7 @@ static void client(const char* skpPath, const char* dataEndpoint) {
              b = rand.nextRangeScalar(0, picture->cullRect().height()),
              l = rand.nextRangeScalar(0, r),
              t = rand.nextRangeScalar(0, b);
-    header.clip.setLTRB(l,t,r,b);
+    header.clip.setLTRB(l, t, r, b);
     header.matrix.setTranslate(-l, -t);
     header.matrix.postRotate(rand.nextRangeScalar(-25, 25));
     header.alpha = 0x7F;
@@ -104,33 +117,39 @@ static void client(const char* skpPath, const char* dataEndpoint) {
 
     // Wait for ack.
     uint8_t ack;
-    nn_recv(socket, &ack, sizeof(ack), 0/*flags*/);
+    nn_recv(socket, &ack, sizeof(ack), 0 /*flags*/);
     SkDebugf(" ok.\n");
 }
 
 // Wait until socketA or socketB has something to tell us, and return which one.
-static int poll_in(int socketA, int socketB) {
+static int poll_in(int socketA, int socketB)
+{
     struct nn_pollfd polls[] = {
         { socketA, NN_POLLIN, 0 },
         { socketB, NN_POLLIN, 0 },
     };
 
-    nn_poll(polls, SK_ARRAY_COUNT(polls), -1/*no timeout*/);
+    nn_poll(polls, SK_ARRAY_COUNT(polls), -1 /*no timeout*/);
 
-    if (polls[0].revents & NN_POLLIN) { return socketA; }
-    if (polls[1].revents & NN_POLLIN) { return socketB; }
+    if (polls[0].revents & NN_POLLIN) {
+        return socketA;
+    }
+    if (polls[1].revents & NN_POLLIN) {
+        return socketB;
+    }
 
     SkFAIL("unreachable");
     return 0;
 }
 
-static void server(const char* dataEndpoint, const char* controlEndpoint, SkCanvas* canvas) {
+static void server(const char* dataEndpoint, const char* controlEndpoint, SkCanvas* canvas)
+{
     // NN_REP sockets receive a request then make a reply.  NN_PULL sockets just receive a request.
-    int data    = nn_socket(AF_SP, NN_REP);
+    int data = nn_socket(AF_SP, NN_REP);
     int control = nn_socket(AF_SP, NN_PULL);
 
     // Servers bind a socket to an endpoint.
-    nn_bind(data,    dataEndpoint);
+    nn_bind(data, dataEndpoint);
     nn_bind(control, controlEndpoint);
 
     while (true) {
@@ -143,42 +162,44 @@ static void server(const char* dataEndpoint, const char* controlEndpoint, SkCanv
 
         // We should have an .skp waiting for us on data socket.
         PictureHeader header;
-        SkAutoTUnref<SkPicture> picture(recv_picture(data, &header));
+        sk_sp<SkPicture> picture(recv_picture(data, &header));
 
         SkPaint paint;
         paint.setAlpha(header.alpha);
         paint.setXfermodeMode(header.xfermode);
 
         canvas->saveLayer(NULL, &paint);
-            canvas->concat(header.matrix);
-            canvas->clipRect(header.clip);
-            picture->playback(canvas);
+        canvas->concat(header.matrix);
+        canvas->clipRect(header.clip);
+        picture->playback(canvas);
         canvas->restore();
         SkDebugf(" drew");
 
         // Send back an ack.
         uint8_t ack = 42;
-        nn_send(data, &ack, sizeof(ack), 0/*flags*/);
+        nn_send(data, &ack, sizeof(ack), 0 /*flags*/);
         SkDebugf(" and acked.\n");
     }
 }
 
-static void stop(const char* controlEndpoint) {
+static void stop(const char* controlEndpoint)
+{
     // An NN_PUSH socket can send messages but not receive them.
     int control = nn_socket(AF_SP, NN_PUSH);
     nn_connect(control, controlEndpoint);
 
     // Sending anything (including this 0-byte message) will tell server() to stop.
-    nn_send(control, NULL, 0, 0/*flags*/);
+    nn_send(control, NULL, 0, 0 /*flags*/);
 }
 
 DEFINE_string2(skp, r, "", ".skp to send (as client)");
 DEFINE_string2(png, w, "", ".png to write (as server)");
 DEFINE_bool(stop, false, "If true, tell server to stop and write its canvas out as a .png.");
-DEFINE_string(data,    "ipc://nanomsg-picture-data",    "Endpoint for sending pictures.");
+DEFINE_string(data, "ipc://nanomsg-picture-data", "Endpoint for sending pictures.");
 DEFINE_string(control, "ipc://nanomsg-picture-control", "Endpoint for control channel.");
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     SkAutoGraphics ag;
     SkCommandLineFlags::Parse(argc, argv);
 

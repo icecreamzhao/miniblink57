@@ -18,9 +18,9 @@ class SkMatrix;
 // drawBitmap calls.  A convenience wrapper around SkRecords::Draw.
 // It returns the number of saveLayer/restore blocks replaced with drawBitmap calls.
 int GrRecordReplaceDraw(const SkPicture*,
-                        SkCanvas*,
-                        GrLayerCache* layerCache,
-                        const SkMatrix& initialMatrix,
-                        SkPicture::AbortCallback*);
+    SkCanvas*,
+    GrLayerCache* layerCache,
+    const SkMatrix& initialMatrix,
+    SkPicture::AbortCallback*);
 
 #endif // GrRecordReplaceDraw_DEFINED

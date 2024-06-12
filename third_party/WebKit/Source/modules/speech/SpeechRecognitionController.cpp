@@ -23,8 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/speech/SpeechRecognitionController.h"
+
+#include <memory>
 
 namespace blink {
 
@@ -33,8 +34,9 @@ const char* SpeechRecognitionController::supplementName()
     return "SpeechRecognitionController";
 }
 
-SpeechRecognitionController::SpeechRecognitionController(PassOwnPtr<SpeechRecognitionClient> client)
-    : m_client(client)
+SpeechRecognitionController::SpeechRecognitionController(
+    std::unique_ptr<SpeechRecognitionClient> client)
+    : m_client(std::move(client))
 {
 }
 
@@ -43,14 +45,19 @@ SpeechRecognitionController::~SpeechRecognitionController()
     // FIXME: Call m_client->pageDestroyed(); once we have implemented a client.
 }
 
-PassOwnPtrWillBeRawPtr<SpeechRecognitionController> SpeechRecognitionController::create(PassOwnPtr<SpeechRecognitionClient> client)
+SpeechRecognitionController* SpeechRecognitionController::create(
+    std::unique_ptr<SpeechRecognitionClient> client)
 {
-    return adoptPtrWillBeNoop(new SpeechRecognitionController(client));
+    return new SpeechRecognitionController(std::move(client));
 }
 
-void provideSpeechRecognitionTo(Page& page, PassOwnPtr<SpeechRecognitionClient> client)
+void provideSpeechRecognitionTo(
+    Page& page,
+    std::unique_ptr<SpeechRecognitionClient> client)
 {
-    SpeechRecognitionController::provideTo(page, SpeechRecognitionController::supplementName(), SpeechRecognitionController::create(client));
+    SpeechRecognitionController::provideTo(
+        page, SpeechRecognitionController::supplementName(),
+        SpeechRecognitionController::create(std::move(client)));
 }
 
 } // namespace blink

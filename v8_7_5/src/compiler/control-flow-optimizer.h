@@ -11,46 +11,46 @@
 
 namespace v8 {
 namespace internal {
-namespace compiler {
+    namespace compiler {
 
-// Forward declarations.
-class CommonOperatorBuilder;
-class Graph;
-class MachineOperatorBuilder;
-class Node;
+        // Forward declarations.
+        class CommonOperatorBuilder;
+        class Graph;
+        class MachineOperatorBuilder;
+        class Node;
 
-class V8_EXPORT_PRIVATE ControlFlowOptimizer final {
- public:
-  ControlFlowOptimizer(Graph* graph, CommonOperatorBuilder* common,
-                       MachineOperatorBuilder* machine, Zone* zone);
+        class V8_EXPORT_PRIVATE ControlFlowOptimizer final {
+        public:
+            ControlFlowOptimizer(Graph* graph, CommonOperatorBuilder* common,
+                MachineOperatorBuilder* machine, Zone* zone);
 
-  void Optimize();
+            void Optimize();
 
- private:
-  void Enqueue(Node* node);
-  void VisitNode(Node* node);
-  void VisitBranch(Node* node);
+        private:
+            void Enqueue(Node* node);
+            void VisitNode(Node* node);
+            void VisitBranch(Node* node);
 
-  bool TryBuildSwitch(Node* node);
-  bool TryCloneBranch(Node* node);
+            bool TryBuildSwitch(Node* node);
+            bool TryCloneBranch(Node* node);
 
-  Graph* graph() const { return graph_; }
-  CommonOperatorBuilder* common() const { return common_; }
-  MachineOperatorBuilder* machine() const { return machine_; }
-  Zone* zone() const { return zone_; }
+            Graph* graph() const { return graph_; }
+            CommonOperatorBuilder* common() const { return common_; }
+            MachineOperatorBuilder* machine() const { return machine_; }
+            Zone* zone() const { return zone_; }
 
-  Graph* const graph_;
-  CommonOperatorBuilder* const common_;
-  MachineOperatorBuilder* const machine_;
-  ZoneQueue<Node*> queue_;
-  NodeMarker<bool> queued_;
-  Zone* const zone_;
+            Graph* const graph_;
+            CommonOperatorBuilder* const common_;
+            MachineOperatorBuilder* const machine_;
+            ZoneQueue<Node*> queue_;
+            NodeMarker<bool> queued_;
+            Zone* const zone_;
 
-  DISALLOW_COPY_AND_ASSIGN(ControlFlowOptimizer);
-};
+            DISALLOW_COPY_AND_ASSIGN(ControlFlowOptimizer);
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_CONTROL_FLOW_OPTIMIZER_H_
+#endif // V8_COMPILER_CONTROL_FLOW_OPTIMIZER_H_

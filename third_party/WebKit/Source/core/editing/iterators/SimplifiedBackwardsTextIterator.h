@@ -26,7 +26,8 @@
 #ifndef SimplifiedBackwardsTextIterator_h
 #define SimplifiedBackwardsTextIterator_h
 
-#include "core/dom/Position.h"
+#include "core/editing/Position.h"
+#include "core/editing/iterators/BackwardsTextBuffer.h"
 #include "core/editing/iterators/FullyClippedStateStack.h"
 #include "core/editing/iterators/TextIteratorFlags.h"
 #include "platform/heap/Heap.h"
@@ -34,39 +35,48 @@
 namespace blink {
 
 class LayoutText;
-class LayoutTextFragment;
 
-// Iterates through the DOM range, returning all the text, and 0-length boundaries
-// at points where replaced elements break up the text flow. The text comes back in
-// chunks so as to optimize for performance of the iteration.
+// Iterates through the DOM range, returning all the text, and 0-length
+// boundaries at points where replaced elements break up the text flow. The text
+// comes back in chunks so as to optimize for performance of the iteration.
 template <typename Strategy>
-class SimplifiedBackwardsTextIteratorAlgorithm {
+class CORE_TEMPLATE_CLASS_EXPORT SimplifiedBackwardsTextIteratorAlgorithm {
     STACK_ALLOCATED();
+
 public:
-    SimplifiedBackwardsTextIteratorAlgorithm(const PositionAlgorithm<Strategy>& start, const PositionAlgorithm<Strategy>& end, TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
+    SimplifiedBackwardsTextIteratorAlgorithm(
+        const PositionTemplate<Strategy>& start,
+        const PositionTemplate<Strategy>& end,
+        TextIteratorBehaviorFlags = TextIteratorDefaultBehavior);
 
     bool atEnd() const { return !m_positionNode || m_shouldStop; }
     void advance();
 
     int length() const { return m_textLength; }
 
+    // Note: |characterAt()| returns characters in the reversed order, since
+    // the iterator is backwards. For example, if the current text is "abc",
+    // then |characterAt(0)| returns 'c'.
+    UChar characterAt(unsigned index) const;
+
     Node* node() const { return m_node; }
 
-    template<typename BufferType>
-    void prependTextTo(BufferType& output)
-    {
-        if (!m_textLength)
-            return;
-        if (m_singleCharacterBuffer)
-            output.prepend(&m_singleCharacterBuffer, 1);
-        else
-            m_textContainer.prependTo(output, m_textOffset, m_textLength);
-    }
+    // Calculate the minimum |actualLength >= minLength| such that code units
+    // with offset range [position, position + actualLength) are whole code
+    // points. Prepend these code points to |output| and return |actualLength|.
+    // TODO(xiaochengh): Use (start, end) instead of (start, length).
+    int copyTextTo(BackwardsTextBuffer* output,
+        int position,
+        int minLength) const;
+    // TODO(xiaochengh): Avoid default parameters.
+    int copyTextTo(BackwardsTextBuffer* output, int position = 0) const;
 
     Node* startContainer() const;
     int endOffset() const;
-    PositionAlgorithm<Strategy> startPosition() const;
-    PositionAlgorithm<Strategy> endPosition() const;
+    PositionTemplate<Strategy> startPosition() const;
+    PositionTemplate<Strategy> endPosition() const;
+
+    bool isInTextSecurityMode() const;
 
 private:
     void init(Node* startNode, Node* endNode, int startOffset, int endOffset);
@@ -78,31 +88,43 @@ private:
     void emitCharacter(UChar, Node*, int startOffset, int endOffset);
     bool advanceRespectingRange(Node*);
 
+    bool isBetweenSurrogatePair(int position) const;
+
+    // Prepend code units with offset range [position, position + copyLength)
+    // to the output buffer.
+    void copyCodeUnitsTo(BackwardsTextBuffer* output,
+        int position,
+        int copyLength) const;
+
     // Current position, not necessarily of the text being returned, but position
     // as we walk through the DOM tree.
-    RawPtrWillBeMember<Node> m_node;
+    Member<Node> m_node;
     int m_offset;
     bool m_handledNode;
     bool m_handledChildren;
-    FullyClippedStateStack m_fullyClippedStack;
+    FullyClippedStateStackAlgorithm<Strategy> m_fullyClippedStack;
 
     // End of the range.
-    RawPtrWillBeMember<Node> m_startNode;
+    Member<Node> m_startNode;
     int m_startOffset;
     // Start of the range.
-    RawPtrWillBeMember<Node> m_endNode;
+    Member<Node> m_endNode;
     int m_endOffset;
 
-    // The current text and its position, in the form to be returned from the iterator.
-    RawPtrWillBeMember<Node> m_positionNode;
+    // The current text and its position, in the form to be returned from the
+    // iterator.
+    Member<Node> m_positionNode;
     int m_positionStartOffset;
     int m_positionEndOffset;
 
-    String m_textContainer; // We're interested in the range [m_textOffset, m_textOffset + m_textLength) of m_textContainer.
+    // We're interested in the range [m_textOffset, m_textOffset + m_textLength)
+    // of m_textContainer.
+    String m_textContainer;
     int m_textOffset;
     int m_textLength;
 
-    // Used for whitespace characters that aren't in the DOM, so we can point at them.
+    // Used for whitespace characters that aren't in the DOM, so we can point at
+    // them.
     UChar m_singleCharacterBuffer;
 
     // Whether m_node has advanced beyond the iteration range (i.e. m_startNode).
@@ -114,14 +136,19 @@ private:
     // Used when the iteration should stop if form controls are reached.
     bool m_stopsOnFormControls;
 
-    // Used when m_stopsOnFormControls is set to determine if the iterator should keep advancing.
+    // Used when m_stopsOnFormControls is set to determine if the iterator should
+    // keep advancing.
     bool m_shouldStop;
 
     // Used in pasting inside password field.
     bool m_emitsOriginalText;
 };
 
-extern template class CORE_EXTERN_TEMPLATE_EXPORT SimplifiedBackwardsTextIteratorAlgorithm<EditingStrategy>;
+extern template class CORE_EXTERN_TEMPLATE_EXPORT
+    SimplifiedBackwardsTextIteratorAlgorithm<EditingStrategy>;
+extern template class CORE_EXTERN_TEMPLATE_EXPORT
+    SimplifiedBackwardsTextIteratorAlgorithm<EditingInFlatTreeStrategy>;
+
 using SimplifiedBackwardsTextIterator = SimplifiedBackwardsTextIteratorAlgorithm<EditingStrategy>;
 
 } // namespace blink

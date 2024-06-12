@@ -29,16 +29,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/LineEnding.h"
 
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
 
 namespace {
 
 class OutputBuffer {
+    STACK_ALLOCATED();
+    WTF_MAKE_NONCOPYABLE(OutputBuffer);
+
 public:
+    OutputBuffer() { }
     virtual char* allocate(size_t) = 0;
     virtual void copy(const CString&) = 0;
     virtual ~OutputBuffer() { }
@@ -50,19 +55,16 @@ public:
         : m_buffer(buffer)
     {
     }
-    ~CStringBuffer() override {}
+    ~CStringBuffer() override { }
 
     char* allocate(size_t size) override
     {
         char* ptr;
-        m_buffer = CString::newUninitialized(size, ptr);
+        m_buffer = CString::createUninitialized(size, ptr);
         return ptr;
     }
 
-    void copy(const CString& source) override
-    {
-        m_buffer = source;
-    }
+    void copy(const CString& source) override { m_buffer = source; }
 
     const CString& buffer() const { return m_buffer; }
 
@@ -76,7 +78,7 @@ public:
         : m_buffer(buffer)
     {
     }
-    ~VectorCharAppendBuffer() override {}
+    ~VectorCharAppendBuffer() override { }
 
     char* allocate(size_t size) override
     {
@@ -94,7 +96,8 @@ private:
     Vector<char>& m_buffer;
 };
 
-void internalNormalizeLineEndingsToCRLF(const CString& from, OutputBuffer& buffer)
+void internalNormalizeLineEndingsToCRLF(const CString& from,
+    OutputBuffer& buffer)
 {
     // Compute the new length.
     size_t newLen = 0;
@@ -147,21 +150,18 @@ void internalNormalizeLineEndingsToCRLF(const CString& from, OutputBuffer& buffe
     }
 }
 
-};
+} // namespace;
 
 namespace blink {
 
-void normalizeToCROrLF(const CString& from, Vector<char>& result, bool toCR);
-
-// Normalize all line-endings to CR or LF.
-void normalizeToCROrLF(const CString& from, Vector<char>& result, bool toCR)
+void normalizeLineEndingsToLF(const CString& from, Vector<char>& result)
 {
     // Compute the new length.
     size_t newLen = 0;
     bool needFix = false;
     const char* p = from.data();
-    char fromEndingChar = toCR ? '\n' : '\r';
-    char toEndingChar = toCR ? '\r' : '\n';
+    char fromEndingChar = '\r';
+    char toEndingChar = '\n';
     while (p < from.data() + from.length()) {
         char c = *p++;
         if (c == '\r' && *p == '\n') {
@@ -212,16 +212,6 @@ CString normalizeLineEndingsToCRLF(const CString& from)
     CStringBuffer buffer(result);
     internalNormalizeLineEndingsToCRLF(from, buffer);
     return buffer.buffer();
-}
-
-void normalizeLineEndingsToCR(const CString& from, Vector<char>& result)
-{
-    normalizeToCROrLF(from, result, true);
-}
-
-void normalizeLineEndingsToLF(const CString& from, Vector<char>& result)
-{
-    normalizeToCROrLF(from, result, false);
 }
 
 void normalizeLineEndingsToNative(const CString& from, Vector<char>& result)

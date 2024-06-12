@@ -18,356 +18,380 @@
 namespace v8 {
 namespace internal {
 
-template <typename T>
-class Handle;
+    template <typename T>
+    class Handle;
 
-class Isolate;
+    class Isolate;
 
-template <typename Derived, typename Shape>
-class Dictionary : public HashTable<Derived, Shape> {
-  typedef HashTable<Derived, Shape> DerivedHashTable;
+    template <typename Derived, typename Shape>
+    class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
+        : public HashTable<Derived, Shape> {
+        using DerivedHashTable = HashTable<Derived, Shape>;
 
- public:
-  typedef typename Shape::Key Key;
-  // Returns the value at entry.
-  Object ValueAt(int entry) {
-    return this->get(DerivedHashTable::EntryToIndex(entry) + 1);
-  }
+    public:
+        using Key = typename Shape::Key;
+        // Returns the value at entry.
+        Object ValueAt(int entry)
+        {
+            return this->get(DerivedHashTable::EntryToIndex(entry) + 1);
+        }
 
-  // Set the value for entry.
-  void ValueAtPut(int entry, Object value) {
-    this->set(DerivedHashTable::EntryToIndex(entry) + 1, value);
-  }
+        // Set the value for entry.
+        void ValueAtPut(int entry, Object value)
+        {
+            this->set(DerivedHashTable::EntryToIndex(entry) + 1, value);
+        }
 
-  // Returns the property details for the property at entry.
-  PropertyDetails DetailsAt(int entry) {
-    return Shape::DetailsAt(Derived::cast(*this), entry);
-  }
+        // Returns the property details for the property at entry.
+        PropertyDetails DetailsAt(int entry)
+        {
+            return Shape::DetailsAt(Derived::cast(*this), entry);
+        }
 
-  // Set the details for entry.
-  void DetailsAtPut(Isolate* isolate, int entry, PropertyDetails value) {
-    Shape::DetailsAtPut(isolate, Derived::cast(*this), entry, value);
-  }
+        // Set the details for entry.
+        void DetailsAtPut(Isolate* isolate, int entry, PropertyDetails value)
+        {
+            Shape::DetailsAtPut(isolate, Derived::cast(*this), entry, value);
+        }
 
-  // Delete a property from the dictionary.
-  V8_WARN_UNUSED_RESULT static Handle<Derived> DeleteEntry(
-      Isolate* isolate, Handle<Derived> dictionary, int entry);
+        // Delete a property from the dictionary.
+        V8_WARN_UNUSED_RESULT static Handle<Derived> DeleteEntry(
+            Isolate* isolate, Handle<Derived> dictionary, int entry);
 
-  // Attempt to shrink the dictionary after deletion of key.
-  V8_WARN_UNUSED_RESULT static inline Handle<Derived> Shrink(
-      Isolate* isolate, Handle<Derived> dictionary) {
-    return DerivedHashTable::Shrink(isolate, dictionary);
-  }
+        // Attempt to shrink the dictionary after deletion of key.
+        V8_WARN_UNUSED_RESULT static inline Handle<Derived> Shrink(
+            Isolate* isolate, Handle<Derived> dictionary)
+        {
+            return DerivedHashTable::Shrink(isolate, dictionary);
+        }
 
-  int NumberOfEnumerableProperties();
+        int NumberOfEnumerableProperties();
 
 #ifdef OBJECT_PRINT
-  // For our gdb macros, we should perhaps change these in the future.
-  void Print();
+        // For our gdb macros, we should perhaps change these in the future.
+        void Print();
 
-  void Print(std::ostream& os);  // NOLINT
+        void Print(std::ostream& os); // NOLINT
 #endif
-  // Returns the key (slow).
-  Object SlowReverseLookup(Object value);
+        // Returns the key (slow).
+        Object SlowReverseLookup(Object value);
 
-  // Sets the entry to (key, value) pair.
-  inline void ClearEntry(Isolate* isolate, int entry);
-  inline void SetEntry(Isolate* isolate, int entry, Object key, Object value,
-                       PropertyDetails details);
+        // Sets the entry to (key, value) pair.
+        inline void ClearEntry(Isolate* isolate, int entry);
+        inline void SetEntry(Isolate* isolate, int entry, Object key, Object value,
+            PropertyDetails details);
 
-  V8_WARN_UNUSED_RESULT static Handle<Derived> Add(
-      Isolate* isolate, Handle<Derived> dictionary, Key key,
-      Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
+        V8_WARN_UNUSED_RESULT static Handle<Derived> Add(
+            Isolate* isolate, Handle<Derived> dictionary, Key key,
+            Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
 
- protected:
-  // Generic at put operation.
-  V8_WARN_UNUSED_RESULT static Handle<Derived> AtPut(Isolate* isolate,
-                                                     Handle<Derived> dictionary,
-                                                     Key key,
-                                                     Handle<Object> value,
-                                                     PropertyDetails details);
+    protected:
+        // Generic at put operation.
+        V8_WARN_UNUSED_RESULT static Handle<Derived> AtPut(Isolate* isolate,
+            Handle<Derived> dictionary,
+            Key key,
+            Handle<Object> value,
+            PropertyDetails details);
 
-  OBJECT_CONSTRUCTORS(Dictionary, HashTable<Derived, Shape>);
-};
+        OBJECT_CONSTRUCTORS(Dictionary, HashTable<Derived, Shape>);
+    };
 
-template <typename Key>
-class BaseDictionaryShape : public BaseShape<Key> {
- public:
-  static const bool kHasDetails = true;
-  template <typename Dictionary>
-  static inline PropertyDetails DetailsAt(Dictionary dict, int entry) {
-    STATIC_ASSERT(Dictionary::kEntrySize == 3);
-    DCHECK_GE(entry, 0);  // Not found is -1, which is not caught by get().
-    return PropertyDetails(Smi::cast(dict->get(
-        Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex)));
-  }
+    template <typename Key>
+    class BaseDictionaryShape : public BaseShape<Key> {
+    public:
+        static const bool kHasDetails = true;
+        template <typename Dictionary>
+        static inline PropertyDetails DetailsAt(Dictionary dict, int entry)
+        {
+            STATIC_ASSERT(Dictionary::kEntrySize == 3);
+            DCHECK_GE(entry, 0); // Not found is -1, which is not caught by get().
+            return PropertyDetails(Smi::cast(dict->get(
+                Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex)));
+        }
 
-  template <typename Dictionary>
-  static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
-                                  PropertyDetails value) {
-    STATIC_ASSERT(Dictionary::kEntrySize == 3);
-    dict->set(Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex,
-              value.AsSmi());
-  }
-};
+        template <typename Dictionary>
+        static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
+            PropertyDetails value)
+        {
+            STATIC_ASSERT(Dictionary::kEntrySize == 3);
+            dict->set(Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex,
+                value.AsSmi());
+        }
+    };
 
-class NameDictionaryShape : public BaseDictionaryShape<Handle<Name>> {
- public:
-  static inline bool IsMatch(Handle<Name> key, Object other);
-  static inline uint32_t Hash(Isolate* isolate, Handle<Name> key);
-  static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
-  static inline Handle<Object> AsHandle(Isolate* isolate, Handle<Name> key);
-  static inline RootIndex GetMapRootIndex();
-  static const int kPrefixSize = 2;
-  static const int kEntrySize = 3;
-  static const int kEntryValueIndex = 1;
-  static const bool kNeedsHoleCheck = false;
-};
+    class NameDictionaryShape : public BaseDictionaryShape<Handle<Name>> {
+    public:
+        static inline bool IsMatch(Handle<Name> key, Object other);
+        static inline uint32_t Hash(Isolate* isolate, Handle<Name> key);
+        static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
+        static inline Handle<Object> AsHandle(Isolate* isolate, Handle<Name> key);
+        static inline RootIndex GetMapRootIndex();
+        static const int kPrefixSize = 2;
+        static const int kEntrySize = 3;
+        static const int kEntryValueIndex = 1;
+        static const bool kNeedsHoleCheck = false;
+    };
 
-template <typename Derived, typename Shape>
-class BaseNameDictionary : public Dictionary<Derived, Shape> {
-  typedef typename Shape::Key Key;
+    template <typename Derived, typename Shape>
+    class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) BaseNameDictionary
+        : public Dictionary<Derived, Shape> {
+        using Key = typename Shape::Key;
 
- public:
-  static const int kNextEnumerationIndexIndex =
-      HashTableBase::kPrefixStartIndex;
-  static const int kObjectHashIndex = kNextEnumerationIndexIndex + 1;
-  static const int kEntryValueIndex = 1;
+    public:
+        static const int kNextEnumerationIndexIndex = HashTableBase::kPrefixStartIndex;
+        static const int kObjectHashIndex = kNextEnumerationIndexIndex + 1;
+        static const int kEntryValueIndex = 1;
 
-  // Accessors for next enumeration index.
-  void SetNextEnumerationIndex(int index) {
-    DCHECK_NE(0, index);
-    this->set(kNextEnumerationIndexIndex, Smi::FromInt(index));
-  }
+        // Accessors for next enumeration index.
+        void SetNextEnumerationIndex(int index)
+        {
+            DCHECK_NE(0, index);
+            this->set(kNextEnumerationIndexIndex, Smi::FromInt(index));
+        }
 
-  int NextEnumerationIndex() {
-    return Smi::ToInt(this->get(kNextEnumerationIndexIndex));
-  }
+        int NextEnumerationIndex()
+        {
+            return Smi::ToInt(this->get(kNextEnumerationIndexIndex));
+        }
 
-  void SetHash(int hash) {
-    DCHECK(PropertyArray::HashField::is_valid(hash));
-    this->set(kObjectHashIndex, Smi::FromInt(hash));
-  }
+        void SetHash(int hash)
+        {
+            DCHECK(PropertyArray::HashField::is_valid(hash));
+            this->set(kObjectHashIndex, Smi::FromInt(hash));
+        }
 
-  int Hash() const {
-    Object hash_obj = this->get(kObjectHashIndex);
-    int hash = Smi::ToInt(hash_obj);
-    DCHECK(PropertyArray::HashField::is_valid(hash));
-    return hash;
-  }
+        int Hash() const
+        {
+            Object hash_obj = this->get(kObjectHashIndex);
+            int hash = Smi::ToInt(hash_obj);
+            DCHECK(PropertyArray::HashField::is_valid(hash));
+            return hash;
+        }
 
-  // Creates a new dictionary.
-  V8_WARN_UNUSED_RESULT static Handle<Derived> New(
-      Isolate* isolate, int at_least_space_for,
-      AllocationType allocation = AllocationType::kYoung,
-      MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
+        // Creates a new dictionary.
+        V8_WARN_UNUSED_RESULT static Handle<Derived> New(
+            Isolate* isolate, int at_least_space_for,
+            AllocationType allocation = AllocationType::kYoung,
+            MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
 
-  // Collect the keys into the given KeyAccumulator, in ascending chronological
-  // order of property creation.
-  static void CollectKeysTo(Handle<Derived> dictionary, KeyAccumulator* keys);
+        // Collect the keys into the given KeyAccumulator, in ascending chronological
+        // order of property creation.
+        static void CollectKeysTo(Handle<Derived> dictionary, KeyAccumulator* keys);
 
-  // Return the key indices sorted by its enumeration index.
-  static Handle<FixedArray> IterationIndices(Isolate* isolate,
-                                             Handle<Derived> dictionary);
+        // Return the key indices sorted by its enumeration index.
+        static Handle<FixedArray> IterationIndices(Isolate* isolate,
+            Handle<Derived> dictionary);
 
-  // Copies enumerable keys to preallocated fixed array.
-  // Does not throw for uninitialized exports in module namespace objects, so
-  // this has to be checked separately.
-  static void CopyEnumKeysTo(Isolate* isolate, Handle<Derived> dictionary,
-                             Handle<FixedArray> storage, KeyCollectionMode mode,
-                             KeyAccumulator* accumulator);
+        // Copies enumerable keys to preallocated fixed array.
+        // Does not throw for uninitialized exports in module namespace objects, so
+        // this has to be checked separately.
+        static void CopyEnumKeysTo(Isolate* isolate, Handle<Derived> dictionary,
+            Handle<FixedArray> storage, KeyCollectionMode mode,
+            KeyAccumulator* accumulator);
 
-  // Ensure enough space for n additional elements.
-  static Handle<Derived> EnsureCapacity(Isolate* isolate,
-                                        Handle<Derived> dictionary, int n);
+        // Ensure enough space for n additional elements.
+        static Handle<Derived> EnsureCapacity(Isolate* isolate,
+            Handle<Derived> dictionary, int n);
 
-  V8_WARN_UNUSED_RESULT static Handle<Derived> AddNoUpdateNextEnumerationIndex(
-      Isolate* isolate, Handle<Derived> dictionary, Key key,
-      Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
+        V8_WARN_UNUSED_RESULT static Handle<Derived> AddNoUpdateNextEnumerationIndex(
+            Isolate* isolate, Handle<Derived> dictionary, Key key,
+            Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
 
-  V8_WARN_UNUSED_RESULT static Handle<Derived> Add(
-      Isolate* isolate, Handle<Derived> dictionary, Key key,
-      Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
+        V8_WARN_UNUSED_RESULT static Handle<Derived> Add(
+            Isolate* isolate, Handle<Derived> dictionary, Key key,
+            Handle<Object> value, PropertyDetails details, int* entry_out = nullptr);
 
-  OBJECT_CONSTRUCTORS(BaseNameDictionary, Dictionary<Derived, Shape>);
-};
+        OBJECT_CONSTRUCTORS(BaseNameDictionary, Dictionary<Derived, Shape>);
+    };
 
-class NameDictionary
-    : public BaseNameDictionary<NameDictionary, NameDictionaryShape> {
- public:
-  DECL_CAST(NameDictionary)
+    class NameDictionary;
 
-  static const int kEntryDetailsIndex = 2;
-  static const int kInitialCapacity = 2;
+    extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+        BaseNameDictionary<NameDictionary, NameDictionaryShape>;
 
-  inline Name NameAt(int entry);
-  inline void set_hash(int hash);
-  inline int hash() const;
+    class V8_EXPORT_PRIVATE NameDictionary
+        : public BaseNameDictionary<NameDictionary, NameDictionaryShape> {
+    public:
+        DECL_CAST(NameDictionary)
 
-  OBJECT_CONSTRUCTORS(NameDictionary,
-                      BaseNameDictionary<NameDictionary, NameDictionaryShape>);
-};
+        static const int kEntryDetailsIndex = 2;
+        static const int kInitialCapacity = 2;
 
-class GlobalDictionaryShape : public NameDictionaryShape {
- public:
-  static inline bool IsMatch(Handle<Name> key, Object other);
-  static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
+        inline Name NameAt(int entry);
+        inline void set_hash(int hash);
+        inline int hash() const;
 
-  static const int kEntrySize = 1;  // Overrides NameDictionaryShape::kEntrySize
+        OBJECT_CONSTRUCTORS(NameDictionary,
+            BaseNameDictionary<NameDictionary, NameDictionaryShape>);
+    };
 
-  template <typename Dictionary>
-  static inline PropertyDetails DetailsAt(Dictionary dict, int entry);
+    class GlobalDictionaryShape : public NameDictionaryShape {
+    public:
+        static inline bool IsMatch(Handle<Name> key, Object other);
+        static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
 
-  template <typename Dictionary>
-  static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
-                                  PropertyDetails value);
+        static const int kEntrySize = 1; // Overrides NameDictionaryShape::kEntrySize
 
-  static inline Object Unwrap(Object key);
-  static inline bool IsKey(ReadOnlyRoots roots, Object k);
-  static inline bool IsLive(ReadOnlyRoots roots, Object key);
-  static inline RootIndex GetMapRootIndex();
-};
+        template <typename Dictionary>
+        static inline PropertyDetails DetailsAt(Dictionary dict, int entry);
 
-class GlobalDictionary
-    : public BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape> {
- public:
-  DECL_CAST(GlobalDictionary)
+        template <typename Dictionary>
+        static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
+            PropertyDetails value);
 
-  inline Object ValueAt(int entry);
-  inline PropertyCell CellAt(int entry);
-  inline void SetEntry(Isolate* isolate, int entry, Object key, Object value,
-                       PropertyDetails details);
-  inline Name NameAt(int entry);
-  inline void ValueAtPut(int entry, Object value);
+        static inline Object Unwrap(Object key);
+        static inline bool IsKey(ReadOnlyRoots roots, Object k);
+        static inline bool IsLive(ReadOnlyRoots roots, Object key);
+        static inline RootIndex GetMapRootIndex();
+    };
 
-  OBJECT_CONSTRUCTORS(
-      GlobalDictionary,
-      BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>);
-};
+    class GlobalDictionary;
 
-class NumberDictionaryBaseShape : public BaseDictionaryShape<uint32_t> {
- public:
-  static inline bool IsMatch(uint32_t key, Object other);
-  static inline Handle<Object> AsHandle(Isolate* isolate, uint32_t key);
+    extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+        BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>;
 
-  static inline uint32_t Hash(Isolate* isolate, uint32_t key);
-  static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
-};
+    class V8_EXPORT_PRIVATE GlobalDictionary
+        : public BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape> {
+    public:
+        DECL_CAST(GlobalDictionary)
 
-class NumberDictionaryShape : public NumberDictionaryBaseShape {
- public:
-  static const int kPrefixSize = 1;
-  static const int kEntrySize = 3;
+        inline Object ValueAt(int entry);
+        inline PropertyCell CellAt(int entry);
+        inline void SetEntry(Isolate* isolate, int entry, Object key, Object value,
+            PropertyDetails details);
+        inline Name NameAt(int entry);
+        inline void ValueAtPut(int entry, Object value);
 
-  static inline RootIndex GetMapRootIndex();
-};
+        OBJECT_CONSTRUCTORS(
+            GlobalDictionary,
+            BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>);
+    };
 
-class SimpleNumberDictionaryShape : public NumberDictionaryBaseShape {
- public:
-  static const bool kHasDetails = false;
-  static const int kPrefixSize = 0;
-  static const int kEntrySize = 2;
+    class NumberDictionaryBaseShape : public BaseDictionaryShape<uint32_t> {
+    public:
+        static inline bool IsMatch(uint32_t key, Object other);
+        static inline Handle<Object> AsHandle(Isolate* isolate, uint32_t key);
 
-  template <typename Dictionary>
-  static inline PropertyDetails DetailsAt(Dictionary dict, int entry) {
-    UNREACHABLE();
-  }
+        static inline uint32_t Hash(Isolate* isolate, uint32_t key);
+        static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
+    };
 
-  template <typename Dictionary>
-  static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
-                                  PropertyDetails value) {
-    UNREACHABLE();
-  }
+    class NumberDictionaryShape : public NumberDictionaryBaseShape {
+    public:
+        static const int kPrefixSize = 1;
+        static const int kEntrySize = 3;
 
-  static inline RootIndex GetMapRootIndex();
-};
+        static inline RootIndex GetMapRootIndex();
+    };
 
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    HashTable<SimpleNumberDictionary, SimpleNumberDictionaryShape>;
+    class SimpleNumberDictionaryShape : public NumberDictionaryBaseShape {
+    public:
+        static const bool kHasDetails = false;
+        static const int kPrefixSize = 0;
+        static const int kEntrySize = 2;
 
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape>;
+        template <typename Dictionary>
+        static inline PropertyDetails DetailsAt(Dictionary dict, int entry)
+        {
+            UNREACHABLE();
+        }
 
-// SimpleNumberDictionary is used to map number to an entry.
-class SimpleNumberDictionary
-    : public Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape> {
- public:
-  DECL_CAST(SimpleNumberDictionary)
-  // Type specific at put (default NONE attributes is used when adding).
-  V8_WARN_UNUSED_RESULT static Handle<SimpleNumberDictionary> Set(
-      Isolate* isolate, Handle<SimpleNumberDictionary> dictionary, uint32_t key,
-      Handle<Object> value);
+        template <typename Dictionary>
+        static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
+            PropertyDetails value)
+        {
+            UNREACHABLE();
+        }
 
-  static const int kEntryValueIndex = 1;
+        static inline RootIndex GetMapRootIndex();
+    };
 
-  OBJECT_CONSTRUCTORS(
-      SimpleNumberDictionary,
-      Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape>);
-};
+    extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+        HashTable<SimpleNumberDictionary, SimpleNumberDictionaryShape>;
 
-extern template class EXPORT_TEMPLATE_DECLARE(
-    V8_EXPORT_PRIVATE) HashTable<NumberDictionary, NumberDictionaryShape>;
+    extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+        Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape>;
 
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    Dictionary<NumberDictionary, NumberDictionaryShape>;
+    // SimpleNumberDictionary is used to map number to an entry.
+    class SimpleNumberDictionary
+        : public Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape> {
+    public:
+        DECL_CAST(SimpleNumberDictionary)
+        // Type specific at put (default NONE attributes is used when adding).
+        V8_WARN_UNUSED_RESULT static Handle<SimpleNumberDictionary> Set(
+            Isolate* isolate, Handle<SimpleNumberDictionary> dictionary, uint32_t key,
+            Handle<Object> value);
 
-// NumberDictionary is used as elements backing store and provides a bitfield
-// and stores property details for every entry.
-class NumberDictionary
-    : public Dictionary<NumberDictionary, NumberDictionaryShape> {
- public:
-  DECL_CAST(NumberDictionary)
-  DECL_PRINTER(NumberDictionary)
+        static const int kEntryValueIndex = 1;
 
-  // Type specific at put (default NONE attributes is used when adding).
-  V8_WARN_UNUSED_RESULT static Handle<NumberDictionary> Set(
-      Isolate* isolate, Handle<NumberDictionary> dictionary, uint32_t key,
-      Handle<Object> value,
-      Handle<JSObject> dictionary_holder = Handle<JSObject>::null(),
-      PropertyDetails details = PropertyDetails::Empty());
+        OBJECT_CONSTRUCTORS(
+            SimpleNumberDictionary,
+            Dictionary<SimpleNumberDictionary, SimpleNumberDictionaryShape>);
+    };
 
-  static const int kMaxNumberKeyIndex = kPrefixStartIndex;
-  void UpdateMaxNumberKey(uint32_t key, Handle<JSObject> dictionary_holder);
+    extern template class EXPORT_TEMPLATE_DECLARE(
+        V8_EXPORT_PRIVATE) HashTable<NumberDictionary, NumberDictionaryShape>;
 
-  // Returns true if the dictionary contains any elements that are non-writable,
-  // non-configurable, non-enumerable, or have getters/setters.
-  bool HasComplexElements();
+    extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+        Dictionary<NumberDictionary, NumberDictionaryShape>;
 
-  // Sorting support
-  void CopyValuesTo(FixedArray elements);
+    // NumberDictionary is used as elements backing store and provides a bitfield
+    // and stores property details for every entry.
+    class NumberDictionary
+        : public Dictionary<NumberDictionary, NumberDictionaryShape> {
+    public:
+        DECL_CAST(NumberDictionary)
+        DECL_PRINTER(NumberDictionary)
 
-  // If slow elements are required we will never go back to fast-case
-  // for the elements kept in this dictionary.  We require slow
-  // elements if an element has been added at an index larger than
-  // kRequiresSlowElementsLimit or set_requires_slow_elements() has been called
-  // when defining a getter or setter with a number key.
-  inline bool requires_slow_elements();
-  inline void set_requires_slow_elements();
+        // Type specific at put (default NONE attributes is used when adding).
+        V8_WARN_UNUSED_RESULT static Handle<NumberDictionary> Set(
+            Isolate* isolate, Handle<NumberDictionary> dictionary, uint32_t key,
+            Handle<Object> value,
+            Handle<JSObject> dictionary_holder = Handle<JSObject>::null(),
+            PropertyDetails details = PropertyDetails::Empty());
 
-  // Get the value of the max number key that has been added to this
-  // dictionary.  max_number_key can only be called if
-  // requires_slow_elements returns false.
-  inline uint32_t max_number_key();
+        static const int kMaxNumberKeyIndex = kPrefixStartIndex;
+        void UpdateMaxNumberKey(uint32_t key, Handle<JSObject> dictionary_holder);
 
-  static const int kEntryValueIndex = 1;
-  static const int kEntryDetailsIndex = 2;
+        // Returns true if the dictionary contains any elements that are non-writable,
+        // non-configurable, non-enumerable, or have getters/setters.
+        bool HasComplexElements();
 
-  // Bit masks.
-  static const int kRequiresSlowElementsMask = 1;
-  static const int kRequiresSlowElementsTagSize = 1;
-  static const uint32_t kRequiresSlowElementsLimit = (1 << 29) - 1;
+        // Sorting support
+        void CopyValuesTo(FixedArray elements);
 
-  // JSObjects prefer dictionary elements if the dictionary saves this much
-  // memory compared to a fast elements backing store.
-  static const uint32_t kPreferFastElementsSizeFactor = 3;
+        // If slow elements are required we will never go back to fast-case
+        // for the elements kept in this dictionary.  We require slow
+        // elements if an element has been added at an index larger than
+        // kRequiresSlowElementsLimit or set_requires_slow_elements() has been called
+        // when defining a getter or setter with a number key.
+        inline bool requires_slow_elements();
+        inline void set_requires_slow_elements();
 
-  OBJECT_CONSTRUCTORS(NumberDictionary,
-                      Dictionary<NumberDictionary, NumberDictionaryShape>);
-};
+        // Get the value of the max number key that has been added to this
+        // dictionary.  max_number_key can only be called if
+        // requires_slow_elements returns false.
+        inline uint32_t max_number_key();
 
-}  // namespace internal
-}  // namespace v8
+        static const int kEntryValueIndex = 1;
+        static const int kEntryDetailsIndex = 2;
+
+        // Bit masks.
+        static const int kRequiresSlowElementsMask = 1;
+        static const int kRequiresSlowElementsTagSize = 1;
+        static const uint32_t kRequiresSlowElementsLimit = (1 << 29) - 1;
+
+        // JSObjects prefer dictionary elements if the dictionary saves this much
+        // memory compared to a fast elements backing store.
+        static const uint32_t kPreferFastElementsSizeFactor = 3;
+
+        OBJECT_CONSTRUCTORS(NumberDictionary,
+            Dictionary<NumberDictionary, NumberDictionaryShape>);
+    };
+
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_DICTIONARY_H_
+#endif // V8_OBJECTS_DICTIONARY_H_

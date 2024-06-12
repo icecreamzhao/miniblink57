@@ -11,7 +11,8 @@
 #include "SkPathWriter.h"
 
 static bool bridgeWinding(SkOpContourHead* contourList, SkPathWriter* simple,
-        SkChunkAlloc* allocator) {
+    SkChunkAlloc* allocator, bool* closable)
+{
     bool unsortable = false;
     do {
         SkOpSpan* span = FindSortableTop(contourList);
@@ -26,32 +27,36 @@ static bool bridgeWinding(SkOpContourHead* contourList, SkPathWriter* simple,
             if (current->activeWinding(start, end)) {
                 do {
                     if (!unsortable && current->done()) {
-                          break;
+                        break;
                     }
                     SkASSERT(unsortable || !current->done());
                     SkOpSpanBase* nextStart = start;
                     SkOpSpanBase* nextEnd = end;
                     SkOpSegment* next = current->findNextWinding(&chase, &nextStart, &nextEnd,
-                            &unsortable);
+                        &unsortable);
                     if (!next) {
                         if (!unsortable && simple->hasMove()
-                                && current->verb() != SkPath::kLine_Verb
-                                && !simple->isClosed()) {
-                            current->addCurveTo(start, end, simple, true);
-                    #if DEBUG_ACTIVE_SPANS
+                            && current->verb() != SkPath::kLine_Verb
+                            && !simple->isClosed()) {
+                            if (!current->addCurveTo(start, end, simple)) {
+                                return false;
+                            }
+#if DEBUG_ACTIVE_SPANS
                             if (!simple->isClosed()) {
                                 DebugShowActiveSpans(contourList);
                             }
-                    #endif
+#endif
                         }
                         break;
                     }
-        #if DEBUG_FLOW
-            SkDebugf("%s current id=%d from=(%1.9g,%1.9g) to=(%1.9g,%1.9g)\n", __FUNCTION__,
-                    current->debugID(), start->pt().fX, start->pt().fY,
-                    end->pt().fX, end->pt().fY);
-        #endif
-                    current->addCurveTo(start, end, simple, true);
+#if DEBUG_FLOW
+                    SkDebugf("%s current id=%d from=(%1.9g,%1.9g) to=(%1.9g,%1.9g)\n", __FUNCTION__,
+                        current->debugID(), start->pt().fX, start->pt().fY,
+                        end->pt().fX, end->pt().fY);
+#endif
+                    if (!current->addCurveTo(start, end, simple)) {
+                        return false;
+                    }
                     current = next;
                     start = nextStart;
                     end = nextEnd;
@@ -59,7 +64,9 @@ static bool bridgeWinding(SkOpContourHead* contourList, SkPathWriter* simple,
                 if (current->activeWinding(start, end) && !simple->isClosed()) {
                     SkOpSpan* spanStart = start->starter(end);
                     if (!spanStart->done()) {
-                        current->addCurveTo(start, end, simple, true);
+                        if (!current->addCurveTo(start, end, simple)) {
+                            return false;
+                        }
                         current->markDone(spanStart);
                     }
                 }
@@ -73,62 +80,68 @@ static bool bridgeWinding(SkOpContourHead* contourList, SkPathWriter* simple,
 #if DEBUG_WINDING
                     SkDebugf("%s chase.append id=%d", __FUNCTION__, last->segment()->debugID());
                     if (!last->final()) {
-                         SkDebugf(" windSum=%d", last->upCast()->windSum());
+                        SkDebugf(" windSum=%d", last->upCast()->windSum());
                     }
                     SkDebugf("\n");
 #endif
                 }
             }
             current = FindChase(&chase, &start, &end);
-        #if DEBUG_ACTIVE_SPANS
+#if DEBUG_ACTIVE_SPANS
             DebugShowActiveSpans(contourList);
-        #endif
+#endif
             if (!current) {
                 break;
             }
         } while (true);
     } while (true);
-    return simple->someAssemblyRequired();
+    *closable = !simple->someAssemblyRequired();
+    return true;
 }
 
 // returns true if all edges were processed
 static bool bridgeXor(SkOpContourHead* contourList, SkPathWriter* simple,
-        SkChunkAlloc* allocator) {
+    SkChunkAlloc* allocator, bool* closable)
+{
     SkOpSegment* current;
     SkOpSpanBase* start;
     SkOpSpanBase* end;
     bool unsortable = false;
-    bool closable = true;
+    *closable = true;
     while ((current = FindUndone(contourList, &start, &end))) {
         do {
-    #if DEBUG_ACTIVE_SPANS
+#if DEBUG_ACTIVE_SPANS
             if (!unsortable && current->done()) {
                 DebugShowActiveSpans(contourList);
             }
-    #endif
+#endif
             SkASSERT(unsortable || !current->done());
             SkOpSpanBase* nextStart = start;
             SkOpSpanBase* nextEnd = end;
             SkOpSegment* next = current->findNextXor(&nextStart, &nextEnd, &unsortable);
             if (!next) {
                 if (!unsortable && simple->hasMove()
-                        && current->verb() != SkPath::kLine_Verb
-                        && !simple->isClosed()) {
-                    current->addCurveTo(start, end, simple, true);
-            #if DEBUG_ACTIVE_SPANS
+                    && current->verb() != SkPath::kLine_Verb
+                    && !simple->isClosed()) {
+                    if (!current->addCurveTo(start, end, simple)) {
+                        return false;
+                    }
+#if DEBUG_ACTIVE_SPANS
                     if (!simple->isClosed()) {
                         DebugShowActiveSpans(contourList);
                     }
-            #endif
+#endif
                 }
                 break;
             }
-        #if DEBUG_FLOW
+#if DEBUG_FLOW
             SkDebugf("%s current id=%d from=(%1.9g,%1.9g) to=(%1.9g,%1.9g)\n", __FUNCTION__,
-                    current->debugID(), start->pt().fX, start->pt().fY,
-                    end->pt().fX, end->pt().fY);
-        #endif
-            current->addCurveTo(start, end, simple, true);
+                current->debugID(), start->pt().fX, start->pt().fY,
+                end->pt().fX, end->pt().fY);
+#endif
+            if (!current->addCurveTo(start, end, simple)) {
+                return false;
+            }
             current = next;
             start = nextStart;
             end = nextEnd;
@@ -137,25 +150,28 @@ static bool bridgeXor(SkOpContourHead* contourList, SkPathWriter* simple,
             SkASSERT(unsortable);
             SkOpSpan* spanStart = start->starter(end);
             if (!spanStart->done()) {
-                current->addCurveTo(start, end, simple, true);
+                if (!current->addCurveTo(start, end, simple)) {
+                    return false;
+                }
                 current->markDone(spanStart);
             }
-            closable = false;
+            *closable = false;
         }
         simple->close();
-    #if DEBUG_ACTIVE_SPANS
+#if DEBUG_ACTIVE_SPANS
         DebugShowActiveSpans(contourList);
-    #endif
+#endif
     }
-    return closable;
+    return true;
 }
 
 // FIXME : add this as a member of SkPath
-bool Simplify(const SkPath& path, SkPath* result) {
-    SkChunkAlloc allocator(4096);  // FIXME: constant-ize, tune
+bool Simplify(const SkPath& path, SkPath* result)
+{
+    SkChunkAlloc allocator(4096); // FIXME: constant-ize, tune
     // returns 1 for evenodd, -1 for winding, regardless of inverse-ness
     SkPath::FillType fillType = path.isInverseFillType() ? SkPath::kInverseEvenOdd_FillType
-            : SkPath::kEvenOdd_FillType;
+                                                         : SkPath::kEvenOdd_FillType;
     if (path.isConvex()) {
         if (result != &path) {
             *result = path;
@@ -167,7 +183,7 @@ bool Simplify(const SkPath& path, SkPath* result) {
     SkOpCoincidence coincidence;
     SkOpContour contour;
     SkOpContourHead* contourList = static_cast<SkOpContourHead*>(&contour);
-    SkOpGlobalState globalState(&coincidence, contourList);
+    SkOpGlobalState globalState(&coincidence, contourList SkDEBUGPARAMS(false) SkDEBUGPARAMS(nullptr));
 #if DEBUG_SORT
     SkPathOpsDebug::gSortCount = SkPathOpsDebug::gSortCountDefault;
 #endif
@@ -176,7 +192,7 @@ bool Simplify(const SkPath& path, SkPath* result) {
         return false;
     }
 #if DEBUG_DUMP_SEGMENTS
-    contour.dumpSegments((SkPathOp) -1);
+    contour.dumpSegments();
 #endif
     if (!SortContourList(&contourList, false, false)) {
         result->reset();
@@ -188,7 +204,8 @@ bool Simplify(const SkPath& path, SkPath* result) {
     do {
         SkOpContour* next = current;
         while (AddIntersectTs(current, next, &coincidence, &allocator)
-                && (next = next->next()));
+            && (next = next->next()))
+            ;
     } while ((current = current->next()));
 #if DEBUG_VALIDATE
     globalState.setPhase(SkOpGlobalState::kWalking);
@@ -196,13 +213,20 @@ bool Simplify(const SkPath& path, SkPath* result) {
     if (!HandleCoincidence(contourList, &coincidence, &allocator)) {
         return false;
     }
+#if DEBUG_DUMP_ALIGNMENT
+    contour.dumpSegments("aligned");
+#endif
     // construct closed contours
     result->reset();
     result->setFillType(fillType);
     SkPathWriter wrapper(*result);
-    if (builder.xorMask() == kWinding_PathOpsMask ? bridgeWinding(contourList, &wrapper, &allocator)
-                : !bridgeXor(contourList, &wrapper, &allocator))
-    {  // if some edges could not be resolved, assemble remaining fragments
+    bool closable SK_INIT_TO_AVOID_WARNING;
+    if (builder.xorMask() == kWinding_PathOpsMask
+            ? !bridgeWinding(contourList, &wrapper, &allocator, &closable)
+            : !bridgeXor(contourList, &wrapper, &allocator, &closable)) {
+        return false;
+    }
+    if (!closable) { // if some edges could not be resolved, assemble remaining fragments
         SkPath temp;
         temp.setFillType(fillType);
         SkPathWriter assembled(temp);
@@ -212,4 +236,3 @@ bool Simplify(const SkPath& path, SkPath* result) {
     }
     return true;
 }
-

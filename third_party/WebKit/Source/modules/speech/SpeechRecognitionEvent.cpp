@@ -23,36 +23,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/speech/SpeechRecognitionEvent.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::create()
+SpeechRecognitionEvent* SpeechRecognitionEvent::create(
+    const AtomicString& eventName,
+    const SpeechRecognitionEventInit& initializer)
 {
-    return adoptRefWillBeNoop(new SpeechRecognitionEvent);
+    return new SpeechRecognitionEvent(eventName, initializer);
 }
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::create(const AtomicString& eventName, const SpeechRecognitionEventInit& initializer)
+SpeechRecognitionEvent* SpeechRecognitionEvent::createResult(
+    unsigned long resultIndex,
+    const HeapVector<Member<SpeechRecognitionResult>>& results)
 {
-    return adoptRefWillBeNoop(new SpeechRecognitionEvent(eventName, initializer));
+    return new SpeechRecognitionEvent(
+        EventTypeNames::result, resultIndex,
+        SpeechRecognitionResultList::create(results));
 }
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::createResult(unsigned long resultIndex, const HeapVector<Member<SpeechRecognitionResult>>& results)
-{
-    return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::result, resultIndex, SpeechRecognitionResultList::create(results)));
-}
-
-PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> SpeechRecognitionEvent::createNoMatch(SpeechRecognitionResult* result)
+SpeechRecognitionEvent* SpeechRecognitionEvent::createNoMatch(
+    SpeechRecognitionResult* result)
 {
     if (result) {
         HeapVector<Member<SpeechRecognitionResult>> results;
-        results.append(result);
-        return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, SpeechRecognitionResultList::create(results)));
+        results.push_back(result);
+        return new SpeechRecognitionEvent(
+            EventTypeNames::nomatch, 0,
+            SpeechRecognitionResultList::create(results));
     }
 
-    return adoptRefWillBeNoop(new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, nullptr));
+    return new SpeechRecognitionEvent(EventTypeNames::nomatch, 0, nullptr);
 }
 
 const AtomicString& SpeechRecognitionEvent::interfaceName() const
@@ -60,12 +62,9 @@ const AtomicString& SpeechRecognitionEvent::interfaceName() const
     return EventNames::SpeechRecognitionEvent;
 }
 
-SpeechRecognitionEvent::SpeechRecognitionEvent()
-    : m_resultIndex(0)
-{
-}
-
-SpeechRecognitionEvent::SpeechRecognitionEvent(const AtomicString& eventName, const SpeechRecognitionEventInit& initializer)
+SpeechRecognitionEvent::SpeechRecognitionEvent(
+    const AtomicString& eventName,
+    const SpeechRecognitionEventInit& initializer)
     : Event(eventName, initializer)
     , m_resultIndex(0)
 {
@@ -75,16 +74,17 @@ SpeechRecognitionEvent::SpeechRecognitionEvent(const AtomicString& eventName, co
         m_results = initializer.results();
 }
 
-SpeechRecognitionEvent::SpeechRecognitionEvent(const AtomicString& eventName, unsigned long resultIndex, SpeechRecognitionResultList* results)
+SpeechRecognitionEvent::SpeechRecognitionEvent(
+    const AtomicString& eventName,
+    unsigned long resultIndex,
+    SpeechRecognitionResultList* results)
     : Event(eventName, /*canBubble=*/false, /*cancelable=*/false)
     , m_resultIndex(resultIndex)
     , m_results(results)
 {
 }
 
-SpeechRecognitionEvent::~SpeechRecognitionEvent()
-{
-}
+SpeechRecognitionEvent::~SpeechRecognitionEvent() { }
 
 DEFINE_TRACE(SpeechRecognitionEvent)
 {

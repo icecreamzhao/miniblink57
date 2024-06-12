@@ -5,13 +5,16 @@
  * found in the LICENSE file.
  */
 
-#include "SkTDPQueue.h"
 #include "SkRandom.h"
+#include "SkTDPQueue.h"
 #include "Test.h"
 
-namespace { bool intless(const int& a, const int& b) { return a < b; } }
+namespace {
+bool intless(const int& a, const int& b) { return a < b; }
+}
 
-static void simple_test(skiatest::Reporter* reporter) {
+static void simple_test(skiatest::Reporter* reporter)
+{
     SkTDPQueue<int, intless> heap;
     REPORTER_ASSERT(reporter, 0 == heap.count());
 
@@ -72,15 +75,17 @@ struct Dummy {
     static bool LessP(Dummy* const& a, Dummy* const& b) { return a->fPriority < b->fPriority; }
     static int* PQIndex(Dummy* const& dummy) { return &dummy->fIndex; }
 
-    bool operator== (const Dummy& that) const {
+    bool operator==(const Dummy& that) const
+    {
         return fValue == that.fValue && fPriority == that.fPriority;
     }
-    bool operator!= (const Dummy& that) const { return !(*this == that); }
+    bool operator!=(const Dummy& that) const { return !(*this == that); }
 };
 
-void random_test(skiatest::Reporter* reporter) {
+void random_test(skiatest::Reporter* reporter)
+{
     SkRandom random;
-    static const Dummy kSentinel = {-1, -1, -1};
+    static const Dummy kSentinel = { -1, -1, -1 };
 
     for (int i = 0; i < 100; ++i) {
         // Create a random set of Dummy objects.
@@ -114,43 +119,43 @@ void random_test(skiatest::Reporter* reporter) {
             // Make sure the top of the queue is really the highest priority.
             Dummy* top = pq.peek();
             for (int k = 0; k < count; ++k) {
-                REPORTER_ASSERT(reporter, kSentinel == array[k] ||
-                                            array[k].fPriority >= top->fPriority);
+                REPORTER_ASSERT(reporter, kSentinel == array[k] || array[k].fPriority >= top->fPriority);
             }
             // Do one of three random actions:
             unsigned action = random.nextULessThan(3);
             switch (action) {
-                case 0: { // pop the top,
-                    Dummy* top = pq.peek();
-                    REPORTER_ASSERT(reporter, array.begin() <= top && top < array.end());
-                    pq.pop();
-                    *top = kSentinel;
-                    break;
-                }
-                case 1: { // remove a random element,
-                    int item;
-                    do {
-                        item = random.nextULessThan(count);
-                    } while (array[item] == kSentinel);
-                    pq.remove(&array[item]);
-                    array[item] = kSentinel;
-                    break;
-                }
-                case 2: { // or change an element's priority.
-                    int item;
-                    do {
-                        item = random.nextULessThan(count);
-                    } while (array[item] == kSentinel);
-                    array[item].fPriority = random.nextS();
-                    pq.priorityDidChange(&array[item]);
-                    break;
-                }
+            case 0: { // pop the top,
+                Dummy* top = pq.peek();
+                REPORTER_ASSERT(reporter, array.begin() <= top && top < array.end());
+                pq.pop();
+                *top = kSentinel;
+                break;
+            }
+            case 1: { // remove a random element,
+                int item;
+                do {
+                    item = random.nextULessThan(count);
+                } while (array[item] == kSentinel);
+                pq.remove(&array[item]);
+                array[item] = kSentinel;
+                break;
+            }
+            case 2: { // or change an element's priority.
+                int item;
+                do {
+                    item = random.nextULessThan(count);
+                } while (array[item] == kSentinel);
+                array[item].fPriority = random.nextS();
+                pq.priorityDidChange(&array[item]);
+                break;
+            }
             }
         }
-   }
+    }
 }
 
-DEF_TEST(TDPQueueTest, reporter) {
+DEF_TEST(TDPQueueTest, reporter)
+{
     simple_test(reporter);
     random_test(reporter);
 }

@@ -10,16 +10,18 @@
 namespace v8 {
 namespace internal {
 
-class FreeBufferExtension : public v8::Extension {
- public:
-  FreeBufferExtension()
-      : v8::Extension("v8/free-buffer", "native function freeBuffer();") {}
-  v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
-      v8::Isolate* isolate, v8::Local<v8::String> name) override;
-  static void FreeBuffer(const v8::FunctionCallbackInfo<v8::Value>& args);
-};
+    class FreeBufferExtension : public v8::Extension {
+    public:
+        FreeBufferExtension()
+            : v8::Extension("v8/free-buffer", "native function freeBuffer();")
+        {
+        }
+        v8::Local<v8::FunctionTemplate> GetNativeFunctionTemplate(
+            v8::Isolate* isolate, v8::Local<v8::String> name) override;
+        static void FreeBuffer(const v8::FunctionCallbackInfo<v8::Value>& args);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_EXTENSIONS_FREE_BUFFER_EXTENSION_H_
+#endif // V8_EXTENSIONS_FREE_BUFFER_EXTENSION_H_

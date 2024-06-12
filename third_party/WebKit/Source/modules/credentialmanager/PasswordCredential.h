@@ -7,42 +7,61 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
-#include "modules/credentialmanager/Credential.h"
+#include "bindings/modules/v8/FormDataOrURLSearchParams.h"
+#include "modules/ModulesExport.h"
+#include "modules/credentialmanager/SiteBoundCredential.h"
 #include "platform/heap/Handle.h"
+#include "platform/network/EncodedFormData.h"
 #include "platform/weborigin/KURL.h"
 
 namespace blink {
 
-class DOMFormData;
+class HTMLFormElement;
+class PasswordCredentialData;
 class WebPasswordCredential;
 
-class PasswordCredential final : public Credential {
+using CredentialPostBodyType = FormDataOrURLSearchParams;
+
+class MODULES_EXPORT PasswordCredential final : public SiteBoundCredential {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PasswordCredential* create(const String& id, const String& password, ExceptionState& exceptionState)
-    {
-        return create(id, password, emptyString(), emptyString(), exceptionState);
-    }
-
-    static PasswordCredential* create(const String& id, const String& password, const String& name, ExceptionState& exceptionState)
-    {
-        return create(id, password, name, emptyString(), exceptionState);
-    }
-
-    static PasswordCredential* create(const String& id, const String& password, const String& name, const String& icon, ExceptionState&);
+    static PasswordCredential* create(const PasswordCredentialData&,
+        ExceptionState&);
+    static PasswordCredential* create(HTMLFormElement*, ExceptionState&);
     static PasswordCredential* create(WebPasswordCredential*);
 
     // PasswordCredential.idl
-    const String& password() const;
-    DOMFormData* formData() const { return m_formData; }
+    void setIdName(const String& name) { m_idName = name; }
+    const String& idName() const { return m_idName; }
 
+    void setPasswordName(const String& name) { m_passwordName = name; }
+    const String& passwordName() const { return m_passwordName; }
+
+    void setAdditionalData(const CredentialPostBodyType& data)
+    {
+        m_additionalData = data;
+    }
+    void additionalData(CredentialPostBodyType& out) const
+    {
+        out = m_additionalData;
+    }
+
+    // Internal methods
+    PassRefPtr<EncodedFormData> encodeFormData(String& contentType) const;
+    const String& password() const;
     DECLARE_VIRTUAL_TRACE();
 
 private:
     PasswordCredential(WebPasswordCredential*);
-    PasswordCredential(const String& id, const String& password, const String& name, const KURL& icon);
+    PasswordCredential(const String& id,
+        const String& password,
+        const String& name,
+        const KURL& icon);
 
-    Member<DOMFormData> m_formData;
+    String m_idName;
+    String m_passwordName;
+    CredentialPostBodyType m_additionalData;
 };
 
 } // namespace blink

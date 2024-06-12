@@ -640,7 +640,9 @@ UConverter* NameTable::GetCharset(int32_t platform_id, int32_t encoding_id) {
 //   if (conv) {
 //     ucnv_close(conv);
 //   }
-  DebugBreak();
+  *(int*)1 = 1;
+  printf("name_table.cc,NameTable::GetCharset is empty\n");
+
   return NULL;
 }
 
@@ -672,7 +674,8 @@ void NameTable::ConvertToNameBytes(const wchar_t* name,
 //     b->clear();
 //   }
 //   ucnv_close(cs);
-  DebugBreak();
+    * (int*)1 = 1;
+    printf("name_table.cc,NameTable::ConvertToNameBytes is empty\n");
 }
 
 wchar_t* NameTable::ConvertFromNameBytes(ByteVector* name_bytes,

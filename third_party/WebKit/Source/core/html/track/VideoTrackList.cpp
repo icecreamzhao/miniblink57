@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/html/track/VideoTrackList.h"
 
 #include "core/html/HTMLMediaElement.h"
@@ -10,14 +9,12 @@
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<VideoTrackList> VideoTrackList::create(HTMLMediaElement& mediaElement)
+VideoTrackList* VideoTrackList::create(HTMLMediaElement& mediaElement)
 {
-    return adoptRefWillBeNoop(new VideoTrackList(mediaElement));
+    return new VideoTrackList(mediaElement);
 }
 
-VideoTrackList::~VideoTrackList()
-{
-}
+VideoTrackList::~VideoTrackList() { }
 
 VideoTrackList::VideoTrackList(HTMLMediaElement& mediaElement)
     : TrackListBase<VideoTrack>(&mediaElement)
@@ -47,13 +44,11 @@ void VideoTrackList::trackSelected(WebMediaPlayer::TrackId selectedTrackId)
     for (unsigned i = 0; i < length(); ++i) {
         VideoTrack* track = anonymousIndexedGetter(i);
 
-        if (track->trackId() != selectedTrackId)
+        if (track->id() != selectedTrackId)
             track->clearSelected();
         else
-            ASSERT(track->selected());
+            DCHECK(track->selected());
     }
-
-    scheduleChangeEvent();
 }
 
 } // namespace blink

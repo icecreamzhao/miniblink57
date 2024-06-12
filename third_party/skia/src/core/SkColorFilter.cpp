@@ -6,26 +6,72 @@
  */
 
 #include "SkColorFilter.h"
+#include "SkNx.h"
+#include "SkPM4f.h"
 #include "SkReadBuffer.h"
+#include "SkRefCnt.h"
 #include "SkString.h"
+#include "SkTDArray.h"
+#include "SkUnPreMultiply.h"
 #include "SkWriteBuffer.h"
 
-bool SkColorFilter::asColorMode(SkColor* color, SkXfermode::Mode* mode) const {
+#if SK_SUPPORT_GPU
+#include "GrFragmentProcessor.h"
+#endif
+
+bool SkColorFilter::asColorMode(SkColor* color, SkXfermode::Mode* mode) const
+{
     return false;
 }
 
-bool SkColorFilter::asColorMatrix(SkScalar matrix[20]) const {
+bool SkColorFilter::asColorMatrix(SkScalar matrix[20]) const
+{
     return false;
 }
 
-bool SkColorFilter::asComponentTable(SkBitmap*) const {
+bool SkColorFilter::asComponentTable(SkBitmap*) const
+{
     return false;
 }
 
-SkColor SkColorFilter::filterColor(SkColor c) const {
+#if SK_SUPPORT_GPU
+sk_sp<GrFragmentProcessor> SkColorFilter::asFragmentProcessor(GrContext*) const
+{
+    return nullptr;
+}
+#endif
+
+void SkColorFilter::filterSpan4f(const SkPM4f src[], int count, SkPM4f result[]) const
+{
+    const int N = 128;
+    SkPMColor tmp[N];
+    while (count > 0) {
+        int n = SkTMin(count, N);
+        for (int i = 0; i < n; ++i) {
+            tmp[i] = src[i].toPMColor();
+        }
+        this->filterSpan(tmp, n, tmp);
+        for (int i = 0; i < n; ++i) {
+            result[i] = SkPM4f::FromPMColor(tmp[i]);
+        }
+        src += n;
+        result += n;
+        count -= n;
+    }
+}
+
+SkColor SkColorFilter::filterColor(SkColor c) const
+{
     SkPMColor dst, src = SkPreMultiplyColor(c);
     this->filterSpan(&src, 1, &dst);
     return SkUnPreMultiply::PMColorToColor(dst);
+}
+
+SkColor4f SkColorFilter::filterColor4f(const SkColor4f& c) const
+{
+    SkPM4f dst, src = c.premul();
+    this->filterSpan4f(&src, 1, &dst);
+    return dst.unpremul();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,22 +84,31 @@ SkColor SkColorFilter::filterColor(SkColor c) const {
  *  we just set an arbitrary limit during construction. If later we find smarter ways to know what
  *  the limnits are, we can change this constant (or remove it).
  */
-#define SK_MAX_COMPOSE_COLORFILTER_COUNT    4
+#define SK_MAX_COMPOSE_COLORFILTER_COUNT 4
 
 class SkComposeColorFilter : public SkColorFilter {
 public:
-    uint32_t getFlags() const override {
-        // Can only claim alphaunchanged and 16bit support if both our proxys do.
+    uint32_t getFlags() const override
+    {
+        // Can only claim alphaunchanged and SkPM4f support if both our proxys do.
         return fOuter->getFlags() & fInner->getFlags();
     }
-    
-    void filterSpan(const SkPMColor shader[], int count, SkPMColor result[]) const override {
+
+    void filterSpan(const SkPMColor shader[], int count, SkPMColor result[]) const override
+    {
         fInner->filterSpan(shader, count, result);
         fOuter->filterSpan(result, count, result);
     }
-    
+
+    void filterSpan4f(const SkPM4f shader[], int count, SkPM4f result[]) const override
+    {
+        fInner->filterSpan4f(shader, count, result);
+        fOuter->filterSpan4f(result, count, result);
+    }
+
 #ifndef SK_IGNORE_TO_STRING
-    void toString(SkString* str) const override {
+    void toString(SkString* str) const override
+    {
         SkString outerS, innerS;
         fOuter->toString(&outerS);
         fInner->toString(&innerS);
@@ -62,75 +117,87 @@ public:
 #endif
 
 #if SK_SUPPORT_GPU
-    bool asFragmentProcessors(GrContext* context, GrProcessorDataManager* procDataManager,
-                              SkTDArray<GrFragmentProcessor*>* array) const override {
-        bool hasFrags = fInner->asFragmentProcessors(context, procDataManager, array);
-        hasFrags |= fOuter->asFragmentProcessors(context, procDataManager, array);
-        return hasFrags;
+    sk_sp<GrFragmentProcessor> asFragmentProcessor(GrContext* context) const override
+    {
+        sk_sp<GrFragmentProcessor> innerFP(fInner->asFragmentProcessor(context));
+        sk_sp<GrFragmentProcessor> outerFP(fOuter->asFragmentProcessor(context));
+        if (!innerFP || !outerFP) {
+            return nullptr;
+        }
+        sk_sp<GrFragmentProcessor> series[] = { std::move(innerFP), std::move(outerFP) };
+        return GrFragmentProcessor::RunInSeries(series, 2);
     }
 #endif
 
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkComposeColorFilter)
-    
+
 protected:
-    void flatten(SkWriteBuffer& buffer) const override {
-        buffer.writeFlattenable(fOuter);
-        buffer.writeFlattenable(fInner);
+    void flatten(SkWriteBuffer& buffer) const override
+    {
+        buffer.writeFlattenable(fOuter.get());
+        buffer.writeFlattenable(fInner.get());
     }
-    
+
 private:
-    SkComposeColorFilter(SkColorFilter* outer, SkColorFilter* inner, int composedFilterCount)
-        : fOuter(SkRef(outer))
-        , fInner(SkRef(inner))
+    SkComposeColorFilter(sk_sp<SkColorFilter> outer, sk_sp<SkColorFilter> inner,
+        int composedFilterCount)
+        : fOuter(std::move(outer))
+        , fInner(std::move(inner))
         , fComposedFilterCount(composedFilterCount)
     {
         SkASSERT(composedFilterCount >= 2);
         SkASSERT(composedFilterCount <= SK_MAX_COMPOSE_COLORFILTER_COUNT);
     }
 
-    int privateComposedFilterCount() const override {
+    int privateComposedFilterCount() const override
+    {
         return fComposedFilterCount;
     }
 
-    SkAutoTUnref<SkColorFilter> fOuter;
-    SkAutoTUnref<SkColorFilter> fInner;
-    const int                   fComposedFilterCount;
+    sk_sp<SkColorFilter> fOuter;
+    sk_sp<SkColorFilter> fInner;
+    const int fComposedFilterCount;
 
     friend class SkColorFilter;
 
     typedef SkColorFilter INHERITED;
 };
 
-SkFlattenable* SkComposeColorFilter::CreateProc(SkReadBuffer& buffer) {
-    SkAutoTUnref<SkColorFilter> outer(buffer.readColorFilter());
-    SkAutoTUnref<SkColorFilter> inner(buffer.readColorFilter());
-    return CreateComposeFilter(outer, inner);
+sk_sp<SkFlattenable> SkComposeColorFilter::CreateProc(SkReadBuffer& buffer)
+{
+    sk_sp<SkColorFilter> outer(buffer.readColorFilter());
+    sk_sp<SkColorFilter> inner(buffer.readColorFilter());
+    return MakeComposeFilter(std::move(outer), std::move(inner));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-SkColorFilter* SkColorFilter::CreateComposeFilter(SkColorFilter* outer, SkColorFilter* inner) {
+sk_sp<SkColorFilter> SkColorFilter::MakeComposeFilter(sk_sp<SkColorFilter> outer,
+    sk_sp<SkColorFilter> inner)
+{
     if (!outer) {
-        return SkSafeRef(inner);
+        return inner;
     }
     if (!inner) {
-        return SkSafeRef(outer);
+        return outer;
     }
 
     // Give the subclass a shot at a more optimal composition...
-    SkColorFilter* composition = outer->newComposed(inner);
+    auto composition = outer->makeComposed(inner);
     if (composition) {
         return composition;
     }
 
     int count = inner->privateComposedFilterCount() + outer->privateComposedFilterCount();
     if (count > SK_MAX_COMPOSE_COLORFILTER_COUNT) {
-        return NULL;
+        return nullptr;
     }
-    return SkNEW_ARGS(SkComposeColorFilter, (outer, inner, count));
+    return sk_sp<SkColorFilter>(new SkComposeColorFilter(std::move(outer), std::move(inner), count));
 }
+
+#include "SkModeColorFilter.h"
 
 SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_START(SkColorFilter)
 SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(SkComposeColorFilter)
+SK_DEFINE_FLATTENABLE_REGISTRAR_ENTRY(SkModeColorFilter)
 SK_DEFINE_FLATTENABLE_REGISTRAR_GROUP_END
-

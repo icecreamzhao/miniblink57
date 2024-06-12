@@ -2,46 +2,46 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/PushSubscriptionCallbacks.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "modules/push_messaging/PushError.h"
 #include "modules/push_messaging/PushSubscription.h"
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
+#include "public/platform/modules/push_messaging/WebPushSubscription.h"
+#include "wtf/Assertions.h"
+#include "wtf/PtrUtil.h"
 
 namespace blink {
 
-PushSubscriptionCallbacks::PushSubscriptionCallbacks(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver, ServiceWorkerRegistration* serviceWorkerRegistration)
+PushSubscriptionCallbacks::PushSubscriptionCallbacks(
+    ScriptPromiseResolver* resolver,
+    ServiceWorkerRegistration* serviceWorkerRegistration)
     : m_resolver(resolver)
     , m_serviceWorkerRegistration(serviceWorkerRegistration)
 {
-    ASSERT(m_resolver);
-    ASSERT(m_serviceWorkerRegistration);
+    DCHECK(m_resolver);
+    DCHECK(m_serviceWorkerRegistration);
 }
 
-PushSubscriptionCallbacks::~PushSubscriptionCallbacks()
+PushSubscriptionCallbacks::~PushSubscriptionCallbacks() { }
+
+void PushSubscriptionCallbacks::onSuccess(
+    std::unique_ptr<WebPushSubscription> webPushSubscription)
 {
+    if (!m_resolver->getExecutionContext() || m_resolver->getExecutionContext()->isContextDestroyed())
+        return;
+
+    m_resolver->resolve(PushSubscription::take(
+        m_resolver.get(), WTF::wrapUnique(webPushSubscription.release()),
+        m_serviceWorkerRegistration));
 }
 
-void PushSubscriptionCallbacks::onSuccess(WebPushSubscription* webPushSubscription)
+void PushSubscriptionCallbacks::onError(const WebPushError& error)
 {
-    if (!m_resolver->executionContext() || m_resolver->executionContext()->activeDOMObjectsAreStopped())
+    if (!m_resolver->getExecutionContext() || m_resolver->getExecutionContext()->isContextDestroyed())
         return;
-
-    if (!webPushSubscription) {
-        m_resolver->resolve(v8::Null(m_resolver->scriptState()->isolate()));
-        return;
-    }
-    m_resolver->resolve(PushSubscription::take(m_resolver.get(), webPushSubscription, m_serviceWorkerRegistration));
-}
-
-void PushSubscriptionCallbacks::onError(WebPushError* error)
-{
-    OwnPtr<WebPushError> ownError = adoptPtr(error);
-    if (!m_resolver->executionContext() || m_resolver->executionContext()->activeDOMObjectsAreStopped())
-        return;
-    m_resolver->reject(PushError::take(m_resolver.get(), ownError.release()));
+    m_resolver->reject(PushError::take(m_resolver.get(), error));
 }
 
 } // namespace blink

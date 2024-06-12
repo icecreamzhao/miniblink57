@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkBorder_DEFINED
 #define SkBorder_DEFINED
 
@@ -52,15 +51,15 @@ public:
     };
 
     enum BlurStyle {
-        kNormal_BlurStyle,  //!< fuzzy inside and outside
-        kInner_BlurStyle,   //!< fuzzy inside, nothing outside
+        kNormal_BlurStyle, //!< fuzzy inside and outside
+        kInner_BlurStyle, //!< fuzzy inside, nothing outside
     };
 
     struct ShadowInfo {
-        SkScalar  fXOffset;
-        SkScalar  fYOffset;
-        SkScalar  fBlurSigma;
-        SkColor   fColor;
+        SkScalar fXOffset;
+        SkScalar fYOffset;
+        SkScalar fBlurSigma;
+        SkColor fColor;
         BlurStyle fStyle;
     };
 
@@ -68,7 +67,8 @@ public:
 
     SkBorder(const SkPaint paints[4], const SkScalar widths[4], const BorderStyle styles[4]);
 
-    void setBackground(SkPaint* p) {
+    void setBackground(SkPaint* p)
+    {
         if (NULL == p) {
             fBackground.reset();
             fFlags &= ~kDrawBackground_Flag;
@@ -78,7 +78,8 @@ public:
         }
     }
 
-    void addShadow(ShadowInfo& info) {
+    void addShadow(ShadowInfo& info)
+    {
         fShadows.push_back(info);
     }
 
@@ -92,13 +93,13 @@ private:
 
     // If kOnePaint_Flag is specified then fBorder[0] is applied to all sides.
     // Otherwise the order is: left, top, right, bottom
-    SkPaint              fPaints[4];
+    SkPaint fPaints[4];
     // Only valid if kDrawBackground_Flag is set.
-    SkPaint              fBackground;
-    SkScalar             fWidths[4];
-    BorderStyle          fStyles[4];
+    SkPaint fBackground;
+    SkScalar fWidths[4];
+    BorderStyle fStyles[4];
     SkTArray<ShadowInfo> fShadows;
-    uint32_t             fFlags;
+    uint32_t fFlags;
 };
 
 #endif

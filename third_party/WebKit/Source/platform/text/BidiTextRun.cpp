@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/BidiTextRun.h"
 
 #include "platform/text/BidiResolver.h"
@@ -41,7 +40,7 @@ TextDirection directionForRun(TextRun& run, bool* hasStrongDirectionality)
     if (!hasStrongDirectionality) {
         // 8bit is Latin-1 and therefore is always LTR.
         if (run.is8Bit())
-            return LTR;
+            return TextDirection::kLtr;
 
         // length == 1 for more than 90% of cases of width() for CJK text.
         if (run.length() == 1 && U16_IS_SINGLE(run.characters16()[0]))
@@ -49,18 +48,21 @@ TextDirection directionForRun(TextRun& run, bool* hasStrongDirectionality)
     }
 
     BidiResolver<TextRunIterator, BidiCharacterRun> bidiResolver;
-    bidiResolver.setStatus(BidiStatus(run.direction(), run.directionalOverride()));
+    bidiResolver.setStatus(
+        BidiStatus(run.direction(), run.directionalOverride()));
     bidiResolver.setPositionIgnoringNestedIsolates(TextRunIterator(&run, 0));
     return bidiResolver.determineDirectionality(hasStrongDirectionality);
 }
 
-TextDirection determineDirectionality(const String& value, bool* hasStrongDirectionality)
+TextDirection determineDirectionality(const String& value,
+    bool* hasStrongDirectionality)
 {
     TextRun run(value);
     return directionForRun(run, hasStrongDirectionality);
 }
 
-TextRun textRunWithDirectionality(const String& value, bool* hasStrongDirectionality)
+TextRun textRunWithDirectionality(const String& value,
+    bool* hasStrongDirectionality)
 {
     TextRun run(value);
     TextDirection direction = directionForRun(run, hasStrongDirectionality);
@@ -70,4 +72,3 @@ TextRun textRunWithDirectionality(const String& value, bool* hasStrongDirectiona
 }
 
 } // namespace blink
-

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkHitTest.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -22,10 +21,13 @@ const SkMemberInfo SkHitTest::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkHitTest);
 
-SkHitTest::SkHitTest() : value(false) {
+SkHitTest::SkHitTest()
+    : value(false)
+{
 }
 
-bool SkHitTest::draw(SkAnimateMaker&) {
+bool SkHitTest::draw(SkAnimateMaker&)
+{
     hits.setCount(bullets.count());
     value = false;
     int bulletCount = bullets.count();
@@ -51,7 +53,8 @@ bool SkHitTest::draw(SkAnimateMaker&) {
     return false;
 }
 
-bool SkHitTest::enable(SkAnimateMaker&) {
+bool SkHitTest::enable(SkAnimateMaker&)
+{
     for (int bIndex = 0; bIndex < bullets.count(); bIndex++) {
         SkDisplayable* bullet = bullets[bIndex];
         bullet->enableBounder();
@@ -63,11 +66,13 @@ bool SkHitTest::enable(SkAnimateMaker&) {
     return false;
 }
 
-bool SkHitTest::hasEnable() const {
+bool SkHitTest::hasEnable() const
+{
     return true;
 }
 
-const SkMemberInfo* SkHitTest::preferredChild(SkDisplayTypes) {
+const SkMemberInfo* SkHitTest::preferredChild(SkDisplayTypes)
+{
     if (bullets.count() == 0)
         return getMember("bullets");
     return getMember("targets"); // !!! cwap! need to refer to member through enum like kScope instead

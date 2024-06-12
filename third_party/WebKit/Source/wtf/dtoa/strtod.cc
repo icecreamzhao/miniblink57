@@ -25,15 +25,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "config.h"
-
-#include <stdarg.h>
-#include <limits.h>
-
 #include "strtod.h"
+
 #include "bignum.h"
 #include "cached-powers.h"
 #include "double.h"
+#include <limits.h>
+#include <stdarg.h>
 
 namespace WTF {
 
@@ -58,9 +56,8 @@ namespace double_conversion {
     // 2^64 = 18446744073709551616
     static const uint64_t kMaxUint64 = UINT64_2PART_C(0xFFFFFFFF, FFFFFFFF);
 
-
     static const double exact_powers_of_ten[] = {
-        1.0,  // 10^0
+        1.0, // 10^0
         10.0,
         100.0,
         1000.0,
@@ -70,7 +67,7 @@ namespace double_conversion {
         10000000.0,
         100000000.0,
         1000000000.0,
-        10000000000.0,  // 10^10
+        10000000000.0, // 10^10
         100000000000.0,
         1000000000000.0,
         10000000000000.0,
@@ -80,7 +77,7 @@ namespace double_conversion {
         100000000000000000.0,
         1000000000000000000.0,
         10000000000000000000.0,
-        100000000000000000000.0,  // 10^20
+        100000000000000000000.0, // 10^20
         1000000000000000000000.0,
         // 10^22 = 0x21e19e0c9bab2400000 = 0x878678326eac9 * 2^22
         10000000000000000000000.0
@@ -92,7 +89,8 @@ namespace double_conversion {
     // we round up to 780.
     static const int kMaxSignificantDecimalDigits = 780;
 
-    static Vector<const char> TrimLeadingZeros(Vector<const char> buffer) {
+    static Vector<const char> TrimLeadingZeros(Vector<const char> buffer)
+    {
         for (int i = 0; i < buffer.length(); i++) {
             if (buffer[i] != '0') {
                 return buffer.SubVector(i, buffer.length());
@@ -101,8 +99,8 @@ namespace double_conversion {
         return Vector<const char>(buffer.start(), 0);
     }
 
-
-    static Vector<const char> TrimTrailingZeros(Vector<const char> buffer) {
+    static Vector<const char> TrimTrailingZeros(Vector<const char> buffer)
+    {
         for (int i = buffer.length() - 1; i >= 0; --i) {
             if (buffer[i] != '0') {
                 return buffer.SubVector(0, i + 1);
@@ -111,11 +109,11 @@ namespace double_conversion {
         return Vector<const char>(buffer.start(), 0);
     }
 
-
     static void TrimToMaxSignificantDigits(Vector<const char> buffer,
-                                           int exponent,
-                                           char* significant_buffer,
-                                           int* significant_exponent) {
+        int exponent,
+        char* significant_buffer,
+        int* significant_exponent)
+    {
         for (int i = 0; i < kMaxSignificantDecimalDigits - 1; ++i) {
             significant_buffer[i] = buffer[i];
         }
@@ -125,8 +123,7 @@ namespace double_conversion {
         // Set the last digit to be non-zero. This is sufficient to guarantee
         // correct rounding.
         significant_buffer[kMaxSignificantDecimalDigits - 1] = '1';
-        *significant_exponent =
-        exponent + (buffer.length() - kMaxSignificantDecimalDigits);
+        *significant_exponent = exponent + (buffer.length() - kMaxSignificantDecimalDigits);
     }
 
     // Reads digits from the buffer and converts them to a uint64.
@@ -135,7 +132,8 @@ namespace double_conversion {
     // Since 2^64 = 18446744073709551616 it would still be possible read another
     // digit if it was less or equal than 6, but this would complicate the code.
     static uint64_t ReadUint64(Vector<const char> buffer,
-                               int* number_of_read_digits) {
+        int* number_of_read_digits)
+    {
         uint64_t result = 0;
         int i = 0;
         while (i < buffer.length() && result <= (kMaxUint64 / 10 - 1)) {
@@ -147,14 +145,14 @@ namespace double_conversion {
         return result;
     }
 
-
     // Reads a DiyFp from the buffer.
     // The returned DiyFp is not necessarily normalized.
     // If remaining_decimals is zero then the returned DiyFp is accurate.
     // Otherwise it has been rounded and has error of at most 1/2 ulp.
     static void ReadDiyFp(Vector<const char> buffer,
-                          DiyFp* result,
-                          int* remaining_decimals) {
+        DiyFp* result,
+        int* remaining_decimals)
+    {
         int read_digits;
         uint64_t significand = ReadUint64(buffer, &read_digits);
         if (buffer.length() == read_digits) {
@@ -172,10 +170,10 @@ namespace double_conversion {
         }
     }
 
-
     static bool DoubleStrtod(Vector<const char> trimmed,
-                             int exponent,
-                             double* result) {
+        int exponent,
+        double* result)
+    {
 #if !defined(DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS)
         // On x86 the floating-point stack can be 64 or 80 bits wide. If it is
         // 80 bits wide (as is the case on Linux) then double-rounding occurs and the
@@ -207,10 +205,8 @@ namespace double_conversion {
                 *result *= exact_powers_of_ten[exponent];
                 return true;
             }
-            int remaining_digits =
-            kMaxExactDoubleIntegerDecimalDigits - trimmed.length();
-            if ((0 <= exponent) &&
-                (exponent - remaining_digits < kExactPowersOfTenSize)) {
+            int remaining_digits = kMaxExactDoubleIntegerDecimalDigits - trimmed.length();
+            if ((0 <= exponent) && (exponent - remaining_digits < kExactPowersOfTenSize)) {
                 // The trimmed string was short and we can multiply it with
                 // 10^remaining_digits. As a result the remaining exponent now fits
                 // into a double too.
@@ -224,36 +220,43 @@ namespace double_conversion {
         return false;
     }
 
-
     // Returns 10^exponent as an exact DiyFp.
     // The given exponent must be in the range [1; kDecimalExponentDistance[.
-    static DiyFp AdjustmentPowerOfTen(int exponent) {
+    static DiyFp AdjustmentPowerOfTen(int exponent)
+    {
         ASSERT(0 < exponent);
         ASSERT(exponent < PowersOfTenCache::kDecimalExponentDistance);
         // Simply hardcode the remaining powers for the given decimal exponent
         // distance.
         ASSERT(PowersOfTenCache::kDecimalExponentDistance == 8);
         switch (exponent) {
-            case 1: return DiyFp(UINT64_2PART_C(0xa0000000, 00000000), -60);
-            case 2: return DiyFp(UINT64_2PART_C(0xc8000000, 00000000), -57);
-            case 3: return DiyFp(UINT64_2PART_C(0xfa000000, 00000000), -54);
-            case 4: return DiyFp(UINT64_2PART_C(0x9c400000, 00000000), -50);
-            case 5: return DiyFp(UINT64_2PART_C(0xc3500000, 00000000), -47);
-            case 6: return DiyFp(UINT64_2PART_C(0xf4240000, 00000000), -44);
-            case 7: return DiyFp(UINT64_2PART_C(0x98968000, 00000000), -40);
-            default:
-                UNREACHABLE();
-                return DiyFp(0, 0);
+        case 1:
+            return DiyFp(UINT64_2PART_C(0xa0000000, 00000000), -60);
+        case 2:
+            return DiyFp(UINT64_2PART_C(0xc8000000, 00000000), -57);
+        case 3:
+            return DiyFp(UINT64_2PART_C(0xfa000000, 00000000), -54);
+        case 4:
+            return DiyFp(UINT64_2PART_C(0x9c400000, 00000000), -50);
+        case 5:
+            return DiyFp(UINT64_2PART_C(0xc3500000, 00000000), -47);
+        case 6:
+            return DiyFp(UINT64_2PART_C(0xf4240000, 00000000), -44);
+        case 7:
+            return DiyFp(UINT64_2PART_C(0x98968000, 00000000), -40);
+        default:
+            UNREACHABLE();
+            return DiyFp(0, 0);
         }
     }
-
 
     // If the function returns true then the result is the correct double.
     // Otherwise it is either the correct double or the double that is just below
     // the correct double.
     static bool DiyFpStrtod(Vector<const char> buffer,
-                            int exponent,
-                            double* result) {
+        int exponent,
+        double* result)
+    {
         DiyFp input;
         int remaining_decimals;
         ReadDiyFp(buffer, &input, &remaining_decimals);
@@ -280,8 +283,8 @@ namespace double_conversion {
         DiyFp cached_power;
         int cached_decimal_exponent;
         PowersOfTenCache::GetCachedPowerForDecimalExponent(exponent,
-                                                           &cached_power,
-                                                           &cached_decimal_exponent);
+            &cached_power,
+            &cached_decimal_exponent);
 
         if (cached_decimal_exponent != exponent) {
             int adjustment_exponent = exponent - cached_decimal_exponent;
@@ -304,7 +307,7 @@ namespace double_conversion {
         //   error_b = 0.5  (all cached powers have an error of less than 0.5 ulp),
         //   error_ab = 0 or 1 / kDenominator > error_a*error_b/ 2^64
         int error_b = kDenominator / 2;
-        int error_ab = (error == 0 ? 0 : 1);  // We round up to 1.
+        int error_ab = (error == 0 ? 0 : 1); // We round up to 1.
         int fixed_error = kDenominator / 2;
         error += error_b + error_ab + fixed_error;
 
@@ -314,16 +317,13 @@ namespace double_conversion {
 
         // See if the double's significand changes if we add/subtract the error.
         int order_of_magnitude = DiyFp::kSignificandSize + input.e();
-        int effective_significand_size =
-        Double::SignificandSizeForOrderOfMagnitude(order_of_magnitude);
-        int precision_digits_count =
-        DiyFp::kSignificandSize - effective_significand_size;
+        int effective_significand_size = Double::SignificandSizeForOrderOfMagnitude(order_of_magnitude);
+        int precision_digits_count = DiyFp::kSignificandSize - effective_significand_size;
         if (precision_digits_count + kDenominatorLog >= DiyFp::kSignificandSize) {
             // This can only happen for very small denormals. In this case the
             // half-way multiplied by the denominator exceeds the range of an uint64.
             // Simply shift everything to the right.
-            int shift_amount = (precision_digits_count + kDenominatorLog) -
-            DiyFp::kSignificandSize + 1;
+            int shift_amount = (precision_digits_count + kDenominatorLog) - DiyFp::kSignificandSize + 1;
             input.set_f(input.f() >> shift_amount);
             input.set_e(input.e() + shift_amount);
             // We add 1 for the lost precision of error, and kDenominator for
@@ -341,7 +341,7 @@ namespace double_conversion {
         precision_bits *= kDenominator;
         half_way *= kDenominator;
         DiyFp rounded_input(input.f() >> precision_digits_count,
-                            input.e() + precision_digits_count);
+            input.e() + precision_digits_count);
         if (precision_bits >= half_way + error) {
             rounded_input.set_f(rounded_input.f() + 1);
         }
@@ -360,7 +360,6 @@ namespace double_conversion {
         }
     }
 
-
     // Returns the correct double for the buffer*10^exponent.
     // The variable guess should be a close guess that is either the correct double
     // or its lower neighbor (the nearest double less than the correct one).
@@ -369,8 +368,9 @@ namespace double_conversion {
     //   buffer.length() + exponent > kMinDecimalPower
     //   buffer.length() <= kMaxDecimalSignificantDigits
     static double BignumStrtod(Vector<const char> buffer,
-                               int exponent,
-                               double guess) {
+        int exponent,
+        double guess)
+    {
         if (guess == Double::Infinity()) {
             return guess;
         }
@@ -412,20 +412,21 @@ namespace double_conversion {
         }
     }
 
-
-    double Strtod(Vector<const char> buffer, int exponent) {
+    double Strtod(Vector<const char> buffer, int exponent)
+    {
         Vector<const char> left_trimmed = TrimLeadingZeros(buffer);
         Vector<const char> trimmed = TrimTrailingZeros(left_trimmed);
         exponent += left_trimmed.length() - trimmed.length();
-        if (trimmed.length() == 0) return 0.0;
+        if (trimmed.length() == 0)
+            return 0.0;
         if (trimmed.length() > kMaxSignificantDecimalDigits) {
             char significant_buffer[kMaxSignificantDecimalDigits];
             int significant_exponent;
             TrimToMaxSignificantDigits(trimmed, exponent,
-                                       significant_buffer, &significant_exponent);
+                significant_buffer, &significant_exponent);
             return Strtod(Vector<const char>(significant_buffer,
-                                             kMaxSignificantDecimalDigits),
-                          significant_exponent);
+                              kMaxSignificantDecimalDigits),
+                significant_exponent);
         }
         if (exponent + trimmed.length() - 1 >= kMaxDecimalPower) {
             return Double::Infinity();
@@ -435,13 +436,12 @@ namespace double_conversion {
         }
 
         double guess;
-        if (DoubleStrtod(trimmed, exponent, &guess) ||
-            DiyFpStrtod(trimmed, exponent, &guess)) {
+        if (DoubleStrtod(trimmed, exponent, &guess) || DiyFpStrtod(trimmed, exponent, &guess)) {
             return guess;
         }
         return BignumStrtod(trimmed, exponent, guess);
     }
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF

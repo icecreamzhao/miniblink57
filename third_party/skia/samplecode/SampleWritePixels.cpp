@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,17 +5,17 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkCornerPathEffect.h"
-#include "SkCullPoints.h"
 #include "SkGradientShader.h"
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
 #include "SkUtils.h"
+#include "SkView.h"
 
-static void create_bitmap(SkBitmap* bitmap) {
+static void create_bitmap(SkBitmap* bitmap)
+{
     const int W = 100;
     const int H = 100;
     bitmap->allocN32Pixels(W, H);
@@ -25,17 +24,19 @@ static void create_bitmap(SkBitmap* bitmap) {
     canvas.drawColor(SK_ColorRED);
     SkPaint paint;
     paint.setColor(SK_ColorBLUE);
-    canvas.drawCircle(SkIntToScalar(W)/2, SkIntToScalar(H)/2, SkIntToScalar(W)/2, paint);
+    canvas.drawCircle(SkIntToScalar(W) / 2, SkIntToScalar(H) / 2, SkIntToScalar(W) / 2, paint);
 }
 
 class WritePixelsView : public SampleView {
     SkPath fPath;
+
 public:
-    WritePixelsView() {}
+    WritePixelsView() { }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "WritePixels");
             return true;
@@ -43,7 +44,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkBitmap bitmap;
         create_bitmap(&bitmap);
         int x = bitmap.width() / 2;

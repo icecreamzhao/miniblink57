@@ -6,12 +6,11 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayAdd.h"
+#include "SkADrawable.h"
 #include "SkAnimateMaker.h"
 #include "SkDisplayApply.h"
 #include "SkDisplayList.h"
-#include "SkADrawable.h"
 #include "SkDrawGroup.h"
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -33,22 +32,28 @@ const SkMemberInfo SkAdd::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAdd);
 
-SkAdd::SkAdd() : mode(kMode_indirect),
-    offset(SK_MaxS32), use(NULL), where(NULL) {
+SkAdd::SkAdd()
+    : mode(kMode_indirect)
+    , offset(SK_MaxS32)
+    , use(nullptr)
+    , where(nullptr)
+{
 }
 
-SkDisplayable* SkAdd::deepCopy(SkAnimateMaker* maker) {
+SkDisplayable* SkAdd::deepCopy(SkAnimateMaker* maker)
+{
     SkADrawable* saveUse = use;
     SkADrawable* saveWhere = where;
-    use = NULL;
-    where = NULL;
-    SkAdd* copy = (SkAdd*) INHERITED::deepCopy(maker);
+    use = nullptr;
+        where = nullptr;
+    SkAdd* copy = (SkAdd*)INHERITED::deepCopy(maker);
     copy->use = use = saveUse;
     copy->where = where = saveWhere;
     return copy;
 }
 
-bool SkAdd::draw(SkAnimateMaker& maker) {
+bool SkAdd::draw(SkAnimateMaker& maker)
+{
     SkASSERT(use);
     SkASSERT(use->isDrawable());
     if (mode == kMode_indirect)
@@ -57,7 +62,8 @@ bool SkAdd::draw(SkAnimateMaker& maker) {
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkAdd::dump(SkAnimateMaker* maker) {
+void SkAdd::dump(SkAnimateMaker* maker)
+{
     dumpBase(maker);
     dumpAttrs(maker);
     if (where)
@@ -67,7 +73,7 @@ void SkAdd::dump(SkAnimateMaker* maker) {
     SkDebugf(">\n");
     SkDisplayList::fIndent += 4;
     int save = SkDisplayList::fDumpIndex;
-    if (use)    //just in case
+    if (use) //just in case
         use->dump(maker);
     SkDisplayList::fIndent -= 4;
     SkDisplayList::fDumpIndex = save;
@@ -75,42 +81,43 @@ void SkAdd::dump(SkAnimateMaker* maker) {
 }
 #endif
 
-bool SkAdd::enable(SkAnimateMaker& maker ) {
+bool SkAdd::enable(SkAnimateMaker& maker)
+{
     SkDisplayTypes type = getType();
     SkDisplayList& displayList = maker.fDisplayList;
     SkTDDrawableArray* parentList = displayList.getDrawList();
     if (type == SkType_Add) {
-        if (use == NULL) // not set in apply yet
+        if (use == nullptr) // not set in apply yet
             return true;
     }
     bool skipAddToParent = true;
     SkASSERT(type != SkType_Replace || where);
     SkTDDrawableArray* grandList SK_INIT_TO_AVOID_WARNING;
-    SkGroup* parentGroup = NULL;
-    SkGroup* thisGroup = NULL;
+    SkGroup* parentGroup = nullptr;
+    SkGroup* thisGroup = nullptr;
     int index = where ? displayList.findGroup(where, &parentList, &parentGroup,
-        &thisGroup, &grandList) : 0;
+  &thisGroup, &grandList) : 0;
     if (index < 0)
         return true;
     int max = parentList->count();
-    if (where == NULL && type == SkType_Move)
+    if (where == nullptr && type == SkType_Move)
         index = max;
     if (offset != SK_MaxS32) {
         index += offset;
         if (index > max) {
             maker.setErrorCode(SkDisplayXMLParserError::kIndexOutOfRange);
-            return true;    // caller should not add
+            return true; // caller should not add
         }
     }
-    if (offset < 0 && where == NULL)
+    if (offset < 0 && where == nullptr)
         index += max + 1;
     switch (type) {
-        case SkType_Add:
-            if (offset == SK_MaxS32 && where == NULL) {
+    case SkType_Add:
+            if (offset == SK_MaxS32 && where == nullptr) {
                 if (use->isDrawable()) {
                     skipAddToParent = mode == kMode_immediate;
                     if (skipAddToParent) {
-                        if (where == NULL) {
+                        if (where == nullptr) {
                             SkTDDrawableArray* useParentList;
                             index = displayList.findGroup(this, &useParentList, &parentGroup,
                                 &thisGroup, &grandList);
@@ -132,49 +139,49 @@ bool SkAdd::enable(SkAnimateMaker& maker ) {
                 if (thisGroup)
                     thisGroup->markCopySet(index);
                 if (use->isApply())
-                    ((SkApply*) use)->setEmbedded();
+                    ((SkApply*)use)->setEmbedded();
             }
             break;
-        case SkType_Move: {
-            int priorLocation = parentList->find(use);
-            if (priorLocation < 0)
-                break;
-            *parentList->insert(index) = use;
-            if (index < priorLocation)
-                priorLocation++;
-            parentList->remove(priorLocation);
-            } break;
-        case SkType_Remove: {
-            SkDisplayable* old = (*parentList)[index];
-            if (((SkRemove*)(this))->fDelete) {
-                delete old;
+    case SkType_Move: {
+        int priorLocation = parentList->find(use);
+        if (priorLocation < 0)
+            break;
+        *parentList->insert(index) = use;
+        if (index < priorLocation)
+            priorLocation++;
+        parentList->remove(priorLocation);
+    } break;
+    case SkType_Remove: {
+        SkDisplayable* old = (*parentList)[index];
+        if (((SkRemove*)(this))->fDelete) {
+            delete old;
+            goto noHelperNeeded;
+        }
+        for (int inner = 0; inner < maker.fChildren.count(); inner++) {
+            SkDisplayable* child = maker.fChildren[inner];
+            if (child == old || child->contains(old))
                 goto noHelperNeeded;
+        }
+        if (maker.fHelpers.find(old) < 0)
+            maker.helperAdd(old);
+    noHelperNeeded:
+        parentList->remove(index);
+    } break;
+    case SkType_Replace:
+        if (thisGroup) {
+            thisGroup->markCopySize(index);
+            if (thisGroup->markedForDelete(index)) {
+                SkDisplayable* old = (*parentList)[index];
+                if (maker.fHelpers.find(old) < 0)
+                    maker.helperAdd(old);
             }
-            for (int inner = 0; inner < maker.fChildren.count(); inner++) {
-                SkDisplayable* child = maker.fChildren[inner];
-                if (child == old || child->contains(old))
-                    goto noHelperNeeded;
-            }
-            if (maker.fHelpers.find(old) < 0)
-                maker.helperAdd(old);
-noHelperNeeded:
-            parentList->remove(index);
-            } break;
-        case SkType_Replace:
-            if (thisGroup) {
-                thisGroup->markCopySize(index);
-                if (thisGroup->markedForDelete(index)) {
-                    SkDisplayable* old = (*parentList)[index];
-                    if (maker.fHelpers.find(old) < 0)
-                        maker.helperAdd(old);
-                }
-            }
-            (*parentList)[index] = use;
-            if (thisGroup)
-                thisGroup->markCopySet(index);
-            break;
-        default:
-            SkASSERT(0);
+        }
+        (*parentList)[index] = use;
+        if (thisGroup)
+            thisGroup->markCopySet(index);
+        break;
+    default:
+        SkASSERT(0);
     }
     if (type == SkType_Remove)
         return true;
@@ -183,31 +190,32 @@ noHelperNeeded:
     return skipAddToParent; // append if indirect: *parentList->append() = this;
 }
 
-bool SkAdd::hasEnable() const {
+bool SkAdd::hasEnable() const
+{
     return true;
 }
 
-void SkAdd::initialize() {
+void SkAdd::initialize()
+{
     if (use)
         use->initialize();
 }
 
-bool SkAdd::isDrawable() const {
-    return getType() == SkType_Add && mode == kMode_indirect && offset == SK_MaxS32 &&
-        where == NULL && use != NULL && use->isDrawable();
+bool SkAdd::isDrawable() const
+{
+    return getType() == SkType_Add && mode == kMode_indirect && offset == SK_MaxS32 && where == nullptr && use != nullptr && use->isDrawable();
 }
 
 //SkDisplayable* SkAdd::resolveTarget(SkAnimateMaker& maker) {
 //  return use;
 //}
 
-
-bool SkClear::enable(SkAnimateMaker& maker ) {
+bool SkClear::enable(SkAnimateMaker& maker)
+{
     SkDisplayList& displayList = maker.fDisplayList;
     displayList.clear();
     return true;
 }
-
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -231,7 +239,9 @@ const SkMemberInfo SkRemove::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkRemove);
 
-SkRemove::SkRemove() : fDelete(false) {
+SkRemove::SkRemove()
+    : fDelete(false)
+{
 }
 
 #if SK_USE_CONDENSED_INFO == 0

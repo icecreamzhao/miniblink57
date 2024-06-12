@@ -29,23 +29,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/HiddenInputType.h"
 
 #include "core/HTMLNames.h"
 #include "core/InputTypeNames.h"
-#include "core/html/FormDataList.h"
+#include "core/html/FormData.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/forms/FormController.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 using namespace HTMLNames;
 
-PassRefPtrWillBeRawPtr<InputType> HiddenInputType::create(HTMLInputElement& element)
+InputType* HiddenInputType::create(HTMLInputElement& element)
 {
-    return adoptRefWillBeNoop(new HiddenInputType(element));
+    return new HiddenInputType(element);
+}
+
+DEFINE_TRACE(HiddenInputType)
+{
+    InputTypeView::trace(visitor);
+    InputType::trace(visitor);
+}
+
+InputTypeView* HiddenInputType::createView()
+{
+    return this;
 }
 
 const AtomicString& HiddenInputType::formControlType() const
@@ -59,7 +68,9 @@ FormControlState HiddenInputType::saveFormControlState() const
     // controls create by createElement() or cloneNode(). It's ok for
     // now because we restore values only to form controls created by
     // parsing.
-    return element().valueAttributeWasUpdatedAfterParsing() ? FormControlState(element().value()) : FormControlState();
+    return element().valueAttributeWasUpdatedAfterParsing()
+        ? FormControlState(element().value())
+        : FormControlState();
 }
 
 void HiddenInputType::restoreFormControlState(const FormControlState& state)
@@ -74,36 +85,36 @@ bool HiddenInputType::supportsValidation() const
 
 LayoutObject* HiddenInputType::createLayoutObject(const ComputedStyle&) const
 {
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return nullptr;
 }
 
-void HiddenInputType::accessKeyAction(bool)
-{
-}
+void HiddenInputType::accessKeyAction(bool) { }
 
 bool HiddenInputType::layoutObjectIsNeeded()
 {
     return false;
 }
 
-bool HiddenInputType::storesValueSeparateFromAttribute()
+InputType::ValueMode HiddenInputType::valueMode() const
 {
-    return false;
+    return ValueMode::kDefault;
 }
 
-void HiddenInputType::setValue(const String& sanitizedValue, bool, TextFieldEventBehavior)
+void HiddenInputType::setValue(const String& sanitizedValue,
+    bool,
+    TextFieldEventBehavior)
 {
     element().setAttribute(valueAttr, AtomicString(sanitizedValue));
 }
 
-bool HiddenInputType::appendFormData(FormDataList& encoding, bool isMultipartForm) const
+void HiddenInputType::appendToFormData(FormData& formData) const
 {
     if (equalIgnoringCase(element().name(), "_charset_")) {
-        encoding.appendData(element().name(), String(encoding.encoding().name()));
-        return true;
+        formData.append(element().name(), String(formData.encoding().name()));
+        return;
     }
-    return InputType::appendFormData(encoding, isMultipartForm);
+    InputType::appendToFormData(formData);
 }
 
 bool HiddenInputType::shouldRespectHeightAndWidthAttributes()

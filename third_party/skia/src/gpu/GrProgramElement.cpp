@@ -7,8 +7,10 @@
 
 #include "GrProgramElement.h"
 #include "GrGpuResourceRef.h"
+#include "SkAtomics.h"
 
-uint32_t GrProgramElement::CreateUniqueID() {
+uint32_t GrProgramElement::CreateUniqueID()
+{
     static int32_t gUniqueID = SK_InvalidUniqueID;
     uint32_t id;
     do {
@@ -17,21 +19,23 @@ uint32_t GrProgramElement::CreateUniqueID() {
     return id;
 }
 
-void GrProgramElement::addPendingIOs() const {
+void GrProgramElement::addPendingIOs() const
+{
     for (int i = 0; i < fGpuResources.count(); ++i) {
         fGpuResources[i]->markPendingIO();
     }
 }
 
-void GrProgramElement::removeRefs() const {
+void GrProgramElement::removeRefs() const
+{
     for (int i = 0; i < fGpuResources.count(); ++i) {
         fGpuResources[i]->removeRef();
     }
 }
 
-void GrProgramElement::pendingIOComplete() const {
+void GrProgramElement::pendingIOComplete() const
+{
     for (int i = 0; i < fGpuResources.count(); ++i) {
         fGpuResources[i]->pendingIOComplete();
     }
 }
-

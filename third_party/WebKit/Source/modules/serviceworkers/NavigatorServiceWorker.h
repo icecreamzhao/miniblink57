@@ -17,27 +17,31 @@ class ExceptionState;
 class Navigator;
 class ServiceWorkerContainer;
 
-class MODULES_EXPORT NavigatorServiceWorker final : public GarbageCollectedFinalized<NavigatorServiceWorker>, public HeapSupplement<Navigator>, public DOMWindowProperty {
+class MODULES_EXPORT NavigatorServiceWorker final
+    : public GarbageCollected<NavigatorServiceWorker>,
+      public Supplement<Navigator> {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorServiceWorker);
+
 public:
     static NavigatorServiceWorker* from(Document&);
     static NavigatorServiceWorker& from(Navigator&);
     static NavigatorServiceWorker* toNavigatorServiceWorker(Navigator&);
-
-    virtual ~NavigatorServiceWorker();
-
-    static ServiceWorkerContainer* serviceWorker(Navigator&, ExceptionState&);
+    static ServiceWorkerContainer* serviceWorker(ExecutionContext*,
+        Navigator&,
+        ExceptionState&);
+    static ServiceWorkerContainer* serviceWorker(ExecutionContext*,
+        Navigator&,
+        String& errorMessage);
+    void clearServiceWorker();
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit NavigatorServiceWorker(Navigator&);
-    ServiceWorkerContainer* serviceWorker(ExceptionState&);
+    ServiceWorkerContainer* serviceWorker(LocalFrame*, ExceptionState&);
+    ServiceWorkerContainer* serviceWorker(LocalFrame*, String& errorMessage);
 
     static const char* supplementName();
-
-    // DOMWindowProperty override.
-    void willDetachGlobalObjectFromFrame() override;
 
     Member<ServiceWorkerContainer> m_serviceWorker;
 };

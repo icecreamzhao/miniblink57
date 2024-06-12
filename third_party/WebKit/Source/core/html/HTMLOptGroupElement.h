@@ -26,42 +26,55 @@
 
 #include "core/CoreExport.h"
 #include "core/html/HTMLElement.h"
-#include "core/style/ComputedStyle.h"
 
 namespace blink {
 
+class ComputedStyle;
 class HTMLSelectElement;
 class HTMLDivElement;
 
-class CORE_EXPORT HTMLOptGroupElement final : public HTMLElement {
+class CORE_EXPORT HTMLOptGroupElement
+#ifndef ENABLE_WML
+    final
+#endif
+    : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLOptGroupElement> create(Document&);
+    static HTMLOptGroupElement* create(Document&);
 
     bool isDisabledFormControl() const override;
+    String defaultToolTip() const override;
     HTMLSelectElement* ownerSelectElement() const;
 
     String groupLabelText() const;
     HTMLDivElement& optGroupLabelElement() const;
 
+#if ENABLE_WML
+protected:
+#else
 private:
+#endif
     explicit HTMLOptGroupElement(Document&);
+    ~HTMLOptGroupElement();
 
     bool supportsFocus() const override;
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
-    void childrenChanged(const ChildrenChange&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     void accessKeyAction(bool sendMouseEvents) override;
     void didAddUserAgentShadowRoot(ShadowRoot&) override;
-    void attach(const AttachContext& = AttachContext()) override;
-    void detach(const AttachContext& = AttachContext()) override;
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
+    void detachLayoutTree(const AttachContext& = AttachContext()) override;
+    bool matchesEnabledPseudoClass() const override;
+    InsertionNotificationRequest insertedInto(ContainerNode*) override;
+    void removedFrom(ContainerNode*) override;
 
-    // <optgroup> might not have a layoutObject so we manually manage a cached style.
+    // <optgroup> might not have a layoutObject so we manually manage a cached
+    // style.
     void updateNonComputedStyle();
     ComputedStyle* nonLayoutObjectComputedStyle() const override;
     PassRefPtr<ComputedStyle> customStyleForLayoutObject() override;
 
     void updateGroupLabel();
-    void recalcSelectOptions();
 
     RefPtr<ComputedStyle> m_style;
 };

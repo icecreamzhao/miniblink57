@@ -31,7 +31,8 @@
 #ifndef FileWriter_h
 #define FileWriter_h
 
-#include "core/dom/ActiveDOMObject.h"
+#include "bindings/core/v8/ActiveScriptWrappable.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/fileapi/FileError.h"
 #include "modules/EventTargetModules.h"
@@ -45,48 +46,47 @@ class Blob;
 class ExceptionState;
 class ExecutionContext;
 
-class FileWriter final
-#if ENABLE(OILPAN)
-    : public EventTargetWithInlineData
-    , public FileWriterBase
-#else
-    : public FileWriterBase
-    , public EventTargetWithInlineData
-#endif
-    , public ActiveDOMObject
-    , public WebFileWriterClient {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(FileWriterBase);
+class FileWriter final : public EventTargetWithInlineData,
+                         public FileWriterBase,
+                         public ActiveScriptWrappable<FileWriter>,
+                         public ContextLifecycleObserver,
+                         public WebFileWriterClient {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(FileWriter);
+    USING_GARBAGE_COLLECTED_MIXIN(FileWriter);
+    USING_PRE_FINALIZER(FileWriter, dispose);
+
 public:
     static FileWriter* create(ExecutionContext*);
     ~FileWriter() override;
 
-    enum ReadyState {
-        INIT = 0,
-        WRITING = 1,
-        DONE = 2
-    };
+    enum ReadyState { kInit = 0,
+        kWriting = 1,
+        kDone = 2 };
 
     void write(Blob*, ExceptionState&);
     void seek(long long position, ExceptionState&);
     void truncate(long long length, ExceptionState&);
     void abort(ExceptionState&);
-    ReadyState readyState() const { return m_readyState; }
-    FileError* error() const { return m_error.get(); }
+    ReadyState getReadyState() const { return m_readyState; }
+    DOMException* error() const { return m_error.get(); }
 
     // WebFileWriterClient
     void didWrite(long long bytes, bool complete) override;
     void didTruncate() override;
     void didFail(WebFileError) override;
 
-    // ActiveDOMObject
-    void stop() override;
-    bool hasPendingActivity() const override;
+    // ContextLifecycleObserver
+    void contextDestroyed(ExecutionContext*) override;
+
+    // ScriptWrappable
+    bool hasPendingActivity() const final;
 
     // EventTarget
     const AtomicString& interfaceName() const override;
-    ExecutionContext* executionContext() const override { return ActiveDOMObject::executionContext(); }
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextLifecycleObserver::getExecutionContext();
+    }
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(writestart);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(progress);
@@ -117,7 +117,9 @@ private:
 
     void setError(FileError::ErrorCode, ExceptionState&);
 
-    Member<FileError> m_error;
+    void dispose();
+
+    Member<DOMException> m_error;
     ReadyState m_readyState;
     Operation m_operationInProgress;
     Operation m_queuedOperation;
@@ -128,7 +130,6 @@ private:
     long long m_recursionDepth;
     double m_lastProgressNotificationTimeMS;
     Member<Blob> m_blobBeingWritten;
-    int m_asyncOperationId;
 };
 
 } // namespace blink

@@ -37,7 +37,7 @@ Design doc: http://www.chromium.org/developers/design-documents/idl-compiler#TOC
 """
 
 import os.path
-from utilities import idl_filename_to_component, is_valid_component_dependency
+from utilities import idl_filename_to_component, is_valid_component_dependency, merge_dict_recursively
 
 # The following extended attributes can be applied to a dependency interface,
 # and are then applied to the individual members when merging.
@@ -45,9 +45,9 @@ from utilities import idl_filename_to_component, is_valid_component_dependency
 # which changes the semantics and yields different code than the same extended
 # attribute on the main interface.
 DEPENDENCY_EXTENDED_ATTRIBUTES = frozenset([
-    'Conditional',
+    'OriginTrialEnabled',
     'RuntimeEnabled',
-    'TypeChecking',
+    'SecureContext',
 ])
 
 
@@ -118,6 +118,8 @@ class InterfaceDependencyResolver(object):
             interface_info['dependencies_full_paths'] +
             interface_info['dependencies_other_component_full_paths'],
             self.reader)
+
+        inherit_unforgeable_attributes(resolved_definitions, self.interfaces_info)
 
         for referenced_interface_name in interface_info['referenced_interfaces']:
             referenced_definitions = self.reader.read_idl_definitions(
@@ -202,7 +204,7 @@ def merge_interface_dependencies(definitions, component, target_interface, depen
             # cpp class to obtain partial interface's cpp class.
             # e.g.. V8WindowPartial.cpp:
             #   DOMWindow* impl = V8Window::toImpl(holder);
-            #   RawPtr<...> cppValue(DOMWindowQuota::webkitStorageInfo(impl));
+            #   DOMWindowQuota* cppValue(DOMWindowQuota::webkitStorageInfo(impl));
             # TODO(tasak): remove ImplementedAs extended attributes
             # from all partial interfaces. Instead, rename all cpp/header
             # files correctly. ImplementedAs should not be allowed in
@@ -253,17 +255,24 @@ def transfer_extended_attributes(dependency_interface, dependency_interface_base
     interface post-merging).
 
     The data storing consists of:
-    * applying certain extended attributes from the dependency interface
-      to its members
+    * moving certain extended attributes from the dependency interface
+      to its members (deleting the extended attribute from the interface)
     * storing the C++ class of the implementation in an internal
       extended attribute of each member, [PartialInterfaceImplementedAs]
 
     No return: modifies dependency_interface in place.
     """
-    merged_extended_attributes = dict(
-        (key, value)
-        for key, value in dependency_interface.extended_attributes.iteritems()
-        if key in DEPENDENCY_EXTENDED_ATTRIBUTES)
+    merged_extended_attributes = {}
+    for key in DEPENDENCY_EXTENDED_ATTRIBUTES:
+        if key not in dependency_interface.extended_attributes:
+            continue
+
+        merged_extended_attributes[key] = dependency_interface.extended_attributes[key]
+        # Remove the merged attributes from the original dependency interface.
+        # This ensures that if other dependency interfaces are merged onto this
+        # one, its extended_attributes do not leak through
+        # (https://crbug.com/603782).
+        del dependency_interface.extended_attributes[key]
 
     # A partial interface's members are implemented as static member functions
     # in a separate C++ class. This class name is stored in
@@ -291,7 +300,7 @@ def transfer_extended_attributes(dependency_interface, dependency_interface_base
     if (dependency_interface.is_partial or
         'LegacyTreatAsPartialInterface' in dependency_interface.extended_attributes):
         merged_extended_attributes['PartialInterfaceImplementedAs'] = (
-            dependency_interface.extended_attributes.get(
+            dependency_interface.extended_attributes.pop(
                 'ImplementedAs', dependency_interface_basename))
 
     def update_attributes(attributes, extras):
@@ -305,3 +314,42 @@ def transfer_extended_attributes(dependency_interface, dependency_interface_base
         update_attributes(constant.extended_attributes, merged_extended_attributes)
     for operation in dependency_interface.operations:
         update_attributes(operation.extended_attributes, merged_extended_attributes)
+
+
+def inherit_unforgeable_attributes(resolved_definitions, interfaces_info):
+    """Inherits [Unforgeable] attributes and updates the arguments accordingly.
+
+    For each interface in |resolved_definitions|, collects all [Unforgeable]
+    attributes in ancestor interfaces in the same component and adds them to
+    the interface.  'referenced_interfaces' and 'cpp_includes' in
+    |interfaces_info| are updated accordingly.
+    """
+    def collect_unforgeable_attributes_in_ancestors(interface_name, component):
+        if not interface_name:
+            # unforgeable_attributes, referenced_interfaces, cpp_includes
+            return [], [], set()
+        interface = interfaces_info[interface_name]
+        unforgeable_attributes, referenced_interfaces, cpp_includes = collect_unforgeable_attributes_in_ancestors(interface.get('parent'), component)
+        this_unforgeable = interface.get('unforgeable_attributes', {}).get(component, [])
+        unforgeable_attributes.extend(this_unforgeable)
+        this_referenced = [attr.idl_type.base_type for attr in this_unforgeable
+                           if attr.idl_type.base_type in
+                           interface.get('referenced_interfaces', [])]
+        referenced_interfaces.extend(this_referenced)
+        cpp_includes.update(interface.get('cpp_includes', {}).get(component, {}))
+        return unforgeable_attributes, referenced_interfaces, cpp_includes
+
+    for component, definitions in resolved_definitions.iteritems():
+        for interface_name, interface in definitions.interfaces.iteritems():
+            interface_info = interfaces_info[interface_name]
+            inherited_unforgeable_attributes, referenced_interfaces, cpp_includes = collect_unforgeable_attributes_in_ancestors(interface_info.get('parent'), component)
+            # This loop may process the same interface many times, so it's
+            # possible that we're adding the same attributes twice or more.
+            # So check if there is a duplicate.
+            for attr in inherited_unforgeable_attributes:
+                if attr not in interface.attributes:
+                    interface.attributes.append(attr)
+            referenced_interfaces.extend(interface_info.get('referenced_interfaces', []))
+            interface_info['referenced_interfaces'] = sorted(set(referenced_interfaces))
+            merge_dict_recursively(interface_info,
+                                   {'cpp_includes': {component: cpp_includes}})

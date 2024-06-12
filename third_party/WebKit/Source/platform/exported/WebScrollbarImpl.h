@@ -10,16 +10,16 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WebScrollbarImpl_h
@@ -28,18 +28,24 @@
 #include "platform/PlatformExport.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebScrollbar.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/PtrUtil.h"
+
+#include <memory>
 
 namespace blink {
 
 class Scrollbar;
 class PLATFORM_EXPORT WebScrollbarImpl final : public WebScrollbar {
-public:
-    static WebScrollbarImpl* create(Scrollbar* scrollbar)
-    {
-        return new WebScrollbarImpl(scrollbar);
-    }
+    USING_FAST_MALLOC(WebScrollbarImpl);
+    WTF_MAKE_NONCOPYABLE(WebScrollbarImpl);
 
-    ~WebScrollbarImpl();
+public:
+    static std::unique_ptr<WebScrollbarImpl> create(Scrollbar* scrollbar)
+    {
+        return WTF::wrapUnique(new WebScrollbarImpl(scrollbar));
+    }
 
     // Implement WebScrollbar methods
     bool isOverlay() const override;
@@ -54,19 +60,17 @@ public:
     ScrollbarControlSize controlSize() const override;
     ScrollbarPart pressedPart() const override;
     ScrollbarPart hoveredPart() const override;
-    ScrollbarOverlayStyle scrollbarOverlayStyle() const override;
+    WebScrollbarOverlayColorTheme scrollbarOverlayColorTheme() const override;
     bool isCustomScrollbar() const override;
     Orientation orientation() const override;
     bool isLeftSideVerticalScrollbar() const override;
-    bool isAlphaLocked() const override;
-    void setIsAlphaLocked(bool) override;
     float elasticOverscroll() const override;
     void setElasticOverscroll(float) override;
 
 private:
     explicit WebScrollbarImpl(Scrollbar*);
 
-    RefPtrWillBePersistent<Scrollbar> m_scrollbar;
+    Persistent<Scrollbar> m_scrollbar;
 };
 
 } // namespace blink

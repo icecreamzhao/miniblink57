@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,14 +5,15 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkGraphics.h"
 #include "SkRandom.h"
+#include "SkView.h"
 
 #include <pthread.h>
 
-static void call_measure() {
+static void call_measure()
+{
     SkPaint paint;
     uint16_t text[32];
     SkRandom rand;
@@ -32,7 +32,8 @@ static void call_measure() {
     }
 }
 
-static void call_draw(SkCanvas* canvas) {
+static void call_draw(SkCanvas* canvas)
+{
     SkPaint paint;
     uint16_t text[32];
     SkRandom rand;
@@ -46,8 +47,7 @@ static void call_draw(SkCanvas* canvas) {
     SkScalar y = SkIntToScalar(20);
 
     canvas->drawColor(SK_ColorWHITE);
-    for (int i = 9; i < 36; i++)
-    {
+    for (int i = 9; i < 36; i++) {
         SkPaint::FontMetrics m;
 
         paint.setTextSize(SkIntToScalar(i));
@@ -59,49 +59,53 @@ static void call_draw(SkCanvas* canvas) {
 
 static bool gDone;
 
-static void* measure_proc(void* context) {
+static void* measure_proc(void* context)
+{
     while (!gDone) {
         call_measure();
     }
-    return NULL;
+    return nullptr;
 }
 
-static void* draw_proc(void* context) {
+static void* draw_proc(void* context)
+{
     SkBitmap* bm = (SkBitmap*)context;
-    SkCanvas    canvas(*bm);
+    SkCanvas canvas(*bm);
 
     while (!gDone) {
         call_draw(&canvas);
     }
-    return NULL;
+    return nullptr;
 }
 
 class FontCacheView : public SampleView {
 public:
     enum { N = 4 };
 
-    pthread_t   fMThreads[N];
-    pthread_t   fDThreads[N];
-    SkBitmap    fBitmaps[N];
+    pthread_t fMThreads[N];
+    pthread_t fDThreads[N];
+    SkBitmap fBitmaps[N];
 
-    FontCacheView() {
+    FontCacheView()
+    {
         gDone = false;
         for (int i = 0; i < N; i++) {
             int status;
 
-            status = pthread_create(&fMThreads[i], NULL,  measure_proc, NULL);
+            status = pthread_create(&fMThreads[i], nullptr, measure_proc, nullptr);
             SkASSERT(0 == status);
 
             fBitmaps[i].allocPixels(SkImageInfo::Make(320, 240,
-                                                      kRGB_565_SkColorType,
-                                                      kOpaque_SkAlphaType));
-            status = pthread_create(&fDThreads[i], NULL,  draw_proc, &fBitmaps[i]);
+                kRGB_565_SkColorType,
+                kOpaque_SkAlphaType));
+            status = pthread_create(&fDThreads[i], nullptr, draw_proc, &fBitmaps[i]);
             SkASSERT(0 == status);
         }
         this->setBGColor(0xFFDDDDDD);
     }
 
-    virtual ~FontCacheView() {
+    virtual ~FontCacheView()
+    {
         gDone = true;
         for (int i = 0; i < N; i++) {
             void* ret;
@@ -114,7 +118,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "FontCache");
             return true;
@@ -122,14 +127,15 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkScalar x = 0;
         SkScalar y = 0;
         for (int i = 0; i < N; i++) {
             canvas->drawBitmap(fBitmaps[i], x, y);
             x += SkIntToScalar(fBitmaps[i].width());
         }
-        this->inval(NULL);
+        this->inval(nullptr);
     }
 
 private:

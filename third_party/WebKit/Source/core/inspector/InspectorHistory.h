@@ -40,12 +40,11 @@ namespace blink {
 
 class ExceptionState;
 
-class InspectorHistory final : public NoBaseWillBeGarbageCollected<InspectorHistory> {
+class InspectorHistory final : public GarbageCollected<InspectorHistory> {
     WTF_MAKE_NONCOPYABLE(InspectorHistory);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(InspectorHistory);
+
 public:
-    class Action : public RefCountedWillBeGarbageCollectedFinalized<Action> {
-        WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(Action);
+    class Action : public GarbageCollectedFinalized<Action> {
     public:
         explicit Action(const String& name);
         virtual ~Action();
@@ -53,7 +52,7 @@ public:
         virtual String toString();
 
         virtual String mergeId();
-        virtual void merge(PassRefPtrWillBeRawPtr<Action>);
+        virtual void merge(Action*);
 
         virtual bool perform(ExceptionState&) = 0;
 
@@ -63,6 +62,7 @@ public:
         virtual bool isNoop() { return false; }
 
         virtual bool isUndoableStateMark();
+
     private:
         String m_name;
     };
@@ -70,7 +70,8 @@ public:
     InspectorHistory();
     DECLARE_TRACE();
 
-    bool perform(PassRefPtrWillBeRawPtr<Action>, ExceptionState&);
+    bool perform(Action*, ExceptionState&);
+    void appendPerformedAction(Action*);
     void markUndoableState();
 
     bool undo(ExceptionState&);
@@ -78,10 +79,9 @@ public:
     void reset();
 
 private:
-    WillBeHeapVector<RefPtrWillBeMember<Action> > m_history;
+    HeapVector<Member<Action>> m_history;
     size_t m_afterLastActionIndex;
 };
-
 
 } // namespace blink
 

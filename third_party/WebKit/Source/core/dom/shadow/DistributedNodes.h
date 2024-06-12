@@ -38,19 +38,24 @@
 namespace blink {
 
 class DistributedNodes final {
-    DISALLOW_ALLOCATION();
-public:
-    DistributedNodes() { m_nodes.reserveInitialCapacity(32); }
+    DISALLOW_NEW();
 
-    PassRefPtrWillBeRawPtr<Node> first() const { return m_nodes.first(); }
-    PassRefPtrWillBeRawPtr<Node> last() const { return m_nodes.last(); }
-    PassRefPtrWillBeRawPtr<Node> at(size_t index) const { return m_nodes.at(index); }
+public:
+    DistributedNodes() { }
+
+    Node* first() const { return m_nodes.front(); }
+    Node* last() const { return m_nodes.back(); }
+    Node* at(size_t index) const { return m_nodes.at(index); }
 
     size_t size() const { return m_nodes.size(); }
     bool isEmpty() const { return m_nodes.isEmpty(); }
 
-    void append(PassRefPtrWillBeRawPtr<Node>);
-    void clear() { m_nodes.clear(); m_indices.clear(); }
+    void append(Node*);
+    void clear()
+    {
+        m_nodes.clear();
+        m_indices.clear();
+    }
     void shrinkToFit() { m_nodes.shrinkToFit(); }
 
     bool contains(const Node* node) const { return m_indices.contains(node); }
@@ -60,15 +65,13 @@ public:
 
     void swap(DistributedNodes& other);
 
-    const WillBeHeapVector<RefPtrWillBeMember<Node>>& nodes() const { return m_nodes; }
-
     DECLARE_TRACE();
 
 private:
-    WillBeHeapVector<RefPtrWillBeMember<Node>> m_nodes;
-    WillBeHeapHashMap<RawPtrWillBeMember<const Node>, size_t> m_indices;
+    HeapVector<Member<Node>> m_nodes;
+    HeapHashMap<Member<const Node>, size_t> m_indices;
 };
 
-}
+} // namespace blink
 
 #endif

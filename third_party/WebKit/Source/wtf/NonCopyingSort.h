@@ -31,8 +31,11 @@ namespace WTF {
 
 using std::swap;
 
-template<typename RandomAccessIterator, typename Predicate>
-inline void siftDown(RandomAccessIterator array, ptrdiff_t start, ptrdiff_t end, Predicate compareLess)
+template <typename RandomAccessIterator, typename Predicate>
+inline void siftDown(RandomAccessIterator array,
+    ptrdiff_t start,
+    ptrdiff_t end,
+    Predicate compareLess)
 {
     ptrdiff_t root = start;
 
@@ -44,13 +47,16 @@ inline void siftDown(RandomAccessIterator array, ptrdiff_t start, ptrdiff_t end,
         if (compareLess(array[root], array[child])) {
             swap(array[root], array[child]);
             root = child;
-        } else
+        } else {
             return;
+        }
     }
 }
 
-template<typename RandomAccessIterator, typename Predicate>
-inline void heapify(RandomAccessIterator array, ptrdiff_t count, Predicate compareLess)
+template <typename RandomAccessIterator, typename Predicate>
+inline void heapify(RandomAccessIterator array,
+    ptrdiff_t count,
+    Predicate compareLess)
 {
     ptrdiff_t start = (count - 2) / 2;
 
@@ -60,8 +66,10 @@ inline void heapify(RandomAccessIterator array, ptrdiff_t count, Predicate compa
     }
 }
 
-template<typename RandomAccessIterator, typename Predicate>
-void heapSort(RandomAccessIterator start, RandomAccessIterator end, Predicate compareLess)
+template <typename RandomAccessIterator, typename Predicate>
+void heapSort(RandomAccessIterator start,
+    RandomAccessIterator end,
+    Predicate compareLess)
 {
     ptrdiff_t count = end - start;
     heapify(start, count, compareLess);
@@ -74,11 +82,14 @@ void heapSort(RandomAccessIterator start, RandomAccessIterator end, Predicate co
     }
 }
 
-template<typename RandomAccessIterator, typename Predicate>
-inline void nonCopyingSort(RandomAccessIterator start, RandomAccessIterator end, Predicate compareLess)
+template <typename RandomAccessIterator, typename Predicate>
+inline void nonCopyingSort(RandomAccessIterator start,
+    RandomAccessIterator end,
+    Predicate compareLess)
 {
-    // heapsort happens to use only swaps, not copies, but the essential thing about
-    // this function is the fact that it does not copy, not the specific algorithm
+    // heapsort happens to use only swaps, not copies, but the essential thing
+    // about this function is the fact that it does not copy, not the specific
+    // algorithm
     heapSort(start, end, compareLess);
 }
 

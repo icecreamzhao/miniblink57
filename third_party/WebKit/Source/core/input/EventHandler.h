@@ -27,8 +27,12 @@
 #define EventHandler_h
 
 #include "core/CoreExport.h"
-#include "core/events/PointerIdManager.h"
 #include "core/events/TextEventInputType.h"
+#include "core/input/GestureManager.h"
+#include "core/input/KeyboardEventManager.h"
+#include "core/input/MouseEventManager.h"
+#include "core/input/PointerEventManager.h"
+#include "core/input/ScrollManager.h"
 #include "core/layout/HitTestRequest.h"
 #include "core/page/DragActions.h"
 #include "core/page/EventWithHitTestResults.h"
@@ -36,12 +40,12 @@
 #include "platform/Cursor.h"
 #include "platform/PlatformMouseEvent.h"
 #include "platform/PlatformTouchPoint.h"
-#include "platform/Timer.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/geometry/LayoutPoint.h"
 #include "platform/heap/Handle.h"
 #include "platform/scroll/ScrollTypes.h"
-#include "public/platform/WebFocusType.h"
+#include "public/platform/WebInputEvent.h"
+#include "public/platform/WebInputEventResult.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashTraits.h"
@@ -49,79 +53,79 @@
 
 namespace blink {
 
-class AutoscrollController;
 class DataTransfer;
-class DeprecatedPaintLayer;
-class DeprecatedPaintLayerScrollableArea;
-class Document;
-class DragState;
+class PaintLayer;
 class Element;
 class Event;
 class EventTarget;
 template <typename EventType>
 class EventWithHitTestResults;
-class FloatPoint;
 class FloatQuad;
+class FrameHost;
 class HTMLFrameSetElement;
 class HitTestRequest;
 class HitTestResult;
-class KeyboardEvent;
 class LayoutObject;
 class LocalFrame;
 class Node;
 class OptionalCursor;
-class PlatformGestureEvent;
-class PlatformKeyboardEvent;
 class PlatformTouchEvent;
-class PlatformWheelEvent;
 class ScrollableArea;
 class Scrollbar;
-class ScrollState;
 class SelectionController;
 class TextEvent;
-class WheelEvent;
-class Widget;
+class WebGestureEvent;
+class WebMouseWheelEvent;
 
-enum class DragInitiator;
-
-class CORE_EXPORT EventHandler : public NoBaseWillBeGarbageCollectedFinalized<EventHandler> {
+class CORE_EXPORT EventHandler final
+    : public GarbageCollectedFinalized<EventHandler> {
     WTF_MAKE_NONCOPYABLE(EventHandler);
+
 public:
-    explicit EventHandler(LocalFrame*);
-    ~EventHandler();
+    explicit EventHandler(LocalFrame&);
     DECLARE_TRACE();
 
     void clear();
-    void nodeWillBeRemoved(Node&);
 
     void updateSelectionForMouseDrag();
+    void startMiddleClickAutoscroll(LayoutObject*);
 
-#if OS(WIN)
-    void startPanScrolling(LayoutObject*);
-#endif
+    // TODO(nzolghadr): Some of the APIs in this class only forward the action
+    // to the corresponding Manager class. We need to investigate whether it is
+    // better to expose the manager instance itself later or can the access to
+    // those APIs be more limited or removed.
 
     void stopAutoscroll();
 
     void dispatchFakeMouseMoveEventSoon();
     void dispatchFakeMouseMoveEventSoonInQuad(const FloatQuad&);
 
-    HitTestResult hitTestResultAtPoint(const LayoutPoint&,
+    HitTestResult hitTestResultAtPoint(
+        const LayoutPoint&,
         HitTestRequest::HitTestRequestType hitType = HitTestRequest::ReadOnly | HitTestRequest::Active,
         const LayoutSize& padding = LayoutSize());
 
-    bool mousePressed() const { return m_mousePressed; }
+    bool mousePressed() const { return m_mouseEventManager->mousePressed(); }
+    bool isMousePositionUnknown() const
+    {
+        return m_mouseEventManager->isMousePositionUnknown();
+    }
+    void clearMouseEventManager() const { m_mouseEventManager->clear(); }
+    void setCapturingMouseEventsNode(
+        Node*); // A caller is responsible for resetting capturing node to 0.
 
-    void setCapturingMouseEventsNode(PassRefPtrWillBeRawPtr<Node>); // A caller is responsible for resetting capturing node to 0.
-
-    bool updateDragAndDrop(const PlatformMouseEvent&, DataTransfer*);
+    WebInputEventResult updateDragAndDrop(const PlatformMouseEvent&,
+        DataTransfer*);
     void cancelDragAndDrop(const PlatformMouseEvent&, DataTransfer*);
-    bool performDragAndDrop(const PlatformMouseEvent&, DataTransfer*);
+    WebInputEventResult performDragAndDrop(const PlatformMouseEvent&,
+        DataTransfer*);
     void updateDragStateAfterEditDragIfNeeded(Element* rootEditableElement);
 
     void scheduleHoverStateUpdate();
     void scheduleCursorUpdate();
 
-    // Return whether a mouse cursor update is currently pending.  Used for testing.
+    // Return whether a mouse cursor update is currently pending.  Used for
+    // testing.
     bool cursorUpdatePending();
 
     void setResizingFrameSet(HTMLFrameSetElement*);
@@ -130,183 +134,203 @@ public:
 
     IntPoint lastKnownMousePosition() const;
 
-    // Attempts to scroll the DOM tree. If that fails, scrolls the view.
-    // If the view can't be scrolled either, recursively bubble to the parent frame.
-    bool bubblingScroll(ScrollDirection, ScrollGranularity, Node* startingNode = nullptr);
+    IntPoint dragDataTransferLocationForTesting();
 
-    bool handleMouseMoveEvent(const PlatformMouseEvent&);
+    // Performs a logical scroll that chains, crossing frames, starting from
+    // the given node or a reasonable default (focus/last clicked).
+    bool bubblingScroll(ScrollDirection,
+        ScrollGranularity,
+        Node* startingNode = nullptr);
+
+    WebInputEventResult handleMouseMoveEvent(
+        const PlatformMouseEvent&,
+        const Vector<PlatformMouseEvent>& coalescedEvents);
     void handleMouseLeaveEvent(const PlatformMouseEvent&);
 
-    bool handleMousePressEvent(const PlatformMouseEvent&);
-    bool handleMouseReleaseEvent(const PlatformMouseEvent&);
-    bool handleWheelEvent(const PlatformWheelEvent&);
-    void defaultWheelEventHandler(Node*, WheelEvent*);
+    WebInputEventResult handleMousePressEvent(const PlatformMouseEvent&);
+    WebInputEventResult handleMouseReleaseEvent(const PlatformMouseEvent&);
+    WebInputEventResult handleWheelEvent(const WebMouseWheelEvent&);
 
     // Called on the local root frame exactly once per gesture event.
-    bool handleGestureEvent(const PlatformGestureEvent&);
-    bool handleGestureEvent(const GestureEventWithHitTestResults&);
+    WebInputEventResult handleGestureEvent(const WebGestureEvent&);
+    WebInputEventResult handleGestureEvent(const GestureEventWithHitTestResults&);
 
-    // Clear the old hover/active state within frames before moving the hover state to the another frame
+    // Clear the old hover/active state within frames before moving the hover
+    // state to the another frame
     void updateGestureHoverActiveState(const HitTestRequest&, Element*);
 
-    // Hit-test the provided (non-scroll) gesture event, applying touch-adjustment and updating
-    // hover/active state across all frames if necessary. This should be called at most once
-    // per gesture event, and called on the local root frame.
+    // Hit-test the provided (non-scroll) gesture event, applying touch-adjustment
+    // and updating hover/active state across all frames if necessary. This should
+    // be called at most once per gesture event, and called on the local root
+    // frame.
     // Note: This is similar to (the less clearly named) prepareMouseEvent.
     // FIXME: Remove readOnly param when there is only ever a single call to this.
-    GestureEventWithHitTestResults targetGestureEvent(const PlatformGestureEvent&, bool readOnly = false);
-    GestureEventWithHitTestResults hitTestResultForGestureEvent(const PlatformGestureEvent&, HitTestRequest::HitTestRequestType);
-    // Handle the provided non-scroll gesture event. Should be called only on the inner frame.
-    bool handleGestureEventInFrame(const GestureEventWithHitTestResults&);
+    GestureEventWithHitTestResults targetGestureEvent(const WebGestureEvent&,
+        bool readOnly = false);
+    GestureEventWithHitTestResults hitTestResultForGestureEvent(
+        const WebGestureEvent&,
+        HitTestRequest::HitTestRequestType);
+    // Handle the provided non-scroll gesture event. Should be called only on the
+    // inner frame.
+    WebInputEventResult handleGestureEventInFrame(
+        const GestureEventWithHitTestResults&);
 
-    // Handle the provided scroll gesture event, propagating down to child frames as necessary.
-    bool handleGestureScrollEvent(const PlatformGestureEvent&);
-    bool handleGestureScrollEnd(const PlatformGestureEvent&);
+    // Handle the provided scroll gesture event, propagating down to child frames
+    // as necessary.
+    WebInputEventResult handleGestureScrollEvent(const WebGestureEvent&);
+    WebInputEventResult handleGestureScrollEnd(const WebGestureEvent&);
     bool isScrollbarHandlingGestures() const;
 
-    bool bestClickableNodeForHitTestResult(const HitTestResult&, IntPoint& targetPoint, Node*& targetNode);
-    bool bestContextMenuNodeForHitTestResult(const HitTestResult&, IntPoint& targetPoint, Node*& targetNode);
-    // FIXME: This doesn't appear to be used outside tests anymore, what path are we using now and is it tested?
-    bool bestZoomableAreaForTouchPoint(const IntPoint& touchCenter, const IntSize& touchRadius, IntRect& targetArea, Node*& targetNode);
+    bool bestClickableNodeForHitTestResult(const HitTestResult&,
+        IntPoint& targetPoint,
+        Node*& targetNode);
+    bool bestContextMenuNodeForHitTestResult(const HitTestResult&,
+        IntPoint& targetPoint,
+        Node*& targetNode);
+    // FIXME: This doesn't appear to be used outside tests anymore, what path are
+    // we using now and is it tested?
+    bool bestZoomableAreaForTouchPoint(const IntPoint& touchCenter,
+        const IntSize& touchRadius,
+        IntRect& targetArea,
+        Node*& targetNode);
 
-    bool sendContextMenuEvent(const PlatformMouseEvent&, Node* overrideTargetNode = nullptr);
-    bool sendContextMenuEventForKey(Element* overrideTargetElement = nullptr);
-    bool sendContextMenuEventForGesture(const GestureEventWithHitTestResults&);
+    WebInputEventResult sendContextMenuEvent(const PlatformMouseEvent&,
+        Node* overrideTargetNode = nullptr);
+    WebInputEventResult sendContextMenuEventForKey(
+        Element* overrideTargetElement = nullptr);
 
-    void setMouseDownMayStartAutoscroll() { m_mouseDownMayStartAutoscroll = true; }
+    // Returns whether pointerId is active or not
+    bool isPointerEventActive(int);
 
-    static unsigned accessKeyModifiers();
-    bool handleAccessKey(const PlatformKeyboardEvent&);
-    bool keyEvent(const PlatformKeyboardEvent&);
+    void setPointerCapture(int, EventTarget*);
+    void releasePointerCapture(int, EventTarget*);
+    bool hasPointerCapture(int, const EventTarget*) const;
+    bool hasProcessedPointerCapture(int, const EventTarget*) const;
+
+    void elementRemoved(EventTarget*);
+
+    void setMouseDownMayStartAutoscroll();
+
+    bool handleAccessKey(const WebKeyboardEvent&);
+    WebInputEventResult keyEvent(const WebKeyboardEvent&);
     void defaultKeyboardEventHandler(KeyboardEvent*);
 
-    bool handleTextInputEvent(const String& text, Event* underlyingEvent = nullptr, TextEventInputType = TextEventInputKeyboard);
+    bool handleTextInputEvent(const String& text,
+        Event* underlyingEvent = nullptr,
+        TextEventInputType = TextEventInputKeyboard);
     void defaultTextInputEventHandler(TextEvent*);
 
     void dragSourceEndedAt(const PlatformMouseEvent&, DragOperation);
 
-    void focusDocumentView();
-
     void capsLockStateMayHaveChanged(); // Only called by FrameSelection
 
-    bool handleTouchEvent(const PlatformTouchEvent&);
+    WebInputEventResult handleTouchEvent(
+        const PlatformTouchEvent&,
+        const Vector<PlatformTouchEvent>& coalescedEvents);
 
     bool useHandCursor(Node*, bool isOverLink);
 
     void notifyElementActivated();
 
-    PassRefPtr<UserGestureToken> takeLastMouseDownGestureToken() { return m_lastMouseDownUserGestureToken.release(); }
+    PassRefPtr<UserGestureToken> takeLastMouseDownGestureToken()
+    {
+        return std::move(m_lastMouseDownUserGestureToken);
+    }
 
-    int clickCount() { return m_clickCount; }
+    SelectionController& selectionController() const
+    {
+        return *m_selectionController;
+    }
 
-    SelectionController& selectionController() const { return *m_selectionController; }
+    // FIXME(nzolghadr): This function is technically a private function of
+    // EventHandler class. Making it public temporary to make it possible to
+    // move some code around in the refactoring process.
+    // Performs a chaining logical scroll, within a *single* frame, starting
+    // from either a provided starting node or a default based on the focused or
+    // most recently clicked node, falling back to the frame.
+    // Returns true if the scroll was consumed.
+    // direction - The logical direction to scroll in. This will be converted to
+    //             a physical direction for each LayoutBox we try to scroll
+    //             based on that box's writing mode.
+    // granularity - The units that the  scroll delta parameter is in.
+    // startNode - Optional. If provided, start chaining from the given node.
+    //             If not, use the current focus or last clicked node.
+    bool logicalScroll(ScrollDirection,
+        ScrollGranularity,
+        Node* startNode = nullptr);
 
-    class TouchInfo {
-        ALLOW_ONLY_INLINE_ALLOCATION();
-    public:
-        DEFINE_INLINE_TRACE()
-        {
-            visitor->trace(touchTarget);
-            visitor->trace(targetFrame);
-        }
-
-        PlatformTouchPoint point;
-        RefPtrWillBeMember<EventTarget> touchTarget;
-        RefPtrWillBeMember<LocalFrame> targetFrame;
-        FloatPoint adjustedPagePoint;
-        FloatSize adjustedRadius;
-        bool knownTarget;
-        bool consumed;
-    };
+    bool isTouchPointerIdActiveOnFrame(int, LocalFrame*) const;
 
 private:
-    static DragState& dragState();
+    WebInputEventResult handleMouseMoveOrLeaveEvent(
+        const PlatformMouseEvent&,
+        const Vector<PlatformMouseEvent>&,
+        HitTestResult* hoveredNode = nullptr,
+        bool onlyUpdateScrollbars = false,
+        bool forceLeave = false);
 
-    DataTransfer* createDraggingDataTransfer() const;
+    HitTestRequest::HitTestRequestType getHitTypeForGestureType(
+        PlatformEvent::EventType);
+    void applyTouchAdjustment(WebGestureEvent*, HitTestResult*);
+    WebInputEventResult handleGestureTapDown(
+        const GestureEventWithHitTestResults&);
+    WebInputEventResult handleGestureTap(const GestureEventWithHitTestResults&);
+    WebInputEventResult handleGestureLongPress(
+        const GestureEventWithHitTestResults&);
+    WebInputEventResult handleGestureLongTap(
+        const GestureEventWithHitTestResults&);
 
-    bool handleMouseMoveOrLeaveEvent(const PlatformMouseEvent&, HitTestResult* hoveredNode = nullptr, bool onlyUpdateScrollbars = false, bool forceLeave = false);
-    bool handleMousePressEvent(const MouseEventWithHitTestResults&);
-    bool handleMouseFocus(const MouseEventWithHitTestResults&);
-    bool handleMouseDraggedEvent(const MouseEventWithHitTestResults&);
-    bool handleMouseReleaseEvent(const MouseEventWithHitTestResults&);
+    void updateGestureTargetNodeForMouseEvent(
+        const GestureEventWithHitTestResults&);
 
-    HitTestRequest::HitTestRequestType getHitTypeForGestureType(PlatformEvent::Type);
-    void applyTouchAdjustment(PlatformGestureEvent*, HitTestResult*);
-    bool handleGestureTap(const GestureEventWithHitTestResults&);
-    bool handleGestureLongPress(const GestureEventWithHitTestResults&);
-    bool handleGestureLongTap(const GestureEventWithHitTestResults&);
-    bool handleGestureScrollUpdate(const PlatformGestureEvent&);
-    bool handleGestureScrollBegin(const PlatformGestureEvent&);
-    void clearGestureScrollState();
-
-    bool shouldApplyTouchAdjustment(const PlatformGestureEvent&) const;
+    bool shouldApplyTouchAdjustment(const WebGestureEvent&) const;
 
     OptionalCursor selectCursor(const HitTestResult&);
-    OptionalCursor selectAutoCursor(const HitTestResult&, Node*, const Cursor& iBeam);
+    OptionalCursor selectAutoCursor(const HitTestResult&,
+        Node*,
+        const Cursor& iBeam);
 
-    void hoverTimerFired(Timer<EventHandler>*);
-    void cursorUpdateTimerFired(Timer<EventHandler>*);
-    void activeIntervalTimerFired(Timer<EventHandler>*);
+    void hoverTimerFired(TimerBase*);
+    void cursorUpdateTimerFired(TimerBase*);
+    void activeIntervalTimerFired(TimerBase*);
 
-    void fakeMouseMoveEventTimerFired(Timer<EventHandler>*);
-    void cancelFakeMouseMoveEvent();
-    bool isCursorVisible() const;
     void updateCursor();
 
-    ScrollableArea* associatedScrollableArea(const DeprecatedPaintLayer*) const;
+    ScrollableArea* associatedScrollableArea(const PaintLayer*) const;
 
-    // Scrolls the elements of the DOM tree. Returns true if a node was scrolled.
-    // False if we reached the root and couldn't scroll anything.
-    // direction - The direction to scroll in. If this is a logical direction, it will be
-    //             converted to the physical direction based on a node's writing mode.
-    // granularity - The units that the  scroll delta parameter is in.
-    // startNode - The node to start bubbling the scroll from. If a node can't scroll,
-    //             the scroll bubbles up to the containing block.
-    // stopNode - On input, if provided and non-null, the node at which we should stop bubbling on input.
-    //            On output, if provided and a node was scrolled stopNode will point to that node.
-    // delta - The delta to scroll by, in the units of the granularity parameter. (e.g. pixels, lines, pages, etc.)
-    // absolutePoint - For wheel scrolls - the location, in absolute coordinates, where the event occured.
-    ScrollResultOneDimensional scroll(ScrollDirection, ScrollGranularity, Node* startNode = nullptr, Node** stopNode = nullptr, float delta = 1.0f, IntPoint absolutePoint = IntPoint());
+    Node* updateMouseEventTargetNode(Node*);
 
-    void resetOverscroll(bool didScrollX, bool didScrollY);
-    void handleOverscroll(const ScrollResult&, const FloatPoint& position = FloatPoint(), const FloatSize& velocity = FloatSize());
+    // Dispatches ME after corresponding PE provided the PE has not been canceled.
+    // The eventType arg must be a mouse event that can be gated though a
+    // preventDefaulted pointerdown (i.e., one of
+    // {mousedown, mousemove, mouseup}).
+    // TODO(mustaq): Can we avoid the clickCount param, instead use
+    // PlatformMouseEvent's count?
+    //     Same applied to dispatchMouseEvent() above.
+    WebInputEventResult updatePointerTargetAndDispatchEvents(
+        const AtomicString& mouseEventType,
+        Node* target,
+        const PlatformMouseEvent&,
+        const Vector<PlatformMouseEvent>& coalescedEvents);
 
-    void customizedScroll(const Node& startNode, ScrollState&);
-
-    TouchAction intersectTouchAction(const TouchAction, const TouchAction);
-    TouchAction computeEffectiveTouchAction(const Node&);
-
-    HitTestResult hitTestResultInFrame(LocalFrame*, const LayoutPoint&, HitTestRequest::HitTestRequestType hitType = HitTestRequest::ReadOnly | HitTestRequest::Active);
-
-    void invalidateClick();
-
-    void updateMouseEventTargetNode(Node*, const PlatformMouseEvent&, bool);
-
-    /* Dispatches mouseover, mouseout, mouseenter and mouseleave events to appropriate nodes when the mouse pointer moves from one node to another. */
-    void sendMouseEventsForNodeTransition(Node*, Node*, const PlatformMouseEvent&);
-
-    MouseEventWithHitTestResults prepareMouseEvent(const HitTestRequest&, const PlatformMouseEvent&);
-
-    bool dispatchMouseEvent(const AtomicString& eventType, Node* target, int clickCount, const PlatformMouseEvent&, bool setUnder);
-    bool dispatchDragEvent(const AtomicString& eventType, Node* target, const PlatformMouseEvent&, DataTransfer*);
-
-    void clearDragDataTransfer();
-
-    bool handleDrag(const MouseEventWithHitTestResults&, DragInitiator);
-    bool tryStartDrag(const MouseEventWithHitTestResults&);
+    // Clears drag target and related states. It is called when drag is done or
+    // canceled.
     void clearDragState();
 
-    bool dispatchDragSrcEvent(const AtomicString& eventType, const PlatformMouseEvent&);
-
-    bool dragHysteresisExceeded(const IntPoint&) const;
-
-    bool passMousePressEventToSubframe(MouseEventWithHitTestResults&, LocalFrame* subframe);
-    bool passMouseMoveEventToSubframe(MouseEventWithHitTestResults&, LocalFrame* subframe, HitTestResult* hoveredNode = nullptr);
-    bool passMouseReleaseEventToSubframe(MouseEventWithHitTestResults&, LocalFrame* subframe);
+    WebInputEventResult passMousePressEventToSubframe(
+        MouseEventWithHitTestResults&,
+        LocalFrame* subframe);
+    WebInputEventResult passMouseMoveEventToSubframe(
+        MouseEventWithHitTestResults&,
+        const Vector<PlatformMouseEvent>&,
+        LocalFrame* subframe,
+        HitTestResult* hoveredNode = nullptr);
+    WebInputEventResult passMouseReleaseEventToSubframe(
+        MouseEventWithHitTestResults&,
+        LocalFrame* subframe);
 
     bool passMousePressEventToScrollbar(MouseEventWithHitTestResults&);
 
-    bool passWheelEventToWidget(const PlatformWheelEvent&, Widget&);
     void defaultSpaceEventHandler(KeyboardEvent*);
     void defaultBackspaceEventHandler(KeyboardEvent*);
     void defaultTabEventHandler(KeyboardEvent*);
@@ -315,140 +339,61 @@ private:
 
     void updateLastScrollbarUnderMouse(Scrollbar*, bool);
 
-    void setFrameWasScrolledByUser();
+    WebInputEventResult handleGestureShowPress();
 
-    bool capturesDragging() const { return m_capturesDragging; }
+    bool shouldBrowserControlsConsumeScroll(FloatSize) const;
 
-    bool handleGestureShowPress();
+    FrameHost* frameHost() const;
 
-    bool handleScrollGestureOnResizer(Node*, const PlatformGestureEvent&);
-
-    bool passScrollGestureEventToWidget(const PlatformGestureEvent&, LayoutObject*);
-
-    AutoscrollController* autoscrollController() const;
-    bool panScrollInProgress() const;
-    void setLastKnownMousePosition(const PlatformMouseEvent&);
-
-    bool shouldTopControlsConsumeScroll(FloatSize) const;
-
-    // If the given element is a shadow host and its root has delegatesFocus=false flag,
-    // slide focus to its inner element. Returns true if the resulting focus is different from
-    // the given element.
-    bool slideFocusOnShadowHostIfNecessary(const Element&);
-
-    void dispatchPointerEventsForTouchEvent(const PlatformTouchEvent&, WillBeHeapVector<TouchInfo>&);
-    void sendPointerCancels(WillBeHeapVector<TouchInfo>&);
-
-    bool dispatchTouchEvents(const PlatformTouchEvent&, WillBeHeapVector<TouchInfo>&, bool, bool);
+    bool rootFrameTouchPointerActiveInCurrentFrame(int pointerId) const;
 
     // NOTE: If adding a new field to this class please ensure that it is
     // cleared in |EventHandler::clear()|.
 
-    LocalFrame* const m_frame;
+    const Member<LocalFrame> m_frame;
 
-    bool m_mousePressed;
-    bool m_capturesDragging;
-    RefPtrWillBeMember<Node> m_mousePressNode;
+    const Member<SelectionController> m_selectionController;
 
-    bool m_mouseDownMayStartDrag;
-    const OwnPtrWillBeMember<SelectionController> m_selectionController;
+    TaskRunnerTimer<EventHandler> m_hoverTimer;
 
-    LayoutPoint m_dragStartPos;
+    // TODO(rbyers): Mouse cursor update is page-wide, not per-frame.  Page-wide
+    // state should move out of EventHandler to a new PageEventHandler class.
+    // crbug.com/449649
+    TaskRunnerTimer<EventHandler> m_cursorUpdateTimer;
 
-    Timer<EventHandler> m_hoverTimer;
-
-    // TODO(rbyers): Mouse cursor update is page-wide, not per-frame.  Page-wide state
-    // should move out of EventHandler to a new PageEventHandler class. crbug.com/449649
-    Timer<EventHandler> m_cursorUpdateTimer;
-
-    bool m_mouseDownMayStartAutoscroll;
-
-    Timer<EventHandler> m_fakeMouseMoveEventTimer;
-
-    bool m_svgPan;
-
-    RawPtrWillBeMember<DeprecatedPaintLayerScrollableArea> m_resizeScrollableArea;
-
-    RefPtrWillBeMember<Node> m_capturingMouseEventsNode;
+    Member<Node> m_capturingMouseEventsNode;
     bool m_eventHandlerWillResetCapturingMouseEventsNode;
 
-    RefPtrWillBeMember<Node> m_nodeUnderMouse;
-    RefPtrWillBeMember<Node> m_lastNodeUnderMouse;
-    RefPtrWillBeMember<LocalFrame> m_lastMouseMoveEventSubframe;
-    RefPtrWillBeMember<Scrollbar> m_lastScrollbarUnderMouse;
+    Member<LocalFrame> m_lastMouseMoveEventSubframe;
+    Member<Scrollbar> m_lastScrollbarUnderMouse;
 
-    int m_clickCount;
-    RefPtrWillBeMember<Node> m_clickNode;
-
-    RefPtrWillBeMember<Node> m_dragTarget;
+    Member<Node> m_dragTarget;
     bool m_shouldOnlyFireDragOverEvent;
 
-    RefPtrWillBeMember<HTMLFrameSetElement> m_frameSetBeingResized;
+    Member<HTMLFrameSetElement> m_frameSetBeingResized;
 
-    LayoutSize m_offsetFromResizeCorner; // In the coords of m_resizeScrollableArea.
-
-    FloatSize m_accumulatedRootOverscroll;
-
-    bool m_mousePositionIsUnknown;
-    // The last mouse movement position this frame has seen in root frame coordinates.
-    IntPoint m_lastKnownMousePosition;
-    IntPoint m_lastKnownMouseGlobalPosition;
-    IntPoint m_mouseDownPos; // In our view's coords.
-    double m_mouseDownTimestamp;
-    PlatformMouseEvent m_mouseDown;
     RefPtr<UserGestureToken> m_lastMouseDownUserGestureToken;
 
-    RefPtrWillBeMember<Node> m_latchedWheelEventNode;
-    bool m_widgetIsLatched;
-
-    RefPtrWillBeMember<Node> m_previousWheelScrolledNode;
-
-    // The target of each active touch point indexed by the touch ID.
-    using TouchTargetMap = WillBeHeapHashMap<unsigned, RefPtrWillBeMember<EventTarget>, DefaultHash<unsigned>::Hash, WTF::UnsignedWithZeroKeyHashTraits<unsigned>>;
-    TouchTargetMap m_targetForTouchID;
-
-    // If set, the document of the active touch sequence. Unset if no touch sequence active.
-    RefPtrWillBeMember<Document> m_touchSequenceDocument;
-    RefPtr<UserGestureToken> m_touchSequenceUserGestureToken;
-
-    bool m_touchPressed;
-
-    PointerIdManager m_pointerIdManager;
-
-    // This is set upon sending a pointercancel for touch, prevents PE dispatches for touches until
-    // all touch-points become inactive.
-    // TODO(mustaq): Consider a state per pointerType, as in PointerIdManager? Exclude mouse?
-    bool m_inPointerCanceledState;
-
-    RefPtrWillBeMember<Node> m_scrollGestureHandlingNode;
-    bool m_lastGestureScrollOverWidget;
-    // The most recent element to scroll natively during this scroll
-    // sequence. Null if no native element has scrolled this scroll
-    // sequence, or if the most recent element to scroll used scroll
-    // customization.
-    RefPtrWillBeMember<Node> m_previousGestureScrolledNode;
-    RefPtrWillBeMember<Scrollbar> m_scrollbarHandlingScrollGesture;
+    Member<ScrollManager> m_scrollManager;
+    Member<MouseEventManager> m_mouseEventManager;
+    Member<KeyboardEventManager> m_keyboardEventManager;
+    Member<PointerEventManager> m_pointerEventManager;
+    Member<GestureManager> m_gestureManager;
 
     double m_maxMouseMovedDuration;
 
     bool m_longTapShouldInvokeContextMenu;
 
-    Timer<EventHandler> m_activeIntervalTimer;
+    TaskRunnerTimer<EventHandler> m_activeIntervalTimer;
     double m_lastShowPressTimestamp;
-    RefPtrWillBeMember<Element> m_lastDeferredTapElement;
+    Member<Element> m_lastDeferredTapElement;
 
-    // Only used with the ScrollCustomization runtime enabled feature.
-    WillBeHeapDeque<RefPtrWillBeMember<Element>> m_currentScrollChain;
-    // True iff some of the delta has been consumed for the current
-    // scroll sequence in this frame, or any child frames. Only used
-    // with ScrollCustomization. If some delta has been consumed, a
-    // scroll which shouldn't propagate can't cause any element to
-    // scroll other than the |m_previousGestureScrolledNode|.
-    bool m_deltaConsumedForScrollSequence;
+    // Set on GestureTapDown if the |pointerdown| event corresponding to the
+    // triggering |touchstart| event was canceled. This suppresses mouse event
+    // firing for the current gesture sequence (i.e. until next GestureTapDown).
+    bool m_suppressMouseEventsFromGestures;
 };
 
 } // namespace blink
-
-WTF_ALLOW_INIT_WITH_MEM_FUNCTIONS(blink::EventHandler::TouchInfo);
 
 #endif // EventHandler_h

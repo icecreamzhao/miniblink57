@@ -23,7 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/testing/TreeTestHelpers.h"
 
 #include <cstdlib>
@@ -31,16 +30,16 @@
 namespace blink {
 namespace TreeTestHelpers {
 
-void initRandom(const int32_t seed)
-{
-    srand(seed);
-}
+    void initRandom(const int32_t seed)
+    {
+        srand(seed);
+    }
 
-int32_t nextRandom(const int32_t maximumValue)
-{
-    // rand_r is not available on Windows
-    return rand() % maximumValue;
-}
+    int32_t nextRandom(const int32_t maximumValue)
+    {
+        // rand_r is not available on Windows
+        return rand() % maximumValue;
+    }
 
 } // namespace TreeTestHelpers
 } // namespace blink

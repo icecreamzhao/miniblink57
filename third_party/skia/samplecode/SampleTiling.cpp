@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,44 +5,45 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkPaint.h"
 #include "SkPath.h"
+#include "SkPicture.h"
 #include "SkPictureRecorder.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkPicture.h"
 #include "SkTypeface.h"
+#include "SkUtils.h"
+#include "SkView.h"
 
 // effects
-#include "SkGradientShader.h"
-#include "SkBlurMask.h"
 #include "SkBlurDrawLooper.h"
+#include "SkBlurMask.h"
+#include "SkGradientShader.h"
 
-static void makebm(SkBitmap* bm, SkColorType ct, int w, int h) {
+static void makebm(SkBitmap* bm, SkColorType ct, int w, int h)
+{
     bm->allocPixels(SkImageInfo::Make(w, h, ct, kPremul_SkAlphaType));
     bm->eraseColor(SK_ColorTRANSPARENT);
 
-    SkCanvas    canvas(*bm);
-    SkPoint     pts[] = { { 0, 0 }, { SkIntToScalar(w), SkIntToScalar(h) } };
-    SkColor     colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE };
-    SkScalar    pos[] = { 0, SK_Scalar1/2, SK_Scalar1 };
-    SkPaint     paint;
+    SkCanvas canvas(*bm);
+    SkPoint pts[] = { { 0, 0 }, { SkIntToScalar(w), SkIntToScalar(h) } };
+    SkColor colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE };
+    SkScalar pos[] = { 0, SK_Scalar1 / 2, SK_Scalar1 };
+    SkPaint paint;
 
     paint.setDither(true);
-    paint.setShader(SkGradientShader::CreateLinear(pts, colors, pos,
-                SK_ARRAY_COUNT(colors), SkShader::kClamp_TileMode))->unref();
+    paint.setShader(SkGradientShader::MakeLinear(pts, colors, pos,
+        SK_ARRAY_COUNT(colors), SkShader::kClamp_TileMode));
     canvas.drawPaint(paint);
 }
 
 static void setup(SkPaint* paint, const SkBitmap& bm, bool filter,
-                  SkShader::TileMode tmx, SkShader::TileMode tmy) {
-    SkShader* shader = SkShader::CreateBitmapShader(bm, tmx, tmy);
-    paint->setShader(shader)->unref();
+    SkShader::TileMode tmx, SkShader::TileMode tmy)
+{
+    paint->setShader(SkShader::MakeBitmapShader(bm, tmx, tmy));
     paint->setFilterQuality(filter ? kLow_SkFilterQuality : kNone_SkFilterQuality);
 }
 
@@ -55,26 +55,30 @@ static const int gWidth = 32;
 static const int gHeight = 32;
 
 class TilingView : public SampleView {
-    SkAutoTUnref<SkPicture>        fTextPicture;
-    SkAutoTUnref<SkBlurDrawLooper> fLooper;
+    sk_sp<SkPicture> fTextPicture;
+    sk_sp<SkDrawLooper> fLooper;
+
 public:
     TilingView()
-            : fLooper(SkBlurDrawLooper::Create(0x88000000,
-                                               SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(1)),
-                                               SkIntToScalar(2), SkIntToScalar(2))) {
+        : fLooper(SkBlurDrawLooper::Make(0x88000000,
+            SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(1)),
+            SkIntToScalar(2), SkIntToScalar(2)))
+    {
         for (size_t i = 0; i < SK_ARRAY_COUNT(gColorTypes); i++) {
             makebm(&fTexture[i], gColorTypes[i], gWidth, gHeight);
         }
     }
 
-    virtual ~TilingView() {
+    virtual ~TilingView()
+    {
     }
 
-    SkBitmap    fTexture[SK_ARRAY_COUNT(gColorTypes)];
+    SkBitmap fTexture[SK_ARRAY_COUNT(gColorTypes)];
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Tiling");
             return true;
@@ -82,24 +86,25 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
-        SkRect r = { 0, 0, SkIntToScalar(gWidth*2), SkIntToScalar(gHeight*2) };
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
+        SkRect r = { 0, 0, SkIntToScalar(gWidth * 2), SkIntToScalar(gHeight * 2) };
 
         static const char* gConfigNames[] = { "8888", "565", "4444" };
 
-        static const bool           gFilters[] = { false, true };
-        static const char*          gFilterNames[] = {     "point",                     "bilinear" };
+        static const bool gFilters[] = { false, true };
+        static const char* gFilterNames[] = { "point", "bilinear" };
 
         static const SkShader::TileMode gModes[] = { SkShader::kClamp_TileMode, SkShader::kRepeat_TileMode, SkShader::kMirror_TileMode };
-        static const char*          gModeNames[] = {    "C",                    "R",                   "M" };
+        static const char* gModeNames[] = { "C", "R", "M" };
 
         SkScalar y = SkIntToScalar(24);
         SkScalar x = SkIntToScalar(10);
 
         SkPictureRecorder recorder;
-        SkCanvas* textCanvas = NULL;
-        if (NULL == fTextPicture) {
-            textCanvas = recorder.beginRecording(1000, 1000, NULL, 0);
+        SkCanvas* textCanvas = nullptr;
+        if (nullptr == fTextPicture) {
+            textCanvas = recorder.beginRecording(1000, 1000, nullptr, 0);
         }
 
         if (textCanvas) {
@@ -113,7 +118,7 @@ protected:
                     str.printf("[%s,%s]", gModeNames[kx], gModeNames[ky]);
 
                     p.setTextAlign(SkPaint::kCenter_Align);
-                    textCanvas->drawText(str.c_str(), str.size(), x + r.width()/2, y, p);
+                    textCanvas->drawText(str.c_str(), str.size(), x + r.width() / 2, y, p);
 
                     x += r.width() * 4 / 3;
                 }
@@ -153,12 +158,12 @@ protected:
         }
 
         if (textCanvas) {
-            SkASSERT(NULL == fTextPicture);
-            fTextPicture.reset(recorder.endRecording());
+            SkASSERT(nullptr == fTextPicture);
+            fTextPicture = recorder.finishRecordingAsPicture();
         }
 
         SkASSERT(fTextPicture);
-        canvas->drawPicture(fTextPicture);
+        canvas->drawPicture(fTextPicture.get());
     }
 
 private:

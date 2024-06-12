@@ -985,7 +985,7 @@ RUNTIME_FUNCTION(Runtime_StringCharCodeAt) {
   DCHECK(args.length() == 2);
   if (!args[0]->IsString()) return isolate->heap()->undefined_value();
   if (!args[1]->IsNumber()) return isolate->heap()->undefined_value();
-  if (std::isinf(args.number_at(1))) return isolate->heap()->nan_value();
+  if (std_isinf(args.number_at(1))) return isolate->heap()->nan_value();
   return __RT_impl_Runtime_StringCharCodeAtRT(args, isolate);
 }
 

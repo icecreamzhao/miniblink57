@@ -65,17 +65,30 @@ public:
     BLINK_EXPORT WebMediaConstraints audioConstraints() const;
     BLINK_EXPORT WebMediaConstraints videoConstraints() const;
 
-    BLINK_EXPORT WebSecurityOrigin securityOrigin() const;
+    BLINK_EXPORT WebSecurityOrigin getSecurityOrigin() const;
     BLINK_EXPORT WebDocument ownerDocument() const;
 
     BLINK_EXPORT void requestSucceeded(const WebMediaStream&);
 
     BLINK_EXPORT void requestDenied(const WebString& description = WebString());
-    BLINK_EXPORT void requestFailedConstraint(const WebString& constraintName, const WebString& description = WebString());
-    BLINK_EXPORT void requestFailedUASpecific(const WebString& name, const WebString& constraintName = WebString(), const WebString& description = WebString());
+    BLINK_EXPORT void requestFailedConstraint(
+        const WebString& constraintName,
+        const WebString& description = WebString());
+    BLINK_EXPORT void requestFailedUASpecific(
+        const WebString& name,
+        const WebString& constraintName = WebString(),
+        const WebString& description = WebString());
 
     // DEPRECATED
-    BLINK_EXPORT void requestFailed(const WebString& description = WebString()) { requestDenied(description); }
+    BLINK_EXPORT void requestFailed(const WebString& description = WebString())
+    {
+        requestDenied(description);
+    }
+
+    // For testing in content/
+    BLINK_EXPORT static WebUserMediaRequest createForTesting(
+        const WebMediaConstraints& audio,
+        const WebMediaConstraints& video);
 
 #if BLINK_IMPLEMENTATION
     WebUserMediaRequest(UserMediaRequest*);
@@ -86,7 +99,8 @@ private:
     WebPrivatePtr<UserMediaRequest> m_private;
 };
 
-inline bool operator==(const WebUserMediaRequest& a, const WebUserMediaRequest& b)
+inline bool operator==(const WebUserMediaRequest& a,
+    const WebUserMediaRequest& b)
 {
     return a.equals(b);
 }

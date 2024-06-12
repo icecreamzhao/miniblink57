@@ -14,24 +14,27 @@ enum {
     NGLYPHS = 100
 };
 
-static SkTypeface::Encoding paint2Encoding(const SkPaint& paint) {
+static SkTypeface::Encoding paint2Encoding(const SkPaint& paint)
+{
     SkPaint::TextEncoding enc = paint.getTextEncoding();
     SkASSERT(SkPaint::kGlyphID_TextEncoding != enc);
     return (SkTypeface::Encoding)enc;
 }
 
 typedef void (*TypefaceProc)(int loops, const SkPaint&, const void* text, size_t len,
-                             int glyphCount);
+    int glyphCount);
 
 static void containsText_proc(int loops, const SkPaint& paint, const void* text, size_t len,
-                              int glyphCount) {
+    int glyphCount)
+{
     for (int i = 0; i < loops; ++i) {
         paint.containsText(text, len);
     }
 }
 
 static void textToGlyphs_proc(int loops, const SkPaint& paint, const void* text, size_t len,
-                              int glyphCount) {
+    int glyphCount)
+{
     uint16_t glyphs[NGLYPHS];
     SkASSERT(glyphCount <= NGLYPHS);
 
@@ -41,7 +44,8 @@ static void textToGlyphs_proc(int loops, const SkPaint& paint, const void* text,
 }
 
 static void charsToGlyphs_proc(int loops, const SkPaint& paint, const void* text,
-                               size_t len, int glyphCount) {
+    size_t len, int glyphCount)
+{
     SkTypeface::Encoding encoding = paint2Encoding(paint);
     uint16_t glyphs[NGLYPHS];
     SkASSERT(glyphCount <= NGLYPHS);
@@ -53,23 +57,25 @@ static void charsToGlyphs_proc(int loops, const SkPaint& paint, const void* text
 }
 
 static void charsToGlyphsNull_proc(int loops, const SkPaint& paint, const void* text,
-                                   size_t len, int glyphCount) {
+    size_t len, int glyphCount)
+{
     SkTypeface::Encoding encoding = paint2Encoding(paint);
 
     SkTypeface* face = paint.getTypeface();
     for (int i = 0; i < loops; ++i) {
-        face->charsToGlyphs(text, encoding, NULL, glyphCount);
+        face->charsToGlyphs(text, encoding, nullptr, glyphCount);
     }
 }
 
 class CMAPBench : public Benchmark {
     TypefaceProc fProc;
-    SkString     fName;
-    char         fText[NGLYPHS];
-    SkPaint      fPaint;
+    SkString fName;
+    char fText[NGLYPHS];
+    SkPaint fPaint;
 
 public:
-    CMAPBench(TypefaceProc proc, const char name[]) {
+    CMAPBench(TypefaceProc proc, const char name[])
+    {
         fProc = proc;
         fName.printf("cmap_%s", name);
 
@@ -77,26 +83,27 @@ public:
             // we're jamming values into utf8, so we must keep it legal utf8
             fText[i] = 'A' + (i & 31);
         }
-        fPaint.setTypeface(SkTypeface::RefDefault())->unref();
+        fPaint.setTypeface(SkTypeface::MakeDefault());
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         fProc(loops, fPaint, fText, sizeof(fText), NGLYPHS);
     }
 
 private:
-
     typedef Benchmark INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new CMAPBench(containsText_proc, "paint_containsText"); )
-DEF_BENCH( return new CMAPBench(textToGlyphs_proc, "paint_textToGlyphs"); )
-DEF_BENCH( return new CMAPBench(charsToGlyphs_proc, "face_charsToGlyphs"); )
-DEF_BENCH( return new CMAPBench(charsToGlyphsNull_proc, "face_charsToGlyphs_null"); )
+DEF_BENCH(return new CMAPBench(containsText_proc, "paint_containsText");)
+DEF_BENCH(return new CMAPBench(textToGlyphs_proc, "paint_textToGlyphs");)
+DEF_BENCH(return new CMAPBench(charsToGlyphs_proc, "face_charsToGlyphs");)
+DEF_BENCH(return new CMAPBench(charsToGlyphsNull_proc, "face_charsToGlyphs_null");)

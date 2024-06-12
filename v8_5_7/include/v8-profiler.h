@@ -640,7 +640,7 @@ class V8_EXPORT HeapProfiler {
    * while the callback is running: only getters on the handle and
    * GetPointerFromInternalField on the objects are allowed.
    */
-  typedef RetainedObjectInfo* (*WrapperInfoCallback)(uint16_t class_id,
+  typedef RetainedObjectInfo* (V8CALL*WrapperInfoCallback)(uint16_t class_id,
                                                      Local<Value> wrapper);
 
   /** Returns the number of snapshots taken. */

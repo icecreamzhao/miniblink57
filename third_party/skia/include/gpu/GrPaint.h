@@ -6,16 +6,15 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrPaint_DEFINED
 #define GrPaint_DEFINED
 
 #include "GrColor.h"
-#include "GrFragmentStage.h"
-#include "GrProcessorDataManager.h"
+#include "GrFragmentProcessor.h"
 #include "GrXferProcessor.h"
 #include "effects/GrPorterDuffXferProcessor.h"
 
+#include "SkRefCnt.h"
 #include "SkRegion.h"
 #include "SkXfermode.h"
 
@@ -43,13 +42,18 @@ public:
 
     GrPaint(const GrPaint& paint) { *this = paint; }
 
-    ~GrPaint() {}
+    ~GrPaint() { }
 
     /**
      * The initial color of the drawn primitive. Defaults to solid white.
      */
-    void setColor(GrColor color) { fColor = color; }
-    GrColor getColor() const { return fColor; }
+    void setColor4f(const GrColor4f& color) { fColor = color; }
+    const GrColor4f& getColor4f() const { return fColor; }
+
+    /**
+     * Legacy getter, until all code handles 4f directly.
+     */
+    GrColor getColor() const { return fColor.toGrColor(); }
 
     /**
      * Should primitives be anti-aliased or not. Defaults to false.
@@ -58,38 +62,57 @@ public:
     bool isAntiAlias() const { return fAntiAlias; }
 
     /**
-     * Should dithering be applied. Defaults to false.
+     * Should shader output conversion from linear to sRGB be disabled.
+     * Only relevant if the destination is sRGB. Defaults to false.
      */
-    void setDither(bool dither) { fDither = dither; }
-    bool isDither() const { return fDither; }
+    void setDisableOutputConversionToSRGB(bool srgb) { fDisableOutputConversionToSRGB = srgb; }
+    bool getDisableOutputConversionToSRGB() const { return fDisableOutputConversionToSRGB; }
 
-    const GrXPFactory* setXPFactory(const GrXPFactory* xpFactory) {
-        fXPFactory.reset(SkRef(xpFactory));
-        return xpFactory;
+    /**
+     * Should sRGB inputs be allowed to perform sRGB to linear conversion. With this flag
+     * set to false, sRGB textures will be treated as linear (including filtering).
+     */
+    void setAllowSRGBInputs(bool allowSRGBInputs) { fAllowSRGBInputs = allowSRGBInputs; }
+    bool getAllowSRGBInputs() const { return fAllowSRGBInputs; }
+
+    /**
+     * Should rendering be gamma-correct, end-to-end. Causes sRGB render targets to behave
+     * as such (with linear blending), and sRGB inputs to be filtered and decoded correctly.
+     */
+    void setGammaCorrect(bool gammaCorrect)
+    {
+        setDisableOutputConversionToSRGB(!gammaCorrect);
+        setAllowSRGBInputs(gammaCorrect);
     }
 
-    void setPorterDuffXPFactory(SkXfermode::Mode mode) {
-        fXPFactory.reset(GrPorterDuffXPFactory::Create(mode));
+    void setXPFactory(sk_sp<GrXPFactory> xpFactory)
+    {
+        fXPFactory = std::move(xpFactory);
     }
 
-    void setCoverageSetOpXPFactory(SkRegion::Op regionOp, bool invertCoverage = false); 
+    void setPorterDuffXPFactory(SkXfermode::Mode mode)
+    {
+        fXPFactory = GrPorterDuffXPFactory::Make(mode);
+    }
+
+    void setCoverageSetOpXPFactory(SkRegion::Op regionOp, bool invertCoverage = false);
 
     /**
      * Appends an additional color processor to the color computation.
      */
-    const GrFragmentProcessor* addColorProcessor(const GrFragmentProcessor* fp) {
+    void addColorFragmentProcessor(sk_sp<GrFragmentProcessor> fp)
+    {
         SkASSERT(fp);
-        SkNEW_APPEND_TO_TARRAY(&fColorStages, GrFragmentStage, (fp));
-        return fp;
+        fColorFragmentProcessors.push_back(std::move(fp));
     }
 
     /**
      * Appends an additional coverage processor to the coverage computation.
      */
-    const GrFragmentProcessor* addCoverageProcessor(const GrFragmentProcessor* fp) {
+    void addCoverageFragmentProcessor(sk_sp<GrFragmentProcessor> fp)
+    {
         SkASSERT(fp);
-        SkNEW_APPEND_TO_TARRAY(&fCoverageStages, GrFragmentStage, (fp));
-        return fp;
+        fCoverageFragmentProcessors.push_back(std::move(fp));
     }
 
     /**
@@ -101,30 +124,35 @@ public:
     void addColorTextureProcessor(GrTexture*, const SkMatrix&, const GrTextureParams&);
     void addCoverageTextureProcessor(GrTexture*, const SkMatrix&, const GrTextureParams&);
 
-    int numColorStages() const { return fColorStages.count(); }
-    int numCoverageStages() const { return fCoverageStages.count(); }
-    int numTotalStages() const { return this->numColorStages() + this->numCoverageStages(); }
+    int numColorFragmentProcessors() const { return fColorFragmentProcessors.count(); }
+    int numCoverageFragmentProcessors() const { return fCoverageFragmentProcessors.count(); }
+    int numTotalFragmentProcessors() const { return this->numColorFragmentProcessors() + this->numCoverageFragmentProcessors(); }
 
-    const GrXPFactory* getXPFactory() const {
-        if (!fXPFactory) {
-            fXPFactory.reset(GrPorterDuffXPFactory::Create(SkXfermode::kSrc_Mode));
-        }
+    GrXPFactory* getXPFactory() const
+    {
         return fXPFactory.get();
     }
 
-    const GrFragmentStage& getColorStage(int s) const { return fColorStages[s]; }
-    const GrFragmentStage& getCoverageStage(int s) const { return fCoverageStages[s]; }
+    GrFragmentProcessor* getColorFragmentProcessor(int i) const
+    {
+        return fColorFragmentProcessors[i].get();
+    }
+    GrFragmentProcessor* getCoverageFragmentProcessor(int i) const
+    {
+        return fCoverageFragmentProcessors[i].get();
+    }
 
-    GrPaint& operator=(const GrPaint& paint) {
+    GrPaint& operator=(const GrPaint& paint)
+    {
         fAntiAlias = paint.fAntiAlias;
-        fDither = paint.fDither;
+        fDisableOutputConversionToSRGB = paint.fDisableOutputConversionToSRGB;
+        fAllowSRGBInputs = paint.fAllowSRGBInputs;
 
         fColor = paint.fColor;
+        fColorFragmentProcessors = paint.fColorFragmentProcessors;
+        fCoverageFragmentProcessors = paint.fCoverageFragmentProcessors;
 
-        fColorStages = paint.fColorStages;
-        fCoverageStages = paint.fCoverageStages;
-
-        fXPFactory.reset(SkRef(paint.getXPFactory()));
+        fXPFactory = paint.fXPFactory;
 
         return *this;
     }
@@ -137,18 +165,16 @@ public:
      */
     bool isConstantBlendedColor(GrColor* constantColor) const;
 
-    GrProcessorDataManager* getProcessorDataManager() { return &fProcDataManager; }
-
 private:
-    mutable SkAutoTUnref<const GrXPFactory> fXPFactory;
-    SkSTArray<4, GrFragmentStage>   fColorStages;
-    SkSTArray<2, GrFragmentStage>   fCoverageStages;
+    mutable sk_sp<GrXPFactory> fXPFactory;
+    SkSTArray<4, sk_sp<GrFragmentProcessor>> fColorFragmentProcessors;
+    SkSTArray<2, sk_sp<GrFragmentProcessor>> fCoverageFragmentProcessors;
 
-    bool                            fAntiAlias;
-    bool                            fDither;
+    bool fAntiAlias;
+    bool fDisableOutputConversionToSRGB;
+    bool fAllowSRGBInputs;
 
-    GrColor                         fColor;
-    GrProcessorDataManager          fProcDataManager;
+    GrColor4f fColor;
 };
 
 #endif

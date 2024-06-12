@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawPaint_DEFINED
 #define SkDrawPaint_DEFINED
 
@@ -26,21 +25,23 @@ class SkDrawPaint : public SkADrawable {
     DECLARE_DRAW_MEMBER_INFO(Paint);
     SkDrawPaint();
     virtual ~SkDrawPaint();
-    virtual bool add(SkAnimateMaker* , SkDisplayable* child);
-    SkDisplayable* deepCopy(SkAnimateMaker* ) override;
-    bool draw(SkAnimateMaker& ) override;
+    virtual bool add(SkAnimateMaker*, SkDisplayable* child);
+    SkDisplayable* deepCopy(SkAnimateMaker*) override;
+    bool draw(SkAnimateMaker&) override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
     void executeFunction(SkDisplayable* target, int index,
         SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
-        SkScriptValue* ) override;
+        SkScriptValue*) override;
     const SkFunctionParamType* getFunctionsParameters() override;
     bool getProperty(int index, SkScriptValue* value) const override;
     bool resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply) override;
+
 protected:
     static const SkFunctionParamType fFunctionParameters[];
     void setupPaint(SkPaint* paint) const;
+
 public:
     SkBool antiAlias;
     SkDrawColor* color;
@@ -70,6 +71,7 @@ public:
     SkBool8 fOwnsShader;
     SkBool8 fOwnsTransferMode;
     SkBool8 fOwnsTypeface;
+
 private:
     typedef SkADrawable INHERITED;
     friend class SkTextToPath;

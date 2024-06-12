@@ -6,27 +6,26 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimateActive_DEFINED
 #define SkAnimateActive_DEFINED
 
 #include "SkDisplayApply.h"
-#include "SkOperandInterpolator.h"
 #include "SkIntArray.h"
+#include "SkOperandInterpolator.h"
 
 class SkAnimateMaker;
 
 class SkActive {
 public:
-    SkActive(SkApply& , SkAnimateMaker& );
+    SkActive(SkApply&, SkAnimateMaker&);
     ~SkActive();
     void advance();
-    void append(SkApply* );
+    void append(SkApply*);
     void calcDurations(int index);
     void create(SkADrawable* scope, SkMSec time);
     bool draw() { return immediate(false); }
     bool enable() { return immediate(true); }
-    void init( );
+    void init();
     SkMSec getTime(SkMSec inTime, int animatorIndex);
     void pickUp(SkActive* existing);
     void reset() { fDrawIndex = 0; }
@@ -40,14 +39,14 @@ private:
     void fixInterpolator(SkBool save);
     bool immediate(bool enable);
     bool initializeSave();
-    void initState(SkApply* , int offset);
+    void initState(SkApply*, int offset);
     void resetInterpolators();
     void resetState();
     void restoreInterpolatorValues(int index);
     void saveInterpolatorValues(int index);
     void setSteps(int steps);
     struct SkState {
-//      void bumpSave();
+        //      void bumpSave();
         SkMSec getRelativeTime(SkMSec time);
         SkApply::Mode fMode;
         SkApply::Transition fTransition;
@@ -62,14 +61,14 @@ private:
         SkMSec fSave;
         SkMSec fTicks;
     };
-    SkActive& operator= (const SkActive& );
+    SkActive& operator=(const SkActive&);
     SkTDArray<SkOperandInterpolator*> fInterpolators;
     SkApply& fApply;
-    SkTDArray<SkState> fState;  // one per animator
-    SkTDOperandPtrArray fSaveRestore;   // if apply has restore="true"
+    SkTDArray<SkState> fState; // one per animator
+    SkTDOperandPtrArray fSaveRestore; // if apply has restore="true"
     SkTDOperandPtrArray fSaveInterpolators;
     SkTDAnimateArray fAnimators;
-    SkMSec fMaxTime;    // greatest of all animation durations; only used by immediate mode
+    SkMSec fMaxTime; // greatest of all animation durations; only used by immediate mode
     SkAnimateMaker& fMaker;
     int fDrawIndex;
     int fDrawMax;

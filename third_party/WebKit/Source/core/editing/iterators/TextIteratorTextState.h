@@ -28,14 +28,16 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/Range.h"
-#include "core/editing/EphemeralRange.h"
-#include "core/layout/LayoutText.h"
+#include "core/editing/iterators/ForwardsTextBuffer.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class LayoutText;
+
 class CORE_EXPORT TextIteratorTextState {
     STACK_ALLOCATED();
+
 public:
     explicit TextIteratorTextState(bool emitsOriginalText);
     ~TextIteratorTextState() { }
@@ -45,10 +47,19 @@ public:
     int length() const { return m_textLength; }
     UChar characterAt(unsigned index) const;
     String substring(unsigned position, unsigned length) const;
-    void appendTextToStringBuilder(StringBuilder&, unsigned position = 0, unsigned maxLength = UINT_MAX) const;
+    void appendTextToStringBuilder(StringBuilder&,
+        unsigned position = 0,
+        unsigned maxLength = UINT_MAX) const;
 
-    void emitCharacter(UChar, Node* textNode, Node* offsetBaseNode, int textStartOffset, int textEndOffset);
-    void emitText(Node* textNode, LayoutText* layoutObject, int textStartOffset, int textEndOffset);
+    void spliceBuffer(UChar,
+        Node* textNode,
+        Node* offsetBaseNode,
+        int textStartOffset,
+        int textEndOffset);
+    void emitText(Node* textNode,
+        LayoutText* layoutObject,
+        int textStartOffset,
+        int textEndOffset);
     void emitAltText(Node*);
     void updateForReplacedElement(Node* baseNode);
     void flushPositionOffsets() const;
@@ -57,51 +68,42 @@ public:
     Node* positionNode() const { return m_positionNode; }
     bool hasEmitted() const { return m_hasEmitted; }
     UChar lastCharacter() const { return m_lastCharacter; }
+    int textStartOffset() const { return m_textStartOffset; }
     void resetRunInformation()
     {
         m_positionNode = nullptr;
         m_textLength = 0;
     }
 
-    EphemeralRange range() const;
-
-    template<typename BufferType>
-    void appendTextTo(BufferType& output, unsigned position = 0) const
-    {
-        ASSERT_WITH_SECURITY_IMPLICATION(position <= static_cast<unsigned>(length()));
-        unsigned lengthToAppend = length() - position;
-        if (!lengthToAppend)
-            return;
-        if (m_singleCharacterBuffer) {
-            ASSERT(!position);
-            ASSERT(length() == 1);
-            output.append(&m_singleCharacterBuffer, 1);
-        } else if (positionNode()) {
-            flushPositionOffsets();
-            string().appendTo(output, positionStartOffset() + position, lengthToAppend);
-        } else {
-            ASSERT_NOT_REACHED(); // "We shouldn't be attempting to append text that doesn't exist.";
-        }
-    }
+    void appendTextTo(ForwardsTextBuffer* output,
+        unsigned position,
+        unsigned lengthToAppend) const;
 
 private:
     int m_textLength;
     String m_text;
 
-    // Used for whitespace characters that aren't in the DOM, so we can point at them.
+    // Used for whitespace characters that aren't in the DOM, so we can point at
+    // them.
     // If non-zero, overrides m_text.
     UChar m_singleCharacterBuffer;
 
-    // The current text and its position, in the form to be returned from the iterator.
-    RawPtrWillBeMember<Node> m_positionNode;
-    mutable RawPtrWillBeMember<Node> m_positionOffsetBaseNode;
+    // The current text and its position, in the form to be returned from the
+    // iterator.
+    Member<Node> m_positionNode;
+    mutable Member<Node> m_positionOffsetBaseNode;
     mutable int m_positionStartOffset;
     mutable int m_positionEndOffset;
 
-    // Used when deciding whether to emit a "positioning" (e.g. newline) before any other content
+    // Used when deciding whether to emit a "positioning" (e.g. newline) before
+    // any other content
     bool m_hasEmitted;
     UChar m_lastCharacter;
     bool m_emitsOriginalText;
+
+    // Stores the length of :first-letter when we are at the remaining text.
+    // Equals to 0 in all other cases.
+    int m_textStartOffset;
 };
 
 } // namespace blink

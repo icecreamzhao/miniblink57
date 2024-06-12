@@ -2,29 +2,34 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/PushError.h"
 
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
-DOMException* PushError::take(ScriptPromiseResolver*, PassOwnPtr<WebType> webError)
+DOMException* PushError::take(ScriptPromiseResolver*,
+    const WebPushError& webError)
 {
-    switch (webError->errorType) {
+    switch (webError.errorType) {
     case WebPushError::ErrorTypeAbort:
-        return DOMException::create(AbortError, webError->message);
+        return DOMException::create(AbortError, webError.message);
+    case WebPushError::ErrorTypeInvalidState:
+        return DOMException::create(InvalidStateError, webError.message);
     case WebPushError::ErrorTypeNetwork:
-        return DOMException::create(NetworkError, webError->message);
+        return DOMException::create(NetworkError, webError.message);
+    case WebPushError::ErrorTypeNotAllowed:
+        return DOMException::create(NotAllowedError, webError.message);
     case WebPushError::ErrorTypeNotFound:
-        return DOMException::create(NotFoundError, webError->message);
+        return DOMException::create(NotFoundError, webError.message);
     case WebPushError::ErrorTypeNotSupported:
-        return DOMException::create(NotSupportedError, webError->message);
+        return DOMException::create(NotSupportedError, webError.message);
     case WebPushError::ErrorTypeUnknown:
-        return DOMException::create(UnknownError, webError->message);
+        return DOMException::create(UnknownError, webError.message);
     }
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return DOMException::create(UnknownError);
 }
 

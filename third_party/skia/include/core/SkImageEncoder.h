@@ -12,6 +12,8 @@
 #include "SkTRegistry.h"
 
 class SkBitmap;
+class SkPixelSerializer;
+class SkPixmap;
 class SkData;
 class SkWStream;
 
@@ -61,13 +63,19 @@ public:
     bool encodeStream(SkWStream* stream, const SkBitmap& bm, int quality);
 
     static SkData* EncodeData(const SkImageInfo&, const void* pixels, size_t rowBytes,
-                              Type, int quality);
+        Type, int quality);
     static SkData* EncodeData(const SkBitmap&, Type, int quality);
 
+    static SkData* EncodeData(const SkPixmap&, Type, int quality);
+
     static bool EncodeFile(const char file[], const SkBitmap&, Type,
-                           int quality);
+        int quality);
     static bool EncodeStream(SkWStream*, const SkBitmap&, Type,
-                           int quality);
+        int quality);
+
+    /** Uses SkImageEncoder to serialize images that are not already
+        encoded as SkImageEncoder::kPNG_Type images. */
+    static SkPixelSerializer* CreatePixelSerializer();
 
 protected:
     /**
@@ -82,15 +90,13 @@ protected:
 
 // This macro declares a global (i.e., non-class owned) creation entry point
 // for each encoder (e.g., CreateJPEGImageEncoder)
-#define DECLARE_ENCODER_CREATOR(codec)          \
-    SkImageEncoder *Create ## codec ();
+#define DECLARE_ENCODER_CREATOR(codec) \
+    SkImageEncoder* Create##codec();
 
 // This macro defines the global creation entry point for each encoder. Each
 // encoder implementation that registers with the encoder factory must call it.
-#define DEFINE_ENCODER_CREATOR(codec)           \
-    SkImageEncoder *Create ## codec () {        \
-        return SkNEW( Sk ## codec );            \
-    }
+#define DEFINE_ENCODER_CREATOR(codec) \
+    SkImageEncoder* Create##codec() { return new Sk##codec; }
 
 // All the encoders known by Skia. Note that, depending on the compiler settings,
 // not all of these will be available
@@ -104,11 +110,15 @@ DECLARE_ENCODER_CREATOR(PNGImageEncoder);
 DECLARE_ENCODER_CREATOR(KTXImageEncoder);
 DECLARE_ENCODER_CREATOR(WEBPImageEncoder);
 
-#ifdef SK_BUILD_FOR_IOS
-DECLARE_ENCODER_CREATOR(PNGImageEncoder_IOS);
+#if defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
+DECLARE_ENCODER_CREATOR(PNGImageEncoder_CG);
+#endif
+
+#if defined(SK_BUILD_FOR_WIN)
+DECLARE_ENCODER_CREATOR(ImageEncoder_WIC);
 #endif
 
 // Typedef to make registering encoder callback easier
 // This has to be defined outside SkImageEncoder. :(
-typedef SkTRegistry<SkImageEncoder*(*)(SkImageEncoder::Type)> SkImageEncoder_EncodeReg;
+typedef SkTRegistry<SkImageEncoder* (*)(SkImageEncoder::Type)> SkImageEncoder_EncodeReg;
 #endif

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// https://w3c.github.io/encrypted-media/#idl-def-MediaKeySystemConfiguration
+// https://w3c.github.io/encrypted-media/#mediakeysystemconfiguration-dictionary
 
 enum MediaKeysRequirement {
     "required",
@@ -10,14 +10,12 @@ enum MediaKeysRequirement {
     "not-allowed"
 };
 
-[
-    RuntimeEnabled=EncryptedMedia
-] dictionary MediaKeySystemConfiguration {
-    sequence<DOMString> initDataTypes;
-    sequence<MediaKeySystemMediaCapability> audioCapabilities;
-    sequence<MediaKeySystemMediaCapability> videoCapabilities;
+dictionary MediaKeySystemConfiguration {
+    DOMString label = "";
+    sequence<DOMString> initDataTypes = [];
+    sequence<MediaKeySystemMediaCapability> audioCapabilities = [];
+    sequence<MediaKeySystemMediaCapability> videoCapabilities = [];
     MediaKeysRequirement distinctiveIdentifier = "optional";
     MediaKeysRequirement persistentState = "optional";
     sequence<DOMString> sessionTypes;
-    DOMString label;
 };

@@ -16,13 +16,13 @@
 #include "SkTDArray.h"
 #include "SkTouchGesture.h"
 #include "SkWindow.h"
+#include "timer/Timer.h"
 
 class GrContext;
 class GrRenderTarget;
 
 class SkCanvas;
 class SkData;
-class SkDeferredCanvas;
 class SkDocument;
 class SkEvent;
 class SkTypeface;
@@ -30,32 +30,32 @@ class SkViewFactory;
 
 class SampleWindow : public SkOSWindow {
     SkTDArray<const SkViewFactory*> fSamples;
+
 public:
     enum DeviceType {
         kRaster_DeviceType,
-        kPicture_DeviceType,
 #if SK_SUPPORT_GPU
         kGPU_DeviceType,
 #if SK_ANGLE
         kANGLE_DeviceType,
 #endif // SK_ANGLE
 #endif // SK_SUPPORT_GPU
-        kDeferred_DeviceType,
         kDeviceTypeCnt
     };
 
-    static bool IsGpuDeviceType(DeviceType devType) {
-    #if SK_SUPPORT_GPU
+    static bool IsGpuDeviceType(DeviceType devType)
+    {
+#if SK_SUPPORT_GPU
         switch (devType) {
-            case kGPU_DeviceType:
-    #if SK_ANGLE
-            case kANGLE_DeviceType:
-    #endif // SK_ANGLE
-                return true;
-            default:
-                return false;
+        case kGPU_DeviceType:
+#if SK_ANGLE
+        case kANGLE_DeviceType:
+#endif // SK_ANGLE
+            return true;
+        default:
+            return false;
         }
-    #endif // SK_SUPPORT_GPU
+#endif // SK_SUPPORT_GPU
         return false;
     }
 
@@ -68,9 +68,7 @@ public:
      */
     class DeviceManager : public SkRefCnt {
     public:
-        
-
-        virtual void setUpBackend(SampleWindow* win, int msaaSampleCount) = 0;
+        virtual void setUpBackend(SampleWindow* win, int msaaSampleCount, bool deepColor) = 0;
 
         virtual void tearDownBackend(SampleWindow* win) = 0;
 
@@ -81,18 +79,23 @@ public:
         // called after drawing, should get the results onto the
         // screen.
         virtual void publishCanvas(DeviceType dType,
-                                   SkCanvas* canvas,
-                                   SampleWindow* win) = 0;
+            SkCanvas* canvas,
+            SampleWindow* win)
+            = 0;
 
         // called when window changes size, guaranteed to be called
         // at least once before first draw (after init)
         virtual void windowSizeChanged(SampleWindow* win) = 0;
 
-        // return the GrContext backing gpu devices (NULL if not built with GPU support)
+        // return the GrContext backing gpu devices (nullptr if not built with GPU support)
         virtual GrContext* getGrContext() = 0;
 
-        // return the GrRenderTarget backing gpu devices (NULL if not built with GPU support)
+        // return the GrRenderTarget backing gpu devices (nullptr if not built with GPU support)
         virtual GrRenderTarget* getGrRenderTarget() = 0;
+
+        // return the color depth of the output device
+        virtual int getColorBits() = 0;
+
     private:
         typedef SkRefCnt INHERITED;
     };
@@ -100,12 +103,13 @@ public:
     SampleWindow(void* hwnd, int argc, char** argv, DeviceManager*);
     virtual ~SampleWindow();
 
-    SkSurface* createSurface() override {
-        SkSurface* surface = NULL;
+    SkSurface* createSurface() override
+    {
+        SkSurface* surface = nullptr;
         if (fDevManager) {
             surface = fDevManager->createSurface(fDeviceType, this);
         }
-        if (NULL == surface) {
+        if (nullptr == surface) {
             surface = this->INHERITED::createSurface();
         }
         return surface;
@@ -114,23 +118,26 @@ public:
     void draw(SkCanvas*) override;
 
     void setDeviceType(DeviceType type);
+    void setDeviceColorType(SkColorType, sk_sp<SkColorSpace>);
     void toggleRendering();
     void toggleSlideshow();
     void toggleFPS();
     void showOverview();
     void toggleDistanceFieldFonts();
+    void setPixelGeometry(int pixelGeometryIndex);
 
     GrContext* getGrContext() const { return fDevManager->getGrContext(); }
 
     void setZoomCenter(float x, float y);
     void changeZoomLevel(float delta);
+    void changeOffset(SkVector delta);
     bool nextSample();
     bool previousSample();
     bool goToSample(int i);
     SkString getSampleTitle(int i);
-    int  sampleCount();
+    int sampleCount();
     bool handleTouch(int ownerId, float x, float y,
-            SkView::Click::State state);
+        SkView::Click::State state);
     void saveToPdf();
     void postInvalDelay();
 
@@ -150,10 +157,10 @@ protected:
     bool onQuery(SkEvent* evt) override;
 
     virtual bool onDispatchClick(int x, int y, Click::State, void* owner,
-                                 unsigned modi) override;
+        unsigned modi) override;
     bool onClick(Click* click) override;
     virtual Click* onFindClickHandler(SkScalar x, SkScalar y,
-                                      unsigned modi) override;
+        unsigned modi) override;
 
 private:
     class DefaultDeviceManager;
@@ -161,65 +168,58 @@ private:
     int fCurrIndex;
 
     SkPictureRecorder fRecorder;
-    SkAutoTDelete<SkSurface> fDeferredSurface;
-    SkAutoTDelete<SkDeferredCanvas> fDeferredCanvas;
     SkAutoTDelete<SkCanvas> fFlagsFilterCanvas;
     SkPath fClipPath;
 
     SkTouchGesture fGesture;
     SkScalar fZoomLevel;
     SkScalar fZoomScale;
+    SkVector fOffset;
 
     DeviceType fDeviceType;
     DeviceManager* fDevManager;
 
     bool fSaveToPdf;
-    SkAutoTUnref<SkDocument> fPDFDocument;
+    bool fSaveToSKP;
+    sk_sp<SkDocument> fPDFDocument;
 
     bool fUseClip;
+    bool fUsePicture;
     bool fAnimating;
     bool fRotate;
     bool fPerspAnim;
     bool fRequestGrabImage;
     bool fMeasureFPS;
-    SkMSec fMeasureFPS_Time;
-    SkMSec fMeasureFPS_StartTime;
+    WallTimer fTimer;
+    double fMeasureFPS_Time;
     bool fMagnify;
     int fTilingMode;
-
-
-    SkOSMenu::TriState fPipeState;  // Mixed uses a tiled pipe
-                                    // On uses a normal pipe
-                                    // Off uses no pipe
-    int  fUsePipeMenuItemID;
 
     // The following are for the 'fatbits' drawing
     // Latest position of the mouse.
     int fMouseX, fMouseY;
     int fFatBitsScale;
     // Used by the text showing position and color values.
-    SkTypeface* fTypeface;
+    sk_sp<SkTypeface> fTypeface;
     bool fShowZoomer;
 
     SkOSMenu::TriState fLCDState;
     SkOSMenu::TriState fAAState;
     SkOSMenu::TriState fSubpixelState;
     int fHintingState;
+    int fPixelGeometryIndex;
     int fFilterQualityIndex;
-    unsigned   fFlipAxis;
+    unsigned fFlipAxis;
 
     int fMSAASampleCount;
+    bool fDeepColor;
 
-    int fScrollTestX, fScrollTestY;
     SkScalar fZoomCenterX, fZoomCenterY;
 
     //Stores global settings
     SkOSMenu* fAppMenu; // We pass ownership to SkWindow, when we call addMenu
     //Stores slide specific settings
     SkOSMenu* fSlideMenu; // We pass ownership to SkWindow, when we call addMenu
-
-    int fTransitionNext;
-    int fTransitionPrev;
 
     void loadView(SkView*);
     void updateTitle();

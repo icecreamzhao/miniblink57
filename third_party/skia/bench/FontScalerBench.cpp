@@ -15,9 +15,11 @@
 class FontScalerBench : public Benchmark {
     SkString fName;
     SkString fText;
-    bool     fDoLCD;
+    bool fDoLCD;
+
 public:
-    FontScalerBench(bool doLCD)  {
+    FontScalerBench(bool doLCD)
+    {
         fName.printf("fontscaler_%s", doLCD ? "lcd" : "aa");
         fText.set("abcdefghijklmnopqrstuvwxyz01234567890");
         fDoLCD = doLCD;
@@ -25,7 +27,8 @@ public:
 
 protected:
     virtual const char* onGetName() { return fName.c_str(); }
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    virtual void onDraw(int loops, SkCanvas* canvas)
+    {
         SkPaint paint;
         this->setupPaint(&paint);
         paint.setLCDRenderText(fDoLCD);
@@ -38,15 +41,16 @@ protected:
             for (int ps = 9; ps <= 24; ps += 2) {
                 paint.setTextSize(SkIntToScalar(ps));
                 canvas->drawText(fText.c_str(), fText.size(),
-                        0, SkIntToScalar(20), paint);
+                    0, SkIntToScalar(20), paint);
             }
         }
     }
+
 private:
     typedef Benchmark INHERITED;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return SkNEW_ARGS(FontScalerBench, (false)); )
-DEF_BENCH( return SkNEW_ARGS(FontScalerBench, (true)); )
+DEF_BENCH(return new FontScalerBench(false);)
+DEF_BENCH(return new FontScalerBench(true);)

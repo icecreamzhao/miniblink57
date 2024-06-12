@@ -4,7 +4,8 @@
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
  * Copyright (C) 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
- * Copyright (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2008 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2012-2013 Intel Corporation. All rights reserved.
  *
@@ -32,12 +33,14 @@
 #include "core/frame/PageScaleConstraints.h"
 #include "platform/Length.h"
 #include "platform/geometry/FloatSize.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class LocalFrame;
 
 struct CORE_EXPORT ViewportDescription {
+    DISALLOW_NEW();
 
     enum Type {
         // These are ordered in increasing importance.
@@ -61,7 +64,12 @@ struct CORE_EXPORT ViewportDescription {
         ValueExtendToZoom = -10
     };
 
-    ViewportDescription(Type type = UserAgentStyleSheet)
+    ViewportDescription(Type type = UserAgentStyleSheet
+#ifdef TENCENT_FITSCREEN
+        ,
+        bool isFit = false
+#endif
+        )
         : type(type)
         , zoom(ValueAuto)
         , minZoom(ValueAuto)
@@ -73,11 +81,15 @@ struct CORE_EXPORT ViewportDescription {
         , minZoomIsExplicit(false)
         , maxZoomIsExplicit(false)
         , userZoomIsExplicit(false)
+#ifdef TENCENT_FITSCREEN
+        , isFitScreenLayout(isFit)
+#endif
     {
     }
 
     // All arguments are in CSS units.
-    PageScaleConstraints resolve(const FloatSize& initialViewportSize, Length legacyFallbackWidth) const;
+    PageScaleConstraints resolve(const FloatSize& initialViewportSize,
+        Length legacyFallbackWidth) const;
 
     Length minWidth;
     Length maxWidth;
@@ -96,25 +108,19 @@ struct CORE_EXPORT ViewportDescription {
     bool minZoomIsExplicit;
     bool maxZoomIsExplicit;
     bool userZoomIsExplicit;
+#ifdef TENCENT_FITSCREEN
+    bool isFitScreenLayout;
+#endif
 
     bool operator==(const ViewportDescription& other) const
     {
         // Used for figuring out whether to reset the viewport or not,
         // thus we are not taking type into account.
-        return minWidth == other.minWidth
-            && maxWidth == other.maxWidth
-            && minHeight == other.minHeight
-            && maxHeight == other.maxHeight
-            && zoom == other.zoom
-            && minZoom == other.minZoom
-            && maxZoom == other.maxZoom
-            && userZoom == other.userZoom
-            && orientation == other.orientation
-            && deprecatedTargetDensityDPI == other.deprecatedTargetDensityDPI
-            && zoomIsExplicit == other.zoomIsExplicit
-            && minZoomIsExplicit == other.minZoomIsExplicit
-            && maxZoomIsExplicit == other.maxZoomIsExplicit
-            && userZoomIsExplicit == other.userZoomIsExplicit;
+        return minWidth == other.minWidth && maxWidth == other.maxWidth && minHeight == other.minHeight && maxHeight == other.maxHeight && zoom == other.zoom && minZoom == other.minZoom && maxZoom == other.maxZoom && userZoom == other.userZoom && orientation == other.orientation && deprecatedTargetDensityDPI == other.deprecatedTargetDensityDPI && zoomIsExplicit == other.zoomIsExplicit && minZoomIsExplicit == other.minZoomIsExplicit && maxZoomIsExplicit == other.maxZoomIsExplicit && userZoomIsExplicit == other.userZoomIsExplicit
+#ifdef TENCENT_FITSCREEN
+            && isFitScreenLayout == other.isFitScreenLayout
+#endif
+            ;
     }
 
     bool operator!=(const ViewportDescription& other) const
@@ -122,18 +128,25 @@ struct CORE_EXPORT ViewportDescription {
         return !(*this == other);
     }
 
-    bool isLegacyViewportType() const { return type >= HandheldFriendlyMeta && type <= ViewportMeta; }
+    bool isLegacyViewportType() const
+    {
+        return type >= HandheldFriendlyMeta && type <= ViewportMeta;
+    }
     bool isMetaViewportType() const { return type == ViewportMeta; }
     bool isSpecifiedByAuthor() const { return type != UserAgentStyleSheet; }
     bool matchesHeuristicsForGpuRasterization() const;
 
-    // Reports UMA stat on whether the page is considered mobile or desktop and what kind of
-    // mobile it is. Applies only to Android, must only be called once per page load.
+    // Reports UMA stat on whether the page is considered mobile or desktop and
+    // what kind of mobile it is. Applies only to Android, must only be called
+    // once per page load.
     void reportMobilePageStats(const LocalFrame*) const;
 
 private:
-    enum Direction { Horizontal, Vertical };
-    static float resolveViewportLength(const Length&, const FloatSize& initialViewportSize, Direction);
+    enum Direction { Horizontal,
+        Vertical };
+    static float resolveViewportLength(const Length&,
+        const FloatSize& initialViewportSize,
+        Direction);
 };
 
 } // namespace blink

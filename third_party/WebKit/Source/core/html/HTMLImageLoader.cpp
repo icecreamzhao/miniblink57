@@ -19,18 +19,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLImageLoader.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Element.h"
 #include "core/events/Event.h"
-#include "core/fetch/ImageResource.h"
+#include "core/fetch/ResourceLoadingLog.h"
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLObjectElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "platform/Logging.h"
+#include "core/loader/resource/ImageResourceContent.h"
 
 namespace blink {
 
@@ -38,60 +37,59 @@ using namespace HTMLNames;
 
 HTMLImageLoader::HTMLImageLoader(Element* element)
     : ImageLoader(element)
-    , m_loadFallbackContentTimer(this, &HTMLImageLoader::timerFired)
 {
 }
 
-HTMLImageLoader::~HTMLImageLoader()
-{
-}
+HTMLImageLoader::~HTMLImageLoader() { }
 
 void HTMLImageLoader::dispatchLoadEvent()
 {
-    WTF_LOG(Timers, "HTMLImageLoader::dispatchLoadEvent %p", this);
+    RESOURCE_LOADING_DVLOG(1) << "HTMLImageLoader::dispatchLoadEvent " << this;
 
-    // HTMLVideoElement uses this class to load the poster image, but it should not fire events for loading or failure.
+    // HTMLVideoElement uses this class to load the poster image, but it should
+    // not fire events for loading or failure.
     if (isHTMLVideoElement(*element()))
         return;
 
     bool errorOccurred = image()->errorOccurred();
-    if (isHTMLObjectElement(*element()) && !errorOccurred)
-        errorOccurred = (image()->response().httpStatusCode() >= 400); // An <object> considers a 404 to be an error and should fire onerror.
-    element()->dispatchEvent(Event::create(errorOccurred ? EventTypeNames::error : EventTypeNames::load));
-}
-
-static void loadFallbackContentForElement(Element* element)
-{
-    if (isHTMLImageElement(element))
-        toHTMLImageElement(element)->ensureFallbackContent();
-    else if (isHTMLInputElement(element))
-        toHTMLInputElement(element)->ensureFallbackContent();
+    if (isHTMLObjectElement(*element()) && !errorOccurred) {
+        // An <object> considers a 404 to be an error and should fire onerror.
+        errorOccurred = (image()->response().httpStatusCode() >= 400);
+    }
+    element()->dispatchEvent(Event::create(errorOccurred ? EventTypeNames::error
+                                                         : EventTypeNames::load));
 }
 
 void HTMLImageLoader::noImageResourceToLoad()
 {
-    // FIXME: Use fallback content even when there is no alt-text. The only blocker is the large amount of rebaselining it requires.
-    if (!toHTMLElement(element())->altText().isEmpty())
-        loadFallbackContentForElement(element());
+    // FIXME: Use fallback content even when there is no alt-text. The only
+    // blocker is the large amount of rebaselining it requires.
+    if (toHTMLElement(element())->altText().isEmpty())
+        return;
+
+    if (isHTMLImageElement(element()))
+        toHTMLImageElement(element())->ensureCollapsedOrFallbackContent();
+    else if (isHTMLInputElement(element()))
+        toHTMLInputElement(element())->ensureFallbackContent();
 }
 
-void HTMLImageLoader::notifyFinished(Resource*)
+void HTMLImageLoader::imageNotifyFinished(ImageResourceContent*)
 {
-    ImageResource* cachedImage = image();
-    RefPtrWillBeRawPtr<Element> element = this->element();
-    ImageLoader::notifyFinished(cachedImage);
+    ImageResourceContent* cachedImage = image();
+    Element* element = this->element();
+    ImageLoader::imageNotifyFinished(cachedImage);
 
     bool loadError = cachedImage->errorOccurred();
     if (isHTMLImageElement(*element)) {
         if (loadError)
-            ensureFallbackContent();
+            toHTMLImageElement(element)->ensureCollapsedOrFallbackContent();
         else
             toHTMLImageElement(element)->ensurePrimaryContent();
     }
 
     if (isHTMLInputElement(*element)) {
         if (loadError)
-            ensureFallbackContent();
+            toHTMLInputElement(element)->ensureFallbackContent();
         else
             toHTMLInputElement(element)->ensurePrimaryContent();
     }
@@ -100,16 +98,4 @@ void HTMLImageLoader::notifyFinished(Resource*)
         toHTMLObjectElement(element)->renderFallbackContent();
 }
 
-void HTMLImageLoader::ensureFallbackContent()
-{
-    if (image()->url().protocolIsData())
-        m_loadFallbackContentTimer.startOneShot(0, FROM_HERE);
-    else
-        loadFallbackContentForElement(element());
-}
-
-void HTMLImageLoader::timerFired(Timer<HTMLImageLoader>*)
-{
-    loadFallbackContentForElement(element());
-}
-}
+} // namespace blink

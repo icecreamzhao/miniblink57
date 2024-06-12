@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkXMLAnimatorWriter_DEFINED
 #define SkXMLAnimatorWriter_DEFINED
 
@@ -19,11 +18,10 @@ class SkXMLAnimatorWriter : public SkXMLWriter {
 public:
     SkXMLAnimatorWriter(SkAnimator*);
     virtual ~SkXMLAnimatorWriter();
-    virtual void    writeHeader();
+    void writeHeader() override;
     SkDEBUGCODE(static void UnitTest(class SkCanvas* canvas);)
 
-protected:
-    void onAddAttributeLen(const char name[], const char value[], size_t length) override;
+        protected : void onAddAttributeLen(const char name[], const char value[], size_t length) override;
     void onEndElement() override;
     void onStartElementLen(const char elem[], size_t length) override;
     void onAddText(const char text[], size_t length) override;

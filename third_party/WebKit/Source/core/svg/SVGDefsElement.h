@@ -21,13 +21,13 @@
 #ifndef SVGDefsElement_h
 #define SVGDefsElement_h
 
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGGraphicsElement.h"
 
 namespace blink {
 
 class SVGDefsElement final : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGDefsElement);
 

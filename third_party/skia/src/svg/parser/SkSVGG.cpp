@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,11 +5,11 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGG.h"
 
 DEFINE_SVG_NO_INFO(G)
 
-void SkSVGG::translate(SkSVGParser& parser, bool defState) {
+void SkSVGG::translate(SkSVGParser& parser, bool defState)
+{
     INHERITED::translate(parser, defState);
 }

@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebNetworkStateNotifier.h"
 
 #include "core/page/NetworkStateNotifier.h"
@@ -40,9 +39,10 @@ void WebNetworkStateNotifier::setOnLine(bool onLine)
     networkStateNotifier().setOnLine(onLine);
 }
 
-void WebNetworkStateNotifier::setWebConnectionType(WebConnectionType type)
+void WebNetworkStateNotifier::setWebConnection(WebConnectionType type,
+    double maxBandwidthMbps)
 {
-    networkStateNotifier().setWebConnectionType(type);
+    networkStateNotifier().setWebConnection(type, maxBandwidthMbps);
 }
 
 } // namespace blink

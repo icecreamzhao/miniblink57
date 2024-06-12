@@ -14,33 +14,39 @@
 namespace v8 {
 namespace internal {
 
-// Forward declaration.
-class Isolate;
+    // Forward declaration.
+    class Isolate;
 
-struct TypeProfileEntry {
-  explicit TypeProfileEntry(
-      int pos, std::vector<v8::internal::Handle<internal::String>> t)
-      : position(pos), types(std::move(t)) {}
-  int position;
-  std::vector<v8::internal::Handle<internal::String>> types;
-};
+    struct TypeProfileEntry {
+        explicit TypeProfileEntry(
+            int pos, std::vector<v8::internal::Handle<internal::String>> t)
+            : position(pos)
+            , types(std::move(t))
+        {
+        }
+        int position;
+        std::vector<v8::internal::Handle<internal::String>> types;
+    };
 
-struct TypeProfileScript {
-  explicit TypeProfileScript(Handle<Script> s) : script(s) {}
-  Handle<Script> script;
-  std::vector<TypeProfileEntry> entries;
-};
+    struct TypeProfileScript {
+        explicit TypeProfileScript(Handle<Script> s)
+            : script(s)
+        {
+        }
+        Handle<Script> script;
+        std::vector<TypeProfileEntry> entries;
+    };
 
-class TypeProfile : public std::vector<TypeProfileScript> {
- public:
-  static std::unique_ptr<TypeProfile> Collect(Isolate* isolate);
-  static void SelectMode(Isolate* isolate, debug::TypeProfileMode mode);
+    class TypeProfile : public std::vector<TypeProfileScript> {
+    public:
+        static std::unique_ptr<TypeProfile> Collect(Isolate* isolate);
+        static void SelectMode(Isolate* isolate, debug::TypeProfileMode mode);
 
- private:
-  TypeProfile() = default;
-};
+    private:
+        TypeProfile() = default;
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_DEBUG_DEBUG_TYPE_PROFILE_H_
+#endif // V8_DEBUG_DEBUG_TYPE_PROFILE_H_

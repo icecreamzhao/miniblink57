@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2008, 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2007 Alp Toker <alp@atoker.com>
  * Copyright (C) 2008 Eric Seidel <eric@webkit.org>
@@ -32,7 +33,6 @@
  * SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/canvas2d/CanvasPathMethods.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -55,7 +55,7 @@ void CanvasPathMethods::closePath()
 
 void CanvasPathMethods::moveTo(float x, float y)
 {
-    if (!std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -64,7 +64,7 @@ void CanvasPathMethods::moveTo(float x, float y)
 
 void CanvasPathMethods::lineTo(float x, float y)
 {
-    if (!std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -72,13 +72,16 @@ void CanvasPathMethods::lineTo(float x, float y)
     FloatPoint p1 = FloatPoint(x, y);
     if (!m_path.hasCurrentPoint())
         m_path.moveTo(p1);
-    else if (p1 != m_path.currentPoint())
-        m_path.addLineTo(p1);
+
+    m_path.addLineTo(p1);
 }
 
-void CanvasPathMethods::quadraticCurveTo(float cpx, float cpy, float x, float y)
+void CanvasPathMethods::quadraticCurveTo(float cpx,
+    float cpy,
+    float x,
+    float y)
 {
-    if (!std::isfinite(cpx) || !std::isfinite(cpy) || !std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(cpx) || !std_isfinite(cpy) || !std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -87,13 +90,18 @@ void CanvasPathMethods::quadraticCurveTo(float cpx, float cpy, float x, float y)
 
     FloatPoint p1 = FloatPoint(x, y);
     FloatPoint cp = FloatPoint(cpx, cpy);
-    if (p1 != m_path.currentPoint() || p1 != cp)
-        m_path.addQuadCurveTo(cp, p1);
+
+    m_path.addQuadCurveTo(cp, p1);
 }
 
-void CanvasPathMethods::bezierCurveTo(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y)
+void CanvasPathMethods::bezierCurveTo(float cp1x,
+    float cp1y,
+    float cp2x,
+    float cp2y,
+    float x,
+    float y)
 {
-    if (!std::isfinite(cp1x) || !std::isfinite(cp1y) || !std::isfinite(cp2x) || !std::isfinite(cp2y) || !std::isfinite(x) || !std::isfinite(y))
+    if (!std_isfinite(cp1x) || !std_isfinite(cp1y) || !std_isfinite(cp2x) || !std_isfinite(cp2y) || !std_isfinite(x) || !std_isfinite(y))
         return;
     if (!isTransformInvertible())
         return;
@@ -103,17 +111,24 @@ void CanvasPathMethods::bezierCurveTo(float cp1x, float cp1y, float cp2x, float 
     FloatPoint p1 = FloatPoint(x, y);
     FloatPoint cp1 = FloatPoint(cp1x, cp1y);
     FloatPoint cp2 = FloatPoint(cp2x, cp2y);
-    if (p1 != m_path.currentPoint() || p1 != cp1 ||  p1 != cp2)
-        m_path.addBezierCurveTo(cp1, cp2, p1);
+
+    m_path.addBezierCurveTo(cp1, cp2, p1);
 }
 
-void CanvasPathMethods::arcTo(float x1, float y1, float x2, float y2, float r, ExceptionState& exceptionState)
+void CanvasPathMethods::arcTo(float x1,
+    float y1,
+    float x2,
+    float y2,
+    float r,
+    ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x1) || !std::isfinite(y1) || !std::isfinite(x2) || !std::isfinite(y2) || !std::isfinite(r))
+    if (!std_isfinite(x1) || !std_isfinite(y1) || !std_isfinite(x2) || !std_isfinite(y2) || !std_isfinite(r))
         return;
 
     if (r < 0) {
-        exceptionState.throwDOMException(IndexSizeError, "The radius provided (" + String::number(r) + ") is negative.");
+        exceptionState.throwDOMException(
+            IndexSizeError,
+            "The radius provided (" + String::number(r) + ") is negative.");
         return;
     }
 
@@ -133,70 +148,77 @@ void CanvasPathMethods::arcTo(float x1, float y1, float x2, float y2, float r, E
 
 namespace {
 
-float adjustEndAngle(float startAngle, float endAngle, bool anticlockwise)
-{
-    float newEndAngle = endAngle;
-    /* http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-arc
-     * If the anticlockwise argument is false and endAngle-startAngle is equal to or greater than 2pi, or,
-     * if the anticlockwise argument is true and startAngle-endAngle is equal to or greater than 2pi,
-     * then the arc is the whole circumference of this ellipse, and the point at startAngle along this circle's circumference,
-     * measured in radians clockwise from the ellipse's semi-major axis, acts as both the start point and the end point.
-     */
-    if (!anticlockwise && endAngle - startAngle >= twoPiFloat)
-        newEndAngle = startAngle + twoPiFloat;
-    else if (anticlockwise && startAngle - endAngle >= twoPiFloat)
-        newEndAngle = startAngle - twoPiFloat;
+    float adjustEndAngle(float startAngle, float endAngle, bool anticlockwise)
+    {
+        float newEndAngle = endAngle;
+        /* http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#dom-context-2d-arc
+   * If the anticlockwise argument is false and endAngle-startAngle is equal
+   * to or greater than 2pi, or,
+   * if the anticlockwise argument is true and startAngle-endAngle is equal to
+   * or greater than 2pi,
+   * then the arc is the whole circumference of this ellipse, and the point at
+   * startAngle along this circle's circumference, measured in radians clockwise
+   * from the ellipse's semi-major axis, acts as both the start point and the
+   * end point.
+   */
+        if (!anticlockwise && endAngle - startAngle >= twoPiFloat)
+            newEndAngle = startAngle + twoPiFloat;
+        else if (anticlockwise && startAngle - endAngle >= twoPiFloat)
+            newEndAngle = startAngle - twoPiFloat;
 
-    /*
-     * Otherwise, the arc is the path along the circumference of this ellipse from the start point to the end point,
-     * going anti-clockwise if the anticlockwise argument is true, and clockwise otherwise.
-     * Since the points are on the ellipse, as opposed to being simply angles from zero,
-     * the arc can never cover an angle greater than 2pi radians.
-     */
-    /* NOTE: When startAngle = 0, endAngle = 2Pi and anticlockwise = true, the spec does not indicate clearly.
-     * We draw the entire circle, because some web sites use arc(x, y, r, 0, 2*Math.PI, true) to draw circle.
-     * We preserve backward-compatibility.
-     */
-    else if (!anticlockwise && startAngle > endAngle)
-        newEndAngle = startAngle + (twoPiFloat - fmodf(startAngle - endAngle, twoPiFloat));
-    else if (anticlockwise && startAngle < endAngle)
-        newEndAngle = startAngle - (twoPiFloat - fmodf(endAngle - startAngle, twoPiFloat));
+        /*
+   * Otherwise, the arc is the path along the circumference of this ellipse
+   * from the start point to the end point, going anti-clockwise if the
+   * anticlockwise argument is true, and clockwise otherwise.
+   * Since the points are on the ellipse, as opposed to being simply angles
+   * from zero, the arc can never cover an angle greater than 2pi radians.
+   */
+        /* NOTE: When startAngle = 0, endAngle = 2Pi and anticlockwise = true, the
+   * spec does not indicate clearly.
+   * We draw the entire circle, because some web sites use arc(x, y, r, 0,
+   * 2*Math.PI, true) to draw circle.
+   * We preserve backward-compatibility.
+   */
+        else if (!anticlockwise && startAngle > endAngle)
+            newEndAngle = startAngle + (twoPiFloat - fmodf(startAngle - endAngle, twoPiFloat));
+        else if (anticlockwise && startAngle < endAngle)
+            newEndAngle = startAngle - (twoPiFloat - fmodf(endAngle - startAngle, twoPiFloat));
 
-    ASSERT(ellipseIsRenderable(startAngle, newEndAngle));
-    return newEndAngle;
-}
-
-inline void lineToFloatPoint(CanvasPathMethods* path, const FloatPoint& p)
-{
-    path->lineTo(p.x(), p.y());
-}
-
-inline FloatPoint getPointOnEllipse(float radiusX, float radiusY, float theta)
-{
-    return FloatPoint(radiusX * cosf(theta), radiusY * sinf(theta));
-}
-
-void canonicalizeAngle(float* startAngle, float* endAngle)
-{
-    // Make 0 <= startAngle < 2*PI
-    float newStartAngle = fmodf(*startAngle, twoPiFloat);
-
-    if (newStartAngle < 0) {
-        newStartAngle += twoPiFloat;
-        // Check for possible catastrophic cancellation in cases where
-        // newStartAngle was a tiny negative number (c.f. crbug.com/503422)
-        if (newStartAngle >= twoPiFloat)
-            newStartAngle -= twoPiFloat;
+        ASSERT(ellipseIsRenderable(startAngle, newEndAngle));
+        return newEndAngle;
     }
 
-    float delta = newStartAngle - *startAngle;
-    *startAngle = newStartAngle;
-    *endAngle = *endAngle + delta;
+    inline void lineToFloatPoint(CanvasPathMethods* path, const FloatPoint& p)
+    {
+        path->lineTo(p.x(), p.y());
+    }
 
-    ASSERT(newStartAngle >= 0 && newStartAngle < twoPiFloat);
-}
+    inline FloatPoint getPointOnEllipse(float radiusX, float radiusY, float theta)
+    {
+        return FloatPoint(radiusX * cosf(theta), radiusY * sinf(theta));
+    }
 
-/*
+    void canonicalizeAngle(float* startAngle, float* endAngle)
+    {
+        // Make 0 <= startAngle < 2*PI
+        float newStartAngle = fmodf(*startAngle, twoPiFloat);
+
+        if (newStartAngle < 0) {
+            newStartAngle += twoPiFloat;
+            // Check for possible catastrophic cancellation in cases where
+            // newStartAngle was a tiny negative number (c.f. crbug.com/503422)
+            if (newStartAngle >= twoPiFloat)
+                newStartAngle -= twoPiFloat;
+        }
+
+        float delta = newStartAngle - *startAngle;
+        *startAngle = newStartAngle;
+        *endAngle = *endAngle + delta;
+
+        ASSERT(newStartAngle >= 0 && newStartAngle < twoPiFloat);
+    }
+
+    /*
  * degenerateEllipse() handles a degenerated ellipse using several lines.
  *
  * Let's see a following example: line to ellipse to line.
@@ -224,45 +246,68 @@ void canonicalizeAngle(float* startAngle, float* endAngle)
  *            ``P
  * Angles for P are 0 and Pi in the ellipse coordinates.
  *
- * To handle both cases, degenerateEllipse() lines to start angle, local maximum points(every 0.5Pi), and end angle.
- * NOTE: Before ellipse() calls this function, adjustEndAngle() is called, so endAngle - startAngle must be equal to or less than 2Pi.
+ * To handle both cases, degenerateEllipse() lines to start angle, local maximum
+ * points(every 0.5Pi), and end angle.
+ * NOTE: Before ellipse() calls this function, adjustEndAngle() is called, so
+ * endAngle - startAngle must be equal to or less than 2Pi.
  */
-void degenerateEllipse(CanvasPathMethods* path, float x, float y, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise)
-{
-    ASSERT(ellipseIsRenderable(startAngle, endAngle));
-    ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
-    ASSERT((anticlockwise && (startAngle - endAngle) >= 0) || (!anticlockwise && (endAngle - startAngle) >= 0));
+    void degenerateEllipse(CanvasPathMethods* path,
+        float x,
+        float y,
+        float radiusX,
+        float radiusY,
+        float rotation,
+        float startAngle,
+        float endAngle,
+        bool anticlockwise)
+    {
+        ASSERT(ellipseIsRenderable(startAngle, endAngle));
+        ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
+        ASSERT((anticlockwise && (startAngle - endAngle) >= 0) || (!anticlockwise && (endAngle - startAngle) >= 0));
 
-    FloatPoint center(x, y);
-    AffineTransform rotationMatrix;
-    rotationMatrix.rotateRadians(rotation);
-    // First, if the object's path has any subpaths, then the method must add a straight line from the last point in the subpath to the start point of the arc.
-    lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, startAngle)));
-    if ((!radiusX && !radiusY) || startAngle == endAngle)
-        return;
+        FloatPoint center(x, y);
+        AffineTransform rotationMatrix;
+        rotationMatrix.rotateRadians(rotation);
+        // First, if the object's path has any subpaths, then the method must add a
+        // straight line from the last point in the subpath to the start point of the
+        // arc.
+        lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, startAngle)));
+        if ((!radiusX && !radiusY) || startAngle == endAngle)
+            return;
 
-    if (!anticlockwise) {
-        // startAngle - fmodf(startAngle, piOverTwoFloat) + piOverTwoFloat is the one of (0, 0.5Pi, Pi, 1.5Pi, 2Pi)
-        // that is the closest to startAngle on the clockwise direction.
-        for (float angle = startAngle - fmodf(startAngle, piOverTwoFloat) + piOverTwoFloat; angle < endAngle; angle += piOverTwoFloat)
-            lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, angle)));
-    } else {
-        for (float angle = startAngle - fmodf(startAngle, piOverTwoFloat); angle > endAngle; angle -= piOverTwoFloat)
-            lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, angle)));
+        if (!anticlockwise) {
+            // startAngle - fmodf(startAngle, piOverTwoFloat) + piOverTwoFloat is the
+            // one of (0, 0.5Pi, Pi, 1.5Pi, 2Pi) that is the closest to startAngle on
+            // the clockwise direction.
+            for (float angle = startAngle - fmodf(startAngle, piOverTwoFloat) + piOverTwoFloat;
+                 angle < endAngle; angle += piOverTwoFloat)
+                lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, angle)));
+        } else {
+            for (float angle = startAngle - fmodf(startAngle, piOverTwoFloat);
+                 angle > endAngle; angle -= piOverTwoFloat)
+                lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, angle)));
+        }
+
+        lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, endAngle)));
     }
-
-    lineToFloatPoint(path, center + rotationMatrix.mapPoint(getPointOnEllipse(radiusX, radiusY, endAngle)));
-}
 
 } // namespace
 
-void CanvasPathMethods::arc(float x, float y, float radius, float startAngle, float endAngle, bool anticlockwise, ExceptionState& exceptionState)
+void CanvasPathMethods::arc(float x,
+    float y,
+    float radius,
+    float startAngle,
+    float endAngle,
+    bool anticlockwise,
+    ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(radius) || !std::isfinite(startAngle) || !std::isfinite(endAngle))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(radius) || !std_isfinite(startAngle) || !std_isfinite(endAngle))
         return;
 
     if (radius < 0) {
-        exceptionState.throwDOMException(IndexSizeError, "The radius provided (" + String::number(radius) + ") is negative.");
+        exceptionState.throwDOMException(
+            IndexSizeError,
+            "The radius provided (" + String::number(radius) + ") is negative.");
         return;
     }
 
@@ -277,20 +322,31 @@ void CanvasPathMethods::arc(float x, float y, float radius, float startAngle, fl
 
     canonicalizeAngle(&startAngle, &endAngle);
     float adjustedEndAngle = adjustEndAngle(startAngle, endAngle, anticlockwise);
-    m_path.addArc(FloatPoint(x, y), radius, startAngle, adjustedEndAngle, anticlockwise);
+    m_path.addArc(FloatPoint(x, y), radius, startAngle, adjustedEndAngle,
+        anticlockwise);
 }
 
-void CanvasPathMethods::ellipse(float x, float y, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise, ExceptionState& exceptionState)
+void CanvasPathMethods::ellipse(float x,
+    float y,
+    float radiusX,
+    float radiusY,
+    float rotation,
+    float startAngle,
+    float endAngle,
+    bool anticlockwise,
+    ExceptionState& exceptionState)
 {
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(radiusX) || !std::isfinite(radiusY) || !std::isfinite(rotation) || !std::isfinite(startAngle) || !std::isfinite(endAngle))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(radiusX) || !std_isfinite(radiusY) || !std_isfinite(rotation) || !std_isfinite(startAngle) || !std_isfinite(endAngle))
         return;
 
     if (radiusX < 0) {
-        exceptionState.throwDOMException(IndexSizeError, "The major-axis radius provided (" + String::number(radiusX) + ") is negative.");
+        exceptionState.throwDOMException(
+            IndexSizeError, "The major-axis radius provided (" + String::number(radiusX) + ") is negative.");
         return;
     }
     if (radiusY < 0) {
-        exceptionState.throwDOMException(IndexSizeError, "The minor-axis radius provided (" + String::number(radiusY) + ") is negative.");
+        exceptionState.throwDOMException(
+            IndexSizeError, "The minor-axis radius provided (" + String::number(radiusY) + ") is negative.");
         return;
     }
 
@@ -300,12 +356,15 @@ void CanvasPathMethods::ellipse(float x, float y, float radiusX, float radiusY, 
     canonicalizeAngle(&startAngle, &endAngle);
     float adjustedEndAngle = adjustEndAngle(startAngle, endAngle, anticlockwise);
     if (!radiusX || !radiusY || startAngle == adjustedEndAngle) {
-        // The ellipse is empty but we still need to draw the connecting line to start point.
-        degenerateEllipse(this, x, y, radiusX, radiusY, rotation, startAngle, adjustedEndAngle, anticlockwise);
+        // The ellipse is empty but we still need to draw the connecting line to
+        // start point.
+        degenerateEllipse(this, x, y, radiusX, radiusY, rotation, startAngle,
+            adjustedEndAngle, anticlockwise);
         return;
     }
 
-    m_path.addEllipse(FloatPoint(x, y), radiusX, radiusY, rotation, startAngle, adjustedEndAngle, anticlockwise);
+    m_path.addEllipse(FloatPoint(x, y), radiusX, radiusY, rotation, startAngle,
+        adjustedEndAngle, anticlockwise);
 }
 
 void CanvasPathMethods::rect(float x, float y, float width, float height)
@@ -313,14 +372,9 @@ void CanvasPathMethods::rect(float x, float y, float width, float height)
     if (!isTransformInvertible())
         return;
 
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(width) || !std::isfinite(height))
+    if (!std_isfinite(x) || !std_isfinite(y) || !std_isfinite(width) || !std_isfinite(height))
         return;
-
-    if (!width && !height) {
-        m_path.moveTo(FloatPoint(x, y));
-        return;
-    }
 
     m_path.addRect(FloatRect(x, y, width, height));
 }
-}
+} // namespace blink

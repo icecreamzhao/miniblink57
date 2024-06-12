@@ -26,26 +26,18 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/fonts/FontFallbackList.h"
 
 #include "platform/FontFamilyNames.h"
+#include "platform/fonts/AlternateFontFamily.h"
 #include "platform/fonts/FontCache.h"
+#include "platform/fonts/FontCacheKey.h"
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/FontFamily.h"
 #include "platform/fonts/SegmentedFontData.h"
 #include "wtf/text/CharacterNames.h"
-#include "wtf/RefCountedLeakCounter.h"
-#ifndef NDEBUG
-#include <set> // weolar TODO
-#endif
 
 namespace blink {
-
-#ifndef NDEBUG
-DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, FontFallbackListCounter, ("FontFallbackListCounter"));
-std::set<void*>* g_activatingFontFallbackList = nullptr;
-#endif
 
 FontFallbackList::FontFallbackList()
     : m_pageZero(0)
@@ -56,29 +48,9 @@ FontFallbackList::FontFallbackList()
     , m_generation(FontCache::fontCache()->generation())
     , m_hasLoadingFallback(false)
 {
-#ifndef NDEBUG
-    FontFallbackListCounter.increment();
-    if (!g_activatingFontFallbackList)
-        g_activatingFontFallbackList = new std::set<void*>();
-    g_activatingFontFallbackList->insert(this);
-
-//     WTF::String outstr = String::format("FontFallbackList::FontFallbackList: %p\n", this);
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-#endif
 }
 
-FontFallbackList::~FontFallbackList()
-{
-    releaseFontData();
-#ifndef NDEBUG
-//     WTF::String outstr = String::format("FontFallbackList::~FontFallbackList: %p\n", this);
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-    g_activatingFontFallbackList->erase(this);
-    FontFallbackListCounter.decrement();
-#endif
-}
-
-void FontFallbackList::invalidate(PassRefPtrWillBeRawPtr<FontSelector> fontSelector)
+void FontFallbackList::invalidate(FontSelector* fontSelector)
 {
     releaseFontData();
     m_fontList.clear();
@@ -87,10 +59,10 @@ void FontFallbackList::invalidate(PassRefPtrWillBeRawPtr<FontSelector> fontSelec
     m_cachedPrimarySimpleFontData = 0;
     m_familyIndex = 0;
     m_hasLoadingFallback = false;
-    m_fontSelector = fontSelector;
+    if (m_fontSelector != fontSelector)
+        m_fontSelector = fontSelector;
     m_fontSelectorVersion = m_fontSelector ? m_fontSelector->version() : 0;
     m_generation = FontCache::fontCache()->generation();
-    m_cachingWordShaper.clear();
 }
 
 void FontFallbackList::releaseFontData()
@@ -102,6 +74,7 @@ void FontFallbackList::releaseFontData()
             FontCache::fontCache()->releaseFontData(toSimpleFontData(m_fontList[i]));
         }
     }
+    m_shapeCache.reset(); // Clear the weak pointer to the cache instance.
 }
 
 bool FontFallbackList::loadingCustomFonts() const
@@ -134,7 +107,7 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 {
     bool shouldLoadCustomFont = true;
 
-    for (unsigned fontIndex = 0; ; ++fontIndex) {
+    for (unsigned fontIndex = 0;; ++fontIndex) {
         const FontData* fontData = fontDataAt(fontDescription, fontIndex);
         if (!fontData) {
             // All fonts are custom fonts and are loading. Return the first FontData.
@@ -160,8 +133,8 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 
         if (fontData->isSegmented()) {
             const SegmentedFontData* segmented = toSegmentedFontData(fontData);
-            for (unsigned i = 0; i < segmented->numRanges(); i++) {
-                const SimpleFontData* rangeFontData = segmented->rangeAt(i).fontData().get();
+            for (unsigned i = 0; i < segmented->numFaces(); i++) {
+                const SimpleFontData* rangeFontData = segmented->faceAt(i)->fontData();
                 if (!rangeFontData->isLoadingFallback())
                     return rangeFontData;
             }
@@ -179,33 +152,23 @@ const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const Fon
 
 PassRefPtr<FontData> FontFallbackList::getFontData(const FontDescription& fontDescription, int& familyIndex) const
 {
-    RefPtr<FontData> result;
+    const FontFamily* currFamily = &fontDescription.family();
+    for (int i = 0; currFamily && i < familyIndex; i++)
+        currFamily = currFamily->next();
 
-    int startIndex = familyIndex;
-    const FontFamily* startFamily = &fontDescription.family();
-    for (int i = 0; startFamily && i < startIndex; i++)
-        startFamily = startFamily->next();
-    const FontFamily* currFamily = startFamily;
-    while (currFamily && !result) {
+    for (; currFamily; currFamily = currFamily->next()) {
         familyIndex++;
         if (currFamily->family().length()) {
+            RefPtr<FontData> result;
             if (m_fontSelector)
                 result = m_fontSelector->getFontData(fontDescription, currFamily->family());
-
             if (!result)
                 result = FontCache::fontCache()->getFontData(fontDescription, currFamily->family());
+            if (result)
+                return result.release();
         }
-        currFamily = currFamily->next();
     }
-
-    if (!currFamily)
-        familyIndex = cAllFamiliesScanned;
-
-    if (result || startIndex)
-        return result.release();
-
-    // If it's the primary font that we couldn't find, we try the following. In all other cases, we will
-    // just use per-character system fallback.
+    familyIndex = cAllFamiliesScanned;
 
     if (m_fontSelector) {
         // Try the user's preferred standard font.
@@ -217,6 +180,31 @@ PassRefPtr<FontData> FontFallbackList::getFontData(const FontDescription& fontDe
     return FontCache::fontCache()->getLastResortFallbackFont(fontDescription);
 }
 
+FallbackListCompositeKey FontFallbackList::compositeKey(const FontDescription& fontDescription) const
+{
+    FallbackListCompositeKey key(fontDescription);
+    const FontFamily* currentFamily = &fontDescription.family();
+    while (currentFamily) {
+        if (currentFamily->family().length()) {
+            FontFaceCreationParams params(adjustFamilyNameToAvoidUnsupportedFonts(currentFamily->family()));
+            RefPtr<FontData> result;
+            if (m_fontSelector)
+                result = m_fontSelector->getFontData(fontDescription, currentFamily->family());
+            if (!result) {
+                if (FontPlatformData* platformData = FontCache::fontCache()->getFontPlatformData(fontDescription, params))
+                    result = FontCache::fontCache()->fontDataFromFontPlatformData(platformData);
+            }
+            if (result) {
+                key.add(fontDescription.cacheKey(params));
+                if (!result->isSegmented() && !result->isCustomFont())
+                    FontCache::fontCache()->releaseFontData(toSimpleFontData(result));
+            }
+        }
+        currentFamily = currentFamily->next();
+    }
+
+    return key;
+}
 
 const FontData* FontFallbackList::fontDataAt(const FontDescription& fontDescription, unsigned realizedFontIndex) const
 {

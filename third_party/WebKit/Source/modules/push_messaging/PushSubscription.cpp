@@ -2,25 +2,31 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/PushSubscription.h"
 
 #include "bindings/core/v8/CallbackPromiseAdapter.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/V8ObjectBuilder.h"
 #include "modules/push_messaging/PushError.h"
+#include "modules/push_messaging/PushSubscriptionOptions.h"
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
 #include "public/platform/Platform.h"
 #include "public/platform/modules/push_messaging/WebPushProvider.h"
 #include "public/platform/modules/push_messaging/WebPushSubscription.h"
-#include "wtf/OwnPtr.h"
+#include "wtf/Assertions.h"
+#include "wtf/text/Base64.h"
+#include <memory>
 
 namespace blink {
 
-PushSubscription* PushSubscription::take(ScriptPromiseResolver*, WebPushSubscription* pushSubscription, ServiceWorkerRegistration* serviceWorkerRegistration)
+PushSubscription* PushSubscription::take(
+    ScriptPromiseResolver*,
+    std::unique_ptr<WebPushSubscription> pushSubscription,
+    ServiceWorkerRegistration* serviceWorkerRegistration)
 {
-    OwnPtr<WebPushSubscription> subscription = adoptPtr(pushSubscription);
-    return new PushSubscription(subscription->endpoint, serviceWorkerRegistration);
+    if (!pushSubscription)
+        return nullptr;
+    return new PushSubscription(*pushSubscription, serviceWorkerRegistration);
 }
 
 void PushSubscription::dispose(WebPushSubscription* pushSubscription)
@@ -29,43 +35,69 @@ void PushSubscription::dispose(WebPushSubscription* pushSubscription)
         delete pushSubscription;
 }
 
-PushSubscription::PushSubscription(const KURL& endpoint, ServiceWorkerRegistration* serviceWorkerRegistration)
-    : m_endpoint(endpoint)
+PushSubscription::PushSubscription(
+    const WebPushSubscription& subscription,
+    ServiceWorkerRegistration* serviceWorkerRegistration)
+    : m_endpoint(subscription.endpoint)
+    , m_options(PushSubscriptionOptions::create(subscription.options))
+    , m_p256dh(DOMArrayBuffer::create(subscription.p256dh.data(),
+          subscription.p256dh.size()))
+    , m_auth(DOMArrayBuffer::create(subscription.auth.data(),
+          subscription.auth.size()))
     , m_serviceWorkerRegistration(serviceWorkerRegistration)
 {
 }
 
-PushSubscription::~PushSubscription()
-{
-}
+PushSubscription::~PushSubscription() { }
 
-KURL PushSubscription::endpoint() const
+DOMArrayBuffer* PushSubscription::getKey(const AtomicString& name) const
 {
-    return m_endpoint;
+    if (name == "p256dh")
+        return m_p256dh;
+    if (name == "auth")
+        return m_auth;
+
+    return nullptr;
 }
 
 ScriptPromise PushSubscription::unsubscribe(ScriptState* scriptState)
 {
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
+    ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
     WebPushProvider* webPushProvider = Platform::current()->pushProvider();
-    ASSERT(webPushProvider);
+    DCHECK(webPushProvider);
 
-    webPushProvider->unsubscribe(m_serviceWorkerRegistration->webRegistration(), new CallbackPromiseAdapter<bool, PushError>(resolver));
+    webPushProvider->unsubscribe(
+        m_serviceWorkerRegistration->webRegistration(),
+        WTF::makeUnique<CallbackPromiseAdapter<bool, PushError>>(resolver));
     return promise;
 }
 
 ScriptValue PushSubscription::toJSONForBinding(ScriptState* scriptState)
 {
+    DCHECK(m_p256dh);
+
     V8ObjectBuilder result(scriptState);
     result.addString("endpoint", endpoint());
+
+    V8ObjectBuilder keys(scriptState);
+    keys.add("p256dh",
+        WTF::base64URLEncode(static_cast<const char*>(m_p256dh->data()),
+            m_p256dh->byteLength()));
+    keys.add("auth",
+        WTF::base64URLEncode(static_cast<const char*>(m_auth->data()),
+            m_auth->byteLength()));
+    result.add("keys", keys);
 
     return result.scriptValue();
 }
 
 DEFINE_TRACE(PushSubscription)
 {
+    visitor->trace(m_options);
+    visitor->trace(m_p256dh);
+    visitor->trace(m_auth);
     visitor->trace(m_serviceWorkerRegistration);
 }
 

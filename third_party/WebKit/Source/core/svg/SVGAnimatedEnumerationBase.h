@@ -31,21 +31,29 @@
 #ifndef SVGAnimatedEnumerationBase_h
 #define SVGAnimatedEnumerationBase_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGEnumeration.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedEnumerationBase : public SVGAnimatedProperty<SVGEnumerationBase> {
+class SVGAnimatedEnumerationBase
+    : public SVGAnimatedProperty<SVGEnumerationBase>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     ~SVGAnimatedEnumerationBase() override;
 
     void setBaseVal(unsigned short, ExceptionState&);
 
 protected:
-    SVGAnimatedEnumerationBase(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGEnumerationBase> initialValue)
-        : SVGAnimatedProperty<SVGEnumerationBase>(contextElement, attributeName, initialValue)
+    SVGAnimatedEnumerationBase(SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        SVGEnumerationBase* initialValue)
+        : SVGAnimatedProperty<SVGEnumerationBase>(contextElement,
+            attributeName,
+            initialValue)
     {
     }
 };

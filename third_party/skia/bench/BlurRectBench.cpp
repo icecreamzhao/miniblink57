@@ -13,20 +13,21 @@
 #include "SkShader.h"
 #include "SkString.h"
 
-#define SMALL   SkIntToScalar(2)
-#define REAL    1.5f
+#define SMALL SkIntToScalar(2)
+#define REAL 1.5f
 static const SkScalar kMedium = SkIntToScalar(5);
-#define BIG     SkIntToScalar(10)
+#define BIG SkIntToScalar(10)
 static const SkScalar kMedBig = SkIntToScalar(20);
 #define REALBIG 30.5f
 
-class BlurRectBench: public Benchmark {
-    int         fLoopCount;
-    SkScalar    fRadius;
-    SkString    fName;
+class BlurRectBench : public Benchmark {
+    int fLoopCount;
+    SkScalar fRadius;
+    SkString fName;
 
 public:
-    BlurRectBench(SkScalar rad) {
+    BlurRectBench(SkScalar rad)
+    {
         fRadius = rad;
 
         if (fRadius > SkIntToScalar(25)) {
@@ -39,44 +40,50 @@ public:
     }
 
 protected:
-    virtual const char* onGetName() {
+    virtual const char* onGetName()
+    {
         return fName.c_str();
     }
 
-    SkScalar radius() const {
+    SkScalar radius() const
+    {
         return fRadius;
     }
 
-    void setName(const SkString& name) {
+    void setName(const SkString& name)
+    {
         fName = name;
     }
 
-    virtual void onDraw(const int loops, SkCanvas*) {
+    virtual void onDraw(int loops, SkCanvas*)
+    {
         SkPaint paint;
         this->setupPaint(&paint);
 
         paint.setAntiAlias(true);
 
-        SkScalar pad = fRadius*3/2 + SK_Scalar1;
+        SkScalar pad = fRadius * 3 / 2 + SK_Scalar1;
         SkRect r = SkRect::MakeWH(2 * pad + SK_Scalar1, 2 * pad + SK_Scalar1);
 
         preBenchSetup(r);
 
         for (int i = 0; i < loops; i++) {
-            makeBlurryRect(r);
+            this->makeBlurryRect(r);
         }
     }
 
     virtual void makeBlurryRect(const SkRect&) = 0;
-    virtual void preBenchSetup(const SkRect&) {}
+    virtual void preBenchSetup(const SkRect&) { }
+
 private:
     typedef Benchmark INHERITED;
 };
 
-
-class BlurRectDirectBench: public BlurRectBench {
- public:
-    BlurRectDirectBench(SkScalar rad) : INHERITED(rad) {
+class BlurRectDirectBench : public BlurRectBench {
+public:
+    BlurRectDirectBench(SkScalar rad)
+        : INHERITED(rad)
+    {
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -87,30 +94,38 @@ class BlurRectDirectBench: public BlurRectBench {
 
         this->setName(name);
     }
+
 protected:
-    void makeBlurryRect(const SkRect& r) override {
+    void makeBlurryRect(const SkRect& r) override
+    {
         SkMask mask;
-        SkBlurMask::BlurRect(SkBlurMask::ConvertRadiusToSigma(this->radius()),
-                             &mask, r, kNormal_SkBlurStyle);
+        if (!SkBlurMask::BlurRect(SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                &mask, r, kNormal_SkBlurStyle)) {
+            return;
+        }
         SkMask::FreeImage(mask.fImage);
     }
+
 private:
     typedef BlurRectBench INHERITED;
 };
 
-class BlurRectSeparableBench: public BlurRectBench {
+class BlurRectSeparableBench : public BlurRectBench {
 
 public:
-    BlurRectSeparableBench(SkScalar rad) : INHERITED(rad) {
-        fSrcMask.fImage = NULL;
+    BlurRectSeparableBench(SkScalar rad)
+        : INHERITED(rad)
+    {
     }
 
-    ~BlurRectSeparableBench() {
+    ~BlurRectSeparableBench()
+    {
         SkMask::FreeImage(fSrcMask.fImage);
     }
 
 protected:
-    void preBenchSetup(const SkRect& r) override {
+    void preBenchSetup(const SkRect& r) override
+    {
         SkMask::FreeImage(fSrcMask.fImage);
 
         r.roundOut(&fSrcMask.fBounds);
@@ -122,13 +137,16 @@ protected:
     }
 
     SkMask fSrcMask;
+
 private:
     typedef BlurRectBench INHERITED;
 };
 
-class BlurRectBoxFilterBench: public BlurRectSeparableBench {
+class BlurRectBoxFilterBench : public BlurRectSeparableBench {
 public:
-    BlurRectBoxFilterBench(SkScalar rad) : INHERITED(rad) {
+    BlurRectBoxFilterBench(SkScalar rad)
+        : INHERITED(rad)
+    {
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -141,21 +159,25 @@ public:
     }
 
 protected:
-
-    void makeBlurryRect(const SkRect&) override {
+    void makeBlurryRect(const SkRect&) override
+    {
         SkMask mask;
-        mask.fImage = NULL;
-        SkBlurMask::BoxBlur(&mask, fSrcMask, SkBlurMask::ConvertRadiusToSigma(this->radius()),
-                            kNormal_SkBlurStyle, kHigh_SkBlurQuality);
+        if (!SkBlurMask::BoxBlur(&mask, fSrcMask, SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                kNormal_SkBlurStyle, kHigh_SkBlurQuality)) {
+            return;
+        }
         SkMask::FreeImage(mask.fImage);
     }
+
 private:
     typedef BlurRectSeparableBench INHERITED;
 };
 
-class BlurRectGaussianBench: public BlurRectSeparableBench {
+class BlurRectGaussianBench : public BlurRectSeparableBench {
 public:
-    BlurRectGaussianBench(SkScalar rad) : INHERITED(rad) {
+    BlurRectGaussianBench(SkScalar rad)
+        : INHERITED(rad)
+    {
         SkString name;
 
         if (SkScalarFraction(rad) != 0) {
@@ -168,14 +190,16 @@ public:
     }
 
 protected:
-
-    void makeBlurryRect(const SkRect&) override {
+    void makeBlurryRect(const SkRect&) override
+    {
         SkMask mask;
-        mask.fImage = NULL;
-        SkBlurMask::BlurGroundTruth(SkBlurMask::ConvertRadiusToSigma(this->radius()),
-                                    &mask, fSrcMask, kNormal_SkBlurStyle);
+        if (!SkBlurMask::BlurGroundTruth(SkBlurMask::ConvertRadiusToSigma(this->radius()),
+                &mask, fSrcMask, kNormal_SkBlurStyle)) {
+            return;
+        }
         SkMask::FreeImage(mask.fImage);
     }
+
 private:
     typedef BlurRectSeparableBench INHERITED;
 };

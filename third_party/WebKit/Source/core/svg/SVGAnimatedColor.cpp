@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGAnimatedColor.h"
 
 #include "core/css/parser/CSSParser.h"
@@ -28,20 +27,21 @@
 namespace blink {
 
 SVGColorProperty::SVGColorProperty(const String& colorString)
-    : SVGPropertyBase(classType())
-    , m_styleColor(StyleColor::currentColor())
+    : m_styleColor(StyleColor::currentColor())
 {
-    RGBA32 color;
+    Color color;
     if (CSSParser::parseColor(color, colorString.stripWhiteSpace()))
-        m_styleColor = StyleColor(color);
+        m_styleColor = color;
 }
 
 String SVGColorProperty::valueAsString() const
 {
-    return m_styleColor.isCurrentColor() ? "currentColor" : m_styleColor.color().serializedAsCSSComponentValue();
+    return m_styleColor.isCurrentColor()
+        ? "currentColor"
+        : m_styleColor.getColor().serializedAsCSSComponentValue();
 }
 
-PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGColorProperty::cloneForAnimation(const String&) const
+SVGPropertyBase* SVGColorProperty::cloneForAnimation(const String&) const
 {
     // SVGAnimatedColor is deprecated. So No SVG DOM animation.
     ASSERT_NOT_REACHED();
@@ -56,7 +56,7 @@ static inline Color fallbackColorForCurrentColor(SVGElement* targetElement)
     return Color::transparent;
 }
 
-void SVGColorProperty::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement* contextElement)
+void SVGColorProperty::add(SVGPropertyBase* other, SVGElement* contextElement)
 {
     ASSERT(contextElement);
 
@@ -66,7 +66,14 @@ void SVGColorProperty::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGEle
     m_styleColor = StyleColor(ColorDistance::addColors(fromColor, toColor));
 }
 
-void SVGColorProperty::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement)
+void SVGColorProperty::calculateAnimatedValue(
+    SVGAnimationElement* animationElement,
+    float percentage,
+    unsigned repeatCount,
+    SVGPropertyBase* fromValue,
+    SVGPropertyBase* toValue,
+    SVGPropertyBase* toAtEndOfDurationValue,
+    SVGElement* contextElement)
 {
     StyleColor fromStyleColor = toSVGColorProperty(fromValue)->m_styleColor;
     StyleColor toStyleColor = toSVGColorProperty(toValue)->m_styleColor;
@@ -82,21 +89,31 @@ void SVGColorProperty::calculateAnimatedValue(SVGAnimationElement* animationElem
 
     ASSERT(animationElement);
     float animatedRed = animatedColor.red();
-    animationElement->animateAdditiveNumber(percentage, repeatCount, fromColor.red(), toColor.red(), toAtEndOfDurationColor.red(), animatedRed);
+    animationElement->animateAdditiveNumber(
+        percentage, repeatCount, fromColor.red(), toColor.red(),
+        toAtEndOfDurationColor.red(), animatedRed);
 
     float animatedGreen = animatedColor.green();
-    animationElement->animateAdditiveNumber(percentage, repeatCount, fromColor.green(), toColor.green(), toAtEndOfDurationColor.green(), animatedGreen);
+    animationElement->animateAdditiveNumber(
+        percentage, repeatCount, fromColor.green(), toColor.green(),
+        toAtEndOfDurationColor.green(), animatedGreen);
 
     float animatedBlue = animatedColor.blue();
-    animationElement->animateAdditiveNumber(percentage, repeatCount, fromColor.blue(), toColor.blue(), toAtEndOfDurationColor.blue(), animatedBlue);
+    animationElement->animateAdditiveNumber(
+        percentage, repeatCount, fromColor.blue(), toColor.blue(),
+        toAtEndOfDurationColor.blue(), animatedBlue);
 
     float animatedAlpha = animatedColor.alpha();
-    animationElement->animateAdditiveNumber(percentage, repeatCount, fromColor.alpha(), toColor.alpha(), toAtEndOfDurationColor.alpha(), animatedAlpha);
+    animationElement->animateAdditiveNumber(
+        percentage, repeatCount, fromColor.alpha(), toColor.alpha(),
+        toAtEndOfDurationColor.alpha(), animatedAlpha);
 
-    m_styleColor = StyleColor(makeRGBA(roundf(animatedRed), roundf(animatedGreen), roundf(animatedBlue), roundf(animatedAlpha)));
+    m_styleColor = StyleColor(makeRGBA(roundf(animatedRed), roundf(animatedGreen),
+        roundf(animatedBlue), roundf(animatedAlpha)));
 }
 
-float SVGColorProperty::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, SVGElement* contextElement)
+float SVGColorProperty::calculateDistance(SVGPropertyBase* toValue,
+    SVGElement* contextElement)
 {
     ASSERT(contextElement);
     Color fallbackColor = fallbackColorForCurrentColor(contextElement);
@@ -106,4 +123,4 @@ float SVGColorProperty::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase
     return ColorDistance::distance(fromColor, toColor);
 }
 
-}
+} // namespace blink

@@ -16,14 +16,28 @@
 #endif
 
 #ifdef _DEBUG
-size_t g_v8MemSize = 0;
+extern size_t g_v8MemSize;
 #endif
+
+namespace WTF {
+
+void* fastMalloc(size_t);
+void* fastZeroedMalloc(size_t);
+void* fastRealloc(void*, size_t);
+char* fastStrDup(const char*);
+void fastFree(void*);
+
+} // namespace WTF
 
 namespace v8 {
 namespace internal {
 
 void* Malloced::New(size_t size) {
+#if 1 // def _DEBUG
   void* result = malloc(size);
+#else
+  void* result = WTF::fastMalloc(size);
+#endif
   if (result == NULL) {
     V8::FatalProcessOutOfMemory("Malloced operator new");
   }
@@ -32,7 +46,11 @@ void* Malloced::New(size_t size) {
 
 
 void Malloced::Delete(void* p) {
+#if 1 // def _DEBUG
   free(p);
+#else
+  WTF::fastFree(p);
+#endif
 }
 
 

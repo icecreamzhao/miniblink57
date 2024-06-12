@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,19 +5,19 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkEvent.h"
 
 void SkEvent::initialize(const char* type, size_t typeLen,
-                         SkEventSinkID targetID) {
-    fType = NULL;
+    SkEventSinkID targetID)
+{
+    fType = nullptr;
     setType(type, typeLen);
     f32 = 0;
     fTargetID = targetID;
-    fTargetProc = NULL;
+    fTargetProc = nullptr;
 #ifdef SK_DEBUG
     fTime = 0;
-    fNextEvent = NULL;
+    fNextEvent = nullptr;
 #endif
 }
 
@@ -30,7 +29,7 @@ SkEvent::SkEvent()
 SkEvent::SkEvent(const SkEvent& src)
 {
     *this = src;
-    if (((size_t) fType & 1) == 0)
+    if (((size_t)fType & 1) == 0)
         setType(src.fType);
 }
 
@@ -47,13 +46,13 @@ SkEvent::SkEvent(const char type[], SkEventSinkID targetID)
 
 SkEvent::~SkEvent()
 {
-    if (((size_t) fType & 1) == 0)
-        sk_free((void*) fType);
+    if (((size_t)fType & 1) == 0)
+        sk_free((void*)fType);
 }
 
 static size_t makeCharArray(char* buffer, size_t compact)
 {
-    size_t bits = (size_t) compact >> 1;
+    size_t bits = (size_t)compact >> 1;
     memcpy(buffer, &bits, sizeof(compact));
     buffer[sizeof(compact)] = 0;
     return strlen(buffer);
@@ -61,15 +60,13 @@ static size_t makeCharArray(char* buffer, size_t compact)
 
 void SkEvent::getType(SkString* str) const
 {
-    if (str)
-    {
-        if ((size_t) fType & 1) // not a pointer
+    if (str) {
+        if ((size_t)fType & 1) // not a pointer
         {
             char chars[sizeof(size_t) + 1];
-            size_t len = makeCharArray(chars, (size_t) fType);
+            size_t len = makeCharArray(chars, (size_t)fType);
             str->set(chars, len);
-        }
-        else
+        } else
             str->set(fType);
     }
 }
@@ -83,9 +80,9 @@ bool SkEvent::isType(const char type[], size_t typeLen) const
 {
     if (typeLen == 0)
         typeLen = strlen(type);
-    if ((size_t) fType & 1) {   // not a pointer
+    if ((size_t)fType & 1) { // not a pointer
         char chars[sizeof(size_t) + 1];
-        size_t len = makeCharArray(chars, (size_t) fType);
+        size_t len = makeCharArray(chars, (size_t)fType);
         return len == typeLen && strncmp(chars, type, typeLen) == 0;
     }
     return strncmp(fType, type, typeLen) == 0 && fType[typeLen] == 0;
@@ -102,11 +99,11 @@ void SkEvent::setType(const char type[], size_t typeLen)
             goto useCharStar;
         slot <<= 1;
         slot |= 1;
-        fType = (char*) slot;
+        fType = (char*)slot;
     } else {
-useCharStar:
-        fType = (char*) sk_malloc_throw(typeLen + 1);
-        SkASSERT(((size_t) fType & 1) == 0);
+    useCharStar:
+        fType = (char*)sk_malloc_throw(typeLen + 1);
+        SkASSERT(((size_t)fType & 1) == 0);
         memcpy(fType, type, typeLen);
         fType[typeLen] = 0;
     }
@@ -128,45 +125,34 @@ void SkEvent::inflate(const SkDOM& dom, const SkDOM::Node* node)
         this->setType(name);
 
     const char* value;
-    if ((value = dom.findAttr(node, "fast32")) != NULL)
-    {
+    if ((value = dom.findAttr(node, "fast32")) != nullptr) {
         int32_t n;
         if (SkParse::FindS32(value, &n))
             this->setFast32(n);
     }
 
-    for (node = dom.getFirstChild(node); node; node = dom.getNextSibling(node))
-    {
-        if (strcmp(dom.getName(node), "data"))
-        {
-            SkDEBUGCODE(SkDebugf("SkEvent::inflate unrecognized subelement <%s>\n", dom.getName(node));)
-            continue;
+    for (node = dom.getFirstChild(node); node; node = dom.getNextSibling(node)) {
+        if (strcmp(dom.getName(node), "data")) {
+            SkDEBUGCODE(SkDebugf("SkEvent::inflate unrecognized subelement <%s>\n", dom.getName(node));) continue;
         }
 
         name = dom.findAttr(node, "name");
-        if (name == NULL)
-        {
-            SkDEBUGCODE(SkDebugf("SkEvent::inflate missing required \"name\" attribute in <data> subelement\n");)
-            continue;
+        if (name == nullptr) {
+            SkDEBUGCODE(SkDebugf("SkEvent::inflate missing required \"name\" attribute in <data> subelement\n");) continue;
         }
 
-        if ((value = dom.findAttr(node, "s32")) != NULL)
-        {
+        if ((value = dom.findAttr(node, "s32")) != nullptr) {
             int32_t n;
             if (SkParse::FindS32(value, &n))
                 this->setS32(name, n);
-        }
-        else if ((value = dom.findAttr(node, "scalar")) != NULL)
-        {
+        } else if ((value = dom.findAttr(node, "scalar")) != nullptr) {
             SkScalar x;
             if (SkParse::FindScalar(value, &x))
                 this->setScalar(name, x);
-        }
-        else if ((value = dom.findAttr(node, "string")) != NULL)
+        } else if ((value = dom.findAttr(node, "string")) != nullptr)
             this->setString(name, value);
 #ifdef SK_DEBUG
-        else
-        {
+        else {
             SkDebugf("SkEvent::inflate <data name=\"%s\"> subelement missing required type attribute [S32 | scalar | string]\n", name);
         }
 #endif
@@ -175,75 +161,67 @@ void SkEvent::inflate(const SkDOM& dom, const SkDOM::Node* node)
 
 #ifdef SK_DEBUG
 
-    #ifndef SkScalarToFloat
-        #define SkScalarToFloat(x)  ((x) / 65536.f)
-    #endif
+#ifndef SkScalarToFloat
+#define SkScalarToFloat(x) ((x) / 65536.f)
+#endif
 
-    void SkEvent::dump(const char title[])
-    {
-        if (title)
-            SkDebugf("%s ", title);
+void SkEvent::dump(const char title[])
+{
+    if (title)
+        SkDebugf("%s ", title);
 
-        SkString    etype;
-        this->getType(&etype);
-        SkDebugf("event<%s> fast32=%d", etype.c_str(), this->getFast32());
+    SkString etype;
+    this->getType(&etype);
+    SkDebugf("event<%s> fast32=%d", etype.c_str(), this->getFast32());
 
-        const SkMetaData&   md = this->getMetaData();
-        SkMetaData::Iter    iter(md);
-        SkMetaData::Type    mtype;
-        int                 count;
-        const char*         name;
+    const SkMetaData& md = this->getMetaData();
+    SkMetaData::Iter iter(md);
+    SkMetaData::Type mtype;
+    int count;
+    const char* name;
 
-        while ((name = iter.next(&mtype, &count)) != NULL)
+    while ((name = iter.next(&mtype, &count)) != nullptr) {
+        SkASSERT(count > 0);
+
+        SkDebugf(" <%s>=", name);
+        switch (mtype) {
+        case SkMetaData::kS32_Type: // vector version???
         {
-            SkASSERT(count > 0);
-
-            SkDebugf(" <%s>=", name);
-            switch (mtype) {
-            case SkMetaData::kS32_Type:     // vector version???
-                {
-                    int32_t value;
-                    md.findS32(name, &value);
-                    SkDebugf("%d ", value);
-                }
-                break;
-            case SkMetaData::kScalar_Type:
-                {
-                    const SkScalar* values = md.findScalars(name, &count, NULL);
-                    SkDebugf("%f", SkScalarToFloat(values[0]));
-                    for (int i = 1; i < count; i++)
-                        SkDebugf(", %f", SkScalarToFloat(values[i]));
-                    SkDebugf(" ");
-                }
-                break;
-            case SkMetaData::kString_Type:
-                {
-                    const char* value = md.findString(name);
-                    SkASSERT(value);
-                    SkDebugf("<%s> ", value);
-                }
-                break;
-            case SkMetaData::kPtr_Type:     // vector version???
-                {
-                    void*   value;
-                    md.findPtr(name, &value);
-                    SkDebugf("%p ", value);
-                }
-                break;
-            case SkMetaData::kBool_Type:    // vector version???
-                {
-                    bool    value;
-                    md.findBool(name, &value);
-                    SkDebugf("%s ", value ? "true" : "false");
-                }
-                break;
-            default:
-                SkDEBUGFAIL("unknown metadata type returned from iterator");
-                break;
-            }
+            int32_t value;
+            md.findS32(name, &value);
+            SkDebugf("%d ", value);
+        } break;
+        case SkMetaData::kScalar_Type: {
+            const SkScalar* values = md.findScalars(name, &count, nullptr);
+            SkDebugf("%f", SkScalarToFloat(values[0]));
+            for (int i = 1; i < count; i++)
+                SkDebugf(", %f", SkScalarToFloat(values[i]));
+            SkDebugf(" ");
+        } break;
+        case SkMetaData::kString_Type: {
+            const char* value = md.findString(name);
+            SkASSERT(value);
+            SkDebugf("<%s> ", value);
+        } break;
+        case SkMetaData::kPtr_Type: // vector version???
+        {
+            void* value;
+            md.findPtr(name, &value);
+            SkDebugf("%p ", value);
+        } break;
+        case SkMetaData::kBool_Type: // vector version???
+        {
+            bool value;
+            md.findBool(name, &value);
+            SkDebugf("%s ", value ? "true" : "false");
+        } break;
+        default:
+            SkDEBUGFAIL("unknown metadata type returned from iterator");
+            break;
         }
-        SkDebugf("\n");
     }
+    SkDebugf("\n");
+}
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -253,16 +231,22 @@ void SkEvent::inflate(const SkDOM& dom, const SkDOM::Node* node)
 #endif
 
 #ifdef SK_TRACE_EVENTS
-    static void event_log(const char s[])
-    {
-        SkDEBUGF(("%s\n", s));
-    }
+static void event_log(const char s[])
+{
+    SkDEBUGF(("%s\n", s));
+}
 
-    #define EVENT_LOG(s)        event_log(s)
-    #define EVENT_LOGN(s, n)    do { SkString str(s); str.append(" "); str.appendS32(n); event_log(str.c_str()); } while (0)
+#define EVENT_LOG(s) event_log(s)
+#define EVENT_LOGN(s, n)        \
+    do {                        \
+        SkString str(s);        \
+        str.append(" ");        \
+        str.appendS32(n);       \
+        event_log(str.c_str()); \
+    } while (0)
 #else
-    #define EVENT_LOG(s)
-    #define EVENT_LOGN(s, n)
+#define EVENT_LOG(s)
+#define EVENT_LOGN(s, n)
 #endif
 
 #include "SkMutex.h"
@@ -270,20 +254,22 @@ void SkEvent::inflate(const SkDOM& dom, const SkDOM::Node* node)
 
 class SkEvent_Globals {
 public:
-    SkEvent_Globals() {
-        fEventQHead = NULL;
-        fEventQTail = NULL;
-        fDelayQHead = NULL;
+    SkEvent_Globals()
+    {
+        fEventQHead = nullptr;
+        fEventQTail = nullptr;
+        fDelayQHead = nullptr;
         SkDEBUGCODE(fEventCounter = 0;)
     }
 
-    SkMutex     fEventMutex;
-    SkEvent*    fEventQHead, *fEventQTail;
-    SkEvent*    fDelayQHead;
+    SkMutex fEventMutex;
+    SkEvent *fEventQHead, *fEventQTail;
+    SkEvent* fDelayQHead;
     SkDEBUGCODE(int fEventCounter;)
 };
 
-static SkEvent_Globals& getGlobals() {
+static SkEvent_Globals& getGlobals()
+{
     // leak this, so we don't incure any shutdown perf hit
     static SkEvent_Globals* gGlobals = new SkEvent_Globals;
     return *gGlobals;
@@ -291,14 +277,15 @@ static SkEvent_Globals& getGlobals() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkEvent::postDelay(SkMSec delay) {
+void SkEvent::postDelay(SkMSec delay)
+{
     if (!fTargetID && !fTargetProc) {
         delete this;
         return;
     }
 
     if (delay) {
-        this->postTime(SkTime::GetMSecs() + delay);
+        this->postTime(GetMSecsSinceStartup() + delay);
         return;
     }
 
@@ -314,7 +301,8 @@ void SkEvent::postDelay(SkMSec delay) {
     }
 }
 
-void SkEvent::postTime(SkMSec time) {
+void SkEvent::postTime(SkMSec time)
+{
     if (!fTargetID && !fTargetProc) {
         delete this;
         return;
@@ -332,27 +320,29 @@ void SkEvent::postTime(SkMSec time) {
     }
 }
 
-bool SkEvent::Enqueue(SkEvent* evt) {
+bool SkEvent::Enqueue(SkEvent* evt)
+{
     SkEvent_Globals& globals = getGlobals();
     //  gEventMutex acquired by caller
 
     SkASSERT(evt);
 
-    bool wasEmpty = globals.fEventQHead == NULL;
+    bool wasEmpty = globals.fEventQHead == nullptr;
 
     if (globals.fEventQTail)
         globals.fEventQTail->fNextEvent = evt;
     globals.fEventQTail = evt;
-    if (globals.fEventQHead == NULL)
+    if (globals.fEventQHead == nullptr)
         globals.fEventQHead = evt;
-    evt->fNextEvent = NULL;
+    evt->fNextEvent = nullptr;
 
     SkDEBUGCODE(++globals.fEventCounter);
 
     return wasEmpty;
 }
 
-SkEvent* SkEvent::Dequeue() {
+SkEvent* SkEvent::Dequeue()
+{
     SkEvent_Globals& globals = getGlobals();
     globals.fEventMutex.acquire();
 
@@ -361,8 +351,8 @@ SkEvent* SkEvent::Dequeue() {
         SkDEBUGCODE(--globals.fEventCounter);
 
         globals.fEventQHead = evt->fNextEvent;
-        if (globals.fEventQHead == NULL) {
-            globals.fEventQTail = NULL;
+        if (globals.fEventQHead == nullptr) {
+            globals.fEventQTail = nullptr;
         }
     }
     globals.fEventMutex.release();
@@ -370,23 +360,25 @@ SkEvent* SkEvent::Dequeue() {
     return evt;
 }
 
-bool SkEvent::QHasEvents() {
+bool SkEvent::QHasEvents()
+{
     SkEvent_Globals& globals = getGlobals();
 
     // this is not thread accurate, need a semaphore for that
-    return globals.fEventQHead != NULL;
+    return globals.fEventQHead != nullptr;
 }
 
 #ifdef SK_TRACE_EVENTS
-    static int gDelayDepth;
+static int gDelayDepth;
 #endif
 
-SkMSec SkEvent::EnqueueTime(SkEvent* evt, SkMSec time) {
+SkMSec SkEvent::EnqueueTime(SkEvent* evt, SkMSec time)
+{
     SkEvent_Globals& globals = getGlobals();
     //  gEventMutex acquired by caller
 
     SkEvent* curr = globals.fDelayQHead;
-    SkEvent* prev = NULL;
+    SkEvent* prev = nullptr;
 
     while (curr) {
         if (SkMSec_LT(time, curr->fTime)) {
@@ -398,13 +390,13 @@ SkMSec SkEvent::EnqueueTime(SkEvent* evt, SkMSec time) {
 
     evt->fTime = time;
     evt->fNextEvent = curr;
-    if (prev == NULL) {
+    if (prev == nullptr) {
         globals.fDelayQHead = evt;
     } else {
         prev->fNextEvent = evt;
     }
 
-    SkMSec delay = globals.fDelayQHead->fTime - SkTime::GetMSecs();
+    SkMSec delay = globals.fDelayQHead->fTime - GetMSecsSinceStartup();
     if ((int32_t)delay <= 0) {
         delay = 1;
     }
@@ -415,10 +407,11 @@ SkMSec SkEvent::EnqueueTime(SkEvent* evt, SkMSec time) {
 
 #include "SkEventSink.h"
 
-bool SkEvent::ProcessEvent() {
-    SkEvent*                evt = SkEvent::Dequeue();
-    SkAutoTDelete<SkEvent>  autoDelete(evt);
-    bool                    again = false;
+bool SkEvent::ProcessEvent()
+{
+    SkEvent* evt = SkEvent::Dequeue();
+    SkAutoTDelete<SkEvent> autoDelete(evt);
+    bool again = false;
 
     EVENT_LOGN("ProcessEvent", (int32_t)evt);
 
@@ -435,12 +428,11 @@ void SkEvent::ServiceQueueTimer()
 
     globals.fEventMutex.acquire();
 
-    bool        wasEmpty = false;
-    SkMSec      now = SkTime::GetMSecs();
-    SkEvent*    evt = globals.fDelayQHead;
+    bool wasEmpty = false;
+    SkMSec now = GetMSecsSinceStartup();
+    SkEvent* evt = globals.fDelayQHead;
 
-    while (evt)
-    {
+    while (evt) {
         if (SkMSec_LT(now, evt->fTime))
             break;
 
@@ -470,7 +462,8 @@ void SkEvent::ServiceQueueTimer()
     SkEvent::SignalQueueTimer(time);
 }
 
-int SkEvent::CountEventsOnQueue() {
+int SkEvent::CountEventsOnQueue()
+{
     SkEvent_Globals& globals = getGlobals();
     globals.fEventMutex.acquire();
 
@@ -485,11 +478,18 @@ int SkEvent::CountEventsOnQueue() {
     return count;
 }
 
+SkMSec SkEvent::GetMSecsSinceStartup()
+{
+    static const double kEpoch = SkTime::GetMSecs();
+    return static_cast<SkMSec>(SkTime::GetMSecs() - kEpoch);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkEvent::Init() {}
+void SkEvent::Init() { }
 
-void SkEvent::Term() {
+void SkEvent::Term()
+{
     SkEvent_Globals& globals = getGlobals();
 
     SkEvent* evt = globals.fEventQHead;

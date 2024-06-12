@@ -46,25 +46,28 @@ class UniqueElementData;
 
 // ElementData represents very common, but not necessarily unique to an element,
 // data such as attributes, inline style, and parsed class names and ids.
-class ElementData : public RefCountedWillBeGarbageCollectedFinalized<ElementData> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ElementData);
+class ElementData : public GarbageCollectedFinalized<ElementData> {
 public:
-#if ENABLE(OILPAN)
     // Override GarbageCollectedFinalized's finalizeGarbageCollectedObject to
     // dispatch to the correct subclass destructor.
     void finalizeGarbageCollectedObject();
-#else
-    // Override RefCounted's deref() to ensure operator delete is called on
-    // the appropriate subclass type.
-    void deref();
-#endif
 
     void clearClass() const { m_classNames.clear(); }
-    void setClass(const AtomicString& className, bool shouldFoldCase) const { m_classNames.set(className, shouldFoldCase ? SpaceSplitString::ShouldFoldCase : SpaceSplitString::ShouldNotFoldCase); }
+    void setClass(const AtomicString& className, bool shouldFoldCase) const
+    {
+        m_classNames.set(shouldFoldCase ? className.lowerASCII() : className,
+            SpaceSplitString::ShouldNotFoldCase);
+    }
     const SpaceSplitString& classNames() const { return m_classNames; }
 
-    const AtomicString& idForStyleResolution() const { return m_idForStyleResolution; }
-    void setIdForStyleResolution(const AtomicString& newId) const { m_idForStyleResolution = newId; }
+    const AtomicString& idForStyleResolution() const
+    {
+        return m_idForStyleResolution;
+    }
+    void setIdForStyleResolution(const AtomicString& newId) const
+    {
+        m_idForStyleResolution = newId;
+    }
 
     const StylePropertySet* inlineStyle() const { return m_inlineStyle.get(); }
 
@@ -87,14 +90,15 @@ protected:
     explicit ElementData(unsigned arraySize);
     ElementData(const ElementData&, bool isUnique);
 
-    // Keep the type in a bitfield instead of using virtual destructors to avoid adding a vtable.
+    // Keep the type in a bitfield instead of using virtual destructors to avoid
+    // adding a vtable.
     unsigned m_isUnique : 1;
     unsigned m_arraySize : 28;
     mutable unsigned m_presentationAttributeStyleIsDirty : 1;
     mutable unsigned m_styleAttributeIsDirty : 1;
     mutable unsigned m_animatedSVGAttributesAreDirty : 1;
 
-    mutable RefPtrWillBeMember<StylePropertySet> m_inlineStyle;
+    mutable Member<StylePropertySet> m_inlineStyle;
     mutable SpaceSplitString m_classNames;
     mutable AtomicString m_idForStyleResolution;
 
@@ -104,20 +108,18 @@ private:
     friend class UniqueElementData;
     friend class SVGElement;
 
-#if !ENABLE(OILPAN)
-    void destroy();
-#endif
-
-    PassRefPtrWillBeRawPtr<UniqueElementData> makeUniqueCopy() const;
+    UniqueElementData* makeUniqueCopy() const;
 };
 
-#define DEFINE_ELEMENT_DATA_TYPE_CASTS(thisType,  pointerPredicate, referencePredicate) \
-    template<typename T> inline thisType* to##thisType(const RefPtr<T>& data) { return to##thisType(data.get()); } \
-    DEFINE_TYPE_CASTS(thisType, ElementData, data, pointerPredicate, referencePredicate)
+#define DEFINE_ELEMENT_DATA_TYPE_CASTS(thisType, pointerPredicate,   \
+    referencePredicate)                                              \
+    DEFINE_TYPE_CASTS(thisType, ElementData, data, pointerPredicate, \
+        referencePredicate)
 
 #if COMPILER(MSVC)
 #pragma warning(push)
-#pragma warning(disable: 4200) // Disable "zero-sized array in struct/union" warning
+#pragma warning( \
+    disable : 4200) // Disable "zero-sized array in struct/union" warning
 #endif
 
 // SharableElementData is managed by ElementDataCache and is produced by
@@ -126,30 +128,32 @@ private:
 // duplicate sets of attributes (ex. the same classes).
 class ShareableElementData final : public ElementData {
 public:
-    static PassRefPtrWillBeRawPtr<ShareableElementData> createWithAttributes(const Vector<Attribute>&);
+    static ShareableElementData* createWithAttributes(const Vector<Attribute>&);
 
     explicit ShareableElementData(const Vector<Attribute>&);
     explicit ShareableElementData(const UniqueElementData&);
     ~ShareableElementData();
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { ElementData::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        ElementData::traceAfterDispatch(visitor);
+    }
 
     // Add support for placement new as ShareableElementData is not allocated
     // with a fixed size. Instead the allocated memory size is computed based on
-    // the number of attributes. This requires us to use Heap::allocate directly
-    // with the computed size and subsequently call placement new with the
-    // allocated memory address.
-    void* operator new(/*std::*/size_t, void* location)
-    {
-        return location;
-    }
+    // the number of attributes. This requires us to use ThreadHeap::allocate
+    // directly with the computed size and subsequently call placement new with
+    // the allocated memory address.
+    void* operator new(std::size_t, void* location) { return location; }
 
     AttributeCollection attributes() const;
 
     Attribute m_attributeArray[0];
 };
 
-DEFINE_ELEMENT_DATA_TYPE_CASTS(ShareableElementData, !data->isUnique(), !data.isUnique());
+DEFINE_ELEMENT_DATA_TYPE_CASTS(ShareableElementData,
+    !data->isUnique(),
+    !data.isUnique());
 
 #if COMPILER(MSVC)
 #pragma warning(pop)
@@ -163,8 +167,8 @@ DEFINE_ELEMENT_DATA_TYPE_CASTS(ShareableElementData, !data->isUnique(), !data.is
 // attribute will have the same inline style.
 class UniqueElementData final : public ElementData {
 public:
-    static PassRefPtrWillBeRawPtr<UniqueElementData> create();
-    PassRefPtrWillBeRawPtr<ShareableElementData> makeShareableCopy() const;
+    static UniqueElementData* create();
+    ShareableElementData* makeShareableCopy() const;
 
     MutableAttributeCollection attributes();
     AttributeCollection attributes() const;
@@ -179,20 +183,13 @@ public:
     // presentation attribute style. Lots of table cells likely have the same
     // attributes. Most modern pages don't use presentation attributes though
     // so this might not make sense.
-    mutable RefPtrWillBeMember<StylePropertySet> m_presentationAttributeStyle;
+    mutable Member<StylePropertySet> m_presentationAttributeStyle;
     AttributeVector m_attributeVector;
 };
 
-DEFINE_ELEMENT_DATA_TYPE_CASTS(UniqueElementData, data->isUnique(), data.isUnique());
-
-#if !ENABLE(OILPAN)
-inline void ElementData::deref()
-{
-    if (!derefBase())
-        return;
-    destroy();
-}
-#endif
+DEFINE_ELEMENT_DATA_TYPE_CASTS(UniqueElementData,
+    data->isUnique(),
+    data.isUnique());
 
 inline const StylePropertySet* ElementData::presentationAttributeStyle() const
 {
@@ -215,7 +212,8 @@ inline AttributeCollection ShareableElementData::attributes() const
 
 inline AttributeCollection UniqueElementData::attributes() const
 {
-    return AttributeCollection(m_attributeVector.data(), m_attributeVector.size());
+    return AttributeCollection(m_attributeVector.data(),
+        m_attributeVector.size());
 }
 
 inline MutableAttributeCollection UniqueElementData::attributes()

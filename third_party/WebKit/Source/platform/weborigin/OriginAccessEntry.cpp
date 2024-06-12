@@ -28,71 +28,61 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/weborigin/OriginAccessEntry.h"
 
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebPublicSuffixList.h"
-// #include <url/third_party/mozilla/url_parse.h>
-// #include <url/url_canon.h>
+// #include "url/third_party/mozilla/url_parse.h"
+// #include "url/url_canon.h"
 
 namespace blink {
 
 namespace {
 
-// TODO(mkwst): This basically replicates GURL::HostIsIPAddress. If/when
-// we re-evaluate everything after merging the Blink and Chromium
-// repositories, perhaps we can just use that directly.
-bool HostIsIPAddress(const String& host)
-{
-    if (host.isEmpty())
-        return false;
-
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    String protocol("https://");
-    KURL url(KURL(), protocol + host + "/");
-    if (!url.isValid())
-        return false;
-
-    url::RawCanonOutputT<char, 128> ignoredOutput;
-    url::CanonHostInfo hostInfo;
-    url::Component hostComponent(0, static_cast<int>(url.host().utf8().length()));
-    url::CanonicalizeIPAddress(url.host().utf8().data(), hostComponent, &ignoredOutput, &hostInfo);
-	return hostInfo.IsIPAddress();
-#else
-    Vector<String> result;
-    host.split(L'.', result);
-    for (size_t i = 0; i < result.size(); ++i) {
-        bool ok = 0;
-        int ip = result[i].toInt(&ok);
-        if (!ok || ip < 0 || ip > 255)
+    // TODO(mkwst): This basically replicates GURL::HostIsIPAddress. If/when
+    // we re-evaluate everything after merging the Blink and Chromium
+    // repositories, perhaps we can just use that directly.
+    bool HostIsIPAddress(const String& host)
+    {
+        if (host.isEmpty())
             return false;
+
+        String protocol("https://");
+        //   KURL url(KURL(), protocol + host + "/");
+        //   if (!url.isValid())
+        //     return false;
+        //
+        //   url::RawCanonOutputT<char, 128> ignoredOutput;
+        //   url::CanonHostInfo hostInfo;
+        //   url::Component hostComponent(0, static_cast<int>(url.host().utf8().length()));
+        //   url::CanonicalizeIPAddress(url.host().utf8().data(), hostComponent,
+        //                              &ignoredOutput, &hostInfo);
+        //   return hostInfo.IsIPAddress();
+        return false;
     }
 
-	return true;
-#endif // MINIBLINK_NOT_IMPLEMENTED
-}
+    bool IsSubdomainOfHost(const String& subdomain, const String& host)
+    {
+        if (subdomain.length() <= host.length())
+            return false;
 
-bool IsSubdomainOfHost(const String& subdomain, const String& host)
-{
-    if (subdomain.length() <= host.length())
-        return false;
+        if (subdomain[subdomain.length() - host.length() - 1] != '.')
+            return false;
 
-    if (subdomain[subdomain.length() - host.length() - 1] != '.')
-        return false;
+        if (!subdomain.endsWith(host))
+            return false;
 
-    if (!subdomain.endsWith(host))
-        return false;
+        return true;
+    }
+} // namespace
 
-    return true;
-}
-}
-
-OriginAccessEntry::OriginAccessEntry(const String& protocol, const String& host, SubdomainSetting subdomainSetting)
-    : m_protocol(protocol.lower())
-    , m_host(host.lower())
+OriginAccessEntry::OriginAccessEntry(const String& protocol,
+    const String& host,
+    SubdomainSetting subdomainSetting)
+    : m_protocol(protocol)
+    , m_host(host)
     , m_subdomainSettings(subdomainSetting)
     , m_hostIsPublicSuffix(false)
 {
@@ -110,7 +100,8 @@ OriginAccessEntry::OriginAccessEntry(const String& protocol, const String& host,
         if (m_host.length() <= publicSuffixLength + 1) {
             m_hostIsPublicSuffix = true;
         } else if (subdomainSetting == AllowRegisterableDomains && publicSuffixLength) {
-            // The "2" in the next line is 1 for the '.', plus a 1-char minimum label length.
+            // The "2" in the next line is 1 for the '.', plus a 1-char minimum label
+            // length.
             const size_t dot = m_host.reverseFind('.', m_host.length() - publicSuffixLength - 2);
             if (dot == kNotFound)
                 m_registerableDomain = host;
@@ -120,15 +111,20 @@ OriginAccessEntry::OriginAccessEntry(const String& protocol, const String& host,
     }
 }
 
-OriginAccessEntry::MatchResult OriginAccessEntry::matchesOrigin(const SecurityOrigin& origin) const
+OriginAccessEntry::MatchResult OriginAccessEntry::matchesOrigin(
+    const SecurityOrigin& origin) const
 {
-    ASSERT(origin.host() == origin.host().lower());
-    ASSERT(origin.protocol() == origin.protocol().lower());
-
     if (m_protocol != origin.protocol())
         return DoesNotMatchOrigin;
 
-    // Special case: Include subdomains and empty host means "all hosts, including ip addresses".
+    return matchesDomain(origin);
+}
+
+OriginAccessEntry::MatchResult OriginAccessEntry::matchesDomain(
+    const SecurityOrigin& origin) const
+{
+    // Special case: Include subdomains and empty host means "all hosts, including
+    // ip addresses".
     if (m_subdomainSettings != DisallowSubdomains && m_host.isEmpty())
         return MatchesOrigin;
 
@@ -151,7 +147,8 @@ OriginAccessEntry::MatchResult OriginAccessEntry::matchesOrigin(const SecurityOr
         break;
 
     case AllowRegisterableDomains:
-        // Fall back to a simple subdomain check if no registerable domain could be found:
+        // Fall back to a simple subdomain check if no registerable domain could
+        // be found:
         if (m_registerableDomain.isEmpty()) {
             if (!IsSubdomainOfHost(origin.host(), m_host))
                 return DoesNotMatchOrigin;

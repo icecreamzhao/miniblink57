@@ -379,6 +379,15 @@
         defined(__x86_64__) || defined(__ppc64__) || defined(__sparc64__) || \
         (defined(__SIZEOF_LONG__) && __SIZEOF_LONG__ == 8) || \
         (defined(__LONG_MAX__) && __LONG_MAX__ == 9223372036854775807L)
+
+# if defined(__LP64__)
+//#error "111"
+#endif
+
+# if __SIZEOF_LONGLONG__ == 8
+#error "222"
+#endif
+
 #    define CURL_TYPEOF_CURL_OFF_T     long
 #    define CURL_FORMAT_CURL_OFF_T     "ld"
 #    define CURL_FORMAT_CURL_OFF_TU    "lu"

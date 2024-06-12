@@ -5,12 +5,12 @@
  * found in the LICENSE file.
  */
 
-#include "windows.h"
 #include "win_dbghelp.h"
+#include "windows.h"
 #include <process.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // Remove prefix addresses. 18 = 2 * (8 digit hexa + 1 space).
 // e.g. "abcd1234 abcd1234 render_pdf!processInput
@@ -44,45 +44,54 @@
 // q - quit cdb.exe
 #define CDB_PRINT_CALLSTACK_CURRENT_THREAD "? " MARKER_THREAD_CALLSTACK_START_NUMBER "; k; ? " MARKER_THREAD_CALLSTACK_STOP_NUMBER "; .ecxr; ? " MARKER_EXCEPTION_CALLSTACK_START_NUMBER "; k; ? " MARKER_EXCEPTION_CALLSTACK_STOP_NUMBER "; q"
 
-static void strncpyOrSetBlank(char* dest, const char* src, size_t len) {
-  const char* srcOrEmptyString = (NULL == src) ? "" : src;
-  strncpy(dest, srcOrEmptyString, len);
+static void strncpyOrSetBlank(char* dest, const char* src, size_t len)
+{
+    const char* srcOrEmptyString = (nullptr == src) ? "" : src;
+    strncpy(dest, srcOrEmptyString, len);
 }
 
 char debug_app_name[MAX_PATH] = "";
-void setAppName(const char* app_name) {
+void setAppName(const char* app_name)
+{
     strncpyOrSetBlank(debug_app_name, app_name, sizeof(debug_app_name));
 }
 
-const char* getAppName() {
+const char* getAppName()
+{
     return debug_app_name;
 }
 
 char debug_binaries_path[MAX_PATH] = "";
-void setBinariesPath(const char* binaries_path) {
+void setBinariesPath(const char* binaries_path)
+{
     strncpyOrSetBlank(debug_binaries_path, binaries_path,
-                      sizeof(debug_binaries_path));
+        sizeof(debug_binaries_path));
 }
 
-const char* getBinariesPath() {
+const char* getBinariesPath()
+{
     return debug_binaries_path;
 }
 
 char debug_app_version[100] = "";
-void setAppVersion(const char* version) {
+void setAppVersion(const char* version)
+{
     strncpyOrSetBlank(debug_app_version, version, sizeof(debug_app_version));
 }
 
-const char* getAppVersion() {
+const char* getAppVersion()
+{
     return debug_app_version;
 }
 
 char debug_cdb_path[MAX_PATH] = "";
-void setCdbPath(const char* path) {
-  strncpyOrSetBlank(debug_cdb_path, path, sizeof(debug_cdb_path));
+void setCdbPath(const char* path)
+{
+    strncpyOrSetBlank(debug_cdb_path, path, sizeof(debug_cdb_path));
 }
 
-const char* getCdbPath() {
+const char* getCdbPath()
+{
     return debug_cdb_path;
 }
 
@@ -91,8 +100,9 @@ const char* getCdbPath() {
  *  byt 2 hex adresses, which will not be reported.
  */
 static void printCallstack(const char* filename,
-                           const char* start,
-                           const char* stop) {
+    const char* start,
+    const char* stop)
+{
     FILE* file = fopen(filename, "rt");
     char line[1000];
     bool started = false;
@@ -105,8 +115,8 @@ static void printCallstack(const char* filename,
             break;
         } else if (started) {
             // Filter messages. Calstack lines contain "exe/dll!function"
-            if (strchr(line, '!') != NULL && strlen(line) > CDB_CALLSTACK_PREFIX) {
-                printf("%s", line + CDB_CALLSTACK_PREFIX);  // fgets includes \n already.
+            if (strchr(line, '!') != nullptr && strlen(line) > CDB_CALLSTACK_PREFIX) {
+                printf("%s", line + CDB_CALLSTACK_PREFIX); // fgets includes \n already.
             }
         }
     }
@@ -114,16 +124,17 @@ static void printCallstack(const char* filename,
 }
 
 #define BUILD_UNIQUE_FILENAME(var, ext, szPath, szAppName, szVersion, stLocalTime) \
-    sprintf(szFileName, "%s%s\\%s-%04d%02d%02d-%02d%02d%02d-%ld-%ld" ext, \
-           szPath, szAppName, szVersion, \
-           stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay, \
-           stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond, \
-           GetCurrentProcessId(), GetCurrentThreadId());
+    sprintf(szFileName, "%s%s\\%s-%04d%02d%02d-%02d%02d%02d-%ld-%ld" ext,          \
+        szPath, szAppName, szVersion,                                              \
+        stLocalTime.wYear, stLocalTime.wMonth, stLocalTime.wDay,                   \
+        stLocalTime.wHour, stLocalTime.wMinute, stLocalTime.wSecond,               \
+        GetCurrentProcessId(), GetCurrentThreadId());
 
 // Exception execution handler.  Exception is recognized. Transfer control to
 // the exception handler by executing the __except compound statement,
 // then continue execution after the __except block.
-int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers) {
+int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers)
+{
     BOOL bMiniDumpSuccessful;
     char szPath[MAX_PATH];
     char szFileName[MAX_PATH];
@@ -135,34 +146,34 @@ int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers) {
     SYSTEMTIME stLocalTime;
     MINIDUMP_EXCEPTION_INFORMATION ExpParam;
 
-    GetLocalTime( &stLocalTime );
-    GetTempPath( dwBufferSize, szPath );
+    GetLocalTime(&stLocalTime);
+    GetTempPath(dwBufferSize, szPath);
 
-    sprintf( szFileName, "%s%s", szPath, szAppName );
-    CreateDirectory( szFileName, NULL );
+    sprintf(szFileName, "%s%s", szPath, szAppName);
+    CreateDirectory(szFileName, nullptr);
 
     BUILD_UNIQUE_FILENAME(szFileName, ".dmp", szPath, szAppName, szVersion, stLocalTime);
     BUILD_UNIQUE_FILENAME(szFileNameOutput, ".out", szPath, szAppName, szVersion, stLocalTime);
 
     hDumpFile = CreateFile(szFileName,
-                           GENERIC_READ|GENERIC_WRITE,
-                           FILE_SHARE_WRITE|FILE_SHARE_READ,
-                           0,
-                           CREATE_ALWAYS,
-                           0,
-                           0);
+        GENERIC_READ | GENERIC_WRITE,
+        FILE_SHARE_WRITE | FILE_SHARE_READ,
+        0,
+        CREATE_ALWAYS,
+        0,
+        0);
 
     ExpParam.ThreadId = GetCurrentThreadId();
     ExpParam.ExceptionPointers = pExceptionPointers;
     ExpParam.ClientPointers = TRUE;
 
     bMiniDumpSuccessful = MiniDumpWriteDump(GetCurrentProcess(),
-                                            GetCurrentProcessId(),
-                                            hDumpFile,
-                                            MiniDumpWithDataSegs,
-                                            &ExpParam,
-                                            NULL,
-                                            NULL);
+        GetCurrentProcessId(),
+        hDumpFile,
+        MiniDumpWithDataSegs,
+        &ExpParam,
+        nullptr,
+        nullptr);
 
     printf("MiniDump file:    %s\n", szFileName);
     printf("App exe and pdb:  %s\n", getBinariesPath());
@@ -173,23 +184,23 @@ int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers) {
 
         char command[MAX_PATH * 4];
         sprintf(command, "%s -y \"%s\" -i \"%s\" -z \"%s\" -c \"%s\" -kqm >\"%s\"",
-                cdbExePath,
-                getBinariesPath(),
-                getBinariesPath(),
-                szFileName,
-                CDB_PRINT_CALLSTACK_CURRENT_THREAD,
-                szFileNameOutput);
+            cdbExePath,
+            getBinariesPath(),
+            getBinariesPath(),
+            szFileName,
+            CDB_PRINT_CALLSTACK_CURRENT_THREAD,
+            szFileNameOutput);
         system(command);
 
         printf("\nThread Callstack:\n");
         printCallstack(szFileNameOutput,
-                       MARKER_THREAD_CALLSTACK_START,
-                       MARKER_THREAD_CALLSTACK_STOP);
+            MARKER_THREAD_CALLSTACK_START,
+            MARKER_THREAD_CALLSTACK_STOP);
 
         printf("\nException Callstack:\n");
         printCallstack(szFileNameOutput,
-                       MARKER_EXCEPTION_CALLSTACK_START,
-                       MARKER_EXCEPTION_CALLSTACK_STOP);
+            MARKER_EXCEPTION_CALLSTACK_START,
+            MARKER_EXCEPTION_CALLSTACK_STOP);
     } else {
         printf("Warning: CDB path not set up.\n");
     }
@@ -201,7 +212,8 @@ int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers) {
  *  e.g out\Debug\render_pdfs.exe
  *  This function expects the .pdb file to be in the same directory.
  */
-void setUpDebuggingFromArgs(const char* vargs0) {
+void setUpDebuggingFromArgs(const char* vargs0)
+{
     size_t i = strlen(vargs0);
 
     if (i >= 4 && _stricmp(vargs0 - 4, ".exe") == 0) {
@@ -228,9 +240,9 @@ void setUpDebuggingFromArgs(const char* vargs0) {
     binaries_path[pos_last_slash] = '\0';
     setBinariesPath(binaries_path);
 
-    setAppVersion("1.0");  // Dummy for now, but use revision instead if we use
-                           // the minidump for anything else other than
-                           // collecting the callstack.
+    setAppVersion("1.0"); // Dummy for now, but use revision instead if we use
+        // the minidump for anything else other than
+        // collecting the callstack.
 
     // cdb.exe is the app used to load the minidump which prints the callstack.
     char cdbExePath[MAX_PATH];

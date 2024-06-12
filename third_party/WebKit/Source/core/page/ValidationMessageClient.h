@@ -35,14 +35,19 @@ namespace blink {
 class Document;
 class Element;
 
-class ValidationMessageClient : public WillBeGarbageCollectedMixin {
+class ValidationMessageClient : public GarbageCollectedMixin {
 public:
     virtual ~ValidationMessageClient() { }
 
     // Show validation message for the specified anchor element. An
     // implementation of this function may hide the message automatically after
     // some period.
-    virtual void showValidationMessage(const Element& anchor, const String& mainMessage, TextDirection, const String& subMessage, TextDirection) = 0;
+    virtual void showValidationMessage(const Element& anchor,
+        const String& mainMessage,
+        TextDirection,
+        const String& subMessage,
+        TextDirection)
+        = 0;
 
     // Hide validation message for the specified anchor if the message for the
     // anchor is already visible.
@@ -59,6 +64,6 @@ public:
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
-}
+} // namespace blink
 
 #endif

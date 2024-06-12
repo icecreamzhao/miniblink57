@@ -71,10 +71,7 @@ struct WebPoint {
         return *this;
     }
 
-    operator IntPoint() const
-    {
-        return IntPoint(x, y);
-    }
+    operator IntPoint() const { return IntPoint(x, y); }
 #else
     WebPoint(const gfx::Point& p)
         : x(p.x())
@@ -89,10 +86,7 @@ struct WebPoint {
         return *this;
     }
 
-    operator gfx::Point() const
-    {
-        return gfx::Point(x, y);
-    }
+    operator gfx::Point() const { return gfx::Point(x, y); }
 #endif
 };
 

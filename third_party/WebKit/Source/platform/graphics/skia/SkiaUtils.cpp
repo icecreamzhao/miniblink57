@@ -28,101 +28,105 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/graphics/skia/SkiaUtils.h"
 
-#include "SkColorPriv.h"
-#include "SkRegion.h"
 #include "platform/graphics/GraphicsContext.h"
-#include "platform/graphics/ImageBuffer.h"
+#include "third_party/skia/include/effects/SkCornerPathEffect.h"
 
 namespace blink {
 
 static const struct CompositOpToXfermodeMode {
     CompositeOperator mCompositOp;
-    SkXfermode::Mode m_xfermodeMode;
+    SkBlendMode m_xfermodeMode;
 } gMapCompositOpsToXfermodeModes[] = {
-    { CompositeClear,           SkXfermode::kClear_Mode },
-    { CompositeCopy,            SkXfermode::kSrc_Mode },
-    { CompositeSourceOver,      SkXfermode::kSrcOver_Mode },
-    { CompositeSourceIn,        SkXfermode::kSrcIn_Mode },
-    { CompositeSourceOut,       SkXfermode::kSrcOut_Mode },
-    { CompositeSourceAtop,      SkXfermode::kSrcATop_Mode },
-    { CompositeDestinationOver, SkXfermode::kDstOver_Mode },
-    { CompositeDestinationIn,   SkXfermode::kDstIn_Mode },
-    { CompositeDestinationOut,  SkXfermode::kDstOut_Mode },
-    { CompositeDestinationAtop, SkXfermode::kDstATop_Mode },
-    { CompositeXOR,             SkXfermode::kXor_Mode },
-    { CompositePlusLighter,     SkXfermode::kPlus_Mode }
+    { CompositeClear, SkBlendMode::kClear },
+    { CompositeCopy, SkBlendMode::kSrc },
+    { CompositeSourceOver, SkBlendMode::kSrcOver },
+    { CompositeSourceIn, SkBlendMode::kSrcIn },
+    { CompositeSourceOut, SkBlendMode::kSrcOut },
+    { CompositeSourceAtop, SkBlendMode::kSrcATop },
+    { CompositeDestinationOver, SkBlendMode::kDstOver },
+    { CompositeDestinationIn, SkBlendMode::kDstIn },
+    { CompositeDestinationOut, SkBlendMode::kDstOut },
+    { CompositeDestinationAtop, SkBlendMode::kDstATop },
+    { CompositeXOR, SkBlendMode::kXor },
+    { CompositePlusLighter, SkBlendMode::kPlus }
 };
 
-// keep this array in sync with WebBlendMode enum in public/platform/WebBlendMode.h
-static const SkXfermode::Mode gMapBlendOpsToXfermodeModes[] = {
-    SkXfermode::kClear_Mode, // WebBlendModeNormal
-    SkXfermode::kMultiply_Mode, // WebBlendModeMultiply
-    SkXfermode::kScreen_Mode, // WebBlendModeScreen
-    SkXfermode::kOverlay_Mode, // WebBlendModeOverlay
-    SkXfermode::kDarken_Mode, // WebBlendModeDarken
-    SkXfermode::kLighten_Mode, // WebBlendModeLighten
-    SkXfermode::kColorDodge_Mode, // WebBlendModeColorDodge
-    SkXfermode::kColorBurn_Mode, // WebBlendModeColorBurn
-    SkXfermode::kHardLight_Mode, // WebBlendModeHardLight
-    SkXfermode::kSoftLight_Mode, // WebBlendModeSoftLight
-    SkXfermode::kDifference_Mode, // WebBlendModeDifference
-    SkXfermode::kExclusion_Mode, // WebBlendModeExclusion
-    SkXfermode::kHue_Mode, // WebBlendModeHue
-    SkXfermode::kSaturation_Mode, // WebBlendModeSaturation
-    SkXfermode::kColor_Mode, // WebBlendModeColor
-    SkXfermode::kLuminosity_Mode // WebBlendModeLuminosity
+// Keep this array in sync with the WebBlendMode enum in
+// public/platform/WebBlendMode.h.
+static const SkBlendMode gMapBlendOpsToXfermodeModes[] = {
+    SkBlendMode::kSrcOver, // WebBlendModeNormal
+    SkBlendMode::kMultiply, // WebBlendModeMultiply
+    SkBlendMode::kScreen, // WebBlendModeScreen
+    SkBlendMode::kOverlay, // WebBlendModeOverlay
+    SkBlendMode::kDarken, // WebBlendModeDarken
+    SkBlendMode::kLighten, // WebBlendModeLighten
+    SkBlendMode::kColorDodge, // WebBlendModeColorDodge
+    SkBlendMode::kColorBurn, // WebBlendModeColorBurn
+    SkBlendMode::kHardLight, // WebBlendModeHardLight
+    SkBlendMode::kSoftLight, // WebBlendModeSoftLight
+    SkBlendMode::kDifference, // WebBlendModeDifference
+    SkBlendMode::kExclusion, // WebBlendModeExclusion
+    SkBlendMode::kHue, // WebBlendModeHue
+    SkBlendMode::kSaturation, // WebBlendModeSaturation
+    SkBlendMode::kColor, // WebBlendModeColor
+    SkBlendMode::kLuminosity // WebBlendModeLuminosity
 };
 
-SkXfermode::Mode WebCoreCompositeToSkiaComposite(CompositeOperator op, WebBlendMode blendMode)
+SkBlendMode WebCoreCompositeToSkiaComposite(CompositeOperator op,
+    WebBlendMode blendMode)
 {
     ASSERT(op == CompositeSourceOver || blendMode == WebBlendModeNormal);
     if (blendMode != WebBlendModeNormal) {
         if (static_cast<uint8_t>(blendMode) >= SK_ARRAY_COUNT(gMapBlendOpsToXfermodeModes)) {
-            SkDEBUGF(("GraphicsContext::setPlatformCompositeOperation unknown WebBlendMode %d\n", blendMode));
-            return SkXfermode::kSrcOver_Mode;
+            SkDEBUGF(
+                ("GraphicsContext::setPlatformCompositeOperation unknown "
+                 "WebBlendMode %d\n",
+                    blendMode));
+            return SkBlendMode::kSrcOver;
         }
         return gMapBlendOpsToXfermodeModes[static_cast<uint8_t>(blendMode)];
     }
 
     const CompositOpToXfermodeMode* table = gMapCompositOpsToXfermodeModes;
     if (static_cast<uint8_t>(op) >= SK_ARRAY_COUNT(gMapCompositOpsToXfermodeModes)) {
-        SkDEBUGF(("GraphicsContext::setPlatformCompositeOperation unknown CompositeOperator %d\n", op));
-        return SkXfermode::kSrcOver_Mode;
+        SkDEBUGF(
+            ("GraphicsContext::setPlatformCompositeOperation unknown "
+             "CompositeOperator %d\n",
+                op));
+        return SkBlendMode::kSrcOver;
     }
     SkASSERT(table[static_cast<uint8_t>(op)].mCompositOp == op);
     return table[static_cast<uint8_t>(op)].m_xfermodeMode;
 }
 
-CompositeOperator compositeOperatorFromSkia(SkXfermode::Mode xferMode)
+CompositeOperator compositeOperatorFromSkia(SkBlendMode xferMode)
 {
     switch (xferMode) {
-    case SkXfermode::kClear_Mode:
+    case SkBlendMode::kClear:
         return CompositeClear;
-    case SkXfermode::kSrc_Mode:
+    case SkBlendMode::kSrc:
         return CompositeCopy;
-    case SkXfermode::kSrcOver_Mode:
+    case SkBlendMode::kSrcOver:
         return CompositeSourceOver;
-    case SkXfermode::kSrcIn_Mode:
+    case SkBlendMode::kSrcIn:
         return CompositeSourceIn;
-    case SkXfermode::kSrcOut_Mode:
+    case SkBlendMode::kSrcOut:
         return CompositeSourceOut;
-    case SkXfermode::kSrcATop_Mode:
+    case SkBlendMode::kSrcATop:
         return CompositeSourceAtop;
-    case SkXfermode::kDstOver_Mode:
+    case SkBlendMode::kDstOver:
         return CompositeDestinationOver;
-    case SkXfermode::kDstIn_Mode:
+    case SkBlendMode::kDstIn:
         return CompositeDestinationIn;
-    case SkXfermode::kDstOut_Mode:
+    case SkBlendMode::kDstOut:
         return CompositeDestinationOut;
-    case SkXfermode::kDstATop_Mode:
+    case SkBlendMode::kDstATop:
         return CompositeDestinationAtop;
-    case SkXfermode::kXor_Mode:
+    case SkBlendMode::kXor:
         return CompositeXOR;
-    case SkXfermode::kPlus_Mode:
+    case SkBlendMode::kPlus:
         return CompositePlusLighter;
     default:
         break;
@@ -130,86 +134,45 @@ CompositeOperator compositeOperatorFromSkia(SkXfermode::Mode xferMode)
     return CompositeSourceOver;
 }
 
-WebBlendMode blendModeFromSkia(SkXfermode::Mode xferMode)
+WebBlendMode blendModeFromSkia(SkBlendMode xferMode)
 {
     switch (xferMode) {
-    case SkXfermode::kSrcOver_Mode:
+    case SkBlendMode::kSrcOver:
         return WebBlendModeNormal;
-    case SkXfermode::kMultiply_Mode:
+    case SkBlendMode::kMultiply:
         return WebBlendModeMultiply;
-    case SkXfermode::kScreen_Mode:
+    case SkBlendMode::kScreen:
         return WebBlendModeScreen;
-    case SkXfermode::kOverlay_Mode:
+    case SkBlendMode::kOverlay:
         return WebBlendModeOverlay;
-    case SkXfermode::kDarken_Mode:
+    case SkBlendMode::kDarken:
         return WebBlendModeDarken;
-    case SkXfermode::kLighten_Mode:
+    case SkBlendMode::kLighten:
         return WebBlendModeLighten;
-    case SkXfermode::kColorDodge_Mode:
+    case SkBlendMode::kColorDodge:
         return WebBlendModeColorDodge;
-    case SkXfermode::kColorBurn_Mode:
+    case SkBlendMode::kColorBurn:
         return WebBlendModeColorBurn;
-    case SkXfermode::kHardLight_Mode:
+    case SkBlendMode::kHardLight:
         return WebBlendModeHardLight;
-    case SkXfermode::kSoftLight_Mode:
+    case SkBlendMode::kSoftLight:
         return WebBlendModeSoftLight;
-    case SkXfermode::kDifference_Mode:
+    case SkBlendMode::kDifference:
         return WebBlendModeDifference;
-    case SkXfermode::kExclusion_Mode:
+    case SkBlendMode::kExclusion:
         return WebBlendModeExclusion;
-    case SkXfermode::kHue_Mode:
+    case SkBlendMode::kHue:
         return WebBlendModeHue;
-    case SkXfermode::kSaturation_Mode:
+    case SkBlendMode::kSaturation:
         return WebBlendModeSaturation;
-    case SkXfermode::kColor_Mode:
+    case SkBlendMode::kColor:
         return WebBlendModeColor;
-    case SkXfermode::kLuminosity_Mode:
+    case SkBlendMode::kLuminosity:
         return WebBlendModeLuminosity;
     default:
         break;
     }
     return WebBlendModeNormal;
-}
-
-bool SkPathContainsPoint(const SkPath& originalPath, const FloatPoint& point, SkPath::FillType ft)
-{
-    SkRect bounds = originalPath.getBounds();
-
-    // We can immediately return false if the point is outside the bounding
-    // rect.  We don't use bounds.contains() here, since it would exclude
-    // points on the right and bottom edges of the bounding rect, and we want
-    // to include them.
-    SkScalar fX = SkFloatToScalar(point.x());
-    SkScalar fY = SkFloatToScalar(point.y());
-    if (fX < bounds.fLeft || fX > bounds.fRight || fY < bounds.fTop || fY > bounds.fBottom)
-        return false;
-
-    // Scale the path to a large size before hit testing for two reasons:
-    // 1) Skia has trouble with coordinates close to the max signed 16-bit values, so we scale larger paths down.
-    //    TODO: when Skia is patched to work properly with large values, this will not be necessary.
-    // 2) Skia does not support analytic hit testing, so we scale paths up to do raster hit testing with subpixel accuracy.
-    SkScalar biggestCoord = std::max(std::max(std::max(bounds.fRight, bounds.fBottom), -bounds.fLeft), -bounds.fTop);
-    if (SkScalarNearlyZero(biggestCoord))
-        return false;
-    biggestCoord = std::max(std::max(biggestCoord, fX + 1), fY + 1);
-
-    const SkScalar kMaxCoordinate = SkIntToScalar(1 << 15);
-    SkScalar scale = kMaxCoordinate / biggestCoord;
-
-    SkRegion rgn;
-    SkRegion clip;
-    SkMatrix m;
-    SkPath scaledPath(originalPath);
-
-    scaledPath.setFillType(ft);
-    m.setScale(scale, scale);
-    scaledPath.transform(m, 0);
-
-    int x = static_cast<int>(floorf(0.5f + point.x() * scale));
-    int y = static_cast<int>(floorf(0.5f + point.y() * scale));
-    clip.setRect(x - 1, y - 1, x + 1, y + 1);
-
-    return rgn.setPath(scaledPath, clip);
 }
 
 SkMatrix affineTransformToSkMatrix(const AffineTransform& source)
@@ -237,13 +200,14 @@ bool nearlyIntegral(float value)
     return fabs(value - floorf(value)) < std::numeric_limits<float>::epsilon();
 }
 
-InterpolationQuality limitInterpolationQuality(const GraphicsContext* context, InterpolationQuality resampling)
+InterpolationQuality limitInterpolationQuality(
+    const GraphicsContext& context,
+    InterpolationQuality resampling)
 {
-    return std::min(resampling, context->imageInterpolationQuality());
+    return std::min(resampling, context.imageInterpolationQuality());
 }
 
-InterpolationQuality computeInterpolationQuality(
-    float srcWidth,
+InterpolationQuality computeInterpolationQuality(float srcWidth,
     float srcHeight,
     float destWidth,
     float destHeight,
@@ -274,17 +238,13 @@ InterpolationQuality computeInterpolationQuality(
     if (widthNearlyEqual && heightNearlyEqual)
         return InterpolationNone;
 
-    if (srcWidth <= kSmallImageSizeThreshold
-        || srcHeight <= kSmallImageSizeThreshold
-        || destWidth <= kSmallImageSizeThreshold
-        || destHeight <= kSmallImageSizeThreshold) {
+    if (srcWidth <= kSmallImageSizeThreshold || srcHeight <= kSmallImageSizeThreshold || destWidth <= kSmallImageSizeThreshold || destHeight <= kSmallImageSizeThreshold) {
         // Small image detected.
 
         // Resample in the case where the new size would be non-integral.
         // This can cause noticeable breaks in repeating patterns, except
         // when the source image is only one pixel wide in that dimension.
-        if ((!nearlyIntegral(destWidth) && srcWidth > 1 + std::numeric_limits<float>::epsilon())
-            || (!nearlyIntegral(destHeight) && srcHeight > 1 + std::numeric_limits<float>::epsilon()))
+        if ((!nearlyIntegral(destWidth) && srcWidth > 1 + std::numeric_limits<float>::epsilon()) || (!nearlyIntegral(destHeight) && srcHeight > 1 + std::numeric_limits<float>::epsilon()))
             return InterpolationLow;
 
         // Otherwise, don't resample small images. These are often used for
@@ -307,8 +267,7 @@ InterpolationQuality computeInterpolationQuality(
         return InterpolationLow;
     }
 
-    if ((diffWidth / srcWidth < kFractionalChangeThreshold)
-        && (diffHeight / srcHeight < kFractionalChangeThreshold)) {
+    if ((diffWidth / srcWidth < kFractionalChangeThreshold) && (diffHeight / srcHeight < kFractionalChangeThreshold)) {
         // It is disappointingly common on the web for image sizes to be off by
         // one or two pixels. We don't bother resampling if the size difference
         // is a small fraction of the original size.
@@ -346,43 +305,56 @@ SkColor scaleAlpha(SkColor color, int alpha)
     return (color & 0x00FFFFFF) | (a << 24);
 }
 
-template<typename PrimitiveType>
-void drawFocusRingPrimitive(const PrimitiveType&, SkCanvas*, const SkPaint&, float cornerRadius)
+template <typename PrimitiveType>
+void drawFocusRingPrimitive(const PrimitiveType&,
+    SkCanvas*,
+    const SkPaint&,
+    float cornerRadius)
 {
     ASSERT_NOT_REACHED(); // Missing an explicit specialization?
 }
 
-template<>
-void drawFocusRingPrimitive<SkRect>(const SkRect& rect, SkCanvas* canvas, const SkPaint& paint, float cornerRadius)
+template <>
+void drawFocusRingPrimitive<SkRect>(const SkRect& rect,
+    SkCanvas* canvas,
+    const SkPaint& paint,
+    float cornerRadius)
 {
     SkRRect rrect;
-    rrect.setRectXY(rect, SkFloatToScalar(cornerRadius), SkFloatToScalar(cornerRadius));
+    rrect.setRectXY(rect, SkFloatToScalar(cornerRadius),
+        SkFloatToScalar(cornerRadius));
     canvas->drawRRect(rrect, paint);
 }
 
-template<>
-void drawFocusRingPrimitive<SkPath>(const SkPath& path, SkCanvas* canvas, const SkPaint& paint, float cornerRadius)
+template <>
+void drawFocusRingPrimitive<SkPath>(const SkPath& path,
+    SkCanvas* canvas,
+    const SkPaint& paint,
+    float cornerRadius)
 {
     SkPaint pathPaint = paint;
-    pathPaint.setPathEffect(SkCornerPathEffect::Create(SkFloatToScalar(cornerRadius)))->unref();
+    pathPaint.setPathEffect(
+        SkCornerPathEffect::Make(SkFloatToScalar(cornerRadius)));
     canvas->drawPath(path, pathPaint);
 }
 
-template<typename PrimitiveType>
-void drawPlatformFocusRing(const PrimitiveType& primitive, SkCanvas* canvas, SkColor color, int width)
+template <typename PrimitiveType>
+void drawPlatformFocusRing(const PrimitiveType& primitive,
+    SkCanvas* canvas,
+    SkColor color,
+    float width)
 {
     SkPaint paint;
     paint.setAntiAlias(true);
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setColor(color);
+    paint.setStrokeWidth(width);
 
 #if OS(MACOSX)
-    paint.setStrokeWidth(width);
     paint.setAlpha(64);
-    float cornerRadius = (width - 1) * 0.5f;
+    const float cornerRadius = (width - 1) * 0.5f;
 #else
-    paint.setStrokeWidth(1);
-    const float cornerRadius = 1;
+    const float cornerRadius = width;
 #endif
 
     drawFocusRingPrimitive(primitive, canvas, paint, cornerRadius);
@@ -395,7 +367,13 @@ void drawPlatformFocusRing(const PrimitiveType& primitive, SkCanvas* canvas, SkC
 #endif
 }
 
-template void PLATFORM_EXPORT drawPlatformFocusRing<SkRect>(const SkRect&, SkCanvas*, SkColor, int width);
-template void PLATFORM_EXPORT drawPlatformFocusRing<SkPath>(const SkPath&, SkCanvas*, SkColor, int width);
+template void PLATFORM_EXPORT drawPlatformFocusRing<SkRect>(const SkRect&,
+    SkCanvas*,
+    SkColor,
+    float width);
+template void PLATFORM_EXPORT drawPlatformFocusRing<SkPath>(const SkPath&,
+    SkCanvas*,
+    SkColor,
+    float width);
 
-}  // namespace blink
+} // namespace blink

@@ -26,32 +26,28 @@
 #ifndef StorageArea_h
 #define StorageArea_h
 
-#include "core/frame/LocalFrameLifecycleObserver.h"
+#include "core/frame/LocalFrame.h"
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
 class ExceptionState;
-class LocalFrame;
 class KURL;
 class SecurityOrigin;
 class Storage;
 class WebStorageArea;
 class WebStorageNamespace;
 
-enum StorageType {
-    LocalStorage,
-    SessionStorage
-};
+enum StorageType { LocalStorage,
+    SessionStorage };
 
-class MODULES_EXPORT StorageArea final : public GarbageCollectedFinalized<StorageArea>, public LocalFrameLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(StorageArea);
+class MODULES_EXPORT StorageArea final
+    : public GarbageCollectedFinalized<StorageArea> {
 public:
-    static StorageArea* create(PassOwnPtr<WebStorageArea>, StorageType);
+    static StorageArea* create(std::unique_ptr<WebStorageArea>, StorageType);
 
     virtual ~StorageArea();
 
@@ -59,29 +55,40 @@ public:
     unsigned length(ExceptionState&, LocalFrame* sourceFrame);
     String key(unsigned index, ExceptionState&, LocalFrame* sourceFrame);
     String getItem(const String& key, ExceptionState&, LocalFrame* sourceFrame);
-    void setItem(const String& key, const String& value, ExceptionState&, LocalFrame* sourceFrame);
+    void setItem(const String& key,
+        const String& value,
+        ExceptionState&,
+        LocalFrame* sourceFrame);
     void removeItem(const String& key, ExceptionState&, LocalFrame* sourceFrame);
     void clear(ExceptionState&, LocalFrame* sourceFrame);
     bool contains(const String& key, ExceptionState&, LocalFrame* sourceFrame);
 
     bool canAccessStorage(LocalFrame*);
-    size_t memoryBytesUsedByCache();
 
-    static void dispatchLocalStorageEvent(const String& key, const String& oldValue, const String& newValue,
-        SecurityOrigin*, const KURL& pageURL, WebStorageArea* sourceAreaInstance, bool originatedInProcess);
-    static void dispatchSessionStorageEvent(const String& key, const String& oldValue, const String& newValue,
-        SecurityOrigin*, const KURL& pageURL, const WebStorageNamespace&,
-        WebStorageArea* sourceAreaInstance, bool originatedInProcess);
+    static void dispatchLocalStorageEvent(const String& key,
+        const String& oldValue,
+        const String& newValue,
+        SecurityOrigin*,
+        const KURL& pageURL,
+        WebStorageArea* sourceAreaInstance);
+    static void dispatchSessionStorageEvent(const String& key,
+        const String& oldValue,
+        const String& newValue,
+        SecurityOrigin*,
+        const KURL& pageURL,
+        const WebStorageNamespace&,
+        WebStorageArea* sourceAreaInstance);
 
     DECLARE_TRACE();
 
 private:
-    StorageArea(PassOwnPtr<WebStorageArea>, StorageType);
+    StorageArea(std::unique_ptr<WebStorageArea>, StorageType);
 
     static bool isEventSource(Storage*, WebStorageArea* sourceAreaInstance);
 
-    OwnPtr<WebStorageArea> m_storageArea;
+    std::unique_ptr<WebStorageArea> m_storageArea;
     StorageType m_storageType;
+    WeakMember<LocalFrame> m_frameUsedForCanAccessStorage;
     bool m_canAccessStorageCachedResult;
 };
 

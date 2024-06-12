@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef ResourceLoadInfo_h
 #define ResourceLoadInfo_h
 
@@ -35,11 +34,11 @@ namespace blink {
 struct ResourceLoadInfo : RefCounted<ResourceLoadInfo> {
     ResourceLoadInfo()
         : httpStatusCode(0)
-        , encodedDataLength(-1) { }
+    {
+    }
 
     int httpStatusCode;
     String httpStatusText;
-    long long encodedDataLength;
     HTTPHeaderMap requestHeaders;
     HTTPHeaderMap responseHeaders;
     String requestHeadersText;
@@ -47,6 +46,6 @@ struct ResourceLoadInfo : RefCounted<ResourceLoadInfo> {
     String npnNegotiatedProtocol;
 };
 
-}
+} // namespace blink
 
 #endif

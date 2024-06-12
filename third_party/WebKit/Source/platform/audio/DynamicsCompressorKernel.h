@@ -31,14 +31,16 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class PLATFORM_EXPORT DynamicsCompressorKernel {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(DynamicsCompressorKernel);
+
 public:
     DynamicsCompressorKernel(float sampleRate, unsigned numberOfChannels);
 
@@ -46,24 +48,23 @@ public:
 
     // Performs stereo-linked compression.
     void process(const float* sourceChannels[],
-                 float* destinationChannels[],
-                 unsigned numberOfChannels,
-                 unsigned framesToProcess,
+        float* destinationChannels[],
+        unsigned numberOfChannels,
+        unsigned framesToProcess,
 
-                 float dbThreshold,
-                 float dbKnee,
-                 float ratio,
-                 float attackTime,
-                 float releaseTime,
-                 float preDelayTime,
-                 float dbPostGain,
-                 float effectBlend,
+        float dbThreshold,
+        float dbKnee,
+        float ratio,
+        float attackTime,
+        float releaseTime,
+        float preDelayTime,
+        float dbPostGain,
+        float effectBlend,
 
-                 float releaseZone1,
-                 float releaseZone2,
-                 float releaseZone3,
-                 float releaseZone4
-                 );
+        float releaseZone1,
+        float releaseZone2,
+        float releaseZone3,
+        float releaseZone4);
 
     void reset();
 
@@ -86,11 +87,13 @@ protected:
     // Lookahead section.
     enum { MaxPreDelayFrames = 1024 };
     enum { MaxPreDelayFramesMask = MaxPreDelayFrames - 1 };
-    enum { DefaultPreDelayFrames = 256 }; // setPreDelayTime() will override this initial value
+    enum {
+        DefaultPreDelayFrames = 256
+    }; // setPreDelayTime() will override this initial value
     unsigned m_lastPreDelayFrames;
     void setPreDelayTime(float);
 
-    Vector<OwnPtr<AudioFloatArray>> m_preDelayBuffers;
+    Vector<std::unique_ptr<AudioFloatArray>> m_preDelayBuffers;
     int m_preDelayReadIndex;
     int m_preDelayWriteIndex;
 
@@ -102,10 +105,13 @@ protected:
     float slopeAt(float x, float k);
     float kAtSlope(float desiredSlope);
 
-    float updateStaticCurveParameters(float dbThreshold, float dbKnee, float ratio);
+    float updateStaticCurveParameters(float dbThreshold,
+        float dbKnee,
+        float ratio);
 
     // Amount of input change in dB required for 1 dB of output change.
-    // This applies to the portion of the curve above m_kneeThresholdDb (see below).
+    // This applies to the portion of the curve above m_kneeThresholdDb (see
+    // below).
     float m_ratio;
     float m_slope; // Inverse ratio.
 
@@ -113,17 +119,19 @@ protected:
     float m_linearThreshold;
     float m_dbThreshold;
 
-    // m_dbKnee is the number of dB above the threshold before we enter the "ratio" portion of the curve.
+    // m_dbKnee is the number of dB above the threshold before we enter the
+    // "ratio" portion of the curve.
     // m_kneeThresholdDb = m_dbThreshold + m_dbKnee
-    // The portion between m_dbThreshold and m_kneeThresholdDb is the "soft knee" portion of the curve
-    // which transitions smoothly from the linear portion to the ratio portion.
+    // The portion between m_dbThreshold and m_kneeThresholdDb is the "soft knee"
+    // portion of the curve which transitions smoothly from the linear portion to
+    // the ratio portion.
     float m_dbKnee;
     float m_kneeThreshold;
     float m_kneeThresholdDb;
     float m_ykneeThresholdDb;
 
     // Internal parameter for the knee portion of the curve.
-    float m_K;
+    float m_knee;
 };
 
 } // namespace blink

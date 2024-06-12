@@ -5,11 +5,12 @@
  * found in the LICENSE file.
  */
 
-
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
+#include "SkRRect.h"
 #include "SkRandom.h"
+#include "SkRect.h"
+#include "gm.h"
 
 namespace skiagm {
 
@@ -22,8 +23,9 @@ public:
     };
 
     ComplexClip2GM(Clip clip, bool antiAlias)
-    : fClip(clip)
-    , fAntiAlias(antiAlias) {
+        : fClip(clip)
+        , fAntiAlias(antiAlias)
+    {
         SkScalar xA = 0.65f;
         SkScalar xF = 50.65f;
 
@@ -38,8 +40,9 @@ public:
     }
 
 protected:
-    void onOnceBeforeDraw() override {
-        this->setBGColor(SkColorSetRGB(0xDD,0xA0,0xDD));
+    void onOnceBeforeDraw() override
+    {
+        this->setBGColor(SkColorSetRGB(0xDD, 0xA0, 0xDD));
 
         // offset the rects a bit so we get antialiasing even in the rect case
         SkScalar xA = 0.65f;
@@ -94,7 +97,7 @@ protected:
         for (int i = 0; i < kRows; ++i) {
             for (int j = 0; j < kCols; ++j) {
                 for (int k = 0; k < 5; ++k) {
-                    fOps[j*kRows+i][k] = ops[r.nextU() % SK_ARRAY_COUNT(ops)];
+                    fOps[j * kRows + i][k] = ops[r.nextU() % SK_ARRAY_COUNT(ops)];
                 }
             }
         }
@@ -105,7 +108,8 @@ protected:
     static const int kPadX = 20;
     static const int kPadY = 20;
 
-    static const char* ClipStr(Clip clip) {
+    static const char* ClipStr(Clip clip)
+    {
         switch (clip) {
         case kRect_Clip:
             return "rect";
@@ -118,72 +122,75 @@ protected:
         return "";
     }
 
-    virtual SkString onShortName() {
+    SkString onShortName() override
+    {
         if (kRect_Clip == fClip && !fAntiAlias) {
             return SkString("complexclip2");
         }
 
         SkString str;
         str.printf("complexclip2_%s_%s",
-                    ClipStr(fClip),
-                    fAntiAlias ? "aa" : "bw");
+            ClipStr(fClip),
+            fAntiAlias ? "aa" : "bw");
         return str;
     }
 
-    virtual SkISize onISize() {
+    SkISize onISize() override
+    {
         return SkISize::Make(SkScalarRoundToInt(fTotalWidth),
-                             SkScalarRoundToInt(fTotalHeight));
+            SkScalarRoundToInt(fTotalHeight));
     }
 
-    virtual void onDraw(SkCanvas* canvas) {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint rectPaint;
         rectPaint.setStyle(SkPaint::kStroke_Style);
         rectPaint.setStrokeWidth(-1);
 
         SkPaint fillPaint;
-        fillPaint.setColor(SkColorSetRGB(0xA0,0xDD,0xA0));
+        fillPaint.setColor(SkColorSetRGB(0xA0, 0xDD, 0xA0));
 
         for (int i = 0; i < kRows; ++i) {
             for (int j = 0; j < kCols; ++j) {
                 canvas->save();
 
-                canvas->translate(kPadX * SK_Scalar1 + (fWidth + kPadX * SK_Scalar1)*j,
-                                  kPadY * SK_Scalar1 + (fHeight + kPadY * SK_Scalar1)*i);
+                canvas->translate(kPadX * SK_Scalar1 + (fWidth + kPadX * SK_Scalar1) * j,
+                    kPadY * SK_Scalar1 + (fHeight + kPadY * SK_Scalar1) * i);
 
                 // draw the original shapes first so we can see the
                 // antialiasing on the clipped draw
                 for (int k = 0; k < 5; ++k) {
                     rectPaint.setColor(fRectColors[k]);
                     switch (fClip) {
-                        case kRect_Clip:
-                            canvas->drawRect(fRects[k], rectPaint);
-                            break;
-                        case kRRect_Clip:
-                            canvas->drawRRect(fRRects[k], rectPaint);
-                            break;
-                        case kPath_Clip:
-                            canvas->drawPath(fPaths[k], rectPaint);
-                            break;
+                    case kRect_Clip:
+                        canvas->drawRect(fRects[k], rectPaint);
+                        break;
+                    case kRRect_Clip:
+                        canvas->drawRRect(fRRects[k], rectPaint);
+                        break;
+                    case kPath_Clip:
+                        canvas->drawPath(fPaths[k], rectPaint);
+                        break;
                     }
                 }
 
                 for (int k = 0; k < 5; ++k) {
                     switch (fClip) {
-                        case kRect_Clip:
-                            canvas->clipRect(fRects[k],
-                                             fOps[j*kRows+i][k],
-                                             fAntiAlias);
-                            break;
-                        case kRRect_Clip:
-                            canvas->clipRRect(fRRects[k],
-                                              fOps[j*kRows+i][k],
-                                              fAntiAlias);
-                            break;
-                        case kPath_Clip:
-                            canvas->clipPath(fPaths[k],
-                                             fOps[j*kRows+i][k],
-                                             fAntiAlias);
-                            break;
+                    case kRect_Clip:
+                        canvas->clipRect(fRects[k],
+                            fOps[j * kRows + i][k],
+                            fAntiAlias);
+                        break;
+                    case kRRect_Clip:
+                        canvas->clipRRect(fRRects[k],
+                            fOps[j * kRows + i][k],
+                            fAntiAlias);
+                        break;
+                    case kPath_Clip:
+                        canvas->clipPath(fPaths[k],
+                            fOps[j * kRows + i][k],
+                            fAntiAlias);
+                        break;
                     }
                 }
                 canvas->drawRect(SkRect::MakeWH(fWidth, fHeight), fillPaint);
@@ -191,6 +198,7 @@ protected:
             }
         }
     }
+
 private:
     Clip fClip;
     bool fAntiAlias;
@@ -210,13 +218,13 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 // bw
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kRect_Clip, false); )
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kRRect_Clip, false); )
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kPath_Clip, false); )
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kRect_Clip, false);)
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kRRect_Clip, false);)
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kPath_Clip, false);)
 
 // aa
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kRect_Clip, true); )
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kRRect_Clip, true); )
-DEF_GM( return new ComplexClip2GM(ComplexClip2GM::kPath_Clip, true); )
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kRect_Clip, true);)
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kRRect_Clip, true);)
+DEF_GM(return new ComplexClip2GM(ComplexClip2GM::kPath_Clip, true);)
 
 }

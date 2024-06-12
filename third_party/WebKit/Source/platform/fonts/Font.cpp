@@ -22,56 +22,44 @@
  *
  */
 
-#include "config.h"
 #include "platform/fonts/Font.h"
 
-#include "SkPaint.h"
-#include "SkTemplates.h"
+#include "platform/LayoutTestSupport.h"
 #include "platform/LayoutUnit.h"
 #include "platform/RuntimeEnabledFeatures.h"
-#include "platform/fonts/Character.h"
+#include "platform/fonts/CharacterRange.h"
 #include "platform/fonts/FontCache.h"
+#include "platform/fonts/FontFallbackIterator.h"
 #include "platform/fonts/FontFallbackList.h"
 #include "platform/fonts/GlyphBuffer.h"
 #include "platform/fonts/GlyphPageTreeNode.h"
 #include "platform/fonts/SimpleFontData.h"
-#ifndef MINIBLINK_NO_HARFBUZZ
-#include "platform/fonts/shaping/HarfBuzzFace.h"
-#include "platform/fonts/shaping/HarfBuzzShaper.h"
-#endif
+#include "platform/fonts/shaping/CachingWordShaper.h"
+// #include "platform/fonts/shaping/HarfBuzzFace.h"
+// #include "platform/fonts/shaping/HarfBuzzShaper.h"
 #include "platform/fonts/shaping/SimpleShaper.h"
 #include "platform/geometry/FloatRect.h"
-#include "platform/graphics/skia/SkiaUtils.h"
 #include "platform/text/BidiResolver.h"
+#include "platform/text/Character.h"
 #include "platform/text/TextRun.h"
 #include "platform/text/TextRunIterator.h"
 #include "platform/transforms/AffineTransform.h"
 #include "third_party/skia/include/core/SkCanvas.h"
-#include "wtf/MainThread.h"
+#include "third_party/skia/include/core/SkPaint.h"
+#include "third_party/skia/include/core/SkTextBlob.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/Unicode.h"
-#include "wtf/RefCountedLeakCounter.h"
 
 using namespace WTF;
 using namespace Unicode;
 
 namespace blink {
 
-#ifndef NDEBUG
-DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, fontCounter, ("FontCounter"));
-Font* gFontDebug = nullptr;
-#endif
-
 Font::Font()
+    : m_canShapeWordByWord(0)
+    , m_shapeWordByWordComputed(0)
 {
-#ifndef NDEBUG
-    fontCounter.increment();
-//     WTF::String outstr = String::format("Font::Font: %p\n", this);
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-//     if (!gFontDebug)
-//         gFontDebug = this;
-#endif
 }
 
 Font::Font(const FontDescription& fd)
@@ -79,39 +67,17 @@ Font::Font(const FontDescription& fd)
     , m_canShapeWordByWord(0)
     , m_shapeWordByWordComputed(0)
 {
-#ifndef NDEBUG
-    fontCounter.increment();
-//     WTF::String outstr = String::format("Font::Font 2: %p\n", this);
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-#endif
 }
 
 Font::Font(const Font& other)
     : m_fontDescription(other.m_fontDescription)
     , m_fontFallbackList(other.m_fontFallbackList)
+    // TODO(yosin): We should have a comment the reason why don't we copy
+    // |m_canShapeWordByWord| and |m_shapeWordByWordComputed| from |other|,
+    // since |operator=()| copies them from |other|.
     , m_canShapeWordByWord(0)
     , m_shapeWordByWordComputed(0)
 {
-#ifndef NDEBUG
-    fontCounter.increment();
-//     WTF::String outstr = String::format("Font::Font 3: %p\n", this);
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-#endif
-}
-
-Font::~Font()
-{
-#ifndef NDEBUG
-//     WTF::String outstr;
-//     if (m_fontFallbackList.get()) {
-//         outstr = String::format("Font::~Font: %p %p %d\n", this, m_fontFallbackList.get(), m_fontFallbackList->refCount());
-//         OutputDebugStringW(outstr.charactersWithNullTermination().data());
-//     } else {
-//         outstr = String::format("Font::~Font: %p\n", this);
-//         OutputDebugStringW(outstr.charactersWithNullTermination().data());
-//     }
-    fontCounter.decrement();
-#endif
 }
 
 Font& Font::operator=(const Font& other)
@@ -125,8 +91,8 @@ Font& Font::operator=(const Font& other)
 
 bool Font::operator==(const Font& other) const
 {
-    FontSelector* first = m_fontFallbackList ? m_fontFallbackList->fontSelector() : 0;
-    FontSelector* second = other.m_fontFallbackList ? other.m_fontFallbackList->fontSelector() : 0;
+    FontSelector* first = m_fontFallbackList ? m_fontFallbackList->getFontSelector() : 0;
+    FontSelector* second = other.m_fontFallbackList ? other.m_fontFallbackList->getFontSelector() : 0;
 
     return first == second
         && m_fontDescription == other.m_fontDescription
@@ -134,20 +100,15 @@ bool Font::operator==(const Font& other) const
         && (m_fontFallbackList ? m_fontFallbackList->generation() : 0) == (other.m_fontFallbackList ? other.m_fontFallbackList->generation() : 0);
 }
 
-void Font::update(PassRefPtrWillBeRawPtr<FontSelector> fontSelector) const
+void Font::update(FontSelector* fontSelector) const
 {
     // FIXME: It is pretty crazy that we are willing to just poke into a RefPtr, but it ends up
     // being reasonably safe (because inherited fonts in the render tree pick up the new
     // style anyway. Other copies are transient, e.g., the state in the GraphicsContext, and
     // won't stick around long enough to get you in trouble). Still, this is pretty disgusting,
     // and could eventually be rectified by using RefPtrs for Fonts themselves.
-    if (!m_fontFallbackList) {
+    if (!m_fontFallbackList)
         m_fontFallbackList = FontFallbackList::create();
-//         WTF::String outstr = String::format("Font::update: %p %p\n", this, m_fontFallbackList.get());
-//         OutputDebugStringW(outstr.charactersWithNullTermination().data());
-//         if (gFontDebug == this)
-//             OutputDebugStringA("");
-    }
     m_fontFallbackList->invalidate(fontSelector);
 }
 
@@ -156,8 +117,7 @@ float Font::buildGlyphBuffer(const TextRunPaintInfo& runInfo, GlyphBuffer& glyph
 {
     if (codePath(runInfo) == ComplexPath) {
         float width;
-#ifndef MINIBLINK_NO_HARFBUZZ
-        CachingWordShaper& shaper = m_fontFallbackList->cachingWordShaper();
+        CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
         if (emphasisData) {
             width = shaper.fillGlyphBufferForTextEmphasis(this, runInfo.run,
                 emphasisData, &glyphBuffer, runInfo.from, runInfo.to);
@@ -165,30 +125,7 @@ float Font::buildGlyphBuffer(const TextRunPaintInfo& runInfo, GlyphBuffer& glyph
             width = shaper.fillGlyphBuffer(this, runInfo.run, nullptr,
                 &glyphBuffer, runInfo.from, runInfo.to);
         }
-#else
-        if (runInfo.run.is8Bit())
-            return 0;
 
-        int dummyLength = std::min(runInfo.to - runInfo.from, runInfo.run.length());
-        Vector<UChar> dummyString;
-        dummyString.resize(dummyLength);
-        const UChar* runCharacters16 = runInfo.run.characters16();
-        int endPos = std::min(runInfo.run.length(), runInfo.to);
-        for (int i = runInfo.from; i < endPos; ++i) {
-            UChar temp[3] = { runCharacters16[i], 0, 0 };
-            if (i < endPos - 1) 
-                temp[1] = runCharacters16[i + 1];
-            
-            if (ComplexPath == Character::characterRangeCodePath(temp, 2))
-                dummyString[i] = L'?';
-            else
-                dummyString[i] = runCharacters16[i];
-        }
-
-        TextRun dummyTextRun(dummyString.data(), dummyString.size());
-        TextRunPaintInfo dummyRunInfo(dummyTextRun);
-        width = buildGlyphBuffer(dummyRunInfo, glyphBuffer, emphasisData);
-#endif
         return width;
     }
 
@@ -206,33 +143,33 @@ float Font::buildGlyphBuffer(const TextRunPaintInfo& runInfo, GlyphBuffer& glyph
     return width;
 }
 
-void Font::drawText(SkCanvas* canvas, const TextRunPaintInfo& runInfo,
+bool Font::drawText(SkCanvas* canvas, const TextRunPaintInfo& runInfo,
     const FloatPoint& point, float deviceScaleFactor, const SkPaint& paint) const
 {
     // Don't draw anything while we are using custom fonts that are in the process of loading.
     if (shouldSkipDrawing())
-        return;
+        return false;
 
     if (runInfo.cachedTextBlob && runInfo.cachedTextBlob->get()) {
-        ASSERT(RuntimeEnabledFeatures::textBlobEnabled());
         // we have a pre-cached blob -- happy joy!
-        drawTextBlob(canvas, paint, runInfo.cachedTextBlob->get(), point.data());
-        return;
+        canvas->drawTextBlob(runInfo.cachedTextBlob->get(), point.x(), point.y(), paint);
+        return true;
     }
 
     GlyphBuffer glyphBuffer;
     buildGlyphBuffer(runInfo, glyphBuffer);
 
     drawGlyphBuffer(canvas, paint, runInfo, glyphBuffer, point, deviceScaleFactor);
+    return true;
 }
 
-void Font::drawBidiText(SkCanvas* canvas, const TextRunPaintInfo& runInfo, const FloatPoint& point, CustomFontNotReadyAction customFontNotReadyAction, float deviceScaleFactor, const SkPaint& paint) const
+bool Font::drawBidiText(SkCanvas* canvas, const TextRunPaintInfo& runInfo, const FloatPoint& point, CustomFontNotReadyAction customFontNotReadyAction, float deviceScaleFactor, const SkPaint& paint) const
 {
     // Don't draw anything while we are using custom fonts that are in the process of loading,
     // except if the 'force' argument is set to true (in which case it will use a fallback
     // font).
     if (shouldSkipDrawing() && customFontNotReadyAction == DoNotPaintIfFontNotReady)
-        return;
+        return false;
 
     // sub-run painting is not supported for Bidi text.
     const TextRun& run = runInfo.run;
@@ -246,14 +183,14 @@ void Font::drawBidiText(SkCanvas* canvas, const TextRunPaintInfo& runInfo, const
     BidiRunList<BidiCharacterRun>& bidiRuns = bidiResolver.runs();
     bidiResolver.createBidiRunsForLine(TextRunIterator(&run, run.length()));
     if (!bidiRuns.runCount())
-        return;
+        return true;
 
     FloatPoint currPoint = point;
     BidiCharacterRun* bidiRun = bidiRuns.firstRun();
     while (bidiRun) {
         TextRun subrun = run.subRun(bidiRun->start(), bidiRun->stop() - bidiRun->start());
         bool isRTL = bidiRun->level() % 2;
-        subrun.setDirection(isRTL ? RTL : LTR);
+        subrun.setDirection(isRTL ? TextDirection::kRtl : TextDirection::kLtr);
         subrun.setDirectionalOverride(bidiRun->dirOverride(false));
 
         TextRunPaintInfo subrunInfo(subrun);
@@ -270,6 +207,7 @@ void Font::drawBidiText(SkCanvas* canvas, const TextRunPaintInfo& runInfo, const
     }
 
     bidiRuns.deleteRuns();
+    return true;
 }
 
 void Font::drawEmphasisMarks(SkCanvas* canvas, const TextRunPaintInfo& runInfo, const AtomicString& mark, const FloatPoint& point, float deviceScaleFactor, const SkPaint& paint) const
@@ -300,58 +238,145 @@ float Font::width(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFo
 {
     FontCachePurgePreventer purgePreventer;
 
-    if (codePath(TextRunPaintInfo(run)) == ComplexPath) {
-#ifndef MINIBLINK_NO_HARFBUZZ
+    if (codePath(TextRunPaintInfo(run)) == ComplexPath)
         return floatWidthForComplexText(run, fallbackFonts, glyphBounds);
-#else
-        Vector<UChar> dummy;
-        dummy.fill(L'?', run.length());
-        TextRun runDummy(dummy.data(), run.length(), run.xPos(), run.expansion(), TextRun::AllowTrailingExpansion | TextRun::ForbidLeadingExpansion, run.direction(), run.directionalOverride());
-        floatWidthForSimpleText(runDummy, fallbackFonts, glyphBounds);
-#endif // MINIBLINK_NO_HARFBUZZ
-    }
     return floatWidthForSimpleText(run, fallbackFonts, glyphBounds);
 }
 
-PassTextBlobPtr Font::buildTextBlob(const GlyphBuffer& glyphBuffer) const
+namespace {
+
+    enum BlobRotation {
+        NoRotation,
+        CCWRotation,
+    };
+
+    class GlyphBufferBloberizer {
+        STACK_ALLOCATED()
+    public:
+        GlyphBufferBloberizer(const GlyphBuffer& buffer, const Font* font, float deviceScaleFactor)
+            : m_buffer(buffer)
+            , m_font(font)
+            , m_deviceScaleFactor(deviceScaleFactor)
+            , m_hasVerticalOffsets(buffer.hasVerticalOffsets())
+            , m_index(0)
+            , m_blobCount(0)
+            , m_rotation(buffer.isEmpty() ? NoRotation : computeBlobRotation(buffer.fontDataAt(0)))
+        {
+        }
+
+        bool done() const { return m_index >= m_buffer.size(); }
+        unsigned blobCount() const { return m_blobCount; }
+
+        std::pair<sk_sp<SkTextBlob>, BlobRotation> next()
+        {
+            ASSERT(!done());
+            const BlobRotation currentRotation = m_rotation;
+
+            while (m_index < m_buffer.size()) {
+                const SimpleFontData* fontData = m_buffer.fontDataAt(m_index);
+                ASSERT(fontData);
+
+                const BlobRotation newRotation = computeBlobRotation(fontData);
+                if (newRotation != m_rotation) {
+                    // We're switching to an orientation which requires a different rotation
+                    //   => emit the pending blob (and start a new one with the new rotation).
+                    m_rotation = newRotation;
+                    break;
+                }
+
+                const unsigned start = m_index++;
+                while (m_index < m_buffer.size() && m_buffer.fontDataAt(m_index) == fontData)
+                    m_index++;
+
+                appendRun(start, m_index - start, fontData);
+            }
+
+            m_blobCount++;
+            return std::make_pair(sk_ref_sp((SkTextBlob*)m_builder.build()), currentRotation);
+        }
+
+    private:
+        static BlobRotation computeBlobRotation(const SimpleFontData* font)
+        {
+            // For vertical upright text we need to compensate the inherited 90deg CW rotation
+            // (using a 90deg CCW rotation).
+            return (font->platformData().isVerticalAnyUpright() && font->verticalData()) ? CCWRotation : NoRotation;
+        }
+
+        void appendRun(unsigned start, unsigned count, const SimpleFontData* fontData)
+        {
+            SkPaint paint;
+            fontData->platformData().setupPaint(&paint, m_deviceScaleFactor, m_font);
+            paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
+
+            const SkTextBlobBuilder::RunBuffer& buffer = m_hasVerticalOffsets
+                ? m_builder.allocRunPos(paint, count)
+                : m_builder.allocRunPosH(paint, count, 0);
+
+            const uint16_t* glyphs = m_buffer.glyphs(start);
+            const float* offsets = m_buffer.offsets(start);
+            std::copy(glyphs, glyphs + count, buffer.glyphs);
+
+            if (m_rotation == NoRotation) {
+                std::copy(offsets, offsets + (m_hasVerticalOffsets ? 2 * count : count), buffer.pos);
+            } else {
+                ASSERT(m_hasVerticalOffsets);
+
+                const float verticalBaselineXOffset = fontData->getFontMetrics().floatAscent()
+                    - fontData->getFontMetrics().floatAscent(IdeographicBaseline);
+
+                // TODO(fmalita): why don't we apply this adjustment when building the glyph buffer?
+                for (unsigned i = 0; i < 2 * count; i += 2) {
+                    buffer.pos[i] = SkFloatToScalar(offsets[i] + verticalBaselineXOffset);
+                    buffer.pos[i + 1] = SkFloatToScalar(offsets[i + 1]);
+                }
+            }
+        }
+
+        const GlyphBuffer& m_buffer;
+        const Font* m_font;
+        const float m_deviceScaleFactor;
+        const bool m_hasVerticalOffsets;
+
+        SkTextBlobBuilder m_builder;
+        unsigned m_index;
+        unsigned m_blobCount;
+        BlobRotation m_rotation;
+    };
+
+} // anonymous namespace
+
+void Font::drawGlyphBuffer(SkCanvas* canvas, const SkPaint& paint, const TextRunPaintInfo& runInfo,
+    const GlyphBuffer& glyphBuffer, const FloatPoint& point, float deviceScaleFactor) const
 {
-    ASSERT(RuntimeEnabledFeatures::textBlobEnabled());
+    GlyphBufferBloberizer bloberizer(glyphBuffer, this, deviceScaleFactor);
+    std::pair<sk_sp<SkTextBlob>, BlobRotation> blob;
 
-    SkTextBlobBuilder builder;
-    bool hasVerticalOffsets = glyphBuffer.hasVerticalOffsets();
+    while (!bloberizer.done()) {
+        blob = bloberizer.next();
+        ASSERT(blob.first);
 
-    unsigned i = 0;
-    while (i < glyphBuffer.size()) {
-        const SimpleFontData* fontData = glyphBuffer.fontDataAt(i);
+        SkAutoCanvasRestore autoRestore(canvas, false);
+        if (blob.second == CCWRotation) {
+            canvas->save();
 
-        // FIXME: Handle vertical text.
-        if (fontData->platformData().isVerticalAnyUpright())
-            return nullptr;
+            SkMatrix m;
+            m.setSinCos(-1, 0, point.x(), point.y());
+            canvas->concat(m);
+        }
 
-        SkPaint paint;
-        // FIXME: FontPlatformData makes some decisions on the device scale
-        // factor, which is found via the GraphicsContext. This should be fixed
-        // to avoid correctness problems here.
-        float deviceScaleFactor = 1.0f;
-        fontData->platformData().setupPaint(&paint, deviceScaleFactor, this);
-        paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
-
-        unsigned start = i++;
-        while (i < glyphBuffer.size() && glyphBuffer.fontDataAt(i) == fontData)
-            i++;
-        unsigned count = i - start;
-
-        const SkTextBlobBuilder::RunBuffer& buffer = hasVerticalOffsets
-            ? builder.allocRunPos(paint, count)
-            : builder.allocRunPosH(paint, count, 0);
-
-        const uint16_t* glyphs = glyphBuffer.glyphs(start);
-        const float* offsets = glyphBuffer.offsets(start);
-        std::copy(glyphs, glyphs + count, buffer.glyphs);
-        std::copy(offsets, offsets + (hasVerticalOffsets ? 2 * count : count), buffer.pos);
+        canvas->drawTextBlob(blob.first.get(), point.x(), point.y(), paint);
     }
 
-    return adoptRef(builder.build());
+    // Cache results when
+    //   1) requested by clients, and
+    //   2) the glyph buffer is encoded as a single blob, and
+    //   3) the blob is not upright/rotated
+    if (runInfo.cachedTextBlob && bloberizer.blobCount() == 1 && blob.second == NoRotation) {
+        ASSERT(!*runInfo.cachedTextBlob);
+        *runInfo.cachedTextBlob = blob.first;
+        ASSERT(*runInfo.cachedTextBlob);
+    }
 }
 
 static inline FloatRect pixelSnappedSelectionRect(FloatRect rect)
@@ -381,11 +406,7 @@ int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyp
 {
     FontCachePurgePreventer purgePreventer;
 
-    if (codePath(TextRunPaintInfo(run)) != ComplexPath
-#ifndef MINIBLINK_NO_HARFBUZZ
-		&& !fontDescription().typesettingFeatures()
-#endif
-		)
+    if (codePath(TextRunPaintInfo(run)) != ComplexPath && !getFontDescription().getTypesettingFeatures())
         return offsetForPositionForSimpleText(run, x, includePartialGlyphs);
 
     return offsetForPositionForComplexText(run, x, includePartialGlyphs);
@@ -393,43 +414,37 @@ int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyp
 
 CodePath Font::codePath(const TextRunPaintInfo& runInfo) const
 {
-    if (RuntimeEnabledFeatures::alwaysUseComplexTextEnabled())
-        return ComplexPath;
-
+    // TODO(eae): Disable the always use complex text feature on Android for now as
+    // it caused a memory regression for webview. crbug.com/577306
+// #if !OS(ANDROID)
+//     if (RuntimeEnabledFeatures::alwaysUseComplexTextEnabled() || LayoutTestSupport::alwaysUseComplexTextForTest()) {
+//         return ComplexPath;
+//     }
+// #endif
+    
     const TextRun& run = runInfo.run;
-#ifndef MINIBLINK_NO_HARFBUZZ
-    if (fontDescription().typesettingFeatures() && (runInfo.from || runInfo.to != run.length()))
+    
+    if (getFontDescription().getTypesettingFeatures())
         return ComplexPath;
-
-    if (m_fontDescription.featureSettings() && m_fontDescription.featureSettings()->size() > 0 && m_fontDescription.letterSpacing() == 0)
+    
+    if (m_fontDescription.featureSettings() && m_fontDescription.featureSettings()->size() > 0)
         return ComplexPath;
-
+    
     if (m_fontDescription.isVerticalBaseline())
         return ComplexPath;
-
+    
     if (m_fontDescription.widthVariant() != RegularWidth)
         return ComplexPath;
-
-    if (run.length() > 1 && fontDescription().typesettingFeatures())
-        return ComplexPath;
-
+    
     // FIXME: This really shouldn't be needed but for some reason the
     // TextRendering setting doesn't propagate to typesettingFeatures in time
     // for the prefs width calculation.
-
-    if (fontDescription().textRendering() == OptimizeLegibility || fontDescription().textRendering() == GeometricPrecision)
+    if (getFontDescription().textRendering() == OptimizeLegibility || getFontDescription().textRendering() == GeometricPrecision)
         return ComplexPath;
-#endif
-
-    if (run.codePath() == TextRun::ForceComplex)
-        return ComplexPath;
-
-    if (run.codePath() == TextRun::ForceSimple)
-        return SimplePath;
-
+    
     if (run.is8Bit())
         return SimplePath;
-
+    
     // Start from 0 since drawing and highlighting also measure the characters before run->from.
     return Character::characterRangeCodePath(run.characters16(), run.length());
 }
@@ -445,19 +460,22 @@ bool Font::canShapeWordByWord() const
 
 bool Font::computeCanShapeWordByWord() const
 {
-    if (!fontDescription().typesettingFeatures())
+    if (!getFontDescription().getTypesettingFeatures())
         return true;
 
+    if (!primaryFont())
+        return false;
+
     const FontPlatformData& platformData = primaryFont()->platformData();
-    TypesettingFeatures features = fontDescription().typesettingFeatures();
+    TypesettingFeatures features = getFontDescription().getTypesettingFeatures();
     return !platformData.hasSpaceInLigaturesOrKerning(features);
 };
 
-void Font::willUseFontData(UChar32 character) const
+void Font::willUseFontData(const String& text) const
 {
-    const FontFamily& family = fontDescription().family();
-    if (m_fontFallbackList && m_fontFallbackList->fontSelector() && !family.familyIsEmpty())
-        m_fontFallbackList->fontSelector()->willUseFontData(fontDescription(), family.family(), character);
+    const FontFamily& family = getFontDescription().family();
+    if (m_fontFallbackList && m_fontFallbackList->getFontSelector() && !family.familyIsEmpty())
+        m_fontFallbackList->getFontSelector()->willUseFontData(getFontDescription(), family.family(), text);
 }
 
 static inline GlyphData glyphDataForNonCJKCharacterWithGlyphOrientation(UChar32 character, bool isUpright, GlyphData& data, unsigned pageNumber)
@@ -494,14 +512,22 @@ static inline GlyphData glyphDataForNonCJKCharacterWithGlyphOrientation(UChar32 
     return data;
 }
 
+PassRefPtr<FontFallbackIterator> Font::createFontFallbackIterator(
+    FontFallbackPriority fallbackPriority) const
+{
+    return FontFallbackIterator::create(m_fontDescription,
+        m_fontFallbackList,
+        fallbackPriority);
+}
+
 GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpace, FontDataVariant variant) const
 {
     ASSERT(isMainThread());
 
     if (variant == AutoVariant) {
-        if (m_fontDescription.variant() == FontVariantSmallCaps) {
+        if (m_fontDescription.variantCaps() == FontDescription::SmallCaps) {
             bool includeDefault = false;
-            UChar32 upperC = toUpper(c, m_fontDescription.locale(includeDefault));
+            UChar32 upperC = toUpper(c, m_fontDescription.locale(includeDefault)->localeString());
             if (upperC != c) {
                 c = upperC;
                 variant = SmallCapsVariant;
@@ -526,6 +552,7 @@ GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpa
         node = GlyphPageTreeNode::getRootChild(fontDataAt(0), pageNumber);
         m_fontFallbackList->setPageNode(pageNumber, node);
     }
+    RELEASE_ASSERT(node); // Diagnosing crbug.com/446566 crash bug.
 
     GlyphPage* page = 0;
     if (variant == NormalVariant) {
@@ -599,7 +626,7 @@ GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpa
     // FIXME: Unclear if this should normalizeSpaces above 0xFFFF.
     // Doing so changes fast/text/international/plane2-diffs.html
     UChar32 characterToRender = c;
-    if (characterToRender <=  0xFFFF)
+    if (characterToRender <= 0xFFFF)
         characterToRender = Character::normalizeSpaces(characterToRender);
 
     const FontData* fontData = fontDataAt(0);
@@ -611,14 +638,15 @@ GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpa
         }
         if (characterFontData) {
             // Got the fallback glyph and font.
-            GlyphPage* fallbackPage = GlyphPageTreeNode::getRootChild(characterFontData.get(), pageNumber)->page();
-            GlyphData data = fallbackPage && fallbackPage->glyphForCharacter(c) ? fallbackPage->glyphDataForCharacter(c) : characterFontData->missingGlyphData();
+            unsigned pageNumberForRendering = characterToRender / GlyphPage::size;
+            GlyphPage* fallbackPage = GlyphPageTreeNode::getRootChild(characterFontData.get(), pageNumberForRendering)->page();
+            GlyphData data = fallbackPage && fallbackPage->glyphForCharacter(characterToRender) ? fallbackPage->glyphDataForCharacter(characterToRender) : characterFontData->missingGlyphData();
             // Cache it so we don't have to do system fallback again next time.
             if (variant == NormalVariant) {
                 page->setGlyphDataForCharacter(c, data.glyph, data.fontData);
                 data.fontData->setMaxGlyphPageTreeLevel(std::max(data.fontData->maxGlyphPageTreeLevel(), node->level()));
-                if (data.fontData->platformData().isVerticalAnyUpright() && !data.fontData->isTextOrientationFallback() && !Character::isCJKIdeographOrSymbol(c))
-                    return glyphDataForNonCJKCharacterWithGlyphOrientation(c, m_fontDescription.isVerticalUpright(c), data, pageNumber);
+                if (data.fontData->platformData().isVerticalAnyUpright() && !data.fontData->isTextOrientationFallback() && !Character::isCJKIdeographOrSymbol(characterToRender))
+                    return glyphDataForNonCJKCharacterWithGlyphOrientation(characterToRender, m_fontDescription.isVerticalUpright(characterToRender), data, pageNumberForRendering);
             }
             return data;
         }
@@ -635,31 +663,23 @@ GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpa
     return data;
 }
 
-// FIXME: This function may not work if the emphasis mark uses a complex script, but none of the
-// standard emphasis marks do so.
 bool Font::getEmphasisMarkGlyphData(const AtomicString& mark, GlyphData& glyphData) const
 {
     if (mark.isEmpty())
         return false;
 
-    UChar32 character = mark[0];
+    TextRun emphasisMarkRun(mark, mark.length());
+    TextRunPaintInfo emphasisPaintInfo(emphasisMarkRun);
+    GlyphBuffer glyphBuffer;
+    buildGlyphBuffer(emphasisPaintInfo, glyphBuffer);
 
-    if (U16_IS_SURROGATE(character)) {
-        if (!U16_IS_SURROGATE_LEAD(character))
-            return false;
+    if (glyphBuffer.isEmpty())
+        return false;
 
-        if (mark.length() < 2)
-            return false;
+    ASSERT(glyphBuffer.fontDataAt(0));
+    glyphData.fontData = glyphBuffer.fontDataAt(0)->emphasisMarkFontData(m_fontDescription).get();
+    glyphData.glyph = glyphBuffer.glyphAt(0);
 
-        UChar low = mark[1];
-        if (!U16_IS_TRAIL(low))
-            return false;
-
-        character = U16_GET_SUPPLEMENTARY(character, low);
-    }
-
-    bool normalizeSpace = false;
-    glyphData = glyphDataForCharacter(character, false, normalizeSpace, EmphasisMarkVariant);
     return true;
 }
 
@@ -676,7 +696,7 @@ int Font::emphasisMarkAscent(const AtomicString& mark) const
     if (!markFontData)
         return 0;
 
-    return markFontData->fontMetrics().ascent();
+    return markFontData->getFontMetrics().ascent();
 }
 
 int Font::emphasisMarkDescent(const AtomicString& mark) const
@@ -692,7 +712,7 @@ int Font::emphasisMarkDescent(const AtomicString& mark) const
     if (!markFontData)
         return 0;
 
-    return markFontData->fontMetrics().descent();
+    return markFontData->getFontMetrics().descent();
 }
 
 int Font::emphasisMarkHeight(const AtomicString& mark) const
@@ -708,80 +728,12 @@ int Font::emphasisMarkHeight(const AtomicString& mark) const
     if (!markFontData)
         return 0;
 
-    return markFontData->fontMetrics().height();
-}
-
-void Font::paintGlyphs(SkCanvas* canvas, const SkPaint& paint, const SimpleFontData* font,
-    const Glyph glyphs[], unsigned numGlyphs,
-    const SkPoint pos[], const FloatRect& textRect, float deviceScaleFactor) const
-{
-    SkPaint fontPaint(paint);
-    font->platformData().setupPaint(&fontPaint, deviceScaleFactor, this);
-    fontPaint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
-    canvas->drawPosText(glyphs, numGlyphs * sizeof(Glyph), pos, fontPaint);
-}
-
-void Font::paintGlyphsHorizontal(SkCanvas* canvas, const SkPaint& paint, const SimpleFontData* font,
-    const Glyph glyphs[], unsigned numGlyphs,
-    const SkScalar xpos[], SkScalar constY, const FloatRect& textRect, float deviceScaleFactor) const
-{
-    SkPaint fontPaint(paint);
-    font->platformData().setupPaint(&fontPaint, deviceScaleFactor, this);
-    fontPaint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
-    canvas->drawPosTextH(glyphs, numGlyphs * sizeof(Glyph), xpos, constY, fontPaint);
-}
-
-void Font::drawGlyphs(SkCanvas* canvas, const SkPaint& paint, const SimpleFontData* font,
-    const GlyphBuffer& glyphBuffer, unsigned from, unsigned numGlyphs,
-    const FloatPoint& point, const FloatRect& textRect, float deviceScaleFactor) const
-{
-    ASSERT(glyphBuffer.size() >= from + numGlyphs);
-
-    if (!glyphBuffer.hasVerticalOffsets()) {
-        SkAutoSTMalloc<64, SkScalar> storage(numGlyphs);
-        SkScalar* xpos = storage.get();
-        for (unsigned i = 0; i < numGlyphs; i++)
-            xpos[i] = SkFloatToScalar(point.x() + glyphBuffer.xOffsetAt(from + i));
-
-        paintGlyphsHorizontal(canvas, paint, font, glyphBuffer.glyphs(from), numGlyphs, xpos,
-            SkFloatToScalar(point.y()), textRect, deviceScaleFactor);
-        return;
-    }
-
-    bool drawVertically = font->platformData().isVerticalAnyUpright() && font->verticalData();
-
-    int canvasStackLevel = canvas->getSaveCount();
-    if (drawVertically) {
-        canvas->save();
-        canvas->concat(affineTransformToSkMatrix(AffineTransform(0, -1, 1, 0, point.x(), point.y())));
-        canvas->concat(affineTransformToSkMatrix(AffineTransform(1, 0, 0, 1, -point.x(), -point.y())));
-    }
-
-    const float verticalBaselineXOffset = drawVertically ? SkFloatToScalar(font->fontMetrics().floatAscent() - font->fontMetrics().floatAscent(IdeographicBaseline)) : 0;
-
-    ASSERT(glyphBuffer.hasVerticalOffsets());
-    SkAutoSTMalloc<32, SkPoint> storage(numGlyphs);
-    SkPoint* pos = storage.get();
-    for (unsigned i = 0; i < numGlyphs; i++) {
-        pos[i].set(
-            SkFloatToScalar(point.x() + verticalBaselineXOffset + glyphBuffer.xOffsetAt(from + i)),
-            SkFloatToScalar(point.y() + glyphBuffer.yOffsetAt(from + i)));
-    }
-
-    paintGlyphs(canvas, paint, font, glyphBuffer.glyphs(from), numGlyphs, pos, textRect, deviceScaleFactor);
-    canvas->restoreToCount(canvasStackLevel);
-}
-
-void Font::drawTextBlob(SkCanvas* canvas, const SkPaint& paint, const SkTextBlob* blob, const SkPoint& origin) const
-{
-    ASSERT(RuntimeEnabledFeatures::textBlobEnabled());
-
-    canvas->drawTextBlob(blob, origin.x(), origin.y(), paint);
+    return markFontData->getFontMetrics().height();
 }
 
 float Font::floatWidthForComplexText(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts, FloatRect* glyphBounds) const
 {
-    CachingWordShaper& shaper = m_fontFallbackList->cachingWordShaper();
+    CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
     float width = shaper.width(this, run, fallbackFonts, glyphBounds);
     return width;
 }
@@ -790,59 +742,42 @@ float Font::floatWidthForComplexText(const TextRun& run, HashSet<const SimpleFon
 int Font::offsetForPositionForComplexText(const TextRun& run, float xFloat,
     bool includePartialGlyphs) const
 {
-#ifndef MINIBLINK_NO_HARFBUZZ
-    HarfBuzzShaper shaper(this, run);
-    RefPtr<ShapeResult> shapeResult = shaper.shapeResult();
-    if (!shapeResult)
-        return 0;
-    return shapeResult->offsetForPosition(xFloat);
-#else
-	  notImplemented();
-	  return 0;
-#endif // MINIBLINK_NOT_IMPLEMENTED
+    CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
+    return shaper.offsetForPosition(this, run, xFloat, includePartialGlyphs);
 }
 
 // Return the rectangle for selecting the given range of code-points in the TextRun.
 FloatRect Font::selectionRectForComplexText(const TextRun& run,
     const FloatPoint& point, int height, int from, int to) const
 {
-    CachingWordShaper& shaper = m_fontFallbackList->cachingWordShaper();
-    return shaper.selectionRect(this, run, point, height, from, to);
+    CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
+    CharacterRange range = shaper.getCharacterRange(this, run, from, to);
+    return FloatRect(point.x() + range.start, point.y(), range.width(), height);
 }
 
-void Font::drawGlyphBuffer(SkCanvas* canvas, const SkPaint& paint, const TextRunPaintInfo& runInfo, const GlyphBuffer& glyphBuffer, const FloatPoint& point, float deviceScaleFactor) const
+CharacterRange Font::getCharacterRange(const TextRun& run, unsigned from, unsigned to) const
 {
-    if (glyphBuffer.isEmpty())
-        return;
+    FontCachePurgePreventer purgePreventer;
+    CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
+    return shaper.getCharacterRange(this, run, from, to);
+}
 
-    if (RuntimeEnabledFeatures::textBlobEnabled()) {
-        // Enabling text-blobs forces the blob rendering path even for uncacheable blobs.
-        TextBlobPtr uncacheableTextBlob;
-        TextBlobPtr& textBlob = runInfo.cachedTextBlob ? *runInfo.cachedTextBlob : uncacheableTextBlob;
-
-        textBlob = buildTextBlob(glyphBuffer);
-        if (textBlob) {
-            drawTextBlob(canvas, paint, textBlob.get(), point.data());
-            return;
-        }
-    }
-
-    // Draw each contiguous run of glyphs that use the same font data.
-    const SimpleFontData* fontData = glyphBuffer.fontDataAt(0);
-    unsigned lastFrom = 0;
-    unsigned nextGlyph;
-
-    for (nextGlyph = 0; nextGlyph < glyphBuffer.size(); ++nextGlyph) {
-        const SimpleFontData* nextFontData = glyphBuffer.fontDataAt(nextGlyph);
-
-        if (nextFontData != fontData) {
-            drawGlyphs(canvas, paint, fontData, glyphBuffer, lastFrom, nextGlyph - lastFrom, point, runInfo.bounds, deviceScaleFactor);
-            lastFrom = nextGlyph;
-            fontData = nextFontData;
-        }
-    }
-
-    drawGlyphs(canvas, paint, fontData, glyphBuffer, lastFrom, nextGlyph - lastFrom, point, runInfo.bounds, deviceScaleFactor);
+Vector<CharacterRange> Font::individualCharacterRanges(const TextRun& run) const
+{
+    // TODO(pdr): Android is temporarily (crbug.com/577306) using the old simple
+    // shaper and using the complex shaper here can show differences between
+    // the two shapers. This function is currently only called through SVG
+    // which now exclusively uses the complex shaper, so the primary difference
+    // will be improved shaping in SVG when compared to HTML.
+    FontCachePurgePreventer purgePreventer;
+    CachingWordShaper shaper(m_fontFallbackList->shapeCache(m_fontDescription));
+    auto ranges = shaper.individualCharacterRanges(this, run);
+    // The shaper should return ranges.size == run.length but on some platforms
+    // (OSX10.9.5) we are seeing cases in the upper end of the unicode range
+    // where this is not true (see: crbug.com/620952). To catch these cases on
+    // more popular platforms, and to protect users, we are using a CHECK here.
+    CHECK_EQ(ranges.size(), run.length());
+    return ranges;
 }
 
 float Font::floatWidthForSimpleText(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts, FloatRect* glyphBounds) const
@@ -871,9 +806,9 @@ FloatRect Font::selectionRectForSimpleText(const TextRun& run, const FloatPoint&
     }
 
     return FloatRect(point.x() + fromX,
-        accountForGlyphBounds ? bounds.y(): point.y(),
+        accountForGlyphBounds ? bounds.y() : point.y(),
         toX - fromX,
-        accountForGlyphBounds ? bounds.maxY()- bounds.y(): h);
+        accountForGlyphBounds ? bounds.maxY() - bounds.y() : h);
 }
 
 int Font::offsetForPositionForSimpleText(const TextRun& run, float x, bool includePartialGlyphs) const

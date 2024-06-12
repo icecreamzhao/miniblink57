@@ -5,15 +5,17 @@
  * found in the LICENSE file.
  */
 
-#include "SkRegionPriv.h"
 #include "SkBlitter.h"
+#include "SkPath.h"
+#include "SkRegionPriv.h"
 #include "SkScan.h"
 #include "SkTDArray.h"
-#include "SkPath.h"
+#include "SkTSort.h"
 
 // The rgnbuilder caller *seems* to pass short counts, possible often seens early failure, so
 // we may not want to promote this to a "std" routine just yet.
-static bool sk_memeq32(const int32_t* SK_RESTRICT a, const int32_t* SK_RESTRICT b, int count) {
+static bool sk_memeq32(const int32_t* SK_RESTRICT a, const int32_t* SK_RESTRICT b, int count)
+{
     for (int i = 0; i < count; ++i) {
         if (a[i] != b[i]) {
             return false;
@@ -30,8 +32,9 @@ public:
     // returns true if it could allocate the working storage needed
     bool init(int maxHeight, int maxTransitions, bool pathIsInverse);
 
-    void done() {
-        if (fCurrScanline != NULL) {
+    void done()
+    {
+        if (fCurrScanline != nullptr) {
             fCurrScanline->fXCount = (SkRegion::RunType)((int)(fCurrXPtr - fCurrScanline->firstX()));
             if (!this->collapsWithPrev()) { // flush the last line
                 fCurrScanline = fCurrScanline->nextScanline();
@@ -39,14 +42,19 @@ public:
         }
     }
 
-    int     computeRunCount() const;
-    void    copyToRect(SkIRect*) const;
-    void    copyToRgn(SkRegion::RunType runs[]) const;
+    int computeRunCount() const;
+    void copyToRect(SkIRect*) const;
+    void copyToRgn(SkRegion::RunType runs[]) const;
 
     void blitH(int x, int y, int width) override;
+    void blitAntiH(int x, int y, const SkAlpha antialias[], const int16_t runs[]) override
+    {
+        SkDEBUGFAIL("blitAntiH not implemented");
+    }
 
 #ifdef SK_DEBUG
-    void dump() const {
+    void dump() const
+    {
         SkDebugf("SkRgnBuilder: Top = %d\n", fTop);
         const Scanline* line = (Scanline*)fStorage;
         while (line < fCurrScanline) {
@@ -78,26 +86,24 @@ private:
         SkRegion::RunType fXCount;
 
         SkRegion::RunType* firstX() const { return (SkRegion::RunType*)(this + 1); }
-        Scanline* nextScanline() const {
+        Scanline* nextScanline() const
+        {
             // add final +1 for the x-sentinel
             return (Scanline*)((SkRegion::RunType*)(this + 1) + fXCount + 1);
         }
     };
-    SkRegion::RunType*  fStorage;
-    Scanline*           fCurrScanline;
-    Scanline*           fPrevScanline;
+    SkRegion::RunType* fStorage;
+    Scanline* fCurrScanline;
+    Scanline* fPrevScanline;
     //  points at next avialable x[] in fCurrScanline
-    SkRegion::RunType*  fCurrXPtr;
-    SkRegion::RunType   fTop;           // first Y value
+    SkRegion::RunType* fCurrXPtr;
+    SkRegion::RunType fTop; // first Y value
 
     int fStorageCount;
 
-    bool collapsWithPrev() {
-        if (fPrevScanline != NULL &&
-            fPrevScanline->fLastY + 1 == fCurrScanline->fLastY &&
-            fPrevScanline->fXCount == fCurrScanline->fXCount &&
-            sk_memeq32(fPrevScanline->firstX(), fCurrScanline->firstX(), fCurrScanline->fXCount))
-        {
+    bool collapsWithPrev()
+    {
+        if (fPrevScanline != nullptr && fPrevScanline->fLastY + 1 == fCurrScanline->fLastY && fPrevScanline->fXCount == fCurrScanline->fXCount && sk_memeq32(fPrevScanline->firstX(), fCurrScanline->firstX(), fCurrScanline->fXCount)) {
             // update the height of fPrevScanline
             fPrevScanline->fLastY = fCurrScanline->fLastY;
             return true;
@@ -107,14 +113,17 @@ private:
 };
 
 SkRgnBuilder::SkRgnBuilder()
-    : fStorage(NULL) {
+    : fStorage(nullptr)
+{
 }
 
-SkRgnBuilder::~SkRgnBuilder() {
+SkRgnBuilder::~SkRgnBuilder()
+{
     sk_free(fStorage);
 }
 
-bool SkRgnBuilder::init(int maxHeight, int maxTransitions, bool pathIsInverse) {
+bool SkRgnBuilder::init(int maxHeight, int maxTransitions, bool pathIsInverse)
+{
     if ((maxHeight | maxTransitions) < 0) {
         return false;
     }
@@ -146,17 +155,18 @@ bool SkRgnBuilder::init(int maxHeight, int maxTransitions, bool pathIsInverse) {
     }
 
     fStorage = (SkRegion::RunType*)sk_malloc_flags(sk_64_asS32(size), 0);
-    if (NULL == fStorage) {
+    if (nullptr == fStorage) {
         return false;
     }
 
-    fCurrScanline = NULL;    // signal empty collection
-    fPrevScanline = NULL;    // signal first scanline
+    fCurrScanline = nullptr; // signal empty collection
+    fPrevScanline = nullptr; // signal first scanline
     return true;
 }
 
-void SkRgnBuilder::blitH(int x, int y, int width) {
-    if (fCurrScanline == NULL) {  // first time
+void SkRgnBuilder::blitH(int x, int y, int width)
+{
+    if (fCurrScanline == nullptr) { // first time
         fTop = (SkRegion::RunType)(y);
         fCurrScanline = (Scanline*)fStorage;
         fCurrScanline->fLastY = (SkRegion::RunType)(y);
@@ -172,9 +182,8 @@ void SkRgnBuilder::blitH(int x, int y, int width) {
             if (!this->collapsWithPrev()) {
                 fPrevScanline = fCurrScanline;
                 fCurrScanline = fCurrScanline->nextScanline();
-
             }
-            if (y - 1 > prevLastY) {  // insert empty run
+            if (y - 1 > prevLastY) { // insert empty run
                 fCurrScanline->fLastY = (SkRegion::RunType)(y - 1);
                 fCurrScanline->fXCount = 0;
                 fCurrScanline = fCurrScanline->nextScanline();
@@ -195,19 +204,21 @@ void SkRgnBuilder::blitH(int x, int y, int width) {
     SkASSERT(fCurrXPtr - fStorage < fStorageCount);
 }
 
-int SkRgnBuilder::computeRunCount() const {
-    if (fCurrScanline == NULL) {
+int SkRgnBuilder::computeRunCount() const
+{
+    if (fCurrScanline == nullptr) {
         return 0;
     }
 
-    const SkRegion::RunType*  line = fStorage;
-    const SkRegion::RunType*  stop = (const SkRegion::RunType*)fCurrScanline;
+    const SkRegion::RunType* line = fStorage;
+    const SkRegion::RunType* stop = (const SkRegion::RunType*)fCurrScanline;
 
     return 2 + (int)(stop - line);
 }
 
-void SkRgnBuilder::copyToRect(SkIRect* r) const {
-    SkASSERT(fCurrScanline != NULL);
+void SkRgnBuilder::copyToRect(SkIRect* r) const
+{
+    SkASSERT(fCurrScanline != nullptr);
     // A rect's scanline is [bottom intervals left right sentinel] == 5
     SkASSERT((const SkRegion::RunType*)fCurrScanline - fStorage == 5);
 
@@ -217,8 +228,9 @@ void SkRgnBuilder::copyToRect(SkIRect* r) const {
     r->set(line->firstX()[0], fTop, line->firstX()[1], line->fLastY + 1);
 }
 
-void SkRgnBuilder::copyToRgn(SkRegion::RunType runs[]) const {
-    SkASSERT(fCurrScanline != NULL);
+void SkRgnBuilder::copyToRgn(SkRegion::RunType runs[]) const
+{
+    SkASSERT(fCurrScanline != nullptr);
     SkASSERT((const SkRegion::RunType*)fCurrScanline - fStorage > 4);
 
     const Scanline* line = (const Scanline*)fStorage;
@@ -228,7 +240,7 @@ void SkRgnBuilder::copyToRgn(SkRegion::RunType runs[]) const {
     do {
         *runs++ = (SkRegion::RunType)(line->fLastY + 1);
         int count = line->fXCount;
-        *runs++ = count >> 1;   // intervalCount
+        *runs++ = count >> 1; // intervalCount
         if (count) {
             memcpy(runs, line->firstX(), count * sizeof(SkRegion::RunType));
             runs += count;
@@ -240,43 +252,46 @@ void SkRgnBuilder::copyToRgn(SkRegion::RunType runs[]) const {
     *runs = SkRegion::kRunTypeSentinel;
 }
 
-static unsigned verb_to_initial_last_index(unsigned verb) {
+static unsigned verb_to_initial_last_index(unsigned verb)
+{
     static const uint8_t gPathVerbToInitialLastIndex[] = {
-        0,  //  kMove_Verb
-        1,  //  kLine_Verb
-        2,  //  kQuad_Verb
-        2,  //  kConic_Verb
-        3,  //  kCubic_Verb
-        0,  //  kClose_Verb
-        0   //  kDone_Verb
+        0, //  kMove_Verb
+        1, //  kLine_Verb
+        2, //  kQuad_Verb
+        2, //  kConic_Verb
+        3, //  kCubic_Verb
+        0, //  kClose_Verb
+        0 //  kDone_Verb
     };
     SkASSERT((unsigned)verb < SK_ARRAY_COUNT(gPathVerbToInitialLastIndex));
     return gPathVerbToInitialLastIndex[verb];
 }
 
-static unsigned verb_to_max_edges(unsigned verb) {
+static unsigned verb_to_max_edges(unsigned verb)
+{
     static const uint8_t gPathVerbToMaxEdges[] = {
-        0,  //  kMove_Verb
-        1,  //  kLine_Verb
-        2,  //  kQuad_VerbB
-        2,  //  kConic_VerbB
-        3,  //  kCubic_Verb
-        0,  //  kClose_Verb
-        0   //  kDone_Verb
+        0, //  kMove_Verb
+        1, //  kLine_Verb
+        2, //  kQuad_VerbB
+        2, //  kConic_VerbB
+        3, //  kCubic_Verb
+        0, //  kClose_Verb
+        0 //  kDone_Verb
     };
     SkASSERT((unsigned)verb < SK_ARRAY_COUNT(gPathVerbToMaxEdges));
     return gPathVerbToMaxEdges[verb];
 }
 
 // If returns 0, ignore itop and ibot
-static int count_path_runtype_values(const SkPath& path, int* itop, int* ibot) {
-    SkPath::Iter    iter(path, true);
-    SkPoint         pts[4];
-    SkPath::Verb    verb;
+static int count_path_runtype_values(const SkPath& path, int* itop, int* ibot)
+{
+    SkPath::Iter iter(path, true);
+    SkPoint pts[4];
+    SkPath::Verb verb;
 
     int maxEdges = 0;
-    SkScalar    top = SkIntToScalar(SK_MaxS16);
-    SkScalar    bot = SkIntToScalar(SK_MinS16);
+    SkScalar top = SkIntToScalar(SK_MaxS16);
+    SkScalar bot = SkIntToScalar(SK_MinS16);
 
     while ((verb = iter.next(pts, false)) != SkPath::kDone_Verb) {
         maxEdges += verb_to_max_edges(verb);
@@ -299,7 +314,7 @@ static int count_path_runtype_values(const SkPath& path, int* itop, int* ibot) {
         }
     }
     if (0 == maxEdges) {
-        return 0;   // we have only moves+closes
+        return 0; // we have only moves+closes
     }
 
     SkASSERT(top <= bot);
@@ -308,7 +323,8 @@ static int count_path_runtype_values(const SkPath& path, int* itop, int* ibot) {
     return maxEdges;
 }
 
-static bool check_inverse_on_empty_return(SkRegion* dst, const SkPath& path, const SkRegion& clip) {
+static bool check_inverse_on_empty_return(SkRegion* dst, const SkPath& path, const SkRegion& clip)
+{
     if (path.isInverseFillType()) {
         return dst->set(clip);
     } else {
@@ -316,10 +332,12 @@ static bool check_inverse_on_empty_return(SkRegion* dst, const SkPath& path, con
     }
 }
 
-bool SkRegion::setPath(const SkPath& path, const SkRegion& clip) {
+bool SkRegion::setPath(const SkPath& path, const SkRegion& clip)
+{
     SkDEBUGCODE(this->validate();)
 
-    if (clip.isEmpty()) {
+        if (clip.isEmpty())
+    {
         return this->setEmpty();
     }
 
@@ -346,8 +364,8 @@ bool SkRegion::setPath(const SkPath& path, const SkRegion& clip) {
     SkRgnBuilder builder;
 
     if (!builder.init(bot - top,
-                      SkMax32(pathTransitions, clipTransitions),
-                      path.isInverseFillType())) {
+            SkMax32(pathTransitions, clipTransitions),
+            path.isInverseFillType())) {
         // can't allocate working space, so return false
         return this->setEmpty();
     }
@@ -369,8 +387,7 @@ bool SkRegion::setPath(const SkPath& path, const SkRegion& clip) {
         tmp.fRunHead->computeRunBounds(&tmp.fBounds);
         this->swap(tmp);
     }
-    SkDEBUGCODE(this->validate();)
-    return true;
+    SkDEBUGCODE(this->validate();) return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,24 +404,27 @@ struct Edge {
     SkRegion::RunType fX;
     SkRegion::RunType fY0, fY1;
     uint8_t fFlags;
-    Edge*   fNext;
+    Edge* fNext;
 
-    void set(int x, int y0, int y1) {
+    void set(int x, int y0, int y1)
+    {
         SkASSERT(y0 != y1);
 
         fX = (SkRegion::RunType)(x);
         fY0 = (SkRegion::RunType)(y0);
         fY1 = (SkRegion::RunType)(y1);
         fFlags = 0;
-        SkDEBUGCODE(fNext = NULL;)
+        SkDEBUGCODE(fNext = nullptr;)
     }
 
-    int top() const {
+    int top() const
+    {
         return SkFastMin32(fY0, fY1);
     }
 };
 
-static void find_link(Edge* base, Edge* stop) {
+static void find_link(Edge* base, Edge* stop)
+{
     SkASSERT(base < stop);
 
     if (base->fFlags == Edge::kCompleteLink) {
@@ -422,7 +442,7 @@ static void find_link(Edge* base, Edge* stop) {
         for (;;) {
             e += 1;
             if ((e->fFlags & Edge::kY1Link) == 0 && y0 == e->fY1) {
-                SkASSERT(NULL == e->fNext);
+                SkASSERT(nullptr == e->fNext);
                 e->fNext = base;
                 e->fFlags = SkToU8(e->fFlags | Edge::kY1Link);
                 break;
@@ -435,7 +455,7 @@ static void find_link(Edge* base, Edge* stop) {
         for (;;) {
             e += 1;
             if ((e->fFlags & Edge::kY0Link) == 0 && y1 == e->fY0) {
-                SkASSERT(NULL == base->fNext);
+                SkASSERT(nullptr == base->fNext);
                 base->fNext = e;
                 e->fFlags = SkToU8(e->fFlags | Edge::kY0Link);
                 break;
@@ -446,7 +466,8 @@ static void find_link(Edge* base, Edge* stop) {
     base->fFlags = Edge::kCompleteLink;
 }
 
-static int extract_path(Edge* edge, Edge* stop, SkPath* path) {
+static int extract_path(Edge* edge, Edge* stop, SkPath* path)
+{
     while (0 == edge->fFlags) {
         edge++; // skip over "used" edges
     }
@@ -463,27 +484,29 @@ static int extract_path(Edge* edge, Edge* stop, SkPath* path) {
     prev->fFlags = 0;
     do {
         if (prev->fX != edge->fX || prev->fY1 != edge->fY0) { // skip collinear
-            path->lineTo(SkIntToScalar(prev->fX), SkIntToScalar(prev->fY1));    // V
-            path->lineTo(SkIntToScalar(edge->fX), SkIntToScalar(edge->fY0));    // H
+            path->lineTo(SkIntToScalar(prev->fX), SkIntToScalar(prev->fY1)); // V
+            path->lineTo(SkIntToScalar(edge->fX), SkIntToScalar(edge->fY0)); // H
         }
         prev = edge;
         edge = edge->fNext;
         count += 1;
         prev->fFlags = 0;
     } while (edge != base);
-    path->lineTo(SkIntToScalar(prev->fX), SkIntToScalar(prev->fY1));    // V
+    path->lineTo(SkIntToScalar(prev->fX), SkIntToScalar(prev->fY1)); // V
     path->close();
     return count;
 }
 
-#include "SkTSearch.h"
+struct EdgeLT {
+    bool operator()(const Edge& a, const Edge& b) const
+    {
+        return (a.fX == b.fX) ? a.top() < b.top() : a.fX < b.fX;
+    }
+};
 
-static int EdgeProc(const Edge* a, const Edge* b) {
-    return (a->fX == b->fX) ? a->top() - b->top() : a->fX - b->fX;
-}
-
-bool SkRegion::getBoundaryPath(SkPath* path) const {
-    // path could safely be NULL if we're empty, but the caller shouldn't
+bool SkRegion::getBoundaryPath(SkPath* path) const
+{
+    // path could safely be nullptr if we're empty, but the caller shouldn't
     // *know* that
     SkASSERT(path);
 
@@ -494,34 +517,34 @@ bool SkRegion::getBoundaryPath(SkPath* path) const {
     const SkIRect& bounds = this->getBounds();
 
     if (this->isRect()) {
-        SkRect  r;
-        r.set(bounds);      // this converts the ints to scalars
+        SkRect r;
+        r.set(bounds); // this converts the ints to scalars
         path->addRect(r);
         return true;
     }
 
-    SkRegion::Iterator  iter(*this);
-    SkTDArray<Edge>     edges;
+    SkRegion::Iterator iter(*this);
+    SkTDArray<Edge> edges;
 
     for (const SkIRect& r = iter.rect(); !iter.done(); iter.next()) {
         Edge* edge = edges.append(2);
         edge[0].set(r.fLeft, r.fBottom, r.fTop);
         edge[1].set(r.fRight, r.fTop, r.fBottom);
     }
-    qsort(edges.begin(), edges.count(), sizeof(Edge), SkCastForQSort(EdgeProc));
 
     int count = edges.count();
     Edge* start = edges.begin();
     Edge* stop = start + count;
-    Edge* e;
+    SkTQSort<Edge>(start, stop - 1, EdgeLT());
 
+    Edge* e;
     for (e = start; e != stop; e++) {
         find_link(e, stop);
     }
 
 #ifdef SK_DEBUG
     for (e = start; e != stop; e++) {
-        SkASSERT(e->fNext != NULL);
+        SkASSERT(e->fNext != nullptr);
         SkASSERT(e->fFlags == Edge::kCompleteLink);
     }
 #endif

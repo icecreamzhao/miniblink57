@@ -15,18 +15,18 @@
  * function that compares two Ts and returns true if the first is higher priority than the second.
  *
  * Optionally objects may know their index into the priority queue. The queue will update the index
- * as the objects move through the queue. This is enabled by using a non-NULL function for INDEX.
+ * as the objects move through the queue. This is enabled by using a non-nullptr function for INDEX.
  * When an INDEX function is provided random deletes from the queue are allowed using remove().
  * Additionally, the * priority is allowed to change as long as priorityDidChange() is called
  * afterwards. In debug builds the index will be set to -1 before an element is removed from the
  * queue.
  */
 template <typename T,
-          bool (*LESS)(const T&, const T&),
-          int* (*INDEX)(const T&) = (int* (*)(const T&))NULL>
+    bool (*LESS)(const T&, const T&),
+    int* (*INDEX)(const T&) = (int* (*)(const T&)) nullptr>
 class SkTDPQueue : public SkNoncopyable {
 public:
-    SkTDPQueue() {}
+    SkTDPQueue() { }
 
     /** Number of items in the queue. */
     int count() const { return fArray.count(); }
@@ -34,12 +34,13 @@ public:
     /** Gets the next item in the queue without popping it. */
     const T& peek() const { return fArray[0]; }
     T& peek() { return fArray[0]; }
-    
+
     /** Removes the next item. */
-    void pop() {
+    void pop()
+    {
         this->validate();
-        SkDEBUGCODE(if (SkToBool(INDEX)) { *INDEX(fArray[0]) = -1; })
-        if (1 == fArray.count()) {
+        SkDEBUGCODE(if (SkToBool(INDEX)) { *INDEX(fArray[0]) = -1; }) if (1 == fArray.count())
+        {
             fArray.pop();
             return;
         }
@@ -53,7 +54,8 @@ public:
     }
 
     /** Inserts a new item in the queue based on its priority. */
-    void insert(T entry) {
+    void insert(T entry)
+    {
         this->validate();
         int index = fArray.count();
         *fArray.append() = entry;
@@ -62,14 +64,15 @@ public:
         this->validate();
     }
 
-    /** Random access removal. This requires that the INDEX function is non-NULL. */
-    void remove(T entry) {
-        SkASSERT(NULL != INDEX);
+    /** Random access removal. This requires that the INDEX function is non-nullptr. */
+    void remove(T entry)
+    {
+        SkASSERT(nullptr != INDEX);
         int index = *INDEX(entry);
         SkASSERT(index >= 0 && index < fArray.count());
         this->validate();
-        SkDEBUGCODE(*INDEX(fArray[index]) = -1;)
-        if (index == fArray.count() - 1) {
+        SkDEBUGCODE(*INDEX(fArray[index]) = -1;) if (index == fArray.count() - 1)
+        {
             fArray.pop();
             return;
         }
@@ -83,8 +86,9 @@ public:
     /** Notification that the priority of an entry has changed. This must be called after an
         item's priority is changed to maintain correct ordering. Changing the priority is only
         allowed if an INDEX function is provided. */
-    void priorityDidChange(T entry) {
-        SkASSERT(NULL != INDEX);
+    void priorityDidChange(T entry)
+    {
+        SkASSERT(nullptr != INDEX);
         int index = *INDEX(entry);
         SkASSERT(index >= 0 && index < fArray.count());
         this->validate(index);
@@ -97,10 +101,19 @@ public:
     T at(int i) const { return fArray[i]; }
 
 private:
-    static int LeftOf(int x) { SkASSERT(x >= 0); return 2 * x + 1; }
-    static int ParentOf(int x) { SkASSERT(x > 0); return (x - 1) >> 1; }
+    static int LeftOf(int x)
+    {
+        SkASSERT(x >= 0);
+        return 2 * x + 1;
+    }
+    static int ParentOf(int x)
+    {
+        SkASSERT(x > 0);
+        return (x - 1) >> 1;
+    }
 
-    void percolateUpOrDown(int index) {
+    void percolateUpOrDown(int index)
+    {
         SkASSERT(index >= 0);
         if (!percolateUpIfNecessary(index)) {
             this->validate(index);
@@ -108,7 +121,8 @@ private:
         }
     }
 
-    bool percolateUpIfNecessary(int index) {
+    bool percolateUpIfNecessary(int index)
+    {
         SkASSERT(index >= 0);
         bool percolated = false;
         do {
@@ -130,11 +144,12 @@ private:
         } while (true);
     }
 
-    void percolateDownIfNecessary(int index) {
+    void percolateDownIfNecessary(int index)
+    {
         SkASSERT(index >= 0);
         do {
             int child = LeftOf(index);
-            
+
             if (child >= fArray.count()) {
                 // We're a leaf.
                 this->setIndex(index);
@@ -168,14 +183,16 @@ private:
         } while (true);
     }
 
-    void setIndex(int index) {
+    void setIndex(int index)
+    {
         SkASSERT(index < fArray.count());
         if (SkToBool(INDEX)) {
             *INDEX(fArray[index]) = index;
         }
     }
 
-    void validate(int excludedIndex = -1) const {
+    void validate(int excludedIndex = -1) const
+    {
 #ifdef SK_DEBUG
         for (int i = 1; i < fArray.count(); ++i) {
             int p = ParentOf(i);
@@ -188,7 +205,7 @@ private:
     }
 
     SkTDArray<T> fArray;
-    
+
     typedef SkNoncopyable INHERITED;
 };
 

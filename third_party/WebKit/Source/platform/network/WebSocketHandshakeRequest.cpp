@@ -28,29 +28,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/network/WebSocketHandshakeRequest.h"
 
 namespace blink {
 
-WebSocketHandshakeRequest::WebSocketHandshakeRequest(const KURL& url) : m_url(url)
+WebSocketHandshakeRequest::WebSocketHandshakeRequest(const KURL& url)
+    : m_url(url)
 {
 }
 
-WebSocketHandshakeRequest::WebSocketHandshakeRequest()
+WebSocketHandshakeRequest::WebSocketHandshakeRequest() { }
+
+WebSocketHandshakeRequest::WebSocketHandshakeRequest(
+    const WebSocketHandshakeRequest& request)
+    : m_url(request.m_url)
+    , m_headerFields(request.m_headerFields)
+    , m_headersText(request.m_headersText)
 {
 }
 
-WebSocketHandshakeRequest::WebSocketHandshakeRequest(const WebSocketHandshakeRequest& request)
-    : m_url(request.m_url), m_headerFields(request.m_headerFields), m_headersText(request.m_headersText)
-{
-}
+WebSocketHandshakeRequest::~WebSocketHandshakeRequest() { }
 
-WebSocketHandshakeRequest::~WebSocketHandshakeRequest()
-{
-}
-
-void WebSocketHandshakeRequest::addAndMergeHeader(HTTPHeaderMap* map, const AtomicString& name, const AtomicString& value)
+void WebSocketHandshakeRequest::addAndMergeHeader(HTTPHeaderMap* map,
+    const AtomicString& name,
+    const AtomicString& value)
 {
     HTTPHeaderMap::AddResult result = map->add(name, value);
     if (!result.isNewEntry) {

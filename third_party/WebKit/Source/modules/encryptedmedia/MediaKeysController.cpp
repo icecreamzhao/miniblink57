@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/encryptedmedia/MediaKeysController.h"
 
 #include "modules/encryptedmedia/MediaKeysClient.h"
@@ -20,15 +19,17 @@ MediaKeysController::MediaKeysController(MediaKeysClient* client)
 {
 }
 
-WebEncryptedMediaClient* MediaKeysController::encryptedMediaClient(ExecutionContext* context)
+WebEncryptedMediaClient* MediaKeysController::encryptedMediaClient(
+    ExecutionContext* context)
 {
     return m_client->encryptedMediaClient(context);
 }
 
-void MediaKeysController::provideMediaKeysTo(Page& page, MediaKeysClient* client)
+void MediaKeysController::provideMediaKeysTo(Page& page,
+    MediaKeysClient* client)
 {
-    MediaKeysController::provideTo(page, supplementName(), adoptPtrWillBeNoop(new MediaKeysController(client)));
+    MediaKeysController::provideTo(page, supplementName(),
+        new MediaKeysController(client));
 }
 
 } // namespace blink
-

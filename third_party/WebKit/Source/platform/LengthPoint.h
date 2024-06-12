@@ -31,14 +31,15 @@
 #define LengthPoint_h
 
 #include "platform/Length.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct LengthPoint {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    LengthPoint()
-    {
-    }
+    LengthPoint() { }
 
     LengthPoint(const Length& x, const Length& y)
         : m_x(x)
@@ -46,8 +47,14 @@ public:
     {
     }
 
-    bool operator==(const LengthPoint& o) const { return m_x == o.m_x && m_y == o.m_y; }
-    bool operator!=(const LengthPoint& o) const { return m_x != o.m_x || m_y != o.m_y; }
+    bool operator==(const LengthPoint& o) const
+    {
+        return m_x == o.m_x && m_y == o.m_y;
+    }
+    bool operator!=(const LengthPoint& o) const
+    {
+        return m_x != o.m_x || m_y != o.m_y;
+    }
 
     void setX(const Length& x) { m_x = x; }
     const Length& x() const { return m_x; }

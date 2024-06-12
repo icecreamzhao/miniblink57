@@ -23,9 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSReflectValue.h"
 
+#include "core/css/CSSIdentifierValue.h"
 #include "core/css/CSSPrimitiveValue.h"
 
 namespace blink {
@@ -39,9 +39,7 @@ String CSSReflectValue::customCSSText() const
 
 bool CSSReflectValue::equals(const CSSReflectValue& other) const
 {
-    return m_direction == other.m_direction
-        && compareCSSValuePtr(m_offset, other.m_offset)
-        && compareCSSValuePtr(m_mask, other.m_mask);
+    return m_direction == other.m_direction && compareCSSValuePtr(m_offset, other.m_offset) && compareCSSValuePtr(m_mask, other.m_mask);
 }
 
 DEFINE_TRACE_AFTER_DISPATCH(CSSReflectValue)

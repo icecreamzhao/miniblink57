@@ -20,7 +20,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutTextFragment.h"
 
 #include "core/dom/FirstLetterPseudoElement.h"
@@ -28,14 +27,18 @@
 #include "core/dom/StyleChangeReason.h"
 #include "core/dom/Text.h"
 #include "core/layout/HitTestResult.h"
-#include "core/layout/LayoutBlock.h"
 
 namespace blink {
 
-LayoutTextFragment::LayoutTextFragment(Node* node, StringImpl* str, int startOffset, int length)
-    : LayoutText(node, str ? str->substring(startOffset, length) : PassRefPtr<StringImpl>(nullptr))
+LayoutTextFragment::LayoutTextFragment(Node* node,
+    StringImpl* str,
+    int startOffset,
+    int length)
+    : LayoutText(node,
+        str ? str->substring(startOffset, length)
+            : PassRefPtr<StringImpl>(nullptr))
     , m_start(startOffset)
-    , m_end(length)
+    , m_fragmentLength(length)
     , m_isRemainingTextLayoutObject(false)
     , m_contentString(str)
     , m_firstLetterPseudoElement(nullptr)
@@ -45,7 +48,7 @@ LayoutTextFragment::LayoutTextFragment(Node* node, StringImpl* str, int startOff
 LayoutTextFragment::LayoutTextFragment(Node* node, StringImpl* str)
     : LayoutText(node, str)
     , m_start(0)
-    , m_end(str ? str->length() : 0)
+    , m_fragmentLength(str ? str->length() : 0)
     , m_isRemainingTextLayoutObject(false)
     , m_contentString(str)
     , m_firstLetterPseudoElement(nullptr)
@@ -82,15 +85,15 @@ PassRefPtr<StringImpl> LayoutTextFragment::originalText() const
     RefPtr<StringImpl> result = completeText();
     if (!result)
         return nullptr;
-    return result->substring(start(), end());
+    return result->substring(start(), fragmentLength());
 }
 
 void LayoutTextFragment::setText(PassRefPtr<StringImpl> text, bool force)
 {
-    LayoutText::setText(text, force);
+    LayoutText::setText(std::move(text), force);
 
     m_start = 0;
-    m_end = textLength();
+    m_fragmentLength = textLength();
 
     // If we're the remaining text from a first letter then we have to tell the
     // first letter pseudo element to reattach itself so it can re-calculate the
@@ -101,12 +104,14 @@ void LayoutTextFragment::setText(PassRefPtr<StringImpl> text, bool force)
     }
 }
 
-void LayoutTextFragment::setTextFragment(PassRefPtr<StringImpl> text, unsigned start, unsigned length)
+void LayoutTextFragment::setTextFragment(PassRefPtr<StringImpl> text,
+    unsigned start,
+    unsigned length)
 {
-    LayoutText::setText(text, false);
+    LayoutText::setText(std::move(text), false);
 
     m_start = start;
-    m_end = length;
+    m_fragmentLength = length;
 }
 
 void LayoutTextFragment::transformText()
@@ -115,7 +120,7 @@ void LayoutTextFragment::transformText()
     // version we will, potentially, screw up the first-letter settings where
     // we only use portions of the string.
     if (RefPtr<StringImpl> textToTransform = originalText())
-        LayoutText::setText(textToTransform.release(), true);
+        LayoutText::setText(std::move(textToTransform), true);
 }
 
 UChar LayoutTextFragment::previousCharacter() const
@@ -129,8 +134,8 @@ UChar LayoutTextFragment::previousCharacter() const
     return LayoutText::previousCharacter();
 }
 
-// If this is the layoutObject for a first-letter pseudoNode then we have to look
-// at the node for the remaining text to find our content.
+// If this is the layoutObject for a first-letter pseudoNode then we have to
+// look at the node for the remaining text to find our content.
 Text* LayoutTextFragment::associatedTextNode() const
 {
     Node* node = this->firstLetterPseudoElement();
@@ -155,7 +160,8 @@ Text* LayoutTextFragment::associatedTextNode() const
     return (node && node->isTextNode()) ? toText(node) : nullptr;
 }
 
-void LayoutTextFragment::updateHitTestResult(HitTestResult& result, const LayoutPoint& point)
+void LayoutTextFragment::updateHitTestResult(HitTestResult& result,
+    const LayoutPoint& point)
 {
     if (result.innerNode())
         return;

@@ -17,20 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGPathBlender.h"
 
+#include "core/svg/SVGPathByteStreamSource.h"
 #include "core/svg/SVGPathConsumer.h"
-#include "core/svg/SVGPathSeg.h"
-#include "core/svg/SVGPathSource.h"
+#include "core/svg/SVGPathData.h"
 #include "platform/animation/AnimationUtilities.h"
 
 namespace blink {
 
-enum FloatBlendMode {
-    BlendHorizontal,
-    BlendVertical
-};
+enum FloatBlendMode { BlendHorizontal,
+    BlendVertical };
 
 class SVGPathBlender::BlendState {
 public:
@@ -43,15 +40,21 @@ public:
     {
     }
 
-    bool blendSegments(const PathSegmentData& fromSeg, const PathSegmentData& toSeg, PathSegmentData&);
+    bool blendSegments(const PathSegmentData& fromSeg,
+        const PathSegmentData& toSeg,
+        PathSegmentData&);
 
 private:
     float blendAnimatedDimensonalFloat(float, float, FloatBlendMode);
-    FloatPoint blendAnimatedFloatPointSameCoordinates(const FloatPoint& from, const FloatPoint& to);
-    FloatPoint blendAnimatedFloatPoint(const FloatPoint& from, const FloatPoint& to);
+    FloatPoint blendAnimatedFloatPointSameCoordinates(const FloatPoint& from,
+        const FloatPoint& to);
+    FloatPoint blendAnimatedFloatPoint(const FloatPoint& from,
+        const FloatPoint& to);
     bool canBlend(const PathSegmentData& fromSeg, const PathSegmentData& toSeg);
 
+    FloatPoint m_fromSubPathPoint;
     FloatPoint m_fromCurrentPoint;
+    FloatPoint m_toSubPathPoint;
     FloatPoint m_toCurrentPoint;
 
     float m_progress;
@@ -64,12 +67,18 @@ private:
 };
 
 // Helper functions
-static inline FloatPoint blendFloatPoint(const FloatPoint& a, const FloatPoint& b, float progress)
+static inline FloatPoint blendFloatPoint(const FloatPoint& a,
+    const FloatPoint& b,
+    float progress)
 {
-    return FloatPoint(blend(a.x(), b.x(), progress), blend(a.y(), b.y(), progress));
+    return FloatPoint(blend(a.x(), b.x(), progress),
+        blend(a.y(), b.y(), progress));
 }
 
-float SVGPathBlender::BlendState::blendAnimatedDimensonalFloat(float from, float to, FloatBlendMode blendMode)
+float SVGPathBlender::BlendState::blendAnimatedDimensonalFloat(
+    float from,
+    float to,
+    FloatBlendMode blendMode)
 {
     if (m_addTypesCount) {
         ASSERT(m_typesAreEqual);
@@ -79,22 +88,29 @@ float SVGPathBlender::BlendState::blendAnimatedDimensonalFloat(float from, float
     if (m_typesAreEqual)
         return blend(from, to, m_progress);
 
-    float fromValue = blendMode == BlendHorizontal ? m_fromCurrentPoint.x() : m_fromCurrentPoint.y();
-    float toValue = blendMode == BlendHorizontal ? m_toCurrentPoint.x() : m_toCurrentPoint.y();
+    float fromValue = blendMode == BlendHorizontal ? m_fromCurrentPoint.x()
+                                                   : m_fromCurrentPoint.y();
+    float toValue = blendMode == BlendHorizontal ? m_toCurrentPoint.x()
+                                                 : m_toCurrentPoint.y();
 
     // Transform toY to the coordinate mode of fromY
     float animValue = blend(from, m_fromIsAbsolute ? to + toValue : to - toValue, m_progress);
 
-    // If we're in the first half of the animation, we should use the type of the from segment.
+    // If we're in the first half of the animation, we should use the type of the
+    // from segment.
     if (m_isInFirstHalfOfAnimation)
         return animValue;
 
-    // Transform the animated point to the coordinate mode, needed for the current progress.
+    // Transform the animated point to the coordinate mode, needed for the current
+    // progress.
     float currentValue = blend(fromValue, toValue, m_progress);
-    return !m_fromIsAbsolute ? animValue + currentValue : animValue - currentValue;
+    return !m_fromIsAbsolute ? animValue + currentValue
+                             : animValue - currentValue;
 }
 
-FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPointSameCoordinates(const FloatPoint& fromPoint, const FloatPoint& toPoint)
+FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPointSameCoordinates(
+    const FloatPoint& fromPoint,
+    const FloatPoint& toPoint)
 {
     if (m_addTypesCount) {
         FloatPoint repeatedToPoint = toPoint;
@@ -104,7 +120,9 @@ FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPointSameCoordinates(co
     return blendFloatPoint(fromPoint, toPoint, m_progress);
 }
 
-FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPoint(const FloatPoint& fromPoint, const FloatPoint& toPoint)
+FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPoint(
+    const FloatPoint& fromPoint,
+    const FloatPoint& toPoint)
 {
     if (m_typesAreEqual)
         return blendAnimatedFloatPointSameCoordinates(fromPoint, toPoint);
@@ -118,11 +136,13 @@ FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPoint(const FloatPoint&
 
     animatedPoint = blendFloatPoint(fromPoint, animatedPoint, m_progress);
 
-    // If we're in the first half of the animation, we should use the type of the from segment.
+    // If we're in the first half of the animation, we should use the type of the
+    // from segment.
     if (m_isInFirstHalfOfAnimation)
         return animatedPoint;
 
-    // Transform the animated point to the coordinate mode, needed for the current progress.
+    // Transform the animated point to the coordinate mode, needed for the current
+    // progress.
     FloatPoint currentPoint = blendFloatPoint(m_fromCurrentPoint, m_toCurrentPoint, m_progress);
     if (!m_fromIsAbsolute)
         return animatedPoint + currentPoint;
@@ -131,7 +151,8 @@ FloatPoint SVGPathBlender::BlendState::blendAnimatedFloatPoint(const FloatPoint&
     return animatedPoint;
 }
 
-bool SVGPathBlender::BlendState::canBlend(const PathSegmentData& fromSeg, const PathSegmentData& toSeg)
+bool SVGPathBlender::BlendState::canBlend(const PathSegmentData& fromSeg,
+    const PathSegmentData& toSeg)
 {
     // Update state first because we'll need it if we return true below.
     m_typesAreEqual = fromSeg.command == toSeg.command;
@@ -149,10 +170,15 @@ bool SVGPathBlender::BlendState::canBlend(const PathSegmentData& fromSeg, const 
     return toAbsolutePathSegType(fromSeg.command) == toAbsolutePathSegType(toSeg.command);
 }
 
-static void updateCurrentPoint(FloatPoint& currentPoint, const PathSegmentData& segment)
+static void updateCurrentPoint(FloatPoint& subPathPoint,
+    FloatPoint& currentPoint,
+    const PathSegmentData& segment)
 {
     switch (segment.command) {
     case PathSegMoveToRel:
+        currentPoint += segment.targetPoint;
+        subPathPoint = currentPoint;
+        break;
     case PathSegLineToRel:
     case PathSegCurveToCubicRel:
     case PathSegCurveToQuadraticRel:
@@ -164,6 +190,9 @@ static void updateCurrentPoint(FloatPoint& currentPoint, const PathSegmentData& 
         currentPoint += segment.targetPoint;
         break;
     case PathSegMoveToAbs:
+        currentPoint = segment.targetPoint;
+        subPathPoint = currentPoint;
+        break;
     case PathSegLineToAbs:
     case PathSegCurveToCubicAbs:
     case PathSegCurveToQuadraticAbs:
@@ -179,13 +208,17 @@ static void updateCurrentPoint(FloatPoint& currentPoint, const PathSegmentData& 
         currentPoint.setY(segment.targetPoint.y());
         break;
     case PathSegClosePath:
+        currentPoint = subPathPoint;
         break;
     default:
         ASSERT_NOT_REACHED();
     }
 }
 
-bool SVGPathBlender::BlendState::blendSegments(const PathSegmentData& fromSeg, const PathSegmentData& toSeg, PathSegmentData& blendedSegment)
+bool SVGPathBlender::BlendState::blendSegments(
+    const PathSegmentData& fromSeg,
+    const PathSegmentData& toSeg,
+    PathSegmentData& blendedSegment)
 {
     if (!canBlend(fromSeg, toSeg))
         return false;
@@ -196,11 +229,11 @@ bool SVGPathBlender::BlendState::blendSegments(const PathSegmentData& fromSeg, c
     case PathSegCurveToCubicRel:
     case PathSegCurveToCubicAbs:
         blendedSegment.point1 = blendAnimatedFloatPoint(fromSeg.point1, toSeg.point1);
-        /* fall through */
+    /* fall through */
     case PathSegCurveToCubicSmoothRel:
     case PathSegCurveToCubicSmoothAbs:
         blendedSegment.point2 = blendAnimatedFloatPoint(fromSeg.point2, toSeg.point2);
-        /* fall through */
+    /* fall through */
     case PathSegMoveToRel:
     case PathSegMoveToAbs:
     case PathSegLineToRel:
@@ -211,11 +244,13 @@ bool SVGPathBlender::BlendState::blendSegments(const PathSegmentData& fromSeg, c
         break;
     case PathSegLineToHorizontalRel:
     case PathSegLineToHorizontalAbs:
-        blendedSegment.targetPoint.setX(blendAnimatedDimensonalFloat(fromSeg.targetPoint.x(), toSeg.targetPoint.x(), BlendHorizontal));
+        blendedSegment.targetPoint.setX(blendAnimatedDimensonalFloat(
+            fromSeg.targetPoint.x(), toSeg.targetPoint.x(), BlendHorizontal));
         break;
     case PathSegLineToVerticalRel:
     case PathSegLineToVerticalAbs:
-        blendedSegment.targetPoint.setY(blendAnimatedDimensonalFloat(fromSeg.targetPoint.y(), toSeg.targetPoint.y(), BlendVertical));
+        blendedSegment.targetPoint.setY(blendAnimatedDimensonalFloat(
+            fromSeg.targetPoint.y(), toSeg.targetPoint.y(), BlendVertical));
         break;
     case PathSegClosePath:
         break;
@@ -227,7 +262,8 @@ bool SVGPathBlender::BlendState::blendSegments(const PathSegmentData& fromSeg, c
     case PathSegArcRel:
     case PathSegArcAbs:
         blendedSegment.targetPoint = blendAnimatedFloatPoint(fromSeg.targetPoint, toSeg.targetPoint);
-        blendedSegment.point1 = blendAnimatedFloatPointSameCoordinates(fromSeg.arcRadii(), toSeg.arcRadii());
+        blendedSegment.point1 = blendAnimatedFloatPointSameCoordinates(
+            fromSeg.arcRadii(), toSeg.arcRadii());
         blendedSegment.point2 = blendAnimatedFloatPointSameCoordinates(fromSeg.point2, toSeg.point2);
         if (m_addTypesCount) {
             blendedSegment.arcLarge = fromSeg.arcLarge || toSeg.arcLarge;
@@ -241,13 +277,15 @@ bool SVGPathBlender::BlendState::blendSegments(const PathSegmentData& fromSeg, c
         ASSERT_NOT_REACHED();
     }
 
-    updateCurrentPoint(m_fromCurrentPoint, fromSeg);
-    updateCurrentPoint(m_toCurrentPoint, toSeg);
+    updateCurrentPoint(m_fromSubPathPoint, m_fromCurrentPoint, fromSeg);
+    updateCurrentPoint(m_toSubPathPoint, m_toCurrentPoint, toSeg);
 
     return true;
 }
 
-SVGPathBlender::SVGPathBlender(SVGPathSource* fromSource, SVGPathSource* toSource, SVGPathConsumer* consumer)
+SVGPathBlender::SVGPathBlender(SVGPathByteStreamSource* fromSource,
+    SVGPathByteStreamSource* toSource,
+    SVGPathConsumer* consumer)
     : m_fromSource(fromSource)
     , m_toSource(toSource)
     , m_consumer(consumer)
@@ -300,4 +338,4 @@ bool SVGPathBlender::blendAnimatedPath(BlendState& blendState)
     return true;
 }
 
-}
+} // namespace blink

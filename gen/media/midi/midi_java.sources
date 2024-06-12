@@ -1,0 +1,6 @@
+../../../../QQBrowser_core/src/org/chromium/midi/MidiDeviceAndroid.java
+../../../../QQBrowser_core/src/org/chromium/midi/MidiInputPortAndroid.java
+../../../../QQBrowser_core/src/org/chromium/midi/MidiManagerAndroid.java
+../../../../QQBrowser_core/src/org/chromium/midi/MidiOutputPortAndroid.java
+../../../../QQBrowser_core/src/org/chromium/midi/UsbMidiDeviceAndroid.java
+../../../../QQBrowser_core/src/org/chromium/midi/UsbMidiDeviceFactoryAndroid.java

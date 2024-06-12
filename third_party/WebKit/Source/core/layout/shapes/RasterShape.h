@@ -35,10 +35,13 @@
 #include "platform/geometry/FloatRect.h"
 #include "wtf/Assertions.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
 class RasterShapeIntervals {
+    USING_FAST_MALLOC(RasterShapeIntervals);
+
 public:
     RasterShapeIntervals(unsigned size, int offset = 0)
         : m_offset(offset)
@@ -62,7 +65,8 @@ public:
         return m_intervals[y + m_offset];
     }
 
-    PassOwnPtr<RasterShapeIntervals> computeShapeMarginIntervals(int shapeMargin) const;
+    std::unique_ptr<RasterShapeIntervals> computeShapeMarginIntervals(
+        int shapeMargin) const;
 
     void buildBoundsPath(Path&) const;
 
@@ -79,18 +83,24 @@ private:
 
 class RasterShape final : public Shape {
     WTF_MAKE_NONCOPYABLE(RasterShape);
+
 public:
-    RasterShape(PassOwnPtr<RasterShapeIntervals> intervals, const IntSize& marginRectSize)
-        : m_intervals(intervals)
+    RasterShape(std::unique_ptr<RasterShapeIntervals> intervals,
+        const IntSize& marginRectSize)
+        : m_intervals(std::move(intervals))
         , m_marginRectSize(marginRectSize)
     {
         m_intervals->initializeBounds();
     }
 
-    virtual LayoutRect shapeMarginLogicalBoundingBox() const override { return static_cast<LayoutRect>(marginIntervals().bounds()); }
-    virtual bool isEmpty() const override { return m_intervals->isEmpty(); }
-    virtual LineSegment getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const override;
-    virtual void buildDisplayPaths(DisplayPaths& paths) const override
+    LayoutRect shapeMarginLogicalBoundingBox() const override
+    {
+        return static_cast<LayoutRect>(marginIntervals().bounds());
+    }
+    bool isEmpty() const override { return m_intervals->isEmpty(); }
+    LineSegment getExcludedInterval(LayoutUnit logicalTop,
+        LayoutUnit logicalHeight) const override;
+    void buildDisplayPaths(DisplayPaths& paths) const override
     {
         m_intervals->buildBoundsPath(paths.shape);
         if (shapeMargin())
@@ -100,8 +110,8 @@ public:
 private:
     const RasterShapeIntervals& marginIntervals() const;
 
-    OwnPtr<RasterShapeIntervals> m_intervals;
-    mutable OwnPtr<RasterShapeIntervals> m_marginIntervals;
+    std::unique_ptr<RasterShapeIntervals> m_intervals;
+    mutable std::unique_ptr<RasterShapeIntervals> m_marginIntervals;
     IntSize m_marginRectSize;
 };
 

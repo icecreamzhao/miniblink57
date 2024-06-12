@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDeque_DEFINED
 #define SkDeque_DEFINED
 
@@ -33,18 +32,20 @@ public:
     SkDeque(size_t elemSize, void* storage, size_t storageSize, int allocCount = 1);
     ~SkDeque();
 
-    bool    empty() const { return 0 == fCount; }
-    int     count() const { return fCount; }
-    size_t  elemSize() const { return fElemSize; }
+    bool empty() const { return 0 == fCount; }
+    int count() const { return fCount; }
+    size_t elemSize() const { return fElemSize; }
 
     const void* front() const { return fFront; }
-    const void* back() const  { return fBack; }
+    const void* back() const { return fBack; }
 
-    void* front() {
+    void* front()
+    {
         return (void*)((const SkDeque*)this)->front();
     }
 
-    void* back() {
+    void* back()
+    {
         return (void*)((const SkDeque*)this)->back();
     }
 
@@ -82,20 +83,23 @@ public:
 
     private:
         SkDeque::Block* fCurBlock;
-        char*           fPos;
-        size_t          fElemSize;
+        char* fPos;
+        size_t fElemSize;
     };
 
     // Inherit privately from Iter to prevent access to reverse iteration
     class F2BIter : private Iter {
     public:
-        F2BIter() {}
+        F2BIter() { }
 
         /**
          * Wrap Iter's 2 parameter ctor to force initialization to the
          * beginning of the deque
          */
-        F2BIter(const SkDeque& d) : INHERITED(d, kFront_IterStart) {}
+        F2BIter(const SkDeque& d)
+            : INHERITED(d, kFront_IterStart)
+        {
+        }
 
         using Iter::next;
 
@@ -103,7 +107,8 @@ public:
          * Wrap Iter::reset to force initialization to the beginning of the
          * deque
          */
-        void reset(const SkDeque& d) {
+        void reset(const SkDeque& d)
+        {
             this->INHERITED::reset(d, kFront_IterStart);
         }
 
@@ -115,24 +120,24 @@ private:
     // allow unit test to call numBlocksAllocated
     friend class DequeUnitTestHelper;
 
-    void*   fFront;
-    void*   fBack;
+    void* fFront;
+    void* fBack;
 
-    Block*  fFrontBlock;
-    Block*  fBackBlock;
-    size_t  fElemSize;
-    void*   fInitialStorage;
-    int     fCount;             // number of elements in the deque
-    int     fAllocCount;        // number of elements to allocate per block
+    Block* fFrontBlock;
+    Block* fBackBlock;
+    size_t fElemSize;
+    void* fInitialStorage;
+    int fCount; // number of elements in the deque
+    int fAllocCount; // number of elements to allocate per block
 
-    Block*  allocateBlock(int allocCount);
-    void    freeBlock(Block* block);
+    Block* allocateBlock(int allocCount);
+    void freeBlock(Block* block);
 
     /**
      * This returns the number of chunk blocks allocated by the deque. It
      * can be used to gauge the effectiveness of the selected allocCount.
      */
-    int  numBlocksAllocated() const;
+    int numBlocksAllocated() const;
 };
 
 #endif

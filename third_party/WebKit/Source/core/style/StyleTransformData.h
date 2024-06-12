@@ -38,14 +38,17 @@ namespace blink {
 
 class StyleTransformData : public RefCounted<StyleTransformData> {
 public:
-    static PassRefPtr<StyleTransformData> create() { return adoptRef(new StyleTransformData); }
-    PassRefPtr<StyleTransformData> copy() const { return adoptRef(new StyleTransformData(*this)); }
+    static PassRefPtr<StyleTransformData> create()
+    {
+        return adoptRef(new StyleTransformData);
+    }
+    PassRefPtr<StyleTransformData> copy() const
+    {
+        return adoptRef(new StyleTransformData(*this));
+    }
 
     bool operator==(const StyleTransformData&) const;
-    bool operator!=(const StyleTransformData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleTransformData& o) const { return !(*this == o); }
     bool has3DTransform() const;
 
     TransformOperations m_operations;

@@ -24,7 +24,6 @@
 
 class SK_API SkEventTracer {
 public:
-
     typedef uint64_t Handle;
 
     static SkEventTracer* GetInstance();
@@ -48,23 +47,26 @@ public:
 
     virtual const uint8_t* getCategoryGroupEnabled(const char* name) = 0;
     virtual const char* getCategoryGroupName(
-      const uint8_t* categoryEnabledFlag) = 0;
+        const uint8_t* categoryEnabledFlag)
+        = 0;
 
     virtual SkEventTracer::Handle
-        addTraceEvent(char phase,
-                      const uint8_t* categoryEnabledFlag,
-                      const char* name,
-                      uint64_t id,
-                      int32_t numArgs,
-                      const char** argNames,
-                      const uint8_t* argTypes,
-                      const uint64_t* argValues,
-                      uint8_t flags) = 0;
+    addTraceEvent(char phase,
+        const uint8_t* categoryEnabledFlag,
+        const char* name,
+        uint64_t id,
+        int32_t numArgs,
+        const char** argNames,
+        const uint8_t* argTypes,
+        const uint64_t* argValues,
+        uint8_t flags)
+        = 0;
 
     virtual void
-        updateTraceEventDuration(const uint8_t* categoryEnabledFlag,
-                                 const char* name,
-                                 SkEventTracer::Handle handle) = 0;
+    updateTraceEventDuration(const uint8_t* categoryEnabledFlag,
+        const char* name,
+        SkEventTracer::Handle handle)
+        = 0;
 };
 
 #endif // SkEventTracer_DEFINED

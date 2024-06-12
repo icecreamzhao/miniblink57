@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="net">
+      <UniqueIdentifier>{6EE990AB-8D5A-EDB4-F3F6-510B9F50DC3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\pacing">
+      <UniqueIdentifier>{066052ED-2FCF-FCFB-D6C2-40E778C91D40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\rtcp">
+      <UniqueIdentifier>{17749A8D-42A0-D157-D2B4-59329A5D0DDF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net\rtp">
+      <UniqueIdentifier>{0AB4C132-B565-9775-05B1-80F79C750A53}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="net/cast_transport.h">
+      <Filter>net</Filter>
+    </None>
+    <CustomBuild Include="net/cast_transport_config.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <None Include="net/cast_transport_config.h">
+      <Filter>net</Filter>
+    </None>
+    <None Include="net/cast_transport_defines.h">
+      <Filter>net</Filter>
+    </None>
+    <CustomBuild Include="net/cast_transport_impl.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <None Include="net/cast_transport_impl.h">
+      <Filter>net</Filter>
+    </None>
+    <CustomBuild Include="net/pacing/paced_sender.cc">
+      <Filter>net\pacing</Filter>
+    </CustomBuild>
+    <None Include="net/pacing/paced_sender.h">
+      <Filter>net\pacing</Filter>
+    </None>
+    <CustomBuild Include="net/rtcp/receiver_rtcp_event_subscriber.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <CustomBuild Include="net/rtcp/receiver_rtcp_session.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/receiver_rtcp_session.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtcp/rtcp_builder.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/rtcp_builder.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtcp/rtcp_defines.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/rtcp_defines.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtcp/rtcp_utility.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/rtcp_utility.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtcp/sender_rtcp_session.cc">
+      <Filter>net\rtcp</Filter>
+    </CustomBuild>
+    <None Include="net/rtcp/sender_rtcp_session.h">
+      <Filter>net\rtcp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/packet_storage.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/packet_storage.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/rtp_defines.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/rtp_defines.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/rtp_packetizer.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/rtp_packetizer.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/rtp_parser.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/rtp_parser.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/rtp/rtp_sender.cc">
+      <Filter>net\rtp</Filter>
+    </CustomBuild>
+    <None Include="net/rtp/rtp_sender.h">
+      <Filter>net\rtp</Filter>
+    </None>
+    <CustomBuild Include="net/udp_transport.cc">
+      <Filter>net</Filter>
+    </CustomBuild>
+    <None Include="net/udp_transport.h">
+      <Filter>net</Filter>
+    </None>
+  </ItemGroup>
+</Project>

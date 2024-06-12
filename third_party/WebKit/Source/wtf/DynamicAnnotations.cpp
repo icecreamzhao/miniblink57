@@ -24,8 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "DynamicAnnotations.h"
 
 #if USE(DYNAMIC_ANNOTATIONS) && !USE(DYNAMIC_ANNOTATIONS_NOIMPL)
@@ -34,16 +32,20 @@
 // This makes all Annotate* functions different, which prevents the linker from
 // folding them.
 #ifdef __COUNTER__
-#define DYNAMIC_ANNOTATIONS_IMPL \
+#define DYNAMIC_ANNOTATIONS_IMPL                           \
     volatile short lineno = (__LINE__ << 8) + __COUNTER__; \
     (void)lineno;
 #else
-#define DYNAMIC_ANNOTATIONS_IMPL \
+#define DYNAMIC_ANNOTATIONS_IMPL             \
     volatile short lineno = (__LINE__ << 8); \
     (void)lineno;
 #endif
 
-void WTFAnnotateBenignRaceSized(const char*, int, const volatile void*, long, const char*)
+void WTFAnnotateBenignRaceSized(const char*,
+    int,
+    const volatile void*,
+    long,
+    const char*)
 {
     DYNAMIC_ANNOTATIONS_IMPL
 }

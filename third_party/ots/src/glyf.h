@@ -14,9 +14,9 @@
 namespace ots {
 
 struct OpenTypeGLYF {
-  std::vector<std::pair<const uint8_t*, size_t> > iov;
+    std::vector<std::pair<const uint8_t*, size_t> > iov;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_GLYF_H_
+#endif // OTS_GLYF_H_

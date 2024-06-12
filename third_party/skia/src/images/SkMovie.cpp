@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -15,7 +14,7 @@
 
 SkMovie::SkMovie()
 {
-    fInfo.fDuration = UNINITIALIZED_MSEC;  // uninitialized
+    fInfo.fDuration = UNINITIALIZED_MSEC; // uninitialized
     fCurrTime = UNINITIALIZED_MSEC; // uninitialized
     fNeedBitmap = true;
 }
@@ -23,7 +22,7 @@ SkMovie::SkMovie()
 void SkMovie::ensureInfo()
 {
     if (fInfo.fDuration == UNINITIALIZED_MSEC && !this->onGetInfo(&fInfo))
-        memset(&fInfo, 0, sizeof(fInfo));   // failure
+        memset(&fInfo, 0, sizeof(fInfo)); // failure
 }
 
 SkMSec SkMovie::duration()
@@ -57,8 +56,7 @@ bool SkMovie::setTime(SkMSec time)
         time = dur;
 
     bool changed = false;
-    if (time != fCurrTime)
-    {
+    if (time != fCurrTime) {
         fCurrTime = time;
         changed = this->onSetTime(time);
         fNeedBitmap |= changed;
@@ -68,12 +66,11 @@ bool SkMovie::setTime(SkMSec time)
 
 const SkBitmap& SkMovie::bitmap()
 {
-    if (fCurrTime == UNINITIALIZED_MSEC)    // uninitialized
+    if (fCurrTime == UNINITIALIZED_MSEC) // uninitialized
         this->setTime(0);
 
-    if (fNeedBitmap)
-    {
-        if (!this->onGetBitmap(&fBitmap))   // failure
+    if (fNeedBitmap) {
+        if (!this->onGetBitmap(&fBitmap)) // failure
             fBitmap.reset();
         fNeedBitmap = false;
     }
@@ -84,12 +81,14 @@ const SkBitmap& SkMovie::bitmap()
 
 #include "SkStream.h"
 
-SkMovie* SkMovie::DecodeMemory(const void* data, size_t length) {
+SkMovie* SkMovie::DecodeMemory(const void* data, size_t length)
+{
     SkMemoryStream stream(data, length, false);
     return SkMovie::DecodeStream(&stream);
 }
 
-SkMovie* SkMovie::DecodeFile(const char path[]) {
+SkMovie* SkMovie::DecodeFile(const char path[])
+{
     SkAutoTDelete<SkStreamRewindable> stream(SkStream::NewFromFile(path));
-    return stream.get() ? SkMovie::DecodeStream(stream) : NULL;
+    return stream.get() ? SkMovie::DecodeStream(stream) : nullptr;
 }

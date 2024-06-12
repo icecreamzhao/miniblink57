@@ -28,16 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/mhtml/MHTMLParser.h"
 
-#include "platform/MIMETypeRegistry.h"
 #include "platform/mhtml/ArchiveResource.h"
-#include "platform/mhtml/MHTMLArchive.h"
 #include "platform/network/ParsedContentType.h"
 #include "platform/text/QuotedPrintable.h"
 #include "wtf/HashMap.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/Base64.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/StringConcatenate.h"
@@ -46,13 +42,11 @@
 
 namespace blink {
 
-// This class is a limited MIME parser used to parse the MIME headers of MHTML files.
-class MIMEHeader : public RefCountedWillBeGarbageCollectedFinalized<MIMEHeader> {
+// This class is a limited MIME parser used to parse the MIME headers of MHTML
+// files.
+class MIMEHeader : public GarbageCollectedFinalized<MIMEHeader> {
 public:
-    static PassRefPtrWillBeRawPtr<MIMEHeader> create()
-    {
-        return adoptRefWillBeNoop(new MIMEHeader());
-    }
+    static MIMEHeader* create() { return new MIMEHeader; }
 
     enum Encoding {
         QuotedPrintable,
@@ -63,9 +57,12 @@ public:
         Unknown
     };
 
-    static PassRefPtrWillBeRawPtr<MIMEHeader> parseHeader(SharedBufferChunkReader* crLFLineReader);
+    static MIMEHeader* parseHeader(SharedBufferChunkReader* crLFLineReader);
 
-    bool isMultipart() const { return m_contentType.startsWith("multipart/", TextCaseInsensitive); }
+    bool isMultipart() const
+    {
+        return m_contentType.startsWith("multipart/", TextCaseASCIIInsensitive);
+    }
 
     String contentType() const { return m_contentType; }
     String charset() const { return m_charset; }
@@ -107,14 +104,14 @@ static KeyValueMap retrieveKeyValuePairs(SharedBufferChunkReader* buffer)
         if (line.isEmpty())
             break; // Empty line means end of key/value section.
         if (line[0] == '\t') {
-            ASSERT(!key.isEmpty());
             value.append(line.substring(1));
             continue;
         }
         // New key/value, store the previous one if any.
         if (!key.isEmpty()) {
             if (keyValuePairs.find(key) != keyValuePairs.end())
-                WTF_LOG_ERROR("Key duplicate found in MIME header. Key is '%s', previous value replaced.", key.ascii().data());
+                DVLOG(1) << "Key duplicate found in MIME header. Key is '" << key
+                         << "', previous value replaced.";
             keyValuePairs.add(key, value.toString().stripWhiteSpace());
             key = String();
             value.clear();
@@ -133,9 +130,9 @@ static KeyValueMap retrieveKeyValuePairs(SharedBufferChunkReader* buffer)
     return keyValuePairs;
 }
 
-PassRefPtrWillBeRawPtr<MIMEHeader> MIMEHeader::parseHeader(SharedBufferChunkReader* buffer)
+MIMEHeader* MIMEHeader::parseHeader(SharedBufferChunkReader* buffer)
 {
-    RefPtrWillBeRawPtr<MIMEHeader> mimeHeader = MIMEHeader::create();
+    MIMEHeader* mimeHeader = MIMEHeader::create();
     KeyValueMap keyValuePairs = retrieveKeyValuePairs(buffer);
     KeyValueMap::iterator mimeParametersIterator = keyValuePairs.find("content-type");
     if (mimeParametersIterator != keyValuePairs.end()) {
@@ -147,7 +144,7 @@ PassRefPtrWillBeRawPtr<MIMEHeader> MIMEHeader::parseHeader(SharedBufferChunkRead
             mimeHeader->m_multipartType = parsedContentType.parameterValueForName("type");
             mimeHeader->m_endOfPartBoundary = parsedContentType.parameterValueForName("boundary");
             if (mimeHeader->m_endOfPartBoundary.isNull()) {
-                WTF_LOG_ERROR("No boundary found in multipart MIME header.");
+                DVLOG(1) << "No boundary found in multipart MIME header.";
                 return nullptr;
             }
             mimeHeader->m_endOfPartBoundary.insert("--", 0);
@@ -169,10 +166,11 @@ PassRefPtrWillBeRawPtr<MIMEHeader> MIMEHeader::parseHeader(SharedBufferChunkRead
     if (mimeParametersIterator != keyValuePairs.end())
         mimeHeader->m_contentID = mimeParametersIterator->value;
 
-    return mimeHeader.release();
+    return mimeHeader;
 }
 
-MIMEHeader::Encoding MIMEHeader::parseContentTransferEncoding(const String& text)
+MIMEHeader::Encoding MIMEHeader::parseContentTransferEncoding(
+    const String& text)
 {
     String encoding = text.stripWhiteSpace().lower();
     if (encoding == "base64")
@@ -185,7 +183,7 @@ MIMEHeader::Encoding MIMEHeader::parseContentTransferEncoding(const String& text
         return SevenBit;
     if (encoding == "binary")
         return Binary;
-    WTF_LOG_ERROR("Unknown encoding '%s' found in MIME header.", text.ascii().data());
+    DVLOG(1) << "Unknown encoding '" << text << "' found in MIME header.";
     return Unknown;
 }
 
@@ -194,43 +192,49 @@ MIMEHeader::MIMEHeader()
 {
 }
 
-static bool skipLinesUntilBoundaryFound(SharedBufferChunkReader& lineReader, const String& boundary)
+static bool skipLinesUntilBoundaryFound(SharedBufferChunkReader& lineReader,
+    const String& boundary)
 {
     String line;
-    while (!(line = lineReader.nextChunkAsUTF8StringWithLatin1Fallback()).isNull()) {
+    while (
+        !(line = lineReader.nextChunkAsUTF8StringWithLatin1Fallback()).isNull()) {
         if (line == boundary)
             return true;
     }
     return false;
 }
 
-MHTMLParser::MHTMLParser(SharedBuffer* data)
-    : m_lineReader(data, "\r\n")
+MHTMLParser::MHTMLParser(PassRefPtr<const SharedBuffer> data)
+    : m_lineReader(std::move(data), "\r\n")
 {
 }
 
-PassRefPtrWillBeRawPtr<MHTMLArchive> MHTMLParser::parseArchive()
+HeapVector<Member<ArchiveResource>> MHTMLParser::parseArchive()
 {
-    RefPtrWillBeRawPtr<MIMEHeader> header = MIMEHeader::parseHeader(&m_lineReader);
-    return parseArchiveWithHeader(header.get());
+    MIMEHeader* header = MIMEHeader::parseHeader(&m_lineReader);
+    HeapVector<Member<ArchiveResource>> resources;
+    if (!parseArchiveWithHeader(header, resources))
+        resources.clear();
+    return resources;
 }
 
-PassRefPtrWillBeRawPtr<MHTMLArchive> MHTMLParser::parseArchiveWithHeader(MIMEHeader* header)
+bool MHTMLParser::parseArchiveWithHeader(
+    MIMEHeader* header,
+    HeapVector<Member<ArchiveResource>>& resources)
 {
     if (!header) {
-        WTF_LOG_ERROR("Failed to parse MHTML part: no header.");
-        return nullptr;
+        DVLOG(1) << "Failed to parse MHTML part: no header.";
+        return false;
     }
 
-    RefPtrWillBeRawPtr<MHTMLArchive> archive = MHTMLArchive::create();
     if (!header->isMultipart()) {
         // With IE a page with no resource is not multi-part.
         bool endOfArchiveReached = false;
-        RefPtrWillBeRawPtr<ArchiveResource> resource = parseNextPart(*header, String(), String(), endOfArchiveReached);
+        ArchiveResource* resource = parseNextPart(*header, String(), String(), endOfArchiveReached);
         if (!resource)
-            return nullptr;
-        archive->setMainResource(resource);
-        return archive;
+            return false;
+        resources.push_back(resource);
+        return true;
     }
 
     // Skip the message content (it's a generic browser specific message).
@@ -238,59 +242,37 @@ PassRefPtrWillBeRawPtr<MHTMLArchive> MHTMLParser::parseArchiveWithHeader(MIMEHea
 
     bool endOfArchive = false;
     while (!endOfArchive) {
-        RefPtrWillBeRawPtr<MIMEHeader> resourceHeader = MIMEHeader::parseHeader(&m_lineReader);
+        MIMEHeader* resourceHeader = MIMEHeader::parseHeader(&m_lineReader);
         if (!resourceHeader) {
-            WTF_LOG_ERROR("Failed to parse MHTML, invalid MIME header.");
-            return nullptr;
+            DVLOG(1) << "Failed to parse MHTML, invalid MIME header.";
+            return false;
         }
         if (resourceHeader->contentType() == "multipart/alternative") {
-            // Ignore IE nesting which makes little sense (IE seems to nest only some of the frames).
-            RefPtrWillBeRawPtr<MHTMLArchive> subframeArchive = parseArchiveWithHeader(resourceHeader.get());
-            if (!subframeArchive) {
-                WTF_LOG_ERROR("Failed to parse MHTML subframe.");
-                return nullptr;
+            // Ignore IE nesting which makes little sense (IE seems to nest only some
+            // of the frames).
+            if (!parseArchiveWithHeader(resourceHeader, resources)) {
+                DVLOG(1) << "Failed to parse MHTML subframe.";
+                return false;
             }
-            bool endOfPartReached = skipLinesUntilBoundaryFound(m_lineReader, header->endOfPartBoundary());
-            ASSERT_UNUSED(endOfPartReached, endOfPartReached);
-            // The top-frame is the first frame found, regardless of the nesting level.
-            if (subframeArchive->mainResource())
-                addResourceToArchive(subframeArchive->mainResource(), archive.get());
-            archive->addSubframeArchive(subframeArchive);
+            skipLinesUntilBoundaryFound(m_lineReader, header->endOfPartBoundary());
             continue;
         }
 
-        RefPtrWillBeRawPtr<ArchiveResource> resource = parseNextPart(*resourceHeader, header->endOfPartBoundary(), header->endOfDocumentBoundary(), endOfArchive);
+        ArchiveResource* resource = parseNextPart(*resourceHeader, header->endOfPartBoundary(),
+            header->endOfDocumentBoundary(), endOfArchive);
         if (!resource) {
-            WTF_LOG_ERROR("Failed to parse MHTML part.");
-            return nullptr;
+            DVLOG(1) << "Failed to parse MHTML part.";
+            return false;
         }
-        addResourceToArchive(resource.get(), archive.get());
+        resources.push_back(resource);
     }
-
-    return archive.release();
+    return true;
 }
 
-void MHTMLParser::addResourceToArchive(ArchiveResource* resource, MHTMLArchive* archive)
-{
-    const AtomicString& mimeType = resource->mimeType();
-    if (!MIMETypeRegistry::isSupportedNonImageMIMEType(mimeType) || MIMETypeRegistry::isSupportedJavaScriptMIMEType(mimeType) || mimeType == "text/css") {
-        m_resources.append(resource);
-        return;
-    }
-
-    // The first document suitable resource is the main frame.
-    if (!archive->mainResource()) {
-        archive->setMainResource(resource);
-        m_frames.append(archive);
-        return;
-    }
-
-    RefPtrWillBeRawPtr<MHTMLArchive> subframe = MHTMLArchive::create();
-    subframe->setMainResource(resource);
-    m_frames.append(subframe);
-}
-
-PassRefPtrWillBeRawPtr<ArchiveResource> MHTMLParser::parseNextPart(const MIMEHeader& mimeHeader, const String& endOfPartBoundary, const String& endOfDocumentBoundary, bool& endOfArchiveReached)
+ArchiveResource* MHTMLParser::parseNextPart(const MIMEHeader& mimeHeader,
+    const String& endOfPartBoundary,
+    const String& endOfDocumentBoundary,
+    bool& endOfArchiveReached)
 {
     ASSERT(endOfPartBoundary.isEmpty() == endOfDocumentBoundary.isEmpty());
 
@@ -304,20 +286,20 @@ PassRefPtrWillBeRawPtr<ArchiveResource> MHTMLParser::parseNextPart(const MIMEHea
     bool endOfPartReached = false;
     if (contentTransferEncoding == MIMEHeader::Binary) {
         if (!checkBoundary) {
-            WTF_LOG_ERROR("Binary contents requires end of part");
+            DVLOG(1) << "Binary contents requires end of part";
             return nullptr;
         }
         m_lineReader.setSeparator(endOfPartBoundary.utf8().data());
         Vector<char> part;
         if (!m_lineReader.nextChunk(part)) {
-            WTF_LOG_ERROR("Binary contents requires end of part");
+            DVLOG(1) << "Binary contents requires end of part";
             return nullptr;
         }
         content->append(part);
         m_lineReader.setSeparator("\r\n");
         Vector<char> nextChars;
         if (m_lineReader.peek(nextChars, 2) != 2) {
-            WTF_LOG_ERROR("Invalid seperator.");
+            DVLOG(1) << "Invalid seperator.";
             return nullptr;
         }
         endOfPartReached = true;
@@ -326,28 +308,32 @@ PassRefPtrWillBeRawPtr<ArchiveResource> MHTMLParser::parseNextPart(const MIMEHea
         if (!endOfArchiveReached) {
             String line = m_lineReader.nextChunkAsUTF8StringWithLatin1Fallback();
             if (!line.isEmpty()) {
-                WTF_LOG_ERROR("No CRLF at end of binary section.");
+                DVLOG(1) << "No CRLF at end of binary section.";
                 return nullptr;
             }
         }
     } else {
         String line;
-        while (!(line = m_lineReader.nextChunkAsUTF8StringWithLatin1Fallback()).isNull()) {
+        while (!(line = m_lineReader.nextChunkAsUTF8StringWithLatin1Fallback())
+                    .isNull()) {
             endOfArchiveReached = (line == endOfDocumentBoundary);
             if (checkBoundary && (line == endOfPartBoundary || endOfArchiveReached)) {
                 endOfPartReached = true;
                 break;
             }
-            // Note that we use line.utf8() and not line.ascii() as ascii turns special characters (such as tab, line-feed...) into '?'.
+            // Note that we use line.utf8() and not line.ascii() as ascii turns
+            // special characters (such as tab, line-feed...) into '?'.
             content->append(line.utf8().data(), line.length());
             if (contentTransferEncoding == MIMEHeader::QuotedPrintable) {
-                // The line reader removes the \r\n, but we need them for the content in this case as the QuotedPrintable decoder expects CR-LF terminated lines.
-                content->append("\r\n", 2);
+                // The line reader removes the \r\n, but we need them for the content in
+                // this case as the QuotedPrintable decoder expects CR-LF terminated
+                // lines.
+                content->append("\r\n", 2u);
             }
         }
     }
     if (!endOfPartReached && checkBoundary) {
-        WTF_LOG_ERROR("No bounday found for MHTML part.");
+        DVLOG(1) << "No boundary found for MHTML part.";
         return nullptr;
     }
 
@@ -355,7 +341,7 @@ PassRefPtrWillBeRawPtr<ArchiveResource> MHTMLParser::parseNextPart(const MIMEHea
     switch (contentTransferEncoding) {
     case MIMEHeader::Base64:
         if (!base64Decode(content->data(), content->size(), data)) {
-            WTF_LOG_ERROR("Invalid base64 content for MHTML part.");
+            DVLOG(1) << "Invalid base64 content for MHTML part.";
             return nullptr;
         }
         break;
@@ -368,36 +354,42 @@ PassRefPtrWillBeRawPtr<ArchiveResource> MHTMLParser::parseNextPart(const MIMEHea
         data.append(content->data(), content->size());
         break;
     default:
-        WTF_LOG_ERROR("Invalid encoding for MHTML part.");
+        DVLOG(1) << "Invalid encoding for MHTML part.";
         return nullptr;
     }
     RefPtr<SharedBuffer> contentBuffer = SharedBuffer::adoptVector(data);
-    // FIXME: the URL in the MIME header could be relative, we should resolve it if it is.
-    // The specs mentions 5 ways to resolve a URL: http://tools.ietf.org/html/rfc2557#section-5
+    // FIXME: the URL in the MIME header could be relative, we should resolve it
+    // if it is.  The specs mentions 5 ways to resolve a URL:
+    // http://tools.ietf.org/html/rfc2557#section-5
     // IE and Firefox (UNMht) seem to generate only absolute URLs.
     KURL location = KURL(KURL(), mimeHeader.contentLocation());
-    return ArchiveResource::create(
-        contentBuffer, location, mimeHeader.contentID(), AtomicString(mimeHeader.contentType()), AtomicString(mimeHeader.charset()), String());
+    return ArchiveResource::create(contentBuffer, location,
+        mimeHeader.contentID(),
+        AtomicString(mimeHeader.contentType()),
+        AtomicString(mimeHeader.charset()));
 }
 
-size_t MHTMLParser::frameCount() const
+// static
+KURL MHTMLParser::convertContentIDToURI(const String& contentID)
 {
-    return m_frames.size();
-}
+    // This function is based primarily on an example from rfc2557 in section
+    // 9.5, but also based on more normative parts of specs like:
+    // - rfc2557 - MHTML - section 8.3 - "Use of the Content-ID header and CID
+    //                                    URLs"
+    // - rfc1738 - URL - section 4 (reserved scheme names;  includes "cid")
+    // - rfc2387 - multipart/related - section 3.4 - "Syntax" (cid := msg-id)
+    // - rfc0822 - msg-id = "<" addr-spec ">"; addr-spec = local-part "@" domain
 
-MHTMLArchive* MHTMLParser::frameAt(size_t index) const
-{
-    return m_frames[index].get();
-}
+    if (contentID.length() <= 2)
+        return KURL();
 
-size_t MHTMLParser::subResourceCount() const
-{
-    return m_resources.size();
-}
+    if (!contentID.startsWith('<') || !contentID.endsWith('>'))
+        return KURL();
 
-ArchiveResource* MHTMLParser::subResourceAt(size_t index) const
-{
-    return m_resources[index].get();
+    StringBuilder uriBuilder;
+    uriBuilder.append("cid:");
+    uriBuilder.append(contentID, 1, contentID.length() - 2);
+    return KURL(KURL(), uriBuilder.toString());
 }
 
 } // namespace blink

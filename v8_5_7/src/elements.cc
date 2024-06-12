@@ -2242,7 +2242,7 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
         if (IsFastDoubleElementsKind(Subclass::kind())) {
           // Search for NaN in FAST_DOUBLE_ELEMENTS or
           // FAST_HOLEY_DOUBLE_ELEMENTS --- Skip The Hole and trust
-          // std::isnan(elementK) for result
+          // std_isnan(elementK) for result
           auto elements = FixedDoubleArray::cast(receiver->elements());
 
           for (uint32_t k = start_from; k < length; ++k) {
@@ -2250,13 +2250,13 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
                 elements->is_the_hole(k)) {
               continue;
             }
-            if (std::isnan(elements->get_scalar(k))) return Just(true);
+            if (std_isnan(elements->get_scalar(k))) return Just(true);
           }
           return Just(false);
         } else {
           // Search for NaN in FAST_ELEMENTS, FAST_HOLEY_ELEMENTS,
           // FAST_SMI_ELEMENTS or FAST_HOLEY_SMI_ELEMENTS. Return true if
-          // elementK->IsHeapNumber() && std::isnan(elementK->Number())
+          // elementK->IsHeapNumber() && std_isnan(elementK->Number())
           DCHECK(IsFastSmiOrObjectElementsKind(Subclass::kind()));
           auto elements = FixedArray::cast(receiver->elements());
 
@@ -2826,7 +2826,7 @@ class TypedElementsAccessor
 
     double search_value = value->Number();
 
-    if (!std::isfinite(search_value)) {
+    if (!std_isfinite(search_value)) {
       // Integral types cannot represent +Inf or NaN
       if (AccessorClass::kind() < FLOAT32_ELEMENTS ||
           AccessorClass::kind() > FLOAT64_ELEMENTS) {
@@ -2844,7 +2844,7 @@ class TypedElementsAccessor
       length = elements->length();
     }
 
-    if (!std::isnan(search_value)) {
+    if (!std_isnan(search_value)) {
       for (uint32_t k = start_from; k < length; ++k) {
         double element_k = elements->get_scalar(k);
         if (element_k == search_value) return Just(true);
@@ -2853,7 +2853,7 @@ class TypedElementsAccessor
     } else {
       for (uint32_t k = start_from; k < length; ++k) {
         double element_k = elements->get_scalar(k);
-        if (std::isnan(element_k)) return Just(true);
+        if (std_isnan(element_k)) return Just(true);
       }
       return Just(false);
     }
@@ -2871,7 +2871,7 @@ class TypedElementsAccessor
 
     double search_value = value->Number();
 
-    if (!std::isfinite(search_value)) {
+    if (!std_isfinite(search_value)) {
       // Integral types cannot represent +Inf or NaN.
       if (AccessorClass::kind() < FLOAT32_ELEMENTS ||
           AccessorClass::kind() > FLOAT64_ELEMENTS) {
@@ -2889,7 +2889,7 @@ class TypedElementsAccessor
       length = elements->length();
     }
 
-    if (std::isnan(search_value)) {
+    if (std_isnan(search_value)) {
       return Just<int64_t>(-1);
     }
 

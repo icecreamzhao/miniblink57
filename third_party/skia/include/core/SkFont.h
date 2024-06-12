@@ -78,21 +78,21 @@ public:
          *  This is a last resort hinting method applied only if other hinting methods do not apply.
          *  TODO: where to put auto-normal vs auto-light?
          */
-        kEnableAutoHints_Flag       = 1 << 0,
+        kEnableAutoHints_Flag = 1 << 0,
 
         /**
          *  If the typeface contains explicit bytecodes for hinting, use them.
          *  If both bytecode and auto hints are specified, attempt to use the bytecodes first;
          *  if that fails (e.g. there are no codes), then attempt to autohint.
          */
-        kEnableByteCodeHints_Flag   = 1 << 1,
+        kEnableByteCodeHints_Flag = 1 << 1,
 
         /**
          *  If the typeface contains explicit bitmaps for hinting, use them.
          *  If both bytecode and auto hints are also specified, attempt to use the bitmaps first;
          *  if that fails (e.g. there are no bitmaps), then attempt to bytecode or autohint.
          */
-        kEmbeddedBitmaps_Flag       = 1 << 2,
+        kEmbeddedBitmaps_Flag = 1 << 2,
 
         /**
          *  Use rounded metric values (e.g. advance).
@@ -103,12 +103,12 @@ public:
          *  This applies to calls that return metrics (e.g. measureText) and to drawing the glyphs
          *  (see SkCanvas drawText and drawPosText).
          */
-        kUseNonlinearMetrics_Flag   = 1 << 3,
+        kUseNonlinearMetrics_Flag = 1 << 3,
 
-        kVertical_Flag              = 1 << 4,
-        kGenA8FromLCD_Flag          = 1 << 5,
-        kEmbolden_Flag              = 1 << 6,
-        kDevKern_Flag               = 1 << 7,   // ifdef ANDROID ?
+        kVertical_Flag = 1 << 4,
+        kGenA8FromLCD_Flag = 1 << 5,
+        kEmbolden_Flag = 1 << 6,
+        kDevKern_Flag = 1 << 7, // ifdef ANDROID ?
     };
 
     enum MaskType {
@@ -117,22 +117,22 @@ public:
         kLCD_MaskType,
     };
 
-    static SkFont* Create(SkTypeface*, SkScalar size, MaskType, uint32_t flags);
-    static SkFont* Create(SkTypeface*, SkScalar size, SkScalar scaleX, SkScalar skewX,
-                          MaskType, uint32_t flags);
+    static sk_sp<SkFont> Make(sk_sp<SkTypeface>, SkScalar size, MaskType, uint32_t flags);
+    static sk_sp<SkFont> Make(sk_sp<SkTypeface>, SkScalar size, SkScalar scaleX, SkScalar skewX,
+        MaskType, uint32_t flags);
 
     /**
      *  Return a font with the same attributes of this font, but with the specified size.
      *  If size is not supported (e.g. <= 0 or non-finite) NULL will be returned.
      */
-    SkFont* cloneWithSize(SkScalar size) const;
+    sk_sp<SkFont> makeWithSize(SkScalar size) const;
 
-    SkTypeface* getTypeface() const { return fTypeface; }
-    SkScalar    getSize() const { return fSize; }
-    SkScalar    getScaleX() const { return fScaleX; }
-    SkScalar    getSkewX() const { return fSkewX; }
-    uint32_t    getFlags() const { return fFlags; }
-    MaskType    getMaskType() const { return (MaskType)fMaskType; }
+    SkTypeface* getTypeface() const { return fTypeface.get(); }
+    SkScalar getSize() const { return fSize; }
+    SkScalar getScaleX() const { return fScaleX; }
+    SkScalar getSkewX() const { return fSkewX; }
+    uint32_t getFlags() const { return fFlags; }
+    MaskType getMaskType() const { return (MaskType)fMaskType; }
 
     bool isVertical() const { return SkToBool(fFlags & kVertical_Flag); }
     bool isEmbolden() const { return SkToBool(fFlags & kEmbolden_Flag); }
@@ -141,27 +141,27 @@ public:
     bool isUseNonLinearMetrics() const { return SkToBool(fFlags & kUseNonlinearMetrics_Flag); }
 
     int textToGlyphs(const void* text, size_t byteLength, SkTextEncoding,
-                     uint16_t glyphs[], int maxGlyphCount) const;
+        uint16_t glyphs[], int maxGlyphCount) const;
 
     SkScalar measureText(const void* text, size_t byteLength, SkTextEncoding) const;
 
-    static SkFont* Testing_CreateFromPaint(const SkPaint&);
+    static sk_sp<SkFont> Testing_CreateFromPaint(const SkPaint&);
 
 private:
     enum {
         kAllFlags = 0xFF,
     };
 
-    SkFont(SkTypeface*, SkScalar size, SkScalar scaleX, SkScalar skewX, MaskType, uint32_t flags);
-    virtual ~SkFont();
+    SkFont(sk_sp<SkTypeface>, SkScalar size, SkScalar scaleX, SkScalar skewX, MaskType,
+        uint32_t flags);
 
-    SkTypeface* fTypeface;
-    SkScalar    fSize;
-    SkScalar    fScaleX;
-    SkScalar    fSkewX;
-    uint16_t    fFlags;
-    uint8_t     fMaskType;
-//  uint8_t     fPad;
+    sk_sp<SkTypeface> fTypeface;
+    SkScalar fSize;
+    SkScalar fScaleX;
+    SkScalar fSkewX;
+    uint16_t fFlags;
+    uint8_t fMaskType;
+    //  uint8_t     fPad;
 };
 
 #endif

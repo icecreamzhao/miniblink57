@@ -23,14 +23,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/PODFreeListArena.h"
 
 #include "platform/testing/ArenaTestHelpers.h"
-#include "wtf/FastMalloc.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/RefPtr.h"
-
-#include <gtest/gtest.h>
+#include "wtf/Vector.h"
 
 namespace blink {
 
@@ -38,30 +36,35 @@ using ArenaTestHelpers::TrackedAllocator;
 
 namespace {
 
-// A couple of simple structs to allocate.
-struct TestClass1 {
-    TestClass1()
-        : x(0), y(0), z(0), w(1) { }
+    // A couple of simple structs to allocate.
+    struct TestClass1 {
+        TestClass1()
+            : x(0)
+            , y(0)
+            , z(0)
+            , w(1)
+        {
+        }
 
-    float x, y, z, w;
-};
+        float x, y, z, w;
+    };
 
-struct TestClass2 {
-    TestClass2()
-        : padding(0)
-    {
-        static int TestIds = 0;
-        id = TestIds++;
-    }
-    int id;
-    int padding;
-};
+    struct TestClass2 {
+        TestClass2()
+            : padding(0)
+        {
+            static int TestIds = 0;
+            id = TestIds++;
+        }
+        int id;
+        int padding;
+    };
 
 } // anonymous namespace
 
 class PODFreeListArenaTest : public testing::Test {
 protected:
-    int getFreeListSize(const PassRefPtr<PODFreeListArena<TestClass1>> arena) const
+    int getFreeListSize(PassRefPtr<PODFreeListArena<TestClass1>> arena) const
     {
         return arena->getFreeListSizeForTesting();
     }
@@ -119,7 +122,8 @@ TEST_F(PODFreeListArenaTest, RunsConstructorsOnReusedObjects)
 
         objects.insert(tc1);
     }
-    for (std::set<TestClass1*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+    for (std::set<TestClass1*>::iterator it = objects.begin();
+         it != objects.end(); ++it) {
         arena->freeObject(*it);
     }
     for (int i = 0; i < 100; i++) {
@@ -137,13 +141,13 @@ TEST_F(PODFreeListArenaTest, RunsConstructorsOnReusedObjects)
 // Make sure freeObject puts the object in the free list.
 TEST_F(PODFreeListArenaTest, AddsFreedObjectsToFreedList)
 {
-    std::vector<TestClass1*> objects;
+    Vector<TestClass1*, 100> objects;
     RefPtr<PODFreeListArena<TestClass1>> arena = PODFreeListArena<TestClass1>::create();
     for (int i = 0; i < 100; i++) {
         objects.push_back(arena->allocateObject());
     }
-    for (std::vector<TestClass1*>::iterator it = objects.begin(); it != objects.end(); ++it) {
-        arena->freeObject(*it);
+    for (auto* object : objects) {
+        arena->freeObject(object);
     }
     EXPECT_EQ(100, getFreeListSize(arena));
 }
@@ -156,7 +160,8 @@ TEST_F(PODFreeListArenaTest, ReusesPreviouslyFreedObjects)
     for (int i = 0; i < 100; i++) {
         objects.insert(arena->allocateObject());
     }
-    for (std::set<TestClass2*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+    for (std::set<TestClass2*>::iterator it = objects.begin();
+         it != objects.end(); ++it) {
         arena->freeObject(*it);
     }
     for (int i = 0; i < 100; i++) {

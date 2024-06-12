@@ -24,22 +24,26 @@ enum SkPixelGeometry {
 };
 
 // Returns true iff geo is a known geometry and is RGB.
-static inline bool SkPixelGeometryIsRGB(SkPixelGeometry geo) {
+static inline bool SkPixelGeometryIsRGB(SkPixelGeometry geo)
+{
     return kRGB_H_SkPixelGeometry == geo || kRGB_V_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is BGR.
-static inline bool SkPixelGeometryIsBGR(SkPixelGeometry geo) {
+static inline bool SkPixelGeometryIsBGR(SkPixelGeometry geo)
+{
     return kBGR_H_SkPixelGeometry == geo || kBGR_V_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is horizontal.
-static inline bool SkPixelGeometryIsH(SkPixelGeometry geo) {
+static inline bool SkPixelGeometryIsH(SkPixelGeometry geo)
+{
     return kRGB_H_SkPixelGeometry == geo || kBGR_H_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is vertical.
-static inline bool SkPixelGeometryIsV(SkPixelGeometry geo) {
+static inline bool SkPixelGeometryIsV(SkPixelGeometry geo)
+{
     return kRGB_V_SkPixelGeometry == geo || kBGR_V_SkPixelGeometry == geo;
 }
 
@@ -51,10 +55,24 @@ static inline bool SkPixelGeometryIsV(SkPixelGeometry geo) {
 class SK_API SkSurfaceProps {
 public:
     enum Flags {
-        kDisallowAntiAlias_Flag     = 1 << 0,
-        kDisallowDither_Flag        = 1 << 1,
-        kUseDistanceFieldFonts_Flag = 1 << 2,
+        kDisallowAntiAlias_Flag = 1 << 0,
+        kDisallowDither_Flag = 1 << 1,
+        kUseDeviceIndependentFonts_Flag = 1 << 2,
+
+        /**
+         *  This flag causes sRGB inputs to the color pipeline (images and other sRGB-tagged
+         *  colors) to be gamma-corrected (converted to linear) before use. Without this flag,
+         *  texture scaling and filtering is not gamma correct, preserving the behavior of Skia
+         *  up through 2015.
+         *
+         *  It is recommended to enable this flag when rendering to an sRGB or floating point
+         *  surface.
+         */
+        kGammaCorrect_Flag = 1 << 3,
     };
+    /** Deprecated alias used by Chromium. Will be removed. */
+    static const Flags kUseDistanceFieldFonts_Flag = kUseDeviceIndependentFonts_Flag;
+
     SkSurfaceProps(uint32_t flags, SkPixelGeometry);
 
     enum InitType {
@@ -69,12 +87,16 @@ public:
 
     bool isDisallowAA() const { return SkToBool(fFlags & kDisallowAntiAlias_Flag); }
     bool isDisallowDither() const { return SkToBool(fFlags & kDisallowDither_Flag); }
-    bool isUseDistanceFieldFonts() const { return SkToBool(fFlags & kUseDistanceFieldFonts_Flag); }
+    bool isUseDeviceIndependentFonts() const
+    {
+        return SkToBool(fFlags & kUseDeviceIndependentFonts_Flag);
+    }
+    bool isGammaCorrect() const { return SkToBool(fFlags & kGammaCorrect_Flag); }
 
 private:
     SkSurfaceProps();
 
-    uint32_t        fFlags;
+    uint32_t fFlags;
     SkPixelGeometry fPixelGeometry;
 };
 

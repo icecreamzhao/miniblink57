@@ -24,8 +24,8 @@
 #ifndef FEConvolveMatrix_h
 #define FEConvolveMatrix_h
 
-#include "platform/geometry/FloatPoint.h"
-#include "platform/geometry/FloatSize.h"
+#include "platform/geometry/IntPoint.h"
+#include "platform/geometry/IntSize.h"
 #include "platform/graphics/filters/Filter.h"
 #include "platform/graphics/filters/FilterEffect.h"
 #include "wtf/Vector.h"
@@ -33,59 +33,52 @@
 namespace blink {
 
 enum EdgeModeType {
-    EDGEMODE_UNKNOWN   = 0,
+    EDGEMODE_UNKNOWN = 0,
     EDGEMODE_DUPLICATE = 1,
-    EDGEMODE_WRAP      = 2,
-    EDGEMODE_NONE      = 3
+    EDGEMODE_WRAP = 2,
+    EDGEMODE_NONE = 3
 };
 
-class PLATFORM_EXPORT FEConvolveMatrix : public FilterEffect {
+class PLATFORM_EXPORT FEConvolveMatrix final : public FilterEffect {
 public:
-    static PassRefPtrWillBeRawPtr<FEConvolveMatrix> create(Filter*, const IntSize&,
-            float, float, const IntPoint&, EdgeModeType, const FloatPoint&,
-            bool, const Vector<float>&);
+    static FEConvolveMatrix* create(Filter*,
+        const IntSize&,
+        float,
+        float,
+        const IntPoint&,
+        EdgeModeType,
+        bool,
+        const Vector<float>&);
 
-    IntSize kernelSize() const;
-    void setKernelSize(const IntSize&);
-
-    const Vector<float>& kernel() const;
-    void setKernel(const Vector<float>&);
-
-    float divisor() const;
     bool setDivisor(float);
-
-    float bias() const;
     bool setBias(float);
-
-    IntPoint targetOffset() const;
     bool setTargetOffset(const IntPoint&);
-
-    EdgeModeType edgeMode() const;
     bool setEdgeMode(EdgeModeType);
-
-    FloatPoint kernelUnitLength() const;
-    bool setKernelUnitLength(const FloatPoint&);
-
-    bool preserveAlpha() const;
     bool setPreserveAlpha(bool);
-
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
-
-    FloatRect mapPaintRect(const FloatRect&, bool forward = true) final;
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
+    FEConvolveMatrix(Filter*,
+        const IntSize&,
+        float,
+        float,
+        const IntPoint&,
+        EdgeModeType,
+        bool,
+        const Vector<float>&);
 
-    FEConvolveMatrix(Filter*, const IntSize&, float, float,
-            const IntPoint&, EdgeModeType, const FloatPoint&, bool, const Vector<float>&);
+    FloatRect mapEffect(const FloatRect&) const final;
+
+    sk_sp<SkImageFilter> createImageFilter() override;
+
+    bool parametersValid() const;
 
     IntSize m_kernelSize;
     float m_divisor;
     float m_bias;
     IntPoint m_targetOffset;
     EdgeModeType m_edgeMode;
-    FloatPoint m_kernelUnitLength;
     bool m_preserveAlpha;
     Vector<float> m_kernelMatrix;
 };

@@ -10,21 +10,25 @@
 #include "Test.h"
 
 // our std SkAlpha255To256
-static int test_srcover0(unsigned dst, unsigned alpha) {
+static int test_srcover0(unsigned dst, unsigned alpha)
+{
     return alpha + SkAlphaMul(dst, SkAlpha255To256(255 - alpha));
 }
 
 // faster hack +1
-static int test_srcover1(unsigned dst, unsigned alpha) {
+static int test_srcover1(unsigned dst, unsigned alpha)
+{
     return alpha + SkAlphaMul(dst, 256 - alpha);
 }
 
 // slower "correct"
-static int test_srcover2(unsigned dst, unsigned alpha) {
+static int test_srcover2(unsigned dst, unsigned alpha)
+{
     return alpha + SkMulDiv255Round(dst, 255 - alpha);
 }
 
-DEF_TEST(SrcOver, reporter) {
+DEF_TEST(SrcOver, reporter)
+{
     /*  Here's the idea. Can we ensure that when we blend on top of an opaque
         dst, that the result always stay's opaque (i.e. exactly 255)?
      */
@@ -42,8 +46,8 @@ DEF_TEST(SrcOver, reporter) {
         opaqueCounter2 += (result2 == 0xFF);
     }
 #if 0
-    SkDebugf("---- opaque test: [%d %d %d]\n",
-             opaqueCounter0, opaqueCounter1, opaqueCounter2);
+    INFOF(reporter, "---- opaque test: [%d %d %d]\n",
+          opaqueCounter0, opaqueCounter1, opaqueCounter2);
 #endif
     // we acknowledge that technique0 does not always return opaque
     REPORTER_ASSERT(reporter, opaqueCounter0 == 256);
@@ -67,8 +71,8 @@ DEF_TEST(SrcOver, reporter) {
 #if 0
             // this shows where r1 (faster) differs from r2 (more exact)
             if (r1 != r2) {
-                SkDebugf("--- dst=%d i=%d r1=%d r2=%d exact=%g\n",
-                         dst, i, r1, r2, i + dst - dst*i/255.0f);
+                INFOF(reporter, "--- dst=%d i=%d r1=%d r2=%d exact=%g\n",
+                      dst, i, r1, r2, i + dst - dst*i/255.0f);
             }
 #endif
         }

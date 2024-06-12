@@ -31,21 +31,26 @@
 #include "platform/graphics/Color.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
 class CORE_EXPORT StyleInheritedData : public RefCounted<StyleInheritedData> {
 public:
-    static PassRefPtr<StyleInheritedData> create() { return adoptRef(new StyleInheritedData); }
-    PassRefPtr<StyleInheritedData> copy() const { return adoptRef(new StyleInheritedData(*this)); }
+    static PassRefPtr<StyleInheritedData> create()
+    {
+        return adoptRef(new StyleInheritedData);
+    }
+    PassRefPtr<StyleInheritedData> copy() const
+    {
+        return adoptRef(new StyleInheritedData(*this));
+    }
     ~StyleInheritedData();
 
     bool operator==(const StyleInheritedData&) const;
-    bool operator!=(const StyleInheritedData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleInheritedData& o) const { return !(*this == o); }
 
     short horizontal_border_spacing;
     short vertical_border_spacing;
@@ -58,6 +63,11 @@ public:
     Color color;
     Color visitedLinkColor;
     float textAutosizingMultiplier;
+
+#ifdef TENCENT_FITSCREEN
+    bool m_isFitScreenLayoutStyle;
+    int m_defaultMaxWidth;
+#endif
 
 private:
     StyleInheritedData();

@@ -28,13 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/crypto/CryptoKey.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/V8ObjectBuilder.h"
 #include "bindings/core/v8/V8Uint8Array.h"
-#include "core/dom/ExceptionCode.h"
 #include "platform/CryptoResult.h"
 #include "public/platform/WebCryptoAlgorithmParams.h"
 #include "public/platform/WebCryptoKeyAlgorithm.h"
@@ -44,100 +42,105 @@ namespace blink {
 
 namespace {
 
-const char* keyTypeToString(WebCryptoKeyType type)
-{
-    switch (type) {
-    case WebCryptoKeyTypeSecret:
-        return "secret";
-    case WebCryptoKeyTypePublic:
-        return "public";
-    case WebCryptoKeyTypePrivate:
-        return "private";
-    }
-    ASSERT_NOT_REACHED();
-    return 0;
-}
-
-struct KeyUsageMapping {
-    WebCryptoKeyUsage value;
-    const char* const name;
-};
-
-// The order of this array is the same order that will appear in
-// CryptoKey.usages. It must be kept ordered as described by the Web Crypto
-// spec.
-const KeyUsageMapping keyUsageMappings[] = {
-    { WebCryptoKeyUsageEncrypt, "encrypt" },
-    { WebCryptoKeyUsageDecrypt, "decrypt" },
-    { WebCryptoKeyUsageSign, "sign" },
-    { WebCryptoKeyUsageVerify, "verify" },
-    { WebCryptoKeyUsageDeriveKey, "deriveKey" },
-    { WebCryptoKeyUsageDeriveBits, "deriveBits" },
-    { WebCryptoKeyUsageWrapKey, "wrapKey" },
-    { WebCryptoKeyUsageUnwrapKey, "unwrapKey" },
-};
-
-static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1, "keyUsageMappings needs to be updated");
-
-const char* keyUsageToString(WebCryptoKeyUsage usage)
-{
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(keyUsageMappings); ++i) {
-        if (keyUsageMappings[i].value == usage)
-            return keyUsageMappings[i].name;
-    }
-    ASSERT_NOT_REACHED();
-    return 0;
-}
-
-WebCryptoKeyUsageMask keyUsageStringToMask(const String& usageString)
-{
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(keyUsageMappings); ++i) {
-        if (keyUsageMappings[i].name == usageString)
-            return keyUsageMappings[i].value;
-    }
-    return 0;
-}
-
-class DictionaryBuilder : public WebCryptoKeyAlgorithmDictionary {
-public:
-    explicit DictionaryBuilder(V8ObjectBuilder& builder)
-        : m_builder(builder)
+    const char* keyTypeToString(WebCryptoKeyType type)
     {
+        switch (type) {
+        case WebCryptoKeyTypeSecret:
+            return "secret";
+        case WebCryptoKeyTypePublic:
+            return "public";
+        case WebCryptoKeyTypePrivate:
+            return "private";
+        }
+        ASSERT_NOT_REACHED();
+        return 0;
     }
 
-    virtual void setString(const char* propertyName, const char* value)
+    struct KeyUsageMapping {
+        WebCryptoKeyUsage value;
+        const char* const name;
+    };
+
+    // The order of this array is the same order that will appear in
+    // CryptoKey.usages. It must be kept ordered as described by the Web Crypto
+    // spec.
+    const KeyUsageMapping keyUsageMappings[] = {
+        { WebCryptoKeyUsageEncrypt, "encrypt" },
+        { WebCryptoKeyUsageDecrypt, "decrypt" },
+        { WebCryptoKeyUsageSign, "sign" },
+        { WebCryptoKeyUsageVerify, "verify" },
+        { WebCryptoKeyUsageDeriveKey, "deriveKey" },
+        { WebCryptoKeyUsageDeriveBits, "deriveBits" },
+        { WebCryptoKeyUsageWrapKey, "wrapKey" },
+        { WebCryptoKeyUsageUnwrapKey, "unwrapKey" },
+    };
+
+    static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1,
+        "keyUsageMappings needs to be updated");
+
+    const char* keyUsageToString(WebCryptoKeyUsage usage)
     {
-        m_builder.addString(propertyName, value);
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(keyUsageMappings); ++i) {
+            if (keyUsageMappings[i].value == usage)
+                return keyUsageMappings[i].name;
+        }
+        ASSERT_NOT_REACHED();
+        return 0;
     }
 
-    virtual void setUint(const char* propertyName, unsigned value)
+    WebCryptoKeyUsageMask keyUsageStringToMask(const String& usageString)
     {
-        m_builder.addNumber(propertyName, value);
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(keyUsageMappings); ++i) {
+            if (keyUsageMappings[i].name == usageString)
+                return keyUsageMappings[i].value;
+        }
+        return 0;
     }
 
-    virtual void setAlgorithm(const char* propertyName, const WebCryptoAlgorithm& algorithm)
-    {
-        ASSERT(algorithm.paramsType() == WebCryptoAlgorithmParamsTypeNone);
+    class DictionaryBuilder : public WebCryptoKeyAlgorithmDictionary {
+        STACK_ALLOCATED();
 
-        V8ObjectBuilder algorithmValue(m_builder.scriptState());
-        algorithmValue.addString("name", WebCryptoAlgorithm::lookupAlgorithmInfo(algorithm.id())->name);
-        m_builder.add(propertyName, algorithmValue);
-    }
+    public:
+        explicit DictionaryBuilder(V8ObjectBuilder& builder)
+            : m_builder(builder)
+        {
+        }
 
-    virtual void setUint8Array(const char* propertyName, const WebVector<unsigned char>& vector)
-    {
-        m_builder.add(propertyName, DOMUint8Array::create(vector.data(), vector.size()));
-    }
+        virtual void setString(const char* propertyName, const char* value)
+        {
+            m_builder.addString(propertyName, value);
+        }
 
-private:
-    V8ObjectBuilder& m_builder;
-};
+        virtual void setUint(const char* propertyName, unsigned value)
+        {
+            m_builder.addNumber(propertyName, value);
+        }
+
+        virtual void setAlgorithm(const char* propertyName,
+            const WebCryptoAlgorithm& algorithm)
+        {
+            ASSERT(algorithm.paramsType() == WebCryptoAlgorithmParamsTypeNone);
+
+            V8ObjectBuilder algorithmValue(m_builder.getScriptState());
+            algorithmValue.addString(
+                "name", WebCryptoAlgorithm::lookupAlgorithmInfo(algorithm.id())->name);
+            m_builder.add(propertyName, algorithmValue);
+        }
+
+        virtual void setUint8Array(const char* propertyName,
+            const WebVector<unsigned char>& vector)
+        {
+            m_builder.add(propertyName,
+                DOMUint8Array::create(vector.data(), vector.size()));
+        }
+
+    private:
+        V8ObjectBuilder& m_builder;
+    };
 
 } // namespace
 
-CryptoKey::~CryptoKey()
-{
-}
+CryptoKey::~CryptoKey() { }
 
 CryptoKey::CryptoKey(const WebCryptoKey& key)
     : m_key(key)
@@ -172,27 +175,47 @@ Vector<String> CryptoKey::usages() const
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(keyUsageMappings); ++i) {
         WebCryptoKeyUsage usage = keyUsageMappings[i].value;
         if (m_key.usages() & usage)
-            result.append(keyUsageToString(usage));
+            result.push_back(keyUsageToString(usage));
     }
     return result;
 }
 
-bool CryptoKey::canBeUsedForAlgorithm(const WebCryptoAlgorithm& algorithm, WebCryptoKeyUsage usage, CryptoResult* result) const
+bool CryptoKey::canBeUsedForAlgorithm(const WebCryptoAlgorithm& algorithm,
+    WebCryptoKeyUsage usage,
+    CryptoResult* result) const
 {
-    if (!(m_key.usages() & usage)) {
-        result->completeWithError(WebCryptoErrorTypeInvalidAccess, "key.usages does not permit this operation");
+    // This order of tests on keys is done throughout the WebCrypto spec when
+    // testing if a key can be used for an algorithm.
+    //
+    // For instance here are the steps as written for encrypt():
+    //
+    // https://w3c.github.io/webcrypto/Overview.html#dfn-SubtleCrypto-method-encrypt
+    //
+    // (8) If the name member of normalizedAlgorithm is not equal to the name
+    //     attribute of the [[algorithm]] internal slot of key then throw an
+    //     InvalidAccessError.
+    //
+    // (9) If the [[usages]] internal slot of key does not contain an entry
+    //     that is "encrypt", then throw an InvalidAccessError.
+
+    if (m_key.algorithm().id() != algorithm.id()) {
+        result->completeWithError(WebCryptoErrorTypeInvalidAccess,
+            "key.algorithm does not match that of operation");
         return false;
     }
 
-    if (m_key.algorithm().id() != algorithm.id()) {
-        result->completeWithError(WebCryptoErrorTypeInvalidAccess, "key.algorithm does not match that of operation");
+    if (!(m_key.usages() & usage)) {
+        result->completeWithError(WebCryptoErrorTypeInvalidAccess,
+            "key.usages does not permit this operation");
         return false;
     }
 
     return true;
 }
 
-bool CryptoKey::parseFormat(const String& formatString, WebCryptoKeyFormat& format, CryptoResult* result)
+bool CryptoKey::parseFormat(const String& formatString,
+    WebCryptoKeyFormat& format,
+    CryptoResult* result)
 {
     // There are few enough values that testing serially is fast enough.
     if (formatString == "raw") {
@@ -212,17 +235,21 @@ bool CryptoKey::parseFormat(const String& formatString, WebCryptoKeyFormat& form
         return true;
     }
 
-    result->completeWithError(WebCryptoErrorTypeType, "Invalid keyFormat argument");
+    result->completeWithError(WebCryptoErrorTypeType,
+        "Invalid keyFormat argument");
     return false;
 }
 
-bool CryptoKey::parseUsageMask(const Vector<String>& usages, WebCryptoKeyUsageMask& mask, CryptoResult* result)
+bool CryptoKey::parseUsageMask(const Vector<String>& usages,
+    WebCryptoKeyUsageMask& mask,
+    CryptoResult* result)
 {
     mask = 0;
     for (size_t i = 0; i < usages.size(); ++i) {
         WebCryptoKeyUsageMask usage = keyUsageStringToMask(usages[i]);
         if (!usage) {
-            result->completeWithError(WebCryptoErrorTypeType, "Invalid keyUsages argument");
+            result->completeWithError(WebCryptoErrorTypeType,
+                "Invalid keyUsages argument");
             return false;
         }
         mask |= usage;

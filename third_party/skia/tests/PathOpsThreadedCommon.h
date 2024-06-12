@@ -8,7 +8,6 @@
 #define PathOpsThreadedCommon_DEFINED
 
 #include "SkGraphics.h"
-#include "SkRunnable.h"
 #include "SkTDArray.h"
 
 #define PATH_STR_SIZE 512
@@ -33,7 +32,10 @@ struct PathOpsThreadState {
 
 class PathOpsThreadedTestRunner {
 public:
-    PathOpsThreadedTestRunner(skiatest::Reporter* reporter) : fReporter(reporter) {}
+    PathOpsThreadedTestRunner(skiatest::Reporter* reporter)
+        : fReporter(reporter)
+    {
+    }
 
     ~PathOpsThreadedTestRunner();
 
@@ -44,10 +46,11 @@ public:
     skiatest::Reporter* fReporter;
 };
 
-class PathOpsThreadedRunnable : public SkRunnable {
+class PathOpsThreadedRunnable {
 public:
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), int a, int b, int c, int d,
-            PathOpsThreadedTestRunner* runner) {
+        PathOpsThreadedTestRunner* runner)
+    {
         fState.fA = a;
         fState.fB = b;
         fState.fC = c;
@@ -57,7 +60,8 @@ public:
     }
 
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), const char* str,
-            PathOpsThreadedTestRunner* runner) {
+        PathOpsThreadedTestRunner* runner)
+    {
         SkASSERT(strlen(str) < sizeof(fState.fSerialNo) - 1);
         strcpy(fState.fSerialNo, str);
         fState.fReporter = runner->fReporter;
@@ -65,7 +69,8 @@ public:
     }
 
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), int dirNo, const char* str,
-            PathOpsThreadedTestRunner* runner) {
+        PathOpsThreadedTestRunner* runner)
+    {
         SkASSERT(strlen(str) < sizeof(fState.fSerialNo) - 1);
         fState.fA = dirNo;
         strcpy(fState.fSerialNo, str);
@@ -73,7 +78,8 @@ public:
         fTestFun = testFun;
     }
 
-    void run() override {
+    void operator()()
+    {
         SkBitmap bitmap;
         fState.fBitmap = &bitmap;
         char pathStr[PATH_STR_SIZE];

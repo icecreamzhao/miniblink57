@@ -11,16 +11,17 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 /**
@@ -89,19 +90,20 @@ Rectangle.intersection = function(rect1, rect2) {
 };
 
 /**
- * @param {!number} width
- * @param {!number} height
+ * @param {!number} width in CSS pixel
+ * @param {!number} height in CSS pixel
  */
 function resizeWindow(width, height) {
-    setWindowRect(adjustWindowRect(width, height, width, height));
+    var zoom = global.params.zoomFactor ? global.params.zoomFactor : 1;
+    setWindowRect(adjustWindowRect(width * zoom, height * zoom, width * zoom, height * zoom));
 }
 
 /**
- * @param {!number} width
- * @param {!number} height
- * @param {?number} minWidth
- * @param {?number} minHeight
- * @return {!Rectangle}
+ * @param {!number} width in DIP
+ * @param {!number} height in DIP
+ * @param {?number} minWidth in DIP
+ * @param {?number} minHeight in DIP
+ * @return {!Rectangle} Adjusted rectangle in DIP
  */
 function adjustWindowRect(width, height, minWidth, minHeight) {
     if (typeof minWidth !== "number")
@@ -109,7 +111,7 @@ function adjustWindowRect(width, height, minWidth, minHeight) {
     if (typeof minHeight !== "number")
         minHeight = 0;
 
-    var windowRect = new Rectangle(0, 0, width, height);
+    var windowRect = new Rectangle(0, 0, Math.ceil(width), Math.ceil(height));
 
     if (!global.params.anchorRectInScreen)
         return windowRect;
@@ -123,6 +125,9 @@ function adjustWindowRect(width, height, minWidth, minHeight) {
     return windowRect;
 }
 
+/**
+ * Arguments are DIPs.
+ */
 function _adjustWindowRectVertically(windowRect, availRect, anchorRect, minHeight) {
     var availableSpaceAbove = anchorRect.y - availRect.y;
     availableSpaceAbove = Math.max(0, Math.min(availRect.height, availableSpaceAbove));
@@ -140,6 +145,9 @@ function _adjustWindowRectVertically(windowRect, availRect, anchorRect, minHeigh
     }
 }
 
+/**
+ * Arguments are DIPs.
+ */
 function _adjustWindowRectHorizontally(windowRect, availRect, anchorRect, minWidth) {
     windowRect.width = Math.min(windowRect.width, availRect.width);
     windowRect.width = Math.max(windowRect.width, minWidth);
@@ -152,7 +160,7 @@ function _adjustWindowRectHorizontally(windowRect, availRect, anchorRect, minWid
 }
 
 /**
- * @param {!Rectangle} rect
+ * @param {!Rectangle} rect Window position and size in DIP.
  */
 function setWindowRect(rect) {
     if (window.frameElement) {
@@ -164,14 +172,17 @@ function setWindowRect(rect) {
 }
 
 function hideWindow() {
-    resizeWindow(1, 1);
+    setWindowRect(adjustWindowRect(1, 1, 1, 1));
 }
 
 /**
  * @return {!boolean}
  */
 function isWindowHidden() {
-    return window.innerWidth === 1 && window.innerHeight === 1;
+    // window.innerWidth and innerHeight are zoom-adjusted values.  If we call
+    // setWindowRect with width=100 and the zoom-level is 2.0, innerWidth will
+    // return 50.
+    return window.innerWidth <= 1 && window.innerHeight <= 1;
 }
 
 window.addEventListener("resize", function() {
@@ -313,6 +324,6 @@ Picker.prototype.cleanup = function() {};
 window.addEventListener("keyup", function(event) {
     // JAWS dispatches extra Alt events and unless we handle them they move the
     // focus and close the popup.
-    if (event.keyIdentifier === "Alt")
+    if (event.key === "Alt")
         event.preventDefault();
 }, true);

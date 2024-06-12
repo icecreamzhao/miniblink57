@@ -21,8 +21,6 @@
 #define SVGMPathElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
-#include "core/svg/SVGAnimatedString.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGURIReference.h"
 
@@ -30,10 +28,10 @@ namespace blink {
 
 class SVGPathElement;
 
-class SVGMPathElement final : public SVGElement,
-                              public SVGURIReference {
+class SVGMPathElement final : public SVGElement, public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGMPathElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGMPathElement);
+
 public:
     DECLARE_NODE_FACTORY(SVGMPathElement);
 
@@ -57,7 +55,6 @@ private:
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
     void notifyParentOfPathChange(ContainerNode*);
-
 };
 
 } // namespace blink

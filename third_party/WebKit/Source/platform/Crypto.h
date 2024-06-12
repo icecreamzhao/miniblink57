@@ -13,9 +13,11 @@
 
 #include "platform/PlatformExport.h"
 #include "public/platform/WebCrypto.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
 #include "wtf/StringHasher.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
@@ -30,15 +32,22 @@ enum HashAlgorithm {
     HashAlgorithmSha512
 };
 
-PLATFORM_EXPORT bool computeDigest(HashAlgorithm, const char* digestable, size_t length, DigestValue& digestResult);
-PLATFORM_EXPORT PassOwnPtr<WebCryptoDigestor> createDigestor(HashAlgorithm);
-PLATFORM_EXPORT void finishDigestor(WebCryptoDigestor*, DigestValue& digestResult);
+PLATFORM_EXPORT bool computeDigest(HashAlgorithm,
+    const char* digestable,
+    size_t length,
+    DigestValue& digestResult);
+// Note: this will never return null.
+PLATFORM_EXPORT std::unique_ptr<WebCryptoDigestor> createDigestor(
+    HashAlgorithm);
+PLATFORM_EXPORT void finishDigestor(WebCryptoDigestor*,
+    DigestValue& digestResult);
 
 } // namespace blink
 
 namespace WTF {
 
 struct DigestValueHash {
+    STATIC_ONLY(DigestValueHash);
     static unsigned hash(const blink::DigestValue& v)
     {
         return StringHasher::computeHash(v.data(), v.size());
@@ -51,15 +60,19 @@ struct DigestValueHash {
 };
 template <>
 struct DefaultHash<blink::DigestValue> {
+    STATIC_ONLY(DefaultHash);
     typedef DigestValueHash Hash;
 };
 
 template <>
 struct DefaultHash<blink::HashAlgorithm> {
+    STATIC_ONLY(DefaultHash);
     typedef IntHash<blink::HashAlgorithm> Hash;
 };
 template <>
-struct HashTraits<blink::HashAlgorithm> : UnsignedWithZeroKeyHashTraits<blink::HashAlgorithm> {
+struct HashTraits<blink::HashAlgorithm>
+    : UnsignedWithZeroKeyHashTraits<blink::HashAlgorithm> {
+    STATIC_ONLY(HashTraits);
 };
 
 } // namespace WTF

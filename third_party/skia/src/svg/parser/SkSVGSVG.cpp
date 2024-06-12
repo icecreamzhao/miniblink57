@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,34 +5,36 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGSVG.h"
 #include "SkParse.h"
 #include "SkRect.h"
 #include "SkSVGParser.h"
 
 const SkSVGAttribute SkSVGSVG::gAttributes[] = {
-    SVG_LITERAL_ATTRIBUTE(enable-background, f_enable_background),
+    SVG_LITERAL_ATTRIBUTE(enable - background, f_enable_background),
     SVG_ATTRIBUTE(height),
     SVG_ATTRIBUTE(overflow),
     SVG_ATTRIBUTE(width),
     SVG_ATTRIBUTE(version),
     SVG_ATTRIBUTE(viewBox),
     SVG_ATTRIBUTE(x),
-    SVG_LITERAL_ATTRIBUTE(xml:space, f_xml_space),
+    SVG_LITERAL_ATTRIBUTE(xml
+                          : space, f_xml_space),
     SVG_ATTRIBUTE(xmlns),
-    SVG_LITERAL_ATTRIBUTE(xmlns:xlink, f_xml_xlink),
+    SVG_LITERAL_ATTRIBUTE(xmlns
+                          : xlink, f_xml_xlink),
     SVG_ATTRIBUTE(y),
 };
 
 DEFINE_SVG_INFO(SVG)
 
-
-bool SkSVGSVG::isFlushable() {
+bool SkSVGSVG::isFlushable()
+{
     return false;
 }
 
-void SkSVGSVG::translate(SkSVGParser& parser, bool defState) {
+void SkSVGSVG::translate(SkSVGParser& parser, bool defState)
+{
     SkScalar height, width;
     SkScalar viewBox[4];
     const char* hSuffix = SkParse::FindScalar(f_height.c_str(), &height);
@@ -44,10 +45,9 @@ void SkSVGSVG::translate(SkSVGParser& parser, bool defState) {
         width = SkScalarMulDiv(width, SK_Scalar1 * 72, SK_Scalar1 * 96);
     SkParse::FindScalars(f_viewBox.c_str(), viewBox, 4);
     SkRect box = SkRect::MakeLTRB(viewBox[0] / width, viewBox[1] / height,
-                                  viewBox[2] / width, viewBox[3] / height);
-    if (box.fLeft == 0 && box.fTop == 0 &&
-        box.fRight == SK_Scalar1 && box.fBottom == SK_Scalar1)
-            return;
+        viewBox[2] / width, viewBox[3] / height);
+    if (box.fLeft == 0 && box.fTop == 0 && box.fRight == SK_Scalar1 && box.fBottom == SK_Scalar1)
+        return;
     parser._startElement("matrix");
     if (box.fLeft != 0) {
         SkString x;

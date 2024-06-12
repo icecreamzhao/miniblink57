@@ -43,7 +43,7 @@
 
 namespace WTF {
 class CString;
-class CStringBuffer;
+class CStringImpl;
 }
 
 namespace blink {
@@ -61,10 +61,7 @@ public:
 
     WebCString() { }
 
-    WebCString(const char* data, size_t len)
-    {
-        assign(data, len);
-    }
+    WebCString(const char* data, size_t len) { assign(data, len); }
 
     WebCString(const WebCString& s) { assign(s); }
 
@@ -122,8 +119,8 @@ public:
 #endif
 
 private:
-    BLINK_COMMON_EXPORT void assign(WTF::CStringBuffer*);
-    WebPrivatePtr<WTF::CStringBuffer> m_private;
+    BLINK_COMMON_EXPORT void assign(WTF::CStringImpl*);
+    WebPrivatePtr<WTF::CStringImpl> m_private;
 };
 
 inline bool operator<(const WebCString& a, const WebCString& b)

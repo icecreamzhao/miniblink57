@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,10 +5,9 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGCircle.h"
-#include "SkSVGParser.h"
 #include "SkParse.h"
+#include "SkSVGParser.h"
 #include <stdio.h>
 
 const SkSVGAttribute SkSVGCircle::gAttributes[] = {
@@ -20,7 +18,8 @@ const SkSVGAttribute SkSVGCircle::gAttributes[] = {
 
 DEFINE_SVG_INFO(Circle)
 
-void SkSVGCircle::translate(SkSVGParser& parser, bool defState) {
+void SkSVGCircle::translate(SkSVGParser& parser, bool defState)
+{
     parser._startElement("oval");
     INHERITED::translate(parser, defState);
     SkScalar cx, cy, r;

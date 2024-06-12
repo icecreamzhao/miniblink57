@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/battery/BatteryManager.h"
 
+#include "core/dom/DOMException.h"
 #include "core/dom/Document.h"
 #include "core/events/Event.h"
 #include "modules/battery/BatteryDispatcher.h"
-#include "modules/battery/BatteryStatus.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
@@ -19,27 +19,22 @@ BatteryManager* BatteryManager::create(ExecutionContext* context)
     return batteryManager;
 }
 
-BatteryManager::~BatteryManager()
-{
-#if !ENABLE(OILPAN)
-    stopUpdating();
-#endif
-}
+BatteryManager::~BatteryManager() { }
 
 BatteryManager::BatteryManager(ExecutionContext* context)
-    : ActiveDOMObject(context)
+    : SuspendableObject(context)
     , PlatformEventController(toDocument(context)->page())
-    , m_batteryStatus(BatteryStatus::create())
 {
 }
 
 ScriptPromise BatteryManager::startRequest(ScriptState* scriptState)
 {
     if (!m_batteryProperty) {
-        m_batteryProperty = new BatteryProperty(scriptState->executionContext(), this, BatteryProperty::Ready);
+        m_batteryProperty = new BatteryProperty(scriptState->getExecutionContext(),
+            this, BatteryProperty::Ready);
 
         // If the context is in a stopped state already, do not start updating.
-        if (!executionContext() || executionContext()->activeDOMObjectsAreStopped()) {
+        if (!getExecutionContext() || getExecutionContext()->isContextDestroyed()) {
             m_batteryProperty->resolve(this);
         } else {
             m_hasEventListener = true;
@@ -52,50 +47,48 @@ ScriptPromise BatteryManager::startRequest(ScriptState* scriptState)
 
 bool BatteryManager::charging()
 {
-    return m_batteryStatus->charging();
+    return m_batteryStatus.charging();
 }
 
 double BatteryManager::chargingTime()
 {
-    return m_batteryStatus->chargingTime();
+    return m_batteryStatus.charging_time();
 }
 
 double BatteryManager::dischargingTime()
 {
-    return m_batteryStatus->dischargingTime();
+    return m_batteryStatus.discharging_time();
 }
 
 double BatteryManager::level()
 {
-    return m_batteryStatus->level();
+    return m_batteryStatus.level();
 }
 
 void BatteryManager::didUpdateData()
 {
-    ASSERT(m_batteryProperty);
+    DCHECK(m_batteryProperty);
 
-    BatteryStatus* oldStatus = m_batteryStatus;
-    m_batteryStatus = BatteryDispatcher::instance().latestData();
+    BatteryStatus oldStatus = m_batteryStatus;
+    m_batteryStatus = *BatteryDispatcher::instance().latestData();
 
-    if (m_batteryProperty->state() == ScriptPromisePropertyBase::Pending) {
+    if (m_batteryProperty->getState() == ScriptPromisePropertyBase::Pending) {
         m_batteryProperty->resolve(this);
         return;
     }
 
-    Document* document = toDocument(executionContext());
-    ASSERT(document);
-    if (document->activeDOMObjectsAreSuspended() || document->activeDOMObjectsAreStopped())
+    Document* document = toDocument(getExecutionContext());
+    DCHECK(document);
+    if (document->isContextSuspended() || document->isContextDestroyed())
         return;
 
-    ASSERT(oldStatus);
-
-    if (m_batteryStatus->charging() != oldStatus->charging())
+    if (m_batteryStatus.charging() != oldStatus.charging())
         dispatchEvent(Event::create(EventTypeNames::chargingchange));
-    if (m_batteryStatus->chargingTime() != oldStatus->chargingTime())
+    if (m_batteryStatus.charging_time() != oldStatus.charging_time())
         dispatchEvent(Event::create(EventTypeNames::chargingtimechange));
-    if (m_batteryStatus->dischargingTime() != oldStatus->dischargingTime())
+    if (m_batteryStatus.discharging_time() != oldStatus.discharging_time())
         dispatchEvent(Event::create(EventTypeNames::dischargingtimechange));
-    if (m_batteryStatus->level() != oldStatus->level())
+    if (m_batteryStatus.level() != oldStatus.level())
         dispatchEvent(Event::create(EventTypeNames::levelchange));
 }
 
@@ -126,10 +119,10 @@ void BatteryManager::resume()
     startUpdating();
 }
 
-void BatteryManager::stop()
+void BatteryManager::contextDestroyed(ExecutionContext*)
 {
     m_hasEventListener = false;
-    m_batteryProperty.clear();
+    m_batteryProperty = nullptr;
     stopUpdating();
 }
 
@@ -137,16 +130,15 @@ bool BatteryManager::hasPendingActivity() const
 {
     // Prevent V8 from garbage collecting the wrapper object if there are
     // event listeners attached to it.
-    return hasEventListeners();
+    return getExecutionContext() && hasEventListeners();
 }
 
 DEFINE_TRACE(BatteryManager)
 {
     visitor->trace(m_batteryProperty);
-    visitor->trace(m_batteryStatus);
     PlatformEventController::trace(visitor);
-    RefCountedGarbageCollectedEventTargetWithInlineData<BatteryManager>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    EventTargetWithInlineData::trace(visitor);
+    SuspendableObject::trace(visitor);
 }
 
 } // namespace blink

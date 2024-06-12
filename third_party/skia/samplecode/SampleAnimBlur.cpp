@@ -8,11 +8,12 @@
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
 #include "SkBlurMaskFilter.h"
-#include "SkColorPriv.h"
 #include "SkCanvas.h"
+#include "SkColorPriv.h"
 #include "SkRandom.h"
 
-SkScalar get_anim_sin(double secs, SkScalar amplitude, SkScalar periodInSec, SkScalar phaseInSec) {
+SkScalar get_anim_sin(double secs, SkScalar amplitude, SkScalar periodInSec, SkScalar phaseInSec)
+{
     if (!periodInSec) {
         return 0;
     }
@@ -24,11 +25,16 @@ SkScalar get_anim_sin(double secs, SkScalar amplitude, SkScalar periodInSec, SkS
 
 class AnimBlurView : public SampleView {
 public:
-    AnimBlurView() : fBlurSigma(0), fCircleRadius(100) {}
+    AnimBlurView()
+        : fBlurSigma(0)
+        , fCircleRadius(100)
+    {
+    }
 
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "AnimBlur");
             return true;
@@ -36,7 +42,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         static const SkBlurStyle gStyles[] = {
             kNormal_SkBlurStyle,
             kInner_SkBlurStyle,
@@ -46,20 +53,19 @@ protected:
         SkRandom random;
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(gStyles); ++i) {
-            SkMaskFilter* mf = SkBlurMaskFilter::Create(
-                                       gStyles[i],
-                                       fBlurSigma,
-                                       SkBlurMaskFilter::kHighQuality_BlurFlag);
             SkPaint paint;
-            SkSafeUnref(paint.setMaskFilter(mf));
+            paint.setMaskFilter(SkBlurMaskFilter::Make(gStyles[i],
+                fBlurSigma,
+                SkBlurMaskFilter::kHighQuality_BlurFlag));
             paint.setColor(random.nextU() | 0xff000000);
             canvas->drawCircle(200 * SK_Scalar1 + 400 * (i % 2) * SK_Scalar1,
-                               200 * SK_Scalar1 + i / 2 * 400 * SK_Scalar1,
-                               fCircleRadius, paint);
+                200 * SK_Scalar1 + i / 2 * 400 * SK_Scalar1,
+                fCircleRadius, paint);
         }
     }
 
-    bool onAnimate(const SkAnimTimer& timer) override {
+    bool onAnimate(const SkAnimTimer& timer) override
+    {
         fBlurSigma = get_anim_sin(timer.secs(), 100, 4, 5);
         fCircleRadius = 3 + get_anim_sin(timer.secs(), 150, 25, 3);
         return true;

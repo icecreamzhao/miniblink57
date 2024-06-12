@@ -28,12 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 // This test files starts with 'SVG' because /^SVG/ is used as a check
 // for SVG interfaces (to use SVGNames for [Reflect] attributes)
 [
     DependentLifetime,
 ] interface SVGTestInterface {
     [Reflect] attribute DOMString type; // Test SVGNames namespace
-    // [Immutable] attribute SVGPoint immutablePoint; // [Immutable] is a nop
 };

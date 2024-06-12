@@ -25,6 +25,8 @@
 
 namespace blink {
 
+class SVGElementProxySet;
+
 enum LayoutSVGResourceType {
     MaskerResourceType,
     MarkerResourceType,
@@ -35,38 +37,38 @@ enum LayoutSVGResourceType {
     ClipperResourceType
 };
 
-class DeprecatedPaintLayer;
-
 class LayoutSVGResourceContainer : public LayoutSVGHiddenContainer {
 public:
     explicit LayoutSVGResourceContainer(SVGElement*);
-    virtual ~LayoutSVGResourceContainer();
+    ~LayoutSVGResourceContainer() override;
 
     virtual void removeAllClientsFromCache(bool markForInvalidation = true) = 0;
-    virtual void removeClientFromCache(LayoutObject*, bool markForInvalidation = true) = 0;
+    virtual void removeClientFromCache(LayoutObject*,
+        bool markForInvalidation = true)
+        = 0;
 
-    virtual void layout() override;
-    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override final;
-    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectSVGResourceContainer || LayoutSVGHiddenContainer::isOfType(type); }
+    void layout() override;
+    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) final;
+    bool isOfType(LayoutObjectType type) const override
+    {
+        return type == LayoutObjectSVGResourceContainer || LayoutSVGHiddenContainer::isOfType(type);
+    }
 
     virtual LayoutSVGResourceType resourceType() const = 0;
 
     bool isSVGPaintServer() const
     {
         LayoutSVGResourceType resourceType = this->resourceType();
-        return resourceType == PatternResourceType
-            || resourceType == LinearGradientResourceType
-            || resourceType == RadialGradientResourceType;
+        return resourceType == PatternResourceType || resourceType == LinearGradientResourceType || resourceType == RadialGradientResourceType;
     }
 
     void idChanged();
-    void addClientLayer(Node*);
-    void addClientLayer(DeprecatedPaintLayer*);
-    void removeClientLayer(DeprecatedPaintLayer*);
 
     void invalidateCacheAndMarkForLayout(SubtreeLayoutScope* = nullptr);
 
-    static void markForLayoutAndParentResourceInvalidation(LayoutObject*, bool needsLayout = true);
+    static void markForLayoutAndParentResourceInvalidation(
+        LayoutObject*,
+        bool needsLayout = true);
 
     void clearInvalidationMask() { m_invalidationMask = 0; }
 
@@ -79,12 +81,15 @@ protected:
         ParentOnlyInvalidation = 1 << 3
     };
 
-    // Used from the invalidateClient/invalidateClients methods from classes, inheriting from us.
+    // Used from the invalidateClient/invalidateClients methods from classes,
+    // inheriting from us.
     void markAllClientsForInvalidation(InvalidationMode);
-    void markAllClientLayersForInvalidation();
     void markClientForInvalidation(LayoutObject*, InvalidationMode);
 
-    virtual void willBeDestroyed() override;
+    void notifyContentChanged();
+    SVGElementProxySet* elementProxySet();
+
+    void willBeDestroyed() override;
 
     bool m_isInLayout;
 
@@ -92,11 +97,13 @@ private:
     friend class SVGResourcesCache;
     void addClient(LayoutObject*);
     void removeClient(LayoutObject*);
+    void detachAllClients();
 
     void registerResource();
 
     AtomicString m_id;
-    // Track global (markAllClientsForInvalidation) invals to avoid redundant crawls.
+    // Track global (markAllClientsForInvalidation) invals to avoid redundant
+    // crawls.
     unsigned m_invalidationMask : 8;
 
     unsigned m_registered : 1;
@@ -104,10 +111,11 @@ private:
     // 22 padding bits available
 
     HashSet<LayoutObject*> m_clients;
-    HashSet<DeprecatedPaintLayer*> m_clientLayers;
 };
 
-inline LayoutSVGResourceContainer* getLayoutSVGResourceContainerById(TreeScope& treeScope, const AtomicString& id)
+inline LayoutSVGResourceContainer* getLayoutSVGResourceContainerById(
+    TreeScope& treeScope,
+    const AtomicString& id)
 {
     if (id.isEmpty())
         return nullptr;
@@ -118,7 +126,7 @@ inline LayoutSVGResourceContainer* getLayoutSVGResourceContainerById(TreeScope& 
     return nullptr;
 }
 
-template<typename Layout>
+template <typename Layout>
 Layout* getLayoutSVGResourceById(TreeScope& treeScope, const AtomicString& id)
 {
     if (LayoutSVGResourceContainer* container = getLayoutSVGResourceContainerById(treeScope, id)) {
@@ -128,11 +136,14 @@ Layout* getLayoutSVGResourceById(TreeScope& treeScope, const AtomicString& id)
     return nullptr;
 }
 
-DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutSVGResourceContainer, isSVGResourceContainer());
+DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutSVGResourceContainer,
+    isSVGResourceContainer());
 
-#define DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(thisType, typeName) \
-    DEFINE_TYPE_CASTS(thisType, LayoutSVGResourceContainer, resource, resource->resourceType() == typeName, resource.resourceType() == typeName)
+#define DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(thisType, typeName)     \
+    DEFINE_TYPE_CASTS(thisType, LayoutSVGResourceContainer, resource, \
+        resource->resourceType() == typeName,                         \
+        resource.resourceType() == typeName)
 
-}
+} // namespace blink
 
 #endif

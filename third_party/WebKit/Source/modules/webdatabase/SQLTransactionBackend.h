@@ -35,6 +35,7 @@
 #include "wtf/Deque.h"
 #include "wtf/Forward.h"
 #include "wtf/ThreadingPrimitives.h"
+#include <memory>
 
 namespace blink {
 
@@ -46,7 +47,8 @@ class SQLTransaction;
 class SQLTransactionBackend;
 class SQLValue;
 
-class SQLTransactionWrapper : public GarbageCollectedFinalized<SQLTransactionWrapper> {
+class SQLTransactionWrapper
+    : public GarbageCollectedFinalized<SQLTransactionWrapper> {
 public:
     virtual ~SQLTransactionWrapper() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
@@ -56,9 +58,14 @@ public:
     virtual void handleCommitFailedAfterPostflight(SQLTransactionBackend*) = 0;
 };
 
-class SQLTransactionBackend final : public GarbageCollectedFinalized<SQLTransactionBackend>, public SQLTransactionStateMachine<SQLTransactionBackend> {
+class SQLTransactionBackend final
+    : public GarbageCollectedFinalized<SQLTransactionBackend>,
+      public SQLTransactionStateMachine<SQLTransactionBackend> {
 public:
-    static SQLTransactionBackend* create(Database*, SQLTransaction*, SQLTransactionWrapper*, bool readOnly);
+    static SQLTransactionBackend* create(Database*,
+        SQLTransaction*,
+        SQLTransactionWrapper*,
+        bool readOnly);
 
     ~SQLTransactionBackend() override;
     DECLARE_TRACE();
@@ -75,10 +82,16 @@ public:
     SQLErrorData* transactionError();
     SQLStatement* currentStatement();
     void setShouldRetryCurrentStatement(bool);
-    void executeSQL(SQLStatement*, const String& statement, const Vector<SQLValue>& arguments, int permissions);
+    void executeSQL(SQLStatement*,
+        const String& statement,
+        const Vector<SQLValue>& arguments,
+        int permissions);
 
 private:
-    SQLTransactionBackend(Database*, SQLTransaction*, SQLTransactionWrapper*, bool readOnly);
+    SQLTransactionBackend(Database*,
+        SQLTransaction*,
+        SQLTransactionWrapper*,
+        bool readOnly);
 
     void doCleanup();
 
@@ -105,12 +118,12 @@ private:
 
     void getNextStatement();
 
-    Member<SQLTransaction> m_frontend;
-    Member<SQLStatementBackend> m_currentStatementBackend;
+    CrossThreadPersistent<SQLTransaction> m_frontend;
+    CrossThreadPersistent<SQLStatementBackend> m_currentStatementBackend;
 
     Member<Database> m_database;
     Member<SQLTransactionWrapper> m_wrapper;
-    OwnPtr<SQLErrorData> m_transactionError;
+    std::unique_ptr<SQLErrorData> m_transactionError;
 
     bool m_hasCallback;
     bool m_hasSuccessCallback;
@@ -122,9 +135,9 @@ private:
     bool m_hasVersionMismatch;
 
     Mutex m_statementMutex;
-    HeapDeque<Member<SQLStatementBackend>> m_statementQueue;
+    Deque<CrossThreadPersistent<SQLStatementBackend>> m_statementQueue;
 
-    OwnPtr<SQLiteTransaction> m_sqliteTransaction;
+    std::unique_ptr<SQLiteTransaction> m_sqliteTransaction;
 };
 
 } // namespace blink

@@ -34,8 +34,9 @@
 // The more *minor* extended attribute should be put in this file.
 
 [
+    ActiveScriptWrappable, // Covered by [ActiveScriptWrappable]
     Constructor,
-    DependentLifetime, // Covered by [ActiveDOMObject]
+    DependentLifetime, // Covered by [DependentLifetime]
     SetWrapperReferenceFrom=ownerNode, // Conflicts with [SetWrapperReferenceTo]
     // Note that Exposed(Arguments) has no effect on bindings-tests. It is
     // processed in generate_global_constructors.py.
@@ -44,14 +45,17 @@
     // This interface has only runtime enabled constants.
     [RuntimeEnabled=FeatureName] const unsigned short CONST_VALUE_1 = 1;
 
+    // Legacy caller with an identifier
+    legacycaller TestInterfaceEmpty legacyCaller(unsigned long index);
+
     // Indexed property operations with an identifier
     [RaisesException] getter TestInterfaceEmpty item(unsigned long index);
-    [RaisesException, TypeChecking=Interface] setter TestInterfaceEmpty setItem(unsigned long index, TestInterfaceEmpty value);
+    [RaisesException] setter TestInterfaceEmpty setItem(unsigned long index, TestInterfaceEmpty value);
     [RaisesException] deleter boolean deleteItem(unsigned long index);
 
     // Named property operations with an identifier
     [RaisesException] getter TestInterfaceEmpty namedItem(DOMString name);
-    [RaisesException, TypeChecking=Interface] setter TestInterfaceEmpty setNamedItem(DOMString name, TestInterfaceEmpty? value);
+    [RaisesException] setter TestInterfaceEmpty setNamedItem(DOMString name, TestInterfaceEmpty? value);
     [RaisesException] deleter boolean deleteNamedItem(DOMString name);
 
     stringifier DOMString stringifierMethod();

@@ -14,7 +14,8 @@ class ExecutionContext;
 class FrameRequestCallback;
 
 class CORE_EXPORT FrameRequestCallbackCollection final {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     explicit FrameRequestCallbackCollection(ExecutionContext*);
 
@@ -28,13 +29,14 @@ public:
     DECLARE_TRACE();
 
 private:
-    using CallbackList = PersistentHeapVectorWillBeHeapVector<Member<FrameRequestCallback>>;
+    using CallbackList = HeapVector<Member<FrameRequestCallback>>;
     CallbackList m_callbacks;
-    CallbackList m_callbacksToInvoke; // only non-empty while inside executeCallbacks
+    CallbackList
+        m_callbacksToInvoke; // only non-empty while inside executeCallbacks
 
     CallbackId m_nextCallbackId = 0;
 
-    RawPtrWillBeMember<ExecutionContext> m_context;
+    Member<ExecutionContext> m_context;
 };
 
 } // namespace blink

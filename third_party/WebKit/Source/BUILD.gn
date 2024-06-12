@@ -9,6 +9,28 @@ if (is_clang) {
 
 visibility = [ "//third_party/WebKit/*" ]
 
+# arguments --------------------------------------------------------------------
+
+declare_args() {
+  # Set to true to enable the clang plugin that checks the usage of the  Blink
+  # garbage-collection infrastructure during compilation.
+  blink_gc_plugin = true
+
+  # Set to true to have the clang Blink GC plugin emit class graph (in JSON)
+  # with typed pointer edges; for debugging or other (internal) uses.
+  blink_gc_plugin_option_do_dump_graph = false
+
+  # Set to true to have the clang Blink GC plugin additionally check if
+  # a class has an empty destructor which would be unnecessarily invoked
+  # when finalized.
+  blink_gc_plugin_option_warn_unneeded_finalizer = false
+
+  # Set to true to have the clang Blink GC plugin use Chromium-style naming
+  # rather than legacy Blink name.
+  # TODO(https://crbug.com/675879): Remove this option after the Blink rename.
+  blink_gc_plugin_option_use_chromium_style_naming = false
+}
+
 # features ---------------------------------------------------------------------
 
 config("features") {
@@ -24,10 +46,42 @@ config("inside_blink") {
   ]
 }
 
+# blink_pch --------------------------------------------------------------------
+
+# Precompiled headers can save a lot of time compiling since Blink has
+# a lot of source in header files.
+
+import("//build/config/pch.gni")
+
+config("blink_pch") {
+  if (enable_precompiled_headers) {
+    if (is_win) {
+      # This is a string rather than a file GN knows about. It has to match
+      # exactly what's in the /FI flag below, and what might appear in the
+      # source code in quotes for an #include directive.
+      precompiled_header = rebase_path("build/win/Precompile.h", root_build_dir)
+
+      # This is a file that GN will compile with the above header. It will be
+      # implicitly added to the sources (potentially multiple times, with one
+      # variant for each language used in the target).
+      precompiled_source =
+          "//third_party/WebKit/Source/build/win/Precompile.cpp"
+
+      # Force include the header.
+      cflags = [ "/FI$precompiled_header" ]
+    }
+  }
+}
+
 # config -----------------------------------------------------------------------
 
 config("config") {
-  include_dirs = [ ".", ".." ]
+  include_dirs = [
+    ".",
+    "..",
+    "$root_gen_dir/blink",
+    "$root_gen_dir/third_party/WebKit",
+  ]
 
   cflags = []
   defines = []
@@ -43,35 +97,61 @@ config("config") {
   }
 
   if (is_win) {
-    if (component_mode == "shared_library") {
+    if (is_component_build) {
       defines += [ "USING_V8_SHARED" ]
     }
-  } else {  # ! Windows
-    # TODO(GYP) this should be based on gcc_version >= 46 but GN doesn't have a
-    # concept of GCC version yet.
-
-    # Disable warnings about c++0x compatibility, as some names (such as
-    # nullptr) conflict with upcoming c++0x types.
-    cflags_cc = [ "-Wno-c++0x-compat" ]
   }
 
-  if (is_linux && current_cpu == "arm") {
-    # Due to a bug in gcc arm, we get warnings about uninitialized
-    # timesNewRoman.unstatic.3258 and colorTransparent.unstatic.4879.
-    cflags += [ "-Wno-uninitialized" ]
-  }
+  if (is_clang && blink_gc_plugin && clang_use_chrome_plugins) {
+    # On Windows, the plugin is built directly into clang, so there's
+    # no need to load it dynamically.
+    if (!is_win) {
+      _blink_gc_plugin_dll_extension = "so"
+      if (is_mac || is_ios) {
+        _blink_gc_plugin_dll_extension = "dylib"
+      }
+      cflags += [
+        "-Xclang",
+        "-load",
+        "-Xclang",
+        rebase_path(
+            "${clang_base_path}/lib/libBlinkGCPlugin.${_blink_gc_plugin_dll_extension}",
+            root_build_dir),
+      ]
+    }
+    cflags += [
+      "-Xclang",
+      "-add-plugin",
+      "-Xclang",
+      "blink-gc-plugin",
+    ]
 
-  if (is_clang) {
-    if (blink_gc_plugin && clang_use_chrome_plugins) {
-      # TODO(GYP)
-      #'cflags': ['<!@(../../../tools/clang/scripts/blink_gc_plugin_flags.py enable-oilpan=<(enable_oilpan) dump-graph=<(blink_gc_plugin_dump_graph))'],
+    # Add arguments for enabled GC plugin options:
+    if (blink_gc_plugin_option_do_dump_graph) {
+      cflags += [
+        "-Xclang",
+        "-plugin-arg-blink-gc-plugin",
+        "-Xclang",
+        "dump-graph",
+      ]
+    }
+    if (blink_gc_plugin_option_warn_unneeded_finalizer) {
+      cflags += [
+        "-Xclang",
+        "-plugin-arg-blink-gc-plugin",
+        "-Xclang",
+        "warn-unneeded-finalizer",
+      ]
+    }
+    if (blink_gc_plugin_option_use_chromium_style_naming) {
+      cflags += [
+        "-Xclang",
+        "-plugin-arg-blink-gc-plugin",
+        "-Xclang",
+        "use-chromium-style-naming",
+      ]
     }
   }
-
-  ## TODO(GYP) : gn does not yet support use_system_icu.
-  #if (use_system_icu) {
-  #  defines += [ "USING_SYSTEM_ICU" ]
-  #}
 }
 
 # The follow configs apply to all targets except for unit tests, which rely on
@@ -81,5 +161,13 @@ config("non_test_config") {
 
   if (is_clang) {
     cflags += [ "-Wglobal-constructors" ]
+  }
+}
+
+if (is_mac) {
+  # This sets up precompiled headers for Mac.
+  config("mac_precompiled_headers") {
+    precompiled_header = rebase_path("build/mac/Prefix.h", root_build_dir)
+    precompiled_source = "//third_party/WebKit/Source/build/mac/Prefix.h"
   }
 }

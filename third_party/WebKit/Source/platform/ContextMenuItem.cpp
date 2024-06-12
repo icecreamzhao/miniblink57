@@ -23,14 +23,17 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/ContextMenuItem.h"
 
 #include "platform/ContextMenu.h"
 
 namespace blink {
 
-ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction action, const String& title, const String& icon, ContextMenu* subMenu)
+ContextMenuItem::ContextMenuItem(ContextMenuItemType type,
+    ContextMenuAction action,
+    const String& title,
+    const String& icon,
+    ContextMenu* subMenu)
     : m_type(type)
     , m_action(action)
     , m_title(title)
@@ -42,7 +45,12 @@ ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction act
         setSubMenu(subMenu);
 }
 
-ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction action, const String& title, const String& icon, bool enabled, bool checked)
+ContextMenuItem::ContextMenuItem(ContextMenuItemType type,
+    ContextMenuAction action,
+    const String& title,
+    const String& icon,
+    bool enabled,
+    bool checked)
     : m_type(type)
     , m_action(action)
     , m_title(title)
@@ -52,7 +60,11 @@ ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction act
 {
 }
 
-ContextMenuItem::ContextMenuItem(ContextMenuAction action, const String& title, bool enabled, bool checked, const Vector<ContextMenuItem>& subMenuItems)
+ContextMenuItem::ContextMenuItem(ContextMenuAction action,
+    const String& title,
+    bool enabled,
+    bool checked,
+    const Vector<ContextMenuItem>& subMenuItems)
     : m_type(SubmenuType)
     , m_action(action)
     , m_title(title)
@@ -62,9 +74,7 @@ ContextMenuItem::ContextMenuItem(ContextMenuAction action, const String& title, 
 {
 }
 
-ContextMenuItem::~ContextMenuItem()
-{
-}
+ContextMenuItem::~ContextMenuItem() { }
 
 void ContextMenuItem::setSubMenu(ContextMenu* subMenu)
 {

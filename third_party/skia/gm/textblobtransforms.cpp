@@ -18,10 +18,11 @@ namespace skiagm {
 class TextBlobTransforms : public GM {
 public:
     // This gm tests that textblobs can be translated, rotated, and scaled
-    TextBlobTransforms() {}
+    TextBlobTransforms() { }
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         SkTextBlobBuilder builder;
 
         // make textblob.  To stress distance fields, we choose sizes appropriately
@@ -52,17 +53,20 @@ protected:
         fBlob.reset(builder.build());
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("textblobtransforms");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
 
-        canvas->drawColor(SK_ColorGRAY);
+        canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
 
         SkPaint paint;
 
@@ -72,7 +76,7 @@ protected:
         // Colors were chosen to map to pairs of canonical colors.  The GPU Backend will cache A8
         // Texture Blobs based on the canonical color they map to.  Canonical colors are used to
         // create masks.  For A8 there are 8 of them.
-        //SkColor colors[] = {SK_ColorCYAN, SK_ColorLTGRAY, SK_ColorYELLOW, SK_ColorWHITE};
+        //SkColor colors[] = {SK_ColorCYAN, sk_tool_utils::color_to_565(SK_ColorLTGRAY), SK_ColorYELLOW, SK_ColorWHITE};
 
         SkScalar xOffset = SkScalarCeilToScalar(bounds.width());
         SkScalar yOffset = SkScalarCeilToScalar(bounds.height());
@@ -105,7 +109,7 @@ protected:
         canvas->rotate(90.f);
 
         // and scales
-        canvas->translate(- 3 * xOffset, 3 * yOffset);
+        canvas->translate(-3 * xOffset, 3 * yOffset);
         canvas->scale(1.5f, 1.5f);
         canvas->drawTextBlob(fBlob, 0, 0, paint);
         canvas->translate(xOffset, 0);
@@ -168,5 +172,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(TextBlobTransforms); )
+DEF_GM(return new TextBlobTransforms;)
 }

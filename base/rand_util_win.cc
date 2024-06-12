@@ -4,6 +4,8 @@
 
 #include "base/rand_util.h"
 
+#include <stddef.h>
+#include <stdint.h>
 #include <windows.h>
 
 // #define needed to link in RtlGenRandom(), a.k.a. SystemFunction036.  See the
@@ -18,34 +20,30 @@
 
 #include "base/logging.h"
 
-#ifdef max
 #undef max
-#endif
-
-#ifdef min
 #undef min
-#endif
 
 namespace base {
 
 // NOTE: This function must be cryptographically secure. http://crbug.com/140076
-uint64 RandUint64() {
-  uint64 number;
-  RandBytes(&number, sizeof(number));
-  return number;
+uint64_t RandUint64()
+{
+    uint64_t number;
+    RandBytes(&number, sizeof(number));
+    return number;
 }
 
-void RandBytes(void* output, size_t output_length) {
-  char* output_ptr = static_cast<char*>(output);
-  while (output_length > 0) {
-    const ULONG output_bytes_this_pass = static_cast<ULONG>(std::min(
-        output_length, static_cast<size_t>(std::numeric_limits<ULONG>::max())));
-    const bool success =
-        RtlGenRandom(output_ptr, output_bytes_this_pass) != FALSE;
-    CHECK(success);
-    output_length -= output_bytes_this_pass;
-    output_ptr += output_bytes_this_pass;
-  }
+void RandBytes(void* output, size_t output_length)
+{
+    char* output_ptr = static_cast<char*>(output);
+    while (output_length > 0) {
+        const ULONG output_bytes_this_pass = static_cast<ULONG>(std::min(
+            output_length, static_cast<size_t>(std::numeric_limits<ULONG>::max())));
+        const bool success = RtlGenRandom(output_ptr, output_bytes_this_pass) != FALSE;
+        CHECK(success);
+        output_length -= output_bytes_this_pass;
+        output_ptr += output_bytes_this_pass;
+    }
 }
 
-}  // namespace base
+} // namespace base

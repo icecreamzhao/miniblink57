@@ -28,27 +28,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableShadow.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableShadow::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableShadow::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     if (usesDefaultInterpolationWith(value))
         return defaultInterpolateTo(this, value, fraction);
 
     const AnimatableShadow* shadowList = toAnimatableShadow(value);
-    return AnimatableShadow::create(ShadowList::blend(m_shadowList.get(), shadowList->m_shadowList.get(), fraction, m_currentColor), m_currentColor);
+    return AnimatableShadow::create(
+        ShadowList::blend(m_shadowList.get(), shadowList->m_shadowList.get(),
+            fraction, m_currentColor),
+        m_currentColor);
 }
 
-bool AnimatableShadow::usesDefaultInterpolationWith(const AnimatableValue* value) const
+bool AnimatableShadow::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
 {
     const AnimatableShadow* target = toAnimatableShadow(value);
     if (!m_shadowList || !target->m_shadowList)
         return false;
 
-    size_t minLength = std::min(m_shadowList->shadows().size(), target->m_shadowList->shadows().size());
+    size_t minLength = std::min(m_shadowList->shadows().size(),
+        target->m_shadowList->shadows().size());
     for (size_t i = 0; i < minLength; ++i) {
         ShadowStyle fromShadowStyle = m_shadowList->shadows()[i].style();
         ShadowStyle toShadowStyle = target->m_shadowList->shadows()[i].style();

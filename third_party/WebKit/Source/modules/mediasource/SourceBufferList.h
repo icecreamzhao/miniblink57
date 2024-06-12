@@ -31,6 +31,7 @@
 #ifndef SourceBufferList_h
 #define SourceBufferList_h
 
+#include "core/dom/ExecutionContext.h"
 #include "modules/EventTargetModules.h"
 #include "platform/heap/Handle.h"
 
@@ -39,29 +40,45 @@ namespace blink {
 class SourceBuffer;
 class GenericEventQueue;
 
-class SourceBufferList final : public RefCountedGarbageCollectedEventTargetWithInlineData<SourceBufferList> {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SourceBufferList);
+class SourceBufferList final : public EventTargetWithInlineData,
+                               public ContextClient {
     DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(SourceBufferList);
+
 public:
-    static SourceBufferList* create(ExecutionContext* context, GenericEventQueue* asyncEventQueue)
+    static SourceBufferList* create(ExecutionContext* context,
+        GenericEventQueue* asyncEventQueue)
     {
         return new SourceBufferList(context, asyncEventQueue);
     }
     ~SourceBufferList() override;
 
     unsigned length() const { return m_list.size(); }
-    SourceBuffer* item(unsigned index) const { return (index < m_list.size()) ? m_list[index].get() : 0; }
+
+    DEFINE_ATTRIBUTE_EVENT_LISTENER(addsourcebuffer);
+    DEFINE_ATTRIBUTE_EVENT_LISTENER(removesourcebuffer);
+
+    SourceBuffer* item(unsigned index) const
+    {
+        return (index < m_list.size()) ? m_list[index].get() : 0;
+    }
 
     void add(SourceBuffer*);
     void insert(size_t position, SourceBuffer*);
     void remove(SourceBuffer*);
     size_t find(SourceBuffer* buffer) { return m_list.find(buffer); }
-    bool contains(SourceBuffer* buffer) { return m_list.find(buffer) != kNotFound; }
+    bool contains(SourceBuffer* buffer)
+    {
+        return m_list.find(buffer) != kNotFound;
+    }
     void clear();
 
     // EventTarget interface
     const AtomicString& interfaceName() const override;
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextClient::getExecutionContext();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -70,8 +87,7 @@ private:
 
     void scheduleEvent(const AtomicString&);
 
-    RawPtrWillBeMember<ExecutionContext> m_executionContext;
-    RawPtrWillBeMember<GenericEventQueue> m_asyncEventQueue;
+    Member<GenericEventQueue> m_asyncEventQueue;
 
     HeapVector<Member<SourceBuffer>> m_list;
 };

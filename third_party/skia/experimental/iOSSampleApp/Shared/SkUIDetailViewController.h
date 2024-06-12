@@ -5,10 +5,10 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#import <UIKit/UIKit.h>
 #import "SkOptionsTableViewController.h"
 #import "SkUIRootViewController.h"
 #import "SkUIView.h"
+#import <UIKit/UIKit.h>
 
 class SampleWindow;
 class SkData;
@@ -36,7 +36,7 @@ class SkData;
 - (void)presentOptions;
 
 //SplitView popover management
-- (void)showRootPopoverButtonItem:(UIBarButtonItem *)barButtonItem;
-- (void)invalidateRootPopoverButtonItem:(UIBarButtonItem *)barButtonItem;
+- (void)showRootPopoverButtonItem:(UIBarButtonItem*)barButtonItem;
+- (void)invalidateRootPopoverButtonItem:(UIBarButtonItem*)barButtonItem;
 
 @end

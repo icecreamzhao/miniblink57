@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/geometry/DoubleSize.h"
 #include "platform/geometry/LayoutSize.h"
+#include "wtf/text/WTFString.h"
 
 #include <limits>
 #include <math.h>
@@ -22,4 +22,9 @@ bool DoubleSize::isZero() const
     return fabs(m_width) < std::numeric_limits<double>::epsilon() && fabs(m_height) < std::numeric_limits<double>::epsilon();
 }
 
+String DoubleSize::toString() const
+{
+    return String::format("%lgx%lg", width(), height());
 }
+
+} // namespace blink

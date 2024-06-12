@@ -6,8 +6,6 @@
  * found in the LICENSE file.
  */
 
-
-
 #ifndef SkGrTexturePixelRef_DEFINED
 #define SkGrTexturePixelRef_DEFINED
 

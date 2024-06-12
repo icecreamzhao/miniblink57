@@ -1,7 +1,7 @@
 include_rules = [
     "+bindings",
     "+core",
-    "+heap",
+    "+device/vibration/vibration_manager.mojom-blink.h",
     "-modules",
     "+modules/ModulesExport.h",
     "+modules/vibration",

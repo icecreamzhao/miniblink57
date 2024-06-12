@@ -1,107 +1,115 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include "SkCGUtils.h"
+
+#include "SkTypes.h"
+#if defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
+
 #include "SkBitmap.h"
+#include "SkCGUtils.h"
 #include "SkColorPriv.h"
 
-static CGBitmapInfo ComputeCGAlphaInfo_RGBA(SkAlphaType at) {
+static CGBitmapInfo ComputeCGAlphaInfo_RGBA(SkAlphaType at)
+{
     CGBitmapInfo info = kCGBitmapByteOrder32Big;
     switch (at) {
-        case kUnknown_SkAlphaType:
-            break;
-        case kOpaque_SkAlphaType:
-            info |= kCGImageAlphaNoneSkipLast;
-            break;
-        case kPremul_SkAlphaType:
-            info |= kCGImageAlphaPremultipliedLast;
-            break;
-        case kUnpremul_SkAlphaType:
-            info |= kCGImageAlphaLast;
-            break;
+    case kUnknown_SkAlphaType:
+        break;
+    case kOpaque_SkAlphaType:
+        info |= kCGImageAlphaNoneSkipLast;
+        break;
+    case kPremul_SkAlphaType:
+        info |= kCGImageAlphaPremultipliedLast;
+        break;
+    case kUnpremul_SkAlphaType:
+        info |= kCGImageAlphaLast;
+        break;
     }
     return info;
 }
 
-static CGBitmapInfo ComputeCGAlphaInfo_BGRA(SkAlphaType at) {
+static CGBitmapInfo ComputeCGAlphaInfo_BGRA(SkAlphaType at)
+{
     CGBitmapInfo info = kCGBitmapByteOrder32Little;
     switch (at) {
-        case kUnknown_SkAlphaType:
-            break;
-        case kOpaque_SkAlphaType:
-            info |= kCGImageAlphaNoneSkipFirst;
-            break;
-        case kPremul_SkAlphaType:
-            info |= kCGImageAlphaPremultipliedFirst;
-            break;
-        case kUnpremul_SkAlphaType:
-            info |= kCGImageAlphaFirst;
-            break;
+    case kUnknown_SkAlphaType:
+        break;
+    case kOpaque_SkAlphaType:
+        info |= kCGImageAlphaNoneSkipFirst;
+        break;
+    case kPremul_SkAlphaType:
+        info |= kCGImageAlphaPremultipliedFirst;
+        break;
+    case kUnpremul_SkAlphaType:
+        info |= kCGImageAlphaFirst;
+        break;
     }
     return info;
 }
 
-static void SkBitmap_ReleaseInfo(void* info, const void* pixelData, size_t size) {
+static void SkBitmap_ReleaseInfo(void* info, const void* pixelData, size_t size)
+{
     SkBitmap* bitmap = reinterpret_cast<SkBitmap*>(info);
     delete bitmap;
 }
 
 static bool getBitmapInfo(const SkBitmap& bm,
-                          size_t* bitsPerComponent,
-                          CGBitmapInfo* info,
-                          bool* upscaleTo32) {
+    size_t* bitsPerComponent,
+    CGBitmapInfo* info,
+    bool* upscaleTo32)
+{
     if (upscaleTo32) {
         *upscaleTo32 = false;
     }
 
     switch (bm.colorType()) {
-        case kRGB_565_SkColorType:
+    case kRGB_565_SkColorType:
 #if 0
             // doesn't see quite right. Are they thinking 1555?
             *bitsPerComponent = 5;
             *info = kCGBitmapByteOrder16Little | kCGImageAlphaNone;
 #else
-            if (upscaleTo32) {
-                *upscaleTo32 = true;
-            }
-            // now treat like RGBA
-            *bitsPerComponent = 8;
-            *info = ComputeCGAlphaInfo_RGBA(kOpaque_SkAlphaType);
+        if (upscaleTo32) {
+            *upscaleTo32 = true;
+        }
+        // now treat like RGBA
+        *bitsPerComponent = 8;
+        *info = ComputeCGAlphaInfo_RGBA(kOpaque_SkAlphaType);
 #endif
-            break;
-        case kRGBA_8888_SkColorType:
-            *bitsPerComponent = 8;
-            *info = ComputeCGAlphaInfo_RGBA(bm.alphaType());
-            break;
-        case kBGRA_8888_SkColorType:
-            *bitsPerComponent = 8;
-            *info = ComputeCGAlphaInfo_BGRA(bm.alphaType());
-            break;
-        case kARGB_4444_SkColorType:
-            *bitsPerComponent = 4;
-            *info = kCGBitmapByteOrder16Little;
-            if (bm.isOpaque()) {
-                *info |= kCGImageAlphaNoneSkipLast;
-            } else {
-                *info |= kCGImageAlphaPremultipliedLast;
-            }
-            break;
-        default:
-            return false;
+        break;
+    case kRGBA_8888_SkColorType:
+        *bitsPerComponent = 8;
+        *info = ComputeCGAlphaInfo_RGBA(bm.alphaType());
+        break;
+    case kBGRA_8888_SkColorType:
+        *bitsPerComponent = 8;
+        *info = ComputeCGAlphaInfo_BGRA(bm.alphaType());
+        break;
+    case kARGB_4444_SkColorType:
+        *bitsPerComponent = 4;
+        *info = kCGBitmapByteOrder16Little;
+        if (bm.isOpaque()) {
+            *info |= kCGImageAlphaNoneSkipLast;
+        } else {
+            *info |= kCGImageAlphaPremultipliedLast;
+        }
+        break;
+    default:
+        return false;
     }
     return true;
 }
 
 static SkBitmap* prepareForImageRef(const SkBitmap& bm,
-                                    size_t* bitsPerComponent,
-                                    CGBitmapInfo* info) {
+    size_t* bitsPerComponent,
+    CGBitmapInfo* info)
+{
     bool upscaleTo32;
     if (!getBitmapInfo(bm, bitsPerComponent, info, &upscaleTo32)) {
-        return NULL;
+        return nullptr;
     }
 
     SkBitmap* copy;
@@ -117,13 +125,14 @@ static SkBitmap* prepareForImageRef(const SkBitmap& bm,
 }
 
 CGImageRef SkCreateCGImageRefWithColorspace(const SkBitmap& bm,
-                                            CGColorSpaceRef colorSpace) {
+    CGColorSpaceRef colorSpace)
+{
     size_t bitsPerComponent SK_INIT_TO_AVOID_WARNING;
-    CGBitmapInfo info       SK_INIT_TO_AVOID_WARNING;
+    CGBitmapInfo info SK_INIT_TO_AVOID_WARNING;
 
     SkBitmap* bitmap = prepareForImageRef(bm, &bitsPerComponent, &info);
-    if (NULL == bitmap) {
-        return NULL;
+    if (nullptr == bitmap) {
+        return nullptr;
     }
 
     const int w = bitmap->width();
@@ -135,18 +144,18 @@ CGImageRef SkCreateCGImageRefWithColorspace(const SkBitmap& bm,
     // proc, which will in turn unlock the pixels
     bitmap->lockPixels();
     CGDataProviderRef dataRef = CGDataProviderCreateWithData(bitmap, bitmap->getPixels(), s,
-                                                             SkBitmap_ReleaseInfo);
+        SkBitmap_ReleaseInfo);
 
     bool releaseColorSpace = false;
-    if (NULL == colorSpace) {
+    if (nullptr == colorSpace) {
         colorSpace = CGColorSpaceCreateDeviceRGB();
         releaseColorSpace = true;
     }
 
     CGImageRef ref = CGImageCreate(w, h, bitsPerComponent,
-                                   bitmap->bytesPerPixel() * 8,
-                                   bitmap->rowBytes(), colorSpace, info, dataRef,
-                                   NULL, false, kCGRenderingIntentDefault);
+        bitmap->bytesPerPixel() * 8,
+        bitmap->rowBytes(), colorSpace, info, dataRef,
+        nullptr, false, kCGRenderingIntentDefault);
 
     if (releaseColorSpace) {
         CGColorSpaceRelease(colorSpace);
@@ -155,7 +164,8 @@ CGImageRef SkCreateCGImageRefWithColorspace(const SkBitmap& bm,
     return ref;
 }
 
-void SkCGDrawBitmap(CGContextRef cg, const SkBitmap& bm, float x, float y) {
+void SkCGDrawBitmap(CGContextRef cg, const SkBitmap& bm, float x, float y)
+{
     CGImageRef img = SkCreateCGImageRef(bm);
 
     if (img) {
@@ -179,32 +189,38 @@ void SkCGDrawBitmap(CGContextRef cg, const SkBitmap& bm, float x, float y) {
 
 class SkAutoPDFRelease {
 public:
-    SkAutoPDFRelease(CGPDFDocumentRef doc) : fDoc(doc) {}
-    ~SkAutoPDFRelease() {
+    SkAutoPDFRelease(CGPDFDocumentRef doc)
+        : fDoc(doc)
+    {
+    }
+    ~SkAutoPDFRelease()
+    {
         if (fDoc) {
             CGPDFDocumentRelease(fDoc);
         }
     }
+
 private:
     CGPDFDocumentRef fDoc;
 };
 #define SkAutoPDFRelease(...) SK_REQUIRE_LOCAL_VAR(SkAutoPDFRelease)
 
-bool SkPDFDocumentToBitmap(SkStream* stream, SkBitmap* output) {
+bool SkPDFDocumentToBitmap(SkStream* stream, SkBitmap* output)
+{
     CGDataProviderRef data = SkCreateDataProviderFromStream(stream);
-    if (NULL == data) {
+    if (nullptr == data) {
         return false;
     }
 
     CGPDFDocumentRef pdf = CGPDFDocumentCreateWithProvider(data);
     CGDataProviderRelease(data);
-    if (NULL == pdf) {
+    if (nullptr == pdf) {
         return false;
     }
     SkAutoPDFRelease releaseMe(pdf);
 
     CGPDFPageRef page = CGPDFDocumentGetPage(pdf, 1);
-    if (NULL == page) {
+    if (nullptr == page) {
         return false;
     }
 
@@ -221,12 +237,12 @@ bool SkPDFDocumentToBitmap(SkStream* stream, SkBitmap* output) {
 
     size_t bitsPerComponent;
     CGBitmapInfo info;
-    getBitmapInfo(bitmap, &bitsPerComponent, &info, NULL);
+    getBitmapInfo(bitmap, &bitsPerComponent, &info, nullptr);
 
     CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
     CGContextRef ctx = CGBitmapContextCreate(bitmap.getPixels(), w, h,
-                                             bitsPerComponent, bitmap.rowBytes(),
-                                             cs, info);
+        bitsPerComponent, bitmap.rowBytes(),
+        cs, info);
     CGColorSpaceRelease(cs);
 
     if (ctx) {
@@ -241,27 +257,28 @@ bool SkPDFDocumentToBitmap(SkStream* stream, SkBitmap* output) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 SK_API bool SkCopyPixelsFromCGImage(const SkImageInfo& info, size_t rowBytes, void* pixels,
-                                    CGImageRef image) {
+    CGImageRef image)
+{
     CGBitmapInfo cg_bitmap_info = 0;
     size_t bitsPerComponent = 0;
     switch (info.colorType()) {
-        case kRGBA_8888_SkColorType:
-            bitsPerComponent = 8;
-            cg_bitmap_info = ComputeCGAlphaInfo_RGBA(info.alphaType());
-            break;
-        case kBGRA_8888_SkColorType:
-            bitsPerComponent = 8;
-            cg_bitmap_info = ComputeCGAlphaInfo_BGRA(info.alphaType());
-            break;
-        default:
-            return false;   // no other colortypes are supported (for now)
+    case kRGBA_8888_SkColorType:
+        bitsPerComponent = 8;
+        cg_bitmap_info = ComputeCGAlphaInfo_RGBA(info.alphaType());
+        break;
+    case kBGRA_8888_SkColorType:
+        bitsPerComponent = 8;
+        cg_bitmap_info = ComputeCGAlphaInfo_BGRA(info.alphaType());
+        break;
+    default:
+        return false; // no other colortypes are supported (for now)
     }
 
     CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
     CGContextRef cg = CGBitmapContextCreate(pixels, info.width(), info.height(), bitsPerComponent,
-                                            rowBytes, cs, cg_bitmap_info);
+        rowBytes, cs, cg_bitmap_info);
     CFRelease(cs);
-    if (NULL == cg) {
+    if (nullptr == cg) {
         return false;
     }
 
@@ -274,7 +291,8 @@ SK_API bool SkCopyPixelsFromCGImage(const SkImageInfo& info, size_t rowBytes, vo
     return true;
 }
 
-bool SkCreateBitmapFromCGImage(SkBitmap* dst, CGImageRef image, SkISize* scaleToFit) {
+bool SkCreateBitmapFromCGImage(SkBitmap* dst, CGImageRef image, SkISize* scaleToFit)
+{
     const int width = scaleToFit ? scaleToFit->width() : SkToInt(CGImageGetWidth(image));
     const int height = scaleToFit ? scaleToFit->height() : SkToInt(CGImageGetHeight(image));
     SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
@@ -290,19 +308,21 @@ bool SkCreateBitmapFromCGImage(SkBitmap* dst, CGImageRef image, SkISize* scaleTo
 
     CGImageAlphaInfo cgInfo = CGImageGetAlphaInfo(image);
     switch (cgInfo) {
-        case kCGImageAlphaNone:
-        case kCGImageAlphaNoneSkipLast:
-        case kCGImageAlphaNoneSkipFirst:
-            SkASSERT(SkBitmap::ComputeIsOpaque(tmp));
+    case kCGImageAlphaNone:
+    case kCGImageAlphaNoneSkipLast:
+    case kCGImageAlphaNoneSkipFirst:
+        SkASSERT(SkBitmap::ComputeIsOpaque(tmp));
+        tmp.setAlphaType(kOpaque_SkAlphaType);
+        break;
+    default:
+        // we don't know if we're opaque or not, so compute it.
+        if (SkBitmap::ComputeIsOpaque(tmp)) {
             tmp.setAlphaType(kOpaque_SkAlphaType);
-            break;
-        default:
-            // we don't know if we're opaque or not, so compute it.
-            if (SkBitmap::ComputeIsOpaque(tmp)) {
-                tmp.setAlphaType(kOpaque_SkAlphaType);
-            }
+        }
     }
 
     *dst = tmp;
     return true;
 }
+
+#endif //defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)

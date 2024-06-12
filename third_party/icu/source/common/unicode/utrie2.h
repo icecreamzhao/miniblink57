@@ -32,12 +32,12 @@ typedef struct UNewTrie2 UNewTrie2;
 */
 struct UTrie2 {
     /* protected: used by macros and functions for reading values */
-    const uint16_t *index;
-    const uint16_t *data16;     /* for fast UTF-8 ASCII access, if 16b data */
-    const uint32_t *data32;     /* NULL if 16b data is used via index */
+    const uint16_t* index;
+    const uint16_t* data16; /* for fast UTF-8 ASCII access, if 16b data */
+    const uint32_t* data32; /* NULL if 16b data is used via index */
 
     int32_t indexLength, dataLength;
-    uint16_t index2NullOffset;  /* 0xffff if there is no dedicated index-2 null block */
+    uint16_t index2NullOffset; /* 0xffff if there is no dedicated index-2 null block */
     uint16_t dataNullOffset;
     uint32_t initialValue;
     /** Value returned for out-of-range code points and illegal UTF-8. */
@@ -48,12 +48,12 @@ struct UTrie2 {
     int32_t highValueIndex;
 
     /* private: used by builder and unserialization functions */
-    void *memory;           /* serialized bytes; NULL if not frozen yet */
-    int32_t length;         /* number of serialized bytes at memory; 0 if not frozen yet */
-    UBool isMemoryOwned;    /* TRUE if the trie owns the memory */
+    void* memory; /* serialized bytes; NULL if not frozen yet */
+    int32_t length; /* number of serialized bytes at memory; 0 if not frozen yet */
+    UBool isMemoryOwned; /* TRUE if the trie owns the memory */
     UBool padding1;
     int16_t padding2;
-    UNewTrie2 *newTrie;     /* builder object; NULL when frozen */
+    UNewTrie2* newTrie; /* builder object; NULL when frozen */
 };
 
 /**
@@ -132,7 +132,7 @@ enum {
     * Length 32=0x20 for lead bytes C0..DF, regardless of UTRIE2_SHIFT_2.
     */
     UTRIE2_UTF8_2B_INDEX_2_OFFSET = UTRIE2_INDEX_2_BMP_LENGTH,
-    UTRIE2_UTF8_2B_INDEX_2_LENGTH = 0x800 >> 6,  /* U+0800 is the first code point after 2-byte UTF-8 */
+    UTRIE2_UTF8_2B_INDEX_2_LENGTH = 0x800 >> 6, /* U+0800 is the first code point after 2-byte UTF-8 */
 
     /**
     * The index-1 table, only used for supplementary code points, at offset 2112=0x840.
@@ -165,12 +165,11 @@ enum {
     UTRIE2_DATA_START_OFFSET = 0xc0
 };
 
-
 /** Internal low-level trie getter. Returns a data index. */
-#define _UTRIE2_INDEX_RAW(offset, trieIndex, c) \
-    (((int32_t)((trieIndex)[(offset)+((c)>>UTRIE2_SHIFT_2)]) \
-    <<UTRIE2_INDEX_SHIFT)+ \
-    ((c)&UTRIE2_DATA_MASK))
+#define _UTRIE2_INDEX_RAW(offset, trieIndex, c)                  \
+    (((int32_t)((trieIndex)[(offset) + ((c) >> UTRIE2_SHIFT_2)]) \
+         << UTRIE2_INDEX_SHIFT)                                  \
+        + ((c)&UTRIE2_DATA_MASK))
 
 /** Internal trie getter from a UTF-16 single/lead code unit. Returns the data index. */
 #define _UTRIE2_INDEX_FROM_U16_SINGLE_LEAD(trieIndex, c) _UTRIE2_INDEX_RAW(0, trieIndex, c)
@@ -180,30 +179,17 @@ enum {
     (trie)->data[_UTRIE2_INDEX_FROM_U16_SINGLE_LEAD((trie)->index, c)]
 
 /** Internal trie getter from a supplementary code point below highStart. Returns the data index. */
-#define _UTRIE2_INDEX_FROM_SUPP(trieIndex, c) \
-    (((int32_t)((trieIndex)[ \
-        (trieIndex)[(UTRIE2_INDEX_1_OFFSET-UTRIE2_OMITTED_BMP_INDEX_1_LENGTH)+ \
-                      ((c)>>UTRIE2_SHIFT_1)]+ \
-        (((c)>>UTRIE2_SHIFT_2)&UTRIE2_INDEX_2_MASK)]) \
-    <<UTRIE2_INDEX_SHIFT)+ \
-    ((c)&UTRIE2_DATA_MASK))
+#define _UTRIE2_INDEX_FROM_SUPP(trieIndex, c)                                                                                                                                      \
+    (((int32_t)((trieIndex)[(trieIndex)[(UTRIE2_INDEX_1_OFFSET - UTRIE2_OMITTED_BMP_INDEX_1_LENGTH) + ((c) >> UTRIE2_SHIFT_1)] + (((c) >> UTRIE2_SHIFT_2) & UTRIE2_INDEX_2_MASK)]) \
+         << UTRIE2_INDEX_SHIFT)                                                                                                                                                    \
+        + ((c)&UTRIE2_DATA_MASK))
 
 /**
 * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
 * Returns the data index.
 */
 #define _UTRIE2_INDEX_FROM_CP(trie, asciiOffset, c) \
-    ((uint32_t)(c)<0xd800 ? \
-        _UTRIE2_INDEX_RAW(0, (trie)->index, c) : \
-        (uint32_t)(c)<=0xffff ? \
-            _UTRIE2_INDEX_RAW( \
-                (c)<=0xdbff ? UTRIE2_LSCP_INDEX_2_OFFSET-(0xd800>>UTRIE2_SHIFT_2) : 0, \
-                (trie)->index, c) : \
-            (uint32_t)(c)>0x10ffff ? \
-                (asciiOffset)+UTRIE2_BAD_UTF8_DATA_OFFSET : \
-                (c)>=(trie)->highStart ? \
-                    (trie)->highValueIndex : \
-                    _UTRIE2_INDEX_FROM_SUPP((trie)->index, c))
+    ((uint32_t)(c) < 0xd800 ? _UTRIE2_INDEX_RAW(0, (trie)->index, c) : (uint32_t)(c) <= 0xffff ? _UTRIE2_INDEX_RAW((c) <= 0xdbff ? UTRIE2_LSCP_INDEX_2_OFFSET - (0xd800 >> UTRIE2_SHIFT_2) : 0, (trie)->index, c) : (uint32_t)(c) > 0x10ffff ? (asciiOffset) + UTRIE2_BAD_UTF8_DATA_OFFSET : (c) >= (trie)->highStart ? (trie)->highValueIndex : _UTRIE2_INDEX_FROM_SUPP((trie)->index, c))
 
 /**
 * Internal trie getter from a code point, with checking that c is in 0..10FFFF.

@@ -27,6 +27,7 @@
 #define TextCodecUTF8_h
 
 #include "wtf/text/TextCodec.h"
+#include <memory>
 
 namespace WTF {
 
@@ -36,26 +37,37 @@ public:
     static void registerCodecs(TextCodecRegistrar);
 
 protected:
-    TextCodecUTF8() : m_partialSequenceSize(0) { }
+    TextCodecUTF8()
+        : m_partialSequenceSize(0)
+    {
+    }
 
 private:
-    static PassOwnPtr<TextCodec> create(const TextEncoding&, const void*);
+    static std::unique_ptr<TextCodec> create(const TextEncoding&, const void*);
 
-    String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) override;
+    String decode(const char*,
+        size_t length,
+        FlushBehavior,
+        bool stopOnError,
+        bool& sawError) override;
     CString encode(const UChar*, size_t length, UnencodableHandling) override;
     CString encode(const LChar*, size_t length, UnencodableHandling) override;
 
-    template<typename CharType>
+    template <typename CharType>
     CString encodeCommon(const CharType* characters, size_t length);
 
     template <typename CharType>
-    bool handlePartialSequence(CharType*& destination, const uint8_t*& source, const uint8_t* end, bool flush, bool stopOnError, bool& sawError);
+    bool handlePartialSequence(CharType*& destination,
+        const uint8_t*& source,
+        const uint8_t* end,
+        bool flush,
+        bool stopOnError,
+        bool& sawError);
     void handleError(UChar*& destination, bool stopOnError, bool& sawError);
     void consumePartialSequenceByte();
 
     int m_partialSequenceSize;
     uint8_t m_partialSequence[U8_MAX_LENGTH];
-
 };
 
 } // namespace WTF

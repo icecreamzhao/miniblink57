@@ -33,15 +33,13 @@ namespace blink {
 
 class TemplateContentDocumentFragment final : public DocumentFragment {
 public:
-    static PassRefPtrWillBeRawPtr<TemplateContentDocumentFragment> create(Document& document, Element* host)
+    static TemplateContentDocumentFragment* create(Document& document,
+        Element* host)
     {
-        return adoptRefWillBeNoop(new TemplateContentDocumentFragment(document, host));
+        return new TemplateContentDocumentFragment(document, host);
     }
 
     Element* host() const { return m_host; }
-#if !ENABLE(OILPAN)
-    void clearHost() { m_host = nullptr; }
-#endif
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
@@ -58,7 +56,7 @@ private:
 
     bool isTemplateContent() const override { return true; }
 
-    RawPtrWillBeMember<Element> m_host;
+    Member<Element> m_host;
 };
 
 } // namespace blink

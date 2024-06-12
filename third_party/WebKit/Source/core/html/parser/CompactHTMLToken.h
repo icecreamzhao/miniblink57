@@ -27,6 +27,7 @@
 #define CompactHTMLToken_h
 
 #include "core/html/parser/HTMLToken.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 #include "wtf/text/TextPosition.h"
 #include "wtf/text/WTFString.h"
@@ -35,24 +36,44 @@ namespace blink {
 
 class QualifiedName;
 
-class CompactHTMLToken {
+class CORE_EXPORT CompactHTMLToken {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     struct Attribute {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
+    public:
         Attribute(const String& name, const String& value)
-            : name(name)
-            , value(value)
+            : m_name(name)
+            , m_value(value)
         {
         }
 
-        String name;
-        String value;
+        const String& name() const { return m_name; }
+        const String& value() const { return m_value; }
+
+        // We don't create a new 8-bit String because it doesn't save memory.
+        const String& value8BitIfNecessary() const { return m_value; }
+
+        bool isSafeToSendToAnotherThread() const
+        {
+            return m_name.isSafeToSendToAnotherThread() && m_value.isSafeToSendToAnotherThread();
+        }
+
+    private:
+        String m_name;
+        String m_value;
     };
 
     CompactHTMLToken(const HTMLToken*, const TextPosition&);
 
     bool isSafeToSendToAnotherThread() const;
 
-    HTMLToken::Type type() const { return static_cast<HTMLToken::Type>(m_type); }
+    HTMLToken::TokenType type() const
+    {
+        return static_cast<HTMLToken::TokenType>(m_type);
+    }
     const String& data() const { return m_data; }
     bool selfClosing() const { return m_selfClosing; }
     bool isAll8BitData() const { return m_isAll8BitData; }
@@ -62,15 +83,15 @@ public:
 
     // There is only 1 DOCTYPE token per document, so to avoid increasing the
     // size of CompactHTMLToken, we just use the m_attributes vector.
-    const String& publicIdentifier() const { return m_attributes[0].name; }
-    const String& systemIdentifier() const { return m_attributes[0].value; }
+    const String& publicIdentifier() const { return m_attributes[0].name(); }
+    const String& systemIdentifier() const { return m_attributes[0].value(); }
     bool doctypeForcesQuirks() const { return m_doctypeForcesQuirks; }
 
 private:
     unsigned m_type : 4;
     unsigned m_selfClosing : 1;
     unsigned m_isAll8BitData : 1;
-    unsigned m_doctypeForcesQuirks: 1;
+    unsigned m_doctypeForcesQuirks : 1;
 
     String m_data; // "name", "characters", or "data" depending on m_type
     Vector<Attribute> m_attributes;
@@ -79,6 +100,6 @@ private:
 
 typedef Vector<CompactHTMLToken> CompactHTMLTokenStream;
 
-}
+} // namespace blink
 
 #endif

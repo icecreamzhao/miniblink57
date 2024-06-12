@@ -28,7 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://dev.w3.org/csswg/css-font-loading/#fontface-interface
+// https://dev.w3.org/csswg/css-font-loading/#fontface-interface
 
 enum FontFaceLoadStatus {
     "unloaded",
@@ -37,13 +37,14 @@ enum FontFaceLoadStatus {
     "error"
 };
 
-// TODO(philipj): This interface should be [Exposed=Window,Worker].
+// TODO(foolip): This interface should be [Exposed=Window,Worker].
 [
-    ActiveDOMObject,
+    ActiveScriptWrappable,
+    DependentLifetime,
     // FIXME: This should be (DOMString or BinaryData), where BinaryData is typedef of (ArrayBuffer or ArrayBufferView)
     Constructor(DOMString family, (DOMString or ArrayBuffer or ArrayBufferView) source, optional FontFaceDescriptors descriptors),
     ConstructorCallWith=ExecutionContext,
-    WillBeGarbageCollected,
+    MeasureAs=FontFaceConstructor,
 ] interface FontFace {
     [RaisesException=Setter, SetterCallWith=ExecutionContext] attribute DOMString family;
     [RaisesException=Setter, SetterCallWith=ExecutionContext] attribute DOMString style;
@@ -52,6 +53,7 @@ enum FontFaceLoadStatus {
     [RaisesException=Setter, SetterCallWith=ExecutionContext] attribute DOMString unicodeRange;
     [RaisesException=Setter, SetterCallWith=ExecutionContext] attribute DOMString variant;
     [RaisesException=Setter, SetterCallWith=ExecutionContext] attribute DOMString featureSettings;
+    [RaisesException=Setter, SetterCallWith=ExecutionContext, RuntimeEnabled=CSSFontDisplay] attribute DOMString display;
 
     readonly attribute FontFaceLoadStatus status;
 

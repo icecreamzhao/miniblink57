@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C9BC9450-1D6D-B7E8-ECA3-7BDDCD18B9B1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>midi</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Release/gen;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /utf-8 /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>MIDI_IMPLEMENTATION;V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="message_util.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/message_util.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/message_util.obj</Outputs>
+    </CustomBuild>
+    <None Include="message_util.h" />
+    <None Include="midi_export.h" />
+    <CustomBuild Include="midi_manager.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_manager.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_manager.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_manager.h" />
+    <CustomBuild Include="midi_message_queue.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_message_queue.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_message_queue.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_message_queue.h" />
+    <CustomBuild Include="midi_port_info.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_port_info.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_port_info.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_port_info.h" />
+    <CustomBuild Include="midi_scheduler.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_scheduler.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_scheduler.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_scheduler.h" />
+    <CustomBuild Include="midi_service.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_service.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_service.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_service.h" />
+    <CustomBuild Include="midi_switches.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_switches.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_switches.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_switches.h" />
+    <CustomBuild Include="midi_manager_win.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_manager_win.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_manager_win.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_manager_win.h" />
+    <CustomBuild Include="midi_manager_winrt.cc">
+      <Command>call ninja.exe -C $(OutDir) obj/media/midi/midi/midi_manager_winrt.obj</Command>
+      <Outputs>$(OutDir)obj/media/midi/midi/midi_manager_winrt.obj</Outputs>
+    </CustomBuild>
+    <None Include="midi_manager_winrt.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/media/midi/midi.lib" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/media/midi/midi.lib" />
+  </Target>
+</Project>

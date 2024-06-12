@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,19 +23,22 @@
 #ifndef FilterOperationResolver_h
 #define FilterOperationResolver_h
 
-#include "core/css/resolver/StyleResolverState.h"
-#include "platform/graphics/filters/FilterOperations.h"
+#include "core/CSSValueKeywords.h"
+#include "core/style/FilterOperations.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class CSSToLengthConversionData;
 class CSSValue;
+class StyleResolverState;
 
 class FilterOperationResolver {
     STATIC_ONLY(FilterOperationResolver);
+
 public:
-    static bool createFilterOperations(CSSValue* inValue, const CSSToLengthConversionData&, FilterOperations& outOperations, StyleResolverState&);
+    static FilterOperation::OperationType filterOperationForType(CSSValueID);
+    static FilterOperations createFilterOperations(StyleResolverState&,
+        const CSSValue&);
 };
 
 } // namespace blink

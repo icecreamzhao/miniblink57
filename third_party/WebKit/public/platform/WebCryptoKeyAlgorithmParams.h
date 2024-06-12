@@ -35,11 +35,18 @@
 #include "WebCryptoAlgorithm.h"
 #include "WebVector.h"
 
+#if INSIDE_BLINK
+#include "platform/heap/Handle.h"
+#endif
+
 namespace blink {
 
 // Interface used for serializing WebCryptoKeyAlgorithmParams to a javascript
 // dictionary.
 class WebCryptoKeyAlgorithmDictionary {
+#if INSIDE_BLINK
+    STACK_ALLOCATED();
+#endif
 public:
     virtual ~WebCryptoKeyAlgorithmDictionary() { }
 
@@ -75,10 +82,7 @@ public:
     {
     }
 
-    unsigned short lengthBits() const
-    {
-        return m_lengthBits;
-    }
+    unsigned short lengthBits() const { return m_lengthBits; }
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -96,21 +100,16 @@ private:
 
 class WebCryptoHmacKeyAlgorithmParams : public WebCryptoKeyAlgorithmParams {
 public:
-    WebCryptoHmacKeyAlgorithmParams(const WebCryptoAlgorithm& hash, unsigned lengthBits)
+    WebCryptoHmacKeyAlgorithmParams(const WebCryptoAlgorithm& hash,
+        unsigned lengthBits)
         : m_hash(hash)
         , m_lengthBits(lengthBits)
     {
     }
 
-    const WebCryptoAlgorithm& hash() const
-    {
-        return m_hash;
-    }
+    const WebCryptoAlgorithm& hash() const { return m_hash; }
 
-    unsigned lengthBits() const
-    {
-        return m_lengthBits;
-    }
+    unsigned lengthBits() const { return m_lengthBits; }
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -128,29 +127,27 @@ private:
     unsigned m_lengthBits;
 };
 
-class WebCryptoRsaHashedKeyAlgorithmParams : public WebCryptoKeyAlgorithmParams {
+class WebCryptoRsaHashedKeyAlgorithmParams
+    : public WebCryptoKeyAlgorithmParams {
 public:
-    WebCryptoRsaHashedKeyAlgorithmParams(unsigned modulusLengthBits, const unsigned char* publicExponent, unsigned publicExponentSize, const WebCryptoAlgorithm& hash)
+    WebCryptoRsaHashedKeyAlgorithmParams(unsigned modulusLengthBits,
+        const unsigned char* publicExponent,
+        unsigned publicExponentSize,
+        const WebCryptoAlgorithm& hash)
         : m_modulusLengthBits(modulusLengthBits)
         , m_publicExponent(publicExponent, publicExponentSize)
         , m_hash(hash)
     {
     }
 
-    unsigned modulusLengthBits() const
-    {
-        return m_modulusLengthBits;
-    }
+    unsigned modulusLengthBits() const { return m_modulusLengthBits; }
 
     const WebVector<unsigned char>& publicExponent() const
     {
         return m_publicExponent;
     }
 
-    const WebCryptoAlgorithm& hash() const
-    {
-        return m_hash;
-    }
+    const WebCryptoAlgorithm& hash() const { return m_hash; }
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {
@@ -177,10 +174,7 @@ public:
     {
     }
 
-    WebCryptoNamedCurve namedCurve() const
-    {
-        return m_namedCurve;
-    }
+    WebCryptoNamedCurve namedCurve() const { return m_namedCurve; }
 
     virtual WebCryptoKeyAlgorithmParamsType type() const
     {

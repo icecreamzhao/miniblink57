@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,13 +5,27 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDiscretePathEffect.h"
-#include "SkReadBuffer.h"
-#include "SkWriteBuffer.h"
+#include "SkFixed.h"
 #include "SkPathMeasure.h"
+#include "SkReadBuffer.h"
+#include "SkStrokeRec.h"
+#include "SkWriteBuffer.h"
 
-static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale) {
+sk_sp<SkPathEffect> SkDiscretePathEffect::Make(SkScalar segLength, SkScalar deviation,
+    uint32_t seedAssist)
+{
+    if (!SkScalarIsFinite(segLength) || !SkScalarIsFinite(deviation)) {
+        return nullptr;
+    }
+    if (segLength <= SK_ScalarNearlyZero) {
+        return nullptr;
+    }
+    return sk_sp<SkPathEffect>(new SkDiscretePathEffect(segLength, deviation, seedAssist));
+}
+
+static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale)
+{
     SkVector normal = tangent;
     normal.rotateCCW();
     normal.setLength(scale);
@@ -20,9 +33,11 @@ static void Perterb(SkPoint* p, const SkVector& tangent, SkScalar scale) {
 }
 
 SkDiscretePathEffect::SkDiscretePathEffect(SkScalar segLength,
-                                           SkScalar deviation,
-                                           uint32_t seedAssist)
-    : fSegLength(segLength), fPerterb(deviation), fSeedAssist(seedAssist)
+    SkScalar deviation,
+    uint32_t seedAssist)
+    : fSegLength(segLength)
+    , fPerterb(deviation)
+    , fSeedAssist(seedAssist)
 {
 }
 
@@ -39,24 +54,32 @@ SkDiscretePathEffect::SkDiscretePathEffect(SkScalar segLength,
 
 class LCGRandom {
 public:
-    LCGRandom(uint32_t seed) : fSeed(seed) {}
+    LCGRandom(uint32_t seed)
+        : fSeed(seed)
+    {
+    }
 
     /** Return the next pseudo random number expressed as a SkScalar
-        in the range (-SK_Scalar1..SK_Scalar1).
+        in the range [-SK_Scalar1..SK_Scalar1).
     */
     SkScalar nextSScalar1() { return SkFixedToScalar(this->nextSFixed1()); }
 
 private:
     /** Return the next pseudo random number as an unsigned 32bit value.
     */
-    uint32_t nextU() { uint32_t r = fSeed * kMul + kAdd; fSeed = r; return r; }
+    uint32_t nextU()
+    {
+        uint32_t r = fSeed * kMul + kAdd;
+        fSeed = r;
+        return r;
+    }
 
     /** Return the next pseudo random number as a signed 32bit value.
      */
     int32_t nextS() { return (int32_t)this->nextU(); }
 
     /** Return the next pseudo random number expressed as a signed SkFixed
-     in the range (-SK_Fixed1..SK_Fixed1).
+     in the range [-SK_Fixed1..SK_Fixed1).
      */
     SkFixed nextSFixed1() { return this->nextS() >> 15; }
 
@@ -69,32 +92,33 @@ private:
 };
 
 bool SkDiscretePathEffect::filterPath(SkPath* dst, const SkPath& src,
-                                      SkStrokeRec* rec, const SkRect*) const {
+    SkStrokeRec* rec, const SkRect*) const
+{
     bool doFill = rec->isFillStyle();
 
-    SkPathMeasure   meas(src, doFill);
+    SkPathMeasure meas(src, doFill);
 
     /* Caller may supply their own seed assist, which by default is 0 */
     uint32_t seed = fSeedAssist ^ SkScalarRoundToInt(meas.getLength());
 
-    LCGRandom   rand(seed ^ ((seed << 16) | (seed >> 16)));
-    SkScalar    scale = fPerterb;
-    SkPoint     p;
-    SkVector    v;
+    LCGRandom rand(seed ^ ((seed << 16) | (seed >> 16)));
+    SkScalar scale = fPerterb;
+    SkPoint p;
+    SkVector v;
 
     do {
-        SkScalar    length = meas.getLength();
+        SkScalar length = meas.getLength();
 
         if (fSegLength * (2 + doFill) > length) {
-            meas.getSegment(0, length, dst, true);  // to short for us to mangle
+            meas.getSegment(0, length, dst, true); // to short for us to mangle
         } else {
-            int         n = SkScalarRoundToInt(length / fSegLength);
-            SkScalar    delta = length / n;
-            SkScalar    distance = 0;
+            int n = SkScalarRoundToInt(length / fSegLength);
+            SkScalar delta = length / n;
+            SkScalar distance = 0;
 
             if (meas.isClosed()) {
                 n -= 1;
-                distance += delta/2;
+                distance += delta / 2;
             }
 
             if (meas.getPosTan(distance, &p, &v)) {
@@ -116,21 +140,24 @@ bool SkDiscretePathEffect::filterPath(SkPath* dst, const SkPath& src,
     return true;
 }
 
-SkFlattenable* SkDiscretePathEffect::CreateProc(SkReadBuffer& buffer) {
+sk_sp<SkFlattenable> SkDiscretePathEffect::CreateProc(SkReadBuffer& buffer)
+{
     SkScalar segLength = buffer.readScalar();
     SkScalar perterb = buffer.readScalar();
     uint32_t seed = buffer.readUInt();
-    return Create(segLength, perterb, seed);
+    return Make(segLength, perterb, seed);
 }
 
-void SkDiscretePathEffect::flatten(SkWriteBuffer& buffer) const {
+void SkDiscretePathEffect::flatten(SkWriteBuffer& buffer) const
+{
     buffer.writeScalar(fSegLength);
     buffer.writeScalar(fPerterb);
     buffer.writeUInt(fSeedAssist);
 }
 
 #ifndef SK_IGNORE_TO_STRING
-void SkDiscretePathEffect::toString(SkString* str) const {
+void SkDiscretePathEffect::toString(SkString* str) const
+{
     str->appendf("SkDiscretePathEffect: (");
     str->appendf("segLength: %.2f deviation: %.2f seed %d", fSegLength, fPerterb, fSeedAssist);
     str->append(")");

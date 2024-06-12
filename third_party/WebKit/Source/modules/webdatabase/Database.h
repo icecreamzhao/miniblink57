@@ -48,16 +48,22 @@ class SQLTransactionCoordinator;
 class SQLTransactionErrorCallback;
 class VoidCallback;
 
-class Database final : public GarbageCollectedFinalized<Database>, public ScriptWrappable {
+class Database final : public GarbageCollectedFinalized<Database>,
+                       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     virtual ~Database();
     DECLARE_TRACE();
 
-    bool openAndVerifyVersion(bool setVersionInNewDatabase, DatabaseError&, String& errorMessage);
+    bool openAndVerifyVersion(bool setVersionInNewDatabase,
+        DatabaseError&,
+        String& errorMessage);
     void close();
 
-    SQLTransactionBackend* runTransaction(SQLTransaction*, bool readOnly, const ChangeVersionData*);
+    SQLTransactionBackend* runTransaction(SQLTransaction*,
+        bool readOnly,
+        const ChangeVersionData*);
     void scheduleTransactionStep(SQLTransactionBackend*);
     void inProgressTransactionCompleted();
 
@@ -66,28 +72,25 @@ public:
 
     // Direct support for the DOM API
     String version() const;
-    void changeVersion(
-        const String& oldVersion,
+    void changeVersion(const String& oldVersion,
         const String& newVersion,
         SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback);
-    void transaction(
-        SQLTransactionCallback*,
+    void transaction(SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback);
-    void readTransaction(
-        SQLTransactionCallback*,
+    void readTransaction(SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback);
 
-    bool opened() const { return m_opened; }
+    bool opened();
     bool isNew() const { return m_new; }
 
-    SecurityOrigin* securityOrigin() const;
+    SecurityOrigin* getSecurityOrigin() const;
     String stringIdentifier() const;
     String displayName() const;
-    unsigned long estimatedSize() const;
+    unsigned estimatedSize() const;
     String fileName() const;
     SQLiteDatabase& sqliteDatabase() { return m_sqliteDatabase; }
 
@@ -108,8 +111,11 @@ public:
     void closeImmediately();
     void closeDatabase();
 
-    DatabaseContext* databaseContext() const { return m_databaseContext.get(); }
-    ExecutionContext* executionContext() const;
+    DatabaseContext* getDatabaseContext() const
+    {
+        return m_databaseContext.get();
+    }
+    ExecutionContext* getExecutionContext() const;
 
 private:
     class DatabaseOpenTask;
@@ -117,42 +123,61 @@ private:
     class DatabaseTransactionTask;
     class DatabaseTableNamesTask;
 
-    Database(DatabaseContext*, const String& name, const String& expectedVersion, const String& displayName, unsigned long estimatedSize);
-    bool performOpenAndVerify(bool setVersionInNewDatabase, DatabaseError&, String& errorMessage);
+    Database(DatabaseContext*,
+        const String& name,
+        const String& expectedVersion,
+        const String& displayName,
+        unsigned estimatedSize);
+    bool performOpenAndVerify(bool setVersionInNewDatabase,
+        DatabaseError&,
+        String& errorMessage);
 
     void scheduleTransaction();
 
     bool getVersionFromDatabase(String& version, bool shouldCacheVersion = true);
-    bool setVersionInDatabase(const String& version, bool shouldCacheVersion = true);
+    bool setVersionInDatabase(const String& version,
+        bool shouldCacheVersion = true);
     void setExpectedVersion(const String&);
     const String& expectedVersion() const { return m_expectedVersion; }
-    String getCachedVersion()const;
+    String getCachedVersion() const;
     void setCachedVersion(const String&);
     bool getActualVersionForTransaction(String& version);
 
-    void runTransaction(
-        SQLTransactionCallback*,
+    void runTransaction(SQLTransactionCallback*,
         SQLTransactionErrorCallback*,
         VoidCallback* successCallback,
         bool readOnly,
         const ChangeVersionData* = 0);
     Vector<String> performGetTableNames();
 
-    void reportOpenDatabaseResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode, double duration);
-    void reportChangeVersionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
-    void reportStartTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
-    void reportCommitTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
-    void reportExecuteStatementResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode);
+    void reportOpenDatabaseResult(int errorSite,
+        int webSqlErrorCode,
+        int sqliteErrorCode,
+        double duration);
+    void reportChangeVersionResult(int errorSite,
+        int webSqlErrorCode,
+        int sqliteErrorCode);
+    void reportStartTransactionResult(int errorSite,
+        int webSqlErrorCode,
+        int sqliteErrorCode);
+    void reportCommitTransactionResult(int errorSite,
+        int webSqlErrorCode,
+        int sqliteErrorCode);
+    void reportExecuteStatementResult(int errorSite,
+        int webSqlErrorCode,
+        int sqliteErrorCode);
     void reportVacuumDatabaseResult(int sqliteErrorCode);
     void logErrorMessage(const String&);
     static const char* databaseInfoTableName();
-#if !LOG_DISABLED || !ERROR_DISABLED
-    String databaseDebugName() const { return m_contextThreadSecurityOrigin->toString() + "::" + m_name; }
-#endif
+    String databaseDebugName() const
+    {
+        return m_contextThreadSecurityOrigin->toString() + "::" + m_name;
+    }
 
     RefPtr<SecurityOrigin> m_contextThreadSecurityOrigin;
     RefPtr<SecurityOrigin> m_databaseThreadSecurityOrigin;
-    Member<DatabaseContext> m_databaseContext; // Associated with m_executionContext.
+    Member<DatabaseContext>
+        m_databaseContext; // Associated with m_executionContext.
 
     String m_name;
     String m_expectedVersion;
@@ -161,14 +186,14 @@ private:
     String m_filename;
 
     DatabaseGuid m_guid;
-    bool m_opened;
+    int m_opened;
     bool m_new;
 
     SQLiteDatabase m_sqliteDatabase;
 
     Member<DatabaseAuthorizer> m_databaseAuthorizer;
 
-    HeapDeque<Member<SQLTransactionBackend>> m_transactionQueue;
+    Deque<CrossThreadPersistent<SQLTransactionBackend>> m_transactionQueue;
     Mutex m_transactionInProgressMutex;
     bool m_transactionInProgress;
     bool m_isTransactionQueueEnabled;

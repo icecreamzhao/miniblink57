@@ -39,8 +39,9 @@ class MediaQueryExp;
 class MediaQueryResult;
 class MediaQuerySet;
 class MediaValues;
+class MediaValuesInitialViewport;
 
-typedef WillBeHeapVector<RefPtrWillBeMember<MediaQueryResult>> MediaQueryResultList;
+using MediaQueryResultList = HeapVector<Member<MediaQueryResult>>;
 
 // Class that evaluates css media queries as defined in
 // CSS3 Module "Media Queries" (http://www.w3.org/TR/css3-mediaqueries/)
@@ -50,50 +51,58 @@ typedef WillBeHeapVector<RefPtrWillBeMember<MediaQueryResult>> MediaQueryResultL
 // right after parsing.
 //
 // the boolean parameter is used to approximate results of evaluation, if
-// the device characteristics are not known. This can be used to prune the loading
-// of stylesheets to only those which are probable to match.
+// the device characteristics are not known. This can be used to prune the
+// loading of stylesheets to only those which are probable to match.
 
-class CORE_EXPORT MediaQueryEvaluator {
-    WTF_MAKE_NONCOPYABLE(MediaQueryEvaluator); WTF_MAKE_FAST_ALLOCATED(MediaQueryEvaluator);
+class CORE_EXPORT MediaQueryEvaluator final
+    : public GarbageCollectedFinalized<MediaQueryEvaluator> {
+    WTF_MAKE_NONCOPYABLE(MediaQueryEvaluator);
+
 public:
+    static void init();
+
+    // Creates evaluator which evaluates to true for all media queries.
+    MediaQueryEvaluator() { }
+
     // Creates evaluator which evaluates only simple media queries
-    // Evaluator returns true for "all", and returns value of \mediaFeatureResult
-    // for any media features.
-
-    explicit MediaQueryEvaluator(bool mediaFeatureResult = false);
-
-    // Creates evaluator which evaluates only simple media queries
-    // Evaluator  returns true for acceptedMediaType and returns value of \mediafeatureResult
-    // for any media features.
-
-    MediaQueryEvaluator(const char* acceptedMediaType, bool mediaFeatureResult = false);
+    // Evaluator returns true for acceptedMediaType and returns true for any media
+    // features.
+    MediaQueryEvaluator(const char* acceptedMediaType);
 
     // Creates evaluator which evaluates full media queries.
     explicit MediaQueryEvaluator(LocalFrame*);
 
-    // Creates evaluator which evaluates in a thread-safe manner a subset of media values.
+    // Creates evaluator which evaluates in a thread-safe manner a subset of media
+    // values.
     explicit MediaQueryEvaluator(const MediaValues&);
+
+    explicit MediaQueryEvaluator(MediaValuesInitialViewport*);
 
     ~MediaQueryEvaluator();
 
     bool mediaTypeMatch(const String& mediaTypeToMatch) const;
 
     // Evaluates a list of media queries.
-    bool eval(const MediaQuerySet*, MediaQueryResultList* = 0) const;
+    bool eval(const MediaQuerySet*,
+        MediaQueryResultList* viewportDependent = nullptr,
+        MediaQueryResultList* deviceDependent = nullptr) const;
 
     // Evaluates media query.
-    bool eval(const MediaQuery*, MediaQueryResultList*) const;
+    bool eval(const MediaQuery*,
+        MediaQueryResultList* viewportDependent = nullptr,
+        MediaQueryResultList* deviceDependent = nullptr) const;
 
     // Evaluates media query subexpression, ie "and (media-feature: value)" part.
     bool eval(const MediaQueryExp*) const;
+
+    DECLARE_TRACE();
 
 private:
     const String mediaType() const;
 
     String m_mediaType;
-    bool m_expectedResult;
-    RefPtr<MediaValues> m_mediaValues;
+    Member<MediaValues> m_mediaValues;
 };
 
-} // namespace
+} // namespace blink
 #endif

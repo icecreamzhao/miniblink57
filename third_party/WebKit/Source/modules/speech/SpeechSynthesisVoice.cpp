@@ -23,24 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/speech/SpeechSynthesisVoice.h"
 
 namespace blink {
 
-SpeechSynthesisVoice* SpeechSynthesisVoice::create(PlatformSpeechSynthesisVoice* voice)
+SpeechSynthesisVoice* SpeechSynthesisVoice::create(
+    PassRefPtr<PlatformSpeechSynthesisVoice> voice)
 {
-    return new SpeechSynthesisVoice(voice);
+    return new SpeechSynthesisVoice(std::move(voice));
 }
 
-SpeechSynthesisVoice::SpeechSynthesisVoice(PlatformSpeechSynthesisVoice* voice)
+SpeechSynthesisVoice::SpeechSynthesisVoice(
+    PassRefPtr<PlatformSpeechSynthesisVoice> voice)
     : m_platformVoice(voice)
 {
 }
 
-DEFINE_TRACE(SpeechSynthesisVoice)
-{
-    visitor->trace(m_platformVoice);
-}
+SpeechSynthesisVoice::~SpeechSynthesisVoice() { }
 
 } // namespace blink

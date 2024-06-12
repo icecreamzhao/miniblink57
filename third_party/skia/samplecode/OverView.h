@@ -15,4 +15,4 @@ SkView* create_overview(int, const SkViewFactory*[]);
 
 bool is_overview(SkView* view);
 
-#endif  // SAMPLECODE_OVERVIEW_H_
+#endif // SAMPLECODE_OVERVIEW_H_

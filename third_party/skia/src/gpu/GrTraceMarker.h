@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2014 Google Inc.
  *
@@ -13,14 +12,19 @@
 
 class GrGpuTraceMarker {
 public:
-    GrGpuTraceMarker() {};
-    GrGpuTraceMarker(const char* marker, int idCounter) : fMarker(marker), fID(idCounter) {}
+    GrGpuTraceMarker(const char* marker, int idCounter)
+        : fMarker(marker)
+        , fID(idCounter)
+    {
+    }
 
-    bool operator<(const GrGpuTraceMarker& rhs) const {
+    bool operator<(const GrGpuTraceMarker& rhs) const
+    {
         return this->fMarker < rhs.fMarker || (this->fMarker == rhs.fMarker && this->fID < rhs.fID);
     }
 
-    bool operator==(const GrGpuTraceMarker& rhs) const {
+    bool operator==(const GrGpuTraceMarker& rhs) const
+    {
         return (this->fID == rhs.fID && this->fMarker == rhs.fMarker);
     }
 
@@ -34,7 +38,7 @@ class SkString;
 
 class GrTraceMarkerSet {
 public:
-    GrTraceMarkerSet() {}
+    GrTraceMarkerSet() { }
 
     GrTraceMarkerSet(const GrTraceMarkerSet& other);
 
@@ -70,17 +74,20 @@ private:
 class GrTraceMarkerSet::Iter {
 public:
     Iter() {};
-    Iter& operator=(const Iter& i) {
+    Iter& operator=(const Iter& i)
+    {
         fCurrentIndex = i.fCurrentIndex;
         fMarkers = i.fMarkers;
         return *this;
     }
-    bool operator==(const Iter& i) const {
+    bool operator==(const Iter& i) const
+    {
         return fCurrentIndex == i.fCurrentIndex && fMarkers == i.fMarkers;
     }
     bool operator!=(const Iter& i) const { return !(*this == i); }
     const GrGpuTraceMarker& operator*() const { return fMarkers->fMarkerArray[fCurrentIndex]; }
-    Iter& operator++() {
+    Iter& operator++()
+    {
         SkASSERT(*this != fMarkers->end());
         ++fCurrentIndex;
         return *this;
@@ -89,7 +96,9 @@ public:
 private:
     friend class GrTraceMarkerSet;
     Iter(const GrTraceMarkerSet* markers, int index)
-            : fMarkers(markers), fCurrentIndex(index) {
+        : fMarkers(markers)
+        , fCurrentIndex(index)
+    {
         SkASSERT(markers);
     }
 

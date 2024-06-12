@@ -12,57 +12,65 @@
 namespace v8 {
 namespace platform {
 
-TaskQueue::TaskQueue() : process_queue_semaphore_(0), terminated_(false) {}
-
-
-TaskQueue::~TaskQueue() {
-  base::MutexGuard guard(&lock_);
-  DCHECK(terminated_);
-  DCHECK(task_queue_.empty());
-}
-
-void TaskQueue::Append(std::unique_ptr<Task> task) {
-  base::MutexGuard guard(&lock_);
-  DCHECK(!terminated_);
-  task_queue_.push(std::move(task));
-  process_queue_semaphore_.Signal();
-}
-
-std::unique_ptr<Task> TaskQueue::GetNext() {
-  for (;;) {
+    TaskQueue::TaskQueue()
+        : process_queue_semaphore_(0)
+        , terminated_(false)
     {
-      base::MutexGuard guard(&lock_);
-      if (!task_queue_.empty()) {
-        std::unique_ptr<Task> result = std::move(task_queue_.front());
-        task_queue_.pop();
-        return result;
-      }
-      if (terminated_) {
+    }
+
+    TaskQueue::~TaskQueue()
+    {
+        base::MutexGuard guard(&lock_);
+        DCHECK(terminated_);
+        DCHECK(task_queue_.empty());
+    }
+
+    void TaskQueue::Append(std::unique_ptr<Task> task)
+    {
+        base::MutexGuard guard(&lock_);
+        DCHECK(!terminated_);
+        task_queue_.push(std::move(task));
         process_queue_semaphore_.Signal();
-        return nullptr;
-      }
     }
-    process_queue_semaphore_.Wait();
-  }
-}
 
-
-void TaskQueue::Terminate() {
-  base::MutexGuard guard(&lock_);
-  DCHECK(!terminated_);
-  terminated_ = true;
-  process_queue_semaphore_.Signal();
-}
-
-void TaskQueue::BlockUntilQueueEmptyForTesting() {
-  for (;;) {
+    std::unique_ptr<Task> TaskQueue::GetNext()
     {
-      base::MutexGuard guard(&lock_);
-      if (task_queue_.empty()) return;
+        for (;;) {
+            {
+                base::MutexGuard guard(&lock_);
+                if (!task_queue_.empty()) {
+                    std::unique_ptr<Task> result = std::move(task_queue_.front());
+                    task_queue_.pop();
+                    return result;
+                }
+                if (terminated_) {
+                    process_queue_semaphore_.Signal();
+                    return nullptr;
+                }
+            }
+            process_queue_semaphore_.Wait();
+        }
     }
-    base::OS::Sleep(base::TimeDelta::FromMilliseconds(5));
-  }
-}
 
-}  // namespace platform
-}  // namespace v8
+    void TaskQueue::Terminate()
+    {
+        base::MutexGuard guard(&lock_);
+        DCHECK(!terminated_);
+        terminated_ = true;
+        process_queue_semaphore_.Signal();
+    }
+
+    void TaskQueue::BlockUntilQueueEmptyForTesting()
+    {
+        for (;;) {
+            {
+                base::MutexGuard guard(&lock_);
+                if (task_queue_.empty())
+                    return;
+            }
+            base::OS::Sleep(base::TimeDelta::FromMilliseconds(5));
+        }
+    }
+
+} // namespace platform
+} // namespace v8

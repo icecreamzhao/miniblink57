@@ -28,18 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableShapeValue.h"
 
 namespace blink {
 
-bool AnimatableShapeValue::usesDefaultInterpolationWith(const AnimatableValue* value) const
+bool AnimatableShapeValue::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
 {
     const AnimatableShapeValue* shapeValue = toAnimatableShapeValue(value);
 
-    if (m_shape->type() != ShapeValue::Shape
-        || shapeValue->m_shape->type() != ShapeValue::Shape
-        || m_shape->cssBox() != shapeValue->m_shape->cssBox())
+    if (m_shape->type() != ShapeValue::Shape || shapeValue->m_shape->type() != ShapeValue::Shape || m_shape->cssBox() != shapeValue->m_shape->cssBox())
         return true;
 
     const BasicShape* fromShape = this->m_shape->shape();
@@ -48,7 +46,9 @@ bool AnimatableShapeValue::usesDefaultInterpolationWith(const AnimatableValue* v
     return !fromShape->canBlend(toShape);
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableShapeValue::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableShapeValue::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     if (usesDefaultInterpolationWith(value))
         return defaultInterpolateTo(this, value, fraction);
@@ -56,7 +56,8 @@ PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableShapeValue::interpolateTo(cons
     const AnimatableShapeValue* shapeValue = toAnimatableShapeValue(value);
     const BasicShape* fromShape = this->m_shape->shape();
     const BasicShape* toShape = shapeValue->m_shape->shape();
-    return AnimatableShapeValue::create(ShapeValue::createShapeValue(toShape->blend(fromShape, fraction), shapeValue->m_shape->cssBox()).get());
+    return AnimatableShapeValue::create(ShapeValue::createShapeValue(
+        toShape->blend(fromShape, fraction), shapeValue->m_shape->cssBox()));
 }
 
 bool AnimatableShapeValue::equalTo(const AnimatableValue* value) const
@@ -65,4 +66,4 @@ bool AnimatableShapeValue::equalTo(const AnimatableValue* value) const
     return m_shape == shape || (m_shape && shape && *m_shape == *shape);
 }
 
-}
+} // namespace blink

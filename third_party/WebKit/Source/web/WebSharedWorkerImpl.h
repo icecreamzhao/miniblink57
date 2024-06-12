@@ -37,16 +37,17 @@
 #include "core/workers/WorkerLoaderProxy.h"
 #include "core/workers/WorkerReportingProxy.h"
 #include "core/workers/WorkerThread.h"
+#include "public/platform/WebAddressSpace.h"
 #include "public/web/WebContentSecurityPolicy.h"
 #include "public/web/WebDevToolsAgentClient.h"
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebSharedWorkerClient.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/RefPtr.h"
+#include <memory>
 
 namespace blink {
 
-class ConsoleMessage;
+class ParentFrameTaskRunners;
 class WebApplicationCacheHost;
 class WebApplicationCacheHostClient;
 class WebLocalFrameImpl;
@@ -64,53 +65,72 @@ class WorkerScriptLoader;
 // the data types.  When the SharedWorker object wants to call
 // WorkerReportingProxy, this class will convert to Chrome data types first and
 // then call the supplied WebCommonWorkerClient.
-class WebSharedWorkerImpl final
-    : public WorkerReportingProxy
-    , public WebFrameClient
-    , public WebSharedWorker
-    , public WebDevToolsAgentClient
-    , private WorkerLoaderProxyProvider {
+class WebSharedWorkerImpl final : public WorkerReportingProxy,
+                                  public WebFrameClient,
+                                  public WebSharedWorker,
+                                  public WebDevToolsAgentClient,
+                                  private WorkerLoaderProxyProvider {
 public:
     explicit WebSharedWorkerImpl(WebSharedWorkerClient*);
 
     // WorkerReportingProxy methods:
-    void reportException(
-        const WTF::String&, int, int, const WTF::String&, int) override;
-    void reportConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>) override;
+    void countFeature(UseCounter::Feature) override;
+    void countDeprecation(UseCounter::Feature) override;
+    void reportException(const WTF::String&,
+        std::unique_ptr<SourceLocation>,
+        int exceptionId) override;
+    void reportConsoleMessage(MessageSource,
+        MessageLevel,
+        const String& message,
+        SourceLocation*) override;
     void postMessageToPageInspector(const WTF::String&) override;
-    void postWorkerConsoleAgentEnabled() override { }
+    ParentFrameTaskRunners* getParentFrameTaskRunners() override;
     void didEvaluateWorkerScript(bool success) override { }
-    void workerGlobalScopeStarted(WorkerGlobalScope*) override;
-    void workerGlobalScopeClosed() override;
-    void workerThreadTerminated() override;
+    void didCloseWorkerGlobalScope() override;
     void willDestroyWorkerGlobalScope() override { }
+    void didTerminateWorkerThread() override;
 
     // WebFrameClient methods to support resource loading thru the 'shadow page'.
-    WebApplicationCacheHost* createApplicationCacheHost(WebLocalFrame*, WebApplicationCacheHostClient*) override;
-    void willSendRequest(WebLocalFrame*, unsigned identifier, WebURLRequest&, const WebURLResponse& redirectResponse) override;
+    WebApplicationCacheHost* createApplicationCacheHost(
+        WebApplicationCacheHostClient*) override;
+    void willSendRequest(WebLocalFrame*, WebURLRequest&) override;
     void didFinishDocumentLoad(WebLocalFrame*) override;
     bool isControlledByServiceWorker(WebDataSource&) override;
     int64_t serviceWorkerID(WebDataSource&) override;
+    InterfaceProvider* interfaceProvider() override;
 
     // WebDevToolsAgentClient overrides.
-    void sendProtocolMessage(int callId, const WebString&, const WebString&) override;
+    void sendProtocolMessage(int sessionId,
+        int callId,
+        const WebString&,
+        const WebString&) override;
     void resumeStartup() override;
+    WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop()
+        override;
 
     // WebSharedWorker methods:
-    void startWorkerContext(const WebURL&, const WebString& name, const WebString& contentSecurityPolicy, WebContentSecurityPolicyType) override;
+    void startWorkerContext(const WebURL&,
+        const WebString& name,
+        const WebString& contentSecurityPolicy,
+        WebContentSecurityPolicyType,
+        WebAddressSpace) override;
     void connect(WebMessagePortChannel*) override;
     void terminateWorkerContext() override;
 
     void pauseWorkerContextOnStart() override;
-    void attachDevTools(const WebString& hostId) override;
-    void reattachDevTools(const WebString& hostId, const WebString& savedState) override;
+    void attachDevTools(const WebString& hostId, int sessionId) override;
+    void reattachDevTools(const WebString& hostId,
+        int sesionId,
+        const WebString& savedState) override;
     void detachDevTools() override;
-    void dispatchDevToolsMessage(const WebString&) override;
+    void dispatchDevToolsMessage(int sessionId,
+        int callId,
+        const WebString& method,
+        const WebString& message) override;
 
 private:
     ~WebSharedWorkerImpl() override;
 
-    void setWorkerThread(PassRefPtr<WorkerThread> thread) { m_workerThread = thread; }
     WorkerThread* workerThread() { return m_workerThread.get(); }
 
     // Shuts down the worker thread.
@@ -123,29 +143,35 @@ private:
     void didReceiveScriptLoaderResponse();
     void onScriptLoaderFinished();
 
-    static void connectTask(PassOwnPtr<WebMessagePortChannel>, ExecutionContext*);
+    static void connectTask(WebMessagePortChannelUniquePtr, ExecutionContext*);
+
     // Tasks that are run on the main thread.
-    void workerGlobalScopeClosedOnMainThread();
-    void workerThreadTerminatedOnMainThread();
+    void didCloseWorkerGlobalScopeOnMainThread();
+    void didTerminateWorkerThreadOnMainThread();
 
     void postMessageToPageInspectorOnMainThread(const String& message);
 
     // WorkerLoaderProxyProvider
-    void postTaskToLoader(PassOwnPtr<ExecutionContextTask>);
-    bool postTaskToWorkerGlobalScope(PassOwnPtr<ExecutionContextTask>);
+    void postTaskToLoader(const WebTraceLocation&,
+        std::unique_ptr<ExecutionContextTask>) override;
+    void postTaskToWorkerGlobalScope(
+        const WebTraceLocation&,
+        std::unique_ptr<WTF::CrossThreadClosure>) override;
 
     // 'shadow page' - created to proxy loading requests from the worker.
-    RefPtrWillBePersistent<ExecutionContext> m_loadingDocument;
+    Persistent<ExecutionContext> m_loadingDocument;
     WebView* m_webView;
-    WebLocalFrameImpl* m_mainFrame;
+    Persistent<WebLocalFrameImpl> m_mainFrame;
     bool m_askedToTerminate;
 
     // This one is bound to and used only on the main thread.
-    OwnPtr<WebServiceWorkerNetworkProvider> m_networkProvider;
+    std::unique_ptr<WebServiceWorkerNetworkProvider> m_networkProvider;
 
-    OwnPtr<WorkerInspectorProxy> m_workerInspectorProxy;
+    Persistent<WorkerInspectorProxy> m_workerInspectorProxy;
 
-    RefPtr<WorkerThread> m_workerThread;
+    Persistent<ParentFrameTaskRunners> m_parentFrameTaskRunners;
+
+    std::unique_ptr<WorkerThread> m_workerThread;
 
     WebSharedWorkerClient* m_client;
 
@@ -153,12 +179,13 @@ private:
     bool m_isPausedOnStart;
 
     // Kept around only while main script loading is ongoing.
-    OwnPtr<WorkerScriptLoader> m_mainScriptLoader;
+    RefPtr<WorkerScriptLoader> m_mainScriptLoader;
 
     RefPtr<WorkerLoaderProxy> m_loaderProxy;
 
     WebURL m_url;
     WebString m_name;
+    WebAddressSpace m_creationAddressSpace;
 };
 
 } // namespace blink

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkHitClear_DEFINED
 #define SkHitClear_DEFINED
 
@@ -16,8 +15,9 @@
 
 class SkHitClear : public SkDisplayable {
     DECLARE_MEMBER_INFO(HitClear);
-    bool enable(SkAnimateMaker& ) override;
+    bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
+
 private:
     SkTDDisplayableArray targets;
 };

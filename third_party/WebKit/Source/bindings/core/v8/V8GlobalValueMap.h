@@ -5,6 +5,7 @@
 #ifndef V8GlobalValueMap_h
 #define V8GlobalValueMap_h
 
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/StringHash.h"
 #include <v8-util.h>
@@ -20,8 +21,12 @@ namespace blink {
  * If so, entries will be removed from the map as the weak references are
  * collected.
  */
-template <class KeyType, class ValueType, v8::PersistentContainerCallbackType type>
+template <class KeyType,
+    class ValueType,
+    v8::PersistentContainerCallbackType type>
 class V8GlobalValueMapTraits {
+    STATIC_ONLY(V8GlobalValueMapTraits);
+
 public:
     // Map traits:
     typedef HashMap<KeyType, v8::PersistentContainerValue> Impl;
@@ -36,8 +41,9 @@ public:
         return iter->value;
     }
     static KeyType Key(Iterator& iter) { return iter->key; }
-    static v8::PersistentContainerValue Set(
-        Impl* impl, KeyType key, v8::PersistentContainerValue value)
+    static v8::PersistentContainerValue Set(Impl* impl,
+        KeyType key,
+        v8::PersistentContainerValue value)
     {
         v8::PersistentContainerValue oldValue = Get(impl, key);
         impl->set(key, value);
@@ -55,18 +61,22 @@ public:
 
     // Weak traits:
     static const v8::PersistentContainerCallbackType kCallbackType = type;
-    typedef v8::GlobalValueMap<KeyType, ValueType, V8GlobalValueMapTraits<KeyType, ValueType, type>> MapType;
+    typedef v8::GlobalValueMap<KeyType,
+        ValueType,
+        V8GlobalValueMapTraits<KeyType, ValueType, type>>
+        MapType;
 
     typedef void WeakCallbackDataType;
 
-    static WeakCallbackDataType* WeakCallbackParameter(MapType* map, KeyType key, const v8::Local<ValueType>& value)
+    static WeakCallbackDataType* WeakCallbackParameter(
+        MapType* map,
+        KeyType key,
+        const v8::Local<ValueType>& value)
     {
         return 0;
     }
 
-    static void DisposeCallbackData(WeakCallbackDataType* callbackData)
-    {
-    }
+    static void DisposeCallbackData(WeakCallbackDataType* callbackData) { }
 
     static MapType* MapFromWeakCallbackInfo(
         const v8::WeakCallbackInfo<WeakCallbackDataType>& data)
@@ -80,19 +90,30 @@ public:
         return KeyType();
     }
 
-    static void OnWeakCallback(const v8::WeakCallbackInfo<WeakCallbackDataType>& data) {}
+    static void OnWeakCallback(
+        const v8::WeakCallbackInfo<WeakCallbackDataType>& data) { }
 
     // Dispose traits:
-    static void Dispose(v8::Isolate* isolate, v8::Global<ValueType> value, KeyType key) { }
-    static void DisposeWeak(const v8::WeakCallbackInfo<WeakCallbackDataType>& data) { }
+    static void Dispose(v8::Isolate* isolate,
+        v8::Global<ValueType> value,
+        KeyType key) { }
+    static void DisposeWeak(
+        const v8::WeakCallbackInfo<WeakCallbackDataType>& data) { }
 };
 
 /**
  * A map for safely storing persistent V8 values, based on
  * v8::GlobalValueMap.
  */
-template <class KeyType, class ValueType, v8::PersistentContainerCallbackType type>
-class V8GlobalValueMap : public v8::GlobalValueMap<KeyType, ValueType, V8GlobalValueMapTraits<KeyType, ValueType, type>> {
+template <class KeyType,
+    class ValueType,
+    v8::PersistentContainerCallbackType type>
+class V8GlobalValueMap : public v8::GlobalValueMap<
+                             KeyType,
+                             ValueType,
+                             V8GlobalValueMapTraits<KeyType, ValueType, type>> {
+    DISALLOW_NEW();
+
 public:
     typedef V8GlobalValueMapTraits<KeyType, ValueType, type> Traits;
     explicit V8GlobalValueMap(v8::Isolate* isolate)

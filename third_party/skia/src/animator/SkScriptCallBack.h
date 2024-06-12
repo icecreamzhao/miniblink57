@@ -24,9 +24,11 @@ public:
         kUnbox
     };
 
-    virtual bool getReference(const char* , size_t len, SkScriptValue2* result) {  return false; }
-    virtual SkOperand2::OpType getReturnType(size_t ref, SkOperand2*) {
-        return SkOperand2::kS32; }
+    virtual bool getReference(const char*, size_t len, SkScriptValue2* result) { return false; }
+    virtual SkOperand2::OpType getReturnType(size_t ref, SkOperand2*)
+    {
+        return SkOperand2::kS32;
+    }
     virtual Type getType() const = 0;
 };
 
@@ -37,22 +39,22 @@ public:
 
 class SkScriptCallBackFunction : public SkScriptCallBack {
 public:
-    virtual void getParamTypes(SkIntArray(SkOperand2::OpType)* types) = 0;
+    virtual void getParamTypes(SkIntArray(SkOperand2::OpType) * types) = 0;
     virtual Type getType() const { return kFunction; }
     virtual bool invoke(size_t ref, SkOpArray* params, SkOperand2* value) = 0;
 };
 
-class SkScriptCallBackMember: public SkScriptCallBack {
+class SkScriptCallBackMember : public SkScriptCallBack {
 public:
-    bool getMemberReference(const char* , size_t len, void* object, SkScriptValue2* ref);
+    bool getMemberReference(const char*, size_t len, void* object, SkScriptValue2* ref);
     virtual Type getType() const { return kMember; }
     virtual bool invoke(size_t ref, void* object, SkOperand2* value) = 0;
 };
 
 class SkScriptCallBackMemberFunction : public SkScriptCallBack {
 public:
-    bool getMemberReference(const char* , size_t len, void* object, SkScriptValue2* ref);
-    virtual void getParamTypes(SkIntArray(SkOperand2::OpType)* types) = 0;
+    bool getMemberReference(const char*, size_t len, void* object, SkScriptValue2* ref);
+    virtual void getParamTypes(SkIntArray(SkOperand2::OpType) * types) = 0;
     virtual Type getType() const { return kMemberFunction; }
     virtual bool invoke(size_t ref, void* object, SkOpArray* params, SkOperand2* value) = 0;
 };

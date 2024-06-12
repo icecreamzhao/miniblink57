@@ -38,7 +38,8 @@
 
 namespace blink {
 
-class KeyAlgorithm : public GarbageCollectedFinalized<KeyAlgorithm>, public ScriptWrappable {
+class KeyAlgorithm : public GarbageCollectedFinalized<KeyAlgorithm>,
+                     public ScriptWrappable {
 public:
     ~KeyAlgorithm() override;
 
@@ -60,8 +61,9 @@ protected:
     WebCryptoKeyAlgorithm m_algorithm;
 };
 
-#define DEFINE_KEY_ALGORITHM_TYPE_CASTS(thisType) \
-    DEFINE_TYPE_CASTS(thisType, KeyAlgorithm, value, value->is##thisType(), value.is##thisType())
+#define DEFINE_KEY_ALGORITHM_TYPE_CASTS(thisType)                           \
+    DEFINE_TYPE_CASTS(thisType, KeyAlgorithm, value, value->is##thisType(), \
+        value.is##thisType())
 
 } // namespace blink
 

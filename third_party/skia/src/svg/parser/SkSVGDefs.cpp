@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,19 +5,21 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGDefs.h"
 
 DEFINE_SVG_NO_INFO(Defs)
 
-bool SkSVGDefs::isDef() {
+bool SkSVGDefs::isDef()
+{
     return true;
 }
 
-bool SkSVGDefs::isNotDef() {
+bool SkSVGDefs::isNotDef()
+{
     return false;
 }
 
-void SkSVGDefs::translate(SkSVGParser& parser, bool defState) {
+void SkSVGDefs::translate(SkSVGParser& parser, bool defState)
+{
     INHERITED::translate(parser, defState);
 }

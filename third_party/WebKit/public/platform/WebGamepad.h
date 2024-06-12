@@ -26,28 +26,75 @@
 
 #include "WebCommon.h"
 
-#if BLINK_IMPLEMENTATION
-#include "wtf/Assertions.h"
-#endif
-
 namespace blink {
 
-#pragma pack(push, 1)
+#pragma pack(push, 4)
 
 class WebGamepadButton {
 public:
     WebGamepadButton()
         : pressed(false)
+        , touched(false)
         , value(0.)
     {
     }
-    WebGamepadButton(bool pressed, double value)
+    WebGamepadButton(bool pressed, bool touched, double value)
         : pressed(pressed)
+        , touched(touched)
         , value(value)
     {
     }
     bool pressed;
+    bool touched;
     double value;
+};
+
+class WebGamepadVector {
+public:
+    WebGamepadVector()
+        : notNull(false)
+    {
+    }
+
+    bool notNull;
+    float x, y, z;
+};
+
+class WebGamepadQuaternion {
+public:
+    WebGamepadQuaternion()
+        : notNull(false)
+    {
+    }
+
+    bool notNull;
+    float x, y, z, w;
+};
+
+class WebGamepadPose {
+public:
+    WebGamepadPose()
+        : notNull(false)
+    {
+    }
+
+    bool notNull;
+
+    bool hasOrientation;
+    bool hasPosition;
+
+    WebGamepadQuaternion orientation;
+    WebGamepadVector position;
+    WebGamepadVector angularVelocity;
+    WebGamepadVector linearVelocity;
+    WebGamepadVector angularAcceleration;
+    WebGamepadVector linearAcceleration;
+};
+
+enum WebGamepadHand {
+    GamepadHandNone = 0,
+    GamepadHandLeft = 1,
+    GamepadHandRight = 2
 };
 
 // This structure is intentionally POD and fixed size so that it can be shared
@@ -65,6 +112,7 @@ public:
         , timestamp(0)
         , axesLength(0)
         , buttonsLength(0)
+        , displayId(0)
     {
         id[0] = 0;
         mapping[0] = 0;
@@ -94,14 +142,15 @@ public:
 
     // Mapping type (for example "standard")
     WebUChar mapping[mappingLengthCap];
+
+    WebGamepadPose pose;
+
+    WebGamepadHand hand;
+
+    unsigned displayId;
 };
 
-#if BLINK_IMPLEMENTATION
-static_assert(sizeof(WebGamepad) == 721, "WebGamepad has wrong size");
-#endif
-
 #pragma pack(pop)
-
 }
 
 #endif // WebGamepad_h

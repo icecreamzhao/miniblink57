@@ -6,24 +6,23 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkSnapShot_DEFINED
 #define SkSnapShot_DEFINED
 
 #include "SkADrawable.h"
-#include "SkImageDecoder.h"
 #include "SkMemberInfo.h"
 #include "SkString.h"
 
-class SkSnapshot: public SkADrawable {
+class SkSnapshot : public SkADrawable {
     DECLARE_MEMBER_INFO(Snapshot);
     SkSnapshot();
-    bool draw(SkAnimateMaker& ) override;
-    private:
+    bool draw(SkAnimateMaker&) override;
+
+private:
     SkString filename;
     SkScalar quality;
     SkBool sequence;
-    int /*SkImageEncoder::Type*/    type;
+    int /*SkImageEncoder::Type*/ type;
     int fSeqVal;
 };
 

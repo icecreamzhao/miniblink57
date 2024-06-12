@@ -28,7 +28,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/InspectorDatabaseResource.h"
 
 #include "modules/webdatabase/Database.h"
@@ -37,12 +36,19 @@ namespace blink {
 
 static int nextUnusedId = 1;
 
-InspectorDatabaseResource* InspectorDatabaseResource::create(Database* database, const String& domain, const String& name, const String& version)
+InspectorDatabaseResource* InspectorDatabaseResource::create(
+    Database* database,
+    const String& domain,
+    const String& name,
+    const String& version)
 {
     return new InspectorDatabaseResource(database, domain, name, version);
 }
 
-InspectorDatabaseResource::InspectorDatabaseResource(Database* database, const String& domain, const String& name, const String& version)
+InspectorDatabaseResource::InspectorDatabaseResource(Database* database,
+    const String& domain,
+    const String& name,
+    const String& version)
     : m_database(database)
     , m_id(String::number(nextUnusedId++))
     , m_domain(domain)
@@ -56,14 +62,15 @@ DEFINE_TRACE(InspectorDatabaseResource)
     visitor->trace(m_database);
 }
 
-void InspectorDatabaseResource::bind(InspectorFrontend::Database* frontend)
+void InspectorDatabaseResource::bind(protocol::Database::Frontend* frontend)
 {
-    RefPtr<TypeBuilder::Database::Database> jsonObject = TypeBuilder::Database::Database::create()
-        .setId(m_id)
-        .setDomain(m_domain)
-        .setName(m_name)
-        .setVersion(m_version);
-    frontend->addDatabase(jsonObject);
+    std::unique_ptr<protocol::Database::Database> jsonObject = protocol::Database::Database::create()
+                                                                   .setId(m_id)
+                                                                   .setDomain(m_domain)
+                                                                   .setName(m_name)
+                                                                   .setVersion(m_version)
+                                                                   .build();
+    frontend->addDatabase(std::move(jsonObject));
 }
 
 } // namespace blink

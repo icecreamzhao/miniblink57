@@ -31,60 +31,91 @@
 #ifndef ImageQualityController_h
 #define ImageQualityController_h
 
+#include "base/gtest_prod_util.h"
 #include "core/CoreExport.h"
-#include "core/layout/LayoutObject.h"
-#include "platform/geometry/IntSize.h"
+#include "platform/Timer.h"
 #include "platform/geometry/LayoutSize.h"
 #include "platform/graphics/Image.h"
-#include "platform/graphics/ImageOrientation.h"
-#include "platform/graphics/ImageSource.h"
 #include "wtf/HashMap.h"
+#include <memory>
 
 namespace blink {
 
+class LayoutObject;
+
 typedef HashMap<const void*, LayoutSize> LayerSizeMap;
-typedef HashMap<LayoutObject*, LayerSizeMap> ObjectLayerSizeMap;
+
+struct ObjectResizeInfo {
+    LayerSizeMap layerSizeMap;
+    bool isResizing;
+};
+
+typedef HashMap<const LayoutObject*, ObjectResizeInfo> ObjectLayerSizeMap;
 
 class CORE_EXPORT ImageQualityController final {
-    WTF_MAKE_NONCOPYABLE(ImageQualityController); WTF_MAKE_FAST_ALLOCATED(ImageQualityController);
+    WTF_MAKE_NONCOPYABLE(ImageQualityController);
+    USING_FAST_MALLOC(ImageQualityController);
+
 public:
     ~ImageQualityController();
 
     static ImageQualityController* imageQualityController();
 
-    static void remove(LayoutObject*);
+    static void remove(LayoutObject&);
 
-    InterpolationQuality chooseInterpolationQuality(GraphicsContext*, LayoutObject*, Image*, const void* layer, const LayoutSize&);
+    InterpolationQuality chooseInterpolationQuality(const LayoutObject&,
+        Image*,
+        const void* layer,
+        const LayoutSize&);
 
 private:
+    static const double cLowQualityTimeThreshold;
+    static const double cTimerRestartThreshold;
+
     ImageQualityController();
 
-    static bool has(LayoutObject*);
-    void set(LayoutObject*, LayerSizeMap* innerMap, const void* layer, const LayoutSize&);
+    static bool has(const LayoutObject&);
+    void set(const LayoutObject&,
+        LayerSizeMap* innerMap,
+        const void* layer,
+        const LayoutSize&,
+        bool isResizing);
 
-    bool shouldPaintAtLowQuality(GraphicsContext*, LayoutObject*, Image*, const void* layer, const LayoutSize&);
-    void removeLayer(LayoutObject*, LayerSizeMap* innerMap, const void* layer);
-    void objectDestroyed(LayoutObject*);
+    bool shouldPaintAtLowQuality(const LayoutObject&,
+        Image*,
+        const void* layer,
+        const LayoutSize&,
+        double lastFrameTimeMonotonic);
+    void removeLayer(const LayoutObject&,
+        LayerSizeMap* innerMap,
+        const void* layer);
+    void objectDestroyed(const LayoutObject&);
     bool isEmpty() { return m_objectLayerSizeMap.isEmpty(); }
 
-    void highQualityRepaintTimerFired(Timer<ImageQualityController>*);
-    void restartTimer();
+    void highQualityRepaintTimerFired(TimerBase*);
+    void restartTimer(double lastFrameTimeMonotonic);
 
     // Only for use in testing.
-    void setTimer(Timer<ImageQualityController>*);
+    void setTimer(std::unique_ptr<TimerBase>);
 
     ObjectLayerSizeMap m_objectLayerSizeMap;
-    OwnPtr<Timer<ImageQualityController>> m_timer;
-    bool m_animatedResizeIsActive;
-    bool m_liveResizeOptimizationIsActive;
+    std::unique_ptr<TimerBase> m_timer;
+    double m_frameTimeWhenTimerStarted;
 
     // For calling set().
-    friend class LayoutPartTest_DestroyUpdatesImageQualityController_Test;
+    FRIEND_TEST_ALL_PREFIXES(LayoutPartTest,
+        DestroyUpdatesImageQualityController);
 
     // For calling setTimer(),
-    friend class ImageQualityControllerTest_LowQualityFilterForLiveResize_Test;
-    friend class ImageQualityControllerTest_LowQualityFilterForResizingImage_Test;
-    friend class ImageQualityControllerTest_DontKickTheAnimationTimerWhenPaintingAtTheSameSize_Test;
+    FRIEND_TEST_ALL_PREFIXES(ImageQualityControllerTest,
+        LowQualityFilterForResizingImage);
+    FRIEND_TEST_ALL_PREFIXES(
+        ImageQualityControllerTest,
+        MediumQualityFilterForNotAnimatedWhileAnotherAnimates);
+    FRIEND_TEST_ALL_PREFIXES(ImageQualityControllerTest,
+        DontKickTheAnimationTimerWhenPaintingAtTheSameSize);
+    FRIEND_TEST_ALL_PREFIXES(ImageQualityControllerTest,
+        DontRestartTimerUnlessAdvanced);
 };
 
 } // namespace blink

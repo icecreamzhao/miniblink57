@@ -19,19 +19,22 @@ class PremulAndUnpremulAlphaOpsBench : public Benchmark {
     SkBitmap fBmp1, fBmp2;
 
 public:
-    PremulAndUnpremulAlphaOpsBench(SkColorType ct) {
+    PremulAndUnpremulAlphaOpsBench(SkColorType ct)
+    {
         fColorType = ct;
         fName.printf("premul_and_unpremul_alpha_%s", sk_tool_utils::colortype_name(ct));
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return fName.c_str();
     }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         SkImageInfo info = SkImageInfo::Make(W, H, fColorType, kUnpremul_SkAlphaType);
-        fBmp1.allocPixels(info);   // used in writePixels
+        fBmp1.allocPixels(info); // used in writePixels
 
         for (int h = 0; h < H; ++h) {
             for (int w = 0; w < W; ++w) {
@@ -40,10 +43,11 @@ protected:
             }
         }
 
-        fBmp2.allocPixels(info);    // used in readPixels()
+        fBmp2.allocPixels(info); // used in readPixels()
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         canvas->clear(SK_ColorBLACK);
 
         for (int loop = 0; loop < loops; ++loop) {
@@ -60,7 +64,6 @@ private:
 
     typedef Benchmark INHERITED;
 };
-
 
 DEF_BENCH(return new PremulAndUnpremulAlphaOpsBench(kRGBA_8888_SkColorType));
 DEF_BENCH(return new PremulAndUnpremulAlphaOpsBench(kBGRA_8888_SkColorType));

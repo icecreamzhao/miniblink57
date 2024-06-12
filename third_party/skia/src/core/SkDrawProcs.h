@@ -8,59 +8,11 @@
 #ifndef SkDrawProcs_DEFINED
 #define SkDrawProcs_DEFINED
 
-#include "SkBlitter.h"
 #include "SkDraw.h"
 #include "SkGlyph.h"
 
-class SkAAClip;
-class SkBlitter;
-
-struct SkDraw1Glyph {
-    const SkDraw* fDraw;
-    const SkRegion* fClip;
-    const SkAAClip* fAAClip;
-    SkBlitter* fBlitter;
-    SkGlyphCache* fCache;
-    const SkPaint* fPaint;
-    SkIRect fClipBounds;
-    /** Half the sampling frequency of the rasterized glyph in x. */
-    SkScalar fHalfSampleX;
-    /** Half the sampling frequency of the rasterized glyph in y. */
-    SkScalar fHalfSampleY;
-
-    /** Draws one glyph.
-     *
-     *  The x and y are pre-biased, so implementations may just truncate them.
-     *  i.e. half the sampling frequency has been added.
-     *  e.g. 1/2 or 1/(2^(SkGlyph::kSubBits+1)) has already been added.
-     *  This added bias can be found in fHalfSampleX,Y.
-     */
-    typedef void (*Proc)(const SkDraw1Glyph&, Sk48Dot16 x, Sk48Dot16 y, const SkGlyph&);
-
-    Proc init(const SkDraw* draw, SkBlitter* blitter, SkGlyphCache* cache,
-              const SkPaint&);
-
-    // call this instead of fBlitter->blitMask() since this wrapper will handle
-    // the case when the mask is ARGB32_Format
-    //
-    void blitMask(const SkMask& mask, const SkIRect& clip) const {
-        if (SkMask::kARGB32_Format == mask.fFormat) {
-            this->blitMaskAsSprite(mask);
-        } else {
-            fBlitter->blitMask(mask, clip);
-        }
-    }
-
-    // mask must be kARGB32_Format
-    void blitMaskAsSprite(const SkMask& mask) const;
-};
-
-struct SkDrawProcs {
-    SkDraw1Glyph::Proc  fD1GProc;
-};
-
 bool SkDrawTreatAAStrokeAsHairline(SkScalar strokeWidth, const SkMatrix&,
-                                   SkScalar* coverage);
+    SkScalar* coverage);
 
 /**
  *  If the current paint is set to stroke and the stroke-width when applied to
@@ -69,7 +21,8 @@ bool SkDrawTreatAAStrokeAsHairline(SkScalar strokeWidth, const SkMatrix&,
  *  conditions are false, then this returns false and coverage is ignored.
  */
 inline bool SkDrawTreatAsHairline(const SkPaint& paint, const SkMatrix& matrix,
-                                  SkScalar* coverage) {
+    SkScalar* coverage)
+{
     if (SkPaint::kStroke_Style != paint.getStyle()) {
         return false;
     }
@@ -90,23 +43,26 @@ inline bool SkDrawTreatAsHairline(const SkPaint& paint, const SkMatrix& matrix,
 class SkTextAlignProc {
 public:
     SkTextAlignProc(SkPaint::Align align)
-        : fAlign(align) {
+        : fAlign(align)
+    {
     }
 
     // Returns the glyph position, which may be rounded or not by the caller
     //   e.g. subpixel doesn't round.
-    void operator()(const SkPoint& loc, const SkGlyph& glyph, SkPoint* dst) {
+    void operator()(const SkPoint& loc, const SkGlyph& glyph, SkPoint* dst)
+    {
         if (SkPaint::kLeft_Align == fAlign) {
             dst->set(loc.fX, loc.fY);
         } else if (SkPaint::kCenter_Align == fAlign) {
-            dst->set(loc.fX - SkFixedToScalar(glyph.fAdvanceX >> 1),
-                     loc.fY - SkFixedToScalar(glyph.fAdvanceY >> 1));
+            dst->set(loc.fX - SkFloatToScalar(glyph.fAdvanceX) / 2,
+                loc.fY - SkFloatToScalar(glyph.fAdvanceY) / 2);
         } else {
             SkASSERT(SkPaint::kRight_Align == fAlign);
-            dst->set(loc.fX - SkFixedToScalar(glyph.fAdvanceX),
-                     loc.fY - SkFixedToScalar(glyph.fAdvanceY));
+            dst->set(loc.fX - SkFloatToScalar(glyph.fAdvanceX),
+                loc.fY - SkFloatToScalar(glyph.fAdvanceY));
         }
     }
+
 private:
     const SkPaint::Align fAlign;
 };

@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebCString.h"
 
 #include "public/platform/WebString.h"
@@ -62,11 +61,7 @@ void WebCString::assign(const WebCString& other)
 
 void WebCString::assign(const char* data, size_t length)
 {
-    char* newData;
-    RefPtr<WTF::CStringBuffer> buffer =
-        WTF::CString::newUninitialized(length, newData).buffer();
-    memcpy(newData, data, length);
-    assign(buffer.get());
+    assign(WTF::CString(data, length).impl());
 }
 
 size_t WebCString::length() const
@@ -86,12 +81,12 @@ WebString WebCString::utf16() const
 
 WebCString::WebCString(const WTF::CString& s)
 {
-    assign(s.buffer());
+    assign(s.impl());
 }
 
 WebCString& WebCString::operator=(const WTF::CString& s)
 {
-    assign(s.buffer());
+    assign(s.impl());
     return *this;
 }
 
@@ -100,7 +95,7 @@ WebCString::operator WTF::CString() const
     return m_private.get();
 }
 
-void WebCString::assign(WTF::CStringBuffer* p)
+void WebCString::assign(WTF::CStringImpl* p)
 {
     m_private = p;
 }

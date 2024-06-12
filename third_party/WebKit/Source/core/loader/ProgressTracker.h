@@ -28,14 +28,16 @@
 
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
-#include "wtf/FastAllocBase.h"
+#include "platform/network/ResourceLoadPriority.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
+#include <memory>
 
 namespace blink {
 
+class FrameLoaderClient;
 class LocalFrame;
 class ResourceResponse;
 struct ProgressItem;
@@ -43,10 +45,12 @@ struct ProgressItem;
 // FIXME: This is only used on Android. Android is the only Chrome
 // browser which shows a progress bar during loading.
 // We should find a better way for Android to get this data and remove this!
-class CORE_EXPORT ProgressTracker final : public NoBaseWillBeGarbageCollectedFinalized<ProgressTracker> {
-    WTF_MAKE_NONCOPYABLE(ProgressTracker); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ProgressTracker);
+class CORE_EXPORT ProgressTracker final
+    : public GarbageCollectedFinalized<ProgressTracker> {
+    WTF_MAKE_NONCOPYABLE(ProgressTracker);
+
 public:
-    static PassOwnPtrWillBeRawPtr<ProgressTracker> create(LocalFrame*);
+    static ProgressTracker* create(LocalFrame*);
 
     ~ProgressTracker();
     DECLARE_TRACE();
@@ -57,31 +61,31 @@ public:
     void progressStarted();
     void progressCompleted();
 
+    void finishedParsing();
+
+    void willStartLoading(unsigned long identifier, ResourceLoadPriority);
     void incrementProgress(unsigned long identifier, const ResourceResponse&);
     void incrementProgress(unsigned long identifier, int);
     void completeProgress(unsigned long identifier);
 
-    long long totalPageAndResourceBytesToLoad() const { return m_totalPageAndResourceBytesToLoad; }
-    long long totalBytesReceived() const { return m_totalBytesReceived; }
-
 private:
     explicit ProgressTracker(LocalFrame*);
 
+    FrameLoaderClient* frameLoaderClient() const;
+
+    void maybeSendProgress();
+    void sendFinalProgress();
     void reset();
 
-    RawPtrWillBeMember<LocalFrame> m_frame;
-    long long m_totalPageAndResourceBytesToLoad;
-    long long m_totalBytesReceived;
+    Member<LocalFrame> m_frame;
     double m_lastNotifiedProgressValue;
     double m_lastNotifiedProgressTime;
-    double m_progressNotificationInterval;
-    double m_progressNotificationTimeInterval;
-    bool m_finalProgressChangedSent;
+    bool m_finishedParsing;
     double m_progressValue;
 
-    HashMap<unsigned long, OwnPtr<ProgressItem>> m_progressItems;
+    HashMap<unsigned long, std::unique_ptr<ProgressItem>> m_progressItems;
 };
 
-}
+} // namespace blink
 
 #endif

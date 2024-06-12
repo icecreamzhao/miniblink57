@@ -32,16 +32,21 @@ namespace blink {
 // Collection that limits to a particular tag.
 class TagCollection : public HTMLCollection {
 public:
-    static PassRefPtrWillBeRawPtr<TagCollection> create(ContainerNode& rootNode, const AtomicString& namespaceURI, const AtomicString& localName)
+    static TagCollection* create(ContainerNode& rootNode,
+        const AtomicString& namespaceURI,
+        const AtomicString& localName)
     {
-        ASSERT(namespaceURI != starAtom);
-        return adoptRefWillBeNoop(new TagCollection(rootNode, TagCollectionType, namespaceURI, localName));
+        DCHECK(namespaceURI != starAtom);
+        return new TagCollection(rootNode, TagCollectionType, namespaceURI,
+            localName);
     }
 
-    static PassRefPtrWillBeRawPtr<TagCollection> create(ContainerNode& rootNode, CollectionType type, const AtomicString& localName)
+    static TagCollection* create(ContainerNode& rootNode,
+        CollectionType type,
+        const AtomicString& localName)
     {
-        ASSERT_UNUSED(type, type == TagCollectionType);
-        return adoptRefWillBeNoop(new TagCollection(rootNode, TagCollectionType, starAtom, localName));
+        DCHECK_EQ(type, TagCollectionType);
+        return new TagCollection(rootNode, TagCollectionType, starAtom, localName);
     }
 
     ~TagCollection() override;
@@ -49,13 +54,20 @@ public:
     bool elementMatches(const Element&) const;
 
 protected:
-    TagCollection(ContainerNode& rootNode, CollectionType, const AtomicString& namespaceURI, const AtomicString& localName);
+    TagCollection(ContainerNode& rootNode,
+        CollectionType,
+        const AtomicString& namespaceURI,
+        const AtomicString& localName);
 
     AtomicString m_namespaceURI;
     AtomicString m_localName;
 };
 
-DEFINE_TYPE_CASTS(TagCollection, LiveNodeListBase, collection, collection->type() == TagCollectionType, collection.type() == TagCollectionType);
+DEFINE_TYPE_CASTS(TagCollection,
+    LiveNodeListBase,
+    collection,
+    collection->type() == TagCollectionType,
+    collection.type() == TagCollectionType);
 
 } // namespace blink
 

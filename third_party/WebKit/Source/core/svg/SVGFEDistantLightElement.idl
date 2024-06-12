@@ -23,9 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/filter-effects/#InterfaceSVGFEDistantLightElement
+// https://drafts.fxtf.org/filters/#InterfaceSVGFEDistantLightElement
 
 interface SVGFEDistantLightElement : SVGElement {
-    readonly attribute SVGAnimatedNumber azimuth;
-    readonly attribute SVGAnimatedNumber elevation;
+    [MeasureAs=SVG1DOMFilter] readonly attribute SVGAnimatedNumber azimuth;
+    [MeasureAs=SVG1DOMFilter] readonly attribute SVGAnimatedNumber elevation;
 };

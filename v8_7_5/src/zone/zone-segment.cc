@@ -9,19 +9,21 @@
 namespace v8 {
 namespace internal {
 
-void Segment::ZapContents() {
+    void Segment::ZapContents()
+    {
 #ifdef DEBUG
-  memset(reinterpret_cast<void*>(start()), kZapDeadByte, capacity());
+        memset(reinterpret_cast<void*>(start()), kZapDeadByte, capacity());
 #endif
-  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), capacity());
-}
+        MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), capacity());
+    }
 
-void Segment::ZapHeader() {
+    void Segment::ZapHeader()
+    {
 #ifdef DEBUG
-  memset(this, kZapDeadByte, sizeof(Segment));
+        memset(this, kZapDeadByte, sizeof(Segment));
 #endif
-  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), sizeof(Segment));
-}
+        MSAN_ALLOCATED_UNINITIALIZED_MEMORY(start(), sizeof(Segment));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

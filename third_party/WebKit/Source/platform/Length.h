@@ -25,8 +25,8 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/animation/AnimationUtilities.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-#include "wtf/FastAllocBase.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/MathExtras.h"
@@ -38,20 +38,25 @@ namespace blink {
 // FIXME: This enum makes it hard to tell in general what values may be
 // appropriate for any given Length.
 enum LengthType {
-    Auto, Percent, Fixed,
-    Intrinsic, MinIntrinsic,
-    MinContent, MaxContent, FillAvailable, FitContent,
+    Auto,
+    Percent,
+    Fixed,
+    MinContent,
+    MaxContent,
+    FillAvailable,
+    FitContent,
     Calculated,
-    ExtendToZoom, DeviceWidth, DeviceHeight,
+    ExtendToZoom,
+    DeviceWidth,
+    DeviceHeight,
     MaxSizeNone
 };
 
-enum ValueRange {
-    ValueRangeAll,
-    ValueRangeNonNegative
-};
+enum ValueRange { ValueRangeAll,
+    ValueRangeNonNegative };
 
 struct PixelsAndPercent {
+    DISALLOW_NEW();
     PixelsAndPercent(float pixels, float percent)
         : pixels(pixels)
         , percent(percent)
@@ -64,39 +69,57 @@ struct PixelsAndPercent {
 class CalculationValue;
 
 class PLATFORM_EXPORT Length {
-    WTF_MAKE_FAST_ALLOCATED(Length);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     Length()
-        :  m_intValue(0), m_quirk(false), m_type(Auto), m_isFloat(false)
+        : m_intValue(0)
+        , m_quirk(false)
+        , m_type(Auto)
+        , m_isFloat(false)
     {
     }
 
     Length(LengthType t)
-        : m_intValue(0), m_quirk(false), m_type(t), m_isFloat(false)
+        : m_intValue(0)
+        , m_quirk(false)
+        , m_type(t)
+        , m_isFloat(false)
     {
         ASSERT(t != Calculated);
     }
 
     Length(int v, LengthType t, bool q = false)
-        : m_intValue(v), m_quirk(q), m_type(t), m_isFloat(false)
+        : m_intValue(v)
+        , m_quirk(q)
+        , m_type(t)
+        , m_isFloat(false)
     {
         ASSERT(t != Calculated);
     }
 
     Length(LayoutUnit v, LengthType t, bool q = false)
-        : m_floatValue(v.toFloat()), m_quirk(q), m_type(t), m_isFloat(true)
+        : m_floatValue(v.toFloat())
+        , m_quirk(q)
+        , m_type(t)
+        , m_isFloat(true)
     {
         ASSERT(t != Calculated);
     }
 
     Length(float v, LengthType t, bool q = false)
-        : m_floatValue(v), m_quirk(q), m_type(t), m_isFloat(true)
+        : m_floatValue(v)
+        , m_quirk(q)
+        , m_type(t)
+        , m_isFloat(true)
     {
         ASSERT(t != Calculated);
     }
 
     Length(double v, LengthType t, bool q = false)
-        : m_quirk(q), m_type(t), m_isFloat(true)
+        : m_quirk(q)
+        , m_type(t)
+        , m_isFloat(true)
     {
         m_floatValue = static_cast<float>(v);
     }
@@ -126,7 +149,10 @@ public:
             decrementCalculatedRef();
     }
 
-    bool operator==(const Length& o) const { return (m_type == o.m_type) && (m_quirk == o.m_quirk) && (isMaxSizeNone() || (getFloatValue() == o.getFloatValue()) || isCalculatedEqual(o)); }
+    bool operator==(const Length& o) const
+    {
+        return (m_type == o.m_type) && (m_quirk == o.m_quirk) && (isMaxSizeNone() || (getFloatValue() == o.getFloatValue()) || isCalculatedEqual(o));
+    }
     bool operator!=(const Length& o) const { return !(*this == o); }
 
     const Length& operator*=(float v)
@@ -144,9 +170,11 @@ public:
         return *this;
     }
 
-    // FIXME: Make this private (if possible) or at least rename it (http://crbug.com/432707).
+    // FIXME: Make this private (if possible) or at least rename it
+    // (http://crbug.com/432707).
     inline float value() const
     {
+        ASSERT(!isCalculated());
         return getFloatValue();
     }
 
@@ -159,22 +187,26 @@ public:
         return getIntValue();
     }
 
+    float pixels() const
+    {
+        ASSERT(type() == Fixed);
+        return getFloatValue();
+    }
+
     float percent() const
     {
         ASSERT(type() == Percent);
         return getFloatValue();
     }
-    PixelsAndPercent pixelsAndPercent() const;
 
-    CalculationValue& calculationValue() const;
+    PixelsAndPercent getPixelsAndPercent() const;
+
+    CalculationValue& getCalculationValue() const;
 
     LengthType type() const { return static_cast<LengthType>(m_type); }
     bool quirk() const { return m_quirk; }
 
-    void setQuirk(bool quirk)
-    {
-        m_quirk = quirk;
-    }
+    void setQuirk(bool quirk) { m_quirk = quirk; }
 
     void setValue(LengthType t, int value)
     {
@@ -206,17 +238,14 @@ public:
         m_isFloat = true;
     }
 
-    void setValue(float value)
-    {
-        *this = Length(value, Fixed);
-    }
+    void setValue(float value) { *this = Length(value, Fixed); }
 
     bool isMaxSizeNone() const { return type() == MaxSizeNone; }
 
-    // FIXME calc: https://bugs.webkit.org/show_bug.cgi?id=80357. A calculated Length
-    // always contains a percentage, and without a maxValue passed to these functions
-    // it's impossible to determine the sign or zero-ness. We assume all calc values
-    // are positive and non-zero for now.
+    // FIXME calc: https://bugs.webkit.org/show_bug.cgi?id=80357. A calculated
+    // Length always contains a percentage, and without a maxValue passed to these
+    // functions it's impossible to determine the sign or zero-ness. We assume all
+    // calc values are positive and non-zero for now.
     bool isZero() const
     {
         ASSERT(!isMaxSizeNone());
@@ -244,10 +273,15 @@ public:
 
     bool isAuto() const { return type() == Auto; }
     bool isFixed() const { return type() == Fixed; }
-    bool isIntrinsicOrAuto() const { return type() == Auto || isLegacyIntrinsic() || isIntrinsic(); }
-    bool isLegacyIntrinsic() const { return type() == Intrinsic || type() == MinIntrinsic; }
-    bool isIntrinsic() const { return type() == MinContent || type() == MaxContent || type() == FillAvailable || type() == FitContent; }
-    bool isSpecified() const { return type() == Fixed || type() == Percent || type() == Calculated; }
+    bool isIntrinsicOrAuto() const { return type() == Auto || isIntrinsic(); }
+    bool isIntrinsic() const
+    {
+        return type() == MinContent || type() == MaxContent || type() == FillAvailable || type() == FitContent;
+    }
+    bool isSpecified() const
+    {
+        return type() == Fixed || type() == Percent || type() == Calculated;
+    }
     bool isSpecifiedOrIntrinsic() const { return isSpecified() || isIntrinsic(); }
     bool isCalculated() const { return type() == Calculated; }
     bool isCalculatedEqual(const Length&) const;
@@ -255,7 +289,11 @@ public:
     bool isMaxContent() const { return type() == MaxContent; }
     bool isFillAvailable() const { return type() == FillAvailable; }
     bool isFitContent() const { return type() == FitContent; }
-    bool hasPercent() const { return type() == Percent || type() == Calculated; }
+    bool isPercent() const { return type() == Percent; }
+    bool isPercentOrCalc() const
+    {
+        return type() == Percent || type() == Calculated;
+    }
 
     Length blend(const Length& from, double progress, ValueRange range) const
     {
@@ -295,6 +333,8 @@ public:
 
     Length subtractFromOneHundredPercent() const;
 
+    Length zoom(double factor) const;
+
 private:
     int getIntValue() const
     {
@@ -320,8 +360,6 @@ private:
     unsigned char m_type;
     bool m_isFloat;
 };
-
-PLATFORM_EXPORT Vector<Length> parseHTMLAreaElementCoords(const String&);
 
 } // namespace blink
 

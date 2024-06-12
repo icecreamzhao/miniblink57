@@ -3,8 +3,10 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
+ * rights reserved.
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
@@ -29,7 +31,6 @@
 #define DocumentOrderedList_h
 
 #include "platform/heap/Handle.h"
-#include "wtf/FastAllocBase.h"
 #include "wtf/ListHashSet.h"
 
 namespace blink {
@@ -38,28 +39,35 @@ class Node;
 
 class DocumentOrderedList final {
     WTF_MAKE_NONCOPYABLE(DocumentOrderedList);
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     DocumentOrderedList() { }
 
     void add(Node*);
-    void parserAdd(Node*);
     void remove(const Node*);
     bool isEmpty() const { return m_nodes.isEmpty(); }
     void clear() { m_nodes.clear(); }
     size_t size() const { return m_nodes.size(); }
 
-    using iterator = WillBeHeapListHashSet<RawPtrWillBeMember<Node>, 32>::iterator;
+    using iterator = HeapListHashSet<Member<Node>, 32>::iterator;
+    using const_iterator = HeapListHashSet<Member<Node>, 32>::const_iterator;
+    using const_reverse_iterator = HeapListHashSet<Member<Node>, 32>::const_reverse_iterator;
 
     iterator begin() { return m_nodes.begin(); }
     iterator end() { return m_nodes.end(); }
+    const_iterator begin() const { return m_nodes.begin(); }
+    const_iterator end() const { return m_nodes.end(); }
+
+    const_reverse_iterator rbegin() const { return m_nodes.rbegin(); }
+    const_reverse_iterator rend() const { return m_nodes.rend(); }
 
     DECLARE_TRACE();
 
 private:
-    WillBeHeapListHashSet<RawPtrWillBeMember<Node>, 32> m_nodes;
+    HeapListHashSet<Member<Node>, 32> m_nodes;
 };
 
-}
+} // namespace blink
 
 #endif

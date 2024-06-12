@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2010 Google Inc.
  *
@@ -6,34 +5,31 @@
  * found in the LICENSE file.
  */
 
-
-
 #include "SkTypes.h"
 
-static const size_t kBufferSize = 2048;
+#if defined(SK_BUILD_FOR_WIN32)
+
+#include "SkLeanWindows.h"
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <windows.h>
 
-void SkDebugf(const char format[], ...) {
-    char    buffer[kBufferSize + 1];
+static const size_t kBufferSize = 2048;
+
+void SkDebugf(const char format[], ...)
+{
+    char buffer[kBufferSize + 1];
     va_list args;
 
     va_start(args, format);
-    vprintf(format, args);
+    vfprintf(stderr, format, args);
     va_end(args);
-    // When we crash on Windows we often are missing a lot of prints. Since we don't really care
-    // about SkDebugf performance we flush after every print.
-//    fflush(stdout);
+    fflush(stderr); // stderr seems to be buffered on Windows.
 
     va_start(args, format);
-#if USING_VC6RT == 1
-    vsprintf(buffer, format, args);
-#else
-    vsnprintf_s(buffer, kBufferSize, format, args);
-#endif
+    vsnprintf(buffer, kBufferSize, format, args);
     va_end(args);
 
     OutputDebugStringA(buffer);
 }
+#endif //defined(SK_BUILD_FOR_WIN32)

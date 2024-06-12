@@ -11,6 +11,9 @@
 #include "Benchmark.h"
 #include "SkCanvas.h"
 #include "SkPicture.h"
+#include "SkTDArray.h"
+
+class SkSurface;
 
 /**
  * Runs an SkPicture as a benchmark by repeatedly drawing it scaled inside a device clip.
@@ -18,12 +21,15 @@
 class SKPBench : public Benchmark {
 public:
     SKPBench(const char* name, const SkPicture*, const SkIRect& devClip, SkScalar scale,
-             bool useMultiPictureDraw, bool doLooping);
+        bool useMultiPictureDraw, bool doLooping);
     ~SKPBench() override;
 
-    int calculateLoops(int defaultLoops) const override {
+    int calculateLoops(int defaultLoops) const override
+    {
         return fDoLooping ? defaultLoops : 1;
     }
+
+    void getGpuStats(SkCanvas*, SkTArray<SkString>* keys, SkTArray<double>* values) override;
 
 protected:
     const char* onGetName() override;
@@ -31,7 +37,7 @@ protected:
     void onPerCanvasPreDraw(SkCanvas*) override;
     void onPerCanvasPostDraw(SkCanvas*) override;
     bool isSuitableFor(Backend backend) override;
-    void onDraw(const int loops, SkCanvas* canvas) override;
+    void onDraw(int loops, SkCanvas* canvas) override;
     SkIPoint onGetSize() override;
 
     virtual void drawMPDPicture();
@@ -49,8 +55,8 @@ private:
     SkString fUniqueName;
 
     const bool fUseMultiPictureDraw;
-    SkTDArray<SkSurface*> fSurfaces;   // for MultiPictureDraw
-    SkTDArray<SkIRect> fTileRects;     // for MultiPictureDraw
+    SkTDArray<SkSurface*> fSurfaces; // for MultiPictureDraw
+    SkTDArray<SkIRect> fTileRects; // for MultiPictureDraw
 
     const bool fDoLooping;
 

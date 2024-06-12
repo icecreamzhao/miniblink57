@@ -37,15 +37,20 @@ namespace blink {
 
 class URLInputType final : public BaseTextInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
 
 private:
-    URLInputType(HTMLInputElement& element) : BaseTextInputType(element) { }
+    URLInputType(HTMLInputElement& element)
+        : BaseTextInputType(element)
+    {
+    }
     void countUsage() override;
     const AtomicString& formControlType() const override;
     bool typeMismatchFor(const String&) const override;
     bool typeMismatch() const override;
     String typeMismatchText() const override;
+    String sanitizeValue(const String&) const override;
+    String sanitizeUserInputValue(const String&) const override;
 };
 
 } // namespace blink

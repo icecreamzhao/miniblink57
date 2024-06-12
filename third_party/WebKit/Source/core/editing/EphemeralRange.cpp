@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/editing/EphemeralRange.h"
 
 #include "core/dom/Document.h"
@@ -13,32 +12,37 @@
 namespace blink {
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(const PositionAlgorithm<Strategy>& start, const PositionAlgorithm<Strategy>& end)
+EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(
+    const PositionTemplate<Strategy>& start,
+    const PositionTemplate<Strategy>& end)
     : m_startPosition(start)
     , m_endPosition(end)
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     , m_domTreeVersion(start.isNull() ? 0 : start.document()->domTreeVersion())
 #endif
 {
     if (m_startPosition.isNull()) {
-        ASSERT(m_endPosition.isNull());
+        DCHECK(m_endPosition.isNull());
         return;
     }
-    ASSERT(m_endPosition.isNotNull());
-    ASSERT(m_startPosition.document() == m_endPosition.document());
-    ASSERT(m_startPosition.inDocument());
-    ASSERT(m_endPosition.inDocument());
+    DCHECK(m_endPosition.isNotNull());
+    DCHECK_EQ(m_startPosition.document(), m_endPosition.document());
+    DCHECK(m_startPosition.isConnected());
+    DCHECK(m_endPosition.isConnected());
+    DCHECK_LE(m_startPosition, m_endPosition);
 }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(const EphemeralRangeTemplate<Strategy>& other)
+EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(
+    const EphemeralRangeTemplate<Strategy>& other)
     : EphemeralRangeTemplate(other.m_startPosition, other.m_endPosition)
 {
-    ASSERT(other.isValid());
+    DCHECK(other.isValid());
 }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(const PositionAlgorithm<Strategy>& position)
+EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(
+    const PositionTemplate<Strategy>& position)
     : EphemeralRangeTemplate(position, position)
 {
 }
@@ -48,77 +52,95 @@ EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate(const Range* range)
 {
     if (!range)
         return;
+    DCHECK(range->isConnected());
     m_startPosition = fromPositionInDOMTree<Strategy>(range->startPosition());
     m_endPosition = fromPositionInDOMTree<Strategy>(range->endPosition());
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     m_domTreeVersion = range->ownerDocument().domTreeVersion();
 #endif
 }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate()
-{
-}
+EphemeralRangeTemplate<Strategy>::EphemeralRangeTemplate() { }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>::~EphemeralRangeTemplate()
-{
-}
+EphemeralRangeTemplate<Strategy>::~EphemeralRangeTemplate() { }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy>& EphemeralRangeTemplate<Strategy>::operator=(const EphemeralRangeTemplate<Strategy>& other)
+EphemeralRangeTemplate<Strategy>& EphemeralRangeTemplate<Strategy>::operator=(
+    const EphemeralRangeTemplate<Strategy>& other)
 {
-    ASSERT(other.isValid());
+    DCHECK(other.isValid());
     m_startPosition = other.m_startPosition;
     m_endPosition = other.m_endPosition;
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     m_domTreeVersion = other.m_domTreeVersion;
 #endif
     return *this;
 }
 
 template <typename Strategy>
+bool EphemeralRangeTemplate<Strategy>::operator==(
+    const EphemeralRangeTemplate<Strategy>& other) const
+{
+    return startPosition() == other.startPosition() && endPosition() == other.endPosition();
+}
+
+template <typename Strategy>
+bool EphemeralRangeTemplate<Strategy>::operator!=(
+    const EphemeralRangeTemplate<Strategy>& other) const
+{
+    return !operator==(other);
+}
+
+template <typename Strategy>
 Document& EphemeralRangeTemplate<Strategy>::document() const
 {
-    ASSERT(isNotNull());
+    DCHECK(isNotNull());
     return *m_startPosition.document();
 }
 
 template <typename Strategy>
-PositionAlgorithm<Strategy> EphemeralRangeTemplate<Strategy>::startPosition() const
+PositionTemplate<Strategy> EphemeralRangeTemplate<Strategy>::startPosition()
+    const
 {
-    ASSERT(isValid());
+    DCHECK(isValid());
     return m_startPosition;
 }
 
 template <typename Strategy>
-PositionAlgorithm<Strategy> EphemeralRangeTemplate<Strategy>::endPosition() const
+PositionTemplate<Strategy> EphemeralRangeTemplate<Strategy>::endPosition()
+    const
 {
-    ASSERT(isValid());
+    DCHECK(isValid());
     return m_endPosition;
 }
 
 template <typename Strategy>
 bool EphemeralRangeTemplate<Strategy>::isCollapsed() const
 {
-    ASSERT(isValid());
+    DCHECK(isValid());
     return m_startPosition == m_endPosition;
 }
 
 template <typename Strategy>
-bool EphemeralRangeTemplate<Strategy>::isNotNull() const
+typename EphemeralRangeTemplate<Strategy>::RangeTraversal
+EphemeralRangeTemplate<Strategy>::nodes() const
 {
-    ASSERT(isValid());
-    return m_startPosition.isNotNull();
+    return RangeTraversal(m_startPosition.nodeAsRangeFirstNode(),
+        m_endPosition.nodeAsRangePastLastNode());
 }
 
 template <typename Strategy>
-EphemeralRangeTemplate<Strategy> EphemeralRangeTemplate<Strategy>::rangeOfContents(const Node& node)
+EphemeralRangeTemplate<Strategy>
+EphemeralRangeTemplate<Strategy>::rangeOfContents(const Node& node)
 {
-    return EphemeralRangeTemplate<Strategy>(PositionAlgorithm<Strategy>::firstPositionInNode(&const_cast<Node&>(node)), PositionAlgorithm<Strategy>::lastPositionInNode(&const_cast<Node&>(node)));
+    return EphemeralRangeTemplate<Strategy>(
+        PositionTemplate<Strategy>::firstPositionInNode(&const_cast<Node&>(node)),
+        PositionTemplate<Strategy>::lastPositionInNode(&const_cast<Node&>(node)));
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 template <typename Strategy>
 bool EphemeralRangeTemplate<Strategy>::isValid() const
 {
@@ -132,6 +154,16 @@ bool EphemeralRangeTemplate<Strategy>::isValid() const
 }
 #endif
 
+Range* createRange(const EphemeralRange& range)
+{
+    if (range.isNull())
+        return nullptr;
+    return Range::create(range.document(), range.startPosition(),
+        range.endPosition());
+}
+
 template class CORE_TEMPLATE_EXPORT EphemeralRangeTemplate<EditingStrategy>;
+template class CORE_TEMPLATE_EXPORT
+    EphemeralRangeTemplate<EditingInFlatTreeStrategy>;
 
 } // namespace blink

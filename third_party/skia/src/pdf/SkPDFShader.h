@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkPDFShader_DEFINED
 #define SkPDFShader_DEFINED
@@ -14,6 +12,7 @@
 #include "SkPDFTypes.h"
 
 class SkPDFCanon;
+class SkPDFDocument;
 class SkMatrix;
 class SkShader;
 struct SkIRect;
@@ -29,7 +28,7 @@ public:
     class State;
 
     /** Get the PDF shader for the passed SkShader. If the SkShader is
-     *  invalid in some way, returns NULL. The reference count of
+     *  invalid in some way, returns nullptr. The reference count of
      *  the object is incremented and it is the caller's responsibility to
      *  unreference it when done.  This is needed to accommodate the weak
      *  reference pattern used when the returned object is new and has no
@@ -42,25 +41,25 @@ public:
      *  @param rasterScale Additional scale to be applied for early
      *                     rasterization.
      */
-    static SkPDFObject* GetPDFShader(SkPDFCanon* canon,
-                                     SkScalar dpi,
-                                     const SkShader& shader,
-                                     const SkMatrix& matrix,
-                                     const SkIRect& surfaceBBox,
-                                     SkScalar rasterScale);
+    static SkPDFObject* GetPDFShader(SkPDFDocument* doc,
+        SkScalar dpi,
+        SkShader* shader,
+        const SkMatrix& matrix,
+        const SkIRect& surfaceBBox,
+        SkScalar rasterScale);
+
+    static sk_sp<SkPDFArray> MakeRangeObject();
 };
 
-class SkPDFFunctionShader : public SkPDFDict {
-    
-
+class SkPDFFunctionShader final : public SkPDFDict {
 public:
     static SkPDFFunctionShader* Create(SkPDFCanon*,
-                                       SkAutoTDelete<SkPDFShader::State>*);
+        std::unique_ptr<SkPDFShader::State>*);
     virtual ~SkPDFFunctionShader();
     bool equals(const SkPDFShader::State&) const;
 
 private:
-    SkAutoTDelete<const SkPDFShader::State> fShaderState;
+    std::unique_ptr<const SkPDFShader::State> fShaderState;
     SkPDFFunctionShader(SkPDFShader::State*);
     typedef SkPDFDict INHERITED;
 };
@@ -70,30 +69,30 @@ private:
  * inside a tiling pattern while providing a common pattern interface.
  * The encapsulation allows the use of a SMask for transparency gradients.
  */
-class SkPDFAlphaFunctionShader : public SkPDFStream {
+class SkPDFAlphaFunctionShader final : public SkPDFStream {
 public:
-    static SkPDFAlphaFunctionShader* Create(SkPDFCanon*,
-                                            SkScalar dpi,
-                                            SkAutoTDelete<SkPDFShader::State>*);
+    static SkPDFAlphaFunctionShader* Create(SkPDFDocument*,
+        SkScalar dpi,
+        std::unique_ptr<SkPDFShader::State>*);
     virtual ~SkPDFAlphaFunctionShader();
     bool equals(const SkPDFShader::State&) const;
 
 private:
-    SkAutoTDelete<const SkPDFShader::State> fShaderState;
+    std::unique_ptr<const SkPDFShader::State> fShaderState;
     SkPDFAlphaFunctionShader(SkPDFShader::State*);
     typedef SkPDFStream INHERITED;
 };
 
-class SkPDFImageShader : public SkPDFStream {
+class SkPDFImageShader final : public SkPDFStream {
 public:
-    static SkPDFImageShader* Create(SkPDFCanon*,
-                                    SkScalar dpi,
-                                    SkAutoTDelete<SkPDFShader::State>*);
+    static SkPDFImageShader* Create(SkPDFDocument*,
+        SkScalar dpi,
+        std::unique_ptr<SkPDFShader::State>*);
     virtual ~SkPDFImageShader();
     bool equals(const SkPDFShader::State&) const;
 
 private:
-    SkAutoTDelete<const SkPDFShader::State> fShaderState;
+    std::unique_ptr<const SkPDFShader::State> fShaderState;
     SkPDFImageShader(SkPDFShader::State*);
     typedef SkPDFStream INHERITED;
 };

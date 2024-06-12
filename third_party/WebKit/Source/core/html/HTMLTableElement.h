@@ -39,30 +39,31 @@ class HTMLTableSectionElement;
 
 class CORE_EXPORT HTMLTableElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLTableElement);
 
     HTMLTableCaptionElement* caption() const;
-    void setCaption(PassRefPtrWillBeRawPtr<HTMLTableCaptionElement>, ExceptionState&);
+    void setCaption(HTMLTableCaptionElement*, ExceptionState&);
 
     HTMLTableSectionElement* tHead() const;
-    void setTHead(PassRefPtrWillBeRawPtr<HTMLTableSectionElement>, ExceptionState&);
+    void setTHead(HTMLTableSectionElement*, ExceptionState&);
 
     HTMLTableSectionElement* tFoot() const;
-    void setTFoot(PassRefPtrWillBeRawPtr<HTMLTableSectionElement>, ExceptionState&);
+    void setTFoot(HTMLTableSectionElement*, ExceptionState&);
 
-    PassRefPtrWillBeRawPtr<HTMLElement> createTHead();
+    HTMLTableSectionElement* createTHead();
     void deleteTHead();
-    PassRefPtrWillBeRawPtr<HTMLElement> createTFoot();
+    HTMLTableSectionElement* createTFoot();
     void deleteTFoot();
-    PassRefPtrWillBeRawPtr<HTMLElement> createTBody();
-    PassRefPtrWillBeRawPtr<HTMLElement> createCaption();
+    HTMLTableSectionElement* createTBody();
+    HTMLTableCaptionElement* createCaption();
     void deleteCaption();
-    PassRefPtrWillBeRawPtr<HTMLElement> insertRow(int index, ExceptionState&);
+    HTMLTableRowElement* insertRow(int index, ExceptionState&);
     void deleteRow(int index, ExceptionState&);
 
-    PassRefPtrWillBeRawPtr<HTMLTableRowsCollection> rows();
-    PassRefPtrWillBeRawPtr<HTMLCollection> tBodies();
+    HTMLTableRowsCollection* rows();
+    HTMLCollection* tBodies();
 
     const AtomicString& rules() const;
     const AtomicString& summary() const;
@@ -76,35 +77,59 @@ private:
     explicit HTMLTableElement(Document&);
     ~HTMLTableElement();
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
     bool isURLAttribute(const Attribute&) const override;
     bool hasLegalLinkAttribute(const QualifiedName&) const override;
     const QualifiedName& subResourceAttributeName() const override;
 
-    // Used to obtain either a solid or outset border decl and to deal with the frame and rules attributes.
+    // Used to obtain either a solid or outset border decl and to deal with the
+    // frame and rules attributes.
     const StylePropertySet* additionalPresentationAttributeStyle() override;
 
-    enum TableRules { UnsetRules, NoneRules, GroupsRules, RowsRules, ColsRules, AllRules };
-    enum CellBorders { NoBorders, SolidBorders, InsetBorders, SolidBordersColsOnly, SolidBordersRowsOnly };
+    enum TableRules {
+        UnsetRules,
+        NoneRules,
+        GroupsRules,
+        RowsRules,
+        ColsRules,
+        AllRules
+    };
+    enum CellBorders {
+        NoBorders,
+        SolidBorders,
+        InsetBorders,
+        SolidBordersColsOnly,
+        SolidBordersRowsOnly
+    };
 
-    CellBorders cellBorders() const;
+    CellBorders getCellBorders() const;
 
-    PassRefPtrWillBeRawPtr<StylePropertySet> createSharedCellStyle();
+    StylePropertySet* createSharedCellStyle();
 
     HTMLTableSectionElement* lastBody() const;
 
     void setNeedsTableStyleRecalc() const;
 
-    bool m_borderAttr;          // Sets a precise border width and creates an outset border for the table and for its cells.
-    bool m_borderColorAttr;     // Overrides the outset border and makes it solid for the table and cells instead.
-    bool m_frameAttr;           // Implies a thin border width if no border is set and then a certain set of solid/hidden borders based off the value.
-    TableRules m_rulesAttr;     // Implies a thin border width, a collapsing border model, and all borders on the table becoming set to hidden (if frame/border
-                                // are present, to none otherwise).
+    // Sets a precise border width and creates an outset border for the table and
+    // for its cells.
+    bool m_borderAttr;
+    // Overrides the outset border and makes it solid for the table and cells
+    // instead.
+    bool m_borderColorAttr;
+    // Implies a thin border width if no border is set and then a certain set of
+    // solid/hidden borders based off the value.
+    bool m_frameAttr;
+    // Implies a thin border width, a collapsing border model, and all borders on
+    // the table becoming set to hidden (if frame/border are present, to none
+    // otherwise).
+    TableRules m_rulesAttr;
 
     unsigned short m_padding;
-    RefPtrWillBeMember<StylePropertySet> m_sharedCellStyle;
+    Member<StylePropertySet> m_sharedCellStyle;
 };
 
 } // namespace blink

@@ -26,14 +26,14 @@
 
 namespace v8 {
 namespace internal {
-namespace GDBJITInterface {
+    namespace GDBJITInterface {
 #ifdef ENABLE_GDB_JIT_INTERFACE
-// JitCodeEventHandler that creates ELF/Mach-O objects and registers them with
-// GDB.
-void EventHandler(const v8::JitCodeEvent* event);
+        // JitCodeEventHandler that creates ELF/Mach-O objects and registers them with
+        // GDB.
+        void EventHandler(const v8::JitCodeEvent* event);
 #endif
-}  // namespace GDBJITInterface
-}  // namespace internal
-}  // namespace v8
+    } // namespace GDBJITInterface
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_GDB_JIT_H_
+#endif // V8_GDB_JIT_H_

@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGTextPositioningElement.h"
 
 #include "core/SVGNames.h"
@@ -29,13 +27,27 @@
 
 namespace blink {
 
-SVGTextPositioningElement::SVGTextPositioningElement(const QualifiedName& tagName, Document& document)
+SVGTextPositioningElement::SVGTextPositioningElement(
+    const QualifiedName& tagName,
+    Document& document)
     : SVGTextContentElement(tagName, document)
-    , m_x(SVGAnimatedLengthList::create(this, SVGNames::xAttr, SVGLengthList::create(SVGLengthMode::Width)))
-    , m_y(SVGAnimatedLengthList::create(this, SVGNames::yAttr, SVGLengthList::create(SVGLengthMode::Height)))
-    , m_dx(SVGAnimatedLengthList::create(this, SVGNames::dxAttr, SVGLengthList::create(SVGLengthMode::Width)))
-    , m_dy(SVGAnimatedLengthList::create(this, SVGNames::dyAttr, SVGLengthList::create(SVGLengthMode::Height)))
-    , m_rotate(SVGAnimatedNumberList::create(this, SVGNames::rotateAttr, SVGNumberList::create()))
+    , m_x(SVGAnimatedLengthList::create(
+          this,
+          SVGNames::xAttr,
+          SVGLengthList::create(SVGLengthMode::Width)))
+    , m_y(SVGAnimatedLengthList::create(
+          this,
+          SVGNames::yAttr,
+          SVGLengthList::create(SVGLengthMode::Height)))
+    , m_dx(SVGAnimatedLengthList::create(
+          this,
+          SVGNames::dxAttr,
+          SVGLengthList::create(SVGLengthMode::Width)))
+    , m_dy(SVGAnimatedLengthList::create(
+          this,
+          SVGNames::dyAttr,
+          SVGLengthList::create(SVGLengthMode::Height)))
+    , m_rotate(SVGAnimatedNumberList::create(this, SVGNames::rotateAttr))
 {
     addToPropertyMap(m_x);
     addToPropertyMap(m_y);
@@ -54,12 +66,10 @@ DEFINE_TRACE(SVGTextPositioningElement)
     SVGTextContentElement::trace(visitor);
 }
 
-void SVGTextPositioningElement::svgAttributeChanged(const QualifiedName& attrName)
+void SVGTextPositioningElement::svgAttributeChanged(
+    const QualifiedName& attrName)
 {
-    bool updateRelativeLengths = attrName == SVGNames::xAttr
-                              || attrName == SVGNames::yAttr
-                              || attrName == SVGNames::dxAttr
-                              || attrName == SVGNames::dyAttr;
+    bool updateRelativeLengths = attrName == SVGNames::xAttr || attrName == SVGNames::yAttr || attrName == SVGNames::dxAttr || attrName == SVGNames::dyAttr;
 
     if (updateRelativeLengths)
         updateRelativeLengthsInformation();
@@ -80,16 +90,4 @@ void SVGTextPositioningElement::svgAttributeChanged(const QualifiedName& attrNam
     SVGTextContentElement::svgAttributeChanged(attrName);
 }
 
-SVGTextPositioningElement* SVGTextPositioningElement::elementFromLayoutObject(LayoutObject& layoutObject)
-{
-    if (!layoutObject.isSVGText() && !layoutObject.isSVGInline())
-        return nullptr;
-
-    Node* node = layoutObject.node();
-    ASSERT(node);
-    ASSERT(node->isSVGElement());
-
-    return isSVGTextPositioningElement(*node) ? toSVGTextPositioningElement(node) : 0;
-}
-
-}
+} // namespace blink

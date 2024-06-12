@@ -7,7 +7,7 @@
 
 #include <signal.h>
 
-#include "v8config.h"  // NOLINT(build/include)
+#include "v8config.h" // NOLINT(build/include)
 
 namespace v8 {
 /**
@@ -25,7 +25,7 @@ namespace v8 {
  * handler.
  */
 V8_EXPORT bool TryHandleWebAssemblyTrapPosix(int sig_code, siginfo_t* info,
-                                             void* context);
+    void* context);
 
-}  // namespace v8
-#endif  // V8_WASM_TRAP_HANDLER_POSIX_H_
+} // namespace v8
+#endif // V8_WASM_TRAP_HANDLER_POSIX_H_

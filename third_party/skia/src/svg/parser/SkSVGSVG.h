@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkSVGSVG_DEFINED
 #define SkSVGSVG_DEFINED
@@ -15,6 +13,7 @@
 class SkSVGSVG : public SkSVGElement {
     DECLARE_SVG_INFO(SVG);
     virtual bool isFlushable();
+
 private:
     SkString f_enable_background;
     SkString f_height;

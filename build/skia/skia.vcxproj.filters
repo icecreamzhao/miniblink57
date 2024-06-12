@@ -1,6 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{24f77c22-76ff-454b-a136-5bec7f4b63fe}</UniqueIdentifier>
     </Filter>
@@ -88,9 +100,6 @@
     <Filter Include="src\pathops">
       <UniqueIdentifier>{8aaa72c3-771b-45d1-a176-9873e33a7d2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\pipe">
-      <UniqueIdentifier>{fdf78194-2c05-4393-a36a-5dc35d582013}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\ports">
       <UniqueIdentifier>{d066bdd8-132c-4c89-b931-cd48e6fce34d}</UniqueIdentifier>
     </Filter>
@@ -100,26 +109,38 @@
     <Filter Include="src\effects\gradients">
       <UniqueIdentifier>{82376d29-a5a8-4410-aece-fc093fe692cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\pipe\utils">
-      <UniqueIdentifier>{5506cb51-c0b6-49ef-9c80-4aa67de1f994}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\utils\win">
       <UniqueIdentifier>{766a9cbc-3eb1-410c-8efd-1ee37a87170c}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\sfnt">
-      <UniqueIdentifier>{e426285d-7906-484a-afd9-9496e9a6c7e7}</UniqueIdentifier>
+      <UniqueIdentifier>{34ba7c70-55ec-40a9-a709-0287ab40b6c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\pdf">
-      <UniqueIdentifier>{45ad2c9d-aeb0-4c8f-94f5-bf69447d511e}</UniqueIdentifier>
+    <Filter Include="include\third_party">
+      <UniqueIdentifier>{c8dba678-ed61-4e7d-b91d-4a8da59c87b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\doc">
-      <UniqueIdentifier>{914b7827-bb92-41a7-969d-158720c3c48a}</UniqueIdentifier>
+    <Filter Include="include\third_party\skcms">
+      <UniqueIdentifier>{fe2e0a23-e5e3-452a-87d4-876480717e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{1dafa973-6a31-4179-92e4-cbd264c7de20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\skcms">
+      <UniqueIdentifier>{1814069b-adc6-4730-81c9-23e208fbd30c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gpu">
+      <UniqueIdentifier>{260fb7a7-cdc7-4bcf-8c8b-98e43a92fce9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\third_party\skia\include\animator\SkAnimatorView.h">
       <Filter>include\animator</Filter>
     </ClInclude>
@@ -768,456 +789,6 @@
     <ClInclude Include="..\..\third_party\skia\include\utils\win\SkHRESULT.h">
       <Filter>include\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkAAClip.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkAdvancedTypefaceMetrics.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkAntiRun.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkAutoKern.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBBoxHierarchy.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBigPicture.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapController.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapFilter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapHeap.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_filter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrix.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrix_template.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_procs.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_sample.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_shaderproc.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_utils.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapScaler.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitBWMaskTemplate.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitMask.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkBuffer.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkCachedData.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkCanvasPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkChecksum.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkColorShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkConfig8888.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkConvolver.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkCoreBlitters.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkCubicClipper.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDescriptor.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDeviceLooper.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDeviceProfile.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDiscardableMemory.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDistanceFieldGen.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkDrawProcs.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkEdge.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkEdgeBuilder.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkEdgeClipper.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkEmptyShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkErrorInternals.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFDot6.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFilterProc.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFilterShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFlate.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFontDescriptor.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFontStream.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkFunction.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkGeometry.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyph.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyphCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyphCache_Globals.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkHalf.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkImageGeneratorPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkLayerInfo.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkLazyFnPtr.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkLineClipper.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkLocalMatrixShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMaskCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMaskGamma.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMathPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMatrixImageFilter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMatrixUtils.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMessageBus.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMiniRecorder.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkMipMap.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkNinePatchIter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkNx.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkOrderedReadBuffer.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPaintDefaults.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPaintPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPathPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPerspIter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureCommon.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureContentInfo.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureData.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureFlat.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPicturePlayback.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureRecord.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureShader.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPMFloat.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkPtrRecorder.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkQuadClipper.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRasterClip.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkReadBuffer.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkReader32.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecord.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordDraw.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecorder.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordOpts.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordPattern.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRecords.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRefDict.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRegionPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkResourceCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRTree.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkRWBuffer.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkScalerContext.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkScan.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkScanPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSemaphore.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSharedMutex.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSmallAllocator.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSpriteBlitter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSpriteBlitterTemplate.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkStreamPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkStringUtils.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkStroke.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkStrokerPriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkSurfacePriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTaskGroup.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTDPQueue.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTDynamicHash.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTextFormatParams.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTextMapStateProc.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTextToPathIter.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTHash.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTLList.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTLS.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTMultiMap.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTraceEvent.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTSort.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTypefaceCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkTypefacePriv.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkUtilsArm.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkValidatingReadBuffer.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkValidationUtils.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkVarAlloc.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkVertState.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkXfermode_proccoeff.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkXfermodeInterpretation.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\SkYUVPlanesCache.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\Sk4px.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\core\Sk4pxXfermode.h">
-      <Filter>src\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\SkArithmeticMode_gpu.h">
-      <Filter>src\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\SkBlurMask.h">
-      <Filter>src\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\SkEmbossMask.h">
-      <Filter>src\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\SkEmbossMask_Table.h">
-      <Filter>src\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\SkGpuBlurUtils.h">
-      <Filter>src\effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkLinearGradient.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkRadialGradient.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkRadialGradient_Table.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkSweepGradient.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient_gpu.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkClampRange.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkGradientBitmapCache.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkGradientShaderPriv.h">
-      <Filter>src\effects\gradients</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\fonts\SkGScalerContext.h">
       <Filter>src\fonts</Filter>
     </ClInclude>
@@ -1245,122 +816,11 @@
     <ClInclude Include="..\..\third_party\skia\src\image\SkImage_Gpu.h">
       <Filter>src\image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\images\SkJpegUtility.h">
-      <Filter>src\images</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\images\SkScaledBitmapSampler.h">
-      <Filter>src\images</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\images\transform_scanline.h">
-      <Filter>src\images</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\images\bmpdecoderhelper.h">
-      <Filter>src\images</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\lazy\SkDiscardableMemoryPool.h">
       <Filter>src\lazy</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\lazy\SkDiscardablePixelRef.h">
       <Filter>src\lazy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\lazy\SkCachingPixelRef.h">
-      <Filter>src\lazy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSSE3.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitMask_opts_arm_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_arm_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE4.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlurImage_opts.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlurImage_opts_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlurImage_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlurImage_opts_SSE4.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkColor_opts_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkColor_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkMath_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkMorphology_opts.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkMorphology_opts_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkMorphology_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkNx_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkNx_sse.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkPMFloat_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkPMFloat_none.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkPMFloat_sse.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkTextureCompression_opts.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkTextureCompression_opts_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkUtils_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkXfermode_opts_arm_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkXfermode_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_NEON.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_none.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapFilter_opts_SSE2.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_filter_neon.h">
-      <Filter>src\opts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_matrix_neon.h">
-      <Filter>src\opts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\pathops\SkPathOpsPoint.h">
       <Filter>src\pathops</Filter>
@@ -1437,28 +897,667 @@
     <ClInclude Include="..\..\third_party\skia\src\pathops\SkPathOpsLine.h">
       <Filter>src\pathops</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pipe\utils\SamplePipeControllers.h">
-      <Filter>src\pipe\utils</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWrite.h">
+      <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\ports\SkFontConfigTypeface.h">
-      <Filter>src\ports</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWriteFontFileStream.h">
+      <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\ports\SkFontHost_FreeType_common.h">
-      <Filter>src\ports</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWriteGeometrySink.h">
+      <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\ports\SkFontMgr_android_parser.h">
-      <Filter>src\ports</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkWGL.h">
+      <Filter>src\utils\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAutoKern.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAutoPixmapStorage.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBBoxHierarchy.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBigPicture.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapController.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapFilter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_filter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrix.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrix_template.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_procs.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_sample.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_shaderproc.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProcState_utils.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapProvider.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBitmapScaler.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitBWMaskTemplate.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitMask.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBlitter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkBuffer.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkCachedData.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkCanvasPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorFilterShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorMatrixFilterRowMajor255.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorSpace_Base.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorSpacePriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkColorSpaceXform.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkComposeShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkConfig8888.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkConvolver.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkCoreBlitters.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkCpu.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkCubicClipper.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDescriptor.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDeviceLooper.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDeviceProfile.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDiscardableMemory.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDistanceFieldGen.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDither.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkDrawProcs.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkEdge.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkEdgeBuilder.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkEdgeClipper.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkEmptyShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkEndian.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkErrorInternals.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFDot6.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFilterProc.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFindAndPlaceGlyph.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFontDescriptor.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFontStream.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkFuzzLogging.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkGeometry.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyph.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyphCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkGlyphCache_Globals.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkHalf.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkImageCacherator.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkImageFilterCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkImageGeneratorPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLayerInfo.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLightingShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline_core.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline_matrix.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline_sample.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline_tile.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLineClipper.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLocalMatrixImageFilter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkLocalMatrixShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMaskCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMaskGamma.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMathPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMatrixImageFilter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMatrixUtils.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMD5.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMessageBus.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMipMap.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkModeColorFilter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkMSAN.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkNextID.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkNinePatchIter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkNormalSource.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkNx.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkOpts.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkOrderedReadBuffer.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPaintDefaults.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPaintPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPathPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPerspIter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureCommon.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureContentInfo.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureData.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureFlat.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPicturePlayback.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureRecord.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPictureShader.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPM4f.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPM4fPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkPtrRecorder.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkQuadClipper.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRasterClip.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkReadBuffer.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkReader32.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecord.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordDraw.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordedDrawable.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecorder.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordOpts.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRecordPattern.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRefDict.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRegionPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkResourceCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkRTree.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkScalerContext.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkScaleToSides.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkScan.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkScanPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSharedMutex.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSinglyLinkedList.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSmallAllocator.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSpanProcs.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSpecialImage.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSpecialSurface.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSpriteBlitter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSpriteBlitterTemplate.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkStreamPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkStringUtils.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkStroke.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkStrokerPriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkSurfacePriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTaskGroup.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTDPQueue.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTDynamicHash.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTextBlobRunIterator.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTextFormatParams.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTextMapStateProc.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTextToPathIter.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTInternalLList.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTLList.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTLS.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTMultiMap.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTraceEvent.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTraceEventCommon.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTSort.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTTopoSort.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTypefaceCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkTypefacePriv.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkUtils.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkUtilsArm.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkValidatingReadBuffer.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkValidationUtils.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkVarAlloc.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkVertState.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkXfermode_proccoeff.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkXfermodeInterpretation.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkYUVPlanesCache.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\Sk4px.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\Sk4x4f.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAAClip.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAdvancedTypefaceMetrics.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAnnotationKeys.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\core\SkAntiRun.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\GrCircleBlurFragmentProcessor.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkArithmeticMode_gpu.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkBlurMask.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkEmbossMask.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkEmbossMask_Table.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkGpuBlurUtils.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\SkPackBits.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\GrAlphaThresholdFragmentProcessor.h">
+      <Filter>src\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkGradientShaderPriv.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkLinearGradient.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkRadialGradient.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkSweepGradient.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\Sk4fGradientBase.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\Sk4fGradientPriv.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\Sk4fLinearGradient.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkClampRange.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\effects\gradients\SkGradientBitmapCache.h">
+      <Filter>src\effects\gradients</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\images\SkJPEGWriteUtility.h">
+      <Filter>src\images</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\images\transform_scanline.h">
+      <Filter>src\images</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkSwizzler_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkTextureCompressor_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkXfermode_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_NEON.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_none.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\Sk4px_SSE2.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapFilter_opts_SSE2.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSE2.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSSE3.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlend_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitMask_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitRow_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE2.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkBlurImageFilter_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkColor_opts_neon.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkColor_opts_SSE2.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkColorCubeFilter_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkColorXform_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkMorphologyImageFilter_opts.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkNx_neon.h">
+      <Filter>src\opts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\opts\SkNx_sse.h">
+      <Filter>src\opts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\ports\SkScalerContext_win_dw.h">
       <Filter>src\ports</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\ports\SkTypeface_win_dw.h">
+    <ClInclude Include="..\..\third_party\skia\src\ports\SkFontConfigInterface_direct.h">
       <Filter>src\ports</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pipe\SkGPipePriv.h">
-      <Filter>src\pipe</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\ports\SkFontConfigTypeface.h">
+      <Filter>src\ports</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkBitmapHasher.h">
+    <ClInclude Include="..\..\third_party\skia\src\ports\SkOSEnvironment.h">
+      <Filter>src\ports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\ports\SkOSLibrary.h">
+      <Filter>src\ports</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_Utils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkThreadUtils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkThreadUtils_win.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkBase64.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkBitmapSourceDeserializer.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\utils\SkBitSet.h">
@@ -1476,7 +1575,13 @@
     <ClInclude Include="..\..\third_party\skia\src\utils\SkMatrix22.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkMD5.h">
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkMultiPictureDocument.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkMultiPictureDocumentPriv.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkMultiPictureDocumentReader.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\utils\SkPatchGrid.h">
@@ -1485,10 +1590,7 @@
     <ClInclude Include="..\..\third_party\skia\src\utils\SkPatchUtils.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkRunnable.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkSHA1.h">
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkRGBAToYUV.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor.h">
@@ -1497,721 +1599,121 @@
     <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_ASTC.h">
       <Filter>src\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_Blitter.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_LATC.h">
       <Filter>src\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_R11EAC.h">
       <Filter>src\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkTextureCompressor_Utils.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkTFitsIn.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkThreadUtils.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkThreadUtils_pthread.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkThreadUtils_win.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkTLogic.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\SkBase64.h">
-      <Filter>src\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWrite.h">
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkAutoCoInitialize.h">
       <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWriteFontFileStream.h">
+    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkHRESULT.h">
       <Filter>src\utils\win</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkDWriteGeometrySink.h">
-      <Filter>src\utils\win</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\image\SkImageShader.h">
+      <Filter>src\image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\utils\win\SkWGL.h">
-      <Filter>src\utils\win</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_name.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_V0.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_V1.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_V2.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_V3.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_V4.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_OS_2_VA.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_post.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTableTypes.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTUtils.h">
       <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFResourceDict.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkPanose.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFShader.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkPreprocessorSeq.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFStream.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkSFNTHeader.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFTypes.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkTTCFHeader.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFUtils.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkTypedEnum.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkJpegInfo.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkIBMFamilyClass.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFBitmap.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_EBDT.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFCanon.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_EBLC.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFDevice.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_EBSC.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFFont.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_gasp.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFFontImpl.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_glyf.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFFormXObject.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_head.h">
+      <Filter>src\sfnt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\skia\src\pdf\SkPDFGraphicState.h">
-      <Filter>src\pdf</Filter>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_hhea.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_loca.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_maxp.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_maxp_CFF.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\src\sfnt\SkOTTable_maxp_TT.h">
+      <Filter>src\sfnt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\include\third_party\skcms\skcms.h">
+      <Filter>include\third_party\skcms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\third_party\skcms\skcms_internal.h">
+      <Filter>third_party\skcms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\skia\include\effects\SkArithmeticImageFilter.h">
+      <Filter>include\effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkAdvancedTypefaceMetrics.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkAlphaRuns.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkAnnotation.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBBHFactory.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBigPicture.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmap.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapController.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapDevice.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapFilter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapHeap.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcState.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrixProcs.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapScaler.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitMask_D32.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitRow_D16.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitRow_D32.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_A8.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_ARGB32.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_RGB16.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_Sprite.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkBuffer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkCachedData.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkCanvas.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkChunkAlloc.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkClipStack.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkColor.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkColorFilter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkColorTable.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkComposeShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkConfig8888.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkConvolver.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkCubicClipper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkData.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDataTable.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDebug.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDeque.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDevice.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDeviceLooper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDeviceProfile.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDistanceFieldGen.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDither.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDraw.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDrawable.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkDrawLooper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkEdge.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkEdgeBuilder.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkEdgeClipper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkError.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFilterProc.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFilterShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFlattenable.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFlattenableSerialization.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFloatBits.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFont.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFontDescriptor.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFontHost.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFontMgr.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFontStream.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFontStyle.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkForceCPlusPlusLinking.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkGeometry.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkGlyphCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkGraphics.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkHalf.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkImageFilter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkImageGenerator.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkImageInfo.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkLineClipper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkLocalMatrixShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMallocPixelRef.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMask.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskFilter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskGamma.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMath.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMatrix.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMatrixImageFilter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMetaData.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMiniRecorder.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMipMap.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkMultiPictureDraw.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkNinePatchIter.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPackBits.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPaint.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPaintPriv.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPath.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPathEffect.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPathMeasure.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPathRef.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPicture.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureContentInfo.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureData.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureFlat.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPicturePlayback.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureRecord.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureRecorder.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPixelRef.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPixmap.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPoint.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkPtrRecorder.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkQuadClipper.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRasterClip.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRasterizer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkReadBuffer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRecord.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRecordDraw.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRecorder.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRecordOpts.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRect.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRefDict.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRegion.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRegion_path.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkResourceCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRRect.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRTree.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkRWBuffer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScalar.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScalerContext.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScan.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Antihair.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_AntiPath.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Hairline.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Path.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkSemaphore.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkShader.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkSharedMutex.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkSpinlock.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkSpriteBlitter_ARGB32.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkSpriteBlitter_RGB16.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkStream.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkString.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkStringUtils.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkStroke.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkStrokeRec.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkStrokerPriv.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTaskGroup.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTextBlob.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTime.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTLS.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTSearch.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTypeface.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkTypefaceCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkUnPreMultiply.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkUtils.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkUtilsArm.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkValidatingReadBuffer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkVarAlloc.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkVertState.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkWriteBuffer.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkWriter32.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermode.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermodeInterpretation.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkYUVPlanesCache.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkAAClip.cpp">
-      <Filter>src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\Sk1DPathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\Sk2DPathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkAlphaThresholdFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkArcToPathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode_gpu.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkBitmapSource.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurDrawLooper.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurMask.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurMaskFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorCubeFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorFilterImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorFilters.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorMatrix.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorMatrixFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkComposeImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkCornerPathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkDashPathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkDiscretePathEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkDisplacementMapEffect.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkDropShadowImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkEmbossMask.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkEmbossMaskFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkGpuBlurUtils.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkLayerDrawLooper.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkLayerRasterizer.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkLerpXfermode.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkLightingImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkLumaColorFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkMagnifierImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkMatrixConvolutionImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkMergeImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkMorphologyImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkOffsetImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkPaintFlagsDrawFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkPerlinNoiseShader.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkPictureImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkPixelXorXfermode.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkRectShaderImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkTableColorFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkTableMaskFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkTestImageFilters.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkTileImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\SkXfermodeImageFilter.cpp">
-      <Filter>src\effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkLinearGradient.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkRadialGradient.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkSweepGradient.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient_gpu.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkClampRange.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkGradientBitmapCache.cpp">
-      <Filter>src\effects\gradients</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkGradientShader.cpp">
-      <Filter>src\effects\gradients</Filter>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\fonts\SkRandomScalerContext.cpp">
       <Filter>src\fonts</Filter>
@@ -2240,89 +1742,11 @@
     <ClCompile Include="..\..\third_party\skia\src\image\SkImage_Raster.cpp">
       <Filter>src\image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageDecoder_wbmp.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageEncoder.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageEncoder_argb.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageEncoder_Factory.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkMovie.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkPageFlipper.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkScaledBitmapSampler.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\bmpdecoderhelper.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkDecodingImageGenerator.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkForceLinking.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageDecoder.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageDecoder_FactoryDefault.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageDecoder_FactoryRegistrar.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\images\SkImageDecoder_libbmp.cpp">
-      <Filter>src\images</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\lazy\SkDiscardableMemoryPool.cpp">
       <Filter>src\lazy</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\lazy\SkDiscardablePixelRef.cpp">
       <Filter>src\lazy</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\lazy\SkCachingPixelRef.cpp">
-      <Filter>src\lazy</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSSE3.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE4.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBlurImage_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBlurImage_opts_SSE4.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkMorphology_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkUtils_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkXfermode_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\opts_check_x86.cpp">
-      <Filter>src\opts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapFilter_opts_SSE2.cpp">
-      <Filter>src\opts</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\pathops\SkPathOpsQuad.cpp">
       <Filter>src\pathops</Filter>
@@ -2420,8 +1844,800 @@
     <ClCompile Include="..\..\third_party\skia\src\pathops\SkPathOpsPoint.cpp">
       <Filter>src\pathops</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pipe\utils\SamplePipeControllers.cpp">
-      <Filter>src\pipe\utils</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkDWriteFontFileStream.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkDWriteGeometrySink.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkHRESULT.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkIStream.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkAutoCoInitialize.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkDWrite.cpp">
+      <Filter>src\utils\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkAutoPixmapStorage.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBBHFactory.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBigPicture.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmap.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapController.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapDevice.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcState.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProcState_matrixProcs.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapProvider.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBitmapScaler.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitMask_D32.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitRow_D16.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitRow_D32.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_A8.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_ARGB32.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_PM4f.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_RGB16.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBlitter_Sprite.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkBuffer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkCachedData.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkCanvas.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkChecksum.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkChunkAlloc.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkClipStack.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColor.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorFilterShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorMatrixFilterRowMajor255.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorSpace.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorSpaceXform.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorTable.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkComposeShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkConfig8888.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkConvolver.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkCpu.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkCubicClipper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkData.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDataTable.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDebug.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDeque.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDevice.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDeviceLooper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDeviceProfile.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDistanceFieldGen.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDither.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDocument.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDraw.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDrawable.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkDrawLooper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkEdge.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkEdgeBuilder.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkEdgeClipper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkError.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFilterProc.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFlattenable.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFlattenableSerialization.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFont.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFontDescriptor.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFontLCDConfig.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFontMgr.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFontStream.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkFontStyle.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkForceCPlusPlusLinking.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkGeometry.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkGlobalInitialization_core.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkGlyphCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkGraphics.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkHalf.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkImageCacherator.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkImageFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkImageFilterCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkImageGenerator.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkImageInfo.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkLightingShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkLinearBitmapPipeline.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkLineClipper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkLocalMatrixImageFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkLocalMatrixShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMallocPixelRef.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMask.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMaskGamma.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMath.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMatrix.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMatrix44.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMatrixImageFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMD5.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMetaData.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMiniRecorder.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMipMap.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkModeColorFilter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkMultiPictureDraw.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkNinePatchIter.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkNormalSource.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkOpts.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPaint.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPaintPriv.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPath.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPathEffect.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPathMeasure.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPathRef.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPicture.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureAnalyzer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureContentInfo.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureData.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureFlat.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureImageGenerator.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPicturePlayback.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureRecord.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureRecorder.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPictureShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPixelRef.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPixmap.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPoint.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPoint3.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkPtrRecorder.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkQuadClipper.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRasterClip.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRasterizer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkReadBuffer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecord.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecordDraw.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecordedDrawable.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecorder.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecordOpts.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRecords.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRect.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRefDict.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRegion.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRegion_path.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkResourceCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRRect.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRTree.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkRWBuffer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScalar.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScalerContext.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScan.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Antihair.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_AntiPath.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Hairline.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkScan_Path.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSemaphore.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkShader.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSharedMutex.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpanProcs.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpecialImage.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpecialSurface.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpinlock.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpriteBlitter_ARGB32.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpriteBlitter_RGB16.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSpriteBlitter4f.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkStream.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkString.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkStringUtils.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkStroke.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkStrokeRec.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkStrokerPriv.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkSwizzle.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTaskGroup.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTextBlob.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkThreadID.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTime.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTLS.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTSearch.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTypeface.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkTypefaceCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkUnPreMultiply.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkUtils.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkUtilsArm.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkValidatingReadBuffer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkVarAlloc.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkVertState.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkWriteBuffer.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkWriter32.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermode.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermode4f.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermodeF16.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkXfermodeInterpretation.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkYUVPlanesCache.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkAAClip.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkAdvancedTypefaceMetrics.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkAlphaRuns.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkAnnotation.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\GrCircleBlurFragmentProcessor.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\Sk1DPathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\Sk2DPathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkAlphaThresholdFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArcToPathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticMode_gpu.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurDrawLooper.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurMask.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkBlurMaskFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorCubeFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorFilterImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorMatrix.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkColorMatrixFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkComposeImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkCornerPathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkDashPathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkDiscretePathEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkDisplacementMapEffect.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkDropShadowImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkEmbossMask.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkEmbossMaskFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkGpuBlurUtils.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkImageSource.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkLayerDrawLooper.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkLayerRasterizer.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkLightingImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkLumaColorFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkMagnifierImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkMatrixConvolutionImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkMergeImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkMorphologyImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkOffsetImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkPackBits.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkPaintFlagsDrawFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkPaintImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkPerlinNoiseShader.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkPictureImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkTableColorFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkTableMaskFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkTileImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkXfermodeImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\GrAlphaThresholdFragmentProcessor.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkGradientShader.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkLinearGradient.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkRadialGradient.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkSweepGradient.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkTwoPointConicalGradient.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\Sk4fGradientBase.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\Sk4fLinearGradient.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkClampRange.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\gradients\SkGradientBitmapCache.cpp">
+      <Filter>src\effects\gradients</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkMovie.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkMovie_FactoryDefault.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkARGBImageEncoder.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkForceLinking.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkImageEncoder.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\images\SkImageEncoder_Factory.cpp">
+      <Filter>src\images</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkOpts_sse41.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkOpts_ssse3.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\opts_check_x86.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapFilter_opts_SSE2.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSE2.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkBitmapProcState_opts_SSSE3.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkBlitRow_opts_SSE2.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\opts\SkOpts_avx.cpp">
+      <Filter>src\opts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkTLS_win.cpp">
+      <Filter>src\ports</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkDebug_stdio.cpp">
+      <Filter>src\ports</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkDebug_win.cpp">
+      <Filter>src\ports</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkDiscardableMemory_none.cpp">
+      <Filter>src\ports</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\ports\SkFontHost_win.cpp">
       <Filter>src\ports</Filter>
@@ -2429,34 +2645,40 @@
     <ClCompile Include="..\..\third_party\skia\src\ports\SkFontMgr_win_gdi_factory.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkGlobalInitialization_chromium.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkGlobalInitialization_default.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkImageGenerator_skia.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkImageGenerator_none.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\ports\SkMemory_malloc.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkOSEnvironment.cpp">
+      <Filter>src\ports</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkOSFile_stdio.cpp">
+      <Filter>src\ports</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\ports\SkOSFile_win.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkTime_win.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\ports\SkOSLibrary_win.cpp">
       <Filter>src\ports</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkTLS_win.cpp">
-      <Filter>src\ports</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkThreadUtils_win.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkDebug_win.cpp">
-      <Filter>src\ports</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkWhitelistChecksums.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pipe\SkGPipeWrite.cpp">
-      <Filter>src\pipe</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkWhitelistTypefaces.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pipe\SkGPipeRead.cpp">
-      <Filter>src\pipe</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkBase64.cpp">
+      <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkBitmapHasher.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkBitmapSourceDeserializer.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkBitSet.cpp">
@@ -2474,16 +2696,7 @@
     <ClCompile Include="..\..\third_party\skia\src\utils\SkCanvasStateUtils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkCubicInterval.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkCullPoints.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkDashPath.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkDeferredCanvas.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkDumpCanvas.cpp">
@@ -2504,13 +2717,13 @@
     <ClCompile Include="..\..\third_party\skia\src\utils\SkMatrix22.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkMatrix44.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkMD5.cpp">
-      <Filter>src\utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkMeshUtils.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkMultiPictureDocument.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkMultiPictureDocumentReader.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkNinePatch.cpp">
@@ -2543,80 +2756,32 @@
     <ClCompile Include="..\..\third_party\skia\src\utils\SkPatchUtils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkRTConf.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkRGBAToYUV.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkSHA1.cpp">
+    <ClCompile Include="..\..\third_party\skia\src\utils\SkRTConf.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\utils\SkTextBox.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkThreadUtils_win.cpp">
-      <Filter>src\utils</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\image\SkImage_Generator.cpp">
+      <Filter>src\image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\SkBase64.cpp">
-      <Filter>src\utils</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\image\SkImageShader.cpp">
+      <Filter>src\image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkHRESULT.cpp">
-      <Filter>src\utils\win</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\core\SkColorSpace_ICC.cpp">
+      <Filter>src\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\utils\win\SkIStream.cpp">
-      <Filter>src\utils\win</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkOSFile_stdio.cpp">
-      <Filter>src\ports</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\ports\SkDiscardableMemory_none.cpp">
-      <Filter>src\ports</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\sfnt\SkOTTable_name.cpp">
+      <Filter>src\sfnt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\skia\src\sfnt\SkOTUtils.cpp">
       <Filter>src\sfnt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFResourceDict.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFShader.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFStream.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFTypes.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFUtils.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkJpegInfo.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFBitmap.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFCanon.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFDevice.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFFont.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFFormXObject.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\pdf\SkPDFGraphicState.cpp">
-      <Filter>src\pdf</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\doc\SkDocument_PDF.cpp">
-      <Filter>src\doc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\doc\SkDocument.cpp">
-      <Filter>src\doc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\skia\src\core\SkFlate.cpp">
-      <Filter>src\core</Filter>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticImageFilter.cpp">
+      <Filter>src\effects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

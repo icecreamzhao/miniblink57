@@ -1,3 +1,9 @@
+/*
+ * Copyright 2013 Google Inc.
+ *
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
 #include "Benchmark.h"
 #include "SkColorPriv.h"
 #include "SkRandom.h"
@@ -6,19 +12,22 @@
 template <bool kFast, bool kScale>
 class FourByteInterpBench : public Benchmark {
 public:
-    FourByteInterpBench() {
+    FourByteInterpBench()
+    {
         fName.set("four_byte_interp");
         fName.append(kFast ? "_fast" : "_slow");
         fName.append(kScale ? "_255" : "_256");
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
     const char* onGetName() override { return fName.c_str(); }
 
-    void onPreDraw() override {
+    void onDelayedSetup() override
+    {
         // A handful of random srcs and dsts.
         SkRandom rand;
         for (int i = 0; i < kInputs; i++) {
@@ -30,10 +39,12 @@ public:
         for (int i = 0; i <= 256; i++) {
             fScales[i] = i;
         }
-        if (kScale) fScales[256] = 255;  // We'll just do 255 twice if we're limited to [0,255].
+        if (kScale)
+            fScales[256] = 255; // We'll just do 255 twice if we're limited to [0,255].
     }
 
-    void onDraw(const int loops, SkCanvas*) override {
+    void onDraw(int loops, SkCanvas*) override
+    {
         // We xor results of FourByteInterp into junk to make sure the function runs.
         volatile SkPMColor junk = 0;
 
@@ -67,15 +78,15 @@ public:
 
 private:
     SkString fName;
-    static const int kInputs = 10;  // Arbitrary.
+    static const int kInputs = 10; // Arbitrary.
     volatile unsigned fSrcs[kInputs];
     volatile unsigned fDsts[kInputs];
-    unsigned fScales[257];  // We need space for [0, 256].
+    unsigned fScales[257]; // We need space for [0, 256].
 };
 
 #define COMMA ,
-DEF_BENCH( return SkNEW(FourByteInterpBench<true COMMA true>); )
-DEF_BENCH( return SkNEW(FourByteInterpBench<true COMMA false>); )
-DEF_BENCH( return SkNEW(FourByteInterpBench<false COMMA true>); )
-DEF_BENCH( return SkNEW(FourByteInterpBench<false COMMA false>); )
+DEF_BENCH(return (new FourByteInterpBench<true COMMA true>);)
+DEF_BENCH(return (new FourByteInterpBench<true COMMA false>);)
+DEF_BENCH(return (new FourByteInterpBench<false COMMA true>);)
+DEF_BENCH(return (new FourByteInterpBench<false COMMA false>);)
 #undef COMMA

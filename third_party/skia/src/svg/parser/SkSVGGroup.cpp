@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,40 +5,46 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkSVGGroup.h"
 #include "SkSVGParser.h"
 
-SkSVGGroup::SkSVGGroup() {
+SkSVGGroup::SkSVGGroup()
+{
     fIsNotDef = false;
 }
 
-SkSVGElement* SkSVGGroup::getGradient() {
+SkSVGElement* SkSVGGroup::getGradient()
+{
     for (SkSVGElement** ptr = fChildren.begin(); ptr < fChildren.end(); ptr++) {
         SkSVGElement* result = (*ptr)->getGradient();
-        if (result != NULL)
+        if (result != nullptr)
             return result;
     }
-    return NULL;
+    return nullptr;
 }
 
-bool SkSVGGroup::isDef() {
+bool SkSVGGroup::isDef()
+{
     return fParent ? fParent->isDef() : false;
 }
 
-bool SkSVGGroup::isFlushable() {
+bool SkSVGGroup::isFlushable()
+{
     return false;
 }
 
-bool SkSVGGroup::isGroup() {
+bool SkSVGGroup::isGroup()
+{
     return true;
 }
 
-bool SkSVGGroup::isNotDef() {
+bool SkSVGGroup::isNotDef()
+{
     return fParent ? fParent->isNotDef() : false;
 }
 
-void SkSVGGroup::translate(SkSVGParser& parser, bool defState) {
+void SkSVGGroup::translate(SkSVGParser& parser, bool defState)
+{
     for (SkSVGElement** ptr = fChildren.begin(); ptr < fChildren.end(); ptr++)
         parser.translate(*ptr, defState);
 }

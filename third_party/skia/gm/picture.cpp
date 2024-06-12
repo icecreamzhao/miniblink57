@@ -5,11 +5,12 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkPaint.h"
 #include "SkPictureRecorder.h"
+#include "gm.h"
 
-static SkPicture* make_picture() {
+static sk_sp<SkPicture> make_picture()
+{
     SkPictureRecorder rec;
     SkCanvas* canvas = rec.beginRecording(100, 100);
 
@@ -21,18 +22,23 @@ static SkPicture* make_picture() {
     canvas->drawRect(SkRect::MakeWH(100, 100), paint);
 
     paint.setColor(0x80FF0000);
-    path.moveTo(0, 0); path.lineTo(100, 0); path.lineTo(100, 100);
+    path.moveTo(0, 0);
+    path.lineTo(100, 0);
+    path.lineTo(100, 100);
     canvas->drawPath(path, paint);
-    
+
     paint.setColor(0x8000FF00);
-    path.reset(); path.moveTo(0, 0); path.lineTo(100, 0); path.lineTo(0, 100);
+    path.reset();
+    path.moveTo(0, 0);
+    path.lineTo(100, 0);
+    path.lineTo(0, 100);
     canvas->drawPath(path, paint);
 
     paint.setColor(0x80FFFFFF);
     paint.setXfermodeMode(SkXfermode::kPlus_Mode);
     canvas->drawRect(SkRect::MakeXYWH(25, 25, 50, 50), paint);
 
-    return rec.endRecording();
+    return rec.finishRecordingAsPicture();
 }
 
 // Exercise the optional arguments to drawPicture
@@ -40,33 +46,38 @@ static SkPicture* make_picture() {
 class PictureGM : public skiagm::GM {
 public:
     PictureGM()
-        : fPicture(NULL)
-    {}
-
-protected:
-    void onOnceBeforeDraw() override {
-         fPicture.reset(make_picture());
+        : fPicture(nullptr)
+    {
     }
 
-    SkString onShortName() override {
+protected:
+    void onOnceBeforeDraw() override
+    {
+        fPicture = make_picture();
+    }
+
+    SkString onShortName() override
+    {
         return SkString("pictures");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(450, 120);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(10, 10);
 
         SkMatrix matrix;
         SkPaint paint;
 
         canvas->drawPicture(fPicture);
-        
+
         matrix.setTranslate(110, 0);
-        canvas->drawPicture(fPicture, &matrix, NULL);
-        
+        canvas->drawPicture(fPicture, &matrix, nullptr);
+
         matrix.postTranslate(110, 0);
         canvas->drawPicture(fPicture, &matrix, &paint);
 
@@ -76,9 +87,9 @@ protected:
     }
 
 private:
-    SkAutoTUnref<SkPicture> fPicture;
+    sk_sp<SkPicture> fPicture;
 
     typedef skiagm::GM INHERITED;
 };
 
-DEF_GM( return SkNEW(PictureGM); )
+DEF_GM(return new PictureGM;)

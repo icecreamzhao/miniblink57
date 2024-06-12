@@ -7,10 +7,10 @@
 
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 #include <utility>
 
 namespace blink {
@@ -18,11 +18,12 @@ namespace blink {
 class Header;
 
 // http://fetch.spec.whatwg.org/#terminology-headers
-class MODULES_EXPORT FetchHeaderList final : public GarbageCollectedFinalized<FetchHeaderList> {
+class MODULES_EXPORT FetchHeaderList final
+    : public GarbageCollectedFinalized<FetchHeaderList> {
 public:
     typedef std::pair<String, String> Header;
     static FetchHeaderList* create();
-    FetchHeaderList* clone();
+    FetchHeaderList* clone() const;
 
     ~FetchHeaderList();
     void append(const String&, const String&);
@@ -38,9 +39,13 @@ public:
     void clearList();
 
     bool containsNonSimpleHeader() const;
+    void sortAndCombine();
 
-    const Vector<OwnPtr<Header>>& list() const { return m_headerList; }
-    const Header& entry(size_t index) const { return *(m_headerList[index].get()); }
+    const Vector<std::unique_ptr<Header>>& list() const { return m_headerList; }
+    const Header& entry(size_t index) const
+    {
+        return *(m_headerList[index].get());
+    }
 
     static bool isValidHeaderName(const String&);
     static bool isValidHeaderValue(const String&);
@@ -49,7 +54,7 @@ public:
 
 private:
     FetchHeaderList();
-    Vector<OwnPtr<Header>> m_headerList;
+    Vector<std::unique_ptr<Header>> m_headerList;
 };
 
 } // namespace blink

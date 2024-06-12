@@ -11,9 +11,9 @@
 namespace ots {
 
 struct OpenTypeHMTX {
-  OpenTypeMetricsTable metrics;
+    OpenTypeMetricsTable metrics;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_HMTX_H_
+#endif // OTS_HMTX_H_

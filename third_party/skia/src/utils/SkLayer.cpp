@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -12,13 +11,14 @@
 //#define DEBUG_TRACK_NEW_DELETE
 
 #ifdef DEBUG_TRACK_NEW_DELETE
-    static int gLayerAllocCount;
+static int gLayerAllocCount;
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
-SkLayer::SkLayer() {
-    fParent = NULL;
+SkLayer::SkLayer()
+{
+    fParent = nullptr;
     m_opacity = SK_Scalar1;
     m_size.set(0, 0);
     m_position.set(0, 0);
@@ -34,8 +34,10 @@ SkLayer::SkLayer() {
 #endif
 }
 
-SkLayer::SkLayer(const SkLayer& src) : INHERITED() {
-    fParent = NULL;
+SkLayer::SkLayer(const SkLayer& src)
+    : INHERITED()
+{
+    fParent = nullptr;
     m_opacity = src.m_opacity;
     m_size = src.m_size;
     m_position = src.m_position;
@@ -51,7 +53,8 @@ SkLayer::SkLayer(const SkLayer& src) : INHERITED() {
 #endif
 }
 
-SkLayer::~SkLayer() {
+SkLayer::~SkLayer()
+{
     this->removeChildren();
 
 #ifdef DEBUG_TRACK_NEW_DELETE
@@ -62,11 +65,13 @@ SkLayer::~SkLayer() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool SkLayer::isInheritFromRootTransform() const {
+bool SkLayer::isInheritFromRootTransform() const
+{
     return (fFlags & kInheritFromRootTransform_Flag) != 0;
 }
 
-void SkLayer::setInheritFromRootTransform(bool doInherit) {
+void SkLayer::setInheritFromRootTransform(bool doInherit)
+{
     if (doInherit) {
         fFlags |= kInheritFromRootTransform_Flag;
     } else {
@@ -74,63 +79,71 @@ void SkLayer::setInheritFromRootTransform(bool doInherit) {
     }
 }
 
-void SkLayer::setMatrix(const SkMatrix& matrix) {
+void SkLayer::setMatrix(const SkMatrix& matrix)
+{
     fMatrix = matrix;
 }
 
-void SkLayer::setChildrenMatrix(const SkMatrix& matrix) {
+void SkLayer::setChildrenMatrix(const SkMatrix& matrix)
+{
     fChildrenMatrix = matrix;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int SkLayer::countChildren() const {
+int SkLayer::countChildren() const
+{
     return m_children.count();
 }
 
-SkLayer* SkLayer::getChild(int index) const {
+SkLayer* SkLayer::getChild(int index) const
+{
     if ((unsigned)index < (unsigned)m_children.count()) {
         SkASSERT(m_children[index]->fParent == this);
         return m_children[index];
     }
-    return NULL;
+    return nullptr;
 }
 
-SkLayer* SkLayer::addChild(SkLayer* child) {
+SkLayer* SkLayer::addChild(SkLayer* child)
+{
     SkASSERT(this != child);
     child->ref();
     child->detachFromParent();
-    SkASSERT(child->fParent == NULL);
+    SkASSERT(child->fParent == nullptr);
     child->fParent = this;
 
     *m_children.append() = child;
     return child;
 }
 
-void SkLayer::detachFromParent() {
+void SkLayer::detachFromParent()
+{
     if (fParent) {
         int index = fParent->m_children.find(this);
         SkASSERT(index >= 0);
         fParent->m_children.remove(index);
-        fParent = NULL;
-        this->unref();  // this call might delete us
+        fParent = nullptr;
+        this->unref(); // this call might delete us
     }
 }
 
-void SkLayer::removeChildren() {
+void SkLayer::removeChildren()
+{
     int count = m_children.count();
     for (int i = 0; i < count; i++) {
         SkLayer* child = m_children[i];
         SkASSERT(child->fParent == this);
-        child->fParent = NULL;  // in case it has more than one owner
+        child->fParent = nullptr; // in case it has more than one owner
         child->unref();
     }
     m_children.reset();
 }
 
-SkLayer* SkLayer::getRootLayer() const {
+SkLayer* SkLayer::getRootLayer() const
+{
     const SkLayer* root = this;
-    while (root->fParent != NULL) {
+    while (root->fParent != nullptr) {
         root = root->fParent;
     }
     return const_cast<SkLayer*>(root);
@@ -138,7 +151,8 @@ SkLayer* SkLayer::getRootLayer() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkLayer::getLocalTransform(SkMatrix* matrix) const {
+void SkLayer::getLocalTransform(SkMatrix* matrix) const
+{
     matrix->setTranslate(m_position.fX, m_position.fY);
 
     SkScalar tx = SkScalarMul(m_anchorPoint.fX, m_size.width());
@@ -148,7 +162,8 @@ void SkLayer::getLocalTransform(SkMatrix* matrix) const {
     matrix->preTranslate(-tx, -ty);
 }
 
-void SkLayer::localToGlobal(SkMatrix* matrix) const {
+void SkLayer::localToGlobal(SkMatrix* matrix) const
+{
     this->getLocalTransform(matrix);
 
     if (this->isInheritFromRootTransform()) {
@@ -157,7 +172,7 @@ void SkLayer::localToGlobal(SkMatrix* matrix) const {
     }
 
     const SkLayer* layer = this;
-    while (layer->fParent != NULL) {
+    while (layer->fParent != nullptr) {
         layer = layer->fParent;
 
         SkMatrix tmp;
@@ -169,13 +184,15 @@ void SkLayer::localToGlobal(SkMatrix* matrix) const {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkLayer::onDraw(SkCanvas*, SkScalar opacity) {
-//    SkDebugf("----- no onDraw for %p\n", this);
+void SkLayer::onDraw(SkCanvas*, SkScalar opacity)
+{
+    //    SkDebugf("----- no onDraw for %p\n", this);
 }
 
 #include "SkString.h"
 
-void SkLayer::draw(SkCanvas* canvas, SkScalar opacity) {
+void SkLayer::draw(SkCanvas* canvas, SkScalar opacity)
+{
 #if 0
     SkString str1, str2;
  //   this->getMatrix().toDumpString(&str1);
@@ -187,7 +204,7 @@ void SkLayer::draw(SkCanvas* canvas, SkScalar opacity) {
 
     opacity = SkScalarMul(opacity, this->getOpacity());
     if (opacity <= 0) {
-//        SkDebugf("---- abort drawing %p opacity %g\n", this, opacity);
+        //        SkDebugf("---- abort drawing %p opacity %g\n", this, opacity);
         return;
     }
 

@@ -26,35 +26,28 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT FEDropShadow : public FilterEffect {
+class PLATFORM_EXPORT FEDropShadow final : public FilterEffect {
 public:
-    static PassRefPtrWillBeRawPtr<FEDropShadow> create(Filter*, float, float, float, float, const Color&, float);
+    static FEDropShadow*
+    create(Filter*, float, float, float, float, const Color&, float);
 
-    float stdDeviationX() const { return m_stdX; }
-    void setStdDeviationX(float stdX) { m_stdX = stdX; }
+    // Compute which destination area will be affected when applying a drop
+    // shadow effect with |stdDeviation| and |offset| to an area |rect|.
+    static FloatRect mapEffect(const FloatSize& stdDeviation,
+        const FloatPoint& offset,
+        const FloatRect&);
 
-    float stdDeviationY() const { return m_stdY; }
-    void setStdDeviationY(float stdY) { m_stdY = stdY; }
-
-    float dx() const { return m_dx; }
-    void setDx(float dx) { m_dx = dx; }
-
-    float dy() const { return m_dy; }
-    void setDy(float dy) { m_dy = dy; }
-
-    Color shadowColor() const { return m_shadowColor; }
-    void setShadowColor(const Color& shadowColor) { m_shadowColor = shadowColor; }
-
-    float shadowOpacity() const { return m_shadowOpacity; }
-    void setShadowOpacity(float shadowOpacity) { m_shadowOpacity = shadowOpacity; }
-
-    FloatRect mapRect(const FloatRect&, bool forward = true) final;
+    void setShadowColor(const Color& color) { m_shadowColor = color; }
+    void setShadowOpacity(float opacity) { m_shadowOpacity = opacity; }
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
 
 private:
     FEDropShadow(Filter*, float, float, float, float, const Color&, float);
+
+    FloatRect mapEffect(const FloatRect&) const override;
+
+    sk_sp<SkImageFilter> createImageFilter() override;
 
     float m_stdX;
     float m_stdY;

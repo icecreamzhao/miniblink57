@@ -97,17 +97,17 @@
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-u_shapeArabic(const UChar *source, int32_t sourceLength,
-              UChar *dest, int32_t destSize,
-              uint32_t options,
-              UErrorCode *pErrorCode);
+u_shapeArabic(const UChar* source, int32_t sourceLength,
+    UChar* dest, int32_t destSize,
+    uint32_t options,
+    UErrorCode* pErrorCode);
 
 /**
  * Memory option: allow the result to have a different length than the source.
  * Affects: LamAlef options
  * @stable ICU 2.0
  */
-#define U_SHAPE_LENGTH_GROW_SHRINK              0
+#define U_SHAPE_LENGTH_GROW_SHRINK 0
 
 /**
  * Memory option: allow the result to have a different length than the source.
@@ -115,14 +115,14 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * This option is an alias to U_SHAPE_LENGTH_GROW_SHRINK
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_RESIZE                  0 
+#define U_SHAPE_LAMALEF_RESIZE 0
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces next to modified characters.
  * @stable ICU 2.0
  */
-#define U_SHAPE_LENGTH_FIXED_SPACES_NEAR        1
+#define U_SHAPE_LENGTH_FIXED_SPACES_NEAR 1
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -131,14 +131,14 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * This option is an alias to U_SHAPE_LENGTH_FIXED_SPACES_NEAR
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_NEAR                    1 
+#define U_SHAPE_LAMALEF_NEAR 1
 
 /**
  * Memory option: the result must have the same length as the source.
  * If more room is necessary, then try to consume spaces at the end of the text.
  * @stable ICU 2.0
  */
-#define U_SHAPE_LENGTH_FIXED_SPACES_AT_END      2
+#define U_SHAPE_LENGTH_FIXED_SPACES_AT_END 2
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -147,7 +147,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * This option is an alias to U_SHAPE_LENGTH_FIXED_SPACES_AT_END
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_END                     2 
+#define U_SHAPE_LAMALEF_END 2
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -163,8 +163,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * This option is an alias to U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_BEGIN                    3 
-
+#define U_SHAPE_LAMALEF_BEGIN 3
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -179,20 +178,19 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: LamAlef options
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_AUTO                     0x10000 
+#define U_SHAPE_LAMALEF_AUTO 0x10000
 
 /** Bit mask for memory options. @stable ICU 2.0 */
-#define U_SHAPE_LENGTH_MASK                      0x10003 /* Changed old value 3 */
-
+#define U_SHAPE_LENGTH_MASK 0x10003 /* Changed old value 3 */
 
 /**
  * Bit mask for LamAlef memory options.
  * @stable ICU 4.2
  */
-#define U_SHAPE_LAMALEF_MASK                     0x10003 /* updated */
+#define U_SHAPE_LAMALEF_MASK 0x10003 /* updated */
 
 /** Direction indicator: the source is in logical (keyboard) order. @stable ICU 2.0 */
-#define U_SHAPE_TEXT_DIRECTION_LOGICAL          0
+#define U_SHAPE_TEXT_DIRECTION_LOGICAL 0
 
 /**
  * Direction indicator:
@@ -201,7 +199,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * This option is an alias to U_SHAPE_TEXT_DIRECTION_LOGICAL
  * @stable ICU 4.2
  */
-#define U_SHAPE_TEXT_DIRECTION_VISUAL_RTL       0
+#define U_SHAPE_TEXT_DIRECTION_VISUAL_RTL 0
 
 /**
  * Direction indicator:
@@ -209,20 +207,19 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * the leftmost displayed character stored first.
  * @stable ICU 2.0
  */
-#define U_SHAPE_TEXT_DIRECTION_VISUAL_LTR       4
+#define U_SHAPE_TEXT_DIRECTION_VISUAL_LTR 4
 
 /** Bit mask for direction indicators. @stable ICU 2.0 */
-#define U_SHAPE_TEXT_DIRECTION_MASK             4
-
+#define U_SHAPE_TEXT_DIRECTION_MASK 4
 
 /** Letter shaping option: do not perform letter shaping. @stable ICU 2.0 */
-#define U_SHAPE_LETTERS_NOOP                    0
+#define U_SHAPE_LETTERS_NOOP 0
 
 /** Letter shaping option: replace abstract letter characters by "shaped" ones. @stable ICU 2.0 */
-#define U_SHAPE_LETTERS_SHAPE                   8
+#define U_SHAPE_LETTERS_SHAPE 8
 
 /** Letter shaping option: replace "shaped" letter characters by abstract ones. @stable ICU 2.0 */
-#define U_SHAPE_LETTERS_UNSHAPE                 0x10
+#define U_SHAPE_LETTERS_UNSHAPE 0x10
 
 /**
  * Letter shaping option: replace abstract letter characters by "shaped" ones.
@@ -233,27 +230,25 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  */
 #define U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED 0x18
 
-
 /** Bit mask for letter shaping options. @stable ICU 2.0 */
-#define U_SHAPE_LETTERS_MASK                        0x18
-
+#define U_SHAPE_LETTERS_MASK 0x18
 
 /** Digit shaping option: do not perform digit shaping. @stable ICU 2.0 */
-#define U_SHAPE_DIGITS_NOOP                     0
+#define U_SHAPE_DIGITS_NOOP 0
 
 /**
  * Digit shaping option:
  * Replace European digits (U+0030...) by Arabic-Indic digits.
  * @stable ICU 2.0
  */
-#define U_SHAPE_DIGITS_EN2AN                    0x20
+#define U_SHAPE_DIGITS_EN2AN 0x20
 
 /**
  * Digit shaping option:
  * Replace Arabic-Indic digits by European digits (U+0030...).
  * @stable ICU 2.0
  */
-#define U_SHAPE_DIGITS_AN2EN                    0x40
+#define U_SHAPE_DIGITS_AN2EN 0x40
 
 /**
  * Digit shaping option:
@@ -266,7 +261,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * (it is <code>U_LEFT_TO_RIGHT</code> [L] or <code>U_RIGHT_TO_LEFT</code> [R]).
  * @stable ICU 2.0
  */
-#define U_SHAPE_DIGITS_ALEN2AN_INIT_LR          0x60
+#define U_SHAPE_DIGITS_ALEN2AN_INIT_LR 0x60
 
 /**
  * Digit shaping option:
@@ -278,26 +273,25 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * (initial state) is assumed to be an Arabic letter.
  * @stable ICU 2.0
  */
-#define U_SHAPE_DIGITS_ALEN2AN_INIT_AL          0x80
+#define U_SHAPE_DIGITS_ALEN2AN_INIT_AL 0x80
 
 /** Not a valid option value. May be replaced by a new option. @stable ICU 2.0 */
-#define U_SHAPE_DIGITS_RESERVED                 0xa0
+#define U_SHAPE_DIGITS_RESERVED 0xa0
 
 /** Bit mask for digit shaping options. @stable ICU 2.0 */
-#define U_SHAPE_DIGITS_MASK                     0xe0
-
+#define U_SHAPE_DIGITS_MASK 0xe0
 
 /** Digit type option: Use Arabic-Indic digits (U+0660...U+0669). @stable ICU 2.0 */
-#define U_SHAPE_DIGIT_TYPE_AN                   0
+#define U_SHAPE_DIGIT_TYPE_AN 0
 
 /** Digit type option: Use Eastern (Extended) Arabic-Indic digits (U+06f0...U+06f9). @stable ICU 2.0 */
-#define U_SHAPE_DIGIT_TYPE_AN_EXTENDED          0x100
+#define U_SHAPE_DIGIT_TYPE_AN_EXTENDED 0x100
 
 /** Not a valid option value. May be replaced by a new option. @stable ICU 2.0 */
-#define U_SHAPE_DIGIT_TYPE_RESERVED             0x200
+#define U_SHAPE_DIGIT_TYPE_RESERVED 0x200
 
 /** Bit mask for digit type options. @stable ICU 2.0 */
-#define U_SHAPE_DIGIT_TYPE_MASK                 0x300 /* I need to change this from 0x3f00 to 0x300 */
+#define U_SHAPE_DIGIT_TYPE_MASK 0x300 /* I need to change this from 0x3f00 to 0x300 */
 
 /** 
  * Tashkeel aggregation option:
@@ -306,11 +300,11 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * U+FC5E, U+FC5F, U+FC60, U+FC61, U+FC62 consecutively.
  * @stable ICU 3.6
  */
-#define U_SHAPE_AGGREGATE_TASHKEEL              0x4000
+#define U_SHAPE_AGGREGATE_TASHKEEL 0x4000
 /** Tashkeel aggregation option: do not aggregate tashkeels. @stable ICU 3.6 */
-#define U_SHAPE_AGGREGATE_TASHKEEL_NOOP         0
+#define U_SHAPE_AGGREGATE_TASHKEEL_NOOP 0
 /** Bit mask for tashkeel aggregation. @stable ICU 3.6 */
-#define U_SHAPE_AGGREGATE_TASHKEEL_MASK         0x4000
+#define U_SHAPE_AGGREGATE_TASHKEEL_MASK 0x4000
 
 /** 
  * Presentation form option:
@@ -318,17 +312,17 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * characters with 0+06xx characters, before shaping.
  * @stable ICU 3.6
  */
-#define U_SHAPE_PRESERVE_PRESENTATION           0x8000
+#define U_SHAPE_PRESERVE_PRESENTATION 0x8000
 /** Presentation form option: 
  * Replace Arabic Presentation Forms-A and Arabic Presentationo Forms-B with 
  * their unshaped correspondants in range 0+06xx, before shaping.
  * @stable ICU 3.6 
  */
-#define U_SHAPE_PRESERVE_PRESENTATION_NOOP      0
+#define U_SHAPE_PRESERVE_PRESENTATION_NOOP 0
 /** Bit mask for preserve presentation form. @stable ICU 3.6 */
-#define U_SHAPE_PRESERVE_PRESENTATION_MASK      0x8000
+#define U_SHAPE_PRESERVE_PRESENTATION_MASK 0x8000
 
-/* Seen Tail option */ 
+/* Seen Tail option */
 /**
  * Memory option: the result must have the same length as the source.
  * Shaping mode: The SEEN family character will expand into two characters using space near 
@@ -341,15 +335,15 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: Seen options
  * @stable ICU 4.2
  */
-#define U_SHAPE_SEEN_TWOCELL_NEAR     0x200000
+#define U_SHAPE_SEEN_TWOCELL_NEAR 0x200000
 
 /**
  * Bit mask for Seen memory options. 
  * @stable ICU 4.2
  */
-#define U_SHAPE_SEEN_MASK             0x700000
+#define U_SHAPE_SEEN_MASK 0x700000
 
-/* YehHamza option */ 
+/* YehHamza option */
 /**
  * Memory option: the result must have the same length as the source.
  * Shaping mode: The YEHHAMZA character will expand into two characters using space near it 
@@ -362,16 +356,15 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: YehHamza options
  * @stable ICU 4.2
  */
-#define U_SHAPE_YEHHAMZA_TWOCELL_NEAR      0x1000000
-
+#define U_SHAPE_YEHHAMZA_TWOCELL_NEAR 0x1000000
 
 /**
  * Bit mask for YehHamza memory options. 
  * @stable ICU 4.2
  */
-#define U_SHAPE_YEHHAMZA_MASK              0x3800000
+#define U_SHAPE_YEHHAMZA_MASK 0x3800000
 
-/* New Tashkeel options */ 
+/* New Tashkeel options */
 /**
  * Memory option: the result must have the same length as the source.
  * Shaping mode: Tashkeel characters will be replaced by spaces. 
@@ -381,7 +374,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: Tashkeel options
  * @stable ICU 4.2
  */
-#define U_SHAPE_TASHKEEL_BEGIN                      0x40000
+#define U_SHAPE_TASHKEEL_BEGIN 0x40000
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -392,7 +385,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: Tashkeel options
  * @stable ICU 4.2
  */
-#define U_SHAPE_TASHKEEL_END                        0x60000
+#define U_SHAPE_TASHKEEL_END 0x60000
 
 /**
  * Memory option: allow the result to have a different length than the source.
@@ -402,7 +395,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affect: Tashkeel options
  * @stable ICU 4.2
  */
-#define U_SHAPE_TASHKEEL_RESIZE                     0x80000
+#define U_SHAPE_TASHKEEL_RESIZE 0x80000
 
 /**
  * Memory option: the result must have the same length as the source.
@@ -413,16 +406,15 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: YehHamza options
  * @stable ICU 4.2
  */
-#define U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL         0xC0000
+#define U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL 0xC0000
 
 /** 
  * Bit mask for Tashkeel replacement with Space or Tatweel memory options. 
  * @stable ICU 4.2
  */
-#define U_SHAPE_TASHKEEL_MASK                       0xE0000
+#define U_SHAPE_TASHKEEL_MASK 0xE0000
 
-
-/* Space location Control options */ 
+/* Space location Control options */
 /**
  * This option affect the meaning of BEGIN and END options. if this option is not used the default
  * for BEGIN and END will be as following: 
@@ -449,7 +441,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Bit mask for swapping BEGIN and END for Visual LTR text 
  * @stable ICU 4.2
  */
-#define U_SHAPE_SPACES_RELATIVE_TO_TEXT_MASK      0x4000000
+#define U_SHAPE_SPACES_RELATIVE_TO_TEXT_MASK 0x4000000
 
 /**
  * If this option is used, shaping will use the new Unicode code point for TAIL (i.e. 0xFE73). 
@@ -463,12 +455,12 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * Affects: All Seen options
  * @stable ICU 4.8
  */
-#define U_SHAPE_TAIL_NEW_UNICODE        0x8000000
+#define U_SHAPE_TAIL_NEW_UNICODE 0x8000000
 
 /**
  * Bit mask for new Unicode Tail option 
  * @stable ICU 4.8
  */
-#define U_SHAPE_TAIL_TYPE_MASK          0x8000000
+#define U_SHAPE_TAIL_TYPE_MASK 0x8000000
 
 #endif

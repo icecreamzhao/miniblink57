@@ -36,22 +36,50 @@
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatSize.h"
 #include "platform/geometry/IntSize.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 
 namespace blink {
 
-enum AspectRatioFit {
-    AspectRatioFitShrink,
-    AspectRatioFitGrow
-};
+enum AspectRatioFit { AspectRatioFitShrink,
+    AspectRatioFitGrow };
 
-class LayoutSize {
+class PLATFORM_EXPORT LayoutSize {
+    DISALLOW_NEW();
+
 public:
     LayoutSize() { }
-    explicit LayoutSize(const IntSize& size) : m_width(size.width()), m_height(size.height()) { }
-    LayoutSize(LayoutUnit width, LayoutUnit height) : m_width(width), m_height(height) { }
+    explicit LayoutSize(const IntSize& size)
+        : m_width(size.width())
+        , m_height(size.height())
+    {
+    }
+    LayoutSize(LayoutUnit width, LayoutUnit height)
+        : m_width(width)
+        , m_height(height)
+    {
+    }
+    LayoutSize(int width, int height)
+        : m_width(LayoutUnit(width))
+        , m_height(LayoutUnit(height))
+    {
+    }
+    LayoutSize(float width, float height)
+        : m_width(LayoutUnit(width))
+        , m_height(LayoutUnit(height))
+    {
+    }
 
-    explicit LayoutSize(const FloatSize& size) : m_width(size.width()), m_height(size.height()) { }
-    explicit LayoutSize(const DoubleSize& size) : m_width(size.width()), m_height(size.height()) { }
+    explicit LayoutSize(const FloatSize& size)
+        : m_width(size.width())
+        , m_height(size.height())
+    {
+    }
+    explicit LayoutSize(const DoubleSize& size)
+        : m_width(size.width())
+        , m_height(size.height())
+    {
+    }
 
     LayoutUnit width() const { return m_width; }
     LayoutUnit height() const { return m_height; }
@@ -59,7 +87,10 @@ public:
     void setWidth(LayoutUnit width) { m_width = width; }
     void setHeight(LayoutUnit height) { m_height = height; }
 
-    bool isEmpty() const { return m_width.rawValue() <= 0 || m_height.rawValue() <= 0; }
+    bool isEmpty() const
+    {
+        return m_width.rawValue() <= 0 || m_height.rawValue() <= 0;
+    }
     bool isZero() const { return !m_width && !m_height; }
 
     float aspectRatio() const { return m_width.toFloat() / m_height.toFloat(); }
@@ -68,6 +99,16 @@ public:
     {
         m_width += width;
         m_height += height;
+    }
+
+    void expand(int width, int height)
+    {
+        expand(LayoutUnit(width), LayoutUnit(height));
+    }
+
+    void shrink(int width, int height)
+    {
+        shrink(LayoutUnit(width), LayoutUnit(height));
     }
 
     void shrink(LayoutUnit width, LayoutUnit height)
@@ -107,10 +148,7 @@ public:
             m_height < other.m_height ? m_height : other.m_height);
     }
 
-    void clampNegativeToZero()
-    {
-        *this = expandedTo(LayoutSize());
-    }
+    void clampNegativeToZero() { *this = expandedTo(LayoutSize()); }
 
     void clampToMinimumSize(const LayoutSize& minimumSize)
     {
@@ -120,24 +158,26 @@ public:
             m_height = minimumSize.height();
     }
 
-    LayoutSize transposedSize() const
-    {
-        return LayoutSize(m_height, m_width);
-    }
+    LayoutSize transposedSize() const { return LayoutSize(m_height, m_width); }
 
-    LayoutSize fitToAspectRatio(const LayoutSize& aspectRatio, AspectRatioFit fit) const
+    LayoutSize fitToAspectRatio(const LayoutSize& aspectRatio,
+        AspectRatioFit fit) const
     {
         float heightScale = height().toFloat() / aspectRatio.height().toFloat();
         float widthScale = width().toFloat() / aspectRatio.width().toFloat();
         if ((widthScale > heightScale) != (fit == AspectRatioFitGrow))
-            return LayoutSize(height() * aspectRatio.width() / aspectRatio.height(), height());
-        return LayoutSize(width(), width() * aspectRatio.height() / aspectRatio.width());
+            return LayoutSize(height() * aspectRatio.width() / aspectRatio.height(),
+                height());
+        return LayoutSize(width(),
+            width() * aspectRatio.height() / aspectRatio.width());
     }
 
     LayoutSize fraction() const
     {
         return LayoutSize(m_width.fraction(), m_height.fraction());
     }
+
+    String toString() const;
 
 private:
     LayoutUnit m_width, m_height;
@@ -218,6 +258,10 @@ inline LayoutSize roundedLayoutSize(const FloatSize& s)
 {
     return LayoutSize(s);
 }
+
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const LayoutSize&, std::ostream*);
 
 } // namespace blink
 

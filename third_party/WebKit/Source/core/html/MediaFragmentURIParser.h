@@ -27,6 +27,7 @@
 #define MediaFragmentURIParser_h
 
 #include "platform/weborigin/KURL.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -34,21 +35,33 @@ namespace blink {
 class KURL;
 
 class MediaFragmentURIParser final {
-public:
+    STACK_ALLOCATED();
 
+public:
     MediaFragmentURIParser(const KURL&);
 
     double startTime();
     double endTime();
 
 private:
-
     void parseFragments();
 
-    enum TimeFormat { None, Invalid, NormalPlayTime, SMPTETimeCode, WallClockTimeCode };
+    enum TimeFormat {
+        None,
+        Invalid,
+        NormalPlayTime,
+        SMPTETimeCode,
+        WallClockTimeCode
+    };
     void parseTimeFragment();
-    bool parseNPTFragment(const LChar*, unsigned length, double& startTime, double& endTime);
-    bool parseNPTTime(const LChar*, unsigned length, unsigned& offset, double& time);
+    bool parseNPTFragment(const LChar*,
+        unsigned length,
+        double& startTime,
+        double& endTime);
+    bool parseNPTTime(const LChar*,
+        unsigned length,
+        unsigned& offset,
+        double& time);
 
     KURL m_url;
     TimeFormat m_timeFormat;

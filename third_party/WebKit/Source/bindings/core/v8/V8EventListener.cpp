@@ -28,25 +28,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8EventListener.h"
 
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "core/dom/Document.h"
+#include "core/events/Event.h"
 #include "core/frame/LocalFrame.h"
 
 namespace blink {
 
-V8EventListener::V8EventListener(v8::Local<v8::Object> listener, bool isAttribute, ScriptState* scriptState)
-    : V8AbstractEventListener(isAttribute, scriptState->world(), scriptState->isolate())
+V8EventListener::V8EventListener(bool isAttribute, ScriptState* scriptState)
+    : V8AbstractEventListener(isAttribute,
+        scriptState->world(),
+        scriptState->isolate())
 {
-    setListenerObject(listener);
 }
 
-v8::Local<v8::Function> V8EventListener::getListenerFunction(ScriptState* scriptState)
+v8::Local<v8::Function> V8EventListener::getListenerFunction(
+    ScriptState* scriptState)
 {
-    v8::Local<v8::Object> listener = getListenerObject(scriptState->executionContext());
+    v8::Local<v8::Object> listener = getListenerObject(scriptState->getExecutionContext());
 
     // Has the listener been disposed?
     if (listener.IsEmpty())
@@ -62,18 +64,31 @@ v8::Local<v8::Function> V8EventListener::getListenerFunction(ScriptState* script
     if (isAttribute())
         return v8::Local<v8::Function>();
 
+    // Getting the handleEvent property can runs script in the getter.
+    if (ScriptForbiddenScope::isScriptForbidden()) {
+        V8ThrowException::throwError(isolate(), "Script execution is forbidden.");
+        return v8::Local<v8::Function>();
+    }
+
     if (listener->IsObject()) {
         // Check that no exceptions were thrown when getting the
         // handleEvent property and that the value is a function.
         v8::Local<v8::Value> property;
-        if (listener->Get(scriptState->context(), v8AtomicString(isolate(), "handleEvent")).ToLocal(&property) && property->IsFunction())
+        if (listener
+                ->Get(scriptState->context(),
+                    v8AtomicString(isolate(), "handleEvent"))
+                .ToLocal(&property)
+            && property->IsFunction())
             return v8::Local<v8::Function>::Cast(property);
     }
 
     return v8::Local<v8::Function>();
 }
 
-v8::Local<v8::Value> V8EventListener::callListenerFunction(ScriptState* scriptState, v8::Local<v8::Value> jsEvent, Event* event)
+v8::Local<v8::Value> V8EventListener::callListenerFunction(
+    ScriptState* scriptState,
+    v8::Local<v8::Value> jsEvent,
+    Event* event)
 {
     ASSERT(!jsEvent.IsEmpty());
     v8::Local<v8::Function> handlerFunction = getListenerFunction(scriptState);
@@ -81,19 +96,24 @@ v8::Local<v8::Value> V8EventListener::callListenerFunction(ScriptState* scriptSt
     if (handlerFunction.IsEmpty() || receiver.IsEmpty())
         return v8::Local<v8::Value>();
 
-    if (!scriptState->executionContext()->isDocument())
+    if (!scriptState->getExecutionContext()->isDocument())
         return v8::Local<v8::Value>();
 
-    LocalFrame* frame = toDocument(scriptState->executionContext())->frame();
+    LocalFrame* frame = toDocument(scriptState->getExecutionContext())->frame();
     if (!frame)
         return v8::Local<v8::Value>();
 
-    if (!frame->script().canExecuteScripts(AboutToExecuteScript))
+    // TODO(jochen): Consider moving this check into canExecuteScripts.
+    // http://crbug.com/608641
+    if (scriptState->world().isMainWorld() && !frame->script().canExecuteScripts(AboutToExecuteScript))
         return v8::Local<v8::Value>();
 
     v8::Local<v8::Value> parameters[1] = { jsEvent };
     v8::Local<v8::Value> result;
-    if (!frame->script().callFunction(handlerFunction, receiver, WTF_ARRAY_LENGTH(parameters), parameters).ToLocal(&result))
+    if (!V8ScriptRunner::callFunction(handlerFunction, frame->document(),
+            receiver, WTF_ARRAY_LENGTH(parameters),
+            parameters, scriptState->isolate())
+             .ToLocal(&result))
         return v8::Local<v8::Value>();
     return result;
 }

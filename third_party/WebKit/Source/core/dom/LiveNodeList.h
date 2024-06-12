@@ -24,22 +24,35 @@
 #ifndef LiveNodeList_h
 #define LiveNodeList_h
 
+#include "core/CoreExport.h"
 #include "core/dom/LiveNodeListBase.h"
 #include "core/dom/NodeList.h"
 #include "core/html/CollectionItemsCache.h"
 #include "core/html/CollectionType.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
 
 namespace blink {
 
 class Element;
 
-class LiveNodeList : public NodeList, public LiveNodeListBase {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(LiveNodeList);
+class CORE_EXPORT LiveNodeList : public NodeList, public LiveNodeListBase {
+    USING_GARBAGE_COLLECTED_MIXIN(LiveNodeList);
+
 public:
-    LiveNodeList(ContainerNode& ownerNode, CollectionType collectionType, NodeListInvalidationType invalidationType, NodeListRootType rootType = NodeListIsRootedAtNode)
-        : LiveNodeListBase(ownerNode, rootType, invalidationType, collectionType) { }
+    LiveNodeList(ContainerNode& ownerNode,
+        CollectionType collectionType,
+        NodeListInvalidationType invalidationType,
+        NodeListRootType rootType = NodeListRootType::Node)
+        : LiveNodeListBase(ownerNode,
+            rootType,
+            invalidationType,
+            collectionType)
+    {
+        // Keep this in the child class because |registerNodeList| requires wrapper
+        // tracing and potentially calls virtual methods which is not allowed in a
+        // base class constructor.
+        document().registerNodeList(this);
+    }
 
     unsigned length() const final;
     Element* item(unsigned offset) const final;
@@ -52,8 +65,12 @@ public:
     bool canTraverseBackward() const { return true; }
     Element* traverseToFirst() const;
     Element* traverseToLast() const;
-    Element* traverseForwardToOffset(unsigned offset, Element& currentNode, unsigned& currentOffset) const;
-    Element* traverseBackwardToOffset(unsigned offset, Element& currentNode, unsigned& currentOffset) const;
+    Element* traverseForwardToOffset(unsigned offset,
+        Element& currentNode,
+        unsigned& currentOffset) const;
+    Element* traverseBackwardToOffset(unsigned offset,
+        Element& currentNode,
+        unsigned& currentOffset) const;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -63,9 +80,14 @@ private:
     mutable CollectionItemsCache<LiveNodeList, Element> m_collectionItemsCache;
 };
 
-DEFINE_TYPE_CASTS(LiveNodeList, LiveNodeListBase, list, isLiveNodeListType(list->type()), isLiveNodeListType(list.type()));
+DEFINE_TYPE_CASTS(LiveNodeList,
+    LiveNodeListBase,
+    list,
+    isLiveNodeListType(list->type()),
+    isLiveNodeListType(list.type()));
 
-inline void LiveNodeList::invalidateCacheForAttribute(const QualifiedName* attrName) const
+inline void LiveNodeList::invalidateCacheForAttribute(
+    const QualifiedName* attrName) const
 {
     if (!attrName || shouldInvalidateTypeOnAttributeChange(invalidationType(), *attrName))
         invalidateCache();

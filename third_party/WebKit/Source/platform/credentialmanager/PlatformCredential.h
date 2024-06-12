@@ -11,10 +11,14 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT PlatformCredential : public GarbageCollectedFinalized<PlatformCredential> {
+class PLATFORM_EXPORT PlatformCredential
+    : public GarbageCollectedFinalized<PlatformCredential> {
     WTF_MAKE_NONCOPYABLE(PlatformCredential);
+
 public:
-    static PlatformCredential* create(const String& id, const String& name, const KURL& iconURL);
+    static PlatformCredential* create(const String& id,
+        const String& name,
+        const KURL& iconURL);
     virtual ~PlatformCredential();
 
     const String& id() const { return m_id; }

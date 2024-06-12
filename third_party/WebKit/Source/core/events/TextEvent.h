@@ -36,25 +36,44 @@ class DocumentFragment;
 
 class TextEvent final : public UIEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<TextEvent> create();
-    static PassRefPtrWillBeRawPtr<TextEvent> create(PassRefPtrWillBeRawPtr<AbstractView>, const String& data, TextEventInputType = TextEventInputKeyboard);
-    static PassRefPtrWillBeRawPtr<TextEvent> createForPlainTextPaste(PassRefPtrWillBeRawPtr<AbstractView>, const String& data, bool shouldSmartReplace);
-    static PassRefPtrWillBeRawPtr<TextEvent> createForFragmentPaste(PassRefPtrWillBeRawPtr<AbstractView>, PassRefPtrWillBeRawPtr<DocumentFragment> data, bool shouldSmartReplace, bool shouldMatchStyle);
-    static PassRefPtrWillBeRawPtr<TextEvent> createForDrop(PassRefPtrWillBeRawPtr<AbstractView>, const String& data);
+    static TextEvent* create();
+    static TextEvent* create(AbstractView*,
+        const String& data,
+        TextEventInputType = TextEventInputKeyboard);
+    static TextEvent* createForPlainTextPaste(AbstractView*,
+        const String& data,
+        bool shouldSmartReplace);
+    static TextEvent* createForFragmentPaste(AbstractView*,
+        DocumentFragment* data,
+        bool shouldSmartReplace,
+        bool shouldMatchStyle);
+    static TextEvent* createForDrop(AbstractView*, const String& data);
 
-    virtual ~TextEvent();
+    ~TextEvent() override;
 
-    void initTextEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<AbstractView>, const String& data);
+    void initTextEvent(const AtomicString& type,
+        bool canBubble,
+        bool cancelable,
+        AbstractView*,
+        const String& data);
 
     String data() const { return m_data; }
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     bool isLineBreak() const { return m_inputType == TextEventInputLineBreak; }
-    bool isComposition() const { return m_inputType == TextEventInputComposition; }
+    bool isComposition() const
+    {
+        return m_inputType == TextEventInputComposition;
+    }
     bool isPaste() const { return m_inputType == TextEventInputPaste; }
     bool isDrop() const { return m_inputType == TextEventInputDrop; }
+    bool isIncrementalInsertion() const
+    {
+        return m_inputType == TextEventInputIncrementalInsertion;
+    }
 
     bool shouldSmartReplace() const { return m_shouldSmartReplace; }
     bool shouldMatchStyle() const { return m_shouldMatchStyle; }
@@ -65,13 +84,19 @@ public:
 private:
     TextEvent();
 
-    TextEvent(PassRefPtrWillBeRawPtr<AbstractView>, const String& data, TextEventInputType = TextEventInputKeyboard);
-    TextEvent(PassRefPtrWillBeRawPtr<AbstractView>, const String& data, PassRefPtrWillBeRawPtr<DocumentFragment>, bool shouldSmartReplace, bool shouldMatchStyle);
+    TextEvent(AbstractView*,
+        const String& data,
+        TextEventInputType = TextEventInputKeyboard);
+    TextEvent(AbstractView*,
+        const String& data,
+        DocumentFragment*,
+        bool shouldSmartReplace,
+        bool shouldMatchStyle);
 
     TextEventInputType m_inputType;
     String m_data;
 
-    RefPtrWillBeMember<DocumentFragment> m_pastingFragment;
+    Member<DocumentFragment> m_pastingFragment;
     bool m_shouldSmartReplace;
     bool m_shouldMatchStyle;
 };
@@ -81,7 +106,11 @@ inline bool isTextEvent(const Event& event)
     return event.type() == EventTypeNames::textInput && event.hasInterface(EventNames::TextEvent);
 }
 
-DEFINE_TYPE_CASTS(TextEvent, Event, event, isTextEvent(*event), isTextEvent(event));
+DEFINE_TYPE_CASTS(TextEvent,
+    Event,
+    event,
+    isTextEvent(*event),
+    isTextEvent(event));
 
 } // namespace blink
 

@@ -16,11 +16,11 @@
  ******************************************************************************
  */
 
- /**
+/**
   * \file
   * \brief Configuration constants for the Windows platform
   */
-  
+
 /** Define the platform we're on. */
 #ifndef U_WINDOWS
 #define U_WINDOWS
@@ -44,11 +44,11 @@
 
 /** Define whether inttypes.h is available */
 #ifndef U_HAVE_INTTYPES_H
-#   if defined(__BORLANDC__) || defined(__MINGW32__)
-#       define U_HAVE_INTTYPES_H 1
-#   else
-#       define U_HAVE_INTTYPES_H 0
-#   endif
+#if defined(__BORLANDC__) || defined(__MINGW32__)
+#define U_HAVE_INTTYPES_H 1
+#else
+#define U_HAVE_INTTYPES_H 0
+#endif
 #endif
 
 /**
@@ -107,12 +107,12 @@
 
 /** Define 64 bit limits */
 #if !U_INT64_IS_LONG_LONG
-# ifndef INT64_C
-#  define INT64_C(x) ((int64_t)x)
-# endif
-# ifndef UINT64_C
-#  define UINT64_C(x) ((uint64_t)x)
-# endif
+#ifndef INT64_C
+#define INT64_C(x) ((int64_t)x)
+#endif
+#ifndef UINT64_C
+#define UINT64_C(x) ((uint64_t)x)
+#endif
 /** else use the umachine.h definition */
 #endif
 
@@ -127,43 +127,43 @@
 #include <inttypes.h>
 #else /* U_HAVE_INTTYPES_H */
 
-#if ! U_HAVE_INT8_T
+#if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
 
-#if ! U_HAVE_UINT8_T
+#if !U_HAVE_UINT8_T
 typedef unsigned char uint8_t;
 #endif
 
-#if ! U_HAVE_INT16_T
+#if !U_HAVE_INT16_T
 typedef signed short int16_t;
 #endif
 
-#if ! U_HAVE_UINT16_T
+#if !U_HAVE_UINT16_T
 typedef unsigned short uint16_t;
 #endif
 
-#if ! U_HAVE_INT32_T
+#if !U_HAVE_INT32_T
 typedef signed int int32_t;
 #endif
 
-#if ! U_HAVE_UINT32_T
+#if !U_HAVE_UINT32_T
 typedef unsigned int uint32_t;
 #endif
 
-#if ! U_HAVE_INT64_T
+#if !U_HAVE_INT64_T
 #if U_INT64_IS_LONG_LONG
-    typedef signed long long int64_t;
+typedef signed long long int64_t;
 #else
-    typedef signed __int64 int64_t;
+typedef signed __int64 int64_t;
 #endif
 #endif
 
-#if ! U_HAVE_UINT64_T
+#if !U_HAVE_UINT64_T
 #if U_INT64_IS_LONG_LONG
-    typedef unsigned long long uint64_t;
+typedef unsigned long long uint64_t;
 #else
-    typedef unsigned __int64 uint64_t;
+typedef unsigned __int64 uint64_t;
 #endif
 #endif
 #endif
@@ -280,7 +280,7 @@ Intel can define _M_IX86 or _M_X64
  * @internal
  */
 #if 1
-#define U_DECLARE_UTF16(string) L ## string
+#define U_DECLARE_UTF16(string) L##string
 #endif
 
 /*===========================================================================*/
@@ -291,25 +291,25 @@ Intel can define _M_IX86 or _M_X64
  * @internal 
  */
 #if 1
-#define U_TZSET         _tzset
+#define U_TZSET _tzset
 #endif
 /**
  * @internal 
  */
 #if 1
-#define U_TIMEZONE      _timezone
+#define U_TIMEZONE _timezone
 #endif
 /**
  * @internal 
  */
 #if 1
-#define U_TZNAME        _tzname
+#define U_TZNAME _tzname
 #endif
 /**
  * @internal 
  */
 #if 1
-#define U_DAYLIGHT      _daylight
+#define U_DAYLIGHT _daylight
 #endif
 
 #define U_HAVE_MMAP 0
@@ -318,7 +318,6 @@ Intel can define _M_IX86 or _M_X64
 #ifndef U_ENABLE_DYLOAD
 #define U_ENABLE_DYLOAD 1
 #endif
-
 
 /** @} */
 
@@ -340,15 +339,15 @@ Intel can define _M_IX86 or _M_X64
 /*===========================================================================*/
 
 #ifndef U_INLINE
-#   ifdef __cplusplus
-#       define U_INLINE inline
-#   else
-#       define U_INLINE __inline
-#   endif
+#ifdef __cplusplus
+#define U_INLINE inline
+#else
+#define U_INLINE __inline
+#endif
 #endif
 
 #if defined(_MSC_VER) && defined(_M_IX86) && !defined(_MANAGED)
-#define U_ALIGN_CODE(val)    __asm      align val
+#define U_ALIGN_CODE(val) __asm align val
 #else
 #define U_ALIGN_CODE(val)
 #endif
@@ -360,7 +359,6 @@ Intel can define _M_IX86 or _M_X64
 #define U_HAVE_MSVC_2003_OR_EARLIER
 #endif
 
-
 /** @} */
 
 /*===========================================================================*/
@@ -368,9 +366,8 @@ Intel can define _M_IX86 or _M_X64
 /*===========================================================================*/
 
 #ifndef U_MAKE
-#define U_MAKE  "nmake"
+#define U_MAKE "nmake"
 #define U_MAKE_IS_NMAKE 1
 #endif
 
 /** @} */
-

@@ -1,6 +1,4 @@
 
-#include <windows.h>
-
 #include "net/cookies/WebCookieJarCurlImpl.h"
 #include "net/WebURLLoaderManager.h"
 #include "net/WebURLLoaderInternal.h"
@@ -12,11 +10,10 @@
 #include "third_party/WebKit/Source/wtf/text/StringBuilder.h"
 #include "third_party/WebKit/Source/wtf/text/StringHash.h"
 #include "third_party/libcurl/include/curl/curl.h"
+#include <windows.h>
 
 namespace net {
-
-//WebCookieJarImpl* WebCookieJarImpl::m_inst = nullptr;
-
+    
 static void readCurlCookieToken(const char*& cookie, String& token)
 {
     // Read the next token from a cookie with the Netscape cookie format.
@@ -31,6 +28,9 @@ static void readCurlCookieToken(const char*& cookie, String& token)
 
 static bool domainMatch(const String& cookieDomain, const String& host)
 {
+//     if (host.isEmpty())
+//         return true;
+
     size_t index = host.find(cookieDomain);
 
     bool tailMatch = (index != WTF::kNotFound && index + cookieDomain.length() == host.length());
@@ -64,7 +64,7 @@ static void appendDotIfNeeded(String* domain)
     }
 
     if (1 == dotCount)
-        domain->insert((const LChar *)".", 1, 0);
+        domain->insert(StringView((const LChar *)".", 1), 0);
 }
 
 static void addMatchingCurlCookie(const char* cookie, const String& domain, const String& path, StringBuilder& cookies, bool httponly)
@@ -114,9 +114,12 @@ static void addMatchingCurlCookie(const char* cookie, const String& domain, cons
     readCurlCookieToken(cookie, strPath);
 
     // Check if path matches
-    int index = path.find(strPath);
-    if (index)
-        return;
+    //if (!path.isEmpty()) 
+    {
+        int index = path.find(strPath);
+        if (index)
+            return;
+    }
 
     String strSecure;
     readCurlCookieToken(cookie, strSecure);
@@ -126,11 +129,11 @@ static void addMatchingCurlCookie(const char* cookie, const String& domain, cons
 
     int expires = strExpires.toInt();
 
-    __int64 now = 0;
+    time_t now = 0;
     time(&now);
 
     // Check if cookie has expired
-    if (expires && now > expires)
+    if (expires != 0 && (now > expires))
         return;
 
     String strName;
@@ -179,7 +182,35 @@ static String restoreEqualSignInValue(const String& value)
         LChar c = value[i];
         result.append(replaceEqualSing == c ? '=' : c);
     }
-    return String::adopt(result);
+    return String(result.data(), result.size());
+}
+
+static Vector<String> splitAttribute(const String& attribute)
+{
+    Vector<String> keyValuePair;
+    if (attribute.isEmpty())
+        return keyValuePair;
+
+    if (attribute.length() < 2)
+        return keyValuePair;
+    
+    size_t pos = attribute.find('=');
+    if (WTF::kNotFound == pos)
+        return keyValuePair;
+
+    if (attribute.length() - 1 == pos)
+        return keyValuePair;
+
+    String key = attribute.substring(0, pos);
+    String value = attribute.substring(pos + 1);
+
+    if (key.isEmpty() || value.isEmpty())
+        return keyValuePair;
+
+    keyValuePair.append(key);
+    keyValuePair.append(value);
+
+    return keyValuePair;
 }
 
 static String getNetscapeCookieFormat(const KURL& url, const String& value)
@@ -200,19 +231,50 @@ static String getNetscapeCookieFormat(const KURL& url, const String& value)
     // First attribute should be <cookiename>=<cookievalue>
     String cookieName, cookieValue;
     Vector<String>::iterator attribute = attributes.begin();
-    if (attribute->contains('=')) {
-        Vector<String> nameValuePair;
-        attribute->split('=', true, nameValuePair);
-        cookieName = nameValuePair[0];
+    String attr = *attribute;
 
-        if (2 < nameValuePair.size()) {
-            for (size_t i = 1; i < nameValuePair.size() - 1; ++i) {
-                cookieName.append('='); // equalDelimiters
-                cookieName.append(nameValuePair[i]);
-            }
-            
+    int equalCount = 0;
+    int firstEqualPos = -1;
+    for (unsigned int i = 0; i < attr.length(); ++i) {
+        if (attr[i] == '=') {
+            ++equalCount;
+            if (-1 == firstEqualPos)
+                firstEqualPos = i;
         }
-        cookieValue = nameValuePair.last();
+    }
+
+    if (equalCount > 0) { // ssxmod_itna=xxx=xxxx;
+        if (firstEqualPos == 0) // 如果等于号在第一位，直接判断为无效cookie
+            return "";
+
+        cookieName = attr.substring(0, firstEqualPos);
+        if (attr.length() - 1 != firstEqualPos) { // 如果等于号在最末尾，则判断value是空的
+            cookieValue = attr.substring(firstEqualPos + 1);
+        }
+
+//         int lastIsEqualCount = 0;
+//         if (1 < equalCount) { // X_HTTP_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;
+//             for (int i = 0; i < 2; ++i) {
+//                 if (attr[attr.length() - 1] == '=') {
+//                     attr.remove(attr.length() - 1, 1);
+//                     lastIsEqualCount++;
+//                 }
+//             }
+//         }
+// 
+//         Vector<String> nameValuePair;
+//         attr.split('=', true, nameValuePair);
+//         cookieName = nameValuePair[0];
+// 
+//         if (2 < nameValuePair.size() && 0 == lastIsEqualCount) {
+//             for (size_t i = 1; i < nameValuePair.size() - 1; ++i) {
+//                 cookieName.append('='); // equalDelimiters
+//                 cookieName.append(nameValuePair[i]);
+//             }
+//         }
+//         cookieValue = nameValuePair.last();
+//         for (int i = 0; i < lastIsEqualCount; ++i)
+//             cookieValue.append('=');
     } else {
         // According to RFC6265 we should ignore the entire
         // set-cookie string now, but other browsers appear
@@ -229,9 +291,10 @@ static String getNetscapeCookieFormat(const KURL& url, const String& value)
 
     // Iterate through remaining attributes
     for (++attribute; attribute != attributes.end(); ++attribute) {
-        if (attribute->contains('=')) {
-            Vector<String> keyValuePair;
-            attribute->split('=', true, keyValuePair);
+        Vector<String> keyValuePair = splitAttribute(*attribute);
+        if (/*attribute->contains('=')*/keyValuePair.size() == 2) {
+            //attribute->split('=', true, keyValuePair);
+            
             String key = keyValuePair[0].stripWhiteSpace().lower();
             String val = keyValuePair[1].stripWhiteSpace();
             if (key == "expires") {
@@ -265,13 +328,19 @@ static String getNetscapeCookieFormat(const KURL& url, const String& value)
 
     StringBuilder cookieStr;
     cookieStr.reserveCapacity(finalStringLength);
-    cookieStr.append(domain + "\t");
-    cookieStr.append(allowSubdomains + "\t");
-    cookieStr.append(path + "\t");
-    cookieStr.append(secure + "\t");
-    cookieStr.append(expiresStr + "\t");
-    cookieStr.append(cookieName + "\t");
-    cookieStr.append(restoreEqualSignInValue(cookieValue));
+    cookieStr.append(StringView(domain));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(allowSubdomains));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(path));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(secure));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(expiresStr));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(cookieName));
+    cookieStr.append("\t");
+    cookieStr.append(StringView(restoreEqualSignInValue(cookieValue)));
 
     return cookieStr.toString();
 }
@@ -527,7 +596,7 @@ void WebCookieJarImpl::flushCurlCookie(CURL* curl)
     curl_easy_setopt(curl, CURLOPT_COOKIELIST, "FLUSH");
 }
 
-String WebCookieJarImpl::getCookiesForSession(const KURL&, const KURL& url, bool httponly)
+String WebCookieJarImpl::getCookiesForSession(const KURL& kurl, const KURL& url, bool httponly)
 {
     String cookies;
     CURL* curl = curl_easy_init();
@@ -589,8 +658,8 @@ WebCookieJarImpl::~WebCookieJarImpl()
 
 // void WebCookieJarImpl::setCookieJarFullPath(const char* path)
 // {
-//     WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-//     WTF::Locker<WTF::Mutex> locker(*mutex);
+//     WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+//     WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 // 
 //     if (!path)
 //         return;
@@ -601,8 +670,8 @@ WebCookieJarImpl::~WebCookieJarImpl()
 
 std::string WebCookieJarImpl::getCookieJarFullPath()
 {
-    WTF::Mutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
-    WTF::Locker<WTF::Mutex> locker(*mutex);
+    WTF::RecursiveMutex* mutex = sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+    WTF::Locker<WTF::RecursiveMutex> locker(*mutex);
 
     flushCurlCookie(nullptr);
     return m_cookieJarFileName;

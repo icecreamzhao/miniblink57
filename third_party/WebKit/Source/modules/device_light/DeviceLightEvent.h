@@ -13,20 +13,18 @@ namespace blink {
 
 class DeviceLightEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     ~DeviceLightEvent() override;
 
-    static PassRefPtrWillBeRawPtr<DeviceLightEvent> create()
+    static DeviceLightEvent* create(const AtomicString& eventType, double value)
     {
-        return adoptRefWillBeNoop(new DeviceLightEvent);
+        return new DeviceLightEvent(eventType, value);
     }
-    static PassRefPtrWillBeRawPtr<DeviceLightEvent> create(const AtomicString& eventType, double value)
+    static DeviceLightEvent* create(const AtomicString& eventType,
+        const DeviceLightEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new DeviceLightEvent(eventType, value));
-    }
-    static PassRefPtrWillBeRawPtr<DeviceLightEvent> create(const AtomicString& eventType, const DeviceLightEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new DeviceLightEvent(eventType, initializer));
+        return new DeviceLightEvent(eventType, initializer);
     }
 
     double value() const { return m_value; }
@@ -34,14 +32,18 @@ public:
     const AtomicString& interfaceName() const override;
 
 private:
-    DeviceLightEvent();
     DeviceLightEvent(const AtomicString& eventType, double value);
-    DeviceLightEvent(const AtomicString& eventType, const DeviceLightEventInit& initializer);
+    DeviceLightEvent(const AtomicString& eventType,
+        const DeviceLightEventInit& initializer);
 
     double m_value;
 };
 
-DEFINE_TYPE_CASTS(DeviceLightEvent, Event, event, event->interfaceName() == EventNames::DeviceLightEvent, event.interfaceName() == EventNames::DeviceLightEvent);
+DEFINE_TYPE_CASTS(DeviceLightEvent,
+    Event,
+    event,
+    event->interfaceName() == EventNames::DeviceLightEvent,
+    event.interfaceName() == EventNames::DeviceLightEvent);
 
 } // namespace blink
 

@@ -10,26 +10,23 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
 #include "modules/webaudio/OscillatorNode.h"
-
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
-#include "modules/webaudio/AudioContext.h"
 #include "modules/webaudio/AudioNodeOutput.h"
 #include "modules/webaudio/PeriodicWave.h"
 #include "platform/audio/AudioUtilities.h"
@@ -42,15 +39,18 @@ namespace blink {
 
 using namespace VectorMath;
 
-OscillatorHandler::OscillatorHandler(AudioNode& node, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune)
+OscillatorHandler::OscillatorHandler(AudioNode& node,
+    float sampleRate,
+    AudioParamHandler& frequency,
+    AudioParamHandler& detune)
     : AudioScheduledSourceHandler(NodeTypeOscillator, node, sampleRate)
     , m_type(SINE)
     , m_frequency(frequency)
     , m_detune(detune)
     , m_firstRender(true)
     , m_virtualReadIndex(0)
-    , m_phaseIncrements(ProcessingSizeInFrames)
-    , m_detuneValues(ProcessingSizeInFrames)
+    , m_phaseIncrements(AudioUtilities::kRenderQuantumFrames)
+    , m_detuneValues(AudioUtilities::kRenderQuantumFrames)
 {
     // Sets up default wavetable.
     setType(m_type);
@@ -61,7 +61,11 @@ OscillatorHandler::OscillatorHandler(AudioNode& node, float sampleRate, AudioPar
     initialize();
 }
 
-PassRefPtr<OscillatorHandler> OscillatorHandler::create(AudioNode& node, float sampleRate, AudioParamHandler& frequency, AudioParamHandler& detune)
+PassRefPtr<OscillatorHandler> OscillatorHandler::create(
+    AudioNode& node,
+    float sampleRate,
+    AudioParamHandler& frequency,
+    AudioParamHandler& detune)
 {
     return adoptRef(new OscillatorHandler(node, sampleRate, frequency, detune));
 }
@@ -90,7 +94,8 @@ String OscillatorHandler::type() const
     }
 }
 
-void OscillatorHandler::setType(const String& type, ExceptionState& exceptionState)
+void OscillatorHandler::setType(const String& type,
+    ExceptionState& exceptionState)
 {
     if (type == "sine") {
         setType(SINE);
@@ -101,42 +106,34 @@ void OscillatorHandler::setType(const String& type, ExceptionState& exceptionSta
     } else if (type == "triangle") {
         setType(TRIANGLE);
     } else if (type == "custom") {
-        exceptionState.throwDOMException(
-            InvalidStateError,
-            "'type' cannot be set directly to 'custom'.  Use setPeriodicWave() to create a custom Oscillator type.");
+        exceptionState.throwDOMException(InvalidStateError,
+            "'type' cannot be set directly to "
+            "'custom'.  Use setPeriodicWave() to "
+            "create a custom Oscillator type.");
     }
 }
 
 bool OscillatorHandler::setType(unsigned type)
 {
     PeriodicWave* periodicWave = nullptr;
-    float sampleRate = this->sampleRate();
 
     switch (type) {
-    case SINE: {
-        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSine, (PeriodicWave::createSine(sampleRate)));
-        periodicWave = periodicWaveSine;
+    case SINE:
+        periodicWave = context()->periodicWave(SINE);
         break;
-    }
-    case SQUARE: {
-        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSquare, (PeriodicWave::createSquare(sampleRate)));
-        periodicWave = periodicWaveSquare;
+    case SQUARE:
+        periodicWave = context()->periodicWave(SQUARE);
         break;
-    }
-    case SAWTOOTH: {
-        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveSawtooth, (PeriodicWave::createSawtooth(sampleRate)));
-        periodicWave = periodicWaveSawtooth;
+    case SAWTOOTH:
+        periodicWave = context()->periodicWave(SAWTOOTH);
         break;
-    }
-    case TRIANGLE: {
-        DEFINE_STATIC_LOCAL(Persistent<PeriodicWave>, periodicWaveTriangle, (PeriodicWave::createTriangle(sampleRate)));
-        periodicWave = periodicWaveTriangle;
+    case TRIANGLE:
+        periodicWave = context()->periodicWave(TRIANGLE);
         break;
-    }
     case CUSTOM:
     default:
-        // Return error for invalid types, including CUSTOM since setPeriodicWave() method must be
-        // called explicitly.
+        // Return false for invalid types, including CUSTOM since
+        // setPeriodicWave() method must be called explicitly.
         ASSERT_NOT_REACHED();
         return false;
     }
@@ -146,10 +143,11 @@ bool OscillatorHandler::setType(unsigned type)
     return true;
 }
 
-bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(size_t framesToProcess)
+bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(
+    size_t framesToProcess)
 {
     bool isGood = framesToProcess <= m_phaseIncrements.size() && framesToProcess <= m_detuneValues.size();
-    ASSERT(isGood);
+    DCHECK(isGood);
     if (!isGood)
         return false;
 
@@ -171,9 +169,11 @@ bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(size_t framesToPr
 
         // Get the sample-accurate frequency values and convert to phase increments.
         // They will be converted to phase increments below.
-        m_frequency->calculateSampleAccurateValues(phaseIncrements, framesToProcess);
+        m_frequency->calculateSampleAccurateValues(phaseIncrements,
+            framesToProcess);
     } else {
-        // Handle ordinary parameter smoothing/de-zippering if there are no scheduled changes.
+        // Handle ordinary parameter smoothing/de-zippering if there are no
+        // scheduled changes.
         m_frequency->smooth();
         float frequency = m_frequency->smoothedValue();
         finalScale *= frequency;
@@ -190,14 +190,17 @@ bool OscillatorHandler::calculateSampleAccuratePhaseIncrements(size_t framesToPr
         float k = 1.0 / 1200;
         vsmul(detuneValues, 1, &k, detuneValues, 1, framesToProcess);
         for (unsigned i = 0; i < framesToProcess; ++i)
-            detuneValues[i] = powf(2, detuneValues[i]); // FIXME: converting to expf() will be faster.
+            detuneValues[i] = powf(
+                2, detuneValues[i]); // FIXME: converting to expf() will be faster.
 
         if (hasFrequencyChanges) {
             // Multiply frequencies by detune scalings.
-            vmul(detuneValues, 1, phaseIncrements, 1, phaseIncrements, 1, framesToProcess);
+            vmul(detuneValues, 1, phaseIncrements, 1, phaseIncrements, 1,
+                framesToProcess);
         }
     } else {
-        // Handle ordinary parameter smoothing/de-zippering if there are no scheduled changes.
+        // Handle ordinary parameter smoothing/de-zippering if there are no
+        // scheduled changes.
         m_detune->smooth();
         float detune = m_detune->smoothedValue();
         float detuneScale = powf(2, detune / 1200);
@@ -221,14 +224,15 @@ void OscillatorHandler::process(size_t framesToProcess)
         return;
     }
 
-    ASSERT(framesToProcess <= m_phaseIncrements.size());
+    DCHECK_LE(framesToProcess, m_phaseIncrements.size());
     if (framesToProcess > m_phaseIncrements.size())
         return;
 
     // The audio thread can't block on this lock, so we call tryLock() instead.
     MutexTryLocker tryLocker(m_processLock);
     if (!tryLocker.locked()) {
-        // Too bad - the tryLock() failed. We must be in the middle of changing wave-tables.
+        // Too bad - the tryLock() failed. We must be in the middle of changing
+        // wave-tables.
         outputBus->zero();
         return;
     }
@@ -241,8 +245,10 @@ void OscillatorHandler::process(size_t framesToProcess)
 
     size_t quantumFrameOffset;
     size_t nonSilentFramesToProcess;
+    double startFrameOffset;
 
-    updateSchedulingInfo(framesToProcess, outputBus, quantumFrameOffset, nonSilentFramesToProcess);
+    updateSchedulingInfo(framesToProcess, outputBus, quantumFrameOffset,
+        nonSilentFramesToProcess, startFrameOffset);
 
     if (!nonSilentFramesToProcess) {
         outputBus->zero();
@@ -254,7 +260,7 @@ void OscillatorHandler::process(size_t framesToProcess)
 
     float* destP = outputBus->channel(0)->mutableData();
 
-    ASSERT(quantumFrameOffset <= framesToProcess);
+    DCHECK_LE(quantumFrameOffset, framesToProcess);
 
     // We keep virtualReadIndex double-precision since we're accumulating values.
     double virtualReadIndex = m_virtualReadIndex;
@@ -273,7 +279,8 @@ void OscillatorHandler::process(size_t framesToProcess)
         float detune = m_detune->smoothedValue();
         float detuneScale = powf(2, detune / 1200);
         frequency *= detuneScale;
-        m_periodicWave->waveDataForFundamentalFrequency(frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+        m_periodicWave->waveDataForFundamentalFrequency(
+            frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
     }
 
     float incr = frequency * rateScale;
@@ -284,6 +291,19 @@ void OscillatorHandler::process(size_t framesToProcess)
     // Start rendering at the correct offset.
     destP += quantumFrameOffset;
     int n = nonSilentFramesToProcess;
+
+    // If startFrameOffset is not 0, that means the oscillator doesn't actually
+    // start at quantumFrameOffset, but just past that time.  Adjust destP and n
+    // to reflect that, and adjust virtualReadIndex to start the value at
+    // startFrameOffset.
+    if (startFrameOffset > 0) {
+        ++destP;
+        --n;
+        virtualReadIndex += (1 - startFrameOffset) * frequency * rateScale;
+        DCHECK(virtualReadIndex < periodicWaveSize);
+    } else if (startFrameOffset < 0) {
+        virtualReadIndex = -startFrameOffset * frequency * rateScale;
+    }
 
     while (n--) {
         unsigned readIndex = static_cast<unsigned>(virtualReadIndex);
@@ -297,7 +317,8 @@ void OscillatorHandler::process(size_t framesToProcess)
             incr = *phaseIncrements++;
 
             frequency = invRateScale * incr;
-            m_periodicWave->waveDataForFundamentalFrequency(frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
+            m_periodicWave->waveDataForFundamentalFrequency(
+                frequency, lowerWaveData, higherWaveData, tableInterpolationFactor);
         }
 
         float sample1Lower = lowerWaveData[readIndex];
@@ -315,7 +336,8 @@ void OscillatorHandler::process(size_t framesToProcess)
 
         *destP++ = sample;
 
-        // Increment virtual read index and wrap virtualReadIndex into the range 0 -> periodicWaveSize.
+        // Increment virtual read index and wrap virtualReadIndex into the range
+        // 0 -> periodicWaveSize.
         virtualReadIndex += incr;
         virtualReadIndex -= floor(virtualReadIndex * invPeriodicWaveSize) * periodicWaveSize;
     }
@@ -327,7 +349,8 @@ void OscillatorHandler::process(size_t framesToProcess)
 
 void OscillatorHandler::setPeriodicWave(PeriodicWave* periodicWave)
 {
-    ASSERT(isMainThread());
+    DCHECK(isMainThread());
+    DCHECK(periodicWave);
 
     // This synchronizes with process().
     MutexLocker processLocker(m_processLock);
@@ -342,19 +365,77 @@ bool OscillatorHandler::propagatesSilence() const
 
 // ----------------------------------------------------------------
 
-OscillatorNode::OscillatorNode(AudioContext& context, float sampleRate)
+OscillatorNode::OscillatorNode(BaseAudioContext& context)
     : AudioScheduledSourceNode(context)
+    ,
     // Use musical pitch standard A440 as a default.
-    , m_frequency(AudioParam::create(context, 440))
+    m_frequency(AudioParam::create(context,
+        ParamTypeOscillatorFrequency,
+        440,
+        -context.sampleRate() / 2,
+        context.sampleRate() / 2))
+    ,
     // Default to no detuning.
-    , m_detune(AudioParam::create(context, 0))
+    m_detune(AudioParam::create(context, ParamTypeOscillatorDetune, 0))
 {
-    setHandler(OscillatorHandler::create(*this, sampleRate, m_frequency->handler(), m_detune->handler()));
+    setHandler(OscillatorHandler::create(*this, context.sampleRate(),
+        m_frequency->handler(),
+        m_detune->handler()));
 }
 
-OscillatorNode* OscillatorNode::create(AudioContext& context, float sampleRate)
+OscillatorNode* OscillatorNode::create(BaseAudioContext& context,
+    ExceptionState& exceptionState)
 {
-    return new OscillatorNode(context, sampleRate);
+    DCHECK(isMainThread());
+
+    if (context.isContextClosed()) {
+        context.throwExceptionForClosedState(exceptionState);
+        return nullptr;
+    }
+
+    return new OscillatorNode(context);
+}
+
+OscillatorNode* OscillatorNode::create(BaseAudioContext* context,
+    const OscillatorOptions& options,
+    ExceptionState& exceptionState)
+{
+    OscillatorNode* node = create(*context, exceptionState);
+
+    if (!node)
+        return nullptr;
+
+    node->handleChannelOptions(options, exceptionState);
+
+    if (options.hasType()) {
+        if (options.type() == "custom" && !options.hasPeriodicWave()) {
+            exceptionState.throwDOMException(InvalidStateError,
+                "'type' cannot be set to 'custom' "
+                "without also specifying "
+                "'periodicWave'");
+            return nullptr;
+        }
+        if (options.type() != "custom" && options.hasPeriodicWave()) {
+            exceptionState.throwDOMException(InvalidStateError,
+                "'type' MUST be 'custom' instead of '" + options.type() + "' if 'periodicWave' is also given");
+            return nullptr;
+        }
+
+        // At this both type and periodicWave are consistently defined.  In that
+        // case, don't set the type if periodicWave is specified because that
+        // will cause an (incorrect) error to be signaled.
+        if (options.type() != "custom")
+            node->setType(options.type(), exceptionState);
+    }
+    if (options.hasDetune())
+        node->detune()->setValue(options.detune());
+    if (options.hasFrequency())
+        node->frequency()->setValue(options.frequency());
+
+    if (options.hasPeriodicWave())
+        node->setPeriodicWave(options.periodicWave());
+
+    return node;
 }
 
 DEFINE_TRACE(OscillatorNode)
@@ -374,7 +455,8 @@ String OscillatorNode::type() const
     return oscillatorHandler().type();
 }
 
-void OscillatorNode::setType(const String& type, ExceptionState& exceptionState)
+void OscillatorNode::setType(const String& type,
+    ExceptionState& exceptionState)
 {
     oscillatorHandler().setType(type, exceptionState);
 }
@@ -395,5 +477,3 @@ void OscillatorNode::setPeriodicWave(PeriodicWave* wave)
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

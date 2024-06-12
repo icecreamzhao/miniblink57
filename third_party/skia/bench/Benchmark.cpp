@@ -15,42 +15,61 @@ const char* SkTriState::Name[] = { "default", "true", "false" };
 
 template BenchRegistry* BenchRegistry::gHead;
 
-Benchmark::Benchmark() {
+Benchmark::Benchmark()
+{
     fForceAlpha = 0xFF;
     fDither = SkTriState::kDefault;
     fOrMask = fClearMask = 0;
 }
 
-const char* Benchmark::getName() {
+const char* Benchmark::getName()
+{
     return this->onGetName();
 }
 
-const char* Benchmark::getUniqueName() {
+const char* Benchmark::getUniqueName()
+{
     return this->onGetUniqueName();
 }
 
-SkIPoint Benchmark::getSize() {
+SkIPoint Benchmark::getSize()
+{
     return this->onGetSize();
 }
 
-void Benchmark::preDraw() {
-    this->onPreDraw();
+void Benchmark::delayedSetup()
+{
+    this->onDelayedSetup();
 }
 
-void Benchmark::perCanvasPreDraw(SkCanvas* canvas) {
+void Benchmark::perCanvasPreDraw(SkCanvas* canvas)
+{
     this->onPerCanvasPreDraw(canvas);
 }
 
-void Benchmark::perCanvasPostDraw(SkCanvas* canvas) {
+void Benchmark::preDraw(SkCanvas* canvas)
+{
+    this->onPreDraw(canvas);
+}
+
+void Benchmark::postDraw(SkCanvas* canvas)
+{
+    this->onPostDraw(canvas);
+}
+
+void Benchmark::perCanvasPostDraw(SkCanvas* canvas)
+{
     this->onPerCanvasPostDraw(canvas);
 }
 
-void Benchmark::draw(const int loops, SkCanvas* canvas) {
-    SkAutoCanvasRestore ar(canvas, true/*save now*/);
+void Benchmark::draw(int loops, SkCanvas* canvas)
+{
+    SkAutoCanvasRestore ar(canvas, true /*save now*/);
     this->onDraw(loops, canvas);
 }
 
-void Benchmark::setupPaint(SkPaint* paint) {
+void Benchmark::setupPaint(SkPaint* paint)
+{
     paint->setAlpha(fForceAlpha);
     paint->setAntiAlias(true);
     paint->setFilterQuality(kNone_SkFilterQuality);
@@ -62,6 +81,7 @@ void Benchmark::setupPaint(SkPaint* paint) {
     }
 }
 
-SkIPoint Benchmark::onGetSize() {
+SkIPoint Benchmark::onGetSize()
+{
     return SkIPoint::Make(640, 480);
 }

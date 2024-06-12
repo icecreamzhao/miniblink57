@@ -30,6 +30,6 @@ void setUpDebuggingFromArgs(const char* vargs0);
 
 int GenerateDumpAndPrintCallstack(EXCEPTION_POINTERS* pExceptionPointers);
 
-#endif  // SK_BUILD_FOR_WIN32
+#endif // SK_BUILD_FOR_WIN32
 
-#endif  // win_dbghelp_DEFINED
+#endif // win_dbghelp_DEFINED

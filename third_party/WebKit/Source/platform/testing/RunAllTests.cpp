@@ -28,44 +28,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#include "platform/EventTracer.h"
-#include "platform/TestingPlatformSupport.h"
+#include "base/bind.h"
+#include "base/test/launcher/unit_test_launcher.h"
+#include "base/test/test_io_thread.h"
+#include "base/test/test_suite.h"
+#include "mojo/edk/embedder/embedder.h"
+#include "mojo/edk/embedder/scoped_ipc_support.h"
 #include "platform/heap/Heap.h"
-#include "wtf/CryptographicallyRandomNumber.h"
-#include "wtf/MainThread.h"
-#include "wtf/Partitions.h"
-#include "wtf/WTF.h"
-#include <base/test/test_suite.h>
-#include <string.h>
+#include "platform/testing/TestingPlatformSupport.h"
+#include <memory>
 
-static double CurrentTime()
+namespace {
+
+int runTestSuite(base::TestSuite* testSuite)
 {
-    return 0.0;
+    int result = testSuite->Run();
+    blink::ThreadState::current()->collectAllGarbage();
+    return result;
 }
 
-static void AlwaysZeroNumberSource(unsigned char* buf, size_t len)
-{
-    memset(buf, '\0', len);
-}
+} // namespace
 
 int main(int argc, char** argv)
 {
-    WTF::setRandomSource(AlwaysZeroNumberSource);
-    WTF::initialize(CurrentTime, nullptr, nullptr, nullptr, nullptr);
-    WTF::initializeMainThread(0);
+    blink::ScopedUnittestsEnvironmentSetup testEnvironmentSetup(argc, argv);
+    int result = 0;
+    {
+        base::TestSuite testSuite(argc, argv);
 
-    blink::TestingPlatformSupport::Config platformConfig;
-    blink::TestingPlatformSupport platform(platformConfig);
-
-    blink::Heap::init();
-    blink::ThreadState::attachMainThread();
-    blink::EventTracer::initialize();
-    int result = base::RunUnitTestsUsingBaseTestSuite(argc, argv);
-    blink::ThreadState::detachMainThread();
-    blink::Heap::shutdown();
-
-    WTF::shutdown();
+        mojo::edk::Init();
+        base::TestIOThread testIoThread(base::TestIOThread::kAutoStart);
+        mojo::edk::ScopedIPCSupport ipcSupport(
+            testIoThread.task_runner(),
+            mojo::edk::ScopedIPCSupport::ShutdownPolicy::CLEAN);
+        result = base::LaunchUnitTests(
+            argc, argv, base::Bind(runTestSuite, base::Unretained(&testSuite)));
+    }
     return result;
 }

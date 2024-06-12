@@ -26,6 +26,7 @@
 #include "platform/text/BidiContext.h"
 #include "platform/text/BidiRunList.h"
 #include "platform/text/TextDirection.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
@@ -33,14 +34,12 @@
 
 namespace blink {
 
-class LayoutObject;
+template <class Iterator>
+class MidpointState final {
+    DISALLOW_NEW();
 
-template <class Iterator> class MidpointState {
 public:
-    MidpointState()
-    {
-        reset();
-    }
+    MidpointState() { reset(); }
 
     void reset()
     {
@@ -61,19 +60,22 @@ public:
         addMidpoint(midpoint);
     }
 
-    // Adding a pair of midpoints before a character will split it out into a new line box.
+    // Adding a pair of midpoints before a character will split it out into a new
+    // line box.
     void ensureCharacterGetsLineBox(Iterator& textParagraphSeparator)
     {
-        startIgnoringSpaces(Iterator(0, textParagraphSeparator.object(), textParagraphSeparator.offset() - 1));
-        stopIgnoringSpaces(Iterator(0, textParagraphSeparator.object(), textParagraphSeparator.offset()));
+        startIgnoringSpaces(Iterator(0, textParagraphSeparator.getLineLayoutItem(),
+            textParagraphSeparator.offset() - 1));
+        stopIgnoringSpaces(Iterator(0, textParagraphSeparator.getLineLayoutItem(),
+            textParagraphSeparator.offset()));
     }
 
     void checkMidpoints(Iterator& lBreak)
     {
-        // Check to see if our last midpoint is a start point beyond the line break. If so,
-        // shave it off the list, and shave off a trailing space if the previous end point doesn't
-        // preserve whitespace.
-        if (lBreak.object() && m_numMidpoints && !(m_numMidpoints % 2)) {
+        // Check to see if our last midpoint is a start point beyond the line break.
+        // If so, shave it off the list, and shave off a trailing space if the
+        // previous end point doesn't preserve whitespace.
+        if (lBreak.getLineLayoutItem() && m_numMidpoints && !(m_numMidpoints % 2)) {
             Iterator* midpointsIterator = m_midpoints.data();
             Iterator& endpoint = midpointsIterator[m_numMidpoints - 2];
             const Iterator& startpoint = midpointsIterator[m_numMidpoints - 1];
@@ -81,9 +83,10 @@ public:
             while (!currpoint.atEnd() && currpoint != startpoint && currpoint != lBreak)
                 currpoint.increment();
             if (currpoint == lBreak) {
-                // We hit the line break before the start point. Shave off the start point.
+                // We hit the line break before the start point. Shave off the start
+                // point.
                 m_numMidpoints--;
-                if (endpoint.object()->style()->collapseWhiteSpace() && endpoint.object()->isText())
+                if (endpoint.getLineLayoutItem().style()->collapseWhiteSpace() && endpoint.getLineLayoutItem().isText())
                     endpoint.setOffset(endpoint.offset() - 1);
             }
         }
@@ -94,11 +97,16 @@ public:
     const unsigned& currentMidpoint() const { return m_currentMidpoint; }
     void incrementCurrentMidpoint() { m_currentMidpoint++; }
     const bool& betweenMidpoints() const { return m_betweenMidpoints; }
-    void setBetweenMidpoints(bool betweenMidpoint) { m_betweenMidpoints = betweenMidpoint; }
+    void setBetweenMidpoints(bool betweenMidpoint)
+    {
+        m_betweenMidpoints = betweenMidpoint;
+    }
+
 private:
     // The goal is to reuse the line state across multiple
-    // lines so we just keep an array around for midpoints and never clear it across multiple
-    // lines. We track the number of items and position using the two other variables.
+    // lines so we just keep an array around for midpoints and never clear it
+    // across multiple lines. We track the number of items and position using the
+    // two other variables.
     Vector<Iterator> m_midpoints;
     unsigned m_numMidpoints;
     unsigned m_currentMidpoint;
@@ -116,7 +124,8 @@ private:
 
 // The BidiStatus at a given position (typically the end of a line) can
 // be cached and then used to restart bidi resolution at that position.
-struct BidiStatus {
+struct BidiStatus final {
+    DISALLOW_NEW();
     BidiStatus()
         : eor(WTF::Unicode::OtherNeutral)
         , lastStrong(WTF::Unicode::OtherNeutral)
@@ -124,16 +133,23 @@ struct BidiStatus {
     {
     }
 
-    // Creates a BidiStatus representing a new paragraph root with a default direction.
-    // Uses TextDirection as it only has two possibilities instead of WTF::Unicode::Direction which has 19.
+    // Creates a BidiStatus representing a new paragraph root with a default
+    // direction.  Uses TextDirection as it only has two possibilities instead of
+    // WTF::Unicode::Direction which has 19.
     BidiStatus(TextDirection textDirection, bool isOverride)
     {
-        WTF::Unicode::Direction direction = textDirection == LTR ? WTF::Unicode::LeftToRight : WTF::Unicode::RightToLeft;
+        WTF::Unicode::CharDirection direction = textDirection == TextDirection::kLtr
+            ? WTF::Unicode::LeftToRight
+            : WTF::Unicode::RightToLeft;
         eor = lastStrong = last = direction;
-        context = BidiContext::create(textDirection == LTR ? 0 : 1, direction, isOverride);
+        context = BidiContext::create(textDirection == TextDirection::kLtr ? 0 : 1,
+            direction, isOverride);
     }
 
-    BidiStatus(WTF::Unicode::Direction eorDir, WTF::Unicode::Direction lastStrongDir, WTF::Unicode::Direction lastDir, PassRefPtr<BidiContext> bidiContext)
+    BidiStatus(WTF::Unicode::CharDirection eorDir,
+        WTF::Unicode::CharDirection lastStrongDir,
+        WTF::Unicode::CharDirection lastDir,
+        PassRefPtr<BidiContext> bidiContext)
         : eor(eorDir)
         , lastStrong(lastStrongDir)
         , last(lastDir)
@@ -141,24 +157,49 @@ struct BidiStatus {
     {
     }
 
-    WTF::Unicode::Direction eor;
-    WTF::Unicode::Direction lastStrong;
-    WTF::Unicode::Direction last;
+    // Creates a BidiStatus for Isolates (RLI/LRI).
+    // The rule X5a ans X5b of UAX#9: http://unicode.org/reports/tr9/#X5a
+    static BidiStatus createForIsolate(TextDirection textDirection,
+        bool isOverride,
+        unsigned char level)
+    {
+        WTF::Unicode::CharDirection direction;
+        if (textDirection == TextDirection::kRtl) {
+            level = nextGreaterOddLevel(level);
+            direction = WTF::Unicode::RightToLeft;
+        } else {
+            level = nextGreaterEvenLevel(level);
+            direction = WTF::Unicode::LeftToRight;
+        }
+        RefPtr<BidiContext> context = BidiContext::create(level, direction, isOverride, FromStyleOrDOM);
+
+        // This copies BidiStatus and may churn the ref on BidiContext.
+        // I doubt it matters.
+        return BidiStatus(direction, direction, direction, context.release());
+    }
+
+    WTF::Unicode::CharDirection eor;
+    WTF::Unicode::CharDirection lastStrong;
+    WTF::Unicode::CharDirection last;
     RefPtr<BidiContext> context;
 };
 
-class BidiEmbedding {
+class BidiEmbedding final {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    BidiEmbedding(WTF::Unicode::Direction direction, BidiEmbeddingSource source)
-    : m_direction(direction)
-    , m_source(source)
+    BidiEmbedding(WTF::Unicode::CharDirection direction,
+        BidiEmbeddingSource source)
+        : m_direction(direction)
+        , m_source(source)
     {
     }
 
-    WTF::Unicode::Direction direction() const { return m_direction; }
+    WTF::Unicode::CharDirection direction() const { return m_direction; }
     BidiEmbeddingSource source() const { return m_source; }
+
 private:
-    WTF::Unicode::Direction m_direction;
+    WTF::Unicode::CharDirection m_direction;
     BidiEmbeddingSource m_source;
 };
 
@@ -178,10 +219,16 @@ enum VisualDirectionOverride {
     VisualRightToLeftOverride
 };
 
+class NoIsolatedRun {
+};
+
 // BidiResolver is WebKit's implementation of the Unicode Bidi Algorithm
 // http://unicode.org/reports/tr9
-template <class Iterator, class Run> class BidiResolver {
+template <class Iterator, class Run, class IsolatedRun = NoIsolatedRun>
+class BidiResolver final {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(BidiResolver);
+
 public:
     BidiResolver()
         : m_direction(WTF::Unicode::OtherNeutral)
@@ -192,13 +239,19 @@ public:
     {
     }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     ~BidiResolver();
 #endif
 
-    const Iterator& position() const { return m_current; }
+    const Iterator& position() const
+    {
+        return m_current;
+    }
     Iterator& position() { return m_current; }
-    void setPositionIgnoringNestedIsolates(const Iterator& position) { m_current = position; }
+    void setPositionIgnoringNestedIsolates(const Iterator& position)
+    {
+        m_current = position;
+    }
     void setPosition(const Iterator& position, unsigned nestedIsolatedCount)
     {
         m_current = position;
@@ -208,34 +261,49 @@ public:
     BidiContext* context() const { return m_status.context.get(); }
     void setContext(PassRefPtr<BidiContext> c) { m_status.context = c; }
 
-    void setLastDir(WTF::Unicode::Direction lastDir) { m_status.last = lastDir; }
-    void setLastStrongDir(WTF::Unicode::Direction lastStrongDir) { m_status.lastStrong = lastStrongDir; }
-    void setEorDir(WTF::Unicode::Direction eorDir) { m_status.eor = eorDir; }
+    void setLastDir(WTF::Unicode::CharDirection lastDir)
+    {
+        m_status.last = lastDir;
+    }
+    void setLastStrongDir(WTF::Unicode::CharDirection lastStrongDir)
+    {
+        m_status.lastStrong = lastStrongDir;
+    }
+    void setEorDir(WTF::Unicode::CharDirection eorDir) { m_status.eor = eorDir; }
 
-    WTF::Unicode::Direction dir() const { return m_direction; }
-    void setDir(WTF::Unicode::Direction d) { m_direction = d; }
+    WTF::Unicode::CharDirection dir() const { return m_direction; }
+    void setDir(WTF::Unicode::CharDirection d) { m_direction = d; }
 
     const BidiStatus& status() const { return m_status; }
     void setStatus(const BidiStatus s)
     {
         ASSERT(s.context);
         m_status = s;
-        m_paragraphDirectionality = s.context->dir() == WTF::Unicode::LeftToRight ? LTR : RTL;
+        m_paragraphDirectionality = s.context->dir() == WTF::Unicode::LeftToRight
+            ? TextDirection::kLtr
+            : TextDirection::kRtl;
     }
 
     MidpointState<Iterator>& midpointState() { return m_midpointState; }
 
-    // The current algorithm handles nested isolates one layer of nesting at a time.
-    // But when we layout each isolated span, we will walk into (and ignore) all
-    // child isolated spans.
+    // The current algorithm handles nested isolates one layer of nesting at a
+    // time.  But when we layout each isolated span, we will walk into (and
+    // ignore) all child isolated spans.
     void enterIsolate() { m_nestedIsolateCount++; }
-    void exitIsolate() { ASSERT(m_nestedIsolateCount >= 1); m_nestedIsolateCount--; }
+    void exitIsolate()
+    {
+        ASSERT(m_nestedIsolateCount >= 1);
+        m_nestedIsolateCount--;
+    }
     bool inIsolate() const { return m_nestedIsolateCount; }
 
-    void embed(WTF::Unicode::Direction, BidiEmbeddingSource);
+    void embed(WTF::Unicode::CharDirection, BidiEmbeddingSource);
     bool commitExplicitEmbedding(BidiRunList<Run>&);
 
-    void createBidiRunsForLine(const Iterator& end, VisualDirectionOverride = NoVisualOverride, bool hardLineBreak = false, bool reorderRuns = true);
+    void createBidiRunsForLine(const Iterator& end,
+        VisualDirectionOverride = NoVisualOverride,
+        bool hardLineBreak = false,
+        bool reorderRuns = true);
 
     BidiRunList<Run>& runs() { return m_runs; }
 
@@ -243,23 +311,29 @@ public:
     // It's unclear if this is still needed.
     void markCurrentRunEmpty() { m_emptyRun = true; }
 
-    Vector<Run*>& isolatedRuns() { return m_isolatedRuns; }
+    Vector<IsolatedRun>& isolatedRuns() { return m_isolatedRuns; }
 
-    bool isEndOfLine(const Iterator& end) { return m_current == end || m_current.atEnd(); }
+    bool isEndOfLine(const Iterator& end)
+    {
+        return m_current == end || m_current.atEnd();
+    }
 
-    TextDirection determineParagraphDirectionality(bool* hasStrongDirectionality = 0)
+    TextDirection determineParagraphDirectionality(
+        bool* hasStrongDirectionality = 0)
     {
         bool breakOnParagraph = true;
-        return determineDirectionalityInternal(breakOnParagraph, hasStrongDirectionality);
+        return determineDirectionalityInternal(breakOnParagraph,
+            hasStrongDirectionality);
     }
     TextDirection determineDirectionality(bool* hasStrongDirectionality = 0)
     {
         bool breakOnParagraph = false;
-        return determineDirectionalityInternal(breakOnParagraph, hasStrongDirectionality);
+        return determineDirectionalityInternal(breakOnParagraph,
+            hasStrongDirectionality);
     }
 
-    void setMidpointStateForIsolatedRun(Run*, const MidpointState<Iterator>&);
-    MidpointState<Iterator> midpointStateForIsolatedRun(Run*);
+    void setMidpointStateForIsolatedRun(Run&, const MidpointState<Iterator>&);
+    MidpointState<Iterator> midpointStateForIsolatedRun(Run&);
 
     Iterator endOfLine() const { return m_endOfLine; }
 
@@ -268,10 +342,19 @@ public:
 protected:
     void increment() { m_current.increment(); }
     // FIXME: Instead of InlineBidiResolvers subclassing this method, we should
-    // pass in some sort of Traits object which knows how to create runs for appending.
+    // pass in some sort of Traits object which knows how to create runs for
+    // appending.
     void appendRun(BidiRunList<Run>&);
 
-    Run* addTrailingRun(BidiRunList<Run>&, int, int, Run*, BidiContext*, TextDirection) const { return 0; }
+    Run* addTrailingRun(BidiRunList<Run>&,
+        int,
+        int,
+        Run*,
+        BidiContext*,
+        TextDirection) const
+    {
+        return 0;
+    }
     Iterator m_current;
     // sor and eor are "start of run" and "end of run" respectively and correpond
     // to abreviations used in UBA spec: http://unicode.org/reports/tr9/#BD7
@@ -279,7 +362,7 @@ protected:
     Iterator m_eor; // Points to the last character in the current run.
     Iterator m_last;
     BidiStatus m_status;
-    WTF::Unicode::Direction m_direction;
+    WTF::Unicode::CharDirection m_direction;
     // m_endOfRunAtEndOfLine is "the position last eor in the end of line"
     Iterator m_endOfRunAtEndOfLine;
     Iterator m_endOfLine;
@@ -294,16 +377,19 @@ protected:
     MidpointState<Iterator> m_midpointState;
 
     unsigned m_nestedIsolateCount;
-    Vector<Run*> m_isolatedRuns;
+    Vector<IsolatedRun> m_isolatedRuns;
     Run* m_trailingSpaceRun;
     TextDirection m_paragraphDirectionality;
 
 private:
-    void raiseExplicitEmbeddingLevel(BidiRunList<Run>&, WTF::Unicode::Direction from, WTF::Unicode::Direction to);
-    void lowerExplicitEmbeddingLevel(BidiRunList<Run>&, WTF::Unicode::Direction from);
+    void raiseExplicitEmbeddingLevel(BidiRunList<Run>&,
+        WTF::Unicode::CharDirection from,
+        WTF::Unicode::CharDirection to);
+    void lowerExplicitEmbeddingLevel(BidiRunList<Run>&,
+        WTF::Unicode::CharDirection from);
     void checkDirectionInLowerRaiseEmbeddingLevel();
 
-    void updateStatusLastFromCurrentDirection(WTF::Unicode::Direction);
+    void updateStatusLastFromCurrentDirection(WTF::Unicode::CharDirection);
     void reorderRunsFromLevels(BidiRunList<Run>&) const;
 
     bool needsToApplyL1Rule(BidiRunList<Run>&) { return false; }
@@ -311,23 +397,26 @@ private:
     // http://www.unicode.org/reports/tr9/#L1
     void applyL1Rule(BidiRunList<Run>&);
 
-    TextDirection determineDirectionalityInternal(bool breakOnParagraph, bool* hasStrongDirectionality);
+    TextDirection determineDirectionalityInternal(bool breakOnParagraph,
+        bool* hasStrongDirectionality);
 
     Vector<BidiEmbedding, 8> m_currentExplicitEmbeddingSequence;
-    HashMap<Run *, MidpointState<Iterator>> m_midpointStateForIsolatedRun;
+    HashMap<Run*, MidpointState<Iterator>> m_midpointStateForIsolatedRun;
 };
 
-#if ENABLE(ASSERT)
-template <class Iterator, class Run>
-BidiResolver<Iterator, Run>::~BidiResolver()
+#if DCHECK_IS_ON()
+template <class Iterator, class Run, class IsolatedRun>
+BidiResolver<Iterator, Run, IsolatedRun>::~BidiResolver()
 {
     // The owner of this resolver should have handled the isolated runs.
     ASSERT(m_isolatedRuns.isEmpty());
+    ASSERT(!m_runs.runCount());
 }
 #endif
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::appendRun(BidiRunList<Run>& runs)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::appendRun(
+    BidiRunList<Run>& runs)
 {
     if (!m_emptyRun && !m_eor.atEnd()) {
         unsigned startOffset = m_sor.offset();
@@ -349,7 +438,8 @@ void BidiResolver<Iterator, Run>::appendRun(BidiRunList<Run>& runs)
             const int limit = USHRT_MAX; // InlineTextBox stores text length as unsigned short.
             if (end - startOffset > limit)
                 end = startOffset + limit;
-            runs.addRun(new Run(startOffset, end, context(), m_direction));
+            runs.addRun(new Run(context()->override(), context()->level(),
+                startOffset, end, m_direction, context()->dir()));
             startOffset = end;
         }
 
@@ -361,8 +451,10 @@ void BidiResolver<Iterator, Run>::appendRun(BidiRunList<Run>& runs)
     m_status.eor = WTF::Unicode::OtherNeutral;
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::embed(WTF::Unicode::Direction dir, BidiEmbeddingSource source)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::embed(
+    WTF::Unicode::CharDirection dir,
+    BidiEmbeddingSource source)
 {
     // Isolated spans compute base directionality during their own UBA run.
     // Do not insert fake embed characters once we enter an isolated span.
@@ -370,34 +462,32 @@ void BidiResolver<Iterator, Run>::embed(WTF::Unicode::Direction dir, BidiEmbeddi
     using namespace WTF::Unicode;
 
     ASSERT(dir == PopDirectionalFormat || dir == LeftToRightEmbedding || dir == LeftToRightOverride || dir == RightToLeftEmbedding || dir == RightToLeftOverride);
-    m_currentExplicitEmbeddingSequence.append(BidiEmbedding(dir, source));
+    m_currentExplicitEmbeddingSequence.push_back(BidiEmbedding(dir, source));
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::checkDirectionInLowerRaiseEmbeddingLevel()
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::
+    checkDirectionInLowerRaiseEmbeddingLevel()
 {
     using namespace WTF::Unicode;
 
     ASSERT(m_status.eor != OtherNeutral || m_eor.atEnd());
-    ASSERT(m_status.last != NonSpacingMark
-        && m_status.last != BoundaryNeutral
-        && m_status.last != RightToLeftEmbedding
-        && m_status.last != LeftToRightEmbedding
-        && m_status.last != RightToLeftOverride
-        && m_status.last != LeftToRightOverride
-        && m_status.last != PopDirectionalFormat);
+    ASSERT(m_status.last != NonSpacingMark && m_status.last != BoundaryNeutral && m_status.last != RightToLeftEmbedding && m_status.last != LeftToRightEmbedding && m_status.last != RightToLeftOverride && m_status.last != LeftToRightOverride && m_status.last != PopDirectionalFormat);
     if (m_direction == OtherNeutral)
         m_direction = m_status.lastStrong == LeftToRight ? LeftToRight : RightToLeft;
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::lowerExplicitEmbeddingLevel(BidiRunList<Run>& runs, WTF::Unicode::Direction from)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::lowerExplicitEmbeddingLevel(
+    BidiRunList<Run>& runs,
+    WTF::Unicode::CharDirection from)
 {
     using namespace WTF::Unicode;
 
     if (!m_emptyRun && m_eor != m_last) {
         checkDirectionInLowerRaiseEmbeddingLevel();
-        // bidi.sor ... bidi.eor ... bidi.last eor; need to append the bidi.sor-bidi.eor run or extend it through bidi.last
+        // bidi.sor ... bidi.eor ... bidi.last eor; need to append the
+        // bidi.sor-bidi.eor run or extend it through bidi.last
         if (from == LeftToRight) {
             // bidi.sor ... bidi.eor ... bidi.last L
             if (m_status.eor == EuropeanNumber) {
@@ -428,14 +518,18 @@ void BidiResolver<Iterator, Run>::lowerExplicitEmbeddingLevel(BidiRunList<Run>& 
     m_eor = Iterator();
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::raiseExplicitEmbeddingLevel(BidiRunList<Run>& runs, WTF::Unicode::Direction from, WTF::Unicode::Direction to)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::raiseExplicitEmbeddingLevel(
+    BidiRunList<Run>& runs,
+    WTF::Unicode::CharDirection from,
+    WTF::Unicode::CharDirection to)
 {
     using namespace WTF::Unicode;
 
     if (!m_emptyRun && m_eor != m_last) {
         checkDirectionInLowerRaiseEmbeddingLevel();
-        // bidi.sor ... bidi.eor ... bidi.last eor; need to append the bidi.sor-bidi.eor run or extend it through bidi.last
+        // bidi.sor ... bidi.eor ... bidi.last eor; need to append the
+        // bidi.sor-bidi.eor run or extend it through bidi.last
         if (to == LeftToRight) {
             // bidi.sor ... bidi.eor ... bidi.last L
             if (m_status.eor == EuropeanNumber) {
@@ -450,9 +544,7 @@ void BidiResolver<Iterator, Run>::raiseExplicitEmbeddingLevel(BidiRunList<Run>& 
                 appendRun(runs);
                 m_direction = LeftToRight;
             }
-        } else if (m_status.eor == ArabicNumber
-            || (m_status.eor == EuropeanNumber && (m_status.lastStrong != LeftToRight || from == RightToLeft))
-            || (m_status.eor != EuropeanNumber && m_status.lastStrong == LeftToRight && from == RightToLeft)) {
+        } else if (m_status.eor == ArabicNumber || (m_status.eor == EuropeanNumber && (m_status.lastStrong != LeftToRight || from == RightToLeft)) || (m_status.eor != EuropeanNumber && m_status.lastStrong == LeftToRight && from == RightToLeft)) {
             appendRun(runs);
             m_direction = RightToLeft;
         }
@@ -467,8 +559,9 @@ void BidiResolver<Iterator, Run>::raiseExplicitEmbeddingLevel(BidiRunList<Run>& 
     m_eor = Iterator();
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::applyL1Rule(BidiRunList<Run>& runs)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::applyL1Rule(
+    BidiRunList<Run>& runs)
 {
     ASSERT(runs.runCount());
     if (!needsToApplyL1Rule(runs))
@@ -480,13 +573,15 @@ void BidiResolver<Iterator, Run>::applyL1Rule(BidiRunList<Run>& runs)
     if (firstSpace == trailingSpaceRun->stop())
         return;
 
-    bool shouldReorder = trailingSpaceRun != (m_paragraphDirectionality == LTR ? runs.lastRun() : runs.firstRun());
+    bool shouldReorder = trailingSpaceRun != (m_paragraphDirectionality == TextDirection::kLtr ? runs.lastRun() : runs.firstRun());
     if (firstSpace != trailingSpaceRun->start()) {
         BidiContext* baseContext = context();
         while (BidiContext* parent = baseContext->parent())
             baseContext = parent;
 
-        m_trailingSpaceRun = addTrailingRun(runs, firstSpace, trailingSpaceRun->m_stop, trailingSpaceRun, baseContext, m_paragraphDirectionality);
+        m_trailingSpaceRun = addTrailingRun(
+            runs, firstSpace, trailingSpaceRun->m_stop, trailingSpaceRun,
+            baseContext, m_paragraphDirectionality);
         ASSERT(m_trailingSpaceRun);
         trailingSpaceRun->m_stop = firstSpace;
         return;
@@ -496,7 +591,7 @@ void BidiResolver<Iterator, Run>::applyL1Rule(BidiRunList<Run>& runs)
         return;
     }
 
-    if (m_paragraphDirectionality == LTR) {
+    if (m_paragraphDirectionality == TextDirection::kLtr) {
         runs.moveRunToEnd(trailingSpaceRun);
         trailingSpaceRun->m_level = 0;
     } else {
@@ -506,12 +601,14 @@ void BidiResolver<Iterator, Run>::applyL1Rule(BidiRunList<Run>& runs)
     m_trailingSpaceRun = trailingSpaceRun;
 }
 
-template <class Iterator, class Run>
-bool BidiResolver<Iterator, Run>::commitExplicitEmbedding(BidiRunList<Run>& runs)
+template <class Iterator, class Run, class IsolatedRun>
+bool BidiResolver<Iterator, Run, IsolatedRun>::commitExplicitEmbedding(
+    BidiRunList<Run>& runs)
 {
     // When we're "inIsolate()" we're resolving the parent context which
     // ignores (skips over) the isolated content, including embedding levels.
-    // We should never accrue embedding levels while skipping over isolated content.
+    // We should never accrue embedding levels while skipping over isolated
+    // content.
     ASSERT(!inIsolate() || m_currentExplicitEmbeddingSequence.isEmpty());
 
     using namespace WTF::Unicode;
@@ -525,7 +622,9 @@ bool BidiResolver<Iterator, Run>::commitExplicitEmbedding(BidiRunList<Run>& runs
             if (BidiContext* parentContext = toContext->parent())
                 toContext = parentContext;
         } else {
-            Direction direction = (embedding.direction() == RightToLeftEmbedding || embedding.direction() == RightToLeftOverride) ? RightToLeft : LeftToRight;
+            CharDirection direction = (embedding.direction() == RightToLeftEmbedding || embedding.direction() == RightToLeftOverride)
+                ? RightToLeft
+                : LeftToRight;
             bool override = embedding.direction() == LeftToRightOverride || embedding.direction() == RightToLeftOverride;
             unsigned char level = toContext->level();
             if (direction == RightToLeft)
@@ -533,16 +632,19 @@ bool BidiResolver<Iterator, Run>::commitExplicitEmbedding(BidiRunList<Run>& runs
             else
                 level = nextGreaterEvenLevel(level);
             if (level < BidiContext::kMaxLevel)
-                toContext = BidiContext::create(level, direction, override, embedding.source(), toContext.get());
+                toContext = BidiContext::create(level, direction, override,
+                    embedding.source(), toContext.get());
         }
     }
 
     unsigned char toLevel = toContext->level();
 
     if (toLevel > fromLevel)
-        raiseExplicitEmbeddingLevel(runs, fromLevel % 2 ? RightToLeft : LeftToRight, toLevel % 2 ? RightToLeft : LeftToRight);
+        raiseExplicitEmbeddingLevel(runs, fromLevel % 2 ? RightToLeft : LeftToRight,
+            toLevel % 2 ? RightToLeft : LeftToRight);
     else if (toLevel < fromLevel)
-        lowerExplicitEmbeddingLevel(runs, fromLevel % 2 ? RightToLeft : LeftToRight);
+        lowerExplicitEmbeddingLevel(runs,
+            fromLevel % 2 ? RightToLeft : LeftToRight);
 
     setContext(toContext);
 
@@ -551,8 +653,10 @@ bool BidiResolver<Iterator, Run>::commitExplicitEmbedding(BidiRunList<Run>& runs
     return fromLevel != toLevel;
 }
 
-template <class Iterator, class Run>
-inline void BidiResolver<Iterator, Run>::updateStatusLastFromCurrentDirection(WTF::Unicode::Direction dirCurrent)
+template <class Iterator, class Run, class IsolatedRun>
+inline void
+BidiResolver<Iterator, Run, IsolatedRun>::updateStatusLastFromCurrentDirection(
+    WTF::Unicode::CharDirection dirCurrent)
 {
     using namespace WTF::Unicode;
     switch (dirCurrent) {
@@ -587,14 +691,15 @@ inline void BidiResolver<Iterator, Run>::updateStatusLastFromCurrentDirection(WT
         // ignore these
         break;
     case EuropeanNumber:
-        // fall through
+    // fall through
     default:
         m_status.last = dirCurrent;
     }
 }
 
-template <class Iterator, class Run>
-inline void BidiResolver<Iterator, Run>::reorderRunsFromLevels(BidiRunList<Run>& runs) const
+template <class Iterator, class Run, class IsolatedRun>
+inline void BidiResolver<Iterator, Run, IsolatedRun>::reorderRunsFromLevels(
+    BidiRunList<Run>& runs) const
 {
     unsigned char levelLow = BidiContext::kMaxLevel;
     unsigned char levelHigh = 0;
@@ -605,8 +710,9 @@ inline void BidiResolver<Iterator, Run>::reorderRunsFromLevels(BidiRunList<Run>&
 
     // This implements reordering of the line (L2 according to Bidi spec):
     // http://unicode.org/reports/tr9/#L2
-    // L2. From the highest level found in the text to the lowest odd level on each line,
-    // reverse any contiguous sequence of characters that are at that level or higher.
+    // L2. From the highest level found in the text to the lowest odd level on
+    // each line, reverse any contiguous sequence of characters that are at that
+    // level or higher.
 
     // Reversing is only done up to the lowest odd level.
     if (!(levelLow % 2))
@@ -618,10 +724,10 @@ inline void BidiResolver<Iterator, Run>::reorderRunsFromLevels(BidiRunList<Run>&
         unsigned i = 0;
         Run* run = runs.firstRun();
         while (i < count) {
-            for (;i < count && run && run->level() < levelHigh; i++)
+            for (; i < count && run && run->level() < levelHigh; i++)
                 run = run->next();
             unsigned start = i;
-            for (;i <= count && run && run->level() >= levelHigh; i++)
+            for (; i <= count && run && run->level() >= levelHigh; i++)
                 run = run->next();
             unsigned end = i - 1;
             runs.reverseRuns(start, end);
@@ -630,9 +736,11 @@ inline void BidiResolver<Iterator, Run>::reorderRunsFromLevels(BidiRunList<Run>&
     }
 }
 
-template <class Iterator, class Run>
-TextDirection BidiResolver<Iterator, Run>::determineDirectionalityInternal(
-    bool breakOnParagraph, bool* hasStrongDirectionality)
+template <class Iterator, class Run, class IsolatedRun>
+TextDirection
+BidiResolver<Iterator, Run, IsolatedRun>::determineDirectionalityInternal(
+    bool breakOnParagraph,
+    bool* hasStrongDirectionality)
 {
     while (!m_current.atEnd()) {
         if (inIsolate()) {
@@ -644,46 +752,52 @@ TextDirection BidiResolver<Iterator, Run>::determineDirectionalityInternal(
         UChar32 current = m_current.current();
         if (UNLIKELY(U16_IS_SURROGATE(current))) {
             increment();
-            // If this not the high part of the surrogate pair, then drop it and move to the next.
+            // If this not the high part of the surrogate pair, then drop it and move
+            // to the next.
             if (!U16_IS_SURROGATE_LEAD(current))
                 continue;
             UChar high = static_cast<UChar>(current);
             if (m_current.atEnd())
                 continue;
             UChar low = m_current.current();
-            // Verify the low part. If invalid, then assume an invalid surrogate pair and retry.
+            // Verify the low part. If invalid, then assume an invalid surrogate pair
+            // and retry.
             if (!U16_IS_TRAIL(low))
                 continue;
             current = U16_GET_SUPPLEMENTARY(high, low);
         }
-        WTF::Unicode::Direction charDirection = WTF::Unicode::direction(current);
+        WTF::Unicode::CharDirection charDirection = WTF::Unicode::direction(current);
         if (charDirection == WTF::Unicode::LeftToRight) {
             if (hasStrongDirectionality)
                 *hasStrongDirectionality = true;
-            return LTR;
+            return TextDirection::kLtr;
         }
         if (charDirection == WTF::Unicode::RightToLeft || charDirection == WTF::Unicode::RightToLeftArabic) {
             if (hasStrongDirectionality)
                 *hasStrongDirectionality = true;
-            return RTL;
+            return TextDirection::kRtl;
         }
         increment();
     }
     if (hasStrongDirectionality)
         *hasStrongDirectionality = false;
-    return LTR;
+    return TextDirection::kLtr;
 }
 
 inline TextDirection directionForCharacter(UChar32 character)
 {
-    WTF::Unicode::Direction charDirection = WTF::Unicode::direction(character);
+    WTF::Unicode::CharDirection charDirection = WTF::Unicode::direction(character);
     if (charDirection == WTF::Unicode::RightToLeft || charDirection == WTF::Unicode::RightToLeftArabic)
-        return RTL;
-    return LTR;
+        return TextDirection::kRtl;
+    return TextDirection::kLtr;
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, VisualDirectionOverride override, bool hardLineBreak, bool reorderRuns)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::createBidiRunsForLine(
+    const Iterator& end,
+    VisualDirectionOverride override,
+    bool hardLineBreak,
+    bool reorderRuns)
 {
     using namespace WTF::Unicode;
 
@@ -714,7 +828,7 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
 
     m_last = m_current;
     bool lastLineEnded = false;
-    BidiResolver<Iterator, Run> stateAtEnd;
+    BidiResolver<Iterator, Run, IsolatedRun> stateAtEnd;
 
     while (true) {
         if (inIsolate() && m_emptyRun) {
@@ -736,7 +850,7 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
             m_endOfRunAtEndOfLine = m_last;
             lastLineEnded = true;
         }
-        Direction dirCurrent;
+        CharDirection dirCurrent;
         if (lastLineEnded && (hardLineBreak || m_current.atEnd())) {
             BidiContext* c = context();
             if (hardLineBreak) {
@@ -757,25 +871,19 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
             }
         } else {
             dirCurrent = m_current.direction();
-            if (context()->override()
-                && dirCurrent != RightToLeftEmbedding
-                && dirCurrent != LeftToRightEmbedding
-                && dirCurrent != RightToLeftOverride
-                && dirCurrent != LeftToRightOverride
-                && dirCurrent != PopDirectionalFormat)
+            if (context()->override() && dirCurrent != RightToLeftEmbedding && dirCurrent != LeftToRightEmbedding && dirCurrent != RightToLeftOverride && dirCurrent != LeftToRightOverride && dirCurrent != PopDirectionalFormat)
                 dirCurrent = context()->dir();
             else if (dirCurrent == NonSpacingMark)
                 dirCurrent = m_status.last;
         }
 
-        // We ignore all character directionality while in unicode-bidi: isolate spans.
-        // We'll handle ordering the isolated characters in a second pass.
+        // We ignore all character directionality while in unicode-bidi: isolate
+        // spans.  We'll handle ordering the isolated characters in a second pass.
         if (inIsolate())
             dirCurrent = OtherNeutral;
 
         ASSERT(m_status.eor != OtherNeutral || m_eor.atEnd());
         switch (dirCurrent) {
-
         // embedding and overrides (X1-X9 in the Bidi specs)
         case RightToLeftEmbedding:
         case LeftToRightEmbedding:
@@ -808,7 +916,8 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
             case OtherNeutral:
                 if (m_status.eor == EuropeanNumber) {
                     if (m_status.lastStrong != LeftToRight) {
-                        // the numbers need to be on a higher embedding level, so let's close that run
+                        // the numbers need to be on a higher embedding level, so let's
+                        // close that run
                         m_direction = EuropeanNumber;
                         appendRun(m_runs);
                         if (context()->dir() != LeftToRight) {
@@ -819,7 +928,8 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
                         }
                     }
                 } else if (m_status.eor == ArabicNumber) {
-                    // Arabic numbers are always on a higher embedding level, so let's close that run
+                    // Arabic numbers are always on a higher embedding level, so let's
+                    // close that run
                     m_direction = ArabicNumber;
                     appendRun(m_runs);
                     if (context()->dir() != LeftToRight) {
@@ -910,11 +1020,13 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
                 case OtherNeutral:
                     if (m_status.eor == EuropeanNumber) {
                         if (m_status.lastStrong == RightToLeft) {
-                            // ENs on both sides behave like Rs, so the neutrals should be R.
-                            // Terminate the EN run.
+                            // ENs on both sides behave like Rs, so the neutrals should be
+                            // R.  Terminate the EN run.
                             appendRun(m_runs);
                             // Make an R run.
-                            m_eor = m_status.last == EuropeanNumberTerminator ? m_lastBeforeET : m_last;
+                            m_eor = m_status.last == EuropeanNumberTerminator
+                                ? m_lastBeforeET
+                                : m_last;
                             m_direction = RightToLeft;
                             appendRun(m_runs);
                             // Begin a new EN run.
@@ -925,7 +1037,9 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
                         appendRun(m_runs);
                         if (m_status.lastStrong == RightToLeft || context()->dir() == RightToLeft) {
                             // Make an R run.
-                            m_eor = m_status.last == EuropeanNumberTerminator ? m_lastBeforeET : m_last;
+                            m_eor = m_status.last == EuropeanNumberTerminator
+                                ? m_lastBeforeET
+                                : m_last;
                             m_direction = RightToLeft;
                             appendRun(m_runs);
                             // Begin a new EN run.
@@ -933,7 +1047,9 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
                         }
                     } else if (m_status.lastStrong == RightToLeft) {
                         // Extend the R run to include the neutrals.
-                        m_eor = m_status.last == EuropeanNumberTerminator ? m_lastBeforeET : m_last;
+                        m_eor = m_status.last == EuropeanNumberTerminator
+                            ? m_lastBeforeET
+                            : m_last;
                         m_direction = RightToLeft;
                         appendRun(m_runs);
                         // Begin a new EN run.
@@ -973,15 +1089,14 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
             case SegmentSeparator:
             case WhiteSpaceNeutral:
             case OtherNeutral:
-                if (m_status.eor == ArabicNumber
-                    || (m_status.eor == EuropeanNumber && (m_status.lastStrong == RightToLeft || context()->dir() == RightToLeft))
-                    || (m_status.eor != EuropeanNumber && m_status.lastStrong == LeftToRight && context()->dir() == RightToLeft)) {
+                if (m_status.eor == ArabicNumber || (m_status.eor == EuropeanNumber && (m_status.lastStrong == RightToLeft || context()->dir() == RightToLeft)) || (m_status.eor != EuropeanNumber && m_status.lastStrong == LeftToRight && context()->dir() == RightToLeft)) {
                     // Terminate the run before the neutrals.
                     appendRun(m_runs);
                     // Begin an R run for the neutrals.
                     m_direction = RightToLeft;
                 } else if (m_direction == OtherNeutral) {
-                    m_direction = m_status.lastStrong == LeftToRight ? LeftToRight : RightToLeft;
+                    m_direction = m_status.lastStrong == LeftToRight ? LeftToRight
+                                                                     : RightToLeft;
                 }
                 m_eor = m_last;
                 appendRun(m_runs);
@@ -1011,9 +1126,10 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
             if (m_eor == m_last)
                 m_eor = m_current;
             break;
-            // neutrals
+        // neutrals
         case BlockSeparator:
-            // ### what do we do with newline and paragraph seperators that come to here?
+            // ### what do we do with newline and paragraph seperators that come to
+            // here?
             break;
         case SegmentSeparator:
             // ### implement rule L1
@@ -1036,7 +1152,8 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
                     m_direction = m_status.eor;
                     break;
                 case EuropeanNumber:
-                    m_direction = m_status.lastStrong == LeftToRight ? LeftToRight : EuropeanNumber;
+                    m_direction = m_status.lastStrong == LeftToRight ? LeftToRight
+                                                                     : EuropeanNumber;
                     break;
                 default:
                     ASSERT_NOT_REACHED();
@@ -1091,19 +1208,22 @@ void BidiResolver<Iterator, Run>::createBidiRunsForLine(const Iterator& end, Vis
         applyL1Rule(m_runs);
 }
 
-template <class Iterator, class Run>
-void BidiResolver<Iterator, Run>::setMidpointStateForIsolatedRun(Run* run, const MidpointState<Iterator>& midpoint)
+template <class Iterator, class Run, class IsolatedRun>
+void BidiResolver<Iterator, Run, IsolatedRun>::setMidpointStateForIsolatedRun(
+    Run& run,
+    const MidpointState<Iterator>& midpoint)
 {
-    ASSERT(!m_midpointStateForIsolatedRun.contains(run));
-    m_midpointStateForIsolatedRun.add(run, midpoint);
+    ASSERT(!m_midpointStateForIsolatedRun.contains(&run));
+    m_midpointStateForIsolatedRun.add(&run, midpoint);
 }
 
-template<class Iterator, class Run>
-MidpointState<Iterator> BidiResolver<Iterator, Run>::midpointStateForIsolatedRun(Run* run)
+template <class Iterator, class Run, class IsolatedRun>
+MidpointState<Iterator>
+BidiResolver<Iterator, Run, IsolatedRun>::midpointStateForIsolatedRun(
+    Run& run)
 {
-    return m_midpointStateForIsolatedRun.take(run);
+    return m_midpointStateForIsolatedRun.take(&run);
 }
-
 
 } // namespace blink
 

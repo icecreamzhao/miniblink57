@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/SVGMatrixTearOff.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -40,18 +39,14 @@ namespace blink {
 
 SVGMatrixTearOff::SVGMatrixTearOff(const AffineTransform& staticValue)
     : m_staticValue(staticValue)
-    , m_contextTransform(nullptr)
+    , m_contextTransform(this, nullptr)
 {
 }
 
 SVGMatrixTearOff::SVGMatrixTearOff(SVGTransformTearOff* transform)
-    : m_contextTransform(transform)
+    : m_contextTransform(this, transform)
 {
     ASSERT(transform);
-}
-
-SVGMatrixTearOff::~SVGMatrixTearOff()
-{
 }
 
 DEFINE_TRACE(SVGMatrixTearOff)
@@ -59,14 +54,21 @@ DEFINE_TRACE(SVGMatrixTearOff)
     visitor->trace(m_contextTransform);
 }
 
+DEFINE_TRACE_WRAPPERS(SVGMatrixTearOff)
+{
+    visitor->traceWrappers(m_contextTransform);
+}
+
 const AffineTransform& SVGMatrixTearOff::value() const
 {
-    return m_contextTransform ? m_contextTransform->target()->matrix() : m_staticValue;
+    return m_contextTransform ? m_contextTransform->target()->matrix()
+                              : m_staticValue;
 }
 
 AffineTransform* SVGMatrixTearOff::mutableValue()
 {
-    return m_contextTransform ? m_contextTransform->target()->mutableMatrix() : &m_staticValue;
+    return m_contextTransform ? m_contextTransform->target()->mutableMatrix()
+                              : &m_staticValue;
 }
 
 void SVGMatrixTearOff::commitChange()
@@ -78,15 +80,16 @@ void SVGMatrixTearOff::commitChange()
     m_contextTransform->commitChange();
 }
 
-#define DEFINE_SETTER(ATTRIBUTE) \
-    void SVGMatrixTearOff::set##ATTRIBUTE(double f, ExceptionState& exceptionState) \
-    { \
+#define DEFINE_SETTER(ATTRIBUTE)                                       \
+    void SVGMatrixTearOff::set##ATTRIBUTE(double f,                    \
+        ExceptionState& exceptionState)                                \
+    {                                                                  \
         if (m_contextTransform && m_contextTransform->isImmutable()) { \
-            exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only."); \
-            return; \
-        } \
-        mutableValue()->set##ATTRIBUTE(f); \
-        commitChange(); \
+            SVGPropertyTearOffBase::throwReadOnly(exceptionState);     \
+            return;                                                    \
+        }                                                              \
+        mutableValue()->set##ATTRIBUTE(f);                             \
+        commitChange();                                                \
     }
 
 DEFINE_SETTER(A);
@@ -98,86 +101,92 @@ DEFINE_SETTER(F);
 
 #undef DEFINE_SETTER
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::translate(double tx, double ty)
+SVGMatrixTearOff* SVGMatrixTearOff::translate(double tx, double ty)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->translate(tx, ty);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::scale(double s)
+SVGMatrixTearOff* SVGMatrixTearOff::scale(double s)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->scale(s, s);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::scaleNonUniform(double sx, double sy)
+SVGMatrixTearOff* SVGMatrixTearOff::scaleNonUniform(double sx, double sy)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->scale(sx, sy);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::rotate(double d)
+SVGMatrixTearOff* SVGMatrixTearOff::rotate(double d)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->rotate(d);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::flipX()
+SVGMatrixTearOff* SVGMatrixTearOff::flipX()
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->flipX();
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::flipY()
+SVGMatrixTearOff* SVGMatrixTearOff::flipY()
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->flipY();
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::skewX(double angle)
+SVGMatrixTearOff* SVGMatrixTearOff::skewX(double angle)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->skewX(angle);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::skewY(double angle)
+SVGMatrixTearOff* SVGMatrixTearOff::skewY(double angle)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     matrix->mutableValue()->skewY(angle);
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::multiply(PassRefPtrWillBeRawPtr<SVGMatrixTearOff> other)
+SVGMatrixTearOff* SVGMatrixTearOff::multiply(SVGMatrixTearOff* other)
 {
-    RefPtrWillBeRawPtr<SVGMatrixTearOff> matrix = create(value());
+    SVGMatrixTearOff* matrix = create(value());
     *matrix->mutableValue() *= other->value();
-    return matrix.release();
+    return matrix;
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::inverse(ExceptionState& exceptionState)
+SVGMatrixTearOff* SVGMatrixTearOff::inverse(ExceptionState& exceptionState)
 {
-    AffineTransform transform = value().inverse();
-    if (!value().isInvertible())
-        exceptionState.throwDOMException(InvalidStateError, "The matrix is not invertible.");
-
-    return create(transform);
+    if (!value().isInvertible()) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "The matrix is not invertible.");
+        return nullptr;
+    }
+    return create(value().inverse());
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGMatrixTearOff::rotateFromVector(double x, double y, ExceptionState& exceptionState)
+SVGMatrixTearOff* SVGMatrixTearOff::rotateFromVector(
+    double x,
+    double y,
+    ExceptionState& exceptionState)
 {
-    if (!x || !y)
-        exceptionState.throwDOMException(InvalidAccessError, "Arguments cannot be zero.");
-
+    if (!x || !y) {
+        exceptionState.throwDOMException(InvalidAccessError,
+            "Arguments cannot be zero.");
+        return nullptr;
+    }
     AffineTransform copy = value();
     copy.rotateFromVector(x, y);
     return create(copy);
 }
 
-}
+} // namespace blink

@@ -5,14 +5,16 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
+#include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "SkGraphics.h"
-#include "SkRandom.h"
 #include "SkLayerDrawLooper.h"
-#include "SkBlurMaskFilter.h"
+#include "SkPath.h"
+#include "SkRandom.h"
+#include "gm.h"
 
-static SkRect inset(const SkRect& r) {
+static SkRect inset(const SkRect& r)
+{
     SkRect rect = r;
     rect.inset(r.width() / 8, r.height() / 8);
     return rect;
@@ -20,20 +22,24 @@ static SkRect inset(const SkRect& r) {
 
 class PathInteriorGM : public skiagm::GM {
 public:
-    PathInteriorGM() {
+    PathInteriorGM()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(770, 770);
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("pathinterior");
     }
 
-    void show(SkCanvas* canvas, const SkPath& path) {
+    void show(SkCanvas* canvas, const SkPath& path)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -44,7 +50,7 @@ protected:
         bool hasInterior = false;
 #endif
 
-        paint.setColor(hasInterior ? 0xFF8888FF : SK_ColorGRAY);
+        paint.setColor(sk_tool_utils::color_to_565(hasInterior ? 0xFF8888FF : SK_ColorGRAY));
         canvas->drawPath(path, paint);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setColor(SK_ColorRED);
@@ -57,11 +63,12 @@ protected:
         }
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->translate(8.5f, 8.5f);
 
         const SkRect rect = { 0, 0, 80, 80 };
-        const SkScalar RAD = rect.width()/8;
+        const SkScalar RAD = rect.width() / 8;
 
         int i = 0;
         for (int insetFirst = 0; insetFirst <= 1; ++insetFirst) {
@@ -103,11 +110,9 @@ protected:
     }
 
 private:
-
     typedef GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-static skiagm::GM* MyFactory(void*) { return new PathInteriorGM; }
-static skiagm::GMRegistry reg(MyFactory);
+DEF_GM(return new PathInteriorGM;)

@@ -9,6 +9,7 @@
 #define SkSVGDevice_DEFINED
 
 #include "SkDevice.h"
+#include "SkTemplates.h"
 
 class SkXMLWriter;
 
@@ -21,40 +22,39 @@ public:
 protected:
     void drawPaint(const SkDraw&, const SkPaint& paint) override;
     void drawPoints(const SkDraw&, SkCanvas::PointMode mode, size_t count,
-                    const SkPoint[], const SkPaint& paint) override;
+        const SkPoint[], const SkPaint& paint) override;
     void drawRect(const SkDraw&, const SkRect& r, const SkPaint& paint) override;
     void drawOval(const SkDraw&, const SkRect& oval, const SkPaint& paint) override;
     void drawRRect(const SkDraw&, const SkRRect& rr, const SkPaint& paint) override;
     void drawPath(const SkDraw&, const SkPath& path,
-                  const SkPaint& paint,
-                  const SkMatrix* prePathMatrix = NULL,
-                  bool pathIsMutable = false) override;
+        const SkPaint& paint,
+        const SkMatrix* prePathMatrix = nullptr,
+        bool pathIsMutable = false) override;
 
     void drawBitmap(const SkDraw&, const SkBitmap& bitmap,
-                    const SkMatrix& matrix, const SkPaint& paint) override;
+        const SkMatrix& matrix, const SkPaint& paint) override;
     void drawSprite(const SkDraw&, const SkBitmap& bitmap,
-                    int x, int y, const SkPaint& paint) override;
+        int x, int y, const SkPaint& paint) override;
     void drawBitmapRect(const SkDraw&, const SkBitmap&,
-                        const SkRect* srcOrNull, const SkRect& dst,
-                        const SkPaint& paint,
-                        SkCanvas::DrawBitmapRectFlags flags) override;
+        const SkRect* srcOrNull, const SkRect& dst,
+        const SkPaint& paint, SkCanvas::SrcRectConstraint) override;
 
     void drawText(const SkDraw&, const void* text, size_t len,
-                  SkScalar x, SkScalar y, const SkPaint& paint) override;
+        SkScalar x, SkScalar y, const SkPaint& paint) override;
     void drawPosText(const SkDraw&, const void* text, size_t len,
-                     const SkScalar pos[], int scalarsPerPos,
-                     const SkPoint& offset, const SkPaint& paint) override;
+        const SkScalar pos[], int scalarsPerPos,
+        const SkPoint& offset, const SkPaint& paint) override;
     void drawTextOnPath(const SkDraw&, const void* text, size_t len,
-                        const SkPath& path, const SkMatrix* matrix,
-                        const SkPaint& paint) override;
+        const SkPath& path, const SkMatrix* matrix,
+        const SkPaint& paint) override;
     void drawVertices(const SkDraw&, SkCanvas::VertexMode, int vertexCount,
-                      const SkPoint verts[], const SkPoint texs[],
-                      const SkColor colors[], SkXfermode* xmode,
-                      const uint16_t indices[], int indexCount,
-                      const SkPaint& paint) override;
+        const SkPoint verts[], const SkPoint texs[],
+        const SkColor colors[], SkXfermode* xmode,
+        const uint16_t indices[], int indexCount,
+        const SkPaint& paint) override;
 
     void drawDevice(const SkDraw&, SkBaseDevice*, int x, int y,
-                    const SkPaint&) override;
+        const SkPaint&) override;
     const SkBitmap& onAccessBitmap() override;
 
 private:
@@ -66,10 +66,10 @@ private:
     class AutoElement;
     class ResourceBucket;
 
-    SkXMLWriter*                  fWriter;
-    SkAutoTDelete<AutoElement>    fRootElement;
+    SkXMLWriter* fWriter;
+    SkAutoTDelete<AutoElement> fRootElement;
     SkAutoTDelete<ResourceBucket> fResourceBucket;
-    SkBitmap                      fLegacyBitmap;
+    SkBitmap fLegacyBitmap;
 
     typedef SkBaseDevice INHERITED;
 };

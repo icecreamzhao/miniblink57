@@ -26,10 +26,29 @@
 #ifndef UnitTestHelpers_h
 #define UnitTestHelpers_h
 
+#include "wtf/PassRefPtr.h"
+#include "wtf/text/WTFString.h"
+
 namespace blink {
+
+class SharedBuffer;
+
 namespace testing {
 
-void runPendingTasks();
+    void runPendingTasks();
+
+    // Wait for delayed task to complete or timers to fire for |delayMs|
+    // milliseconds.
+    void runDelayedTasks(double delayMs);
+
+    String blinkRootDir();
+
+    PassRefPtr<SharedBuffer> readFromFile(const String& path);
+
+    void enterRunLoop();
+    void exitRunLoop();
+
+    void yieldCurrentThread();
 
 } // namespace testing
 } // namespace blink

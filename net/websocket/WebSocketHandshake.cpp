@@ -35,12 +35,12 @@
 
 #include "third_party/WebKit/Source/core/loader/CookieJar.h"
 #include "third_party/WebKit/Source/core/dom/Document.h"
-#include "third_party/WebKit/Source/platform/Logging.h"
 #include "third_party/WebKit/Source/platform/network/WebSocketHandshakeRequest.h"
+#include "third_party/WebKit/Source/platform/network/HTTPParsers.h"
 #include <wtf/CryptographicallyRandomNumber.h>
 // #include <wtf/MD5.h>
 // #include <wtf/SHA1.h>
-#include "third_party/skia/src/utils/SkSHA1.h"
+//#include "third_party/skia/src/utils/SkSHA1.h"
 #include <wtf/StdLibExtras.h>
 #include <wtf/StringExtras.h>
 #include <wtf/Vector.h>
@@ -48,9 +48,21 @@
 #include <wtf/text/CString.h>
 #include <wtf/text/StringBuilder.h>
 #include <wtf/text/WTFString.h>
+#include "third_party/smhasher/src/sha1.h"
 // #include <wtf/unicode/CharacterNames.h>
 
 using namespace blink;
+
+static const size_t maxInputSampleSize = 128;
+static const UChar horizontalEllipsis = 0x2026;
+
+String trimInputSample(const char* p, size_t len)
+{
+    String s = String(p, std::min<size_t>(len, maxInputSampleSize));
+    if (len > maxInputSampleSize)
+        s.append(horizontalEllipsis);
+    return s;
+}
 
 namespace net {
 
@@ -82,17 +94,6 @@ static String hostName(const blink::KURL& url, bool secure)
     return builder.toString();
 }
 
-static const size_t maxInputSampleSize = 128;
-static const UChar horizontalEllipsis = 0x2026;
-
-static String trimInputSample(const char* p, size_t len)
-{
-    String s = String(p, std::min<size_t>(len, maxInputSampleSize));
-    if (len > maxInputSampleSize)
-        s.append(horizontalEllipsis);
-    return s;
-}
-
 static String generateSecWebSocketKey()
 {
     static const size_t nonceSize = 16;
@@ -105,13 +106,21 @@ String WebSocketHandshake::getExpectedWebSocketAccept(const String& secWebSocket
 {
     static const char* const webSocketKeyGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     CString keyData = secWebSocketKey.ascii();
-    SkSHA1 sha1;
+//     SkSHA1 sha1;
+// 
+//     sha1.write(reinterpret_cast<const uint8_t*>(keyData.data()), keyData.length());
+//     sha1.write(reinterpret_cast<const uint8_t*>(webSocketKeyGUID), strlen(webSocketKeyGUID));
+//     SkSHA1::Digest hash;
+//     sha1.finish(hash);
 
-    sha1.write(reinterpret_cast<const uint8_t*>(keyData.data()), keyData.length());
-    sha1.write(reinterpret_cast<const uint8_t*>(webSocketKeyGUID), strlen(webSocketKeyGUID));
-    SkSHA1::Digest hash;
-    sha1.finish(hash);
-    return base64Encode((const char*)hash.data, 20);
+    SHA1_CTX context = { 0 };
+    uint8_t digest[SHA1_DIGEST_SIZE] = { 0 };
+    SHA1_Init(&context);
+    SHA1_Update(&context, reinterpret_cast<const uint8_t*>(keyData.data()), keyData.length());
+    SHA1_Update(&context, reinterpret_cast<const uint8_t*>(webSocketKeyGUID), strlen(webSocketKeyGUID));
+    SHA1_Final(&context, digest);
+
+    return base64Encode((const char*)digest, SHA1_DIGEST_SIZE);
 }
 
 WebSocketHandshake::WebSocketHandshake(const KURL& url, const String& protocol, ExecutionContext* context)
@@ -161,14 +170,14 @@ bool WebSocketHandshake::secure() const
 
 String WebSocketHandshake::clientOrigin() const
 {
-    return m_context->securityOrigin()->toString();
+    return m_context->getSecurityOrigin()->toString();
 }
 
 String WebSocketHandshake::clientLocation() const
 {
     StringBuilder builder;
     builder.append(m_secure ? "wss" : "ws");
-    builder.appendLiteral("://");
+    builder.append("://");
     builder.append(hostName(m_url, m_secure));
     builder.append(resourceName(m_url));
     return builder.toString();
@@ -179,9 +188,9 @@ CString WebSocketHandshake::clientHandshakeMessage() const
     // Keep the following consistent with clientHandshakeRequest().
     StringBuilder builder;
 
-    builder.appendLiteral("GET ");
+    builder.append("GET ");
     builder.append(resourceName(m_url));
-    builder.appendLiteral(" HTTP/1.1\r\n");
+    builder.append(" HTTP/1.1\r\n");
 
     Vector<String> fields;
     fields.append("Upgrade: websocket");
@@ -194,7 +203,7 @@ CString WebSocketHandshake::clientHandshakeMessage() const
     blink::KURL url = httpURLForAuthenticationAndCookies();
     if (m_context->isDocument()) {
         Document& document = toDocument(*m_context);
-        String cookie = cookieRequestHeaderFieldValue(&document, url);
+        String cookie = cookieRequestHeaderFieldValue(document, url);
         if (!cookie.isEmpty())
             fields.append("Cookie: " + cookie);
         // Set "Cookie2: <cookie>" if cookies 2 exists for url?
@@ -214,7 +223,7 @@ CString WebSocketHandshake::clientHandshakeMessage() const
         fields.append("Sec-WebSocket-Extensions: " + extensionValue);
 
     // Add a User-Agent header.
-    fields.append("User-Agent: " + m_context->userAgent(m_context->url()));
+    fields.append("User-Agent: " + m_context->userAgent(/*m_context->url()*/));
 
     // Fields in the handshake are sent by the client in a random order; the
     // order is not meaningful.  Thus, it's ok to send the order we constructed
@@ -222,16 +231,19 @@ CString WebSocketHandshake::clientHandshakeMessage() const
 
     for (auto& field : fields) {
         builder.append(field);
-        builder.appendLiteral("\r\n");
+        builder.append("\r\n");
     }
 
-    builder.appendLiteral("\r\n");
+    builder.append("\r\n");
 
     return builder.toString().utf8();
 }
 
 PassRefPtr<WebSocketHandshakeRequest> WebSocketHandshake::clientHandshakeRequest() const
 {
+    if (!m_context)
+        return nullptr;
+
     PassRefPtr<WebSocketHandshakeRequest> request = WebSocketHandshakeRequest::create(m_url);
     request->addHeaderField("Connection", "Upgrade");
     request->addHeaderField("Host", hostName(m_url, m_secure).utf8().data());
@@ -241,7 +253,7 @@ PassRefPtr<WebSocketHandshakeRequest> WebSocketHandshake::clientHandshakeRequest
     blink::KURL url = httpURLForAuthenticationAndCookies();
     if (m_context->isDocument()) {
         Document* document = toDocument(m_context);
-        String cookie = cookieRequestHeaderFieldValue(document, url);
+        String cookie = cookieRequestHeaderFieldValue(*document, url);
         if (!cookie.isEmpty())
             request->addHeaderField("Cookie", cookie.utf8().data());
         // Set "Cookie2: <cookie>" if cookies 2 exists for url?
@@ -257,7 +269,7 @@ PassRefPtr<WebSocketHandshakeRequest> WebSocketHandshake::clientHandshakeRequest
         request->addHeaderField("Sec-WebSocket-Extensions", extensionValue.utf8().data());
 
     // Add a User-Agent header.
-    request->addHeaderField("User-Agent", m_context->userAgent(m_context->url()).utf8().data());
+    request->addHeaderField("User-Agent", m_context->userAgent(/*m_context->url()*/).utf8().data());
 
     return request;
 }
@@ -285,7 +297,7 @@ int WebSocketHandshake::readServerHandshake(const char* header, size_t len)
         m_mode = Failed; // m_failureReason is set inside readStatusLine().
         return len;
     }
-    WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() Status code is %d", this, statusCode);
+    //WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() Status code is %d", this, statusCode);
 
     m_serverHandshakeResponse = WebSocketHandshakeResponse();
     m_serverHandshakeResponse.setStatusCode(statusCode);
@@ -304,12 +316,12 @@ int WebSocketHandshake::readServerHandshake(const char* header, size_t len)
     }
     const char* p = readHTTPHeaders(header + lineLength, header + len);
     if (!p) {
-        WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() readHTTPHeaders() failed", this);
+        //WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() readHTTPHeaders() failed", this);
         m_mode = Failed; // m_failureReason is set inside readHTTPHeaders().
         return len;
     }
     if (!checkResponseHeaders()) {
-        WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() checkResponseHeaders() failed", this);
+        //WTF_LOG(Network, "WebSocketHandshake %p readServerHandshake() checkResponseHeaders() failed", this);
         m_mode = Failed;
         return p - header;
     }
@@ -377,7 +389,7 @@ blink::KURL WebSocketHandshake::httpURLForAuthenticationAndCookies() const
 {
     blink::KURL url = m_url;
     bool couldSetProtocol = url.setProtocol(m_secure ? "https" : "http");
-    ASSERT_UNUSED(couldSetProtocol, couldSetProtocol);
+    //ASSERT_UNUSED(couldSetProtocol, couldSetProtocol);
     return url;
 }
 
@@ -460,7 +472,7 @@ const char* WebSocketHandshake::readHTTPHeaders(const char* start, const char* e
     bool sawSecWebSocketProtocolHeaderField = false;
     const char* p = start;
     for (; p < end; /*p++*/) {
-        size_t consumedLength = parseHTTPHeader(p, end - p, m_failureReason, name, value);
+        size_t consumedLength = blink::parseHTTPHeader(p, end - p, m_failureReason, name, value);
         if (!consumedLength)
             return 0;
         p += consumedLength;

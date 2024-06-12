@@ -45,25 +45,38 @@ namespace double_conversion {
         static const uint64_t kExponentMask = UINT64_2PART_C(0x7FF00000, 00000000);
         static const uint64_t kSignificandMask = UINT64_2PART_C(0x000FFFFF, FFFFFFFF);
         static const uint64_t kHiddenBit = UINT64_2PART_C(0x00100000, 00000000);
-        static const int kPhysicalSignificandSize = 52;  // Excludes the hidden bit.
+        static const int kPhysicalSignificandSize = 52; // Excludes the hidden bit.
         static const int kSignificandSize = 53;
 
-        Double() : d64_(0) {}
-        explicit Double(double d) : d64_(double_to_uint64(d)) {}
-        explicit Double(uint64_t d64) : d64_(d64) {}
+        Double()
+            : d64_(0)
+        {
+        }
+        explicit Double(double d)
+            : d64_(double_to_uint64(d))
+        {
+        }
+        explicit Double(uint64_t d64)
+            : d64_(d64)
+        {
+        }
         explicit Double(DiyFp diy_fp)
-        : d64_(DiyFpToUint64(diy_fp)) {}
+            : d64_(DiyFpToUint64(diy_fp))
+        {
+        }
 
         // The value encoded by this Double must be greater or equal to +0.0.
         // It must not be special (infinity, or NaN).
-        DiyFp AsDiyFp() const {
+        DiyFp AsDiyFp() const
+        {
             ASSERT(Sign() > 0);
             ASSERT(!IsSpecial());
             return DiyFp(Significand(), Exponent());
         }
 
         // The value encoded by this Double must be strictly greater than 0.
-        DiyFp AsNormalizedDiyFp() const {
+        DiyFp AsNormalizedDiyFp() const
+        {
             ASSERT(value() > 0.0);
             uint64_t f = Significand();
             int e = Exponent();
@@ -80,13 +93,16 @@ namespace double_conversion {
         }
 
         // Returns the double's bit as uint64.
-        uint64_t AsUint64() const {
+        uint64_t AsUint64() const
+        {
             return d64_;
         }
 
         // Returns the next greater double. Returns +infinity on input +infinity.
-        double NextDouble() const {
-            if (d64_ == kInfinity) return Double(kInfinity).value();
+        double NextDouble() const
+        {
+            if (d64_ == kInfinity)
+                return Double(kInfinity).value();
             if (Sign() < 0 && Significand() == 0) {
                 // -0.0
                 return 0.0;
@@ -98,16 +114,18 @@ namespace double_conversion {
             }
         }
 
-        int Exponent() const {
-            if (IsDenormal()) return kDenormalExponent;
+        int Exponent() const
+        {
+            if (IsDenormal())
+                return kDenormalExponent;
 
             uint64_t d64 = AsUint64();
-            int biased_e =
-            static_cast<int>((d64 & kExponentMask) >> kPhysicalSignificandSize);
+            int biased_e = static_cast<int>((d64 & kExponentMask) >> kPhysicalSignificandSize);
             return biased_e - kExponentBias;
         }
 
-        uint64_t Significand() const {
+        uint64_t Significand() const
+        {
             uint64_t d64 = AsUint64();
             uint64_t significand = d64 & kSignificandMask;
             if (!IsDenormal()) {
@@ -118,38 +136,42 @@ namespace double_conversion {
         }
 
         // Returns true if the double is a denormal.
-        bool IsDenormal() const {
+        bool IsDenormal() const
+        {
             uint64_t d64 = AsUint64();
             return (d64 & kExponentMask) == 0;
         }
 
         // We consider denormals not to be special.
         // Hence only Infinity and NaN are special.
-        bool IsSpecial() const {
+        bool IsSpecial() const
+        {
             uint64_t d64 = AsUint64();
             return (d64 & kExponentMask) == kExponentMask;
         }
 
-        bool IsNan() const {
+        bool IsNan() const
+        {
             uint64_t d64 = AsUint64();
-            return ((d64 & kExponentMask) == kExponentMask) &&
-            ((d64 & kSignificandMask) != 0);
+            return ((d64 & kExponentMask) == kExponentMask) && ((d64 & kSignificandMask) != 0);
         }
 
-        bool IsInfinite() const {
+        bool IsInfinite() const
+        {
             uint64_t d64 = AsUint64();
-            return ((d64 & kExponentMask) == kExponentMask) &&
-            ((d64 & kSignificandMask) == 0);
+            return ((d64 & kExponentMask) == kExponentMask) && ((d64 & kSignificandMask) == 0);
         }
 
-        int Sign() const {
+        int Sign() const
+        {
             uint64_t d64 = AsUint64();
-            return (d64 & kSignMask) == 0? 1: -1;
+            return (d64 & kSignMask) == 0 ? 1 : -1;
         }
 
         // Precondition: the value encoded by this Double must be greater or equal
         // than +0.0.
-        DiyFp UpperBoundary() const {
+        DiyFp UpperBoundary() const
+        {
             ASSERT(Sign() > 0);
             return DiyFp(Significand() * 2 + 1, Exponent() - 1);
         }
@@ -158,7 +180,8 @@ namespace double_conversion {
         // The bigger boundary (m_plus) is normalized. The lower boundary has the same
         // exponent as m_plus.
         // Precondition: the value encoded by this Double must be greater than 0.
-        void NormalizedBoundaries(DiyFp* out_m_minus, DiyFp* out_m_plus) const {
+        void NormalizedBoundaries(DiyFp* out_m_minus, DiyFp* out_m_plus) const
+        {
             ASSERT(value() > 0.0);
             DiyFp v = this->AsDiyFp();
             bool significand_is_zero = (v.f() == kHiddenBit);
@@ -189,19 +212,23 @@ namespace double_conversion {
         // once it's encoded into a double. In almost all cases this is equal to
         // kSignificandSize. The only exceptions are denormals. They start with
         // leading zeroes and their effective significand-size is hence smaller.
-        static int SignificandSizeForOrderOfMagnitude(int order) {
+        static int SignificandSizeForOrderOfMagnitude(int order)
+        {
             if (order >= (kDenormalExponent + kSignificandSize)) {
                 return kSignificandSize;
             }
-            if (order <= kDenormalExponent) return 0;
+            if (order <= kDenormalExponent)
+                return 0;
             return order - kDenormalExponent;
         }
 
-        static double Infinity() {
+        static double Infinity()
+        {
             return Double(kInfinity).value();
         }
 
-        static double NaN() {
+        static double NaN()
+        {
             return Double(kNaN).value();
         }
 
@@ -214,7 +241,8 @@ namespace double_conversion {
 
         const uint64_t d64_;
 
-        static uint64_t DiyFpToUint64(DiyFp diy_fp) {
+        static uint64_t DiyFpToUint64(DiyFp diy_fp)
+        {
             uint64_t significand = diy_fp.f();
             int exponent = diy_fp.e();
             while (significand > kHiddenBit + kSignificandMask) {
@@ -237,13 +265,12 @@ namespace double_conversion {
             } else {
                 biased_exponent = static_cast<uint64_t>(exponent + kExponentBias);
             }
-            return (significand & kSignificandMask) |
-            (biased_exponent << kPhysicalSignificandSize);
+            return (significand & kSignificandMask) | (biased_exponent << kPhysicalSignificandSize);
         }
     };
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF
 
-#endif  // DOUBLE_CONVERSION_DOUBLE_H_
+#endif // DOUBLE_CONVERSION_DOUBLE_H_

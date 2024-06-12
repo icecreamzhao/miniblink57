@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/WebEntities.h"
 
 #include "public/platform/WebString.h"
@@ -39,7 +38,7 @@ namespace blink {
 
 WebEntities::WebEntities(bool xmlEntities)
 {
-    ASSERT(m_entitiesMap.isEmpty());
+    DCHECK(m_entitiesMap.isEmpty());
     m_entitiesMap.set(0x003c, "lt");
     m_entitiesMap.set(0x003e, "gt");
     m_entitiesMap.set(0x0026, "amp");

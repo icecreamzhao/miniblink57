@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGDescElement.h"
 
 #include "core/SVGNames.h"
@@ -31,5 +30,4 @@ inline SVGDescElement::SVGDescElement(Document& document)
 }
 
 DEFINE_NODE_FACTORY(SVGDescElement)
-
 }

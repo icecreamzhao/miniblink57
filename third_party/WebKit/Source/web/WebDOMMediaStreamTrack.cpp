@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebDOMMediaStreamTrack.h"
 
 #include "bindings/modules/v8/V8MediaStreamTrack.h"
@@ -36,12 +35,13 @@
 
 namespace blink {
 
-WebDOMMediaStreamTrack::WebDOMMediaStreamTrack(PassRefPtrWillBeRawPtr<MediaStreamTrack> track)
+WebDOMMediaStreamTrack::WebDOMMediaStreamTrack(MediaStreamTrack* track)
     : m_private(track)
 {
 }
 
-WebDOMMediaStreamTrack WebDOMMediaStreamTrack::fromV8Value(v8::Local<v8::Value> value)
+WebDOMMediaStreamTrack WebDOMMediaStreamTrack::fromV8Value(
+    v8::Local<v8::Value> value)
 {
     if (V8MediaStreamTrack::hasInstance(value, v8::Isolate::GetCurrent())) {
         v8::Local<v8::Object> object = v8::Local<v8::Object>::Cast(value);

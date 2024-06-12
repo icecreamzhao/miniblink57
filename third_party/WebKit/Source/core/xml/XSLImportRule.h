@@ -23,10 +23,8 @@
 #ifndef XSLImportRule_h
 #define XSLImportRule_h
 
-#include "core/fetch/ResourcePtr.h"
 #include "core/xml/XSLStyleSheet.h"
 #include "platform/RuntimeEnabledFeatures.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
@@ -34,7 +32,7 @@ class XSLImportRule final : public GarbageCollectedFinalized<XSLImportRule> {
 public:
     static XSLImportRule* create(XSLStyleSheet* parentSheet, const String& href)
     {
-        ASSERT(RuntimeEnabledFeatures::xsltEnabled());
+        DCHECK(RuntimeEnabledFeatures::xsltEnabled());
         return new XSLImportRule(parentSheet, href);
     }
 
@@ -45,7 +43,10 @@ public:
     XSLStyleSheet* styleSheet() const { return m_styleSheet.get(); }
 
     XSLStyleSheet* parentStyleSheet() const { return m_parentStyleSheet; }
-    void setParentStyleSheet(XSLStyleSheet* styleSheet) { m_parentStyleSheet = styleSheet; }
+    void setParentStyleSheet(XSLStyleSheet* styleSheet)
+    {
+        m_parentStyleSheet = styleSheet;
+    }
 
     bool isLoading();
     void loadSheet();
@@ -53,11 +54,13 @@ public:
 private:
     XSLImportRule(XSLStyleSheet* parentSheet, const String& href);
 
-    void setXSLStyleSheet(const String& href, const KURL& baseURL, const String& sheet);
+    void setXSLStyleSheet(const String& href,
+        const KURL& baseURL,
+        const String& sheet);
 
-    RawPtrWillBeMember<XSLStyleSheet> m_parentStyleSheet;
+    Member<XSLStyleSheet> m_parentStyleSheet;
     String m_strHref;
-    RefPtrWillBeMember<XSLStyleSheet> m_styleSheet;
+    Member<XSLStyleSheet> m_styleSheet;
     bool m_loading;
 };
 

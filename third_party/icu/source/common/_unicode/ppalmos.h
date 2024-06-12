@@ -16,11 +16,11 @@
 #ifndef U_PPALMOS_H
 #define U_PPALMOS_H
 
- /**
+/**
   * \file
   * \brief Configuration constants for the Palm OS platform
   */
-  
+
 /* Define the platform we're on. */
 #ifndef U_PALMOS
 #define U_PALMOS
@@ -89,7 +89,6 @@
 #define U_HAVE_UINT64_T U_HAVE_INTTYPES_H
 #endif
 
-
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
@@ -100,43 +99,43 @@
 #include <inttypes.h>
 #else /* U_HAVE_INTTYPES_H */
 
-#if ! U_HAVE_INT8_T
+#if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
 
-#if ! U_HAVE_UINT8_T
+#if !U_HAVE_UINT8_T
 typedef unsigned char uint8_t;
 #endif
 
-#if ! U_HAVE_INT16_T
+#if !U_HAVE_INT16_T
 typedef signed short int16_t;
 #endif
 
-#if ! U_HAVE_UINT16_T
+#if !U_HAVE_UINT16_T
 typedef unsigned short uint16_t;
 #endif
 
-#if ! U_HAVE_INT32_T
+#if !U_HAVE_INT32_T
 typedef signed int int32_t;
 #endif
 
-#if ! U_HAVE_UINT32_T
+#if !U_HAVE_UINT32_T
 typedef unsigned int uint32_t;
 #endif
 
-#if ! U_HAVE_INT64_T
+#if !U_HAVE_INT64_T
 #if U_INT64_IS_LONG_LONG
-    typedef signed long long int64_t;
+typedef signed long long int64_t;
 #else
-    typedef signed __int64 int64_t;
+typedef signed __int64 int64_t;
 #endif
 #endif
 
-#if ! U_HAVE_UINT64_T
+#if !U_HAVE_UINT64_T
 #if U_INT64_IS_LONG_LONG
-    typedef unsigned long long uint64_t;
+typedef unsigned long long uint64_t;
 #else
-    typedef unsigned __int64 uint64_t;
+typedef unsigned __int64 uint64_t;
 #endif
 #endif
 #endif
@@ -203,7 +202,7 @@ typedef unsigned int uint32_t;
 
 /* Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX 0
-#define U_LIB_SUFFIX_C_NAME 
+#define U_LIB_SUFFIX_C_NAME
 #define U_LIB_SUFFIX_C_NAME_STRING ""
 
 /*===========================================================================*/
@@ -213,22 +212,21 @@ typedef unsigned int uint32_t;
 #define U_HAVE_WCHAR_H 1
 #define U_SIZEOF_WCHAR_T 2
 
-#define U_HAVE_WCSCPY    0
+#define U_HAVE_WCSCPY 0
 
 /*===========================================================================*/
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-
 /* TODO: Fix Palm OS's determination of a timezone */
 #if 0
-#define U_TZSET         _tzset
+#define U_TZSET _tzset
 #endif
 #if 0
-#define U_TIMEZONE      _timezone
+#define U_TIMEZONE _timezone
 #endif
 #if 0
-#define U_TZNAME        _tzname
+#define U_TZNAME _tzname
 #endif
 
 #define U_HAVE_MMAP 0
@@ -247,26 +245,25 @@ typedef unsigned int uint32_t;
 /*===========================================================================*/
 
 #ifndef U_INLINE
-#   ifdef __cplusplus
-#       define U_INLINE inline
-#   else
-#       define U_INLINE __inline
-#   endif
+#ifdef __cplusplus
+#define U_INLINE inline
+#else
+#define U_INLINE __inline
+#endif
 #endif
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define U_ALIGN_CODE(val)    __asm      align val
+#define U_ALIGN_CODE(val) __asm align val
 #else
 #define U_ALIGN_CODE(val)
 #endif
-
 
 /*===========================================================================*/
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
 #ifndef U_MAKE
-#define U_MAKE  "nmake"
+#define U_MAKE "nmake"
 #define U_MAKE_IS_NMAKE 1
 #endif
 

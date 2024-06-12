@@ -19,36 +19,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/paint/ThemePainter.h"
 
 #include "core/InputTypeNames.h"
+#include "core/frame/FrameView.h"
+#include "core/frame/UseCounter.h"
 #include "core/html/HTMLDataListElement.h"
 #include "core/html/HTMLDataListOptionsCollection.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLOptionElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/html/shadow/ShadowElementNames.h"
-#include "core/layout/LayoutMeter.h"
 #include "core/layout/LayoutTheme.h"
 #include "core/layout/LayoutView.h"
 #include "core/paint/MediaControlsPainter.h"
 #include "core/paint/PaintInfo.h"
 #include "core/style/ComputedStyle.h"
+#include "platform/Theme.h"
 #include "platform/graphics/GraphicsContextStateSaver.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebFallbackThemeEngine.h"
 #include "public/platform/WebRect.h"
 
-#if USE(NEW_THEME)
-#include "platform/Theme.h"
-#endif
-
 // The methods in this file are shared by all themes on every platform.
 
 namespace blink {
 
-static WebFallbackThemeEngine::State getWebFallbackThemeState(const LayoutObject* o)
+static WebFallbackThemeEngine::State getWebFallbackThemeState(
+    const LayoutObject& o)
 {
     if (!LayoutTheme::isEnabled(o))
         return WebFallbackThemeEngine::StateDisabled;
@@ -60,31 +58,36 @@ static WebFallbackThemeEngine::State getWebFallbackThemeState(const LayoutObject
     return WebFallbackThemeEngine::StateNormal;
 }
 
-bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntRect& r)
-{
-    ControlPart part = o->styleRef().appearance();
+ThemePainter::ThemePainter() { }
 
-    if (LayoutTheme::theme().shouldUseFallbackTheme(o->styleRef()))
+bool ThemePainter::paint(const LayoutObject& o,
+    const PaintInfo& paintInfo,
+    const IntRect& r)
+{
+    ControlPart part = o.styleRef().appearance();
+
+    if (LayoutTheme::theme().shouldUseFallbackTheme(o.styleRef()))
         return paintUsingFallbackTheme(o, paintInfo, r);
 
-#if USE(NEW_THEME)
-    switch (part) {
-    case CheckboxPart:
-    case RadioPart:
-    case PushButtonPart:
-    case SquareButtonPart:
-    case ButtonPart:
-    case InnerSpinButtonPart:
-        platformTheme()->paint(part, LayoutTheme::controlStatesForLayoutObject(o), const_cast<GraphicsContext*>(paintInfo.context), r, o->styleRef().effectiveZoom(), o->view()->frameView());
-        return false;
-    default:
-        break;
+    if (part == ButtonPart && o.node()) {
+        UseCounter::count(o.document(),
+            UseCounter::CSSValueAppearanceButtonRendered);
+        if (isHTMLAnchorElement(o.node())) {
+            UseCounter::count(o.document(),
+                UseCounter::CSSValueAppearanceButtonForAnchor);
+        } else if (isHTMLButtonElement(o.node())) {
+            UseCounter::count(o.document(),
+                UseCounter::CSSValueAppearanceButtonForButton);
+        } else if (isHTMLInputElement(o.node()) && toHTMLInputElement(o.node())->isTextButton()) {
+            // Text buttons (type=button, reset, submit) has
+            // -webkit-appearance:push-button by default.
+            UseCounter::count(o.node()->document(),
+                UseCounter::CSSValueAppearanceButtonForOtherButtons);
+        }
     }
-#endif
 
     // Call the appropriate paint method based off the appearance value.
     switch (part) {
-#if !USE(NEW_THEME)
     case CheckboxPart:
         return paintCheckbox(o, paintInfo, r);
     case RadioPart:
@@ -95,15 +98,10 @@ bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntR
         return paintButton(o, paintInfo, r);
     case InnerSpinButtonPart:
         return paintInnerSpinButton(o, paintInfo, r);
-#endif
     case MenulistPart:
         return paintMenuList(o, paintInfo, r);
     case MeterPart:
-    case RelevancyLevelIndicatorPart:
-    case ContinuousCapacityLevelIndicatorPart:
-    case DiscreteCapacityLevelIndicatorPart:
-    case RatingLevelIndicatorPart:
-        return paintMeter(o, paintInfo, r);
+        return true;
     case ProgressBarPart:
         return paintProgressBar(o, paintInfo, r);
     case SliderHorizontalPart:
@@ -122,7 +120,8 @@ bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntR
     case MediaMuteButtonPart:
         return MediaControlsPainter::paintMediaMuteButton(o, paintInfo, r);
     case MediaToggleClosedCaptionsButtonPart:
-        return MediaControlsPainter::paintMediaToggleClosedCaptionsButton(o, paintInfo, r);
+        return MediaControlsPainter::paintMediaToggleClosedCaptionsButton(
+            o, paintInfo, r);
     case MediaSliderPart:
         return MediaControlsPainter::paintMediaSlider(o, paintInfo, r);
     case MediaSliderThumbPart:
@@ -133,8 +132,8 @@ bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntR
         return MediaControlsPainter::paintMediaVolumeSlider(o, paintInfo, r);
     case MediaVolumeSliderThumbPart:
         return MediaControlsPainter::paintMediaVolumeSliderThumb(o, paintInfo, r);
-    case MediaFullScreenVolumeSliderPart:
-    case MediaFullScreenVolumeSliderThumbPart:
+    case MediaFullscreenVolumeSliderPart:
+    case MediaFullscreenVolumeSliderThumbPart:
     case MediaTimeRemainingPart:
     case MediaCurrentTimePart:
     case MediaControlsBackgroundPart:
@@ -142,6 +141,18 @@ bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntR
     case MediaCastOffButtonPart:
     case MediaOverlayCastOffButtonPart:
         return MediaControlsPainter::paintMediaCastButton(o, paintInfo, r);
+    case MediaTrackSelectionCheckmarkPart:
+        return MediaControlsPainter::paintMediaTrackSelectionCheckmark(
+            o, paintInfo, r);
+    case MediaClosedCaptionsIconPart:
+        return MediaControlsPainter::paintMediaClosedCaptionsIcon(o, paintInfo,
+            r);
+    case MediaSubtitlesIconPart:
+        return MediaControlsPainter::paintMediaSubtitlesIcon(o, paintInfo, r);
+    case MediaOverflowMenuButtonPart:
+        return MediaControlsPainter::paintMediaOverflowMenu(o, paintInfo, r);
+    case MediaDownloadIconPart:
+        return MediaControlsPainter::paintMediaDownloadIcon(o, paintInfo, r);
     case MenulistButtonPart:
     case TextFieldPart:
     case TextAreaPart:
@@ -150,22 +161,33 @@ bool ThemePainter::paint(LayoutObject* o, const PaintInfo& paintInfo, const IntR
         return paintSearchField(o, paintInfo, r);
     case SearchFieldCancelButtonPart:
         return paintSearchFieldCancelButton(o, paintInfo, r);
-    case SearchFieldDecorationPart:
-        return paintSearchFieldDecoration(o, paintInfo, r);
-    case SearchFieldResultsDecorationPart:
-        return paintSearchFieldResultsDecoration(o, paintInfo, r);
     default:
         break;
     }
 
-    return true; // We don't support the appearance, so let the normal background/border paint.
+    return true; // We don't support the appearance, so let the normal
+        // background/border paint.
 }
 
-bool ThemePainter::paintBorderOnly(LayoutObject* o, const PaintInfo& paintInfo, const IntRect& r)
+bool ThemePainter::paintBorderOnly(const LayoutObject& o,
+    const PaintInfo& paintInfo,
+    const IntRect& r)
 {
     // Call the appropriate paint method based off the appearance value.
-    switch (o->style()->appearance()) {
+    switch (o.styleRef().appearance()) {
     case TextFieldPart:
+        UseCounter::count(o.document(),
+            UseCounter::CSSValueAppearanceTextFieldRendered);
+        if (isHTMLInputElement(o.node())) {
+            HTMLInputElement* input = toHTMLInputElement(o.node());
+            if (input->type() == InputTypeNames::search)
+                UseCounter::count(o.document(),
+                    UseCounter::CSSValueAppearanceTextFieldForSearch);
+            else if (input->isTextField())
+                UseCounter::count(
+                    o.document(),
+                    UseCounter::CSSValueAppearanceTextFieldForTextField);
+        }
         return paintTextField(o, paintInfo, r);
     case TextAreaPart:
         return paintTextArea(o, paintInfo, r);
@@ -180,18 +202,12 @@ bool ThemePainter::paintBorderOnly(LayoutObject* o, const PaintInfo& paintInfo, 
     case ButtonPart:
     case MenulistPart:
     case MeterPart:
-    case RelevancyLevelIndicatorPart:
-    case ContinuousCapacityLevelIndicatorPart:
-    case DiscreteCapacityLevelIndicatorPart:
-    case RatingLevelIndicatorPart:
     case ProgressBarPart:
     case SliderHorizontalPart:
     case SliderVerticalPart:
     case SliderThumbHorizontalPart:
     case SliderThumbVerticalPart:
     case SearchFieldCancelButtonPart:
-    case SearchFieldDecorationPart:
-    case SearchFieldResultsDecorationPart:
     default:
         break;
     }
@@ -199,10 +215,12 @@ bool ThemePainter::paintBorderOnly(LayoutObject* o, const PaintInfo& paintInfo, 
     return false;
 }
 
-bool ThemePainter::paintDecorations(LayoutObject* o, const PaintInfo& paintInfo, const IntRect& r)
+bool ThemePainter::paintDecorations(const LayoutObject& o,
+    const PaintInfo& paintInfo,
+    const IntRect& r)
 {
     // Call the appropriate paint method based off the appearance value.
-    switch (o->style()->appearance()) {
+    switch (o.styleRef().appearance()) {
     case MenulistButtonPart:
         return paintMenuListButton(o, paintInfo, r);
     case TextFieldPart:
@@ -214,10 +232,6 @@ bool ThemePainter::paintDecorations(LayoutObject* o, const PaintInfo& paintInfo,
     case ButtonPart:
     case MenulistPart:
     case MeterPart:
-    case RelevancyLevelIndicatorPart:
-    case ContinuousCapacityLevelIndicatorPart:
-    case DiscreteCapacityLevelIndicatorPart:
-    case RatingLevelIndicatorPart:
     case ProgressBarPart:
     case SliderHorizontalPart:
     case SliderVerticalPart:
@@ -225,8 +239,6 @@ bool ThemePainter::paintDecorations(LayoutObject* o, const PaintInfo& paintInfo,
     case SliderThumbVerticalPart:
     case SearchFieldPart:
     case SearchFieldCancelButtonPart:
-    case SearchFieldDecorationPart:
-    case SearchFieldResultsDecorationPart:
     default:
         break;
     }
@@ -234,19 +246,16 @@ bool ThemePainter::paintDecorations(LayoutObject* o, const PaintInfo& paintInfo,
     return false;
 }
 
-bool ThemePainter::paintMeter(LayoutObject*, const PaintInfo&, const IntRect&)
+void ThemePainter::paintSliderTicks(const LayoutObject& o,
+    const PaintInfo& paintInfo,
+    const IntRect& rect)
 {
-    return true;
-}
-
-void ThemePainter::paintSliderTicks(LayoutObject* o, const PaintInfo& paintInfo, const IntRect& rect)
-{
-    Node* node = o->node();
+    Node* node = o.node();
     if (!isHTMLInputElement(node))
         return;
 
     HTMLInputElement* input = toHTMLInputElement(node);
-    if (input->type() != InputTypeNames::range)
+    if (input->type() != InputTypeNames::range || !input->userAgentShadowRoot()->hasChildren())
         return;
 
     HTMLDataListElement* dataList = input->dataList();
@@ -255,14 +264,16 @@ void ThemePainter::paintSliderTicks(LayoutObject* o, const PaintInfo& paintInfo,
 
     double min = input->minimum();
     double max = input->maximum();
-    ControlPart part = o->style()->appearance();
+    ControlPart part = o.styleRef().appearance();
     // We don't support ticks on alternate sliders like MediaVolumeSliders.
-    if (part !=  SliderHorizontalPart && part != SliderVerticalPart)
+    if (part != SliderHorizontalPart && part != SliderVerticalPart)
         return;
-    bool isHorizontal = part ==  SliderHorizontalPart;
+    bool isHorizontal = part == SliderHorizontalPart;
 
     IntSize thumbSize;
-    LayoutObject* thumbLayoutObject = input->userAgentShadowRoot()->getElementById(ShadowElementNames::sliderThumb())->layoutObject();
+    LayoutObject* thumbLayoutObject = input->userAgentShadowRoot()
+                                          ->getElementById(ShadowElementNames::sliderThumb())
+                                          ->layoutObject();
     if (thumbLayoutObject) {
         const ComputedStyle& thumbStyle = thumbLayoutObject->styleRef();
         int thumbWidth = thumbStyle.width().intValue();
@@ -272,16 +283,19 @@ void ThemePainter::paintSliderTicks(LayoutObject* o, const PaintInfo& paintInfo,
     }
 
     IntSize tickSize = LayoutTheme::theme().sliderTickSize();
-    float zoomFactor = o->style()->effectiveZoom();
+    float zoomFactor = o.styleRef().effectiveZoom();
     FloatRect tickRect;
     int tickRegionSideMargin = 0;
     int tickRegionWidth = 0;
     IntRect trackBounds;
-    LayoutObject* trackLayoutObject = input->userAgentShadowRoot()->getElementById(ShadowElementNames::sliderTrack())->layoutObject();
-    // We can ignoring transforms because transform is handled by the graphics context.
+    LayoutObject* trackLayoutObject = input->userAgentShadowRoot()
+                                          ->getElementById(ShadowElementNames::sliderTrack())
+                                          ->layoutObject();
+    // We can ignoring transforms because transform is handled by the graphics
+    // context.
     if (trackLayoutObject)
         trackBounds = trackLayoutObject->absoluteBoundingBoxRectIgnoringTransforms();
-    IntRect sliderBounds = o->absoluteBoundingBoxRectIgnoringTransforms();
+    IntRect sliderBounds = o.absoluteBoundingBoxRectIgnoringTransforms();
 
     // Make position relative to the transformed ancestor element.
     trackBounds.setX(trackBounds.x() - sliderBounds.x() + rect.x());
@@ -300,26 +314,31 @@ void ThemePainter::paintSliderTicks(LayoutObject* o, const PaintInfo& paintInfo,
         tickRegionSideMargin = trackBounds.y() + (thumbSize.width() - tickSize.width() * zoomFactor) / 2.0;
         tickRegionWidth = trackBounds.height() - thumbSize.width();
     }
-    RefPtrWillBeRawPtr<HTMLDataListOptionsCollection> options = dataList->options();
-    for (unsigned i = 0; HTMLOptionElement* optionElement = options->item(i); i++) {
+    HTMLDataListOptionsCollection* options = dataList->options();
+    for (unsigned i = 0; HTMLOptionElement* optionElement = options->item(i);
+         i++) {
         String value = optionElement->value();
         if (!input->isValidValue(value))
             continue;
         double parsedValue = parseToDoubleForNumberType(input->sanitizeValue(value));
         double tickFraction = (parsedValue - min) / (max - min);
-        double tickRatio = isHorizontal && o->style()->isLeftToRightDirection() ? tickFraction : 1.0 - tickFraction;
+        double tickRatio = isHorizontal && o.styleRef().isLeftToRightDirection()
+            ? tickFraction
+            : 1.0 - tickFraction;
         double tickPosition = round(tickRegionSideMargin + tickRegionWidth * tickRatio);
         if (isHorizontal)
             tickRect.setX(tickPosition);
         else
             tickRect.setY(tickPosition);
-        paintInfo.context->fillRect(tickRect, o->resolveColor(CSSPropertyColor));
+        paintInfo.context.fillRect(tickRect, o.resolveColor(CSSPropertyColor));
     }
 }
 
-bool ThemePainter::paintUsingFallbackTheme(LayoutObject* o, const PaintInfo& i, const IntRect& r)
+bool ThemePainter::paintUsingFallbackTheme(const LayoutObject& o,
+    const PaintInfo& i,
+    const IntRect& r)
 {
-    ControlPart part = o->style()->appearance();
+    ControlPart part = o.styleRef().appearance();
     switch (part) {
     case CheckboxPart:
         return paintCheckboxUsingFallbackTheme(o, i, r);
@@ -331,47 +350,55 @@ bool ThemePainter::paintUsingFallbackTheme(LayoutObject* o, const PaintInfo& i, 
     return true;
 }
 
-bool ThemePainter::paintCheckboxUsingFallbackTheme(LayoutObject* o, const PaintInfo& i, const IntRect& r)
+bool ThemePainter::paintCheckboxUsingFallbackTheme(const LayoutObject& o,
+    const PaintInfo& i,
+    const IntRect& r)
 {
     WebFallbackThemeEngine::ExtraParams extraParams;
-    WebCanvas* canvas = i.context->canvas();
+    WebCanvas* canvas = i.context.canvas();
     extraParams.button.checked = LayoutTheme::isChecked(o);
     extraParams.button.indeterminate = LayoutTheme::isIndeterminate(o);
 
-    float zoomLevel = o->style()->effectiveZoom();
-    GraphicsContextStateSaver stateSaver(*i.context);
+    float zoomLevel = o.styleRef().effectiveZoom();
+    GraphicsContextStateSaver stateSaver(i.context);
     IntRect unzoomedRect = r;
     if (zoomLevel != 1) {
         unzoomedRect.setWidth(unzoomedRect.width() / zoomLevel);
         unzoomedRect.setHeight(unzoomedRect.height() / zoomLevel);
-        i.context->translate(unzoomedRect.x(), unzoomedRect.y());
-        i.context->scale(zoomLevel, zoomLevel);
-        i.context->translate(-unzoomedRect.x(), -unzoomedRect.y());
+        i.context.translate(unzoomedRect.x(), unzoomedRect.y());
+        i.context.scale(zoomLevel, zoomLevel);
+        i.context.translate(-unzoomedRect.x(), -unzoomedRect.y());
     }
 
-    Platform::current()->fallbackThemeEngine()->paint(canvas, WebFallbackThemeEngine::PartCheckbox, getWebFallbackThemeState(o), WebRect(unzoomedRect), &extraParams);
+    Platform::current()->fallbackThemeEngine()->paint(
+        canvas, WebFallbackThemeEngine::PartCheckbox, getWebFallbackThemeState(o),
+        WebRect(unzoomedRect), &extraParams);
     return false;
 }
 
-bool ThemePainter::paintRadioUsingFallbackTheme(LayoutObject* o, const PaintInfo& i, const IntRect& r)
+bool ThemePainter::paintRadioUsingFallbackTheme(const LayoutObject& o,
+    const PaintInfo& i,
+    const IntRect& r)
 {
     WebFallbackThemeEngine::ExtraParams extraParams;
-    WebCanvas* canvas = i.context->canvas();
+    WebCanvas* canvas = i.context.canvas();
     extraParams.button.checked = LayoutTheme::isChecked(o);
     extraParams.button.indeterminate = LayoutTheme::isIndeterminate(o);
 
-    float zoomLevel = o->style()->effectiveZoom();
-    GraphicsContextStateSaver stateSaver(*i.context);
+    float zoomLevel = o.styleRef().effectiveZoom();
+    GraphicsContextStateSaver stateSaver(i.context);
     IntRect unzoomedRect = r;
     if (zoomLevel != 1) {
         unzoomedRect.setWidth(unzoomedRect.width() / zoomLevel);
         unzoomedRect.setHeight(unzoomedRect.height() / zoomLevel);
-        i.context->translate(unzoomedRect.x(), unzoomedRect.y());
-        i.context->scale(zoomLevel, zoomLevel);
-        i.context->translate(-unzoomedRect.x(), -unzoomedRect.y());
+        i.context.translate(unzoomedRect.x(), unzoomedRect.y());
+        i.context.scale(zoomLevel, zoomLevel);
+        i.context.translate(-unzoomedRect.x(), -unzoomedRect.y());
     }
 
-    Platform::current()->fallbackThemeEngine()->paint(canvas, WebFallbackThemeEngine::PartRadio, getWebFallbackThemeState(o), WebRect(unzoomedRect), &extraParams);
+    Platform::current()->fallbackThemeEngine()->paint(
+        canvas, WebFallbackThemeEngine::PartRadio, getWebFallbackThemeState(o),
+        WebRect(unzoomedRect), &extraParams);
     return false;
 }
 

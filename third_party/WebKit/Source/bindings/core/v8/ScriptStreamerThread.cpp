@@ -2,15 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "bindings/core/v8/ScriptStreamerThread.h"
 
 #include "bindings/core/v8/ScriptStreamer.h"
-#include "platform/Task.h"
-#include "platform/TraceEvent.h"
+#include "core/inspector/InspectorTraceEvents.h"
+#include "platform/WebTaskRunner.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
 #include "public/platform/Platform.h"
-#include "wtf/MainThread.h"
-#include "wtf/PassOwnPtr.h"
+#include "public/platform/WebTraceLocation.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -54,13 +55,14 @@ ScriptStreamerThread* ScriptStreamerThread::shared()
     return s_sharedThread;
 }
 
-void ScriptStreamerThread::postTask(WebThread::Task* task)
+void ScriptStreamerThread::postTask(std::unique_ptr<CrossThreadClosure> task)
 {
     ASSERT(isMainThread());
     MutexLocker locker(m_mutex);
     ASSERT(!m_runningTask);
     m_runningTask = true;
-    platformThread().postTask(FROM_HERE, task);
+    platformThread().getWebTaskRunner()->postTask(BLINK_FROM_HERE,
+        std::move(task));
 }
 
 void ScriptStreamerThread::taskDone()
@@ -72,14 +74,21 @@ void ScriptStreamerThread::taskDone()
 
 WebThread& ScriptStreamerThread::platformThread()
 {
-    if (!isRunning())
-        m_thread = adoptPtr(Platform::current()->createThread("ScriptStreamerThread"));
+    if (!isRunning()) {
+        m_thread = WTF::wrapUnique(
+            Platform::current()->createThread("ScriptStreamerThread"));
+    }
     return *m_thread;
 }
 
-void ScriptStreamerThread::runScriptStreamingTask(WTF::PassOwnPtr<v8::ScriptCompiler::ScriptStreamingTask> task, ScriptStreamer* streamer)
+void ScriptStreamerThread::runScriptStreamingTask(
+    std::unique_ptr<v8::ScriptCompiler::ScriptStreamingTask> task,
+    ScriptStreamer* streamer)
 {
-    TRACE_EVENT0("v8", "v8.parseOnBackground");
+    //   TRACE_EVENT1(
+    //       "v8,devtools.timeline", "v8.parseOnBackground", "data",
+    //       InspectorParseScriptEvent::data(streamer->scriptResourceIdentifier(),
+    //                                       streamer->scriptURLString()));
     // Running the task can and will block: SourceStream::GetSomeData will get
     // called and it will block and wait for data from the network.
     task->Run();

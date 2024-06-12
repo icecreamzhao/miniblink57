@@ -7,30 +7,32 @@
  *
  */
 
-#include "Global.h"
 #include "Path2DBuilder.h"
+#include "Global.h"
 #include "Path2D.h"
 #include "SkPath.h"
 
 Global* Path2DBuilder::gGlobal = NULL;
 
-void Path2DBuilder::ConstructPath(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::ConstructPath(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     v8::HandleScope handleScope(gGlobal->getIsolate());
     Path2DBuilder* path = new Path2DBuilder();
     args.This()->SetInternalField(
-            0, v8::External::New(gGlobal->getIsolate(), path));
+        0, v8::External::New(gGlobal->getIsolate(), path));
 }
 
-#define ADD_METHOD(name, fn) \
-    constructor->InstanceTemplate()->Set( \
-            v8::String::NewFromUtf8( \
-                    global->getIsolate(), name, \
-                    v8::String::kInternalizedString), \
-            v8::FunctionTemplate::New(global->getIsolate(), fn))
+#define ADD_METHOD(name, fn)                  \
+    constructor->InstanceTemplate()->Set(     \
+        v8::String::NewFromUtf8(              \
+            global->getIsolate(), name,       \
+            v8::String::kInternalizedString), \
+        v8::FunctionTemplate::New(global->getIsolate(), fn))
 
 // Install the constructor in the global scope so Path2DBuilders can be constructed
 // in JS.
-void Path2DBuilder::AddToGlobal(Global* global) {
+void Path2DBuilder::AddToGlobal(Global* global)
+{
     gGlobal = global;
 
     // Create a stack-allocated handle scope.
@@ -42,7 +44,7 @@ void Path2DBuilder::AddToGlobal(Global* global) {
     v8::Context::Scope contextScope(context);
 
     v8::Local<v8::FunctionTemplate> constructor = v8::FunctionTemplate::New(
-            gGlobal->getIsolate(), Path2DBuilder::ConstructPath);
+        gGlobal->getIsolate(), Path2DBuilder::ConstructPath);
     constructor->InstanceTemplate()->SetInternalFieldCount(1);
 
     ADD_METHOD("close", ClosePath);
@@ -58,26 +60,30 @@ void Path2DBuilder::AddToGlobal(Global* global) {
     ADD_METHOD("finalize", Finalize);
 
     context->Global()->Set(v8::String::NewFromUtf8(
-            gGlobal->getIsolate(), "Path2DBuilder"), constructor->GetFunction());
+                               gGlobal->getIsolate(), "Path2DBuilder"),
+        constructor->GetFunction());
 }
 
-Path2DBuilder* Path2DBuilder::Unwrap(const v8::FunctionCallbackInfo<v8::Value>& args) {
+Path2DBuilder* Path2DBuilder::Unwrap(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     v8::Handle<v8::External> field = v8::Handle<v8::External>::Cast(
-            args.This()->GetInternalField(0));
+        args.This()->GetInternalField(0));
     void* ptr = field->Value();
     return static_cast<Path2DBuilder*>(ptr);
 }
 
-void Path2DBuilder::ClosePath(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::ClosePath(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     Path2DBuilder* path = Unwrap(args);
     path->fSkPath.close();
 }
 
-void Path2DBuilder::MoveTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::MoveTo(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 2) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 2 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 2 arguments required."));
         return;
     }
     double x = args[0]->NumberValue();
@@ -86,11 +92,12 @@ void Path2DBuilder::MoveTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
     path->fSkPath.moveTo(SkDoubleToScalar(x), SkDoubleToScalar(y));
 }
 
-void Path2DBuilder::LineTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::LineTo(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 2) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 2 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 2 arguments required."));
         return;
     }
     double x = args[0]->NumberValue();
@@ -99,11 +106,12 @@ void Path2DBuilder::LineTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
     path->fSkPath.lineTo(SkDoubleToScalar(x), SkDoubleToScalar(y));
 }
 
-void Path2DBuilder::QuadraticCurveTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::QuadraticCurveTo(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 4) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 4 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 4 arguments required."));
         return;
     }
     double cpx = args[0]->NumberValue();
@@ -114,15 +122,16 @@ void Path2DBuilder::QuadraticCurveTo(const v8::FunctionCallbackInfo<v8::Value>& 
     // TODO(jcgregorio) Doesn't handle the empty last path case correctly per
     // the HTML 5 spec.
     path->fSkPath.quadTo(
-            SkDoubleToScalar(cpx), SkDoubleToScalar(cpy),
-            SkDoubleToScalar(x), SkDoubleToScalar(y));
+        SkDoubleToScalar(cpx), SkDoubleToScalar(cpy),
+        SkDoubleToScalar(x), SkDoubleToScalar(y));
 }
 
-void Path2DBuilder::BezierCurveTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::BezierCurveTo(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 6) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 6 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 6 arguments required."));
         return;
     }
     double cp1x = args[0]->NumberValue();
@@ -135,52 +144,54 @@ void Path2DBuilder::BezierCurveTo(const v8::FunctionCallbackInfo<v8::Value>& arg
     // TODO(jcgregorio) Doesn't handle the empty last path case correctly per
     // the HTML 5 spec.
     path->fSkPath.cubicTo(
-            SkDoubleToScalar(cp1x), SkDoubleToScalar(cp1y),
-            SkDoubleToScalar(cp2x), SkDoubleToScalar(cp2y),
-            SkDoubleToScalar(x), SkDoubleToScalar(y));
+        SkDoubleToScalar(cp1x), SkDoubleToScalar(cp1y),
+        SkDoubleToScalar(cp2x), SkDoubleToScalar(cp2y),
+        SkDoubleToScalar(x), SkDoubleToScalar(y));
 }
 
-void Path2DBuilder::Arc(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::Arc(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 5 && args.Length() != 6) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 5 or 6 args required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 5 or 6 args required."));
         return;
     }
-    double x          = args[0]->NumberValue();
-    double y          = args[1]->NumberValue();
-    double radius     = args[2]->NumberValue();
+    double x = args[0]->NumberValue();
+    double y = args[1]->NumberValue();
+    double radius = args[2]->NumberValue();
     double startAngle = args[3]->NumberValue();
-    double endAngle   = args[4]->NumberValue();
+    double endAngle = args[4]->NumberValue();
     bool antiClockwise = false;
     if (args.Length() == 6) {
-       antiClockwise = args[5]->BooleanValue();
+        antiClockwise = args[5]->BooleanValue();
     }
     double sweepAngle;
     if (!antiClockwise) {
-      sweepAngle = endAngle - startAngle;
+        sweepAngle = endAngle - startAngle;
     } else {
-      sweepAngle = startAngle - endAngle;
-      startAngle = endAngle;
+        sweepAngle = startAngle - endAngle;
+        startAngle = endAngle;
     }
 
     Path2DBuilder* path = Unwrap(args);
     SkRect rect = {
-        SkDoubleToScalar(x-radius),
-        SkDoubleToScalar(y-radius),
-        SkDoubleToScalar(x+radius),
-        SkDoubleToScalar(y+radius)
+        SkDoubleToScalar(x - radius),
+        SkDoubleToScalar(y - radius),
+        SkDoubleToScalar(x + radius),
+        SkDoubleToScalar(y + radius)
     };
 
     path->fSkPath.addArc(rect, SkRadiansToDegrees(startAngle),
-                         SkRadiansToDegrees(sweepAngle));
+        SkRadiansToDegrees(sweepAngle));
 }
 
-void Path2DBuilder::Rect(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::Rect(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 4) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 4 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 4 arguments required."));
         return;
     }
     double x = args[0]->NumberValue();
@@ -198,56 +209,58 @@ void Path2DBuilder::Rect(const v8::FunctionCallbackInfo<v8::Value>& args) {
     path->fSkPath.addRect(rect);
 }
 
-void Path2DBuilder::Oval(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::Oval(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 4 && args.Length() != 5) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 4 or 5 args required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 4 or 5 args required."));
         return;
     }
-    double x          = args[0]->NumberValue();
-    double y          = args[1]->NumberValue();
-    double radiusX    = args[2]->NumberValue();
-    double radiusY    = args[3]->NumberValue();
+    double x = args[0]->NumberValue();
+    double y = args[1]->NumberValue();
+    double radiusX = args[2]->NumberValue();
+    double radiusY = args[3]->NumberValue();
     SkPath::Direction dir = SkPath::kCW_Direction;
     if (args.Length() == 5 && !args[4]->BooleanValue()) {
         dir = SkPath::kCCW_Direction;
     }
     Path2DBuilder* path = Unwrap(args);
     SkRect rect = {
-        SkDoubleToScalar(x-radiusX),
-        SkDoubleToScalar(y-radiusX),
-        SkDoubleToScalar(x+radiusY),
-        SkDoubleToScalar(y+radiusY)
+        SkDoubleToScalar(x - radiusX),
+        SkDoubleToScalar(y - radiusX),
+        SkDoubleToScalar(x + radiusY),
+        SkDoubleToScalar(y + radiusY)
     };
 
     path->fSkPath.addOval(rect, dir);
 }
 
-void Path2DBuilder::ConicTo(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::ConicTo(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 5) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 5 args required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 5 args required."));
         return;
     }
     double x1 = args[0]->NumberValue();
     double y1 = args[1]->NumberValue();
     double x2 = args[2]->NumberValue();
     double y2 = args[3]->NumberValue();
-    double w  = args[4]->NumberValue();
+    double w = args[4]->NumberValue();
     Path2DBuilder* path = Unwrap(args);
 
     path->fSkPath.conicTo(
-            SkDoubleToScalar(x1),
-            SkDoubleToScalar(y1),
-            SkDoubleToScalar(x2),
-            SkDoubleToScalar(y2),
-            SkDoubleToScalar(w)
-            );
+        SkDoubleToScalar(x1),
+        SkDoubleToScalar(y1),
+        SkDoubleToScalar(x2),
+        SkDoubleToScalar(y2),
+        SkDoubleToScalar(w));
 }
 
-void Path2DBuilder::Finalize(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Path2DBuilder::Finalize(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     Path2DBuilder* path = Unwrap(args);
 
     // Build Path2D from out fSkPath and return it.

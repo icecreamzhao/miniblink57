@@ -26,14 +26,14 @@ OFStreamBase::~OFStreamBase() {}
 
 int OFStreamBase::sync() {
   //std::fflush(f_);
-  DebugBreak();
+  base::OS::DebugBreak();
   return 0;
 }
 
 
 OFStreamBase::int_type OFStreamBase::overflow(int_type c) {
   //return (c != EOF) ? std::fputc(c, f_) : c;
-  DebugBreak();
+  base::OS::DebugBreak();
   return c;
 }
 
@@ -41,7 +41,7 @@ OFStreamBase::int_type OFStreamBase::overflow(int_type c) {
 std::streamsize OFStreamBase::xsputn(const char* s, std::streamsize n) {
 //   return static_cast<std::streamsize>(
 //       std::fwrite(s, 1, static_cast<size_t>(n), f_));
-  DebugBreak();
+  base::OS::DebugBreak();
   return n;
 }
 

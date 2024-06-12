@@ -28,11 +28,10 @@
 #ifndef BASE_JSON_JSON_READER_H_
 #define BASE_JSON_JSON_READER_H_
 
-#include <string>
 #include <memory>
+#include <string>
 
 #include "base/base_export.h"
-#include "base/basictypes.h"
 #include "base/strings/string_piece.h"
 
 namespace base {
@@ -40,95 +39,103 @@ namespace base {
 class Value;
 
 namespace internal {
-class JSONParser;
+    class JSONParser;
 }
 
 enum JSONParserOptions {
-  // Parses the input strictly according to RFC 4627, except for where noted
-  // above.
-  JSON_PARSE_RFC = 0,
+    // Parses the input strictly according to RFC 4627, except for where noted
+    // above.
+    JSON_PARSE_RFC = 0,
 
-  // Allows commas to exist after the last element in structures.
-  JSON_ALLOW_TRAILING_COMMAS = 1 << 0,
+    // Allows commas to exist after the last element in structures.
+    JSON_ALLOW_TRAILING_COMMAS = 1 << 0,
 
-  // The parser can perform optimizations by placing hidden data in the root of
-  // the JSON object, which speeds up certain operations on children. However,
-  // if the child is Remove()d from root, it would result in use-after-free
-  // unless it is DeepCopy()ed or this option is used.
-  JSON_DETACHABLE_CHILDREN = 1 << 1,
+    // The parser can perform optimizations by placing hidden data in the root of
+    // the JSON object, which speeds up certain operations on children. However,
+    // if the child is Remove()d from root, it would result in use-after-free
+    // unless it is DeepCopy()ed or this option is used.
+    JSON_DETACHABLE_CHILDREN = 1 << 1,
+
+    // If set the parser replaces invalid characters with the Unicode replacement
+    // character (U+FFFD). If not set, invalid characters trigger a hard error and
+    // parsing fails.
+    JSON_REPLACE_INVALID_CHARACTERS = 1 << 2,
 };
 
 class BASE_EXPORT JSONReader {
- public:
-  // Error codes during parsing.
-  enum JsonParseError {
-    JSON_NO_ERROR = 0,
-    JSON_INVALID_ESCAPE,
-    JSON_SYNTAX_ERROR,
-    JSON_UNEXPECTED_TOKEN,
-    JSON_TRAILING_COMMA,
-    JSON_TOO_MUCH_NESTING,
-    JSON_UNEXPECTED_DATA_AFTER_ROOT,
-    JSON_UNSUPPORTED_ENCODING,
-    JSON_UNQUOTED_DICTIONARY_KEY,
-    JSON_PARSE_ERROR_COUNT
-  };
+public:
+    // Error codes during parsing.
+    enum JsonParseError {
+        JSON_NO_ERROR = 0,
+        JSON_INVALID_ESCAPE,
+        JSON_SYNTAX_ERROR,
+        JSON_UNEXPECTED_TOKEN,
+        JSON_TRAILING_COMMA,
+        JSON_TOO_MUCH_NESTING,
+        JSON_UNEXPECTED_DATA_AFTER_ROOT,
+        JSON_UNSUPPORTED_ENCODING,
+        JSON_UNQUOTED_DICTIONARY_KEY,
+        JSON_PARSE_ERROR_COUNT
+    };
 
-  // String versions of parse error codes.
-  static const char kInvalidEscape[];
-  static const char kSyntaxError[];
-  static const char kUnexpectedToken[];
-  static const char kTrailingComma[];
-  static const char kTooMuchNesting[];
-  static const char kUnexpectedDataAfterRoot[];
-  static const char kUnsupportedEncoding[];
-  static const char kUnquotedDictionaryKey[];
+    // String versions of parse error codes.
+    static const char kInvalidEscape[];
+    static const char kSyntaxError[];
+    static const char kUnexpectedToken[];
+    static const char kTrailingComma[];
+    static const char kTooMuchNesting[];
+    static const char kUnexpectedDataAfterRoot[];
+    static const char kUnsupportedEncoding[];
+    static const char kUnquotedDictionaryKey[];
 
-  // Constructs a reader with the default options, JSON_PARSE_RFC.
-  JSONReader();
+    // Constructs a reader with the default options, JSON_PARSE_RFC.
+    JSONReader();
 
-  // Constructs a reader with custom options.
-  explicit JSONReader(int options);
+    // Constructs a reader with custom options.
+    explicit JSONReader(int options);
 
-  ~JSONReader();
+    ~JSONReader();
 
-  // Reads and parses |json|, returning a Value. The caller owns the returned
-  // instance. If |json| is not a properly formed JSON string, returns NULL.
-  static std::unique_ptr<Value> Read(const StringPiece& json);
+    // Reads and parses |json|, returning a Value.
+    // If |json| is not a properly formed JSON string, returns nullptr.
+    // Wrap this in base::FooValue::From() to check the Value is of type Foo and
+    // convert to a FooValue at the same time.
+    static std::unique_ptr<Value> Read(StringPiece json);
 
-  // Reads and parses |json|, returning a Value owned by the caller. The
-  // parser respects the given |options|. If the input is not properly formed,
-  // returns NULL.
-  static std::unique_ptr<Value> Read(const StringPiece& json, int options);
+    // Same as Read() above, but the parser respects the given |options|.
+    static std::unique_ptr<Value> Read(StringPiece json, int options);
 
-  // Reads and parses |json| like Read(). |error_code_out| and |error_msg_out|
-  // are optional. If specified and NULL is returned, they will be populated
-  // an error code and a formatted error message (including error location if
-  // appropriate). Otherwise, they will be unmodified.
-  static std::unique_ptr<Value> ReadAndReturnError(const StringPiece& json,
-                                              int options,  // JSONParserOptions
-                                              int* error_code_out,
-                                              std::string* error_msg_out);
+    // Reads and parses |json| like Read(). |error_code_out| and |error_msg_out|
+    // are optional. If specified and nullptr is returned, they will be populated
+    // an error code and a formatted error message (including error location if
+    // appropriate). Otherwise, they will be unmodified.
+    static std::unique_ptr<Value> ReadAndReturnError(
+        const StringPiece& json,
+        int options, // JSONParserOptions
+        int* error_code_out,
+        std::string* error_msg_out,
+        int* error_line_out = nullptr,
+        int* error_column_out = nullptr);
 
-  // Converts a JSON parse error code into a human readable message.
-  // Returns an empty string if error_code is JSON_NO_ERROR.
-  static std::string ErrorCodeToString(JsonParseError error_code);
+    // Converts a JSON parse error code into a human readable message.
+    // Returns an empty string if error_code is JSON_NO_ERROR.
+    static std::string ErrorCodeToString(JsonParseError error_code);
 
-  // Parses an input string into a Value that is owned by the caller.
-  std::unique_ptr<Value> ReadToValue(const std::string& json);
+    // Non-static version of Read() above.
+    std::unique_ptr<Value> ReadToValue(StringPiece json);
 
-  // Returns the error code if the last call to ReadToValue() failed.
-  // Returns JSON_NO_ERROR otherwise.
-  JsonParseError error_code() const;
+    // Returns the error code if the last call to ReadToValue() failed.
+    // Returns JSON_NO_ERROR otherwise.
+    JsonParseError error_code() const;
 
-  // Converts error_code_ to a human-readable string, including line and column
-  // numbers if appropriate.
-  std::string GetErrorMessage() const;
+    // Converts error_code_ to a human-readable string, including line and column
+    // numbers if appropriate.
+    std::string GetErrorMessage() const;
 
- private:
-     std::unique_ptr<internal::JSONParser> parser_;
+private:
+    std::unique_ptr<internal::JSONParser> parser_;
 };
 
-}  // namespace base
+} // namespace base
 
-#endif  // BASE_JSON_JSON_READER_H_
+#endif // BASE_JSON_JSON_READER_H_

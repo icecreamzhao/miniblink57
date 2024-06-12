@@ -34,8 +34,9 @@
 #include "platform/graphics/Gradient.h"
 #include "platform/graphics/GraphicsTypes.h"
 #include "platform/graphics/Pattern.h"
-#include "third_party/skia/include/core/SkColorPriv.h"
-#include "third_party/skia/include/effects/SkDashPathEffect.h"
+#include "third_party/skia/include/core/SkPaint.h"
+#include "third_party/skia/include/core/SkPathEffect.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
@@ -43,7 +44,9 @@ namespace blink {
 
 // Encapsulates stroke geometry information.
 // It is pulled out of GraphicsContextState to enable other methods to use it.
-class PLATFORM_EXPORT StrokeData {
+class PLATFORM_EXPORT StrokeData final {
+    DISALLOW_NEW();
+
 public:
     StrokeData()
         : m_style(SolidStroke)
@@ -60,10 +63,8 @@ public:
     float thickness() const { return m_thickness; }
     void setThickness(float thickness) { m_thickness = thickness; }
 
-    LineCap lineCap() const { return (LineCap)m_lineCap; }
     void setLineCap(LineCap cap) { m_lineCap = (SkPaint::Cap)cap; }
 
-    LineJoin lineJoin() const { return (LineJoin)m_lineJoin; }
     void setLineJoin(LineJoin join) { m_lineJoin = (SkPaint::Join)join; }
 
     float miterLimit() const { return m_miterLimit; }
@@ -88,7 +89,7 @@ private:
     SkPaint::Cap m_lineCap;
     SkPaint::Join m_lineJoin;
     float m_miterLimit;
-    RefPtr<SkDashPathEffect> m_dash;
+    sk_sp<SkPathEffect> m_dash;
 };
 
 } // namespace blink

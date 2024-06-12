@@ -39,24 +39,23 @@ namespace blink {
 
 class WebViewImpl;
 
-class SpellCheckerClientImpl final : public SpellCheckerClient, public TextCheckerClient {
+class SpellCheckerClientImpl final : public SpellCheckerClient,
+                                     public TextCheckerClient {
 public:
     explicit SpellCheckerClientImpl(WebViewImpl*);
 
     ~SpellCheckerClientImpl() override;
 
-    bool isContinuousSpellCheckingEnabled() override;
-    void toggleContinuousSpellChecking() override;
-    bool isGrammarCheckingEnabled() override;
-    bool shouldEraseMarkersAfterChangeSelection(TextCheckingType) const override;
-    void checkSpellingOfString(const String&, int* misspellingLocation, int* misspellingLength) override;
-    void checkGrammarOfString(const String&, Vector<GrammarDetail>&,
-        int* badGrammarLocation, int* badGrammarLength) override;
-    String getAutoCorrectSuggestionForMisspelledWord(const String&) override;
+    bool isSpellCheckingEnabled() override;
+    void toggleSpellCheckingEnabled() override;
+    void checkSpellingOfString(const String&,
+        int* misspellingLocation,
+        int* misspellingLength) override;
     void updateSpellingUIWithMisspelledWord(const String&) override;
     void showSpellingUI(bool show) override;
     bool spellingUIIsShowing() override;
-    void requestCheckingOfString(PassRefPtrWillBeRawPtr<TextCheckingRequest>) override;
+    void requestCheckingOfString(TextCheckingRequest*) override;
+    void cancelAllPendingRequests() override;
 
     TextCheckerClient& textChecker() override { return *this; }
 

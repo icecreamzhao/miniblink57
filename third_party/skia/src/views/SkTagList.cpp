@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkTagList.h"
 
@@ -17,8 +15,7 @@ SkTagList* SkTagList::Find(SkTagList* rec, U8CPU tag)
 {
     SkASSERT(tag < kSkTagListCount);
 
-    while (rec != NULL)
-    {
+    while (rec != nullptr) {
         if (rec->fTag == tag)
             break;
         rec = rec->fNext;
@@ -31,14 +28,12 @@ void SkTagList::DeleteTag(SkTagList** head, U8CPU tag)
     SkASSERT(tag < kSkTagListCount);
 
     SkTagList* rec = *head;
-    SkTagList* prev = NULL;
+    SkTagList* prev = nullptr;
 
-    while (rec != NULL)
-    {
+    while (rec != nullptr) {
         SkTagList* next = rec->fNext;
 
-        if (rec->fTag == tag)
-        {
+        if (rec->fTag == tag) {
             if (prev)
                 prev->fNext = next;
             else
@@ -53,8 +48,7 @@ void SkTagList::DeleteTag(SkTagList** head, U8CPU tag)
 
 void SkTagList::DeleteAll(SkTagList* rec)
 {
-    while (rec)
-    {
+    while (rec) {
         SkTagList* next = rec->fNext;
         delete rec;
         rec = next;

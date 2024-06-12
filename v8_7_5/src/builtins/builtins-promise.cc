@@ -7,18 +7,19 @@
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/builtins/builtins.h"
 #include "src/counters.h"
-#include "src/heap/heap-inl.h"  // For ToBoolean. TODO(jkummerow): Drop.
+#include "src/heap/heap-inl.h" // For ToBoolean. TODO(jkummerow): Drop.
 #include "src/objects-inl.h"
 
 namespace v8 {
 namespace internal {
 
-BUILTIN(IsPromise) {
-  SealHandleScope scope(isolate);
+    BUILTIN(IsPromise)
+    {
+        SealHandleScope scope(isolate);
 
-  Handle<Object> object = args.atOrUndefined(isolate, 1);
-  return isolate->heap()->ToBoolean(object->IsJSPromise());
-}
+        Handle<Object> object = args.atOrUndefined(isolate, 1);
+        return isolate->heap()->ToBoolean(object->IsJSPromise());
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

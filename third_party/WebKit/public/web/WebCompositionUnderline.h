@@ -43,18 +43,27 @@ struct WebCompositionUnderline {
         , endOffset(0)
         , color(0)
         , thick(false)
-        , backgroundColor(0) { }
+        , backgroundColor(0)
+    {
+    }
 
-    WebCompositionUnderline(unsigned s, unsigned e, WebColor c, bool t, WebColor bc)
+    WebCompositionUnderline(unsigned s,
+        unsigned e,
+        WebColor c,
+        bool t,
+        WebColor bc)
         : startOffset(s)
         , endOffset(e)
         , color(c)
         , thick(t)
-        , backgroundColor(bc) { }
+        , backgroundColor(bc)
+    {
+    }
 
     bool operator<(const WebCompositionUnderline& other) const
     {
-        return startOffset != other.startOffset ? startOffset < other.startOffset : endOffset < other.endOffset;
+        return startOffset != other.startOffset ? startOffset < other.startOffset
+                                                : endOffset < other.endOffset;
     }
 
     // Need to update IPC_STRUCT_TRAITS_BEGIN(blink::WebCompositionUnderline)

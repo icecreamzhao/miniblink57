@@ -23,17 +23,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
 
 namespace blink {
 
-PlatformSpeechSynthesisUtterance* PlatformSpeechSynthesisUtterance::create(PlatformSpeechSynthesisUtteranceClient* client)
+PlatformSpeechSynthesisUtterance* PlatformSpeechSynthesisUtterance::create(
+    PlatformSpeechSynthesisUtteranceClient* client)
 {
     return new PlatformSpeechSynthesisUtterance(client);
 }
 
-PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(PlatformSpeechSynthesisUtteranceClient* client)
+PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(
+    PlatformSpeechSynthesisUtteranceClient* client)
     : m_client(client)
     , m_volume(1.0f)
     , m_rate(1.0f)
@@ -44,7 +45,6 @@ PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(PlatformSpeec
 DEFINE_TRACE(PlatformSpeechSynthesisUtterance)
 {
     visitor->trace(m_client);
-    visitor->trace(m_voice);
 }
 
 } // namespace blink

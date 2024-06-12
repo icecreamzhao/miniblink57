@@ -19,26 +19,24 @@
  *
  */
 
-#include "config.h"
 #include "core/style/CounterDirectives.h"
 
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 bool operator==(const CounterDirectives& a, const CounterDirectives& b)
 {
-    return a.isIncrement() == b.isIncrement()
-        && a.incrementValue() == b.incrementValue()
-        && a.isReset() == b.isReset()
-        && a.resetValue() == b.resetValue();
+    return a.isIncrement() == b.isIncrement() && a.incrementValue() == b.incrementValue() && a.isReset() == b.isReset() && a.resetValue() == b.resetValue();
 }
 
-PassOwnPtr<CounterDirectiveMap> clone(const CounterDirectiveMap& counterDirectives)
+std::unique_ptr<CounterDirectiveMap> clone(
+    const CounterDirectiveMap& counterDirectives)
 {
-    OwnPtr<CounterDirectiveMap> result = adoptPtr(new CounterDirectiveMap);
+    std::unique_ptr<CounterDirectiveMap> result = WTF::wrapUnique(new CounterDirectiveMap);
     *result = counterDirectives;
-    return result.release();
+    return result;
 }
 
 } // namespace blink

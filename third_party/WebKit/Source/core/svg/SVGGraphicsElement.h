@@ -25,60 +25,73 @@
 #include "core/CoreExport.h"
 #include "core/svg/SVGAnimatedTransformList.h"
 #include "core/svg/SVGElement.h"
-#include "core/svg/SVGRectTearOff.h"
 #include "core/svg/SVGTests.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class AffineTransform;
-class Path;
 class SVGMatrixTearOff;
+class SVGRectTearOff;
 
 class CORE_EXPORT SVGGraphicsElement : public SVGElement, public SVGTests {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGGraphicsElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGGraphicsElement);
+
 public:
     ~SVGGraphicsElement() override;
 
-    enum StyleUpdateStrategy { AllowStyleUpdate, DisallowStyleUpdate };
+    enum StyleUpdateStrategy { AllowStyleUpdate,
+        DisallowStyleUpdate };
 
     AffineTransform getCTM(StyleUpdateStrategy = AllowStyleUpdate);
     AffineTransform getScreenCTM(StyleUpdateStrategy = AllowStyleUpdate);
-    PassRefPtrWillBeRawPtr<SVGMatrixTearOff> getCTMFromJavascript();
-    PassRefPtrWillBeRawPtr<SVGMatrixTearOff> getScreenCTMFromJavascript();
-
-    PassRefPtrWillBeRawPtr<SVGMatrixTearOff> getTransformToElement(SVGElement*, ExceptionState&);
+    SVGMatrixTearOff* getCTMFromJavascript();
+    SVGMatrixTearOff* getScreenCTMFromJavascript();
 
     SVGElement* nearestViewportElement() const;
     SVGElement* farthestViewportElement() const;
 
-    AffineTransform localCoordinateSpaceTransform(SVGElement::CTMScope) const override { return calculateAnimatedLocalTransform(); }
-    bool hasAnimatedLocalTransform() const;
-    AffineTransform calculateAnimatedLocalTransform() const;
+    AffineTransform localCoordinateSpaceTransform(
+        SVGElement::CTMScope) const override
+    {
+        return calculateTransform(IncludeMotionTransform);
+    }
     AffineTransform* animateMotionTransform() override;
 
     virtual FloatRect getBBox();
-    PassRefPtrWillBeRawPtr<SVGRectTearOff> getBBoxFromJavascript();
+    SVGRectTearOff* getBBoxFromJavascript();
 
-    bool isValid() const final { return SVGTests::isValid(document()); }
+    bool isValid() const final { return SVGTests::isValid(); }
 
     SVGAnimatedTransformList* transform() { return m_transform.get(); }
-    const SVGAnimatedTransformList* transform() const { return m_transform.get(); }
+    const SVGAnimatedTransformList* transform() const
+    {
+        return m_transform.get();
+    }
 
-    AffineTransform computeCTM(SVGElement::CTMScope mode, SVGGraphicsElement::StyleUpdateStrategy,
+    AffineTransform computeCTM(SVGElement::CTMScope mode,
+        SVGGraphicsElement::StyleUpdateStrategy,
         const SVGGraphicsElement* ancestor = 0) const;
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    SVGGraphicsElement(const QualifiedName&, Document&, ConstructionType = CreateSVGElement);
+    SVGGraphicsElement(const QualifiedName&,
+        Document&,
+        ConstructionType = CreateSVGElement);
 
-    bool supportsFocus() const override { return Element::supportsFocus() || hasFocusEventListeners(); }
+    bool supportsFocus() const override
+    {
+        return Element::supportsFocus() || hasFocusEventListeners();
+    }
 
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
     void svgAttributeChanged(const QualifiedName&) override;
 
-    RefPtrWillBeMember<SVGAnimatedTransformList> m_transform;
+    Member<SVGAnimatedTransformList> m_transform;
 
 private:
     bool isSVGGraphicsElement() const final { return true; }

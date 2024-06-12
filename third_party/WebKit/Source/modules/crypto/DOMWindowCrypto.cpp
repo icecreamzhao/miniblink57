@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/crypto/DOMWindowCrypto.h"
 
 #include "core/frame/LocalDOMWindow.h"
@@ -37,11 +36,9 @@
 namespace blink {
 
 DOMWindowCrypto::DOMWindowCrypto(LocalDOMWindow& window)
-    : DOMWindowProperty(window.frame())
+    : Supplement<LocalDOMWindow>(window)
 {
 }
-
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowCrypto);
 
 const char* DOMWindowCrypto::supplementName()
 {
@@ -50,10 +47,11 @@ const char* DOMWindowCrypto::supplementName()
 
 DOMWindowCrypto& DOMWindowCrypto::from(LocalDOMWindow& window)
 {
-    DOMWindowCrypto* supplement = static_cast<DOMWindowCrypto*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    DOMWindowCrypto* supplement = static_cast<DOMWindowCrypto*>(
+        Supplement<LocalDOMWindow>::from(window, supplementName()));
     if (!supplement) {
         supplement = new DOMWindowCrypto(window);
-        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+        provideTo(window, supplementName(), supplement);
     }
     return *supplement;
 }
@@ -65,7 +63,7 @@ Crypto* DOMWindowCrypto::crypto(DOMWindow& window)
 
 Crypto* DOMWindowCrypto::crypto() const
 {
-    if (!m_crypto && frame())
+    if (!m_crypto)
         m_crypto = Crypto::create();
     return m_crypto.get();
 }
@@ -73,8 +71,7 @@ Crypto* DOMWindowCrypto::crypto() const
 DEFINE_TRACE(DOMWindowCrypto)
 {
     visitor->trace(m_crypto);
-    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<LocalDOMWindow>::trace(visitor);
 }
 
 } // namespace blink

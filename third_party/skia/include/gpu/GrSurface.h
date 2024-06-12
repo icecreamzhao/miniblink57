@@ -5,12 +5,11 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrSurface_DEFINED
 #define GrSurface_DEFINED
 
-#include "GrTypes.h"
 #include "GrGpuResource.h"
+#include "GrTypes.h"
 #include "SkImageInfo.h"
 #include "SkRect.h"
 
@@ -34,9 +33,10 @@ public:
      * Helper that gets the width and height of the surface as a bounding rectangle.
      */
     void getBoundsRect(SkRect* rect) const { rect->setWH(SkIntToScalar(this->width()),
-                                                         SkIntToScalar(this->height())); }
+        SkIntToScalar(this->height())); }
 
-    GrSurfaceOrigin origin() const {
+    GrSurfaceOrigin origin() const
+    {
         SkASSERT(kTopLeft_GrSurfaceOrigin == fDesc.fOrigin || kBottomLeft_GrSurfaceOrigin == fDesc.fOrigin);
         return fDesc.fOrigin;
     }
@@ -82,10 +82,10 @@ public:
      *              pixel config.
      */
     bool readPixels(int left, int top, int width, int height,
-                    GrPixelConfig config,
-                    void* buffer,
-                    size_t rowBytes = 0,
-                    uint32_t pixelOpsFlags = 0);
+        GrPixelConfig config,
+        void* buffer,
+        size_t rowBytes = 0,
+        uint32_t pixelOpsFlags = 0);
 
     /**
      * Copy the src pixels [buffer, rowbytes, pixelconfig] into the surface at the specified
@@ -100,20 +100,19 @@ public:
      *                      packed.
      * @param pixelOpsFlags See the GrContext::PixelOpsFlags enum.
      *
-     * @return true if the read succeeded, false if not. The read can fail because of an unsupported
-     *              pixel config.
+     * @return true if the write succeeded, false if not. The write can fail because of an
+     *              unsupported pixel config.
      */
     bool writePixels(int left, int top, int width, int height,
-                     GrPixelConfig config,
-                     const void* buffer,
-                     size_t rowBytes = 0,
-                     uint32_t pixelOpsFlags = 0);
+        GrPixelConfig config,
+        const void* buffer,
+        size_t rowBytes = 0,
+        uint32_t pixelOpsFlags = 0);
 
     /**
      * After this returns any pending writes to the surface will be issued to the backend 3D API.
      */
     void flushWrites();
-
 
     /**
      * After this returns any pending surface IO will be issued to the backend 3D API and
@@ -128,10 +127,13 @@ public:
     typedef void* ReleaseCtx;
     typedef void (*ReleaseProc)(ReleaseCtx);
 
-    void setRelease(ReleaseProc proc, ReleaseCtx ctx) {
+    void setRelease(ReleaseProc proc, ReleaseCtx ctx)
+    {
         fReleaseProc = proc;
         fReleaseCtx = ctx;
     }
+
+    static size_t WorseCaseSize(const GrSurfaceDesc& desc);
 
 protected:
     // Methods made available via GrSurfacePriv
@@ -144,14 +146,16 @@ protected:
     // Provides access to methods that should be public within Skia code.
     friend class GrSurfacePriv;
 
-    GrSurface(GrGpu* gpu, LifeCycle lifeCycle, const GrSurfaceDesc& desc)
-        : INHERITED(gpu, lifeCycle)
+    GrSurface(GrGpu* gpu, const GrSurfaceDesc& desc)
+        : INHERITED(gpu)
         , fDesc(desc)
         , fReleaseProc(NULL)
         , fReleaseCtx(NULL)
-    {}
+    {
+    }
 
-    ~GrSurface() override {
+    ~GrSurface() override
+    {
         // check that invokeReleaseProc has been called (if needed)
         SkASSERT(NULL == fReleaseProc);
     }
@@ -162,7 +166,8 @@ protected:
     void onAbandon() override;
 
 private:
-    void invokeReleaseProc() {
+    void invokeReleaseProc()
+    {
         if (fReleaseProc) {
             fReleaseProc(fReleaseCtx);
             fReleaseProc = NULL;
@@ -170,7 +175,7 @@ private:
     }
 
     ReleaseProc fReleaseProc;
-    ReleaseCtx  fReleaseCtx;
+    ReleaseCtx fReleaseCtx;
 
     typedef GrGpuResource INHERITED;
 };

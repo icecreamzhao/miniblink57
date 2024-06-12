@@ -5,51 +5,58 @@
  * found in the LICENSE file.
  */
 
-#include "DMSrcSink.h"
 #include "DMSrcSinkAndroid.h"
+#include "DMSrcSink.h"
 
 #include "SkAndroidSDKCanvas.h"
 #include "SkCanvas.h"
-#include "SkHwuiRenderer.h"
-#include "SkiaCanvasProxy.h"
 #include "SkStream.h"
+#include "SkiaCanvasProxy.h"
+#include <utils/TestWindowContext.h>
 
 /* These functions are only compiled in the Android Framework. */
 
 namespace DM {
 
-Error HWUISink::draw(const Src& src, SkBitmap* dst, SkWStream*, SkString*) const {
-    SkHwuiRenderer renderer;
-    renderer.initialize(src.size());
+Error HWUISink::draw(const Src& src, SkBitmap* dst, SkWStream*, SkString*) const
+{
+    android::uirenderer::TestWindowContext renderer;
+    renderer.initialize(src.size().width(), src.size().height());
     SkCanvas* canvas = renderer.prepareToDraw();
     Error err = src.draw(canvas);
     if (!err.isEmpty()) {
         return err;
     }
     renderer.finishDrawing();
-    renderer.proxy->fence();
+    renderer.fence();
     renderer.capturePixels(dst);
     return "";
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-ViaAndroidSDK::ViaAndroidSDK(Sink* sink) : fSink(sink) { }
+ViaAndroidSDK::ViaAndroidSDK(Sink* sink)
+    : fSink(sink)
+{
+}
 
 Error ViaAndroidSDK::draw(const Src& src,
-                          SkBitmap* bitmap,
-                          SkWStream* stream,
-                          SkString* log) const {
+    SkBitmap* bitmap,
+    SkWStream* stream,
+    SkString* log) const
+{
     struct ProxySrc : public Src {
         const Src& fSrc;
         ProxySrc(const Src& src)
-            : fSrc(src) {}
+            : fSrc(src)
+        {
+        }
 
-        Error draw(SkCanvas* canvas) const override {
+        Error draw(SkCanvas* canvas) const override
+        {
             // Pass through HWUI's upper layers to get operational transforms
-            SkAutoTDelete<android::Canvas> ac (android::Canvas::create_canvas(canvas));
-            SkAutoTUnref<android::uirenderer::SkiaCanvasProxy> scProxy
-                (new android::uirenderer::SkiaCanvasProxy(ac));
+            SkAutoTDelete<android::Canvas> ac(android::Canvas::create_canvas(canvas));
+            SkAutoTUnref<android::uirenderer::SkiaCanvasProxy> scProxy(new android::uirenderer::SkiaCanvasProxy(ac));
 
             // Pass through another proxy to get paint transforms
             SkAndroidSDKCanvas fc;
@@ -60,10 +67,14 @@ Error ViaAndroidSDK::draw(const Src& src,
             return "";
         }
         SkISize size() const override { return fSrc.size(); }
-        Name name() const override { sk_throw(); return ""; }
+        Name name() const override
+        {
+            sk_throw();
+            return "";
+        }
     } proxy(src);
 
     return fSink->draw(proxy, bitmap, stream, log);
 }
 
-}  // namespace DM
+} // namespace DM

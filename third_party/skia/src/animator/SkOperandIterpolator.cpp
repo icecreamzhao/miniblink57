@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,39 +5,39 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkOperandInterpolator.h"
 #include "SkScript.h"
 
-SkOperandInterpolator::SkOperandInterpolator() {
+SkOperandInterpolator::SkOperandInterpolator()
+{
     INHERITED::reset(0, 0);
     fType = SkType_Unknown;
 }
 
 SkOperandInterpolator::SkOperandInterpolator(int elemCount, int frameCount,
-                                             SkDisplayTypes type)
+    SkDisplayTypes type)
 {
     this->reset(elemCount, frameCount, type);
 }
 
 void SkOperandInterpolator::reset(int elemCount, int frameCount, SkDisplayTypes type)
 {
-//  SkASSERT(type == SkType_String || type == SkType_Float || type == SkType_Int ||
-//      type == SkType_Displayable || type == SkType_Drawable);
+    //  SkASSERT(type == SkType_String || type == SkType_Float || type == SkType_Int ||
+    //      type == SkType_Displayable || type == SkType_Drawable);
     INHERITED::reset(elemCount, frameCount);
     fType = type;
     fStorage = sk_malloc_throw((sizeof(SkOperand) * elemCount + sizeof(SkTimeCode)) * frameCount);
-    fTimes = (SkTimeCode*) fStorage;
-    fValues = (SkOperand*) ((char*) fStorage + sizeof(SkTimeCode) * frameCount);
+    fTimes = (SkTimeCode*)fStorage;
+    fValues = (SkOperand*)((char*)fStorage + sizeof(SkTimeCode) * frameCount);
 #ifdef SK_DEBUG
-    fTimesArray = (SkTimeCode(*)[10]) fTimes;
-    fValuesArray = (SkOperand(*)[10]) fValues;
+    fTimesArray = (SkTimeCode(*)[10])fTimes;
+    fValuesArray = (SkOperand(*)[10])fValues;
 #endif
 }
 
 bool SkOperandInterpolator::setKeyFrame(int index, SkMSec time, const SkOperand values[], SkScalar blend)
 {
-    SkASSERT(values != NULL);
+    SkASSERT(values != nullptr);
     blend = SkScalarPin(blend, 0, SK_Scalar1);
 
     bool success = ~index == SkTSearch<SkMSec>(&fTimes->fTime, index, time, sizeof(SkTimeCode));
@@ -60,16 +59,14 @@ SkInterpolatorBase::Result SkOperandInterpolator::timeToValues(SkMSec time, SkOp
 {
     SkScalar T;
     int index;
-    SkBool exact;
+    bool exact;
     Result result = timeToT(time, &T, &index, &exact);
-    if (values)
-    {
+    if (values) {
         const SkOperand* nextSrc = &fValues[index * fElemCount];
 
         if (exact)
             memcpy(values, nextSrc, fElemCount * sizeof(SkScalar));
-        else
-        {
+        else {
             SkASSERT(index > 0);
 
             const SkOperand* prevSrc = nextSrc - fElemCount;
@@ -96,21 +93,21 @@ SkInterpolatorBase::Result SkOperandInterpolator::timeToValues(SkMSec time, SkOp
 #ifdef SK_DEBUG
 
 #ifdef SK_SUPPORT_UNITTEST
-    static SkOperand* iset(SkOperand array[3], int a, int b, int c)
-    {
-        array[0].fScalar = SkIntToScalar(a);
-        array[1].fScalar = SkIntToScalar(b);
-        array[2].fScalar = SkIntToScalar(c);
-        return array;
-    }
+static SkOperand* iset(SkOperand array[3], int a, int b, int c)
+{
+    array[0].fScalar = SkIntToScalar(a);
+    array[1].fScalar = SkIntToScalar(b);
+    array[2].fScalar = SkIntToScalar(c);
+    return array;
+}
 #endif
 
 void SkOperandInterpolator::UnitTest()
 {
 #ifdef SK_SUPPORT_UNITTEST
-    SkOperandInterpolator   inter(3, 2, SkType_Float);
-    SkOperand       v1[3], v2[3], v[3], vv[3];
-    Result          result;
+    SkOperandInterpolator inter(3, 2, SkType_Float);
+    SkOperand v1[3], v2[3], v[3], vv[3];
+    Result result;
 
     inter.setKeyFrame(0, 100, iset(v1, 10, 20, 30), 0);
     inter.setKeyFrame(1, 200, iset(v2, 110, 220, 330));

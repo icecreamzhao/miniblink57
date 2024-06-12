@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkMemberInfo.h"
 
 #if SK_USE_CONDENSED_INFO == 1
@@ -19,7 +18,8 @@
 #include "SkCondensedRelease.cpp"
 #endif
 
-static int _searchByName(const unsigned char* lengths, int count, const char* strings, const char target[]) {
+static int _searchByName(const unsigned char* lengths, int count, const char* strings, const char target[])
+{
     int lo = 0;
     int hi = count - 1;
     while (lo < hi) {
@@ -34,8 +34,9 @@ static int _searchByName(const unsigned char* lengths, int count, const char* st
     return hi;
 }
 
-static int _searchByType(SkDisplayTypes type) {
-    unsigned char match = (unsigned char) type;
+static int _searchByType(SkDisplayTypes type)
+{
+    unsigned char match = (unsigned char)type;
     int lo = 0;
     int hi = kTypeIDs - 1;
     while (lo < hi) {
@@ -50,32 +51,35 @@ static int _searchByType(SkDisplayTypes type) {
     return hi;
 }
 
-const SkMemberInfo* SkDisplayType::GetMembers(SkAnimateMaker* , SkDisplayTypes type, int* infoCountPtr) {
+const SkMemberInfo* SkDisplayType::GetMembers(SkAnimateMaker*, SkDisplayTypes type, int* infoCountPtr)
+{
     int lookup = _searchByType(type);
     if (lookup < 0)
-        return NULL;
+        return nullptr;
     if (infoCountPtr)
         *infoCountPtr = gInfoCounts[lookup];
     return gInfoTables[lookup];
 }
 
 // !!! replace with inline
-const SkMemberInfo* SkDisplayType::GetMember(SkAnimateMaker* , SkDisplayTypes type, const char** matchPtr ) {
+const SkMemberInfo* SkDisplayType::GetMember(SkAnimateMaker*, SkDisplayTypes type, const char** matchPtr)
+{
     const SkMemberInfo* info = SkMemberInfo::Find(type, matchPtr);
     SkASSERT(info);
     return info;
 }
 
-static const SkMemberInfo* _lookup(int lookup, const char** matchPtr) {
+static const SkMemberInfo* _lookup(int lookup, const char** matchPtr)
+{
     int count = gInfoCounts[lookup];
     const SkMemberInfo* info = gInfoTables[lookup];
     if (info->fType == SkType_BaseClassInfo) {
         int baseTypeLookup = info->fOffset;
         const SkMemberInfo* result = _lookup(baseTypeLookup, matchPtr);
-        if (result != NULL)
+        if (result != nullptr)
             return result;
         if (--count == 0)
-            return NULL;
+            return nullptr;
         info++;
     }
     SkASSERT(info->fType != SkType_BaseClassInfo);
@@ -83,37 +87,40 @@ static const SkMemberInfo* _lookup(int lookup, const char** matchPtr) {
     const char* strings = gInfoNames[lookup];
     int index = _searchByName(&info->fName, count, strings, match);
     if (index < 0)
-        return NULL;
+        return nullptr;
     return &info[index];
 }
 
-const SkMemberInfo* SkMemberInfo::Find(SkDisplayTypes type, int* index) {
+const SkMemberInfo* SkMemberInfo::Find(SkDisplayTypes type, int* index)
+{
     int count = gInfoCounts[lookup];
     const SkMemberInfo* info = gInfoTables[lookup];
     if (info->fType == SkType_BaseClassInfo) {
         int baseTypeLookup = info->fOffset;
         const SkMemberInfo* result = Find(baseTypeLookup, index);
-        if (result != NULL)
+        if (result != nullptr)
             return result;
         if (--count == 0)
-            return NULL;
+            return nullptr;
         info++;
     }
     SkASSERT(info->fType != SkType_BaseClassInfo);
     if (*index >= count) {
         *index -= count;
-        return NULL;
+        return nullptr;
     }
     return &info[index];
 }
 
-const SkMemberInfo* SkMemberInfo::Find(SkDisplayTypes type, const char** matchPtr) {
+const SkMemberInfo* SkMemberInfo::Find(SkDisplayTypes type, const char** matchPtr)
+{
     int lookup = _searchByType(type);
     SkASSERT(lookup >= 0);
     return _lookup(lookup, matchPtr);
 }
 
-const SkMemberInfo* SkMemberInfo::getInherited() const {
+const SkMemberInfo* SkMemberInfo::getInherited() const
+{
     int baseTypeLookup = fOffset;
     return gInfoTables[baseTypeLookup];
 }

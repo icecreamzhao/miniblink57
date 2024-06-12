@@ -37,8 +37,10 @@
 
 namespace blink {
 
-class Metadata : public GarbageCollectedFinalized<Metadata>, public ScriptWrappable {
+class Metadata final : public GarbageCollectedFinalized<Metadata>,
+                       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static Metadata* create(const FileMetadata& platformMetadata)
     {
@@ -51,14 +53,22 @@ public:
     }
 
     // Return Epoch time in milliseconds for Date.
-    double modificationTime() const { return m_platformMetadata.modificationTime; }
-    unsigned long long size() const { return static_cast<unsigned long long>(m_platformMetadata.length); }
+    double modificationTime() const
+    {
+        return m_platformMetadata.modificationTime;
+    }
+    unsigned long long size() const
+    {
+        return static_cast<unsigned long long>(m_platformMetadata.length);
+    }
 
     DEFINE_INLINE_TRACE() { }
 
 private:
     explicit Metadata(const FileMetadata& platformMetadata)
-        : m_platformMetadata(platformMetadata) { }
+        : m_platformMetadata(platformMetadata)
+    {
+    }
 
     FileMetadata m_platformMetadata;
 };

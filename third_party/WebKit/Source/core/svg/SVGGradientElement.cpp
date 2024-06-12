@@ -19,35 +19,46 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGGradientElement.h"
 
-#include "core/XLinkNames.h"
 #include "core/dom/Attribute.h"
 #include "core/dom/ElementTraversal.h"
+#include "core/dom/StyleChangeReason.h"
 #include "core/layout/svg/LayoutSVGResourceContainer.h"
 #include "core/svg/SVGStopElement.h"
 #include "core/svg/SVGTransformList.h"
 
 namespace blink {
 
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGSpreadMethodType>()
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGSpreadMethodType>()
 {
     DEFINE_STATIC_LOCAL(SVGEnumerationStringEntries, entries, ());
     if (entries.isEmpty()) {
-        entries.append(SVGEnumerationBase::StringEntry(SVGSpreadMethodPad, "pad"));
-        entries.append(SVGEnumerationBase::StringEntry(SVGSpreadMethodReflect, "reflect"));
-        entries.append(SVGEnumerationBase::StringEntry(SVGSpreadMethodRepeat, "repeat"));
+        entries.push_back(std::make_pair(SVGSpreadMethodPad, "pad"));
+        entries.push_back(std::make_pair(SVGSpreadMethodReflect, "reflect"));
+        entries.push_back(std::make_pair(SVGSpreadMethodRepeat, "repeat"));
     }
     return entries;
 }
 
-SVGGradientElement::SVGGradientElement(const QualifiedName& tagName, Document& document)
+SVGGradientElement::SVGGradientElement(const QualifiedName& tagName,
+    Document& document)
     : SVGElement(tagName, document)
     , SVGURIReference(this)
-    , m_gradientTransform(SVGAnimatedTransformList::create(this, SVGNames::gradientTransformAttr, SVGTransformList::create()))
-    , m_spreadMethod(SVGAnimatedEnumeration<SVGSpreadMethodType>::create(this, SVGNames::spreadMethodAttr, SVGSpreadMethodPad))
-    , m_gradientUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(this, SVGNames::gradientUnitsAttr, SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX))
+    , m_gradientTransform(
+          SVGAnimatedTransformList::create(this,
+              SVGNames::gradientTransformAttr,
+              CSSPropertyTransform))
+    , m_spreadMethod(SVGAnimatedEnumeration<SVGSpreadMethodType>::create(
+          this,
+          SVGNames::spreadMethodAttr,
+          SVGSpreadMethodPad))
+    , m_gradientUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(
+          this,
+          SVGNames::gradientUnitsAttr,
+          SVGUnitTypes::kSvgUnitTypeObjectboundingbox))
 {
     addToPropertyMap(m_gradientTransform);
     addToPropertyMap(m_spreadMethod);
@@ -63,13 +74,29 @@ DEFINE_TRACE(SVGGradientElement)
     SVGURIReference::trace(visitor);
 }
 
+void SVGGradientElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
+{
+    if (name == SVGNames::gradientTransformAttr) {
+        addPropertyToPresentationAttributeStyle(
+            style, CSSPropertyTransform,
+            m_gradientTransform->currentValue()->cssValue());
+        return;
+    }
+    SVGElement::collectStyleForPresentationAttribute(name, value, style);
+}
+
 void SVGGradientElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    if (attrName == SVGNames::gradientUnitsAttr
-        || attrName == SVGNames::gradientTransformAttr
-        || attrName == SVGNames::spreadMethodAttr
-        || SVGURIReference::isKnownAttribute(attrName))
-    {
+    if (attrName == SVGNames::gradientTransformAttr) {
+        invalidateSVGPresentationAttributeStyle();
+        setNeedsStyleRecalc(LocalStyleChange,
+            StyleChangeReasonForTracing::fromAttribute(attrName));
+    }
+
+    if (attrName == SVGNames::gradientUnitsAttr || attrName == SVGNames::gradientTransformAttr || attrName == SVGNames::spreadMethodAttr || SVGURIReference::isKnownAttribute(attrName)) {
         SVGElement::InvalidationGuard invalidationGuard(this);
 
         LayoutSVGResourceContainer* layoutObject = toLayoutSVGResourceContainer(this->layoutObject());
@@ -90,7 +117,8 @@ void SVGGradientElement::childrenChanged(const ChildrenChange& change)
         return;
 
     if (LayoutObject* object = layoutObject())
-        object->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::ChildChanged);
+        object->setNeedsLayoutAndFullPaintInvalidation(
+            LayoutInvalidationReason::ChildChanged);
 }
 
 Vector<Gradient::ColorStop> SVGGradientElement::buildStops()
@@ -98,16 +126,17 @@ Vector<Gradient::ColorStop> SVGGradientElement::buildStops()
     Vector<Gradient::ColorStop> stops;
 
     float previousOffset = 0.0f;
-    for (SVGStopElement* stop = Traversal<SVGStopElement>::firstChild(*this); stop; stop = Traversal<SVGStopElement>::nextSibling(*stop)) {
-        // Figure out right monotonic offset
-        float offset = stop->offset()->currentValue()->value();
+    for (const SVGStopElement& stop :
+        Traversal<SVGStopElement>::childrenOf(*this)) {
+        // Figure out right monotonic offset.
+        float offset = stop.offset()->currentValue()->value();
         offset = std::min(std::max(previousOffset, offset), 1.0f);
         previousOffset = offset;
 
-        stops.append(Gradient::ColorStop(offset, stop->stopColorIncludingOpacity()));
+        stops.push_back(
+            Gradient::ColorStop(offset, stop.stopColorIncludingOpacity()));
     }
-
     return stops;
 }
 
-}
+} // namespace blink

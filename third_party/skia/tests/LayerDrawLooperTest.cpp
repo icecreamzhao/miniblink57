@@ -19,7 +19,8 @@
 #include "SkXfermode.h"
 #include "Test.h"
 
-static SkBitmap make_bm(int w, int h) {
+static SkBitmap make_bm(int w, int h)
+{
     SkBitmap bm;
     bm.allocN32Pixels(w, h);
     return bm;
@@ -28,10 +29,13 @@ static SkBitmap make_bm(int w, int h) {
 // TODO: can this be derived from SkBaseDevice?
 class FakeDevice : public SkBitmapDevice {
 public:
-    FakeDevice() : INHERITED(make_bm(100, 100), SkSurfaceProps(0, kUnknown_SkPixelGeometry)) {
+    FakeDevice()
+        : INHERITED(make_bm(100, 100), SkSurfaceProps(0, kUnknown_SkPixelGeometry))
+    {
     }
 
-    void drawRect(const SkDraw& draw, const SkRect& r, const SkPaint& paint) override {
+    void drawRect(const SkDraw& draw, const SkRect& r, const SkPaint& paint) override
+    {
         fLastMatrix = *draw.fMatrix;
         this->INHERITED::drawRect(draw, r, paint);
     }
@@ -42,7 +46,8 @@ private:
     typedef SkBitmapDevice INHERITED;
 };
 
-static void test_frontToBack(skiatest::Reporter* reporter) {
+static void test_frontToBack(skiatest::Reporter* reporter)
+{
     SkLayerDrawLooper::Builder looperBuilder;
     SkLayerDrawLooper::LayerInfo layerInfo;
 
@@ -58,7 +63,7 @@ static void test_frontToBack(skiatest::Reporter* reporter) {
     FakeDevice device;
     SkCanvas canvas(&device);
     SkPaint paint;
-    SkAutoTUnref<SkLayerDrawLooper> looper(looperBuilder.detachLooper());
+    auto looper(looperBuilder.detach());
     SkSmallAllocator<1, 32> allocator;
     void* buffer = allocator.reserveT<SkDrawLooper::Context>(looper->contextSize());
     SkDrawLooper::Context* context = looper->createContext(&canvas, buffer);
@@ -82,7 +87,8 @@ static void test_frontToBack(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, !context->next(&canvas, &paint));
 }
 
-static void test_backToFront(skiatest::Reporter* reporter) {
+static void test_backToFront(skiatest::Reporter* reporter)
+{
     SkLayerDrawLooper::Builder looperBuilder;
     SkLayerDrawLooper::LayerInfo layerInfo;
 
@@ -98,7 +104,7 @@ static void test_backToFront(skiatest::Reporter* reporter) {
     FakeDevice device;
     SkCanvas canvas(&device);
     SkPaint paint;
-    SkAutoTUnref<SkLayerDrawLooper> looper(looperBuilder.detachLooper());
+    auto looper(looperBuilder.detach());
     SkSmallAllocator<1, 32> allocator;
     void* buffer = allocator.reserveT<SkDrawLooper::Context>(looper->contextSize());
     SkDrawLooper::Context* context = looper->createContext(&canvas, buffer);
@@ -122,7 +128,8 @@ static void test_backToFront(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, !context->next(&canvas, &paint));
 }
 
-static void test_mixed(skiatest::Reporter* reporter) {
+static void test_mixed(skiatest::Reporter* reporter)
+{
     SkLayerDrawLooper::Builder looperBuilder;
     SkLayerDrawLooper::LayerInfo layerInfo;
 
@@ -138,7 +145,7 @@ static void test_mixed(skiatest::Reporter* reporter) {
     FakeDevice device;
     SkCanvas canvas(&device);
     SkPaint paint;
-    SkAutoTUnref<SkLayerDrawLooper> looper(looperBuilder.detachLooper());
+    sk_sp<SkDrawLooper> looper(looperBuilder.detach());
     SkSmallAllocator<1, 32> allocator;
     void* buffer = allocator.reserveT<SkDrawLooper::Context>(looper->contextSize());
     SkDrawLooper::Context* context = looper->createContext(&canvas, buffer);
@@ -162,7 +169,8 @@ static void test_mixed(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, !context->next(&canvas, &paint));
 }
 
-DEF_TEST(LayerDrawLooper, reporter) {
+DEF_TEST(LayerDrawLooper, reporter)
+{
     test_frontToBack(reporter);
     test_backToFront(reporter);
     test_mixed(reporter);

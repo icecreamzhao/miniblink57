@@ -27,22 +27,30 @@
 #include "core/svg/SVGAnimatedNumberOptionalNumber.h"
 #include "core/svg/SVGFELightElement.h"
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
-#include "platform/graphics/filters/FESpecularLighting.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGFESpecularLightingElement final : public SVGFilterPrimitiveStandardAttributes {
+class SVGFESpecularLightingElement final
+    : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFESpecularLightingElement);
-    void lightElementAttributeChanged(const SVGFELightElement*, const QualifiedName&);
+    void lightElementAttributeChanged(const SVGFELightElement*,
+        const QualifiedName&);
 
     SVGAnimatedNumber* specularConstant() { return m_specularConstant.get(); }
     SVGAnimatedNumber* specularExponent() { return m_specularExponent.get(); }
     SVGAnimatedNumber* surfaceScale() { return m_surfaceScale.get(); }
-    SVGAnimatedNumber* kernelUnitLengthX() { return m_kernelUnitLength->firstNumber(); }
-    SVGAnimatedNumber* kernelUnitLengthY() { return m_kernelUnitLength->secondNumber(); }
+    SVGAnimatedNumber* kernelUnitLengthX()
+    {
+        return m_kernelUnitLength->firstNumber();
+    }
+    SVGAnimatedNumber* kernelUnitLengthY()
+    {
+        return m_kernelUnitLength->secondNumber();
+    }
     SVGAnimatedString* in1() { return m_in1.get(); }
 
     DECLARE_VIRTUAL_TRACE();
@@ -52,16 +60,13 @@ private:
 
     bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    static const AtomicString& kernelUnitLengthXIdentifier();
-    static const AtomicString& kernelUnitLengthYIdentifier();
-
-    RefPtrWillBeMember<SVGAnimatedNumber> m_specularConstant;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_specularExponent;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_surfaceScale;
-    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
-    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    Member<SVGAnimatedNumber> m_specularConstant;
+    Member<SVGAnimatedNumber> m_specularExponent;
+    Member<SVGAnimatedNumber> m_surfaceScale;
+    Member<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
+    Member<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

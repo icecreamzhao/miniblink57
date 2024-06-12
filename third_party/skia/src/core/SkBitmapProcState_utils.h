@@ -4,7 +4,8 @@
 // Helper to ensure that when we shift down, we do it w/o sign-extension
 // so the caller doesn't have to manually mask off the top 16 bits
 //
-static unsigned SK_USHIFT16(unsigned x) {
+static unsigned SK_USHIFT16(unsigned x)
+{
     return x >> 16;
 }
 
@@ -19,8 +20,9 @@ static unsigned SK_USHIFT16(unsigned x) {
  *  skip the very_small test here.
  */
 static inline bool can_truncate_to_fixed_for_decal(SkFractionalInt frX,
-                                                   SkFractionalInt frDx,
-                                                   int count, unsigned max) {
+    SkFractionalInt frDx,
+    int count, unsigned max)
+{
     SkFixed dx = SkFractionalIntToFixed(frDx);
 
     // if decal_ kept SkFractionalInt precision, this would just be dx <= 0
@@ -33,8 +35,7 @@ static inline bool can_truncate_to_fixed_for_decal(SkFractionalInt frX,
     // We cast to unsigned so we don't have to check for negative values, which
     // will now appear as very large positive values, and thus fail our test!
     SkFixed fx = SkFractionalIntToFixed(frX);
-    return (unsigned)SkFixedFloorToInt(fx) <= max &&
-           (unsigned)SkFixedFloorToInt(fx + dx * (count - 1)) < max;
+    return (unsigned)SkFixedFloorToInt(fx) <= max && (unsigned)SkFixedFloorToInt(fx + dx * (count - 1)) < max;
 }
 
 #endif /* #ifndef SkBitmapProcState_utils_DEFINED */

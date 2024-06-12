@@ -25,9 +25,9 @@
  * \brief C++ API: StringPiece: Read-only byte string wrapper class.
  */
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
 #include "unicode/std_string.h"
+#include "unicode/uobject.h"
+#include "unicode/utypes.h"
 
 // Arghh!  I wish C++ literals were "string".
 
@@ -50,45 +50,56 @@ U_NAMESPACE_BEGIN
  * @stable ICU 4.2
  */
 class U_COMMON_API StringPiece : public UMemory {
- private:
-  const char*   ptr_;
-  int32_t       length_;
+private:
+    const char* ptr_;
+    int32_t length_;
 
- public:
-  /**
+public:
+    /**
    * Default constructor, creates an empty StringPiece.
    * @stable ICU 4.2
    */
-  StringPiece() : ptr_(NULL), length_(0) { }
-  /**
+    StringPiece()
+        : ptr_(NULL)
+        , length_(0)
+    {
+    }
+    /**
    * Constructs from a NUL-terminated const char * pointer.
    * @param str a NUL-terminated const char * pointer
    * @stable ICU 4.2
    */
-  StringPiece(const char* str);
+    StringPiece(const char* str);
 #if U_HAVE_STD_STRING
-  /**
+    /**
    * Constructs from a std::string.
    * @stable ICU 4.2
    */
-  StringPiece(const std::string& str)
-    : ptr_(str.data()), length_(static_cast<int32_t>(str.size())) { }
+    StringPiece(const std::string& str)
+        : ptr_(str.data())
+        , length_(static_cast<int32_t>(str.size()))
+    {
+    }
 #endif
-  /**
+    /**
    * Constructs from a const char * pointer and a specified length.
    * @param offset a const char * pointer (need not be terminated)
    * @param len the length of the string; must be non-negative
    * @stable ICU 4.2
    */
-  StringPiece(const char* offset, int32_t len) : ptr_(offset), length_(len) { }
-  /**
+    StringPiece(const char* offset, int32_t len)
+        : ptr_(offset)
+        , length_(len)
+    {
+    }
+    /**
    * Substring of another StringPiece.
    * @param x the other StringPiece
    * @param pos start position in x; must be non-negative and <= x.length().
    * @stable ICU 4.2
    */
-  StringPiece(const StringPiece& x, int32_t pos);
-  /**
+    StringPiece(const StringPiece& x, int32_t pos);
+    /**
    * Substring of another StringPiece.
    * @param x the other StringPiece
    * @param pos start position in x; must be non-negative and <= x.length().
@@ -96,9 +107,9 @@ class U_COMMON_API StringPiece : public UMemory {
    *            must be non-negative and will be pinned to at most x.length() - pos.
    * @stable ICU 4.2
    */
-  StringPiece(const StringPiece& x, int32_t pos, int32_t len);
+    StringPiece(const StringPiece& x, int32_t pos, int32_t len);
 
-  /**
+    /**
    * Returns the string pointer. May be NULL if it is empty.
    *
    * data() may return a pointer to a buffer with embedded NULs, and the
@@ -108,84 +119,94 @@ class U_COMMON_API StringPiece : public UMemory {
    * @return the string pointer
    * @stable ICU 4.2
    */
-  const char* data() const { return ptr_; }
-  /**
+    const char* data() const { return ptr_; }
+    /**
    * Returns the string length. Same as length().
    * @return the string length
    * @stable ICU 4.2
    */
-  int32_t size() const { return length_; }
-  /**
+    int32_t size() const { return length_; }
+    /**
    * Returns the string length. Same as size().
    * @return the string length
    * @stable ICU 4.2
    */
-  int32_t length() const { return length_; }
-  /**
+    int32_t length() const { return length_; }
+    /**
    * Returns whether the string is empty.
    * @return TRUE if the string is empty
    * @stable ICU 4.2
    */
-  UBool empty() const { return length_ == 0; }
+    UBool empty() const { return length_ == 0; }
 
-  /**
+    /**
    * Sets to an empty string.
    * @stable ICU 4.2
    */
-  void clear() { ptr_ = NULL; length_ = 0; }
+    void clear()
+    {
+        ptr_ = NULL;
+        length_ = 0;
+    }
 
-  /**
+    /**
    * Reset the stringpiece to refer to new data.
    * @param xdata pointer the new string data.  Need not be nul terminated.
    * @param len the length of the new data
    * @stable ICU 4.8
    */
-  void set(const char* xdata, int32_t len) { ptr_ = xdata; length_ = len; }
+    void set(const char* xdata, int32_t len)
+    {
+        ptr_ = xdata;
+        length_ = len;
+    }
 
-  /**
+    /**
    * Reset the stringpiece to refer to new data.
    * @param str a pointer to a NUL-terminated string. 
    * @stable ICU 4.8
    */
-  void set(const char* str);
+    void set(const char* str);
 
-  /**
+    /**
    * Removes the first n string units.
    * @param n prefix length, must be non-negative and <=length()
    * @stable ICU 4.2
    */
-  void remove_prefix(int32_t n) {
-    if (n >= 0) {
-      if (n > length_) {
-        n = length_;
-      }
-      ptr_ += n;
-      length_ -= n;
+    void remove_prefix(int32_t n)
+    {
+        if (n >= 0) {
+            if (n > length_) {
+                n = length_;
+            }
+            ptr_ += n;
+            length_ -= n;
+        }
     }
-  }
 
-  /**
+    /**
    * Removes the last n string units.
    * @param n suffix length, must be non-negative and <=length()
    * @stable ICU 4.2
    */
-  void remove_suffix(int32_t n) {
-    if (n >= 0) {
-      if (n <= length_) {
-        length_ -= n;
-      } else {
-        length_ = 0;
-      }
+    void remove_suffix(int32_t n)
+    {
+        if (n >= 0) {
+            if (n <= length_) {
+                length_ -= n;
+            } else {
+                length_ = 0;
+            }
+        }
     }
-  }
 
-  /**
+    /**
    * Maximum integer, used as a default value for substring methods.
    * @stable ICU 4.2
    */
-  static const int32_t npos; // = 0x7fffffff;
+    static const int32_t npos; // = 0x7fffffff;
 
-  /**
+    /**
    * Returns a substring of this StringPiece.
    * @param pos start position; must be non-negative and <= length().
    * @param len length of the substring;
@@ -193,9 +214,10 @@ class U_COMMON_API StringPiece : public UMemory {
    * @return the substring StringPiece
    * @stable ICU 4.2
    */
-  StringPiece substr(int32_t pos, int32_t len = npos) const {
-    return StringPiece(*this, pos, len);
-  }
+    StringPiece substr(int32_t pos, int32_t len = npos) const
+    {
+        return StringPiece(*this, pos, len);
+    }
 };
 
 /**
@@ -205,7 +227,7 @@ class U_COMMON_API StringPiece : public UMemory {
  * @return TRUE if the string data is equal
  * @stable ICU 4.8
  */
-U_EXPORT UBool U_EXPORT2 
+U_EXPORT UBool U_EXPORT2
 operator==(const StringPiece& x, const StringPiece& y);
 
 /**
@@ -215,10 +237,11 @@ operator==(const StringPiece& x, const StringPiece& y);
  * @return TRUE if the string data is not equal
  * @stable ICU 4.8
  */
-inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
-  return !(x == y);
+inline UBool operator!=(const StringPiece& x, const StringPiece& y)
+{
+    return !(x == y);
 }
 
 U_NAMESPACE_END
 
-#endif  // __STRINGPIECE_H__
+#endif // __STRINGPIECE_H__

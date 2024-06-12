@@ -42,7 +42,6 @@ public:
     // Called when color chooser has ended.
     virtual void didEndChooser() { }
 };
-
 }
 
 #endif // WebColorChooserClient_h

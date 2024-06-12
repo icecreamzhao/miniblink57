@@ -11,29 +11,32 @@
 
 namespace cc_blink {
 
-WebImageLayerImpl::WebImageLayerImpl() {
-  layer_.reset(new WebLayerImplFixedBounds(
-      cc::PictureImageLayer::Create(WebLayerImpl::LayerSettings())));
+WebImageLayerImpl::WebImageLayerImpl()
+{
+    layer_.reset(new WebLayerImplFixedBounds(cc::PictureImageLayer::Create()));
 }
 
-WebImageLayerImpl::~WebImageLayerImpl() {
+WebImageLayerImpl::~WebImageLayerImpl()
+{
 }
 
-blink::WebLayer* WebImageLayerImpl::layer() {
-  return layer_.get();
+blink::WebLayer* WebImageLayerImpl::layer()
+{
+    return layer_.get();
 }
 
-void WebImageLayerImpl::setImage(const SkImage* image) {
-  skia::RefPtr<const SkImage> imageRef = skia::SharePtr(image);
-  static_cast<cc::PictureImageLayer*>(layer_->layer())
-      ->SetImage(imageRef.Pass());
-  static_cast<WebLayerImplFixedBounds*>(layer_.get())
-      ->SetFixedBounds(gfx::Size(image->width(), image->height()));
+void WebImageLayerImpl::setImage(const SkImage* image)
+{
+    static_cast<cc::PictureImageLayer*>(layer_->layer())
+        ->SetImage(sk_ref_sp(image));
+    static_cast<WebLayerImplFixedBounds*>(layer_.get())
+        ->SetFixedBounds(gfx::Size(image->width(), image->height()));
 }
 
-void WebImageLayerImpl::setNearestNeighbor(bool nearest_neighbor) {
-  static_cast<cc::PictureImageLayer*>(layer_->layer())
-      ->SetNearestNeighbor(nearest_neighbor);
+void WebImageLayerImpl::setNearestNeighbor(bool nearest_neighbor)
+{
+    static_cast<cc::PictureImageLayer*>(layer_->layer())
+        ->SetNearestNeighbor(nearest_neighbor);
 }
 
-}  // namespace cc_blink
+} // namespace cc_blink

@@ -23,14 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/vtt/VTTRegionList.h"
 
 namespace blink {
 
-VTTRegionList::VTTRegionList()
-{
-}
+VTTRegionList::VTTRegionList() { }
 
 unsigned long VTTRegionList::length() const
 {
@@ -50,17 +47,17 @@ VTTRegion* VTTRegionList::getRegionById(const String& id) const
     if (id.isEmpty())
         return nullptr;
 
-    for (size_t i = 0; i < m_list.size(); ++i) {
-        if (m_list[i]->id() == id)
-            return m_list[i].get();
+    for (const auto& region : m_list) {
+        if (region->id() == id)
+            return region.get();
     }
 
     return nullptr;
 }
 
-void VTTRegionList::add(PassRefPtrWillBeRawPtr<VTTRegion> region)
+void VTTRegionList::add(VTTRegion* region)
 {
-    m_list.append(region);
+    m_list.push_back(region);
 }
 
 bool VTTRegionList::remove(VTTRegion* region)

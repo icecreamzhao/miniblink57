@@ -43,35 +43,61 @@
 namespace v8 {
 namespace base {
 
-std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
-  std::vector<SharedLibraryAddress> result;
-  unsigned int images_count = _dyld_image_count();
-  for (unsigned int i = 0; i < images_count; ++i) {
-    const mach_header* header = _dyld_get_image_header(i);
-    if (header == nullptr) continue;
+    std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses()
+    {
+        std::vector<SharedLibraryAddress> result;
+        unsigned int images_count = _dyld_image_count();
+        for (unsigned int i = 0; i < images_count; ++i) {
+            const mach_header* header = _dyld_get_image_header(i);
+            if (header == nullptr)
+                continue;
 #if V8_HOST_ARCH_X64
-    uint64_t size;
-    char* code_ptr = getsectdatafromheader_64(
-        reinterpret_cast<const mach_header_64*>(header), SEG_TEXT, SECT_TEXT,
-        &size);
+            uint64_t size;
+            char* code_ptr = getsectdatafromheader_64(
+                reinterpret_cast<const mach_header_64*>(header), SEG_TEXT, SECT_TEXT,
+                &size);
 #else
-    unsigned int size;
-    char* code_ptr = getsectdatafromheader(header, SEG_TEXT, SECT_TEXT, &size);
+            unsigned int size;
+            char* code_ptr = getsectdatafromheader(header, SEG_TEXT, SECT_TEXT, &size);
 #endif
-    if (code_ptr == nullptr) continue;
-    const intptr_t slide = _dyld_get_image_vmaddr_slide(i);
-    const uintptr_t start = reinterpret_cast<uintptr_t>(code_ptr) + slide;
-    result.push_back(SharedLibraryAddress(_dyld_get_image_name(i), start,
-                                          start + size, slide));
-  }
-  return result;
-}
+            if (code_ptr == nullptr)
+                continue;
+            const intptr_t slide = _dyld_get_image_vmaddr_slide(i);
+            const uintptr_t start = reinterpret_cast<uintptr_t>(code_ptr) + slide;
+            result.push_back(SharedLibraryAddress(_dyld_get_image_name(i), start,
+                start + size, slide));
+        }
+        return result;
+    }
 
-void OS::SignalCodeMovingGC() {}
+    void OS::SignalCodeMovingGC() { }
 
-TimezoneCache* OS::CreateTimezoneCache() {
-  return new PosixDefaultTimezoneCache();
-}
+    TimezoneCache* OS::CreateTimezoneCache()
+    {
+        return new PosixDefaultTimezoneCache();
+    }
 
-}  // namespace base
-}  // namespace v8
+    void OS::AdjustSchedulingParams()
+    {
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_IA32
+        {
+            // Check availability of scheduling params.
+            uint32_t val = 0;
+            size_t valSize = sizeof(val);
+            int rc = sysctlbyname("kern.tcsm_available", &val, &valSize, NULL, 0);
+            if (rc < 0 || !val)
+                return;
+        }
+
+        {
+            // Adjust scheduling params.
+            uint32_t val = 1;
+            int rc = sysctlbyname("kern.tcsm_enable", NULL, NULL, &val, sizeof(val));
+            DCHECK_GE(rc, 0);
+            USE(rc);
+        }
+#endif
+    }
+
+} // namespace base
+} // namespace v8

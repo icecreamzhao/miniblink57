@@ -8,8 +8,8 @@
 #ifndef SkTextMapStateProc_DEFINED
 #define SkTextMapStateProc_DEFINED
 
-#include "SkPoint.h"
 #include "SkMatrix.h"
+#include "SkPoint.h"
 
 class SkTextMapStateProc {
 public:
@@ -17,7 +17,8 @@ public:
         : fMatrix(matrix)
         , fProc(matrix.getMapXYProc())
         , fOffset(offset)
-        , fScaleX(fMatrix.getScaleX()) {
+        , fScaleX(fMatrix.getScaleX())
+    {
         SkASSERT(1 == scalarsPerPosition || 2 == scalarsPerPosition);
         if (1 == scalarsPerPosition) {
             unsigned mtype = fMatrix.getType();
@@ -27,7 +28,7 @@ public:
                 // Bake the matrix scale/translation components into fOffset,
                 // to expedite proc computations.
                 fOffset.set(SkScalarMul(offset.x(), fMatrix.getScaleX()) + fMatrix.getTranslateX(),
-                            SkScalarMul(offset.y(), fMatrix.getScaleY()) + fMatrix.getTranslateY());
+                    SkScalarMul(offset.y(), fMatrix.getScaleY()) + fMatrix.getTranslateY());
 
                 if (mtype & SkMatrix::kScale_Mask) {
                     fMapCase = kOnlyScaleX;
@@ -51,12 +52,13 @@ private:
         kX
     } fMapCase;
     const SkMatrix::MapXYProc fProc;
-    SkPoint  fOffset; // In kOnly* mode, this includes the matrix translation component.
+    SkPoint fOffset; // In kOnly* mode, this includes the matrix translation component.
     SkScalar fScaleX; // This is only used by kOnly... cases.
 };
 
-inline void SkTextMapStateProc::operator()(const SkScalar pos[], SkPoint* loc) const {
-    switch(fMapCase) {
+inline void SkTextMapStateProc::operator()(const SkScalar pos[], SkPoint* loc) const
+{
+    switch (fMapCase) {
     case kXY:
         fProc(fMatrix, pos[0] + fOffset.x(), pos[1] + fOffset.y(), loc);
         break;
@@ -75,4 +77,3 @@ inline void SkTextMapStateProc::operator()(const SkScalar pos[], SkPoint* loc) c
 }
 
 #endif
-

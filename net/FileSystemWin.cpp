@@ -70,8 +70,8 @@ static bool getFindData(String path, WIN32_FIND_DATAW& findData)
 static bool getFileSizeFromFindData(const WIN32_FIND_DATAW& findData, long long& size)
 {
     ULARGE_INTEGER fileSize;
-    fileSize.HighPart = findData.nFileSizeHigh;
-    fileSize.LowPart = findData.nFileSizeLow;
+    fileSize.u.HighPart = findData.nFileSizeHigh;
+    fileSize.u.LowPart = findData.nFileSizeLow;
 
     if (fileSize.QuadPart > static_cast<ULONGLONG>(std::numeric_limits<long long>::max()))
         return false;
@@ -83,8 +83,8 @@ static bool getFileSizeFromFindData(const WIN32_FIND_DATAW& findData, long long&
 static bool getFileSizeFromByHandleFileInformationStructure(const BY_HANDLE_FILE_INFORMATION& fileInformation, long long& size)
 {
     ULARGE_INTEGER fileSize;
-    fileSize.HighPart = fileInformation.nFileSizeHigh;
-    fileSize.LowPart = fileInformation.nFileSizeLow;
+    fileSize.u.HighPart = fileInformation.nFileSizeHigh;
+    fileSize.u.LowPart = fileInformation.nFileSizeLow;
 
     if (fileSize.QuadPart > static_cast<ULONGLONG>(std::numeric_limits<long long>::max()))
         return false;
@@ -96,8 +96,8 @@ static bool getFileSizeFromByHandleFileInformationStructure(const BY_HANDLE_FILE
 static void getFileCreationTimeFromFindData(const WIN32_FIND_DATAW& findData, time_t& time)
 {
     ULARGE_INTEGER fileTime;
-    fileTime.HighPart = findData.ftCreationTime.dwHighDateTime;
-    fileTime.LowPart = findData.ftCreationTime.dwLowDateTime;
+    fileTime.u.HighPart = findData.ftCreationTime.dwHighDateTime;
+    fileTime.u.LowPart = findData.ftCreationTime.dwLowDateTime;
 
     // Information about converting time_t to FileTime is available at http://msdn.microsoft.com/en-us/library/ms724228%28v=vs.85%29.aspx
     time = fileTime.QuadPart / 10000000 - kSecondsFromFileTimeToTimet;
@@ -106,8 +106,8 @@ static void getFileCreationTimeFromFindData(const WIN32_FIND_DATAW& findData, ti
 static void getFileModificationTimeFromFindData(const WIN32_FIND_DATAW& findData, time_t& time)
 {
     ULARGE_INTEGER fileTime;
-    fileTime.HighPart = findData.ftLastWriteTime.dwHighDateTime;
-    fileTime.LowPart = findData.ftLastWriteTime.dwLowDateTime;
+    fileTime.u.HighPart = findData.ftLastWriteTime.dwHighDateTime;
+    fileTime.u.LowPart = findData.ftLastWriteTime.dwLowDateTime;
 
     // Information about converting time_t to FileTime is available at http://msdn.microsoft.com/en-us/library/ms724228%28v=vs.85%29.aspx
     time = fileTime.QuadPart / 10000000 - kSecondsFromFileTimeToTimet;
@@ -192,15 +192,15 @@ bool recursiveCreateDirectory(const String& dirString)
 
     Vector<UChar> buf = dir.charactersWithNullTermination();
 
-    WIN32_FIND_DATA wfd;
-    HANDLE hFind = ::FindFirstFile(buf.data(), &wfd);
+    WIN32_FIND_DATAW wfd;
+    HANDLE hFind = ::FindFirstFileW(buf.data(), &wfd);
     if (hFind != INVALID_HANDLE_VALUE) {
         ::FindClose(hFind);
         if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             return true;
     }
 
-    if (!::CreateDirectory(buf.data(), NULL)) {
+    if (!::CreateDirectoryW(buf.data(), NULL)) {
         String newDir = dir;
         while (newDir[newDir.length() - 1] != '\\') {
             newDir.remove(newDir.length() - 1, 1);
@@ -210,7 +210,7 @@ bool recursiveCreateDirectory(const String& dirString)
         recursiveCreateDirectory(newDir);
 
         buf = dir.charactersWithNullTermination();
-        return !!::CreateDirectory(buf.data(), NULL);
+        return !!::CreateDirectoryW(buf.data(), NULL);
     }
 
     return true;
@@ -272,7 +272,7 @@ std::vector<char> fileSystemRepresentation(const String& path)
 bool makeAllDirectories(const String& path)
 {
     Vector<UChar> pathBuffer = WTF::ensureUTF16UChar(path, true);
-    if (SHCreateDirectoryEx(0, pathBuffer.data(), 0) != ERROR_SUCCESS) {
+    if (SHCreateDirectoryExW(0, pathBuffer.data(), 0) != ERROR_SUCCESS) {
         DWORD error = GetLastError();
         if (error != ERROR_FILE_EXISTS && error != ERROR_ALREADY_EXISTS) {
             //LOG_ERROR("Failed to create path %s", path.ascii().data());
@@ -291,7 +291,7 @@ String homeDirectoryPath()
 String pathGetFileName(const String& path)
 {
     Vector<UChar> pathBuffer = WTF::ensureUTF16UChar(path, true);
-    return String(::PathFindFileName(pathBuffer.data()));
+    return String(::PathFindFileNameW(pathBuffer.data()));
 }
 
 String directoryName(const String& path)
@@ -410,7 +410,7 @@ PlatformFileHandle openFile(const String& path, FileOpenMode mode)
     }
 
     Vector<UChar> pathBuffer = WTF::ensureUTF16UChar(path, true);
-    PlatformFileHandle handle = CreateFile(pathBuffer.data(), desiredAccess, FILE_SHARE_READ, 0, creationDisposition, FILE_ATTRIBUTE_NORMAL, 0);
+    PlatformFileHandle handle = CreateFileW(pathBuffer.data(), desiredAccess, FILE_SHARE_READ, 0, creationDisposition, FILE_ATTRIBUTE_NORMAL, 0);
     return handle;
 }
 
@@ -434,9 +434,9 @@ long long seekFile(PlatformFileHandle handle, long long offset, FileSeekOrigin o
     LARGE_INTEGER largeOffset;
     largeOffset.QuadPart = offset;
 
-    largeOffset.LowPart = SetFilePointer(handle, largeOffset.LowPart, &largeOffset.HighPart, moveMethod);
+    largeOffset.u.LowPart = SetFilePointer(handle, largeOffset.u.LowPart, &largeOffset.u.HighPart, moveMethod);
 
-    if (largeOffset.LowPart == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
+    if (largeOffset.u.LowPart == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
         return -1;
 
     return largeOffset.QuadPart;

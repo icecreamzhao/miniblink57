@@ -19,48 +19,51 @@
  */
 
 // https://html.spec.whatwg.org/#htmlelement
-
+[HTMLConstructor]
 interface HTMLElement : Element {
     // metadata attributes
-    [Reflect] attribute DOMString title;
-    [Reflect] attribute DOMString lang;
-    attribute boolean translate;
-    attribute DOMString dir;
+    [CEReactions, Reflect] attribute DOMString title;
+    [CEReactions, Reflect] attribute DOMString lang;
+    [CEReactions] attribute boolean translate;
+    [CEReactions] attribute DOMString dir;
     [SameObject, PerWorldBindings] readonly attribute DOMStringMap dataset;
 
     // user interaction
-    [Reflect] attribute boolean hidden;
+    [CEReactions, Reflect] attribute boolean hidden;
     void click();
-    [CustomElementCallbacks] attribute long tabIndex;
+    [CEReactions, CustomElementCallbacks] attribute long tabIndex;
     void focus();
     void blur();
-    [Reflect] attribute DOMString accessKey;
-    [CustomElementCallbacks] attribute boolean draggable;
-    [RuntimeEnabled=ContextMenu] attribute HTMLMenuElement? contextMenu;
-    attribute boolean spellcheck;
+    [CEReactions, Reflect] attribute DOMString accessKey;
+    [CEReactions, CustomElementCallbacks] attribute boolean draggable;
+    [CEReactions, RuntimeEnabled=ContextMenu] attribute HTMLMenuElement? contextMenu;
+    [CEReactions] attribute boolean spellcheck;
 
     // HTMLElement implements ElementContentEditable
     // https://html.spec.whatwg.org/#contenteditable
-    [CustomElementCallbacks, RaisesException=Setter] attribute DOMString contentEditable;
-    readonly attribute boolean isContentEditable;
+    [CEReactions, CustomElementCallbacks, RaisesException=Setter] attribute DOMString contentEditable;
+    [ImplementedAs=isContentEditableForBinding] readonly attribute boolean isContentEditable;
+    [RuntimeEnabled=InputModeAttribute, CEReactions, Reflect] attribute DOMString inputMode;
 
     // CSSOM View Module
-    // http://dev.w3.org/csswg/cssom-view/#extensions-to-the-htmlelement-interface
-    [PerWorldBindings] readonly attribute Element? offsetParent;
-    readonly attribute long offsetTop;
-    readonly attribute long offsetLeft;
-    readonly attribute long offsetWidth;
-    readonly attribute long offsetHeight;
+    // https://dev.w3.org/csswg/cssom-view/#extensions-to-the-htmlelement-interface
+    [PerWorldBindings, ImplementedAs=unclosedOffsetParent] readonly attribute Element? offsetParent;
+    [ImplementedAs=offsetTopForBinding] readonly attribute long offsetTop;
+    [ImplementedAs=offsetLeftForBinding] readonly attribute long offsetLeft;
+    [ImplementedAs=offsetWidthForBinding] readonly attribute long offsetWidth;
+    [ImplementedAs=offsetHeightForBinding] readonly attribute long offsetHeight;
 
     // CSS Object Model (CSSOM)
-    // http://dev.w3.org/csswg/cssom/#the-elementcssinlinestyle-interface
-    // FIXME: style should have [PutForwards=cssText].
-    [SameObject, PerWorldBindings] readonly attribute CSSStyleDeclaration style;
+    // https://dev.w3.org/csswg/cssom/#the-elementcssinlinestyle-interface
+    [SameObject, PerWorldBindings, PutForwards=cssText] readonly attribute CSSStyleDeclaration style;
+    // Typed OM
+    // https://drafts.css-houdini.org/css-typed-om/#inline-stylepropertymap-objects
+    [RuntimeEnabled=CSSTypedOM] readonly attribute StylePropertyMap styleMap;
 
     // Non-standard APIs
-    [TreatNullAs=NullString, CustomElementCallbacks, RaisesException=Setter, MeasureAs=HTMLElementInnerText] attribute DOMString innerText;
-    [TreatNullAs=NullString, CustomElementCallbacks, RaisesException=Setter, MeasureAs=HTMLElementOuterText] attribute DOMString outerText;
-    [Reflect, TreatNullAs=NullString, MeasureAs=PrefixedHTMLElementDropzone] attribute DOMString webkitdropzone;
+    [TreatNullAs=NullString, CEReactions, CustomElementCallbacks, RaisesException=Setter, MeasureAs=HTMLElementInnerText] attribute DOMString innerText;
+    [TreatNullAs=NullString, CEReactions, CustomElementCallbacks, RaisesException=Setter, MeasureAs=HTMLElementOuterText] attribute DOMString outerText;
+    [CEReactions, Reflect, TreatNullAs=NullString, MeasureAs=PrefixedHTMLElementDropzone] attribute DOMString webkitdropzone;
 };
 
 HTMLElement implements GlobalEventHandlers;

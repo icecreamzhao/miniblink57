@@ -8,7 +8,7 @@
 #include "browser/api/ApiWebContents.h"
 #include "common/api/ObjectLifeMonitor.h"
 
-#include "cef/include/base/cef_macros.h"
+//#include "cef/include/base/cef_macros.h"
 
 namespace atom {
 
@@ -33,6 +33,6 @@ private:
     DISALLOW_COPY_AND_ASSIGN(RemoteCallbackFreer);
 };
 
-}  // namespace atom
+} // namespace atom
 
-#endif  // ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#endif // ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_

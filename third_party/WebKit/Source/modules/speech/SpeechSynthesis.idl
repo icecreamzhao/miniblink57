@@ -23,15 +23,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#tts-section
+
 [
-    GarbageCollected,
     NoInterfaceObject
 ] interface SpeechSynthesis : EventTarget {
     readonly attribute boolean pending;
     readonly attribute boolean speaking;
     readonly attribute boolean paused;
 
-    [RaisesException] void speak(SpeechSynthesisUtterance utterance);
+    void speak(SpeechSynthesisUtterance utterance);
     void cancel();
     void pause();
     void resume();

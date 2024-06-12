@@ -33,23 +33,32 @@
 
 namespace blink {
 
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<EdgeModeType>();
+template <>
+const SVGEnumerationStringEntries& getStaticStringEntries<EdgeModeType>();
 
-class SVGFEConvolveMatrixElement final : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEConvolveMatrixElement final
+    : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEConvolveMatrixElement);
 
     SVGAnimatedBoolean* preserveAlpha() { return m_preserveAlpha.get(); }
     SVGAnimatedNumber* divisor() { return m_divisor.get(); }
     SVGAnimatedNumber* bias() { return m_bias.get(); }
-    SVGAnimatedNumber* kernelUnitLengthX() { return m_kernelUnitLength->firstNumber(); }
-    SVGAnimatedNumber* kernelUnitLengthY() { return m_kernelUnitLength->secondNumber(); }
+    SVGAnimatedNumber* kernelUnitLengthX()
+    {
+        return m_kernelUnitLength->firstNumber();
+    }
+    SVGAnimatedNumber* kernelUnitLengthY()
+    {
+        return m_kernelUnitLength->secondNumber();
+    }
     SVGAnimatedNumberList* kernelMatrix() { return m_kernelMatrix.get(); }
     SVGAnimatedString* in1() { return m_in1.get(); }
     SVGAnimatedEnumeration<EdgeModeType>* edgeMode() { return m_edgeMode.get(); }
-    SVGAnimatedInteger* orderX() { return m_order->firstInteger(); }
-    SVGAnimatedInteger* orderY() { return m_order->secondInteger(); }
+    SVGAnimatedInteger* orderX() const { return m_order->firstInteger(); }
+    SVGAnimatedInteger* orderY() const { return m_order->secondInteger(); }
     SVGAnimatedInteger* targetX() { return m_targetX.get(); }
     SVGAnimatedInteger* targetY() { return m_targetY.get(); }
 
@@ -58,20 +67,23 @@ public:
 private:
     explicit SVGFEConvolveMatrixElement(Document&);
 
+    IntSize matrixOrder() const;
+    IntPoint targetPoint() const;
+
     bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    RefPtrWillBeMember<SVGAnimatedNumber> m_bias;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_divisor;
-    RefPtrWillBeMember<SVGAnimatedString> m_in1;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<EdgeModeType>> m_edgeMode;
-    RefPtrWillBeMember<SVGAnimatedNumberList> m_kernelMatrix;
-    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
-    RefPtrWillBeMember<SVGAnimatedIntegerOptionalInteger> m_order;
-    RefPtrWillBeMember<SVGAnimatedBoolean> m_preserveAlpha;
-    RefPtrWillBeMember<SVGAnimatedInteger> m_targetX;
-    RefPtrWillBeMember<SVGAnimatedInteger> m_targetY;
+    Member<SVGAnimatedNumber> m_bias;
+    Member<SVGAnimatedNumber> m_divisor;
+    Member<SVGAnimatedString> m_in1;
+    Member<SVGAnimatedEnumeration<EdgeModeType>> m_edgeMode;
+    Member<SVGAnimatedNumberList> m_kernelMatrix;
+    Member<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
+    Member<SVGAnimatedIntegerOptionalInteger> m_order;
+    Member<SVGAnimatedBoolean> m_preserveAlpha;
+    Member<SVGAnimatedInteger> m_targetX;
+    Member<SVGAnimatedInteger> m_targetY;
 };
 
 } // namespace blink

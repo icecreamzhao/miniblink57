@@ -27,7 +27,7 @@
 #define FontData_h
 
 #include "platform/PlatformExport.h"
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
@@ -39,7 +39,8 @@ namespace blink {
 class SimpleFontData;
 
 class PLATFORM_EXPORT FontData : public RefCounted<FontData> {
-    WTF_MAKE_NONCOPYABLE(FontData); WTF_MAKE_FAST_ALLOCATED(FontData);
+    WTF_MAKE_NONCOPYABLE(FontData);
+
 public:
     FontData()
         : m_maxGlyphPageTreeLevel(0)
@@ -63,8 +64,9 @@ private:
     mutable unsigned m_maxGlyphPageTreeLevel;
 };
 
-#define DEFINE_FONT_DATA_TYPE_CASTS(thisType, predicate) \
-    template<typename T> inline thisType* to##thisType(const RefPtr<T>& fontData) { return to##thisType(fontData.get()); } \
+#define DEFINE_FONT_DATA_TYPE_CASTS(thisType, predicate)                                              \
+    template <typename T>                                                                             \
+    inline thisType* to##thisType(const RefPtr<T>& fontData) { return to##thisType(fontData.get()); } \
     DEFINE_TYPE_CASTS(thisType, FontData, fontData, fontData->isSegmented() == predicate, fontData.isSegmented() == predicate)
 
 } // namespace blink

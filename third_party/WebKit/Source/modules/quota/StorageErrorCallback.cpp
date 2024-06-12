@@ -28,25 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/quota/StorageErrorCallback.h"
 
-#include "core/dom/DOMError.h"
+#include "modules/quota/DOMError.h"
 
 namespace blink {
 
-StorageErrorCallback::CallbackTask::CallbackTask(StorageErrorCallback* callback, ExceptionCode ec)
-    : m_callback(callback)
-    , m_ec(ec)
+std::unique_ptr<ExecutionContextTask>
+StorageErrorCallback::createSameThreadTask(StorageErrorCallback* callback,
+    ExceptionCode ec)
 {
+    return blink::createSameThreadTask(&StorageErrorCallback::run,
+        wrapPersistent(callback), ec);
 }
 
-void StorageErrorCallback::CallbackTask::performTask(ExecutionContext*)
+void StorageErrorCallback::run(StorageErrorCallback* callback,
+    ExceptionCode ec)
 {
-    if (!m_callback)
+    if (!callback)
         return;
-    m_callback->handleEvent(DOMError::create(m_ec));
+    callback->handleEvent(DOMError::create(ec));
 }
 
 } // namespace blink

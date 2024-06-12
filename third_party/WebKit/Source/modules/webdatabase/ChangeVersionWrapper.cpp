@@ -25,7 +25,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "config.h"
 #include "modules/webdatabase/ChangeVersionWrapper.h"
 
 #include "modules/webdatabase/Database.h"
@@ -33,13 +32,15 @@
 
 namespace blink {
 
-ChangeVersionWrapper::ChangeVersionWrapper(const String& oldVersion, const String& newVersion)
+ChangeVersionWrapper::ChangeVersionWrapper(const String& oldVersion,
+    const String& newVersion)
     : m_oldVersion(oldVersion.isolatedCopy())
     , m_newVersion(newVersion.isolatedCopy())
 {
 }
 
-bool ChangeVersionWrapper::performPreflight(SQLTransactionBackend* transaction)
+bool ChangeVersionWrapper::performPreflight(
+    SQLTransactionBackend* transaction)
 {
     ASSERT(transaction && transaction->database());
 
@@ -48,22 +49,26 @@ bool ChangeVersionWrapper::performPreflight(SQLTransactionBackend* transaction)
     String actualVersion;
     if (!database->getVersionFromDatabase(actualVersion)) {
         int sqliteError = database->sqliteDatabase().lastError();
-        database->reportChangeVersionResult(1, SQLError::UNKNOWN_ERR, sqliteError);
-        m_sqlError = SQLErrorData::create(SQLError::UNKNOWN_ERR, "unable to read the current version",
+        database->reportChangeVersionResult(1, SQLError::kUnknownErr, sqliteError);
+        m_sqlError = SQLErrorData::create(
+            SQLError::kUnknownErr, "unable to read the current version",
             sqliteError, database->sqliteDatabase().lastErrorMsg());
         return false;
     }
 
     if (actualVersion != m_oldVersion) {
-        database->reportChangeVersionResult(2, SQLError::VERSION_ERR, 0);
-        m_sqlError = SQLErrorData::create(SQLError::VERSION_ERR, "current version of the database and `oldVersion` argument do not match");
+        database->reportChangeVersionResult(2, SQLError::kVersionErr, 0);
+        m_sqlError = SQLErrorData::create(SQLError::kVersionErr,
+            "current version of the database and "
+            "`oldVersion` argument do not match");
         return false;
     }
 
     return true;
 }
 
-bool ChangeVersionWrapper::performPostflight(SQLTransactionBackend* transaction)
+bool ChangeVersionWrapper::performPostflight(
+    SQLTransactionBackend* transaction)
 {
     ASSERT(transaction && transaction->database());
 
@@ -71,8 +76,9 @@ bool ChangeVersionWrapper::performPostflight(SQLTransactionBackend* transaction)
 
     if (!database->setVersionInDatabase(m_newVersion)) {
         int sqliteError = database->sqliteDatabase().lastError();
-        database->reportChangeVersionResult(3, SQLError::UNKNOWN_ERR, sqliteError);
-        m_sqlError = SQLErrorData::create(SQLError::UNKNOWN_ERR, "unable to set new version in database",
+        database->reportChangeVersionResult(3, SQLError::kUnknownErr, sqliteError);
+        m_sqlError = SQLErrorData::create(
+            SQLError::kUnknownErr, "unable to set new version in database",
             sqliteError, database->sqliteDatabase().lastErrorMsg());
         return false;
     }
@@ -83,7 +89,8 @@ bool ChangeVersionWrapper::performPostflight(SQLTransactionBackend* transaction)
     return true;
 }
 
-void ChangeVersionWrapper::handleCommitFailedAfterPostflight(SQLTransactionBackend* transaction)
+void ChangeVersionWrapper::handleCommitFailedAfterPostflight(
+    SQLTransactionBackend* transaction)
 {
     transaction->database()->setCachedVersion(m_oldVersion);
 }

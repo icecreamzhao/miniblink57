@@ -13,15 +13,16 @@
 
 __SK_FORCE_IMAGE_DECODER_LINKING;
 
-
-static void usage(const char * argv0) {
+static void usage(const char* argv0)
+{
     SkDebugf("%s <input> \n", argv0);
     SkDebugf("    [--help|-h]: show this help message\n");
     SkDebugf("\n\n");
     SkDebugf("     input:     Either a directory or a single .skp file.\n");
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[])
+{
 #ifndef SK_BUILD_FOR_WIN32
     // Set numeric formatting to default. Otherwise shaders will have numbers with wrong comma.
     // QApplication documentation recommends setlocale("LC_NUMERIC", "C") after QApplication
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
     QStringList argList = a.arguments();
 
     if (argList.count() <= 0) {
-        return -1;  // should at least have command name
+        return -1; // should at least have command name
     }
 
     SkString input;
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
     SkString commandName(iter->toAscii().data());
     ++iter; // skip the command name
 
-    for ( ; iter != argList.end(); ++iter) {
+    for (; iter != argList.end(); ++iter) {
         if (0 == iter->compare("--help") || 0 == iter->compare("-h")) {
             usage(commandName.c_str());
             return -1;
@@ -67,6 +68,5 @@ int main(int argc, char *argv[]) {
 
     w.show();
     int result = a.exec();
-    SkGraphics::Term();
     return result;
 }

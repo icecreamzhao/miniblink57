@@ -10,10 +10,10 @@
 namespace ots {
 
 struct OpenTypeCVT {
-  const uint8_t *data;
-  uint32_t length;
+    const uint8_t* data;
+    uint32_t length;
 };
 
-}  // namespace ots
+} // namespace ots
 
-#endif  // OTS_CVT_H_
+#endif // OTS_CVT_H_

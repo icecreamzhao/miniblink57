@@ -33,8 +33,14 @@
 
 namespace blink {
 
-class MODULES_EXPORT MediaDeviceInfo final : public GarbageCollectedFinalized<MediaDeviceInfo>, public ScriptWrappable {
+class ScriptState;
+class ScriptValue;
+
+class MODULES_EXPORT MediaDeviceInfo final
+    : public GarbageCollectedFinalized<MediaDeviceInfo>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static MediaDeviceInfo* create(const WebMediaDeviceInfo&);
 
@@ -42,6 +48,8 @@ public:
     String kind() const;
     String label() const;
     String groupId() const;
+
+    ScriptValue toJSONForBinding(ScriptState*);
 
     DEFINE_INLINE_TRACE() { }
 

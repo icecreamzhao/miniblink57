@@ -8,9 +8,9 @@
 #ifndef Sk2DPathEffect_DEFINED
 #define Sk2DPathEffect_DEFINED
 
+#include "SkMatrix.h"
 #include "SkPath.h"
 #include "SkPathEffect.h"
-#include "SkMatrix.h"
 
 class SK_API Sk2DPathEffect : public SkPathEffect {
 public:
@@ -42,8 +42,8 @@ protected:
     SK_TO_STRING_OVERRIDE()
 
 private:
-    SkMatrix    fMatrix, fInverse;
-    bool        fMatrixIsInvertible;
+    SkMatrix fMatrix, fInverse;
+    bool fMatrixIsInvertible;
 
     // illegal
     Sk2DPathEffect(const Sk2DPathEffect&);
@@ -55,19 +55,23 @@ private:
 
 class SK_API SkLine2DPathEffect : public Sk2DPathEffect {
 public:
-    static SkLine2DPathEffect* Create(SkScalar width, const SkMatrix& matrix) {
-        return SkNEW_ARGS(SkLine2DPathEffect, (width, matrix));
+    static sk_sp<SkPathEffect> Make(SkScalar width, const SkMatrix& matrix)
+    {
+        return sk_sp<SkPathEffect>(new SkLine2DPathEffect(width, matrix));
     }
 
     virtual bool filterPath(SkPath* dst, const SkPath& src,
-                            SkStrokeRec*, const SkRect*) const override;
+        SkStrokeRec*, const SkRect*) const override;
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkLine2DPathEffect)
 
 protected:
     SkLine2DPathEffect(SkScalar width, const SkMatrix& matrix)
-        : Sk2DPathEffect(matrix), fWidth(width) {}
+        : Sk2DPathEffect(matrix)
+        , fWidth(width)
+    {
+    }
     void flatten(SkWriteBuffer&) const override;
 
     void nextSpan(int u, int v, int ucount, SkPath*) const override;
@@ -84,8 +88,9 @@ public:
      *  Stamp the specified path to fill the shape, using the matrix to define
      *  the latice.
      */
-    static SkPath2DPathEffect* Create(const SkMatrix& matrix, const SkPath& path) {
-        return SkNEW_ARGS(SkPath2DPathEffect, (matrix, path));
+    static sk_sp<SkPathEffect> Make(const SkMatrix& matrix, const SkPath& path)
+    {
+        return sk_sp<SkPathEffect>(new SkPath2DPathEffect(matrix, path));
     }
 
     SK_TO_STRING_OVERRIDE()
@@ -98,7 +103,7 @@ protected:
     void next(const SkPoint&, int u, int v, SkPath*) const override;
 
 private:
-    SkPath  fPath;
+    SkPath fPath;
 
     typedef Sk2DPathEffect INHERITED;
 };

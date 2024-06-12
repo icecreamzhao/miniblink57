@@ -16,27 +16,31 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(Foreign, HeapObject)
+    OBJECT_CONSTRUCTORS_IMPL(Foreign, HeapObject)
 
-CAST_ACCESSOR(Foreign)
+    CAST_ACCESSOR(Foreign)
 
-// static
-bool Foreign::IsNormalized(Object value) {
-  if (value == Smi::kZero) return true;
-  return Foreign::cast(value)->foreign_address() != kNullAddress;
-}
+    // static
+    bool Foreign::IsNormalized(Object value)
+    {
+        if (value == Smi::kZero)
+            return true;
+        return Foreign::cast(value)->foreign_address() != kNullAddress;
+    }
 
-Address Foreign::foreign_address() {
-  return READ_UINTPTR_FIELD(*this, kForeignAddressOffset);
-}
+    Address Foreign::foreign_address()
+    {
+        return READ_UINTPTR_FIELD(*this, kForeignAddressOffset);
+    }
 
-void Foreign::set_foreign_address(Address value) {
-  WRITE_UINTPTR_FIELD(*this, kForeignAddressOffset, value);
-}
+    void Foreign::set_foreign_address(Address value)
+    {
+        WRITE_UINTPTR_FIELD(*this, kForeignAddressOffset, value);
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_FOREIGN_INL_H_
+#endif // V8_OBJECTS_FOREIGN_INL_H_

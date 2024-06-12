@@ -23,40 +23,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/mediastream/MediaDevicesRequest.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
 #include "core/dom/DOMException.h"
 #include "core/dom/Document.h"
-#include "core/dom/ExceptionCode.h"
 #include "modules/mediastream/UserMediaController.h"
 
 namespace blink {
 
-MediaDevicesRequest* MediaDevicesRequest::create(ScriptState* state, UserMediaController* controller)
+MediaDevicesRequest* MediaDevicesRequest::create(
+    ScriptState* state,
+    UserMediaController* controller)
 {
-    MediaDevicesRequest* request = new MediaDevicesRequest(state, controller);
-    request->suspendIfNeeded();
-    return request;
+    return new MediaDevicesRequest(state, controller);
 }
 
-MediaDevicesRequest::MediaDevicesRequest(ScriptState* state, UserMediaController* controller)
-    : ActiveDOMObject(state->executionContext())
+MediaDevicesRequest::MediaDevicesRequest(ScriptState* state,
+    UserMediaController* controller)
+    : ContextLifecycleObserver(state->getExecutionContext())
     , m_controller(controller)
     , m_resolver(ScriptPromiseResolver::create(state))
 {
 }
 
-MediaDevicesRequest::~MediaDevicesRequest()
-{
-}
+MediaDevicesRequest::~MediaDevicesRequest() { }
 
 Document* MediaDevicesRequest::ownerDocument()
 {
-    if (ExecutionContext* context = executionContext()) {
+    if (ExecutionContext* context = getExecutionContext()) {
         return toDocument(context);
     }
 
@@ -65,7 +61,7 @@ Document* MediaDevicesRequest::ownerDocument()
 
 ScriptPromise MediaDevicesRequest::start()
 {
-    ASSERT(m_controller);
+    DCHECK(m_controller);
     m_resolver->keepAliveWhilePending();
     m_controller->requestMediaDevices(this);
     return m_resolver->promise();
@@ -73,13 +69,13 @@ ScriptPromise MediaDevicesRequest::start()
 
 void MediaDevicesRequest::succeed(const MediaDeviceInfoVector& mediaDevices)
 {
-    if (!executionContext() || !m_resolver)
+    if (!getExecutionContext() || !m_resolver)
         return;
 
     m_resolver->resolve(mediaDevices);
 }
 
-void MediaDevicesRequest::stop()
+void MediaDevicesRequest::contextDestroyed(ExecutionContext*)
 {
     m_controller.clear();
     m_resolver.clear();
@@ -89,7 +85,7 @@ DEFINE_TRACE(MediaDevicesRequest)
 {
     visitor->trace(m_controller);
     visitor->trace(m_resolver);
-    ActiveDOMObject::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 } // namespace blink

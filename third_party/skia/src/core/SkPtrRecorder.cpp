@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -8,7 +7,8 @@
 #include "SkPtrRecorder.h"
 #include "SkTSearch.h"
 
-void SkPtrSet::reset() {
+void SkPtrSet::reset()
+{
     Pair* p = fList.begin();
     Pair* stop = fList.end();
     while (p < stop) {
@@ -18,12 +18,14 @@ void SkPtrSet::reset() {
     fList.reset();
 }
 
-bool SkPtrSet::Less(const Pair& a, const Pair& b) {
+bool SkPtrSet::Less(const Pair& a, const Pair& b)
+{
     return (char*)a.fPtr < (char*)b.fPtr;
 }
 
-uint32_t SkPtrSet::find(void* ptr) const {
-    if (NULL == ptr) {
+uint32_t SkPtrSet::find(void* ptr) const
+{
+    if (nullptr == ptr) {
         return 0;
     }
 
@@ -38,8 +40,9 @@ uint32_t SkPtrSet::find(void* ptr) const {
     return fList[index].fIndex;
 }
 
-uint32_t SkPtrSet::add(void* ptr) {
-    if (NULL == ptr) {
+uint32_t SkPtrSet::add(void* ptr)
+{
+    if (nullptr == ptr) {
         return 0;
     }
 
@@ -59,7 +62,8 @@ uint32_t SkPtrSet::add(void* ptr) {
     }
 }
 
-void SkPtrSet::copyToArray(void* array[]) const {
+void SkPtrSet::copyToArray(void* array[]) const
+{
     int count = fList.count();
     if (count > 0) {
         SkASSERT(array);

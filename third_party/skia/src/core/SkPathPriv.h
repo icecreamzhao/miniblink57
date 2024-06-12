@@ -13,12 +13,13 @@
 class SkPathPriv {
 public:
     enum FirstDirection {
-        kCW_FirstDirection,         // == SkPath::kCW_Direction
-        kCCW_FirstDirection,        // == SkPath::kCCW_Direction
+        kCW_FirstDirection, // == SkPath::kCW_Direction
+        kCCW_FirstDirection, // == SkPath::kCCW_Direction
         kUnknown_FirstDirection,
     };
 
-    static FirstDirection AsFirstDirection(SkPath::Direction dir) {
+    static FirstDirection AsFirstDirection(SkPath::Direction dir)
+    {
         // since we agree numerically for the values in Direction, we can just cast.
         return (FirstDirection)dir;
     }
@@ -27,9 +28,12 @@ public:
      *  Return the opposite of the specified direction. kUnknown is its own
      *  opposite.
      */
-    static FirstDirection OppositeFirstDirection(FirstDirection dir) {
+    static FirstDirection OppositeFirstDirection(FirstDirection dir)
+    {
         static const FirstDirection gOppositeDir[] = {
-            kCCW_FirstDirection, kCW_FirstDirection, kUnknown_FirstDirection, 
+            kCCW_FirstDirection,
+            kCW_FirstDirection,
+            kUnknown_FirstDirection,
         };
         return gOppositeDir[dir];
     }
@@ -49,16 +53,52 @@ public:
      *  specified direction. If dir is kUnknown, returns true if the direction
      *  cannot be computed.
      */
-    static bool CheapIsFirstDirection(const SkPath& path, FirstDirection dir) {
+    static bool CheapIsFirstDirection(const SkPath& path, FirstDirection dir)
+    {
         FirstDirection computedDir = kUnknown_FirstDirection;
         (void)CheapComputeFirstDirection(path, &computedDir);
         return computedDir == dir;
     }
 
-    static bool LastVerbIsClose(const SkPath& path) {
-        int count = path.countVerbs();
-        return count >= 1 && path.fPathRef->verbs()[~(count - 1)] == SkPath::Verb::kClose_Verb;
+    static bool IsClosedSingleContour(const SkPath& path)
+    {
+        int verbCount = path.countVerbs();
+        if (verbCount == 0)
+            return false;
+        int moveCount = 0;
+        auto verbs = path.fPathRef->verbs();
+        for (int i = 0; i < verbCount; i++) {
+            switch (verbs[~i]) { // verbs are stored backwards; we use [~i] to get the i'th verb
+            case SkPath::Verb::kMove_Verb:
+                moveCount += 1;
+                if (moveCount > 1) {
+                    return false;
+                }
+                break;
+            case SkPath::Verb::kClose_Verb:
+                if (i == verbCount - 1) {
+                    return true;
+                }
+                return false;
+            default:
+                break;
+            }
+        }
+        return false;
     }
+
+    static void AddGenIDChangeListener(const SkPath& path, SkPathRef::GenIDChangeListener* listener)
+    {
+        path.fPathRef->addGenIDChangeListener(listener);
+    }
+
+    /**
+     * This returns true for a rect that begins and ends at the same corner and has either a move
+     * followed by four lines or a move followed by 3 lines and a close. None of the parameters are
+     * optional. This does not permit degenerate line or point rectangles.
+     */
+    static bool IsSimpleClosedRect(const SkPath& path, SkRect* rect, SkPath::Direction* direction,
+        unsigned* start);
 };
 
 #endif

@@ -31,23 +31,38 @@
 #ifndef SVGAnimatedNumberList_h
 #define SVGAnimatedNumberList_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGNumberListTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-// SVG Spec: http://www.w3.org/TR/SVG11/types.html#InterfaceSVGAnimatedNumberList
-class SVGAnimatedNumberList final : public SVGAnimatedProperty<SVGNumberList> {
+// SVG Spec:
+// http://www.w3.org/TR/SVG11/types.html#InterfaceSVGAnimatedNumberList
+class SVGAnimatedNumberList final : public SVGAnimatedProperty<SVGNumberList>,
+                                    public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGAnimatedNumberList> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGNumberList> initialValue)
+    static SVGAnimatedNumberList* create(SVGElement* contextElement,
+        const QualifiedName& attributeName)
     {
-        return adoptRefWillBeNoop(new SVGAnimatedNumberList(contextElement, attributeName, initialValue));
+        return new SVGAnimatedNumberList(contextElement, attributeName);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
+    {
+        visitor->traceWrappers(contextElement());
     }
 
 protected:
-    SVGAnimatedNumberList(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGNumberList> initialValue)
-        : SVGAnimatedProperty<SVGNumberList>(contextElement, attributeName, initialValue) { }
+    SVGAnimatedNumberList(SVGElement* contextElement,
+        const QualifiedName& attributeName)
+        : SVGAnimatedProperty<SVGNumberList>(contextElement,
+            attributeName,
+            SVGNumberList::create())
+    {
+    }
 };
 
 } // namespace blink

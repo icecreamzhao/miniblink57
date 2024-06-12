@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "web/MediaKeysClientImpl.h"
 
 #include "core/dom/Document.h"
@@ -13,11 +12,10 @@
 
 namespace blink {
 
-MediaKeysClientImpl::MediaKeysClientImpl()
-{
-}
+MediaKeysClientImpl::MediaKeysClientImpl() { }
 
-WebEncryptedMediaClient* MediaKeysClientImpl::encryptedMediaClient(ExecutionContext* executionContext)
+WebEncryptedMediaClient* MediaKeysClientImpl::encryptedMediaClient(
+    ExecutionContext* executionContext)
 {
     Document* document = toDocument(executionContext);
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());

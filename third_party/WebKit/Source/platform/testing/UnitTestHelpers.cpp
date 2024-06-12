@@ -23,30 +23,77 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/testing/UnitTestHelpers.h"
 
+#include "base/files/file_path.h"
+#include "base/files/file_util.h"
+#include "base/message_loop/message_loop.h"
+#include "base/path_service.h"
+#include "base/run_loop.h"
+#include "platform/SharedBuffer.h"
+#include "platform/Timer.h"
+#include "platform/WebTaskRunner.h"
+#include "platform/heap/Handle.h"
+#include "public/platform/FilePathConversion.h"
 #include "public/platform/Platform.h"
+#include "public/platform/WebString.h"
 #include "public/platform/WebThread.h"
 #include "public/platform/WebTraceLocation.h"
-#include "public/platform/WebUnitTestSupport.h"
+#include "wtf/text/StringUTF8Adaptor.h"
 
 namespace blink {
 namespace testing {
 
-class QuitTask : public WebThread::Task {
-public:
-    virtual void run()
+    void runPendingTasks()
     {
-        Platform::current()->unitTestSupport()->exitRunLoop();
+        Platform::current()->currentThread()->getWebTaskRunner()->postTask(
+            BLINK_FROM_HERE, WTF::bind(&exitRunLoop));
+
+        // We forbid GC in the tasks. Otherwise the registered GCTaskObserver tries
+        // to run GC with NoHeapPointerOnStack.
+        ThreadState::current()->enterGCForbiddenScope();
+        enterRunLoop();
+        ThreadState::current()->leaveGCForbiddenScope();
     }
-};
 
-void runPendingTasks()
-{
-    Platform::current()->currentThread()->postTask(FROM_HERE, new QuitTask);
-    Platform::current()->unitTestSupport()->enterRunLoop();
-}
+    void runDelayedTasks(double delayMs)
+    {
+        Platform::current()->currentThread()->getWebTaskRunner()->postDelayedTask(
+            BLINK_FROM_HERE, WTF::bind(&exitRunLoop), delayMs);
+        enterRunLoop();
+    }
 
-}
-}
+    String blinkRootDir()
+    {
+        base::FilePath path;
+        base::PathService::Get(base::DIR_SOURCE_ROOT, &path);
+        path = path.Append(FILE_PATH_LITERAL("third_party/WebKit"));
+        path = base::MakeAbsoluteFilePath(path);
+        return String::fromUTF8(path.MaybeAsASCII().c_str());
+    }
+
+    PassRefPtr<SharedBuffer> readFromFile(const String& path)
+    {
+        base::FilePath filePath = blink::WebStringToFilePath(path);
+        std::string buffer;
+        base::ReadFileToString(filePath, &buffer);
+        return SharedBuffer::create(buffer.data(), buffer.size());
+    }
+
+    void enterRunLoop()
+    {
+        base::RunLoop().Run();
+    }
+
+    void exitRunLoop()
+    {
+        base::MessageLoop::current()->QuitWhenIdle();
+    }
+
+    void yieldCurrentThread()
+    {
+        base::PlatformThread::YieldCurrentThread();
+    }
+
+} // namespace testing
+} // namespace blink

@@ -25,7 +25,6 @@
  *
  */
 
-#include "config.h"
 #include "modules/filesystem/WorkerGlobalScopeFileSystem.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -42,89 +41,134 @@
 #include "modules/filesystem/SyncCallbackHelper.h"
 #include "platform/FileSystemType.h"
 #include "platform/weborigin/SecurityOrigin.h"
+#include <memory>
 
 namespace blink {
 
-void WorkerGlobalScopeFileSystem::webkitRequestFileSystem(WorkerGlobalScope& worker, int type, long long size, FileSystemCallback* successCallback, ErrorCallback* errorCallback)
+void WorkerGlobalScopeFileSystem::webkitRequestFileSystem(
+    WorkerGlobalScope& worker,
+    int type,
+    long long size,
+    FileSystemCallback* successCallback,
+    ErrorCallback* errorCallback)
 {
-    ExecutionContext* secureContext = worker.executionContext();
-    if (!secureContext->securityOrigin()->canAccessFileSystem()) {
-        DOMFileSystem::scheduleCallback(&worker, errorCallback, FileError::create(FileError::SECURITY_ERR));
+    ExecutionContext* secureContext = worker.getExecutionContext();
+    if (!secureContext->getSecurityOrigin()->canAccessFileSystem()) {
+        DOMFileSystem::reportError(&worker,
+            ScriptErrorCallback::wrap(errorCallback),
+            FileError::kSecurityErr);
         return;
     }
 
     FileSystemType fileSystemType = static_cast<FileSystemType>(type);
     if (!DOMFileSystemBase::isValidType(fileSystemType)) {
-        DOMFileSystem::scheduleCallback(&worker, errorCallback, FileError::create(FileError::INVALID_MODIFICATION_ERR));
+        DOMFileSystem::reportError(&worker,
+            ScriptErrorCallback::wrap(errorCallback),
+            FileError::kInvalidModificationErr);
         return;
     }
 
-    LocalFileSystem::from(worker)->requestFileSystem(&worker, fileSystemType, size, FileSystemCallbacks::create(successCallback, errorCallback, &worker, fileSystemType));
+    LocalFileSystem::from(worker)->requestFileSystem(
+        &worker, fileSystemType, size,
+        FileSystemCallbacks::create(successCallback,
+            ScriptErrorCallback::wrap(errorCallback),
+            &worker, fileSystemType));
 }
 
-DOMFileSystemSync* WorkerGlobalScopeFileSystem::webkitRequestFileSystemSync(WorkerGlobalScope& worker, int type, long long size, ExceptionState& exceptionState)
+DOMFileSystemSync* WorkerGlobalScopeFileSystem::webkitRequestFileSystemSync(
+    WorkerGlobalScope& worker,
+    int type,
+    long long size,
+    ExceptionState& exceptionState)
 {
-    ExecutionContext* secureContext = worker.executionContext();
-    if (!secureContext->securityOrigin()->canAccessFileSystem()) {
+    ExecutionContext* secureContext = worker.getExecutionContext();
+    if (!secureContext->getSecurityOrigin()->canAccessFileSystem()) {
         exceptionState.throwSecurityError(FileError::securityErrorMessage);
         return 0;
     }
 
     FileSystemType fileSystemType = static_cast<FileSystemType>(type);
     if (!DOMFileSystemBase::isValidType(fileSystemType)) {
-        exceptionState.throwDOMException(InvalidModificationError, "the type must be TEMPORARY or PERSISTENT.");
+        exceptionState.throwDOMException(
+            InvalidModificationError,
+            "the type must be kTemporary or kPersistent.");
         return 0;
     }
 
     FileSystemSyncCallbackHelper* helper = FileSystemSyncCallbackHelper::create();
-    OwnPtr<AsyncFileSystemCallbacks> callbacks = FileSystemCallbacks::create(helper->successCallback(), helper->errorCallback(), &worker, fileSystemType);
+    std::unique_ptr<AsyncFileSystemCallbacks> callbacks = FileSystemCallbacks::create(helper->getSuccessCallback(),
+        helper->getErrorCallback(), &worker,
+        fileSystemType);
     callbacks->setShouldBlockUntilCompletion(true);
 
-    LocalFileSystem::from(worker)->requestFileSystem(&worker, fileSystemType, size, callbacks.release());
+    LocalFileSystem::from(worker)->requestFileSystem(&worker, fileSystemType,
+        size, std::move(callbacks));
     return helper->getResult(exceptionState);
 }
 
-void WorkerGlobalScopeFileSystem::webkitResolveLocalFileSystemURL(WorkerGlobalScope& worker, const String& url, EntryCallback* successCallback, ErrorCallback* errorCallback)
+void WorkerGlobalScopeFileSystem::webkitResolveLocalFileSystemURL(
+    WorkerGlobalScope& worker,
+    const String& url,
+    EntryCallback* successCallback,
+    ErrorCallback* errorCallback)
 {
     KURL completedURL = worker.completeURL(url);
-    ExecutionContext* secureContext = worker.executionContext();
-    if (!secureContext->securityOrigin()->canAccessFileSystem() || !secureContext->securityOrigin()->canRequest(completedURL)) {
-        DOMFileSystem::scheduleCallback(&worker, errorCallback, FileError::create(FileError::SECURITY_ERR));
+    ExecutionContext* secureContext = worker.getExecutionContext();
+    if (!secureContext->getSecurityOrigin()->canAccessFileSystem() || !secureContext->getSecurityOrigin()->canRequest(completedURL)) {
+        DOMFileSystem::reportError(&worker,
+            ScriptErrorCallback::wrap(errorCallback),
+            FileError::kSecurityErr);
         return;
     }
 
     if (!completedURL.isValid()) {
-        DOMFileSystem::scheduleCallback(&worker, errorCallback, FileError::create(FileError::ENCODING_ERR));
+        DOMFileSystem::reportError(&worker,
+            ScriptErrorCallback::wrap(errorCallback),
+            FileError::kEncodingErr);
         return;
     }
 
-    LocalFileSystem::from(worker)->resolveURL(&worker, completedURL, ResolveURICallbacks::create(successCallback, errorCallback, &worker));
+    LocalFileSystem::from(worker)->resolveURL(
+        &worker, completedURL,
+        ResolveURICallbacks::create(
+            successCallback, ScriptErrorCallback::wrap(errorCallback), &worker));
 }
 
-EntrySync* WorkerGlobalScopeFileSystem::webkitResolveLocalFileSystemSyncURL(WorkerGlobalScope& worker, const String& url, ExceptionState& exceptionState)
+EntrySync* WorkerGlobalScopeFileSystem::webkitResolveLocalFileSystemSyncURL(
+    WorkerGlobalScope& worker,
+    const String& url,
+    ExceptionState& exceptionState)
 {
     KURL completedURL = worker.completeURL(url);
-    ExecutionContext* secureContext = worker.executionContext();
-    if (!secureContext->securityOrigin()->canAccessFileSystem() || !secureContext->securityOrigin()->canRequest(completedURL)) {
+    ExecutionContext* secureContext = worker.getExecutionContext();
+    if (!secureContext->getSecurityOrigin()->canAccessFileSystem() || !secureContext->getSecurityOrigin()->canRequest(completedURL)) {
         exceptionState.throwSecurityError(FileError::securityErrorMessage);
         return 0;
     }
 
     if (!completedURL.isValid()) {
-        exceptionState.throwDOMException(EncodingError, "the URL '" + url + "' is invalid.");
+        exceptionState.throwDOMException(EncodingError,
+            "the URL '" + url + "' is invalid.");
         return 0;
     }
 
     EntrySyncCallbackHelper* resolveURLHelper = EntrySyncCallbackHelper::create();
-    OwnPtr<AsyncFileSystemCallbacks> callbacks = ResolveURICallbacks::create(resolveURLHelper->successCallback(), resolveURLHelper->errorCallback(), &worker);
+    std::unique_ptr<AsyncFileSystemCallbacks> callbacks = ResolveURICallbacks::create(resolveURLHelper->getSuccessCallback(),
+        resolveURLHelper->getErrorCallback(),
+        &worker);
     callbacks->setShouldBlockUntilCompletion(true);
 
-    LocalFileSystem::from(worker)->resolveURL(&worker, completedURL, callbacks.release());
+    LocalFileSystem::from(worker)->resolveURL(&worker, completedURL,
+        std::move(callbacks));
 
     return resolveURLHelper->getResult(exceptionState);
 }
 
-static_assert(static_cast<int>(WorkerGlobalScopeFileSystem::TEMPORARY) == static_cast<int>(FileSystemTypeTemporary), "WorkerGlobalScopeFileSystem::TEMPORARY should match FileSystemTypeTemporary");
-static_assert(static_cast<int>(WorkerGlobalScopeFileSystem::PERSISTENT) == static_cast<int>(FileSystemTypePersistent), "WorkerGlobalScopeFileSystem::PERSISTENT should match FileSystemTypePersistent");
+static_assert(static_cast<int>(WorkerGlobalScopeFileSystem::kTemporary) == static_cast<int>(FileSystemTypeTemporary),
+    "WorkerGlobalScopeFileSystem::kTemporary should match "
+    "FileSystemTypeTemporary");
+static_assert(static_cast<int>(WorkerGlobalScopeFileSystem::kPersistent) == static_cast<int>(FileSystemTypePersistent),
+    "WorkerGlobalScopeFileSystem::kPersistent should match "
+    "FileSystemTypePersistent");
 
 } // namespace blink

@@ -28,6 +28,7 @@ namespace blink {
 
 class SVGPolygonElement final : public SVGPolyElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGPolygonElement);
 

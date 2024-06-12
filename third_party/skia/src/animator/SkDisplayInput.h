@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayInput_DEFINED
 #define SkDisplayInput_DEFINED
 
@@ -16,15 +15,17 @@
 class SkInput : public SkDisplayable {
     DECLARE_MEMBER_INFO(Input);
     SkInput();
-    SkDisplayable* contains(const SkString& ) override;
+    SkDisplayable* contains(const SkString&) override;
     bool getProperty(int index, SkScriptValue* value) const override;
-    bool enable(SkAnimateMaker & ) override;
+    bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
+
 protected:
     SkString name;
-    int32_t  fInt;
+    int32_t fInt;
     SkScalar fFloat;
     SkString string;
+
 private:
     friend class SkDisplayEvent;
     friend class SkPost;

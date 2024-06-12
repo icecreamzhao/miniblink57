@@ -2,20 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/workers/InProcessWorkerBase.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/events/MessageEvent.h"
 #include "core/fetch/ResourceFetcher.h"
-#include "core/frame/LocalDOMWindow.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/inspector/InspectorInstrumentation.h"
-#include "core/workers/WorkerGlobalScopeProxy.h"
+#include "core/workers/InProcessWorkerMessagingProxy.h"
 #include "core/workers/WorkerScriptLoader.h"
-#include "core/workers/WorkerThread.h"
-#include "platform/network/ContentSecurityPolicyResponseHeaders.h"
-#include "wtf/MainThread.h"
+#include <memory>
 
 namespace blink {
 
@@ -27,39 +23,44 @@ InProcessWorkerBase::InProcessWorkerBase(ExecutionContext* context)
 
 InProcessWorkerBase::~InProcessWorkerBase()
 {
-    ASSERT(isMainThread());
+    DCHECK(isMainThread());
     if (!m_contextProxy)
         return;
-    m_contextProxy->workerObjectDestroyed();
+    m_contextProxy->parentObjectDestroyed();
 }
 
-void InProcessWorkerBase::postMessage(ExecutionContext* context, PassRefPtr<SerializedScriptValue> message, const MessagePortArray* ports, ExceptionState& exceptionState)
+void InProcessWorkerBase::postMessage(ExecutionContext* context,
+    PassRefPtr<SerializedScriptValue> message,
+    const MessagePortArray& ports,
+    ExceptionState& exceptionState)
 {
-    ASSERT(m_contextProxy);
+    DCHECK(m_contextProxy);
     // Disentangle the port in preparation for sending it to the remote context.
-    OwnPtr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
+    std::unique_ptr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
     if (exceptionState.hadException())
         return;
-    m_contextProxy->postMessageToWorkerGlobalScope(message, channels.release());
+    m_contextProxy->postMessageToWorkerGlobalScope(std::move(message),
+        std::move(channels));
 }
 
-bool InProcessWorkerBase::initialize(ExecutionContext* context, const String& url, ExceptionState& exceptionState)
+bool InProcessWorkerBase::initialize(ExecutionContext* context,
+    const String& url,
+    ExceptionState& exceptionState)
 {
-    suspendIfNeeded();
-
-    KURL scriptURL = resolveURL(url, exceptionState);
+    // TODO(mkwst): Revisit the context as
+    // https://drafts.css-houdini.org/worklets/ evolves.
+    KURL scriptURL = resolveURL(url, exceptionState, WebURLRequest::RequestContextScript);
     if (scriptURL.isEmpty())
         return false;
 
-    m_scriptLoader = adoptPtr(new WorkerScriptLoader());
+    m_scriptLoader = WorkerScriptLoader::create();
     m_scriptLoader->loadAsynchronously(
-        *context,
-        scriptURL,
-        DenyCrossOriginRequests,
-        bind(&InProcessWorkerBase::onResponse, this),
-        bind(&InProcessWorkerBase::onFinished, this));
+        *context, scriptURL, DenyCrossOriginRequests,
+        context->securityContext().addressSpace(),
+        WTF::bind(&InProcessWorkerBase::onResponse, wrapPersistent(this)),
+        WTF::bind(&InProcessWorkerBase::onFinished, wrapPersistent(this)));
 
-    m_contextProxy = createWorkerGlobalScopeProxy(context);
+    m_contextProxy = createInProcessWorkerMessagingProxy(context);
 
     return true;
 }
@@ -67,45 +68,45 @@ bool InProcessWorkerBase::initialize(ExecutionContext* context, const String& ur
 void InProcessWorkerBase::terminate()
 {
     if (m_contextProxy)
-        m_contextProxy->terminateWorkerGlobalScope();
+        m_contextProxy->terminateGlobalScope();
 }
 
-void InProcessWorkerBase::stop()
+void InProcessWorkerBase::contextDestroyed(ExecutionContext*)
 {
+    if (m_scriptLoader)
+        m_scriptLoader->cancel();
     terminate();
 }
 
 bool InProcessWorkerBase::hasPendingActivity() const
 {
-    // The worker context does not exist while loading, so we must ensure that the worker object is not collected, nor are its event listeners.
+    // The worker context does not exist while loading, so we must ensure that the
+    // worker object is not collected, nor are its event listeners.
     return (m_contextProxy && m_contextProxy->hasPendingActivity()) || m_scriptLoader;
-}
-
-PassRefPtr<ContentSecurityPolicy> InProcessWorkerBase::contentSecurityPolicy()
-{
-    if (m_scriptLoader)
-        return m_scriptLoader->contentSecurityPolicy();
-    return m_contentSecurityPolicy;
 }
 
 void InProcessWorkerBase::onResponse()
 {
-    InspectorInstrumentation::didReceiveScriptResponse(executionContext(), m_scriptLoader->identifier());
+    InspectorInstrumentation::didReceiveScriptResponse(
+        getExecutionContext(), m_scriptLoader->identifier());
 }
 
 void InProcessWorkerBase::onFinished()
 {
-    if (m_scriptLoader->failed()) {
+    if (m_scriptLoader->canceled()) {
+        // Do nothing.
+    } else if (m_scriptLoader->failed()) {
         dispatchEvent(Event::createCancelable(EventTypeNames::error));
     } else {
-        ASSERT(m_contextProxy);
-        WorkerThreadStartMode startMode = DontPauseWorkerGlobalScopeOnStart;
-        if (InspectorInstrumentation::shouldPauseDedicatedWorkerOnStart(executionContext()))
-            startMode = PauseWorkerGlobalScopeOnStart;
-        m_contextProxy->startWorkerGlobalScope(m_scriptLoader->url(), executionContext()->userAgent(m_scriptLoader->url()), m_scriptLoader->script(), startMode);
-        InspectorInstrumentation::scriptImported(executionContext(), m_scriptLoader->identifier(), m_scriptLoader->script());
+        m_contextProxy->startWorkerGlobalScope(
+            m_scriptLoader->url(), getExecutionContext()->userAgent(),
+            m_scriptLoader->script(),
+            m_scriptLoader->releaseContentSecurityPolicy(),
+            m_scriptLoader->getReferrerPolicy());
+        InspectorInstrumentation::scriptImported(getExecutionContext(),
+            m_scriptLoader->identifier(),
+            m_scriptLoader->script());
     }
-    m_contentSecurityPolicy = m_scriptLoader->releaseContentSecurityPolicy();
     m_scriptLoader = nullptr;
 }
 

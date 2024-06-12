@@ -22,26 +22,32 @@ class SkBitmap;
 class SkCanvas;
 
 struct Config {
-    const char* name;
+    SkString name;
     Benchmark::Backend backend;
     SkColorType color;
     SkAlphaType alpha;
+    sk_sp<SkColorSpace> colorSpace;
     int samples;
 #if SK_SUPPORT_GPU
-    GrContextFactory::GLContextType ctxType;
+    sk_gpu_test::GrContextFactory::ContextType ctxType;
+    sk_gpu_test::GrContextFactory::ContextOptions ctxOptions;
     bool useDFText;
 #else
     int bogusInt;
+    int bogusIntOption;
     bool bogusBool;
 #endif
 };
 
 struct Target {
-    explicit Target(const Config& c) : config(c) { }
+    explicit Target(const Config& c)
+        : config(c)
+    {
+    }
     virtual ~Target() { }
 
     const Config config;
-    SkAutoTDelete<SkSurface> surface;
+    sk_sp<SkSurface> surface;
 
     /** Called once per target, immediately before any timing or drawing. */
     virtual void setup() { }
@@ -76,12 +82,13 @@ struct Target {
     /** Writes any config-specific data to the log. */
     virtual void fillOptions(ResultsWriter*) { }
 
-    SkCanvas* getCanvas() const {
+    SkCanvas* getCanvas() const
+    {
         if (!surface.get()) {
-            return NULL;
+            return nullptr;
         }
         return surface->getCanvas();
     }
 };
 
-#endif  // nanobench_DEFINED
+#endif // nanobench_DEFINED

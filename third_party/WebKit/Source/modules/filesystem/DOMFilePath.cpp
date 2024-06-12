@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/filesystem/DOMFilePath.h"
 
 #include "wtf/Vector.h"
@@ -76,7 +75,7 @@ bool DOMFilePath::isParentOf(const String& parent, const String& mayBeChild)
     ASSERT(DOMFilePath::isAbsolute(mayBeChild));
     if (parent == DOMFilePath::root && mayBeChild != DOMFilePath::root)
         return true;
-    if (parent.length() >= mayBeChild.length() || !mayBeChild.startsWith(parent, TextCaseInsensitive))
+    if (parent.length() >= mayBeChild.length() || !mayBeChild.startsWith(parent, TextCaseUnicodeInsensitive))
         return false;
     if (mayBeChild[parent.length()] != DOMFilePath::separator)
         return false;
@@ -94,10 +93,10 @@ String DOMFilePath::removeExtraParentReferences(const String& path)
             continue;
         if (components[i] == "..") {
             if (canonicalized.size() > 0)
-                canonicalized.removeLast();
+                canonicalized.pop_back();
             continue;
         }
-        canonicalized.append(components[i]);
+        canonicalized.push_back(components[i]);
     }
     if (canonicalized.isEmpty())
         return DOMFilePath::root;
@@ -118,11 +117,13 @@ bool DOMFilePath::isValidPath(const String& path)
     if (path.find(static_cast<UChar>(0)) != WTF::kNotFound)
         return false;
 
-    // While not [yet] restricted by the spec, '\\' complicates implementation for Chromium.
+    // While not [yet] restricted by the spec, '\\' complicates implementation for
+    // Chromium.
     if (path.find('\\') != WTF::kNotFound)
         return false;
 
-    // This method is only called on fully-evaluated absolute paths. Any sign of ".." or "." is likely an attempt to break out of the sandbox.
+    // This method is only called on fully-evaluated absolute paths. Any sign of
+    // ".." or "." is likely an attempt to break out of the sandbox.
     Vector<String> components;
     path.split(DOMFilePath::separator, components);
     for (size_t i = 0; i < components.size(); ++i) {

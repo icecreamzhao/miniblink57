@@ -5,12 +5,13 @@
  * found in the LICENSE file.
  */
 
-#include "SkMatrix.h"
 #include "SkMatrix22.h"
+#include "SkMatrix.h"
 #include "SkPoint.h"
 #include "SkScalar.h"
 
-void SkComputeGivensRotation(const SkVector& h, SkMatrix* G) {
+void SkComputeGivensRotation(const SkVector& h, SkMatrix* G)
+{
     const SkScalar& a = h.fX;
     const SkScalar& b = h.fY;
     SkScalar c, s;
@@ -24,13 +25,13 @@ void SkComputeGivensRotation(const SkVector& h, SkMatrix* G) {
         //r = SkScalarAbs(b);
     } else if (SkScalarAbs(b) > SkScalarAbs(a)) {
         SkScalar t = a / b;
-        SkScalar u = SkScalarCopySign(SkScalarSqrt(SK_Scalar1 + t*t), b);
+        SkScalar u = SkScalarCopySign(SkScalarSqrt(SK_Scalar1 + t * t), b);
         s = -SK_Scalar1 / u;
         c = -s * t;
         //r = b * u;
     } else {
         SkScalar t = b / a;
-        SkScalar u = SkScalarCopySign(SkScalarSqrt(SK_Scalar1 + t*t), a);
+        SkScalar u = SkScalarCopySign(SkScalarSqrt(SK_Scalar1 + t * t), a);
         c = SK_Scalar1 / u;
         s = -c * t;
         //r = a * u;

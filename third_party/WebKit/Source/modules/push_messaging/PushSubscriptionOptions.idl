@@ -4,6 +4,10 @@
 
 // https://w3c.github.io/push-api/#idl-def-PushSubscriptionOptions
 
-dictionary PushSubscriptionOptions {
-    boolean userVisibleOnly = false;
+[
+    Exposed=(Window,ServiceWorker),
+    RuntimeEnabled=PushMessaging,
+] interface PushSubscriptionOptions {
+    readonly attribute boolean userVisibleOnly;
+    [SameObject] readonly attribute ArrayBuffer? applicationServerKey;
 };

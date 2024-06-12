@@ -28,12 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/LayoutTestSupport.h"
+
+#include "wtf/Assertions.h"
 
 namespace blink {
 
 static bool s_isRunningLayoutTest = false;
+static bool s_isMockThemeEnabled = false;
 static bool s_isFontAntialiasingEnabled = false;
 
 bool LayoutTestSupport::isRunningLayoutTest()
@@ -44,6 +46,17 @@ bool LayoutTestSupport::isRunningLayoutTest()
 void LayoutTestSupport::setIsRunningLayoutTest(bool value)
 {
     s_isRunningLayoutTest = value;
+}
+
+bool LayoutTestSupport::isMockThemeEnabledForTest()
+{
+    return s_isMockThemeEnabled;
+}
+
+void LayoutTestSupport::setMockThemeEnabledForTest(bool value)
+{
+    ASSERT(s_isRunningLayoutTest);
+    s_isMockThemeEnabled = value;
 }
 
 bool LayoutTestSupport::isFontAntialiasingEnabledForTest()

@@ -28,10 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebFormControlElement.h"
 
 #include "core/dom/NodeComputedStyle.h"
+#include "core/events/Event.h"
 #include "core/html/HTMLFormControlElement.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
@@ -83,17 +83,47 @@ bool WebFormControlElement::autoComplete() const
         return constUnwrap<HTMLInputElement>()->shouldAutocomplete();
     if (isHTMLTextAreaElement(*m_private))
         return constUnwrap<HTMLTextAreaElement>()->shouldAutocomplete();
+    if (isHTMLSelectElement(*m_private))
+        return constUnwrap<HTMLSelectElement>()->shouldAutocomplete();
     return false;
 }
 
 void WebFormControlElement::setValue(const WebString& value, bool sendEvents)
 {
     if (isHTMLInputElement(*m_private))
-        unwrap<HTMLInputElement>()->setValue(value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+        unwrap<HTMLInputElement>()->setValue(
+            value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
     else if (isHTMLTextAreaElement(*m_private))
-        unwrap<HTMLTextAreaElement>()->setValue(value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
+        unwrap<HTMLTextAreaElement>()->setValue(
+            value, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
     else if (isHTMLSelectElement(*m_private))
         unwrap<HTMLSelectElement>()->setValue(value, sendEvents);
+}
+
+void WebFormControlElement::setAutofillValue(const WebString& value)
+{
+    // The input and change events will be sent in setValue.
+    if (isHTMLInputElement(*m_private) || isHTMLTextAreaElement(*m_private)) {
+        if (!focused())
+            unwrap<Element>()->dispatchFocusEvent(nullptr, WebFocusTypeForward,
+                nullptr);
+        unwrap<Element>()->dispatchScopedEvent(
+            Event::createBubble(EventTypeNames::keydown));
+        unwrap<TextControlElement>()->setValue(value, DispatchInputAndChangeEvent);
+        unwrap<Element>()->dispatchScopedEvent(
+            Event::createBubble(EventTypeNames::keyup));
+        if (!focused())
+            unwrap<Element>()->dispatchBlurEvent(nullptr, WebFocusTypeForward,
+                nullptr);
+    } else if (isHTMLSelectElement(*m_private)) {
+        if (!focused())
+            unwrap<Element>()->dispatchFocusEvent(nullptr, WebFocusTypeForward,
+                nullptr);
+        unwrap<HTMLSelectElement>()->setValue(value, true);
+        if (!focused())
+            unwrap<Element>()->dispatchBlurEvent(nullptr, WebFocusTypeForward,
+                nullptr);
+    }
 }
 
 WebString WebFormControlElement::value() const
@@ -140,9 +170,9 @@ WebString WebFormControlElement::editingValue() const
 void WebFormControlElement::setSelectionRange(int start, int end)
 {
     if (isHTMLInputElement(*m_private))
-        unwrap<HTMLInputElement>()->setSelectionRange(start, end, SelectionHasNoDirection, NotDispatchSelectEvent);
+        unwrap<HTMLInputElement>()->setSelectionRange(start, end);
     else if (isHTMLTextAreaElement(*m_private))
-        unwrap<HTMLTextAreaElement>()->setSelectionRange(start, end, SelectionHasNoDirection, NotDispatchSelectEvent);
+        unwrap<HTMLTextAreaElement>()->setSelectionRange(start, end);
 }
 
 int WebFormControlElement::selectionStart() const
@@ -163,16 +193,24 @@ int WebFormControlElement::selectionEnd() const
     return 0;
 }
 
-WebString WebFormControlElement::directionForFormData() const
+WebString WebFormControlElement::alignmentForFormData() const
 {
-    if (const ComputedStyle* style = constUnwrap<HTMLFormControlElement>()->computedStyle())
-        return style->isLeftToRightDirection() ? WebString::fromUTF8("ltr") : WebString::fromUTF8("rtl");
-    return WebString::fromUTF8("ltr");
+    if (const ComputedStyle* style = constUnwrap<HTMLFormControlElement>()->computedStyle()) {
+        if (style->textAlign() == ETextAlign::kRight)
+            return WebString::fromUTF8("right");
+        if (style->textAlign() == ETextAlign::kLeft)
+            return WebString::fromUTF8("left");
+    }
+    return WebString();
 }
 
-bool WebFormControlElement::isActivatedSubmit() const
+WebString WebFormControlElement::directionForFormData() const
 {
-    return constUnwrap<HTMLFormControlElement>()->isActivatedSubmit();
+    if (const ComputedStyle* style = constUnwrap<HTMLFormControlElement>()->computedStyle()) {
+        return style->isLeftToRightDirection() ? WebString::fromUTF8("ltr")
+                                               : WebString::fromUTF8("rtl");
+    }
+    return WebString::fromUTF8("ltr");
 }
 
 WebFormElement WebFormControlElement::form() const
@@ -180,18 +218,22 @@ WebFormElement WebFormControlElement::form() const
     return WebFormElement(constUnwrap<HTMLFormControlElement>()->form());
 }
 
-WebFormControlElement::WebFormControlElement(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>& elem)
+WebFormControlElement::WebFormControlElement(HTMLFormControlElement* elem)
     : WebElement(elem)
 {
 }
 
-WebFormControlElement& WebFormControlElement::operator=(const PassRefPtrWillBeRawPtr<HTMLFormControlElement>& elem)
+DEFINE_WEB_NODE_TYPE_CASTS(WebFormControlElement,
+    isElementNode() && constUnwrap<Element>()->isFormControlElement());
+
+WebFormControlElement& WebFormControlElement::operator=(
+    HTMLFormControlElement* elem)
 {
     m_private = elem;
     return *this;
 }
 
-WebFormControlElement::operator PassRefPtrWillBeRawPtr<HTMLFormControlElement>() const
+WebFormControlElement::operator HTMLFormControlElement*() const
 {
     return toHTMLFormControlElement(m_private.get());
 }

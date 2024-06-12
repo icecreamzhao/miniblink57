@@ -27,27 +27,32 @@
 #ifndef CompositingLayerAssigner_h
 #define CompositingLayerAssigner_h
 
-#include "core/layout/compositing/DeprecatedPaintLayerCompositor.h"
+#include "core/layout/compositing/PaintLayerCompositor.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutPoint.h"
+#include "platform/graphics/SquashingDisallowedReasons.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-class CompositedDeprecatedPaintLayerMapping;
-class DeprecatedPaintLayer;
+class CompositedLayerMapping;
+class PaintLayer;
 
 class CompositingLayerAssigner {
+    STACK_ALLOCATED();
+
 public:
-    explicit CompositingLayerAssigner(DeprecatedPaintLayerCompositor*);
+    explicit CompositingLayerAssigner(PaintLayerCompositor*);
     ~CompositingLayerAssigner();
 
-    void assign(DeprecatedPaintLayer* updateRoot, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation);
+    void assign(PaintLayer* updateRoot,
+        Vector<PaintLayer*>& layersNeedingPaintInvalidation);
 
     bool layersChanged() const { return m_layersChanged; }
 
     // FIXME: This function should be private. We should remove the one caller
     // once we've fixed the compositing chicken/egg issues.
-    CompositingStateTransitionType computeCompositedLayerUpdate(DeprecatedPaintLayer*);
+    CompositingStateTransitionType computeCompositedLayerUpdate(PaintLayer*);
 
 private:
     struct SquashingState {
@@ -56,38 +61,56 @@ private:
             , hasMostRecentMapping(false)
             , haveAssignedBackingsToEntireSquashingLayerSubtree(false)
             , nextSquashedLayerIndex(0)
-            , totalAreaOfSquashedRects(0) { }
+            , totalAreaOfSquashedRects(0)
+        {
+        }
 
-        void updateSquashingStateForNewMapping(CompositedDeprecatedPaintLayerMapping*, bool hasNewCompositedDeprecatedPaintLayerMapping);
+        void updateSquashingStateForNewMapping(
+            CompositedLayerMapping*,
+            bool hasNewCompositedPaintLayerMapping,
+            Vector<PaintLayer*>& layersNeedingPaintInvalidation);
 
-        // The most recent composited backing that the layer should squash onto if needed.
-        CompositedDeprecatedPaintLayerMapping* mostRecentMapping;
+        // The most recent composited backing that the layer should squash onto if
+        // needed.
+        CompositedLayerMapping* mostRecentMapping;
         bool hasMostRecentMapping;
 
-        // Whether all Layers in the stacking subtree rooted at the most recent mapping's
-        // owning layer have had CompositedDeprecatedPaintLayerMappings assigned. Layers cannot squash into a
-        // CompositedDeprecatedPaintLayerMapping owned by a stacking ancestor, since this changes paint order.
+        // Whether all Layers in the stacking subtree rooted at the most recent
+        // mapping's owning layer have had CompositedLayerMappings assigned. Layers
+        // cannot squash into a CompositedLayerMapping owned by a stacking ancestor,
+        // since this changes paint order.
         bool haveAssignedBackingsToEntireSquashingLayerSubtree;
 
-        // Counter that tracks what index the next Layer would be if it gets squashed to the current squashing layer.
+        // Counter that tracks what index the next Layer would be if it gets
+        // squashed to the current squashing layer.
         size_t nextSquashedLayerIndex;
 
         // The absolute bounding rect of all the squashed layers.
         IntRect boundingRect;
 
-        // This is simply the sum of the areas of the squashed rects. This can be very skewed if the rects overlap,
-        // but should be close enough to drive a heuristic.
+        // This is simply the sum of the areas of the squashed rects. This can be
+        // very skewed if the rects overlap, but should be close enough to drive a
+        // heuristic.
         uint64_t totalAreaOfSquashedRects;
     };
 
-    void assignLayersToBackingsInternal(DeprecatedPaintLayer*, SquashingState&, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation);
-    void assignLayersToBackingsForReflectionLayer(DeprecatedPaintLayer* reflectionLayer, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation);
-    CompositingReasons getReasonsPreventingSquashing(const DeprecatedPaintLayer*, const SquashingState&);
-    bool squashingWouldExceedSparsityTolerance(const DeprecatedPaintLayer* candidate, const SquashingState&);
-    void updateSquashingAssignment(DeprecatedPaintLayer*, SquashingState&, CompositingStateTransitionType, Vector<DeprecatedPaintLayer*>& layersNeedingPaintInvalidation);
-    bool needsOwnBacking(const DeprecatedPaintLayer*) const;
+    void assignLayersToBackingsInternal(
+        PaintLayer*,
+        SquashingState&,
+        Vector<PaintLayer*>& layersNeedingPaintInvalidation);
+    SquashingDisallowedReasons getReasonsPreventingSquashing(
+        const PaintLayer*,
+        const SquashingState&);
+    bool squashingWouldExceedSparsityTolerance(const PaintLayer* candidate,
+        const SquashingState&);
+    void updateSquashingAssignment(
+        PaintLayer*,
+        SquashingState&,
+        CompositingStateTransitionType,
+        Vector<PaintLayer*>& layersNeedingPaintInvalidation);
+    bool needsOwnBacking(const PaintLayer*) const;
 
-    DeprecatedPaintLayerCompositor* m_compositor;
+    PaintLayerCompositor* m_compositor;
     bool m_layersChanged;
 };
 

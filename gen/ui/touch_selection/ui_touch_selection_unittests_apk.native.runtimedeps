@@ -1,0 +1,3 @@
+./lib_ui_touch_selection_unittests__library.so
+./libosmesa.so
+../../testing/test_env.py

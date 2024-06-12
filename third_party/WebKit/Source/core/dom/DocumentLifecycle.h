@@ -32,15 +32,22 @@
 #define DocumentLifecycle_h
 
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/Noncopyable.h"
+
+#if DCHECK_IS_ON()
+#include "wtf/Forward.h"
+#endif
 
 namespace blink {
 
 class CORE_EXPORT DocumentLifecycle {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(DocumentLifecycle);
+
 public:
-    enum State {
+    enum LifecycleState {
         Uninitialized,
         Inactive,
 
@@ -65,43 +72,78 @@ public:
         InPaintInvalidation,
         PaintInvalidationClean,
 
-        // Once the document starts shuting down, we cannot return
+        // In InPrePaint step, any data needed by painting are prepared.
+        // When RuntimeEnabledFeatures::slimmingPaintV2Enabled, paint property trees
+        // are built.
+        // Otherwise these steps are not applicable.
+        InPrePaint,
+        PrePaintClean,
+
+        InPaint,
+        PaintClean,
+
+        // Once the document starts shutting down, we cannot return
         // to the style/layout/compositing states.
         Stopping,
         Stopped,
-        Disposed,
     };
 
     class Scope {
+        STACK_ALLOCATED();
         WTF_MAKE_NONCOPYABLE(Scope);
-    public:
-        Scope(DocumentLifecycle&, State finalState);
-        ~Scope();
 
-        void setFinalState(State finalState) { m_finalState = finalState; }
+    public:
+        Scope(DocumentLifecycle&, LifecycleState finalState);
+        ~Scope();
 
     private:
         DocumentLifecycle& m_lifecycle;
-        State m_finalState;
+        LifecycleState m_finalState;
     };
 
     class DeprecatedTransition {
+        DISALLOW_NEW();
         WTF_MAKE_NONCOPYABLE(DeprecatedTransition);
+
     public:
-        DeprecatedTransition(State from, State to);
+        DeprecatedTransition(LifecycleState from, LifecycleState to);
         ~DeprecatedTransition();
 
-        State from() const { return m_from; }
-        State to() const { return m_to; }
+        LifecycleState from() const { return m_from; }
+        LifecycleState to() const { return m_to; }
 
     private:
         DeprecatedTransition* m_previous;
-        State m_from;
-        State m_to;
+        LifecycleState m_from;
+        LifecycleState m_to;
+    };
+
+    // Within this scope, state transitions are not allowed.
+    // Any attempts to advance or rewind will result in a DCHECK.
+    class DisallowTransitionScope {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(DisallowTransitionScope);
+
+    public:
+        explicit DisallowTransitionScope(DocumentLifecycle& documentLifecycle)
+            : m_documentLifecycle(documentLifecycle)
+        {
+            m_documentLifecycle.incrementNoTransitionCount();
+        }
+
+        ~DisallowTransitionScope()
+        {
+            m_documentLifecycle.decrementNoTransitionCount();
+        }
+
+    private:
+        DocumentLifecycle& m_documentLifecycle;
     };
 
     class DetachScope {
+        STACK_ALLOCATED();
         WTF_MAKE_NONCOPYABLE(DetachScope);
+
     public:
         explicit DetachScope(DocumentLifecycle& documentLifecycle)
             : m_documentLifecycle(documentLifecycle)
@@ -109,20 +151,42 @@ public:
             m_documentLifecycle.incrementDetachCount();
         }
 
-        ~DetachScope()
-        {
-            m_documentLifecycle.decrementDetachCount();
-        }
+        ~DetachScope() { m_documentLifecycle.decrementDetachCount(); }
 
     private:
         DocumentLifecycle& m_documentLifecycle;
+    };
+
+    // Throttling is disabled by default. Instantiating this class allows
+    // throttling (e.g., during BeginMainFrame). If a script needs to run inside
+    // this scope, DisallowThrottlingScope should be used to let the script
+    // perform a synchronous layout if necessary.
+    class CORE_EXPORT AllowThrottlingScope {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(AllowThrottlingScope);
+
+    public:
+        AllowThrottlingScope(DocumentLifecycle&);
+        ~AllowThrottlingScope();
+    };
+
+    class CORE_EXPORT DisallowThrottlingScope {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(DisallowThrottlingScope);
+
+    public:
+        DisallowThrottlingScope(DocumentLifecycle&);
+        ~DisallowThrottlingScope();
+
+    private:
+        int m_savedCount;
     };
 
     DocumentLifecycle();
     ~DocumentLifecycle();
 
     bool isActive() const { return m_state > Inactive && m_state < Stopping; }
-    State state() const { return m_state; }
+    LifecycleState state() const { return m_state; }
 
     bool stateAllowsTreeMutations() const;
     bool stateAllowsLayoutTreeMutations() const;
@@ -130,34 +194,46 @@ public:
     bool stateAllowsLayoutInvalidation() const;
     bool stateAllowsLayoutTreeNotifications() const;
 
-    void advanceTo(State);
-    void ensureStateAtMost(State);
+    void advanceTo(LifecycleState);
+    void ensureStateAtMost(LifecycleState);
+
+    bool stateTransitionDisallowed() const { return m_disallowTransitionCount; }
+    void incrementNoTransitionCount() { m_disallowTransitionCount++; }
+    void decrementNoTransitionCount()
+    {
+        DCHECK_GT(m_disallowTransitionCount, 0);
+        m_disallowTransitionCount--;
+    }
 
     bool inDetach() const { return m_detachCount; }
     void incrementDetachCount() { m_detachCount++; }
     void decrementDetachCount()
     {
-        ASSERT(m_detachCount > 0);
+        DCHECK_GT(m_detachCount, 0);
         m_detachCount--;
     }
 
+    bool throttlingAllowed() const;
+
+#if DCHECK_IS_ON()
+    WTF::String toString() const;
+#endif
 private:
-#if ENABLE(ASSERT)
-    bool canAdvanceTo(State) const;
-    bool canRewindTo(State) const;
+#if DCHECK_IS_ON()
+    bool canAdvanceTo(LifecycleState) const;
+    bool canRewindTo(LifecycleState) const;
 #endif
 
-    State m_state;
+    LifecycleState m_state;
     int m_detachCount;
+    int m_disallowTransitionCount;
 };
 
 inline bool DocumentLifecycle::stateAllowsTreeMutations() const
 {
-    // FIXME: We should not allow mutations in InPreLayout or AfterPerformLayout either,
-    // but we need to fix MediaList listeners and plugins first.
-    return m_state != InStyleRecalc
-        && m_state != InPerformLayout
-        && m_state != InCompositingUpdate;
+    // FIXME: We should not allow mutations in InPreLayout or AfterPerformLayout
+    // either, but we need to fix MediaList listeners and plugins first.
+    return m_state != InStyleRecalc && m_state != InPerformLayout && m_state != InCompositingUpdate && m_state != InPrePaint && m_state != InPaint;
 }
 
 inline bool DocumentLifecycle::stateAllowsLayoutTreeMutations() const
@@ -172,22 +248,12 @@ inline bool DocumentLifecycle::stateAllowsLayoutTreeNotifications() const
 
 inline bool DocumentLifecycle::stateAllowsDetach() const
 {
-    return m_state == VisualUpdatePending
-        || m_state == InStyleRecalc
-        || m_state == StyleClean
-        || m_state == LayoutSubtreeChangeClean
-        || m_state == InPreLayout
-        || m_state == LayoutClean
-        || m_state == CompositingClean
-        || m_state == PaintInvalidationClean
-        || m_state == Stopping;
+    return m_state == VisualUpdatePending || m_state == InStyleRecalc || m_state == StyleClean || m_state == LayoutSubtreeChangeClean || m_state == InPreLayout || m_state == LayoutClean || m_state == CompositingClean || m_state == PaintInvalidationClean || m_state == PrePaintClean || m_state == PaintClean || m_state == Stopping;
 }
 
 inline bool DocumentLifecycle::stateAllowsLayoutInvalidation() const
 {
-    return m_state != InPerformLayout
-        && m_state != InCompositingUpdate
-        && m_state != InPaintInvalidation;
+    return m_state != InPerformLayout && m_state != InCompositingUpdate && m_state != InPaintInvalidation && m_state != InPrePaint && m_state != InPaint;
 }
 
 } // namespace blink

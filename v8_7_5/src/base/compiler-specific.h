@@ -23,7 +23,7 @@
 // (This is undocumented but matches what the system C headers do.)
 #if defined(__GNUC__)
 #define PRINTF_FORMAT(format_param, dots_param) \
-  __attribute__((format(printf, format_param, dots_param)))
+    __attribute__((format(printf, format_param, dots_param)))
 #else
 #define PRINTF_FORMAT(format_param, dots_param)
 #endif
@@ -67,7 +67,8 @@
 
 // MSVC_SUPPRESS_WARNING disables warning |n| for the remainder of the line and
 // for the next line of the source file.
-#define MSVC_SUPPRESS_WARNING(n) __pragma(warning(suppress : n))
+#define MSVC_SUPPRESS_WARNING(n) __pragma(warning(suppress \
+                                                  : n))
 
 // Allows exporting a class that inherits from a non-exported base class.
 // This uses suppress instead of push/pop because the delimiter after the
@@ -82,27 +83,26 @@
 // static data is done through derived classes or inline methods. For more info,
 // see http://msdn.microsoft.com/en-us/library/3tdb471s(VS.80).aspx
 #define NON_EXPORTED_BASE(code) \
-  MSVC_SUPPRESS_WARNING(4275)   \
-  code
+    MSVC_SUPPRESS_WARNING(4275) \
+    code
 
-#else  // Not MSVC
+#else // Not MSVC
 
 #define MSVC_SUPPRESS_WARNING(n)
 #define NON_EXPORTED_BASE(code) code
 
-#endif  // V8_CC_MSVC
+#endif // V8_CC_MSVC
 
 // Allowing the use of noexcept by removing the keyword on older compilers that
 // do not support adding noexcept to default members.
 // Disabled on MSVC because constructors of standard containers are not noexcept
 // there.
-#if ((!defined(V8_CC_GNU) && !defined(V8_CC_MSVC) &&                      \
-      !defined(V8_TARGET_ARCH_MIPS) && !defined(V8_TARGET_ARCH_MIPS64) && \
-      !defined(V8_TARGET_ARCH_PPC) && !defined(V8_TARGET_ARCH_PPC64)) ||  \
-     (defined(__clang__) && __cplusplus > 201300L))
-#define V8_NOEXCEPT noexcept
-#else
+// #if ((!defined(V8_CC_GNU) && !defined(V8_CC_MSVC) && !defined(V8_TARGET_ARCH_MIPS) && !defined(V8_TARGET_ARCH_MIPS64) && !defined(V8_TARGET_ARCH_PPC) && !defined(V8_TARGET_ARCH_PPC64)) || (defined(__clang__) && __cplusplus > 201300L))
+// #define V8_NOEXCEPT noexcept
+// #else
+// #define V8_NOEXCEPT
+// #endif
+// weolar
 #define V8_NOEXCEPT
-#endif
 
-#endif  // V8_BASE_COMPILER_SPECIFIC_H_
+#endif // V8_BASE_COMPILER_SPECIFIC_H_

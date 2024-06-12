@@ -31,50 +31,33 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class CORE_EXPORT InspectorOverlayHost final : public RefCountedWillBeGarbageCollectedFinalized<InspectorOverlayHost>, public ScriptWrappable {
+class CORE_EXPORT InspectorOverlayHost final
+    : public GarbageCollected<InspectorOverlayHost>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<InspectorOverlayHost> create()
-    {
-        return adoptRefWillBeNoop(new InspectorOverlayHost());
-    }
-    ~InspectorOverlayHost();
+    static InspectorOverlayHost* create() { return new InspectorOverlayHost(); }
     DECLARE_TRACE();
 
     void resume();
     void stepOver();
-    void startPropertyChange(const String&);
-    void changeProperty(float delta);
-    void endPropertyChange();
 
-    class DebuggerListener : public WillBeGarbageCollectedMixin {
+    class Listener : public GarbageCollectedMixin {
     public:
-        virtual ~DebuggerListener() { }
+        virtual ~Listener() { }
         virtual void overlayResumed() = 0;
         virtual void overlaySteppedOver() = 0;
     };
-    void setDebuggerListener(DebuggerListener* listener) { m_debuggerListener = listener; }
-
-    class CORE_EXPORT LayoutEditorListener : public WillBeGarbageCollectedMixin {
-    public:
-        virtual ~LayoutEditorListener() { }
-        virtual void overlayStartedPropertyChange(const String&) = 0;
-        virtual void overlayPropertyChanged(float cssDelta) = 0;
-        virtual void overlayEndedPropertyChange() = 0;
-    };
-    void setLayoutEditorListener(LayoutEditorListener* listener) { m_layoutEditorListener = listener; }
+    void setListener(Listener* listener) { m_listener = listener; }
 
 private:
     InspectorOverlayHost();
 
-    RawPtrWillBeMember<DebuggerListener> m_debuggerListener;
-    RawPtrWillBeMember<LayoutEditorListener> m_layoutEditorListener;
-
+    Member<Listener> m_listener;
 };
 
 } // namespace blink

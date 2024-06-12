@@ -43,22 +43,29 @@ class StorageErrorCallback;
 class StorageQuotaCallback;
 class StorageUsageCallback;
 
-class DeprecatedStorageInfo final : public GarbageCollected<DeprecatedStorageInfo>, public ScriptWrappable {
+class DeprecatedStorageInfo final
+    : public GarbageCollected<DeprecatedStorageInfo>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     enum {
-        TEMPORARY,
-        PERSISTENT,
+        kTemporary,
+        kPersistent,
     };
 
-    static DeprecatedStorageInfo* create()
-    {
-        return new DeprecatedStorageInfo();
-    }
+    static DeprecatedStorageInfo* create() { return new DeprecatedStorageInfo(); }
 
-    void queryUsageAndQuota(ExecutionContext*, int storageType, StorageUsageCallback*, StorageErrorCallback*);
+    void queryUsageAndQuota(ExecutionContext*,
+        int storageType,
+        StorageUsageCallback*,
+        StorageErrorCallback*);
 
-    void requestQuota(ExecutionContext*, int storageType, unsigned long long newQuotaInBytes, StorageQuotaCallback*, StorageErrorCallback*);
+    void requestQuota(ExecutionContext*,
+        int storageType,
+        unsigned long long newQuotaInBytes,
+        StorageQuotaCallback*,
+        StorageErrorCallback*);
 
     DECLARE_TRACE();
 

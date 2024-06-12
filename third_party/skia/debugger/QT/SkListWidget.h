@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SKLISTWIDGET_H_
 #define SKLISTWIDGET_H_
 
@@ -23,21 +22,21 @@ public:
         Constructs the list widget with the specified parent for layout purposes.
         @param parent  The parent container of this widget
      */
-    SkListWidget(QObject* parent = NULL) {}
+    SkListWidget(QObject* parent = nullptr) { }
 
-    virtual ~SkListWidget() {}
+    virtual ~SkListWidget() { }
 
     /**
         Draws the current state of the widget. Overriden from QWidget.
      */
     void paint(QPainter* painter, const QStyleOptionViewItem& option,
-               const QModelIndex& index ) const;
+        const QModelIndex& index) const;
 
     /**
         Returns the default size of the widget. Overriden from QWidget.
      */
     QSize sizeHint(const QStyleOptionViewItem& option,
-                   const QModelIndex& index) const;
+        const QModelIndex& index) const;
 };
 
 #endif

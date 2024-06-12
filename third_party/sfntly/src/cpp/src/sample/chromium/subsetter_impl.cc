@@ -122,6 +122,7 @@ std::string fromUTF8(const std::string& utf8) {
 
 std::string fromWideToUtf8(const wchar_t* utf16)
 {
+#if defined(WIN32) 
     std::string utf8;
     size_t n = ::WideCharToMultiByte(CP_UTF8, 0, utf16, wcslen(utf16), NULL, 0, NULL, NULL);
     if (0 == n)
@@ -131,6 +132,10 @@ std::string fromWideToUtf8(const wchar_t* utf16)
     utf8.resize(n);
     utf8.assign(&buf[0], n);
     return utf8;
+#else
+    * (int*)1 = 1;
+    printf("subsetter_impl.cc,fromWideToUtf8 is empty\n");
+#endif
 }
 
 // The bitmap tables must be greater than 16KB to trigger bitmap subsetter.

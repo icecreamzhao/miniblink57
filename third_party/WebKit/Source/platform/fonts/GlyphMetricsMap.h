@@ -31,20 +31,27 @@
 
 #include "platform/fonts/Glyph.h"
 #include "platform/geometry/FloatRect.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/Unicode.h"
+#include <memory>
 
 namespace blink {
 
 const float cGlyphSizeUnknown = -1;
 
-template<class T> class GlyphMetricsMap {
+template <class T>
+class GlyphMetricsMap {
+    USING_FAST_MALLOC(GlyphMetricsMap);
     WTF_MAKE_NONCOPYABLE(GlyphMetricsMap);
+
 public:
-    GlyphMetricsMap() : m_filledPrimaryPage(false) { }
+    GlyphMetricsMap()
+        : m_filledPrimaryPage(false)
+    {
+    }
     T metricsForGlyph(Glyph glyph)
     {
         return locatePage(glyph / GlyphMetricsPage::size)->metricsForGlyph(glyph);
@@ -57,8 +64,12 @@ public:
 
 private:
     class GlyphMetricsPage {
+        USING_FAST_MALLOC(GlyphMetricsPage);
+        WTF_MAKE_NONCOPYABLE(GlyphMetricsPage);
+
     public:
         static const size_t size = 256; // Usually covers Latin-1 in a single page.
+        GlyphMetricsPage() { }
 
         T metricsForGlyph(Glyph glyph) const { return m_metrics[glyph % size]; }
         void setMetricsForGlyph(Glyph glyph, const T& metrics)
@@ -88,20 +99,23 @@ private:
 
     bool m_filledPrimaryPage;
     GlyphMetricsPage m_primaryPage; // We optimize for the page that contains glyph indices 0-255.
-    OwnPtr<HashMap<int, OwnPtr<GlyphMetricsPage>>> m_pages;
+    std::unique_ptr<HashMap<int, std::unique_ptr<GlyphMetricsPage>>> m_pages;
 };
 
-template<> inline float GlyphMetricsMap<float>::unknownMetrics()
+template <>
+inline float GlyphMetricsMap<float>::unknownMetrics()
 {
     return cGlyphSizeUnknown;
 }
 
-template<> inline FloatRect GlyphMetricsMap<FloatRect>::unknownMetrics()
+template <>
+inline FloatRect GlyphMetricsMap<FloatRect>::unknownMetrics()
 {
     return FloatRect(0, 0, cGlyphSizeUnknown, cGlyphSizeUnknown);
 }
 
-template<class T> typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap<T>::locatePageSlowCase(unsigned pageNumber)
+template <class T>
+typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap<T>::locatePageSlowCase(unsigned pageNumber)
 {
     GlyphMetricsPage* page;
     if (!pageNumber) {
@@ -114,10 +128,10 @@ template<class T> typename GlyphMetricsMap<T>::GlyphMetricsPage* GlyphMetricsMap
             if (page)
                 return page;
         } else {
-            m_pages = adoptPtr(new HashMap<int, OwnPtr<GlyphMetricsPage>>);
+            m_pages = wrapUnique(new HashMap<int, std::unique_ptr<GlyphMetricsPage>>);
         }
         page = new GlyphMetricsPage;
-        m_pages->set(pageNumber, adoptPtr(page));
+        m_pages->set(pageNumber, WTF::wrapUnique(page));
     }
 
     // Fill in the whole page with the unknown glyph information.

@@ -10,15 +10,17 @@
 #include "gradients/SkClampRange.h"
 
 static skiatest::Reporter* gReporter;
-#define R_ASSERT(cond) if (!(cond)) {      \
-    SkDebugf("%d: %s\n", __LINE__, #cond); \
-    REPORTER_ASSERT(gReporter, cond);      \
-}
+#define R_ASSERT(cond)                         \
+    if (!(cond)) {                             \
+        SkDebugf("%d: %s\n", __LINE__, #cond); \
+        REPORTER_ASSERT(gReporter, cond);      \
+    }
 
 // Arbitrary sentinel values outside [0, 0xFFFF].
 static const int kV0 = -42, kV1 = -53, kRamp = -64;
 
-static void check_value(int64_t bigfx, int expected) {
+static void check_value(int64_t bigfx, int expected)
+{
     if (bigfx < 0) {
         R_ASSERT(expected == kV0);
     } else if (bigfx > kFracMax_SkGradFixed) {
@@ -32,7 +34,8 @@ static void check_value(int64_t bigfx, int expected) {
 }
 
 static void slow_check(const SkClampRange& range,
-                       const SkGradFixed fx, SkGradFixed dx, int count) {
+    const SkGradFixed fx, SkGradFixed dx, int count)
+{
     SkASSERT(range.fCount0 + range.fCount1 + range.fCount2 == count);
 
     // If dx is large, fx will overflow if updated naively.  So we use more bits.
@@ -54,8 +57,8 @@ static void slow_check(const SkClampRange& range,
     }
 }
 
-
-static void test_range(SkFixed fx, SkFixed dx, int count) {
+static void test_range(SkFixed fx, SkFixed dx, int count)
+{
     const SkGradFixed gfx = SkFixedToGradFixed(fx);
     const SkGradFixed gdx = SkFixedToGradFixed(dx);
 
@@ -64,26 +67,26 @@ static void test_range(SkFixed fx, SkFixed dx, int count) {
     slow_check(range, gfx, gdx, count);
 }
 
-#define ff(x)   SkIntToFixed(x)
+#define ff(x) SkIntToFixed(x)
 
-DEF_TEST(ClampRange, reporter) {
+DEF_TEST(ClampRange, reporter)
+{
     gReporter = reporter;
 
     test_range(0, 0, 20);
     test_range(0xFFFF, 0, 20);
     test_range(-ff(2), 0, 20);
-    test_range( ff(2), 0, 20);
+    test_range(ff(2), 0, 20);
 
     test_range(-10, 1, 20);
     test_range(10, -1, 20);
     test_range(-10, 3, 20);
     test_range(10, -3, 20);
 
-    test_range(ff(1),  ff(16384),  100);
+    test_range(ff(1), ff(16384), 100);
     test_range(ff(-1), ff(-16384), 100);
-    test_range(ff(1)/2, ff(16384), 100);
-    // TODO(reed): skia:2481, fix whatever bug this is, then uncomment
-    //test_range(ff(1)/2, ff(-16384), 100);
+    test_range(ff(1) / 2, ff(16384), 100);
+    test_range(ff(1) / 2, ff(-16384), 100);
 
     SkRandom rand;
 

@@ -37,9 +37,8 @@ class SpellCheckerClient {
 public:
     virtual ~SpellCheckerClient() { }
 
-    virtual bool isContinuousSpellCheckingEnabled() = 0;
-    virtual void toggleContinuousSpellChecking() = 0;
-    virtual bool isGrammarCheckingEnabled() = 0;
+    virtual bool isSpellCheckingEnabled() = 0;
+    virtual void toggleSpellCheckingEnabled() = 0;
 
     virtual TextCheckerClient& textChecker() = 0;
 
@@ -48,6 +47,6 @@ public:
     virtual bool spellingUIIsShowing() = 0;
 };
 
-}
+} // namespace blink
 
 #endif // SpellCheckerClient_h

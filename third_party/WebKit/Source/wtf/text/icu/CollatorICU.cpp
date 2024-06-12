@@ -26,13 +26,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/text/Collator.h"
 
 #include "wtf/Assertions.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/StringExtras.h"
 #include "wtf/Threading.h"
 #include "wtf/ThreadingPrimitives.h"
+#include <memory>
 #include <stdlib.h>
 #include <string.h>
 #include <unicode/ucol.h>
@@ -43,7 +44,7 @@ static UCollator* cachedCollator;
 static char cachedEquivalentLocale[Collator::ulocFullnameCapacity];
 static Mutex& cachedCollatorMutex()
 {
-    AtomicallyInitializedStaticReference(Mutex, mutex, new Mutex);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(Mutex, mutex, new Mutex);
     return mutex;
 }
 
@@ -55,9 +56,9 @@ Collator::Collator(const char* locale)
     setEquivalentLocale(m_locale, m_equivalentLocale);
 }
 
-PassOwnPtr<Collator> Collator::userDefault()
+std::unique_ptr<Collator> Collator::userDefault()
 {
-    return adoptPtr(new Collator(0));
+    return wrapUnique(new Collator(0));
 }
 
 Collator::~Collator()
@@ -122,7 +123,7 @@ void Collator::releaseCollator()
             ucol_close(cachedCollator);
         cachedCollator = m_collator;
         strncpy(cachedEquivalentLocale, m_equivalentLocale, ulocFullnameCapacity);
-        m_collator  = 0;
+        m_collator = 0;
     }
     m_collator = 0;
 }

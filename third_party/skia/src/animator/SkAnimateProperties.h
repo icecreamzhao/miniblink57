@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimateProperties_DEFINED
 #define SkAnimateProperties_DEFINED
 

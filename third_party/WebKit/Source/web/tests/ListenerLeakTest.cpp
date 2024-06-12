@@ -28,20 +28,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/testing/URLTestHelpers.h"
 #include "public/platform/Platform.h"
-#include "public/platform/WebUnitTestSupport.h"
+#include "public/platform/WebURLLoaderMockFactory.h"
+#include "public/web/WebCache.h"
 #include "public/web/WebView.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "web/tests/FrameTestHelpers.h"
-#include <gtest/gtest.h>
 #include <v8/include/v8-profiler.h>
 #include <v8/include/v8.h>
 
 namespace blink {
 
-const v8::HeapGraphNode* GetProperty(const v8::HeapGraphNode* node, v8::HeapGraphEdge::Type type, const char* name)
+const v8::HeapGraphNode* GetProperty(const v8::HeapGraphNode* node,
+    v8::HeapGraphEdge::Type type,
+    const char* name)
 {
     for (int i = 0, count = node->GetChildrenCount(); i < count; ++i) {
         const v8::HeapGraphEdge* prop = node->GetChild(i);
@@ -82,7 +83,6 @@ int GetNumObjects(const char* constructor)
     return count;
 }
 
-
 class ListenerLeakTest : public testing::Test {
 public:
     void RunTest(const std::string& filename)
@@ -90,19 +90,21 @@ public:
         std::string baseURL("http://www.example.com/");
         std::string fileName(filename);
         bool executeScript = true;
-        URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(baseURL.c_str()), WebString::fromUTF8(fileName.c_str()));
+        URLTestHelpers::registerMockedURLFromBaseURL(
+            WebString::fromUTF8(baseURL.c_str()),
+            WebString::fromUTF8(fileName.c_str()));
         webViewHelper.initializeAndLoad(baseURL + fileName, executeScript);
     }
 
     void TearDown() override
     {
-        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
+        Platform::current()->getURLLoaderMockFactory()->unregisterAllURLs();
+        WebCache::clear();
     }
 
 protected:
     FrameTestHelpers::WebViewHelper webViewHelper;
 };
-
 
 // This test tries to create a reference cycle between node and its listener.
 // See http://crbug/17400.

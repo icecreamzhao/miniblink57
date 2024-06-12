@@ -6,20 +6,30 @@
 #define Extensions3DUtil_h
 
 #include "platform/PlatformExport.h"
-#include "platform/graphics/GraphicsTypes3D.h"
 #include "third_party/khronos/GLES2/gl2.h"
-#include "third_party/khronos/GLES2/gl2ext.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/text/StringHash.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
+
+namespace gpu {
+namespace gles2 {
+    class GLES2Interface;
+}
+}
 
 namespace blink {
 
-class WebGraphicsContext3D;
+class PLATFORM_EXPORT Extensions3DUtil final {
+    USING_FAST_MALLOC(Extensions3DUtil);
+    WTF_MAKE_NONCOPYABLE(Extensions3DUtil);
 
-class PLATFORM_EXPORT Extensions3DUtil {
 public:
-    // Creates a new Extensions3DUtil. If the passed WebGraphicsContext3D has been spontaneously lost, returns null.
-    static PassOwnPtr<Extensions3DUtil> create(WebGraphicsContext3D*);
+    // Creates a new Extensions3DUtil. If the passed GLES2Interface has been
+    // spontaneously lost, returns null.
+    static std::unique_ptr<Extensions3DUtil> create(gpu::gles2::GLES2Interface*);
     ~Extensions3DUtil();
 
     bool isValid() { return m_isValid; }
@@ -28,13 +38,16 @@ public:
     bool ensureExtensionEnabled(const String& name);
     bool isExtensionEnabled(const String& name);
 
-    static bool canUseCopyTextureCHROMIUM(GLenum destTarget, GLenum destFormat, GLenum destType, GLint level);
+    static bool canUseCopyTextureCHROMIUM(GLenum destTarget,
+        GLenum destFormat,
+        GLenum destType,
+        GLint level);
 
 private:
-    Extensions3DUtil(WebGraphicsContext3D*);
+    Extensions3DUtil(gpu::gles2::GLES2Interface*);
     void initializeExtensions();
 
-    WebGraphicsContext3D* m_context;
+    gpu::gles2::GLES2Interface* m_gl;
     HashSet<String> m_enabledExtensions;
     HashSet<String> m_requestableExtensions;
     bool m_isValid;

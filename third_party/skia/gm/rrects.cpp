@@ -7,10 +7,12 @@
 
 #include "gm.h"
 #if SK_SUPPORT_GPU
-#include "GrTest.h"
+#include "GrContext.h"
+#include "GrDrawContextPriv.h"
+#include "batches/GrDrawBatch.h"
+#include "batches/GrRectBatchFactory.h"
 #include "effects/GrRRectEffect.h"
 #endif
-#include "SkDevice.h"
 #include "SkRRect.h"
 
 namespace skiagm {
@@ -26,44 +28,48 @@ public:
         kAA_Clip_Type,
         kEffect_Type,
     };
-    RRectGM(Type type) : fType(type) {
+    RRectGM(Type type)
+        : fType(type)
+    {
+    }
+
+protected:
+    void onOnceBeforeDraw() override
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
         this->setUpRRects();
     }
 
-protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         SkString name("rrect");
         switch (fType) {
-            case kBW_Draw_Type:
-                name.append("_draw_bw");
-                break;
-            case kAA_Draw_Type:
-                name.append("_draw_aa");
-                break;
-            case kBW_Clip_Type:
-                name.append("_clip_bw");
-                break;
-            case kAA_Clip_Type:
-                name.append("_clip_aa");
-                break;
-            case kEffect_Type:
-                name.append("_effect");
-                break;
+        case kBW_Draw_Type:
+            name.append("_draw_bw");
+            break;
+        case kAA_Draw_Type:
+            name.append("_draw_aa");
+            break;
+        case kBW_Clip_Type:
+            name.append("_clip_bw");
+            break;
+        case kAA_Clip_Type:
+            name.append("_clip_aa");
+            break;
+        case kEffect_Type:
+            name.append("_effect");
+            break;
         }
         return name;
     }
 
     SkISize onISize() override { return SkISize::Make(kImageWidth, kImageHeight); }
 
-    void onDraw(SkCanvas* canvas) override {
-        GrContext* context = NULL;
-#if SK_SUPPORT_GPU
-        GrRenderTarget* rt = canvas->internal_private_accessTopLayerRenderTarget();
-        context = rt ? rt->getContext() : NULL;
-#endif
-        if (kEffect_Type == fType && NULL == context) {
-            this->drawGpuOnlyMessage(canvas);
+    void onDraw(SkCanvas* canvas) override
+    {
+        GrDrawContext* drawContext = canvas->internal_private_accessTopLayerDrawContext();
+        if (kEffect_Type == fType && !drawContext) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
 
@@ -73,14 +79,14 @@ protected:
         }
 
         static const SkRect kMaxTileBound = SkRect::MakeWH(SkIntToScalar(kTileX),
-                                                           SkIntToScalar(kTileY));
+            SkIntToScalar(kTileY));
 #ifdef SK_DEBUG
         static const SkRect kMaxImageBound = SkRect::MakeWH(SkIntToScalar(kImageWidth),
-                                                            SkIntToScalar(kImageHeight));
+            SkIntToScalar(kImageHeight));
 #endif
 
 #if SK_SUPPORT_GPU
-        int lastEdgeType = (kEffect_Type == fType) ? kLast_GrProcessorEdgeType: 0;
+        int lastEdgeType = (kEffect_Type == fType) ? kLast_GrProcessorEdgeType : 0;
 #else
         int lastEdgeType = 0;
 #endif
@@ -97,44 +103,37 @@ protected:
                 SkASSERT(kMaxImageBound.contains(imageSpaceBounds));
 #endif
                 canvas->save();
-                    canvas->translate(SkIntToScalar(x), SkIntToScalar(y));
-                    if (kEffect_Type == fType) {
+                canvas->translate(SkIntToScalar(x), SkIntToScalar(y));
+                if (kEffect_Type == fType) {
 #if SK_SUPPORT_GPU
-                        GrTestTarget tt;
-                        context->getTestTarget(&tt);
-                        if (NULL == tt.target()) {
-                            SkDEBUGFAIL("Couldn't get Gr test target.");
-                            return;
-                        }
-                        GrPipelineBuilder pipelineBuilder;
+                    GrPaint grPaint;
+                    grPaint.setXPFactory(GrPorterDuffXPFactory::Make(SkXfermode::kSrc_Mode));
 
-                        SkRRect rrect = fRRects[curRRect];
-                        rrect.offset(SkIntToScalar(x), SkIntToScalar(y));
-                        GrPrimitiveEdgeType edgeType = (GrPrimitiveEdgeType) et;
-                        SkAutoTUnref<GrFragmentProcessor> fp(GrRRectEffect::Create(edgeType,
-                                                                                   rrect));
-                        if (fp) {
-                            pipelineBuilder.addCoverageProcessor(fp);
-                            pipelineBuilder.setRenderTarget(rt);
+                    SkRRect rrect = fRRects[curRRect];
+                    rrect.offset(SkIntToScalar(x), SkIntToScalar(y));
+                    GrPrimitiveEdgeType edgeType = (GrPrimitiveEdgeType)et;
+                    sk_sp<GrFragmentProcessor> fp(GrRRectEffect::Make(edgeType, rrect));
+                    if (fp) {
+                        grPaint.addCoverageFragmentProcessor(std::move(fp));
 
-                            SkRect bounds = rrect.getBounds();
-                            bounds.outset(2.f, 2.f);
+                        SkRect bounds = rrect.getBounds();
+                        bounds.outset(2.f, 2.f);
 
-                            tt.target()->drawSimpleRect(&pipelineBuilder,
-                                                        0xff000000,
-                                                        SkMatrix::I(),
-                                                        bounds);
-                        } else {
-                            drew = false;
-                        }
-#endif
-                    } else if (kBW_Clip_Type == fType || kAA_Clip_Type == fType) {
-                        bool aaClip = (kAA_Clip_Type == fType);
-                        canvas->clipRRect(fRRects[curRRect], SkRegion::kReplace_Op, aaClip);
-                        canvas->drawRect(kMaxTileBound, paint);
+                        SkAutoTUnref<GrDrawBatch> batch(
+                            GrRectBatchFactory::CreateNonAAFill(0xff000000, SkMatrix::I(),
+                                bounds, nullptr, nullptr));
+                        drawContext->drawContextPriv().testingOnly_drawBatch(grPaint, batch);
                     } else {
-                        canvas->drawRRect(fRRects[curRRect], paint);
+                        drew = false;
                     }
+#endif
+                } else if (kBW_Clip_Type == fType || kAA_Clip_Type == fType) {
+                    bool aaClip = (kAA_Clip_Type == fType);
+                    canvas->clipRRect(fRRects[curRRect], SkRegion::kReplace_Op, aaClip);
+                    canvas->drawRect(kMaxTileBound, paint);
+                } else {
+                    canvas->drawRRect(fRRects[curRRect], paint);
+                }
                 canvas->restore();
                 if (drew) {
                     x = x + kTileX;
@@ -150,24 +149,25 @@ protected:
         }
     }
 
-    void setUpRRects() {
+    void setUpRRects()
+    {
         // each RRect must fit in a 0x0 -> (kTileX-2)x(kTileY-2) block. These will be tiled across
         // the screen in kTileX x kTileY tiles. The extra empty pixels on each side are for AA.
 
         // simple cases
-        fRRects[0].setRect(SkRect::MakeWH(kTileX-2, kTileY-2));
-        fRRects[1].setOval(SkRect::MakeWH(kTileX-2, kTileY-2));
-        fRRects[2].setRectXY(SkRect::MakeWH(kTileX-2, kTileY-2), 10, 10);
-        fRRects[3].setRectXY(SkRect::MakeWH(kTileX-2, kTileY-2), 10, 5);
+        fRRects[0].setRect(SkRect::MakeWH(kTileX - 2, kTileY - 2));
+        fRRects[1].setOval(SkRect::MakeWH(kTileX - 2, kTileY - 2));
+        fRRects[2].setRectXY(SkRect::MakeWH(kTileX - 2, kTileY - 2), 10, 10);
+        fRRects[3].setRectXY(SkRect::MakeWH(kTileX - 2, kTileY - 2), 10, 5);
         // small circular corners are an interesting test case for gpu clipping
-        fRRects[4].setRectXY(SkRect::MakeWH(kTileX-2, kTileY-2), 1, 1);
-        fRRects[5].setRectXY(SkRect::MakeWH(kTileX-2, kTileY-2), 0.5f, 0.5f);
-        fRRects[6].setRectXY(SkRect::MakeWH(kTileX-2, kTileY-2), 0.2f, 0.2f);
+        fRRects[4].setRectXY(SkRect::MakeWH(kTileX - 2, kTileY - 2), 1, 1);
+        fRRects[5].setRectXY(SkRect::MakeWH(kTileX - 2, kTileY - 2), 0.5f, 0.5f);
+        fRRects[6].setRectXY(SkRect::MakeWH(kTileX - 2, kTileY - 2), 0.2f, 0.2f);
 
         // The first complex case needs special handling since it is a square
-        fRRects[kNumSimpleCases].setRectRadii(SkRect::MakeWH(kTileY-2, kTileY-2), gRadii[0]);
+        fRRects[kNumSimpleCases].setRectRadii(SkRect::MakeWH(kTileY - 2, kTileY - 2), gRadii[0]);
         for (size_t i = 1; i < SK_ARRAY_COUNT(gRadii); ++i) {
-            fRRects[kNumSimpleCases+i].setRectRadii(SkRect::MakeWH(kTileX-2, kTileY-2), gRadii[i]);
+            fRRects[kNumSimpleCases + i].setRectRadii(SkRect::MakeWH(kTileX - 2, kTileY - 2), gRadii[i]);
         }
     }
 
@@ -255,12 +255,12 @@ const SkVector RRectGM::gRadii[kNumComplexCases][4] = {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return new RRectGM(RRectGM::kAA_Draw_Type); )
-DEF_GM( return new RRectGM(RRectGM::kBW_Draw_Type); )
-DEF_GM( return new RRectGM(RRectGM::kAA_Clip_Type); )
-DEF_GM( return new RRectGM(RRectGM::kBW_Clip_Type); )
+DEF_GM(return new RRectGM(RRectGM::kAA_Draw_Type);)
+DEF_GM(return new RRectGM(RRectGM::kBW_Draw_Type);)
+DEF_GM(return new RRectGM(RRectGM::kAA_Clip_Type);)
+DEF_GM(return new RRectGM(RRectGM::kBW_Clip_Type);)
 #if SK_SUPPORT_GPU
-DEF_GM( return new RRectGM(RRectGM::kEffect_Type); )
+DEF_GM(return new RRectGM(RRectGM::kEffect_Type);)
 #endif
 
 }

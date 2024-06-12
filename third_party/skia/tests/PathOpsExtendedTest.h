@@ -26,10 +26,11 @@ struct TestDesc {
 
 //extern int comparePaths(const SkPath& one, const SkPath& two);
 extern int comparePaths(skiatest::Reporter* reporter, const char* filename,
-                        const SkPath& one, const SkPath& two, SkBitmap& bitmap);
+    const SkPath& one, const SkPath& two, SkBitmap& bitmap);
 
 inline int comparePaths(skiatest::Reporter* reporter, const char* filename,
-                        const SkPath& one, const SkPath& two) {
+    const SkPath& one, const SkPath& two)
+{
     SkBitmap bitmap;
     return comparePaths(reporter, filename, one, two, bitmap);
 }
@@ -37,28 +38,31 @@ inline int comparePaths(skiatest::Reporter* reporter, const char* filename,
 extern bool drawAsciiPaths(const SkPath& one, const SkPath& two, bool drawPaths);
 extern void showOp(const SkPathOp op);
 extern bool testPathOp(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
-                       const SkPathOp , const char* testName);
+    const SkPathOp, const char* testName);
 extern bool testPathOpCheck(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
-                            const SkPathOp , const char* testName, bool checkFail);
+    const SkPathOp, const char* testName, bool checkFail);
 extern bool testPathOpFailCheck(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
-                                const SkPathOp , const char* testName);
+    const SkPathOp, const char* testName);
 extern bool testPathFailOp(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
-                           const SkPathOp , const char* testName);
+    const SkPathOp, const char* testName);
+extern bool testPathFailSkipAssertOp(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
+    const SkPathOp, const char* testName);
+extern bool testPathSkipAssertOp(skiatest::Reporter* reporter, const SkPath& a, const SkPath& b,
+    const SkPathOp, const char* testName);
 extern bool testSimplify(SkPath& path, bool useXor, SkPath& out, PathOpsThreadState& state,
-                         const char* pathStr);
+    const char* pathStr);
 extern bool testSimplify(skiatest::Reporter* reporter, const SkPath& path, const char* filename);
 extern bool testSimplifyCheck(skiatest::Reporter* reporter, const SkPath& path,
-                              const char* filename, bool checkFail);
+    const char* filename, bool checkFail);
 
 void initializeTests(skiatest::Reporter* reporter, const char* testName);
-void outputProgress(char* ramStr, const char* pathStr, SkPath::FillType );
+void outputProgress(char* ramStr, const char* pathStr, SkPath::FillType);
 void outputProgress(char* ramStr, const char* pathStr, SkPathOp op);
 
 void RunTestSet(skiatest::Reporter* reporter, TestDesc tests[], size_t count,
-                void (*firstTest)(skiatest::Reporter* , const char* filename),
-                void (*skipTest)(skiatest::Reporter* , const char* filename),
-                void (*stopTest)(skiatest::Reporter* , const char* filename), bool reverse);
-void ShowTestArray(const char* testName);
+    void (*firstTest)(skiatest::Reporter*, const char* filename),
+    void (*skipTest)(skiatest::Reporter*, const char* filename),
+    void (*stopTest)(skiatest::Reporter*, const char* filename), bool reverse);
 void ShowTestName(PathOpsThreadState* data, int a, int b, int c, int d);
 void ShowFunctionHeader(const char* name);
 void ShowPath(const SkPath& path, const char* pathName);

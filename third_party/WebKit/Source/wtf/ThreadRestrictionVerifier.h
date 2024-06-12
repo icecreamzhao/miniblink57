@@ -33,16 +33,17 @@
 
 #include "wtf/Assertions.h"
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 
 #include "wtf/Threading.h"
 
 namespace WTF {
 
-// Verifies that a class is used in a way that respects its lack of thread-safety.
-// The default mode is to verify that the object will only be used on a single thread. The
-// thread gets captured when setShared(true) is called.
-// The mode may be changed by calling useMutexMode (or turnOffVerification).
+// Verifies that a class is used in a way that respects its lack of
+// thread-safety.  The default mode is to verify that the object will only be
+// used on a single thread. The thread gets captured when setShared(true) is
+// called.  The mode may be changed by calling useMutexMode (or
+// turnOffVerification).
 class ThreadRestrictionVerifier {
 public:
     ThreadRestrictionVerifier()
@@ -51,6 +52,44 @@ public:
     {
     }
 
+    // Call onRef() before refCount is incremented in ref(). Returns whether the
+    // ref() is safe.
+    template <typename COUNTERTYPE>
+    bool onRef(COUNTERTYPE refCount)
+    {
+        // Start thread verification as soon as the ref count gets to 2. This
+        // heuristic reflects the fact that items are often created on one
+        // thread and then given to another thread to be used.
+        // FIXME: Make this restriction tigher. Especially as we move to more
+        // common methods for sharing items across threads like
+        // CrossThreadCopier.h
+        // We should be able to add a "detachFromThread" method to make this
+        // explicit.
+        if (refCount == 1)
+            setShared(true);
+        return isSafeToUse();
+    }
+
+    // Call onDeref() before refCount is decremented in deref(). Returns whether
+    // the deref() is safe.
+    template <typename COUNTERTYPE>
+    bool onDeref(COUNTERTYPE refCount)
+    {
+        bool safe = isSafeToUse();
+        // Stop thread verification when the ref goes to 1 because it
+        // is safe to be passed to another thread at this point.
+        if (refCount == 2)
+            setShared(false);
+        return safe;
+    }
+
+    // Is it OK to use the object at this moment on the current thread?
+    bool isSafeToUse() const
+    {
+        return !m_shared || m_owningThread == currentThread();
+    }
+
+private:
     // Indicates that the object may (or may not) be owned by more than one place.
     void setShared(bool shared)
     {
@@ -60,28 +99,18 @@ public:
         if (!m_shared)
             return;
 
-        ASSERT_UNUSED(previouslyShared, shared != previouslyShared);
-        // Capture the current thread to verify that subsequent ref/deref happen on this thread.
+        DCHECK_NE(shared, previouslyShared);
+        // Capture the current thread to verify that subsequent ref/deref happen on
+        // this thread.
         m_owningThread = currentThread();
     }
 
-    // Is it OK to use the object at this moment on the current thread?
-    bool isSafeToUse() const
-    {
-        if (!m_shared)
-            return true;
-
-        return m_owningThread == currentThread();
-    }
-
-private:
     bool m_shared;
 
-    // Used by SingleThreadVerificationMode
     ThreadIdentifier m_owningThread;
 };
 
-}
+} // namespace WTF
 
-#endif // ENABLE(ASSERT)
+#endif // DCHECK_IS_ON()
 #endif // ThreadRestrictionVerifier_h

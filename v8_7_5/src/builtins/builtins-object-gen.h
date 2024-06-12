@@ -8,7 +8,8 @@
 #include "src/code-stub-assembler.h"
 
 namespace v8 {
-namespace internal {}  // namespace internal
-}  // namespace v8
+namespace internal {
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_BUILTINS_BUILTINS_OBJECT_GEN_H_
+#endif // V8_BUILTINS_BUILTINS_OBJECT_GEN_H_

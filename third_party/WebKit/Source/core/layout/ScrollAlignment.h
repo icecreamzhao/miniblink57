@@ -24,7 +24,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  *
  * Alternatively, the contents of this file may be used under the terms
  * of either the Mozilla Public License Version 1.1, found at
@@ -45,6 +45,7 @@
 #define ScrollAlignment_h
 
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -61,12 +62,25 @@ enum ScrollAlignmentBehavior {
 class LayoutRect;
 
 struct CORE_EXPORT ScrollAlignment {
-    static ScrollAlignmentBehavior getVisibleBehavior(const ScrollAlignment& s) { return s.m_rectVisible; }
-    static ScrollAlignmentBehavior getPartialBehavior(const ScrollAlignment& s) { return s.m_rectPartial; }
-    static ScrollAlignmentBehavior getHiddenBehavior(const ScrollAlignment& s) { return s.m_rectHidden; }
+    STACK_ALLOCATED();
+    static ScrollAlignmentBehavior getVisibleBehavior(const ScrollAlignment& s)
+    {
+        return s.m_rectVisible;
+    }
+    static ScrollAlignmentBehavior getPartialBehavior(const ScrollAlignment& s)
+    {
+        return s.m_rectPartial;
+    }
+    static ScrollAlignmentBehavior getHiddenBehavior(const ScrollAlignment& s)
+    {
+        return s.m_rectHidden;
+    }
 
     // FIXME: This function should probably go somewhere else but where?
-    static LayoutRect getRectToExpose(const LayoutRect& visibleRect, const LayoutRect& exposeRect, const ScrollAlignment& alignX, const ScrollAlignment& alignY);
+    static LayoutRect getRectToExpose(const LayoutRect& visibleRect,
+        const LayoutRect& exposeRect,
+        const ScrollAlignment& alignX,
+        const ScrollAlignment& alignY);
 
     static const ScrollAlignment alignCenterIfNeeded;
     static const ScrollAlignment alignToEdgeIfNeeded;
@@ -78,7 +92,6 @@ struct CORE_EXPORT ScrollAlignment {
     ScrollAlignmentBehavior m_rectHidden;
     ScrollAlignmentBehavior m_rectPartial;
 };
-
 
 } // namespace blink
 

@@ -20,8 +20,8 @@
  * \brief C++ API: Appendable class: Sink for Unicode code points and 16-bit code units (UChars).
  */
 
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
@@ -79,7 +79,7 @@ public:
      * @return TRUE if the operation succeeded
      * @stable ICU 4.8
      */
-    virtual UBool appendString(const UChar *s, int32_t length);
+    virtual UBool appendString(const UChar* s, int32_t length);
 
     /**
      * Tells the object that the caller is going to append roughly
@@ -136,10 +136,10 @@ public:
      * @return a buffer with *resultCapacity>=minCapacity
      * @stable ICU 4.8
      */
-    virtual UChar *getAppendBuffer(int32_t minCapacity,
-                                   int32_t desiredCapacityHint,
-                                   UChar *scratch, int32_t scratchCapacity,
-                                   int32_t *resultCapacity);
+    virtual UChar* getAppendBuffer(int32_t minCapacity,
+        int32_t desiredCapacityHint,
+        UChar* scratch, int32_t scratchCapacity,
+        int32_t* resultCapacity);
 };
 
 /**
@@ -155,7 +155,10 @@ public:
      * @param s The UnicodeString to which this Appendable will write.
      * @stable ICU 4.8
      */
-    explicit UnicodeStringAppendable(UnicodeString &s) : str(s) {}
+    explicit UnicodeStringAppendable(UnicodeString& s)
+        : str(s)
+    {
+    }
 
     /**
      * Destructor.
@@ -186,7 +189,7 @@ public:
      * @return TRUE if the operation succeeded
      * @stable ICU 4.8
      */
-    virtual UBool appendString(const UChar *s, int32_t length);
+    virtual UBool appendString(const UChar* s, int32_t length);
 
     /**
      * Tells the UnicodeString that the caller is going to append roughly
@@ -218,15 +221,15 @@ public:
      * @return a buffer with *resultCapacity>=minCapacity
      * @stable ICU 4.8
      */
-    virtual UChar *getAppendBuffer(int32_t minCapacity,
-                                   int32_t desiredCapacityHint,
-                                   UChar *scratch, int32_t scratchCapacity,
-                                   int32_t *resultCapacity);
+    virtual UChar* getAppendBuffer(int32_t minCapacity,
+        int32_t desiredCapacityHint,
+        UChar* scratch, int32_t scratchCapacity,
+        int32_t* resultCapacity);
 
 private:
-    UnicodeString &str;
+    UnicodeString& str;
 };
 
 U_NAMESPACE_END
 
-#endif  // __APPENDABLE_H__
+#endif // __APPENDABLE_H__

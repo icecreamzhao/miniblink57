@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/platform/WebStorageQuotaCallbacks.h"
 
 #include "platform/StorageQuotaCallbacks.h"
 
 namespace blink {
 
-WebStorageQuotaCallbacks::WebStorageQuotaCallbacks(StorageQuotaCallbacks* callbacks)
+WebStorageQuotaCallbacks::WebStorageQuotaCallbacks(
+    StorageQuotaCallbacks* callbacks)
     : m_private(callbacks)
 {
 }
@@ -24,14 +24,18 @@ void WebStorageQuotaCallbacks::assign(const WebStorageQuotaCallbacks& other)
     m_private = other.m_private;
 }
 
-void WebStorageQuotaCallbacks::didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes)
+void WebStorageQuotaCallbacks::didQueryStorageUsageAndQuota(
+    unsigned long long usageInBytes,
+    unsigned long long quotaInBytes)
 {
     ASSERT(!m_private.isNull());
     m_private->didQueryStorageUsageAndQuota(usageInBytes, quotaInBytes);
     m_private.reset();
 }
 
-void WebStorageQuotaCallbacks::didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes)
+void WebStorageQuotaCallbacks::didGrantStorageQuota(
+    unsigned long long usageInBytes,
+    unsigned long long grantedQuotaInBytes)
 {
     ASSERT(!m_private.isNull());
     m_private->didGrantStorageQuota(usageInBytes, grantedQuotaInBytes);

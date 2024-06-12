@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="message_util_unittest.cc" />
+    <CustomBuild Include="midi_manager_unittest.cc" />
+    <CustomBuild Include="midi_manager_usb_unittest.cc" />
+    <CustomBuild Include="midi_message_queue_unittest.cc" />
+    <CustomBuild Include="usb_midi_descriptor_parser_unittest.cc" />
+    <CustomBuild Include="usb_midi_input_stream_unittest.cc" />
+    <CustomBuild Include="usb_midi_output_stream_unittest.cc" />
+    <CustomBuild Include="midi_manager_usb.cc" />
+    <None Include="midi_manager_usb.h" />
+    <CustomBuild Include="usb_midi_descriptor_parser.cc" />
+    <None Include="usb_midi_descriptor_parser.h" />
+    <None Include="usb_midi_device.h" />
+    <None Include="usb_midi_export.h" />
+    <CustomBuild Include="usb_midi_input_stream.cc" />
+    <None Include="usb_midi_input_stream.h" />
+    <None Include="usb_midi_jack.h" />
+    <CustomBuild Include="usb_midi_output_stream.cc" />
+    <None Include="usb_midi_output_stream.h" />
+  </ItemGroup>
+</Project>

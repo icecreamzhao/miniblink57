@@ -19,11 +19,10 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "config.h"
-
 #include "platform/geometry/FloatPoint3D.h"
-#include "wtf/MathExtras.h"
 
+#include "wtf/MathExtras.h"
+#include "wtf/text/WTFString.h"
 #include <math.h>
 
 namespace blink {
@@ -46,12 +45,16 @@ float FloatPoint3D::angleBetween(const FloatPoint3D& y) const
 
     if (xLength && yLength) {
         float cosAngle = this->dot(y) / (xLength * yLength);
-        // Due to round-off |cosAngle| can have a magnitude greater than 1.  Clamp the value to [-1,
-        // 1] before computing the angle.
+        // Due to round-off |cosAngle| can have a magnitude greater than 1.  Clamp
+        // the value to [-1, 1] before computing the angle.
         return acos(clampTo(cosAngle, -1.0, 1.0));
     }
     return 0;
 }
 
-} // namespace blink
+String FloatPoint3D::toString() const
+{
+    return String::format("%lg,%lg,%lg", x(), y(), z());
+}
 
+} // namespace blink

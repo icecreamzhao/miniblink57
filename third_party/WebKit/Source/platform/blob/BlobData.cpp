@@ -28,49 +28,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/blob/BlobData.h"
 
 #include "platform/UUID.h"
 #include "platform/blob/BlobRegistry.h"
 #include "platform/text/LineEnding.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/TextEncoding.h"
+#include <memory>
 
 namespace blink {
 
 namespace {
 
-// All consecutive items that are accumulate to < this number will have the
-// data appended to the same item.
-static const size_t kMaxConsolidatedItemSizeInBytes = 15 * 1024;
+    // All consecutive items that are accumulate to < this number will have the
+    // data appended to the same item.
+    static const size_t kMaxConsolidatedItemSizeInBytes = 15 * 1024;
 
-// http://dev.w3.org/2006/webapi/FileAPI/#constructorBlob
-bool isValidBlobType(const String& type)
-{
-    for (unsigned i = 0; i < type.length(); ++i) {
-        UChar c = type[i];
-        if (c < 0x20 || c > 0x7E)
-            return false;
+    // http://dev.w3.org/2006/webapi/FileAPI/#constructorBlob
+    bool isValidBlobType(const String& type)
+    {
+        for (unsigned i = 0; i < type.length(); ++i) {
+            UChar c = type[i];
+            if (c < 0x20 || c > 0x7E)
+                return false;
+        }
+        return true;
     }
-    return true;
-}
 
-}
+} // namespace
 
 const long long BlobDataItem::toEndOfFile = -1;
 
-RawData::RawData()
-{
-}
+RawData::RawData() { }
 
-void RawData::detachFromCurrentThread()
-{
-}
+void RawData::detachFromCurrentThread() { }
 
 void BlobDataItem::detachFromCurrentThread()
 {
@@ -79,9 +75,19 @@ void BlobDataItem::detachFromCurrentThread()
     fileSystemURL = fileSystemURL.copy();
 }
 
-PassOwnPtr<BlobData> BlobData::create()
+std::unique_ptr<BlobData> BlobData::create()
 {
-    return adoptPtr(new BlobData());
+    return WTF::wrapUnique(
+        new BlobData(FileCompositionStatus::NO_UNKNOWN_SIZE_FILES));
+}
+
+std::unique_ptr<BlobData> BlobData::createForFileWithUnknownSize(
+    const String& path)
+{
+    std::unique_ptr<BlobData> data = WTF::wrapUnique(
+        new BlobData(FileCompositionStatus::SINGLE_UNKNOWN_SIZE_FILE));
+    data->m_items.push_back(BlobDataItem(path));
+    return data;
 }
 
 void BlobData::detachFromCurrentThread()
@@ -99,38 +105,56 @@ void BlobData::setContentType(const String& contentType)
         m_contentType = "";
 }
 
-void BlobData::appendData(PassRefPtr<RawData> data, long long offset, long long length)
+void BlobData::appendData(PassRefPtr<RawData> data,
+    long long offset,
+    long long length)
 {
-    m_items.append(BlobDataItem(data, offset, length));
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
+    m_items.push_back(BlobDataItem(std::move(data), offset, length));
 }
 
-void BlobData::appendFile(const String& path)
+void BlobData::appendFile(const String& path,
+    long long offset,
+    long long length,
+    double expectedModificationTime)
 {
-    m_items.append(BlobDataItem(path));
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
+    m_items.push_back(
+        BlobDataItem(path, offset, length, expectedModificationTime));
 }
 
-void BlobData::appendFile(const String& path, long long offset, long long length, double expectedModificationTime)
+void BlobData::appendBlob(PassRefPtr<BlobDataHandle> dataHandle,
+    long long offset,
+    long long length)
 {
-    m_items.append(BlobDataItem(path, offset, length, expectedModificationTime));
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
+    m_items.push_back(BlobDataItem(std::move(dataHandle), offset, length));
 }
 
-void BlobData::appendBlob(PassRefPtr<BlobDataHandle> dataHandle, long long offset, long long length)
+void BlobData::appendFileSystemURL(const KURL& url,
+    long long offset,
+    long long length,
+    double expectedModificationTime)
 {
-    m_items.append(BlobDataItem(dataHandle, offset, length));
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
+    m_items.push_back(
+        BlobDataItem(url, offset, length, expectedModificationTime));
 }
 
-void BlobData::appendFileSystemURL(const KURL& url, long long offset, long long length, double expectedModificationTime)
+void BlobData::appendText(const String& text,
+    bool doNormalizeLineEndingsToNative)
 {
-    m_items.append(BlobDataItem(url, offset, length, expectedModificationTime));
-}
-
-void BlobData::appendText(const String& text, bool doNormalizeLineEndingsToNative)
-{
-    CString utf8Text = UTF8Encoding().normalizeAndEncode(text, WTF::EntitiesForUnencodables);
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
+    CString utf8Text = UTF8Encoding().encode(text, WTF::EntitiesForUnencodables);
     RefPtr<RawData> data = nullptr;
     Vector<char>* buffer;
     if (canConsolidateData(text.length())) {
-        buffer = m_items.last().data->mutableData();
+        buffer = m_items.back().data->mutableData();
     } else {
         data = RawData::create();
         buffer = data->mutableData();
@@ -143,28 +167,30 @@ void BlobData::appendText(const String& text, bool doNormalizeLineEndingsToNativ
     }
 
     if (data)
-        m_items.append(BlobDataItem(data.release()));
+        m_items.push_back(BlobDataItem(std::move(data)));
 }
 
 void BlobData::appendBytes(const void* bytes, size_t length)
 {
+    CHECK_EQ(m_fileComposition, FileCompositionStatus::NO_UNKNOWN_SIZE_FILES)
+        << "Blobs with a unknown-size file cannot have other items.";
     if (canConsolidateData(length)) {
-        m_items.last().data->mutableData()->append(
-            static_cast<const char*>(bytes),
+        m_items.back().data->mutableData()->append(static_cast<const char*>(bytes),
             length);
         return;
     }
     RefPtr<RawData> data = RawData::create();
     Vector<char>* buffer = data->mutableData();
-    buffer->append(static_cast<const char *>(bytes), length);
-    m_items.append(BlobDataItem(data.release()));
+    buffer->append(static_cast<const char*>(bytes), length);
+    m_items.push_back(BlobDataItem(std::move(data)));
 }
 
 long long BlobData::length() const
 {
     long long length = 0;
 
-    for (Vector<BlobDataItem>::const_iterator it = m_items.begin(); it != m_items.end(); ++it) {
+    for (Vector<BlobDataItem>::const_iterator it = m_items.begin();
+         it != m_items.end(); ++it) {
         const BlobDataItem& item = *it;
         if (item.length != BlobDataItem::toEndOfFile) {
             ASSERT(item.length >= 0);
@@ -189,7 +215,7 @@ bool BlobData::canConsolidateData(size_t length)
 {
     if (m_items.isEmpty())
         return false;
-    BlobDataItem& lastItem = m_items.last();
+    BlobDataItem& lastItem = m_items.back();
     if (lastItem.type != BlobDataItem::Data)
         return false;
     if (lastItem.data->length() + length > kMaxConsolidatedItemSizeInBytes)
@@ -204,15 +230,17 @@ BlobDataHandle::BlobDataHandle()
     BlobRegistry::registerBlobData(m_uuid, BlobData::create());
 }
 
-BlobDataHandle::BlobDataHandle(PassOwnPtr<BlobData> data, long long size)
+BlobDataHandle::BlobDataHandle(std::unique_ptr<BlobData> data, long long size)
     : m_uuid(createCanonicalUUIDString())
     , m_type(data->contentType().isolatedCopy())
     , m_size(size)
 {
-    BlobRegistry::registerBlobData(m_uuid, data);
+    BlobRegistry::registerBlobData(m_uuid, std::move(data));
 }
 
-BlobDataHandle::BlobDataHandle(const String& uuid, const String& type, long long size)
+BlobDataHandle::BlobDataHandle(const String& uuid,
+    const String& type,
+    long long size)
     : m_uuid(uuid.isolatedCopy())
     , m_type(isValidBlobType(type) ? type.isolatedCopy() : "")
     , m_size(size)

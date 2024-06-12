@@ -33,24 +33,31 @@
 
 namespace blink {
 
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
 class CORE_EXPORT StyleVisualData : public RefCounted<StyleVisualData> {
 public:
-    static PassRefPtr<StyleVisualData> create() { return adoptRef(new StyleVisualData); }
-    PassRefPtr<StyleVisualData> copy() const { return adoptRef(new StyleVisualData(*this)); }
+    static PassRefPtr<StyleVisualData> create()
+    {
+        return adoptRef(new StyleVisualData);
+    }
+    PassRefPtr<StyleVisualData> copy() const
+    {
+        return adoptRef(new StyleVisualData(*this));
+    }
     ~StyleVisualData();
 
     bool operator==(const StyleVisualData& o) const
     {
-        return clip == o.clip
-            && hasAutoClip == o.hasAutoClip
-            && textDecoration == o.textDecoration
-            && m_zoom == o.m_zoom;
+        return clip == o.clip && hasAutoClip == o.hasAutoClip && textDecoration == o.textDecoration && m_zoom == o.m_zoom;
     }
     bool operator!=(const StyleVisualData& o) const { return !(*this == o); }
 
     LengthBox clip;
     bool hasAutoClip : 1;
-    unsigned textDecoration : TextDecorationBits; // Text decorations defined *only* by this element.
+    unsigned textDecoration
+        : TextDecorationBits; // Text decorations defined *only* by this element.
 
     float m_zoom;
 

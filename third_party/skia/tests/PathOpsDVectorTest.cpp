@@ -9,18 +9,19 @@
 #include "Test.h"
 
 static const SkDPoint tests[] = {
-    {0, 0},
-    {1, 0},
-    {0, 1},
-    {2, 1},
-    {1, 2},
-    {1, 1},
-    {2, 2}
+    { 0, 0 },
+    { 1, 0 },
+    { 0, 1 },
+    { 2, 1 },
+    { 1, 2 },
+    { 1, 1 },
+    { 2, 2 }
 };
 
 static const size_t tests_count = SK_ARRAY_COUNT(tests);
 
-DEF_TEST(PathOpsDVector, reporter) {
+DEF_TEST(PathOpsDVector, reporter)
+{
     for (size_t index = 0; index < tests_count - 1; ++index) {
         SkDVector v1 = tests[index + 1] - tests[index];
         SkASSERT(ValidVector(v1));

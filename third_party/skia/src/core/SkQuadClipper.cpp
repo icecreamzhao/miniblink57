@@ -8,11 +8,13 @@
 #include "SkQuadClipper.h"
 #include "SkGeometry.h"
 
-SkQuadClipper::SkQuadClipper() {
+SkQuadClipper::SkQuadClipper()
+{
     fClip.setEmpty();
 }
 
-void SkQuadClipper::setClip(const SkIRect& clip) {
+void SkQuadClipper::setClip(const SkIRect& clip)
+{
     // conver to scalars, since that's where we'll see the points
     fClip.set(clip);
 }
@@ -20,16 +22,17 @@ void SkQuadClipper::setClip(const SkIRect& clip) {
 ///////////////////////////////////////////////////////////////////////////////
 
 static bool chopMonoQuadAt(SkScalar c0, SkScalar c1, SkScalar c2,
-                           SkScalar target, SkScalar* t) {
+    SkScalar target, SkScalar* t)
+{
     /* Solve F(t) = y where F(t) := [0](1-t)^2 + 2[1]t(1-t) + [2]t^2
      *  We solve for t, using quadratic equation, hence we have to rearrange
      * our cooefficents to look like At^2 + Bt + C
      */
     SkScalar A = c0 - c1 - c1 + c2;
-    SkScalar B = 2*(c1 - c0);
+    SkScalar B = 2 * (c1 - c0);
     SkScalar C = c0 - target;
 
-    SkScalar roots[2];  // we only expect one, but make room for 2 for safety
+    SkScalar roots[2]; // we only expect one, but make room for 2 for safety
     int count = SkFindUnitQuadRoots(A, B, C, roots);
     if (count) {
         *t = roots[0];
@@ -38,7 +41,8 @@ static bool chopMonoQuadAt(SkScalar c0, SkScalar c1, SkScalar c2,
     return false;
 }
 
-static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t) {
+static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t)
+{
     return chopMonoQuadAt(pts[0].fY, pts[1].fY, pts[2].fY, y, t);
 }
 
@@ -48,7 +52,8 @@ static bool chopMonoQuadAtY(SkPoint pts[3], SkScalar y, SkScalar* t) {
  communicate that to setQuadratic, and then avoid having to flip it back
  here (only to have setQuadratic do the flip again)
  */
-bool SkQuadClipper::clipQuad(const SkPoint srcPts[3], SkPoint dst[3]) {
+bool SkQuadClipper::clipQuad(const SkPoint srcPts[3], SkPoint dst[3])
+{
     bool reverse;
 
     // we need the data to be monotonically increasing in Y

@@ -13,32 +13,32 @@
 namespace v8 {
 namespace internal {
 
-class CpuProfiler;
-class Isolate;
+    class CpuProfiler;
+    class Isolate;
 
-class TracingCpuProfilerImpl final
-    : private v8::TracingController::TraceStateObserver {
- public:
-  explicit TracingCpuProfilerImpl(Isolate*);
-  ~TracingCpuProfilerImpl() override;
+    class TracingCpuProfilerImpl final
+        : private v8::TracingController::TraceStateObserver {
+    public:
+        explicit TracingCpuProfilerImpl(Isolate*);
+        ~TracingCpuProfilerImpl() override;
 
-  // v8::TracingController::TraceStateObserver
-  void OnTraceEnabled() final;
-  void OnTraceDisabled() final;
+        // v8::TracingController::TraceStateObserver
+        void OnTraceEnabled() final;
+        void OnTraceDisabled() final;
 
- private:
-  void StartProfiling();
-  void StopProfiling();
+    private:
+        void StartProfiling();
+        void StopProfiling();
 
-  Isolate* isolate_;
-  std::unique_ptr<CpuProfiler> profiler_;
-  bool profiling_enabled_;
-  base::Mutex mutex_;
+        Isolate* isolate_;
+        std::unique_ptr<CpuProfiler> profiler_;
+        bool profiling_enabled_;
+        base::Mutex mutex_;
 
-  DISALLOW_COPY_AND_ASSIGN(TracingCpuProfilerImpl);
-};
+        DISALLOW_COPY_AND_ASSIGN(TracingCpuProfilerImpl);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_PROFILER_TRACING_CPU_PROFILER_H_
+#endif // V8_PROFILER_TRACING_CPU_PROFILER_H_

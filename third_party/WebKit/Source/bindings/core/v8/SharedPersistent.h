@@ -40,9 +40,11 @@ namespace blink {
 
 template <typename T>
 class SharedPersistent : public RefCounted<SharedPersistent<T>> {
-WTF_MAKE_NONCOPYABLE(SharedPersistent);
+    WTF_MAKE_NONCOPYABLE(SharedPersistent);
+
 public:
-    static PassRefPtr<SharedPersistent<T>> create(v8::Local<T> value, v8::Isolate* isolate)
+    static PassRefPtr<SharedPersistent<T>> create(v8::Local<T> value,
+        v8::Isolate* isolate)
     {
         return adoptRef(new SharedPersistent<T>(value, isolate));
     }
@@ -54,7 +56,8 @@ public:
 
     bool isEmpty() { return m_value.isEmpty(); }
 
-    void setReference(const v8::Persistent<v8::Object>& parent, v8::Isolate* isolate)
+    void setReference(const v8::Persistent<v8::Object>& parent,
+        v8::Isolate* isolate)
     {
         m_value.setReference(parent, isolate);
     }
@@ -65,7 +68,10 @@ public:
     }
 
 private:
-    explicit SharedPersistent(v8::Local<T> value, v8::Isolate* isolate) : m_value(isolate, value) { }
+    explicit SharedPersistent(v8::Local<T> value, v8::Isolate* isolate)
+        : m_value(isolate, value)
+    {
+    }
     ScopedPersistent<T> m_value;
 };
 

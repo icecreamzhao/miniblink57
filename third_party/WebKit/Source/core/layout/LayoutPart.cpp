@@ -22,7 +22,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutPart.h"
 
 #include "core/dom/AXObjectCache.h"
@@ -32,19 +31,22 @@
 #include "core/layout/HitTestResult.h"
 #include "core/layout/LayoutAnalyzer.h"
 #include "core/layout/LayoutView.h"
-#include "core/layout/svg/LayoutSVGRoot.h"
-#include "core/paint/BoxPainter.h"
-#include "core/paint/DeprecatedPaintLayer.h"
+#include "core/layout/api/LayoutAPIShim.h"
+#include "core/layout/api/LayoutViewItem.h"
 #include "core/paint/PartPainter.h"
 #include "core/plugins/PluginView.h"
+#ifdef TENCENT_FITSCREEN_FRAEME_FLATTEN
+#include "core/page/Page.h"
+#endif
 
 namespace blink {
 
 LayoutPart::LayoutPart(Element* element)
     : LayoutReplaced(element)
+    ,
     // Reference counting is used to prevent the part from being destroyed
     // while inside the Widget code, which might not be able to handle that.
-    , m_refCount(1)
+    m_refCount(1)
 {
     ASSERT(element);
     frameView()->addPart(this);
@@ -76,15 +78,15 @@ void LayoutPart::willBeDestroyed()
 void LayoutPart::destroy()
 {
     willBeDestroyed();
-    // We call clearNode here because LayoutPart is ref counted. This call to destroy
-    // may not actually destroy the layout object. We can keep it around because of
-    // references from the FrameView class. (The actual destruction of the class happens
-    // in postDestroy() which is called from deref()).
+    // We call clearNode here because LayoutPart is ref counted. This call to
+    // destroy may not actually destroy the layout object. We can keep it around
+    // because of references from the FrameView class. (The actual destruction of
+    // the class happens in postDestroy() which is called from deref()).
     //
-    // But, we've told the system we've destroyed the layoutObject, which happens when
-    // the DOM node is destroyed. So there is a good change the DOM node this object
-    // points too is invalid, so we have to clear the node so we make sure we don't
-    // access it in the future.
+    // But, we've told the system we've destroyed the layoutObject, which happens
+    // when the DOM node is destroyed. So there is a good change the DOM node this
+    // object points too is invalid, so we have to clear the node so we make sure
+    // we don't access it in the future.
     clearNode();
     deref();
 }
@@ -96,7 +98,7 @@ LayoutPart::~LayoutPart()
 
 Widget* LayoutPart::widget() const
 {
-    // Plugin widgets are stored in their DOM node. This includes HTMLAppletElement.
+    // Plugin widgets are stored in their DOM node.
     Element* element = toElement(node());
 
     if (element && element->isFrameOwnerElement())
@@ -105,20 +107,20 @@ Widget* LayoutPart::widget() const
     return nullptr;
 }
 
-DeprecatedPaintLayerType LayoutPart::layerTypeRequired() const
+PaintLayerType LayoutPart::layerTypeRequired() const
 {
-    DeprecatedPaintLayerType type = LayoutReplaced::layerTypeRequired();
-    if (type != NoDeprecatedPaintLayer)
+    PaintLayerType type = LayoutReplaced::layerTypeRequired();
+    if (type != NoPaintLayer)
         return type;
-    return ForcedDeprecatedPaintLayer;
+    return ForcedPaintLayer;
 }
 
 bool LayoutPart::requiresAcceleratedCompositing() const
 {
-    // There are two general cases in which we can return true. First, if this is a plugin
-    // LayoutObject and the plugin has a layer, then we need a layer. Second, if this is
-    // a LayoutObject with a contentDocument and that document needs a layer, then we need
-    // a layer.
+    // There are two general cases in which we can return true. First, if this is
+    // a plugin LayoutObject and the plugin has a layer, then we need a layer.
+    // Second, if this is a LayoutObject with a contentDocument and that document
+    // needs a layer, then we need a layer.
     if (widget() && widget()->isPluginView() && toPluginView(widget())->platformLayer())
         return true;
 
@@ -130,8 +132,9 @@ bool LayoutPart::requiresAcceleratedCompositing() const
         return true;
 
     if (Document* contentDocument = element->contentDocument()) {
-        if (LayoutView* view = contentDocument->layoutView())
-            return view->usesCompositing();
+        LayoutViewItem viewItem = contentDocument->layoutViewItem();
+        if (!viewItem.isNull())
+            return viewItem.usesCompositing();
     }
 
     return false;
@@ -141,53 +144,92 @@ bool LayoutPart::needsPreferredWidthsRecalculation() const
 {
     if (LayoutReplaced::needsPreferredWidthsRecalculation())
         return true;
-    return embeddedContentBox();
+    return embeddedReplacedContent();
 }
 
-bool LayoutPart::nodeAtPointOverWidget(HitTestResult& result, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction action)
+bool LayoutPart::nodeAtPointOverWidget(
+    HitTestResult& result,
+    const HitTestLocation& locationInContainer,
+    const LayoutPoint& accumulatedOffset,
+    HitTestAction action)
 {
     bool hadResult = result.innerNode();
-    bool inside = LayoutReplaced::nodeAtPoint(result, locationInContainer, accumulatedOffset, action);
+    bool inside = LayoutReplaced::nodeAtPoint(result, locationInContainer,
+        accumulatedOffset, action);
 
-    // Check to see if we are really over the widget itself (and not just in the border/padding area).
+    // Check to see if we are really over the widget itself (and not just in the
+    // border/padding area).
     if ((inside || result.isRectBasedTest()) && !hadResult && result.innerNode() == node())
         result.setIsOverWidget(contentBoxRect().contains(result.localPoint()));
     return inside;
 }
 
-bool LayoutPart::nodeAtPoint(HitTestResult& result, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction action)
+bool LayoutPart::nodeAtPoint(HitTestResult& result,
+    const HitTestLocation& locationInContainer,
+    const LayoutPoint& accumulatedOffset,
+    HitTestAction action)
 {
     if (!widget() || !widget()->isFrameView() || !result.hitTestRequest().allowsChildFrameContent())
-        return nodeAtPointOverWidget(result, locationInContainer, accumulatedOffset, action);
+        return nodeAtPointOverWidget(result, locationInContainer, accumulatedOffset,
+            action);
 
-    FrameView* childFrameView = toFrameView(widget());
-    LayoutView* childRoot = childFrameView->layoutView();
+    // A hit test can never hit an off-screen element; only off-screen iframes are
+    // throttled; therefore, hit tests can skip descending into throttled iframes.
+    if (toFrameView(widget())->shouldThrottleRendering())
+        return nodeAtPointOverWidget(result, locationInContainer, accumulatedOffset,
+            action);
 
-    if (visibleToHitTestRequest(result.hitTestRequest()) && childRoot) {
-        LayoutPoint adjustedLocation = accumulatedOffset + location();
-        LayoutPoint contentOffset = LayoutPoint(borderLeft() + paddingLeft(), borderTop() + paddingTop()) - LayoutSize(childFrameView->scrollOffset());
-        HitTestLocation newHitTestLocation(locationInContainer, -adjustedLocation - contentOffset);
-        HitTestRequest newHitTestRequest(result.hitTestRequest().type() | HitTestRequest::ChildFrameHitTest);
-        HitTestResult childFrameResult(newHitTestRequest, newHitTestLocation);
+    ASSERT(document().lifecycle().state() >= DocumentLifecycle::CompositingClean);
 
-        // The frame's layout and style must be up-to-date if we reach here.
-        bool isInsideChildFrame = childRoot->hitTestNoLifecycleUpdate(childFrameResult);
+    if (action == HitTestForeground) {
+        FrameView* childFrameView = toFrameView(widget());
+        LayoutViewItem childRootItem = childFrameView->layoutViewItem();
 
-        if (result.hitTestRequest().listBased()) {
-            result.append(childFrameResult);
-        } else if (isInsideChildFrame) {
-            // Force the result not to be cacheable because the parent
-            // frame should not cache this result; as it won't be notified of
-            // changes in the child.
-            childFrameResult.setCacheable(false);
-            result = childFrameResult;
+        if (visibleToHitTestRequest(result.hitTestRequest()) && !childRootItem.isNull()) {
+            LayoutPoint adjustedLocation = accumulatedOffset + location();
+            LayoutPoint contentOffset = LayoutPoint(borderLeft() + paddingLeft(),
+                                            borderTop() + paddingTop())
+                - LayoutSize(childFrameView->scrollOffsetInt());
+            HitTestLocation newHitTestLocation(locationInContainer,
+                -adjustedLocation - contentOffset);
+            HitTestRequest newHitTestRequest(result.hitTestRequest().type() | HitTestRequest::ChildFrameHitTest);
+            HitTestResult childFrameResult(newHitTestRequest, newHitTestLocation);
+
+            // The frame's layout and style must be up to date if we reach here.
+            bool isInsideChildFrame = childRootItem.hitTestNoLifecycleUpdate(childFrameResult);
+
+            if (result.hitTestRequest().listBased()) {
+                result.append(childFrameResult);
+            } else if (isInsideChildFrame) {
+                // Force the result not to be cacheable because the parent frame should
+                // not cache this result; as it won't be notified of changes in the
+                // child.
+                childFrameResult.setCacheable(false);
+                result = childFrameResult;
+            }
+
+            // Don't trust |isInsideChildFrame|. For rect-based hit-test, returns
+            // true only when the hit test rect is totally within the iframe,
+            // i.e. nodeAtPointOverWidget() also returns true.
+            // Use a temporary HitTestResult because we don't want to collect the
+            // iframe element itself if the hit-test rect is totally within the
+            // iframe.
+            if (isInsideChildFrame) {
+                if (!locationInContainer.isRectBasedTest())
+                    return true;
+                HitTestResult pointOverWidgetResult = result;
+                bool pointOverWidget = nodeAtPointOverWidget(pointOverWidgetResult, locationInContainer,
+                    accumulatedOffset, action);
+                if (pointOverWidget)
+                    return true;
+                result = pointOverWidgetResult;
+                return false;
+            }
         }
-
-        if (isInsideChildFrame)
-            return true;
     }
 
-    return nodeAtPointOverWidget(result, locationInContainer, accumulatedOffset, action);
+    return nodeAtPointOverWidget(result, locationInContainer, accumulatedOffset,
+        action);
 }
 
 CompositingReasons LayoutPart::additionalCompositingReasons() const
@@ -197,7 +239,8 @@ CompositingReasons LayoutPart::additionalCompositingReasons() const
     return CompositingReasonNone;
 }
 
-void LayoutPart::styleDidChange(StyleDifference diff, const ComputedStyle* oldStyle)
+void LayoutPart::styleDidChange(StyleDifference diff,
+    const ComputedStyle* oldStyle)
 {
     LayoutReplaced::styleDidChange(diff, oldStyle);
     Widget* widget = this->widget();
@@ -209,7 +252,7 @@ void LayoutPart::styleDidChange(StyleDifference diff, const ComputedStyle* oldSt
     if (widget && widget->isFrameView())
         toFrameView(widget)->recalculateCustomScrollbarStyle();
 
-    if (style()->visibility() != VISIBLE) {
+    if (style()->visibility() != EVisibility::kVisible) {
         widget->hide();
     } else {
         widget->show();
@@ -223,23 +266,38 @@ void LayoutPart::layout()
     clearNeedsLayout();
 }
 
-void LayoutPart::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutPart::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     PartPainter(*this).paint(paintInfo, paintOffset);
 }
 
-void LayoutPart::paintContents(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutPart::paintContents(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     PartPainter(*this).paintContents(paintInfo, paintOffset);
 }
 
-CursorDirective LayoutPart::getCursor(const LayoutPoint& point, Cursor& cursor) const
+CursorDirective LayoutPart::getCursor(const LayoutPoint& point,
+    Cursor& cursor) const
 {
     if (widget() && widget()->isPluginView()) {
-        // A plugin is responsible for setting the cursor when the pointer is over it.
+        // A plugin is responsible for setting the cursor when the pointer is over
+        // it.
         return DoNotSetCursor;
     }
     return LayoutReplaced::getCursor(point, cursor);
+}
+
+LayoutRect LayoutPart::replacedContentRect() const
+{
+    // We don't propagate sub-pixel into sub-frame layout, in other words, the
+    // rect is snapped at the document boundary, and sub-pixel movement could
+    // cause the sub-frame to layout due to the 1px snap difference. In order to
+    // avoid that, the size of sub-frame is rounded in advance.
+    LayoutRect sizeRoundedRect = contentBoxRect();
+    sizeRoundedRect.setSize(LayoutSize(roundedIntSize(sizeRoundedRect.size())));
+    return sizeRoundedRect;
 }
 
 void LayoutPart::updateOnWidgetChange()
@@ -252,94 +310,177 @@ void LayoutPart::updateOnWidgetChange()
         return;
 
     if (!needsLayout())
-        updateWidgetGeometry();
+        updateWidgetGeometryInternal();
 
-    if (style()->visibility() != VISIBLE) {
+    if (style()->visibility() != EVisibility::kVisible) {
         widget->hide();
     } else {
         widget->show();
-        // FIXME: Why do we issue a full paint invalidation in this case, but not the other?
+        // FIXME: Why do we issue a full paint invalidation in this case, but not
+        // the other?
         setShouldDoFullPaintInvalidation();
     }
 }
 
-void LayoutPart::updateWidgetPosition()
+void LayoutPart::updateWidgetGeometry()
 {
     Widget* widget = this->widget();
     if (!widget || !node()) // Check the node in case destroy() has been called.
         return;
 
-    bool boundsChanged = updateWidgetGeometry();
+    LayoutRect newFrame = replacedContentRect();
+    DCHECK(newFrame.size() == roundedIntSize(newFrame.size()));
+    bool boundsWillChange = LayoutSize(widget->frameRect().size()) != newFrame.size();
 
-    // If the frame bounds got changed, or if view needs layout (possibly indicating
-    // content size is wrong) we have to do a layout to set the right widget size.
-    if (widget && widget->isFrameView()) {
-        FrameView* frameView = toFrameView(widget);
-        // Check the frame's page to make sure that the frame isn't in the process of being destroyed.
-        if ((boundsChanged || frameView->needsLayout()) && frameView->frame().page())
-            frameView->layout();
-    }
+    FrameView* frameView = widget->isFrameView() ? toFrameView(widget) : nullptr;
+
+    // If frame bounds are changing mark the view for layout. Also check the
+    // frame's page to make sure that the frame isn't in the process of being
+    // destroyed. If iframe scrollbars needs reconstruction from native to custom
+    // scrollbar, then also we need to layout the frameview.
+    if (frameView && frameView->frame().page() && (boundsWillChange || frameView->needsScrollbarReconstruction()))
+        frameView->setNeedsLayout();
+
+    updateWidgetGeometryInternal();
+
+    // If view needs layout, either because bounds have changed or possibly
+    // indicating content size is wrong, we have to do a layout to set the right
+    // widget size.
+    if (frameView && frameView->needsLayout() && frameView->frame().page())
+        frameView->layout();
+
+    widget->widgetGeometryMayHaveChanged();
 }
 
-void LayoutPart::widgetPositionsUpdated()
-{
-    Widget* widget = this->widget();
-    if (!widget)
-        return;
-    widget->widgetPositionsUpdated();
-}
-
-bool LayoutPart::updateWidgetGeometry()
+void LayoutPart::updateWidgetGeometryInternal()
 {
     Widget* widget = this->widget();
     ASSERT(widget);
 
-    LayoutRect contentBox = contentBoxRect();
-    LayoutRect absoluteContentBox(localToAbsoluteQuad(FloatQuad(contentBox)).boundingBox());
-    if (widget->isFrameView()) {
-        contentBox.setLocation(absoluteContentBox.location());
-        return setWidgetGeometry(contentBox);
-    }
+    // Ignore transform here, as we only care about the sub-pixel accumulation.
+    // TODO(trchen): What about multicol? Need a LayoutBox function to query
+    // sub-pixel accumulation.
+    LayoutPoint absoluteLocation(localToAbsolute(FloatPoint()));
+    LayoutRect absoluteReplacedRect = replacedContentRect();
+    absoluteReplacedRect.moveBy(absoluteLocation);
 
-    return setWidgetGeometry(absoluteContentBox);
-}
+    IntRect frameRect(IntPoint(),
+        pixelSnappedIntRect(absoluteReplacedRect).size());
+    // Normally the location of the frame rect is ignored by the painter, but
+    // currently it is still used by a family of coordinate conversion function in
+    // Widget/FrameView. This is incorrect because coordinate conversion needs to
+    // take transform and into account.
+    // A few callers still use the family of conversion function, including but
+    // not exhaustive:
+    // FrameView::updateViewportIntersectionIfNeeded()
+    // RemoteFrameView::frameRectsChanged().
+    // WebPluginContainerImpl::reportGeometry()
+    // TODO(trchen): Remove this hack once we fixed all callers.
+    FloatRect absoluteBoundingBox = localToAbsoluteQuad(FloatRect(replacedContentRect())).boundingBox();
+    frameRect.setLocation(roundedIntPoint(absoluteBoundingBox.location()));
 
-// Widgets are always placed on integer boundaries, so rounding the size is actually
-// the desired behavior. This function is here because it's otherwise seldom what we
-// want to do with a LayoutRect.
-static inline IntRect roundedIntRect(const LayoutRect& rect)
-{
-    return IntRect(roundedIntPoint(rect.location()), roundedIntSize(rect.size()));
-}
-
-bool LayoutPart::setWidgetGeometry(const LayoutRect& frame)
-{
-    if (!node())
-        return false;
-
-    Widget* widget = this->widget();
-    ASSERT(widget);
-
-    IntRect newFrame = roundedIntRect(frame);
-
-    if (widget->frameRect() == newFrame)
-        return false;
-
+    // Why is the protector needed?
     RefPtr<LayoutPart> protector(this);
-    RefPtrWillBeRawPtr<Node> protectedNode(node());
-    widget->setFrameRect(newFrame);
-    return widget->frameRect().size() != newFrame.size();
+    widget->setFrameRect(frameRect);
 }
 
-void LayoutPart::invalidatePaintOfSubtreesIfNeeded(PaintInvalidationState& paintInvalidationState)
+void LayoutPart::invalidatePaintOfSubtreesIfNeeded(
+    const PaintInvalidationState& paintInvalidationState)
 {
-    if (widget() && widget()->isFrameView()) {
+    if (widget() && widget()->isFrameView() && !isThrottledFrameView()) {
         FrameView* childFrameView = toFrameView(widget());
-        PaintInvalidationState childViewPaintInvalidationState(*childFrameView->layoutView(), paintInvalidationState);
-        toFrameView(widget())->invalidateTreeIfNeeded(childViewPaintInvalidationState);
+        // |childFrameView| is in another document, which could be
+        // missing its LayoutView. TODO(jchaffraix): Ideally we should
+        // not need this code.
+        if (LayoutView* childLayoutView = toLayoutView(LayoutAPIShim::layoutObjectFrom(
+                childFrameView->layoutViewItem()))) {
+            PaintInvalidationState childViewPaintInvalidationState(
+                paintInvalidationState, *childLayoutView);
+            childFrameView->invalidateTreeIfNeeded(childViewPaintInvalidationState);
+        }
     }
 
     LayoutReplaced::invalidatePaintOfSubtreesIfNeeded(paintInvalidationState);
 }
 
+bool LayoutPart::isThrottledFrameView() const
+{
+    if (!widget() || !widget()->isFrameView())
+        return false;
+    const FrameView* frameView = toFrameView(widget());
+    return frameView->shouldThrottleRendering();
 }
+
+inline bool shouldExpandFrame(LayoutUnit width, LayoutUnit height, bool hasFixedWidth, bool hasFixedHeight)
+{
+    // If the size computed to zero never expand.
+    if (!width || !height)
+        return false;
+    // Really small fixed size frames can't be meant to be scrolled and are there probably by mistake. Avoid expanding.
+    static unsigned smallestUsefullyScrollableDimension = 8;
+    if (hasFixedWidth && width < LayoutUnit(smallestUsefullyScrollableDimension))
+        return false;
+    if (hasFixedHeight && height < LayoutUnit(smallestUsefullyScrollableDimension))
+        return false;
+    return true;
+}
+
+#ifdef TENCENT_FITSCREEN_FRAEME_FLATTEN
+void LayoutPart::layoutWithFlattening(bool hasFixedWidth, bool hasFixedHeight)
+{
+    FrameView* childFrameView = toFrameView(widget());
+
+    LayoutView* childRoot = childFrameView ? childFrameView->frame().contentLayoutObject() : 0;
+
+    if (!childRoot || !shouldExpandFrame(frameRect().width(), frameRect().height(), hasFixedWidth, hasFixedHeight)) {
+        updateWidgetGeometry();
+        if (childFrameView)
+            childFrameView->layout();
+        //setSelfNeedsLayout(false);
+        return;
+    }
+
+    // need to update to calculate min/max correctly
+    updateWidgetGeometry();
+
+    // if scrollbars are off, and the width or height are fixed
+    // we obey them and do not expand. With frame flattening
+    // no subframe much ever become scrollable.
+
+    HTMLFrameElementBase* element = static_cast<HTMLFrameElementBase*>(node());
+    bool isScrollable = element->scrollingMode() != ScrollbarAlwaysOff;
+
+    // consider iframe inset border
+    int hBorder = borderLeft() + borderRight();
+    int vBorder = borderTop() + borderBottom();
+
+    // make sure minimum preferred width is enforced
+    if (isScrollable || !hasFixedWidth) {
+        if (document().needFitScreenLayout()
+            && document().page()) {
+            int maxWidth = document().page()->getDefaultMaxWidth();
+            int w = std::max(frameRect().width().toInt(), childRoot->minPreferredLogicalWidth().toInt() + hBorder);
+            if (w > maxWidth)
+                w = maxWidth;
+            setWidth(LayoutUnit(w));
+        } else
+            setWidth(max(frameRect().width(), childRoot->minPreferredLogicalWidth() + hBorder));
+        // update again to pass the new width to the child frame
+        updateWidgetGeometry();
+        childFrameView->layout();
+    }
+
+    // expand the frame by setting frame height = content height
+    if (isScrollable || !hasFixedHeight || childRoot->isFrameSet())
+        setHeight(LayoutUnit(std::max(frameRect().height().toInt(), childFrameView->contentsHeight() + vBorder)));
+    if (isScrollable || !hasFixedWidth || childRoot->isFrameSet())
+        setWidth(LayoutUnit(std::max(frameRect().width().toInt(), childFrameView->contentsWidth() + hBorder)));
+
+    updateWidgetGeometry();
+
+    //   ASSERT(!childFrameView->layoutPending());
+    //   ASSERT(!childRoot->needsLayout());
+}
+#endif
+
+} // namespace blink

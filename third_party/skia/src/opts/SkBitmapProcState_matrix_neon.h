@@ -7,30 +7,30 @@
 
 #include <arm_neon.h>
 
-#define SCALE_NOFILTER_NAME     MAKENAME(_nofilter_scale)
-#define SCALE_FILTER_NAME       MAKENAME(_filter_scale)
-#define AFFINE_NOFILTER_NAME    MAKENAME(_nofilter_affine)
-#define AFFINE_FILTER_NAME      MAKENAME(_filter_affine)
-#define PERSP_NOFILTER_NAME     MAKENAME(_nofilter_persp)
-#define PERSP_FILTER_NAME       MAKENAME(_filter_persp)
+#define SCALE_NOFILTER_NAME MAKENAME(_nofilter_scale)
+#define SCALE_FILTER_NAME MAKENAME(_filter_scale)
+#define AFFINE_NOFILTER_NAME MAKENAME(_nofilter_affine)
+#define AFFINE_FILTER_NAME MAKENAME(_filter_affine)
+#define PERSP_NOFILTER_NAME MAKENAME(_nofilter_persp)
+#define PERSP_FILTER_NAME MAKENAME(_filter_persp)
 
-#define PACK_FILTER_X_NAME  MAKENAME(_pack_filter_x)
-#define PACK_FILTER_Y_NAME  MAKENAME(_pack_filter_y)
+#define PACK_FILTER_X_NAME MAKENAME(_pack_filter_x)
+#define PACK_FILTER_Y_NAME MAKENAME(_pack_filter_y)
 #define PACK_FILTER_X4_NAME MAKENAME(_pack_filter_x4)
 #define PACK_FILTER_Y4_NAME MAKENAME(_pack_filter_y4)
 
 #ifndef PREAMBLE
-    #define PREAMBLE(state)
-    #define PREAMBLE_PARAM_X
-    #define PREAMBLE_PARAM_Y
-    #define PREAMBLE_ARG_X
-    #define PREAMBLE_ARG_Y
+#define PREAMBLE(state)
+#define PREAMBLE_PARAM_X
+#define PREAMBLE_PARAM_Y
+#define PREAMBLE_ARG_X
+#define PREAMBLE_ARG_Y
 #endif
 
 static void SCALE_NOFILTER_NAME(const SkBitmapProcState& s,
-                                uint32_t xy[], int count, int x, int y) {
-    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask |
-                             SkMatrix::kScale_Mask)) == 0);
+    uint32_t xy[], int count, int x, int y)
+{
+    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask)) == 0);
 
     PREAMBLE(s);
 
@@ -38,13 +38,10 @@ static void SCALE_NOFILTER_NAME(const SkBitmapProcState& s,
     const unsigned maxX = s.fPixmap.width() - 1;
     SkFractionalInt fx;
     {
-        SkPoint pt;
-        s.fInvProc(s.fInvMatrix, SkIntToScalar(x) + SK_ScalarHalf,
-                                 SkIntToScalar(y) + SK_ScalarHalf, &pt);
-        fx = SkScalarToFractionalInt(pt.fY);
+        const SkBitmapProcStateAutoMapper mapper(s, x, y);
         const unsigned maxY = s.fPixmap.height() - 1;
-        *xy++ = TILEY_PROCF(SkFractionalIntToFixed(fx), maxY);
-        fx = SkScalarToFractionalInt(pt.fX);
+        *xy++ = TILEY_PROCF(mapper.fixedY(), maxY);
+        fx = mapper.fractionalIntX();
     }
 
     if (0 == maxX) {
@@ -59,24 +56,24 @@ static void SCALE_NOFILTER_NAME(const SkBitmapProcState& s,
     // test if we don't need to apply the tile proc
     if (can_truncate_to_fixed_for_decal(fx, dx, count, maxX)) {
         decal_nofilter_scale_neon(xy, SkFractionalIntToFixed(fx),
-                             SkFractionalIntToFixed(dx), count);
+            SkFractionalIntToFixed(dx), count);
         return;
     }
 #endif
 
     if (count >= 8) {
-        SkFractionalInt dx2 = dx+dx;
-        SkFractionalInt dx4 = dx2+dx2;
-        SkFractionalInt dx8 = dx4+dx4;
+        SkFractionalInt dx2 = dx + dx;
+        SkFractionalInt dx4 = dx2 + dx2;
+        SkFractionalInt dx8 = dx4 + dx4;
 
         // now build fx/fx+dx/fx+2dx/fx+3dx
         SkFractionalInt fx1, fx2, fx3;
         int32x4_t lbase, hbase;
-        int16_t *dst16 = (int16_t *)xy;
+        int16_t* dst16 = (int16_t*)xy;
 
-        fx1 = fx+dx;
-        fx2 = fx1+dx;
-        fx3 = fx2+dx;
+        fx1 = fx + dx;
+        fx2 = fx1 + dx;
+        fx3 = fx2 + dx;
 
         lbase = vdupq_n_s32(SkFractionalIntToFixed(fx));
         lbase = vsetq_lane_s32(SkFractionalIntToFixed(fx1), lbase, 1);
@@ -94,13 +91,13 @@ static void SCALE_NOFILTER_NAME(const SkBitmapProcState& s,
             vst1q_s16(dst16, fx8);
 
             // but preserving base & on to the next
-            lbase = vaddq_s32 (lbase, vdupq_n_s32(SkFractionalIntToFixed(dx8)));
-            hbase = vaddq_s32 (hbase, vdupq_n_s32(SkFractionalIntToFixed(dx8)));
+            lbase = vaddq_s32(lbase, vdupq_n_s32(SkFractionalIntToFixed(dx8)));
+            hbase = vaddq_s32(hbase, vdupq_n_s32(SkFractionalIntToFixed(dx8)));
             dst16 += 8;
             count -= 8;
             fx += dx8;
         };
-        xy = (uint32_t *) dst16;
+        xy = (uint32_t*)dst16;
     }
 
     uint16_t* xx = (uint16_t*)xy;
@@ -111,20 +108,16 @@ static void SCALE_NOFILTER_NAME(const SkBitmapProcState& s,
 }
 
 static void AFFINE_NOFILTER_NAME(const SkBitmapProcState& s,
-                                 uint32_t xy[], int count, int x, int y) {
+    uint32_t xy[], int count, int x, int y)
+{
     SkASSERT(s.fInvType & SkMatrix::kAffine_Mask);
-    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask |
-                             SkMatrix::kScale_Mask |
-                             SkMatrix::kAffine_Mask)) == 0);
+    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask | SkMatrix::kAffine_Mask)) == 0);
 
     PREAMBLE(s);
-    SkPoint srcPt;
-    s.fInvProc(s.fInvMatrix,
-               SkIntToScalar(x) + SK_ScalarHalf,
-               SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
+    const SkBitmapProcStateAutoMapper mapper(s, x, y);
 
-    SkFractionalInt fx = SkScalarToFractionalInt(srcPt.fX);
-    SkFractionalInt fy = SkScalarToFractionalInt(srcPt.fY);
+    SkFractionalInt fx = mapper.fractionalIntX();
+    SkFractionalInt fy = mapper.fractionalIntY();
     SkFractionalInt dx = s.fInvSxFractionalInt;
     SkFractionalInt dy = s.fInvKyFractionalInt;
     int maxX = s.fPixmap.width() - 1;
@@ -138,19 +131,19 @@ static void AFFINE_NOFILTER_NAME(const SkBitmapProcState& s,
 
         int32x4_t xbase, ybase;
         int32x4_t x2base, y2base;
-        int16_t *dst16 = (int16_t *) xy;
+        int16_t* dst16 = (int16_t*)xy;
 
         // now build fx, fx+dx, fx+2dx, fx+3dx
         xbase = vdupq_n_s32(SkFractionalIntToFixed(fx));
-        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx), xbase, 1);
-        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx+dx), xbase, 2);
-        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx+dx+dx), xbase, 3);
+        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx), xbase, 1);
+        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx + dx), xbase, 2);
+        xbase = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx + dx + dx), xbase, 3);
 
         // same for fy
         ybase = vdupq_n_s32(SkFractionalIntToFixed(fy));
-        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy+dy), ybase, 1);
-        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy+dy+dy), ybase, 2);
-        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy+dy+dy+dy), ybase, 3);
+        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy + dy), ybase, 1);
+        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy + dy + dy), ybase, 2);
+        ybase = vsetq_lane_s32(SkFractionalIntToFixed(fy + dy + dy + dy), ybase, 3);
 
         x2base = vaddq_s32(xbase, vdupq_n_s32(SkFractionalIntToFixed(dx4)));
         y2base = vaddq_s32(ybase, vdupq_n_s32(SkFractionalIntToFixed(dy4)));
@@ -175,19 +168,20 @@ static void AFFINE_NOFILTER_NAME(const SkBitmapProcState& s,
             fx += dx8;
             fy += dy8;
         } while (count >= 8);
-        xy = (uint32_t *) dst16;
+        xy = (uint32_t*)dst16;
     }
 
     for (int i = count; i > 0; --i) {
-        *xy++ = (TILEY_PROCF(SkFractionalIntToFixed(fy), maxY) << 16) |
-                 TILEX_PROCF(SkFractionalIntToFixed(fx), maxX);
-        fx += dx; fy += dy;
+        *xy++ = (TILEY_PROCF(SkFractionalIntToFixed(fy), maxY) << 16) | TILEX_PROCF(SkFractionalIntToFixed(fx), maxX);
+        fx += dx;
+        fy += dy;
     }
 }
 
 static void PERSP_NOFILTER_NAME(const SkBitmapProcState& s,
-                                uint32_t* SK_RESTRICT xy,
-                                int count, int x, int y) {
+    uint32_t* SK_RESTRICT xy,
+    int count, int x, int y)
+{
     SkASSERT(s.fInvType & SkMatrix::kPerspective_Mask);
 
     PREAMBLE(s);
@@ -196,60 +190,62 @@ static void PERSP_NOFILTER_NAME(const SkBitmapProcState& s,
     int maxY = s.fPixmap.height() - 1;
 
     SkPerspIter iter(s.fInvMatrix,
-                     SkIntToScalar(x) + SK_ScalarHalf,
-                     SkIntToScalar(y) + SK_ScalarHalf, count);
+        SkIntToScalar(x) + SK_ScalarHalf,
+        SkIntToScalar(y) + SK_ScalarHalf, count);
 
     while ((count = iter.next()) != 0) {
         const SkFixed* SK_RESTRICT srcXY = iter.getXY();
 
         if (count >= 8) {
-            int32_t *mysrc = (int32_t *) srcXY;
-            int16_t *mydst = (int16_t *) xy;
+            int32_t* mysrc = (int32_t*)srcXY;
+            int16_t* mydst = (int16_t*)xy;
             do {
                 int16x8x2_t hi16;
                 int32x4x2_t xy1, xy2;
 
                 xy1 = vld2q_s32(mysrc);
-                xy2 = vld2q_s32(mysrc+8);
+                xy2 = vld2q_s32(mysrc + 8);
 
                 hi16.val[0] = TILEX_PROCF_NEON8(xy1.val[0], xy2.val[0], maxX);
                 hi16.val[1] = TILEY_PROCF_NEON8(xy1.val[1], xy2.val[1], maxY);
 
                 vst2q_s16(mydst, hi16);
 
-                count -= 8;  // 8 iterations
+                count -= 8; // 8 iterations
                 mysrc += 16; // 16 longs
                 mydst += 16; // 16 shorts, aka 8 longs
             } while (count >= 8);
             // get xy and srcXY fixed up
-            srcXY = (const SkFixed *) mysrc;
-            xy = (uint32_t *) mydst;
+            srcXY = (const SkFixed*)mysrc;
+            xy = (uint32_t*)mydst;
         }
 
         while (--count >= 0) {
-            *xy++ = (TILEY_PROCF(srcXY[1], maxY) << 16) |
-                     TILEX_PROCF(srcXY[0], maxX);
+            *xy++ = (TILEY_PROCF(srcXY[1], maxY) << 16) | TILEX_PROCF(srcXY[0], maxX);
             srcXY += 2;
         }
     }
 }
 
 static inline uint32_t PACK_FILTER_Y_NAME(SkFixed f, unsigned max,
-                                          SkFixed one PREAMBLE_PARAM_Y) {
+    SkFixed one PREAMBLE_PARAM_Y)
+{
     unsigned i = TILEY_PROCF(f, max);
     i = (i << 4) | TILEY_LOW_BITS(f, max);
     return (i << 14) | (TILEY_PROCF((f + one), max));
 }
 
 static inline uint32_t PACK_FILTER_X_NAME(SkFixed f, unsigned max,
-                                          SkFixed one PREAMBLE_PARAM_X) {
+    SkFixed one PREAMBLE_PARAM_X)
+{
     unsigned i = TILEX_PROCF(f, max);
     i = (i << 4) | TILEX_LOW_BITS(f, max);
     return (i << 14) | (TILEX_PROCF((f + one), max));
 }
 
 static inline int32x4_t PACK_FILTER_X4_NAME(int32x4_t f, unsigned max,
-                                          SkFixed one PREAMBLE_PARAM_X) {
+    SkFixed one PREAMBLE_PARAM_X)
+{
     int32x4_t ret, res, wide_one;
 
     // Prepare constants
@@ -270,7 +266,8 @@ static inline int32x4_t PACK_FILTER_X4_NAME(int32x4_t f, unsigned max,
 }
 
 static inline int32x4_t PACK_FILTER_Y4_NAME(int32x4_t f, unsigned max,
-                                          SkFixed one PREAMBLE_PARAM_X) {
+    SkFixed one PREAMBLE_PARAM_X)
+{
     int32x4_t ret, res, wide_one;
 
     // Prepare constants
@@ -291,9 +288,9 @@ static inline int32x4_t PACK_FILTER_Y4_NAME(int32x4_t f, unsigned max,
 }
 
 static void SCALE_FILTER_NAME(const SkBitmapProcState& s,
-                              uint32_t xy[], int count, int x, int y) {
-    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask |
-                             SkMatrix::kScale_Mask)) == 0);
+    uint32_t xy[], int count, int x, int y)
+{
+    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask)) == 0);
     SkASSERT(s.fInvKy == 0);
 
     PREAMBLE(s);
@@ -304,74 +301,67 @@ static void SCALE_FILTER_NAME(const SkBitmapProcState& s,
     SkFractionalInt fx;
 
     {
-        SkPoint pt;
-        s.fInvProc(s.fInvMatrix, SkIntToScalar(x) + SK_ScalarHalf,
-                                 SkIntToScalar(y) + SK_ScalarHalf, &pt);
-        const SkFixed fy = SkScalarToFixed(pt.fY) - (s.fFilterOneY >> 1);
+        const SkBitmapProcStateAutoMapper mapper(s, x, y);
+        const SkFixed fy = mapper.fixedY();
         const unsigned maxY = s.fPixmap.height() - 1;
         // compute our two Y values up front
         *xy++ = PACK_FILTER_Y_NAME(fy, maxY, s.fFilterOneY PREAMBLE_ARG_Y);
         // now initialize fx
-        fx = SkScalarToFractionalInt(pt.fX) - (SkFixedToFractionalInt(one) >> 1);
+        fx = mapper.fractionalIntX();
     }
 
 #ifdef CHECK_FOR_DECAL
     // test if we don't need to apply the tile proc
     if (can_truncate_to_fixed_for_decal(fx, dx, count, maxX)) {
         decal_filter_scale_neon(xy, SkFractionalIntToFixed(fx),
-                             SkFractionalIntToFixed(dx), count);
+            SkFractionalIntToFixed(dx), count);
         return;
     }
 #endif
     {
 
-    if (count >= 4) {
-        int32x4_t wide_fx;
+        if (count >= 4) {
+            int32x4_t wide_fx;
 
-        wide_fx = vdupq_n_s32(SkFractionalIntToFixed(fx));
-        wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx), wide_fx, 1);
-        wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx+dx), wide_fx, 2);
-        wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx+dx+dx+dx), wide_fx, 3);
+            wide_fx = vdupq_n_s32(SkFractionalIntToFixed(fx));
+            wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx), wide_fx, 1);
+            wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx + dx), wide_fx, 2);
+            wide_fx = vsetq_lane_s32(SkFractionalIntToFixed(fx + dx + dx + dx), wide_fx, 3);
 
-        while (count >= 4) {
-            int32x4_t res;
+            while (count >= 4) {
+                int32x4_t res;
 
-            res = PACK_FILTER_X4_NAME(wide_fx, maxX, one PREAMBLE_ARG_X);
+                res = PACK_FILTER_X4_NAME(wide_fx, maxX, one PREAMBLE_ARG_X);
 
-            vst1q_u32(xy, vreinterpretq_u32_s32(res));
+                vst1q_u32(xy, vreinterpretq_u32_s32(res));
 
-            wide_fx += vdupq_n_s32(SkFractionalIntToFixed(dx+dx+dx+dx));
-            fx += dx+dx+dx+dx;
-            xy += 4;
-            count -= 4;
+                wide_fx += vdupq_n_s32(SkFractionalIntToFixed(dx + dx + dx + dx));
+                fx += dx + dx + dx + dx;
+                xy += 4;
+                count -= 4;
+            }
         }
-    }
 
-    while (--count >= 0) {
-        *xy++ = PACK_FILTER_X_NAME(SkFractionalIntToFixed(fx), maxX, one PREAMBLE_ARG_X);
-        fx += dx;
-    }
-
+        while (--count >= 0) {
+            *xy++ = PACK_FILTER_X_NAME(SkFractionalIntToFixed(fx), maxX, one PREAMBLE_ARG_X);
+            fx += dx;
+        }
     }
 }
 
 static void AFFINE_FILTER_NAME(const SkBitmapProcState& s,
-                               uint32_t xy[], int count, int x, int y) {
+    uint32_t xy[], int count, int x, int y)
+{
     SkASSERT(s.fInvType & SkMatrix::kAffine_Mask);
-    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask |
-                             SkMatrix::kScale_Mask |
-                             SkMatrix::kAffine_Mask)) == 0);
+    SkASSERT((s.fInvType & ~(SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask | SkMatrix::kAffine_Mask)) == 0);
 
     PREAMBLE(s);
-    SkPoint srcPt;
-    s.fInvProc(s.fInvMatrix,
-               SkIntToScalar(x) + SK_ScalarHalf,
-               SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
+    const SkBitmapProcStateAutoMapper mapper(s, x, y);
 
     SkFixed oneX = s.fFilterOneX;
     SkFixed oneY = s.fFilterOneY;
-    SkFixed fx = SkScalarToFixed(srcPt.fX) - (oneX >> 1);
-    SkFixed fy = SkScalarToFixed(srcPt.fY) - (oneY >> 1);
+    SkFixed fx = mapper.fixedX();
+    SkFixed fy = mapper.fixedY();
     SkFixed dx = s.fInvSx;
     SkFixed dy = s.fInvKy;
     unsigned maxX = s.fPixmap.width() - 1;
@@ -381,14 +371,14 @@ static void AFFINE_FILTER_NAME(const SkBitmapProcState& s,
         int32x4_t wide_fy, wide_fx;
 
         wide_fx = vdupq_n_s32(fx);
-        wide_fx = vsetq_lane_s32(fx+dx, wide_fx, 1);
-        wide_fx = vsetq_lane_s32(fx+dx+dx, wide_fx, 2);
-        wide_fx = vsetq_lane_s32(fx+dx+dx+dx, wide_fx, 3);
+        wide_fx = vsetq_lane_s32(fx + dx, wide_fx, 1);
+        wide_fx = vsetq_lane_s32(fx + dx + dx, wide_fx, 2);
+        wide_fx = vsetq_lane_s32(fx + dx + dx + dx, wide_fx, 3);
 
         wide_fy = vdupq_n_s32(fy);
-        wide_fy = vsetq_lane_s32(fy+dy, wide_fy, 1);
-        wide_fy = vsetq_lane_s32(fy+dy+dy, wide_fy, 2);
-        wide_fy = vsetq_lane_s32(fy+dy+dy+dy, wide_fy, 3);
+        wide_fy = vsetq_lane_s32(fy + dy, wide_fy, 1);
+        wide_fy = vsetq_lane_s32(fy + dy + dy, wide_fy, 2);
+        wide_fy = vsetq_lane_s32(fy + dy + dy + dy, wide_fy, 3);
 
         while (count >= 4) {
             int32x4x2_t vxy;
@@ -401,10 +391,10 @@ static void AFFINE_FILTER_NAME(const SkBitmapProcState& s,
             vst2q_s32((int32_t*)xy, vxy);
 
             // prepare next iteration
-            wide_fx += vdupq_n_s32(dx+dx+dx+dx);
+            wide_fx += vdupq_n_s32(dx + dx + dx + dx);
             fx += dx + dx + dx + dx;
-            wide_fy += vdupq_n_s32(dy+dy+dy+dy);
-            fy += dy+dy+dy+dy;
+            wide_fy += vdupq_n_s32(dy + dy + dy + dy);
+            fy += dy + dy + dy + dy;
             xy += 8; // 4 x's, 4 y's
             count -= 4;
         }
@@ -420,8 +410,9 @@ static void AFFINE_FILTER_NAME(const SkBitmapProcState& s,
 }
 
 static void PERSP_FILTER_NAME(const SkBitmapProcState& s,
-                              uint32_t* SK_RESTRICT xy, int count,
-                              int x, int y) {
+    uint32_t* SK_RESTRICT xy, int count,
+    int x, int y)
+{
     SkASSERT(s.fInvType & SkMatrix::kPerspective_Mask);
 
     PREAMBLE(s);
@@ -431,8 +422,8 @@ static void PERSP_FILTER_NAME(const SkBitmapProcState& s,
     SkFixed oneY = s.fFilterOneY;
 
     SkPerspIter iter(s.fInvMatrix,
-                     SkIntToScalar(x) + SK_ScalarHalf,
-                     SkIntToScalar(y) + SK_ScalarHalf, count);
+        SkIntToScalar(x) + SK_ScalarHalf,
+        SkIntToScalar(y) + SK_ScalarHalf, count);
 
     while ((count = iter.next()) != 0) {
         const SkFixed* SK_RESTRICT srcXY = iter.getXY();
@@ -445,8 +436,8 @@ static void PERSP_FILTER_NAME(const SkBitmapProcState& s,
             vxy = vld2q_s32(srcXY);
 
             // do the X side, then the Y side, then interleave them
-            wide_x = vsubq_s32(vxy.val[0], vdupq_n_s32(oneX>>1));
-            wide_y = vsubq_s32(vxy.val[1], vdupq_n_s32(oneY>>1));
+            wide_x = vsubq_s32(vxy.val[0], vdupq_n_s32(oneX >> 1));
+            wide_y = vsubq_s32(vxy.val[1], vdupq_n_s32(oneY >> 1));
 
             vresyx.val[0] = PACK_FILTER_Y4_NAME(wide_y, maxY, oneY PREAMBLE_ARG_Y);
             vresyx.val[1] = PACK_FILTER_X4_NAME(wide_x, maxX, oneX PREAMBLE_ARG_X);
@@ -455,17 +446,17 @@ static void PERSP_FILTER_NAME(const SkBitmapProcState& s,
             vst2q_s32((int32_t*)xy, vresyx);
 
             // on to the next iteration
-            srcXY += 2*4;
+            srcXY += 2 * 4;
             count -= 4;
-            xy += 2*4;
+            xy += 2 * 4;
         }
 
         while (--count >= 0) {
             // NB: we read x/y, we write y/x
             *xy++ = PACK_FILTER_Y_NAME(srcXY[1] - (oneY >> 1), maxY,
-                                       oneY PREAMBLE_ARG_Y);
+                oneY PREAMBLE_ARG_Y);
             *xy++ = PACK_FILTER_X_NAME(srcXY[0] - (oneX >> 1), maxX,
-                                       oneX PREAMBLE_ARG_X);
+                oneX PREAMBLE_ARG_X);
             srcXY += 2;
         }
     }
@@ -491,7 +482,7 @@ const SkBitmapProcState::MatrixProc MAKENAME(_Procs)[] = {
 #undef TILEX_PROCF
 #undef TILEY_PROCF
 #ifdef CHECK_FOR_DECAL
-    #undef CHECK_FOR_DECAL
+#undef CHECK_FOR_DECAL
 #endif
 
 #undef SCALE_NOFILTER_NAME

@@ -32,12 +32,26 @@
 
 namespace blink {
 
-class Coordinates : public GarbageCollected<Coordinates>, public ScriptWrappable {
+class Coordinates : public GarbageCollected<Coordinates>,
+                    public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static Coordinates* create(double latitude, double longitude, bool providesAltitude, double altitude, double accuracy, bool providesAltitudeAccuracy, double altitudeAccuracy, bool providesHeading, double heading, bool providesSpeed, double speed)
+    static Coordinates* create(double latitude,
+        double longitude,
+        bool providesAltitude,
+        double altitude,
+        double accuracy,
+        bool providesAltitudeAccuracy,
+        double altitudeAccuracy,
+        bool providesHeading,
+        double heading,
+        bool providesSpeed,
+        double speed)
     {
-        return new Coordinates(latitude, longitude, providesAltitude, altitude, accuracy, providesAltitudeAccuracy, altitudeAccuracy, providesHeading, heading, providesSpeed, speed);
+        return new Coordinates(latitude, longitude, providesAltitude, altitude,
+            accuracy, providesAltitudeAccuracy, altitudeAccuracy,
+            providesHeading, heading, providesSpeed, speed);
     }
 
     DEFINE_INLINE_TRACE() { }
@@ -51,7 +65,17 @@ public:
     double speed(bool& isNull) const;
 
 private:
-    Coordinates(double latitude, double longitude, bool providesAltitude, double altitude, double accuracy, bool providesAltitudeAccuracy, double altitudeAccuracy, bool providesHeading, double heading, bool providesSpeed, double speed)
+    Coordinates(double latitude,
+        double longitude,
+        bool providesAltitude,
+        double altitude,
+        double accuracy,
+        bool providesAltitudeAccuracy,
+        double altitudeAccuracy,
+        bool providesHeading,
+        double heading,
+        bool providesSpeed,
+        double speed)
         : m_latitude(latitude)
         , m_longitude(longitude)
         , m_altitude(altitude)
@@ -62,7 +86,9 @@ private:
         , m_canProvideAltitude(providesAltitude)
         , m_canProvideAltitudeAccuracy(providesAltitudeAccuracy)
         , m_canProvideHeading(providesHeading)
-        , m_canProvideSpeed(providesSpeed) { }
+        , m_canProvideSpeed(providesSpeed)
+    {
+    }
 
     double m_latitude;
     double m_longitude;

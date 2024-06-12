@@ -37,10 +37,12 @@
 
 namespace blink {
 
+class WebDocumentSubresourceFilter;
 class WebURL;
 class WebURLRequest;
 class WebURLResponse;
-template <typename T> class WebVector;
+template <typename T>
+class WebVector;
 
 class WebDataSource {
 public:
@@ -56,7 +58,7 @@ public:
     // include additional request headers added by WebKit that were not
     // present in the original request.  This request may also correspond
     // to a location specified by a redirect that was followed.
-    virtual const WebURLRequest& request() const = 0;
+    virtual const WebURLRequest& getRequest() const = 0;
 
     // Returns the response associated with this datasource.
     virtual const WebURLResponse& response() const = 0;
@@ -93,7 +95,7 @@ public:
     // data pointer will be deleted when the datasource is destroyed.
     // Setting the extra data pointer will cause any existing non-null
     // extra data pointer to be deleted.
-    virtual ExtraData* extraData() const = 0;
+    virtual ExtraData* getExtraData() const = 0;
     virtual void setExtraData(ExtraData*) = 0;
 
     // Sets the navigation start time for this datasource. Ordinarily,
@@ -103,6 +105,21 @@ public:
     // Calling it later may confuse users, because JavaScript may have run and
     // the user may have already recorded the original value.
     virtual void setNavigationStartTime(double) = 0;
+
+    // Sets timing and attributes of the navigation.
+    // Ordinarily, they are determined in WebCore, but when the navigation is
+    // handled by the client, they can be passed here.
+    virtual void updateNavigation(double redirectStartTime,
+        double redirectEndTime,
+        double fetchStartTime,
+        const WebVector<WebURL>& redirectChain)
+        = 0;
+
+    // Allows the embedder to inject a filter that will be consulted for each
+    // subsequent subresource load, and gets the final say in deciding whether
+    // or not to allow the load. The passed-in filter object is deleted when the
+    // datasource is destroyed or when a new filter is set.
+    virtual void setSubresourceFilter(WebDocumentSubresourceFilter*) = 0;
 
 protected:
     ~WebDataSource() { }

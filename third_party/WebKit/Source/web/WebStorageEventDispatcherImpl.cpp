@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebStorageEventDispatcher.h"
 
 #include "modules/storage/StorageArea.h"
@@ -36,32 +35,36 @@
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/WebURL.h"
 #include "web/WebViewImpl.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 void WebStorageEventDispatcher::dispatchLocalStorageEvent(
-        const WebString& key, const WebString& oldValue,
-        const WebString& newValue, const WebURL& origin,
-        const WebURL& pageURL, WebStorageArea* sourceAreaInstance,
-        bool originatedInProcess)
+    const WebString& key,
+    const WebString& oldValue,
+    const WebString& newValue,
+    const WebURL& origin,
+    const WebURL& pageURL,
+    WebStorageArea* sourceAreaInstance)
 {
     RefPtr<SecurityOrigin> securityOrigin = SecurityOrigin::create(origin);
-    StorageArea::dispatchLocalStorageEvent(
-            key, oldValue, newValue, securityOrigin.get(), pageURL,
-            sourceAreaInstance, originatedInProcess);
+    StorageArea::dispatchLocalStorageEvent(key, oldValue, newValue,
+        securityOrigin.get(), pageURL,
+        sourceAreaInstance);
 }
 
 void WebStorageEventDispatcher::dispatchSessionStorageEvent(
-        const WebString& key, const WebString& oldValue,
-        const WebString& newValue, const WebURL& origin,
-        const WebURL& pageURL, const WebStorageNamespace& sessionNamespace,
-        WebStorageArea* sourceAreaInstance, bool originatedInProcess)
+    const WebString& key,
+    const WebString& oldValue,
+    const WebString& newValue,
+    const WebURL& origin,
+    const WebURL& pageURL,
+    const WebStorageNamespace& sessionNamespace,
+    WebStorageArea* sourceAreaInstance)
 {
     RefPtr<SecurityOrigin> securityOrigin = SecurityOrigin::create(origin);
     StorageArea::dispatchSessionStorageEvent(
-            key, oldValue, newValue, securityOrigin.get(), pageURL,
-            sessionNamespace, sourceAreaInstance, originatedInProcess);
+        key, oldValue, newValue, securityOrigin.get(), pageURL, sessionNamespace,
+        sourceAreaInstance);
 }
 
 } // namespace blink

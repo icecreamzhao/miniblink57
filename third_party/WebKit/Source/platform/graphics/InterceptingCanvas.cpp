@@ -2,12 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/graphics/InterceptingCanvas.h"
 
 namespace blink {
 
-void InterceptingCanvasBase::unrollDrawPicture(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint, SkPicture::AbortCallback* abortCallback)
+void InterceptingCanvasBase::unrollDrawPicture(
+    const SkPicture* picture,
+    const SkMatrix* matrix,
+    const SkPaint* paint,
+    SkPicture::AbortCallback* abortCallback)
 {
     int saveCount = this->getSaveCount();
     if (paint) {

@@ -26,9 +26,11 @@
 
 #include <atomic>
 #include <limits>
+#include <windows.h>
 
 #include "src/trap-handler/trap-handler-internal.h"
 #include "src/trap-handler/trap-handler.h"
+#include "src/base/thread-local.h"
 
 namespace {
 size_t gNextCodeObject = 0;
@@ -42,227 +44,294 @@ constexpr bool kEnableSlowChecks = false;
 
 namespace v8 {
 namespace internal {
-namespace trap_handler {
+    namespace trap_handler {
 
-constexpr size_t kInitialCodeObjectSize = 1024;
-constexpr size_t kCodeObjectGrowthFactor = 2;
+        base::ThreadLocalPointer<int>* g_thread_in_wasm_code_tls = NULL;
 
-constexpr size_t HandlerDataSize(size_t num_protected_instructions) {
-  return offsetof(CodeProtectionInfo, instructions) +
-         num_protected_instructions * sizeof(ProtectedInstructionData);
-}
+        constexpr size_t kInitialCodeObjectSize = 1024;
+        constexpr size_t kCodeObjectGrowthFactor = 2;
 
-namespace {
+        constexpr size_t HandlerDataSize(size_t num_protected_instructions)
+        {
+            return offsetof(CodeProtectionInfo, instructions) + num_protected_instructions * sizeof(ProtectedInstructionData);
+        }
+
+        namespace {
 #ifdef DEBUG
-bool IsDisjoint(const CodeProtectionInfo* a, const CodeProtectionInfo* b) {
-  if (a == nullptr || b == nullptr) {
-    return true;
-  }
-  return a->base >= b->base + b->size || b->base >= a->base + a->size;
-}
+            bool IsDisjoint(const CodeProtectionInfo* a, const CodeProtectionInfo* b)
+            {
+                if (a == nullptr || b == nullptr) {
+                    return true;
+                }
+                return a->base >= b->base + b->size || b->base >= a->base + a->size;
+            }
 #endif
 
-// Verify that the code range does not overlap any that have already been
-// registered.
-void VerifyCodeRangeIsDisjoint(const CodeProtectionInfo* code_info) {
-  for (size_t i = 0; i < gNumCodeObjects; ++i) {
-    DCHECK(IsDisjoint(code_info, gCodeObjects[i].code_info));
-  }
-}
+            // Verify that the code range does not overlap any that have already been
+            // registered.
+            void VerifyCodeRangeIsDisjoint(const CodeProtectionInfo* code_info)
+            {
+                for (size_t i = 0; i < gNumCodeObjects; ++i) {
+                    DCHECK(IsDisjoint(code_info, gCodeObjects[i].code_info));
+                }
+            }
 
-void ValidateCodeObjects() {
-  // Sanity-check the code objects
-  for (unsigned i = 0; i < gNumCodeObjects; ++i) {
-    const auto* data = gCodeObjects[i].code_info;
+            void ValidateCodeObjects()
+            {
+                // Sanity-check the code objects
+                for (unsigned i = 0; i < gNumCodeObjects; ++i) {
+                    const auto* data = gCodeObjects[i].code_info;
 
-    if (data == nullptr) continue;
+                    if (data == nullptr)
+                        continue;
 
-    // Do some sanity checks on the protected instruction data
-    for (unsigned i = 0; i < data->num_protected_instructions; ++i) {
-      DCHECK_GE(data->instructions[i].instr_offset, 0);
-      DCHECK_LT(data->instructions[i].instr_offset, data->size);
-      DCHECK_GE(data->instructions[i].landing_offset, 0);
-      DCHECK_LT(data->instructions[i].landing_offset, data->size);
-      DCHECK_GT(data->instructions[i].landing_offset,
-                data->instructions[i].instr_offset);
-    }
-  }
+                    // Do some sanity checks on the protected instruction data
+                    for (unsigned i = 0; i < data->num_protected_instructions; ++i) {
+                        DCHECK_GE(data->instructions[i].instr_offset, 0);
+                        DCHECK_LT(data->instructions[i].instr_offset, data->size);
+                        DCHECK_GE(data->instructions[i].landing_offset, 0);
+                        DCHECK_LT(data->instructions[i].landing_offset, data->size);
+                        DCHECK_GT(data->instructions[i].landing_offset,
+                            data->instructions[i].instr_offset);
+                    }
+                }
 
-  // Check the validity of the free list.
-  size_t free_count = 0;
-  for (size_t i = gNextCodeObject; i != gNumCodeObjects;
-       i = gCodeObjects[i].next_free) {
-    DCHECK_LT(i, gNumCodeObjects);
-    ++free_count;
-    // This check will fail if we encounter a cycle.
-    DCHECK_LE(free_count, gNumCodeObjects);
-  }
+                // Check the validity of the free list.
+                size_t free_count = 0;
+                for (size_t i = gNextCodeObject; i != gNumCodeObjects;
+                     i = gCodeObjects[i].next_free) {
+                    DCHECK_LT(i, gNumCodeObjects);
+                    ++free_count;
+                    // This check will fail if we encounter a cycle.
+                    DCHECK_LE(free_count, gNumCodeObjects);
+                }
 
-  // Check that all free entries are reachable via the free list.
-  size_t free_count2 = 0;
-  for (size_t i = 0; i < gNumCodeObjects; ++i) {
-    if (gCodeObjects[i].code_info == nullptr) {
-      ++free_count2;
-    }
-  }
-  DCHECK_EQ(free_count, free_count2);
-}
-}  // namespace
+                // Check that all free entries are reachable via the free list.
+                size_t free_count2 = 0;
+                for (size_t i = 0; i < gNumCodeObjects; ++i) {
+                    if (gCodeObjects[i].code_info == nullptr) {
+                        ++free_count2;
+                    }
+                }
+                DCHECK_EQ(free_count, free_count2);
+            }
+        } // namespace
 
-CodeProtectionInfo* CreateHandlerData(
-    Address base, size_t size, size_t num_protected_instructions,
-    const ProtectedInstructionData* protected_instructions) {
-  const size_t alloc_size = HandlerDataSize(num_protected_instructions);
-  CodeProtectionInfo* data =
-      reinterpret_cast<CodeProtectionInfo*>(malloc(alloc_size));
+        CodeProtectionInfo* CreateHandlerData(
+            Address base, size_t size, size_t num_protected_instructions,
+            const ProtectedInstructionData* protected_instructions)
+        {
+            const size_t alloc_size = HandlerDataSize(num_protected_instructions);
+            CodeProtectionInfo* data = reinterpret_cast<CodeProtectionInfo*>(malloc(alloc_size));
 
-  if (data == nullptr) {
-    return nullptr;
-  }
+            if (data == nullptr) {
+                return nullptr;
+            }
 
-  data->base = base;
-  data->size = size;
-  data->num_protected_instructions = num_protected_instructions;
+            data->base = base;
+            data->size = size;
+            data->num_protected_instructions = num_protected_instructions;
 
-  memcpy(data->instructions, protected_instructions,
-         num_protected_instructions * sizeof(ProtectedInstructionData));
+            memcpy(data->instructions, protected_instructions,
+                num_protected_instructions * sizeof(ProtectedInstructionData));
 
-  return data;
-}
+            return data;
+        }
 
-int RegisterHandlerData(
-    Address base, size_t size, size_t num_protected_instructions,
-    const ProtectedInstructionData* protected_instructions) {
+        int RegisterHandlerData(
+            Address base, size_t size, size_t num_protected_instructions,
+            const ProtectedInstructionData* protected_instructions)
+        {
 
-  CodeProtectionInfo* data = CreateHandlerData(
-      base, size, num_protected_instructions, protected_instructions);
+            CodeProtectionInfo* data = CreateHandlerData(
+                base, size, num_protected_instructions, protected_instructions);
 
-  if (data == nullptr) {
-    abort();
-  }
+            if (data == nullptr) {
+                abort();
+            }
 
-  MetadataLock lock;
+            MetadataLock lock;
 
-  if (kEnableSlowChecks) {
-    VerifyCodeRangeIsDisjoint(data);
-  }
+            if (kEnableSlowChecks) {
+                VerifyCodeRangeIsDisjoint(data);
+            }
 
-  size_t i = gNextCodeObject;
+            size_t i = gNextCodeObject;
 
-  // Explicitly convert std::numeric_limits<int>::max() to unsigned to avoid
-  // compiler warnings about signed/unsigned comparisons. We aren't worried
-  // about sign extension because we know std::numeric_limits<int>::max() is
-  // positive.
-  const size_t int_max = std::numeric_limits<int>::max();
+            // Explicitly convert std::numeric_limits<int>::max() to unsigned to avoid
+            // compiler warnings about signed/unsigned comparisons. We aren't worried
+            // about sign extension because we know std::numeric_limits<int>::max() is
+            // positive.
+            const size_t int_max = std::numeric_limits<int>::max();
 
-  // We didn't find an opening in the available space, so grow.
-  if (i == gNumCodeObjects) {
-    size_t new_size = gNumCodeObjects > 0
-                          ? gNumCodeObjects * kCodeObjectGrowthFactor
-                          : kInitialCodeObjectSize;
+            // We didn't find an opening in the available space, so grow.
+            if (i == gNumCodeObjects) {
+                size_t new_size = gNumCodeObjects > 0
+                    ? gNumCodeObjects * kCodeObjectGrowthFactor
+                    : kInitialCodeObjectSize;
 
-    // Because we must return an int, there is no point in allocating space for
-    // more objects than can fit in an int.
-    if (new_size > int_max) {
-      new_size = int_max;
-    }
-    if (new_size == gNumCodeObjects) {
-      free(data);
-      return kInvalidIndex;
-    }
+                // Because we must return an int, there is no point in allocating space for
+                // more objects than can fit in an int.
+                if (new_size > int_max) {
+                    new_size = int_max;
+                }
+                if (new_size == gNumCodeObjects) {
+                    free(data);
+                    return kInvalidIndex;
+                }
 
-    // Now that we know our new size is valid, we can go ahead and realloc the
-    // array.
-    gCodeObjects = static_cast<CodeProtectionInfoListEntry*>(
-        realloc(gCodeObjects, sizeof(*gCodeObjects) * new_size));
+                // Now that we know our new size is valid, we can go ahead and realloc the
+                // array.
+                gCodeObjects = static_cast<CodeProtectionInfoListEntry*>(
+                    realloc(gCodeObjects, sizeof(*gCodeObjects) * new_size));
 
-    if (gCodeObjects == nullptr) {
-      abort();
-    }
+                if (gCodeObjects == nullptr) {
+                    abort();
+                }
 
-    memset(gCodeObjects + gNumCodeObjects, 0,
-           sizeof(*gCodeObjects) * (new_size - gNumCodeObjects));
-    for (size_t j = gNumCodeObjects; j < new_size; ++j) {
-      gCodeObjects[j].next_free = j + 1;
-    }
-    gNumCodeObjects = new_size;
-  }
+                memset(gCodeObjects + gNumCodeObjects, 0,
+                    sizeof(*gCodeObjects) * (new_size - gNumCodeObjects));
+                for (size_t j = gNumCodeObjects; j < new_size; ++j) {
+                    gCodeObjects[j].next_free = j + 1;
+                }
+                gNumCodeObjects = new_size;
+            }
 
-  DCHECK(gCodeObjects[i].code_info == nullptr);
+            DCHECK(gCodeObjects[i].code_info == nullptr);
 
-  // Find out where the next entry should go.
-  gNextCodeObject = gCodeObjects[i].next_free;
+            // Find out where the next entry should go.
+            gNextCodeObject = gCodeObjects[i].next_free;
 
-  if (i <= int_max) {
-    gCodeObjects[i].code_info = data;
+            if (i <= int_max) {
+                gCodeObjects[i].code_info = data;
 
-    if (kEnableSlowChecks) {
-      ValidateCodeObjects();
-    }
+                if (kEnableSlowChecks) {
+                    ValidateCodeObjects();
+                }
 
-    return static_cast<int>(i);
-  } else {
-    free(data);
-    return kInvalidIndex;
-  }
-}
+                return static_cast<int>(i);
+            } else {
+                free(data);
+                return kInvalidIndex;
+            }
+        }
 
-void ReleaseHandlerData(int index) {
-  if (index == kInvalidIndex) {
-    return;
-  }
-  DCHECK_GE(index, 0);
+        void ReleaseHandlerData(int index)
+        {
+            if (index == kInvalidIndex) {
+                return;
+            }
+            DCHECK_GE(index, 0);
 
-  // Remove the data from the global list if it's there.
-  CodeProtectionInfo* data = nullptr;
-  {
-    MetadataLock lock;
+            // Remove the data from the global list if it's there.
+            CodeProtectionInfo* data = nullptr;
+            {
+                MetadataLock lock;
 
-    data = gCodeObjects[index].code_info;
-    gCodeObjects[index].code_info = nullptr;
+                data = gCodeObjects[index].code_info;
+                gCodeObjects[index].code_info = nullptr;
 
-    gCodeObjects[index].next_free = gNextCodeObject;
-    gNextCodeObject = index;
+                gCodeObjects[index].next_free = gNextCodeObject;
+                gNextCodeObject = index;
 
-    if (kEnableSlowChecks) {
-      ValidateCodeObjects();
-    }
-  }
-  // TODO(eholk): on debug builds, ensure there are no more copies in
-  // the list.
-  DCHECK_NOT_NULL(data);  // make sure we're releasing legitimate handler data.
-  free(data);
-}
+                if (kEnableSlowChecks) {
+                    ValidateCodeObjects();
+                }
+            }
+            // TODO(eholk): on debug builds, ensure there are no more copies in
+            // the list.
+            DCHECK_NOT_NULL(data); // make sure we're releasing legitimate handler data.
+            free(data);
+        }
 
-int* GetThreadInWasmThreadLocalAddress() { return &g_thread_in_wasm_code; }
+#ifdef SUPPORT_XP_CODE
 
-size_t GetRecoveredTrapCount() {
-  return gRecoveredTrapCount.load(std::memory_order_relaxed);
-}
+        DISABLE_ASAN bool IsThreadInWasm()
+        {
+//             int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+            int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
+            return *thread_in_wasm_code_ptr != 0;
+        }
+
+        void SetThreadInWasm()
+        {
+            if (IsTrapHandlerEnabled()) {
+                DCHECK(!IsThreadInWasm());
+
+                //int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
+                *thread_in_wasm_code_ptr = 1;
+            }
+        }
+
+        void ClearThreadInWasm()
+        {
+            if (IsTrapHandlerEnabled()) {
+                DCHECK(IsThreadInWasm());
+
+                //int* thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                int* thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
+                *thread_in_wasm_code_ptr = 0;
+            }
+        }
+
+        int* GetThreadInWasmThreadLocalAddress()
+        {
+            int* thread_in_wasm_code_ptr = nullptr;
+            if (0 == g_thread_in_wasm_code_tls) {
+                //g_thread_in_wasm_code_tls = ::TlsAlloc();
+                g_thread_in_wasm_code_tls = new base::ThreadLocalPointer<int>();
+
+                thread_in_wasm_code_ptr = (int*)malloc(sizeof(int));
+                *thread_in_wasm_code_ptr = 0;
+                //::TlsSetValue(g_thread_in_wasm_code_tls, thread_in_wasm_code_ptr);
+                g_thread_in_wasm_code_tls->Set(thread_in_wasm_code_ptr);
+            } else {
+                //thread_in_wasm_code_ptr = (int*)::TlsGetValue(g_thread_in_wasm_code_tls);
+                thread_in_wasm_code_ptr = g_thread_in_wasm_code_tls->Get();
+            }
+
+            return thread_in_wasm_code_ptr;
+        }
+
+#else
+
+        int* GetThreadInWasmThreadLocalAddress()
+        {
+            return &g_thread_in_wasm_code;
+        }
+
+#endif
+
+        size_t GetRecoveredTrapCount()
+        {
+            return gRecoveredTrapCount.load(std::memory_order_relaxed);
+        }
 
 #if !V8_TRAP_HANDLER_SUPPORTED
-// This version is provided for systems that do not support trap handlers.
-// Otherwise, the correct one should be implemented in the appropriate
-// platform-specific handler-outside.cc.
-bool RegisterDefaultTrapHandler() { return false; }
+        // This version is provided for systems that do not support trap handlers.
+        // Otherwise, the correct one should be implemented in the appropriate
+        // platform-specific handler-outside.cc.
+        bool RegisterDefaultTrapHandler() { return false; }
 
-void RemoveTrapHandler() {}
+        void RemoveTrapHandler() { }
 #endif
 
-bool g_is_trap_handler_enabled;
+        bool g_is_trap_handler_enabled;
 
-bool EnableTrapHandler(bool use_v8_handler) {
-  if (!V8_TRAP_HANDLER_SUPPORTED) {
-    return false;
-  }
-  if (use_v8_handler) {
-    g_is_trap_handler_enabled = RegisterDefaultTrapHandler();
-    return g_is_trap_handler_enabled;
-  }
-  g_is_trap_handler_enabled = true;
-  return true;
-}
+        bool EnableTrapHandler(bool use_v8_handler)
+        {
+            if (!V8_TRAP_HANDLER_SUPPORTED) {
+                return false;
+            }
+            if (use_v8_handler) {
+                g_is_trap_handler_enabled = RegisterDefaultTrapHandler();
+                return g_is_trap_handler_enabled;
+            }
+            g_is_trap_handler_enabled = true;
+            return true;
+        }
 
-}  // namespace trap_handler
-}  // namespace internal
-}  // namespace v8
+    } // namespace trap_handler
+} // namespace internal
+} // namespace v8

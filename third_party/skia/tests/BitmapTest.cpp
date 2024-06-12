@@ -9,24 +9,25 @@
 #include "SkMallocPixelRef.h"
 #include "Test.h"
 
-static void test_peekpixels(skiatest::Reporter* reporter) {
+static void test_peekpixels(skiatest::Reporter* reporter)
+{
     const SkImageInfo info = SkImageInfo::MakeN32Premul(10, 10);
 
     SkPixmap pmap;
     SkBitmap bm;
 
     // empty should return false
-    REPORTER_ASSERT(reporter, !bm.peekPixels(NULL));
+    REPORTER_ASSERT(reporter, !bm.peekPixels(nullptr));
     REPORTER_ASSERT(reporter, !bm.peekPixels(&pmap));
 
     // no pixels should return false
     bm.setInfo(SkImageInfo::MakeN32Premul(10, 10));
-    REPORTER_ASSERT(reporter, !bm.peekPixels(NULL));
+    REPORTER_ASSERT(reporter, !bm.peekPixels(nullptr));
     REPORTER_ASSERT(reporter, !bm.peekPixels(&pmap));
 
     // real pixels should return true
     bm.allocPixels(info);
-    REPORTER_ASSERT(reporter, bm.peekPixels(NULL));
+    REPORTER_ASSERT(reporter, bm.peekPixels(nullptr));
     REPORTER_ASSERT(reporter, bm.peekPixels(&pmap));
     REPORTER_ASSERT(reporter, pmap.info() == bm.info());
     REPORTER_ASSERT(reporter, pmap.addr() == bm.getPixels());
@@ -35,7 +36,8 @@ static void test_peekpixels(skiatest::Reporter* reporter) {
 }
 
 // https://code.google.com/p/chromium/issues/detail?id=446164
-static void test_bigalloc(skiatest::Reporter* reporter) {
+static void test_bigalloc(skiatest::Reporter* reporter)
+{
     const int width = 0x40000001;
     const int height = 0x00000096;
     const SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
@@ -43,11 +45,12 @@ static void test_bigalloc(skiatest::Reporter* reporter) {
     SkBitmap bm;
     REPORTER_ASSERT(reporter, !bm.tryAllocPixels(info));
 
-    SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, info.minRowBytes(), NULL);
+    SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, info.minRowBytes(), nullptr);
     REPORTER_ASSERT(reporter, !pr);
 }
 
-static void test_allocpixels(skiatest::Reporter* reporter) {
+static void test_allocpixels(skiatest::Reporter* reporter)
+{
     const int width = 10;
     const int height = 10;
     const SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
@@ -78,14 +81,15 @@ static void test_allocpixels(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, info.minRowBytes() == bm.rowBytes());
 
     bm.reset();
-    bool success = bm.setInfo(info, info.minRowBytes() - 1);   // invalid for 32bit
+    bool success = bm.setInfo(info, info.minRowBytes() - 1); // invalid for 32bit
     REPORTER_ASSERT(reporter, !success);
     REPORTER_ASSERT(reporter, bm.isNull());
 }
 
-static void test_bigwidth(skiatest::Reporter* reporter) {
+static void test_bigwidth(skiatest::Reporter* reporter)
+{
     SkBitmap bm;
-    int width = 1 << 29;    // *4 will be the high-bit of 32bit int
+    int width = 1 << 29; // *4 will be the high-bit of 32bit int
 
     SkImageInfo info = SkImageInfo::MakeA8(width, 1);
     REPORTER_ASSERT(reporter, bm.setInfo(info));
@@ -103,7 +107,8 @@ static void test_bigwidth(skiatest::Reporter* reporter) {
 /**
  *  This test contains basic sanity checks concerning bitmaps.
  */
-DEF_TEST(Bitmap, reporter) {
+DEF_TEST(Bitmap, reporter)
+{
     // Zero-sized bitmaps are allowed
     for (int width = 0; width < 2; ++width) {
         for (int height = 0; height < 2; ++height) {
@@ -121,4 +126,51 @@ DEF_TEST(Bitmap, reporter) {
     test_allocpixels(reporter);
     test_bigalloc(reporter);
     test_peekpixels(reporter);
+}
+
+/**
+ *  This test checks that getColor works for both swizzles.
+ */
+DEF_TEST(Bitmap_getColor_Swizzle, r)
+{
+    SkBitmap source;
+    source.allocN32Pixels(1, 1);
+    source.eraseColor(SK_ColorRED);
+    SkColorType colorTypes[] = {
+        kRGBA_8888_SkColorType,
+        kBGRA_8888_SkColorType,
+    };
+    for (SkColorType ct : colorTypes) {
+        SkBitmap copy;
+        if (!source.copyTo(&copy, ct)) {
+            ERRORF(r, "SkBitmap::copy failed %d", (int)ct);
+            continue;
+        }
+        SkAutoLockPixels autoLockPixels1(copy);
+        SkAutoLockPixels autoLockPixels2(source);
+        REPORTER_ASSERT(r, source.getColor(0, 0) == copy.getColor(0, 0));
+    }
+}
+
+static void test_erasecolor_premul(skiatest::Reporter* reporter, SkColorType ct, SkColor input,
+    SkColor expected)
+{
+    SkBitmap bm;
+    bm.allocPixels(SkImageInfo::Make(1, 1, ct, kPremul_SkAlphaType));
+    bm.eraseColor(input);
+    INFOF(reporter, "expected: %x actual: %x\n", expected, bm.getColor(0, 0));
+    REPORTER_ASSERT(reporter, bm.getColor(0, 0) == expected);
+}
+
+/**
+ *  This test checks that eraseColor premultiplies the color correctly.
+ */
+DEF_TEST(Bitmap_eraseColor_Premul, r)
+{
+    SkColor color = 0x80FF0080;
+    test_erasecolor_premul(r, kAlpha_8_SkColorType, color, 0x80000000);
+    test_erasecolor_premul(r, kRGB_565_SkColorType, color, 0xFF840042);
+    test_erasecolor_premul(r, kARGB_4444_SkColorType, color, 0x88FF0080);
+    test_erasecolor_premul(r, kRGBA_8888_SkColorType, color, color);
+    test_erasecolor_premul(r, kBGRA_8888_SkColorType, color, color);
 }

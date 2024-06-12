@@ -2,17 +2,27 @@
 #ifndef content_browser_DragHandle_h
 #define content_browser_DragHandle_h
 
-#include "third_party/WebKit/public/web/WebDragOperation.h"
+//#include "third_party/WebKit/public/web/WebDragOperation.h"
 #include "third_party/WebKit/public/platform/WebDragData.h"
+#include "third_party/WebKit/public/platform/WebDragData.h"
+#include "third_party/WebKit/public/platform/WebTraceLocation.h"
+#include "third_party/WebKit/public/platform/WebDragOperation.h"
+#include "third_party/WebKit/Source/wtf/OwnPtr.h"
+#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
+#include "third_party/WebKit/Source/wtf/Functional.h"
+
 #include "base/COMPtr.h"
 #include <shlobj.h>
+//#include <oleidl.h>
 #include <functional>
+#include <vector>
 
 namespace blink {
 class WebViewImpl;
 class WebImage;
 class WebLocalFrame;
 struct WebPoint;
+class Task;
 }
 
 typedef struct _wkeWebDragData wkeWebDragData;
@@ -54,10 +64,25 @@ public:
         const blink::WebPoint* dragImageOffset);
     
     // IDropTarget
-    virtual HRESULT __stdcall DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
-    HRESULT __stdcall DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
+    HRESULT __stdcall DragEnter(     
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect) override;
+    HRESULT __stdcall DragOver(
+    
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect
+    
+    ) override;
     HRESULT __stdcall DragLeave() override;
-    HRESULT __stdcall Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect) override;
+    HRESULT __stdcall Drop(
+        /* [unique][in] */ IDataObject* pDataObj,
+        /* [in] */ DWORD grfKeyState,
+        /* [in] */ POINTL pt,
+        /* [out][in] */ DWORD* pdwEffect
+    ) override;
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppvObject) override;
 
     ULONG __stdcall AddRef() override;
@@ -68,11 +93,14 @@ public:
     IDataObject* getDragData() const { return m_dragData.get(); }
 
 private:
-    
+    void postMainThreadTask(const blink::WebTraceLocation& location, std::function<void(void)>&& closure);
+    void runMainThreadTasks();
     void simulateDrag();
 
     long m_refCount;
     int m_taskCount;
+
+    bool m_isDragTargetDragEnter;
 
     blink::WebViewImpl* m_webViewImpl;
 
@@ -92,6 +120,9 @@ private:
     std::function<void(void)> m_notifOnDragging;
 
     COMPtr<IDataObject> m_tempDataObjectForSimulate;
+
+    WTF::RecursiveMutex m_tasksLock;
+    std::vector<std::function<void(void)>*> m_tasks;
 };
 
 }

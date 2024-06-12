@@ -2,26 +2,61 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "web/ResizeViewportAnchor.h"
 
+#include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
-#include "core/frame/PinchViewport.h"
+#include "core/frame/RootFrameViewport.h"
+#include "core/frame/VisualViewport.h"
+#include "core/page/Page.h"
 #include "platform/geometry/DoubleRect.h"
-#include "platform/geometry/DoubleSize.h"
 #include "platform/geometry/FloatSize.h"
 
 namespace blink {
 
-ResizeViewportAnchor::ResizeViewportAnchor(FrameView& rootFrameView, PinchViewport& pinchViewport)
-    : ViewportAnchor(rootFrameView, pinchViewport)
-    , m_pinchViewportInDocument(rootFrameView.scrollableArea()->visibleContentRectDouble().location())
+void ResizeViewportAnchor::resizeFrameView(IntSize size)
 {
+    FrameView* frameView = rootFrameView();
+    DCHECK(frameView);
+
+    ScrollableArea* rootViewport = frameView->getScrollableArea();
+    ScrollOffset offset = rootViewport->getScrollOffset();
+
+    frameView->resize(size);
+    m_drift += rootViewport->getScrollOffset() - offset;
 }
 
-ResizeViewportAnchor::~ResizeViewportAnchor()
+void ResizeViewportAnchor::endScope()
 {
-    m_rootFrameView->scrollableArea()->setScrollPosition(m_pinchViewportInDocument, ProgrammaticScroll);
+    if (--m_scopeCount > 0)
+        return;
+
+    FrameView* frameView = rootFrameView();
+    if (!frameView)
+        return;
+
+    ScrollOffset visualViewportInDocument = frameView->getScrollableArea()->getScrollOffset() - m_drift;
+
+    // TODO(bokan): Don't use RootFrameViewport::setScrollPosition since it
+    // assumes we can just set a sub-pixel precision offset on the FrameView.
+    // While we "can" do this, the offset that will be shipped to CC will be the
+    // truncated number and this class is used to handle TopControl movement
+    // which needs the two threads to match exactly pixel-for-pixel. We can
+    // replace this with RFV::setScrollPosition once Blink is sub-pixel scroll
+    // offset aware. crbug.com/414283.
+    DCHECK(frameView->getRootFrameViewport());
+    frameView->getRootFrameViewport()->restoreToAnchor(visualViewportInDocument);
+
+    m_drift = ScrollOffset();
+}
+
+FrameView* ResizeViewportAnchor::rootFrameView()
+{
+    if (Frame* frame = m_page->mainFrame()) {
+        if (frame->isLocalFrame())
+            return toLocalFrame(frame)->view();
+    }
+    return nullptr;
 }
 
 } // namespace blink

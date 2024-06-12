@@ -19,12 +19,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGImageElement.h"
 
 #include "core/CSSPropertyNames.h"
-#include "core/XLinkNames.h"
+#include "core/dom/StyleChangeReason.h"
 #include "core/layout/LayoutImageResource.h"
 #include "core/layout/svg/LayoutSVGImage.h"
 
@@ -33,11 +31,26 @@ namespace blink {
 inline SVGImageElement::SVGImageElement(Document& document)
     : SVGGraphicsElement(SVGNames::imageTag, document)
     , SVGURIReference(this)
-    , m_x(SVGAnimatedLength::create(this, SVGNames::xAttr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
-    , m_y(SVGAnimatedLength::create(this, SVGNames::yAttr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
-    , m_width(SVGAnimatedLength::create(this, SVGNames::widthAttr, SVGLength::create(SVGLengthMode::Width), ForbidNegativeLengths))
-    , m_height(SVGAnimatedLength::create(this, SVGNames::heightAttr, SVGLength::create(SVGLengthMode::Height), ForbidNegativeLengths))
-    , m_preserveAspectRatio(SVGAnimatedPreserveAspectRatio::create(this, SVGNames::preserveAspectRatioAttr, SVGPreserveAspectRatio::create()))
+    , m_x(SVGAnimatedLength::create(this,
+          SVGNames::xAttr,
+          SVGLength::create(SVGLengthMode::Width),
+          CSSPropertyX))
+    , m_y(SVGAnimatedLength::create(this,
+          SVGNames::yAttr,
+          SVGLength::create(SVGLengthMode::Height),
+          CSSPropertyY))
+    , m_width(SVGAnimatedLength::create(this,
+          SVGNames::widthAttr,
+          SVGLength::create(SVGLengthMode::Width),
+          CSSPropertyWidth))
+    , m_height(
+          SVGAnimatedLength::create(this,
+              SVGNames::heightAttr,
+              SVGLength::create(SVGLengthMode::Height),
+              CSSPropertyHeight))
+    , m_preserveAspectRatio(SVGAnimatedPreserveAspectRatio::create(
+          this,
+          SVGNames::preserveAspectRatioAttr))
     , m_imageLoader(SVGImageLoader::create(this))
     , m_needsLoaderURIUpdate(true)
 {
@@ -66,7 +79,7 @@ bool SVGImageElement::currentFrameHasSingleSecurityOrigin() const
 {
     if (LayoutSVGImage* layoutSVGImage = toLayoutSVGImage(layoutObject())) {
         if (layoutSVGImage->imageResource()->hasImage()) {
-            if (Image* image = layoutSVGImage->imageResource()->cachedImage()->image())
+            if (Image* image = layoutSVGImage->imageResource()->cachedImage()->getImage())
                 return image->currentFrameHasSingleSecurityOrigin();
         }
     }
@@ -74,44 +87,33 @@ bool SVGImageElement::currentFrameHasSingleSecurityOrigin() const
     return true;
 }
 
-bool SVGImageElement::isPresentationAttribute(const QualifiedName& attrName) const
+void SVGImageElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
-    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr)
-        return true;
-    return SVGGraphicsElement::isPresentationAttribute(attrName);
-}
-
-bool SVGImageElement::isPresentationAttributeWithSVGDOM(const QualifiedName& attrName) const
-{
-    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr)
-        return true;
-    return SVGGraphicsElement::isPresentationAttributeWithSVGDOM(attrName);
-}
-
-void SVGImageElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
-{
-    RefPtrWillBeRawPtr<SVGAnimatedPropertyBase> property = propertyFromAttribute(name);
-
-    if (property == m_width)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyWidth, *m_width->currentValue());
-    else if (property == m_height)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyHeight, *m_height->currentValue());
-    else if (property == m_x)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyX, *m_x->currentValue());
-    else if (property == m_y)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyY, *m_y->currentValue());
-    else
-        SVGGraphicsElement::collectStyleForPresentationAttribute(name, value, style);
+    SVGAnimatedPropertyBase* property = propertyFromAttribute(name);
+    if (property == m_width) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyWidth,
+            m_width->cssValue());
+    } else if (property == m_height) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyHeight,
+            m_height->cssValue());
+    } else if (property == m_x) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyX,
+            m_x->cssValue());
+    } else if (property == m_y) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyY,
+            m_y->cssValue());
+    } else {
+        SVGGraphicsElement::collectStyleForPresentationAttribute(name, value,
+            style);
+    }
 }
 
 void SVGImageElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    bool isLengthAttribute = attrName == SVGNames::xAttr
-                          || attrName == SVGNames::yAttr
-                          || attrName == SVGNames::widthAttr
-                          || attrName == SVGNames::heightAttr;
+    bool isLengthAttribute = attrName == SVGNames::xAttr || attrName == SVGNames::yAttr || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr;
 
     if (isLengthAttribute || attrName == SVGNames::preserveAspectRatioAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
@@ -137,7 +139,7 @@ void SVGImageElement::svgAttributeChanged(const QualifiedName& attrName)
 
     if (SVGURIReference::isKnownAttribute(attrName)) {
         SVGElement::InvalidationGuard invalidationGuard(this);
-        if (inDocument())
+        if (isConnected())
             imageLoader().updateFromElement(ImageLoader::UpdateIgnorePreviousError);
         else
             m_needsLoaderURIUpdate = true;
@@ -149,10 +151,7 @@ void SVGImageElement::svgAttributeChanged(const QualifiedName& attrName)
 
 bool SVGImageElement::selfHasRelativeLengths() const
 {
-    return m_x->currentValue()->isRelative()
-        || m_y->currentValue()->isRelative()
-        || m_width->currentValue()->isRelative()
-        || m_height->currentValue()->isRelative();
+    return m_x->currentValue()->isRelative() || m_y->currentValue()->isRelative() || m_width->currentValue()->isRelative() || m_height->currentValue()->isRelative();
 }
 
 LayoutObject* SVGImageElement::createLayoutObject(const ComputedStyle&)
@@ -165,9 +164,9 @@ bool SVGImageElement::haveLoadedRequiredResources()
     return !m_needsLoaderURIUpdate && !imageLoader().hasPendingActivity();
 }
 
-void SVGImageElement::attach(const AttachContext& context)
+void SVGImageElement::attachLayoutTree(const AttachContext& context)
 {
-    SVGGraphicsElement::attach(context);
+    SVGGraphicsElement::attachLayoutTree(context);
 
     if (LayoutSVGImage* imageObj = toLayoutSVGImage(layoutObject())) {
         if (imageObj->imageResource()->hasImage())
@@ -177,20 +176,22 @@ void SVGImageElement::attach(const AttachContext& context)
     }
 }
 
-Node::InsertionNotificationRequest SVGImageElement::insertedInto(ContainerNode* rootParent)
+Node::InsertionNotificationRequest SVGImageElement::insertedInto(
+    ContainerNode* rootParent)
 {
     SVGGraphicsElement::insertedInto(rootParent);
-    if (!rootParent->inDocument())
+    if (!rootParent->isConnected())
         return InsertionDone;
 
-    // We can only resolve base URIs properly after tree insertion - hence, URI mutations while
-    // detached are deferred until this point.
+    // We can only resolve base URIs properly after tree insertion - hence, URI
+    // mutations while detached are deferred until this point.
     if (m_needsLoaderURIUpdate) {
         imageLoader().updateFromElement(ImageLoader::UpdateIgnorePreviousError);
         m_needsLoaderURIUpdate = false;
     } else {
-        // A previous loader update may have failed to actually fetch the image if the document
-        // was inactive. In that case, force a re-update (but don't clear previous errors).
+        // A previous loader update may have failed to actually fetch the image if
+        // the document was inactive. In that case, force a re-update (but don't
+        // clear previous errors).
         if (!imageLoader().image())
             imageLoader().updateFromElement();
     }

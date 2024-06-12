@@ -37,9 +37,13 @@
 namespace blink {
 
 // This class is an implementation detail for deferred interpolations.
-class PLATFORM_EXPORT InterpolatedTransformOperation : public TransformOperation {
+class PLATFORM_EXPORT InterpolatedTransformOperation final
+    : public TransformOperation {
 public:
-    static PassRefPtr<InterpolatedTransformOperation> create(const TransformOperations& from, const TransformOperations& to, double progress)
+    static PassRefPtr<InterpolatedTransformOperation> create(
+        const TransformOperations& from,
+        const TransformOperations& to,
+        double progress)
     {
         return adoptRef(new InterpolatedTransformOperation(from, to, progress));
     }
@@ -53,20 +57,30 @@ private:
     OperationType type() const override { return Interpolated; }
 
     bool operator==(const TransformOperation&) const override;
-    void apply(TransformationMatrix&, const FloatSize& borderBoxSize) const override;
+    void apply(TransformationMatrix&,
+        const FloatSize& borderBoxSize) const override;
 
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from,
+        double progress,
+        bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> zoom(double factor) final
+    {
+        return create(from.zoom(factor), to.zoom(factor), progress);
+    }
 
     bool dependsOnBoxSize() const override
     {
         return from.dependsOnBoxSize() || to.dependsOnBoxSize();
     }
 
-    InterpolatedTransformOperation(const TransformOperations& from, const TransformOperations& to, double progress)
+    InterpolatedTransformOperation(const TransformOperations& from,
+        const TransformOperations& to,
+        double progress)
         : from(from)
         , to(to)
         , progress(progress)
-    { }
+    {
+    }
 
     const TransformOperations from;
     const TransformOperations to;
@@ -76,4 +90,3 @@ private:
 } // namespace blink
 
 #endif // InterpolatedTransformOperation_h
-

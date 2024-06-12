@@ -13,13 +13,16 @@ namespace blink {
 
 class ExceptionState;
 
-class TrackDefaultList final : public GarbageCollected<TrackDefaultList>, public ScriptWrappable {
+class TrackDefaultList final : public GarbageCollected<TrackDefaultList>,
+                               public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static TrackDefaultList* create(); // Creates an empty TrackDefaultList.
 
     // Implement the IDL
-    static TrackDefaultList* create(const HeapVector<Member<TrackDefault>>&, ExceptionState&);
+    static TrackDefaultList* create(const HeapVector<Member<TrackDefault>>&,
+        ExceptionState&);
 
     unsigned length() const { return m_trackDefaults.size(); }
     TrackDefault* item(unsigned) const;

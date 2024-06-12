@@ -5,21 +5,29 @@
 #ifndef StereoPannerNode_h
 #define StereoPannerNode_h
 
+#include "base/gtest_prod_util.h"
 #include "modules/webaudio/AudioNode.h"
 #include "modules/webaudio/AudioParam.h"
 #include "platform/audio/AudioBus.h"
-#include "platform/audio/Spatializer.h"
+#include "platform/audio/StereoPanner.h"
+#include <memory>
 
 namespace blink {
+
+class BaseAudioContext;
+class StereoPannerOptions;
 
 // StereoPannerNode is an AudioNode with one input and one output. It is
 // specifically designed for equal-power stereo panning.
 class StereoPannerHandler final : public AudioHandler {
 public:
-    static PassRefPtr<StereoPannerHandler> create(AudioNode&, float sampleRate, AudioParamHandler& pan);
+    static PassRefPtr<StereoPannerHandler> create(AudioNode&,
+        float sampleRate,
+        AudioParamHandler& pan);
     ~StereoPannerHandler() override;
 
     void process(size_t framesToProcess) override;
+    void processOnlyAudioParams(size_t framesToProcess) override;
     void initialize() override;
 
     void setChannelCount(unsigned long, ExceptionState&) final;
@@ -28,25 +36,28 @@ public:
 private:
     StereoPannerHandler(AudioNode&, float sampleRate, AudioParamHandler& pan);
 
-    OwnPtr<Spatializer> m_stereoPanner;
+    std::unique_ptr<StereoPanner> m_stereoPanner;
     RefPtr<AudioParamHandler> m_pan;
 
     AudioFloatArray m_sampleAccuratePanValues;
 
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class StereoPannerNodeTest_StereoPannerLifetime_Test;
+    FRIEND_TEST_ALL_PREFIXES(StereoPannerNodeTest, StereoPannerLifetime);
 };
 
 class StereoPannerNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static StereoPannerNode* create(AudioContext&, float sampleRate);
+    static StereoPannerNode* create(BaseAudioContext&, ExceptionState&);
+    static StereoPannerNode* create(BaseAudioContext*,
+        const StereoPannerOptions&,
+        ExceptionState&);
     DECLARE_VIRTUAL_TRACE();
 
     AudioParam* pan() const;
 
 private:
-    StereoPannerNode(AudioContext&, float sampleRate);
+    StereoPannerNode(BaseAudioContext&);
 
     Member<AudioParam> m_pan;
 };

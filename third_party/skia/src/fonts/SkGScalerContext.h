@@ -13,14 +13,14 @@
 
 class SkGTypeface : public SkTypeface {
 public:
-    SkGTypeface(SkTypeface* proxy, const SkPaint&);
-    virtual ~SkGTypeface();
+    SkGTypeface(sk_sp<SkTypeface> proxy, const SkPaint&);
 
-    SkTypeface* proxy() const { return fProxy; }
+    SkTypeface* proxy() const { return fProxy.get(); }
     const SkPaint& paint() const { return fPaint; }
 
 protected:
-    SkScalerContext* onCreateScalerContext(const SkDescriptor*) const override;
+    SkScalerContext* onCreateScalerContext(const SkScalerContextEffects&,
+        const SkDescriptor*) const override;
     void onFilterRec(SkScalerContextRec*) const override;
     SkAdvancedTypefaceMetrics* onGetAdvancedTypefaceMetrics(
         PerGlyphInfo,
@@ -30,7 +30,7 @@ protected:
     void onGetFontDescriptor(SkFontDescriptor*, bool* isLocal) const override;
 
     int onCharsToGlyphs(const void* chars, Encoding encoding,
-                        uint16_t glyphs[], int glyphCount) const override;
+        uint16_t glyphs[], int glyphCount) const override;
     int onCountGlyphs() const override;
     int onGetUPEM() const override;
 
@@ -39,11 +39,11 @@ protected:
 
     int onGetTableTags(SkFontTableTag tags[]) const override;
     size_t onGetTableData(SkFontTableTag, size_t offset,
-                          size_t length, void* data) const override;
+        size_t length, void* data) const override;
 
 private:
-    SkTypeface* fProxy;
-    SkPaint     fPaint;
+    sk_sp<SkTypeface> fProxy;
+    SkPaint fPaint;
 };
 
 #endif

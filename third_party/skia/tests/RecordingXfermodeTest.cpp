@@ -9,9 +9,9 @@
 
 #include "../include/core/SkCanvas.h"
 #include "../include/core/SkPicture.h"
+#include "../include/core/SkPictureRecorder.h"
 #include "../include/core/SkStream.h"
 #include "../include/core/SkString.h"
-#include "../include/core/SkPictureRecorder.h"
 #include <cstring>
 
 // Verify that replay of a recording into a clipped canvas
@@ -22,8 +22,10 @@
 namespace {
 
 class Drawer {
- public:
-    explicit Drawer() : fImageInfo(SkImageInfo::MakeN32Premul(200, 100)) {
+public:
+    explicit Drawer()
+        : fImageInfo(SkImageInfo::MakeN32Premul(200, 100))
+    {
         fCircleBM.allocPixels(SkImageInfo::MakeN32Premul(100, 100));
         SkCanvas canvas(fCircleBM);
         canvas.clear(0xffffffff);
@@ -34,7 +36,8 @@ class Drawer {
 
     const SkImageInfo& imageInfo() const { return fImageInfo; }
 
-    void draw(SkCanvas* canvas, const SkRect& clipRect, SkXfermode::Mode mode) const {
+    void draw(SkCanvas* canvas, const SkRect& clipRect, SkXfermode::Mode mode) const
+    {
         SkPaint greenPaint;
         greenPaint.setColor(0xff008000);
         SkPaint blackPaint;
@@ -45,42 +48,45 @@ class Drawer {
         layerPaint.setColor(0xff000000);
         layerPaint.setXfermodeMode(mode);
         SkRect canvasRect(SkRect::MakeWH(SkIntToScalar(fImageInfo.width()),
-                                         SkIntToScalar(fImageInfo.height())));
+            SkIntToScalar(fImageInfo.height())));
 
         canvas->clipRect(clipRect);
         canvas->clear(0xff000000);
 
-        canvas->saveLayer(NULL, &blackPaint);
-            canvas->drawRect(canvasRect, greenPaint);
-            canvas->saveLayer(NULL, &layerPaint);
-                canvas->drawBitmapRect(fCircleBM, SkRect::MakeXYWH(20,20,60,60), &blackPaint);
-            canvas->restore();
+        canvas->saveLayer(nullptr, &blackPaint);
+        canvas->drawRect(canvasRect, greenPaint);
+        canvas->saveLayer(nullptr, &layerPaint);
+        canvas->drawBitmapRect(fCircleBM, SkRect::MakeXYWH(20, 20, 60, 60), &blackPaint);
+        canvas->restore();
         canvas->restore();
     }
 
- private:
+private:
     const SkImageInfo fImageInfo;
     SkBitmap fCircleBM;
 };
 
 class RecordingStrategy {
- public:
-    virtual ~RecordingStrategy() {}
+public:
+    virtual ~RecordingStrategy() { }
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
-                                            const SkRect& intoClip,
-                                            SkXfermode::Mode) = 0;
+        const SkRect& intoClip,
+        SkXfermode::Mode)
+        = 0;
 };
 
 class BitmapBackedCanvasStrategy : public RecordingStrategy {
     // This version just draws into a bitmap-backed canvas.
- public:
-    BitmapBackedCanvasStrategy(const SkImageInfo& imageInfo) {
+public:
+    BitmapBackedCanvasStrategy(const SkImageInfo& imageInfo)
+    {
         fBitmap.allocPixels(imageInfo);
     }
 
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
-                                            const SkRect& intoClip,
-                                            SkXfermode::Mode mode) {
+        const SkRect& intoClip,
+        SkXfermode::Mode mode)
+    {
         SkCanvas canvas(fBitmap);
         canvas.clear(0xffffffff);
         // Note that the scene is drawn just into the clipped region!
@@ -89,7 +95,7 @@ class BitmapBackedCanvasStrategy : public RecordingStrategy {
         return fBitmap;
     }
 
- private:
+private:
     SkBitmap fBitmap;
 };
 
@@ -97,24 +103,26 @@ class PictureStrategy : public RecordingStrategy {
     // This version draws the entire scene into an SkPictureRecorder.
     // Then it then replays the scene through a clip rectangle.
     // This backend proved to be buggy.
- public:
-    PictureStrategy(const SkImageInfo& imageInfo) {
+public:
+    PictureStrategy(const SkImageInfo& imageInfo)
+    {
         fBitmap.allocPixels(imageInfo);
-        fWidth  = imageInfo.width();
+        fWidth = imageInfo.width();
         fHeight = imageInfo.height();
     }
 
     virtual const SkBitmap& recordAndReplay(const Drawer& drawer,
-                                            const SkRect& intoClip,
-                                            SkXfermode::Mode mode) {
+        const SkRect& intoClip,
+        SkXfermode::Mode mode)
+    {
         SkRTreeFactory factory;
         SkPictureRecorder recorder;
-        SkRect canvasRect(SkRect::MakeWH(SkIntToScalar(fWidth),SkIntToScalar(fHeight)));
+        SkRect canvasRect(SkRect::MakeWH(SkIntToScalar(fWidth), SkIntToScalar(fHeight)));
         SkCanvas* canvas = recorder.beginRecording(SkIntToScalar(fWidth),
-                                                   SkIntToScalar(fHeight),
-                                                   &factory);
+            SkIntToScalar(fHeight),
+            &factory);
         drawer.draw(canvas, canvasRect, mode);
-        SkAutoTUnref<SkPicture> picture(recorder.endRecording());
+        sk_sp<SkPicture> picture(recorder.finishRecordingAsPicture());
 
         SkCanvas replayCanvas(fBitmap);
         replayCanvas.clear(0xffffffff);
@@ -123,7 +131,7 @@ class PictureStrategy : public RecordingStrategy {
         return fBitmap;
     }
 
- private:
+private:
     SkBitmap fBitmap;
     int fWidth;
     int fHeight;
@@ -131,8 +139,8 @@ class PictureStrategy : public RecordingStrategy {
 
 } // namespace
 
-
-DEF_TEST(SkRecordingAccuracyXfermode, reporter) {
+DEF_TEST(SkRecordingAccuracyXfermode, reporter)
+{
 #define FINEGRAIN 0
     const Drawer drawer;
 
@@ -157,12 +165,12 @@ DEF_TEST(SkRecordingAccuracyXfermode, reporter) {
         // The pixel arrays should match.
 #if FINEGRAIN
         REPORTER_ASSERT(reporter,
-                        0 == memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize));
+            0 == memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize));
 #else
         if (memcmp(goldenBM.getPixels(), pictureBM.getPixels(), pixelsSize)) {
             numErrors++;
             errors.appendf("For SkXfermode %d %s:    SkPictureRecorder bitmap is wrong\n",
-                           iMode, SkXfermode::ModeName(mode));
+                iMode, SkXfermode::ModeName(mode));
         }
 #endif
     }

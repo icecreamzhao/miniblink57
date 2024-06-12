@@ -1,0 +1,3 @@
+./lib_sql_unittests__library.so
+../../sql/test/data/
+../../testing/test_env.py

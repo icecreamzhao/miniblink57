@@ -17,29 +17,36 @@ class SkCanvas;
 struct SkUnit3D {
     SkScalar fX, fY, fZ;
 
-    void set(SkScalar x, SkScalar y, SkScalar z) {
-        fX = x; fY = y; fZ = z;
+    void set(SkScalar x, SkScalar y, SkScalar z)
+    {
+        fX = x;
+        fY = y;
+        fZ = z;
     }
     static SkScalar Dot(const SkUnit3D&, const SkUnit3D&);
     static void Cross(const SkUnit3D&, const SkUnit3D&, SkUnit3D* cross);
 };
 
 struct SkPoint3D {
-    SkScalar    fX, fY, fZ;
+    SkScalar fX, fY, fZ;
 
-    void set(SkScalar x, SkScalar y, SkScalar z) {
-        fX = x; fY = y; fZ = z;
+    void set(SkScalar x, SkScalar y, SkScalar z)
+    {
+        fX = x;
+        fY = y;
+        fZ = z;
     }
-    SkScalar    normalize(SkUnit3D*) const;
+    SkScalar normalize(SkUnit3D*) const;
 };
 typedef SkPoint3D SkVector3D;
 
 struct SkMatrix3D {
-    SkScalar    fMat[3][4];
+    SkScalar fMat[3][4];
 
     void reset();
 
-    void setRow(int row, SkScalar a, SkScalar b, SkScalar c, SkScalar d = 0) {
+    void setRow(int row, SkScalar a, SkScalar b, SkScalar c, SkScalar d = 0)
+    {
         SkASSERT((unsigned)row < 3);
         fMat[row][0] = a;
         fMat[row][1] = b;
@@ -61,11 +68,13 @@ struct SkMatrix3D {
     void mapPoint(const SkPoint3D& src, SkPoint3D* dst) const;
     void mapVector(const SkVector3D& src, SkVector3D* dst) const;
 
-    void mapPoint(SkPoint3D* v) const {
+    void mapPoint(SkPoint3D* v) const
+    {
         this->mapPoint(*v, v);
     }
 
-    void mapVector(SkVector3D* v) const {
+    void mapVector(SkVector3D* v) const
+    {
         this->mapVector(*v, v);
     }
 };
@@ -74,23 +83,24 @@ class SkPatch3D {
 public:
     SkPatch3D();
 
-    void    reset();
-    void    transform(const SkMatrix3D&, SkPatch3D* dst = NULL) const;
+    void reset();
+    void transform(const SkMatrix3D&, SkPatch3D* dst = NULL) const;
 
     // dot a unit vector with the patch's normal
     SkScalar dotWith(SkScalar dx, SkScalar dy, SkScalar dz) const;
-    SkScalar dotWith(const SkVector3D& v) const {
+    SkScalar dotWith(const SkVector3D& v) const
+    {
         return this->dotWith(v.fX, v.fY, v.fZ);
     }
 
     // deprecated, but still here for animator (for now)
-    void rotate(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) {}
-    void rotateDegrees(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) {}
+    void rotate(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) { }
+    void rotateDegrees(SkScalar /*x*/, SkScalar /*y*/, SkScalar /*z*/) { }
 
 private:
 public: // make public for SkDraw3D for now
-    SkVector3D  fU, fV;
-    SkPoint3D   fOrigin;
+    SkVector3D fU, fV;
+    SkPoint3D fOrigin;
 
     friend class SkCamera3D;
 };
@@ -103,14 +113,14 @@ public:
     void update();
     void patchToMatrix(const SkPatch3D&, SkMatrix* matrix) const;
 
-    SkPoint3D   fLocation;
-    SkPoint3D   fAxis;
-    SkPoint3D   fZenith;
-    SkPoint3D   fObserver;
+    SkPoint3D fLocation;
+    SkPoint3D fAxis;
+    SkPoint3D fZenith;
+    SkPoint3D fObserver;
 
 private:
-    mutable SkMatrix    fOrientation;
-    mutable bool        fNeedToUpdate;
+    mutable SkMatrix fOrientation;
+    mutable bool fNeedToUpdate;
 
     void doUpdate() const;
 };
@@ -142,12 +152,12 @@ public:
 
 private:
     struct Rec {
-        Rec*        fNext;
-        SkMatrix3D  fMatrix;
+        Rec* fNext;
+        SkMatrix3D fMatrix;
     };
-    Rec*        fRec;
-    Rec         fInitialRec;
-    SkCamera3D  fCamera;
+    Rec* fRec;
+    Rec fInitialRec;
+    SkCamera3D fCamera;
 };
 
 #endif

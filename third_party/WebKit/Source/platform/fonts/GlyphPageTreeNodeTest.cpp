@@ -2,65 +2,65 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/fonts/GlyphPageTreeNode.h"
 
 #include "platform/fonts/SegmentedFontData.h"
 #include "platform/fonts/SimpleFontData.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
 namespace {
 
-class TestCustomFontData : public CustomFontData {
-public:
-    static PassRefPtr<TestCustomFontData> create() { return adoptRef(new TestCustomFontData()); }
-private:
-    TestCustomFontData() { }
-    bool isLoadingFallback() const override { return true; }
-};
+    class TestCustomFontData : public CustomFontData {
+    public:
+        static PassRefPtr<TestCustomFontData> create() { return adoptRef(new TestCustomFontData()); }
 
-class TestSimpleFontData : public SimpleFontData {
-public:
-    static PassRefPtr<TestSimpleFontData> create(UChar32 from, UChar32 to)
-    {
-        return adoptRef(new TestSimpleFontData(nullptr, from, to));
-    }
+    private:
+        TestCustomFontData() { }
+        bool isLoadingFallback() const override { return true; }
+    };
 
-    static PassRefPtr<TestSimpleFontData> createUnloaded(UChar32 from, UChar32 to)
-    {
-        return adoptRef(new TestSimpleFontData(TestCustomFontData::create(), from, to));
-    }
-
-private:
-    TestSimpleFontData(PassRefPtr<CustomFontData> customData, UChar32 from, UChar32 to)
-        : SimpleFontData(customData, 10, false, false)
-        , m_from(from)
-        , m_to(to)
-    {
-    }
-
-    bool fillGlyphPage(GlyphPage* pageToFill, unsigned offset, unsigned length, UChar* buffer, unsigned bufferLength) const override
-    {
-        const Glyph kGlyph = 1;
-        String bufferString(buffer, bufferLength);
-        unsigned bufferIndex = 0;
-        bool hasGlyphs = false;
-        for (unsigned i = 0; i < length; i++) {
-            UChar32 c = bufferString.characterStartingAt(bufferIndex);
-            bufferIndex += U16_LENGTH(c);
-            if (m_from <= c && c <= m_to) {
-                pageToFill->setGlyphDataForIndex(offset + i, kGlyph, this);
-                hasGlyphs = true;
-            }
+    class TestSimpleFontData : public SimpleFontData {
+    public:
+        static PassRefPtr<TestSimpleFontData> create(UChar32 from, UChar32 to)
+        {
+            return adoptRef(new TestSimpleFontData(nullptr, from, to));
         }
-        return hasGlyphs;
-    }
 
-    UChar32 m_from;
-    UChar32 m_to;
-};
+        static PassRefPtr<TestSimpleFontData> createUnloaded(UChar32 from, UChar32 to)
+        {
+            return adoptRef(new TestSimpleFontData(TestCustomFontData::create(), from, to));
+        }
+
+    private:
+        TestSimpleFontData(PassRefPtr<CustomFontData> customData, UChar32 from, UChar32 to)
+            : SimpleFontData(customData, 10, false, false)
+            , m_from(from)
+            , m_to(to)
+        {
+        }
+
+        bool fillGlyphPage(GlyphPage* pageToFill, unsigned offset, unsigned length, UChar* buffer, unsigned bufferLength) const override
+        {
+            const Glyph kGlyph = 1;
+            String bufferString(buffer, bufferLength);
+            unsigned bufferIndex = 0;
+            bool hasGlyphs = false;
+            for (unsigned i = 0; i < length; i++) {
+                UChar32 c = bufferString.characterStartingAt(bufferIndex);
+                bufferIndex += U16_LENGTH(c);
+                if (m_from <= c && c <= m_to) {
+                    pageToFill->setGlyphDataForIndex(offset + i, kGlyph, this);
+                    hasGlyphs = true;
+                }
+            }
+            return hasGlyphs;
+        }
+
+        UChar32 m_from;
+        UChar32 m_to;
+    };
 
 } // anonymous namespace
 
@@ -108,8 +108,8 @@ TEST(GlyphPageTreeNodeTest, segmentedData)
         RefPtr<TestSimpleFontData> dataBtoC = TestSimpleFontData::create('B', 'C');
         RefPtr<TestSimpleFontData> dataCtoE = TestSimpleFontData::create('C', 'E');
         RefPtr<SegmentedFontData> segmentedData = SegmentedFontData::create();
-        segmentedData->appendRange(FontDataRange('A', 'C', dataBtoC));
-        segmentedData->appendRange(FontDataRange('C', 'D', dataCtoE));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataBtoC, 'A', 'C')));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataCtoE, 'C', 'D')));
         GlyphPageTreeNode* node = GlyphPageTreeNode::getNormalRootChild(segmentedData.get(), kPageNumber);
 
         EXPECT_EQ(0, node->page()->glyphDataForCharacter('A').fontData);
@@ -146,9 +146,9 @@ TEST(GlyphPageTreeNodeTest, customData)
         RefPtr<TestSimpleFontData> dataBtoD = TestSimpleFontData::create('B', 'D');
         RefPtr<TestSimpleFontData> dataCtoE = TestSimpleFontData::createUnloaded('C', 'E');
         RefPtr<SegmentedFontData> segmentedData = SegmentedFontData::create();
-        segmentedData->appendRange(FontDataRange('A', 'C', dataAtoC));
-        segmentedData->appendRange(FontDataRange('B', 'D', dataBtoD));
-        segmentedData->appendRange(FontDataRange('C', 'E', dataCtoE));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataAtoC, 'A', 'C')));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataBtoD, 'B', 'D')));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataCtoE, 'C', 'E')));
         GlyphPageTreeNode* node = GlyphPageTreeNode::getNormalRootChild(segmentedData.get(), kPageNumber);
 
         EXPECT_EQ(0, node->page()->glyphDataForCharacter('A').fontData);
@@ -177,9 +177,9 @@ TEST(GlyphPageTreeNodeTest, customDataWithMultiplePages)
         RefPtr<SegmentedFontData> segmentedData1 = SegmentedFontData::create();
         RefPtr<SegmentedFontData> segmentedData2 = SegmentedFontData::create();
         RefPtr<SegmentedFontData> segmentedData3 = SegmentedFontData::create();
-        segmentedData1->appendRange(FontDataRange('A', 'C', dataAtoC));
-        segmentedData2->appendRange(FontDataRange('B', 'D', dataBtoD));
-        segmentedData3->appendRange(FontDataRange('C', 'E', dataCtoE));
+        segmentedData1->appendFace(adoptRef(new FontDataForRangeSet(dataAtoC, 'A', 'C')));
+        segmentedData2->appendFace(adoptRef(new FontDataForRangeSet(dataBtoD, 'B', 'D')));
+        segmentedData3->appendFace(adoptRef(new FontDataForRangeSet(dataCtoE, 'C', 'E')));
         GlyphPageTreeNode* node1 = GlyphPageTreeNode::getNormalRootChild(segmentedData1.get(), kPageNumber);
         GlyphPageTreeNode* node2 = node1->getNormalChild(segmentedData2.get(), kPageNumber);
         GlyphPageTreeNode* node3 = node2->getNormalChild(segmentedData3.get(), kPageNumber);
@@ -207,7 +207,7 @@ TEST(GlyphPageTreeNodeTest, systemFallback)
         RefPtr<TestSimpleFontData> dataAtoC = TestSimpleFontData::createUnloaded('A', 'C');
         RefPtr<TestSimpleFontData> dataBtoD = TestSimpleFontData::create('B', 'D');
         RefPtr<SegmentedFontData> segmentedData = SegmentedFontData::create();
-        segmentedData->appendRange(FontDataRange('A', 'C', dataAtoC));
+        segmentedData->appendFace(adoptRef(new FontDataForRangeSet(dataAtoC, 'A', 'C')));
         GlyphPageTreeNode* node1 = GlyphPageTreeNode::getNormalRootChild(segmentedData.get(), kPageNumber);
         GlyphPageTreeNode* node2 = node1->getNormalChild(dataBtoD.get(), kPageNumber);
         SystemFallbackGlyphPageTreeNode* node3 = node2->getSystemFallbackChild(kPageNumber);

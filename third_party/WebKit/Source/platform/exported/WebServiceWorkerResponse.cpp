@@ -2,25 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-#include "public/platform/WebServiceWorkerResponse.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerResponse.h"
 
 #include "platform/blob/BlobData.h"
 #include "platform/network/HTTPHeaderMap.h"
 #include "public/platform/WebHTTPHeaderVisitor.h"
 #include "wtf/HashMap.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class WebServiceWorkerResponsePrivate : public RefCounted<WebServiceWorkerResponsePrivate> {
+class WebServiceWorkerResponsePrivate
+    : public RefCounted<WebServiceWorkerResponsePrivate> {
 public:
     WebServiceWorkerResponsePrivate()
         : status(0)
         , responseType(WebServiceWorkerResponseTypeDefault)
         , error(WebServiceWorkerResponseErrorUnknown)
+        , responseTime(0)
     {
     }
-    WebURL url;
+    WebVector<WebURL> urlList;
     unsigned short status;
     WebString statusText;
     WebServiceWorkerResponseType responseType;
@@ -28,6 +30,9 @@ public:
     RefPtr<BlobDataHandle> blobDataHandle;
     WebURL streamURL;
     WebServiceWorkerResponseError error;
+    int64_t responseTime;
+    WebString cacheStorageCacheName;
+    WebVector<WebString> corsExposedHeaderNames;
 };
 
 WebServiceWorkerResponse::WebServiceWorkerResponse()
@@ -45,14 +50,14 @@ void WebServiceWorkerResponse::assign(const WebServiceWorkerResponse& other)
     m_private = other.m_private;
 }
 
-void WebServiceWorkerResponse::setURL(const WebURL& url)
+void WebServiceWorkerResponse::setURLList(const WebVector<WebURL>& urlList)
 {
-    m_private->url = url;
+    m_private->urlList = urlList;
 }
 
-WebURL WebServiceWorkerResponse::url() const
+const WebVector<WebURL>& WebServiceWorkerResponse::urlList() const
 {
-    return m_private->url;
+    return m_private->urlList;
 }
 
 void WebServiceWorkerResponse::setStatus(unsigned short status)
@@ -75,7 +80,8 @@ WebString WebServiceWorkerResponse::statusText() const
     return m_private->statusText;
 }
 
-void WebServiceWorkerResponse::setResponseType(WebServiceWorkerResponseType responseType)
+void WebServiceWorkerResponse::setResponseType(
+    WebServiceWorkerResponseType responseType)
 {
     m_private->responseType = responseType;
 }
@@ -85,12 +91,14 @@ WebServiceWorkerResponseType WebServiceWorkerResponse::responseType() const
     return m_private->responseType;
 }
 
-void WebServiceWorkerResponse::setHeader(const WebString& key, const WebString& value)
+void WebServiceWorkerResponse::setHeader(const WebString& key,
+    const WebString& value)
 {
     m_private->headers.set(key, value);
 }
 
-void WebServiceWorkerResponse::appendHeader(const WebString& key, const WebString& value)
+void WebServiceWorkerResponse::appendHeader(const WebString& key,
+    const WebString& value)
 {
     HTTPHeaderMap::AddResult addResult = m_private->headers.add(key, value);
     if (!addResult.isNewEntry)
@@ -100,8 +108,10 @@ void WebServiceWorkerResponse::appendHeader(const WebString& key, const WebStrin
 WebVector<WebString> WebServiceWorkerResponse::getHeaderKeys() const
 {
     Vector<String> keys;
-    for (HTTPHeaderMap::const_iterator it = m_private->headers.begin(), end = m_private->headers.end(); it != end; ++it)
-        keys.append(it->key);
+    for (HTTPHeaderMap::const_iterator it = m_private->headers.begin(),
+                                       end = m_private->headers.end();
+         it != end; ++it)
+        keys.push_back(it->key);
 
     return keys;
 }
@@ -111,9 +121,12 @@ WebString WebServiceWorkerResponse::getHeader(const WebString& key) const
     return m_private->headers.get(key);
 }
 
-void WebServiceWorkerResponse::visitHTTPHeaderFields(WebHTTPHeaderVisitor* headerVisitor) const
+void WebServiceWorkerResponse::visitHTTPHeaderFields(
+    WebHTTPHeaderVisitor* headerVisitor) const
 {
-    for (HTTPHeaderMap::const_iterator i = m_private->headers.begin(), end = m_private->headers.end(); i != end; ++i)
+    for (HTTPHeaderMap::const_iterator i = m_private->headers.begin(),
+                                       end = m_private->headers.end();
+         i != end; ++i)
         headerVisitor->visitHeader(i->key, i->value);
 }
 
@@ -136,21 +149,6 @@ uint64_t WebServiceWorkerResponse::blobSize() const
     return m_private->blobDataHandle->size();
 }
 
-const HTTPHeaderMap& WebServiceWorkerResponse::headers() const
-{
-    return m_private->headers;
-}
-
-void WebServiceWorkerResponse::setBlobDataHandle(PassRefPtr<BlobDataHandle> blobDataHandle)
-{
-    m_private->blobDataHandle = blobDataHandle;
-}
-
-PassRefPtr<BlobDataHandle> WebServiceWorkerResponse::blobDataHandle() const
-{
-    return m_private->blobDataHandle;
-}
-
 void WebServiceWorkerResponse::setStreamURL(const WebURL& url)
 {
     m_private->streamURL = url;
@@ -169,6 +167,54 @@ void WebServiceWorkerResponse::setError(WebServiceWorkerResponseError error)
 WebServiceWorkerResponseError WebServiceWorkerResponse::error() const
 {
     return m_private->error;
+}
+
+void WebServiceWorkerResponse::setResponseTime(int64_t time)
+{
+    m_private->responseTime = time;
+}
+
+int64_t WebServiceWorkerResponse::responseTime() const
+{
+    return m_private->responseTime;
+}
+
+void WebServiceWorkerResponse::setCacheStorageCacheName(
+    const WebString& cacheStorageCacheName)
+{
+    m_private->cacheStorageCacheName = cacheStorageCacheName;
+}
+
+WebString WebServiceWorkerResponse::cacheStorageCacheName() const
+{
+    return m_private->cacheStorageCacheName;
+}
+
+void WebServiceWorkerResponse::setCorsExposedHeaderNames(
+    const WebVector<WebString>& headerNames)
+{
+    m_private->corsExposedHeaderNames = headerNames;
+}
+
+WebVector<WebString> WebServiceWorkerResponse::corsExposedHeaderNames() const
+{
+    return m_private->corsExposedHeaderNames;
+}
+
+const HTTPHeaderMap& WebServiceWorkerResponse::headers() const
+{
+    return m_private->headers;
+}
+
+void WebServiceWorkerResponse::setBlobDataHandle(
+    PassRefPtr<BlobDataHandle> blobDataHandle)
+{
+    m_private->blobDataHandle = blobDataHandle;
+}
+
+PassRefPtr<BlobDataHandle> WebServiceWorkerResponse::blobDataHandle() const
+{
+    return m_private->blobDataHandle;
 }
 
 } // namespace blink

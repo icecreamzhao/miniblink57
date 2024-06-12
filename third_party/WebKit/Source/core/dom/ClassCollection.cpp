@@ -27,7 +27,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/ClassCollection.h"
 
 #include "core/dom/Document.h"
@@ -35,18 +34,17 @@
 
 namespace blink {
 
-ClassCollection::ClassCollection(ContainerNode& rootNode, const AtomicString& classNames)
+ClassCollection::ClassCollection(ContainerNode& rootNode,
+    const AtomicString& classNames)
     : HTMLCollection(rootNode, ClassCollectionType, DoesNotOverrideItemAfter)
-    , m_classNames(classNames, document().inQuirksMode() ? SpaceSplitString::ShouldFoldCase : SpaceSplitString::ShouldNotFoldCase)
+    , m_classNames(classNames,
+          document().inQuirksMode()
+              ? SpaceSplitString::ShouldFoldCase
+              : SpaceSplitString::ShouldNotFoldCase)
     , m_originalClassNames(classNames)
 {
 }
 
-ClassCollection::~ClassCollection()
-{
-#if !ENABLE(OILPAN)
-    ownerNode().nodeLists()->removeCache(this, ClassCollectionType, m_originalClassNames);
-#endif
-}
+ClassCollection::~ClassCollection() { }
 
 } // namespace blink

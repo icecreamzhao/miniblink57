@@ -2,181 +2,338 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/resolver/CSSVariableResolver.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
 #include "core/StyleBuilderFunctions.h"
+#include "core/StylePropertyShorthand.h"
+#include "core/css/CSSPendingSubstitutionValue.h"
+#include "core/css/CSSUnsetValue.h"
 #include "core/css/CSSVariableData.h"
 #include "core/css/CSSVariableReferenceValue.h"
+#include "core/css/PropertyRegistry.h"
 #include "core/css/parser/CSSParserToken.h"
 #include "core/css/parser/CSSParserTokenRange.h"
-#include "core/css/parser/CSSParserValues.h"
 #include "core/css/parser/CSSPropertyParser.h"
 #include "core/css/resolver/StyleBuilder.h"
+#include "core/css/resolver/StyleBuilderConverter.h"
 #include "core/css/resolver/StyleResolverState.h"
-#include "core/style/StyleVariableData.h"
+#include "core/style/StyleInheritedVariables.h"
+#include "core/style/StyleNonInheritedVariables.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-// TODO(leviw): This should take a CSSParserTokenRange
-static void findEndIndexOfVariableReference(const Vector<CSSParserToken>& resolvedTokens, unsigned startIndex, unsigned& endIndex, unsigned& commaIndex, bool& hasClosingBracket)
+bool CSSVariableResolver::resolveFallback(CSSParserTokenRange range,
+    bool disallowAnimationTainted,
+    Vector<CSSParserToken>& result,
+    bool& resultIsAnimationTainted)
 {
-    endIndex = 0;
-    commaIndex = 0;
-    unsigned bracketCount = 1;
-    for (unsigned i = startIndex; i < resolvedTokens.size(); ++i) {
-        CSSParserTokenType type = resolvedTokens[i].type();
-
-        if (type == CommaToken && !commaIndex) {
-            commaIndex = i;
-        } else if (type == LeftParenthesisToken || type == FunctionToken) {
-            bracketCount++;
-        } else if (type == RightParenthesisToken) {
-            if (bracketCount == 1) {
-                hasClosingBracket = true;
-                endIndex = i;
-                return;
-            }
-            bracketCount--;
-        }
-    }
-    hasClosingBracket = false;
-    endIndex = resolvedTokens.size() - 1;
+    if (range.atEnd())
+        return false;
+    ASSERT(range.peek().type() == CommaToken);
+    range.consume();
+    return resolveTokenRange(range, disallowAnimationTainted, result,
+        resultIsAnimationTainted);
 }
 
-unsigned CSSVariableResolver::resolveVariableTokensRecursive(Vector<CSSParserToken>& resolvedTokens, unsigned startIndex)
+CSSVariableData* CSSVariableResolver::valueForCustomProperty(
+    AtomicString name)
 {
-    unsigned variableLocation = startIndex;
-    while (resolvedTokens[variableLocation].type() != IdentToken)
-        variableLocation++;
-
-    unsigned commaIndex;
-    unsigned endIndex;
-    bool hasClosingBracket;
-    // Find default value and match braces
-    findEndIndexOfVariableReference(resolvedTokens, variableLocation + 1, endIndex, commaIndex, hasClosingBracket);
-
-    unsigned length = endIndex - startIndex + 1;
-    unsigned varFunctionPosition = startIndex;
-
-    AtomicString variableName = resolvedTokens[variableLocation].value();
-
-    if (m_variablesSeen.contains(variableName)) {
-        m_cycleDetected = true;
-        resolvedTokens.clear();
-        return 0;
+    if (m_variablesSeen.contains(name)) {
+        m_cycleStartPoints.add(name);
+        return nullptr;
     }
 
-    CSSVariableData* variableData = m_styleVariableData ? m_styleVariableData->getVariable(variableName) : nullptr;
-    if (variableData) {
-        Vector<CSSParserToken> tokens(variableData->tokens());
-        if (variableData->needsVariableResolution()) {
-            m_variablesSeen.add(variableName);
-            resolveVariableReferencesFromTokens(tokens);
-            m_variablesSeen.remove(variableName);
+    DCHECK(m_registry || !RuntimeEnabledFeatures::cssVariables2Enabled());
+    const PropertyRegistry::Registration* registration = m_registry ? m_registry->registration(name) : nullptr;
 
-            // The old variable data holds onto the backing string the new resolved CSSVariableData
-            // relies on. Ensure it will live beyond us overwriting the RefPtr in StyleVariableData.
-            ASSERT(variableData->refCount() > 1);
+    CSSVariableData* variableData = nullptr;
+    if (!registration || registration->inherits()) {
+        if (m_inheritedVariables)
+            variableData = m_inheritedVariables->getVariable(name);
+    } else {
+        if (m_nonInheritedVariables)
+            variableData = m_nonInheritedVariables->getVariable(name);
+    }
+    if (!variableData)
+        return registration ? registration->initialVariableData() : nullptr;
+    if (!variableData->needsVariableResolution())
+        return variableData;
 
-            m_styleVariableData->setVariable(variableName, CSSVariableData::createResolved(tokens));
-        }
-        if (tokens.size()) {
-            resolvedTokens.remove(startIndex, length);
-            resolvedTokens.insert(startIndex, tokens);
-            return tokens.size();
-        }
+    RefPtr<CSSVariableData> newVariableData = resolveCustomProperty(name, *variableData);
+    if (!registration) {
+        m_inheritedVariables->setVariable(name, newVariableData);
+        return newVariableData.get();
     }
 
-    // Fallback on default value if present
-    if (!commaIndex || m_cycleDetected) {
-        resolvedTokens.clear();
-        return 0;
+    const CSSValue* parsedValue = nullptr;
+    if (newVariableData) {
+        parsedValue = newVariableData->parseForSyntax(registration->syntax());
+        if (!parsedValue)
+            newVariableData = nullptr;
     }
-
-    // Move the tokens to the beginning of the variable reference
-    unsigned defaultValueStart = commaIndex + 1;
-    unsigned defaultValueLength = endIndex - commaIndex - (hasClosingBracket ? 1 : 0);
-    for (unsigned i = 0; i < defaultValueLength; ++i)
-        resolvedTokens[varFunctionPosition + i] = resolvedTokens[defaultValueStart + i];
-    resolvedTokens.remove(varFunctionPosition + defaultValueLength, length - defaultValueLength);
-
-    resolveVariableReferencesFromTokens(resolvedTokens);
-
-    return resolvedTokens.size();
+    if (registration->inherits()) {
+        m_inheritedVariables->setVariable(name, newVariableData);
+        m_inheritedVariables->setRegisteredVariable(name, parsedValue);
+    } else {
+        m_nonInheritedVariables->setVariable(name, newVariableData);
+        m_nonInheritedVariables->setRegisteredVariable(name, parsedValue);
+    }
+    if (!newVariableData)
+        return registration->initialVariableData();
+    return newVariableData.get();
 }
 
-void CSSVariableResolver::resolveVariableReferencesFromTokens(Vector<CSSParserToken>& tokens)
+PassRefPtr<CSSVariableData> CSSVariableResolver::resolveCustomProperty(
+    AtomicString name,
+    const CSSVariableData& variableData)
 {
-    for (unsigned i = 0; i < tokens.size(); ++i) {
-        if (tokens[i].functionId() == CSSValueVar) {
-            unsigned validTokens = resolveVariableTokensRecursive(tokens, i);
-            if (validTokens < 1 || m_cycleDetected) {
-                tokens.clear();
-                break;
-            }
-            i += validTokens - 1;
-        }
+    ASSERT(variableData.needsVariableResolution());
+
+    bool disallowAnimationTainted = false;
+    bool isAnimationTainted = variableData.isAnimationTainted();
+    Vector<CSSParserToken> tokens;
+    m_variablesSeen.add(name);
+    bool success = resolveTokenRange(variableData.tokens(), disallowAnimationTainted, tokens,
+        isAnimationTainted);
+    m_variablesSeen.remove(name);
+
+    // The old variable data holds onto the backing string the new resolved
+    // CSSVariableData relies on. Ensure it will live beyond us overwriting the
+    // RefPtr in StyleInheritedVariables.
+    ASSERT(variableData.refCount() > 1);
+
+    if (!success || !m_cycleStartPoints.isEmpty()) {
+        m_cycleStartPoints.remove(name);
+        return nullptr;
     }
+    return CSSVariableData::createResolved(tokens, variableData,
+        isAnimationTainted);
 }
 
-void CSSVariableResolver::resolveAndApplyVariableReferences(StyleResolverState& state, CSSPropertyID id, const CSSVariableReferenceValue& value)
+bool CSSVariableResolver::resolveVariableReference(
+    CSSParserTokenRange range,
+    bool disallowAnimationTainted,
+    Vector<CSSParserToken>& result,
+    bool& resultIsAnimationTainted)
 {
-    // TODO(leviw): This should be a stack
-    Vector<CSSParserToken> tokens = value.variableDataValue()->tokens();
+    range.consumeWhitespace();
+    ASSERT(range.peek().type() == IdentToken);
+    AtomicString variableName = range.consumeIncludingWhitespace().value().toAtomicString();
+    ASSERT(range.atEnd() || (range.peek().type() == CommaToken));
 
-    CSSVariableResolver resolver(state.style()->variables());
+    CSSVariableData* variableData = valueForCustomProperty(variableName);
+    if (!variableData || (disallowAnimationTainted && variableData->isAnimationTainted())) {
+        // TODO(alancutter): Append the registered initial custom property value if
+        // we are disallowing an animation tainted value.
+        return resolveFallback(range, disallowAnimationTainted, result,
+            resultIsAnimationTainted);
+    }
 
-    resolver.resolveVariableReferencesFromTokens(tokens);
+    result.appendVector(variableData->tokens());
+    resultIsAnimationTainted |= variableData->isAnimationTainted();
 
-    if (!tokens.size())
+    Vector<CSSParserToken> trash;
+    bool trashIsAnimationTainted;
+    resolveFallback(range, disallowAnimationTainted, trash,
+        trashIsAnimationTainted);
+    return true;
+}
+
+void CSSVariableResolver::resolveApplyAtRule(CSSParserTokenRange& range,
+    Vector<CSSParserToken>& result)
+{
+    DCHECK(range.peek().type() == AtKeywordToken && equalIgnoringASCIICase(range.peek().value(), "apply"));
+    range.consumeIncludingWhitespace();
+    const CSSParserToken& variableName = range.consumeIncludingWhitespace();
+    // TODO(timloh): Should we actually be consuming this?
+    if (range.peek().type() == SemicolonToken)
+        range.consume();
+
+    CSSVariableData* variableData = valueForCustomProperty(variableName.value().toAtomicString());
+    if (!variableData)
+        return; // Invalid custom property
+
+    CSSParserTokenRange rule = variableData->tokenRange();
+    rule.consumeWhitespace();
+    if (rule.peek().type() != LeftBraceToken)
+        return;
+    CSSParserTokenRange ruleContents = rule.consumeBlock();
+    rule.consumeWhitespace();
+    if (!rule.atEnd())
         return;
 
-    CSSParserContext context(HTMLStandardMode, 0);
-
-    WillBeHeapVector<CSSProperty, 256> parsedProperties;
-
-	bool usesRemUnits = false;
-	CSSParserTokenRange range(tokens);
-	CSSParserValueList valueList(range, usesRemUnits);
-    CSSPropertyParser::parseValue(id, false, &valueList, context, parsedProperties, StyleRule::Type::Style);
-
-    unsigned parsedPropertiesCount = parsedProperties.size();
-    for (unsigned i = 0; i < parsedPropertiesCount; ++i)
-        StyleBuilder::applyProperty(parsedProperties[i].id(), state, parsedProperties[i].value());
+    result.appendRange(ruleContents.begin(), ruleContents.end());
 }
 
-void CSSVariableResolver::resolveVariableDefinitions(StyleVariableData* variables)
+bool CSSVariableResolver::resolveTokenRange(CSSParserTokenRange range,
+    bool disallowAnimationTainted,
+    Vector<CSSParserToken>& result,
+    bool& resultIsAnimationTainted)
 {
-    if (!variables)
+    bool success = true;
+    while (!range.atEnd()) {
+        if (range.peek().functionId() == CSSValueVar) {
+            success &= resolveVariableReference(range.consumeBlock(),
+                disallowAnimationTainted, result,
+                resultIsAnimationTainted);
+        } else if (range.peek().type() == AtKeywordToken && equalIgnoringASCIICase(range.peek().value(), "apply") && RuntimeEnabledFeatures::cssApplyAtRulesEnabled()) {
+            resolveApplyAtRule(range, result);
+        } else {
+            result.push_back(range.consume());
+        }
+    }
+    return success;
+}
+
+const CSSValue* CSSVariableResolver::resolveVariableReferences(
+    const StyleResolverState& state,
+    CSSPropertyID id,
+    const CSSValue& value,
+    bool disallowAnimationTainted)
+{
+    ASSERT(!isShorthandProperty(id));
+
+    if (value.isPendingSubstitutionValue()) {
+        return resolvePendingSubstitutions(state, id,
+            toCSSPendingSubstitutionValue(value),
+            disallowAnimationTainted);
+    }
+
+    if (value.isVariableReferenceValue()) {
+        return resolveVariableReferences(state, id,
+            toCSSVariableReferenceValue(value),
+            disallowAnimationTainted);
+    }
+
+    NOTREACHED();
+    return nullptr;
+}
+
+const CSSValue* CSSVariableResolver::resolveVariableReferences(
+    const StyleResolverState& state,
+    CSSPropertyID id,
+    const CSSVariableReferenceValue& value,
+    bool disallowAnimationTainted)
+{
+    CSSVariableResolver resolver(state);
+    Vector<CSSParserToken> tokens;
+    bool isAnimationTainted = false;
+    if (!resolver.resolveTokenRange(value.variableDataValue()->tokens(),
+            disallowAnimationTainted, tokens,
+            isAnimationTainted))
+        return CSSUnsetValue::create();
+    const CSSValue* result = CSSPropertyParser::parseSingleValue(id, tokens, strictCSSParserContext());
+    if (!result)
+        return CSSUnsetValue::create();
+    return result;
+}
+
+const CSSValue* CSSVariableResolver::resolvePendingSubstitutions(
+    const StyleResolverState& state,
+    CSSPropertyID id,
+    const CSSPendingSubstitutionValue& pendingValue,
+    bool disallowAnimationTainted)
+{
+    // Longhands from shorthand references follow this path.
+    HeapHashMap<CSSPropertyID, Member<const CSSValue>>& propertyCache = state.parsedPropertiesForPendingSubstitutionCache(pendingValue);
+
+    const CSSValue* value = propertyCache.get(id);
+    if (!value) {
+        // TODO(timloh): We shouldn't retry this for all longhands if the shorthand
+        // ends up invalid.
+        CSSVariableReferenceValue* shorthandValue = pendingValue.shorthandValue();
+        CSSPropertyID shorthandPropertyId = pendingValue.shorthandPropertyId();
+
+        CSSVariableResolver resolver(state);
+
+        Vector<CSSParserToken> tokens;
+        bool isAnimationTainted = false;
+        if (resolver.resolveTokenRange(
+                shorthandValue->variableDataValue()->tokens(),
+                disallowAnimationTainted, tokens, isAnimationTainted)) {
+            CSSParserContext* context = CSSParserContext::create(HTMLStandardMode);
+
+            HeapVector<CSSProperty, 256> parsedProperties;
+
+            if (CSSPropertyParser::parseValue(
+                    shorthandPropertyId, false, CSSParserTokenRange(tokens), context,
+                    parsedProperties, StyleRule::RuleType::Style)) {
+                unsigned parsedPropertiesCount = parsedProperties.size();
+                for (unsigned i = 0; i < parsedPropertiesCount; ++i) {
+                    propertyCache.set(parsedProperties[i].id(),
+                        parsedProperties[i].value());
+                }
+            }
+        }
+        value = propertyCache.get(id);
+    }
+
+    if (value)
+        return value;
+
+    return CSSUnsetValue::create();
+}
+
+void CSSVariableResolver::resolveVariableDefinitions(
+    const StyleResolverState& state)
+{
+    StyleInheritedVariables* inheritedVariables = state.style()->inheritedVariables();
+    StyleNonInheritedVariables* nonInheritedVariables = state.style()->nonInheritedVariables();
+    if (!inheritedVariables && !nonInheritedVariables)
         return;
 
-    for (auto& variable : variables->m_data) {
-        if (!variable.value->needsVariableResolution())
-            continue;
-        Vector<CSSParserToken> resolvedTokens(variable.value->tokens());
-
-        CSSVariableResolver resolver(variables, variable.key);
-        resolver.resolveVariableReferencesFromTokens(resolvedTokens);
-
-        variable.value = CSSVariableData::createResolved(resolvedTokens);
+    CSSVariableResolver resolver(state);
+    if (inheritedVariables) {
+        for (auto& variable : inheritedVariables->m_data)
+            resolver.valueForCustomProperty(variable.key);
+    }
+    if (nonInheritedVariables) {
+        for (auto& variable : nonInheritedVariables->m_data)
+            resolver.valueForCustomProperty(variable.key);
     }
 }
 
-CSSVariableResolver::CSSVariableResolver(StyleVariableData* styleVariableData)
-    : m_styleVariableData(styleVariableData)
-    , m_cycleDetected(false)
+void CSSVariableResolver::computeRegisteredVariables(
+    const StyleResolverState& state)
+{
+    // const_cast is needed because Persistent<const ...> doesn't work properly.
+
+    StyleInheritedVariables* inheritedVariables = state.style()->inheritedVariables();
+    if (inheritedVariables) {
+        for (auto& variable : inheritedVariables->m_registeredData) {
+            if (variable.value) {
+                variable.value = const_cast<CSSValue*>(
+                    &StyleBuilderConverter::convertRegisteredPropertyValue(
+                        state, *variable.value));
+            }
+        }
+    }
+
+    StyleNonInheritedVariables* nonInheritedVariables = state.style()->nonInheritedVariables();
+    if (nonInheritedVariables) {
+        for (auto& variable : nonInheritedVariables->m_registeredData) {
+            if (variable.value) {
+                variable.value = const_cast<CSSValue*>(
+                    &StyleBuilderConverter::convertRegisteredPropertyValue(
+                        state, *variable.value));
+            }
+        }
+    }
+}
+
+CSSVariableResolver::CSSVariableResolver(const StyleResolverState& state)
+    : m_inheritedVariables(state.style()->inheritedVariables())
+    , m_nonInheritedVariables(state.style()->nonInheritedVariables())
+    , m_registry(state.document().propertyRegistry())
 {
 }
 
-CSSVariableResolver::CSSVariableResolver(StyleVariableData* styleVariableData, AtomicString& variable)
-    : m_styleVariableData(styleVariableData)
-    , m_cycleDetected(false)
+DEFINE_TRACE(CSSVariableResolver)
 {
-    m_variablesSeen.add(variable);
+    visitor->trace(m_registry);
 }
 
 } // namespace blink

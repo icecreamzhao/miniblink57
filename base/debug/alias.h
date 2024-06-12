@@ -10,12 +10,12 @@
 namespace base {
 namespace debug {
 
-// Make the optimizer think that var is aliased. This is to prevent it from
-// optimizing out variables that that would not otherwise be live at the point
-// of a potential crash.
-void BASE_EXPORT Alias(const void* var);
+    // Make the optimizer think that var is aliased. This is to prevent it from
+    // optimizing out variables that that would not otherwise be live at the point
+    // of a potential crash.
+    void BASE_EXPORT Alias(const void* var);
 
-}  // namespace debug
-}  // namespace base
+} // namespace debug
+} // namespace base
 
-#endif  // BASE_DEBUG_ALIAS_H_
+#endif // BASE_DEBUG_ALIAS_H_

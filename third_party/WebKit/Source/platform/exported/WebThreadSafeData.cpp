@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebThreadSafeData.h"
 
 #include "platform/blob/BlobData.h"
@@ -65,7 +64,7 @@ const char* WebThreadSafeData::data() const
     return m_private->data();
 }
 
-WebThreadSafeData::WebThreadSafeData(const PassRefPtr<RawData>& data)
+WebThreadSafeData::WebThreadSafeData(PassRefPtr<RawData> data)
     : m_private(data)
 {
 }
@@ -75,13 +74,14 @@ WebThreadSafeData::WebThreadSafeData(const WebThreadSafeData& other)
     m_private = other.m_private;
 }
 
-WebThreadSafeData& WebThreadSafeData::operator=(const WebThreadSafeData& other)
+WebThreadSafeData& WebThreadSafeData::operator=(
+    const WebThreadSafeData& other)
 {
     m_private = other.m_private;
     return *this;
 }
 
-WebThreadSafeData& WebThreadSafeData::operator=(const PassRefPtr<RawData>& data)
+WebThreadSafeData& WebThreadSafeData::operator=(PassRefPtr<RawData> data)
 {
     m_private = data;
     return *this;

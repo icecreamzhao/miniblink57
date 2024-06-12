@@ -32,20 +32,19 @@
 #define DataTransferItemFileSystem_h
 
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class DataTransferItem;
 class Entry;
-class ExecutionContext;
+class ScriptState;
 
 class DataTransferItemFileSystem {
-public:
-    static Entry* webkitGetAsEntry(ExecutionContext*, DataTransferItem&);
+    STATIC_ONLY(DataTransferItemFileSystem);
 
-private:
-    DataTransferItemFileSystem();
-    ~DataTransferItemFileSystem();
+public:
+    static Entry* webkitGetAsEntry(ScriptState*, DataTransferItem&);
 };
 
 } // namespace blink

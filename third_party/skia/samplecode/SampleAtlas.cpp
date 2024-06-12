@@ -7,17 +7,44 @@
 
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkDrawable.h"
 #include "SkPath.h"
-#include "SkRandom.h"
 #include "SkRSXform.h"
+#include "SkRandom.h"
 #include "SkSurface.h"
+#include "SkView.h"
 
-static SkImage* make_atlas(int atlasSize, int cellSize) {
+typedef void (*DrawAtlasProc)(SkCanvas*, SkImage*, const SkRSXform[], const SkRect[],
+    const SkColor[], int, const SkRect*, const SkPaint*);
+
+static void draw_atlas(SkCanvas* canvas, SkImage* atlas, const SkRSXform xform[],
+    const SkRect tex[], const SkColor colors[], int count, const SkRect* cull,
+    const SkPaint* paint)
+{
+    canvas->drawAtlas(atlas, xform, tex, colors, count, SkXfermode::kModulate_Mode, cull, paint);
+}
+
+static void draw_atlas_sim(SkCanvas* canvas, SkImage* atlas, const SkRSXform xform[],
+    const SkRect tex[], const SkColor colors[], int count, const SkRect* cull,
+    const SkPaint* paint)
+{
+    for (int i = 0; i < count; ++i) {
+        SkMatrix matrix;
+        matrix.setRSXform(xform[i]);
+
+        canvas->save();
+        canvas->concat(matrix);
+        canvas->drawImageRect(atlas, tex[i], tex[i].makeOffset(-tex[i].x(), -tex[i].y()), paint,
+            SkCanvas::kFast_SrcRectConstraint);
+        canvas->restore();
+    }
+}
+
+static sk_sp<SkImage> make_atlas(int atlasSize, int cellSize)
+{
     SkImageInfo info = SkImageInfo::MakeN32Premul(atlasSize, atlasSize);
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRaster(info));
+    auto surface(SkSurface::MakeRaster(info));
     SkCanvas* canvas = surface->getCanvas();
 
     SkPaint paint;
@@ -34,11 +61,11 @@ static SkImage* make_atlas(int atlasSize, int cellSize) {
             paint.setColor(rand.nextU());
             paint.setAlpha(0xFF);
             int index = i % strlen(s);
-            canvas->drawText(&s[index], 1, x + half, y + half + half/2, paint);
+            canvas->drawText(&s[index], 1, x + half, y + half + half / 2, paint);
             i += 1;
         }
     }
-    return surface->newImageSnapshot();
+    return surface->makeImageSnapshot();
 }
 
 class DrawAtlasDrawable : public SkDrawable {
@@ -49,16 +76,17 @@ class DrawAtlasDrawable : public SkDrawable {
     };
 
     struct Rec {
-        SkPoint     fCenter;
-        SkVector    fVelocity;
-        SkScalar    fScale;
-        SkScalar    fDScale;
-        SkScalar    fRadian;
-        SkScalar    fDRadian;
-        SkScalar    fAlpha;
-        SkScalar    fDAlpha;
+        SkPoint fCenter;
+        SkVector fVelocity;
+        SkScalar fScale;
+        SkScalar fDScale;
+        SkScalar fRadian;
+        SkScalar fDRadian;
+        SkScalar fAlpha;
+        SkScalar fDAlpha;
 
-        void advance(const SkRect& bounds) {
+        void advance(const SkRect& bounds)
+        {
             fCenter += fVelocity;
             if (fCenter.fX > bounds.right()) {
                 SkASSERT(fVelocity.fX > 0);
@@ -78,7 +106,7 @@ class DrawAtlasDrawable : public SkDrawable {
             }
 
             fScale += fDScale;
-            if (fScale > 2 || fScale < SK_Scalar1/2) {
+            if (fScale > 2 || fScale < SK_Scalar1 / 2) {
                 fDScale = -fDScale;
             }
 
@@ -94,37 +122,34 @@ class DrawAtlasDrawable : public SkDrawable {
                 fDAlpha = -fDAlpha;
             }
         }
-        
-        SkRSXform asRSXform() const {
-            SkMatrix m;
-            m.setTranslate(-8, -8);
-            m.postScale(fScale, fScale);
-            m.postRotate(SkRadiansToDegrees(fRadian));
-            m.postTranslate(fCenter.fX, fCenter.fY);
 
-            SkRSXform x;
-            x.fSCos = m.getScaleX();
-            x.fSSin = m.getSkewY();
-            x.fTx = m.getTranslateX();
-            x.fTy = m.getTranslateY();
-            return x;
+        SkRSXform asRSXform() const
+        {
+            return SkRSXform::MakeFromRadians(fScale, fRadian, fCenter.x(), fCenter.y(),
+                SkScalarHalf(kCellSize), SkScalarHalf(kCellSize));
         }
     };
+
+    DrawAtlasProc fProc;
 
     enum {
         N = 256,
     };
 
-    SkAutoTUnref<SkImage> fAtlas;
-    Rec         fRec[N];
-    SkRect      fTex[N];
-    SkRect      fBounds;
-    bool        fUseColors;
+    sk_sp<SkImage> fAtlas;
+    Rec fRec[N];
+    SkRect fTex[N];
+    SkRect fBounds;
+    bool fUseColors;
 
 public:
-    DrawAtlasDrawable(const SkRect& r) : fBounds(r), fUseColors(false) {
+    DrawAtlasDrawable(DrawAtlasProc proc, const SkRect& r)
+        : fProc(proc)
+        , fBounds(r)
+        , fUseColors(false)
+    {
         SkRandom rand;
-        fAtlas.reset(make_atlas(kAtlasSize, kCellSize));
+        fAtlas = make_atlas(kAtlasSize, kCellSize);
         const SkScalar kMaxSpeed = 5;
         const SkScalar cell = SkIntToScalar(kCellSize);
         int i = 0;
@@ -133,12 +158,12 @@ public:
                 const SkScalar sx = SkIntToScalar(x);
                 const SkScalar sy = SkIntToScalar(y);
                 fTex[i].setXYWH(sx, sy, cell, cell);
-                
-                fRec[i].fCenter.set(sx + cell/2, sy + 3*cell/4);
+
+                fRec[i].fCenter.set(sx + cell / 2, sy + 3 * cell / 4);
                 fRec[i].fVelocity.fX = rand.nextSScalar1() * kMaxSpeed;
                 fRec[i].fVelocity.fY = rand.nextSScalar1() * kMaxSpeed;
                 fRec[i].fScale = 1;
-                fRec[i].fDScale = rand.nextSScalar1() / 4;
+                fRec[i].fDScale = rand.nextSScalar1() / 16;
                 fRec[i].fRadian = 0;
                 fRec[i].fDRadian = rand.nextSScalar1() / 8;
                 fRec[i].fAlpha = rand.nextUScalar1();
@@ -148,12 +173,14 @@ public:
         }
     }
 
-    void toggleUseColors() {
+    void toggleUseColors()
+    {
         fUseColors = !fUseColors;
     }
 
 protected:
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkRSXform xform[N];
         SkColor colors[N];
 
@@ -168,12 +195,12 @@ protected:
         paint.setFilterQuality(kLow_SkFilterQuality);
 
         const SkRect cull = this->getBounds();
-        const SkColor* colorsPtr = fUseColors ? colors : NULL;
-        canvas->drawAtlas(fAtlas, xform, fTex, colorsPtr, N, SkXfermode::kModulate_Mode,
-                          &cull, &paint);
+        const SkColor* colorsPtr = fUseColors ? colors : nullptr;
+        fProc(canvas, fAtlas.get(), xform, fTex, colorsPtr, N, &cull, &paint);
     }
-    
-    SkRect onGetBounds() override {
+
+    SkRect onGetBounds() override
+    {
         const SkScalar border = kMaxScale * kCellSize;
         SkRect r = fBounds;
         r.outset(border, border);
@@ -185,38 +212,51 @@ private:
 };
 
 class DrawAtlasView : public SampleView {
+    const char* fName;
     DrawAtlasDrawable* fDrawable;
 
 public:
-    DrawAtlasView() {
-        fDrawable = new DrawAtlasDrawable(SkRect::MakeWH(640, 480));
+    DrawAtlasView(const char name[], DrawAtlasProc proc)
+        : fName(name)
+    {
+        fDrawable = new DrawAtlasDrawable(proc, SkRect::MakeWH(640, 480));
     }
 
-    ~DrawAtlasView() override {
+    ~DrawAtlasView() override
+    {
         fDrawable->unref();
     }
 
 protected:
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
-            SampleCode::TitleR(evt, "DrawAtlas");
+            SampleCode::TitleR(evt, fName);
             return true;
         }
         SkUnichar uni;
         if (SampleCode::CharQ(*evt, &uni)) {
             switch (uni) {
-                case 'C': fDrawable->toggleUseColors(); this->inval(NULL); return true;
-                default: break;
+            case 'C':
+                fDrawable->toggleUseColors();
+                this->inval(nullptr);
+                return true;
+            default:
+                break;
             }
         }
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         canvas->drawDrawable(fDrawable);
-        this->inval(NULL);
     }
 
+    bool onAnimate(const SkAnimTimer&) override
+    {
+        return true;
+    }
 #if 0
     // TODO: switch over to use this for our animation
     bool onAnimate(const SkAnimTimer& timer) override {
@@ -232,5 +272,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-static SkView* MyFactory() { return new DrawAtlasView; }
-static SkViewRegister reg(MyFactory);
+DEF_SAMPLE(return new DrawAtlasView("DrawAtlas", draw_atlas);)
+DEF_SAMPLE(return new DrawAtlasView("DrawAtlasSim", draw_atlas_sim);)

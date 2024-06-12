@@ -12,37 +12,37 @@
 namespace v8 {
 namespace base {
 
-class V8_BASE_EXPORT PageAllocator
-    : public NON_EXPORTED_BASE(::v8::PageAllocator) {
- public:
-  PageAllocator();
-  ~PageAllocator() override = default;
+    class V8_BASE_EXPORT PageAllocator
+        : public NON_EXPORTED_BASE(::v8::PageAllocator) {
+    public:
+        PageAllocator();
+        ~PageAllocator() override = default;
 
-  size_t AllocatePageSize() override { return allocate_page_size_; }
+        size_t AllocatePageSize() override { return allocate_page_size_; }
 
-  size_t CommitPageSize() override { return commit_page_size_; }
+        size_t CommitPageSize() override { return commit_page_size_; }
 
-  void SetRandomMmapSeed(int64_t seed) override;
+        void SetRandomMmapSeed(int64_t seed) override;
 
-  void* GetRandomMmapAddr() override;
+        void* GetRandomMmapAddr() override;
 
-  void* AllocatePages(void* address, size_t size, size_t alignment,
-                      PageAllocator::Permission access) override;
+        void* AllocatePages(void* address, size_t size, size_t alignment,
+            PageAllocator::Permission access) override;
 
-  bool FreePages(void* address, size_t size) override;
+        bool FreePages(void* address, size_t size) override;
 
-  bool ReleasePages(void* address, size_t size, size_t new_size) override;
+        bool ReleasePages(void* address, size_t size, size_t new_size) override;
 
-  bool SetPermissions(void* address, size_t size,
-                      PageAllocator::Permission access) override;
+        bool SetPermissions(void* address, size_t size,
+            PageAllocator::Permission access) override;
 
-  bool DiscardSystemPages(void* address, size_t size) override;
+        bool DiscardSystemPages(void* address, size_t size) override;
 
- private:
-  const size_t allocate_page_size_;
-  const size_t commit_page_size_;
-};
+    private:
+        const size_t allocate_page_size_;
+        const size_t commit_page_size_;
+    };
 
-}  // namespace base
-}  // namespace v8
-#endif  // V8_BASE_PAGE_ALLOCATOR_H_
+} // namespace base
+} // namespace v8
+#endif // V8_BASE_PAGE_ALLOCATOR_H_

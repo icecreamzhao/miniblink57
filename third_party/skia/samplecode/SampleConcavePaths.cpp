@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,31 +6,31 @@
  */
 
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
+#include "SkParsePath.h"
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkParsePath.h"
 #include "SkTime.h"
 #include "SkTypeface.h"
+#include "SkUtils.h"
+#include "SkView.h"
+#include "SkXfermode.h"
 
 #include "SkGeometry.h"
 
 class ConcavePathView : public SampleView {
 public:
-    ConcavePathView() {}
+    ConcavePathView() { }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ConcavePaths");
             return true;
@@ -39,7 +38,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkPaint paint;
 
         paint.setAntiAlias(true);
@@ -138,8 +138,9 @@ protected:
     }
 
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y,
-                                              unsigned modi) {
-        this->inval(NULL);
+        unsigned modi)
+    {
+        this->inval(nullptr);
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 

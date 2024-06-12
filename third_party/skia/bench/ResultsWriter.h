@@ -12,9 +12,9 @@
 
 #include "BenchLogger.h"
 #include "SkJSONCPP.h"
+#include "SkOSFile.h"
 #include "SkStream.h"
 #include "SkString.h"
-#include "SkTArray.h"
 #include "SkTypes.h"
 
 /**
@@ -24,30 +24,30 @@
  */
 class ResultsWriter : SkNoncopyable {
 public:
-    virtual ~ResultsWriter() {}
+    virtual ~ResultsWriter() { }
 
     // Record one key value pair that makes up a unique key for this type of run, e.g.
     // builder name, machine type, Debug/Release, etc.
-    virtual void key(const char name[], const char value[]) {}
+    virtual void key(const char name[], const char value[]) { }
 
     // Record one key value pair that describes the run instance, e.g. git hash, build number.
-    virtual void property(const char name[], const char value[]) {}
+    virtual void property(const char name[], const char value[]) { }
 
     // Denote the start of a specific benchmark. Once bench is called,
     // then config and metric can be called multiple times to record runs.
-    virtual void bench(const char name[], int32_t x, int32_t y) {}
+    virtual void bench(const char name[], int32_t x, int32_t y) { }
 
     // Record the specific configuration a bench is run under, such as "8888".
-    virtual void config(const char name[]) {}
+    virtual void config(const char name[]) { }
 
     // Record the options for a configuration, such as "GL_RENDERER".
-    virtual void configOption(const char name[], const char* value) {}
+    virtual void configOption(const char name[], const char* value) { }
 
     // Record a single test metric.
-    virtual void metric(const char name[], double ms) {}
+    virtual void metric(const char name[], double ms) { }
 
     // Flush to storage now please.
-    virtual void flush() {}
+    virtual void flush() { }
 };
 
 /**
@@ -78,34 +78,43 @@ public:
         : fFilename(filename)
         , fRoot()
         , fResults(fRoot["results"])
-        , fBench(NULL)
-        , fConfig(NULL) {}
+        , fBench(nullptr)
+        , fConfig(nullptr)
+    {
+    }
 
-    ~NanoJSONResultsWriter() {
+    ~NanoJSONResultsWriter()
+    {
         this->flush();
     }
 
     // Added under "key".
-    virtual void key(const char name[], const char value[]) {
+    void key(const char name[], const char value[]) override
+    {
         fRoot["key"][name] = value;
     }
     // Inserted directly into the root.
-    virtual void property(const char name[], const char value[]) {
+    void property(const char name[], const char value[]) override
+    {
         fRoot[name] = value;
     }
-    virtual void bench(const char name[], int32_t x, int32_t y) {
-        SkString id = SkStringPrintf( "%s_%d_%d", name, x, y);
+    void bench(const char name[], int32_t x, int32_t y) override
+    {
+        SkString id = SkStringPrintf("%s_%d_%d", name, x, y);
         fResults[id.c_str()] = Json::Value(Json::objectValue);
         fBench = &fResults[id.c_str()];
     }
-    virtual void config(const char name[]) {
+    void config(const char name[]) override
+    {
         SkASSERT(fBench);
         fConfig = &(*fBench)[name];
     }
-    virtual void configOption(const char name[], const char* value) {
+    void configOption(const char name[], const char* value) override
+    {
         (*fConfig)["options"][name] = value;
     }
-    virtual void metric(const char name[], double ms) {
+    void metric(const char name[], double ms) override
+    {
         // Don't record if nan, or -nan.
         if (sk_double_isnan(ms)) {
             return;
@@ -115,7 +124,14 @@ public:
     }
 
     // Flush to storage now please.
-    virtual void flush() {
+    void flush() override
+    {
+        SkString dirname = SkOSPath::Dirname(fFilename.c_str());
+        if (!sk_exists(dirname.c_str(), kWrite_SkFILE_Flag)) {
+            if (!sk_mkdir(dirname.c_str())) {
+                SkDebugf("Failed to create directory.");
+            }
+        }
         SkFILEWStream stream(fFilename.c_str());
         stream.writeText(Json::StyledWriter().write(fRoot).c_str());
         stream.flush();
@@ -128,6 +144,5 @@ private:
     Json::Value* fBench;
     Json::Value* fConfig;
 };
-
 
 #endif

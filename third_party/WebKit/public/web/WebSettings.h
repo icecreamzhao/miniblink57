@@ -31,17 +31,20 @@
 #ifndef WebSettings_h
 #define WebSettings_h
 
+#include "../platform/PointerProperties.h"
 #include "../platform/WebCommon.h"
 #include "../platform/WebSize.h"
+#include "../platform/WebViewportStyle.h"
 #include <unicode/uscript.h>
 
 namespace blink {
 
 class WebString;
 
-// WebSettings is owned by the WebView and allows code to modify the settings for
-// the WebView's page without any knowledge of WebCore itself.  For the most part,
-// these functions have a 1:1 mapping with the methods in WebCore/page/Settings.h.
+// WebSettings is owned by the WebView and allows code to modify the settings
+// for the WebView's page without any knowledge of WebCore itself.  For the most
+// part, these functions have a 1:1 mapping with the methods in
+// WebCore/page/Settings.h.
 class WebSettings {
 public:
     enum ImageAnimationPolicy {
@@ -64,25 +67,18 @@ public:
         V8CacheOptionsCode,
     };
 
-    // Bit field values indicating available pointer types. Identical to
-    // blink::PointerType enums, enforced by compile-time assertions in
-    // AssertMatchingEnums.cpp.
-    // TODO(mustaq): Move this into public/platform, like WebBlendMode.
-    enum PointerType {
-        PointerTypeNone = 1 << 0,
-        PointerTypeCoarse = 1 << 1,
-        PointerTypeFine = 1 << 2
+    enum class V8CacheStrategiesForCacheStorage {
+        Default,
+        None,
+        Normal,
+        Aggressive,
     };
 
-    // Bit field values indicating available hover types. Identical to
-    // blink::HoverType enums, enforced by compile-time assertions in
-    // AssertMatchingEnums.cpp.
-    enum HoverType {
-        HoverTypeNone = 1 << 0,
-        // Indicates that the primary pointing system can hover, but it requires
-        // a significant action on the user's part. e.g. hover on "long press".
-        HoverTypeOnDemand = 1 << 1,
-        HoverTypeHover = 1 << 2
+    enum class ProgressBarCompletion {
+        LoadEvent,
+        ResourcesBeforeDCL,
+        DOMContentLoaded,
+        ResourcesBeforeDCLAndSameOriginIFrames
     };
 
     // Selection strategy defines how the selection granularity changes when the
@@ -101,25 +97,31 @@ public:
     enum class TextTrackKindUserPreference {
         // Display only tracks marked as default
         Default,
-        // If available, display captions track in preferred language, else display subtitles.
+        // If available, display captions track in preferred language, else display
+        // subtitles.
         Captions,
-        // If available, display subtitles track in preferred language, else display captions.
+        // If available, display subtitles track in preferred language, else display
+        // captions.
         Subtitles
+    };
+
+    // Defines the default for 'passive' field used in the AddEventListenerOptions
+    // interface when javascript calls addEventListener.
+    enum class PassiveEventListenerDefault {
+        False, // Default of false.
+        True, // Default of true.
+        ForceAllTrue // Force all values to be true even when specified.
     };
 
     // Sets value of a setting by its string identifier from Settings.in and
     // string representation of value. An enum's string representation is the
     // string representation of the integer value of the enum.
-    virtual void setFromStrings(const WebString& name, const WebString& value) = 0;
+    virtual void setFromStrings(const WebString& name,
+        const WebString& value)
+        = 0;
 
-    virtual bool mainFrameResizesAreOrientationChanges() const = 0;
-    virtual int availablePointerTypes() const = 0;
-    virtual PointerType primaryPointerType() const = 0;
-    virtual int availableHoverTypes() const = 0;
-    virtual HoverType primaryHoverType() const = 0;
     virtual bool shrinksViewportContentToFit() const = 0;
     virtual bool viewportEnabled() const = 0;
-    virtual void setAccelerated2dCanvasEnabled(bool) = 0;
     virtual void setAccelerated2dCanvasMSAASampleCount(int) = 0;
     virtual void setAcceleratedCompositingEnabled(bool) = 0;
     virtual void setPreferCompositingToLCDTextEnabled(bool) = 0;
@@ -131,9 +133,9 @@ public:
     // method.
     virtual void setAccessibilityEnabled(bool) = 0;
     virtual void setAccessibilityPasswordValuesEnabled(bool) = 0;
-    virtual void setAllowDisplayOfInsecureContent(bool) = 0;
     virtual void setAllowFileAccessFromFileURLs(bool) = 0;
     virtual void setAllowCustomScrollbarInMainFrame(bool) = 0;
+    virtual void setAllowGeolocationOnInsecureOrigins(bool) = 0;
     // If set to true, allows frames with an https origin to run active
     // contents at an insecure URL. This includes WebSockets. Otherwise,
     // disallows it. The FrameLoaderClient set to the frame may override the
@@ -141,16 +143,20 @@ public:
     virtual void setAllowRunningOfInsecureContent(bool) = 0;
     virtual void setAllowScriptsToCloseWindows(bool) = 0;
     virtual void setAllowUniversalAccessFromFileURLs(bool) = 0;
+    virtual void setAlwaysShowContextMenuOnTouch(bool) = 0;
     virtual void setAntialiased2dCanvasEnabled(bool) = 0;
     virtual void setAntialiasedClips2dCanvasEnabled(bool) = 0;
-    virtual void setAsynchronousSpellCheckingEnabled(bool) = 0;
     virtual void setAutoZoomFocusedNodeToLegibleScale(bool) = 0;
-    virtual void setCaretBrowsingEnabled(bool) = 0;
+    virtual void setBrowserSideNavigationEnabled(bool) = 0;
     virtual void setClobberUserAgentInitialScaleQuirk(bool) = 0;
     virtual void setCookieEnabled(bool) = 0;
+    virtual void setCrossOriginMediaPlaybackRequiresUserGesture(bool) = 0;
     virtual void setNavigateOnDragDrop(bool) = 0;
-    virtual void setCursiveFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
+    virtual void setCursiveFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
     virtual void setDNSPrefetchingEnabled(bool) = 0;
+    virtual void setDataSaverEnabled(bool) = 0;
     virtual void setDOMPasteAllowed(bool) = 0;
     virtual void setDefaultFixedFontSize(int) = 0;
     virtual void setDefaultFontSize(int) = 0;
@@ -158,7 +164,6 @@ public:
     virtual void setDefaultVideoPosterURL(const WebString&) = 0;
     void setDeferred2dCanvasEnabled(bool) { } // temporary stub
     virtual void setDeviceScaleAdjustment(float) = 0;
-    virtual void setDeviceSupportsMouse(bool) = 0;
     virtual void setDeviceSupportsTouch(bool) = 0;
     virtual void setDisableReadingFromCanvas(bool) = 0;
     virtual void setDoubleTapToZoomEnabled(bool) = 0;
@@ -169,55 +174,71 @@ public:
     virtual bool multiTargetTapNotificationEnabled() = 0;
     virtual void setMultiTargetTapNotificationEnabled(bool) = 0;
     virtual void setExperimentalWebGLEnabled(bool) = 0;
-    virtual void setFantasyFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
-    virtual void setFixedFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
-    virtual void setReportWheelOverscroll(bool) = 0;
+    virtual void setFantasyFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
+    virtual void setFixedFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
+    virtual void setForcePreloadNoneForMediaElements(bool) = 0;
     virtual void setForceZeroLayoutHeight(bool) = 0;
     virtual void setFullscreenSupported(bool) = 0;
+    virtual void setHideDownloadUI(bool) = 0;
+    virtual void setHistoryEntryRequiresUserGesture(bool) = 0;
     virtual void setHyperlinkAuditingEnabled(bool) = 0;
     virtual void setIgnoreMainFrameOverflowHiddenQuirk(bool) = 0;
     virtual void setImageAnimationPolicy(ImageAnimationPolicy) = 0;
     virtual void setImagesEnabled(bool) = 0;
     virtual void setInlineTextBoxAccessibilityEnabled(bool) = 0;
-    virtual void setInvertViewportScrollOrder(bool) = 0;
-    virtual void setJavaEnabled(bool) = 0;
+    virtual void setInertVisualViewport(bool) = 0;
     virtual void setJavaScriptCanAccessClipboard(bool) = 0;
     virtual void setJavaScriptCanOpenWindowsAutomatically(bool) = 0;
     virtual void setJavaScriptEnabled(bool) = 0;
     void setLayerSquashingEnabled(bool) { }
     virtual void setLoadsImagesAutomatically(bool) = 0;
     virtual void setLoadWithOverviewMode(bool) = 0;
+    virtual void setShouldReuseGlobalForUnownedMainFrame(bool) = 0;
+    virtual void setProgressBarCompletion(ProgressBarCompletion) = 0;
     virtual void setLocalStorageEnabled(bool) = 0;
     virtual void setMainFrameClipsContent(bool) = 0;
     virtual void setMainFrameResizesAreOrientationChanges(bool) = 0;
     virtual void setMaxTouchPoints(int) = 0;
     virtual void setMediaControlsOverlayPlayButtonEnabled(bool) = 0;
     virtual void setMediaPlaybackRequiresUserGesture(bool) = 0;
+    virtual void setPresentationRequiresUserGesture(bool) = 0;
     virtual void setMinimumAccelerated2dCanvasSize(int) = 0;
     virtual void setMinimumFontSize(int) = 0;
     virtual void setMinimumLogicalFontSize(int) = 0;
     virtual void setMockScrollbarsEnabled(bool) = 0;
+    virtual void setHideScrollbars(bool) = 0;
     virtual void setOfflineWebApplicationCacheEnabled(bool) = 0;
-    virtual void setOpenGLMultisamplingEnabled(bool) = 0;
+    virtual void setPassiveEventListenerDefault(PassiveEventListenerDefault) = 0;
     virtual void setPasswordEchoDurationInSeconds(double) = 0;
     virtual void setPasswordEchoEnabled(bool) = 0;
     virtual void setPerTilePaintingEnabled(bool) = 0;
-    virtual void setPictographFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
-    virtual void setPinchOverlayScrollbarThickness(int) = 0;
+    virtual void setPictographFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
     virtual void setPluginsEnabled(bool) = 0;
+    virtual void setEncryptedMediaEnabled(bool) = 0;
+    virtual void setPresentationReceiver(bool) = 0;
     virtual void setAvailablePointerTypes(int) = 0;
     virtual void setPrimaryPointerType(PointerType) = 0;
     virtual void setAvailableHoverTypes(int) = 0;
     virtual void setPrimaryHoverType(HoverType) = 0;
+    virtual void setPreferHiddenVolumeControls(bool) = 0;
     virtual void setRenderVSyncNotificationEnabled(bool) = 0;
     virtual void setReportScreenSizeInPhysicalPixelsQuirk(bool) = 0;
-    virtual void setRootLayerScrolls(bool) = 0;
     virtual void setRubberBandingOnCompositorThread(bool) = 0;
-    virtual void setSansSerifFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
+    virtual void setSansSerifFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
     virtual void setSelectTrailingWhitespaceEnabled(bool) = 0;
     virtual void setSelectionIncludesAltImageText(bool) = 0;
     virtual void setSelectionStrategy(SelectionStrategyType) = 0;
-    virtual void setSerifFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
+    virtual void setSerifFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
     virtual void setShouldPrintBackgrounds(bool) = 0;
     virtual void setShouldClearDocumentBackground(bool) = 0;
     virtual void setShouldRespectImageOrientation(bool) = 0;
@@ -234,9 +255,14 @@ public:
     // event handlers specified. User can also trigger click handlers for such
     // elements using SPACE or ENTER keys.
     virtual void setSpatialNavigationEnabled(bool) = 0;
-    virtual void setStandardFontFamily(const WebString&, UScriptCode = USCRIPT_COMMON) = 0;
+    virtual void setSpellCheckEnabledByDefault(bool) = 0;
+    virtual void setStandardFontFamily(const WebString&,
+        UScriptCode = USCRIPT_COMMON)
+        = 0;
     virtual void setStrictMixedContentChecking(bool) = 0;
+    virtual void setStrictMixedContentCheckingForPlugin(bool) = 0;
     virtual void setStrictPowerfulFeatureRestrictions(bool) = 0;
+    virtual void setStrictlyBlockBlockableMixedContent(bool) = 0;
     virtual void setSupportDeprecatedTargetDensityDPI(bool) = 0;
     virtual void setSupportsMultipleWindows(bool) = 0;
     virtual void setSyncXHRInDocumentsEnabled(bool) = 0;
@@ -248,20 +274,20 @@ public:
     virtual void setTextTrackFontFamily(const WebString&) = 0;
     virtual void setTextTrackFontStyle(const WebString&) = 0;
     virtual void setTextTrackFontVariant(const WebString&) = 0;
+    virtual void setTextTrackMarginPercentage(float) = 0;
     virtual void setTextTrackTextColor(const WebString&) = 0;
     virtual void setTextTrackTextShadow(const WebString&) = 0;
     virtual void setTextTrackTextSize(const WebString&) = 0;
     virtual void setThreadedScrollingEnabled(bool) = 0;
     virtual void setTouchDragDropEnabled(bool) = 0;
-    virtual void setTouchEditingEnabled(bool) = 0;
-    virtual void setUnifiedTextCheckerEnabled(bool) = 0;
-    virtual void setUnsafePluginPastingEnabled(bool) = 0;
     virtual void setUseLegacyBackgroundSizeShorthandBehavior(bool) = 0;
-    virtual void setUseMobileViewportStyle(bool) = 0;
+    virtual void setViewportStyle(WebViewportStyle) = 0;
     virtual void setUseSolidColorScrollbars(bool) = 0;
     virtual void setUseWideViewport(bool) = 0;
-    virtual void setUsesEncodingDetector(bool) = 0;
     virtual void setV8CacheOptions(V8CacheOptions) = 0;
+    virtual void setV8CacheStrategiesForCacheStorage(
+        V8CacheStrategiesForCacheStorage)
+        = 0;
     virtual void setValidationMessageTimerMagnification(int) = 0;
     virtual void setViewportEnabled(bool) = 0;
     virtual void setViewportMetaEnabled(bool) = 0;
@@ -269,12 +295,20 @@ public:
     virtual void setViewportMetaMergeContentQuirk(bool) = 0;
     virtual void setViewportMetaNonUserScalableQuirk(bool) = 0;
     virtual void setViewportMetaZeroValuesQuirk(bool) = 0;
-    virtual void setWebAudioEnabled(bool) = 0;
     virtual void setWebGLErrorsToConsoleEnabled(bool) = 0;
     virtual void setWebSecurityEnabled(bool) = 0;
     virtual void setWideViewportQuirkEnabled(bool) = 0;
     virtual void setXSSAuditorEnabled(bool) = 0;
+    // Background timer throttling aggressiveness settings.
+    virtual void setExpensiveBackgroundThrottlingCPUBudget(float) = 0;
+    virtual void setExpensiveBackgroundThrottlingInitialBudget(float) = 0;
+    virtual void setExpensiveBackgroundThrottlingMaxBudget(float) = 0;
+    virtual void setExpensiveBackgroundThrottlingMaxDelay(float) = 0;
 
+#ifdef TENCENT_FITSCREEN
+    virtual bool getFitScreenEnabled() const = 0;
+    virtual void setFitScreenEnabled(bool) = 0;
+#endif
 protected:
     ~WebSettings() { }
 };

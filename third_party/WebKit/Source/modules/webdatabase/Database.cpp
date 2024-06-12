@@ -23,13 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/Database.h"
 
-#include "core/dom/CrossThreadTask.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/dom/ExecutionContextTask.h"
+#include "core/dom/TaskRunnerHelper.h"
 #include "core/html/VoidCallback.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "modules/webdatabase/ChangeVersionData.h"
@@ -47,13 +46,17 @@
 #include "modules/webdatabase/SQLTransactionClient.h"
 #include "modules/webdatabase/SQLTransactionCoordinator.h"
 #include "modules/webdatabase/SQLTransactionErrorCallback.h"
+#include "modules/webdatabase/StorageLog.h"
 #include "modules/webdatabase/sqlite/SQLiteStatement.h"
 #include "modules/webdatabase/sqlite/SQLiteTransaction.h"
-#include "platform/Logging.h"
+#include "platform/WaitableEvent.h"
 #include "platform/heap/SafePoint.h"
-#include "platform/weborigin/DatabaseIdentifier.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebDatabaseObserver.h"
+#include "public/platform/WebSecurityOrigin.h"
+#include "wtf/Atomics.h"
+#include "wtf/CurrentTime.h"
+#include <memory>
 
 // Registering "opened" databases with the DatabaseTracker
 // =======================================================
@@ -86,21 +89,35 @@
 
 namespace blink {
 
+// Defines static local variable after making sure that guid lock is held.
+// (We can't use DEFINE_STATIC_LOCAL for this because it asserts thread
+// safety, which is externally guaranteed by the guideMutex lock)
+#define DEFINE_STATIC_LOCAL_WITH_LOCK(type, name, arguments) \
+    ASSERT(guidMutex().locked());                            \
+    static type& name = *new type arguments
+
 static const char versionKey[] = "WebKitDatabaseVersionKey";
 static const char infoTableName[] = "__WebKitDatabaseInfoTable__";
 
-static String formatErrorMessage(const char* message, int sqliteErrorCode, const char* sqliteErrorMessage)
+static String formatErrorMessage(const char* message,
+    int sqliteErrorCode,
+    const char* sqliteErrorMessage)
 {
-    return String::format("%s (%d %s)", message, sqliteErrorCode, sqliteErrorMessage);
+    return String::format("%s (%d %s)", message, sqliteErrorCode,
+        sqliteErrorMessage);
 }
 
-static bool retrieveTextResultFromDatabase(SQLiteDatabase& db, const String& query, String& resultString)
+static bool retrieveTextResultFromDatabase(SQLiteDatabase& db,
+    const String& query,
+    String& resultString)
 {
     SQLiteStatement statement(db, query);
     int result = statement.prepare();
 
     if (result != SQLResultOk) {
-        WTF_LOG_ERROR("Error (%i) preparing statement to read text result from database (%s)", result, query.ascii().data());
+        DLOG(ERROR) << "Error (" << result
+                    << ") preparing statement to read text result from database ("
+                    << query << ")";
         return false;
     }
 
@@ -114,17 +131,21 @@ static bool retrieveTextResultFromDatabase(SQLiteDatabase& db, const String& que
         return true;
     }
 
-    WTF_LOG_ERROR("Error (%i) reading text result from database (%s)", result, query.ascii().data());
+    DLOG(ERROR) << "Error (" << result << ") reading text result from database ("
+                << query << ")";
     return false;
 }
 
-static bool setTextValueInDatabase(SQLiteDatabase& db, const String& query, const String& value)
+static bool setTextValueInDatabase(SQLiteDatabase& db,
+    const String& query,
+    const String& value)
 {
     SQLiteStatement statement(db, query);
     int result = statement.prepare();
 
     if (result != SQLResultOk) {
-        WTF_LOG_ERROR("Failed to prepare statement to set value in database (%s)", query.ascii().data());
+        DLOG(ERROR) << "Failed to prepare statement to set value in database ("
+                    << query << ")";
         return false;
     }
 
@@ -132,7 +153,8 @@ static bool setTextValueInDatabase(SQLiteDatabase& db, const String& query, cons
 
     result = statement.step();
     if (result != SQLResultDone) {
-        WTF_LOG_ERROR("Failed to step statement to set value in database (%s)", query.ascii().data());
+        DLOG(ERROR) << "Failed to step statement to set value in database ("
+                    << query << ")";
         return false;
     }
 
@@ -142,16 +164,14 @@ static bool setTextValueInDatabase(SQLiteDatabase& db, const String& query, cons
 // FIXME: move all guid-related functions to a DatabaseVersionTracker class.
 static RecursiveMutex& guidMutex()
 {
-    AtomicallyInitializedStaticReference(RecursiveMutex, mutex, new RecursiveMutex);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(RecursiveMutex, mutex, new RecursiveMutex);
     return mutex;
 }
 
 typedef HashMap<DatabaseGuid, String> GuidVersionMap;
 static GuidVersionMap& guidToVersionMap()
 {
-    // Ensure the the mutex is locked.
-    ASSERT(guidMutex().locked());
-    DEFINE_STATIC_LOCAL_NOASSERT(GuidVersionMap, map, ());
+    DEFINE_STATIC_LOCAL_WITH_LOCK(GuidVersionMap, map, ());
     return map;
 }
 
@@ -169,19 +189,18 @@ static inline void updateGuidVersionMap(DatabaseGuid guid, String newVersion)
     // FIXME: This is a quite-awkward restriction to have to program with.
 
     // Map null string to empty string (see comment above).
-    guidToVersionMap().set(guid, newVersion.isEmpty() ? String() : newVersion.isolatedCopy());
+    guidToVersionMap().set(
+        guid, newVersion.isEmpty() ? String() : newVersion.isolatedCopy());
 }
 
-typedef HashMap<DatabaseGuid, HashSet<Database*>*> GuidDatabaseMap;
-static GuidDatabaseMap& guidToDatabaseMap()
+static HashCountedSet<DatabaseGuid>& guidCount()
 {
-    // Ensure the the mutex is locked.
-    ASSERT(guidMutex().locked());
-    DEFINE_STATIC_LOCAL_NOASSERT(GuidDatabaseMap, map, ());
-    return map;
+    DEFINE_STATIC_LOCAL_WITH_LOCK(HashCountedSet<DatabaseGuid>, guidCount, ());
+    return guidCount;
 }
 
-static DatabaseGuid guidForOriginAndName(const String& origin, const String& name)
+static DatabaseGuid guidForOriginAndName(const String& origin,
+    const String& name)
 {
     // Ensure the the mutex is locked.
     ASSERT(guidMutex().locked());
@@ -189,7 +208,7 @@ static DatabaseGuid guidForOriginAndName(const String& origin, const String& nam
     String stringID = origin + "/" + name;
 
     typedef HashMap<String, int> IDGuidMap;
-    DEFINE_STATIC_LOCAL_NOASSERT(IDGuidMap, stringIdentifierToGUIDMap, ());
+    DEFINE_STATIC_LOCAL_WITH_LOCK(IDGuidMap, stringIdentifierToGUIDMap, ());
     DatabaseGuid guid = stringIdentifierToGUIDMap.get(stringID);
     if (!guid) {
         static int currentNewGUID = 1;
@@ -200,19 +219,24 @@ static DatabaseGuid guidForOriginAndName(const String& origin, const String& nam
     return guid;
 }
 
-Database::Database(DatabaseContext* databaseContext, const String& name, const String& expectedVersion, const String& displayName, unsigned long estimatedSize)
+Database::Database(DatabaseContext* databaseContext,
+    const String& name,
+    const String& expectedVersion,
+    const String& displayName,
+    unsigned estimatedSize)
     : m_databaseContext(databaseContext)
     , m_name(name.isolatedCopy())
     , m_expectedVersion(expectedVersion.isolatedCopy())
     , m_displayName(displayName.isolatedCopy())
     , m_estimatedSize(estimatedSize)
     , m_guid(0)
-    , m_opened(false)
+    , m_opened(0)
     , m_new(false)
     , m_transactionInProgress(false)
     , m_isTransactionQueueEnabled(true)
 {
-    m_contextThreadSecurityOrigin = m_databaseContext->securityOrigin()->isolatedCopy();
+    DCHECK(isMainThread());
+    m_contextThreadSecurityOrigin = m_databaseContext->getSecurityOrigin()->isolatedCopy();
 
     m_databaseAuthorizer = DatabaseAuthorizer::create(infoTableName);
 
@@ -221,17 +245,12 @@ Database::Database(DatabaseContext* databaseContext, const String& name, const S
 
     {
         SafePointAwareMutexLocker locker(guidMutex());
-        m_guid = guidForOriginAndName(securityOrigin()->toString(), name);
-        HashSet<Database*>* hashSet = guidToDatabaseMap().get(m_guid);
-        if (!hashSet) {
-            hashSet = new HashSet<Database*>;
-            guidToDatabaseMap().set(m_guid, hashSet);
-        }
-
-        hashSet->add(this);
+        m_guid = guidForOriginAndName(getSecurityOrigin()->toString(), name);
+        guidCount().add(m_guid);
     }
 
-    m_filename = DatabaseManager::manager().fullPathForDatabase(securityOrigin(), m_name);
+    m_filename = DatabaseManager::manager().fullPathForDatabase(
+        getSecurityOrigin(), m_name);
 
     m_databaseThreadSecurityOrigin = m_contextThreadSecurityOrigin->isolatedCopy();
     ASSERT(m_databaseContext->databaseThread());
@@ -257,28 +276,30 @@ DEFINE_TRACE(Database)
     visitor->trace(m_databaseContext);
     visitor->trace(m_sqliteDatabase);
     visitor->trace(m_databaseAuthorizer);
-    visitor->trace(m_transactionQueue);
 }
 
-bool Database::openAndVerifyVersion(bool setVersionInNewDatabase, DatabaseError& error, String& errorMessage)
+bool Database::openAndVerifyVersion(bool setVersionInNewDatabase,
+    DatabaseError& error,
+    String& errorMessage)
 {
-    TaskSynchronizer synchronizer;
-    if (!databaseContext()->databaseThreadAvailable())
+    WaitableEvent event;
+    if (!getDatabaseContext()->databaseThreadAvailable())
         return false;
 
     DatabaseTracker::tracker().prepareToOpenDatabase(this);
     bool success = false;
-    OwnPtr<DatabaseOpenTask> task = DatabaseOpenTask::create(this, setVersionInNewDatabase, &synchronizer, error, errorMessage, success);
-    databaseContext()->databaseThread()->scheduleTask(task.release());
-    synchronizer.waitForTaskCompletion();
+    std::unique_ptr<DatabaseOpenTask> task = DatabaseOpenTask::create(
+        this, setVersionInNewDatabase, &event, error, errorMessage, success);
+    getDatabaseContext()->databaseThread()->scheduleTask(std::move(task));
+    event.wait();
 
     return success;
 }
 
 void Database::close()
 {
-    ASSERT(databaseContext()->databaseThread());
-    ASSERT(databaseContext()->databaseThread()->isDatabaseThread());
+    ASSERT(getDatabaseContext()->databaseThread());
+    ASSERT(getDatabaseContext()->databaseThread()->isDatabaseThread());
 
     {
         MutexLocker locker(m_transactionInProgressMutex);
@@ -297,10 +318,12 @@ void Database::close()
     }
 
     closeDatabase();
-    databaseContext()->databaseThread()->recordDatabaseClosed(this);
+    getDatabaseContext()->databaseThread()->recordDatabaseClosed(this);
 }
 
-SQLTransactionBackend* Database::runTransaction(SQLTransaction* transaction, bool readOnly, const ChangeVersionData* data)
+SQLTransactionBackend* Database::runTransaction(SQLTransaction* transaction,
+    bool readOnly,
+    const ChangeVersionData* data)
 {
     MutexLocker locker(m_transactionInProgressMutex);
     if (!m_isTransactionQueueEnabled)
@@ -333,11 +356,12 @@ void Database::scheduleTransaction()
     if (m_isTransactionQueueEnabled && !m_transactionQueue.isEmpty())
         transaction = m_transactionQueue.takeFirst();
 
-    if (transaction && databaseContext()->databaseThreadAvailable()) {
-        OwnPtr<DatabaseTransactionTask> task = DatabaseTransactionTask::create(transaction);
-        WTF_LOG(StorageAPI, "Scheduling DatabaseTransactionTask %p for transaction %p\n", task.get(), task->transaction());
+    if (transaction && getDatabaseContext()->databaseThreadAvailable()) {
+        std::unique_ptr<DatabaseTransactionTask> task = DatabaseTransactionTask::create(transaction);
+        STORAGE_DVLOG(1) << "Scheduling DatabaseTransactionTask " << task.get()
+                         << " for transaction " << task->transaction();
         m_transactionInProgress = true;
-        databaseContext()->databaseThread()->scheduleTask(task.release());
+        getDatabaseContext()->databaseThread()->scheduleTask(std::move(task));
     } else {
         m_transactionInProgress = false;
     }
@@ -345,22 +369,23 @@ void Database::scheduleTransaction()
 
 void Database::scheduleTransactionStep(SQLTransactionBackend* transaction)
 {
-    if (!databaseContext()->databaseThreadAvailable())
+    if (!getDatabaseContext()->databaseThreadAvailable())
         return;
 
-    OwnPtr<DatabaseTransactionTask> task = DatabaseTransactionTask::create(transaction);
-    WTF_LOG(StorageAPI, "Scheduling DatabaseTransactionTask %p for the transaction step\n", task.get());
-    databaseContext()->databaseThread()->scheduleTask(task.release());
+    std::unique_ptr<DatabaseTransactionTask> task = DatabaseTransactionTask::create(transaction);
+    STORAGE_DVLOG(1) << "Scheduling DatabaseTransactionTask " << task.get()
+                     << " for the transaction step";
+    getDatabaseContext()->databaseThread()->scheduleTask(std::move(task));
 }
 
 SQLTransactionClient* Database::transactionClient() const
 {
-    return databaseContext()->databaseThread()->transactionClient();
+    return getDatabaseContext()->databaseThread()->transactionClient();
 }
 
 SQLTransactionCoordinator* Database::transactionCoordinator() const
 {
-    return databaseContext()->databaseThread()->transactionCoordinator();
+    return getDatabaseContext()->databaseThread()->transactionCoordinator();
 }
 
 // static
@@ -374,20 +399,15 @@ void Database::closeDatabase()
     if (!m_opened)
         return;
 
+    releaseStore(&m_opened, 0);
     m_sqliteDatabase.close();
-    m_opened = false;
     // See comment at the top this file regarding calling removeOpenDatabase().
     DatabaseTracker::tracker().removeOpenDatabase(this);
     {
         SafePointAwareMutexLocker locker(guidMutex());
 
-        HashSet<Database*>* hashSet = guidToDatabaseMap().get(m_guid);
-        ASSERT(hashSet);
-        ASSERT(hashSet->contains(this));
-        hashSet->remove(this);
-        if (hashSet->isEmpty()) {
-            guidToDatabaseMap().remove(m_guid);
-            delete hashSet;
+        ASSERT(guidCount().contains(m_guid));
+        if (guidCount().remove(m_guid)) {
             guidToVersionMap().remove(m_guid);
         }
     }
@@ -404,6 +424,7 @@ String Database::version() const
 
 class DoneCreatingDatabaseOnExitCaller {
     STACK_ALLOCATED();
+
 public:
     DoneCreatingDatabaseOnExitCaller(Database* database)
         : m_database(database)
@@ -419,11 +440,13 @@ public:
     void setOpenSucceeded() { m_openSucceeded = true; }
 
 private:
-    Member<Database> m_database;
+    CrossThreadPersistent<Database> m_database;
     bool m_openSucceeded;
 };
 
-bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, DatabaseError& error, String& errorMessage)
+bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase,
+    DatabaseError& error,
+    String& errorMessage)
 {
     double callStartTime = WTF::monotonicallyIncreasingTime();
     DoneCreatingDatabaseOnExitCaller onExitCaller(this);
@@ -435,12 +458,18 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
     const int maxSqliteBusyWaitTime = 30000;
 
     if (!m_sqliteDatabase.open(m_filename)) {
-        reportOpenDatabaseResult(1, InvalidStateError, m_sqliteDatabase.lastError(), WTF::monotonicallyIncreasingTime() - callStartTime);
-        errorMessage = formatErrorMessage("unable to open database", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+        reportOpenDatabaseResult(
+            1, InvalidStateError, m_sqliteDatabase.lastError(),
+            WTF::monotonicallyIncreasingTime() - callStartTime);
+        errorMessage = formatErrorMessage("unable to open database",
+            m_sqliteDatabase.lastError(),
+            m_sqliteDatabase.lastErrorMsg());
         return false;
     }
     if (!m_sqliteDatabase.turnOnIncrementalAutoVacuum())
-        WTF_LOG_ERROR("Unable to turn on incremental auto-vacuum (%d %s)", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+        DLOG(ERROR) << "Unable to turn on incremental auto-vacuum ("
+                    << m_sqliteDatabase.lastError() << " "
+                    << m_sqliteDatabase.lastErrorMsg() << ")";
 
     m_sqliteDatabase.setBusyTimeout(maxSqliteBusyWaitTime);
 
@@ -452,7 +481,8 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
         if (entry != guidToVersionMap().end()) {
             // Map null string to empty string (see updateGuidVersionMap()).
             currentVersion = entry->value.isNull() ? emptyString() : entry->value.isolatedCopy();
-            WTF_LOG(StorageAPI, "Current cached version for guid %i is %s", m_guid, currentVersion.ascii().data());
+            STORAGE_DVLOG(1) << "Current cached version for guid " << m_guid << " is "
+                             << currentVersion;
 
             // Note: In multi-process browsers the cached value may be
             // inaccurate, but we cannot read the actual version from the
@@ -470,13 +500,17 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
             }
             m_sqliteDatabase.setBusyTimeout(maxSqliteBusyWaitTime);
         } else {
-            WTF_LOG(StorageAPI, "No cached version for guid %i", m_guid);
+            STORAGE_DVLOG(1) << "No cached version for guid " << m_guid;
 
             SQLiteTransaction transaction(m_sqliteDatabase);
             transaction.begin();
             if (!transaction.inProgress()) {
-                reportOpenDatabaseResult(2, InvalidStateError, m_sqliteDatabase.lastError(), WTF::monotonicallyIncreasingTime() - callStartTime);
-                errorMessage = formatErrorMessage("unable to open database, failed to start transaction", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+                reportOpenDatabaseResult(
+                    2, InvalidStateError, m_sqliteDatabase.lastError(),
+                    WTF::monotonicallyIncreasingTime() - callStartTime);
+                errorMessage = formatErrorMessage(
+                    "unable to open database, failed to start transaction",
+                    m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
                 m_sqliteDatabase.close();
                 return false;
             }
@@ -485,28 +519,45 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
             if (!m_sqliteDatabase.tableExists(tableName)) {
                 m_new = true;
 
-                if (!m_sqliteDatabase.executeCommand("CREATE TABLE " + tableName + " (key TEXT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT REPLACE,value TEXT NOT NULL ON CONFLICT FAIL);")) {
-                    reportOpenDatabaseResult(3, InvalidStateError, m_sqliteDatabase.lastError(), WTF::monotonicallyIncreasingTime() - callStartTime);
-                    errorMessage = formatErrorMessage("unable to open database, failed to create 'info' table", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+                if (!m_sqliteDatabase.executeCommand(
+                        "CREATE TABLE " + tableName + " (key TEXT NOT NULL ON CONFLICT FAIL UNIQUE ON CONFLICT "
+                                                      "REPLACE,value TEXT NOT NULL ON CONFLICT FAIL);")) {
+                    reportOpenDatabaseResult(
+                        3, InvalidStateError, m_sqliteDatabase.lastError(),
+                        WTF::monotonicallyIncreasingTime() - callStartTime);
+                    errorMessage = formatErrorMessage(
+                        "unable to open database, failed to create 'info' table",
+                        m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
                     transaction.rollback();
                     m_sqliteDatabase.close();
                     return false;
                 }
             } else if (!getVersionFromDatabase(currentVersion, false)) {
-                reportOpenDatabaseResult(4, InvalidStateError, m_sqliteDatabase.lastError(), WTF::monotonicallyIncreasingTime() - callStartTime);
-                errorMessage = formatErrorMessage("unable to open database, failed to read current version", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+                reportOpenDatabaseResult(
+                    4, InvalidStateError, m_sqliteDatabase.lastError(),
+                    WTF::monotonicallyIncreasingTime() - callStartTime);
+                errorMessage = formatErrorMessage(
+                    "unable to open database, failed to read current version",
+                    m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
                 transaction.rollback();
                 m_sqliteDatabase.close();
                 return false;
             }
 
             if (currentVersion.length()) {
-                WTF_LOG(StorageAPI, "Retrieved current version %s from database %s", currentVersion.ascii().data(), databaseDebugName().ascii().data());
+                STORAGE_DVLOG(1) << "Retrieved current version " << currentVersion
+                                 << " from database " << databaseDebugName();
             } else if (!m_new || shouldSetVersionInNewDatabase) {
-                WTF_LOG(StorageAPI, "Setting version %s in database %s that was just created", m_expectedVersion.ascii().data(), databaseDebugName().ascii().data());
+                STORAGE_DVLOG(1) << "Setting version " << m_expectedVersion
+                                 << " in database " << databaseDebugName()
+                                 << " that was just created";
                 if (!setVersionInDatabase(m_expectedVersion, false)) {
-                    reportOpenDatabaseResult(5, InvalidStateError, m_sqliteDatabase.lastError(), WTF::monotonicallyIncreasingTime() - callStartTime);
-                    errorMessage = formatErrorMessage("unable to open database, failed to write current version", m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
+                    reportOpenDatabaseResult(
+                        5, InvalidStateError, m_sqliteDatabase.lastError(),
+                        WTF::monotonicallyIncreasingTime() - callStartTime);
+                    errorMessage = formatErrorMessage(
+                        "unable to open database, failed to write current version",
+                        m_sqliteDatabase.lastError(), m_sqliteDatabase.lastErrorMsg());
                     transaction.rollback();
                     m_sqliteDatabase.close();
                     return false;
@@ -519,7 +570,8 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
     }
 
     if (currentVersion.isNull()) {
-        WTF_LOG(StorageAPI, "Database %s does not have its version set", databaseDebugName().ascii().data());
+        STORAGE_DVLOG(1) << "Database " << databaseDebugName()
+                         << " does not have its version set";
         currentVersion = "";
     }
 
@@ -529,7 +581,9 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
     // If the expected version is the empty string, then we always return with
     // whatever version of the database we have.
     if ((!m_new || shouldSetVersionInNewDatabase) && m_expectedVersion.length() && m_expectedVersion != currentVersion) {
-        reportOpenDatabaseResult(6, InvalidStateError, 0, WTF::monotonicallyIncreasingTime() - callStartTime);
+        reportOpenDatabaseResult(
+            6, InvalidStateError, 0,
+            WTF::monotonicallyIncreasingTime() - callStartTime);
         errorMessage = "unable to open database, version mismatch, '" + m_expectedVersion + "' does not match the currentVersion of '" + currentVersion + "'";
         m_sqliteDatabase.close();
         return false;
@@ -540,7 +594,7 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
 
     // See comment at the top this file regarding calling addOpenDatabase().
     DatabaseTracker::tracker().addOpenDatabase(this);
-    m_opened = true;
+    m_opened = 1;
 
     // Declare success:
     error = DatabaseError::None; // Clear the presumed error from above.
@@ -552,10 +606,11 @@ bool Database::performOpenAndVerify(bool shouldSetVersionInNewDatabase, Database
         m_expectedVersion = "";
     }
 
-    reportOpenDatabaseResult(0, -1, 0, WTF::monotonicallyIncreasingTime() - callStartTime); // OK
+    reportOpenDatabaseResult(
+        0, -1, 0, WTF::monotonicallyIncreasingTime() - callStartTime); // OK
 
-    if (databaseContext()->databaseThread())
-        databaseContext()->databaseThread()->recordDatabaseOpen(this);
+    if (getDatabaseContext()->databaseThread())
+        getDatabaseContext()->databaseThread()->recordDatabaseOpen(this);
     return true;
 }
 
@@ -571,7 +626,7 @@ String Database::displayName() const
     return m_displayName.isolatedCopy();
 }
 
-unsigned long Database::estimatedSize() const
+unsigned Database::estimatedSize() const
 {
     return m_estimatedSize;
 }
@@ -582,9 +637,10 @@ String Database::fileName() const
     return m_filename.isolatedCopy();
 }
 
-bool Database::getVersionFromDatabase(String& version, bool shouldCacheVersion)
+bool Database::getVersionFromDatabase(String& version,
+    bool shouldCacheVersion)
 {
-    String query(String("SELECT value FROM ") + infoTableName +  " WHERE key = '" + versionKey + "';");
+    String query(String("SELECT value FROM ") + infoTableName + " WHERE key = '" + versionKey + "';");
 
     m_databaseAuthorizer->disable();
 
@@ -593,7 +649,8 @@ bool Database::getVersionFromDatabase(String& version, bool shouldCacheVersion)
         if (shouldCacheVersion)
             setCachedVersion(version);
     } else {
-        WTF_LOG_ERROR("Failed to retrieve version from database %s", databaseDebugName().ascii().data());
+        DLOG(ERROR) << "Failed to retrieve version from database "
+                    << databaseDebugName();
     }
 
     m_databaseAuthorizer->enable();
@@ -601,12 +658,13 @@ bool Database::getVersionFromDatabase(String& version, bool shouldCacheVersion)
     return result;
 }
 
-bool Database::setVersionInDatabase(const String& version, bool shouldCacheVersion)
+bool Database::setVersionInDatabase(const String& version,
+    bool shouldCacheVersion)
 {
     // The INSERT will replace an existing entry for the database with the new
     // version number, due to the UNIQUE ON CONFLICT REPLACE clause in the
     // CREATE statement (see Database::performOpenAndVerify()).
-    String query(String("INSERT INTO ") + infoTableName +  " (key, value) VALUES ('" + versionKey + "', ?);");
+    String query(String("INSERT INTO ") + infoTableName + " (key, value) VALUES ('" + versionKey + "', ?);");
 
     m_databaseAuthorizer->disable();
 
@@ -615,7 +673,8 @@ bool Database::setVersionInDatabase(const String& version, bool shouldCacheVersi
         if (shouldCacheVersion)
             setCachedVersion(version);
     } else {
-        WTF_LOG_ERROR("Failed to set version %s in database (%s)", version.ascii().data(), query.ascii().data());
+        DLOG(ERROR) << "Failed to set version " << version << " in database ("
+                    << query << ")";
     }
 
     m_databaseAuthorizer->enable();
@@ -710,55 +769,66 @@ void Database::incrementalVacuumIfNeeded()
         int result = m_sqliteDatabase.runIncrementalVacuumCommand();
         reportVacuumDatabaseResult(result);
         if (result != SQLResultOk)
-            logErrorMessage(formatErrorMessage("error vacuuming database", result, m_sqliteDatabase.lastErrorMsg()));
+            logErrorMessage(formatErrorMessage("error vacuuming database", result,
+                m_sqliteDatabase.lastErrorMsg()));
     }
 }
 
 // These are used to generate histograms of errors seen with websql.
 // See about:histograms in chromium.
-void Database::reportOpenDatabaseResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode, double duration)
+void Database::reportOpenDatabaseResult(int errorSite,
+    int webSqlErrorCode,
+    int sqliteErrorCode,
+    double duration)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportOpenDatabaseResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), errorSite, webSqlErrorCode, sqliteErrorCode,
-            duration);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(), errorSite,
+            webSqlErrorCode, sqliteErrorCode, duration);
     }
 }
 
-void Database::reportChangeVersionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode)
+void Database::reportChangeVersionResult(int errorSite,
+    int webSqlErrorCode,
+    int sqliteErrorCode)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportChangeVersionResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), errorSite, webSqlErrorCode, sqliteErrorCode);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(), errorSite,
+            webSqlErrorCode, sqliteErrorCode);
     }
 }
 
-void Database::reportStartTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode)
+void Database::reportStartTransactionResult(int errorSite,
+    int webSqlErrorCode,
+    int sqliteErrorCode)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportStartTransactionResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), errorSite, webSqlErrorCode, sqliteErrorCode);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(), errorSite,
+            webSqlErrorCode, sqliteErrorCode);
     }
 }
 
-void Database::reportCommitTransactionResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode)
+void Database::reportCommitTransactionResult(int errorSite,
+    int webSqlErrorCode,
+    int sqliteErrorCode)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportCommitTransactionResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), errorSite, webSqlErrorCode, sqliteErrorCode);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(), errorSite,
+            webSqlErrorCode, sqliteErrorCode);
     }
 }
 
-void Database::reportExecuteStatementResult(int errorSite, int webSqlErrorCode, int sqliteErrorCode)
+void Database::reportExecuteStatementResult(int errorSite,
+    int webSqlErrorCode,
+    int sqliteErrorCode)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportExecuteStatementResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), errorSite, webSqlErrorCode, sqliteErrorCode);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(), errorSite,
+            webSqlErrorCode, sqliteErrorCode);
     }
 }
 
@@ -766,32 +836,33 @@ void Database::reportVacuumDatabaseResult(int sqliteErrorCode)
 {
     if (Platform::current()->databaseObserver()) {
         Platform::current()->databaseObserver()->reportVacuumDatabaseResult(
-            createDatabaseIdentifierFromSecurityOrigin(securityOrigin()),
-            stringIdentifier(), sqliteErrorCode);
+            WebSecurityOrigin(getSecurityOrigin()), stringIdentifier(),
+            sqliteErrorCode);
     }
 }
 
 void Database::logErrorMessage(const String& message)
 {
-    executionContext()->addConsoleMessage(ConsoleMessage::create(StorageMessageSource, ErrorMessageLevel, message));
+    getExecutionContext()->addConsoleMessage(
+        ConsoleMessage::create(StorageMessageSource, ErrorMessageLevel, message));
 }
 
-ExecutionContext* Database::executionContext() const
+ExecutionContext* Database::getExecutionContext() const
 {
-    return databaseContext()->executionContext();
+    return getDatabaseContext()->getExecutionContext();
 }
 
 void Database::closeImmediately()
 {
-    ASSERT(executionContext()->isContextThread());
-    if (databaseContext()->databaseThreadAvailable() && opened()) {
+    ASSERT(getExecutionContext()->isContextThread());
+    if (getDatabaseContext()->databaseThreadAvailable() && opened()) {
         logErrorMessage("forcibly closing database");
-        databaseContext()->databaseThread()->scheduleTask(DatabaseCloseTask::create(this, 0));
+        getDatabaseContext()->databaseThread()->scheduleTask(
+            DatabaseCloseTask::create(this, 0));
     }
 }
 
-void Database::changeVersion(
-    const String& oldVersion,
+void Database::changeVersion(const String& oldVersion,
     const String& newVersion,
     SQLTransactionCallback* callback,
     SQLTransactionErrorCallback* errorCallback,
@@ -801,50 +872,58 @@ void Database::changeVersion(
     runTransaction(callback, errorCallback, successCallback, false, &data);
 }
 
-void Database::transaction(
-    SQLTransactionCallback* callback,
+void Database::transaction(SQLTransactionCallback* callback,
     SQLTransactionErrorCallback* errorCallback,
     VoidCallback* successCallback)
 {
     runTransaction(callback, errorCallback, successCallback, false);
 }
 
-void Database::readTransaction(
-    SQLTransactionCallback* callback,
+void Database::readTransaction(SQLTransactionCallback* callback,
     SQLTransactionErrorCallback* errorCallback,
     VoidCallback* successCallback)
 {
     runTransaction(callback, errorCallback, successCallback, true);
 }
 
-static void callTransactionErrorCallback(SQLTransactionErrorCallback* callback, PassOwnPtr<SQLErrorData> errorData)
+static void callTransactionErrorCallback(
+    SQLTransactionErrorCallback* callback,
+    std::unique_ptr<SQLErrorData> errorData)
 {
     callback->handleEvent(SQLError::create(*errorData));
 }
 
-void Database::runTransaction(
-    SQLTransactionCallback* callback,
+void Database::runTransaction(SQLTransactionCallback* callback,
     SQLTransactionErrorCallback* errorCallback,
     VoidCallback* successCallback,
     bool readOnly,
     const ChangeVersionData* changeVersionData)
 {
-    ASSERT(executionContext()->isContextThread());
-    // FIXME: Rather than passing errorCallback to SQLTransaction and then
-    // sometimes firing it ourselves, this code should probably be pushed down
-    // into Database so that we only create the SQLTransaction if we're
-    // actually going to run it.
-#if ENABLE(ASSERT)
+    if (!getExecutionContext())
+        return;
+
+    ASSERT(getExecutionContext()->isContextThread());
+// FIXME: Rather than passing errorCallback to SQLTransaction and then
+// sometimes firing it ourselves, this code should probably be pushed down
+// into Database so that we only create the SQLTransaction if we're
+// actually going to run it.
+#if DCHECK_IS_ON()
     SQLTransactionErrorCallback* originalErrorCallback = errorCallback;
 #endif
-    SQLTransaction* transaction = SQLTransaction::create(this, callback, successCallback, errorCallback, readOnly);
+    SQLTransaction* transaction = SQLTransaction::create(
+        this, callback, successCallback, errorCallback, readOnly);
     SQLTransactionBackend* transactionBackend = runTransaction(transaction, readOnly, changeVersionData);
     if (!transactionBackend) {
         SQLTransactionErrorCallback* callback = transaction->releaseErrorCallback();
         ASSERT(callback == originalErrorCallback);
         if (callback) {
-            OwnPtr<SQLErrorData> error = SQLErrorData::create(SQLError::UNKNOWN_ERR, "database has been closed");
-            executionContext()->postTask(FROM_HERE, createSameThreadTask(&callTransactionErrorCallback, callback, error.release()));
+            std::unique_ptr<SQLErrorData> error = SQLErrorData::create(
+                SQLError::kUnknownErr, "database has been closed");
+            getExecutionContext()->postTask(
+                TaskType::DatabaseAccess, BLINK_FROM_HERE,
+                createSameThreadTask(&callTransactionErrorCallback,
+                    wrapPersistent(callback),
+                    WTF::passed(std::move(error))));
         }
     }
 }
@@ -853,16 +932,21 @@ void Database::scheduleTransactionCallback(SQLTransaction* transaction)
 {
     // The task is constructed in a database thread, and destructed in the
     // context thread.
-    executionContext()->postTask(FROM_HERE, createCrossThreadTask(&SQLTransaction::performPendingCallback, transaction));
+    getExecutionContext()->postTask(
+        TaskType::DatabaseAccess, BLINK_FROM_HERE,
+        createCrossThreadTask(&SQLTransaction::performPendingCallback,
+            wrapCrossThreadPersistent(transaction)));
 }
 
 Vector<String> Database::performGetTableNames()
 {
     disableAuthorizer();
 
-    SQLiteStatement statement(sqliteDatabase(), "SELECT name FROM sqlite_master WHERE type='table';");
+    SQLiteStatement statement(
+        sqliteDatabase(), "SELECT name FROM sqlite_master WHERE type='table';");
     if (statement.prepare() != SQLResultOk) {
-        WTF_LOG_ERROR("Unable to retrieve list of tables for database %s", databaseDebugName().ascii().data());
+        DLOG(ERROR) << "Unable to retrieve list of tables for database "
+                    << databaseDebugName();
         enableAuthorizer();
         return Vector<String>();
     }
@@ -872,13 +956,13 @@ Vector<String> Database::performGetTableNames()
     while ((result = statement.step()) == SQLResultRow) {
         String name = statement.getColumnText(0);
         if (name != databaseInfoTableName())
-            tableNames.append(name);
+            tableNames.push_back(name);
     }
 
     enableAuthorizer();
 
     if (result != SQLResultDone) {
-        WTF_LOG_ERROR("Error getting tables for database %s", databaseDebugName().ascii().data());
+        DLOG(ERROR) << "Error getting tables for database " << databaseDebugName();
         return Vector<String>();
     }
 
@@ -891,24 +975,31 @@ Vector<String> Database::tableNames()
     // take strict turns in dealing with them. However, if the code changes,
     // this may not be true anymore.
     Vector<String> result;
-    TaskSynchronizer synchronizer;
-    if (!databaseContext()->databaseThreadAvailable())
+    WaitableEvent event;
+    if (!getDatabaseContext()->databaseThreadAvailable())
         return result;
 
-    OwnPtr<DatabaseTableNamesTask> task = DatabaseTableNamesTask::create(this, &synchronizer, result);
-    databaseContext()->databaseThread()->scheduleTask(task.release());
-    synchronizer.waitForTaskCompletion();
+    std::unique_ptr<DatabaseTableNamesTask> task = DatabaseTableNamesTask::create(this, &event, result);
+    getDatabaseContext()->databaseThread()->scheduleTask(std::move(task));
+    event.wait();
 
     return result;
 }
 
-SecurityOrigin* Database::securityOrigin() const
+SecurityOrigin* Database::getSecurityOrigin() const
 {
-    if (executionContext()->isContextThread())
+    if (!getExecutionContext())
+        return nullptr;
+    if (getExecutionContext()->isContextThread())
         return m_contextThreadSecurityOrigin.get();
-    if (databaseContext()->databaseThread()->isDatabaseThread())
+    if (getDatabaseContext()->databaseThread()->isDatabaseThread())
         return m_databaseThreadSecurityOrigin.get();
-    return 0;
+    return nullptr;
+}
+
+bool Database::opened()
+{
+    return static_cast<bool>(acquireLoad(&m_opened));
 }
 
 } // namespace blink

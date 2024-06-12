@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/credentialmanager/Credential.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -10,18 +9,7 @@
 
 namespace blink {
 
-Credential* Credential::create(const String& id, const String& name, const KURL& icon)
-{
-    return new Credential(id, name, icon);
-}
-
-Credential* Credential::create(const String& id, const String& name, const String& icon, ExceptionState& exceptionState)
-{
-    KURL iconURL = parseStringAsURL(icon, exceptionState);
-    if (exceptionState.hadException())
-        return nullptr;
-    return new Credential(id, name, iconURL);
-}
+Credential::~Credential() { }
 
 Credential::Credential(PlatformCredential* credential)
     : m_platformCredential(credential)
@@ -33,13 +21,15 @@ Credential::Credential(const String& id, const String& name, const KURL& icon)
 {
 }
 
-KURL Credential::parseStringAsURL(const String& url, ExceptionState& exceptionState)
+KURL Credential::parseStringAsURL(const String& url,
+    ExceptionState& exceptionState)
 {
     if (url.isEmpty())
         return KURL();
     KURL parsedURL = KURL(KURL(), url);
     if (!parsedURL.isValid())
-        exceptionState.throwDOMException(SyntaxError, "'" + url + "' is not a valid URL.");
+        exceptionState.throwDOMException(SyntaxError,
+            "'" + url + "' is not a valid URL.");
     return parsedURL;
 }
 

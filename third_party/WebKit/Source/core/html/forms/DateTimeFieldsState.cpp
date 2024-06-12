@@ -23,8 +23,6 @@
  * SUCH DAMAGE.
  */
 
-#include "config.h"
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/forms/DateTimeFieldsState.h"
 
 #include "core/html/forms/FormController.h"
@@ -33,7 +31,8 @@ namespace blink {
 
 const unsigned DateTimeFieldsState::emptyValue = static_cast<unsigned>(-1);
 
-static unsigned getNumberFromFormControlState(const FormControlState& state, size_t index)
+static unsigned getNumberFromFormControlState(const FormControlState& state,
+    size_t index)
 {
     if (index >= state.valueSize())
         return DateTimeFieldsState::emptyValue;
@@ -42,7 +41,9 @@ static unsigned getNumberFromFormControlState(const FormControlState& state, siz
     return parsed ? value : DateTimeFieldsState::emptyValue;
 }
 
-static DateTimeFieldsState::AMPMValue getAMPMFromFormControlState(const FormControlState& state, size_t index)
+static DateTimeFieldsState::AMPMValue getAMPMFromFormControlState(
+    const FormControlState& state,
+    size_t index)
 {
     if (index >= state.valueSize())
         return DateTimeFieldsState::AMPMValueEmpty;
@@ -74,7 +75,8 @@ unsigned DateTimeFieldsState::hour23() const
     return (m_hour % 12) + (m_ampm == AMPMValuePM ? 12 : 0);
 }
 
-DateTimeFieldsState DateTimeFieldsState::restoreFormControlState(const FormControlState& state)
+DateTimeFieldsState DateTimeFieldsState::restoreFormControlState(
+    const FormControlState& state)
 {
     DateTimeFieldsState dateTimeFieldsState;
     dateTimeFieldsState.setYear(getNumberFromFormControlState(state, 0));
@@ -98,7 +100,8 @@ FormControlState DateTimeFieldsState::saveFormControlState() const
     state.append(hasHour() ? String::number(m_hour) : emptyString());
     state.append(hasMinute() ? String::number(m_minute) : emptyString());
     state.append(hasSecond() ? String::number(m_second) : emptyString());
-    state.append(hasMillisecond() ? String::number(m_millisecond) : emptyString());
+    state.append(hasMillisecond() ? String::number(m_millisecond)
+                                  : emptyString());
     state.append(hasWeekOfYear() ? String::number(m_weekOfYear) : emptyString());
     if (hasAMPM())
         state.append(m_ampm == AMPMValueAM ? "A" : "P");
@@ -108,5 +111,3 @@ FormControlState DateTimeFieldsState::saveFormControlState() const
 }
 
 } // namespace blink
-
-#endif

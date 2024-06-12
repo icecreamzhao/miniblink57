@@ -28,61 +28,77 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "platform/graphics/ImageBufferSurface.h"
 
-#include "platform/graphics/BitmapImage.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/ImageBuffer.h"
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkDevice.h"
+#include "platform/graphics/StaticBitmapImage.h"
+#include "third_party/skia/include/core/SkColorSpace.h"
 #include "third_party/skia/include/core/SkImage.h"
-#include "third_party/skia/include/core/SkPicture.h"
+
+class SkPicture;
 
 namespace blink {
 
-ImageBufferSurface::ImageBufferSurface(const IntSize& size, OpacityMode opacityMode)
+ImageBufferSurface::ImageBufferSurface(const IntSize& size,
+    OpacityMode opacityMode,
+    sk_sp<SkColorSpace> colorSpace,
+    SkColorType colorType)
     : m_opacityMode(opacityMode)
     , m_size(size)
+    , m_colorSpace(colorSpace)
+    , m_colorType(colorType)
 {
     setIsHidden(false);
 }
 
 ImageBufferSurface::~ImageBufferSurface() { }
 
-PassRefPtr<SkPicture> ImageBufferSurface::getPicture()
+sk_sp<SkPicture> ImageBufferSurface::getPicture()
 {
     return nullptr;
 }
 
 void ImageBufferSurface::clear()
 {
-    // Clear the background transparent or opaque, as required. It would be nice if this wasn't
-    // required, but the canvas is currently filled with the magic transparency
-    // color. Can we have another way to manage this?
+    // Clear the background transparent or opaque, as required. It would be nice
+    // if this wasn't required, but the canvas is currently filled with the magic
+    // transparency color. Can we have another way to manage this?
     if (isValid()) {
-        if (m_opacityMode == Opaque)
-            canvas()->drawARGB(255, 0, 0, 0, SkXfermode::kSrc_Mode);
-        else
-            canvas()->drawARGB(0, 0, 0, 0, SkXfermode::kClear_Mode);
+        if (m_opacityMode == Opaque) {
+            canvas()->clear(SK_ColorBLACK);
+        } else {
+            canvas()->clear(SK_ColorTRANSPARENT);
+        }
+        didDraw(FloatRect(FloatPoint(0, 0), FloatSize(size())));
     }
 }
 
-const SkBitmap& ImageBufferSurface::bitmap()
+void ImageBufferSurface::draw(GraphicsContext& context,
+    const FloatRect& destRect,
+    const FloatRect& srcRect,
+    SkBlendMode op)
 {
-    ASSERT(canvas());
-    willAccessPixels();
-    return canvas()->getDevice()->accessBitmap(false);
+    sk_sp<SkImage> snapshot = newImageSnapshot(PreferNoAcceleration, SnapshotReasonPaint);
+    if (!snapshot)
+        return;
+
+    RefPtr<Image> image = StaticBitmapImage::create(std::move(snapshot));
+    context.drawImage(image.get(), destRect, &srcRect, op);
 }
 
-void ImageBufferSurface::draw(GraphicsContext* context, const FloatRect& destRect, const FloatRect& srcRect, SkXfermode::Mode op)
+void ImageBufferSurface::flush(FlushReason)
 {
-    SkBitmap bmp = bitmap();
+    canvas()->flush();
+}
 
-    RefPtr<Image> image = BitmapImage::create(bmp);
-
-    context->drawImage(image.get(), destRect, srcRect, op, DoNotRespectImageOrientation);
+bool ImageBufferSurface::writePixels(const SkImageInfo& origInfo,
+    const void* pixels,
+    size_t rowBytes,
+    int x,
+    int y)
+{
+    return canvas()->writePixels(origInfo, pixels, rowBytes, x, y);
 }
 
 } // namespace blink

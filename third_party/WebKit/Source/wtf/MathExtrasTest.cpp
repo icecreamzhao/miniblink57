@@ -23,10 +23,9 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/MathExtras.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace WTF {
 
@@ -42,10 +41,12 @@ TEST(MathExtrasTest, Lrint)
     EXPECT_EQ(0, lrint(0));
     EXPECT_EQ(0, lrint(-0));
     if (sizeof(long int) == 8) {
-        // Largest double number with 0.5 precision and one halfway rounding case below.
+        // Largest double number with 0.5 precision and one halfway rounding case
+        // below.
         EXPECT_EQ(pow(2.0, 52), lrint(pow(2.0, 52) - 0.5));
         EXPECT_EQ(pow(2.0, 52) - 2, lrint(pow(2.0, 52) - 1.5));
-        // Smallest double number with 0.5 precision and one halfway rounding case above.
+        // Smallest double number with 0.5 precision and one halfway rounding case
+        // above.
         EXPECT_EQ(-pow(2.0, 52), lrint(-pow(2.0, 52) + 0.5));
         EXPECT_EQ(-pow(2.0, 52) + 2, lrint(-pow(2.0, 52) + 1.5));
     }
@@ -108,8 +109,12 @@ TEST(MathExtrasTest, clampToIntFloat)
     // way when stored in a 32-bit float.  Make sure clamping does not cause us
     // to erroneously jump to the larger value.
     int nearFloatPrecisionLimit = 2147483520;
-    EXPECT_EQ(nearFloatPrecisionLimit, clampTo<int>(static_cast<float>(nearFloatPrecisionLimit), 0, nearFloatPrecisionLimit + 1));
-    EXPECT_EQ(-nearFloatPrecisionLimit, clampTo<int>(static_cast<float>(-nearFloatPrecisionLimit), -nearFloatPrecisionLimit - 1, 0));
+    EXPECT_EQ(nearFloatPrecisionLimit,
+        clampTo<int>(static_cast<float>(nearFloatPrecisionLimit), 0,
+            nearFloatPrecisionLimit + 1));
+    EXPECT_EQ(-nearFloatPrecisionLimit,
+        clampTo<int>(static_cast<float>(-nearFloatPrecisionLimit),
+            -nearFloatPrecisionLimit - 1, 0));
 }
 
 TEST(MathExtrasTest, clampToIntDouble)
@@ -166,15 +171,19 @@ TEST(MathExtrasTest, clampToDouble)
 TEST(MathExtrasText, clampToLongLongDouble)
 {
     double overflowLL = static_cast<double>(std::numeric_limits<long long>::max()) * 2;
-    EXPECT_EQ(std::numeric_limits<long long>::max(), clampTo<long long>(overflowLL));
-    EXPECT_EQ(std::numeric_limits<long long>::min(), clampTo<long long>(-overflowLL));
+    EXPECT_EQ(std::numeric_limits<long long>::max(),
+        clampTo<long long>(overflowLL));
+    EXPECT_EQ(std::numeric_limits<long long>::min(),
+        clampTo<long long>(-overflowLL));
 }
 
 TEST(MathExtrasText, clampToUnsignedLongLongDouble)
 {
     double overflowULL = static_cast<double>(std::numeric_limits<unsigned long long>::max()) * 2;
-    EXPECT_EQ(std::numeric_limits<unsigned long long>::max(), clampTo<unsigned long long>(overflowULL));
-    EXPECT_EQ(std::numeric_limits<unsigned long long>::min(), clampTo<unsigned long long>(-overflowULL));
+    EXPECT_EQ(std::numeric_limits<unsigned long long>::max(),
+        clampTo<unsigned long long>(overflowULL));
+    EXPECT_EQ(std::numeric_limits<unsigned long long>::min(),
+        clampTo<unsigned long long>(-overflowULL));
 }
 
 TEST(MathExtrasTest, clampToUnsignedUnsignedLong)
@@ -233,7 +242,8 @@ TEST(MathExtrasTest, clampToUnsignedLongLongUnsignedLongLong)
     EXPECT_EQ(0ULL, clampTo<unsigned long long>(0ULL));
     EXPECT_EQ(1ULL, clampTo<unsigned long long>(0ULL, 1ULL, 2ULL));
     EXPECT_EQ(2ULL, clampTo<unsigned long long>(3ULL, 1ULL, 2ULL));
-    EXPECT_EQ(0xFFFFFFFFFFFFFFF5ULL, clampTo<unsigned long long>(0xFFFFFFFFFFFFFFF5ULL));
+    EXPECT_EQ(0xFFFFFFFFFFFFFFF5ULL,
+        clampTo<unsigned long long>(0xFFFFFFFFFFFFFFF5ULL));
 }
 
 // Make sure that various +-inf cases are handled properly (they aren't

@@ -5,23 +5,24 @@
  * found in the LICENSE file.
  */
 
-
-#include "gl/GrGLInterface.h"
 #include "gl/GrGLAssembleInterface.h"
+#include "gl/GrGLInterface.h"
 #include "gl/GrGLUtil.h"
 
 #include <GL/glx.h>
 
-static GrGLFuncPtr glx_get(void* ctx, const char name[]) {
-    SkASSERT(NULL == ctx);
+static GrGLFuncPtr glx_get(void* ctx, const char name[])
+{
+    SkASSERT(nullptr == ctx);
     SkASSERT(glXGetCurrentContext());
     return glXGetProcAddress(reinterpret_cast<const GLubyte*>(name));
 }
 
-const GrGLInterface* GrGLCreateNativeInterface() {
-    if (NULL == glXGetCurrentContext()) {
-        return NULL;
+const GrGLInterface* GrGLCreateNativeInterface()
+{
+    if (nullptr == glXGetCurrentContext()) {
+        return nullptr;
     }
 
-    return GrGLAssembleInterface(NULL, glx_get);
+    return GrGLAssembleInterface(nullptr, glx_get);
 }

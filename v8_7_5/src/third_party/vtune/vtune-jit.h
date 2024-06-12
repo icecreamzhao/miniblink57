@@ -65,18 +65,16 @@
 
 namespace vTune {
 namespace internal {
-using namespace v8;
-class VTUNEJITInterface {
- public:
-  static void event_handler(const v8::JitCodeEvent* event);
+    using namespace v8;
+    class VTUNEJITInterface {
+    public:
+        static void event_handler(const v8::JitCodeEvent* event);
 
- private:
-  //static Mutex* vtunemutex_;
-};
+    private:
+        //static Mutex* vtunemutex_;
+    };
 
+}
+} // namespace vTune::internal
 
-} }  // namespace vTune::internal
-
-
-#endif  // VTUNE_VTUNE_JIT_H_
-
+#endif // VTUNE_VTUNE_JIT_H_

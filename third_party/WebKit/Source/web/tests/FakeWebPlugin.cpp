@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/tests/FakeWebPlugin.h"
 
 namespace blink {
@@ -38,9 +37,7 @@ FakeWebPlugin::FakeWebPlugin(WebFrame* frame, const WebPluginParams& params)
 {
 }
 
-FakeWebPlugin::~FakeWebPlugin()
-{
-}
+FakeWebPlugin::~FakeWebPlugin() { }
 
 bool FakeWebPlugin::initialize(WebPluginContainer* container)
 {

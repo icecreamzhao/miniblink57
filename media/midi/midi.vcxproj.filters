@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="message_util.cc" />
+    <None Include="message_util.h" />
+    <None Include="midi_export.h" />
+    <CustomBuild Include="midi_manager.cc" />
+    <None Include="midi_manager.h" />
+    <CustomBuild Include="midi_message_queue.cc" />
+    <None Include="midi_message_queue.h" />
+    <CustomBuild Include="midi_port_info.cc" />
+    <None Include="midi_port_info.h" />
+    <CustomBuild Include="midi_scheduler.cc" />
+    <None Include="midi_scheduler.h" />
+    <CustomBuild Include="midi_service.cc" />
+    <None Include="midi_service.h" />
+    <CustomBuild Include="midi_switches.cc" />
+    <None Include="midi_switches.h" />
+    <CustomBuild Include="midi_manager_win.cc" />
+    <None Include="midi_manager_win.h" />
+    <CustomBuild Include="midi_manager_winrt.cc" />
+    <None Include="midi_manager_winrt.h" />
+  </ItemGroup>
+</Project>

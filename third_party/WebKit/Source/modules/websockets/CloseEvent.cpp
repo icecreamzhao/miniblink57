@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/websockets/CloseEvent.h"
 
 namespace blink {
 
-CloseEvent::CloseEvent(const AtomicString& type, const CloseEventInit& initializer)
+CloseEvent::CloseEvent(const AtomicString& type,
+    const CloseEventInit& initializer)
     : Event(type, initializer)
     , m_wasClean(false)
     , m_code(0)

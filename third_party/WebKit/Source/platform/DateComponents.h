@@ -32,19 +32,24 @@
 #define DateComponents_h
 
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/text/Unicode.h"
 #include <limits>
 
 namespace blink {
 
-// A DateComponents instance represents one of the following date and time combinations:
+// A DateComponents instance represents one of the following date and time
+// combinations:
 // * Month type: year-month
 // * Date type: year-month-day
 // * Week type: year-week
 // * Time type: hour-minute-second-millisecond
-// * DateTime or DateTimeLocal type: year-month-day hour-minute-second-millisecond
+// * DateTime or DateTimeLocal type:
+//   year-month-day hour-minute-second-millisecond
 class PLATFORM_EXPORT DateComponents {
+    DISALLOW_NEW();
+
 public:
     DateComponents()
         : m_millisecond(0)
@@ -78,11 +83,12 @@ public:
     int month() const { return m_month; }
     int fullYear() const { return m_year; }
     int week() const { return m_week; }
-    Type type() const { return m_type; }
+    Type getType() const { return m_type; }
 
     enum SecondFormat {
         None, // Suppress the second part and the millisecond part if they are 0.
-        Second, // Always show the second part, and suppress the millisecond part if it is 0.
+        Second, // Always show the second part, and suppress the millisecond part
+        // if it is 0.
         Millisecond // Always show the second part and the millisecond part.
     };
 
@@ -122,9 +128,11 @@ public:
 
     // For Date type. Updates m_year, m_month and m_monthDay.
     bool setMillisecondsSinceEpochForDate(double ms);
-    // For DateTime type. Updates m_year, m_month, m_monthDay, m_hour, m_minute, m_second and m_millisecond.
+    // For DateTime type. Updates m_year, m_month, m_monthDay, m_hour, m_minute,
+    // m_second and m_millisecond.
     bool setMillisecondsSinceEpochForDateTime(double ms);
-    // For DateTimeLocal type. Updates m_year, m_month, m_monthDay, m_hour, m_minute, m_second and m_millisecond.
+    // For DateTimeLocal type. Updates m_year, m_month, m_monthDay, m_hour,
+    // m_minute, m_second and m_millisecond.
     bool setMillisecondsSinceEpochForDateTimeLocal(double ms);
     // For Month type. Updates m_year and m_month.
     bool setMillisecondsSinceEpochForMonth(double ms);
@@ -146,20 +154,47 @@ public:
     // Returns the number of months from 1970-01.
     // Do not call this for types other than Month.
     double monthsSinceEpoch() const;
-    static inline double invalidMilliseconds() { return std::numeric_limits<double>::quiet_NaN(); }
+    static inline double invalidMilliseconds()
+    {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
 
     // Minimum and maxmimum limits for setMillisecondsSince*(),
     // setMonthsSinceEpoch(), millisecondsSinceEpoch(), and monthsSinceEpoch().
-    static inline double minimumDate() { return -62135596800000.0; } // 0001-01-01T00:00Z
-    static inline double minimumDateTime() { return -62135596800000.0; } // ditto.
-    static inline double minimumMonth() { return (1 - 1970) * 12.0 + 1 - 1; } // 0001-01
+    static inline double minimumDate()
+    {
+        return -62135596800000.0;
+    } // 0001-01-01T00:00Z
+    static inline double minimumDateTime()
+    {
+        return -62135596800000.0;
+    } // ditto.
+    static inline double minimumMonth()
+    {
+        return (1 - 1970) * 12.0 + 1 - 1;
+    } // 0001-01
     static inline double minimumTime() { return 0; } // 00:00:00.000
-    static inline double minimumWeek() { return -62135596800000.0; } // 0001-01-01, the first Monday of 0001.
-    static inline double maximumDate() { return 8640000000000000.0; } // 275760-09-13T00:00Z
-    static inline double maximumDateTime() { return 8640000000000000.0; } // ditto.
-    static inline double maximumMonth() { return (275760 - 1970) * 12.0 + 9 - 1; } // 275760-09
+    static inline double minimumWeek()
+    {
+        return -62135596800000.0;
+    } // 0001-01-01, the first Monday of 0001.
+    static inline double maximumDate()
+    {
+        return 8640000000000000.0;
+    } // 275760-09-13T00:00Z
+    static inline double maximumDateTime()
+    {
+        return 8640000000000000.0;
+    } // ditto.
+    static inline double maximumMonth()
+    {
+        return (275760 - 1970) * 12.0 + 9 - 1;
+    } // 275760-09
     static inline double maximumTime() { return 86399999; } // 23:59:59.999
-    static inline double maximumWeek() { return 8639999568000000.0; } // 275760-09-08, the Monday of the week including 275760-09-13.
+    static inline double maximumWeek()
+    {
+        return 8639999568000000.0;
+    } // 275760-09-08, the Monday of the week including 275760-09-13.
 
     // HTML5 uses ISO-8601 format with year >= 1. Gregorian calendar started in
     // 1582. However, we need to support 0001-01-01 in Gregorian calendar rule.
@@ -208,7 +243,6 @@ private:
 
     Type m_type;
 };
-
 
 } // namespace blink
 

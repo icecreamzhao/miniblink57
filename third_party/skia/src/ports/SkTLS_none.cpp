@@ -7,12 +7,14 @@
 
 #include "SkTLS.h"
 
-static void* gSpecific = NULL;
+static void* gSpecific = nullptr;
 
-void* SkTLS::PlatformGetSpecific(bool) {
+void* SkTLS::PlatformGetSpecific(bool)
+{
     return gSpecific;
 }
 
-void SkTLS::PlatformSetSpecific(void* ptr) {
+void SkTLS::PlatformSetSpecific(void* ptr)
+{
     gSpecific = ptr;
 }

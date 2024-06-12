@@ -11,23 +11,24 @@
 #include "Test.h"
 
 typedef struct {
-    skiatest::Reporter *fReporter;
-    unsigned int *fIntPointer;
+    skiatest::Reporter* fReporter;
+    unsigned int* fIntPointer;
 } ErrorContext;
 
-#define CHECK(errcode)                                                        \
-  REPORTER_ASSERT( reporter, (err = SkGetLastError()) == errcode);            \
-  if (err != kNoError_SkError)                                                \
-  {                                                                           \
-     SkClearLastError();                                                      \
-  }
+#define CHECK(errcode)                                              \
+    REPORTER_ASSERT(reporter, (err = SkGetLastError()) == errcode); \
+    if (err != kNoError_SkError) {                                  \
+        SkClearLastError();                                         \
+    }
 
-static void cb(SkError err, void *context) {
-    ErrorContext *context_ptr = static_cast<ErrorContext *>(context);
-    REPORTER_ASSERT( context_ptr->fReporter, (*(context_ptr->fIntPointer) == 0xdeadbeef) );
+static void cb(SkError err, void* context)
+{
+    ErrorContext* context_ptr = static_cast<ErrorContext*>(context);
+    REPORTER_ASSERT(context_ptr->fReporter, (*(context_ptr->fIntPointer) == 0xdeadbeef));
 }
 
-DEF_TEST(Error, reporter) {
+DEF_TEST(Error, reporter)
+{
     // Some previous user of this thread may have left an error laying around.
     SkClearLastError();
 

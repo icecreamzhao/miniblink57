@@ -24,13 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/page/DragData.h"
 
 #include "core/clipboard/DataObject.h"
 #include "core/dom/DocumentFragment.h"
 #include "core/dom/Range.h"
-#include "core/editing/markup.h"
+#include "core/editing/serializers/Serialization.h"
 #include "core/frame/LocalFrame.h"
 #include "platform/FileMetadata.h"
 #include "platform/clipboard/ClipboardMimeTypes.h"
@@ -39,8 +38,11 @@
 
 namespace blink {
 
-DragData::DragData(DataObject* data, const IntPoint& clientPosition, const IntPoint& globalPosition,
-    DragOperation sourceOperationMask, DragApplicationFlags flags)
+DragData::DragData(DataObject* data,
+    const IntPoint& clientPosition,
+    const IntPoint& globalPosition,
+    DragOperation sourceOperationMask,
+    DragApplicationFlags flags)
     : m_clientPosition(clientPosition)
     , m_globalPosition(globalPosition)
     , m_platformDragData(data)
@@ -49,18 +51,18 @@ DragData::DragData(DataObject* data, const IntPoint& clientPosition, const IntPo
 {
 }
 
-static bool containsHTML(const DataObject* dropData)
+bool DragData::containsHTML() const
 {
-    return dropData->types().contains(mimeTypeTextHTML);
+    return m_platformDragData->types().contains(mimeTypeTextHTML);
 }
 
 bool DragData::containsURL(FilenameConversionPolicy filenamePolicy) const
 {
-    return m_platformDragData->types().contains(mimeTypeTextURIList)
-        || (filenamePolicy == ConvertFilenames && m_platformDragData->containsFilenames());
+    return m_platformDragData->types().contains(mimeTypeTextURIList) || (filenamePolicy == ConvertFilenames && m_platformDragData->containsFilenames());
 }
 
-String DragData::asURL(FilenameConversionPolicy filenamePolicy, String* title) const
+String DragData::asURL(FilenameConversionPolicy filenamePolicy,
+    String* title) const
 {
     String url;
     if (m_platformDragData->types().contains(mimeTypeTextURIList))
@@ -85,8 +87,13 @@ void DragData::asFilePaths(Vector<String>& result) const
     const Vector<String>& filenames = m_platformDragData->filenames();
     for (size_t i = 0; i < filenames.size(); ++i) {
         if (!filenames[i].isEmpty())
-            result.append(filenames[i]);
+            result.push_back(filenames[i]);
     }
+}
+
+unsigned DragData::numberOfFiles() const
+{
+    return m_platformDragData->filenames().size();
 }
 
 bool DragData::containsPlainText() const
@@ -105,19 +112,15 @@ bool DragData::canSmartReplace() const
     // This is allowed whenever the drag data contains a 'range' (ie.,
     // ClipboardWin::writeRange is called). For example, dragging a link
     // should not result in a space being added.
-    return m_platformDragData->types().contains(mimeTypeTextPlain)
-        && !m_platformDragData->types().contains(mimeTypeTextURIList);
+    return m_platformDragData->types().contains(mimeTypeTextPlain) && !m_platformDragData->types().contains(mimeTypeTextURIList);
 }
 
 bool DragData::containsCompatibleContent() const
 {
-    return containsPlainText()
-        || containsURL()
-        || containsHTML(m_platformDragData)
-        || containsFiles();
+    return containsPlainText() || containsURL() || containsHTML() || containsFiles();
 }
 
-PassRefPtrWillBeRawPtr<DocumentFragment> DragData::asFragment(LocalFrame* frame, PassRefPtrWillBeRawPtr<Range>, bool, bool&) const
+DocumentFragment* DragData::asFragment(LocalFrame* frame) const
 {
     /*
      * Order is richest format first. On OSX this is:
@@ -134,13 +137,14 @@ PassRefPtrWillBeRawPtr<DocumentFragment> DragData::asFragment(LocalFrame* frame,
         // and call createFragmentFromMarkup.
     }
 
-    if (m_platformDragData->types().contains(mimeTypeTextHTML)) {
+    if (containsHTML()) {
         String html;
         KURL baseURL;
         m_platformDragData->htmlAndBaseURL(html, baseURL);
-        ASSERT(frame->document());
-        if (RefPtrWillBeRawPtr<DocumentFragment> fragment = createFragmentFromMarkup(*frame->document(), html, baseURL, DisallowScriptingAndPluginContent))
-            return fragment.release();
+        DCHECK(frame->document());
+        if (DocumentFragment* fragment = createFragmentFromMarkup(*frame->document(), html, baseURL,
+                DisallowScriptingAndPluginContent))
+            return fragment;
     }
 
     return nullptr;

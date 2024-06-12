@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/Crypto.h"
 
 #include "public/platform/Platform.h"
 #include "public/platform/WebCrypto.h"
 #include "public/platform/WebCryptoAlgorithm.h"
+#include <memory>
 
 namespace blink {
 
@@ -28,7 +28,10 @@ static WebCryptoAlgorithmId toWebCryptoAlgorithmId(HashAlgorithm algorithm)
     return WebCryptoAlgorithmIdSha256;
 }
 
-bool computeDigest(HashAlgorithm algorithm, const char* digestable, size_t length, DigestValue& digestResult)
+bool computeDigest(HashAlgorithm algorithm,
+    const char* digestable,
+    size_t length,
+    DigestValue& digestResult)
 {
     WebCryptoAlgorithmId algorithmId = toWebCryptoAlgorithmId(algorithm);
     WebCrypto* crypto = Platform::current()->crypto();
@@ -37,17 +40,21 @@ bool computeDigest(HashAlgorithm algorithm, const char* digestable, size_t lengt
 
     ASSERT(crypto);
 
-    OwnPtr<WebCryptoDigestor> digestor = adoptPtr(crypto->createDigestor(algorithmId));
-    if (!digestor.get() || !digestor->consume(reinterpret_cast<const unsigned char*>(digestable), length) || !digestor->finish(result, resultSize))
+    std::unique_ptr<WebCryptoDigestor> digestor = crypto->createDigestor(algorithmId);
+    DCHECK(digestor);
+    if (!digestor->consume(reinterpret_cast<const unsigned char*>(digestable),
+            length)
+        || !digestor->finish(result, resultSize))
         return false;
 
     digestResult.append(static_cast<uint8_t*>(result), resultSize);
     return true;
 }
 
-PassOwnPtr<WebCryptoDigestor> createDigestor(HashAlgorithm algorithm)
+std::unique_ptr<WebCryptoDigestor> createDigestor(HashAlgorithm algorithm)
 {
-    return adoptPtr(Platform::current()->crypto()->createDigestor(toWebCryptoAlgorithmId(algorithm)));
+    return Platform::current()->crypto()->createDigestor(
+        toWebCryptoAlgorithmId(algorithm));
 }
 
 void finishDigestor(WebCryptoDigestor* digestor, DigestValue& digestResult)

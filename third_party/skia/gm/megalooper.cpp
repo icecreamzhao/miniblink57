@@ -5,12 +5,12 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
 #include "SkLayerDrawLooper.h"
+#include "gm.h"
 
 // This GM tests 3 different ways of drawing four shadows around a square:
 //      just using 4 blurred rects
@@ -21,15 +21,19 @@ class MegaLooperGM : public skiagm::GM {
 public:
     // The types define "<# of loopers> x <# of stages per looper>"
     enum Type {
-        k0x0_Type,  // draw without loopers at all
-        k4x1_Type,  // a looper for each shadow
-        k1x4_Type,  // all four shadows in one looper
+        k0x0_Type, // draw without loopers at all
+        k4x1_Type, // a looper for each shadow
+        k1x4_Type, // all four shadows in one looper
     };
 
-    MegaLooperGM(Type type) : fType(type) {}
+    MegaLooperGM(Type type)
+        : fType(type)
+    {
+    }
 
 protected:
-    virtual SkString onShortName() {
+    virtual SkString onShortName()
+    {
         switch (fType) {
         case k0x0_Type:
             return SkString("megalooper_0x0");
@@ -37,31 +41,33 @@ protected:
         case k4x1_Type:
             return SkString("megalooper_4x1");
             break;
-        case k1x4_Type:     // fall through
+        case k1x4_Type: // fall through
         default:
             return SkString("megalooper_1x4");
             break;
         }
     }
 
-    virtual SkISize onISize() {
+    virtual SkISize onISize()
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    virtual void onDraw(SkCanvas* canvas) {
+    virtual void onDraw(SkCanvas* canvas)
+    {
         for (int y = 100; y < kHeight; y += 200) {
             for (int x = 100; x < kWidth; x += 200) {
                 switch (fType) {
-                    case k0x0_Type:
-                        draw0x0(canvas, SkIntToScalar(x), SkIntToScalar(y));
-                        break;
-                    case k4x1_Type:
-                        draw4x1(canvas, SkIntToScalar(x), SkIntToScalar(y));
-                        break;
-                    case k1x4_Type:     // fall through
-                    default:
-                        draw1x4(canvas, SkIntToScalar(x), SkIntToScalar(y));
-                        break;
+                case k0x0_Type:
+                    draw0x0(canvas, SkIntToScalar(x), SkIntToScalar(y));
+                    break;
+                case k4x1_Type:
+                    draw4x1(canvas, SkIntToScalar(x), SkIntToScalar(y));
+                    break;
+                case k1x4_Type: // fall through
+                default:
+                    draw1x4(canvas, SkIntToScalar(x), SkIntToScalar(y));
+                    break;
                 }
             }
         }
@@ -80,13 +86,14 @@ private:
 
     // Just draw a blurred rect at each of the four corners of a square (centered at x,y).
     // Use two clips to define a rectori where we want pixels to appear.
-    void draw0x0(SkCanvas* canvas, SkScalar x, SkScalar y) {
+    void draw0x0(SkCanvas* canvas, SkScalar x, SkScalar y)
+    {
         SkRect innerClip = { -kHalfSquareSize, -kHalfSquareSize, kHalfSquareSize, kHalfSquareSize };
         innerClip.offset(x, y);
 
         SkRect outerClip = {
-            -kHalfOuterClipSize-kHalfSquareSize, -kHalfOuterClipSize-kHalfSquareSize,
-             kHalfOuterClipSize+kHalfSquareSize,  kHalfOuterClipSize+kHalfSquareSize
+            -kHalfOuterClipSize - kHalfSquareSize, -kHalfOuterClipSize - kHalfSquareSize,
+            kHalfOuterClipSize + kHalfSquareSize, kHalfOuterClipSize + kHalfSquareSize
         };
         outerClip.offset(x, y);
 
@@ -96,7 +103,7 @@ private:
 
         SkPaint paint;
         paint.setAntiAlias(true);
-        paint.setMaskFilter(createBlur())->unref();
+        paint.setMaskFilter(MakeBlur());
 
         for (int i = 0; i < 4; ++i) {
             paint.setColor(gColors[i]);
@@ -110,11 +117,12 @@ private:
         canvas->restore();
     }
 
-    SkMaskFilter* createBlur() {
+    static sk_sp<SkMaskFilter> MakeBlur()
+    {
         static const SkScalar kBlurSigma = SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(25));
 
-        return SkBlurMaskFilter::Create(kNormal_SkBlurStyle, kBlurSigma,
-                                        SkBlurMaskFilter::kHighQuality_BlurFlag);
+        return SkBlurMaskFilter::Make(kNormal_SkBlurStyle, kBlurSigma,
+            SkBlurMaskFilter::kHighQuality_BlurFlag);
     }
 
     // This draws 4 blurred shadows around a single square (centered at x, y).
@@ -126,12 +134,13 @@ private:
     // blurred rect) is offset to reside outside of the large outer clip (so
     // it never appears) but the offset in the draw looper is used to translate
     // the blurred version back into the clip.
-    void draw4x1(SkCanvas* canvas, SkScalar x, SkScalar y) {
+    void draw4x1(SkCanvas* canvas, SkScalar x, SkScalar y)
+    {
 
         for (int i = 0; i < 4; ++i) {
             SkPaint loopPaint;
 
-            loopPaint.setLooper(create1Looper(-kOffsetToOutsideClip, 0, gColors[i]))->unref();
+            loopPaint.setLooper(create1Looper(-kOffsetToOutsideClip, 0, gColors[i]));
             loopPaint.setAntiAlias(true);
 
             SkRect outerClip = {
@@ -146,96 +155,96 @@ private:
             rect.offset(x, y);
 
             canvas->save();
-                canvas->clipRect(outerClip, SkRegion::kIntersect_Op);
-                canvas->clipRect(rect, SkRegion::kDifference_Op);
+            canvas->clipRect(outerClip, SkRegion::kIntersect_Op);
+            canvas->clipRect(rect, SkRegion::kDifference_Op);
 
-                // move the rect to where we want the blur to appear
-                rect.offset(gBlurOffsets[i]);
-                // then move it outside the clip (the blur stage of the draw
-                // looper will undo this translation)
-                rect.offset(SkIntToScalar(kOffsetToOutsideClip), 0);
+            // move the rect to where we want the blur to appear
+            rect.offset(gBlurOffsets[i]);
+            // then move it outside the clip (the blur stage of the draw
+            // looper will undo this translation)
+            rect.offset(SkIntToScalar(kOffsetToOutsideClip), 0);
 
-                canvas->drawRect(rect, loopPaint);
+            canvas->drawRect(rect, loopPaint);
             canvas->restore();
         }
     }
 
     // Create a 1-tier drawlooper
-    SkLayerDrawLooper* create1Looper(SkScalar xOff, SkScalar yOff, SkColor color) {
+    sk_sp<SkDrawLooper> create1Looper(SkScalar xOff, SkScalar yOff, SkColor color)
+    {
         SkLayerDrawLooper::Builder looperBuilder;
         SkLayerDrawLooper::LayerInfo info;
 
-        info.fPaintBits = SkLayerDrawLooper::kColorFilter_Bit |
-                          SkLayerDrawLooper::kMaskFilter_Bit;
+        info.fPaintBits = SkLayerDrawLooper::kColorFilter_Bit | SkLayerDrawLooper::kMaskFilter_Bit;
         info.fColorMode = SkXfermode::kSrc_Mode;
         info.fOffset.set(xOff, yOff);
         info.fPostTranslate = false;
 
         SkPaint* paint = looperBuilder.addLayer(info);
 
-        paint->setMaskFilter(this->createBlur())->unref();
+        paint->setMaskFilter(MakeBlur());
 
-        SkColorFilter* cf = SkColorFilter::CreateModeFilter(color, SkXfermode::kSrcIn_Mode);
-        paint->setColorFilter(cf)->unref();
+        paint->setColorFilter(SkColorFilter::MakeModeFilter(color, SkXfermode::kSrcIn_Mode));
 
-        return looperBuilder.detachLooper();
+        return looperBuilder.detach();
     }
 
-    void draw1x4(SkCanvas* canvas, SkScalar x, SkScalar y) {
+    void draw1x4(SkCanvas* canvas, SkScalar x, SkScalar y)
+    {
         SkRect rect = { -kHalfSquareSize, -kHalfSquareSize, kHalfSquareSize, kHalfSquareSize };
         rect.offset(x, y);
 
         SkRect outerClip = {
-            -kHalfOuterClipSize-kHalfSquareSize, -kHalfOuterClipSize-kHalfSquareSize,
-             kHalfOuterClipSize+kHalfSquareSize,  kHalfOuterClipSize+kHalfSquareSize
+            -kHalfOuterClipSize - kHalfSquareSize, -kHalfOuterClipSize - kHalfSquareSize,
+            kHalfOuterClipSize + kHalfSquareSize, kHalfOuterClipSize + kHalfSquareSize
         };
         outerClip.offset(x, y);
 
         SkPaint paint;
         paint.setAntiAlias(true);
-        paint.setLooper(create4Looper(-kOffsetToOutsideClip-kHalfSquareSize, 0))->unref();
+        paint.setLooper(create4Looper(-kOffsetToOutsideClip - kHalfSquareSize, 0));
 
         canvas->save();
-            canvas->clipRect(outerClip, SkRegion::kIntersect_Op);
-            canvas->clipRect(rect, SkRegion::kDifference_Op);
+        canvas->clipRect(outerClip, SkRegion::kIntersect_Op);
+        canvas->clipRect(rect, SkRegion::kDifference_Op);
 
-            rect.offset(SkIntToScalar(kOffsetToOutsideClip+kHalfSquareSize), 0);
-            canvas->drawRect(rect, paint);
+        rect.offset(SkIntToScalar(kOffsetToOutsideClip + kHalfSquareSize), 0);
+        canvas->drawRect(rect, paint);
         canvas->restore();
     }
 
     // Create a 4-tier draw looper
-    SkLayerDrawLooper* create4Looper(SkScalar xOff, SkScalar yOff) {
+    sk_sp<SkDrawLooper> create4Looper(SkScalar xOff, SkScalar yOff)
+    {
         SkLayerDrawLooper::Builder looperBuilder;
         SkLayerDrawLooper::LayerInfo info;
 
-        info.fPaintBits = SkLayerDrawLooper::kColorFilter_Bit |
-                          SkLayerDrawLooper::kMaskFilter_Bit;
+        info.fPaintBits = SkLayerDrawLooper::kColorFilter_Bit | SkLayerDrawLooper::kMaskFilter_Bit;
         info.fColorMode = SkXfermode::kSrc_Mode;
         info.fPostTranslate = false;
 
         SkPaint* paint;
 
         for (int i = 3; i >= 0; --i) {
-            info.fOffset.set(xOff+gBlurOffsets[i].fX, yOff+gBlurOffsets[i].fY);
+            info.fOffset.set(xOff + gBlurOffsets[i].fX, yOff + gBlurOffsets[i].fY);
             paint = looperBuilder.addLayer(info);
 
-            paint->setMaskFilter(this->createBlur())->unref();
+            paint->setMaskFilter(MakeBlur());
 
-            SkColorFilter* cf = SkColorFilter::CreateModeFilter(gColors[i], SkXfermode::kSrcIn_Mode);
-            paint->setColorFilter(cf)->unref();
+            paint->setColorFilter(SkColorFilter::MakeModeFilter(gColors[i],
+                SkXfermode::kSrcIn_Mode));
         }
 
-        return looperBuilder.detachLooper();
+        return looperBuilder.detach();
     }
 
     typedef GM INHERITED;
 };
 
 const SkPoint MegaLooperGM::gBlurOffsets[4] = {
-    {  kHalfSquareSize,  kHalfSquareSize },
-    { -kHalfSquareSize,  kHalfSquareSize },
-    {  kHalfSquareSize, -kHalfSquareSize },
+    { kHalfSquareSize, kHalfSquareSize },
+    { -kHalfSquareSize, kHalfSquareSize },
+    { kHalfSquareSize, -kHalfSquareSize },
     { -kHalfSquareSize, -kHalfSquareSize }
 };
 
@@ -243,6 +252,6 @@ const SkColor MegaLooperGM::gColors[4] = {
     SK_ColorGREEN, SK_ColorYELLOW, SK_ColorBLUE, SK_ColorRED
 };
 
-DEF_GM( return new MegaLooperGM(MegaLooperGM::k0x0_Type); )
-DEF_GM( return new MegaLooperGM(MegaLooperGM::k4x1_Type); )
-DEF_GM( return new MegaLooperGM(MegaLooperGM::k1x4_Type); )
+DEF_GM(return new MegaLooperGM(MegaLooperGM::k0x0_Type);)
+DEF_GM(return new MegaLooperGM(MegaLooperGM::k4x1_Type);)
+DEF_GM(return new MegaLooperGM(MegaLooperGM::k1x4_Type);)

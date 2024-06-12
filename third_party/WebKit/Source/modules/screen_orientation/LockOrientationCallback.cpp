@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/screen_orientation/LockOrientationCallback.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
@@ -12,14 +11,13 @@
 
 namespace blink {
 
-LockOrientationCallback::LockOrientationCallback(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+LockOrientationCallback::LockOrientationCallback(
+    ScriptPromiseResolver* resolver)
     : m_resolver(resolver)
 {
 }
 
-LockOrientationCallback::~LockOrientationCallback()
-{
-}
+LockOrientationCallback::~LockOrientationCallback() { }
 
 void LockOrientationCallback::onSuccess()
 {
@@ -34,15 +32,17 @@ void LockOrientationCallback::onError(WebLockOrientationError error)
     switch (error) {
     case WebLockOrientationErrorNotAvailable:
         code = NotSupportedError;
-        msg = "lockOrientation() is not available on this device.";
+        msg = "screen.orientation.lock() is not available on this device.";
         break;
-    case WebLockOrientationErrorFullScreenRequired:
+    case WebLockOrientationErrorFullscreenRequired:
         code = SecurityError;
-        msg = "The page needs to be fullscreen in order to call lockOrientation().";
+        msg = "The page needs to be fullscreen in order to call "
+              "screen.orientation.lock().";
         break;
     case WebLockOrientationErrorCanceled:
         code = AbortError;
-        msg = "A call to lockOrientation() or unlockOrientation() canceled this call.";
+        msg = "A call to screen.orientation.lock() or screen.orientation.unlock() "
+              "canceled this call.";
         break;
     }
 

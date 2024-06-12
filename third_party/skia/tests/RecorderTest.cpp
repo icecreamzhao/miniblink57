@@ -14,7 +14,7 @@
 #include "SkShader.h"
 #include "SkSurface.h"
 
-#define COUNT(T) + 1
+#define COUNT(T) +1
 static const int kRecordTypes = SK_RECORD_TYPES(COUNT);
 #undef COUNT
 
@@ -29,9 +29,10 @@ public:
     template <typename T>
     int count() const { return fHistogram[T::kType]; }
 
-    void apply(const SkRecord& record) {
-        for (unsigned i = 0; i < record.count(); i++) {
-            record.visit<void>(i, *this);
+    void apply(const SkRecord& record)
+    {
+        for (int i = 0; i < record.count(); i++) {
+            record.visit(i, *this);
         }
     }
 
@@ -39,7 +40,8 @@ private:
     int fHistogram[kRecordTypes];
 };
 
-DEF_TEST(Recorder, r) {
+DEF_TEST(Recorder, r)
+{
     SkRecord record;
     SkRecorder recorder(&record, 1920, 1080);
 
@@ -51,14 +53,15 @@ DEF_TEST(Recorder, r) {
 }
 
 // Regression test for leaking refs held by optional arguments.
-DEF_TEST(Recorder_RefLeaking, r) {
+DEF_TEST(Recorder_RefLeaking, r)
+{
     // We use SaveLayer to test:
     //   - its SkRect argument is optional and SkRect is POD.  Just testing that that works.
     //   - its SkPaint argument is optional and SkPaint is not POD.  The bug was here.
 
     SkRect bounds = SkRect::MakeWH(320, 240);
     SkPaint paint;
-    paint.setShader(SkShader::CreateEmptyShader())->unref();
+    paint.setShader(SkShader::MakeEmptyShader());
 
     REPORTER_ASSERT(r, paint.getShader()->unique());
     {
@@ -70,20 +73,21 @@ DEF_TEST(Recorder_RefLeaking, r) {
     REPORTER_ASSERT(r, paint.getShader()->unique());
 }
 
-DEF_TEST(Recorder_drawImage_takeReference, reporter) {
+DEF_TEST(Recorder_drawImage_takeReference, reporter)
+{
 
-    SkAutoTUnref<SkImage> image;
+    sk_sp<SkImage> image;
     {
-        SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(100, 100));
+        auto surface(SkSurface::MakeRasterN32Premul(100, 100));
         surface->getCanvas()->clear(SK_ColorGREEN);
-        image.reset(surface->newImageSnapshot());
+        image = surface->makeImageSnapshot();
     }
     {
         SkRecord record;
         SkRecorder recorder(&record, 100, 100);
 
         // DrawImage is supposed to take a reference
-        recorder.drawImage(image.get(), 0, 0);
+        recorder.drawImage(image, 0, 0);
         REPORTER_ASSERT(reporter, !image->unique());
 
         Tally tally;
@@ -98,7 +102,7 @@ DEF_TEST(Recorder_drawImage_takeReference, reporter) {
         SkRecorder recorder(&record, 100, 100);
 
         // DrawImageRect is supposed to take a reference
-        recorder.drawImageRect(image.get(), 0, SkRect::MakeWH(100, 100));
+        recorder.drawImageRect(image, SkRect::MakeWH(100, 100), nullptr);
         REPORTER_ASSERT(reporter, !image->unique());
 
         Tally tally;

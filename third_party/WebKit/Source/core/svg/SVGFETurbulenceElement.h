@@ -32,23 +32,33 @@
 namespace blink {
 
 enum SVGStitchOptions {
-    SVG_STITCHTYPE_UNKNOWN  = 0,
-    SVG_STITCHTYPE_STITCH   = 1,
-    SVG_STITCHTYPE_NOSTITCH = 2
+    kSvgStitchtypeUnknown = 0,
+    kSvgStitchtypeStitch = 1,
+    kSvgStitchtypeNostitch = 2
 };
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGStitchOptions>();
+template <>
+const SVGEnumerationStringEntries& getStaticStringEntries<SVGStitchOptions>();
 
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<TurbulenceType>();
+template <>
+const SVGEnumerationStringEntries& getStaticStringEntries<TurbulenceType>();
 
-class SVGFETurbulenceElement final : public SVGFilterPrimitiveStandardAttributes {
+class SVGFETurbulenceElement final
+    : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFETurbulenceElement);
 
     SVGAnimatedNumber* baseFrequencyX() { return m_baseFrequency->firstNumber(); }
-    SVGAnimatedNumber* baseFrequencyY() { return m_baseFrequency->secondNumber(); }
+    SVGAnimatedNumber* baseFrequencyY()
+    {
+        return m_baseFrequency->secondNumber();
+    }
     SVGAnimatedNumber* seed() { return m_seed.get(); }
-    SVGAnimatedEnumeration<SVGStitchOptions>* stitchTiles() { return m_stitchTiles.get(); }
+    SVGAnimatedEnumeration<SVGStitchOptions>* stitchTiles()
+    {
+        return m_stitchTiles.get();
+    }
     SVGAnimatedEnumeration<TurbulenceType>* type() { return m_type.get(); }
     SVGAnimatedInteger* numOctaves() { return m_numOctaves.get(); }
 
@@ -57,15 +67,16 @@ public:
 private:
     explicit SVGFETurbulenceElement(Document&);
 
-    bool setFilterEffectAttribute(FilterEffect*, const QualifiedName& attrName) override;
+    bool setFilterEffectAttribute(FilterEffect*,
+        const QualifiedName& attrName) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_baseFrequency;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_seed;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGStitchOptions>> m_stitchTiles;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<TurbulenceType>> m_type;
-    RefPtrWillBeMember<SVGAnimatedInteger> m_numOctaves;
+    Member<SVGAnimatedNumberOptionalNumber> m_baseFrequency;
+    Member<SVGAnimatedNumber> m_seed;
+    Member<SVGAnimatedEnumeration<SVGStitchOptions>> m_stitchTiles;
+    Member<SVGAnimatedEnumeration<TurbulenceType>> m_type;
+    Member<SVGAnimatedInteger> m_numOctaves;
 };
 
 } // namespace blink

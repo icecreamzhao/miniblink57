@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2014 Samsung Electronics. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,9 +25,9 @@
 #ifndef HTMLFormControlsCollection_h
 #define HTMLFormControlsCollection_h
 
-#include "core/html/FormAssociatedElement.h"
 #include "core/html/HTMLCollection.h"
 #include "core/html/HTMLElement.h"
+#include "core/html/ListedElement.h"
 #include "core/html/RadioNodeList.h"
 
 namespace blink {
@@ -34,17 +35,21 @@ namespace blink {
 class HTMLImageElement;
 class RadioNodeListOrElement;
 
-// This class is just a big hack to find form elements even in malformed HTML elements.
-// The famous <table><tr><form><td> problem.
+// This class is just a big hack to find form elements even in malformed HTML
+// elements.  The famous <table><tr><form><td> problem.
 
 class HTMLFormControlsCollection final : public HTMLCollection {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLFormControlsCollection> create(ContainerNode&, CollectionType);
+    static HTMLFormControlsCollection* create(ContainerNode&, CollectionType);
 
     ~HTMLFormControlsCollection() override;
 
-    HTMLElement* item(unsigned offset) const { return toHTMLElement(HTMLCollection::item(offset)); }
+    HTMLElement* item(unsigned offset) const
+    {
+        return toHTMLElement(HTMLCollection::item(offset));
+    }
 
     HTMLElement* namedItem(const AtomicString& name) const override;
     void namedGetter(const AtomicString& name, RadioNodeListOrElement&);
@@ -57,15 +62,19 @@ private:
     void updateIdNameCache() const override;
     void supportedPropertyNames(Vector<String>& names) override;
 
-    const FormAssociatedElement::List& formControlElements() const;
-    const WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>>& formImageElements() const;
+    const ListedElement::List& listedElements() const;
+    const HeapVector<Member<HTMLImageElement>>& formImageElements() const;
     HTMLElement* virtualItemAfter(Element*) const override;
     void invalidateCache(Document* oldDocument = 0) const override;
 
-    mutable RawPtrWillBeMember<HTMLElement> m_cachedElement;
+    mutable Member<HTMLElement> m_cachedElement;
     mutable unsigned m_cachedElementOffsetInArray;
 };
-DEFINE_TYPE_CASTS(HTMLFormControlsCollection, LiveNodeListBase, collection, collection->type() == FormControls, collection.type() == FormControls);
+DEFINE_TYPE_CASTS(HTMLFormControlsCollection,
+    LiveNodeListBase,
+    collection,
+    collection->type() == FormControls,
+    collection.type() == FormControls);
 
 } // namespace blink
 

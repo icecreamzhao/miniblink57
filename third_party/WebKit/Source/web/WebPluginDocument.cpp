@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebPluginDocument.h"
 
 #include "core/dom/Document.h"
@@ -38,9 +37,7 @@
 
 #include "wtf/PassRefPtr.h"
 
-
 namespace blink {
-
 
 WebPlugin* WebPluginDocument::plugin()
 {
@@ -51,19 +48,21 @@ WebPlugin* WebPluginDocument::plugin()
     return container ? container->plugin() : 0;
 }
 
-
-WebPluginDocument::WebPluginDocument(const PassRefPtrWillBeRawPtr<PluginDocument>& elem)
+WebPluginDocument::WebPluginDocument(PluginDocument* elem)
     : WebDocument(elem)
 {
 }
 
-WebPluginDocument& WebPluginDocument::operator=(const PassRefPtrWillBeRawPtr<PluginDocument>& elem)
+DEFINE_WEB_NODE_TYPE_CASTS(WebPluginDocument,
+    isDocumentNode() && constUnwrap<Document>()->isPluginDocument());
+
+WebPluginDocument& WebPluginDocument::operator=(PluginDocument* elem)
 {
     m_private = elem;
     return *this;
 }
 
-WebPluginDocument::operator PassRefPtrWillBeRawPtr<PluginDocument>() const
+WebPluginDocument::operator PluginDocument*() const
 {
     return static_cast<PluginDocument*>(m_private.get());
 }

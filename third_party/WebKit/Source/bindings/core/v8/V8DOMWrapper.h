@@ -31,10 +31,12 @@
 #ifndef V8DOMWrapper_h
 #define V8DOMWrapper_h
 
+#include "bindings/core/v8/BindingSecurity.h"
 #include "bindings/core/v8/DOMDataStore.h"
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RawPtr.h"
+#include "bindings/core/v8/V8Binding.h"
+#include "core/CoreExport.h"
+#include "wtf/Compiler.h"
 #include "wtf/text/AtomicString.h"
 #include <v8.h>
 
@@ -44,81 +46,134 @@ class Node;
 struct WrapperTypeInfo;
 
 class V8DOMWrapper {
+    STATIC_ONLY(V8DOMWrapper);
+
 public:
-    static v8::Local<v8::Object> createWrapper(v8::Isolate*, v8::Local<v8::Object> creationContext, const WrapperTypeInfo*, ScriptWrappable*);
+    static v8::Local<v8::Object> createWrapper(
+        v8::Isolate*,
+        v8::Local<v8::Object> creationContext,
+        const WrapperTypeInfo*);
     static bool isWrapper(v8::Isolate*, v8::Local<v8::Value>);
 
     // Associates the given ScriptWrappable with the given |wrapper| if the
     // ScriptWrappable is not yet associated with any wrapper.  Returns the
     // wrapper already associated or |wrapper| if not yet associated.
     // The caller should always use the returned value rather than |wrapper|.
-    static v8::Local<v8::Object> associateObjectWithWrapper(v8::Isolate*, ScriptWrappable*, const WrapperTypeInfo*, v8::Local<v8::Object> wrapper) WARN_UNUSED_RETURN;
-    static v8::Local<v8::Object> associateObjectWithWrapper(v8::Isolate*, Node*, const WrapperTypeInfo*, v8::Local<v8::Object> wrapper) WARN_UNUSED_RETURN;
-    static void setNativeInfo(v8::Local<v8::Object>, const WrapperTypeInfo*, ScriptWrappable*);
-    static void clearNativeInfo(v8::Local<v8::Object>, const WrapperTypeInfo*);
+    WARN_UNUSED_RESULT static v8::Local<v8::Object> associateObjectWithWrapper(
+        v8::Isolate*,
+        ScriptWrappable*,
+        const WrapperTypeInfo*,
+        v8::Local<v8::Object> wrapper);
+    WARN_UNUSED_RESULT static v8::Local<v8::Object> associateObjectWithWrapper(
+        v8::Isolate*,
+        Node*,
+        const WrapperTypeInfo*,
+        v8::Local<v8::Object> wrapper);
+    static void setNativeInfo(v8::Isolate*,
+        v8::Local<v8::Object>,
+        const WrapperTypeInfo*,
+        ScriptWrappable*);
+    static void clearNativeInfo(v8::Isolate*, v8::Local<v8::Object>);
+
     // hasInternalFieldsSet only checks if the value has the internal fields for
     // wrapper obejct and type, and does not check if it's valid or not.  The
     // value may not be a Blink's wrapper object.  In order to make sure of it,
     // Use isWrapper function instead.
-    static bool hasInternalFieldsSet(v8::Local<v8::Value>);
+    CORE_EXPORT static bool hasInternalFieldsSet(v8::Local<v8::Value>);
 };
 
-inline void V8DOMWrapper::setNativeInfo(v8::Local<v8::Object> wrapper, const WrapperTypeInfo* wrapperTypeInfo, ScriptWrappable* scriptWrappable)
+inline void V8DOMWrapper::setNativeInfo(v8::Isolate* isolate,
+    v8::Local<v8::Object> wrapper,
+    const WrapperTypeInfo* wrapperTypeInfo,
+    ScriptWrappable* scriptWrappable)
 {
     ASSERT(wrapper->InternalFieldCount() >= 2);
     ASSERT(scriptWrappable);
     ASSERT(wrapperTypeInfo);
-    wrapper->SetAlignedPointerInInternalField(v8DOMWrapperObjectIndex, scriptWrappable);
-    wrapper->SetAlignedPointerInInternalField(v8DOMWrapperTypeIndex, const_cast<WrapperTypeInfo*>(wrapperTypeInfo));
+    int indices[] = { v8DOMWrapperObjectIndex, v8DOMWrapperTypeIndex };
+    void* values[] = { scriptWrappable,
+        const_cast<WrapperTypeInfo*>(wrapperTypeInfo) };
+    wrapper->SetAlignedPointerInInternalFields(WTF_ARRAY_LENGTH(indices), indices,
+        values);
+    if (RuntimeEnabledFeatures::traceWrappablesEnabled()) {
+        auto perIsolateData = V8PerIsolateData::from(isolate);
+        // We notify ScriptWrappableVisitor about the new wrapper association,
+        // so the visitor can make sure to trace the association (in case it is
+        // currently tracing).  Because of some optimizations, V8 will not
+        // necessarily detect wrappers created during its incremental marking.
+        perIsolateData->scriptWrappableVisitor()->RegisterV8Reference(
+            std::make_pair(const_cast<WrapperTypeInfo*>(wrapperTypeInfo),
+                scriptWrappable));
+    }
 }
 
-inline void V8DOMWrapper::clearNativeInfo(v8::Local<v8::Object> wrapper, const WrapperTypeInfo* wrapperTypeInfo)
+inline void V8DOMWrapper::clearNativeInfo(v8::Isolate* isolate,
+    v8::Local<v8::Object> wrapper)
 {
-    ASSERT(wrapper->InternalFieldCount() >= 2);
-    ASSERT(wrapperTypeInfo);
-    // clearNativeInfo() is used only by NP objects, which are not garbage collected.
-    ASSERT(wrapperTypeInfo->gcType == WrapperTypeInfo::RefCountedObject);
-    wrapper->SetAlignedPointerInInternalField(v8DOMWrapperTypeIndex, const_cast<WrapperTypeInfo*>(wrapperTypeInfo));
-    wrapper->SetAlignedPointerInInternalField(v8DOMWrapperObjectIndex, 0);
+    int indices[] = { v8DOMWrapperObjectIndex, v8DOMWrapperTypeIndex };
+    void* values[] = { nullptr, nullptr };
+    wrapper->SetAlignedPointerInInternalFields(WTF_ARRAY_LENGTH(indices), indices,
+        values);
 }
 
-inline v8::Local<v8::Object> V8DOMWrapper::associateObjectWithWrapper(v8::Isolate* isolate, ScriptWrappable* impl, const WrapperTypeInfo* wrapperTypeInfo, v8::Local<v8::Object> wrapper)
+inline v8::Local<v8::Object> V8DOMWrapper::associateObjectWithWrapper(
+    v8::Isolate* isolate,
+    ScriptWrappable* impl,
+    const WrapperTypeInfo* wrapperTypeInfo,
+    v8::Local<v8::Object> wrapper)
 {
     if (DOMDataStore::setWrapper(isolate, impl, wrapperTypeInfo, wrapper)) {
-        wrapperTypeInfo->refObject(impl);
-        setNativeInfo(wrapper, wrapperTypeInfo, impl);
+        wrapperTypeInfo->wrapperCreated();
+        setNativeInfo(isolate, wrapper, wrapperTypeInfo, impl);
         ASSERT(hasInternalFieldsSet(wrapper));
     }
-    RELEASE_ASSERT_WITH_SECURITY_IMPLICATION(toScriptWrappable(wrapper) == impl);
+    SECURITY_CHECK(toScriptWrappable(wrapper) == impl);
     return wrapper;
 }
 
-inline v8::Local<v8::Object> V8DOMWrapper::associateObjectWithWrapper(v8::Isolate* isolate, Node* node, const WrapperTypeInfo* wrapperTypeInfo, v8::Local<v8::Object> wrapper)
+inline v8::Local<v8::Object> V8DOMWrapper::associateObjectWithWrapper(
+    v8::Isolate* isolate,
+    Node* node,
+    const WrapperTypeInfo* wrapperTypeInfo,
+    v8::Local<v8::Object> wrapper)
 {
     if (DOMDataStore::setWrapper(isolate, node, wrapperTypeInfo, wrapper)) {
-        wrapperTypeInfo->refObject(ScriptWrappable::fromNode(node));
-        setNativeInfo(wrapper, wrapperTypeInfo, ScriptWrappable::fromNode(node));
+        wrapperTypeInfo->wrapperCreated();
+        setNativeInfo(isolate, wrapper, wrapperTypeInfo,
+            ScriptWrappable::fromNode(node));
         ASSERT(hasInternalFieldsSet(wrapper));
     }
-    RELEASE_ASSERT_WITH_SECURITY_IMPLICATION(toScriptWrappable(wrapper) == ScriptWrappable::fromNode(node));
+    SECURITY_CHECK(toScriptWrappable(wrapper) == ScriptWrappable::fromNode(node));
     return wrapper;
 }
 
 class V8WrapperInstantiationScope {
+    STACK_ALLOCATED();
+
 public:
-    V8WrapperInstantiationScope(v8::Local<v8::Object> creationContext, v8::Isolate* isolate)
+    V8WrapperInstantiationScope(v8::Local<v8::Object> creationContext,
+        v8::Isolate* isolate,
+        bool withSecurityCheck)
         : m_didEnterContext(false)
         , m_context(isolate->GetCurrentContext())
+        , m_tryCatch(isolate)
+        , m_convertExceptions(false)
     {
         // creationContext should not be empty. Because if we have an
         // empty creationContext, we will end up creating
         // a new object in the context currently entered. This is wrong.
         RELEASE_ASSERT(!creationContext.IsEmpty());
         v8::Local<v8::Context> contextForWrapper = creationContext->CreationContext();
-        // For performance, we enter the context only if the currently running context
-        // is different from the context that we are about to enter.
+
+        // For performance, we enter the context only if the currently running
+        // context is different from the context that we are about to enter.
         if (contextForWrapper == m_context)
             return;
+        if (withSecurityCheck) {
+            securityCheck(isolate, contextForWrapper);
+        } else {
+            m_convertExceptions = true;
+        }
         m_context = v8::Local<v8::Context>::New(isolate, contextForWrapper);
         m_didEnterContext = true;
         m_context->Enter();
@@ -126,16 +181,31 @@ public:
 
     ~V8WrapperInstantiationScope()
     {
-        if (!m_didEnterContext)
+        if (!m_didEnterContext) {
+            m_tryCatch.ReThrow();
             return;
+        }
         m_context->Exit();
+        // Rethrow any cross-context exceptions as security error.
+        if (m_tryCatch.HasCaught()) {
+            if (m_convertExceptions) {
+                m_tryCatch.Reset();
+                convertException();
+            }
+            m_tryCatch.ReThrow();
+        }
     }
 
     v8::Local<v8::Context> context() const { return m_context; }
 
 private:
+    void securityCheck(v8::Isolate*, v8::Local<v8::Context> contextForWrapper);
+    void convertException();
+
     bool m_didEnterContext;
     v8::Local<v8::Context> m_context;
+    v8::TryCatch m_tryCatch;
+    bool m_convertExceptions;
 };
 
 } // namespace blink

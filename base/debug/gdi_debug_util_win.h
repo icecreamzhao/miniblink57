@@ -12,12 +12,12 @@
 namespace base {
 namespace debug {
 
-// Crashes the process leaving valuable information on the dump via
-// debug::alias so we can find what is causing the allocation failures.
-void BASE_EXPORT GDIBitmapAllocFailure(BITMAPINFOHEADER* header,
-                                       HANDLE shared_section);
+    // Crashes the process leaving valuable information on the dump via
+    // debug::alias so we can find what is causing the allocation failures.
+    void BASE_EXPORT GDIBitmapAllocFailure(BITMAPINFOHEADER* header,
+        HANDLE shared_section);
 
-}  // namespace debug
-}  // namespace base
+} // namespace debug
+} // namespace base
 
-#endif  // BASE_DEBUG_GDI_DEBUG_UTIL_WIN_H_
+#endif // BASE_DEBUG_GDI_DEBUG_UTIL_WIN_H_

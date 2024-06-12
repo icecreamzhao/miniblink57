@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -13,12 +12,14 @@
 
 class BigBlurView : public SampleView {
 public:
-    BigBlurView() {
+    BigBlurView()
+    {
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "BigBlur");
             return true;
@@ -26,15 +27,15 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkPaint paint;
         canvas->save();
         paint.setColor(SK_ColorBLUE);
-        SkMaskFilter* mf = SkBlurMaskFilter::Create(
+        paint.setMaskFilter(SkBlurMaskFilter::Make(
             kNormal_SkBlurStyle,
             SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(128)),
-            SkBlurMaskFilter::kHighQuality_BlurFlag);
-        paint.setMaskFilter(mf)->unref();
+            SkBlurMaskFilter::kHighQuality_BlurFlag));
         canvas->translate(200, 200);
         canvas->drawCircle(100, 100, 200, paint);
         canvas->restore();

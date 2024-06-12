@@ -12,10 +12,14 @@
 namespace blink {
 
 class DeviceOrientationData;
+class DeviceOrientationDispatcher;
 class Event;
 
-class MODULES_EXPORT DeviceOrientationController final : public DeviceSingleWindowEventController, public WillBeHeapSupplement<Document> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationController);
+class MODULES_EXPORT DeviceOrientationController
+    : public DeviceSingleWindowEventController,
+      public Supplement<Document> {
+    USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationController);
+
 public:
     ~DeviceOrientationController() override;
 
@@ -24,29 +28,33 @@ public:
 
     // Inherited from DeviceSingleWindowEventController.
     void didUpdateData() override;
-    void didAddEventListener(LocalDOMWindow*, const AtomicString& eventType) override;
+    void didAddEventListener(LocalDOMWindow*,
+        const AtomicString& eventType) override;
 
     void setOverride(DeviceOrientationData*);
     void clearOverride();
 
     DECLARE_VIRTUAL_TRACE();
 
-private:
+protected:
     explicit DeviceOrientationController(Document&);
 
+    virtual DeviceOrientationDispatcher& dispatcherInstance() const;
+
+private:
     // Inherited from DeviceEventControllerBase.
     void registerWithDispatcher() override;
     void unregisterWithDispatcher() override;
     bool hasLastData() override;
 
     // Inherited from DeviceSingleWindowEventController.
-    PassRefPtrWillBeRawPtr<Event> lastEvent() const override;
+    Event* lastEvent() const override;
     const AtomicString& eventTypeName() const override;
     bool isNullEvent(Event*) const override;
 
     DeviceOrientationData* lastData() const;
 
-    PersistentWillBeMember<DeviceOrientationData> m_overrideOrientationData;
+    Member<DeviceOrientationData> m_overrideOrientationData;
 };
 
 } // namespace blink

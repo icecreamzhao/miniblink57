@@ -5,11 +5,9 @@
 #ifndef CoreExport_h
 #define CoreExport_h
 
-#if !defined(LINK_CORE_MODULES_SEPARATELY)
-#define LINK_CORE_MODULES_SEPARATELY 0
-#endif
+#include "wtf/Compiler.h"
 
-#if LINK_CORE_MODULES_SEPARATELY && defined(COMPONENT_BUILD)
+#if defined(COMPONENT_BUILD)
 #if defined(WIN32)
 
 #if defined(BLINK_CORE_IMPLEMENTATION) && BLINK_CORE_IMPLEMENTATION
@@ -47,5 +45,7 @@
 #define CORE_EXTERN_TEMPLATE_EXPORT CORE_EXPORT
 #define CORE_TEMPLATE_EXPORT
 #endif
+
+#undef interface
 
 #endif // CoreExport_h

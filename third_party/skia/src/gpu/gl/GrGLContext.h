@@ -5,14 +5,13 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef GrGLContext_DEFINED
 #define GrGLContext_DEFINED
 
-#include "gl/GrGLExtensions.h"
-#include "gl/GrGLInterface.h"
 #include "GrGLCaps.h"
 #include "GrGLUtil.h"
+#include "gl/GrGLExtensions.h"
+#include "gl/GrGLInterface.h"
 
 struct GrContextOptions;
 
@@ -33,7 +32,8 @@ public:
     GrGLDriverVersion driverVersion() const { return fDriverVersion; }
     const GrGLCaps* caps() const { return fGLCaps.get(); }
     GrGLCaps* caps() { return fGLCaps; }
-    bool hasExtension(const char* ext) const {
+    bool hasExtension(const char* ext) const
+    {
         return fInterface->hasExtension(ext);
     }
 
@@ -41,26 +41,26 @@ public:
 
 protected:
     struct ConstructorArgs {
-        const GrGLInterface*                fInterface;
-        GrGLVersion                         fGLVersion;
-        GrGLSLGeneration                    fGLSLGeneration;
-        GrGLVendor                          fVendor;
-        GrGLRenderer                        fRenderer;
-        GrGLDriver                          fDriver;
-        GrGLDriverVersion                   fDriverVersion;
-        const  GrContextOptions*            fContextOptions;
+        const GrGLInterface* fInterface;
+        GrGLVersion fGLVersion;
+        GrGLSLGeneration fGLSLGeneration;
+        GrGLVendor fVendor;
+        GrGLRenderer fRenderer;
+        GrGLDriver fDriver;
+        GrGLDriverVersion fDriverVersion;
+        const GrContextOptions* fContextOptions;
     };
 
     GrGLContextInfo(const ConstructorArgs& args);
 
-    SkAutoTUnref<const GrGLInterface>   fInterface;
-    GrGLVersion                         fGLVersion;
-    GrGLSLGeneration                    fGLSLGeneration;
-    GrGLVendor                          fVendor;
-    GrGLRenderer                        fRenderer;
-    GrGLDriver                          fDriver;
-    GrGLDriverVersion                   fDriverVersion;
-    SkAutoTUnref<GrGLCaps>              fGLCaps;
+    SkAutoTUnref<const GrGLInterface> fInterface;
+    GrGLVersion fGLVersion;
+    GrGLSLGeneration fGLSLGeneration;
+    GrGLVendor fVendor;
+    GrGLRenderer fRenderer;
+    GrGLDriver fDriver;
+    GrGLDriverVersion fDriverVersion;
+    SkAutoTUnref<GrGLCaps> fGLCaps;
 };
 
 /**
@@ -77,7 +77,10 @@ public:
     const GrGLInterface* interface() const { return fInterface; }
 
 private:
-    GrGLContext(const ConstructorArgs& args) : INHERITED(args) {}
+    GrGLContext(const ConstructorArgs& args)
+        : INHERITED(args)
+    {
+    }
 
     typedef GrGLContextInfo INHERITED;
 };

@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkAntiRun_DEFINED
 #define SkAntiRun_DEFINED
@@ -19,18 +17,19 @@
 
 class SkAlphaRuns {
 public:
-    int16_t*    fRuns;
-    uint8_t*     fAlpha;
+    int16_t* fRuns;
+    uint8_t* fAlpha;
 
     /// Returns true if the scanline contains only a single run,
     /// of alpha value 0.
-    bool empty() const {
+    bool empty() const
+    {
         SkASSERT(fRuns[0] > 0);
         return fAlpha[0] == 0 && fRuns[fRuns[0]] == 0;
     }
 
     /// Reinitialize for a new scanline.
-    void    reset(int width);
+    void reset(int width);
 
     /**
      *  Insert into the buffer a run starting at (x-offsetX):
@@ -46,15 +45,16 @@ public:
      *  scanlines, then offsetX should be 0 when this is called.
      */
     SK_ALWAYS_INLINE int add(int x, U8CPU startAlpha, int middleCount, U8CPU stopAlpha,
-                             U8CPU maxValue, int offsetX) {
+        U8CPU maxValue, int offsetX)
+    {
         SkASSERT(middleCount >= 0);
         SkASSERT(x >= 0 && x + (startAlpha != 0) + middleCount + (stopAlpha != 0) <= fWidth);
 
         SkASSERT(fRuns[offsetX] >= 0);
 
-        int16_t*    runs = fRuns + offsetX;
-        uint8_t*    alpha = fAlpha + offsetX;
-        uint8_t*    lastAlpha = alpha;
+        int16_t* runs = fRuns + offsetX;
+        uint8_t* alpha = fAlpha + offsetX;
+        uint8_t* lastAlpha = alpha;
         x -= offsetX;
 
         if (startAlpha) {
@@ -66,12 +66,11 @@ public:
             */
             unsigned tmp = alpha[x] + startAlpha;
             SkASSERT(tmp <= 256);
-            alpha[x] = SkToU8(tmp - (tmp >> 8));    // was (tmp >> 7), but that seems wrong if we're trying to catch 256
+            alpha[x] = SkToU8(tmp - (tmp >> 8)); // was (tmp >> 7), but that seems wrong if we're trying to catch 256
 
             runs += x + 1;
             alpha += x + 1;
             x = 0;
-            lastAlpha += x; // we don't want the +1
             SkDEBUGCODE(this->validate();)
         }
 
@@ -89,7 +88,8 @@ public:
                 middleCount -= n;
             } while (middleCount > 0);
             SkDEBUGCODE(this->validate();)
-            lastAlpha = alpha;
+                lastAlpha
+                = alpha;
         }
 
         if (stopAlpha) {
@@ -97,16 +97,17 @@ public:
             alpha += x;
             alpha[0] = SkToU8(alpha[0] + stopAlpha);
             SkDEBUGCODE(this->validate();)
-            lastAlpha = alpha;
+                lastAlpha
+                = alpha;
         }
 
-        return SkToS32(lastAlpha - fAlpha);  // new offsetX
+        return SkToS32(lastAlpha - fAlpha); // new offsetX
     }
 
     SkDEBUGCODE(void assertValid(int y, int maxStep) const;)
-    SkDEBUGCODE(void dump() const;)
+        SkDEBUGCODE(void dump() const;)
 
-    /**
+        /**
      * Break the runs in the buffer at offsets x and x+count, properly
      * updating the runs to the right and left.
      *   i.e. from the state AAAABBBB, run-length encoded as A4B4,
@@ -114,14 +115,15 @@ public:
      * Allows add() to sum another run to some of the new sub-runs.
      *   i.e. adding ..CCCCC. would produce AADDEEEB, rle as A2D2E3B1.
      */
-    static void Break(int16_t runs[], uint8_t alpha[], int x, int count) {
+        static void Break(int16_t runs[], uint8_t alpha[], int x, int count)
+    {
         SkASSERT(count > 0 && x >= 0);
 
         //  SkAlphaRuns::BreakAt(runs, alpha, x);
         //  SkAlphaRuns::BreakAt(&runs[x], &alpha[x], count);
 
         int16_t* next_runs = runs + x;
-        uint8_t*  next_alpha = alpha + x;
+        uint8_t* next_alpha = alpha + x;
 
         while (x > 0) {
             int n = runs[0];
@@ -167,7 +169,8 @@ public:
      * Used by the RectClipBlitter to trim a RLE encoding to match the
      * clipping rectangle.
      */
-    static void BreakAt(int16_t runs[], uint8_t alpha[], int x) {
+    static void BreakAt(int16_t runs[], uint8_t alpha[], int x)
+    {
         while (x > 0) {
             int n = runs[0];
             SkASSERT(n > 0);
@@ -186,7 +189,7 @@ public:
 
 private:
     SkDEBUGCODE(int fWidth;)
-    SkDEBUGCODE(void validate() const;)
+        SkDEBUGCODE(void validate() const;)
 };
 
 #endif

@@ -7,9 +7,11 @@
 namespace v8 {
 namespace internal {
 
-void DescriptorLookupCache::Clear() {
-  for (int index = 0; index < kLength; index++) keys_[index].source = Map();
-}
+    void DescriptorLookupCache::Clear()
+    {
+        for (int index = 0; index < kLength; index++)
+            keys_[index].source = Map();
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8

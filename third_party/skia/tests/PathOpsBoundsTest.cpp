@@ -10,26 +10,27 @@
 #include "Test.h"
 
 static const SkRect sectTests[][2] = {
-    {{2, 0, 4, 1}, {4, 0, 6, 1}},
-    {{2, 0, 4, 1}, {3, 0, 5, 1}},
-    {{2, 0, 4, 1}, {3, 0, 5, 0}},
-    {{2, 0, 4, 1}, {3, 1, 5, 2}},
-    {{2, 1, 4, 2}, {1, 0, 5, 3}},
-    {{2, 1, 5, 3}, {3, 1, 4, 2}},
-    {{2, 0, 4, 1}, {3, 0, 3, 0}},  // intersecting an empty bounds is OK
-    {{2, 0, 4, 1}, {4, 1, 5, 2}},  // touching just on a corner is OK
+    { { 2, 0, 4, 1 }, { 4, 0, 6, 1 } },
+    { { 2, 0, 4, 1 }, { 3, 0, 5, 1 } },
+    { { 2, 0, 4, 1 }, { 3, 0, 5, 0 } },
+    { { 2, 0, 4, 1 }, { 3, 1, 5, 2 } },
+    { { 2, 1, 4, 2 }, { 1, 0, 5, 3 } },
+    { { 2, 1, 5, 3 }, { 3, 1, 4, 2 } },
+    { { 2, 0, 4, 1 }, { 3, 0, 3, 0 } }, // intersecting an empty bounds is OK
+    { { 2, 0, 4, 1 }, { 4, 1, 5, 2 } }, // touching just on a corner is OK
 };
 
 static const size_t sectTestsCount = SK_ARRAY_COUNT(sectTests);
 
 static const SkRect noSectTests[][2] = {
-    {{2, 0, 4, 1}, {5, 0, 6, 1}},
-    {{2, 0, 4, 1}, {3, 2, 5, 2}},
+    { { 2, 0, 4, 1 }, { 5, 0, 6, 1 } },
+    { { 2, 0, 4, 1 }, { 3, 2, 5, 2 } },
 };
 
 static const size_t noSectTestsCount = SK_ARRAY_COUNT(noSectTests);
 
-DEF_TEST(PathOpsBounds, reporter) {
+DEF_TEST(PathOpsBounds, reporter)
+{
     for (size_t index = 0; index < sectTestsCount; ++index) {
         const SkPathOpsBounds& bounds1 = static_cast<const SkPathOpsBounds&>(sectTests[index][0]);
         SkASSERT(ValidBounds(bounds1));
@@ -58,10 +59,10 @@ DEF_TEST(PathOpsBounds, reporter) {
     bounds.add(ordinal);
     REPORTER_ASSERT(reporter, bounds == expected);
     bounds.setEmpty();
-    SkDPoint botRight = {3, 4};
+    SkDPoint botRight = { 3, 4 };
     bounds.add(botRight);
     REPORTER_ASSERT(reporter, bounds == expected);
-    const SkPoint curvePts[] = {{0, 0}, {1, 2}, {3, 4}, {5, 6}};
+    const SkPoint curvePts[] = { { 0, 0 }, { 1, 2 }, { 3, 4 }, { 5, 6 } };
     SkDCurve curve;
     curve.fQuad.set(curvePts);
     curve.setQuadBounds(curvePts, 1, 0, 1, &bounds);

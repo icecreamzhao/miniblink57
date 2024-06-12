@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/TableLayoutAlgorithmFixed.h"
 
 #include "core/layout/LayoutTable.h"
@@ -78,22 +77,26 @@ TableLayoutAlgorithmFixed::TableLayoutAlgorithmFixed(LayoutTable* table)
 
 int TableLayoutAlgorithmFixed::calcWidthArray()
 {
-    // FIXME: We might want to wait until we have all of the first row before computing for the first time.
+    // FIXME: We might want to wait until we have all of the first row before
+    // computing for the first time.
     int usedWidth = 0;
 
     // iterate over all <col> elements
-    unsigned nEffCols = m_table->numEffCols();
+    unsigned nEffCols = m_table->numEffectiveColumns();
     m_width.resize(nEffCols);
     m_width.fill(Length(Auto));
 
     unsigned currentEffectiveColumn = 0;
-    for (LayoutTableCol* col = m_table->firstColumn(); col; col = col->nextColumn()) {
-        // LayoutTableCols don't have the concept of preferred logical width, but we need to clear their dirty bits
-        // so that if we call setPreferredWidthsDirty(true) on a col or one of its descendants, we'll mark it's
-        // ancestors as dirty.
+    for (LayoutTableCol* col = m_table->firstColumn(); col;
+         col = col->nextColumn()) {
+        // LayoutTableCols don't have the concept of preferred logical width, but we
+        // need to clear their dirty bits so that if we call
+        // setPreferredWidthsDirty(true) on a col or one of its descendants, we'll
+        // mark it's ancestors as dirty.
         col->clearPreferredLogicalWidthsDirtyBits();
 
-        // Width specified by column-groups that have column child does not affect column width in fixed layout tables
+        // Width specified by column-groups that have column child does not affect
+        // column width in fixed layout tables
         if (col->isTableColumnGroupWithColumnChildren())
             continue;
 
@@ -106,20 +109,20 @@ int TableLayoutAlgorithmFixed::calcWidthArray()
         while (span) {
             unsigned spanInCurrentEffectiveColumn;
             if (currentEffectiveColumn >= nEffCols) {
-                m_table->appendColumn(span);
+                m_table->appendEffectiveColumn(span);
                 nEffCols++;
-                m_width.append(Length());
+                m_width.push_back(Length());
                 spanInCurrentEffectiveColumn = span;
             } else {
-                if (span < m_table->spanOfEffCol(currentEffectiveColumn)) {
-                    m_table->splitColumn(currentEffectiveColumn, span);
+                if (span < m_table->spanOfEffectiveColumn(currentEffectiveColumn)) {
+                    m_table->splitEffectiveColumn(currentEffectiveColumn, span);
                     nEffCols++;
-                    m_width.append(Length());
+                    m_width.push_back(Length());
                 }
-                spanInCurrentEffectiveColumn = m_table->spanOfEffCol(currentEffectiveColumn);
+                spanInCurrentEffectiveColumn = m_table->spanOfEffectiveColumn(currentEffectiveColumn);
             }
             // TODO(alancutter): Make this work correctly for calc lengths.
-            if ((colStyleLogicalWidth.isFixed() || colStyleLogicalWidth.hasPercent()) && colStyleLogicalWidth.isPositive()) {
+            if ((colStyleLogicalWidth.isFixed() || colStyleLogicalWidth.isPercentOrCalc()) && colStyleLogicalWidth.isPositive()) {
                 m_width[currentEffectiveColumn] = colStyleLogicalWidth;
                 m_width[currentEffectiveColumn] *= spanInCurrentEffectiveColumn;
                 usedWidth += effectiveColWidth * spanInCurrentEffectiveColumn;
@@ -137,25 +140,29 @@ int TableLayoutAlgorithmFixed::calcWidthArray()
     unsigned currentColumn = 0;
 
     LayoutTableRow* firstRow = section->firstRow();
-    for (LayoutTableCell* cell = firstRow->firstCell(); cell; cell = cell->nextCell()) {
+    for (LayoutTableCell* cell = firstRow->firstCell(); cell;
+         cell = cell->nextCell()) {
         Length logicalWidth = cell->styleOrColLogicalWidth();
 
-        // FIXME: calc() on tables should be handled consistently with other lengths. See bug: https://crbug.com/382725
+        // FIXME: calc() on tables should be handled consistently with other
+        // lengths. See bug: https://crbug.com/382725
         if (logicalWidth.isCalculated())
             logicalWidth = Length(); // Make it Auto
 
         unsigned span = cell->colSpan();
         int fixedBorderBoxLogicalWidth = 0;
-        // FIXME: Support other length types. If the width is non-auto, it should probably just use
-        // LayoutBox::computeLogicalWidthUsing to compute the width.
+        // FIXME: Support other length types. If the width is non-auto, it should
+        // probably just use LayoutBox::computeLogicalWidthUsing to compute the
+        // width.
         if (logicalWidth.isFixed() && logicalWidth.isPositive()) {
-            fixedBorderBoxLogicalWidth = cell->adjustBorderBoxLogicalWidthForBoxSizing(logicalWidth.value());
+            fixedBorderBoxLogicalWidth = cell->adjustBorderBoxLogicalWidthForBoxSizing(logicalWidth.value())
+                                             .toInt();
             logicalWidth.setValue(fixedBorderBoxLogicalWidth);
         }
 
         unsigned usedSpan = 0;
         while (usedSpan < span && currentColumn < nEffCols) {
-            float eSpan = m_table->spanOfEffCol(currentColumn);
+            float eSpan = m_table->spanOfEffectiveColumn(currentColumn);
             // Only set if no col element has already set it.
             if (m_width[currentColumn].isAuto() && logicalWidth.type() != Auto) {
                 m_width[currentColumn] = logicalWidth;
@@ -166,9 +173,10 @@ int TableLayoutAlgorithmFixed::calcWidthArray()
             ++currentColumn;
         }
 
-        // TableLayoutAlgorithmFixed doesn't use min/maxPreferredLogicalWidths, but we need to clear the
-        // dirty bit on the cell so that we'll correctly mark its ancestors dirty
-        // in case we later call setPreferredLogicalWidthsDirty() on it later.
+        // TableLayoutAlgorithmFixed doesn't use min/maxPreferredLogicalWidths, but
+        // we need to clear the dirty bit on the cell so that we'll correctly mark
+        // its ancestors dirty in case we later call
+        // setPreferredLogicalWidthsDirty() on it later.
         if (cell->preferredLogicalWidthsDirty())
             cell->clearPreferredLogicalWidthsDirty();
     }
@@ -176,44 +184,56 @@ int TableLayoutAlgorithmFixed::calcWidthArray()
     return usedWidth;
 }
 
-void TableLayoutAlgorithmFixed::computeIntrinsicLogicalWidths(LayoutUnit& minWidth, LayoutUnit& maxWidth)
+void TableLayoutAlgorithmFixed::computeIntrinsicLogicalWidths(
+    LayoutUnit& minWidth,
+    LayoutUnit& maxWidth)
 {
-    minWidth = maxWidth = calcWidthArray();
+    minWidth = maxWidth = LayoutUnit(calcWidthArray());
 }
 
-void TableLayoutAlgorithmFixed::applyPreferredLogicalWidthQuirks(LayoutUnit& minWidth, LayoutUnit& maxWidth) const
+void TableLayoutAlgorithmFixed::applyPreferredLogicalWidthQuirks(
+    LayoutUnit& minWidth,
+    LayoutUnit& maxWidth) const
 {
     Length tableLogicalWidth = m_table->style()->logicalWidth();
-    if (tableLogicalWidth.isFixed() && tableLogicalWidth.isPositive())
-        minWidth = maxWidth = max<int>(minWidth, tableLogicalWidth.value() - m_table->bordersPaddingAndSpacingInRowDirection());
+    if (tableLogicalWidth.isFixed() && tableLogicalWidth.isPositive()) {
+        minWidth = maxWidth = LayoutUnit(
+            max(minWidth,
+                LayoutUnit(tableLogicalWidth.value() - m_table->bordersPaddingAndSpacingInRowDirection()))
+                .floor());
+    }
 
     /*
         <table style="width:100%; background-color:red"><tr><td>
             <table style="background-color:blue"><tr><td>
-                <table style="width:100%; background-color:green; table-layout:fixed"><tr><td>
+                <table style="width:100%; background-color:green;
+                              table-layout:fixed"><tr><td>
                     Content
                 </td></tr></table>
             </td></tr></table>
         </td></tr></table>
     */
-    // In this example, the two inner tables should be as large as the outer table.
-    // We can achieve this effect by making the maxwidth of fixed tables with percentage
-    // widths be infinite.
-    if (m_table->style()->logicalWidth().hasPercent() && maxWidth < tableMaxWidth)
-        maxWidth = tableMaxWidth;
+    // In this example, the two inner tables should be as large as the outer
+    // table. We can achieve this effect by making the maxwidth of fixed tables
+    // with percentage widths be infinite.
+    if (m_table->style()->logicalWidth().isPercentOrCalc() && maxWidth < tableMaxWidth)
+        maxWidth = LayoutUnit(tableMaxWidth);
 }
 
 void TableLayoutAlgorithmFixed::layout()
 {
-    int tableLogicalWidth = m_table->logicalWidth() - m_table->bordersPaddingAndSpacingInRowDirection();
-    unsigned nEffCols = m_table->numEffCols();
+    int tableLogicalWidth = (m_table->logicalWidth() - m_table->bordersPaddingAndSpacingInRowDirection())
+                                .toInt();
+    unsigned nEffCols = m_table->numEffectiveColumns();
 
-    // FIXME: It is possible to be called without having properly updated our internal representation.
-    // This means that our preferred logical widths were not recomputed as expected.
+    // FIXME: It is possible to be called without having properly updated our
+    // internal representation. This means that our preferred logical widths were
+    // not recomputed as expected.
     if (nEffCols != m_width.size()) {
         calcWidthArray();
-        // FIXME: Table layout shouldn't modify our table structure (but does due to columns and column-groups).
-        nEffCols = m_table->numEffCols();
+        // FIXME: Table layout shouldn't modify our table structure (but does due to
+        // columns and column-groups).
+        nEffCols = m_table->numEffectiveColumns();
     }
 
     Vector<int> calcWidth(nEffCols, 0);
@@ -232,14 +252,14 @@ void TableLayoutAlgorithmFixed::layout()
         if (m_width[i].isFixed()) {
             calcWidth[i] = m_width[i].value();
             totalFixedWidth += calcWidth[i];
-        } else if (m_width[i].hasPercent()) {
+        } else if (m_width[i].isPercentOrCalc()) {
             // TODO(alancutter): Make this work correctly for calc lengths.
-            calcWidth[i] = valueForLength(m_width[i], tableLogicalWidth);
+            calcWidth[i] = valueForLength(m_width[i], LayoutUnit(tableLogicalWidth)).toInt();
             totalPercentWidth += calcWidth[i];
             totalPercent += m_width[i].percent();
         } else if (m_width[i].isAuto()) {
             numAuto++;
-            autoSpan += m_table->spanOfEffCol(i);
+            autoSpan += m_table->spanOfEffectiveColumn(i);
         }
     }
 
@@ -263,7 +283,7 @@ void TableLayoutAlgorithmFixed::layout()
                 totalPercentWidth = 0;
                 for (unsigned i = 0; i < nEffCols; i++) {
                     // TODO(alancutter): Make this work correctly for calc lengths.
-                    if (m_width[i].hasPercent()) {
+                    if (m_width[i].isPercentOrCalc()) {
                         calcWidth[i] = m_width[i].percent() * (tableLogicalWidth - totalFixedWidth) / totalPercent;
                         totalPercentWidth += calcWidth[i];
                     }
@@ -273,12 +293,12 @@ void TableLayoutAlgorithmFixed::layout()
         }
     } else {
         // Divide the remaining width among the auto columns.
-        ASSERT(autoSpan >= numAuto);
+        DCHECK_GE(autoSpan, numAuto);
         int remainingWidth = tableLogicalWidth - totalFixedWidth - totalPercentWidth - hspacing * (autoSpan - numAuto);
         int lastAuto = 0;
         for (unsigned i = 0; i < nEffCols; i++) {
             if (m_width[i].isAuto()) {
-                unsigned span = m_table->spanOfEffCol(i);
+                unsigned span = m_table->spanOfEffectiveColumn(i);
                 int w = remainingWidth * span / autoSpan;
                 calcWidth[i] = w + hspacing * (span - 1);
                 remainingWidth -= w;
@@ -286,7 +306,7 @@ void TableLayoutAlgorithmFixed::layout()
                     break;
                 lastAuto = i;
                 numAuto--;
-                ASSERT(autoSpan >= span);
+                DCHECK_GE(autoSpan, span);
                 autoSpan -= span;
             }
         }
@@ -309,14 +329,14 @@ void TableLayoutAlgorithmFixed::layout()
             calcWidth[nEffCols - 1] += remainingWidth;
     }
 
+    ASSERT(m_table->effectiveColumnPositions().size() == nEffCols + 1);
     int pos = 0;
     for (unsigned i = 0; i < nEffCols; i++) {
-        m_table->setColumnPosition(i, pos);
+        m_table->setEffectiveColumnPosition(i, pos);
         pos += calcWidth[i] + hspacing;
     }
-    int colPositionsSize = m_table->columnPositions().size();
-    if (colPositionsSize > 0)
-        m_table->setColumnPosition(colPositionsSize - 1, pos);
+    // The extra position is for the imaginary column after the last column.
+    m_table->setEffectiveColumnPosition(nEffCols, pos);
 }
 
 void TableLayoutAlgorithmFixed::willChangeTableLayout()
@@ -326,15 +346,7 @@ void TableLayoutAlgorithmFixed::willChangeTableLayout()
     // (see calcWidthArray above.) This optimization is preferred to always
     // computing the logical widths we never intended to use.
     m_table->recalcSectionsIfNeeded();
-    for (LayoutTableSection* section = m_table->topNonEmptySection(); section; section = m_table->sectionBelow(section)) {
-        for (unsigned i = 0; i < section->numRows(); i++) {
-            LayoutTableRow* row = section->rowLayoutObjectAt(i);
-            if (!row)
-                continue;
-            for (LayoutTableCell* cell = row->firstCell(); cell; cell = cell->nextCell())
-                cell->setPreferredLogicalWidthsDirty();
-        }
-    }
+    m_table->markAllCellsWidthsDirtyAndOrNeedsLayout(LayoutTable::MarkDirtyOnly);
 }
 
 } // namespace blink

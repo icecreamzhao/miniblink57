@@ -21,6 +21,9 @@
  *
  */
 
+#define TENCENT_FITSCREEN 1
+#define TENCENT_FITSCREEN_FRAEME_FLATTEN 1
+
 /* Include compiler specific macros */
 #include "wtf/Compiler.h"
 
@@ -30,18 +33,7 @@
 
 /* ==== Platform adaptation macros: these describe properties of the target environment. ==== */
 
-/* HAVE() - specific system features (headers, functions or similar) that are present or not */
-#define HAVE(WTF_FEATURE) (defined HAVE_##WTF_FEATURE  && HAVE_##WTF_FEATURE)
-/* OS() - underlying operating system; only to be used for mandated low-level services like
-   virtual memory, not to choose a GUI toolkit */
-#define OS(WTF_FEATURE) (defined WTF_OS_##WTF_FEATURE  && WTF_OS_##WTF_FEATURE)
-
-/* ==== Policy decision macros: these define policy choices for a particular port. ==== */
-
-/* USE() - use a particular third-party library or optional OS service */
-#define USE(WTF_FEATURE) (defined WTF_USE_##WTF_FEATURE  && WTF_USE_##WTF_FEATURE)
-/* ENABLE() - turn on a specific feature of WebKit */
-#define ENABLE(WTF_FEATURE) (defined ENABLE_##WTF_FEATURE  && ENABLE_##WTF_FEATURE)
+#include "wtf/build_config.h"
 
 /* ==== OS() - underlying operating system; only to be used for mandated low-level services like
    virtual memory, not to choose a GUI toolkit ==== */
@@ -67,13 +59,13 @@
 #endif
 
 /* OS(POSIX) - Any Unix-like system */
-#if OS(ANDROID)          \
-    || OS(MACOSX)           \
-    || OS(FREEBSD)          \
-    || OS(LINUX)            \
-    || OS(OPENBSD)          \
-    || defined(unix)        \
-    || defined(__unix)      \
+#if OS(ANDROID)        \
+    || OS(MACOSX)      \
+    || OS(FREEBSD)     \
+    || OS(LINUX)       \
+    || OS(OPENBSD)     \
+    || defined(unix)   \
+    || defined(__unix) \
     || defined(__unix__)
 #define WTF_OS_POSIX 1
 #endif
@@ -136,16 +128,23 @@
 
 #endif
 
-#include "platform/NotImplemented.h"
+#include <array>
+#include <algorithm>
+#include <ratio>
+#include <chrono>
+#include <set>
+#include <map>
+#include <bitset>
+#include <unordered_set>
+#include <unordered_map>
+#include <mutex>
+
 #include "base/basictypes.h" // for int8...
+#include "platform/NotImplemented.h"
 
 // Adopted from base/compiler_specific.h where you can find a detailed explanation.
 #if COMPILER(MSVC)
 #define STATIC_CONST_MEMBER_DEFINITION __declspec(selectany)
 #else
 #define STATIC_CONST_MEMBER_DEFINITION
-#endif
-
-#if USING_VC6RT == 1
-#include <algorithmvc6.h>
 #endif

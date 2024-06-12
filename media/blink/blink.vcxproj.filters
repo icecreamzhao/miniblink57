@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup />
+  <ItemGroup>
+    <CustomBuild Include="active_loader.cc" />
+    <None Include="active_loader.h" />
+    <CustomBuild Include="buffered_data_source_host_impl.cc" />
+    <None Include="buffered_data_source_host_impl.h" />
+    <CustomBuild Include="cache_util.cc" />
+    <None Include="cache_util.h" />
+    <None Include="cdm_result_promise.h" />
+    <CustomBuild Include="cdm_result_promise_helper.cc" />
+    <None Include="cdm_result_promise_helper.h" />
+    <CustomBuild Include="cdm_session_adapter.cc" />
+    <None Include="cdm_session_adapter.h" />
+    <None Include="interval_map.h" />
+    <CustomBuild Include="key_system_config_selector.cc" />
+    <None Include="key_system_config_selector.h" />
+    <None Include="lru.h" />
+    <None Include="media_blink_export.h" />
+    <CustomBuild Include="multibuffer.cc" />
+    <None Include="multibuffer.h" />
+    <CustomBuild Include="multibuffer_data_source.cc" />
+    <None Include="multibuffer_data_source.h" />
+    <CustomBuild Include="multibuffer_reader.cc" />
+    <None Include="multibuffer_reader.h" />
+    <CustomBuild Include="new_session_cdm_result_promise.cc" />
+    <None Include="new_session_cdm_result_promise.h" />
+    <CustomBuild Include="resource_multibuffer_data_provider.cc" />
+    <None Include="resource_multibuffer_data_provider.h" />
+    <CustomBuild Include="texttrack_impl.cc" />
+    <None Include="texttrack_impl.h" />
+    <CustomBuild Include="url_index.cc" />
+    <None Include="url_index.h" />
+    <CustomBuild Include="video_frame_compositor.cc" />
+    <None Include="video_frame_compositor.h" />
+    <CustomBuild Include="watch_time_reporter.cc" />
+    <None Include="watch_time_reporter.h" />
+    <CustomBuild Include="webaudiosourceprovider_impl.cc" />
+    <None Include="webaudiosourceprovider_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmodule_impl.cc" />
+    <None Include="webcontentdecryptionmodule_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmoduleaccess_impl.cc" />
+    <None Include="webcontentdecryptionmoduleaccess_impl.h" />
+    <CustomBuild Include="webcontentdecryptionmodulesession_impl.cc" />
+    <None Include="webcontentdecryptionmodulesession_impl.h" />
+    <CustomBuild Include="webencryptedmediaclient_impl.cc" />
+    <None Include="webencryptedmediaclient_impl.h" />
+    <CustomBuild Include="webinbandtexttrack_impl.cc" />
+    <None Include="webinbandtexttrack_impl.h" />
+    <None Include="webmediaplayer_delegate.h" />
+    <CustomBuild Include="webmediaplayer_params.cc" />
+    <None Include="webmediaplayer_params.h" />
+    <CustomBuild Include="webmediaplayer_util.cc" />
+    <None Include="webmediaplayer_util.h" />
+    <CustomBuild Include="webmediasource_impl.cc" />
+    <None Include="webmediasource_impl.h" />
+    <CustomBuild Include="websourcebuffer_impl.cc" />
+    <None Include="websourcebuffer_impl.h" />
+    <CustomBuild Include="webmediaplayer_impl.cc" />
+    <None Include="webmediaplayer_impl.h" />
+  </ItemGroup>
+</Project>

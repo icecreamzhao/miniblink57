@@ -10,7 +10,6 @@
 
 namespace blink {
 
-class WebTraceLocation;
 class Task;
 
 } // blink
@@ -18,6 +17,10 @@ class Task;
 namespace WTF {
 class Mutex;
 } // WTF
+
+namespace base {
+class WaitableEvent;
+}
 
 namespace content {
 
@@ -47,16 +50,20 @@ public:
 
     // Returns the scheduler associated with the thread.
     virtual blink::WebScheduler* scheduler() const override;
+    virtual blink::WebTaskRunner* getWebTaskRunner() override;
 
     void willExit();
 
     void startTriggerTasks();
     void schedulerTasks();
+    bool hasImmediatelyTimer();
 
     void fire();
     
     void suspendTimerQueue();
     void resumeTimerQueue();
+
+    void cancelTimerTask(WebThread::Task* task);
 
     void disableScheduler();
     void enableScheduler();
@@ -90,7 +97,7 @@ private:
     void postDelayedTaskImpl(
         const blink::WebTraceLocation& location, blink::WebThread::Task* task, long long delayMs, double* createTimeOnOtherThread, int priority, unsigned* heapInsertionOrder);
     
-    static unsigned __stdcall WebThreadImplThreadEntryPoint(void* param);
+    static DWORD __stdcall WebThreadImplThreadEntryPoint(void* param);
     void threadEntryPoint();
     void deleteUnusedTimers();
     void deleteTimersOnExit();
@@ -100,7 +107,7 @@ private:
     void didProcessTasks();
     void clearEmptyObservers();
 
-    HANDLE m_hEvent;
+    base::WaitableEvent* m_hEvent;
     blink::PlatformThreadId m_threadId;
     bool m_willExit;
     bool m_threadClosed;

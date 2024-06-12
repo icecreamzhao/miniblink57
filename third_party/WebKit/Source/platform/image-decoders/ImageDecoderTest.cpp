@@ -28,38 +28,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/image-decoders/ImageDecoder.h"
 
 #include "platform/image-decoders/ImageFrame.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/Vector.h"
-#include <gtest/gtest.h>
+#include <memory>
 
 namespace blink {
 
 class TestImageDecoder : public ImageDecoder {
 public:
     TestImageDecoder()
-        : ImageDecoder(ImageSource::AlphaNotPremultiplied, ImageSource::GammaAndColorProfileApplied, noDecodedImageByteLimit)
+        : ImageDecoder(AlphaNotPremultiplied,
+            ColorBehavior::transformToTargetForTesting(),
+            noDecodedImageByteLimit)
     {
     }
 
     String filenameExtension() const override { return ""; }
 
-    Vector<ImageFrame, 1>& frameBufferCache()
-    {
-        return m_frameBufferCache;
-    }
+    Vector<ImageFrame, 1>& frameBufferCache() { return m_frameBufferCache; }
 
     void resetRequiredPreviousFrames(bool knownOpaque = false)
     {
         for (size_t i = 0; i < m_frameBufferCache.size(); ++i)
-            m_frameBufferCache[i].setRequiredPreviousFrameIndex(findRequiredPreviousFrame(i, knownOpaque));
+            m_frameBufferCache[i].setRequiredPreviousFrameIndex(
+                findRequiredPreviousFrame(i, knownOpaque));
     }
 
-    void initFrames(size_t numFrames, unsigned width = 100, unsigned height = 100)
+    void initFrames(size_t numFrames,
+        unsigned width = 100,
+        unsigned height = 100)
     {
         setSize(width, height);
         m_frameBufferCache.resize(numFrames);
@@ -74,7 +75,8 @@ private:
 
 TEST(ImageDecoderTest, sizeCalculationMayOverflow)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     EXPECT_FALSE(decoder->setSize(1 << 29, 1));
     EXPECT_FALSE(decoder->setSize(1, 1 << 29));
     EXPECT_FALSE(decoder->setSize(1 << 15, 1 << 15));
@@ -85,7 +87,8 @@ TEST(ImageDecoderTest, sizeCalculationMayOverflow)
 
 TEST(ImageDecoderTest, requiredPreviousFrameIndex)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(6);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
 
@@ -110,16 +113,19 @@ TEST(ImageDecoderTest, requiredPreviousFrameIndex)
 
 TEST(ImageDecoderTest, requiredPreviousFrameIndexDisposeOverwriteBgcolor)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(3);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
 
-    // Fully covering DisposeOverwriteBgcolor previous frame resets the starting state.
+    // Fully covering DisposeOverwriteBgcolor previous frame resets the starting
+    // state.
     frameBuffers[1].setDisposalMethod(ImageFrame::DisposeOverwriteBgcolor);
     decoder->resetRequiredPreviousFrames();
     EXPECT_EQ(kNotFound, frameBuffers[2].requiredPreviousFrameIndex());
 
-    // Partially covering DisposeOverwriteBgcolor previous frame is required by this frame.
+    // Partially covering DisposeOverwriteBgcolor previous frame is required by
+    // this frame.
     frameBuffers[1].setOriginalFrameRect(IntRect(50, 50, 50, 50));
     decoder->resetRequiredPreviousFrames();
     EXPECT_EQ(1u, frameBuffers[2].requiredPreviousFrameIndex());
@@ -127,7 +133,8 @@ TEST(ImageDecoderTest, requiredPreviousFrameIndexDisposeOverwriteBgcolor)
 
 TEST(ImageDecoderTest, requiredPreviousFrameIndexForFrame1)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(2);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
 
@@ -156,24 +163,31 @@ TEST(ImageDecoderTest, requiredPreviousFrameIndexForFrame1)
 
 TEST(ImageDecoderTest, requiredPreviousFrameIndexBlendAtopBgcolor)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(3);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
 
     frameBuffers[1].setOriginalFrameRect(IntRect(25, 25, 50, 50));
     frameBuffers[2].setAlphaBlendSource(ImageFrame::BlendAtopBgcolor);
 
-    // A full frame with 'blending method == BlendAtopBgcolor' doesn't depend on any prior frames.
-    for (int disposeMethod = ImageFrame::DisposeNotSpecified; disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
-        frameBuffers[1].setDisposalMethod(static_cast<ImageFrame::DisposalMethod>(disposeMethod));
+    // A full frame with 'blending method == BlendAtopBgcolor' doesn't depend on
+    // any prior frames.
+    for (int disposeMethod = ImageFrame::DisposeNotSpecified;
+         disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
+        frameBuffers[1].setDisposalMethod(
+            static_cast<ImageFrame::DisposalMethod>(disposeMethod));
         decoder->resetRequiredPreviousFrames();
         EXPECT_EQ(kNotFound, frameBuffers[2].requiredPreviousFrameIndex());
     }
 
-    // A non-full frame with 'blending method == BlendAtopBgcolor' does depend on a prior frame.
+    // A non-full frame with 'blending method == BlendAtopBgcolor' does depend on
+    // a prior frame.
     frameBuffers[2].setOriginalFrameRect(IntRect(50, 50, 50, 50));
-    for (int disposeMethod = ImageFrame::DisposeNotSpecified; disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
-        frameBuffers[1].setDisposalMethod(static_cast<ImageFrame::DisposalMethod>(disposeMethod));
+    for (int disposeMethod = ImageFrame::DisposeNotSpecified;
+         disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
+        frameBuffers[1].setDisposalMethod(
+            static_cast<ImageFrame::DisposalMethod>(disposeMethod));
         decoder->resetRequiredPreviousFrames();
         EXPECT_NE(kNotFound, frameBuffers[2].requiredPreviousFrameIndex());
     }
@@ -181,23 +195,28 @@ TEST(ImageDecoderTest, requiredPreviousFrameIndexBlendAtopBgcolor)
 
 TEST(ImageDecoderTest, requiredPreviousFrameIndexKnownOpaque)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(3);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
 
     frameBuffers[1].setOriginalFrameRect(IntRect(25, 25, 50, 50));
 
     // A full frame that is known to be opaque doesn't depend on any prior frames.
-    for (int disposeMethod = ImageFrame::DisposeNotSpecified; disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
-        frameBuffers[1].setDisposalMethod(static_cast<ImageFrame::DisposalMethod>(disposeMethod));
+    for (int disposeMethod = ImageFrame::DisposeNotSpecified;
+         disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
+        frameBuffers[1].setDisposalMethod(
+            static_cast<ImageFrame::DisposalMethod>(disposeMethod));
         decoder->resetRequiredPreviousFrames(true);
         EXPECT_EQ(kNotFound, frameBuffers[2].requiredPreviousFrameIndex());
     }
 
     // A non-full frame that is known to be opaque does depend on a prior frame.
     frameBuffers[2].setOriginalFrameRect(IntRect(50, 50, 50, 50));
-    for (int disposeMethod = ImageFrame::DisposeNotSpecified; disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
-        frameBuffers[1].setDisposalMethod(static_cast<ImageFrame::DisposalMethod>(disposeMethod));
+    for (int disposeMethod = ImageFrame::DisposeNotSpecified;
+         disposeMethod <= ImageFrame::DisposeOverwritePrevious; ++disposeMethod) {
+        frameBuffers[1].setDisposalMethod(
+            static_cast<ImageFrame::DisposalMethod>(disposeMethod));
         decoder->resetRequiredPreviousFrames(true);
         EXPECT_NE(kNotFound, frameBuffers[2].requiredPreviousFrameIndex());
     }
@@ -205,7 +224,8 @@ TEST(ImageDecoderTest, requiredPreviousFrameIndexKnownOpaque)
 
 TEST(ImageDecoderTest, clearCacheExceptFrameDoNothing)
 {
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->clearCacheExceptFrame(0);
 
     // This should not crash.
@@ -216,24 +236,27 @@ TEST(ImageDecoderTest, clearCacheExceptFrameDoNothing)
 TEST(ImageDecoderTest, clearCacheExceptFrameAll)
 {
     const size_t numFrames = 10;
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(numFrames);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
     for (size_t i = 0; i < numFrames; ++i)
-        frameBuffers[i].setStatus(i % 2 ? ImageFrame::FramePartial : ImageFrame::FrameComplete);
+        frameBuffers[i].setStatus(i % 2 ? ImageFrame::FramePartial
+                                        : ImageFrame::FrameComplete);
 
     decoder->clearCacheExceptFrame(kNotFound);
 
     for (size_t i = 0; i < numFrames; ++i) {
         SCOPED_TRACE(testing::Message() << i);
-        EXPECT_EQ(ImageFrame::FrameEmpty, frameBuffers[i].status());
+        EXPECT_EQ(ImageFrame::FrameEmpty, frameBuffers[i].getStatus());
     }
 }
 
 TEST(ImageDecoderTest, clearCacheExceptFramePreverveClearExceptFrame)
 {
     const size_t numFrames = 10;
-    OwnPtr<TestImageDecoder> decoder(adoptPtr(new TestImageDecoder()));
+    std::unique_ptr<TestImageDecoder> decoder(
+        WTF::makeUnique<TestImageDecoder>());
     decoder->initFrames(numFrames);
     Vector<ImageFrame, 1>& frameBuffers = decoder->frameBufferCache();
     for (size_t i = 0; i < numFrames; ++i)
@@ -244,9 +267,9 @@ TEST(ImageDecoderTest, clearCacheExceptFramePreverveClearExceptFrame)
     for (size_t i = 0; i < numFrames; ++i) {
         SCOPED_TRACE(testing::Message() << i);
         if (i == 5)
-            EXPECT_EQ(ImageFrame::FrameComplete, frameBuffers[i].status());
+            EXPECT_EQ(ImageFrame::FrameComplete, frameBuffers[i].getStatus());
         else
-            EXPECT_EQ(ImageFrame::FrameEmpty, frameBuffers[i].status());
+            EXPECT_EQ(ImageFrame::FrameEmpty, frameBuffers[i].getStatus());
     }
 }
 

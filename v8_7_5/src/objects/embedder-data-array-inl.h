@@ -16,23 +16,25 @@
 namespace v8 {
 namespace internal {
 
-CAST_ACCESSOR(EmbedderDataArray)
+    CAST_ACCESSOR(EmbedderDataArray)
 
-SMI_ACCESSORS(EmbedderDataArray, length, kLengthOffset)
+    SMI_ACCESSORS(EmbedderDataArray, length, kLengthOffset)
 
-OBJECT_CONSTRUCTORS_IMPL(EmbedderDataArray, HeapObject)
+    OBJECT_CONSTRUCTORS_IMPL(EmbedderDataArray, HeapObject)
 
-Address EmbedderDataArray::slots_start() {
-  return FIELD_ADDR(*this, OffsetOfElementAt(0));
-}
+    Address EmbedderDataArray::slots_start()
+    {
+        return FIELD_ADDR(*this, OffsetOfElementAt(0));
+    }
 
-Address EmbedderDataArray::slots_end() {
-  return FIELD_ADDR(*this, OffsetOfElementAt(length()));
-}
+    Address EmbedderDataArray::slots_end()
+    {
+        return FIELD_ADDR(*this, OffsetOfElementAt(length()));
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_EMBEDDER_DATA_ARRAY_INL_H_
+#endif // V8_OBJECTS_EMBEDDER_DATA_ARRAY_INL_H_

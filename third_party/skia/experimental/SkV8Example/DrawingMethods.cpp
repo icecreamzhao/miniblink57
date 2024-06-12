@@ -8,21 +8,21 @@
  */
 #include <v8.h>
 
-#include "Global.h"
 #include "DrawingMethods.h"
+#include "Global.h"
 #include "Path2D.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
 
-
-DrawingMethods* DrawingMethods::Unwrap(v8::Handle<v8::Object> obj) {
+DrawingMethods* DrawingMethods::Unwrap(v8::Handle<v8::Object> obj)
+{
     v8::Handle<v8::External> field = v8::Handle<v8::External>::Cast(obj->GetInternalField(0));
     void* ptr = field->Value();
     return static_cast<DrawingMethods*>(ptr);
 }
 
-
-void DrawingMethods::Save(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::Save(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -32,7 +32,8 @@ void DrawingMethods::Save(const v8::FunctionCallbackInfo<v8::Value>& args) {
     canvas->save();
 }
 
-void DrawingMethods::Restore(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::Restore(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -42,7 +43,8 @@ void DrawingMethods::Restore(const v8::FunctionCallbackInfo<v8::Value>& args) {
     canvas->restore();
 }
 
-void DrawingMethods::Rotate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::Rotate(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -51,15 +53,16 @@ void DrawingMethods::Rotate(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
     if (args.Length() != 1) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 1 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 1 arguments required."));
         return;
     }
     double angle = args[0]->NumberValue();
     canvas->rotate(SkRadiansToDegrees(angle));
 }
 
-void DrawingMethods::Translate(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::Translate(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -68,8 +71,8 @@ void DrawingMethods::Translate(const v8::FunctionCallbackInfo<v8::Value>& args) 
 
     if (args.Length() != 2) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 2 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 2 arguments required."));
         return;
     }
     double dx = args[0]->NumberValue();
@@ -77,7 +80,8 @@ void DrawingMethods::Translate(const v8::FunctionCallbackInfo<v8::Value>& args) 
     canvas->translate(SkDoubleToScalar(dx), SkDoubleToScalar(dy));
 }
 
-void DrawingMethods::ResetTransform(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::ResetTransform(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -87,7 +91,8 @@ void DrawingMethods::ResetTransform(const v8::FunctionCallbackInfo<v8::Value>& a
     canvas->resetMatrix();
 }
 
-void DrawingMethods::DrawPath(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void DrawingMethods::DrawPath(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     DrawingMethods* drawingMethods = Unwrap(args.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -96,13 +101,13 @@ void DrawingMethods::DrawPath(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
     if (args.Length() != 1) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 1 argument required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 1 argument required."));
         return;
     }
 
     v8::Handle<v8::External> field = v8::Handle<v8::External>::Cast(
-            args[0]->ToObject()->GetInternalField(0));
+        args[0]->ToObject()->GetInternalField(0));
     void* ptr = field->Value();
     Path2D* path = static_cast<Path2D*>(ptr);
     if (NULL == path) {
@@ -117,9 +122,9 @@ void DrawingMethods::DrawPath(const v8::FunctionCallbackInfo<v8::Value>& args) {
     canvas->drawPath(*(path->path()), fillStyle);
 }
 
-
 void DrawingMethods::GetWidth(v8::Local<v8::String> name,
-        const v8::PropertyCallbackInfo<v8::Value>& info) {
+    const v8::PropertyCallbackInfo<v8::Value>& info)
+{
     DrawingMethods* drawingMethods = Unwrap(info.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -127,12 +132,13 @@ void DrawingMethods::GetWidth(v8::Local<v8::String> name,
     }
 
     info.GetReturnValue().Set(
-            v8::Int32::New(
-                drawingMethods->fGlobal->getIsolate(), canvas->imageInfo().width()));
+        v8::Int32::New(
+            drawingMethods->fGlobal->getIsolate(), canvas->imageInfo().width()));
 }
 
 void DrawingMethods::GetHeight(v8::Local<v8::String> name,
-        const v8::PropertyCallbackInfo<v8::Value>& info) {
+    const v8::PropertyCallbackInfo<v8::Value>& info)
+{
     DrawingMethods* drawingMethods = Unwrap(info.This());
     SkCanvas* canvas = drawingMethods->getCanvas();
     if (NULL == canvas) {
@@ -140,26 +146,27 @@ void DrawingMethods::GetHeight(v8::Local<v8::String> name,
     }
 
     info.GetReturnValue().Set(
-            v8::Int32::New(
-                drawingMethods->fGlobal->getIsolate(), canvas->imageInfo().height()));
+        v8::Int32::New(
+            drawingMethods->fGlobal->getIsolate(), canvas->imageInfo().height()));
 }
 
-#define ADD_METHOD(name, fn) \
-    tmpl->Set(v8::String::NewFromUtf8( \
-         fGlobal->getIsolate(), name, \
-         v8::String::kInternalizedString), \
-             v8::FunctionTemplate::New(fGlobal->getIsolate(), fn))
+#define ADD_METHOD(name, fn)                        \
+    tmpl->Set(v8::String::NewFromUtf8(              \
+                  fGlobal->getIsolate(), name,      \
+                  v8::String::kInternalizedString), \
+        v8::FunctionTemplate::New(fGlobal->getIsolate(), fn))
 
-void DrawingMethods::addAttributesAndMethods(v8::Handle<v8::ObjectTemplate> tmpl) {
+void DrawingMethods::addAttributesAndMethods(v8::Handle<v8::ObjectTemplate> tmpl)
+{
     v8::HandleScope scope(fGlobal->getIsolate());
 
     // Add accessors for each of the fields of the context object.
     tmpl->SetAccessor(v8::String::NewFromUtf8(
-        fGlobal->getIsolate(), "width", v8::String::kInternalizedString),
-            GetWidth);
+                          fGlobal->getIsolate(), "width", v8::String::kInternalizedString),
+        GetWidth);
     tmpl->SetAccessor(v8::String::NewFromUtf8(
-        fGlobal->getIsolate(), "height", v8::String::kInternalizedString),
-            GetHeight);
+                          fGlobal->getIsolate(), "height", v8::String::kInternalizedString),
+        GetHeight);
 
     // Add methods.
     ADD_METHOD("save", Save);

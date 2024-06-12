@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawTo.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -23,7 +22,11 @@ const SkMemberInfo SkDrawTo::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawTo);
 
-SkDrawTo::SkDrawTo() : drawOnce(false), use(NULL), fDrawnOnce(false) {
+SkDrawTo::SkDrawTo()
+    : drawOnce(false)
+    , use(nullptr)
+    , fDrawnOnce(false)
+{
 }
 
 #if 0
@@ -32,7 +35,8 @@ SkDrawTo::~SkDrawTo() {
 }
 #endif
 
-bool SkDrawTo::draw(SkAnimateMaker& maker) {
+bool SkDrawTo::draw(SkAnimateMaker& maker)
+{
     if (fDrawnOnce)
         return false;
     SkCanvas canvas(use->fBitmap);
@@ -45,7 +49,8 @@ bool SkDrawTo::draw(SkAnimateMaker& maker) {
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkDrawTo::dump(SkAnimateMaker* maker) {
+void SkDrawTo::dump(SkAnimateMaker* maker)
+{
     dumpBase(maker);
     dumpAttrs(maker);
     if (use)

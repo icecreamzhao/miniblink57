@@ -5,11 +5,12 @@
  * found in the LICENSE file.
  */
 
+#include "SkDrawable.h"
 #include "SkAtomics.h"
 #include "SkCanvas.h"
-#include "SkDrawable.h"
 
-static int32_t next_generation_id() {
+static int32_t next_generation_id()
+{
     static int32_t gCanvasDrawableGenerationID;
 
     // do a loop in case our global wraps around, as we never want to
@@ -21,9 +22,13 @@ static int32_t next_generation_id() {
     return genID;
 }
 
-SkDrawable::SkDrawable() : fGenerationID(0) {}
+SkDrawable::SkDrawable()
+    : fGenerationID(0)
+{
+}
 
-static void draw_bbox(SkCanvas* canvas, const SkRect& r) {
+static void draw_bbox(SkCanvas* canvas, const SkRect& r)
+{
     SkPaint paint;
     paint.setStyle(SkPaint::kStroke_Style);
     paint.setColor(0xFFFF7088);
@@ -32,7 +37,8 @@ static void draw_bbox(SkCanvas* canvas, const SkRect& r) {
     canvas->drawLine(r.left(), r.bottom(), r.right(), r.top(), paint);
 }
 
-void SkDrawable::draw(SkCanvas* canvas, const SkMatrix* matrix) {
+void SkDrawable::draw(SkCanvas* canvas, const SkMatrix* matrix)
+{
     SkAutoCanvasRestore acr(canvas, true);
     if (matrix) {
         canvas->concat(*matrix);
@@ -44,27 +50,32 @@ void SkDrawable::draw(SkCanvas* canvas, const SkMatrix* matrix) {
     }
 }
 
-void SkDrawable::draw(SkCanvas* canvas, SkScalar x, SkScalar y) {
+void SkDrawable::draw(SkCanvas* canvas, SkScalar x, SkScalar y)
+{
     SkMatrix matrix = SkMatrix::MakeTrans(x, y);
     this->draw(canvas, &matrix);
 }
 
-SkPicture* SkDrawable::newPictureSnapshot() {
+SkPicture* SkDrawable::newPictureSnapshot()
+{
     return this->onNewPictureSnapshot();
 }
 
-uint32_t SkDrawable::getGenerationID() {
+uint32_t SkDrawable::getGenerationID()
+{
     if (0 == fGenerationID) {
         fGenerationID = next_generation_id();
     }
     return fGenerationID;
 }
 
-SkRect SkDrawable::getBounds() {
+SkRect SkDrawable::getBounds()
+{
     return this->onGetBounds();
 }
 
-void SkDrawable::notifyDrawingChanged() {
+void SkDrawable::notifyDrawingChanged()
+{
     fGenerationID = 0;
 }
 
@@ -72,14 +83,15 @@ void SkDrawable::notifyDrawingChanged() {
 
 #include "SkPictureRecorder.h"
 
-SkPicture* SkDrawable::onNewPictureSnapshot() {
+SkPicture* SkDrawable::onNewPictureSnapshot()
+{
     SkPictureRecorder recorder;
 
     const SkRect bounds = this->getBounds();
-    SkCanvas* canvas = recorder.beginRecording(bounds, NULL, 0);
+    SkCanvas* canvas = recorder.beginRecording(bounds, nullptr, 0);
     this->draw(canvas);
     if (false) {
         draw_bbox(canvas, bounds);
     }
-    return recorder.endRecording();
+    return recorder.finishRecordingAsPicture().release();
 }

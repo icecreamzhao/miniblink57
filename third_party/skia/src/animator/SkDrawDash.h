@@ -8,14 +8,15 @@
 #ifndef SkDrawDash_DEFINED
 #define SkDrawDash_DEFINED
 
-#include "SkPaintPart.h"
 #include "SkIntArray.h"
+#include "SkPaintPart.h"
 
 class SkDash : public SkDrawPathEffect {
     DECLARE_MEMBER_INFO(Dash);
     SkDash();
     virtual ~SkDash();
     SkPathEffect* getPathEffect() override;
+
 private:
     SkTDScalarArray intervals;
     SkScalar phase;

@@ -32,20 +32,33 @@ namespace net {
 
 PathWalker::PathWalker(const String& directory, const String& pattern)
 {
+#if defined(OS_WIN)
     String path = directory + "\\" + pattern;
     m_handle = ::FindFirstFileW(path.charactersWithNullTermination().data(), &m_data);
+#else
+    DebugBreak();
+#endif
 }
 
 PathWalker::~PathWalker()
 {
+#if defined(OS_WIN)
     if (!isValid())
         return;
     ::FindClose(m_handle);
+#else
+    DebugBreak();
+#endif
 }
 
 bool PathWalker::step()
 {
+#if defined(OS_WIN)
     return ::FindNextFileW(m_handle, &m_data);
+#else
+    DebugBreak();
+    return false;
+#endif
 }
 
 } // namespace WebCore

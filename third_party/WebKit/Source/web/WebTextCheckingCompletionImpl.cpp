@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/WebTextCheckingCompletionImpl.h"
 
 #include "platform/text/TextCheckerClient.h"
@@ -39,15 +38,17 @@
 
 namespace blink {
 
-static Vector<TextCheckingResult> toCoreResults(const WebVector<WebTextCheckingResult>& results)
+static Vector<TextCheckingResult> toCoreResults(
+    const WebVector<WebTextCheckingResult>& results)
 {
     Vector<TextCheckingResult> coreResults;
     for (size_t i = 0; i < results.size(); ++i)
-        coreResults.append(results[i]);
+        coreResults.push_back(results[i]);
     return coreResults;
 }
 
-void WebTextCheckingCompletionImpl::didFinishCheckingText(const WebVector<WebTextCheckingResult>& results)
+void WebTextCheckingCompletionImpl::didFinishCheckingText(
+    const WebVector<WebTextCheckingResult>& results)
 {
     m_request->didSucceed(toCoreResults(results));
     delete this;

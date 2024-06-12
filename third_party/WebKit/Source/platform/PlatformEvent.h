@@ -26,18 +26,16 @@
 #ifndef PlatformEvent_h
 #define PlatformEvent_h
 
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
+#include "wtf/Time.h"
+
 namespace blink {
 
 class PlatformEvent {
 public:
-    enum Type {
+    enum EventType {
         NoType = 0,
-
-        // PlatformKeyboardEvent
-        KeyDown,
-        KeyUp,
-        RawKeyDown,
-        Char,
 
         // PlatformMouseEvent
         MouseMoved,
@@ -45,107 +43,110 @@ public:
         MouseReleased,
         MouseScroll,
 
-        // PlatformWheelEvent
-        Wheel,
-
-        // PlatformGestureEvent
-        GestureScrollBegin,
-        GestureScrollEnd,
-        GestureScrollUpdate,
-        GestureTap,
-        GestureTapUnconfirmed,
-        GestureTapDown,
-        GestureShowPress,
-        GestureTapDownCancel,
-        GestureTwoFingerTap,
-        GestureLongPress,
-        GestureLongTap,
-        GesturePinchBegin,
-        GesturePinchEnd,
-        GesturePinchUpdate,
-        GestureFlingStart,
-
         // PlatformTouchEvent
         TouchStart,
         TouchMove,
         TouchEnd,
         TouchCancel,
+        TouchScrollStarted,
     };
 
+    // These values are direct mappings of the values in WebInputEvent so the
+    // values can be cast between the enumerations. static_asserts checking this
+    // are in web/WebInputEventConversion.cpp.
     enum Modifiers {
-        AltKey      = 1 << 0,
-        CtrlKey     = 1 << 1,
-        MetaKey     = 1 << 2,
-        ShiftKey    = 1 << 3,
+        NoModifiers = 0,
+        ShiftKey = 1 << 0,
+        CtrlKey = 1 << 1,
+        AltKey = 1 << 2,
+        MetaKey = 1 << 3,
 
-        LeftButtonDown   = 1 << 6,
+        IsKeyPad = 1 << 4,
+        IsAutoRepeat = 1 << 5,
+
+        LeftButtonDown = 1 << 6,
         MiddleButtonDown = 1 << 7,
-        RightButtonDown  = 1 << 8,
+        RightButtonDown = 1 << 8,
+
+        CapsLockOn = 1 << 9,
+        NumLockOn = 1 << 10,
+
+        IsLeft = 1 << 11,
+        IsRight = 1 << 12,
+        IsTouchAccessibility = 1 << 13,
+        IsComposing = 1 << 14,
+
+        AltGrKey = 1 << 15,
+        FnKey = 1 << 16,
+        SymbolKey = 1 << 17,
+
+        ScrollLockOn = 1 << 18,
+
+        // The set of non-stateful modifiers that specifically change the
+        // interpretation of the key being pressed. For example; IsLeft,
+        // IsRight, IsComposing don't change the meaning of the key
+        // being pressed. NumLockOn, ScrollLockOn, CapsLockOn are stateful
+        // and don't indicate explicit depressed state.
+        KeyModifiers = SymbolKey | FnKey | AltGrKey | MetaKey | AltKey | CtrlKey | ShiftKey,
     };
 
     enum RailsMode {
-        RailsModeFree       = 0,
+        RailsModeFree = 0,
         RailsModeHorizontal = 1,
-        RailsModeVertical   = 2,
+        RailsModeVertical = 2,
     };
 
-    Type type() const { return static_cast<Type>(m_type); }
+    // These values are direct mappings of the values in WebInputEvent
+    // so the values can be cast between the enumerations. static_asserts
+    // checking this are in web/WebInputEventConversion.cpp.
+    enum DispatchType {
+        Blocking,
+        EventNonBlocking,
+        // All listeners are passive.
+        ListenersNonBlockingPassive,
+        // This value represents a state which would have normally blocking
+        // but was forced to be non-blocking during fling; not cancelable.
+        ListenersForcedNonBlockingDueToFling,
+    };
+
+    EventType type() const { return static_cast<EventType>(m_type); }
 
     bool shiftKey() const { return m_modifiers & ShiftKey; }
     bool ctrlKey() const { return m_modifiers & CtrlKey; }
     bool altKey() const { return m_modifiers & AltKey; }
     bool metaKey() const { return m_modifiers & MetaKey; }
 
-    unsigned modifiers() const { return m_modifiers; }
+    Modifiers getModifiers() const { return static_cast<Modifiers>(m_modifiers); }
 
-    double timestamp() const { return m_timestamp; }
+    TimeTicks timestamp() const { return m_timestamp; }
 
 protected:
     PlatformEvent()
         : m_type(NoType)
-        , m_modifiers(0)
-        , m_timestamp(0)
+        , m_modifiers()
     {
     }
 
-    explicit PlatformEvent(Type type)
+    explicit PlatformEvent(EventType type)
         : m_type(type)
         , m_modifiers(0)
-        , m_timestamp(0)
     {
     }
 
-    PlatformEvent(Type type, Modifiers modifiers, double timestamp)
+    PlatformEvent(EventType type, Modifiers modifiers, TimeTicks timestamp)
         : m_type(type)
         , m_modifiers(modifiers)
         , m_timestamp(timestamp)
     {
     }
 
-    PlatformEvent(Type type, bool shiftKey, bool ctrlKey, bool altKey, bool metaKey, double timestamp)
-        : m_type(type)
-        , m_modifiers(0)
-        , m_timestamp(timestamp)
-    {
-        if (shiftKey)
-            m_modifiers |= ShiftKey;
-        if (ctrlKey)
-            m_modifiers |= CtrlKey;
-        if (altKey)
-            m_modifiers |= AltKey;
-        if (metaKey)
-            m_modifiers |= MetaKey;
-    }
-
     // Explicit protected destructor so that people don't accidentally
     // delete a PlatformEvent.
-    ~PlatformEvent()
-    {
-    }
+    ~PlatformEvent() { }
 
     unsigned m_type;
     unsigned m_modifiers;
-    double m_timestamp;
+    TimeTicks m_timestamp;
 };
 
 } // namespace blink

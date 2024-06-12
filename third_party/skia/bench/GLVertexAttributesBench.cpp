@@ -11,11 +11,12 @@
 
 #if SK_SUPPORT_GPU
 #include "GLBench.h"
-#include "gl/GrGLGLSL.h"
+#include "gl/GrGLContext.h"
 #include "gl/GrGLInterface.h"
-#include "gl/GrGLShaderVar.h"
 #include "gl/GrGLUtil.h"
+#include "glsl/GrGLSL.h"
 #include "glsl/GrGLSLCaps.h"
+#include "glsl/GrGLSLShaderVar.h"
 #include <stdio.h>
 
 /*
@@ -29,14 +30,15 @@ public:
         , fProgram(0)
         , fVBO(0)
         , fAttribs(attribs)
-        , fStride(2 * sizeof(SkPoint) + fAttribs * sizeof(GrGLfloat) * 4) {
+        , fStride(2 * sizeof(SkPoint) + fAttribs * sizeof(GrGLfloat) * 4)
+    {
         fName.appendf("GLVertexAttributesBench_%d", fAttribs);
     }
 
 protected:
     const char* onGetName() override { return fName.c_str(); }
     void setup(const GrGLContext*) override;
-    void glDraw(const int loops, const GrGLContext*) override;
+    void glDraw(int loops, const GrGLContext*) override;
     void teardown(const GrGLInterface*) override;
 
     static const GrGLuint kScreenWidth = 800;
@@ -63,43 +65,44 @@ private:
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 GrGLuint GLVertexAttributesBench::setupShader(const GrGLContext* ctx, uint32_t attribs,
-                                              uint32_t maxAttribs) {
-    const char* version = GrGLGetGLSLVersionDecl(*ctx);
+    uint32_t maxAttribs)
+{
+    const GrGLSLCaps* glslCaps = ctx->caps()->glslCaps();
+    const char* version = glslCaps->versionDeclString();
 
     // setup vertex shader
-    GrGLShaderVar aPosition("a_position", kVec4f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
-    SkTArray<GrGLShaderVar> aVars;
-    SkTArray<GrGLShaderVar> oVars;
+    GrGLSLShaderVar aPosition("a_position", kVec4f_GrSLType, GrShaderVar::kAttribute_TypeModifier);
+    SkTArray<GrGLSLShaderVar> aVars;
+    SkTArray<GrGLSLShaderVar> oVars;
 
     SkString vshaderTxt(version);
-    aPosition.appendDecl(*ctx, &vshaderTxt);
+    aPosition.appendDecl(glslCaps, &vshaderTxt);
     vshaderTxt.append(";\n");
 
     for (uint32_t i = 0; i < attribs; i++) {
         SkString aname;
         aname.appendf("a_color_%d", i);
-        aVars.push_back(GrGLShaderVar(aname.c_str(),
-                                       kVec4f_GrSLType,
-                                       GrShaderVar::kAttribute_TypeModifier));
-        aVars.back().appendDecl(*ctx, &vshaderTxt);
+        aVars.push_back(GrGLSLShaderVar(aname.c_str(),
+            kVec4f_GrSLType,
+            GrShaderVar::kAttribute_TypeModifier));
+        aVars.back().appendDecl(glslCaps, &vshaderTxt);
         vshaderTxt.append(";\n");
-
     }
 
     for (uint32_t i = 0; i < maxAttribs; i++) {
         SkString oname;
         oname.appendf("o_color_%d", i);
-        oVars.push_back(GrGLShaderVar(oname.c_str(),
-                                       kVec4f_GrSLType,
-                                       GrShaderVar::kVaryingOut_TypeModifier));
-        oVars.back().appendDecl(*ctx, &vshaderTxt);
+        oVars.push_back(GrGLSLShaderVar(oname.c_str(),
+            kVec4f_GrSLType,
+            GrShaderVar::kVaryingOut_TypeModifier));
+        oVars.back().appendDecl(glslCaps, &vshaderTxt);
         vshaderTxt.append(";\n");
     }
 
     vshaderTxt.append(
-            "void main()\n"
-            "{\n"
-                "gl_Position = a_position;\n");
+        "void main()\n"
+        "{\n"
+        "gl_Position = a_position;\n");
 
     for (uint32_t i = 0; i < attribs; i++) {
         vshaderTxt.appendf("%s = %s;\n", oVars[i].c_str(), aVars[i].c_str());
@@ -115,14 +118,13 @@ GrGLuint GLVertexAttributesBench::setupShader(const GrGLContext* ctx, uint32_t a
     const GrGLInterface* gl = ctx->interface();
 
     // setup fragment shader
-    GrGLShaderVar oFragColor("o_FragColor", kVec4f_GrSLType, GrShaderVar::kOut_TypeModifier);
+    GrGLSLShaderVar oFragColor("o_FragColor", kVec4f_GrSLType, GrShaderVar::kOut_TypeModifier);
     SkString fshaderTxt(version);
-    GrGLAppendGLSLDefaultFloatPrecisionDeclaration(kDefault_GrSLPrecision, gl->fStandard,
-                                                   &fshaderTxt);
+    GrGLSLAppendDefaultFloatPrecisionDeclaration(kDefault_GrSLPrecision, *glslCaps, &fshaderTxt);
 
     const char* fsOutName;
-    if (ctx->caps()->glslCaps()->mustDeclareFragmentShaderOutput()) {
-        oFragColor.appendDecl(*ctx, &fshaderTxt);
+    if (glslCaps->mustDeclareFragmentShaderOutput()) {
+        oFragColor.appendDecl(glslCaps, &fshaderTxt);
         fshaderTxt.append(";\n");
         fsOutName = oFragColor.c_str();
     } else {
@@ -131,14 +133,15 @@ GrGLuint GLVertexAttributesBench::setupShader(const GrGLContext* ctx, uint32_t a
 
     for (uint32_t i = 0; i < maxAttribs; i++) {
         oVars[i].setTypeModifier(GrShaderVar::kVaryingIn_TypeModifier);
-        oVars[i].appendDecl(*ctx, &fshaderTxt);
+        oVars[i].appendDecl(glslCaps, &fshaderTxt);
         fshaderTxt.append(";\n");
     }
 
     fshaderTxt.appendf(
-            "void main()\n"
-            "{\n"
-               "%s = ", fsOutName);
+        "void main()\n"
+        "{\n"
+        "%s = ",
+        fsOutName);
 
     fshaderTxt.appendf("%s", oVars[0].c_str());
     for (uint32_t i = 1; i < maxAttribs; i++) {
@@ -153,7 +156,8 @@ GrGLuint GLVertexAttributesBench::setupShader(const GrGLContext* ctx, uint32_t a
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GLVertexAttributesBench::setup(const GrGLContext* ctx) {
+void GLVertexAttributesBench::setup(const GrGLContext* ctx)
+{
     const GrGLInterface* gl = ctx->interface();
     fTexture = SetupFramebuffer(gl, kScreenWidth, kScreenHeight);
 
@@ -161,7 +165,7 @@ void GLVertexAttributesBench::setup(const GrGLContext* ctx) {
 
     // setup matrices
     SkMatrix viewMatrices[kNumTri];
-    for (uint32_t i = 0 ; i < kNumTri; i++) {
+    for (uint32_t i = 0; i < kNumTri; i++) {
         SkMatrix m = SkMatrix::I();
         m.setScale(0.0001f, 0.0001f);
         viewMatrices[i] = m;
@@ -175,11 +179,17 @@ void GLVertexAttributesBench::setup(const GrGLContext* ctx) {
     for (uint32_t i = 0; i < kNumTri; i++) {
         unsigned char* ptr = &fVertices[static_cast<int>(i * kVerticesPerTri * fStride)];
         SkPoint* p = reinterpret_cast<SkPoint*>(ptr);
-        p->set(-1.0f, -1.0f); p++; p->set( 0.0f, 1.0f);
+        p->set(-1.0f, -1.0f);
+        p++;
+        p->set(0.0f, 1.0f);
         p = reinterpret_cast<SkPoint*>(ptr + fStride);
-        p->set( 1.0f, -1.0f); p++; p->set( 0.0f, 1.0f);
+        p->set(1.0f, -1.0f);
+        p++;
+        p->set(0.0f, 1.0f);
         p = reinterpret_cast<SkPoint*>(ptr + fStride * 2);
-        p->set( 1.0f,  1.0f); p++; p->set( 0.0f, 1.0f);
+        p->set(1.0f, 1.0f);
+        p++;
+        p->set(0.0f, 1.0f);
 
         SkPoint* position = reinterpret_cast<SkPoint*>(ptr);
         viewMatrices[i].mapPointsWithStride(position, fStride, kVerticesPerTri);
@@ -207,26 +217,24 @@ void GLVertexAttributesBench::setup(const GrGLContext* ctx) {
     GR_GL_CALL(gl, UseProgram(fProgram));
 }
 
-void GLVertexAttributesBench::glDraw(const int loops, const GrGLContext* ctx) {
+void GLVertexAttributesBench::glDraw(int loops, const GrGLContext* ctx)
+{
     const GrGLInterface* gl = ctx->interface();
 
     // upload vertex attributes
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, fVBO));
     GR_GL_CALL(gl, EnableVertexAttribArray(0));
-    GR_GL_CALL(gl, VertexAttribPointer(0, 4, GR_GL_FLOAT, GR_GL_FALSE, (GrGLsizei)fStride,
-                                       (GrGLvoid*)0));
+    GR_GL_CALL(gl, VertexAttribPointer(0, 4, GR_GL_FLOAT, GR_GL_FALSE, (GrGLsizei)fStride, (GrGLvoid*)0));
 
     size_t runningStride = 2 * sizeof(SkPoint);
     for (uint32_t i = 0; i < fAttribs; i++) {
         int attribId = i + 1;
         GR_GL_CALL(gl, EnableVertexAttribArray(attribId));
-        GR_GL_CALL(gl, VertexAttribPointer(attribId, 4, GR_GL_FLOAT, GR_GL_FALSE,
-                                           (GrGLsizei)fStride, (GrGLvoid*)(runningStride)));
+        GR_GL_CALL(gl, VertexAttribPointer(attribId, 4, GR_GL_FLOAT, GR_GL_FALSE, (GrGLsizei)fStride, (GrGLvoid*)(runningStride)));
         runningStride += sizeof(GrGLfloat) * 4;
     }
 
-    GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, fVertices.count(), fVertices.begin(),
-                              GR_GL_STREAM_DRAW));
+    GR_GL_CALL(gl, BufferData(GR_GL_ARRAY_BUFFER, fVertices.count(), fVertices.begin(), GR_GL_STREAM_DRAW));
 
     uint32_t maxTrianglesPerFlush = kNumTri;
     uint32_t trianglesToDraw = loops * kDrawMultiplier;
@@ -245,7 +253,8 @@ void GLVertexAttributesBench::glDraw(const int loops, const GrGLContext* ctx) {
 #endif
 }
 
-void GLVertexAttributesBench::teardown(const GrGLInterface* gl) {
+void GLVertexAttributesBench::teardown(const GrGLInterface* gl)
+{
     // teardown
     GR_GL_CALL(gl, BindBuffer(GR_GL_ARRAY_BUFFER, 0));
     GR_GL_CALL(gl, BindTexture(GR_GL_TEXTURE_2D, 0));
@@ -253,16 +262,17 @@ void GLVertexAttributesBench::teardown(const GrGLInterface* gl) {
     GR_GL_CALL(gl, DeleteTextures(1, &fTexture));
     GR_GL_CALL(gl, DeleteProgram(fProgram));
     GR_GL_CALL(gl, DeleteBuffers(fBuffers.count(), fBuffers.begin()));
+    fBuffers.reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new GLVertexAttributesBench(0) )
-DEF_BENCH( return new GLVertexAttributesBench(1) )
-DEF_BENCH( return new GLVertexAttributesBench(2) )
-DEF_BENCH( return new GLVertexAttributesBench(3) )
-DEF_BENCH( return new GLVertexAttributesBench(4) )
-DEF_BENCH( return new GLVertexAttributesBench(5) )
-DEF_BENCH( return new GLVertexAttributesBench(6) )
-DEF_BENCH( return new GLVertexAttributesBench(7) )
+DEF_BENCH(return new GLVertexAttributesBench(0))
+DEF_BENCH(return new GLVertexAttributesBench(1))
+DEF_BENCH(return new GLVertexAttributesBench(2))
+DEF_BENCH(return new GLVertexAttributesBench(3))
+DEF_BENCH(return new GLVertexAttributesBench(4))
+DEF_BENCH(return new GLVertexAttributesBench(5))
+DEF_BENCH(return new GLVertexAttributesBench(6))
+DEF_BENCH(return new GLVertexAttributesBench(7))
 #endif

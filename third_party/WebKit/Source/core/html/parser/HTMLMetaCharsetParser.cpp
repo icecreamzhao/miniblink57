@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/HTMLMetaCharsetParser.h"
 
 #include "core/HTMLNames.h"
@@ -47,50 +46,50 @@ HTMLMetaCharsetParser::HTMLMetaCharsetParser()
 {
 }
 
-HTMLMetaCharsetParser::~HTMLMetaCharsetParser()
-{
-}
+HTMLMetaCharsetParser::~HTMLMetaCharsetParser() { }
 
 bool HTMLMetaCharsetParser::processMeta()
 {
     const HTMLToken::AttributeList& tokenAttributes = m_token.attributes();
     HTMLAttributeList attributes;
     for (const HTMLToken::Attribute& tokenAttribute : tokenAttributes) {
-        String attributeName = attemptStaticStringCreation(tokenAttribute.name, Likely8Bit);
-        String attributeValue = StringImpl::create8BitIfPossible(tokenAttribute.value);
-        attributes.append(std::make_pair(attributeName, attributeValue));
+        String attributeName = tokenAttribute.nameAttemptStaticStringCreation();
+        String attributeValue = tokenAttribute.value8BitIfNecessary();
+        attributes.push_back(std::make_pair(attributeName, attributeValue));
     }
 
     m_encoding = encodingFromMetaAttributes(attributes);
     return m_encoding.isValid();
 }
 
-static const int bytesToCheckUnconditionally = 1024; // That many input bytes will be checked for meta charset even if <head> section is over.
+// That many input bytes will be checked for meta charset even if <head> section
+// is over.
+static const int bytesToCheckUnconditionally = 1024;
 
-bool HTMLMetaCharsetParser::checkForMetaCharset(const char* data, size_t length)
+bool HTMLMetaCharsetParser::checkForMetaCharset(const char* data,
+    size_t length)
 {
     if (m_doneChecking)
         return true;
 
     ASSERT(!m_encoding.isValid());
 
-    // We still don't have an encoding, and are in the head.
-    // The following tags are allowed in <head>:
-    // SCRIPT|STYLE|META|LINK|OBJECT|TITLE|BASE
+    // We still don't have an encoding, and are in the head. The following tags
+    // are allowed in <head>: SCRIPT|STYLE|META|LINK|OBJECT|TITLE|BASE
 
-    // We stop scanning when a tag that is not permitted in <head>
-    // is seen, rather when </head> is seen, because that more closely
-    // matches behavior in other browsers; more details in
-    // <http://bugs.webkit.org/show_bug.cgi?id=3590>.
+    // We stop scanning when a tag that is not permitted in <head> is seen, rather
+    // when </head> is seen, because that more closely matches behavior in other
+    // browsers; more details in <http://bugs.webkit.org/show_bug.cgi?id=3590>.
 
     // Additionally, we ignore things that looks like tags in <title>, <script>
-    // and <noscript>; see <http://bugs.webkit.org/show_bug.cgi?id=4560>,
-    // <http://bugs.webkit.org/show_bug.cgi?id=12165> and
-    // <http://bugs.webkit.org/show_bug.cgi?id=12389>.
+    // and <noscript>; see:
+    // <http://bugs.webkit.org/show_bug.cgi?id=4560>
+    // <http://bugs.webkit.org/show_bug.cgi?id=12165>
+    // <http://bugs.webkit.org/show_bug.cgi?id=12389>
 
-    // Since many sites have charset declarations after <body> or other tags
-    // that are disallowed in <head>, we don't bail out until we've checked at
-    // least bytesToCheckUnconditionally bytes of input.
+    // Since many sites have charset declarations after <body> or other tags that
+    // are disallowed in <head>, we don't bail out until we've checked at least
+    // bytesToCheckUnconditionally bytes of input.
 
     m_input.append(SegmentedString(m_assumedCodec->decode(data, length)));
 
@@ -106,11 +105,7 @@ bool HTMLMetaCharsetParser::checkForMetaCharset(const char* data, size_t length)
                 }
             }
 
-            if (!threadSafeMatch(tagName, scriptTag) && !threadSafeMatch(tagName, noscriptTag)
-                && !threadSafeMatch(tagName, styleTag) && !threadSafeMatch(tagName, linkTag)
-                && !threadSafeMatch(tagName, metaTag) && !threadSafeMatch(tagName, objectTag)
-                && !threadSafeMatch(tagName, titleTag) && !threadSafeMatch(tagName, baseTag)
-                && (end || !threadSafeMatch(tagName, htmlTag)) && (end || !threadSafeMatch(tagName, headTag))) {
+            if (!threadSafeMatch(tagName, scriptTag) && !threadSafeMatch(tagName, noscriptTag) && !threadSafeMatch(tagName, styleTag) && !threadSafeMatch(tagName, linkTag) && !threadSafeMatch(tagName, metaTag) && !threadSafeMatch(tagName, objectTag) && !threadSafeMatch(tagName, titleTag) && !threadSafeMatch(tagName, baseTag) && (end || !threadSafeMatch(tagName, htmlTag)) && (end || !threadSafeMatch(tagName, headTag))) {
                 m_inHeadSection = false;
             }
         }
@@ -126,4 +121,4 @@ bool HTMLMetaCharsetParser::checkForMetaCharset(const char* data, size_t length)
     return false;
 }
 
-}
+} // namespace blink

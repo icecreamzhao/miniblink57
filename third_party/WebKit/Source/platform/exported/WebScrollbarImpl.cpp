@@ -10,19 +10,17 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-#include "config.h"
 
 #include "platform/exported/WebScrollbarImpl.h"
 
@@ -34,10 +32,6 @@ namespace blink {
 WebScrollbarImpl::WebScrollbarImpl(Scrollbar* scrollbar)
     : m_scrollbar(scrollbar)
 {
-}
-
-WebScrollbarImpl::~WebScrollbarImpl()
-{ 
 }
 
 bool WebScrollbarImpl::isOverlay() const
@@ -94,7 +88,8 @@ void WebScrollbarImpl::getTickmarks(WebVector<WebRect>& webTickmarks) const
 
 WebScrollbar::ScrollbarControlSize WebScrollbarImpl::controlSize() const
 {
-    return static_cast<WebScrollbar::ScrollbarControlSize>(m_scrollbar->controlSize());
+    return static_cast<WebScrollbar::ScrollbarControlSize>(
+        m_scrollbar->controlSize());
 }
 
 WebScrollbar::ScrollbarPart WebScrollbarImpl::pressedPart() const
@@ -107,9 +102,11 @@ WebScrollbar::ScrollbarPart WebScrollbarImpl::hoveredPart() const
     return static_cast<WebScrollbar::ScrollbarPart>(m_scrollbar->hoveredPart());
 }
 
-WebScrollbar::ScrollbarOverlayStyle WebScrollbarImpl::scrollbarOverlayStyle() const
+WebScrollbarOverlayColorTheme WebScrollbarImpl::scrollbarOverlayColorTheme()
+    const
 {
-    return static_cast<WebScrollbar::ScrollbarOverlayStyle>(m_scrollbar->scrollbarOverlayStyle());
+    return static_cast<WebScrollbarOverlayColorTheme>(
+        m_scrollbar->getScrollbarOverlayColorTheme());
 }
 
 WebScrollbar::Orientation WebScrollbarImpl::orientation() const
@@ -125,16 +122,6 @@ bool WebScrollbarImpl::isLeftSideVerticalScrollbar() const
 bool WebScrollbarImpl::isCustomScrollbar() const
 {
     return m_scrollbar->isCustomScrollbar();
-}
-
-bool WebScrollbarImpl::isAlphaLocked() const
-{
-    return m_scrollbar->isAlphaLocked();
-}
-
-void WebScrollbarImpl::setIsAlphaLocked(bool flag)
-{
-    m_scrollbar->setIsAlphaLocked(flag);
 }
 
 float WebScrollbarImpl::elasticOverscroll() const

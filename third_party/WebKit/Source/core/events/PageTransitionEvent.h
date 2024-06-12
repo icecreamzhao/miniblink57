@@ -33,23 +33,23 @@ namespace blink {
 
 class PageTransitionEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<PageTransitionEvent> create()
+    static PageTransitionEvent* create() { return new PageTransitionEvent; }
+    static PageTransitionEvent* create(const AtomicString& type, bool persisted)
     {
-        return adoptRefWillBeNoop(new PageTransitionEvent);
+        return new PageTransitionEvent(type, persisted);
     }
-    static PassRefPtrWillBeRawPtr<PageTransitionEvent> create(const AtomicString& type, bool persisted)
+    static PageTransitionEvent* create(
+        const AtomicString& type,
+        const PageTransitionEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new PageTransitionEvent(type, persisted));
-    }
-    static PassRefPtrWillBeRawPtr<PageTransitionEvent> create(const AtomicString& type, const PageTransitionEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new PageTransitionEvent(type, initializer));
+        return new PageTransitionEvent(type, initializer);
     }
 
-    virtual ~PageTransitionEvent();
+    ~PageTransitionEvent() override;
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     bool persisted() const { return m_persisted; }
 

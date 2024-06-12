@@ -31,17 +31,26 @@ class SVGRadialGradientElement;
 class LayoutSVGResourceRadialGradient final : public LayoutSVGResourceGradient {
 public:
     explicit LayoutSVGResourceRadialGradient(SVGRadialGradientElement*);
-    virtual ~LayoutSVGResourceRadialGradient();
+    ~LayoutSVGResourceRadialGradient() override;
 
-    virtual const char* name() const override { return "LayoutSVGResourceRadialGradient"; }
+    const char* name() const override
+    {
+        return "LayoutSVGResourceRadialGradient";
+    }
 
     static const LayoutSVGResourceType s_resourceType = RadialGradientResourceType;
-    virtual LayoutSVGResourceType resourceType() const override { return s_resourceType; }
+    LayoutSVGResourceType resourceType() const override { return s_resourceType; }
 
-    virtual SVGUnitTypes::SVGUnitType gradientUnits() const override { return attributes().gradientUnits(); }
-    virtual void calculateGradientTransform(AffineTransform& transform) override { transform = attributes().gradientTransform(); }
-    virtual bool collectGradientAttributes(SVGGradientElement*) override;
-    virtual void buildGradient(GradientData*) const override;
+    SVGUnitTypes::SVGUnitType gradientUnits() const override
+    {
+        return attributes().gradientUnits();
+    }
+    AffineTransform calculateGradientTransform() const override
+    {
+        return attributes().gradientTransform();
+    }
+    bool collectGradientAttributes(SVGGradientElement*) override;
+    PassRefPtr<Gradient> buildGradient() const override;
 
     FloatPoint centerPoint(const RadialGradientAttributes&) const;
     FloatPoint focalPoint(const RadialGradientAttributes&) const;
@@ -49,21 +58,21 @@ public:
     float focalRadius(const RadialGradientAttributes&) const;
 
 private:
-#if ENABLE(OILPAN)
     Persistent<RadialGradientAttributesWrapper> m_attributesWrapper;
 
-    RadialGradientAttributes& mutableAttributes() { return m_attributesWrapper->attributes(); }
-    const RadialGradientAttributes& attributes() const { return m_attributesWrapper->attributes(); }
-#else
-    RadialGradientAttributes m_attributes;
-
-    RadialGradientAttributes& mutableAttributes() { return m_attributes; }
-    const RadialGradientAttributes& attributes() const { return m_attributes; }
-#endif
+    RadialGradientAttributes& mutableAttributes()
+    {
+        return m_attributesWrapper->attributes();
+    }
+    const RadialGradientAttributes& attributes() const
+    {
+        return m_attributesWrapper->attributes();
+    }
 };
 
-DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(LayoutSVGResourceRadialGradient, RadialGradientResourceType);
+DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(LayoutSVGResourceRadialGradient,
+    RadialGradientResourceType);
 
-}
+} // namespace blink
 
 #endif

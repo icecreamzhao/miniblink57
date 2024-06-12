@@ -28,10 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/ElementAnimations.h"
-
-#include "core/layout/LayoutObject.h"
 
 namespace blink {
 
@@ -40,42 +37,45 @@ ElementAnimations::ElementAnimations()
 {
 }
 
-ElementAnimations::~ElementAnimations()
-{
-#if !ENABLE(OILPAN)
-    for (KeyframeEffect* effect : m_effects)
-        effect->notifyElementDestroyed();
-    m_effects.clear();
-#endif
-}
+ElementAnimations::~ElementAnimations() { }
 
 void ElementAnimations::updateAnimationFlags(ComputedStyle& style)
 {
     for (const auto& entry : m_animations) {
         const Animation& animation = *entry.key;
-        ASSERT(animation.effect());
+        DCHECK(animation.effect());
         // FIXME: Needs to consider AnimationGroup once added.
-        ASSERT(animation.effect()->isAnimation());
-        const KeyframeEffect& effect = *toKeyframeEffect(animation.effect());
+        DCHECK(animation.effect()->isKeyframeEffectReadOnly());
+        const KeyframeEffectReadOnly& effect = *toKeyframeEffectReadOnly(animation.effect());
         if (effect.isCurrent()) {
             if (effect.affects(PropertyHandle(CSSPropertyOpacity)))
                 style.setHasCurrentOpacityAnimation(true);
-            if (effect.affects(PropertyHandle(CSSPropertyTransform))
-                || effect.affects(PropertyHandle(CSSPropertyRotate))
-                || effect.affects(PropertyHandle(CSSPropertyScale))
-                || effect.affects(PropertyHandle(CSSPropertyTranslate)))
+            if (effect.affects(PropertyHandle(CSSPropertyTransform)) || effect.affects(PropertyHandle(CSSPropertyRotate)) || effect.affects(PropertyHandle(CSSPropertyScale)) || effect.affects(PropertyHandle(CSSPropertyTranslate)))
                 style.setHasCurrentTransformAnimation(true);
-            if (effect.affects(PropertyHandle(CSSPropertyWebkitFilter)))
+            if (effect.affects(PropertyHandle(CSSPropertyFilter)))
                 style.setHasCurrentFilterAnimation(true);
+            if (effect.affects(PropertyHandle(CSSPropertyBackdropFilter)))
+                style.setHasCurrentBackdropFilterAnimation(true);
         }
     }
 
-    if (style.hasCurrentOpacityAnimation())
-        style.setIsRunningOpacityAnimationOnCompositor(m_defaultStack.hasActiveAnimationsOnCompositor(CSSPropertyOpacity));
-    if (style.hasCurrentTransformAnimation())
-        style.setIsRunningTransformAnimationOnCompositor(m_defaultStack.hasActiveAnimationsOnCompositor(CSSPropertyTransform));
-    if (style.hasCurrentFilterAnimation())
-        style.setIsRunningFilterAnimationOnCompositor(m_defaultStack.hasActiveAnimationsOnCompositor(CSSPropertyWebkitFilter));
+    if (style.hasCurrentOpacityAnimation()) {
+        style.setIsRunningOpacityAnimationOnCompositor(
+            m_effectStack.hasActiveAnimationsOnCompositor(CSSPropertyOpacity));
+    }
+    if (style.hasCurrentTransformAnimation()) {
+        style.setIsRunningTransformAnimationOnCompositor(
+            m_effectStack.hasActiveAnimationsOnCompositor(CSSPropertyTransform));
+    }
+    if (style.hasCurrentFilterAnimation()) {
+        style.setIsRunningFilterAnimationOnCompositor(
+            m_effectStack.hasActiveAnimationsOnCompositor(CSSPropertyFilter));
+    }
+    if (style.hasCurrentBackdropFilterAnimation()) {
+        style.setIsRunningBackdropFilterAnimationOnCompositor(
+            m_effectStack.hasActiveAnimationsOnCompositor(
+                CSSPropertyBackdropFilter));
+    }
 }
 
 void ElementAnimations::restartAnimationOnCompositor()
@@ -86,31 +86,31 @@ void ElementAnimations::restartAnimationOnCompositor()
 
 DEFINE_TRACE(ElementAnimations)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_cssAnimations);
-    visitor->trace(m_defaultStack);
+    visitor->trace(m_customCompositorAnimations);
+    visitor->trace(m_effectStack);
     visitor->trace(m_animations);
-#endif
 }
 
 const ComputedStyle* ElementAnimations::baseComputedStyle() const
 {
-#if !ENABLE(ASSERT)
+#if !DCHECK_IS_ON()
     if (isAnimationStyleChange())
         return m_baseComputedStyle.get();
 #endif
     return nullptr;
 }
 
-void ElementAnimations::updateBaseComputedStyle(const ComputedStyle* computedStyle)
+void ElementAnimations::updateBaseComputedStyle(
+    const ComputedStyle* computedStyle)
 {
     if (!isAnimationStyleChange()) {
         m_baseComputedStyle = nullptr;
         return;
     }
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     if (m_baseComputedStyle && computedStyle)
-        ASSERT(*m_baseComputedStyle == *computedStyle);
+        DCHECK(*m_baseComputedStyle == *computedStyle);
 #endif
     m_baseComputedStyle = ComputedStyle::clone(*computedStyle);
 }
@@ -122,12 +122,13 @@ void ElementAnimations::clearBaseComputedStyle()
 
 bool ElementAnimations::isAnimationStyleChange() const
 {
-    // TODO(rune@opera.com): The FontFaceCache version number may be increased without forcing
-    // a style recalc (see crbug.com/471079). ComputedStyle objects created with different cache
-    // versions will not be considered equal as Font::operator== will compare versions, hence
-    // ComputedStyle::operator== will return false. We avoid using baseComputedStyle (the check for
-    // isFallbackValid()) in that case to avoid triggering the ComputedStyle comparison ASSERT
-    // in updateBaseComputedStyle.
+    // TODO(rune@opera.com): The FontFaceCache version number may be increased
+    // without forcing a style recalc (see crbug.com/471079). ComputedStyle
+    // objects created with different cache versions will not be considered equal
+    // as Font::operator== will compare versions, hence ComputedStyle::operator==
+    // will return false. We avoid using baseComputedStyle (the check for
+    // isFallbackValid()) in that case to avoid triggering the ComputedStyle
+    // comparison ASSERT in updateBaseComputedStyle.
     return m_animationStyleChange && (!m_baseComputedStyle || m_baseComputedStyle->font().isFallbackValid());
 }
 

@@ -9,26 +9,26 @@
 
 namespace v8 {
 namespace platform {
-namespace tracing {
+    namespace tracing {
 
-class JSONTraceWriter : public TraceWriter {
- public:
-  explicit JSONTraceWriter(std::ostream& stream);
-  JSONTraceWriter(std::ostream& stream, const std::string& tag);
-  ~JSONTraceWriter() override;
-  void AppendTraceEvent(TraceObject* trace_event) override;
-  void Flush() override;
+        class JSONTraceWriter : public TraceWriter {
+        public:
+            explicit JSONTraceWriter(std::ostream& stream);
+            JSONTraceWriter(std::ostream& stream, const std::string& tag);
+            ~JSONTraceWriter() override;
+            void AppendTraceEvent(TraceObject* trace_event) override;
+            void Flush() override;
 
- private:
-  void AppendArgValue(uint8_t type, TraceObject::ArgValue value);
-  void AppendArgValue(v8::ConvertableToTraceFormat*);
+        private:
+            void AppendArgValue(uint8_t type, TraceObject::ArgValue value);
+            void AppendArgValue(v8::ConvertableToTraceFormat*);
 
-  std::ostream& stream_;
-  bool append_comma_ = false;
-};
+            std::ostream& stream_;
+            bool append_comma_ = false;
+        };
 
-}  // namespace tracing
-}  // namespace platform
-}  // namespace v8
+    } // namespace tracing
+} // namespace platform
+} // namespace v8
 
-#endif  // V8_LIBPLATFORM_TRACING_TRACE_WRITER_H_
+#endif // V8_LIBPLATFORM_TRACING_TRACE_WRITER_H_

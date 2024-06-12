@@ -9,12 +9,12 @@
 
 @interface SkUIRootViewController : UITableViewController <UITableViewDataSource> {
 @private
-    UIPopoverController *popoverController;
-    UIBarButtonItem *popoverButtonItem;
+    UIPopoverController* popoverController;
+    UIBarButtonItem* popoverButtonItem;
     NSMutableArray* fSamples;
 }
-@property (nonatomic, retain) UIPopoverController *popoverController;
-@property (nonatomic, retain) UIBarButtonItem *popoverButtonItem;
+@property (nonatomic, retain) UIPopoverController* popoverController;
+@property (nonatomic, retain) UIBarButtonItem* popoverButtonItem;
 
 - (void)addItem:(NSString*)anItem;
 

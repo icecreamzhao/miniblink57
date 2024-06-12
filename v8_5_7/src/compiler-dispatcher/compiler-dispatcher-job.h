@@ -10,7 +10,7 @@
 #include "src/base/macros.h"
 #include "src/globals.h"
 #include "src/handles.h"
-#include "testing/gtest/include/gtest/gtest_prod.h"
+//#include "testing/gtest/include/gtest/gtest_prod.h"
 
 namespace v8 {
 namespace internal {
@@ -84,7 +84,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
   void ResetOnMainThread();
 
  private:
-  FRIEND_TEST(CompilerDispatcherJobTest, ScopeChain);
+  //FRIEND_TEST(CompilerDispatcherJobTest, ScopeChain);
 
   CompileJobStatus status_ = CompileJobStatus::kInitial;
   Isolate* isolate_;

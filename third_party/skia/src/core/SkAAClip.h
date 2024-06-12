@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -20,13 +19,14 @@ public:
 
     SkAAClip& operator=(const SkAAClip&);
     friend bool operator==(const SkAAClip&, const SkAAClip&);
-    friend bool operator!=(const SkAAClip& a, const SkAAClip& b) {
+    friend bool operator!=(const SkAAClip& a, const SkAAClip& b)
+    {
         return !(a == b);
     }
 
     void swap(SkAAClip&);
 
-    bool isEmpty() const { return NULL == fRunHead; }
+    bool isEmpty() const { return nullptr == fRunHead; }
     const SkIRect& getBounds() const { return fBounds; }
 
     // Returns true iff the clip is not empty, and is just a hard-edged rect (no partial alpha).
@@ -36,7 +36,7 @@ public:
     bool setEmpty();
     bool setRect(const SkIRect&);
     bool setRect(const SkRect&, bool doAA = true);
-    bool setPath(const SkPath&, const SkRegion* clip = NULL, bool doAA = true);
+    bool setPath(const SkPath&, const SkRegion* clip = nullptr, bool doAA = true);
     bool setRegion(const SkRegion&);
     bool set(const SkAAClip&);
 
@@ -48,7 +48,8 @@ public:
     bool op(const SkAAClip&, SkRegion::Op);
 
     bool translate(int dx, int dy, SkAAClip* dst) const;
-    bool translate(int dx, int dy) {
+    bool translate(int dx, int dy)
+    {
         return this->translate(dx, dy, this);
     }
 
@@ -61,12 +62,13 @@ public:
     // called internally
 
     bool quickContains(int left, int top, int right, int bottom) const;
-    bool quickContains(const SkIRect& r) const {
+    bool quickContains(const SkIRect& r) const
+    {
         return this->quickContains(r.fLeft, r.fTop, r.fRight, r.fBottom);
     }
 
-    const uint8_t* findRow(int y, int* lastYForRow = NULL) const;
-    const uint8_t* findX(const uint8_t data[], int x, int* initialCount = NULL) const;
+    const uint8_t* findRow(int y, int* lastYForRow = nullptr) const;
+    const uint8_t* findX(const uint8_t data[], int x, int* initialCount = nullptr) const;
 
     class Iter;
     struct RunHead;
@@ -75,14 +77,16 @@ public:
 
 #ifdef SK_DEBUG
     void validate() const;
-    void debug(bool compress_y=false) const;
+    void debug(bool compress_y = false) const;
 #else
-    void validate() const {}
-    void debug(bool compress_y=false) const {}
+    void validate() const
+    {
+    }
+    void debug(bool compress_y = false) const { }
 #endif
 
 private:
-    SkIRect  fBounds;
+    SkIRect fBounds;
     RunHead* fRunHead;
 
     void freeRuns();
@@ -99,10 +103,14 @@ private:
 
 class SkAAClipBlitter : public SkBlitter {
 public:
-    SkAAClipBlitter() : fScanlineScratch(NULL) {}
+    SkAAClipBlitter()
+        : fScanlineScratch(nullptr)
+    {
+    }
     virtual ~SkAAClipBlitter();
 
-    void init(SkBlitter* blitter, const SkAAClip* aaclip) {
+    void init(SkBlitter* blitter, const SkAAClip* aaclip)
+    {
         SkASSERT(aaclip && !aaclip->isEmpty());
         fBlitter = blitter;
         fAAClip = aaclip;
@@ -117,19 +125,19 @@ public:
     const SkPixmap* justAnOpaqueColor(uint32_t* value) override;
 
 private:
-    SkBlitter*      fBlitter;
+    SkBlitter* fBlitter;
     const SkAAClip* fAAClip;
-    SkIRect         fAAClipBounds;
+    SkIRect fAAClipBounds;
 
     // point into fScanlineScratch
-    int16_t*        fRuns;
-    SkAlpha*        fAA;
+    int16_t* fRuns;
+    SkAlpha* fAA;
 
     enum {
         kSize = 32 * 32
     };
-    SkAutoSMalloc<kSize> fGrayMaskScratch;  // used for blitMask
-    void* fScanlineScratch;  // enough for a mask at 32bit, or runs+aa
+    SkAutoSMalloc<kSize> fGrayMaskScratch; // used for blitMask
+    void* fScanlineScratch; // enough for a mask at 32bit, or runs+aa
 
     void ensureRunsAndAA();
 };

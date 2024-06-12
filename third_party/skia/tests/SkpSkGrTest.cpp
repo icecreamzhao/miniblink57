@@ -14,14 +14,11 @@
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkColor.h"
-#include "SkDevice.h"
 #include "SkGraphics.h"
-#include "SkImageDecoder.h"
 #include "SkImageEncoder.h"
 #include "SkOSFile.h"
 #include "SkPicture.h"
 #include "SkRTConf.h"
-#include "SkRunnable.h"
 #include "SkStream.h"
 #include "SkString.h"
 #include "SkTArray.h"
@@ -35,15 +32,15 @@
 #endif
 
 #ifdef SK_BUILD_FOR_WIN
-    #define PATH_SLASH "\\"
-    #define IN_DIR "D:\\9-30-13\\"
-    #define OUT_DIR "D:\\skpSkGr\\11\\"
-    #define LINE_FEED "\r\n"
+#define PATH_SLASH "\\"
+#define IN_DIR "D:\\9-30-13\\"
+#define OUT_DIR "D:\\skpSkGr\\11\\"
+#define LINE_FEED "\r\n"
 #else
-    #define PATH_SLASH "/"
-    #define IN_DIR "/usr/local/google/home/caryclark" PATH_SLASH "9-30-13-skp"
-    #define OUT_DIR "/media/01CD75512A7F9EE0/4" PATH_SLASH
-    #define LINE_FEED "\n"
+#define PATH_SLASH "/"
+#define IN_DIR "/usr/local/google/home/caryclark" PATH_SLASH "9-30-13-skp"
+#define OUT_DIR "/media/01CD75512A7F9EE0/4" PATH_SLASH
+#define LINE_FEED "\n"
 #endif
 
 #define PATH_STR_SIZE 512
@@ -52,7 +49,7 @@ static const struct {
     int directory;
     const char* filename;
 } skipOverSkGr[] = {
-    {1, "http___accuweather_com_.skp"},  // Couldn't convert bitmap to texture.http___absoku072_com_
+    { 1, "http___accuweather_com_.skp" }, // Couldn't convert bitmap to texture.http___absoku072_com_
 };
 
 static const size_t skipOverSkGrCount = SK_ARRAY_COUNT(skipOverSkGr);
@@ -72,20 +69,23 @@ enum {
 };
 
 struct TestResult {
-    void init(int dirNo) {
+    void init(int dirNo)
+    {
         fDirNo = dirNo;
         sk_bzero(fFilename, sizeof(fFilename));
         fTestStep = kCompareBits;
         fScaleOversized = true;
     }
 
-    SkString status() {
+    SkString status()
+    {
         SkString outStr;
         outStr.printf("%s %d %d%s", fFilename, fPixelError, fTime, LINE_FEED);
         return outStr;
     }
 
-    static void Test(int dirNo, const char* filename, TestStep testStep, bool verbose) {
+    static void Test(int dirNo, const char* filename, TestStep testStep, bool verbose)
+    {
         TestResult test;
         test.init(dirNo);
         test.fTestStep = testStep;
@@ -96,7 +96,8 @@ struct TestResult {
         }
     }
 
-    void test(int dirNo, const SkString& filename) {
+    void test(int dirNo, const SkString& filename)
+    {
         init(dirNo);
         strcpy(fFilename, filename.c_str());
         testOne();
@@ -108,12 +109,13 @@ struct TestResult {
     TestStep fTestStep;
     int fDirNo;
     int fPixelError;
-    int fTime;
+    SkMSec fTime;
     bool fScaleOversized;
 };
 
 struct SkpSkGrThreadState {
-    void init(int dirNo) {
+    void init(int dirNo)
+    {
         fResult.init(dirNo);
         fFoundCount = 0;
         fSmallestError = 0;
@@ -133,7 +135,8 @@ struct SkpSkGrThreadState {
 
 struct SkpSkGrThreadedTestRunner {
     SkpSkGrThreadedTestRunner(skiatest::Reporter* reporter)
-        : fReporter(reporter) {
+        : fReporter(reporter)
+    {
     }
 
     ~SkpSkGrThreadedTestRunner();
@@ -142,10 +145,11 @@ struct SkpSkGrThreadedTestRunner {
     skiatest::Reporter* fReporter;
 };
 
-class SkpSkGrThreadedRunnable : public SkRunnable {
+class SkpSkGrThreadedRunnable {
 public:
     SkpSkGrThreadedRunnable(void (*testFun)(SkpSkGrThreadState*), int dirNo, const char* str,
-            SkpSkGrThreadedTestRunner* runner) {
+        SkpSkGrThreadedTestRunner* runner)
+    {
         SkASSERT(strlen(str) < sizeof(fState.fResult.fFilename) - 1);
         fState.init(dirNo);
         strcpy(fState.fResult.fFilename, str);
@@ -153,7 +157,8 @@ public:
         fTestFun = testFun;
     }
 
-    void run() override {
+    void operator()()
+    {
         SkGraphics::SetTLSFontCacheLimit(1 * 1024 * 1024);
         (*fTestFun)(&fState);
     }
@@ -162,17 +167,17 @@ public:
     void (*fTestFun)(SkpSkGrThreadState*);
 };
 
-SkpSkGrThreadedTestRunner::~SkpSkGrThreadedTestRunner() {
+SkpSkGrThreadedTestRunner::~SkpSkGrThreadedTestRunner()
+{
     for (int index = 0; index < fRunnables.count(); index++) {
-        SkDELETE(fRunnables[index]);
+        delete fRunnables[index];
     }
 }
 
-void SkpSkGrThreadedTestRunner::render() {
-    // TODO: we don't really need to be using SkRunnables here anymore.
-    // We can just write the code we'd run right in the for loop.
-    sk_parallel_for(fRunnables.count(), [&](int i) {
-        fRunnables[i]->run();
+void SkpSkGrThreadedTestRunner::render()
+{
+    SkTaskGroup().batch(fRunnables.count(), [&](int i) {
+        fRunnables[i]();
     });
 }
 
@@ -184,7 +189,8 @@ static const char outSkpDir[] = OUT_DIR "skpTest";
 static const char outDiffDir[] = OUT_DIR "outTest";
 static const char outStatusDir[] = OUT_DIR "statusTest";
 
-static SkString make_filepath(int dirIndex, const char* dir, const char* name) {
+static SkString make_filepath(int dirIndex, const char* dir, const char* name)
+{
     SkString path(dir);
     if (dirIndex) {
         path.appendf("%d", dirIndex);
@@ -194,7 +200,8 @@ static SkString make_filepath(int dirIndex, const char* dir, const char* name) {
     return path;
 }
 
-static SkString make_in_dir_name(int dirIndex) {
+static SkString make_in_dir_name(int dirIndex)
+{
     SkString dirName(IN_DIR);
     dirName.appendf("%d", dirIndex);
     if (!sk_exists(dirName.c_str())) {
@@ -204,7 +211,8 @@ static SkString make_in_dir_name(int dirIndex) {
     return dirName;
 }
 
-static bool make_out_dirs() {
+static bool make_out_dirs()
+{
     SkString outDir = make_filepath(0, OUT_DIR, "");
     if (!sk_exists(outDir.c_str())) {
         if (!sk_mkdir(outDir.c_str())) {
@@ -250,21 +258,23 @@ static bool make_out_dirs() {
     return true;
 }
 
-static SkString make_png_name(const char* filename) {
+static SkString make_png_name(const char* filename)
+{
     SkString pngName = SkString(filename);
     pngName.remove(pngName.size() - 3, 3);
     pngName.append("png");
     return pngName;
 }
 
-typedef GrContextFactory::GLContextType GLContextType;
+typedef GrContextFactory::ContextType ContextType;
 #ifdef SK_BUILD_FOR_WIN
-static const GLContextType kAngle = GrContextFactory::kANGLE_GLContextType;
+static const ContextType kAngle = GrContextFactory::kANGLE_ContextType;
 #else
-static const GLContextType kNative = GrContextFactory::kNative_GLContextType;
+static const ContextType kNative = GrContextFactory::kNativeGL_ContextType;
 #endif
 
-static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
+static int similarBits(const SkBitmap& gr, const SkBitmap& sk)
+{
     const int kRowCount = 3;
     const int kThreshold = 3;
     int width = SkTMin(gr.width(), sk.width());
@@ -293,9 +303,9 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
             int db = SkGetPackedB32(grColor) - SkGetPackedB32(skColor);
             int error = SkTMax(SkAbs32(dr), SkTMax(SkAbs32(dg), SkAbs32(db)));
             if ((cOut[x] = error >= kThreshold) && x >= 2
-                    && base[x - 2] && base[width + x - 2] && base[width * 2 + x - 2]
-                    && base[x - 1] && base[width + x - 1] && base[width * 2 + x - 1]
-                    && base[x - 0] && base[width + x - 0] && base[width * 2 + x - 0]) {
+                && base[x - 2] && base[width + x - 2] && base[width * 2 + x - 2]
+                && base[x - 1] && base[width + x - 1] && base[width * 2 + x - 1]
+                && base[x - 0] && base[width + x - 0] && base[width * 2 + x - 0]) {
                 errorTotal += error;
             }
         }
@@ -303,7 +313,8 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
     return errorTotal;
 }
 
-static bool addError(SkpSkGrThreadState* data) {
+static bool addError(SkpSkGrThreadState* data)
+{
     bool foundSmaller = false;
     int dCount = data->fFoundCount;
     int pixelError = data->fResult.fPixelError;
@@ -336,7 +347,8 @@ static bool addError(SkpSkGrThreadState* data) {
     return foundSmaller;
 }
 
-static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
+static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
+{
     canvas->save();
     int pWidth = pic->width();
     int pHeight = pic->height();
@@ -344,10 +356,10 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
     const int slices = 3;
     int xInterval = SkTMax(pWidth - maxDimension, 0) / (slices - 1);
     int yInterval = SkTMax(pHeight - maxDimension, 0) / (slices - 1);
-    SkRect rect = {0, 0, SkIntToScalar(SkTMin(maxDimension, pWidth)),
-            SkIntToScalar(SkTMin(maxDimension, pHeight))};
+    SkRect rect = { 0, 0, SkIntToScalar(SkTMin(maxDimension, pWidth)),
+        SkIntToScalar(SkTMin(maxDimension, pHeight)) };
     canvas->clipRect(rect);
-    SkMSec start = SkTime::GetMSecs();
+    skiatest::Timer timer;
     for (int x = 0; x < slices; ++x) {
         for (int y = 0; y < slices; ++y) {
             pic->draw(canvas);
@@ -355,12 +367,13 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
         }
         canvas->translate(SkIntToScalar(xInterval), SkIntToScalar(-yInterval * slices));
     }
-    SkMSec end = SkTime::GetMSecs();
+    SkMSec elapsed = timer.elapsedMsInt();
     canvas->restore();
-    return end - start;
+    return elapsed;
 }
 
-static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale) {
+static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale)
+{
     canvas->clear(SK_ColorWHITE);
     if (scale != 1) {
         canvas->save();
@@ -372,17 +385,19 @@ static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale) {
     }
 }
 
-static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName) {
+static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName)
+{
     SkString outFile = make_filepath(0, outDir, pngName);
     if (!SkImageEncoder::EncodeFile(outFile.c_str(), bitmap,
             SkImageEncoder::kPNG_Type, 100)) {
         SkDebugf("unable to encode gr %s (width=%d height=%d)br \n", pngName,
-                    bitmap.width(), bitmap.height());
+            bitmap.width(), bitmap.height());
     }
 }
 
-void TestResult::testOne() {
-    SkPicture* pic = NULL;
+void TestResult::testOne()
+{
+    sk_sp<SkPicture> pic;
     {
         SkString d;
         d.printf("    {%d, \"%s\"},", fDirNo, fFilename);
@@ -403,7 +418,7 @@ void TestResult::testOne() {
             wStream.write(&bytes[0], length);
             wStream.flush();
         }
-        pic = SkPicture::CreateFromStream(&stream, &SkImageDecoder::DecodeMemory);
+        pic = SkPicture::MakeFromStream(&stream);
         if (!pic) {
             SkDebugf("unable to decode %s\n", fFilename);
             goto finish;
@@ -417,7 +432,7 @@ void TestResult::testOne() {
 #else
         GrContext* context = contextFactory.get(kNative);
 #endif
-        if (NULL == context) {
+        if (nullptr == context) {
             SkDebugf("unable to allocate context for %s\n", fFilename);
             goto finish;
         }
@@ -439,8 +454,8 @@ void TestResult::testOne() {
         } while ((scale *= 2) < 256);
         if (scale >= 256) {
             SkDebugf("unable to allocate bitmap for %s (w=%d h=%d) (sw=%d sh=%d)\n",
-                    fFilename, pWidth, pHeight, dim.fX, dim.fY);
-            goto finish;
+                fFilename, pWidth, pHeight, dim.fX, dim.fY);
+            return;
         }
         SkCanvas skCanvas(bitmap);
         drawPict(pic, &skCanvas, fScaleOversized ? scale : 1);
@@ -450,15 +465,15 @@ void TestResult::testOne() {
         desc.fWidth = dim.fX;
         desc.fHeight = dim.fY;
         desc.fSampleCnt = 0;
-        SkAutoTUnref<GrTexture> texture(context->createUncachedTexture(desc, NULL, 0));
+        SkAutoTUnref<GrTexture> texture(context->createUncachedTexture(desc, nullptr, 0));
         if (!texture) {
             SkDebugf("unable to allocate texture for %s (w=%d h=%d)\n", fFilename,
                 dim.fX, dim.fY);
-            goto finish;
+            return;
         }
         SkGpuDevice grDevice(context, texture.get());
         SkCanvas grCanvas(&grDevice);
-        drawPict(pic, &grCanvas, fScaleOversized ? scale : 1);
+        drawPict(pic.get(), &grCanvas, fScaleOversized ? scale : 1);
 
         SkBitmap grBitmap;
         grBitmap.allocPixels(grCanvas.imageInfo());
@@ -466,8 +481,8 @@ void TestResult::testOne() {
 
         if (fTestStep == kCompareBits) {
             fPixelError = similarBits(grBitmap, bitmap);
-            int skTime = timePict(pic, &skCanvas);
-            int grTime = timePict(pic, &grCanvas);
+            SkMSec skTime = timePict(pic, &skCanvas);
+            SkMSec grTime = timePict(pic, &grCanvas);
             fTime = skTime - grTime;
         } else if (fTestStep == kEncodeFiles) {
             SkString pngStr = make_png_name(fFilename);
@@ -476,11 +491,10 @@ void TestResult::testOne() {
             writePict(bitmap, outSkDir, pngName);
         }
     }
-finish:
-    SkDELETE(pic);
 }
 
-static SkString makeStatusString(int dirNo) {
+static SkString makeStatusString(int dirNo)
+{
     SkString statName;
     statName.printf("stats%d.txt", dirNo);
     SkString statusFile = make_filepath(0, outStatusDir, statName.c_str());
@@ -492,7 +506,8 @@ public:
     PreParser(int dirNo)
         : fDirNo(dirNo)
         , fIndex(0)
-        , fStatusPath(makeStatusString(dirNo)) {
+        , fStatusPath(makeStatusString(dirNo))
+    {
         if (!sk_exists(fStatusPath.c_str())) {
             return;
         }
@@ -503,7 +518,8 @@ public:
         fResults.pop_back();
     }
 
-    bool fetch(SkFILEStream& reader, TestResult* result) {
+    bool fetch(SkFILEStream& reader, TestResult* result)
+    {
         char c;
         int i = 0;
         result->init(fDirNo);
@@ -554,7 +570,8 @@ public:
         return true;
     }
 
-    bool match(const SkString& filename, SkFILEWStream* stream, TestResult* result) {
+    bool match(const SkString& filename, SkFILEWStream* stream, TestResult* result)
+    {
         if (fIndex < fResults.count()) {
             *result = fResults[fIndex++];
             SkASSERT(filename.equals(result->fFilename));
@@ -573,7 +590,8 @@ private:
     SkString fStatusPath;
 };
 
-static bool initTest() {
+static bool initTest()
+{
 #if !defined SK_BUILD_FOR_WIN && !defined SK_BUILD_FOR_MAC
     SK_CONF_SET("images.jpeg.suppressDecoderWarnings", true);
     SK_CONF_SET("images.png.suppressDecoderWarnings", true);
@@ -581,7 +599,8 @@ static bool initTest() {
     return make_out_dirs();
 }
 
-DEF_TEST(SkpSkGr, reporter) {
+DEF_TEST(SkpSkGr, reporter)
+{
     SkTArray<TestResult, true> errors;
     if (!initTest()) {
         return;
@@ -603,7 +622,7 @@ DEF_TEST(SkpSkGr, reporter) {
         while (iter.next(&filename)) {
             for (size_t index = 0; index < skipOverSkGrCount; ++index) {
                 if (skipOverSkGr[index].directory == dirNo
-                        && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+                    && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
                     goto skipOver;
                 }
             }
@@ -637,9 +656,9 @@ DEF_TEST(SkpSkGr, reporter) {
                     SkDebugf("#%d\n", testCount);
                 }
             }
-     skipOver:
-             reporter->bumpTestCount();
-    checkEarlyExit:
+        skipOver:
+            reporter->bumpTestCount();
+        checkEarlyExit:
             if (1 && testCount == 20) {
                 break;
             }
@@ -649,17 +668,19 @@ breakOut:
     if (reporter->verbose()) {
         for (int index = 0; index < state.fFoundCount; ++index) {
             SkDebugf("%d %s %d\n", state.fDirsFound[index], state.fFilesFound[index],
-                     state.fError[index]);
+                state.fError[index]);
         }
     }
     for (int index = 0; index < state.fFoundCount; ++index) {
         TestResult::Test(state.fDirsFound[index], state.fFilesFound[index], kEncodeFiles,
-                reporter->verbose());
-        if (reporter->verbose()) SkDebugf("+");
+            reporter->verbose());
+        if (reporter->verbose())
+            SkDebugf("+");
     }
 }
 
-static void bumpCount(skiatest::Reporter* reporter, bool skipping) {
+static void bumpCount(skiatest::Reporter* reporter, bool skipping)
+{
     if (reporter->verbose()) {
         static int threadTestCount;
         sk_atomic_inc(&threadTestCount);
@@ -672,13 +693,15 @@ static void bumpCount(skiatest::Reporter* reporter, bool skipping) {
     }
 }
 
-static void testSkGrMain(SkpSkGrThreadState* data) {
+static void testSkGrMain(SkpSkGrThreadState* data)
+{
     data->fResult.testOne();
     bumpCount(data->fReporter, false);
     data->fReporter->bumpTestCount();
 }
 
-DEF_TEST(SkpSkGrThreaded, reporter) {
+DEF_TEST(SkpSkGrThreaded, reporter)
+{
     if (!initTest()) {
         return;
     }
@@ -700,15 +723,14 @@ DEF_TEST(SkpSkGrThreaded, reporter) {
             }
             for (size_t index = 0; index < skipOverSkGrCount; ++index) {
                 if (skipOverSkGr[index].directory == dirIndex
-                        && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
+                    && strcmp(filename.c_str(), skipOverSkGr[index].filename) == 0) {
                     bumpCount(reporter, true);
                     goto skipOver;
                 }
             }
-            *testRunner.fRunnables.append() = SkNEW_ARGS(SkpSkGrThreadedRunnable,
-                    (&testSkGrMain, dirIndex, filename.c_str(), &testRunner));
-    skipOver:
-            ;
+            *testRunner.fRunnables.append() = new SkpSkGrThreadedRunnable(
+                &testSkGrMain, dirIndex, filename.c_str(), &testRunner);
+        skipOver:;
         }
     }
     testRunner.render();
@@ -744,7 +766,8 @@ DEF_TEST(SkpSkGrThreaded, reporter) {
     }
 }
 
-DEF_TEST(SkpSkGrOneOff, reporter) {
+DEF_TEST(SkpSkGrOneOff, reporter)
+{
     if (!initTest()) {
         return;
     }

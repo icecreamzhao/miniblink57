@@ -31,22 +31,44 @@
 #ifndef StyleColor_h
 #define StyleColor_h
 
+#include "core/CSSValueKeywords.h"
 #include "platform/graphics/Color.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class StyleColor {
+    DISALLOW_NEW();
+
 public:
-    StyleColor(Color color) : m_color(color), m_currentColor(false) { }
+    StyleColor()
+        : m_currentColor(true)
+    {
+    }
+    StyleColor(Color color)
+        : m_color(color)
+        , m_currentColor(false)
+    {
+    }
     static StyleColor currentColor() { return StyleColor(); }
 
     bool isCurrentColor() const { return m_currentColor; }
-    Color color() const { ASSERT(!isCurrentColor()); return m_color; }
+    Color getColor() const
+    {
+        ASSERT(!isCurrentColor());
+        return m_color;
+    }
 
-    Color resolve(Color currentColor) const { return m_currentColor ? currentColor : m_color; }
+    Color resolve(Color currentColor) const
+    {
+        return m_currentColor ? currentColor : m_color;
+    }
+
+    static Color colorFromKeyword(CSSValueID);
+    static bool isColorKeyword(CSSValueID);
+    static bool isSystemColor(CSSValueID);
 
 private:
-    StyleColor() : m_currentColor(true) { }
     Color m_color;
     bool m_currentColor;
 };
@@ -55,14 +77,13 @@ inline bool operator==(const StyleColor& a, const StyleColor& b)
 {
     if (a.isCurrentColor() || b.isCurrentColor())
         return a.isCurrentColor() && b.isCurrentColor();
-    return a.color() == b.color();
+    return a.getColor() == b.getColor();
 }
 
 inline bool operator!=(const StyleColor& a, const StyleColor& b)
 {
     return !(a == b);
 }
-
 
 } // namespace blink
 

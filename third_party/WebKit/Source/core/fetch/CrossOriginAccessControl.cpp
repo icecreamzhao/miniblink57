@@ -24,9 +24,9 @@
  *
  */
 
-#include "config.h"
 #include "core/fetch/CrossOriginAccessControl.h"
 
+#include "core/fetch/FetchUtils.h"
 #include "core/fetch/Resource.h"
 #include "core/fetch/ResourceLoaderOptions.h"
 #include "platform/network/HTTPParsers.h"
@@ -34,78 +34,94 @@
 #include "platform/network/ResourceResponse.h"
 #include "platform/weborigin/SchemeRegistry.h"
 #include "platform/weborigin/SecurityOrigin.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/Threading.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/StringBuilder.h"
 #include <algorithm>
+#include <memory>
+
+namespace wke {
+extern bool g_disableCspCheck;
+}
 
 namespace blink {
 
-static PassOwnPtr<HTTPHeaderSet> createAllowedCrossOriginResponseHeadersSet()
-{
-    OwnPtr<HTTPHeaderSet> headerSet = adoptPtr(new HashSet<String, CaseFoldingHash>);
-
-    headerSet->add("cache-control");
-    headerSet->add("content-language");
-    headerSet->add("content-type");
-    headerSet->add("expires");
-    headerSet->add("last-modified");
-    headerSet->add("pragma");
-
-    return headerSet.release();
-}
-
 bool isOnAccessControlResponseHeaderWhitelist(const String& name)
 {
-    AtomicallyInitializedStaticReference(HTTPHeaderSet, allowedCrossOriginResponseHeaders, (createAllowedCrossOriginResponseHeadersSet().leakPtr()));
-
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        HTTPHeaderSet, allowedCrossOriginResponseHeaders,
+        (new HTTPHeaderSet({
+            "cache-control",
+            "content-language",
+            "content-type",
+            "expires",
+            "last-modified",
+            "pragma",
+        })));
     return allowedCrossOriginResponseHeaders.contains(name);
 }
 
-void updateRequestForAccessControl(ResourceRequest& request, SecurityOrigin* securityOrigin, StoredCredentials allowCredentials)
+// Fetch API Spec: https://fetch.spec.whatwg.org/#cors-preflight-fetch-0
+static AtomicString createAccessControlRequestHeadersHeader(
+    const HTTPHeaderMap& headers)
 {
-    request.removeCredentials();
-    request.setAllowStoredCredentials(allowCredentials == AllowStoredCredentials);
-    request.setFetchCredentialsMode(allowCredentials == AllowStoredCredentials ? WebURLRequest::FetchCredentialsModeInclude : WebURLRequest::FetchCredentialsModeOmit);
+    Vector<String> filteredHeaders;
+    for (const auto& header : headers) {
+        if (FetchUtils::isSimpleHeader(header.key, header.value)) {
+            // Exclude simple headers.
+            continue;
+        }
+        if (equalIgnoringCase(header.key, "referer")) {
+            // When the request is from a Worker, referrer header was added by
+            // WorkerThreadableLoader. But it should not be added to
+            // Access-Control-Request-Headers header.
+            continue;
+        }
+        filteredHeaders.push_back(header.key.lower());
+    }
+    if (!filteredHeaders.size())
+        return nullAtom;
 
-    if (securityOrigin)
-        request.setHTTPOrigin(securityOrigin->toAtomicString());
+    // Sort header names lexicographically.
+    std::sort(filteredHeaders.begin(), filteredHeaders.end(),
+        WTF::codePointCompareLessThan);
+    StringBuilder headerBuffer;
+    for (const String& header : filteredHeaders) {
+        if (!headerBuffer.isEmpty())
+            headerBuffer.append(",");
+        headerBuffer.append(header);
+    }
+
+    return AtomicString(headerBuffer.toString());
 }
 
-ResourceRequest createAccessControlPreflightRequest(const ResourceRequest& request, SecurityOrigin* securityOrigin)
+ResourceRequest createAccessControlPreflightRequest(
+    const ResourceRequest& request)
 {
-    ResourceRequest preflightRequest(request.url());
-    updateRequestForAccessControl(preflightRequest, securityOrigin, DoNotAllowStoredCredentials);
-    preflightRequest.setHTTPMethod("OPTIONS");
-    preflightRequest.setHTTPHeaderField("Access-Control-Request-Method", request.httpMethod());
+    const KURL& requestURL = request.url();
+
+    DCHECK(requestURL.user().isEmpty());
+    DCHECK(requestURL.pass().isEmpty());
+
+    ResourceRequest preflightRequest(requestURL);
+    preflightRequest.setAllowStoredCredentials(false);
+    preflightRequest.setHTTPMethod(HTTPNames::OPTIONS);
+    preflightRequest.setHTTPHeaderField(HTTPNames::Access_Control_Request_Method,
+        AtomicString(request.httpMethod()));
     preflightRequest.setPriority(request.priority());
     preflightRequest.setRequestContext(request.requestContext());
-    preflightRequest.setSkipServiceWorker(true);
+    preflightRequest.setSkipServiceWorker(WebURLRequest::SkipServiceWorker::All);
 
-    const HTTPHeaderMap& requestHeaderFields = request.httpHeaderFields();
+    if (request.isExternalRequest()) {
+        preflightRequest.setHTTPHeaderField(
+            HTTPNames::Access_Control_Request_External, "true");
+    }
 
-    if (requestHeaderFields.size() > 0) {
-        // Sort header names lexicographically: https://crbug.com/452391
-        // Fetch API Spec:
-        //   https://fetch.spec.whatwg.org/#cors-preflight-fetch-0
-        Vector<String> headers;
-        for (const auto& header : requestHeaderFields) {
-            if (equalIgnoringCase(header.key, "referer")) {
-                // When the request is from a Worker, referrer header was added
-                // by WorkerThreadableLoader. But it should not be added to
-                // Access-Control-Request-Headers header.
-                continue;
-            }
-            headers.append(header.key.lower());
-        }
-        std::sort(headers.begin(), headers.end(), WTF::codePointCompareLessThan);
-        StringBuilder headerBuffer;
-        for (const String& header : headers) {
-            if (!headerBuffer.isEmpty())
-                headerBuffer.appendLiteral(", ");
-            headerBuffer.append(header);
-        }
-        preflightRequest.setHTTPHeaderField("Access-Control-Request-Headers", AtomicString(headerBuffer.toString()));
+    AtomicString requestHeaders = createAccessControlRequestHeadersHeader(request.httpHeaderFields());
+    if (requestHeaders != nullAtom) {
+        preflightRequest.setHTTPHeaderField(
+            HTTPNames::Access_Control_Request_Headers, requestHeaders);
     }
 
     return preflightRequest;
@@ -118,91 +134,270 @@ static bool isOriginSeparator(UChar ch)
 
 static bool isInterestingStatusCode(int statusCode)
 {
-    // Predicate that gates what status codes should be included in
-    // console error messages for responses containing no access
-    // control headers.
+    // Predicate that gates what status codes should be included in console error
+    // messages for responses containing no access control headers.
     return statusCode >= 400;
 }
 
-static String buildAccessControlFailureMessage(const String& detail, SecurityOrigin* securityOrigin)
+static void appendOriginDeniedMessage(StringBuilder& builder,
+    const SecurityOrigin* securityOrigin)
 {
-    return detail + " Origin '" + securityOrigin->toString() + "' is therefore not allowed access.";
+    builder.append(" Origin '");
+    builder.append(securityOrigin->toString());
+    builder.append("' is therefore not allowed access.");
 }
 
-bool passesAccessControlCheck(const ResourceResponse& response, StoredCredentials includeCredentials, SecurityOrigin* securityOrigin, String& errorDescription)
+static void appendNoCORSInformationalMessage(
+    StringBuilder& builder,
+    WebURLRequest::RequestContext context)
 {
-    AtomicallyInitializedStaticReference(AtomicString, allowOriginHeaderName, (new AtomicString("access-control-allow-origin", AtomicString::ConstructFromLiteral)));
-    AtomicallyInitializedStaticReference(AtomicString, allowCredentialsHeaderName, (new AtomicString("access-control-allow-credentials", AtomicString::ConstructFromLiteral)));
+    if (context != WebURLRequest::RequestContextFetch)
+        return;
+    builder.append(
+        " Have the server send the header with a valid value, or, if an "
+        "opaque response serves your needs, set the request's mode to "
+        "'no-cors' to fetch the resource with CORS disabled.");
+}
+
+CrossOriginAccessControl::AccessStatus CrossOriginAccessControl::checkAccess(
+    const ResourceResponse& response,
+    StoredCredentials includeCredentials,
+    const SecurityOrigin* securityOrigin)
+{
+    if (wke::g_disableCspCheck)
+        return kAccessAllowed;
+    
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(AtomicString, allowOriginHeaderName, (new AtomicString("access-control-allow-origin")));
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(AtomicString, allowCredentialsHeaderName, (new AtomicString("access-control-allow-credentials")));
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(AtomicString, allowSuboriginHeaderName, (new AtomicString("access-control-allow-suborigin")));
 
     int statusCode = response.httpStatusCode();
-    return true; // weolar
-    if (!statusCode) {
-        errorDescription = buildAccessControlFailureMessage("Invalid response.", securityOrigin);
-        return false;
-    }
+    if (!statusCode)
+        return kInvalidResponse;
 
     const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
+
+    // Check Suborigins, unless the Access-Control-Allow-Origin is '*', which
+    // implies that all Suborigins are okay as well.
+    if (securityOrigin->hasSuborigin() && allowOriginHeaderValue != starAtom) {
+        const AtomicString& allowSuboriginHeaderValue = response.httpHeaderField(allowSuboriginHeaderName);
+        AtomicString atomicSuboriginName(securityOrigin->suborigin()->name());
+        if (allowSuboriginHeaderValue != starAtom && allowSuboriginHeaderValue != atomicSuboriginName) {
+            return kSubOriginMismatch;
+        }
+    }
+
     if (allowOriginHeaderValue == starAtom) {
-        // A wildcard Access-Control-Allow-Origin can not be used if credentials are to be sent,
-        // even with Access-Control-Allow-Credentials set to true.
+        // A wildcard Access-Control-Allow-Origin can not be used if credentials are
+        // to be sent, even with Access-Control-Allow-Credentials set to true.
         if (includeCredentials == DoNotAllowStoredCredentials)
-            return true;
+            return kAccessAllowed;
         if (response.isHTTP()) {
-            errorDescription = buildAccessControlFailureMessage("A wildcard '*' cannot be used in the 'Access-Control-Allow-Origin' header when the credentials flag is true.", securityOrigin);
-            return false;
+            return kWildcardOriginNotAllowed;
         }
     } else if (allowOriginHeaderValue != securityOrigin->toAtomicString()) {
-        if (allowOriginHeaderValue.isNull()) {
-            errorDescription = buildAccessControlFailureMessage("No 'Access-Control-Allow-Origin' header is present on the requested resource.", securityOrigin);
-
-            if (isInterestingStatusCode(statusCode))
-                errorDescription.append(" The response had HTTP status code " + String::number(statusCode) + ".");
-
-            return false;
+        if (allowOriginHeaderValue.isNull())
+            return kMissingAllowOriginHeader;
+        if (allowOriginHeaderValue.getString().find(isOriginSeparator, 0) != kNotFound) {
+            return kMultipleAllowOriginValues;
         }
+        KURL headerOrigin(KURL(), allowOriginHeaderValue);
+        if (!headerOrigin.isValid())
+            return kInvalidAllowOriginValue;
 
-        String detail;
-        if (allowOriginHeaderValue.string().find(isOriginSeparator, 0) != kNotFound) {
-            detail = "The 'Access-Control-Allow-Origin' header contains multiple values '" + allowOriginHeaderValue + "', but only one is allowed.";
-        } else {
-            KURL headerOrigin(KURL(), allowOriginHeaderValue);
-            if (!headerOrigin.isValid())
-                detail = "The 'Access-Control-Allow-Origin' header contains the invalid value '" + allowOriginHeaderValue + "'.";
-            else
-                detail = "The 'Access-Control-Allow-Origin' header has a value '" + allowOriginHeaderValue + "' that is not equal to the supplied origin.";
-        }
-        errorDescription = buildAccessControlFailureMessage(detail, securityOrigin);
-        return false;
+        return kAllowOriginMismatch;
     }
 
     if (includeCredentials == AllowStoredCredentials) {
         const AtomicString& allowCredentialsHeaderValue = response.httpHeaderField(allowCredentialsHeaderName);
         if (allowCredentialsHeaderValue != "true") {
-            errorDescription = buildAccessControlFailureMessage("Credentials flag is 'true', but the 'Access-Control-Allow-Credentials' header is '" + allowCredentialsHeaderValue + "'. It must be 'true' to allow credentials.", securityOrigin);
-            return false;
+            return kDisallowCredentialsNotSetToTrue;
         }
     }
-
-    return true;
+    return kAccessAllowed;
 }
 
-bool passesPreflightStatusCheck(const ResourceResponse& response, String& errorDescription)
+void CrossOriginAccessControl::accessControlErrorString(
+    StringBuilder& builder,
+    CrossOriginAccessControl::AccessStatus status,
+    const ResourceResponse& response,
+    const SecurityOrigin* securityOrigin,
+    WebURLRequest::RequestContext context)
+{
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        AtomicString, allowOriginHeaderName,
+        (new AtomicString("access-control-allow-origin")));
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        AtomicString, allowCredentialsHeaderName,
+        (new AtomicString("access-control-allow-credentials")));
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        AtomicString, allowSuboriginHeaderName,
+        (new AtomicString("access-control-allow-suborigin")));
+
+    switch (status) {
+    case kInvalidResponse: {
+        builder.append("Invalid response.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        return;
+    }
+    case kSubOriginMismatch: {
+        const AtomicString& allowSuboriginHeaderValue = response.httpHeaderField(allowSuboriginHeaderName);
+        builder.append(
+            "The 'Access-Control-Allow-Suborigin' header has a value '");
+        builder.append(allowSuboriginHeaderValue);
+        builder.append("' that is not equal to the supplied suborigin.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        return;
+    }
+    case kWildcardOriginNotAllowed: {
+        builder.append(
+            "The value of the 'Access-Control-Allow-Origin' header in the "
+            "response must not be the wildcard '*' when the request's "
+            "credentials mode is 'include'.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        if (context == WebURLRequest::RequestContextXMLHttpRequest) {
+            builder.append(
+                " The credentials mode of requests initiated by the "
+                "XMLHttpRequest is controlled by the withCredentials attribute.");
+        }
+        return;
+    }
+    case kMissingAllowOriginHeader: {
+        builder.append(
+            "No 'Access-Control-Allow-Origin' header is present on the requested "
+            "resource.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        int statusCode = response.httpStatusCode();
+        if (isInterestingStatusCode(statusCode)) {
+            builder.append(" The response had HTTP status code ");
+            builder.append(String::number(statusCode));
+            builder.append('.');
+        }
+        if (context == WebURLRequest::RequestContextFetch) {
+            builder.append(
+                " If an opaque response serves your needs, set the request's mode "
+                "to 'no-cors' to fetch the resource with CORS disabled.");
+        }
+        return;
+    }
+    case kMultipleAllowOriginValues: {
+        const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
+        builder.append(
+            "The 'Access-Control-Allow-Origin' header contains multiple values "
+            "'");
+        builder.append(allowOriginHeaderValue);
+        builder.append("', but only one is allowed.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        appendNoCORSInformationalMessage(builder, context);
+        return;
+    }
+    case kInvalidAllowOriginValue: {
+        const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
+        builder.append(
+            "The 'Access-Control-Allow-Origin' header contains the invalid "
+            "value '");
+        builder.append(allowOriginHeaderValue);
+        builder.append("'.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        appendNoCORSInformationalMessage(builder, context);
+        return;
+    }
+    case kAllowOriginMismatch: {
+        const AtomicString& allowOriginHeaderValue = response.httpHeaderField(allowOriginHeaderName);
+        builder.append("The 'Access-Control-Allow-Origin' header has a value '");
+        builder.append(allowOriginHeaderValue);
+        builder.append("' that is not equal to the supplied origin.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        appendNoCORSInformationalMessage(builder, context);
+        return;
+    }
+    case kDisallowCredentialsNotSetToTrue: {
+        const AtomicString& allowCredentialsHeaderValue = response.httpHeaderField(allowCredentialsHeaderName);
+        builder.append(
+            "The value of the 'Access-Control-Allow-Credentials' header in "
+            "the response is '");
+        builder.append(allowCredentialsHeaderValue);
+        builder.append(
+            "' which must "
+            "be 'true' when the request's credentials mode is 'include'.");
+        appendOriginDeniedMessage(builder, securityOrigin);
+        if (context == WebURLRequest::RequestContextXMLHttpRequest) {
+            builder.append(
+                " The credentials mode of requests initiated by the "
+                "XMLHttpRequest is controlled by the withCredentials attribute.");
+        }
+        return;
+    }
+    default:
+        NOTREACHED();
+    }
+}
+
+CrossOriginAccessControl::PreflightStatus
+CrossOriginAccessControl::checkPreflight(const ResourceResponse& response)
 {
     // CORS preflight with 3XX is considered network error in
-    // Fetch API Spec:
-    //   https://fetch.spec.whatwg.org/#cors-preflight-fetch
-    // CORS Spec:
-    //   http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0
+    // Fetch API Spec: https://fetch.spec.whatwg.org/#cors-preflight-fetch
+    // CORS Spec: http://www.w3.org/TR/cors/#cross-origin-request-with-preflight-0
     // https://crbug.com/452394
-    if (response.httpStatusCode() < 200 || response.httpStatusCode() >= 300) {
-        errorDescription = "Response for preflight has invalid HTTP status code " + String::number(response.httpStatusCode());
-        return false;
-    }
+    int statusCode = response.httpStatusCode();
+    if (!FetchUtils::isOkStatus(statusCode))
+        return kPreflightInvalidStatus;
 
-    return true;
+    return kPreflightSuccess;
 }
 
-void parseAccessControlExposeHeadersAllowList(const String& headerValue, HTTPHeaderSet& headerSet)
+CrossOriginAccessControl::PreflightStatus
+CrossOriginAccessControl::checkExternalPreflight(
+    const ResourceResponse& response)
+{
+    AtomicString result = response.httpHeaderField(HTTPNames::Access_Control_Allow_External);
+    if (result.isNull())
+        return kPreflightMissingAllowExternal;
+    if (!equalIgnoringCase(result, "true"))
+        return kPreflightInvalidAllowExternal;
+    return kPreflightSuccess;
+}
+
+void CrossOriginAccessControl::preflightErrorString(
+    StringBuilder& builder,
+    CrossOriginAccessControl::PreflightStatus status,
+    const ResourceResponse& response)
+{
+    switch (status) {
+    case kPreflightInvalidStatus: {
+        int statusCode = response.httpStatusCode();
+        builder.append("Response for preflight has invalid HTTP status code ");
+        builder.append(String::number(statusCode));
+        return;
+    }
+    case kPreflightMissingAllowExternal: {
+        builder.append(
+            "No 'Access-Control-Allow-External' header was present in ");
+        builder.append(
+            "the preflight response for this external request (This is");
+        builder.append(" an experimental header which is defined in ");
+        builder.append("'https://wicg.github.io/cors-rfc1918/').");
+        return;
+    }
+    case kPreflightInvalidAllowExternal: {
+        String result = response.httpHeaderField(HTTPNames::Access_Control_Allow_External);
+        builder.append("The 'Access-Control-Allow-External' header in the ");
+        builder.append(
+            "preflight response for this external request had a value");
+        builder.append(" of '");
+        builder.append(result);
+        builder.append("',  not 'true' (This is an experimental header which is");
+        builder.append(" defined in 'https://wicg.github.io/cors-rfc1918/').");
+        return;
+    }
+    default:
+        NOTREACHED();
+    }
+}
+
+void parseAccessControlExposeHeadersAllowList(const String& headerValue,
+    HTTPHeaderSet& headerSet)
 {
     Vector<String> headers;
     headerValue.split(',', false, headers);
@@ -213,62 +408,137 @@ void parseAccessControlExposeHeadersAllowList(const String& headerValue, HTTPHea
     }
 }
 
-bool CrossOriginAccessControl::isLegalRedirectLocation(const KURL& requestURL, String& errorDescription)
+void extractCorsExposedHeaderNamesList(const ResourceResponse& response,
+    HTTPHeaderSet& headerSet)
 {
-    // CORS restrictions imposed on Location: URL -- http://www.w3.org/TR/cors/#redirect-steps (steps 2 + 3.)
-    if (!SchemeRegistry::shouldTreatURLSchemeAsCORSEnabled(requestURL.protocol())) {
-        errorDescription = "The request was redirected to a URL ('" + requestURL.string() + "') which has a disallowed scheme for cross-origin requests.";
-        return false;
+    // If a response was fetched via a service worker, it will always have
+    // corsExposedHeaderNames set, either from the Access-Control-Expose-Headers
+    // header, or explicitly via foreign fetch. For requests that didn't come from
+    // a service worker, foreign fetch doesn't apply so just parse the CORS
+    // header.
+    if (response.wasFetchedViaServiceWorker()) {
+        for (const auto& header : response.corsExposedHeaderNames())
+            headerSet.add(header);
+        return;
     }
-
-    if (!(requestURL.user().isEmpty() && requestURL.pass().isEmpty())) {
-        errorDescription = "The request was redirected to a URL ('" + requestURL.string() + "') containing userinfo, which is disallowed for cross-origin requests.";
-        return false;
-    }
-
-    return true;
+    parseAccessControlExposeHeadersAllowList(
+        response.httpHeaderField(HTTPNames::Access_Control_Expose_Headers),
+        headerSet);
 }
 
-bool CrossOriginAccessControl::handleRedirect(SecurityOrigin* securityOrigin, ResourceRequest& newRequest, const ResourceResponse& redirectResponse, StoredCredentials withCredentials, ResourceLoaderOptions& options, String& errorMessage)
+CrossOriginAccessControl::RedirectStatus
+CrossOriginAccessControl::checkRedirectLocation(const KURL& requestURL)
+{
+    // Block non HTTP(S) schemes as specified in the step 4 in
+    // https://fetch.spec.whatwg.org/#http-redirect-fetch. Chromium also allows
+    // the data scheme.
+    //
+    // TODO(tyoshino): This check should be performed regardless of the CORS flag
+    // and request's mode.
+    if (!SchemeRegistry::shouldTreatURLSchemeAsCORSEnabled(requestURL.protocol()))
+        return kRedirectDisallowedScheme;
+
+    // Block URLs including credentials as specified in the step 9 in
+    // https://fetch.spec.whatwg.org/#http-redirect-fetch.
+    //
+    // TODO(tyoshino): This check should be performed also when request's
+    // origin is not same origin with the redirect destination's origin.
+    if (!(requestURL.user().isEmpty() && requestURL.pass().isEmpty()))
+        return kRedirectContainsCredentials;
+
+    return kRedirectSuccess;
+}
+
+void CrossOriginAccessControl::redirectErrorString(
+    StringBuilder& builder,
+    CrossOriginAccessControl::RedirectStatus status,
+    const KURL& requestURL)
+{
+    switch (status) {
+    case kRedirectDisallowedScheme: {
+        builder.append("Redirect location '");
+        builder.append(requestURL.getString());
+        builder.append("' has a disallowed scheme for cross-origin requests.");
+        return;
+    }
+    case kRedirectContainsCredentials: {
+        builder.append("Redirect location '");
+        builder.append(requestURL.getString());
+        builder.append(
+            "' contains a username and password, which is disallowed for"
+            " cross-origin requests.");
+        return;
+    }
+    default:
+        NOTREACHED();
+    }
+}
+
+bool CrossOriginAccessControl::handleRedirect(
+    PassRefPtr<SecurityOrigin> securityOrigin,
+    ResourceRequest& newRequest,
+    const ResourceResponse& redirectResponse,
+    StoredCredentials withCredentials,
+    ResourceLoaderOptions& options,
+    String& errorMessage)
 {
     // http://www.w3.org/TR/cors/#redirect-steps terminology:
-    const KURL& originalURL = redirectResponse.url();
+    const KURL& lastURL = redirectResponse.url();
     const KURL& newURL = newRequest.url();
 
-    bool redirectCrossOrigin = !securityOrigin->canRequest(newURL);
+    RefPtr<SecurityOrigin> currentSecurityOrigin = securityOrigin;
 
-    // Same-origin request URLs that redirect are allowed without checking access.
-    if (!securityOrigin->canRequest(originalURL)) {
+    RefPtr<SecurityOrigin> newSecurityOrigin = currentSecurityOrigin;
+
+    // TODO(tyoshino): This should be fixed to check not only the last one but
+    // all redirect responses.
+    if (!currentSecurityOrigin->canRequest(lastURL)) {
         // Follow http://www.w3.org/TR/cors/#redirect-steps
-        String errorDescription;
-
-        // Steps 3 & 4 - check if scheme and other URL restrictions hold.
-        bool allowRedirect = isLegalRedirectLocation(newURL, errorDescription);
-        if (allowRedirect) {
-            // Step 5: perform resource sharing access check.
-            allowRedirect = passesAccessControlCheck(redirectResponse, withCredentials, securityOrigin, errorDescription);
-            if (allowRedirect) {
-                RefPtr<SecurityOrigin> originalOrigin = SecurityOrigin::create(originalURL);
-                // Step 6: if the request URL origin is not same origin as the original URL's,
-                // set the source origin to a globally unique identifier.
-                if (!originalOrigin->canRequest(newURL)) {
-                    options.securityOrigin = SecurityOrigin::createUnique();
-                    securityOrigin = options.securityOrigin.get();
-                }
-            }
-        }
-        if (!allowRedirect) {
-            const String& originalOrigin = SecurityOrigin::create(originalURL)->toString();
-            errorMessage = "Redirect at origin '" + originalOrigin + "' has been blocked from loading by Cross-Origin Resource Sharing policy: " + errorDescription;
+        CrossOriginAccessControl::RedirectStatus redirectStatus = CrossOriginAccessControl::checkRedirectLocation(newURL);
+        if (redirectStatus != kRedirectSuccess) {
+            StringBuilder builder;
+            builder.append("Redirect from '");
+            builder.append(lastURL.getString());
+            builder.append("' has been blocked by CORS policy: ");
+            CrossOriginAccessControl::redirectErrorString(builder, redirectStatus,
+                newURL);
+            errorMessage = builder.toString();
             return false;
         }
+
+        // Step 5: perform resource sharing access check.
+        CrossOriginAccessControl::AccessStatus corsStatus = CrossOriginAccessControl::checkAccess(redirectResponse, withCredentials,
+            currentSecurityOrigin.get());
+        if (corsStatus != kAccessAllowed) {
+            StringBuilder builder;
+            builder.append("Redirect from '");
+            builder.append(lastURL.getString());
+            builder.append("' has been blocked by CORS policy: ");
+            CrossOriginAccessControl::accessControlErrorString(
+                builder, corsStatus, redirectResponse, currentSecurityOrigin.get(),
+                newRequest.requestContext());
+            errorMessage = builder.toString();
+            return false;
+        }
+
+        RefPtr<SecurityOrigin> lastOrigin = SecurityOrigin::create(lastURL);
+        // Set request's origin to a globally unique identifier as specified in
+        // the step 10 in https://fetch.spec.whatwg.org/#http-redirect-fetch.
+        if (!lastOrigin->canRequest(newURL)) {
+            options.securityOrigin = SecurityOrigin::createUnique();
+            newSecurityOrigin = options.securityOrigin;
+        }
     }
-    if (redirectCrossOrigin) {
-        // If now to a different origin, update/set Origin:.
+
+    if (!currentSecurityOrigin->canRequest(newURL)) {
         newRequest.clearHTTPOrigin();
-        newRequest.setHTTPOrigin(securityOrigin->toAtomicString());
-        // If the user didn't request credentials in the first place, update our
-        // state so we neither request them nor expect they must be allowed.
+        newRequest.setHTTPOrigin(newSecurityOrigin.get());
+
+        // Unset credentials flag if request's credentials mode is "same-origin" as
+        // request's response tainting becomes "cors".
+        //
+        // This is equivalent to the step 2 in
+        // https://fetch.spec.whatwg.org/#http-network-or-cache-fetch
         if (options.credentialsRequested == ClientDidNotRequestCredentials)
             options.allowCredentials = DoNotAllowStoredCredentials;
     }

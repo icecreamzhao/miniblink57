@@ -11,104 +11,118 @@
 
 namespace v8 {
 namespace internal {
-namespace torque {
+    namespace torque {
 
-struct SourcePosition;
+        struct SourcePosition;
 
-class SourceId {
- public:
-  static SourceId Invalid() { return SourceId(-1); }
-  bool IsValid() const { return id_ != -1; }
-  int operator==(const SourceId& s) const { return id_ == s.id_; }
-  bool operator<(const SourceId& s) const { return id_ < s.id_; }
+        class SourceId {
+        public:
+            static SourceId Invalid() { return SourceId(-1); }
+            bool IsValid() const { return id_ != -1; }
+            int operator==(const SourceId& s) const { return id_ == s.id_; }
+            bool operator<(const SourceId& s) const { return id_ < s.id_; }
 
- private:
-  explicit SourceId(int id) : id_(id) {}
-  int id_;
-  friend struct SourcePosition;
-  friend class SourceFileMap;
-};
+        private:
+            explicit SourceId(int id)
+                : id_(id)
+            {
+            }
+            int id_;
+            friend struct SourcePosition;
+            friend class SourceFileMap;
+        };
 
-struct LineAndColumn {
-  int line;
-  int column;
+        struct LineAndColumn {
+            int line;
+            int column;
 
-  static LineAndColumn Invalid() { return {-1, -1}; }
+            static LineAndColumn Invalid() { return { -1, -1 }; }
 
-  bool operator==(const LineAndColumn& other) const {
-    return line == other.line && column == other.column;
-  }
-};
+            bool operator==(const LineAndColumn& other) const
+            {
+                return line == other.line && column == other.column;
+            }
+        };
 
-struct SourcePosition {
-  SourceId source;
-  LineAndColumn start;
-  LineAndColumn end;
+        struct SourcePosition {
+            SourceId source;
+            LineAndColumn start;
+            LineAndColumn end;
 
-  static SourcePosition Invalid() {
-    SourcePosition pos{SourceId::Invalid(), LineAndColumn::Invalid(),
-                       LineAndColumn::Invalid()};
-    return pos;
-  }
+            static SourcePosition Invalid()
+            {
+                SourcePosition pos { SourceId::Invalid(), LineAndColumn::Invalid(),
+                    LineAndColumn::Invalid() };
+                return pos;
+            }
 
-  bool CompareStartIgnoreColumn(const SourcePosition& pos) const {
-    return start.line == pos.start.line && source == pos.source;
-  }
+            bool CompareStartIgnoreColumn(const SourcePosition& pos) const
+            {
+                return start.line == pos.start.line && source == pos.source;
+            }
 
-  bool Contains(LineAndColumn pos) const {
-    if (pos.line < start.line || pos.line > end.line) return false;
+            bool Contains(LineAndColumn pos) const
+            {
+                if (pos.line < start.line || pos.line > end.line)
+                    return false;
 
-    if (pos.line == start.line && pos.column < start.column) return false;
-    if (pos.line == end.line && pos.column >= end.column) return false;
-    return true;
-  }
+                if (pos.line == start.line && pos.column < start.column)
+                    return false;
+                if (pos.line == end.line && pos.column >= end.column)
+                    return false;
+                return true;
+            }
 
-  bool operator==(const SourcePosition& pos) const {
-    return source == pos.source && start == pos.start && end == pos.end;
-  }
-};
+            bool operator==(const SourcePosition& pos) const
+            {
+                return source == pos.source && start == pos.start && end == pos.end;
+            }
+        };
 
-DECLARE_CONTEXTUAL_VARIABLE(CurrentSourceFile, SourceId);
-DECLARE_CONTEXTUAL_VARIABLE(CurrentSourcePosition, SourcePosition);
+        DECLARE_CONTEXTUAL_VARIABLE(CurrentSourceFile, SourceId);
+        DECLARE_CONTEXTUAL_VARIABLE(CurrentSourcePosition, SourcePosition);
 
-class SourceFileMap : public ContextualClass<SourceFileMap> {
- public:
-  SourceFileMap() = default;
-  static const std::string& GetSource(SourceId source) {
-    CHECK(source.IsValid());
-    return Get().sources_[source.id_];
-  }
+        class SourceFileMap : public ContextualClass<SourceFileMap> {
+        public:
+            SourceFileMap() = default;
+            static const std::string& GetSource(SourceId source)
+            {
+                CHECK(source.IsValid());
+                return Get().sources_[source.id_];
+            }
 
-  static SourceId AddSource(std::string path) {
-    Get().sources_.push_back(std::move(path));
-    return SourceId(static_cast<int>(Get().sources_.size()) - 1);
-  }
+            static SourceId AddSource(std::string path)
+            {
+                Get().sources_.push_back(std::move(path));
+                return SourceId(static_cast<int>(Get().sources_.size()) - 1);
+            }
 
-  static SourceId GetSourceId(const std::string& path) {
-    for (size_t i = 0; i < Get().sources_.size(); ++i) {
-      if (Get().sources_[i] == path) {
-        return SourceId(static_cast<int>(i));
-      }
-    }
-    return SourceId::Invalid();
-  }
+            static SourceId GetSourceId(const std::string& path)
+            {
+                for (size_t i = 0; i < Get().sources_.size(); ++i) {
+                    if (Get().sources_[i] == path) {
+                        return SourceId(static_cast<int>(i));
+                    }
+                }
+                return SourceId::Invalid();
+            }
 
- private:
-  std::vector<std::string> sources_;
-};
+        private:
+            std::vector<std::string> sources_;
+        };
 
-inline std::string PositionAsString(SourcePosition pos) {
-  return SourceFileMap::GetSource(pos.source) + ":" +
-         std::to_string(pos.start.line + 1) + ":" +
-         std::to_string(pos.start.column + 1);
-}
+        inline std::string PositionAsString(SourcePosition pos)
+        {
+            return SourceFileMap::GetSource(pos.source) + ":" + std::to_string(pos.start.line + 1) + ":" + std::to_string(pos.start.column + 1);
+        }
 
-inline std::ostream& operator<<(std::ostream& out, SourcePosition pos) {
-  return out << PositionAsString(pos);
-}
+        inline std::ostream& operator<<(std::ostream& out, SourcePosition pos)
+        {
+            return out << PositionAsString(pos);
+        }
 
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
+    } // namespace torque
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_TORQUE_SOURCE_POSITIONS_H_
+#endif // V8_TORQUE_SOURCE_POSITIONS_H_

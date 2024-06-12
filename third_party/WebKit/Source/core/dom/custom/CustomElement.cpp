@@ -1,159 +1,283 @@
-/*
- * Copyright (C) 2013 Google Inc. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer
- *    in the documentation and/or other materials provided with the
- *    distribution.
- * 3. Neither the name of Google Inc. nor the names of its contributors
- *    may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-#include "config.h"
 #include "core/dom/custom/CustomElement.h"
 
-#include "core/HTMLNames.h"
-#include "core/MathMLNames.h"
-#include "core/SVGNames.h"
+#include "core/HTMLElementFactory.h"
+#include "core/HTMLElementTypeHelpers.h"
 #include "core/dom/Document.h"
-#include "core/dom/Element.h"
-#include "core/dom/custom/CustomElementMicrotaskRunQueue.h"
-#include "core/dom/custom/CustomElementObserver.h"
-#include "core/dom/custom/CustomElementScheduler.h"
+#include "core/dom/QualifiedName.h"
+#include "core/dom/custom/CEReactionsScope.h"
+#include "core/dom/custom/CustomElementDefinition.h"
+#include "core/dom/custom/CustomElementReactionStack.h"
+#include "core/dom/custom/CustomElementRegistry.h"
+#include "core/dom/custom/V0CustomElement.h"
+#include "core/dom/custom/V0CustomElementRegistrationContext.h"
+#include "core/frame/LocalDOMWindow.h"
+#include "core/html/HTMLElement.h"
+#include "core/html/HTMLUnknownElement.h"
+#include "wtf/text/AtomicStringHash.h"
 
 namespace blink {
 
-CustomElementMicrotaskImportStep* CustomElement::didCreateImport(HTMLImportChild* import)
+CustomElementRegistry* CustomElement::registry(const Element& element)
 {
-    return CustomElementScheduler::scheduleImport(import);
+    return registry(element.document());
 }
 
-void CustomElement::didFinishLoadingImport(Document& master)
+CustomElementRegistry* CustomElement::registry(const Document& document)
 {
-    master.customElementMicrotaskRunQueue()->requestDispatchIfNeeded();
+    if (LocalDOMWindow* window = document.executingWindow())
+        return window->customElements();
+    return nullptr;
 }
 
-Vector<AtomicString>& CustomElement::embedderCustomElementNames()
+static CustomElementDefinition* definitionForElementWithoutCheck(
+    const Element& element)
 {
-    DEFINE_STATIC_LOCAL(Vector<AtomicString>, names, ());
-    return names;
+    DCHECK_EQ(element.getCustomElementState(), CustomElementState::Custom);
+    return element.customElementDefinition();
 }
 
-void CustomElement::addEmbedderCustomElementName(const AtomicString& name)
+CustomElementDefinition* CustomElement::definitionForElement(
+    const Element* element)
 {
-    AtomicString lower = name.lower();
-    if (isValidName(lower, EmbedderNames))
+    if (!element || element->getCustomElementState() != CustomElementState::Custom)
+        return nullptr;
+    return definitionForElementWithoutCheck(*element);
+}
+
+bool CustomElement::isHyphenatedSpecElementName(const AtomicString& name)
+{
+    // Even if Blink does not implement one of the related specs, (for
+    // example annotation-xml is from MathML, which Blink does not
+    // implement) we must prohibit using the name because that is
+    // required by the HTML spec which we *do* implement. Don't remove
+    // names from this list without removing them from the HTML spec
+    // first.
+    DEFINE_STATIC_LOCAL(HashSet<AtomicString>, hyphenatedSpecElementNames,
+        ({
+            "annotation-xml",
+            "color-profile",
+            "font-face",
+            "font-face-src",
+            "font-face-uri",
+            "font-face-format",
+            "font-face-name",
+            "missing-glyph",
+        }));
+    return hyphenatedSpecElementNames.contains(name);
+}
+
+bool CustomElement::shouldCreateCustomElement(const AtomicString& name)
+{
+    return RuntimeEnabledFeatures::customElementsV1Enabled() && isValidName(name);
+}
+
+bool CustomElement::shouldCreateCustomElement(const QualifiedName& tagName)
+{
+    return shouldCreateCustomElement(tagName.localName()) && tagName.namespaceURI() == HTMLNames::xhtmlNamespaceURI;
+}
+
+bool CustomElement::shouldCreateCustomizedBuiltinElement(
+    const AtomicString& localName)
+{
+    return htmlElementTypeForTag(localName) != HTMLElementType::kHTMLUnknownElement && RuntimeEnabledFeatures::customElementsBuiltinEnabled();
+}
+
+bool CustomElement::shouldCreateCustomizedBuiltinElement(
+    const QualifiedName& tagName)
+{
+    return shouldCreateCustomizedBuiltinElement(tagName.localName()) && tagName.namespaceURI() == HTMLNames::xhtmlNamespaceURI;
+}
+
+static CustomElementDefinition* definitionFor(
+    const Document& document,
+    const CustomElementDescriptor desc)
+{
+    if (CustomElementRegistry* registry = CustomElement::registry(document))
+        return registry->definitionFor(desc);
+    return nullptr;
+}
+
+HTMLElement* CustomElement::createCustomElementSync(
+    Document& document,
+    const QualifiedName& tagName)
+{
+    CustomElementDefinition* definition = nullptr;
+    CustomElementRegistry* registry = CustomElement::registry(document);
+    if (registry) {
+        definition = registry->definitionFor(
+            CustomElementDescriptor(tagName.localName(), tagName.localName()));
+    }
+    return createCustomElementSync(document, tagName, definition);
+}
+
+HTMLElement* CustomElement::createCustomElementSync(
+    Document& document,
+    const AtomicString& localName,
+    CustomElementDefinition* definition)
+{
+    return createCustomElementSync(
+        document,
+        QualifiedName(nullAtom, localName, HTMLNames::xhtmlNamespaceURI),
+        definition);
+}
+
+// https://dom.spec.whatwg.org/#concept-create-element
+HTMLElement* CustomElement::createCustomElementSync(
+    Document& document,
+    const QualifiedName& tagName,
+    CustomElementDefinition* definition)
+{
+    DCHECK(shouldCreateCustomElement(tagName) || shouldCreateCustomizedBuiltinElement(tagName));
+    HTMLElement* element;
+
+    if (definition && definition->descriptor().isAutonomous()) {
+        // 6. If definition is non-null and we have an autonomous custom element
+        element = definition->createElementSync(document, tagName);
+    } else if (definition) {
+        // 5. If definition is non-null and we have a customized built-in element
+        element = createUndefinedElement(document, tagName);
+        definition->upgrade(element);
+    } else {
+        // 7. Otherwise
+        element = createUndefinedElement(document, tagName);
+    }
+    return element;
+}
+
+HTMLElement* CustomElement::createCustomElementAsync(
+    Document& document,
+    const QualifiedName& tagName)
+{
+    DCHECK(shouldCreateCustomElement(tagName));
+
+    // To create an element:
+    // https://dom.spec.whatwg.org/#concept-create-element
+    // 6. If definition is non-null, then:
+    // 6.2. If the synchronous custom elements flag is not set:
+    if (CustomElementDefinition* definition = definitionFor(
+            document,
+            CustomElementDescriptor(tagName.localName(), tagName.localName())))
+        return definition->createElementAsync(document, tagName);
+
+    return createUndefinedElement(document, tagName);
+}
+
+// Create a HTMLElement
+HTMLElement* CustomElement::createUndefinedElement(
+    Document& document,
+    const QualifiedName& tagName)
+{
+    bool shouldCreateBuiltin = shouldCreateCustomizedBuiltinElement(tagName);
+    DCHECK(shouldCreateCustomElement(tagName) || shouldCreateBuiltin);
+
+    HTMLElement* element;
+    if (V0CustomElement::isValidName(tagName.localName()) && document.registrationContext()) {
+        Element* v0element = document.registrationContext()->createCustomTagElement(
+            document, tagName);
+        SECURITY_DCHECK(v0element->isHTMLElement());
+        element = toHTMLElement(v0element);
+    } else if (shouldCreateBuiltin) {
+        element = HTMLElementFactory::createHTMLElement(
+            tagName.localName(), document, CreatedByCreateElement);
+    } else {
+        element = HTMLElement::create(tagName, document);
+    }
+
+    element->setCustomElementState(CustomElementState::Undefined);
+
+    return element;
+}
+
+HTMLElement* CustomElement::createFailedElement(Document& document,
+    const QualifiedName& tagName)
+{
+    DCHECK(shouldCreateCustomElement(tagName));
+
+    // "create an element for a token":
+    // https://html.spec.whatwg.org/multipage/syntax.html#create-an-element-for-the-token
+
+    // 7. If this step throws an exception, let element be instead a new element
+    // that implements HTMLUnknownElement, with no attributes, namespace set to
+    // given namespace, namespace prefix set to null, custom element state set
+    // to "failed", and node document set to document.
+
+    HTMLElement* element = HTMLUnknownElement::create(tagName, document);
+    element->setCustomElementState(CustomElementState::Failed);
+    return element;
+}
+
+void CustomElement::enqueue(Element* element, CustomElementReaction* reaction)
+{
+    // To enqueue an element on the appropriate element queue
+    // https://html.spec.whatwg.org/multipage/scripting.html#enqueue-an-element-on-the-appropriate-element-queue
+
+    // If the custom element reactions stack is not empty, then
+    // Add element to the current element queue.
+    if (CEReactionsScope* current = CEReactionsScope::current()) {
+        current->enqueueToCurrentQueue(element, reaction);
         return;
-    embedderCustomElementNames().append(lower);
-}
-
-static inline bool isValidNCName(const AtomicString& name)
-{
-    if (kNotFound != name.find(':'))
-        return false;
-
-    if (!name.string().is8Bit()) {
-        const UChar32 c = name.characters16()[0];
-        // These characters comes under CombiningChar in NCName and according to
-        // NCName only BaseChar and Ideodgraphic can come as first chars.
-        // Also these characters come under Letter_Other in UnicodeData, thats
-        // why they pass as valid document name.
-        if (c == 0x0B83 || c == 0x0F88 || c == 0x0F89 || c == 0x0F8A || c == 0x0F8B)
-            return false;
     }
 
-    return Document::isValidName(name.string());
+    // If the custom element reactions stack is empty, then
+    // Add element to the backup element queue.
+    CustomElementReactionStack::current().enqueueToBackupQueue(element, reaction);
 }
 
-bool CustomElement::isValidName(const AtomicString& name, NameSet validNames)
+void CustomElement::enqueueConnectedCallback(Element* element)
 {
-    if ((validNames & EmbedderNames) && kNotFound != embedderCustomElementNames().find(name))
-        return Document::isValidName(name);
-
-    if ((validNames & StandardNames) && kNotFound != name.find('-')) {
-        DEFINE_STATIC_LOCAL(Vector<AtomicString>, reservedNames, ());
-        if (reservedNames.isEmpty()) {
-            // FIXME(crbug.com/426605): We should be able to remove this.
-            reservedNames.append(MathMLNames::annotation_xmlTag.localName());
-        }
-
-        if (kNotFound == reservedNames.find(name))
-            return isValidNCName(name);
-    }
-
-    return false;
+    CustomElementDefinition* definition = definitionForElementWithoutCheck(*element);
+    if (definition->hasConnectedCallback())
+        definition->enqueueConnectedCallback(element);
 }
 
-void CustomElement::define(Element* element, PassRefPtrWillBeRawPtr<CustomElementDefinition> passDefinition)
+void CustomElement::enqueueDisconnectedCallback(Element* element)
 {
-    RefPtrWillBeRawPtr<CustomElementDefinition> definition(passDefinition);
-
-    switch (element->customElementState()) {
-    case Element::NotCustomElement:
-    case Element::Upgraded:
-        ASSERT_NOT_REACHED();
-        break;
-
-    case Element::WaitingForUpgrade:
-        element->setCustomElementDefinition(definition);
-        CustomElementScheduler::scheduleCallback(definition->callbacks(), element, CustomElementLifecycleCallbacks::CreatedCallback);
-        break;
-    }
+    CustomElementDefinition* definition = definitionForElementWithoutCheck(*element);
+    if (definition->hasDisconnectedCallback())
+        definition->enqueueDisconnectedCallback(element);
 }
 
-void CustomElement::attributeDidChange(Element* element, const AtomicString& name, const AtomicString& oldValue, const AtomicString& newValue)
+void CustomElement::enqueueAdoptedCallback(Element* element,
+    Document* oldOwner,
+    Document* newOwner)
 {
-    ASSERT(element->customElementState() == Element::Upgraded);
-    CustomElementScheduler::scheduleAttributeChangedCallback(element->customElementDefinition()->callbacks(), element, name, oldValue, newValue);
+    DCHECK_EQ(element->getCustomElementState(), CustomElementState::Custom);
+    CustomElementDefinition* definition = definitionForElementWithoutCheck(*element);
+    if (definition->hasAdoptedCallback())
+        definition->enqueueAdoptedCallback(element, oldOwner, newOwner);
 }
 
-void CustomElement::didAttach(Element* element, const Document& document)
+void CustomElement::enqueueAttributeChangedCallback(
+    Element* element,
+    const QualifiedName& name,
+    const AtomicString& oldValue,
+    const AtomicString& newValue)
 {
-    ASSERT(element->customElementState() == Element::Upgraded);
-    if (!document.domWindow())
+    CustomElementDefinition* definition = definitionForElementWithoutCheck(*element);
+    if (definition->hasAttributeChangedCallback(name))
+        definition->enqueueAttributeChangedCallback(element, name, oldValue,
+            newValue);
+}
+
+void CustomElement::tryToUpgrade(Element* element)
+{
+    // Try to upgrade an element
+    // https://html.spec.whatwg.org/multipage/scripting.html#concept-try-upgrade
+
+    DCHECK_EQ(element->getCustomElementState(), CustomElementState::Undefined);
+
+    CustomElementRegistry* registry = CustomElement::registry(*element);
+    if (!registry)
         return;
-    CustomElementScheduler::scheduleCallback(element->customElementDefinition()->callbacks(), element, CustomElementLifecycleCallbacks::AttachedCallback);
-}
-
-void CustomElement::didDetach(Element* element, const Document& document)
-{
-    ASSERT(element->customElementState() == Element::Upgraded);
-    if (!document.domWindow())
-        return;
-    CustomElementScheduler::scheduleCallback(element->customElementDefinition()->callbacks(), element, CustomElementLifecycleCallbacks::DetachedCallback);
-}
-
-void CustomElement::wasDestroyed(Element* element)
-{
-    switch (element->customElementState()) {
-    case Element::NotCustomElement:
-        ASSERT_NOT_REACHED();
-        break;
-
-    case Element::WaitingForUpgrade:
-    case Element::Upgraded:
-        CustomElementObserver::notifyElementWasDestroyed(element);
-        break;
-    }
+    if (CustomElementDefinition* definition = registry->definitionFor(
+            CustomElementDescriptor(element->localName(), element->localName())))
+        definition->enqueueUpgradeReaction(element);
+    else
+        registry->addCandidate(element);
 }
 
 } // namespace blink

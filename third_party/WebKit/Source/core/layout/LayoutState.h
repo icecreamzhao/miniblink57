@@ -27,70 +27,93 @@
 #define LayoutState_h
 
 #include "platform/geometry/LayoutRect.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 
 namespace blink {
 
-class ForceHorriblySlowRectMapping;
 class LayoutBox;
 class LayoutFlowThread;
 class LayoutObject;
 class LayoutView;
 
+// LayoutState is an optimization used during layout.
+//
+// LayoutState's purpose is to cache information as we walk down the container
+// block chain during layout. In particular, the absolute layout offset for the
+// current LayoutObject is O(1) when using LayoutState, when it is
+// O(depthOfTree) without it (thus potentially making layout O(N^2)).
+// LayoutState incurs some memory overhead and is pretty intrusive (see next
+// paragraphs about those downsides).
+//
+// To use LayoutState, the layout() functions have to allocate a new LayoutSTate
+// object on the stack whenever the LayoutObject creates a new coordinate system
+// (which is pretty much all objects but LayoutTableRow).
+//
+// LayoutStates are linked together with a single linked list, acting in
+// practice like a stack that we push / pop. LayoutView holds the top-most
+// pointer to this stack.
+//
+// See the layout() functions on how to set it up during layout.
+// See e.g LayoutBox::offsetFromLogicalTopOfFirstPage on how to use LayoutState
+// for computations.
 class LayoutState {
+    // LayoutState is always allocated on the stack.
+    // The reason is that it is scoped to layout, thus we can avoid expensive
+    // mallocs.
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(LayoutState);
+
 public:
     // Constructor for root LayoutState created by LayoutView
-    LayoutState(LayoutUnit pageLogicalHeight, bool pageLogicalHeightChanged, LayoutView&);
-    // Constructor for sub-tree layout
+    explicit LayoutState(LayoutView&);
+    // Constructor for sub-tree layout and orthogonal writing-mode roots
     explicit LayoutState(LayoutObject& root);
 
-    LayoutState(LayoutBox&, const LayoutSize& offset, LayoutUnit pageLogicalHeight = 0, bool pageHeightLogicalChanged = false, bool containingBlockLogicalWidthChanged = false);
+    LayoutState(LayoutBox&,
+        bool containingBlockLogicalWidthChanged = false);
 
     ~LayoutState();
 
-    void clearPaginationInformation();
     bool isPaginated() const { return m_isPaginated; }
 
-    // The page logical offset is the object's offset from the top of the page in the page progression
-    // direction (so an x-offset in vertical text and a y-offset for horizontal text).
-    LayoutUnit pageLogicalOffset(const LayoutBox&, const LayoutUnit& childLogicalOffset) const;
+    // The page logical offset is the object's offset from the top of the page in
+    // the page progression direction (so an x-offset in vertical text and a
+    // y-offset for horizontal text).
+    LayoutUnit pageLogicalOffset(const LayoutBox&,
+        const LayoutUnit& childLogicalOffset) const;
 
-    const LayoutSize& layoutOffset() const { return m_layoutOffset; }
-    const LayoutSize& pageOffset() const { return m_pageOffset; }
-    LayoutUnit pageLogicalHeight() const { return m_pageLogicalHeight; }
-    bool pageLogicalHeightChanged() const { return m_pageLogicalHeightChanged; }
-    bool containingBlockLogicalWidthChanged() const { return m_containingBlockLogicalWidthChanged; }
+    const LayoutSize& paginationOffset() const { return m_paginationOffset; }
+    bool containingBlockLogicalWidthChanged() const
+    {
+        return m_containingBlockLogicalWidthChanged;
+    }
+
+    bool paginationStateChanged() const { return m_paginationStateChanged; }
+    void setPaginationStateChanged() { m_paginationStateChanged = true; }
 
     LayoutState* next() const { return m_next; }
-
-    bool needsBlockDirectionLocationSetBeforeLayout() const { return m_isPaginated && m_pageLogicalHeight; }
 
     LayoutFlowThread* flowThread() const { return m_flowThread; }
 
     LayoutObject& layoutObject() const { return m_layoutObject; }
 
 private:
-    friend class ForceHorriblySlowRectMapping;
-
-    // Do not add anything apart from bitfields until after m_flowThread. See https://bugs.webkit.org/show_bug.cgi?id=100173
+    // Do not add anything apart from bitfields until after m_flowThread. See
+    // https://bugs.webkit.org/show_bug.cgi?id=100173
     bool m_isPaginated : 1;
-    // If our page height has changed, this will force all blocks to relayout.
-    bool m_pageLogicalHeightChanged : 1;
+
     bool m_containingBlockLogicalWidthChanged : 1;
+    bool m_paginationStateChanged : 1;
 
     LayoutFlowThread* m_flowThread;
 
     LayoutState* m_next;
 
-    // x/y offset from container. Does not include relative positioning or scroll offsets.
-    LayoutSize m_layoutOffset;
-
-    // The current page height for the pagination model that encloses us.
-    LayoutUnit m_pageLogicalHeight;
-    // The offset of the start of the first page in the nearest enclosing pagination model.
-    LayoutSize m_pageOffset;
+    // x/y offset from the logical top / start of the first page. Does not include
+    // relative positioning or scroll offsets.
+    LayoutSize m_paginationOffset;
 
     LayoutObject& m_layoutObject;
 };

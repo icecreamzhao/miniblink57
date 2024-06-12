@@ -1,26 +1,28 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkPath.h"
 #include "SkRegion.h"
 #include "SkShader.h"
 #include "SkUtils.h"
-#include "SkImageDecoder.h"
+#include "SkView.h"
 
-static void test_strokerect(SkCanvas* canvas) {
+#include <math.h>
+
+static void test_strokerect(SkCanvas* canvas)
+{
     int width = 100;
     int height = 100;
 
     SkBitmap bitmap;
-    bitmap.allocPixels(SkImageInfo::MakeA8(width*2, height*2));
+    bitmap.allocPixels(SkImageInfo::MakeA8(width * 2, height * 2));
     bitmap.eraseColor(SK_ColorTRANSPARENT);
 
     SkScalar dx = 20;
@@ -28,8 +30,8 @@ static void test_strokerect(SkCanvas* canvas) {
 
     SkPath path;
     path.addRect(0.0f, 0.0f,
-                 SkIntToScalar(width), SkIntToScalar(height),
-                 SkPath::kCW_Direction);
+        SkIntToScalar(width), SkIntToScalar(height),
+        SkPath::kCW_Direction);
     SkRect r = SkRect::MakeWH(SkIntToScalar(width), SkIntToScalar(height));
 
     SkCanvas c(bitmap);
@@ -42,17 +44,18 @@ static void test_strokerect(SkCanvas* canvas) {
     // use the rect
     c.clear(SK_ColorTRANSPARENT);
     c.drawRect(r, paint);
-    canvas->drawBitmap(bitmap, 0, 0, NULL);
+    canvas->drawBitmap(bitmap, 0, 0, nullptr);
 
     // use the path
     c.clear(SK_ColorTRANSPARENT);
     c.drawPath(path, paint);
-    canvas->drawBitmap(bitmap, SkIntToScalar(2*width), 0, NULL);
+    canvas->drawBitmap(bitmap, SkIntToScalar(2 * width), 0, nullptr);
 }
 
 static void drawFadingText(SkCanvas* canvas,
-                           const char* text, size_t len, SkScalar x, SkScalar y,
-                           const SkPaint& paint) {
+    const char* text, size_t len, SkScalar x, SkScalar y,
+    const SkPaint& paint)
+{
     // Need a bounds for the text
     SkRect bounds;
     SkPaint::FontMetrics fm;
@@ -64,7 +67,7 @@ static void drawFadingText(SkCanvas* canvas,
     // antialiasing
     bounds.inset(-SkIntToScalar(2), -SkIntToScalar(2));
 
-    canvas->saveLayer(&bounds, NULL);
+    canvas->saveLayer(&bounds, nullptr);
     canvas->drawText(text, len, x, y, paint);
 
     const SkPoint pts[] = {
@@ -77,17 +80,16 @@ static void drawFadingText(SkCanvas* canvas,
     // of our pts[] array.
     const SkScalar pos[] = { 0, 0.9f, SK_Scalar1 };
 
-    SkShader* s = SkGradientShader::CreateLinear(pts, colors, pos, 3,
-                                                 SkShader::kClamp_TileMode);
     SkPaint p;
-    p.setShader(s)->unref();
+    p.setShader(SkGradientShader::MakeLinear(pts, colors, pos, 3, SkShader::kClamp_TileMode));
     p.setXfermodeMode(SkXfermode::kDstIn_Mode);
     canvas->drawRect(bounds, p);
 
     canvas->restore();
 }
 
-static void test_text(SkCanvas* canvas) {
+static void test_text(SkCanvas* canvas)
+{
     SkPaint paint;
     paint.setAntiAlias(true);
     paint.setTextSize(20);
@@ -104,25 +106,20 @@ static void test_text(SkCanvas* canvas) {
     const SkPoint pts[] = { { x, y }, { x + paint.measureText(str, len), y } };
     const SkColor colors[] = { SK_ColorBLACK, SK_ColorBLACK, 0 };
     const SkScalar pos[] = { 0, 0.9f, 1 };
-    SkShader* s = SkGradientShader::CreateLinear(pts, colors, pos,
-                                                 SK_ARRAY_COUNT(colors),
-                                                 SkShader::kClamp_TileMode);
-    paint.setShader(s)->unref();
+    paint.setShader(SkGradientShader::MakeLinear(pts, colors, pos,
+        SK_ARRAY_COUNT(colors),
+        SkShader::kClamp_TileMode));
     canvas->drawText(str, len, x, y, paint);
 
     y += 20;
-    paint.setShader(NULL);
+    paint.setShader(nullptr);
     drawFadingText(canvas, str, len, x, y, paint);
 }
 
-#ifdef SK_BUILD_FOR_WIN
-// windows doesn't have roundf
-inline float roundf(float x) { return (x-floor(x))>0.5 ? ceil(x) : floor(x); }
-#endif
-
 #ifdef SK_DEBUG
 static void make_rgn(SkRegion* rgn, int left, int top, int right, int bottom,
-                     int count, int32_t runs[]) {
+    int count, int32_t runs[])
+{
     SkIRect r;
     r.set(left, top, right, bottom);
 
@@ -130,7 +127,8 @@ static void make_rgn(SkRegion* rgn, int left, int top, int right, int bottom,
     SkASSERT(rgn->getBounds() == r);
 }
 
-static void test_union_bug_1505668(SkRegion* ra, SkRegion* rb, SkRegion* rc) {
+static void test_union_bug_1505668(SkRegion* ra, SkRegion* rb, SkRegion* rc)
+{
     static int32_t dataA[] = {
         0x00000001,
         0x000001dd, 2, 0x00000001, 0x0000000c, 0x0000000d, 0x00000025, 0x7fffffff,
@@ -160,14 +158,16 @@ static void test_union_bug_1505668(SkRegion* ra, SkRegion* rb, SkRegion* rc) {
 }
 #endif
 
-static void scale_rect(SkIRect* dst, const SkIRect& src, float scale) {
+static void scale_rect(SkIRect* dst, const SkIRect& src, float scale)
+{
     dst->fLeft = (int)::roundf(src.fLeft * scale);
     dst->fTop = (int)::roundf(src.fTop * scale);
     dst->fRight = (int)::roundf(src.fRight * scale);
     dst->fBottom = (int)::roundf(src.fBottom * scale);
 }
 
-static void scale_rgn(SkRegion* dst, const SkRegion& src, float scale) {
+static void scale_rgn(SkRegion* dst, const SkRegion& src, float scale)
+{
     SkRegion tmp;
     SkRegion::Iterator iter(src);
 
@@ -180,15 +180,15 @@ static void scale_rgn(SkRegion* dst, const SkRegion& src, float scale) {
 }
 
 static void paint_rgn(SkCanvas* canvas, const SkRegion& rgn,
-                      const SkPaint& paint) {
+    const SkPaint& paint)
+{
     SkRegion scaled;
     scale_rgn(&scaled, rgn, 0.5f);
 
-    SkRegion::Iterator  iter(rgn);
+    SkRegion::Iterator iter(rgn);
 
-    for (; !iter.done(); iter.next())
-    {
-        SkRect    r;
+    for (; !iter.done(); iter.next()) {
+        SkRect r;
         r.set(iter.rect());
         canvas->drawRect(r, paint);
     }
@@ -196,7 +196,8 @@ static void paint_rgn(SkCanvas* canvas, const SkRegion& rgn,
 
 class RegionView : public SampleView {
 public:
-    RegionView() {
+    RegionView()
+    {
         fBase.set(100, 100, 150, 150);
         fRect = fBase;
         fRect.inset(5, 5);
@@ -204,22 +205,24 @@ public:
         this->setBGColor(0xFFDDDDDD);
     }
 
-    void build_base_rgn(SkRegion* rgn) {
+    void build_base_rgn(SkRegion* rgn)
+    {
         rgn->setRect(fBase);
         SkIRect r = fBase;
         r.offset(75, 20);
         rgn->op(r, SkRegion::kUnion_Op);
     }
 
-    void build_rgn(SkRegion* rgn, SkRegion::Op op) {
+    void build_rgn(SkRegion* rgn, SkRegion::Op op)
+    {
         build_base_rgn(rgn);
         rgn->op(fRect, op);
     }
 
-
 protected:
     // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Regions");
             return true;
@@ -228,7 +231,8 @@ protected:
     }
 
     static void drawstr(SkCanvas* canvas, const char text[], const SkPoint& loc,
-                        bool hilite) {
+        bool hilite)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTextSize(SkIntToScalar(20));
@@ -236,7 +240,8 @@ protected:
         canvas->drawText(text, strlen(text), loc.fX, loc.fY, paint);
     }
 
-    void drawPredicates(SkCanvas* canvas, const SkPoint pts[]) {
+    void drawPredicates(SkCanvas* canvas, const SkPoint pts[])
+    {
         SkRegion rgn;
         build_base_rgn(&rgn);
 
@@ -244,9 +249,10 @@ protected:
         drawstr(canvas, "Contains", pts[1], rgn.contains(fRect));
     }
 
-    void drawOrig(SkCanvas* canvas, bool bg) {
-        SkRect      r;
-        SkPaint     paint;
+    void drawOrig(SkCanvas* canvas, bool bg)
+    {
+        SkRect r;
+        SkPaint paint;
 
         paint.setStyle(SkPaint::kStroke_Style);
         if (bg)
@@ -260,8 +266,9 @@ protected:
         canvas->drawRect(r, paint);
     }
 
-    void drawRgnOped(SkCanvas* canvas, SkRegion::Op op, SkColor color) {
-        SkRegion    rgn;
+    void drawRgnOped(SkCanvas* canvas, SkRegion::Op op, SkColor color)
+    {
+        SkRegion rgn;
 
         this->build_rgn(&rgn, op);
 
@@ -272,14 +279,14 @@ protected:
             tmp.translate(5, -3);
 
             {
-                char    buffer[1000];
-                SkDEBUGCODE(size_t  size = ) tmp.writeToMemory(NULL);
+                char buffer[1000];
+                SkDEBUGCODE(size_t size =) tmp.writeToMemory(nullptr);
                 SkASSERT(size <= sizeof(buffer));
-                SkDEBUGCODE(size_t  size2 = ) tmp.writeToMemory(buffer);
+                SkDEBUGCODE(size_t size2 =) tmp.writeToMemory(buffer);
                 SkASSERT(size == size2);
 
-                SkRegion    tmp3;
-                SkDEBUGCODE(size2 = ) tmp3.readFromMemory(buffer, 1000);
+                SkRegion tmp3;
+                SkDEBUGCODE(size2 =) tmp3.readFromMemory(buffer, 1000);
                 SkASSERT(size == size2);
 
                 SkASSERT(tmp3 == tmp);
@@ -302,9 +309,10 @@ protected:
         paint_rgn(canvas, rgn, paint);
     }
 
-    void drawPathOped(SkCanvas* canvas, SkRegion::Op op, SkColor color) {
-        SkRegion    rgn;
-        SkPath      path;
+    void drawPathOped(SkCanvas* canvas, SkRegion::Op op, SkColor color)
+    {
+        SkRegion rgn;
+        SkPath path;
 
         this->build_rgn(&rgn, op);
         rgn.getBoundaryPath(&path);
@@ -321,7 +329,8 @@ protected:
         canvas->drawPath(path, paint);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         if (false) { // avoid bit rot, suppress warning
             test_strokerect(canvas);
             return;
@@ -335,7 +344,7 @@ protected:
             SkRegion a, b, c;
             test_union_bug_1505668(&a, &b, &c);
 
-            if (false) {    // draw the result of the test
+            if (false) { // draw the result of the test
                 SkPaint paint;
 
                 canvas->translate(SkIntToScalar(10), SkIntToScalar(10));
@@ -345,36 +354,36 @@ protected:
                 paint_rgn(canvas, b, paint);
                 paint.setColor(SK_ColorBLACK);
                 paint.setStyle(SkPaint::kStroke_Style);
-             //   paint_rgn(canvas, c, paint);
+                //   paint_rgn(canvas, c, paint);
                 return;
             }
         }
 #endif
         const SkPoint origins[] = {
-            { 30*SK_Scalar1, 50*SK_Scalar1 },
-            { 150*SK_Scalar1, 50*SK_Scalar1 },
+            { 30 * SK_Scalar1, 50 * SK_Scalar1 },
+            { 150 * SK_Scalar1, 50 * SK_Scalar1 },
         };
         this->drawPredicates(canvas, origins);
 
         static const struct {
-            SkColor         fColor;
-            const char*     fName;
-            SkRegion::Op    fOp;
+            SkColor fColor;
+            const char* fName;
+            SkRegion::Op fOp;
         } gOps[] = {
-            { SK_ColorBLACK,    "Difference",   SkRegion::kDifference_Op    },
-            { SK_ColorRED,      "Intersect",    SkRegion::kIntersect_Op     },
-            { 0xFF008800,       "Union",        SkRegion::kUnion_Op         },
-            { SK_ColorBLUE,     "XOR",          SkRegion::kXOR_Op           }
+            { SK_ColorBLACK, "Difference", SkRegion::kDifference_Op },
+            { SK_ColorRED, "Intersect", SkRegion::kIntersect_Op },
+            { 0xFF008800, "Union", SkRegion::kUnion_Op },
+            { SK_ColorBLUE, "XOR", SkRegion::kXOR_Op }
         };
 
         SkPaint textPaint;
         textPaint.setAntiAlias(true);
-        textPaint.setTextSize(SK_Scalar1*24);
+        textPaint.setTextSize(SK_Scalar1 * 24);
 
         this->drawOrig(canvas, false);
         canvas->save();
-            canvas->translate(SkIntToScalar(200), 0);
-            this->drawRgnOped(canvas, SkRegion::kUnion_Op, SK_ColorBLACK);
+        canvas->translate(SkIntToScalar(200), 0);
+        this->drawRgnOped(canvas, SkRegion::kUnion_Op, SK_ColorBLACK);
         canvas->restore();
 
         canvas->translate(0, SkIntToScalar(200));
@@ -394,20 +403,24 @@ protected:
     }
 
     virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y,
-                                              unsigned modi) override {
+        unsigned modi) override
+    {
         return fRect.contains(SkScalarRoundToInt(x),
-                              SkScalarRoundToInt(y)) ? new Click(this) : NULL;
+                   SkScalarRoundToInt(y))
+            ? new Click(this)
+            : nullptr;
     }
 
-    bool onClick(Click* click) override {
+    bool onClick(Click* click) override
+    {
         fRect.offset(click->fICurr.fX - click->fIPrev.fX,
-                     click->fICurr.fY - click->fIPrev.fY);
-        this->inval(NULL);
+            click->fICurr.fY - click->fIPrev.fY);
+        this->inval(nullptr);
         return true;
     }
 
 private:
-    SkIRect    fBase, fRect;
+    SkIRect fBase, fRect;
 
     typedef SampleView INHERITED;
 };

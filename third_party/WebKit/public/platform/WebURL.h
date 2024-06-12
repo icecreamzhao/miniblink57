@@ -31,12 +31,13 @@
 #ifndef WebURL_h
 #define WebURL_h
 
-#include "WebCString.h"
+#include "WebCommon.h"
 #include "WebString.h"
-//#include <url/third_party/mozilla/url_parse.h>
+#include "url/third_party/mozilla/url_parse.h"
+#include "third_party/WebKit/public/platform/WebCString.h"
 
 #if !INSIDE_BLINK
-#include <url/gurl.h>
+#include "url/gurl.h"
 #endif
 
 namespace blink {
@@ -45,29 +46,18 @@ class KURL;
 
 class WebURL {
 public:
-    ~WebURL()
-    {
-    }
+    ~WebURL() { }
 
     WebURL()
         : m_isValid(false)
     {
     }
 
-    WebURL(const WebURL& url)
-        : m_string(url.m_string)
-        //, m_parsed(url.m_parsed)
-        , m_isValid(url.m_isValid)
-    {
-    }
+    WebURL(const WebURL& url);
 
-    WebURL& operator=(const WebURL& url)
-    {
-        m_string = url.m_string;
-        //m_parsed = url.m_parsed;
-        m_isValid = url.m_isValid;
-        return *this;
-    }
+    WebURL& operator=(const WebURL& url);
+
+    const WebString& string() const { return m_string; }
 
     // FIXME: Remove this API.
     WebCString spec() const
@@ -76,60 +66,51 @@ public:
         return WebCString(spec.data(), spec.length());
     }
 
-    const WebString& string() const
-    {
-        return m_string;
-    }
+    const url::Parsed& parsed() const { return m_parsed; }
 
-//     const url::Parsed& parsed() const
-//     {
-//         return m_parsed;
-//     }
+    bool isValid() const { return m_isValid; }
 
-    bool isValid() const
-    {
-        return m_isValid;
-    }
+    bool isEmpty() const { return m_string.isEmpty(); }
 
-    bool isEmpty() const
-    {
-        return m_string.isEmpty();
-    }
+    bool isNull() const { return m_string.isEmpty(); }
 
-    bool isNull() const
-    {
-        return m_string.isEmpty();
-    }
+    BLINK_PLATFORM_EXPORT bool protocolIs(const char* protocol) const;
 
 #if INSIDE_BLINK
     BLINK_PLATFORM_EXPORT WebURL(const KURL&);
     BLINK_PLATFORM_EXPORT WebURL& operator=(const KURL&);
     BLINK_PLATFORM_EXPORT operator KURL() const;
 #else
+//     WebURL(const GURL& url);
+//     WebURL& operator=(const GURL& url);
+//     operator GURL() const;
+    operator GURL() const
+    {
+        //return isNull() ? GURL() : GURL(m_string.utf8(), m_parsed, m_isValid);
+        return isNull() ? GURL() : GURL(m_string.utf8());
+    }
+
     WebURL(const GURL& url)
         : m_string(WebString::fromUTF8(url.possibly_invalid_spec()))
-        , m_parsed(url.parsed_for_possibly_invalid_spec())
-        , m_isValid(url.is_valid())
+        ,
+        //m_parsed(url.parsed_for_possibly_invalid_spec()),
+        m_isValid(url.is_valid())
     {
     }
 
     WebURL& operator=(const GURL& url)
     {
         m_string = WebString::fromUTF8(url.possibly_invalid_spec());
-        m_parsed = url.parsed_for_possibly_invalid_spec();
+        //m_parsed = url.parsed_for_possibly_invalid_spec();
         m_isValid = url.is_valid();
-        return *this;
-    }
 
-    operator GURL() const
-    {
-        return isNull() ? GURL() : GURL(m_string.utf8(), m_parsed, m_isValid);
+        return *this;
     }
 #endif
 
 private:
     WebString m_string;
-    //url::Parsed m_parsed;
+    url::Parsed m_parsed;
     bool m_isValid;
 };
 

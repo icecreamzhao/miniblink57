@@ -1248,7 +1248,7 @@ void Simulator::set_fpu_register_word_invalid_result(float original,
   if (FCSR_ & kFCSRNaN2008FlagMask) {
     double max_int32 = std::numeric_limits<int32_t>::max();
     double min_int32 = std::numeric_limits<int32_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register_word(fd_reg(), 0);
     } else if (rounded > max_int32) {
       set_fpu_register_word(fd_reg(), kFPUInvalidResult);
@@ -1267,7 +1267,7 @@ void Simulator::set_fpu_register_invalid_result(float original, float rounded) {
   if (FCSR_ & kFCSRNaN2008FlagMask) {
     double max_int32 = std::numeric_limits<int32_t>::max();
     double min_int32 = std::numeric_limits<int32_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register(fd_reg(), 0);
     } else if (rounded > max_int32) {
       set_fpu_register(fd_reg(), kFPUInvalidResult);
@@ -1289,7 +1289,7 @@ void Simulator::set_fpu_register_invalid_result64(float original,
     // loading the most accurate representation into max_int64, which is 2^63.
     double max_int64 = std::numeric_limits<int64_t>::max();
     double min_int64 = std::numeric_limits<int64_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register(fd_reg(), 0);
     } else if (rounded >= max_int64) {
       set_fpu_register(fd_reg(), kFPU64InvalidResult);
@@ -1309,7 +1309,7 @@ void Simulator::set_fpu_register_word_invalid_result(double original,
   if (FCSR_ & kFCSRNaN2008FlagMask) {
     double max_int32 = std::numeric_limits<int32_t>::max();
     double min_int32 = std::numeric_limits<int32_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register_word(fd_reg(), 0);
     } else if (rounded > max_int32) {
       set_fpu_register_word(fd_reg(), kFPUInvalidResult);
@@ -1329,7 +1329,7 @@ void Simulator::set_fpu_register_invalid_result(double original,
   if (FCSR_ & kFCSRNaN2008FlagMask) {
     double max_int32 = std::numeric_limits<int32_t>::max();
     double min_int32 = std::numeric_limits<int32_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register(fd_reg(), 0);
     } else if (rounded > max_int32) {
       set_fpu_register(fd_reg(), kFPUInvalidResult);
@@ -1351,7 +1351,7 @@ void Simulator::set_fpu_register_invalid_result64(double original,
     // loading the most accurate representation into max_int64, which is 2^63.
     double max_int64 = std::numeric_limits<int64_t>::max();
     double min_int64 = std::numeric_limits<int64_t>::min();
-    if (std::isnan(original)) {
+    if (std_isnan(original)) {
       set_fpu_register(fd_reg(), 0);
     } else if (rounded >= max_int64) {
       set_fpu_register(fd_reg(), kFPU64InvalidResult);
@@ -1373,7 +1373,7 @@ bool Simulator::set_fcsr_round_error(double original, double rounded) {
   double max_int32 = std::numeric_limits<int32_t>::max();
   double min_int32 = std::numeric_limits<int32_t>::min();
 
-  if (!std::isfinite(original) || !std::isfinite(rounded)) {
+  if (!std_isfinite(original) || !std_isfinite(rounded)) {
     set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
     ret = true;
   }
@@ -1407,7 +1407,7 @@ bool Simulator::set_fcsr_round64_error(double original, double rounded) {
   double max_int64 = std::numeric_limits<int64_t>::max();
   double min_int64 = std::numeric_limits<int64_t>::min();
 
-  if (!std::isfinite(original) || !std::isfinite(rounded)) {
+  if (!std_isfinite(original) || !std_isfinite(rounded)) {
     set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
     ret = true;
   }
@@ -1439,7 +1439,7 @@ bool Simulator::set_fcsr_round_error(float original, float rounded) {
   double max_int32 = std::numeric_limits<int32_t>::max();
   double min_int32 = std::numeric_limits<int32_t>::min();
 
-  if (!std::isfinite(original) || !std::isfinite(rounded)) {
+  if (!std_isfinite(original) || !std_isfinite(rounded)) {
     set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
     ret = true;
   }
@@ -1473,7 +1473,7 @@ bool Simulator::set_fcsr_round64_error(float original, float rounded) {
   double max_int64 = std::numeric_limits<int64_t>::max();
   double min_int64 = std::numeric_limits<int64_t>::min();
 
-  if (!std::isfinite(original) || !std::isfinite(rounded)) {
+  if (!std_isfinite(original) || !std_isfinite(rounded)) {
     set_fcsr_bit(kFCSRInvalidOpFlagBit, true);
     ret = true;
   }
@@ -2304,17 +2304,17 @@ float FPAbs<float>(float a) {
 
 template <typename T>
 static bool FPUProcessNaNsAndZeros(T a, T b, MaxMinKind kind, T& result) {
-  if (std::isnan(a) && std::isnan(b)) {
+  if (std_isnan(a) && std_isnan(b)) {
     result = a;
-  } else if (std::isnan(a)) {
+  } else if (std_isnan(a)) {
     result = b;
-  } else if (std::isnan(b)) {
+  } else if (std_isnan(b)) {
     result = a;
   } else if (b == a) {
     // Handle -0.0 == 0.0 case.
-    // std::signbit() returns int 0 or 1 so substracting MaxMinKind::kMax
+    // std_signbit() returns int 0 or 1 so substracting MaxMinKind::kMax
     // negates the result.
-    result = std::signbit(b) - static_cast<int>(kind) ? b : a;
+    result = std_signbit(b) - static_cast<int>(kind) ? b : a;
   } else {
     return false;
   }
@@ -2376,7 +2376,7 @@ enum class KeepSign : bool { no = false, yes };
 template <typename T, typename std::enable_if<std::is_floating_point<T>::value,
                                               int>::type = 0>
 T FPUCanonalizeNaNArg(T result, T arg, KeepSign keepSign = KeepSign::no) {
-  DCHECK(std::isnan(arg));
+  DCHECK(std_isnan(arg));
   T qNaN = std::numeric_limits<T>::quiet_NaN();
   if (keepSign == KeepSign::yes) {
     return std::copysign(qNaN, result);
@@ -2386,7 +2386,7 @@ T FPUCanonalizeNaNArg(T result, T arg, KeepSign keepSign = KeepSign::no) {
 
 template <typename T>
 T FPUCanonalizeNaNArgs(T result, KeepSign keepSign, T first) {
-  if (std::isnan(first)) {
+  if (std_isnan(first)) {
     return FPUCanonalizeNaNArg(result, first, keepSign);
   }
   return result;
@@ -2394,7 +2394,7 @@ T FPUCanonalizeNaNArgs(T result, KeepSign keepSign, T first) {
 
 template <typename T, typename... Args>
 T FPUCanonalizeNaNArgs(T result, KeepSign keepSign, T first, Args... args) {
-  if (std::isnan(first)) {
+  if (std_isnan(first)) {
     return FPUCanonalizeNaNArg(result, first, keepSign);
   }
   return FPUCanonalizeNaNArgs(result, keepSign, args...);
@@ -2408,7 +2408,7 @@ T FPUCanonalizeOperation(Func f, T first, Args... args) {
 template <typename Func, typename T, typename... Args>
 T FPUCanonalizeOperation(Func f, KeepSign keepSign, T first, Args... args) {
   T result = f(first, args...);
-  if (std::isnan(result)) {
+  if (std_isnan(result)) {
     result = FPUCanonalizeNaNArgs(result, keepSign, first, args...);
   }
   return result;
@@ -2584,25 +2584,25 @@ void Simulator::DecodeTypeRegisterDRsType() {
           FPUCanonalizeOperation([](double fs) { return 1.0 / fs; }, fs));
       break;
     case C_UN_D:
-      set_fcsr_bit(fcsr_cc, std::isnan(fs) || std::isnan(ft));
+      set_fcsr_bit(fcsr_cc, std_isnan(fs) || std_isnan(ft));
       break;
     case C_EQ_D:
       set_fcsr_bit(fcsr_cc, (fs == ft));
       break;
     case C_UEQ_D:
-      set_fcsr_bit(fcsr_cc, (fs == ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs == ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case C_OLT_D:
       set_fcsr_bit(fcsr_cc, (fs < ft));
       break;
     case C_ULT_D:
-      set_fcsr_bit(fcsr_cc, (fs < ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs < ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case C_OLE_D:
       set_fcsr_bit(fcsr_cc, (fs <= ft));
       break;
     case C_ULE_D:
-      set_fcsr_bit(fcsr_cc, (fs <= ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs <= ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case CVT_W_D: {  // Convert double to word.
       double rounded;
@@ -2826,7 +2826,7 @@ void Simulator::DecodeTypeRegisterWRsType() {
       set_fpu_register_word(fd_reg(), 0);
       break;
     case CMP_UN:
-      if (std::isnan(fs) || std::isnan(ft)) {
+      if (std_isnan(fs) || std_isnan(ft)) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
@@ -2840,7 +2840,7 @@ void Simulator::DecodeTypeRegisterWRsType() {
       }
       break;
     case CMP_UEQ:
-      if ((fs == ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs == ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
@@ -2854,7 +2854,7 @@ void Simulator::DecodeTypeRegisterWRsType() {
       }
       break;
     case CMP_ULT:
-      if ((fs < ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs < ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
@@ -2868,21 +2868,21 @@ void Simulator::DecodeTypeRegisterWRsType() {
       }
       break;
     case CMP_ULE:
-      if ((fs <= ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs <= ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
       }
       break;
     case CMP_OR:
-      if (!std::isnan(fs) && !std::isnan(ft)) {
+      if (!std_isnan(fs) && !std_isnan(ft)) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
       }
       break;
     case CMP_UNE:
-      if ((fs != ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs != ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register_word(fd_reg(), -1);
       } else {
         set_fpu_register_word(fd_reg(), 0);
@@ -3014,25 +3014,25 @@ void Simulator::DecodeTypeRegisterSRsType() {
       set_fcsr_bit(fcsr_cc, false);
       break;
     case C_UN_D:
-      set_fcsr_bit(fcsr_cc, std::isnan(fs) || std::isnan(ft));
+      set_fcsr_bit(fcsr_cc, std_isnan(fs) || std_isnan(ft));
       break;
     case C_EQ_D:
       set_fcsr_bit(fcsr_cc, (fs == ft));
       break;
     case C_UEQ_D:
-      set_fcsr_bit(fcsr_cc, (fs == ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs == ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case C_OLT_D:
       set_fcsr_bit(fcsr_cc, (fs < ft));
       break;
     case C_ULT_D:
-      set_fcsr_bit(fcsr_cc, (fs < ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs < ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case C_OLE_D:
       set_fcsr_bit(fcsr_cc, (fs <= ft));
       break;
     case C_ULE_D:
-      set_fcsr_bit(fcsr_cc, (fs <= ft) || (std::isnan(fs) || std::isnan(ft)));
+      set_fcsr_bit(fcsr_cc, (fs <= ft) || (std_isnan(fs) || std_isnan(ft)));
       break;
     case CVT_D_S:
       set_fpu_register_double(fd_reg(), static_cast<double>(fs));
@@ -3326,7 +3326,7 @@ void Simulator::DecodeTypeRegisterLRsType() {
       set_fpu_register(fd_reg(), 0);
       break;
     case CMP_UN:
-      if (std::isnan(fs) || std::isnan(ft)) {
+      if (std_isnan(fs) || std_isnan(ft)) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
@@ -3340,7 +3340,7 @@ void Simulator::DecodeTypeRegisterLRsType() {
       }
       break;
     case CMP_UEQ:
-      if ((fs == ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs == ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
@@ -3354,7 +3354,7 @@ void Simulator::DecodeTypeRegisterLRsType() {
       }
       break;
     case CMP_ULT:
-      if ((fs < ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs < ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
@@ -3368,28 +3368,28 @@ void Simulator::DecodeTypeRegisterLRsType() {
       }
       break;
     case CMP_ULE:
-      if ((fs <= ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs <= ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
       }
       break;
     case CMP_OR:
-      if (!std::isnan(fs) && !std::isnan(ft)) {
+      if (!std_isnan(fs) && !std_isnan(ft)) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
       }
       break;
     case CMP_UNE:
-      if ((fs != ft) || (std::isnan(fs) || std::isnan(ft))) {
+      if ((fs != ft) || (std_isnan(fs) || std_isnan(ft))) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);
       }
       break;
     case CMP_NE:
-      if (fs != ft && (!std::isnan(fs) && !std::isnan(ft))) {
+      if (fs != ft && (!std_isnan(fs) && !std_isnan(ft))) {
         set_fpu_register(fd_reg(), -1);
       } else {
         set_fpu_register(fd_reg(), 0);

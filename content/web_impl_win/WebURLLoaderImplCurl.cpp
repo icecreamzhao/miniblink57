@@ -11,7 +11,8 @@
 #include "third_party/WebKit/public/platform/WebURLError.h"
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 #include "third_party/WebKit/Source/wtf/RefCountedLeakCounter.h"
-
+// #include "third_party/WebKit/Source/wtf/text/OwnPtr.h"
+// #include "third_party/WebKit/Source/wtf/text/PassOwnPtr.h"
 #include <windows.h>
 
 #ifndef NDEBUG
@@ -31,6 +32,7 @@ WebURLLoaderImplCurl::WebURLLoaderImplCurl()
 
 WebURLLoaderImplCurl::~WebURLLoaderImplCurl()
 {
+    cancel();
 #ifndef NDEBUG
     webURLLoaderImplCurlCount.decrement();
 #endif
@@ -38,7 +40,7 @@ WebURLLoaderImplCurl::~WebURLLoaderImplCurl()
 
 void WebURLLoaderImplCurl::init()
 {
-    m_hadDestroied = false;
+    m_hadDestroied = nullptr;
     m_jobIds = 0;
     m_blobLoader = nullptr;
 }
@@ -49,37 +51,62 @@ static bool shouldContentSniffURL(const KURL& url)
     return !url.protocolIs("file");
 }
 
+static bool checkIsResURL(const KURL& url)
+{
+    String urlStr = url.getUTF8String();
+    urlStr = urlStr.lower();
+    if (WTF::kNotFound != urlStr.find("jpg") ||
+        WTF::kNotFound != urlStr.find("gif") ||
+        WTF::kNotFound != urlStr.find("bmp") ||
+        WTF::kNotFound != urlStr.find("png") ||
+        WTF::kNotFound != urlStr.find("mp3") ||
+        WTF::kNotFound != urlStr.find("mp4")
+        )
+        return true;
+    return false;
+}
+
 void WebURLLoaderImplCurl::loadSynchronously(
     const blink::WebURLRequest& request,
     blink::WebURLResponse& response,
     blink::WebURLError& error,
-    blink::WebData& data)
+    blink::WebData& data,
+    int64_t& encodedDataLength,
+    int64_t& encodedBodyLength)
 {
     if (!net::WebURLLoaderManager::sharedInstance())
         return;
 
     init();
 
+    net::WebURLLoaderManager* netManager = net::WebURLLoaderManager::sharedInstance();
     WebURLRequest requestNew = request;
+
+    KURL url = request.url();
+    net::WebURLLoaderManager::IoThreadType type = net::WebURLLoaderManager::kIoThreadTypeSync; 
+    // checkIsResURL(url) ? net::WebURLLoaderManager::kIoThreadTypeRes : net::WebURLLoaderManager::kIoThreadTypeOther;
 
     Vector<char> buffer;
     net::BlinkSynchronousLoader syncLoader(error, response, buffer);
-    net::WebURLLoaderInternal* job = new net::WebURLLoaderInternal(this, requestNew, &syncLoader, false, shouldContentSniffURL(request.url()));
-    net::WebURLLoaderManager::sharedInstance()->dispatchSynchronousJob(job);
+    net::WebURLLoaderInternal* job = new net::WebURLLoaderInternal(netManager->getIoThread(type), this, requestNew, &syncLoader, false, shouldContentSniffURL(request.url()));
+    netManager->dispatchSynchronousJob(job);
 
     data.assign(buffer.data(), buffer.size());
 }
 
 void WebURLLoaderImplCurl::loadAsynchronously(const blink::WebURLRequest& request, blink::WebURLLoaderClient* client)
 {
-    if (!net::WebURLLoaderManager::sharedInstance())
+    net::WebURLLoaderManager* netManager = net::WebURLLoaderManager::sharedInstance();
+    if (!netManager)
         return;
 
     init();
 
     KURL url = request.url();
+    net::WebURLLoaderManager::IoThreadType type = checkIsResURL(url) ? net::WebURLLoaderManager::kIoThreadTypeRes : net::WebURLLoaderManager::kIoThreadTypeOther;
+
     if (url.protocol() == "blob") {
-        WebBlobRegistryImpl* blolRegistry = (WebBlobRegistryImpl*)blink::Platform::current()->blobRegistry();
+        WebBlobRegistryImpl* blolRegistry = (WebBlobRegistryImpl*)blink::Platform::current()->getBlobRegistry();
         net::BlobDataWrap* blogData = blolRegistry->getBlobDataFromUUID(url.string());
         if (!blogData)
             return;
@@ -89,11 +116,11 @@ void WebURLLoaderImplCurl::loadAsynchronously(const blink::WebURLRequest& reques
         m_blobLoader = net::BlobResourceLoader::createAsync(blogData, request, client, this);
         m_blobLoader->start();
         return;
-    }
+    }    
 
     WebURLRequest requestNew = request;
-    net::WebURLLoaderInternal* job = new net::WebURLLoaderInternal(this, requestNew, client, false, shouldContentSniffURL(request.url()));
-    int jobIds = net::WebURLLoaderManager::sharedInstance()->addAsynchronousJob(job);
+    net::WebURLLoaderInternal* job = new net::WebURLLoaderInternal(netManager->getIoThread(type), this, requestNew, client, false, shouldContentSniffURL(request.url()));
+    int jobIds = netManager->addAsynchronousJob(job);
     if (0 == jobIds)
         return;
     m_jobIds = jobIds;
@@ -139,10 +166,15 @@ void WebURLLoaderImplCurl::didChangePriority(blink::WebURLRequest::Priority new_
     //notImplemented();
 }
 
-bool WebURLLoaderImplCurl::attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threaded_data_receiver)
+void WebURLLoaderImplCurl::setLoadingTaskRunner(base::SingleThreadTaskRunner* runner)
 {
-    notImplemented();
-    return false;
+
 }
+
+// bool WebURLLoaderImplCurl::attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threaded_data_receiver)
+// {
+//     notImplemented();
+//     return false;
+// }
 
 } // content

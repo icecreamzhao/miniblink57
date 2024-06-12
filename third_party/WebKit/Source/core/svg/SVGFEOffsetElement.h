@@ -23,13 +23,13 @@
 
 #include "core/svg/SVGAnimatedNumber.h"
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
-#include "platform/graphics/filters/FEOffset.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class SVGFEOffsetElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEOffsetElement);
 
@@ -43,11 +43,11 @@ private:
     explicit SVGFEOffsetElement(Document&);
 
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    RefPtrWillBeMember<SVGAnimatedNumber> m_dx;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_dy;
-    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    Member<SVGAnimatedNumber> m_dx;
+    Member<SVGAnimatedNumber> m_dy;
+    Member<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

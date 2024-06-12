@@ -7,35 +7,42 @@
 
 #include "GrGLGpu.h"
 
-#include "builders/GrGLProgramBuilder.h"
-#include "GrProcessor.h"
-#include "GrGLProcessor.h"
 #include "GrGLPathRendering.h"
+#include "GrProcessor.h"
 #include "SkRTConf.h"
 #include "SkTSearch.h"
+#include "builders/GrGLProgramBuilder.h"
+#include "glsl/GrGLSLFragmentProcessor.h"
+#include "glsl/GrGLSLProgramDataManager.h"
 
 #ifdef PROGRAM_CACHE_STATS
 SK_CONF_DECLARE(bool, c_DisplayCache, "gpu.displayCache", false,
-                "Display program cache usage.");
+    "Display program cache usage.");
 #endif
 
-typedef GrGLProgramDataManager::UniformHandle UniformHandle;
+typedef GrGLSLProgramDataManager::UniformHandle UniformHandle;
 
 struct GrGLGpu::ProgramCache::Entry {
-    
-    Entry() : fProgram(NULL), fLRUStamp(0) {}
 
-    SkAutoTUnref<GrGLProgram>   fProgram;
-    unsigned int                fLRUStamp;
+    Entry()
+        : fProgram(nullptr)
+        , fLRUStamp(0)
+    {
+    }
+
+    SkAutoTUnref<GrGLProgram> fProgram;
+    unsigned int fLRUStamp;
 };
 
 struct GrGLGpu::ProgramCache::ProgDescLess {
-    bool operator() (const GrProgramDesc& desc, const Entry* entry) {
+    bool operator()(const GrProgramDesc& desc, const Entry* entry)
+    {
         SkASSERT(entry->fProgram.get());
         return GrProgramDesc::Less(desc, entry->fProgram->getDesc());
     }
 
-    bool operator() (const Entry* entry, const GrProgramDesc& desc) {
+    bool operator()(const Entry* entry, const GrProgramDesc& desc)
+    {
         SkASSERT(entry->fProgram.get());
         return GrProgramDesc::Less(entry->fProgram->getDesc(), desc);
     }
@@ -52,13 +59,14 @@ GrGLGpu::ProgramCache::ProgramCache(GrGLGpu* gpu)
 #endif
 {
     for (int i = 0; i < 1 << kHashBits; ++i) {
-        fHashTable[i] = NULL;
+        fHashTable[i] = nullptr;
     }
 }
 
-GrGLGpu::ProgramCache::~ProgramCache() {
-    for (int i = 0; i < fCount; ++i){
-        SkDELETE(fEntries[i]);
+GrGLGpu::ProgramCache::~ProgramCache()
+{
+    for (int i = 0; i < fCount; ++i) {
+        delete fEntries[i];
     }
     // dump stats
 #ifdef PROGRAM_CACHE_STATS
@@ -66,9 +74,7 @@ GrGLGpu::ProgramCache::~ProgramCache() {
         SkDebugf("--- Program Cache ---\n");
         SkDebugf("Total requests: %d\n", fTotalRequests);
         SkDebugf("Cache misses: %d\n", fCacheMisses);
-        SkDebugf("Cache miss %%: %f\n", (fTotalRequests > 0) ?
-                                            100.f * fCacheMisses / fTotalRequests :
-                                            0.f);
+        SkDebugf("Cache miss %%: %f\n", (fTotalRequests > 0) ? 100.f * fCacheMisses / fTotalRequests : 0.f);
         int cacheHits = fTotalRequests - fCacheMisses;
         SkDebugf("Hash miss %%: %f\n", (cacheHits > 0) ? 100.f * fHashMisses / cacheHits : 0.f);
         SkDebugf("---------------------\n");
@@ -76,42 +82,67 @@ GrGLGpu::ProgramCache::~ProgramCache() {
 #endif
 }
 
-void GrGLGpu::ProgramCache::abandon() {
+void GrGLGpu::ProgramCache::abandon()
+{
     for (int i = 0; i < fCount; ++i) {
         SkASSERT(fEntries[i]->fProgram.get());
         fEntries[i]->fProgram->abandon();
-        SkDELETE(fEntries[i]);
+        delete fEntries[i];
+        fEntries[i] = nullptr;
     }
     fCount = 0;
+
+    // zero out hash table
+    for (int i = 0; i < 1 << kHashBits; i++) {
+        fHashTable[i] = nullptr;
+    }
+
+    fCurrLRUStamp = 0;
+#ifdef PROGRAM_CACHE_STATS
+    fTotalRequests = 0;
+    fCacheMisses = 0;
+    fHashMisses = 0;
+#endif
 }
 
-int GrGLGpu::ProgramCache::search(const GrProgramDesc& desc) const {
+int GrGLGpu::ProgramCache::search(const GrProgramDesc& desc) const
+{
     ProgDescLess less;
     return SkTSearch(fEntries, fCount, desc, sizeof(Entry*), less);
 }
 
-GrGLProgram* GrGLGpu::ProgramCache::refProgram(const DrawArgs& args) {
+GrGLProgram* GrGLGpu::ProgramCache::refProgram(const GrGLGpu* gpu,
+    const GrPipeline& pipeline,
+    const GrPrimitiveProcessor& primProc)
+{
 #ifdef PROGRAM_CACHE_STATS
     ++fTotalRequests;
 #endif
 
-    Entry* entry = NULL;
+    // Get GrGLProgramDesc
+    GrGLProgramDesc desc;
+    if (!GrGLProgramDescBuilder::Build(&desc, primProc, pipeline, *gpu->glCaps().glslCaps())) {
+        GrCapsDebugf(gpu->caps(), "Failed to gl program descriptor!\n");
+        return nullptr;
+    }
 
-    uint32_t hashIdx = args.fDesc->getChecksum();
+    Entry* entry = nullptr;
+
+    uint32_t hashIdx = desc.getChecksum();
     hashIdx ^= hashIdx >> 16;
     if (kHashBits <= 8) {
         hashIdx ^= hashIdx >> 8;
     }
-    hashIdx &=((1 << kHashBits) - 1);
+    hashIdx &= ((1 << kHashBits) - 1);
     Entry* hashedEntry = fHashTable[hashIdx];
-    if (hashedEntry && hashedEntry->fProgram->getDesc() == *args.fDesc) {
+    if (hashedEntry && hashedEntry->fProgram->getDesc() == desc) {
         SkASSERT(hashedEntry->fProgram);
         entry = hashedEntry;
     }
 
     int entryIdx;
-    if (NULL == entry) {
-        entryIdx = this->search(*args.fDesc);
+    if (nullptr == entry) {
+        entryIdx = this->search(desc);
         if (entryIdx >= 0) {
             entry = fEntries[entryIdx];
 #ifdef PROGRAM_CACHE_STATS
@@ -120,18 +151,18 @@ GrGLProgram* GrGLGpu::ProgramCache::refProgram(const DrawArgs& args) {
         }
     }
 
-    if (NULL == entry) {
+    if (nullptr == entry) {
         // We have a cache miss
 #ifdef PROGRAM_CACHE_STATS
         ++fCacheMisses;
 #endif
-        GrGLProgram* program = GrGLProgramBuilder::CreateProgram(args, fGpu);
-        if (NULL == program) {
-            return NULL;
+        GrGLProgram* program = GrGLProgramBuilder::CreateProgram(pipeline, primProc, desc, fGpu);
+        if (nullptr == program) {
+            return nullptr;
         }
         int purgeIdx = 0;
         if (fCount < kMaxEntries) {
-            entry = SkNEW(Entry);
+            entry = new Entry;
             purgeIdx = fCount++;
             fEntries[purgeIdx] = entry;
         } else {
@@ -145,7 +176,7 @@ GrGLProgram* GrGLGpu::ProgramCache::refProgram(const DrawArgs& args) {
             entry = fEntries[purgeIdx];
             int purgedHashIdx = entry->fProgram->getDesc().getChecksum() & ((1 << kHashBits) - 1);
             if (fHashTable[purgedHashIdx] == entry) {
-                fHashTable[purgedHashIdx] = NULL;
+                fHashTable[purgedHashIdx] = nullptr;
             }
         }
         SkASSERT(fEntries[purgeIdx] == entry);

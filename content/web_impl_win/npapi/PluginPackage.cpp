@@ -35,6 +35,7 @@
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
 
 #define PURE = 0
+#define interface struct
 
 #include <Shlwapi.h>
 #include <string.h>
@@ -67,7 +68,7 @@ void PluginPackage::freeLibrarySoon()
     m_freeLibraryTimer.startOneShot(0, FROM_HERE);
 }
 
-void PluginPackage::freeLibraryTimerFired(blink::Timer<PluginPackage>*)
+void PluginPackage::freeLibraryTimerFired(blink::TimerBase*)
 {
     if (!m_isVirtual)
         ASSERT(m_module);
@@ -203,8 +204,9 @@ PassRefPtr<PluginPackage> PluginPackage::createVirtualPackage(
     package->m_mimeToDescriptions.add(mimeDescription, description);
     package->m_mimeToExtensions.add(mimeDescription, extensionsVector);
 
-    database->addVirtualPlugin(package);
-    database->setPreferredPluginForMIMEType(description, package.get());
+//     database->addVirtualPlugin(package);
+//     database->setPreferredPluginForMIMEType(description, package.get());
+    DebugBreak();
 
     return package.release();
 }
@@ -277,7 +279,6 @@ void PluginPackage::initializeBrowserFuncs()
     m_browserFuncs.getvalueforurl = NPN_GetValueForURL;
     m_browserFuncs.setvalueforurl = NPN_SetValueForURL;
     m_browserFuncs.getauthenticationinfo = NPN_GetAuthenticationInfo;
-
     m_browserFuncs.popupcontextmenu = NPN_PopUpContextMenu;
 }
 

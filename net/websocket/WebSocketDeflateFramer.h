@@ -36,7 +36,7 @@
 #endif
 #include "net/websocket/WebSocketExtensionProcessor.h"
 #include "net/websocket/WebSocketOneFrame.h"
-#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/Source/wtf/allocator/PartitionAllocator.h"
 #include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 
 namespace net {

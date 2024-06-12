@@ -10,6 +10,7 @@
 #include "SkBase64.h"
 #include "SkBitmap.h"
 #include "SkChecksum.h"
+#include "SkClipStack.h"
 #include "SkData.h"
 #include "SkDraw.h"
 #include "SkImageEncoder.h"
@@ -24,57 +25,63 @@
 
 namespace {
 
-static SkString svg_color(SkColor color) {
+static SkString svg_color(SkColor color)
+{
     return SkStringPrintf("rgb(%u,%u,%u)",
-                          SkColorGetR(color),
-                          SkColorGetG(color),
-                          SkColorGetB(color));
+        SkColorGetR(color),
+        SkColorGetG(color),
+        SkColorGetB(color));
 }
 
-static SkScalar svg_opacity(SkColor color) {
+static SkScalar svg_opacity(SkColor color)
+{
     return SkIntToScalar(SkColorGetA(color)) / SK_AlphaOPAQUE;
 }
 
 // Keep in sync with SkPaint::Cap
-static const char* cap_map[]  = {
-    NULL,    // kButt_Cap (default)
+static const char* cap_map[] = {
+    nullptr, // kButt_Cap (default)
     "round", // kRound_Cap
     "square" // kSquare_Cap
 };
-SK_COMPILE_ASSERT(SK_ARRAY_COUNT(cap_map) == SkPaint::kCapCount, missing_cap_map_entry);
+static_assert(SK_ARRAY_COUNT(cap_map) == SkPaint::kCapCount, "missing_cap_map_entry");
 
-static const char* svg_cap(SkPaint::Cap cap) {
+static const char* svg_cap(SkPaint::Cap cap)
+{
     SkASSERT(cap < SK_ARRAY_COUNT(cap_map));
     return cap_map[cap];
 }
 
 // Keep in sync with SkPaint::Join
 static const char* join_map[] = {
-    NULL,    // kMiter_Join (default)
+    nullptr, // kMiter_Join (default)
     "round", // kRound_Join
-    "bevel"  // kBevel_Join
+    "bevel" // kBevel_Join
 };
-SK_COMPILE_ASSERT(SK_ARRAY_COUNT(join_map) == SkPaint::kJoinCount, missing_join_map_entry);
+static_assert(SK_ARRAY_COUNT(join_map) == SkPaint::kJoinCount, "missing_join_map_entry");
 
-static const char* svg_join(SkPaint::Join join) {
+static const char* svg_join(SkPaint::Join join)
+{
     SkASSERT(join < SK_ARRAY_COUNT(join_map));
     return join_map[join];
 }
 
 // Keep in sync with SkPaint::Align
 static const char* text_align_map[] = {
-    NULL,     // kLeft_Align (default)
+    nullptr, // kLeft_Align (default)
     "middle", // kCenter_Align
-    "end"     // kRight_Align
+    "end" // kRight_Align
 };
-SK_COMPILE_ASSERT(SK_ARRAY_COUNT(text_align_map) == SkPaint::kAlignCount,
-                  missing_text_align_map_entry);
-static const char* svg_text_align(SkPaint::Align align) {
+static_assert(SK_ARRAY_COUNT(text_align_map) == SkPaint::kAlignCount,
+    "missing_text_align_map_entry");
+static const char* svg_text_align(SkPaint::Align align)
+{
     SkASSERT(align < SK_ARRAY_COUNT(text_align_map));
     return text_align_map[align];
 }
 
-static SkString svg_transform(const SkMatrix& t) {
+static SkString svg_transform(const SkMatrix& t)
+{
     SkASSERT(!t.isIdentity());
 
     SkString tstr;
@@ -94,9 +101,9 @@ static SkString svg_transform(const SkMatrix& t) {
         //    | b d f |
         //    | 0 0 1 |
         tstr.printf("matrix(%g %g %g %g %g %g)",
-                    t.getScaleX(),     t.getSkewY(),
-                    t.getSkewX(),      t.getScaleY(),
-                    t.getTranslateX(), t.getTranslateY());
+            t.getScaleX(), t.getSkewY(),
+            t.getSkewX(), t.getScaleY(),
+            t.getTranslateX(), t.getTranslateY());
         break;
     }
 
@@ -105,7 +112,9 @@ static SkString svg_transform(const SkMatrix& t) {
 
 struct Resources {
     Resources(const SkPaint& paint)
-        : fPaintServer(svg_color(paint.getColor())) {}
+        : fPaintServer(svg_color(paint.getColor()))
+    {
+    }
 
     SkString fPaintServer;
     SkString fClip;
@@ -114,7 +123,7 @@ struct Resources {
 class SVGTextBuilder : SkNoncopyable {
 public:
     SVGTextBuilder(const void* text, size_t byteLen, const SkPaint& paint, const SkPoint& offset,
-                   unsigned scalarsPerPos, const SkScalar pos[] = NULL)
+        unsigned scalarsPerPos, const SkScalar pos[] = nullptr)
         : fOffset(offset)
         , fScalarsPerPos(scalarsPerPos)
         , fPos(pos)
@@ -125,7 +134,7 @@ public:
 
         int count = paint.countText(text, byteLen);
 
-        switch(paint.getTextEncoding()) {
+        switch (paint.getTextEncoding()) {
         case SkPaint::kGlyphID_TextEncoding: {
             SkASSERT(count * sizeof(uint16_t) == byteLen);
             SkAutoSTArray<64, SkUnichar> unichars(count);
@@ -176,11 +185,12 @@ public:
     const SkString& posY() const { return fPosY; }
 
 private:
-    void appendUnichar(SkUnichar c) {
+    void appendUnichar(SkUnichar c)
+    {
         bool discardPos = false;
         bool isWhitespace = false;
 
-        switch(c) {
+        switch (c) {
         case ' ':
         case '\t':
             // consolidate whitespace to match SVG's xml:space=default munging
@@ -222,7 +232,8 @@ private:
         fLastCharWasWhitespace = isWhitespace;
     }
 
-    void advancePos(bool discard) {
+    void advancePos(bool discard)
+    {
         if (!discard && fScalarsPerPos > 0) {
             fPosX.appendf("%.8g, ", fOffset.x() + fPos[0]);
             if (fScalarsPerPos > 1) {
@@ -233,12 +244,12 @@ private:
         fPos += fScalarsPerPos;
     }
 
-    const SkPoint&  fOffset;
-    const unsigned  fScalarsPerPos;
+    const SkPoint& fOffset;
+    const unsigned fScalarsPerPos;
     const SkScalar* fPos;
 
     SkString fText, fPosX, fPosY;
-    bool     fLastCharWasWhitespace;
+    bool fLastCharWasWhitespace;
 };
 
 }
@@ -247,21 +258,31 @@ private:
 // and deduplicate resources.
 class SkSVGDevice::ResourceBucket : ::SkNoncopyable {
 public:
-    ResourceBucket() : fGradientCount(0), fClipCount(0), fPathCount(0), fImageCount(0) {}
+    ResourceBucket()
+        : fGradientCount(0)
+        , fClipCount(0)
+        , fPathCount(0)
+        , fImageCount(0)
+    {
+    }
 
-    SkString addLinearGradient() {
+    SkString addLinearGradient()
+    {
         return SkStringPrintf("gradient_%d", fGradientCount++);
     }
 
-    SkString addClip() {
+    SkString addClip()
+    {
         return SkStringPrintf("clip_%d", fClipCount++);
     }
 
-    SkString addPath() {
+    SkString addPath()
+    {
         return SkStringPrintf("path_%d", fPathCount++);
     }
 
-    SkString addImage() {
+    SkString addImage()
+    {
         return SkStringPrintf("img_%d", fImageCount++);
     }
 
@@ -276,21 +297,23 @@ class SkSVGDevice::AutoElement : ::SkNoncopyable {
 public:
     AutoElement(const char name[], SkXMLWriter* writer)
         : fWriter(writer)
-        , fResourceBucket(NULL) {
+        , fResourceBucket(nullptr)
+    {
         fWriter->startElement(name);
     }
 
     AutoElement(const char name[], SkXMLWriter* writer, ResourceBucket* bucket,
-                const SkDraw& draw, const SkPaint& paint)
+        const SkDraw& draw, const SkPaint& paint)
         : fWriter(writer)
-        , fResourceBucket(bucket) {
+        , fResourceBucket(bucket)
+    {
 
         Resources res = this->addResources(draw, paint);
         if (!res.fClip.isEmpty()) {
             // The clip is in device space. Apply it via a <g> wrapper to avoid local transform
             // interference.
-            fClipGroup.reset(SkNEW_ARGS(AutoElement, ("g", fWriter)));
-            fClipGroup->addAttribute("clip-path",res.fClip);
+            fClipGroup.reset(new AutoElement("g", fWriter));
+            fClipGroup->addAttribute("clip-path", res.fClip);
         }
 
         fWriter->startElement(name);
@@ -302,27 +325,33 @@ public:
         }
     }
 
-    ~AutoElement() {
+    ~AutoElement()
+    {
         fWriter->endElement();
     }
 
-    void addAttribute(const char name[], const char val[]) {
+    void addAttribute(const char name[], const char val[])
+    {
         fWriter->addAttribute(name, val);
     }
 
-    void addAttribute(const char name[], const SkString& val) {
+    void addAttribute(const char name[], const SkString& val)
+    {
         fWriter->addAttribute(name, val.c_str());
     }
 
-    void addAttribute(const char name[], int32_t val) {
+    void addAttribute(const char name[], int32_t val)
+    {
         fWriter->addS32Attribute(name, val);
     }
 
-    void addAttribute(const char name[], SkScalar val) {
+    void addAttribute(const char name[], SkScalar val)
+    {
         fWriter->addScalarAttribute(name, val);
     }
 
-    void addText(const SkString& text) {
+    void addText(const SkString& text)
+    {
         fWriter->addText(text.c_str(), text.size());
     }
 
@@ -339,12 +368,13 @@ private:
 
     SkString addLinearGradientDef(const SkShader::GradientInfo& info, const SkShader* shader);
 
-    SkXMLWriter*               fWriter;
-    ResourceBucket*            fResourceBucket;
+    SkXMLWriter* fWriter;
+    ResourceBucket* fResourceBucket;
     SkAutoTDelete<AutoElement> fClipGroup;
 };
 
-void SkSVGDevice::AutoElement::addPaint(const SkPaint& paint, const Resources& resources) {
+void SkSVGDevice::AutoElement::addPaint(const SkPaint& paint, const Resources& resources)
+{
     SkPaint::Style style = paint.getStyle();
     if (style == SkPaint::kFill_Style || style == SkPaint::kStrokeAndFill_Style) {
         this->addAttribute("fill", resources.fPaintServer);
@@ -389,11 +419,12 @@ void SkSVGDevice::AutoElement::addPaint(const SkPaint& paint, const Resources& r
     }
 }
 
-Resources SkSVGDevice::AutoElement::addResources(const SkDraw& draw, const SkPaint& paint) {
+Resources SkSVGDevice::AutoElement::addResources(const SkDraw& draw, const SkPaint& paint)
+{
     Resources resources(paint);
 
     // FIXME: this is a weak heuristic and we end up with LOTS of redundant clips.
-    bool hasClip   = !draw.fClipStack->isWideOpen();
+    bool hasClip = !draw.fClipStack->isWideOpen();
     bool hasShader = SkToBool(paint.getShader());
 
     if (hasClip || hasShader) {
@@ -411,7 +442,8 @@ Resources SkSVGDevice::AutoElement::addResources(const SkDraw& draw, const SkPai
     return resources;
 }
 
-void SkSVGDevice::AutoElement::addShaderResources(const SkPaint& paint, Resources* resources) {
+void SkSVGDevice::AutoElement::addShaderResources(const SkPaint& paint, Resources* resources)
+{
     const SkShader* shader = paint.getShader();
     SkASSERT(SkToBool(shader));
 
@@ -423,7 +455,7 @@ void SkSVGDevice::AutoElement::addShaderResources(const SkPaint& paint, Resource
         return;
     }
 
-    SkAutoSTArray<16, SkColor>  grColors(grInfo.fColorCount);
+    SkAutoSTArray<16, SkColor> grColors(grInfo.fColorCount);
     SkAutoSTArray<16, SkScalar> grOffsets(grInfo.fColorCount);
     grInfo.fColors = grColors.get();
     grInfo.fColorOffsets = grOffsets.get();
@@ -436,15 +468,15 @@ void SkSVGDevice::AutoElement::addShaderResources(const SkPaint& paint, Resource
     resources->fPaintServer.printf("url(#%s)", addLinearGradientDef(grInfo, shader).c_str());
 }
 
-void SkSVGDevice::AutoElement::addClipResources(const SkDraw& draw, Resources* resources) {
+void SkSVGDevice::AutoElement::addClipResources(const SkDraw& draw, Resources* resources)
+{
     SkASSERT(!draw.fClipStack->isWideOpen());
 
     SkPath clipPath;
-    (void) draw.fClipStack->asPath(&clipPath);
+    (void)draw.fClipStack->asPath(&clipPath);
 
     SkString clipID = fResourceBucket->addClip();
-    const char* clipRule = clipPath.getFillType() == SkPath::kEvenOdd_FillType ?
-                           "evenodd" : "nonzero";
+    const char* clipRule = clipPath.getFillType() == SkPath::kEvenOdd_FillType ? "evenodd" : "nonzero";
     {
         // clipPath is in device space, but since we're only pushing transform attributes
         // to the leaf nodes, so are all our elements => SVG userSpaceOnUse == device space.
@@ -467,7 +499,8 @@ void SkSVGDevice::AutoElement::addClipResources(const SkDraw& draw, Resources* r
 }
 
 SkString SkSVGDevice::AutoElement::addLinearGradientDef(const SkShader::GradientInfo& info,
-                                                        const SkShader* shader) {
+    const SkShader* shader)
+{
     SkASSERT(fResourceBucket);
     SkString id = fResourceBucket->addLinearGradient();
 
@@ -505,7 +538,8 @@ SkString SkSVGDevice::AutoElement::addLinearGradientDef(const SkShader::Gradient
     return id;
 }
 
-void SkSVGDevice::AutoElement::addRectAttributes(const SkRect& rect) {
+void SkSVGDevice::AutoElement::addRectAttributes(const SkRect& rect)
+{
     // x, y default to 0
     if (rect.x() != 0) {
         this->addAttribute("x", rect.x());
@@ -518,13 +552,15 @@ void SkSVGDevice::AutoElement::addRectAttributes(const SkRect& rect) {
     this->addAttribute("height", rect.height());
 }
 
-void SkSVGDevice::AutoElement::addPathAttributes(const SkPath& path) {
+void SkSVGDevice::AutoElement::addPathAttributes(const SkPath& path)
+{
     SkString pathData;
     SkParsePath::ToSVGString(path, &pathData);
     this->addAttribute("d", pathData);
 }
 
-void SkSVGDevice::AutoElement::addTextAttributes(const SkPaint& paint) {
+void SkSVGDevice::AutoElement::addTextAttributes(const SkPaint& paint)
+{
     this->addAttribute("font-size", paint.getTextSize());
 
     if (const char* textAlign = svg_text_align(paint.getTextAlign())) {
@@ -533,8 +569,7 @@ void SkSVGDevice::AutoElement::addTextAttributes(const SkPaint& paint) {
 
     SkString familyName;
     SkTHashSet<SkString> familySet;
-    SkAutoTUnref<const SkTypeface> tface(paint.getTypeface() ?
-        SkRef(paint.getTypeface()) : SkTypeface::RefDefault());
+    sk_sp<const SkTypeface> tface(paint.getTypeface() ? sk_ref_sp(paint.getTypeface()) : SkTypeface::MakeDefault());
 
     SkASSERT(tface);
     SkTypeface::Style style = tface->style();
@@ -560,18 +595,20 @@ void SkSVGDevice::AutoElement::addTextAttributes(const SkPaint& paint) {
     }
 }
 
-SkBaseDevice* SkSVGDevice::Create(const SkISize& size, SkXMLWriter* writer) {
+SkBaseDevice* SkSVGDevice::Create(const SkISize& size, SkXMLWriter* writer)
+{
     if (!writer) {
-        return NULL;
+        return nullptr;
     }
 
-    return SkNEW_ARGS(SkSVGDevice, (size, writer));
+    return new SkSVGDevice(size, writer);
 }
 
 SkSVGDevice::SkSVGDevice(const SkISize& size, SkXMLWriter* writer)
     : INHERITED(SkSurfaceProps(0, kUnknown_SkPixelGeometry))
     , fWriter(writer)
-    , fResourceBucket(SkNEW(ResourceBucket)) {
+    , fResourceBucket(new ResourceBucket)
+{
     SkASSERT(writer);
 
     fLegacyBitmap.setInfo(SkImageInfo::MakeUnknown(size.width(), size.height()));
@@ -579,7 +616,7 @@ SkSVGDevice::SkSVGDevice(const SkISize& size, SkXMLWriter* writer)
     fWriter->writeHeader();
 
     // The root <svg> tag gets closed by the destructor.
-    fRootElement.reset(SkNEW_ARGS(AutoElement, ("svg", fWriter)));
+    fRootElement.reset(new AutoElement("svg", fWriter));
 
     fRootElement->addAttribute("xmlns", "http://www.w3.org/2000/svg");
     fRootElement->addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -587,59 +624,66 @@ SkSVGDevice::SkSVGDevice(const SkISize& size, SkXMLWriter* writer)
     fRootElement->addAttribute("height", size.height());
 }
 
-SkSVGDevice::~SkSVGDevice() {
+SkSVGDevice::~SkSVGDevice()
+{
 }
 
-SkImageInfo SkSVGDevice::imageInfo() const {
+SkImageInfo SkSVGDevice::imageInfo() const
+{
     return fLegacyBitmap.info();
 }
 
-const SkBitmap& SkSVGDevice::onAccessBitmap() {
+const SkBitmap& SkSVGDevice::onAccessBitmap()
+{
     return fLegacyBitmap;
 }
 
-void SkSVGDevice::drawPaint(const SkDraw& draw, const SkPaint& paint) {
+void SkSVGDevice::drawPaint(const SkDraw& draw, const SkPaint& paint)
+{
     AutoElement rect("rect", fWriter, fResourceBucket, draw, paint);
     rect.addRectAttributes(SkRect::MakeWH(SkIntToScalar(this->width()),
-                                          SkIntToScalar(this->height())));
+        SkIntToScalar(this->height())));
 }
 
 void SkSVGDevice::drawPoints(const SkDraw& draw, SkCanvas::PointMode mode, size_t count,
-                             const SkPoint pts[], const SkPaint& paint) {
+    const SkPoint pts[], const SkPaint& paint)
+{
     SkPath path;
 
     switch (mode) {
-            // todo
-        case SkCanvas::kPoints_PointMode:
-            SkDebugf("unsupported operation: drawPoints(kPoints_PointMode)\n");
-            break;
-        case SkCanvas::kLines_PointMode:
-            count -= 1;
-            for (size_t i = 0; i < count; i += 2) {
-                path.rewind();
-                path.moveTo(pts[i]);
-                path.lineTo(pts[i+1]);
-                AutoElement elem("path", fWriter, fResourceBucket, draw, paint);
-                elem.addPathAttributes(path);
-            }
-            break;
-        case SkCanvas::kPolygon_PointMode:
-            if (count > 1) {
-                path.addPoly(pts, SkToInt(count), false);
-                path.moveTo(pts[0]);
-                AutoElement elem("path", fWriter, fResourceBucket, draw, paint);
-                elem.addPathAttributes(path);
-            }
-            break;
+        // todo
+    case SkCanvas::kPoints_PointMode:
+        SkDebugf("unsupported operation: drawPoints(kPoints_PointMode)\n");
+        break;
+    case SkCanvas::kLines_PointMode:
+        count -= 1;
+        for (size_t i = 0; i < count; i += 2) {
+            path.rewind();
+            path.moveTo(pts[i]);
+            path.lineTo(pts[i + 1]);
+            AutoElement elem("path", fWriter, fResourceBucket, draw, paint);
+            elem.addPathAttributes(path);
+        }
+        break;
+    case SkCanvas::kPolygon_PointMode:
+        if (count > 1) {
+            path.addPoly(pts, SkToInt(count), false);
+            path.moveTo(pts[0]);
+            AutoElement elem("path", fWriter, fResourceBucket, draw, paint);
+            elem.addPathAttributes(path);
+        }
+        break;
     }
 }
 
-void SkSVGDevice::drawRect(const SkDraw& draw, const SkRect& r, const SkPaint& paint) {
+void SkSVGDevice::drawRect(const SkDraw& draw, const SkRect& r, const SkPaint& paint)
+{
     AutoElement rect("rect", fWriter, fResourceBucket, draw, paint);
     rect.addRectAttributes(r);
 }
 
-void SkSVGDevice::drawOval(const SkDraw& draw, const SkRect& oval, const SkPaint& paint) {
+void SkSVGDevice::drawOval(const SkDraw& draw, const SkRect& oval, const SkPaint& paint)
+{
     AutoElement ellipse("ellipse", fWriter, fResourceBucket, draw, paint);
     ellipse.addAttribute("cx", oval.centerX());
     ellipse.addAttribute("cy", oval.centerY());
@@ -647,7 +691,8 @@ void SkSVGDevice::drawOval(const SkDraw& draw, const SkRect& oval, const SkPaint
     ellipse.addAttribute("ry", oval.height() / 2);
 }
 
-void SkSVGDevice::drawRRect(const SkDraw& draw, const SkRRect& rr, const SkPaint& paint) {
+void SkSVGDevice::drawRRect(const SkDraw& draw, const SkRRect& rr, const SkPaint& paint)
+{
     SkPath path;
     path.addRRect(rr);
 
@@ -656,20 +701,22 @@ void SkSVGDevice::drawRRect(const SkDraw& draw, const SkRRect& rr, const SkPaint
 }
 
 void SkSVGDevice::drawPath(const SkDraw& draw, const SkPath& path, const SkPaint& paint,
-                           const SkMatrix* prePathMatrix, bool pathIsMutable) {
+    const SkMatrix* prePathMatrix, bool pathIsMutable)
+{
     AutoElement elem("path", fWriter, fResourceBucket, draw, paint);
     elem.addPathAttributes(path);
 }
 
 void SkSVGDevice::drawBitmapCommon(const SkDraw& draw, const SkBitmap& bm,
-                                   const SkPaint& paint) {
+    const SkPaint& paint)
+{
     SkAutoTUnref<const SkData> pngData(
         SkImageEncoder::EncodeData(bm, SkImageEncoder::kPNG_Type, SkImageEncoder::kDefaultQuality));
     if (!pngData) {
         return;
     }
 
-    size_t b64Size = SkBase64::Encode(pngData->data(), pngData->size(), NULL);
+    size_t b64Size = SkBase64::Encode(pngData->data(), pngData->size(), nullptr);
     SkAutoTMalloc<char> b64Data(b64Size);
     SkBase64::Encode(pngData->data(), pngData->size(), b64Data.get());
 
@@ -695,7 +742,8 @@ void SkSVGDevice::drawBitmapCommon(const SkDraw& draw, const SkBitmap& bm,
 }
 
 void SkSVGDevice::drawBitmap(const SkDraw& draw, const SkBitmap& bitmap,
-                             const SkMatrix& matrix, const SkPaint& paint) {
+    const SkMatrix& matrix, const SkPaint& paint)
+{
     SkMatrix adjustedMatrix = *draw.fMatrix;
     adjustedMatrix.preConcat(matrix);
     SkDraw adjustedDraw(draw);
@@ -705,7 +753,8 @@ void SkSVGDevice::drawBitmap(const SkDraw& draw, const SkBitmap& bitmap,
 }
 
 void SkSVGDevice::drawSprite(const SkDraw& draw, const SkBitmap& bitmap,
-                             int x, int y, const SkPaint& paint) {
+    int x, int y, const SkPaint& paint)
+{
     SkMatrix adjustedMatrix = *draw.fMatrix;
     adjustedMatrix.preTranslate(SkIntToScalar(x), SkIntToScalar(y));
     SkDraw adjustedDraw(draw);
@@ -715,12 +764,13 @@ void SkSVGDevice::drawSprite(const SkDraw& draw, const SkBitmap& bitmap,
 }
 
 void SkSVGDevice::drawBitmapRect(const SkDraw& draw, const SkBitmap& bm, const SkRect* srcOrNull,
-                                 const SkRect& dst, const SkPaint& paint,
-                                 SkCanvas::DrawBitmapRectFlags) {
+    const SkRect& dst, const SkPaint& paint,
+    SkCanvas::SrcRectConstraint)
+{
     SkMatrix adjustedMatrix;
     adjustedMatrix.setRectToRect(srcOrNull ? *srcOrNull : SkRect::Make(bm.bounds()),
-                                 dst,
-                                 SkMatrix::kFill_ScaleToFit);
+        dst,
+        SkMatrix::kFill_ScaleToFit);
     adjustedMatrix.postConcat(*draw.fMatrix);
 
     SkDraw adjustedDraw(draw);
@@ -740,7 +790,8 @@ void SkSVGDevice::drawBitmapRect(const SkDraw& draw, const SkBitmap& bm, const S
 }
 
 void SkSVGDevice::drawText(const SkDraw& draw, const void* text, size_t len,
-                           SkScalar x, SkScalar y, const SkPaint& paint) {
+    SkScalar x, SkScalar y, const SkPaint& paint)
+{
     AutoElement elem("text", fWriter, fResourceBucket, draw, paint);
     elem.addTextAttributes(paint);
 
@@ -751,8 +802,9 @@ void SkSVGDevice::drawText(const SkDraw& draw, const void* text, size_t len,
 }
 
 void SkSVGDevice::drawPosText(const SkDraw& draw, const void* text, size_t len,
-                              const SkScalar pos[], int scalarsPerPos, const SkPoint& offset,
-                              const SkPaint& paint) {
+    const SkScalar pos[], int scalarsPerPos, const SkPoint& offset,
+    const SkPaint& paint)
+{
     SkASSERT(scalarsPerPos == 1 || scalarsPerPos == 2);
 
     AutoElement elem("text", fWriter, fResourceBucket, draw, paint);
@@ -765,7 +817,8 @@ void SkSVGDevice::drawPosText(const SkDraw& draw, const void* text, size_t len,
 }
 
 void SkSVGDevice::drawTextOnPath(const SkDraw&, const void* text, size_t len, const SkPath& path,
-                                 const SkMatrix* matrix, const SkPaint& paint) {
+    const SkMatrix* matrix, const SkPaint& paint)
+{
     SkString pathID = fResourceBucket->addPath();
 
     {
@@ -773,7 +826,6 @@ void SkSVGDevice::drawTextOnPath(const SkDraw&, const void* text, size_t len, co
         AutoElement pathElement("path", fWriter);
         pathElement.addAttribute("id", pathID);
         pathElement.addPathAttributes(path);
-
     }
 
     {
@@ -789,8 +841,7 @@ void SkSVGDevice::drawTextOnPath(const SkDraw&, const void* text, size_t len, co
             textPathElement.addAttribute("xlink:href", SkStringPrintf("#%s", pathID.c_str()));
 
             if (paint.getTextAlign() != SkPaint::kLeft_Align) {
-                SkASSERT(paint.getTextAlign() == SkPaint::kCenter_Align ||
-                         paint.getTextAlign() == SkPaint::kRight_Align);
+                SkASSERT(paint.getTextAlign() == SkPaint::kCenter_Align || paint.getTextAlign() == SkPaint::kRight_Align);
                 textPathElement.addAttribute("startOffset",
                     paint.getTextAlign() == SkPaint::kCenter_Align ? "50%" : "100%");
             }
@@ -802,16 +853,18 @@ void SkSVGDevice::drawTextOnPath(const SkDraw&, const void* text, size_t len, co
 }
 
 void SkSVGDevice::drawVertices(const SkDraw&, SkCanvas::VertexMode, int vertexCount,
-                               const SkPoint verts[], const SkPoint texs[],
-                               const SkColor colors[], SkXfermode* xmode,
-                               const uint16_t indices[], int indexCount,
-                               const SkPaint& paint) {
+    const SkPoint verts[], const SkPoint texs[],
+    const SkColor colors[], SkXfermode* xmode,
+    const uint16_t indices[], int indexCount,
+    const SkPaint& paint)
+{
     // todo
     SkDebugf("unsupported operation: drawVertices()\n");
 }
 
 void SkSVGDevice::drawDevice(const SkDraw&, SkBaseDevice*, int x, int y,
-                             const SkPaint&) {
+    const SkPaint&)
+{
     // todo
     SkDebugf("unsupported operation: drawDevice()\n");
 }

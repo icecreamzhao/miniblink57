@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -8,14 +7,15 @@
 #ifndef SkViewPriv_DEFINED
 #define SkViewPriv_DEFINED
 
-#include "SkView.h"
 #include "SkTagList.h"
+#include "SkView.h"
 
 struct Layout_SkTagList : SkTagList {
-    SkView::Layout*    fLayout;
+    SkView::Layout* fLayout;
 
     Layout_SkTagList(SkView::Layout* layout)
-        : SkTagList(kViewLayout_SkTagList), fLayout(layout)
+        : SkTagList(kViewLayout_SkTagList)
+        , fLayout(layout)
     {
         SkASSERT(layout);
         layout->ref();
@@ -27,10 +27,11 @@ struct Layout_SkTagList : SkTagList {
 };
 
 struct Artist_SkTagList : SkTagList {
-    SkView::Artist*    fArtist;
+    SkView::Artist* fArtist;
 
     Artist_SkTagList(SkView::Artist* artist)
-        : SkTagList(kViewArtist_SkTagList), fArtist(artist)
+        : SkTagList(kViewArtist_SkTagList)
+        , fArtist(artist)
     {
         SkASSERT(artist);
         artist->ref();

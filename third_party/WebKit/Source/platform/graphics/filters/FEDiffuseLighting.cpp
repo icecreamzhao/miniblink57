@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FEDiffuseLighting.h"
 
 #include "platform/graphics/filters/LightSource.h"
@@ -28,22 +27,34 @@
 
 namespace blink {
 
-FEDiffuseLighting::FEDiffuseLighting(Filter* filter, const Color& lightingColor, float surfaceScale,
-    float diffuseConstant, float kernelUnitLengthX, float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
-    : FELighting(filter, DiffuseLighting, lightingColor, surfaceScale, diffuseConstant, 0, 0, kernelUnitLengthX, kernelUnitLengthY, lightSource)
+FEDiffuseLighting::FEDiffuseLighting(Filter* filter,
+    const Color& lightingColor,
+    float surfaceScale,
+    float diffuseConstant,
+    PassRefPtr<LightSource> lightSource)
+    : FELighting(filter,
+        DiffuseLighting,
+        lightingColor,
+        surfaceScale,
+        diffuseConstant,
+        0,
+        0,
+        std::move(lightSource))
 {
 }
 
-PassRefPtrWillBeRawPtr<FEDiffuseLighting> FEDiffuseLighting::create(Filter* filter, const Color& lightingColor,
-    float surfaceScale, float diffuseConstant, float kernelUnitLengthX,
-    float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
+FEDiffuseLighting* FEDiffuseLighting::create(
+    Filter* filter,
+    const Color& lightingColor,
+    float surfaceScale,
+    float diffuseConstant,
+    PassRefPtr<LightSource> lightSource)
 {
-    return adoptRefWillBeNoop(new FEDiffuseLighting(filter, lightingColor, surfaceScale, diffuseConstant, kernelUnitLengthX, kernelUnitLengthY, lightSource));
+    return new FEDiffuseLighting(filter, lightingColor, surfaceScale,
+        diffuseConstant, std::move(lightSource));
 }
 
-FEDiffuseLighting::~FEDiffuseLighting()
-{
-}
+FEDiffuseLighting::~FEDiffuseLighting() { }
 
 Color FEDiffuseLighting::lightingColor() const
 {
@@ -85,32 +96,6 @@ bool FEDiffuseLighting::setDiffuseConstant(float diffuseConstant)
     return true;
 }
 
-float FEDiffuseLighting::kernelUnitLengthX() const
-{
-    return m_kernelUnitLengthX;
-}
-
-bool FEDiffuseLighting::setKernelUnitLengthX(float kernelUnitLengthX)
-{
-    if (m_kernelUnitLengthX == kernelUnitLengthX)
-        return false;
-    m_kernelUnitLengthX = kernelUnitLengthX;
-    return true;
-}
-
-float FEDiffuseLighting::kernelUnitLengthY() const
-{
-    return m_kernelUnitLengthY;
-}
-
-bool FEDiffuseLighting::setKernelUnitLengthY(float kernelUnitLengthY)
-{
-    if (m_kernelUnitLengthY == kernelUnitLengthY)
-        return false;
-    m_kernelUnitLengthY = kernelUnitLengthY;
-    return true;
-}
-
 const LightSource* FEDiffuseLighting::lightSource() const
 {
     return m_lightSource.get();
@@ -121,14 +106,14 @@ void FEDiffuseLighting::setLightSource(PassRefPtr<LightSource> lightSource)
     m_lightSource = lightSource;
 }
 
-TextStream& FEDiffuseLighting::externalRepresentation(TextStream& ts, int indent) const
+TextStream& FEDiffuseLighting::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[feDiffuseLighting";
     FilterEffect::externalRepresentation(ts);
     ts << " surfaceScale=\"" << m_surfaceScale << "\" "
-       << "diffuseConstant=\"" << m_diffuseConstant << "\" "
-       << "kernelUnitLength=\"" << m_kernelUnitLengthX << ", " << m_kernelUnitLengthY << "\"]\n";
+       << "diffuseConstant=\"" << m_diffuseConstant << "\"]\n";
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     return ts;
 }

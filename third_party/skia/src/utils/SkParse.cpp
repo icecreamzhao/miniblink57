@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,8 +5,9 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkParse.h"
+
+#include <stdlib.h>
 
 static inline bool is_between(int c, int min, int max)
 {
@@ -34,7 +34,7 @@ static int to_hex(int c)
     if (is_digit(c))
         return c - '0';
 
-    c |= 0x20;  // make us lower-case
+    c |= 0x20; // make us lower-case
     if (is_between(c, 'a', 'f'))
         return c + 10 - 'a';
     else
@@ -73,7 +73,7 @@ int SkParse::Count(const char str[])
             if ((c = *str++) == '\0')
                 goto goHome;
         } while (is_sep(c) == false);
-skipLeading:
+    skipLeading:
         do {
             if ((c = *str++) == '\0')
                 goto goHome;
@@ -94,7 +94,7 @@ int SkParse::Count(const char str[], char separator)
             if ((c = *str++) == '\0')
                 goto goHome;
         } while (c != separator);
-skipLeading:
+    skipLeading:
         do {
             if ((c = *str++) == '\0')
                 goto goHome;
@@ -110,27 +110,25 @@ const char* SkParse::FindHex(const char str[], uint32_t* value)
     str = skip_ws(str);
 
     if (!is_hex(*str))
-        return NULL;
+        return nullptr;
 
     uint32_t n = 0;
     int max_digits = 8;
     int digit;
 
-    while ((digit = to_hex(*str)) >= 0)
-    {
+    while ((digit = to_hex(*str)) >= 0) {
         if (--max_digits < 0)
-            return NULL;
+            return nullptr;
         n = (n << 4) | digit;
         str += 1;
     }
 
-    if (*str == 0 || is_ws(*str))
-    {
+    if (*str == 0 || is_ws(*str)) {
         if (value)
             *value = n;
         return str;
     }
-    return NULL;
+    return nullptr;
 }
 
 const char* SkParse::FindS32(const char str[], int32_t* value)
@@ -139,19 +137,17 @@ const char* SkParse::FindS32(const char str[], int32_t* value)
     str = skip_ws(str);
 
     int sign = 0;
-    if (*str == '-')
-    {
+    if (*str == '-') {
         sign = -1;
         str += 1;
     }
 
     if (!is_digit(*str))
-        return NULL;
+        return nullptr;
 
     int n = 0;
-    while (is_digit(*str))
-    {
-        n = 10*n + *str - '0';
+    while (is_digit(*str)) {
+        n = 10 * n + *str - '0';
         str += 1;
     }
     if (value)
@@ -165,27 +161,24 @@ const char* SkParse::FindMSec(const char str[], SkMSec* value)
     str = skip_ws(str);
 
     int sign = 0;
-    if (*str == '-')
-    {
+    if (*str == '-') {
         sign = -1;
         str += 1;
     }
 
     if (!is_digit(*str))
-        return NULL;
+        return nullptr;
 
     int n = 0;
-    while (is_digit(*str))
-    {
-        n = 10*n + *str - '0';
+    while (is_digit(*str)) {
+        n = 10 * n + *str - '0';
         str += 1;
     }
     int remaining10s = 3;
     if (*str == '.') {
         str++;
-        while (is_digit(*str))
-        {
-            n = 10*n + *str - '0';
+        while (is_digit(*str)) {
+            n = 10 * n + *str - '0';
             str += 1;
             if (--remaining10s == 0)
                 break;
@@ -198,14 +191,15 @@ const char* SkParse::FindMSec(const char str[], SkMSec* value)
     return str;
 }
 
-const char* SkParse::FindScalar(const char str[], SkScalar* value) {
+const char* SkParse::FindScalar(const char str[], SkScalar* value)
+{
     SkASSERT(str);
     str = skip_ws(str);
 
     char* stop;
     float v = (float)strtod(str, &stop);
     if (str == stop) {
-        return NULL;
+        return nullptr;
     }
     if (value) {
         *value = v;
@@ -217,12 +211,10 @@ const char* SkParse::FindScalars(const char str[], SkScalar value[], int count)
 {
     SkASSERT(count >= 0);
 
-    if (count > 0)
-    {
-        for (;;)
-        {
+    if (count > 0) {
+        for (;;) {
             str = SkParse::FindScalar(str, value);
-            if (--count == 0 || str == NULL)
+            if (--count == 0 || str == nullptr)
                 break;
 
             // keep going
@@ -247,14 +239,13 @@ bool SkParse::FindBool(const char str[], bool* value)
     static const char* gYes[] = { "yes", "1", "true" };
     static const char* gNo[] = { "no", "0", "false" };
 
-    if (lookup_str(str, gYes, SK_ARRAY_COUNT(gYes)))
-    {
-        if (value) *value = true;
+    if (lookup_str(str, gYes, SK_ARRAY_COUNT(gYes))) {
+        if (value)
+            *value = true;
         return true;
-    }
-    else if (lookup_str(str, gNo, SK_ARRAY_COUNT(gNo)))
-    {
-        if (value) *value = false;
+    } else if (lookup_str(str, gNo, SK_ARRAY_COUNT(gNo))) {
+        if (value)
+            *value = false;
         return true;
     }
     return false;
@@ -262,22 +253,21 @@ bool SkParse::FindBool(const char str[], bool* value)
 
 int SkParse::FindList(const char target[], const char list[])
 {
-    size_t  len = strlen(target);
-    int     index = 0;
+    size_t len = strlen(target);
+    int index = 0;
 
-    for (;;)
-    {
+    for (;;) {
         const char* end = strchr(list, ',');
-        size_t      entryLen;
+        size_t entryLen;
 
-        if (end == NULL) // last entry
+        if (end == nullptr) // last entry
             entryLen = strlen(list);
         else
             entryLen = end - list;
 
         if (entryLen == len && memcmp(target, list, len) == 0)
             return index;
-        if (end == NULL)
+        if (end == nullptr)
             break;
 
         list = end + 1; // skip the ','

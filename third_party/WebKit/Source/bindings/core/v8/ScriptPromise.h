@@ -35,7 +35,9 @@
 #include "bindings/core/v8/ScriptValue.h"
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
+#include "wtf/Vector.h"
 #include <v8.h>
 
 namespace blink {
@@ -48,6 +50,8 @@ class DOMException;
 // memory leaks since it has a reference from C++ to V8.
 //
 class CORE_EXPORT ScriptPromise final {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     // Constructs an empty promise.
     ScriptPromise();
@@ -60,49 +64,31 @@ public:
 
     ~ScriptPromise();
 
-    ScriptPromise then(v8::Local<v8::Function> onFulfilled, v8::Local<v8::Function> onRejected = v8::Local<v8::Function>());
+    ScriptPromise then(
+        v8::Local<v8::Function> onFulfilled,
+        v8::Local<v8::Function> onRejected = v8::Local<v8::Function>());
 
-    bool isObject() const
-    {
-        return m_promise.isObject();
-    }
+    bool isObject() const { return m_promise.isObject(); }
 
-    bool isNull() const
-    {
-        return m_promise.isNull();
-    }
+    bool isNull() const { return m_promise.isNull(); }
 
     bool isUndefinedOrNull() const
     {
         return m_promise.isUndefined() || m_promise.isNull();
     }
 
-    ScriptValue scriptValue() const
-    {
-        return m_promise;
-    }
+    ScriptValue getScriptValue() const { return m_promise; }
 
-    v8::Local<v8::Value> v8Value() const
-    {
-        return m_promise.v8Value();
-    }
+    v8::Local<v8::Value> v8Value() const { return m_promise.v8Value(); }
 
-    v8::Isolate* isolate() const
-    {
-        return m_promise.isolate();
-    }
+    v8::Isolate* isolate() const { return m_promise.isolate(); }
 
-    bool isEmpty() const
-    {
-        return m_promise.isEmpty();
-    }
+    bool isEmpty() const { return m_promise.isEmpty(); }
 
-    void clear()
-    {
-        m_promise.clear();
-    }
+    void clear() { m_promise.clear(); }
 
-    void setReference(const v8::Persistent<v8::Object>& parent, v8::Isolate* isolate)
+    void setReference(const v8::Persistent<v8::Object>& parent,
+        v8::Isolate* isolate)
     {
         m_promise.setReference(parent, isolate);
     }
@@ -124,6 +110,9 @@ public:
     static ScriptPromise cast(ScriptState*, const ScriptValue& /*value*/);
     static ScriptPromise cast(ScriptState*, v8::Local<v8::Value> /*value*/);
 
+    // Constructs and returns a ScriptPromise resolved with undefined.
+    static ScriptPromise castUndefined(ScriptState*);
+
     static ScriptPromise reject(ScriptState*, const ScriptValue&);
     static ScriptPromise reject(ScriptState*, v8::Local<v8::Value>);
 
@@ -131,9 +120,16 @@ public:
 
     static v8::Local<v8::Promise> rejectRaw(ScriptState*, v8::Local<v8::Value>);
 
+    // Constructs and returns a ScriptPromise to be resolved when all |promises|
+    // are resolved. If one of |promises| is rejected, the returned
+    // ScriptPromise is rejected.
+    static ScriptPromise all(ScriptState*, const Vector<ScriptPromise>& promises);
+
     // This is a utility class intended to be used internally.
     // ScriptPromiseResolver is for general purpose.
     class CORE_EXPORT InternalResolver final {
+        DISALLOW_NEW();
+
     public:
         explicit InternalResolver(ScriptState*);
         v8::Local<v8::Promise> v8Promise() const;
@@ -155,6 +151,5 @@ private:
 };
 
 } // namespace blink
-
 
 #endif // ScriptPromise_h

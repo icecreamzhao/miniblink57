@@ -17,28 +17,28 @@
       'target_name': 'tools',
       'type': 'none',
       'dependencies': [
-        'bench_pictures',
         'chrome_fuzz',
         'dump_record',
-        'filter',
-        'flatten',
+        'get_images_from_skps',
         'gpuveto',
+        'imgblur',
+        'imgslice',
         'lua_app',
         'lua_pictures',
-        'imgconv',
         'pinspect',
-        'render_pdfs',
-        'render_pictures',
         'skdiff',
         'skhello',
-        'skp2svg',
-        'skpdiff',
         'skpinfo',
         'skpmaker',
-        'test_image_decoder',
         'test_public_includes',
+        'using_skia_and_harfbuzz',
+        'visualize_color_gamut',
+        'whitelist_typefaces',
       ],
       'conditions': [
+        ['skia_mesa and skia_os in ["linux", "mac"]',
+          { 'dependencies': [ 'fiddle_build_test' ] }
+        ],
         ['skia_shared_lib',
           {
             'dependencies': [
@@ -46,7 +46,48 @@
             ],
           },
         ],
+        [ 'skia_os == "android"',
+          {
+            'dependencies': [
+               # Build this by default to catch compile errors more quickly, since
+               # the only other time this code is exercised in the android framework
+              'android_utils',
+            ],
+          },
+        ],
       ],
+    },
+    {
+      'target_name': 'android_utils',
+      'type': 'static_library',
+      'dependencies': [
+        'core.gyp:core',
+      ],
+      'sources': [
+        '../tools/android/SkAndroidSDKCanvas.h',
+        '../tools/android/SkAndroidSDKCanvas.cpp',
+      ],
+      'direct_dependent_settings': {
+        'include_dirs': [
+          '../tools/android',
+        ],
+      },
+    },
+    {
+        'target_name': 'dump_record',
+        'type': 'executable',
+        'sources': [
+            '../tools/dump_record.cpp',
+            '../tools/DumpRecord.cpp',
+         ],
+         'include_dirs': [
+            '../include/private',
+            '../src/core',
+         ],
+         'dependencies': [
+            'flags.gyp:flags',
+            'skia_lib.gyp:skia_lib',
+         ],
     },
     {
       'target_name': 'chrome_fuzz',
@@ -98,9 +139,12 @@
       'sources': [
         '../tools/sk_tool_utils.cpp',
         '../tools/sk_tool_utils_font.cpp',
+        '../tools/random_parse_path.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         '../src/fonts',
+        '../src/core',
       ],
       'dependencies': [
         'resources',
@@ -114,38 +158,11 @@
     {
       'target_name' : 'timer',
       'type': 'static_library',
-      'sources': [
-        '../tools/timer/Timer.cpp',
-        '../tools/timer/TimerData.cpp',
-      ],
-      'include_dirs': [
-        '../src/core',
-        '../src/gpu',
-      ],
+      'sources': [ '../tools/timer/Timer.cpp' ],
       'direct_dependent_settings': {
         'include_dirs': ['../tools/timer'],
       },
-      'dependencies': [
-        'skia_lib.gyp:skia_lib',
-        'jsoncpp.gyp:jsoncpp',
-      ],
-      'conditions': [
-        ['skia_gpu == 1', {
-          'sources': [ '../tools/timer/GpuTimer.cpp' ],
-        }],
-        [ 'skia_os in ["mac", "ios"]', {
-          'sources': [ '../tools/timer/SysTimer_mach.cpp' ],
-        }],
-        [ 'skia_os == "win"', {
-          'sources': [ '../tools/timer/SysTimer_windows.cpp' ],
-        }],
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "android", "chromeos"]', {
-          'sources': [ '../tools/timer/SysTimer_posix.cpp' ],
-        }],
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
-          'link_settings': { 'libraries': [ '-lrt' ] },
-        }],
-      ],
+      'dependencies': [ 'skia_lib.gyp:skia_lib' ],
     },
     {
       'target_name': 'skdiff',
@@ -164,70 +181,13 @@
       ],
     },
     {
-      'target_name': 'skpdiff',
-      'type': 'executable',
-      'sources': [
-        '../tools/skpdiff/skpdiff_main.cpp',
-        '../tools/skpdiff/SkDiffContext.cpp',
-        '../tools/skpdiff/SkImageDiffer.cpp',
-        '../tools/skpdiff/SkPMetric.cpp',
-        '../tools/skpdiff/skpdiff_util.cpp',
-      ],
-      'include_dirs': [
-        '../src/core/', # needed for SkTLList.h
-        '../tools/',    # needed for picture_utils::replace_char
-      ],
-      'dependencies': [
-        'flags.gyp:flags',
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_utils',
-      ],
-      'cflags': [
-        '-O3',
-      ],
-      'conditions': [
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
-          'link_settings': {
-            'libraries': [
-              '-lrt',
-              '-pthread',
-            ],
-          },
-        }],
-        ['skia_opencl', {
-          'sources': [
-            '../tools/skpdiff/SkCLImageDiffer.cpp',
-            '../tools/skpdiff/SkDifferentPixelsMetric_opencl.cpp',
-          ],
-          'conditions': [
-            [ 'skia_os == "mac"', {
-              'link_settings': {
-                'libraries': [
-                  '$(SDKROOT)/System/Library/Frameworks/OpenCL.framework',
-                ]
-              }
-            }, {
-              'link_settings': {
-                'libraries': [
-                  '-lOpenCL',
-                ],
-              },
-            }],
-          ],
-        }, { # !skia_opencl
-          'sources': [
-            '../tools/skpdiff/SkDifferentPixelsMetric_cpu.cpp',
-          ],
-        }],
-      ],
-    },
-    {
       'target_name': 'skpmaker',
       'type': 'executable',
       'sources': [
         '../tools/skpmaker.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         '../src/core',
       ],
       'dependencies': [
@@ -270,6 +230,7 @@
         '../tools/skpinfo.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         '../src/core/',
       ],
       'dependencies': [
@@ -278,33 +239,49 @@
       ],
     },
     {
-      'target_name': 'flatten',
+      'target_name': 'imgblur',
       'type': 'executable',
       'sources': [
-        '../tools/flatten.cpp',
-      ],
-      'dependencies': [
-        'skia_lib.gyp:skia_lib',
-      ],
-    },
-    {
-      # Superseded by dm, should be removed.
-      'target_name': 'skp2svg',
-      'type': 'executable',
-      'sources': [
-        '../src/svg/skp2svg.cpp',
-        '../tools/LazyDecodeBitmap.cpp',
+        '../tools/imgblur.cpp',
       ],
       'include_dirs': [
-        '../src/core/',
-        '../src/lazy/',
-        '../tools/',
+        '../include/core',
+      ],
+      'dependencies': [
+        'flags.gyp:flags',
+        'flags.gyp:flags_common',
+        'skia_lib.gyp:skia_lib',
+        'tools.gyp:sk_tool_utils',
+      ],
+    },
+    {
+      'target_name': 'imgslice',
+      'type': 'executable',
+      'sources': [
+        '../tools/imgslice.cpp',
+      ],
+      'include_dirs': [
+        '../include/core',
       ],
       'dependencies': [
         'flags.gyp:flags',
         'skia_lib.gyp:skia_lib',
-        'svg.gyp:svg',
-        'xml.gyp:xml',
+      ],
+    },
+    {
+      'target_name': 'get_images_from_skps',
+      'type': 'executable',
+      'sources': [
+        '../tools/get_images_from_skps.cpp',
+      ],
+      'include_dirs': [
+        '../src/core',
+        '../include/private',
+      ],
+      'dependencies': [
+        'flags.gyp:flags',
+        'jsoncpp.gyp:jsoncpp',
+        'skia_lib.gyp:skia_lib',
       ],
     },
     {
@@ -312,12 +289,11 @@
       'type': 'executable',
       'sources': [
         '../tools/gpuveto.cpp',
-        '../tools/LazyDecodeBitmap.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         '../src/core/',
         '../src/images',
-        '../src/lazy',
       ],
       'dependencies': [
         'flags.gyp:flags',
@@ -332,6 +308,7 @@
         '../src/utils/SkLua.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         # Lua exposes GrReduceClip which in turn requires src/core for SkTLList
         '../src/gpu/',
         '../src/core/',
@@ -354,6 +331,7 @@
         '../src/utils/SkLua.cpp',
       ],
       'include_dirs': [
+        '../include/private',
         # Lua exposes GrReduceClip which in turn requires src/core for SkTLList
         '../src/gpu/',
         '../src/core/',
@@ -363,185 +341,10 @@
         'flags.gyp:flags',
         'images.gyp:images',
         'lua.gyp:lua',
-        'tools.gyp:picture_renderer',
         'tools.gyp:picture_utils',
         'pdf.gyp:pdf',
         'ports.gyp:ports',
         'skia_lib.gyp:skia_lib',
-      ],
-    },
-    {
-      'target_name': 'render_pictures',
-      'type': 'executable',
-      'sources': [
-        '../tools/render_pictures_main.cpp',
-      ],
-      'include_dirs': [
-        '../src/core',
-        '../src/images',
-        '../src/lazy',
-        '../src/pipe/utils/',
-      ],
-      'dependencies': [
-        'flags.gyp:flags',
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_renderer',
-        'tools.gyp:picture_utils',
-      ],
-    },
-    {
-      'target_name': 'bench_pictures',
-      'type': 'executable',
-      'sources': [
-        '../bench/BenchLogger.cpp',
-        '../bench/BenchLogger.h',
-        '../tools/PictureBenchmark.cpp',
-        '../tools/PictureResultsWriter.h',
-        '../tools/bench_pictures_main.cpp',
-      ],
-      'include_dirs': [
-        '../src/core/',
-        '../bench',
-        '../src/lazy/',
-      ],
-      'dependencies': [
-        'timer',
-        'crash_handler',
-        'flags.gyp:flags',
-        'jsoncpp.gyp:jsoncpp',
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_renderer',
-        'tools.gyp:picture_utils',
-      ],
-      'conditions': [
-        ['skia_android_framework == 1', {
-          'libraries': [ '-lskia' ],
-        }],
-      ],
-    },
-    {
-      'target_name': 'dump_record',
-      'type': 'executable',
-      'sources': [
-        '../tools/dump_record.cpp',
-        '../tools/DumpRecord.cpp',
-        '../tools/LazyDecodeBitmap.cpp',
-      ],
-      'include_dirs': [
-        '../src/core/',
-        '../src/images',
-        '../src/lazy',
-      ],
-      'dependencies': [
-        'timer',
-        'flags.gyp:flags',
-        'skia_lib.gyp:skia_lib',
-      ],
-    },
-    {
-      'target_name': 'picture_renderer',
-      'type': 'static_library',
-      'sources': [
-        '../tools/image_expectations.h',
-        '../tools/image_expectations.cpp',
-        '../tools/LazyDecodeBitmap.cpp',
-        '../tools/PictureRenderer.h',
-        '../tools/PictureRenderer.cpp',
-        '../tools/PictureRenderingFlags.h',
-        '../tools/PictureRenderingFlags.cpp',
-        '../tools/CopyTilesRenderer.h',
-        '../tools/CopyTilesRenderer.cpp',
-        '../src/pipe/utils/SamplePipeControllers.h',
-        '../src/pipe/utils/SamplePipeControllers.cpp',
-      ],
-      'include_dirs': [
-        '../src/core',
-        '../src/images',
-        '../src/lazy',
-        '../src/pipe/utils/',
-        '../src/utils/',
-      ],
-      'direct_dependent_settings': {
-        'include_dirs': [
-          # needed for JSON headers used within image_expectations.h
-          '../third_party/externals/jsoncpp-chromium/overrides/include/',
-          '../third_party/externals/jsoncpp/include/',
-        ],
-      },
-      'dependencies': [
-        'flags.gyp:flags',
-        'jsoncpp.gyp:jsoncpp',
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_utils',
-      ],
-      'conditions': [
-        ['skia_gpu == 1',
-          {
-            'include_dirs' : [
-              '../src/gpu',
-            ],
-            'dependencies': [
-              'gputest.gyp:skgputest',
-            ],
-            'export_dependent_settings': [
-                'gputest.gyp:skgputest',
-            ],
-          },
-        ],
-      ],
-    },
-    {
-      'target_name': 'render_pdfs',
-      'type': 'executable',
-      'sources': [
-        '../tools/render_pdfs_main.cpp',
-      ],
-      'include_dirs': [
-        '../src/core',
-        '../src/pipe/utils/',
-        '../src/utils/',
-      ],
-      'dependencies': [
-        'flags.gyp:flags',
-        'pdf.gyp:pdf',
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_utils',
-        'tools.gyp:proc_stats',
-      ],
-      'conditions': [
-        ['skia_win_debuggers_path and skia_os == "win"',
-          {
-            'dependencies': [
-              'tools.gyp:win_dbghelp',
-            ],
-          },
-        ],
-        # VS static libraries don't have a linker option. We must set a global
-        # project linker option, or add it to each executable.
-        ['skia_win_debuggers_path and skia_os == "win" and '
-         'skia_arch_width == 64',
-          {
-            'msvs_settings': {
-              'VCLinkerTool': {
-                'AdditionalDependencies': [
-                  '<(skia_win_debuggers_path)/x64/DbgHelp.lib',
-                ],
-              },
-            },
-          },
-        ],
-        ['skia_win_debuggers_path and skia_os == "win" and '
-         'skia_arch_width == 32',
-          {
-            'msvs_settings': {
-              'VCLinkerTool': {
-                'AdditionalDependencies': [
-                  '<(skia_win_debuggers_path)/DbgHelp.lib',
-                ],
-              },
-            },
-          },
-        ],
       ],
     },
     {
@@ -550,6 +353,9 @@
       'sources': [
         '../tools/picture_utils.cpp',
         '../tools/picture_utils.h',
+      ],
+      'include_dirs': [
+          '../src/core/',
       ],
       'dependencies': [
         'skia_lib.gyp:skia_lib',
@@ -569,49 +375,6 @@
       'dependencies': [
         'flags.gyp:flags',
         'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_renderer',
-      ],
-    },
-    {
-      'target_name': 'imgconv',
-      'type': 'executable',
-      'sources': [
-        '../tools/imgconv.cpp',
-      ],
-      'dependencies': [
-        'flags.gyp:flags',
-        'skia_lib.gyp:skia_lib',
-      ],
-    },
-    {
-      'target_name': 'filter',
-      'type': 'executable',
-      'include_dirs' : [
-        '../src/core',
-        '../src/utils/debugger',
-      ],
-      'sources': [
-        '../tools/filtermain.cpp',
-        '../src/utils/debugger/SkDrawCommand.h',
-        '../src/utils/debugger/SkDrawCommand.cpp',
-        '../src/utils/debugger/SkDebugCanvas.h',
-        '../src/utils/debugger/SkDebugCanvas.cpp',
-        '../src/utils/debugger/SkObjectParser.h',
-        '../src/utils/debugger/SkObjectParser.cpp',
-      ],
-      'dependencies': [
-        'skia_lib.gyp:skia_lib',
-        'tools.gyp:picture_utils',
-      ],
-    },
-    {
-      'target_name': 'test_image_decoder',
-      'type': 'executable',
-      'sources': [
-        '../tools/test_image_decoder.cpp',
-      ],
-      'dependencies': [
-        'skia_lib.gyp:skia_lib',
       ],
     },
     {
@@ -626,6 +389,80 @@
       },
     },
     {
+      'target_name': 'url_data_manager',
+      'type': 'static_library',
+      'sources': [
+        '../tools/UrlDataManager.h',
+        '../tools/UrlDataManager.cpp',
+      ],
+      'dependencies': [
+        'skia_lib.gyp:skia_lib',
+      ],
+      'include_dirs': [
+         '../include/private',
+         '../src/core',
+      ],
+      'direct_dependent_settings': {
+        'include_dirs': [
+          '../include/private',
+          '../tools',
+        ],
+      },
+    },
+    {
+      'target_name': 'using_skia_and_harfbuzz',
+      'type': 'executable',
+      'sources': [ '../tools/using_skia_and_harfbuzz.cpp' ],
+      'dependencies': [
+        'skia_lib.gyp:skia_lib',
+        'pdf.gyp:pdf',
+        'harfbuzz.gyp:harfbuzz',
+      ],
+      'cflags': [ '-w', ],
+      'msvs_settings': { 'VCCLCompilerTool': { 'WarningLevel': '0', }, },
+      'xcode_settings': { 'WARNING_CFLAGS': [ '-w', ], },
+    },
+    {
+      'target_name': 'visualize_color_gamut',
+      'type': 'executable',
+      'sources': [
+        '../tools/visualize_color_gamut.cpp',
+      ],
+      'include_dirs': [
+        '../src/core',
+        '../include/private',
+        '../tools',
+      ],
+      'dependencies': [
+        'flags.gyp:flags',
+        'resources',
+        'skia_lib.gyp:skia_lib',
+      ],
+    },
+    {
+      'target_name': 'whitelist_typefaces',
+      'type': 'executable',
+      'sources': [
+        '../tools/whitelist_typefaces.cpp',
+      ],
+      'dependencies': [
+        'skia_lib.gyp:skia_lib',
+      ],
+    },
+    {
+      'target_name': 'thermal_manager',
+      'type': 'static_library',
+      'sources': [
+        '../tools/ThermalManager.cpp',
+      ],
+      'dependencies': [
+        'skia_lib.gyp:skia_lib',
+      ],
+      'direct_dependent_settings': {
+        'include_dirs': [ '../tools', ],
+      },
+    },
+    {
       'target_name': 'test_public_includes',
       'type': 'static_library',
       # Ensure that our public headers don't have unused params so that clients
@@ -633,15 +470,16 @@
       'cflags!': [ '-Wno-unused-parameter' ],
       'variables': {
         'includes_to_test': [
+          '<(skia_include_path)/android',
           '<(skia_include_path)/animator',
           '<(skia_include_path)/c',
+          '<(skia_include_path)/codec',
           '<(skia_include_path)/config',
           '<(skia_include_path)/core',
           '<(skia_include_path)/effects',
           '<(skia_include_path)/gpu',
           '<(skia_include_path)/images',
           '<(skia_include_path)/pathops',
-          '<(skia_include_path)/pipe',
           '<(skia_include_path)/ports',
           '<(skia_include_path)/svg/parser',
           '<(skia_include_path)/utils',
@@ -650,12 +488,7 @@
         ],
         'paths_to_ignore': [
           '<(skia_include_path)/gpu/gl/GrGLConfig_chrome.h',
-          '<(skia_include_path)/ports/SkAtomics_std.h',
-          '<(skia_include_path)/ports/SkAtomics_atomic.h',
-          '<(skia_include_path)/ports/SkAtomics_sync.h',
           '<(skia_include_path)/ports/SkFontMgr_fontconfig.h',
-          '<(skia_include_path)/ports/SkMutex_pthread.h',
-          '<(skia_include_path)/ports/SkMutex_win.h',
           '<(skia_include_path)/ports/SkTypeface_mac.h',
           '<(skia_include_path)/ports/SkTypeface_win.h',
           '<(skia_include_path)/utils/ios',
@@ -663,7 +496,6 @@
           '<(skia_include_path)/utils/win',
           '<(skia_include_path)/utils/SkDebugUtils.h',
           '<(skia_include_path)/utils/SkJSONCPP.h',
-          '<(skia_include_path)/views/animated',
           '<(skia_include_path)/views/SkOSWindow_Android.h',
           '<(skia_include_path)/views/SkOSWindow_iOS.h',
           '<(skia_include_path)/views/SkOSWindow_Mac.h',
@@ -671,6 +503,10 @@
           '<(skia_include_path)/views/SkOSWindow_Unix.h',
           '<(skia_include_path)/views/SkOSWindow_Win.h',
           '<(skia_include_path)/views/SkWindow.h',
+          '<(skia_include_path)/gpu/vk',
+        ],
+        'output_file' : [
+          '<(INTERMEDIATE_DIR)/test_public_includes.cpp',
         ],
       },
       'include_dirs': [
@@ -686,15 +522,16 @@
           'inputs': [
             '../tools/generate_includes_cpp.py',
             '<@(includes_to_test)',
-            # This causes the gyp generator on mac to fail
-            #'<@(paths_to_ignore)',
           ],
           'outputs': [
-            '<(INTERMEDIATE_DIR)/test_public_includes.cpp',
+            '<@(output_file)',
+            # Force the script to always run so that we pick up when files have
+            # been deleted.
+            'filename_that_does_not_exists_but_forces_rebuild.txt',
           ],
           'action': ['python', '../tools/generate_includes_cpp.py',
                                '--ignore', '<(paths_to_ignore)',
-                               '<@(_outputs)', '<@(includes_to_test)'],
+                               '<@(output_file)', '<@(includes_to_test)'],
         },
       ],
     },
@@ -714,6 +551,7 @@
               '../src/utils/SkLua.cpp',
             ],
             'include_dirs': [
+              '../include/private',
               # Lua exposes GrReduceClip which in turn requires src/core for SkTLList
               '../src/gpu/',
               '../src/core/',
@@ -777,6 +615,7 @@
               '../tools/create_test_font.cpp',
             ],
             'include_dirs': [
+              '../include/private',
               '../src/core',
             ],
             'dependencies': [
@@ -784,6 +623,27 @@
               'skia_lib.gyp:skia_lib',
               'resources',
             ],
+          },
+        ],
+      },
+    ],
+    ['skia_mesa and skia_os in ["linux", "mac"]',
+      {
+        'targets': [
+          {
+            'target_name': 'fiddle_build_test',
+            'type': 'executable',
+            'sources': [
+              '../tools/fiddle/draw.cpp',
+              '../tools/fiddle/fiddle_main.cpp',
+              '../tools/fiddle/fiddle_main.h',
+            ],
+            'dependencies': [
+              'skia_lib.gyp:skia_lib',
+              'pdf.gyp:pdf',
+              'gputest.gyp:osmesa',
+            ],
+            'defines': [ 'FIDDLE_BUILD_TEST' ],
           },
         ],
       },

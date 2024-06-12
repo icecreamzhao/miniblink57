@@ -6,6 +6,7 @@
 #define NavigatorContentUtilsClientMock_h
 
 #include "modules/navigatorcontentutils/NavigatorContentUtilsClient.h"
+#include "platform/heap/Handle.h"
 #include "wtf/HashSet.h"
 #include "wtf/text/WTFString.h"
 
@@ -14,17 +15,27 @@ namespace blink {
 class KURL;
 
 // Provides a mock object for the navigatorcontentutils client.
-class NavigatorContentUtilsClientMock : public NavigatorContentUtilsClient {
+class NavigatorContentUtilsClientMock final
+    : public NavigatorContentUtilsClient {
 public:
-    NavigatorContentUtilsClientMock() { }
+    static NavigatorContentUtilsClientMock* create()
+    {
+        return new NavigatorContentUtilsClientMock;
+    }
+
     ~NavigatorContentUtilsClientMock() override { }
 
-    virtual void registerProtocolHandler(const String& scheme, const KURL&, const String& title);
+    virtual void registerProtocolHandler(const String& scheme,
+        const KURL&,
+        const String& title);
 
-    virtual CustomHandlersState isProtocolHandlerRegistered(const String& scheme, const KURL&);
+    virtual CustomHandlersState isProtocolHandlerRegistered(const String& scheme,
+        const KURL&);
     virtual void unregisterProtocolHandler(const String& scheme, const KURL&);
 
 private:
+    NavigatorContentUtilsClientMock() { }
+
     typedef struct {
         String scheme;
         KURL url;

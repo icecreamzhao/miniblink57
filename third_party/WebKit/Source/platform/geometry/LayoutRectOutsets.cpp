@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/LayoutRectOutsets.h"
 
 #include "wtf/Assertions.h"
@@ -56,14 +55,16 @@ LayoutUnit LayoutRectOutsets::logicalRight(WritingMode writingMode) const
     return isHorizontalWritingMode(writingMode) ? m_right : m_bottom;
 }
 
-LayoutRectOutsets LayoutRectOutsets::logicalOutsets(WritingMode writingMode) const
+LayoutRectOutsets LayoutRectOutsets::logicalOutsets(
+    WritingMode writingMode) const
 {
     if (!isHorizontalWritingMode(writingMode))
         return LayoutRectOutsets(m_left, m_bottom, m_right, m_top);
     return *this;
 }
 
-LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(WritingMode writingMode) const
+LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(
+    WritingMode writingMode) const
 {
     LayoutRectOutsets outsets = logicalOutsets(writingMode);
     if (isFlippedLinesWritingMode(writingMode))
@@ -74,13 +75,11 @@ LayoutRectOutsets LayoutRectOutsets::logicalOutsetsWithFlippedLines(WritingMode 
 LayoutUnit LayoutRectOutsets::before(WritingMode writingMode) const
 {
     switch (writingMode) {
-    case TopToBottomWritingMode:
+    case WritingMode::kHorizontalTb:
         return m_top;
-    case BottomToTopWritingMode:
-        return m_bottom;
-    case LeftToRightWritingMode:
+    case WritingMode::kVerticalLr:
         return m_left;
-    case RightToLeftWritingMode:
+    case WritingMode::kVerticalRl:
         return m_right;
     }
     ASSERT_NOT_REACHED();
@@ -90,46 +89,53 @@ LayoutUnit LayoutRectOutsets::before(WritingMode writingMode) const
 LayoutUnit LayoutRectOutsets::after(WritingMode writingMode) const
 {
     switch (writingMode) {
-    case TopToBottomWritingMode:
+    case WritingMode::kHorizontalTb:
         return m_bottom;
-    case BottomToTopWritingMode:
-        return m_top;
-    case LeftToRightWritingMode:
+    case WritingMode::kVerticalLr:
         return m_right;
-    case RightToLeftWritingMode:
+    case WritingMode::kVerticalRl:
         return m_left;
     }
     ASSERT_NOT_REACHED();
     return m_bottom;
 }
 
-LayoutUnit LayoutRectOutsets::start(WritingMode writingMode, TextDirection direction) const
+LayoutUnit LayoutRectOutsets::start(WritingMode writingMode,
+    TextDirection direction) const
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_left : m_right;
     return isLeftToRightDirection(direction) ? m_top : m_bottom;
 }
 
-LayoutUnit LayoutRectOutsets::end(WritingMode writingMode, TextDirection direction) const
+LayoutUnit LayoutRectOutsets::end(WritingMode writingMode,
+    TextDirection direction) const
 {
     if (isHorizontalWritingMode(writingMode))
         return isLeftToRightDirection(direction) ? m_right : m_left;
     return isLeftToRightDirection(direction) ? m_bottom : m_top;
 }
 
+LayoutUnit LayoutRectOutsets::over(WritingMode writingMode) const
+{
+    return isHorizontalWritingMode(writingMode) ? m_top : m_right;
+}
+
+LayoutUnit LayoutRectOutsets::under(WritingMode writingMode) const
+{
+    return isHorizontalWritingMode(writingMode) ? m_bottom : m_left;
+}
+
 void LayoutRectOutsets::setBefore(WritingMode writingMode, LayoutUnit value)
 {
     switch (writingMode) {
-    case TopToBottomWritingMode:
+    case WritingMode::kHorizontalTb:
         m_top = value;
         break;
-    case BottomToTopWritingMode:
-        m_bottom = value;
-        break;
-    case LeftToRightWritingMode:
+    case WritingMode::kVerticalLr:
         m_left = value;
         break;
-    case RightToLeftWritingMode:
+    case WritingMode::kVerticalRl:
         m_right = value;
         break;
     default:
@@ -141,16 +147,13 @@ void LayoutRectOutsets::setBefore(WritingMode writingMode, LayoutUnit value)
 void LayoutRectOutsets::setAfter(WritingMode writingMode, LayoutUnit value)
 {
     switch (writingMode) {
-    case TopToBottomWritingMode:
+    case WritingMode::kHorizontalTb:
         m_bottom = value;
         break;
-    case BottomToTopWritingMode:
-        m_top = value;
-        break;
-    case LeftToRightWritingMode:
+    case WritingMode::kVerticalLr:
         m_right = value;
         break;
-    case RightToLeftWritingMode:
+    case WritingMode::kVerticalRl:
         m_left = value;
         break;
     default:
@@ -159,7 +162,9 @@ void LayoutRectOutsets::setAfter(WritingMode writingMode, LayoutUnit value)
     }
 }
 
-void LayoutRectOutsets::setStart(WritingMode writingMode, TextDirection direction, LayoutUnit value)
+void LayoutRectOutsets::setStart(WritingMode writingMode,
+    TextDirection direction,
+    LayoutUnit value)
 {
     if (isHorizontalWritingMode(writingMode)) {
         if (isLeftToRightDirection(direction))
@@ -174,7 +179,9 @@ void LayoutRectOutsets::setStart(WritingMode writingMode, TextDirection directio
     }
 }
 
-void LayoutRectOutsets::setEnd(WritingMode writingMode, TextDirection direction, LayoutUnit value)
+void LayoutRectOutsets::setEnd(WritingMode writingMode,
+    TextDirection direction,
+    LayoutUnit value)
 {
     if (isHorizontalWritingMode(writingMode)) {
         if (isLeftToRightDirection(direction))

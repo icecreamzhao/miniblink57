@@ -61,44 +61,48 @@
 namespace v8 {
 namespace base {
 
-using OnceType = std::atomic<uint8_t>;
+    using OnceType = std::atomic<uint8_t>;
 
 #define V8_ONCE_INIT \
-  { 0 }
+    {                \
+        0            \
+    }
 
 #define V8_DECLARE_ONCE(NAME) ::v8::base::OnceType NAME
 
-enum : uint8_t {
-  ONCE_STATE_UNINITIALIZED = 0,
-  ONCE_STATE_EXECUTING_FUNCTION = 1,
-  ONCE_STATE_DONE = 2
-};
+    enum : uint8_t {
+        ONCE_STATE_UNINITIALIZED = 0,
+        ONCE_STATE_EXECUTING_FUNCTION = 1,
+        ONCE_STATE_DONE = 2
+    };
 
-typedef void (*PointerArgFunction)(void* arg);
+    using PointerArgFunction = void (*)(void* arg);
 
-template <typename T>
-struct OneArgFunction {
-  typedef void (*type)(T);
-};
+    template <typename T>
+    struct OneArgFunction {
+        using type = void (*)(T);
+    };
 
-V8_BASE_EXPORT void CallOnceImpl(OnceType* once,
-                                 std::function<void()> init_func);
+    V8_BASE_EXPORT void CallOnceImpl(OnceType* once,
+        std::function<void()> init_func);
 
-inline void CallOnce(OnceType* once, std::function<void()> init_func) {
-  if (once->load(std::memory_order_acquire) != ONCE_STATE_DONE) {
-    CallOnceImpl(once, init_func);
-  }
-}
+    inline void CallOnce(OnceType* once, std::function<void()> init_func)
+    {
+        if (once->load(std::memory_order_acquire) != ONCE_STATE_DONE) {
+            CallOnceImpl(once, init_func);
+        }
+    }
 
-template <typename Arg>
-inline void CallOnce(OnceType* once,
-    typename OneArgFunction<Arg*>::type init_func, Arg* arg) {
-  if (once->load(std::memory_order_acquire) != ONCE_STATE_DONE) {
-    CallOnceImpl(once, [=]() { init_func(arg); });
-  }
-}
+    template <typename Arg>
+    inline void CallOnce(OnceType* once,
+        typename OneArgFunction<Arg*>::type init_func, Arg* arg)
+    {
+        if (once->load(std::memory_order_acquire) != ONCE_STATE_DONE) {
+            CallOnceImpl(once, [=]() { init_func(arg); });
+        }
+    }
 
-}  // namespace base
-}  // namespace v8
+} // namespace base
+} // namespace v8
 
-#endif  // V8_BASE_ONCE_H_
+#endif // V8_BASE_ONCE_H_

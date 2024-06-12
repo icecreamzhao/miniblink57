@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawLine_DEFINED
 #define SkDrawLine_DEFINED
 
@@ -16,7 +15,8 @@
 class SkLine : public SkBoundable {
     DECLARE_MEMBER_INFO(Line);
     SkLine();
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
+
 private:
     SkScalar x1;
     SkScalar x2;

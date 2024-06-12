@@ -31,145 +31,91 @@
 #ifndef InspectorInstrumentation_h
 #define InspectorInstrumentation_h
 
-#include "bindings/core/v8/ScriptString.h"
 #include "core/CoreExport.h"
-#include "core/css/CSSSelector.h"
-#include "core/css/CSSStyleDeclaration.h"
-#include "core/css/CSSStyleSheet.h"
-#include "core/dom/CharacterData.h"
-#include "core/dom/Element.h"
-#include "core/dom/ExecutionContext.h"
-#include "core/events/NodeEventContext.h"
+#include "core/dom/Document.h"
+#include "core/dom/Node.h"
 #include "core/frame/LocalFrame.h"
-#include "core/inspector/ConsoleAPITypes.h"
-#include "core/layout/HitTestResult.h"
-#include "core/layout/LayoutImage.h"
 #include "core/page/ChromeClient.h"
-#include "platform/network/FormData.h"
-#include "platform/network/WebSocketHandshakeRequest.h"
-#include "platform/network/WebSocketHandshakeResponse.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
-class Document;
-class EventTarget;
-class ExecutionContext;
 class InstrumentingAgents;
-class ThreadableLoaderClient;
+class ThreadDebugger;
 class WorkerGlobalScope;
-class WorkerInspectorProxy;
-
-#define FAST_RETURN_IF_NO_FRONTENDS(value) if (!hasFrontends()) return value;
-
-class CORE_EXPORT InspectorInstrumentationCookie {
-    STACK_ALLOCATED();
-public:
-    InspectorInstrumentationCookie();
-    explicit InspectorInstrumentationCookie(InstrumentingAgents*);
-    InspectorInstrumentationCookie(const InspectorInstrumentationCookie&);
-    InspectorInstrumentationCookie& operator=(const InspectorInstrumentationCookie&);
-    ~InspectorInstrumentationCookie();
-
-    InstrumentingAgents* instrumentingAgents() const { return m_instrumentingAgents.get(); }
-    bool isValid() const { return !!m_instrumentingAgents; }
-
-private:
-    RefPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
-};
 
 namespace InspectorInstrumentation {
 
-class CORE_EXPORT FrontendCounter {
-private:
-    friend void frontendCreated();
-    friend void frontendDeleted();
-    friend bool hasFrontends();
-    static int s_frontendCounter;
-};
+    class CORE_EXPORT AsyncTask {
+        STACK_ALLOCATED();
 
-inline void frontendCreated() { atomicIncrement(&FrontendCounter::s_frontendCounter); }
-inline void frontendDeleted() { atomicDecrement(&FrontendCounter::s_frontendCounter); }
-inline bool hasFrontends() { return FrontendCounter::s_frontendCounter; }
+    public:
+        AsyncTask(ExecutionContext*, void* task);
+        AsyncTask(ExecutionContext*, void* task, bool enabled);
+        ~AsyncTask();
 
-CORE_EXPORT void registerInstrumentingAgents(InstrumentingAgents*);
-CORE_EXPORT void unregisterInstrumentingAgents(InstrumentingAgents*);
+    private:
+        ThreadDebugger* m_debugger;
+        void* m_task;
+    };
 
-// Called from generated instrumentation code.
-CORE_EXPORT InstrumentingAgents* instrumentingAgentsFor(LocalFrame*);
-InstrumentingAgents* instrumentingAgentsFor(EventTarget*);
-InstrumentingAgents* instrumentingAgentsFor(ExecutionContext*);
-InstrumentingAgents* instrumentingAgentsFor(Document&);
-InstrumentingAgents* instrumentingAgentsFor(Document*);
-InstrumentingAgents* instrumentingAgentsFor(LayoutObject*);
-InstrumentingAgents* instrumentingAgentsFor(Node*);
-InstrumentingAgents* instrumentingAgentsFor(WorkerGlobalScope*);
+    class CORE_EXPORT NativeBreakpoint {
+        STACK_ALLOCATED();
 
-// Helper for the one above.
-CORE_EXPORT InstrumentingAgents* instrumentingAgentsForNonDocumentContext(ExecutionContext*);
+    public:
+        NativeBreakpoint(ExecutionContext*, const char* name, bool sync);
+        NativeBreakpoint(ExecutionContext*, EventTarget*, Event*);
+        ~NativeBreakpoint();
 
-}  // namespace InspectorInstrumentation
+    private:
+        Member<InstrumentingAgents> m_instrumentingAgents;
+        bool m_sync;
+    };
 
-namespace InstrumentationEvents {
-extern const char PaintSetup[];
-extern const char Paint[];
-extern const char Layer[];
-extern const char RequestMainThreadFrame[];
-extern const char BeginFrame[];
-extern const char DrawFrame[];
-extern const char ActivateLayerTree[];
-extern const char EmbedderCallback[];
-};
+    // Called from generated instrumentation code.
+    CORE_EXPORT InstrumentingAgents* instrumentingAgentsFor(WorkerGlobalScope*);
+    CORE_EXPORT InstrumentingAgents* instrumentingAgentsForNonDocumentContext(
+        ExecutionContext*);
 
-namespace InstrumentationEventArguments {
-extern const char FrameId[];
-extern const char LayerId[];
-extern const char LayerTreeId[];
-extern const char PageId[];
-extern const char CallbackName[];
-};
+    inline InstrumentingAgents* instrumentingAgentsFor(LocalFrame* frame)
+    {
+        return frame ? frame->instrumentingAgents() : nullptr;
+    }
 
-namespace InspectorInstrumentation {
+    inline InstrumentingAgents* instrumentingAgentsFor(Document& document)
+    {
+        LocalFrame* frame = document.frame();
+        if (!frame && document.templateDocumentHost())
+            frame = document.templateDocumentHost()->frame();
+        return instrumentingAgentsFor(frame);
+    }
 
-inline InstrumentingAgents* instrumentingAgentsFor(ExecutionContext* context)
-{
-    if (!context)
-        return 0;
-    return context->isDocument() ? instrumentingAgentsFor(*toDocument(context)) : instrumentingAgentsForNonDocumentContext(context);
-}
+    inline InstrumentingAgents* instrumentingAgentsFor(Document* document)
+    {
+        return document ? instrumentingAgentsFor(*document) : nullptr;
+    }
 
-inline InstrumentingAgents* instrumentingAgentsFor(Document& document)
-{
-    LocalFrame* frame = document.frame();
-    if (!frame && document.templateDocumentHost())
-        frame = document.templateDocumentHost()->frame();
-    return instrumentingAgentsFor(frame);
-}
+    inline InstrumentingAgents* instrumentingAgentsFor(ExecutionContext* context)
+    {
+        if (!context)
+            return nullptr;
+        return context->isDocument()
+            ? instrumentingAgentsFor(*toDocument(context))
+            : instrumentingAgentsForNonDocumentContext(context);
+    }
 
-inline InstrumentingAgents* instrumentingAgentsFor(Document* document)
-{
-    return document ? instrumentingAgentsFor(*document) : 0;
-}
+    inline InstrumentingAgents* instrumentingAgentsFor(Node* node)
+    {
+        return node ? instrumentingAgentsFor(node->document()) : nullptr;
+    }
 
-inline InstrumentingAgents* instrumentingAgentsFor(CSSStyleSheet* styleSheet)
-{
-    return styleSheet ? instrumentingAgentsFor(styleSheet->ownerDocument()) : 0;
-}
-
-inline InstrumentingAgents* instrumentingAgentsFor(Node* node)
-{
-    return node ? instrumentingAgentsFor(node->document()) : 0;
-}
-
-inline InstrumentingAgents* instrumentingAgentsFor(CSSStyleDeclaration* declaration)
-{
-    return declaration ? instrumentingAgentsFor(declaration->parentStyleSheet()) : 0;
-}
+    inline InstrumentingAgents* instrumentingAgentsFor(EventTarget* eventTarget)
+    {
+        return eventTarget
+            ? instrumentingAgentsFor(eventTarget->getExecutionContext())
+            : nullptr;
+    }
 
 } // namespace InspectorInstrumentation
-
-InstrumentingAgents* instrumentationForWorkerGlobalScope(WorkerGlobalScope*);
-
 } // namespace blink
 
 #include "core/InspectorInstrumentationInl.h"

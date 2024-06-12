@@ -38,10 +38,13 @@ namespace blink {
 
 class ProfilingCanvas;
 
-template<> class CanvasInterceptor<ProfilingCanvas> : protected InterceptingCanvasBase::CanvasInterceptorBase<ProfilingCanvas> {
+template <>
+class CanvasInterceptor<ProfilingCanvas>
+    : protected InterceptingCanvasBase::CanvasInterceptorBase<ProfilingCanvas> {
 public:
     CanvasInterceptor(InterceptingCanvasBase*);
     ~CanvasInterceptor();
+
 private:
     double m_startTime;
 };

@@ -12,19 +12,24 @@
 struct SkDRect {
     double fLeft, fTop, fRight, fBottom;
 
-    void add(const SkDPoint& pt) {
+    void add(const SkDPoint& pt)
+    {
         fLeft = SkTMin(fLeft, pt.fX);
         fTop = SkTMin(fTop, pt.fY);
         fRight = SkTMax(fRight, pt.fX);
         fBottom = SkTMax(fBottom, pt.fY);
     }
 
-    bool contains(const SkDPoint& pt) const {
+    bool contains(const SkDPoint& pt) const
+    {
         return approximately_between(fLeft, pt.fX, fRight)
-                && approximately_between(fTop, pt.fY, fBottom);
+            && approximately_between(fTop, pt.fY, fBottom);
     }
 
-    bool intersects(const SkDRect& r) const {
+    void debugInit();
+
+    bool intersects(const SkDRect& r) const
+    {
         SkASSERT(fLeft <= fRight);
         SkASSERT(fTop <= fBottom);
         SkASSERT(r.fLeft <= r.fRight);
@@ -32,32 +37,38 @@ struct SkDRect {
         return r.fLeft <= fRight && fLeft <= r.fRight && r.fTop <= fBottom && fTop <= r.fBottom;
     }
 
-    void set(const SkDPoint& pt) {
+    void set(const SkDPoint& pt)
+    {
         fLeft = fRight = pt.fX;
         fTop = fBottom = pt.fY;
     }
 
-    double width() const {
+    double width() const
+    {
         return fRight - fLeft;
     }
 
-    double height() const {
+    double height() const
+    {
         return fBottom - fTop;
     }
 
-    void setBounds(const SkDConic& curve) {
+    void setBounds(const SkDConic& curve)
+    {
         setBounds(curve, curve, 0, 1);
     }
 
     void setBounds(const SkDConic& curve, const SkDConic& sub, double tStart, double tEnd);
 
-    void setBounds(const SkDCubic& curve) {
+    void setBounds(const SkDCubic& curve)
+    {
         setBounds(curve, curve, 0, 1);
     }
 
     void setBounds(const SkDCubic& curve, const SkDCubic& sub, double tStart, double tEnd);
 
-    void setBounds(const SkDQuad& curve) {
+    void setBounds(const SkDQuad& curve)
+    {
         setBounds(curve, curve, 0, 1);
     }
 

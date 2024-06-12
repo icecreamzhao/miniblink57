@@ -33,15 +33,14 @@
 
 #include "platform/Length.h"
 #include "platform/LengthFunctions.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/RefCounted.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT CalculationValue : public RefCounted<CalculationValue> {
 public:
-    static PassRefPtr<CalculationValue> create(PixelsAndPercent value, ValueRange range)
+    static PassRefPtr<CalculationValue> create(PixelsAndPercent value,
+        ValueRange range)
     {
         return adoptRef(new CalculationValue(value, range));
     }
@@ -51,11 +50,18 @@ public:
         float value = pixels() + percent() / 100 * maxValue;
         return (isNonNegative() && value < 0) ? 0 : value;
     }
-    bool operator==(const CalculationValue& o) const { return pixels() == o.pixels() && percent() == o.percent(); }
+    bool operator==(const CalculationValue& o) const
+    {
+        return pixels() == o.pixels() && percent() == o.percent();
+    }
     bool isNonNegative() const { return m_isNonNegative; }
+    ValueRange getValueRange() const
+    {
+        return m_isNonNegative ? ValueRangeNonNegative : ValueRangeAll;
+    }
     float pixels() const { return m_value.pixels; }
     float percent() const { return m_value.percent; }
-    PixelsAndPercent pixelsAndPercent() const { return m_value; }
+    PixelsAndPercent getPixelsAndPercent() const { return m_value; }
 
 private:
     CalculationValue(PixelsAndPercent value, ValueRange range)

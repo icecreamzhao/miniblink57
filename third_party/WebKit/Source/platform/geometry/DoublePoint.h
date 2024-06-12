@@ -8,6 +8,8 @@
 #include "platform/geometry/DoubleSize.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntPoint.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 #include <algorithm>
 
 namespace blink {
@@ -15,6 +17,8 @@ namespace blink {
 class LayoutPoint;
 
 class PLATFORM_EXPORT DoublePoint {
+    DISALLOW_NEW();
+
 public:
     DoublePoint()
         : m_x(0)
@@ -39,14 +43,16 @@ public:
     explicit DoublePoint(const LayoutPoint&);
 
     explicit DoublePoint(const IntSize& size)
-        : m_x(size.width()), m_y(size.height())
+        : m_x(size.width())
+        , m_y(size.height())
     {
     }
 
     explicit DoublePoint(const FloatSize&);
 
     explicit DoublePoint(const DoubleSize& size)
-        : m_x(size.width()), m_y(size.height())
+        : m_x(size.width())
+        , m_y(size.height())
     {
     }
 
@@ -95,6 +101,8 @@ public:
     {
         return DoublePoint(m_x * scale, m_y * scale);
     }
+
+    String toString() const;
 
 private:
     double m_x, m_y;
@@ -169,6 +177,10 @@ inline DoubleSize toDoubleSize(const DoublePoint& a)
     return DoubleSize(a.x(), a.y());
 }
 
-}
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const DoublePoint&, std::ostream*);
+
+} // namespace blink
 
 #endif

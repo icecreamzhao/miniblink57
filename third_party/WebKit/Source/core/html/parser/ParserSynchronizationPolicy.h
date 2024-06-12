@@ -7,7 +7,6 @@ enum ParserSynchronizationPolicy {
     AllowAsynchronousParsing,
     ForceSynchronousParsing,
 };
-
 }
 
 #endif // ParserSynchronizationPolicy_h

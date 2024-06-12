@@ -2,36 +2,39 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/mediasource/TrackDefault.h"
 
 #include "bindings/core/v8/ExceptionState.h"
-#include "core/dom/ExceptionCode.h"
 #include "core/html/track/AudioTrack.h"
 #include "core/html/track/TextTrack.h"
 #include "core/html/track/VideoTrack.h"
 
 namespace blink {
 
-static const AtomicString& audioKeyword()
+const AtomicString& TrackDefault::audioKeyword()
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, audio, ("audio", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, audio, ("audio"));
     return audio;
 }
 
-static const AtomicString& videoKeyword()
+const AtomicString& TrackDefault::videoKeyword()
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, video, ("video", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, video, ("video"));
     return video;
 }
 
-static const AtomicString& textKeyword()
+const AtomicString& TrackDefault::textKeyword()
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, text, ("text", AtomicString::ConstructFromLiteral));
+    DEFINE_STATIC_LOCAL(const AtomicString, text, ("text"));
     return text;
 }
 
-TrackDefault* TrackDefault::create(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID, ExceptionState& exceptionState)
+TrackDefault* TrackDefault::create(const AtomicString& type,
+    const String& language,
+    const String& label,
+    const Vector<String>& kinds,
+    const String& byteStreamTrackID,
+    ExceptionState& exceptionState)
 {
     // Per 11 Nov 2014 Editor's Draft
     // https://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html#idl-def-TrackDefault
@@ -76,7 +79,7 @@ TrackDefault* TrackDefault::create(const AtomicString& type, const String& langu
             }
         }
     } else {
-        ASSERT_NOT_REACHED(); // IDL enforcement should prevent this case.
+        NOTREACHED(); // IDL enforcement should prevent this case.
         return nullptr;
     }
 
@@ -90,11 +93,13 @@ TrackDefault* TrackDefault::create(const AtomicString& type, const String& langu
     return new TrackDefault(type, language, label, kinds, byteStreamTrackID);
 }
 
-TrackDefault::~TrackDefault()
-{
-}
+TrackDefault::~TrackDefault() { }
 
-TrackDefault::TrackDefault(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID)
+TrackDefault::TrackDefault(const AtomicString& type,
+    const String& language,
+    const String& label,
+    const Vector<String>& kinds,
+    const String& byteStreamTrackID)
     : m_type(type)
     , m_byteStreamTrackID(byteStreamTrackID)
     , m_language(language)

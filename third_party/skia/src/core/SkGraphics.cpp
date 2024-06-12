@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,19 +5,23 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkGraphics.h"
 
 #include "SkBlitter.h"
 #include "SkCanvas.h"
+#include "SkCpu.h"
 #include "SkGeometry.h"
+#include "SkGlyphCache.h"
+#include "SkImageFilter.h"
 #include "SkMath.h"
 #include "SkMatrix.h"
+#include "SkOpts.h"
 #include "SkPath.h"
 #include "SkPathEffect.h"
 #include "SkPixelRef.h"
-#include "SkRefCnt.h"
 #include "SkRTConf.h"
+#include "SkRefCnt.h"
+#include "SkResourceCache.h"
 #include "SkScalerContext.h"
 #include "SkShader.h"
 #include "SkStream.h"
@@ -27,7 +30,10 @@
 #include "SkUtils.h"
 #include "SkXfermode.h"
 
-void SkGraphics::GetVersion(int32_t* major, int32_t* minor, int32_t* patch) {
+#include <stdlib.h>
+
+void SkGraphics::GetVersion(int32_t* major, int32_t* minor, int32_t* patch)
+{
     if (major) {
         *major = SKIA_VERSION_MAJOR;
     }
@@ -39,18 +45,13 @@ void SkGraphics::GetVersion(int32_t* major, int32_t* minor, int32_t* patch) {
     }
 }
 
-#define typesizeline(type)  { #type , sizeof(type) }
+void SkGraphics::Init()
+{
+    // SkGraphics::Init() must be thread-safe and idempotent.
+    SkCpu::CacheRuntimeFeatures();
+    SkOpts::Init();
 
-#ifdef BUILD_EMBOSS_TABLE
-    extern void SkEmbossMask_BuildTable();
-#endif
-
-#ifdef BUILD_RADIALGRADIENT_TABLE
-    extern void SkRadialGradient_BuildTable();
-#endif
-
-void SkGraphics::Init() {
-#ifdef SK_DEVELOPER
+#ifdef SK_DEBUG
     skRTConfRegistry().possiblyDumpFile();
     skRTConfRegistry().validate();
     if (skRTConfRegistry().hasNonDefault()) {
@@ -58,77 +59,21 @@ void SkGraphics::Init() {
         skRTConfRegistry().printNonDefault();
     }
 #endif
-
-#ifdef BUILD_EMBOSS_TABLE
-    SkEmbossMask_BuildTable();
-#endif
-#ifdef BUILD_RADIALGRADIENT_TABLE
-    SkRadialGradient_BuildTable();
-#endif
-
-#ifdef SK_DEBUGx
-    int i;
-
-    static const struct {
-        const char* fTypeName;
-        size_t      fSizeOf;
-    } gTypeSize[] = {
-        typesizeline(char),
-        typesizeline(short),
-        typesizeline(int),
-        typesizeline(long),
-        typesizeline(size_t),
-        typesizeline(void*),
-
-        typesizeline(S8CPU),
-        typesizeline(U8CPU),
-        typesizeline(S16CPU),
-        typesizeline(U16CPU),
-
-        typesizeline(SkPoint),
-        typesizeline(SkRect),
-        typesizeline(SkMatrix),
-        typesizeline(SkPath),
-        typesizeline(SkGlyph),
-        typesizeline(SkRefCnt),
-
-        typesizeline(SkPaint),
-        typesizeline(SkCanvas),
-        typesizeline(SkBlitter),
-        typesizeline(SkShader),
-        typesizeline(SkXfermode),
-        typesizeline(SkPathEffect)
-    };
-
-#ifdef SK_CPU_BENDIAN
-    SkDebugf("SkGraphics: big-endian\n");
-#else
-    SkDebugf("SkGraphics: little-endian\n");
-#endif
-
-    {
-        char    test = 0xFF;
-        int     itest = test;   // promote to int, see if it sign-extended
-        if (itest < 0)
-            SkDebugf("SkGraphics: char is signed\n");
-        else
-            SkDebugf("SkGraphics: char is unsigned\n");
-    }
-    for (i = 0; i < (int)SK_ARRAY_COUNT(gTypeSize); i++) {
-        SkDebugf("SkGraphics: sizeof(%s) = %d\n",
-                 gTypeSize[i].fTypeName, gTypeSize[i].fSizeOf);
-    }
-    SkDebugf("SkGraphics: font cache limit %dK\n",
-             GetFontCacheLimit() >> 10);
-
-#endif
-
 }
 
-void SkGraphics::Term() {
-    PurgeFontCache();
-    PurgeResourceCache();
-    SkPaint::Term();
+///////////////////////////////////////////////////////////////////////////////
+
+void SkGraphics::DumpMemoryStatistics(SkTraceMemoryDump* dump)
+{
+    SkResourceCache::DumpMemoryStatistics(dump);
+    SkGlyphCache::DumpMemoryStatistics(dump);
+}
+
+void SkGraphics::PurgeAllCaches()
+{
+    SkGraphics::PurgeFontCache();
+    SkGraphics::PurgeResourceCache();
+    SkImageFilter::PurgeCache();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +90,8 @@ static const struct {
 };
 
 /* flags are of the form param; or param=value; */
-void SkGraphics::SetFlags(const char* flags) {
+void SkGraphics::SetFlags(const char* flags)
+{
     if (!flags) {
         return;
     }
@@ -169,7 +115,7 @@ void SkGraphics::SetFlags(const char* flags) {
             if (strncmp(flags, gFlags[i].fStr, paramLen) == 0) {
                 size_t val = 0;
                 if (nextEqual) {
-                    val = (size_t) atoi(nextEqual + 1);
+                    val = (size_t)atoi(nextEqual + 1);
                 }
                 (gFlags[i].fFunc)(val);
                 break;

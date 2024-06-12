@@ -31,6 +31,7 @@
 #ifndef FontFaceCreationParams_h
 #define FontFaceCreationParams_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/StringHasher.h"
 #include "wtf/text/AtomicString.h"
@@ -44,32 +45,39 @@ enum FontFaceCreationType {
 };
 
 class FontFaceCreationParams {
-    FontFaceCreationType m_creationType;
-    AtomicString m_family;
-    CString m_filename;
-    int m_fontconfigInterfaceId;
-    int m_ttcIndex;
+    USING_FAST_MALLOC(FontFaceCreationParams);
 
 public:
     FontFaceCreationParams()
-        : m_creationType(CreateFontByFamily), m_family(AtomicString()), m_filename(CString()), m_fontconfigInterfaceId(0), m_ttcIndex(0)
+        : m_creationType(CreateFontByFamily)
+        , m_family(AtomicString())
+        , m_filename(CString())
+        , m_fontconfigInterfaceId(0)
+        , m_ttcIndex(0)
     {
     }
 
     explicit FontFaceCreationParams(AtomicString family)
-        : m_creationType(CreateFontByFamily), m_family(family), m_filename(CString()), m_fontconfigInterfaceId(0), m_ttcIndex(0)
+        : m_creationType(CreateFontByFamily)
+        , m_family(family)
+        , m_filename(CString())
+        , m_fontconfigInterfaceId(0)
+        , m_ttcIndex(0)
     {
 #if OS(WIN)
-    // Leading "@" in the font name enables Windows vertical flow flag for the font.
-    // Because we do vertical flow by ourselves, we don't want to use the Windows feature.
-    // IE disregards "@" regardless of the orientation, so we follow the behavior and
-    // normalize the family name.
-    m_family = (m_family.isEmpty() || m_family[0] != '@') ? m_family : AtomicString(m_family.impl()->substring(1));
+        // Leading "@" in the font name enables Windows vertical flow flag for the font.
+        // Because we do vertical flow by ourselves, we don't want to use the Windows feature.
+        // IE disregards "@" regardless of the orientation, so we follow the behavior and
+        // normalize the family name.
+        m_family = (m_family.isEmpty() || m_family[0] != '@') ? m_family : AtomicString(m_family.impl()->substring(1));
 #endif
     }
 
     FontFaceCreationParams(CString filename, int fontconfigInterfaceId, int ttcIndex = 0)
-        : m_creationType(CreateFontByFciIdAndTtcIndex), m_filename(filename), m_fontconfigInterfaceId(fontconfigInterfaceId), m_ttcIndex(ttcIndex)
+        : m_creationType(CreateFontByFciIdAndTtcIndex)
+        , m_filename(filename)
+        , m_fontconfigInterfaceId(fontconfigInterfaceId)
+        , m_ttcIndex(ttcIndex)
     {
     }
 
@@ -120,6 +128,12 @@ public:
             && m_ttcIndex == other.m_ttcIndex;
     }
 
+private:
+    FontFaceCreationType m_creationType;
+    AtomicString m_family;
+    CString m_filename;
+    int m_fontconfigInterfaceId;
+    int m_ttcIndex;
 };
 
 } // namespace blink

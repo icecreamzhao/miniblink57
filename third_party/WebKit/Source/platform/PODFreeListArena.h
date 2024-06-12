@@ -27,6 +27,8 @@
 #define PODFreeListArena_h
 
 #include "platform/PODArena.h"
+#include "wtf/Allocator.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
@@ -39,9 +41,10 @@ public:
     }
 
     // Creates a new PODFreeListArena configured with the given Allocator.
-    static PassRefPtr<PODFreeListArena> create(PassRefPtr<PODArena::Allocator> allocator)
+    static PassRefPtr<PODFreeListArena> create(
+        PassRefPtr<PODArena::Allocator> allocator)
     {
-        return adoptRef(new PODFreeListArena(allocator));
+        return adoptRef(new PODFreeListArena(std::move(allocator)));
     }
 
     // Allocates an object from the arena.
@@ -51,7 +54,7 @@ public:
 
         if (ptr) {
             // Use placement operator new to allocate a T at this location.
-            new(ptr) T();
+            new (ptr) T();
             return static_cast<T*>(ptr);
         }
 
@@ -59,13 +62,14 @@ public:
         return static_cast<T*>(m_arena->allocateObject<T>());
     }
 
-    template<class Argument1Type> T* allocateObject(const Argument1Type& argument1)
+    template <class Argument1Type>
+    T* allocateObject(const Argument1Type& argument1)
     {
         void* ptr = allocateFromFreeList();
 
         if (ptr) {
             // Use placement operator new to allocate a T at this location.
-            new(ptr) T(argument1);
+            new (ptr) T(argument1);
             return static_cast<T*>(ptr);
         }
 
@@ -83,10 +87,16 @@ public:
 
 private:
     PODFreeListArena()
-        : m_arena(PODArena::create()), m_freeList(0) { }
+        : m_arena(PODArena::create())
+        , m_freeList(0)
+    {
+    }
 
     explicit PODFreeListArena(PassRefPtr<PODArena::Allocator> allocator)
-        : m_arena(PODArena::create(allocator)), m_freeList(0) { }
+        : m_arena(PODArena::create(std::move(allocator)))
+        , m_freeList(0)
+    {
+    }
 
     ~PODFreeListArena() { }
 
@@ -111,15 +121,17 @@ private:
 
     RefPtr<PODArena> m_arena;
 
-    // This free list contains pointers within every chunk that's been allocated so
-    // far. None of the individual chunks can be freed until the arena is
+    // This free list contains pointers within every chunk that's been allocated
+    // so far. None of the individual chunks can be freed until the arena is
     // destroyed.
     struct FixedSizeMemoryChunk {
+        DISALLOW_NEW();
         FixedSizeMemoryChunk* next;
     };
     FixedSizeMemoryChunk* m_freeList;
 
-    static_assert(sizeof(T) >= sizeof(FixedSizeMemoryChunk), "PODFreeListArena type should be larger");
+    static_assert(sizeof(T) >= sizeof(FixedSizeMemoryChunk),
+        "PODFreeListArena type should be larger");
 
     friend class WTF::RefCounted<PODFreeListArena>;
     friend class PODFreeListArenaTest;

@@ -73,14 +73,23 @@ public:
     // - currentInterimResults contains zero or more inteirm results that
     // replace the interim results that were reported the last time this
     // function was called.
-    virtual void didReceiveResults(const WebSpeechRecognitionHandle&, const WebVector<WebSpeechRecognitionResult>& newFinalResults, const WebVector<WebSpeechRecognitionResult>& currentInterimResults) = 0;
+    virtual void didReceiveResults(
+        const WebSpeechRecognitionHandle&,
+        const WebVector<WebSpeechRecognitionResult>& newFinalResults,
+        const WebVector<WebSpeechRecognitionResult>& currentInterimResults)
+        = 0;
 
     // To be called when the speech recognizer returns a final result with no
     // recognizion hypothesis.
-    virtual void didReceiveNoMatch(const WebSpeechRecognitionHandle&, const WebSpeechRecognitionResult&) = 0;
+    virtual void didReceiveNoMatch(const WebSpeechRecognitionHandle&,
+        const WebSpeechRecognitionResult&)
+        = 0;
 
     // To be called when a speech recognition error occurs.
-    virtual void didReceiveError(const WebSpeechRecognitionHandle&, const WebString& message, ErrorCode) = 0;
+    virtual void didReceiveError(const WebSpeechRecognitionHandle&,
+        const WebString& message,
+        ErrorCode)
+        = 0;
 
     // To be called when the recognizer has begun to listen to the audio with
     // the intention of recognizing.
@@ -91,7 +100,7 @@ public:
     virtual void didEnd(const WebSpeechRecognitionHandle&) = 0;
 
 protected:
-    virtual ~WebSpeechRecognizerClient() {}
+    virtual ~WebSpeechRecognizerClient() { }
 };
 
 } // namespace blink

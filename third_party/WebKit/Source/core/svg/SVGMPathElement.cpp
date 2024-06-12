@@ -17,11 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGMPathElement.h"
 
-#include "core/XLinkNames.h"
 #include "core/dom/Document.h"
 #include "core/svg/SVGAnimateMotionElement.h"
 #include "core/svg/SVGDocumentExtensions.h"
@@ -33,6 +30,7 @@ inline SVGMPathElement::SVGMPathElement(Document& document)
     : SVGElement(SVGNames::mpathTag, document)
     , SVGURIReference(this)
 {
+    ASSERT(RuntimeEnabledFeatures::smilEnabled());
 }
 
 DEFINE_TRACE(SVGMPathElement)
@@ -43,21 +41,17 @@ DEFINE_TRACE(SVGMPathElement)
 
 DEFINE_NODE_FACTORY(SVGMPathElement)
 
-SVGMPathElement::~SVGMPathElement()
-{
-#if !ENABLE(OILPAN)
-    clearResourceReferences();
-#endif
-}
+SVGMPathElement::~SVGMPathElement() { }
 
 void SVGMPathElement::buildPendingResource()
 {
     clearResourceReferences();
-    if (!inDocument())
+    if (!isConnected())
         return;
 
     AtomicString id;
-    Element* target = SVGURIReference::targetElementFromIRIString(hrefString(), treeScope(), &id);
+    Element* target = SVGURIReference::targetElementFromIRIString(
+        hrefString(), treeScope(), &id);
     if (!target) {
         // Do not register as pending if we are already pending this resource.
         if (document().accessSVGExtensions().isElementPendingResource(this, id))
@@ -68,8 +62,9 @@ void SVGMPathElement::buildPendingResource()
             ASSERT(hasPendingResources());
         }
     } else if (isSVGPathElement(target)) {
-        // Register us with the target in the dependencies map. Any change of hrefElement
-        // that leads to relayout/repainting now informs us, so we can react to it.
+        // Register us with the target in the dependencies map. Any change of
+        // hrefElement that leads to relayout/repainting now informs us, so we can
+        // react to it.
         addReferenceTo(toSVGElement(target));
     }
 
@@ -81,10 +76,11 @@ void SVGMPathElement::clearResourceReferences()
     removeAllOutgoingReferences();
 }
 
-Node::InsertionNotificationRequest SVGMPathElement::insertedInto(ContainerNode* rootParent)
+Node::InsertionNotificationRequest SVGMPathElement::insertedInto(
+    ContainerNode* rootParent)
 {
     SVGElement::insertedInto(rootParent);
-    if (rootParent->inDocument())
+    if (rootParent->isConnected())
         buildPendingResource();
     return InsertionDone;
 }
@@ -93,7 +89,7 @@ void SVGMPathElement::removedFrom(ContainerNode* rootParent)
 {
     SVGElement::removedFrom(rootParent);
     notifyParentOfPathChange(rootParent);
-    if (rootParent->inDocument())
+    if (rootParent->isConnected())
         clearResourceReferences();
 }
 

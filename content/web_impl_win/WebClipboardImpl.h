@@ -7,6 +7,7 @@
 
 #include "base/compiler_specific.h"
 #include "third_party/WebKit/public/platform/WebClipboard.h"
+#include "third_party/WebKit/public/platform/WebBlobInfo.h"
 
 namespace blink {
 class IntSize;
@@ -42,9 +43,8 @@ class WebClipboardImpl : public blink::WebClipboard {
          blink::WebURL* source_url,
          unsigned* fragment_start,
          unsigned* fragment_end) override;
-     blink::WebData readImage(blink::WebClipboard::Buffer buffer) override;
-     blink::WebString readCustomData(blink::WebClipboard::Buffer buffer,
-         const blink::WebString& type) override;
+     blink::WebBlobInfo readImage(blink::WebClipboard::Buffer buffer) override;
+     blink::WebString readCustomData(blink::WebClipboard::Buffer buffer, const blink::WebString& type) override;
 
      void writePlainText(const blink::WebString& plain_text) override;
      void writeHTML(const blink::WebString& htmlText, const blink::WebURL& sourceUrl, const blink::WebString& plainText, bool writeSmartPaste) override;
@@ -63,7 +63,7 @@ private:
     HWND getClipboardWindow();
     void readAvailableTypes(ClipboardType type, Vector<blink::WebString>* types, bool* containsFilenames) const;
     void writeToClipboardInternal(unsigned int format, HANDLE handle);
-    void writeTextInternal(String string);
+    void writeTextInternal(const String& string);
 
     HWND m_clipboardOwner;
 };

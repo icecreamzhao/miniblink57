@@ -46,17 +46,17 @@
 #ifndef RESBUND_H
 #define RESBUND_H
 
-#include "unicode/utypes.h"
+#include "unicode/locid.h"
+#include "unicode/unistr.h"
 #include "unicode/uobject.h"
 #include "unicode/ures.h"
-#include "unicode/unistr.h"
-#include "unicode/locid.h"
+#include "unicode/utypes.h"
 
 /**
  * \file 
  * \brief C++ API: Resource Bundle
  */
- 
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -103,9 +103,9 @@ public:
      * fall back locales could be found.
      * @stable ICU 2.0
      */
-    ResourceBundle(const UnicodeString&    packageName,
-                   const Locale&           locale,
-                   UErrorCode&              err);
+    ResourceBundle(const UnicodeString& packageName,
+        const Locale& locale,
+        UErrorCode& err);
 
     /**
      * Construct a resource bundle for the default bundle in the specified package.
@@ -118,8 +118,8 @@ public:
      * @param err A UErrorCode value
      * @stable ICU 2.0
      */
-    ResourceBundle(const UnicodeString&    packageName,
-                   UErrorCode&              err);
+    ResourceBundle(const UnicodeString& packageName,
+        UErrorCode& err);
 
     /**
      * Construct a resource bundle for the ICU default bundle.
@@ -127,7 +127,7 @@ public:
      * @param err A UErrorCode value
      * @stable ICU 2.0
      */
-    ResourceBundle(UErrorCode &err);
+    ResourceBundle(UErrorCode& err);
 
     /**
      * Standard constructor, onstructs a resource bundle for the locale-specific
@@ -144,8 +144,8 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle(const char* packageName,
-                   const Locale& locale,
-                   UErrorCode& err);
+        const Locale& locale,
+        UErrorCode& err);
 
     /**
      * Copy constructor.
@@ -153,7 +153,7 @@ public:
      * @param original The resource bundle to copy.
      * @stable ICU 2.0
      */
-    ResourceBundle(const ResourceBundle &original);
+    ResourceBundle(const ResourceBundle& original);
 
     /**
      * Constructor from a C UResourceBundle. The resource bundle is
@@ -164,8 +164,8 @@ public:
      * @param status A UErrorCode value.
      * @stable ICU 2.0
      */
-    ResourceBundle(UResourceBundle *res,
-                   UErrorCode &status);
+    ResourceBundle(UResourceBundle* res,
+        UErrorCode& status);
 
     /**
      * Assignment operator.
@@ -174,7 +174,7 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle&
-      operator=(const ResourceBundle& other);
+    operator=(const ResourceBundle& other);
 
     /** Destructor.
      * @stable ICU 2.0
@@ -192,7 +192,7 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.8
      */
-    ResourceBundle *clone() const;
+    ResourceBundle* clone() const;
 
     /**
      * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
@@ -205,7 +205,7 @@ public:
      * @stable ICU 2.0
      */
     int32_t
-      getSize(void) const;
+    getSize(void) const;
 
     /**
      * returns a string from a string resource type
@@ -218,7 +218,7 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
-      getString(UErrorCode& status) const;
+    getString(UErrorCode& status) const;
 
     /**
      * returns a binary data from a resource. Can be used at most primitive resource types (binaries,
@@ -233,8 +233,7 @@ public:
      * @stable ICU 2.0
      */
     const uint8_t*
-      getBinary(int32_t& len, UErrorCode& status) const;
-
+    getBinary(int32_t& len, UErrorCode& status) const;
 
     /**
      * returns an integer vector from a resource.
@@ -248,7 +247,7 @@ public:
      * @stable ICU 2.0
      */
     const int32_t*
-      getIntVector(int32_t& len, UErrorCode& status) const;
+    getIntVector(int32_t& len, UErrorCode& status) const;
 
     /**
      * returns an unsigned integer from a resource.
@@ -262,7 +261,7 @@ public:
      * @stable ICU 2.0
      */
     uint32_t
-      getUInt(UErrorCode& status) const;
+    getUInt(UErrorCode& status) const;
 
     /**
      * returns a signed integer from a resource.
@@ -276,7 +275,7 @@ public:
      * @stable ICU 2.0
      */
     int32_t
-      getInt(UErrorCode& status) const;
+    getInt(UErrorCode& status) const;
 
     /**
      * Checks whether the resource has another element to iterate over.
@@ -285,7 +284,7 @@ public:
      * @stable ICU 2.0
      */
     UBool
-      hasNext(void) const;
+    hasNext(void) const;
 
     /**
      * Resets the internal context of a resource so that iteration starts from the first element.
@@ -293,7 +292,7 @@ public:
      * @stable ICU 2.0
      */
     void
-      resetIterator(void);
+    resetIterator(void);
 
     /**
      * Returns the key associated with this resource. Not all the resources have a key - only
@@ -303,7 +302,7 @@ public:
      * @stable ICU 2.0
      */
     const char*
-      getKey(void) const;
+    getKey(void) const;
 
     /**
      * Gets the locale ID of the resource bundle as a string.
@@ -313,8 +312,7 @@ public:
      * @stable ICU 2.0
      */
     const char*
-      getName(void) const;
-
+    getName(void) const;
 
     /**
      * Returns the type of a resource. Available types are defined in enum UResType
@@ -323,7 +321,7 @@ public:
      * @stable ICU 2.0
      */
     UResType
-      getType(void) const;
+    getType(void) const;
 
     /**
      * Returns the next resource in a given resource or NULL if there are no more resources
@@ -333,7 +331,7 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
-      getNext(UErrorCode& status);
+    getNext(UErrorCode& status);
 
     /**
      * Returns the next string in a resource or NULL if there are no more resources
@@ -344,7 +342,7 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
-      getNextString(UErrorCode& status);
+    getNextString(UErrorCode& status);
 
     /**
      * Returns the next string in a resource or NULL if there are no more resources
@@ -356,8 +354,8 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
-      getNextString(const char ** key,
-                    UErrorCode& status);
+    getNextString(const char** key,
+        UErrorCode& status);
 
     /**
      * Returns the resource in a resource at the specified index.
@@ -368,8 +366,8 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
-      get(int32_t index,
-          UErrorCode& status) const;
+    get(int32_t index,
+        UErrorCode& status) const;
 
     /**
      * Returns the string in a given resource at the specified index.
@@ -380,8 +378,8 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
-      getStringEx(int32_t index,
-                  UErrorCode& status) const;
+    getStringEx(int32_t index,
+        UErrorCode& status) const;
 
     /**
      * Returns a resource in a resource that has a given key. This procedure works only with table
@@ -393,8 +391,8 @@ public:
      * @stable ICU 2.0
      */
     ResourceBundle
-      get(const char* key,
-          UErrorCode& status) const;
+    get(const char* key,
+        UErrorCode& status) const;
 
     /**
      * Returns a string in a resource that has a given key. This procedure works only with table
@@ -406,8 +404,8 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString
-      getStringEx(const char* key,
-                  UErrorCode& status) const;
+    getStringEx(const char* key,
+        UErrorCode& status) const;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -420,8 +418,8 @@ public:
      * @deprecated ICU 2.8 Use getVersion instead.
      */
     const char*
-      getVersionNumber(void) const;
-#endif  /* U_HIDE_DEPRECATED_API */
+    getVersionNumber(void) const;
+#endif /* U_HIDE_DEPRECATED_API */
 
     /**
      * Return the version number associated with this ResourceBundle as a UVersionInfo array.
@@ -431,7 +429,7 @@ public:
      * @stable ICU 2.0
      */
     void
-      getVersion(UVersionInfo versionInfo) const;
+    getVersion(UVersionInfo versionInfo) const;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -441,8 +439,8 @@ public:
      * @deprecated ICU 2.8 Use getLocale(ULocDataLocaleType type, UErrorCode &status) overload instead.
      */
     const Locale&
-      getLocale(void) const;
-#endif  /* U_HIDE_DEPRECATED_API */
+    getLocale(void) const;
+#endif /* U_HIDE_DEPRECATED_API */
 
     /**
      * Return the Locale associated with this ResourceBundle.
@@ -455,15 +453,15 @@ public:
      * @stable ICU 2.8
      */
     const Locale
-      getLocale(ULocDataLocaleType type, UErrorCode &status) const;
+    getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 #ifndef U_HIDE_INTERNAL_API
     /**
      * This API implements multilevel fallback
      * @internal
      */
     ResourceBundle
-        getWithFallback(const char* key, UErrorCode& status);
-#endif  /* U_HIDE_INTERNAL_API */
+    getWithFallback(const char* key, UErrorCode& status);
+#endif /* U_HIDE_INTERNAL_API */
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -481,9 +479,9 @@ public:
 private:
     ResourceBundle(); // default constructor not implemented
 
-    UResourceBundle *fResource;
+    UResourceBundle* fResource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
-    Locale *fLocale;
+    Locale* fLocale;
 };
 
 U_NAMESPACE_END

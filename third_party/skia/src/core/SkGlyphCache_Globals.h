@@ -14,60 +14,57 @@
 #include "SkTLS.h"
 
 #ifndef SK_DEFAULT_FONT_CACHE_COUNT_LIMIT
-    #define SK_DEFAULT_FONT_CACHE_COUNT_LIMIT   2048
+#define SK_DEFAULT_FONT_CACHE_COUNT_LIMIT 2048
 #endif
 
 #ifndef SK_DEFAULT_FONT_CACHE_LIMIT
-    #define SK_DEFAULT_FONT_CACHE_LIMIT     (2 * 1024 * 1024)
+#define SK_DEFAULT_FONT_CACHE_LIMIT (2 * 1024 * 1024)
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
 class SkGlyphCache_Globals {
 public:
-    SkGlyphCache_Globals() {
-        fHead = NULL;
+    SkGlyphCache_Globals()
+    {
+        fHead = nullptr;
         fTotalMemoryUsed = 0;
         fCacheSizeLimit = SK_DEFAULT_FONT_CACHE_LIMIT;
         fCacheCount = 0;
         fCacheCountLimit = SK_DEFAULT_FONT_CACHE_COUNT_LIMIT;
     }
 
-    ~SkGlyphCache_Globals() {
+    ~SkGlyphCache_Globals()
+    {
         SkGlyphCache* cache = fHead;
         while (cache) {
             SkGlyphCache* next = cache->fNext;
-            SkDELETE(cache);
+            delete cache;
             cache = next;
         }
     }
 
-    SkSpinlock     fLock;
+    mutable SkSpinlock fLock;
 
     SkGlyphCache* internalGetHead() const { return fHead; }
     SkGlyphCache* internalGetTail() const;
 
-    size_t getTotalMemoryUsed() const { return fTotalMemoryUsed; }
-    int getCacheCountUsed() const { return fCacheCount; }
+    size_t getTotalMemoryUsed() const;
+    int getCacheCountUsed() const;
 
 #ifdef SK_DEBUG
     void validate() const;
 #else
-    void validate() const {}
+    void validate() const
+    {
+    }
 #endif
 
-    int getCacheCountLimit() const { return fCacheCountLimit; }
+    int getCacheCountLimit() const;
     int setCacheCountLimit(int limit);
 
-    size_t  getCacheSizeLimit() const { return fCacheSizeLimit; }
-    size_t  setCacheSizeLimit(size_t limit);
-
-    // returns true if this cache is over-budget either due to size limit
-    // or count limit.
-    bool isOverBudget() const {
-        return fCacheCount > fCacheCountLimit ||
-               fTotalMemoryUsed > fCacheSizeLimit;
-    }
+    size_t getCacheSizeLimit() const;
+    size_t setCacheSizeLimit(size_t limit);
 
     void purgeAll(); // does not change budget
 
@@ -80,8 +77,8 @@ public:
 
 private:
     SkGlyphCache* fHead;
-    size_t  fTotalMemoryUsed;
-    size_t  fCacheSizeLimit;
+    size_t fTotalMemoryUsed;
+    size_t fCacheSizeLimit;
     int32_t fCacheCountLimit;
     int32_t fCacheCount;
 

@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-
 #include "public/web/WebSelection.h"
 
 #include "core/editing/SelectionType.h"
@@ -11,18 +9,22 @@
 
 namespace blink {
 
-static WebSelectionBound getWebSelectionBound(const CompositedSelection& selection, bool isStart)
+static WebSelectionBound getWebSelectionBound(
+    const CompositedSelection& selection,
+    bool isStart)
 {
-    ASSERT(selection.type != NoSelection);
+    DCHECK_NE(selection.type, NoSelection);
     const CompositedSelectionBound& bound = isStart ? selection.start : selection.end;
-    ASSERT(bound.layer);
+    DCHECK(bound.layer);
 
     WebSelectionBound::Type type = WebSelectionBound::Caret;
     if (selection.type == RangeSelection) {
         if (isStart)
-            type = bound.isTextDirectionRTL ? WebSelectionBound::SelectionRight : WebSelectionBound::SelectionLeft;
+            type = bound.isTextDirectionRTL ? WebSelectionBound::SelectionRight
+                                            : WebSelectionBound::SelectionLeft;
         else
-            type = bound.isTextDirectionRTL ? WebSelectionBound::SelectionLeft : WebSelectionBound::SelectionRight;
+            type = bound.isTextDirectionRTL ? WebSelectionBound::SelectionLeft
+                                            : WebSelectionBound::SelectionRight;
     }
 
     WebSelectionBound result(type);
@@ -33,13 +35,14 @@ static WebSelectionBound getWebSelectionBound(const CompositedSelection& selecti
     return result;
 }
 
-// SelectionType enums have the same values; enforced in AssertMatchingEnums.cpp.
+// SelectionType enums have the same values; enforced in
+// AssertMatchingEnums.cpp.
 WebSelection::WebSelection(const CompositedSelection& selection)
     : m_selectionType(static_cast<WebSelection::SelectionType>(selection.type))
     , m_start(getWebSelectionBound(selection, true))
     , m_end(getWebSelectionBound(selection, false))
     , m_isEditable(selection.isEditable)
-    , m_isEmptyTextFormControl(selection.isEmptyTextFormControl)
+    , m_isEmptyTextControl(selection.isEmptyTextControl)
 {
 }
 
@@ -48,7 +51,7 @@ WebSelection::WebSelection(const WebSelection& other)
     , m_start(other.m_start)
     , m_end(other.m_end)
     , m_isEditable(other.m_isEditable)
-    , m_isEmptyTextFormControl(other.m_isEmptyTextFormControl)
+    , m_isEmptyTextControl(other.m_isEmptyTextControl)
 {
 }
 

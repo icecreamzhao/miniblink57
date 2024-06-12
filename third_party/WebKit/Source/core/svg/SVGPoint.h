@@ -31,6 +31,7 @@
 #ifndef SVGPoint_h
 #define SVGPoint_h
 
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 #include "platform/geometry/FloatPoint.h"
 
@@ -39,21 +40,18 @@ namespace blink {
 class AffineTransform;
 class SVGPointTearOff;
 
-class SVGPoint : public SVGPropertyHelper<SVGPoint> {
+class SVGPoint final : public SVGPropertyHelper<SVGPoint> {
 public:
     typedef SVGPointTearOff TearOffType;
 
-    static PassRefPtrWillBeRawPtr<SVGPoint> create()
+    static SVGPoint* create() { return new SVGPoint(); }
+
+    static SVGPoint* create(const FloatPoint& point)
     {
-        return adoptRefWillBeNoop(new SVGPoint());
+        return new SVGPoint(point);
     }
 
-    static PassRefPtrWillBeRawPtr<SVGPoint> create(const FloatPoint& point)
-    {
-        return adoptRefWillBeNoop(new SVGPoint(point));
-    }
-
-    PassRefPtrWillBeRawPtr<SVGPoint> clone() const;
+    SVGPoint* clone() const;
 
     const FloatPoint& value() const { return m_value; }
     void setValue(const FloatPoint& value) { m_value = value; }
@@ -66,11 +64,18 @@ public:
     FloatPoint matrixTransform(const AffineTransform&) const;
 
     String valueAsString() const override;
-    void setValueAsString(const String&, ExceptionState&);
+    SVGParsingError setValueAsString(const String&);
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement* contextElement) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float percentage,
+        unsigned repeatCount,
+        SVGPropertyBase* from,
+        SVGPropertyBase* to,
+        SVGPropertyBase* toAtEndOfDurationValue,
+        SVGElement* contextElement) override;
+    float calculateDistance(SVGPropertyBase* to,
+        SVGElement* contextElement) override;
 
     static AnimatedPropertyType classType() { return AnimatedPoint; }
 
@@ -78,18 +83,13 @@ private:
     SVGPoint();
     explicit SVGPoint(const FloatPoint&);
 
-    template<typename CharType>
-    void parse(const CharType*& ptr, const CharType* end, ExceptionState&);
+    template <typename CharType>
+    SVGParsingError parse(const CharType*& ptr, const CharType* end);
 
     FloatPoint m_value;
 };
 
-inline PassRefPtrWillBeRawPtr<SVGPoint> toSVGPoint(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
-{
-    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
-    ASSERT(base->type() == SVGPoint::classType());
-    return static_pointer_cast<SVGPoint>(base.release());
-}
+DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGPoint);
 
 } // namespace blink
 

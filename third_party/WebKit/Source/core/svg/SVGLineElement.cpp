@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGLineElement.h"
 
 #include "core/layout/svg/LayoutSVGShape.h"
@@ -28,10 +27,19 @@ namespace blink {
 
 inline SVGLineElement::SVGLineElement(Document& document)
     : SVGGeometryElement(SVGNames::lineTag, document)
-    , m_x1(SVGAnimatedLength::create(this, SVGNames::x1Attr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
-    , m_y1(SVGAnimatedLength::create(this, SVGNames::y1Attr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
-    , m_x2(SVGAnimatedLength::create(this, SVGNames::x2Attr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
-    , m_y2(SVGAnimatedLength::create(this, SVGNames::y2Attr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
+    , m_x1(SVGAnimatedLength::create(this,
+          SVGNames::x1Attr,
+          SVGLength::create(SVGLengthMode::Width)))
+    , m_y1(SVGAnimatedLength::create(this,
+          SVGNames::y1Attr,
+          SVGLength::create(SVGLengthMode::Height)))
+    , m_x2(SVGAnimatedLength::create(this,
+          SVGNames::x2Attr,
+          SVGLength::create(SVGLengthMode::Width)))
+    , m_y2(
+          SVGAnimatedLength::create(this,
+              SVGNames::y2Attr,
+              SVGLength::create(SVGLengthMode::Height)))
 {
     addToPropertyMap(m_x1);
     addToPropertyMap(m_y1);
@@ -55,18 +63,17 @@ Path SVGLineElement::asPath() const
     Path path;
 
     SVGLengthContext lengthContext(this);
-    path.moveTo(FloatPoint(x1()->currentValue()->value(lengthContext), y1()->currentValue()->value(lengthContext)));
-    path.addLineTo(FloatPoint(x2()->currentValue()->value(lengthContext), y2()->currentValue()->value(lengthContext)));
+    path.moveTo(FloatPoint(x1()->currentValue()->value(lengthContext),
+        y1()->currentValue()->value(lengthContext)));
+    path.addLineTo(FloatPoint(x2()->currentValue()->value(lengthContext),
+        y2()->currentValue()->value(lengthContext)));
 
     return path;
 }
 
 void SVGLineElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    if (attrName == SVGNames::x1Attr
-        || attrName == SVGNames::y1Attr
-        || attrName == SVGNames::x2Attr
-        || attrName == SVGNames::y2Attr) {
+    if (attrName == SVGNames::x1Attr || attrName == SVGNames::y1Attr || attrName == SVGNames::x2Attr || attrName == SVGNames::y2Attr) {
         updateRelativeLengthsInformation();
 
         LayoutSVGShape* layoutObject = toLayoutSVGShape(this->layoutObject());
@@ -84,10 +91,7 @@ void SVGLineElement::svgAttributeChanged(const QualifiedName& attrName)
 
 bool SVGLineElement::selfHasRelativeLengths() const
 {
-    return m_x1->currentValue()->isRelative()
-        || m_y1->currentValue()->isRelative()
-        || m_x2->currentValue()->isRelative()
-        || m_y2->currentValue()->isRelative();
+    return m_x1->currentValue()->isRelative() || m_y1->currentValue()->isRelative() || m_x2->currentValue()->isRelative() || m_y2->currentValue()->isRelative();
 }
 
 } // namespace blink

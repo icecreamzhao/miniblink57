@@ -7,7 +7,7 @@
 
 #include <windows.h>
 
-#include "v8config.h"  // NOLINT(build/include)
+#include "v8config.h" // NOLINT(build/include)
 
 namespace v8 {
 /**
@@ -24,5 +24,5 @@ namespace v8 {
  */
 V8_EXPORT bool TryHandleWebAssemblyTrapWindows(EXCEPTION_POINTERS* exception);
 
-}  // namespace v8
-#endif  // V8_WASM_TRAP_HANDLER_WIN_H_
+} // namespace v8
+#endif // V8_WASM_TRAP_HANDLER_WIN_H_

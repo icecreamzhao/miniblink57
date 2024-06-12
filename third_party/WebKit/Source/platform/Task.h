@@ -40,8 +40,8 @@ namespace blink {
 
 class Task : public WebThread::Task {
 public:
-    explicit Task(PassOwnPtr<Closure> closure)
-        : m_closure(closure)
+    explicit Task(std::unique_ptr<WTF::Closure> closure)
+        : m_closure(std::move(closure))
     {
     }
 
@@ -51,7 +51,7 @@ public:
     }
 
 private:
-    OwnPtr<Closure> m_closure;
+    std::unique_ptr<WTF::Closure> m_closure;
 };
 
 } // namespace blink

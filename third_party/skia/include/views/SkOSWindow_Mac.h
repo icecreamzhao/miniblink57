@@ -15,24 +15,29 @@ class SkOSWindow : public SkWindow {
 public:
     SkOSWindow(void* hwnd);
     ~SkOSWindow();
-    void*   getHWND() const { return fHWND; }
+    void* getHWND() const { return fHWND; }
 
     virtual bool onDispatchClick(int x, int y, Click::State state,
-                                 void* owner, unsigned modi);
+        void* owner, unsigned modi);
     enum SkBackEndTypes {
         kNone_BackEndType,
 #if SK_SUPPORT_GPU
         kNativeGL_BackEndType,
 #endif
+#if SK_ANGLE
+        kANGLE_BackEndType,
+#endif // SK_ANGLE
     };
 
-    void    detach();
-    bool    attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo*);
-    void    present();
+    void release();
+    bool attach(SkBackEndTypes attachType, int msaaSampleCount, bool deepColor,
+        AttachmentInfo*);
+    void present();
 
-    bool    makeFullscreen();
-    void    closeWindow();
-    void    setVsync(bool);
+    bool makeFullscreen();
+    void closeWindow();
+    void setVsync(bool);
+
 protected:
     // overrides from SkEventSink
     virtual bool onEvent(const SkEvent& evt);
@@ -44,11 +49,11 @@ protected:
     virtual void onSetTitle(const char[]);
 
 private:
-    void*   fHWND;
-    bool    fInvalEventIsPending;
-    void*   fNotifier;
+    void* fHWND;
+    bool fInvalEventIsPending;
+    void* fNotifier;
 #if SK_SUPPORT_GPU
-    void*   fGLContext;
+    void* fGLContext;
 #endif
     typedef SkWindow INHERITED;
 };

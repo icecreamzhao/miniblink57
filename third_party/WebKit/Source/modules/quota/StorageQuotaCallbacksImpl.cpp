@@ -28,32 +28,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/quota/StorageQuotaCallbacksImpl.h"
 
-#include "core/dom/DOMError.h"
-#include "core/dom/ExceptionCode.h"
+#include "modules/quota/DOMError.h"
 #include "modules/quota/StorageInfo.h"
 
 namespace blink {
 
-StorageQuotaCallbacksImpl::StorageQuotaCallbacksImpl(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+StorageQuotaCallbacksImpl::StorageQuotaCallbacksImpl(
+    ScriptPromiseResolver* resolver)
     : m_resolver(resolver)
 {
 }
 
-StorageQuotaCallbacksImpl::~StorageQuotaCallbacksImpl()
+StorageQuotaCallbacksImpl::~StorageQuotaCallbacksImpl() { }
+
+void StorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(
+    unsigned long long usageInBytes,
+    unsigned long long quotaInBytes)
 {
+    StorageInfo info;
+    info.setUsage(usageInBytes);
+    info.setQuota(quotaInBytes);
+    m_resolver->resolve(info);
 }
 
-void StorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes)
+void StorageQuotaCallbacksImpl::didGrantStorageQuota(
+    unsigned long long usageInBytes,
+    unsigned long long grantedQuotaInBytes)
 {
-    m_resolver->resolve(StorageInfo::create(usageInBytes, quotaInBytes));
-}
-
-void StorageQuotaCallbacksImpl::didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes)
-{
-    m_resolver->resolve(StorageInfo::create(usageInBytes, grantedQuotaInBytes));
+    StorageInfo info;
+    info.setUsage(usageInBytes);
+    info.setQuota(grantedQuotaInBytes);
+    m_resolver->resolve(info);
 }
 
 void StorageQuotaCallbacksImpl::didFail(WebStorageQuotaError error)

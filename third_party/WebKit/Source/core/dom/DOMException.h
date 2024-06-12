@@ -31,27 +31,41 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
+#include "core/dom/ExceptionCode.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-typedef int ExceptionCode;
-
-class CORE_EXPORT DOMException final : public GarbageCollectedFinalized<DOMException>, public ScriptWrappable {
+class CORE_EXPORT DOMException final
+    : public GarbageCollectedFinalized<DOMException>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static DOMException* create(ExceptionCode, const String& sanitizedMessage = String(), const String& unsanitizedMessage = String());
+    static DOMException* create(ExceptionCode,
+        const String& sanitizedMessage = String(),
+        const String& unsanitizedMessage = String());
+
+    // Constructor exposed to script.
+    static DOMException* create(const String& message, const String& name);
 
     unsigned short code() const { return m_code; }
     String name() const { return m_name; }
 
-    // This is the message that's exposed to JavaScript: never return unsanitized data.
+    // This is the message that's exposed to JavaScript: never return unsanitized
+    // data.
     String message() const { return m_sanitizedMessage; }
     String toString() const;
 
-    // This is the message that's exposed to the console: if an unsanitized message is present, we prefer it.
-    String messageForConsole() const { return !m_unsanitizedMessage.isEmpty() ? m_unsanitizedMessage : m_sanitizedMessage; }
+    // This is the message that's exposed to the console: if an unsanitized
+    // message is present, we prefer it.
+    String messageForConsole() const
+    {
+        return !m_unsanitizedMessage.isEmpty() ? m_unsanitizedMessage
+                                               : m_sanitizedMessage;
+    }
     String toStringForConsole() const;
 
     static String getErrorName(ExceptionCode);
@@ -60,7 +74,10 @@ public:
     DEFINE_INLINE_TRACE() { }
 
 private:
-    DOMException(unsigned short m_code, const String& name, const String& sanitizedMessage, const String& unsanitizedMessage);
+    DOMException(unsigned short m_code,
+        const String& name,
+        const String& sanitizedMessage,
+        const String& unsanitizedMessage);
 
     unsigned short m_code;
     String m_name;

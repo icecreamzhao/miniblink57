@@ -23,25 +23,30 @@
 #ifndef FEComposite_h
 #define FEComposite_h
 
-#include "SkXfermode.h"
+#include "SkBlendMode.h"
 #include "platform/graphics/filters/FilterEffect.h"
 
 namespace blink {
 
 enum CompositeOperationType {
-    FECOMPOSITE_OPERATOR_UNKNOWN    = 0,
-    FECOMPOSITE_OPERATOR_OVER       = 1,
-    FECOMPOSITE_OPERATOR_IN         = 2,
-    FECOMPOSITE_OPERATOR_OUT        = 3,
-    FECOMPOSITE_OPERATOR_ATOP       = 4,
-    FECOMPOSITE_OPERATOR_XOR        = 5,
+    FECOMPOSITE_OPERATOR_UNKNOWN = 0,
+    FECOMPOSITE_OPERATOR_OVER = 1,
+    FECOMPOSITE_OPERATOR_IN = 2,
+    FECOMPOSITE_OPERATOR_OUT = 3,
+    FECOMPOSITE_OPERATOR_ATOP = 4,
+    FECOMPOSITE_OPERATOR_XOR = 5,
     FECOMPOSITE_OPERATOR_ARITHMETIC = 6,
-    FECOMPOSITE_OPERATOR_LIGHTER    = 7
+    FECOMPOSITE_OPERATOR_LIGHTER = 7
 };
 
-class PLATFORM_EXPORT FEComposite : public FilterEffect {
+class PLATFORM_EXPORT FEComposite final : public FilterEffect {
 public:
-    static PassRefPtrWillBeRawPtr<FEComposite> create(Filter*, const CompositeOperationType&, float, float, float, float);
+    static FEComposite* create(Filter*,
+        const CompositeOperationType&,
+        float,
+        float,
+        float,
+        float);
 
     CompositeOperationType operation() const;
     bool setOperation(CompositeOperationType);
@@ -58,20 +63,30 @@ public:
     float k4() const;
     bool setK4(float);
 
-    FloatRect determineAbsolutePaintRect(const FloatRect& requestedRect) override;
-
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
-    PassRefPtr<SkImageFilter> createImageFilterWithoutValidation(SkiaImageFilterBuilder*) override;
-
 protected:
-    bool mayProduceInvalidPreMultipliedPixels() override { return m_type == FECOMPOSITE_OPERATOR_ARITHMETIC; }
+    bool mayProduceInvalidPreMultipliedPixels() override
+    {
+        return m_type == FECOMPOSITE_OPERATOR_ARITHMETIC;
+    }
 
 private:
-    FEComposite(Filter*, const CompositeOperationType&, float, float, float, float);
+    FEComposite(Filter*,
+        const CompositeOperationType&,
+        float,
+        float,
+        float,
+        float);
 
-    PassRefPtr<SkImageFilter> createImageFilterInternal(SkiaImageFilterBuilder*, bool requiresPMColorValidation);
+    FloatRect mapInputs(const FloatRect&) const override;
+
+    bool affectsTransparentPixels() const override;
+
+    sk_sp<SkImageFilter> createImageFilter() override;
+    sk_sp<SkImageFilter> createImageFilterWithoutValidation() override;
+    sk_sp<SkImageFilter> createImageFilterInternal(
+        bool requiresPMColorValidation);
 
     CompositeOperationType m_type;
     float m_k1;

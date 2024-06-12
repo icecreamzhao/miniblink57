@@ -45,21 +45,17 @@ class WebSearchableFormData {
 public:
     // If the provided form is suitable for automated searching, isValid()
     // will return false.
-    BLINK_EXPORT WebSearchableFormData(const WebFormElement&, const WebInputElement& selectedInputElement = WebInputElement());
+    BLINK_EXPORT WebSearchableFormData(
+        const WebFormElement&,
+        const WebInputElement& selectedInputElement = WebInputElement());
 
     bool isValid() { return m_url.isValid(); }
 
     // URL for the searchable form request.
-    const WebURL& url() const
-    {
-        return m_url;
-    }
+    const WebURL& url() const { return m_url; }
 
     // Encoding used to encode the form parameters; never empty.
-    const WebString& encoding() const
-    {
-        return m_encoding;
-    }
+    const WebString& encoding() const { return m_encoding; }
 
 private:
     WebURL m_url;

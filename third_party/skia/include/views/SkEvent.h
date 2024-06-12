@@ -12,6 +12,8 @@
 #include "SkMetaData.h"
 #include "SkString.h"
 
+#include "../private/SkLeanWindows.h"
+
 /** Unique 32bit id used to identify an instance of SkEventSink. When events are
     posted, they are posted to a specific sinkID. When it is time to dispatch the
     event, the sinkID is used to find the specific SkEventSink object. If it is found,
@@ -75,7 +77,8 @@ public:
      *  the eventsink matching the targetID (if not 0), or the target proc is
      *  called (if not NULL).
      */
-    SkEvent* setTargetID(SkEventSinkID targetID) {
+    SkEvent* setTargetID(SkEventSinkID targetID)
+    {
         fTargetProc = NULL;
         fTargetID = targetID;
         return this;
@@ -98,7 +101,8 @@ public:
      *  the eventsink matching the targetID (if not 0), or the target proc is
      *  called (if not NULL).
      */
-    SkEvent* setTargetProc(Proc proc) {
+    SkEvent* setTargetProc(Proc proc)
+    {
         fTargetID = 0;
         fTargetProc = proc;
         return this;
@@ -138,7 +142,8 @@ public:
     */
     bool findPtr(const char name[], void** value) const { return fMeta.findPtr(name, value); }
     bool findBool(const char name[], bool* value) const { return fMeta.findBool(name, value); }
-    const void* findData(const char name[], size_t* byteCount = NULL) const {
+    const void* findData(const char name[], size_t* byteCount = NULL) const
+    {
         return fMeta.findData(name, byteCount);
     }
 
@@ -151,7 +156,8 @@ public:
     /** Returns true if ethe event contains the named pointer field, and if it equals the specified value */
     bool hasPtr(const char name[], void* value) const { return fMeta.hasPtr(name, value); }
     bool hasBool(const char name[], bool value) const { return fMeta.hasBool(name, value); }
-    bool hasData(const char name[], const void* data, size_t byteCount) const {
+    bool hasData(const char name[], const void* data, size_t byteCount) const
+    {
         return fMeta.hasData(name, data, byteCount);
     }
 
@@ -168,7 +174,8 @@ public:
     /** Add/replace the named pointer field to the event. There is no XML equivalent for this call */
     void setPtr(const char name[], void* value) { fMeta.setPtr(name, value); }
     void setBool(const char name[], bool value) { fMeta.setBool(name, value); }
-    void setData(const char name[], const void* data, size_t byteCount) {
+    void setData(const char name[], const void* data, size_t byteCount)
+    {
         fMeta.setData(name, data, byteCount);
     }
 
@@ -182,15 +189,16 @@ public:
 
     SkDEBUGCODE(void dump(const char title[] = NULL);)
 
-    ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
 
-    /**
+        /**
      *  Post to the event queue using the event's targetID or target-proc.
      *
      *  The event must be dynamically allocated, as ownership is transferred to
      *  the event queue. It cannot be allocated on the stack or in a global.
      */
-    void post() {
+        void post()
+    {
         return this->postDelay(0);
     }
 
@@ -206,12 +214,19 @@ public:
     /**
      *  Post to the event queue using the event's targetID or target-proc.
      *  The event will be delivered no sooner than the specified millisecond
-     *  time, as measured by SkTime::GetMSecs().
+     *  time, as measured by GetMSecsSinceStartup().
      *
      *  The event must be dynamically allocated, as ownership is transferred to
      *  the event queue. It cannot be allocated on the stack or in a global.
      */
     void postTime(SkMSec time);
+
+    /**
+     *  Returns ~zero the first time it's called, then returns the number of
+     *  milliseconds since the first call. Behavior is undefined if the program
+     *  runs more than ~25 days.
+     */
+    static SkMSec GetMSecsSinceStartup();
 
     ///////////////////////////////////////////////
     /** Porting layer must call these functions **/
@@ -223,7 +238,7 @@ public:
     */
     static void Init();
     /** Global cleanup function for the SkEvent system. Should be called exactly once after
-        all event methods have been called, and should be called before calling SkGraphics::Term().
+        all event methods have been called.
     */
     static void Term();
 
@@ -261,24 +276,24 @@ public:
 #endif
 
 private:
-    SkMetaData      fMeta;
-    mutable char*   fType;  // may be characters with low bit set to know that it is not a pointer
-    uint32_t        f32;
+    SkMetaData fMeta;
+    mutable char* fType; // may be characters with low bit set to know that it is not a pointer
+    uint32_t f32;
 
     // 'there can be only one' (non-zero) between target-id and target-proc
-    SkEventSinkID   fTargetID;
-    Proc            fTargetProc;
+    SkEventSinkID fTargetID;
+    Proc fTargetProc;
 
     // these are for our implementation of the event queue
-    SkMSec          fTime;
-    SkEvent*        fNextEvent; // either in the delay or normal event queue
+    SkMSec fTime;
+    SkEvent* fNextEvent; // either in the delay or normal event queue
 
     void initialize(const char* type, size_t typeLen, SkEventSinkID);
 
     static bool Enqueue(SkEvent* evt);
     static SkMSec EnqueueTime(SkEvent* evt, SkMSec time);
     static SkEvent* Dequeue();
-    static bool     QHasEvents();
+    static bool QHasEvents();
 };
 
 #endif

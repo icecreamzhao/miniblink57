@@ -2,54 +2,65 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/battery/BatteryDispatcher.h"
 
-#include "modules/battery/BatteryStatus.h"
+#include "platform/mojo/MojoHelper.h"
+#include "public/platform/InterfaceProvider.h"
 #include "public/platform/Platform.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
 BatteryDispatcher& BatteryDispatcher::instance()
 {
-    DEFINE_STATIC_LOCAL(Persistent<BatteryDispatcher>, batteryDispatcher, (new BatteryDispatcher()));
-    return *batteryDispatcher;
+    DEFINE_STATIC_LOCAL(BatteryDispatcher, batteryDispatcher,
+        (new BatteryDispatcher));
+    return batteryDispatcher;
 }
 
 BatteryDispatcher::BatteryDispatcher()
+    : m_hasLatestData(false)
 {
 }
 
-BatteryDispatcher::~BatteryDispatcher()
+void BatteryDispatcher::queryNextStatus()
 {
+    m_monitor->QueryNextStatus(convertToBaseCallback(
+        WTF::bind(&BatteryDispatcher::onDidChange, wrapPersistent(this))));
 }
 
-DEFINE_TRACE(BatteryDispatcher)
+void BatteryDispatcher::onDidChange(
+    device::blink::BatteryStatusPtr batteryStatus)
 {
-    visitor->trace(m_batteryStatus);
-    PlatformEventDispatcher::trace(visitor);
+    queryNextStatus();
+
+    DCHECK(batteryStatus);
+
+    updateBatteryStatus(
+        BatteryStatus(batteryStatus->charging, batteryStatus->charging_time,
+            batteryStatus->discharging_time, batteryStatus->level));
 }
 
-void BatteryDispatcher::updateBatteryStatus(const WebBatteryStatus& batteryStatus)
+void BatteryDispatcher::updateBatteryStatus(
+    const BatteryStatus& batteryStatus)
 {
-    m_batteryStatus = BatteryStatus::create(batteryStatus.charging, batteryStatus.chargingTime, batteryStatus.dischargingTime, batteryStatus.level);
+    m_batteryStatus = batteryStatus;
+    m_hasLatestData = true;
     notifyControllers();
-}
-
-BatteryStatus* BatteryDispatcher::latestData()
-{
-    return m_batteryStatus.get();
 }
 
 void BatteryDispatcher::startListening()
 {
-    Platform::current()->startListening(WebPlatformEventBattery, this);
+    DCHECK(!m_monitor.is_bound());
+    Platform::current()->interfaceProvider()->getInterface(
+        mojo::MakeRequest(&m_monitor));
+    queryNextStatus();
 }
 
 void BatteryDispatcher::stopListening()
 {
-    Platform::current()->stopListening(WebPlatformEventBattery);
-    m_batteryStatus.clear();
+    m_monitor.reset();
+    m_hasLatestData = false;
 }
 
 } // namespace blink

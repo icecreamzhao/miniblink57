@@ -30,7 +30,8 @@ namespace blink {
 class SVGPatternElement;
 
 class PatternAttributes final {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     PatternAttributes()
         : m_x(SVGLength::create(SVGLengthMode::Width))
@@ -39,8 +40,8 @@ public:
         , m_height(SVGLength::create(SVGLengthMode::Height))
         , m_viewBox()
         , m_preserveAspectRatio(SVGPreserveAspectRatio::create())
-        , m_patternUnits(SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX)
-        , m_patternContentUnits(SVGUnitTypes::SVG_UNIT_TYPE_USERSPACEONUSE)
+        , m_patternUnits(SVGUnitTypes::kSvgUnitTypeObjectboundingbox)
+        , m_patternContentUnits(SVGUnitTypes::kSvgUnitTypeUserspaceonuse)
         , m_patternContentElement(nullptr)
         , m_xSet(false)
         , m_ySet(false)
@@ -60,31 +61,40 @@ public:
     SVGLength* width() const { return m_width.get(); }
     SVGLength* height() const { return m_height.get(); }
     FloatRect viewBox() const { return m_viewBox; }
-    SVGPreserveAspectRatio* preserveAspectRatio() const { return m_preserveAspectRatio.get(); }
+    SVGPreserveAspectRatio* preserveAspectRatio() const
+    {
+        return m_preserveAspectRatio.get();
+    }
     SVGUnitTypes::SVGUnitType patternUnits() const { return m_patternUnits; }
-    SVGUnitTypes::SVGUnitType patternContentUnits() const { return m_patternContentUnits; }
+    SVGUnitTypes::SVGUnitType patternContentUnits() const
+    {
+        return m_patternContentUnits;
+    }
     AffineTransform patternTransform() const { return m_patternTransform; }
-    const SVGPatternElement* patternContentElement() const { return m_patternContentElement; }
+    const SVGPatternElement* patternContentElement() const
+    {
+        return m_patternContentElement;
+    }
 
-    void setX(PassRefPtrWillBeRawPtr<SVGLength> value)
+    void setX(SVGLength* value)
     {
         m_x = value;
         m_xSet = true;
     }
 
-    void setY(PassRefPtrWillBeRawPtr<SVGLength> value)
+    void setY(SVGLength* value)
     {
         m_y = value;
         m_ySet = true;
     }
 
-    void setWidth(PassRefPtrWillBeRawPtr<SVGLength> value)
+    void setWidth(SVGLength* value)
     {
         m_width = value;
         m_widthSet = true;
     }
 
-    void setHeight(PassRefPtrWillBeRawPtr<SVGLength> value)
+    void setHeight(SVGLength* value)
     {
         m_height = value;
         m_heightSet = true;
@@ -96,7 +106,7 @@ public:
         m_viewBoxSet = true;
     }
 
-    void setPreserveAspectRatio(PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> value)
+    void setPreserveAspectRatio(SVGPreserveAspectRatio* value)
     {
         m_preserveAspectRatio = value;
         m_preserveAspectRatioSet = true;
@@ -149,16 +159,16 @@ public:
 
 private:
     // Properties
-    RefPtrWillBeMember<SVGLength> m_x;
-    RefPtrWillBeMember<SVGLength> m_y;
-    RefPtrWillBeMember<SVGLength> m_width;
-    RefPtrWillBeMember<SVGLength> m_height;
+    Member<SVGLength> m_x;
+    Member<SVGLength> m_y;
+    Member<SVGLength> m_width;
+    Member<SVGLength> m_height;
     FloatRect m_viewBox;
-    RefPtrWillBeMember<SVGPreserveAspectRatio> m_preserveAspectRatio;
+    Member<SVGPreserveAspectRatio> m_preserveAspectRatio;
     SVGUnitTypes::SVGUnitType m_patternUnits;
     SVGUnitTypes::SVGUnitType m_patternContentUnits;
     AffineTransform m_patternTransform;
-    RawPtrWillBeMember<const SVGPatternElement> m_patternContentElement;
+    Member<const SVGPatternElement> m_patternContentElement;
 
     // Property states
     bool m_xSet : 1;
@@ -173,9 +183,9 @@ private:
     bool m_patternContentElementSet : 1;
 };
 
-#if ENABLE(OILPAN)
 // Wrapper object for the PatternAttributes part object.
-class PatternAttributesWrapper : public GarbageCollectedFinalized<PatternAttributesWrapper> {
+class PatternAttributesWrapper
+    : public GarbageCollected<PatternAttributesWrapper> {
 public:
     static PatternAttributesWrapper* create()
     {
@@ -187,13 +197,10 @@ public:
     DEFINE_INLINE_TRACE() { visitor->trace(m_attributes); }
 
 private:
-    PatternAttributesWrapper()
-    {
-    }
+    PatternAttributesWrapper() { }
 
     PatternAttributes m_attributes;
 };
-#endif
 
 } // namespace blink
 

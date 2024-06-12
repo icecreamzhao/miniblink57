@@ -4,7 +4,7 @@
 
 #ifndef V8_INTL_SUPPORT
 #error Internationalization is expected to be enabled.
-#endif  // V8_INTL_SUPPORT
+#endif // V8_INTL_SUPPORT
 
 #ifndef V8_OBJECTS_JS_COLLATOR_INL_H_
 #define V8_OBJECTS_JS_COLLATOR_INL_H_
@@ -18,16 +18,16 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(JSCollator, JSObject)
+    OBJECT_CONSTRUCTORS_IMPL(JSCollator, JSObject)
 
-ACCESSORS(JSCollator, icu_collator, Managed<icu::Collator>, kICUCollatorOffset)
-ACCESSORS(JSCollator, bound_compare, Object, kBoundCompareOffset)
+    ACCESSORS(JSCollator, icu_collator, Managed<icu::Collator>, kICUCollatorOffset)
+    ACCESSORS(JSCollator, bound_compare, Object, kBoundCompareOffset)
 
-CAST_ACCESSOR(JSCollator)
+    CAST_ACCESSOR(JSCollator)
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_JS_COLLATOR_INL_H_
+#endif // V8_OBJECTS_JS_COLLATOR_INL_H_

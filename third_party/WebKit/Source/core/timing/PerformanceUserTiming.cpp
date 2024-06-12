@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/timing/PerformanceUserTiming.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -31,7 +30,8 @@
 #include "core/timing/PerformanceBase.h"
 #include "core/timing/PerformanceMark.h"
 #include "core/timing/PerformanceMeasure.h"
-#include "platform/TraceEvent.h"
+#include "platform/Histogram.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
 #include "public/platform/Platform.h"
 #include "wtf/text/StringHash.h"
 
@@ -39,61 +39,66 @@ namespace blink {
 
 namespace {
 
-using RestrictedKeyMap = HashMap<String, NavigationTimingFunction>;
+    using RestrictedKeyMap = HashMap<String, NavigationTimingFunction>;
 
-RestrictedKeyMap* createRestrictedKeyMap()
+    RestrictedKeyMap* createRestrictedKeyMap()
+    {
+        RestrictedKeyMap* map = new RestrictedKeyMap();
+        map->add("navigationStart", &PerformanceTiming::navigationStart);
+        map->add("unloadEventStart", &PerformanceTiming::unloadEventStart);
+        map->add("unloadEventEnd", &PerformanceTiming::unloadEventEnd);
+        map->add("redirectStart", &PerformanceTiming::redirectStart);
+        map->add("redirectEnd", &PerformanceTiming::redirectEnd);
+        map->add("fetchStart", &PerformanceTiming::fetchStart);
+        map->add("domainLookupStart", &PerformanceTiming::domainLookupStart);
+        map->add("domainLookupEnd", &PerformanceTiming::domainLookupEnd);
+        map->add("connectStart", &PerformanceTiming::connectStart);
+        map->add("connectEnd", &PerformanceTiming::connectEnd);
+        map->add("secureConnectionStart", &PerformanceTiming::secureConnectionStart);
+        map->add("requestStart", &PerformanceTiming::requestStart);
+        map->add("responseStart", &PerformanceTiming::responseStart);
+        map->add("responseEnd", &PerformanceTiming::responseEnd);
+        map->add("domLoading", &PerformanceTiming::domLoading);
+        map->add("domInteractive", &PerformanceTiming::domInteractive);
+        map->add("domContentLoadedEventStart",
+            &PerformanceTiming::domContentLoadedEventStart);
+        map->add("domContentLoadedEventEnd",
+            &PerformanceTiming::domContentLoadedEventEnd);
+        map->add("domComplete", &PerformanceTiming::domComplete);
+        map->add("loadEventStart", &PerformanceTiming::loadEventStart);
+        map->add("loadEventEnd", &PerformanceTiming::loadEventEnd);
+        return map;
+    }
+
+    const RestrictedKeyMap& restrictedKeyMap()
+    {
+        DEFINE_THREAD_SAFE_STATIC_LOCAL(RestrictedKeyMap, map,
+            createRestrictedKeyMap());
+        return map;
+    }
+
+} // namespace
+
+UserTiming::UserTiming(PerformanceBase& performance)
+    : m_performance(&performance)
 {
-    RestrictedKeyMap* map = new RestrictedKeyMap();
-    map->add("navigationStart", &PerformanceTiming::navigationStart);
-    map->add("unloadEventStart", &PerformanceTiming::unloadEventStart);
-    map->add("unloadEventEnd", &PerformanceTiming::unloadEventEnd);
-    map->add("redirectStart", &PerformanceTiming::redirectStart);
-    map->add("redirectEnd", &PerformanceTiming::redirectEnd);
-    map->add("fetchStart", &PerformanceTiming::fetchStart);
-    map->add("domainLookupStart", &PerformanceTiming::domainLookupStart);
-    map->add("domainLookupEnd", &PerformanceTiming::domainLookupEnd);
-    map->add("connectStart", &PerformanceTiming::connectStart);
-    map->add("connectEnd", &PerformanceTiming::connectEnd);
-    map->add("secureConnectionStart", &PerformanceTiming::secureConnectionStart);
-    map->add("requestStart", &PerformanceTiming::requestStart);
-    map->add("responseStart", &PerformanceTiming::responseStart);
-    map->add("responseEnd", &PerformanceTiming::responseEnd);
-    map->add("domLoading", &PerformanceTiming::domLoading);
-    map->add("domInteractive", &PerformanceTiming::domInteractive);
-    map->add("domContentLoadedEventStart", &PerformanceTiming::domContentLoadedEventStart);
-    map->add("domContentLoadedEventEnd", &PerformanceTiming::domContentLoadedEventEnd);
-    map->add("domComplete", &PerformanceTiming::domComplete);
-    map->add("loadEventStart", &PerformanceTiming::loadEventStart);
-    map->add("loadEventEnd", &PerformanceTiming::loadEventEnd);
-    return map;
 }
 
-const RestrictedKeyMap& restrictedKeyMap()
+static void insertPerformanceEntry(PerformanceEntryMap& performanceEntryMap,
+    PerformanceEntry& entry)
 {
-    AtomicallyInitializedStaticReference(RestrictedKeyMap, map, createRestrictedKeyMap());
-    return map;
-}
-
-} // namespace anonymous
-
-UserTiming::UserTiming(PerformanceBase* performance)
-    : m_performance(performance)
-{
-}
-
-static void insertPerformanceEntry(PerformanceEntryMap& performanceEntryMap, PerformanceEntry* entry)
-{
-    PerformanceEntryMap::iterator it = performanceEntryMap.find(entry->name());
-    if (it != performanceEntryMap.end())
-        it->value.append(entry);
-    else {
+    PerformanceEntryMap::iterator it = performanceEntryMap.find(entry.name());
+    if (it != performanceEntryMap.end()) {
+        it->value.push_back(&entry);
+    } else {
         PerformanceEntryVector vector(1);
-        vector[0] = entry;
-        performanceEntryMap.set(entry->name(), vector);
+        vector[0] = Member<PerformanceEntry>(entry);
+        performanceEntryMap.set(entry.name(), vector);
     }
 }
 
-static void clearPeformanceEntries(PerformanceEntryMap& performanceEntryMap, const String& name)
+static void clearPeformanceEntries(PerformanceEntryMap& performanceEntryMap,
+    const String& name)
 {
     if (name.isNull()) {
         performanceEntryMap.clear();
@@ -104,17 +109,25 @@ static void clearPeformanceEntries(PerformanceEntryMap& performanceEntryMap, con
         performanceEntryMap.remove(name);
 }
 
-void UserTiming::mark(const String& markName, ExceptionState& exceptionState)
+PerformanceEntry* UserTiming::mark(const String& markName,
+    ExceptionState& exceptionState)
 {
     if (restrictedKeyMap().contains(markName)) {
-        exceptionState.throwDOMException(SyntaxError, "'" + markName + "' is part of the PerformanceTiming interface, and cannot be used as a mark name.");
-        return;
+        exceptionState.throwDOMException(
+            SyntaxError, "'" + markName + "' is part of the PerformanceTiming interface, and "
+                                          "cannot be used as a mark name.");
+        return nullptr;
     }
 
     TRACE_EVENT_COPY_MARK("blink.user_timing", markName.utf8().data());
     double startTime = m_performance->now();
-    insertPerformanceEntry(m_marksMap, PerformanceMark::create(markName, startTime));
-    Platform::current()->histogramCustomCounts("PLT.UserTiming_Mark", static_cast<int>(startTime), 0, 600000, 100);
+    PerformanceEntry* entry = PerformanceMark::create(markName, startTime);
+    insertPerformanceEntry(m_marksMap, *entry);
+    DEFINE_THREAD_SAFE_STATIC_LOCAL(
+        CustomCountHistogram, userTimingMarkHistogram,
+        new CustomCountHistogram("PLT.UserTiming_Mark", 0, 600000, 100));
+    userTimingMarkHistogram.count(static_cast<int>(startTime));
+    return entry;
 }
 
 void UserTiming::clearMarks(const String& markName)
@@ -122,43 +135,52 @@ void UserTiming::clearMarks(const String& markName)
     clearPeformanceEntries(m_marksMap, markName);
 }
 
-double UserTiming::findExistingMarkStartTime(const String& markName, ExceptionState& exceptionState)
+double UserTiming::findExistingMarkStartTime(const String& markName,
+    ExceptionState& exceptionState)
 {
     if (m_marksMap.contains(markName))
-        return m_marksMap.get(markName).last()->startTime();
+        return m_marksMap.get(markName).back()->startTime();
 
     if (restrictedKeyMap().contains(markName) && m_performance->timing()) {
-        double value = static_cast<double>((m_performance->timing()->*(restrictedKeyMap().get(markName)))());
+        double value = static_cast<double>(
+            (m_performance->timing()->*(restrictedKeyMap().get(markName)))());
         if (!value) {
-            exceptionState.throwDOMException(InvalidAccessError, "'" + markName + "' is empty: either the event hasn't happened yet, or it would provide cross-origin timing information.");
+            exceptionState.throwDOMException(
+                InvalidAccessError, "'" + markName + "' is empty: either the event hasn't "
+                                                     "happened yet, or it would provide "
+                                                     "cross-origin timing information.");
             return 0.0;
         }
         return value - m_performance->timing()->navigationStart();
     }
 
-    exceptionState.throwDOMException(SyntaxError, "The mark '" + markName + "' does not exist.");
+    exceptionState.throwDOMException(
+        SyntaxError, "The mark '" + markName + "' does not exist.");
     return 0.0;
 }
 
-void UserTiming::measure(const String& measureName, const String& startMark, const String& endMark, ExceptionState& exceptionState)
+PerformanceEntry* UserTiming::measure(const String& measureName,
+    const String& startMark,
+    const String& endMark,
+    ExceptionState& exceptionState)
 {
     double startTime = 0.0;
     double endTime = 0.0;
 
-    if (startMark.isNull())
+    if (startMark.isNull()) {
         endTime = m_performance->now();
-    else if (endMark.isNull()) {
+    } else if (endMark.isNull()) {
         endTime = m_performance->now();
         startTime = findExistingMarkStartTime(startMark, exceptionState);
         if (exceptionState.hadException())
-            return;
+            return nullptr;
     } else {
         endTime = findExistingMarkStartTime(endMark, exceptionState);
         if (exceptionState.hadException())
-            return;
+            return nullptr;
         startTime = findExistingMarkStartTime(startMark, exceptionState);
         if (exceptionState.hadException())
-            return;
+            return nullptr;
     }
 
     // User timing events are stored as integer milliseconds from the start of
@@ -167,12 +189,25 @@ void UserTiming::measure(const String& measureName, const String& startMark, con
     double startTimeMonotonic = m_performance->timeOrigin() + startTime / 1000.0;
     double endTimeMonotonic = m_performance->timeOrigin() + endTime / 1000.0;
 
-    TRACE_EVENT_COPY_NESTABLE_ASYNC_BEGIN_WITH_TIMESTAMP0("blink.user_timing", measureName.utf8().data(), WTF::StringHash::hash(measureName), startTimeMonotonic);
-    TRACE_EVENT_COPY_NESTABLE_ASYNC_END_WITH_TIMESTAMP0("blink.user_timing", measureName.utf8().data(), WTF::StringHash::hash(measureName), endTimeMonotonic);
+    //   TRACE_EVENT_COPY_NESTABLE_ASYNC_BEGIN_WITH_TIMESTAMP0(
+    //       "blink.user_timing", measureName.utf8().data(),
+    //       WTF::StringHash::hash(measureName),
+    //       TraceEvent::toTraceTimestamp(startTimeMonotonic));
+    //   TRACE_EVENT_COPY_NESTABLE_ASYNC_END_WITH_TIMESTAMP0(
+    //       "blink.user_timing", measureName.utf8().data(),
+    //       WTF::StringHash::hash(measureName),
+    //       TraceEvent::toTraceTimestamp(endTimeMonotonic));
 
-    insertPerformanceEntry(m_measuresMap, PerformanceMeasure::create(measureName, startTime, endTime));
-    if (endTime >= startTime)
-        Platform::current()->histogramCustomCounts("PLT.UserTiming_MeasureDuration", static_cast<int>(endTime - startTime), 0, 600000, 100);
+    PerformanceEntry* entry = PerformanceMeasure::create(measureName, startTime, endTime);
+    insertPerformanceEntry(m_measuresMap, *entry);
+    if (endTime >= startTime) {
+        DEFINE_THREAD_SAFE_STATIC_LOCAL(
+            CustomCountHistogram, measureDurationHistogram,
+            new CustomCountHistogram("PLT.UserTiming_MeasureDuration", 0, 600000,
+                100));
+        measureDurationHistogram.count(static_cast<int>(endTime - startTime));
+    }
+    return entry;
 }
 
 void UserTiming::clearMeasures(const String& measureName)
@@ -180,7 +215,8 @@ void UserTiming::clearMeasures(const String& measureName)
     clearPeformanceEntries(m_measuresMap, measureName);
 }
 
-static PerformanceEntryVector convertToEntrySequence(const PerformanceEntryMap& performanceEntryMap)
+static PerformanceEntryVector convertToEntrySequence(
+    const PerformanceEntryMap& performanceEntryMap)
 {
     PerformanceEntryVector entries;
 
@@ -190,7 +226,9 @@ static PerformanceEntryVector convertToEntrySequence(const PerformanceEntryMap& 
     return entries;
 }
 
-static PerformanceEntryVector getEntrySequenceByName(const PerformanceEntryMap& performanceEntryMap, const String& name)
+static PerformanceEntryVector getEntrySequenceByName(
+    const PerformanceEntryMap& performanceEntryMap,
+    const String& name)
 {
     PerformanceEntryVector entries;
 

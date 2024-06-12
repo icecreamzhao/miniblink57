@@ -9,29 +9,35 @@
 #include "SkTSort.h"
 #include "Test.h"
 
+#include <stdlib.h>
+
 extern "C" {
-    static int compare_int(const void* a, const void* b) {
-        return *(const int*)a - *(const int*)b;
-    }
+static int compare_int(const void* a, const void* b)
+{
+    return *(const int*)a - *(const int*)b;
+}
 }
 
-static void rand_array(SkRandom& rand, int array[], int n) {
+static void rand_array(SkRandom& rand, int array[], int n)
+{
     for (int j = 0; j < n; j++) {
         array[j] = rand.nextS() & 0xFF;
     }
 }
 
 static void check_sort(skiatest::Reporter* reporter, const char label[],
-                       const int array[], const int reference[], int n) {
+    const int array[], const int reference[], int n)
+{
     for (int j = 0; j < n; ++j) {
         if (array[j] != reference[j]) {
             ERRORF(reporter, "%sSort [%d] failed %d %d",
-                   label, n, array[j], reference[j]);
+                label, n, array[j], reference[j]);
         }
     }
 }
 
-DEF_TEST(Sort, reporter) {
+DEF_TEST(Sort, reporter)
+{
     /** An array of random numbers to be sorted. */
     int randomArray[500];
     /** The reference sort of the random numbers. */
@@ -39,7 +45,7 @@ DEF_TEST(Sort, reporter) {
     /** The random numbers are copied into this array, sorted by an SkSort,
         then this array is compared against the reference sort. */
     int workingArray[SK_ARRAY_COUNT(randomArray)];
-    SkRandom    rand;
+    SkRandom rand;
 
     for (int i = 0; i < 10000; i++) {
         int count = rand.nextRangeU(1, SK_ARRAY_COUNT(randomArray));

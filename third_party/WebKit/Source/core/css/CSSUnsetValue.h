@@ -12,18 +12,20 @@ namespace blink {
 
 class CSSUnsetValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSUnsetValue> create()
-    {
-        return adoptRefWillBeNoop(new CSSUnsetValue);
-    }
+    static CSSUnsetValue* create();
 
     String customCSSText() const;
 
     bool equals(const CSSUnsetValue&) const { return true; }
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValue::traceAfterDispatch(visitor);
+    }
 
 private:
+    friend class CSSValuePool;
+
     CSSUnsetValue()
         : CSSValue(UnsetClass)
     {

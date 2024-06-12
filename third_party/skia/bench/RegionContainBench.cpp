@@ -10,7 +10,8 @@
 #include "SkRegion.h"
 #include "SkString.h"
 
-static bool sect_proc(SkRegion& a, SkRegion& b) {
+static bool sect_proc(SkRegion& a, SkRegion& b)
+{
     SkRegion result;
     return result.op(a, b, SkRegion::kIntersect_Op);
 }
@@ -19,7 +20,7 @@ class RegionContainBench : public Benchmark {
 public:
     typedef bool (*Proc)(SkRegion& a, SkRegion& b);
     SkRegion fA, fB;
-    Proc     fProc;
+    Proc fProc;
     SkString fName;
 
     enum {
@@ -28,12 +29,14 @@ public:
         COUNT = 10,
     };
 
-    SkIRect randrect(SkRandom& rand, int i) {
+    SkIRect randrect(SkRandom& rand, int i)
+    {
         int w = rand.nextU() % W;
-        return SkIRect::MakeXYWH(0, i*H/COUNT, w, H/COUNT);
+        return SkIRect::MakeXYWH(0, i * H / COUNT, w, H / COUNT);
     }
 
-    RegionContainBench(Proc proc, const char name[])  {
+    RegionContainBench(Proc proc, const char name[])
+    {
         fProc = proc;
         fName.printf("region_contains_%s", name);
 
@@ -45,18 +48,20 @@ public:
         fB.setRect(0, 0, H, W);
     }
 
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
 protected:
     const char* onGetName() override { return fName.c_str(); }
 
-    void onDraw(const int loops, SkCanvas*) override {
+    void onDraw(int loops, SkCanvas*) override
+    {
         Proc proc = fProc;
 
         for (int i = 0; i < loops; ++i) {
-           proc(fA, fB);
+            proc(fA, fB);
         }
     }
 
@@ -64,4 +69,4 @@ private:
     typedef Benchmark INHERITED;
 };
 
-DEF_BENCH( return SkNEW_ARGS(RegionContainBench, (sect_proc, "sect")); )
+DEF_BENCH(return new RegionContainBench(sect_proc, "sect");)

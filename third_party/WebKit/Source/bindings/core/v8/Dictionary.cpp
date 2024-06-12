@@ -23,196 +23,190 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/Dictionary.h"
 
-#include "bindings/core/v8/ArrayValue.h"
-#include "bindings/core/v8/ExceptionMessages.h"
-#include "bindings/core/v8/ExceptionState.h"
-#include "bindings/core/v8/V8ArrayBufferView.h"
-#include "bindings/core/v8/V8Binding.h"
-#include "bindings/core/v8/V8DOMError.h"
-#include "bindings/core/v8/V8Element.h"
-#include "bindings/core/v8/V8EventTarget.h"
-#include "bindings/core/v8/V8MediaKeyError.h"
-#include "bindings/core/v8/V8MessagePort.h"
-#include "bindings/core/v8/V8TextTrack.h"
-#include "bindings/core/v8/V8VoidCallback.h"
-#include "bindings/core/v8/V8Window.h"
-#include "core/html/track/TrackBase.h"
-#include "wtf/MathExtras.h"
+#include "bindings/core/v8/V8ScriptRunner.h"
+#include "bindings/core/v8/V8StringResource.h"
+#include "core/dom/ExecutionContext.h"
 
 namespace blink {
 
-static ExceptionState& emptyExceptionState()
+Dictionary::Dictionary(v8::Isolate* isolate,
+    v8::Local<v8::Value> dictionaryObject,
+    ExceptionState& exceptionState)
+    : m_isolate(isolate)
 {
-    AtomicallyInitializedStaticReference(WTF::ThreadSpecific<NonThrowableExceptionState>, exceptionState, new ThreadSpecific<NonThrowableExceptionState>);
-    return *exceptionState;
+    DCHECK(isolate);
+
+    // https://heycam.github.io/webidl/#es-dictionary
+    // Type of an ECMAScript value must be Undefined, Null or Object.
+    if (dictionaryObject.IsEmpty() || dictionaryObject->IsUndefined()) {
+        m_valueType = ValueType::Undefined;
+        return;
+    }
+    if (dictionaryObject->IsNull()) {
+        m_valueType = ValueType::Null;
+        return;
+    }
+    if (dictionaryObject->IsObject()) {
+        m_valueType = ValueType::Object;
+        m_dictionaryObject = dictionaryObject.As<v8::Object>();
+        return;
+    }
+
+    exceptionState.throwTypeError(
+        "The dictionary provided is neither undefined, null nor an Object.");
 }
 
-Dictionary::Dictionary()
-    : m_isolate(0)
-    , m_exceptionState(&emptyExceptionState())
+bool Dictionary::hasProperty(const StringView& key,
+    ExceptionState& exceptionState) const
 {
-}
-
-Dictionary::Dictionary(const v8::Local<v8::Value>& options, v8::Isolate* isolate, ExceptionState& exceptionState)
-    : m_options(options)
-    , m_isolate(isolate)
-    , m_exceptionState(&exceptionState)
-{
-    ASSERT(m_isolate);
-    ASSERT(m_exceptionState);
-#if ENABLE(ASSERT)
-    m_exceptionState->onStackObjectChecker().add(this);
-#endif
-}
-
-Dictionary::~Dictionary()
-{
-#if ENABLE(ASSERT)
-    if (m_exceptionState)
-        m_exceptionState->onStackObjectChecker().remove(this);
-#endif
-}
-
-Dictionary& Dictionary::operator=(const Dictionary& optionsObject)
-{
-    m_options = optionsObject.m_options;
-    m_isolate = optionsObject.m_isolate;
-#if ENABLE(ASSERT)
-    if (m_exceptionState)
-        m_exceptionState->onStackObjectChecker().remove(this);
-#endif
-    m_exceptionState = optionsObject.m_exceptionState;
-#if ENABLE(ASSERT)
-    if (m_exceptionState)
-        m_exceptionState->onStackObjectChecker().add(this);
-#endif
-    return *this;
-}
-
-bool Dictionary::isObject() const
-{
-    return !isUndefinedOrNull() && m_options->IsObject();
-}
-
-bool Dictionary::isUndefinedOrNull() const
-{
-    if (m_options.IsEmpty())
-        return true;
-    return blink::isUndefinedOrNull(m_options);
-}
-
-bool Dictionary::hasProperty(const String& key) const
-{
-    v8::Local<v8::Object> object;
-    if (!toObject(object))
+    if (m_dictionaryObject.IsEmpty())
         return false;
 
-    ASSERT(m_isolate);
-    ASSERT(m_isolate == v8::Isolate::GetCurrent());
-    ASSERT(m_exceptionState);
-    v8::Local<v8::String> v8Key = v8String(m_isolate, key);
-    return v8CallBoolean(object->Has(v8Context(), v8Key));
-}
-
-bool Dictionary::getKey(const String& key, v8::Local<v8::Value>& value) const
-{
-    v8::Local<v8::Object> object;
-    if (!toObject(object))
+    v8::TryCatch tryCatch(m_isolate);
+    bool hasKey = false;
+    if (!m_dictionaryObject->Has(v8Context(), v8String(m_isolate, key))
+             .To(&hasKey)) {
+        exceptionState.rethrowV8Exception(tryCatch.Exception());
         return false;
+    }
 
-    ASSERT(m_isolate);
-    ASSERT(m_isolate == v8::Isolate::GetCurrent());
-    ASSERT(m_exceptionState);
-    v8::Local<v8::String> v8Key = v8String(m_isolate, key);
-    if (!v8CallBoolean(object->Has(v8Context(), v8Key)))
-        return false;
-    return object->Get(v8Context(), v8Key).ToLocal(&value);
+    return hasKey;
 }
 
-bool Dictionary::get(const String& key, v8::Local<v8::Value>& value) const
+DictionaryIterator Dictionary::getIterator(
+    ExecutionContext* executionContext) const
 {
-    return getKey(key, value);
+    v8::Local<v8::Value> iteratorGetter;
+    if (!getInternal(v8::Symbol::GetIterator(m_isolate), iteratorGetter) || !iteratorGetter->IsFunction())
+        return nullptr;
+    v8::Local<v8::Value> iterator;
+    if (!v8Call(V8ScriptRunner::callFunction(
+                    v8::Local<v8::Function>::Cast(iteratorGetter),
+                    executionContext, m_dictionaryObject, 0, nullptr, m_isolate),
+            iterator))
+        return nullptr;
+    if (!iterator->IsObject())
+        return nullptr;
+    return DictionaryIterator(v8::Local<v8::Object>::Cast(iterator), m_isolate);
 }
 
-bool Dictionary::get(const String& key, Dictionary& value) const
+bool Dictionary::get(const StringView& key, Dictionary& value) const
 {
     v8::Local<v8::Value> v8Value;
-    if (!getKey(key, v8Value))
+    if (!get(key, v8Value))
         return false;
 
     if (v8Value->IsObject()) {
         ASSERT(m_isolate);
         ASSERT(m_isolate == v8::Isolate::GetCurrent());
-        value = Dictionary(v8Value, m_isolate, *m_exceptionState);
+        // TODO(bashi,yukishiino): Should rethrow the exception.
+        // http://crbug.com/666661
+        DummyExceptionStateForTesting exceptionState;
+        value = Dictionary(m_isolate, v8Value, exceptionState);
     }
 
     return true;
 }
 
-static inline bool propertyKey(v8::Local<v8::Context> v8Context, v8::Local<v8::Array> properties, uint32_t index, v8::Local<v8::String>& key)
+bool Dictionary::getInternal(const v8::Local<v8::Value>& key,
+    v8::Local<v8::Value>& result) const
 {
-    v8::Local<v8::Value> property;
-    if (!properties->Get(v8Context, index).ToLocal(&property))
+    if (m_dictionaryObject.IsEmpty())
         return false;
-    return property->ToString(v8Context).ToLocal(&key);
+
+    if (!v8CallBoolean(m_dictionaryObject->Has(v8Context(), key)))
+        return false;
+
+    // Swallow a possible exception in v8::Object::Get().
+    // TODO(bashi,yukishiino): Should rethrow the exception.
+    // http://crbug.com/666661
+    v8::TryCatch tryCatch(isolate());
+    return m_dictionaryObject->Get(v8Context(), key).ToLocal(&result);
 }
 
-bool Dictionary::getOwnPropertiesAsStringHashMap(HashMap<String, String>& hashMap) const
+WARN_UNUSED_RESULT static v8::MaybeLocal<v8::String> getStringValueInArray(
+    v8::Local<v8::Context> context,
+    v8::Local<v8::Array> array,
+    uint32_t index)
 {
-    v8::Local<v8::Object> object;
-    if (!toObject(object))
-        return false;
+    v8::Local<v8::Value> value;
+    if (!array->Get(context, index).ToLocal(&value))
+        return v8::MaybeLocal<v8::String>();
+    return value->ToString(context);
+}
 
-    v8::Local<v8::Array> properties;
-    if (!object->GetOwnPropertyNames(v8Context()).ToLocal(&properties))
-        return false;
-    for (uint32_t i = 0; i < properties->Length(); ++i) {
+HashMap<String, String> Dictionary::getOwnPropertiesAsStringHashMap(
+    ExceptionState& exceptionState) const
+{
+    if (m_dictionaryObject.IsEmpty())
+        return HashMap<String, String>();
+
+    v8::TryCatch tryCatch(isolate());
+    v8::Local<v8::Array> propertyNames;
+    if (!m_dictionaryObject->GetOwnPropertyNames(v8Context())
+             .ToLocal(&propertyNames)) {
+        exceptionState.rethrowV8Exception(tryCatch.Exception());
+        return HashMap<String, String>();
+    }
+
+    HashMap<String, String> ownProperties;
+    for (uint32_t i = 0; i < propertyNames->Length(); ++i) {
         v8::Local<v8::String> key;
-        if (!propertyKey(v8Context(), properties, i, key))
-            continue;
-        if (!v8CallBoolean(object->Has(v8Context(), key)))
-            continue;
+        if (!getStringValueInArray(v8Context(), propertyNames, i).ToLocal(&key)) {
+            exceptionState.rethrowV8Exception(tryCatch.Exception());
+            return HashMap<String, String>();
+        }
+        V8StringResource<> stringKey(key);
+        if (!stringKey.prepare(isolate(), exceptionState))
+            return HashMap<String, String>();
 
         v8::Local<v8::Value> value;
-        if (!object->Get(v8Context(), key).ToLocal(&value))
-            continue;
-        TOSTRING_DEFAULT(V8StringResource<>, stringKey, key, false);
-        TOSTRING_DEFAULT(V8StringResource<>, stringValue, value, false);
+        if (!m_dictionaryObject->Get(v8Context(), key).ToLocal(&value)) {
+            exceptionState.rethrowV8Exception(tryCatch.Exception());
+            return HashMap<String, String>();
+        }
+        V8StringResource<> stringValue(value);
+        if (!stringValue.prepare(isolate(), exceptionState))
+            return HashMap<String, String>();
+
         if (!static_cast<const String&>(stringKey).isEmpty())
-            hashMap.set(stringKey, stringValue);
+            ownProperties.set(stringKey, stringValue);
     }
 
-    return true;
+    return ownProperties;
 }
 
-bool Dictionary::getPropertyNames(Vector<String>& names) const
+Vector<String> Dictionary::getPropertyNames(
+    ExceptionState& exceptionState) const
 {
-    v8::Local<v8::Object> object;
-    if (!toObject(object))
-        return false;
+    if (m_dictionaryObject.IsEmpty())
+        return Vector<String>();
 
-    v8::Local<v8::Array> properties;
-    if (!object->GetPropertyNames(v8Context()).ToLocal(&properties))
-        return false;
-    for (uint32_t i = 0; i < properties->Length(); ++i) {
+    v8::TryCatch tryCatch(isolate());
+    v8::Local<v8::Array> propertyNames;
+    if (!m_dictionaryObject->GetPropertyNames(v8Context())
+             .ToLocal(&propertyNames)) {
+        exceptionState.rethrowV8Exception(tryCatch.Exception());
+        return Vector<String>();
+    }
+
+    Vector<String> names;
+    for (uint32_t i = 0; i < propertyNames->Length(); ++i) {
         v8::Local<v8::String> key;
-        if (!propertyKey(v8Context(), properties, i, key))
-            continue;
-        if (!v8CallBoolean(object->Has(v8Context(), key)))
-            continue;
-        TOSTRING_DEFAULT(V8StringResource<>, stringKey, key, false);
-        names.append(stringKey);
+        if (!getStringValueInArray(v8Context(), propertyNames, i).ToLocal(&key)) {
+            exceptionState.rethrowV8Exception(tryCatch.Exception());
+            return Vector<String>();
+        }
+        V8StringResource<> stringKey(key);
+        if (!stringKey.prepare(isolate(), exceptionState))
+            return Vector<String>();
+
+        names.push_back(stringKey);
     }
 
-    return true;
-}
-
-bool Dictionary::toObject(v8::Local<v8::Object>& object) const
-{
-    return !isUndefinedOrNull() && m_options->ToObject(v8Context()).ToLocal(&object);
+    return names;
 }
 
 } // namespace blink

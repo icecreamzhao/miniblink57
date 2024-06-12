@@ -12,4 +12,4 @@
 #include "src/arm64/macro-assembler-arm64-inl.h"
 #endif
 
-#endif  // V8_MACRO_ASSEMBLER_INL_H_
+#endif // V8_MACRO_ASSEMBLER_INL_H_

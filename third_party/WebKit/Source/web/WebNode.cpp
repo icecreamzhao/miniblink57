@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebNode.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -36,79 +35,32 @@
 #include "core/dom/Element.h"
 #include "core/dom/Node.h"
 #include "core/dom/NodeList.h"
+#include "core/dom/StaticNodeList.h"
 #include "core/dom/TagCollection.h"
-#include "core/editing/markup.h"
+#include "core/dom/TaskRunnerHelper.h"
+#include "core/editing/EditingUtilities.h"
+#include "core/editing/serializers/Serialization.h"
 #include "core/events/Event.h"
 #include "core/html/HTMLCollection.h"
 #include "core/html/HTMLElement.h"
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutPart.h"
-#include "modules/accessibility/AXObject.h"
-#include "modules/accessibility/AXObjectCacheImpl.h"
-#include "platform/Task.h"
+//#include "modules/accessibility/AXObject.h"
+//#include "modules/accessibility/AXObjectCacheImpl.h"
 #include "platform/Widget.h"
 #include "public/platform/WebString.h"
-#include "public/platform/WebSuspendableTask.h"
-#include "public/web/WebAXObject.h"
+//#include "public/web/WebAXObject.h"
 #include "public/web/WebDOMEvent.h"
 #include "public/web/WebDocument.h"
 #include "public/web/WebElement.h"
 #include "public/web/WebElementCollection.h"
-#include "public/web/WebNodeList.h"
 #include "public/web/WebPluginContainer.h"
 #include "web/FrameLoaderClientImpl.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPluginContainerImpl.h"
+#include "wtf/PtrUtil.h"
 
 namespace blink {
-
-namespace {
-
-class NodeDispatchEventTask: public SuspendableTask {
-    WTF_MAKE_NONCOPYABLE(NodeDispatchEventTask);
-public:
-    NodeDispatchEventTask(const WebPrivatePtr<Node>& node, WebDOMEvent event)
-        : m_event(event)
-    {
-        m_node = node;
-    }
-
-    ~NodeDispatchEventTask()
-    {
-        m_node.reset();
-    }
-
-    void run() override
-    {
-        m_node->dispatchEvent(m_event);
-    }
-private:
-    WebPrivatePtr<Node> m_node;
-    WebDOMEvent m_event;
-};
-
-class NodeDispatchSimulatedClickTask: public SuspendableTask {
-    WTF_MAKE_NONCOPYABLE(NodeDispatchSimulatedClickTask);
-public:
-    NodeDispatchSimulatedClickTask(const WebPrivatePtr<Node>& node)
-    {
-        m_node = node;
-    }
-
-    ~NodeDispatchSimulatedClickTask()
-    {
-        m_node.reset();
-    }
-
-    void run() override
-    {
-        m_node->dispatchSimulatedClick(nullptr);
-    }
-private:
-    WebPrivatePtr<Node> m_node;
-};
-
-} // namespace
 
 void WebNode::reset()
 {
@@ -130,19 +82,9 @@ bool WebNode::lessThan(const WebNode& n) const
     return m_private.get() < n.m_private.get();
 }
 
-WebNode::NodeType WebNode::nodeType() const
-{
-    return static_cast<NodeType>(m_private->nodeType());
-}
-
 WebNode WebNode::parentNode() const
 {
     return WebNode(const_cast<ContainerNode*>(m_private->parentNode()));
-}
-
-WebString WebNode::nodeName() const
-{
-    return m_private->nodeName();
 }
 
 WebString WebNode::nodeValue() const
@@ -175,31 +117,6 @@ WebNode WebNode::nextSibling() const
     return WebNode(m_private->nextSibling());
 }
 
-bool WebNode::hasChildNodes() const
-{
-    return m_private->hasChildren();
-}
-
-WebNodeList WebNode::childNodes()
-{
-    return WebNodeList(m_private->childNodes());
-}
-
-WebString WebNode::createMarkup() const
-{
-    return blink::createMarkup(m_private.get());
-}
-
-bool WebNode::isLink() const
-{
-    return m_private->isLink();
-}
-
-bool WebNode::isTextNode() const
-{
-    return m_private->isTextNode();
-}
-
 bool WebNode::isDraggable() const
 {
     Node* n = m_private.get();
@@ -215,25 +132,41 @@ bool WebNode::isDraggable() const
     return DraggableRegionDrag == style->getDraggableRegionMode();
 }
 
+
+bool WebNode::isLink() const
+{
+    return m_private->isLink();
+}
+
+bool WebNode::isTextNode() const
+{
+    return m_private->isTextNode();
+}
+
+bool WebNode::isCommentNode() const
+{
+    return m_private->getNodeType() == Node::kCommentNode;
+}
+
 bool WebNode::isFocusable() const
 {
     if (!m_private->isElementNode())
         return false;
-    m_private->document().updateLayoutIgnorePendingStylesheets();
+    m_private->document().updateStyleAndLayoutIgnorePendingStylesheets();
     return toElement(m_private.get())->isFocusable();
 }
 
 bool WebNode::isContentEditable() const
 {
-    return m_private->isContentEditable();
+    m_private->document().updateStyleAndLayoutTree();
+    return hasEditableStyle(*m_private);
 }
 
 bool WebNode::isInsideFocusableElementOrARIAWidget() const
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    return AXObject::isInsideFocusableElementOrARIAWidget(*this->constUnwrap<Node>());
-#endif // MINIBLINK_NOT_IMPLEMENTED
-    notImplemented();
+    //   return AXObject::isInsideFocusableElementOrARIAWidget(
+    //       *this->constUnwrap<Node>());
+    DebugBreak();
     return false;
 }
 
@@ -242,96 +175,93 @@ bool WebNode::isElementNode() const
     return m_private->isElementNode();
 }
 
-void WebNode::dispatchEvent(const WebDOMEvent& event)
+bool WebNode::isDocumentNode() const
 {
-    if (!event.isNull())
-        m_private->executionContext()->postSuspendableTask(adoptPtr(new NodeDispatchEventTask(m_private, event)));
+    return m_private->isDocumentNode();
+}
+
+bool WebNode::isDocumentTypeNode() const
+{
+    return m_private->getNodeType() == Node::kDocumentTypeNode;
 }
 
 void WebNode::simulateClick()
 {
-    m_private->executionContext()->postSuspendableTask(adoptPtr(new NodeDispatchSimulatedClickTask(m_private)));
+    TaskRunnerHelper::get(TaskType::UserInteraction,
+        m_private->getExecutionContext())
+        ->postTask(
+            FROM_HERE,
+            WTF::bind(&Node::dispatchSimulatedClick,
+                wrapWeakPersistent(m_private.get()), nullptr, SendNoEvents,
+                SimulatedClickCreationScope::FromUserAgent));
 }
 
-WebElementCollection WebNode::getElementsByHTMLTagName(const WebString& tag) const
+WebElementCollection WebNode::getElementsByHTMLTagName(
+    const WebString& tag) const
 {
     if (m_private->isContainerNode())
-        return WebElementCollection(toContainerNode(m_private.get())->getElementsByTagNameNS(HTMLNames::xhtmlNamespaceURI, tag));
+        return WebElementCollection(
+            toContainerNode(m_private.get())
+                ->getElementsByTagNameNS(HTMLNames::xhtmlNamespaceURI, tag));
     return WebElementCollection();
 }
 
-WebElement WebNode::querySelector(const WebString& tag, WebExceptionCode& ec) const
+WebElement WebNode::querySelector(const WebString& selector) const
 {
-    TrackExceptionState exceptionState;
-    WebElement element;
-    if (m_private->isContainerNode())
-        element = toContainerNode(m_private.get())->querySelector(tag, exceptionState);
-    ec = exceptionState.code();
-    return element;
+    if (!m_private->isContainerNode())
+        return WebElement();
+    return toContainerNode(m_private.get())
+        ->querySelector(selector, IGNORE_EXCEPTION_FOR_TESTING);
 }
 
 bool WebNode::focused() const
 {
-    return m_private->focused();
+    return m_private->isFocused();
 }
 
-bool WebNode::remove()
+WebPluginContainer* WebNode::pluginContainerFromNode(const Node* node)
 {
-    TrackExceptionState exceptionState;
-    m_private->remove(exceptionState);
-    return !exceptionState.hadException();
-}
+    if (!node)
+        return nullptr;
 
-bool WebNode::hasNonEmptyBoundingBox() const
-{
-    m_private->document().updateLayoutIgnorePendingStylesheets();
-    return m_private->hasNonEmptyBoundingBox();
-}
+    if (!isHTMLObjectElement(node) && !isHTMLEmbedElement(node))
+        return nullptr;
 
-bool WebNode::containsIncludingShadowDOM(const WebNode& other) const
-{
-    return m_private->containsIncludingShadowDOM(other.m_private.get());
+    LayoutObject* object = node->layoutObject();
+    if (object && object->isLayoutPart()) {
+        Widget* widget = toLayoutPart(object)->widget();
+        if (widget && widget->isPluginContainer())
+            return toWebPluginContainerImpl(widget);
+    }
+
+    return nullptr;
 }
 
 WebPluginContainer* WebNode::pluginContainer() const
 {
-    if (isNull())
-        return 0;
-    const Node& coreNode = *constUnwrap<Node>();
-    if (isHTMLObjectElement(coreNode) || isHTMLEmbedElement(coreNode)) {
-        LayoutObject* object = coreNode.layoutObject();
-        if (object && object->isLayoutPart()) {
-            Widget* widget = toLayoutPart(object)->widget();
-            if (widget && widget->isPluginContainer())
-                return toWebPluginContainerImpl(widget);
-        }
-    }
-    return 0;
+    return pluginContainerFromNode(constUnwrap<Node>());
 }
 
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-WebAXObject WebNode::accessibilityObject()
-{
-    WebDocument webDocument = document();
-    const Document* doc = document().constUnwrap<Document>();
-    AXObjectCacheImpl* cache = toAXObjectCacheImpl(doc->existingAXObjectCache());
-    Node* node = unwrap<Node>();
-    return cache ? WebAXObject(cache->get(node)) : WebAXObject();
-}
-#endif // MINIBLINK_NOT_IMPLEMENTED
+// WebAXObject WebNode::accessibilityObject() {
+//   WebDocument webDocument = document();
+//   const Document* doc = document().constUnwrap<Document>();
+//   AXObjectCacheImpl* cache = toAXObjectCacheImpl(doc->existingAXObjectCache());
+//   Node* node = unwrap<Node>();
+//   return cache ? WebAXObject(cache->get(node)) : WebAXObject();
+// }
 
-WebNode::WebNode(const PassRefPtrWillBeRawPtr<Node>& node)
+WebNode::WebNode(Node* node)
     : m_private(node)
 {
 }
 
-WebNode& WebNode::operator=(const PassRefPtrWillBeRawPtr<Node>& node)
+WebNode& WebNode::operator=(Node* node)
 {
     m_private = node;
     return *this;
 }
 
-WebNode::operator PassRefPtrWillBeRawPtr<Node>() const
+WebNode::operator Node*() const
 {
     return m_private.get();
 }

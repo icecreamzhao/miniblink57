@@ -12,15 +12,15 @@
 namespace gin {
 
 class DebugImpl {
- public:
-  static v8::FunctionEntryHook GetFunctionEntryHook();
-  static v8::JitCodeEventHandler GetJitCodeEventHandler();
+public:
+    static v8::FunctionEntryHook GetFunctionEntryHook();
+    static v8::JitCodeEventHandler GetJitCodeEventHandler();
 #if defined(OS_WIN)
-  static Debug::CodeRangeCreatedCallback GetCodeRangeCreatedCallback();
-  static Debug::CodeRangeDeletedCallback GetCodeRangeDeletedCallback();
+    static Debug::CodeRangeCreatedCallback GetCodeRangeCreatedCallback();
+    static Debug::CodeRangeDeletedCallback GetCodeRangeDeletedCallback();
 #endif
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_PUBLIC_DEBUG_IMPL_H_
+#endif // GIN_PUBLIC_DEBUG_IMPL_H_

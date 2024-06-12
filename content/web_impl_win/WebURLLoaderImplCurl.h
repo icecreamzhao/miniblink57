@@ -34,22 +34,23 @@ public:
         const blink::WebURLRequest& request,
         blink::WebURLResponse& response,
         blink::WebURLError& error,
-        blink::WebData& data) OVERRIDE;
+        blink::WebData& data,
+        int64_t& encodedDataLength,
+        int64_t& encodedBodyLength) override;
     virtual void loadAsynchronously(
         const blink::WebURLRequest& request,
-        blink::WebURLLoaderClient* client) OVERRIDE;
-    virtual void cancel() OVERRIDE;
-    virtual void setDefersLoading(bool value) OVERRIDE;
-    virtual void didChangePriority(blink::WebURLRequest::Priority new_priority,
-        int intra_priority_value) OVERRIDE;
-    virtual bool attachThreadedDataReceiver(
-        blink::WebThreadedDataReceiver* threaded_data_receiver) OVERRIDE;
+        blink::WebURLLoaderClient* client) override;
+    virtual void cancel() override;
+    virtual void setDefersLoading(bool value) override;
+    virtual void didChangePriority(blink::WebURLRequest::Priority new_priority, int intra_priority_value) override;
+    //virtual bool attachThreadedDataReceiver(blink::WebThreadedDataReceiver* threaded_data_receiver) override;
 
     void fileLoadImpl(const blink::KURL& url);
 
     //void fireFailure(blink::Timer<WebURLLoaderImplCurl>*);
    
     //net::WebURLLoaderInternal* loaderInterna() { return m_webURLLoaderInternal; }
+    void setLoadingTaskRunner(base::SingleThreadTaskRunner *) override;
 
 private:
     bool* m_hadDestroied;

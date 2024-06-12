@@ -14,29 +14,35 @@
 namespace blink {
 
 template <typename T>
-class MIDIPortMap : public GarbageCollected<MIDIPortMap<T>>, public Maplike<String, T*> {
+class MIDIPortMap : public GarbageCollected<MIDIPortMap<T>>,
+                    public Maplike<String, T*> {
 public:
-    explicit MIDIPortMap(const HeapVector<Member<T>>& entries) : m_entries(entries) { }
+    explicit MIDIPortMap(const HeapVector<Member<T>>& entries)
+        : m_entries(entries)
+    {
+    }
 
     // IDL attributes / methods
     size_t size() const { return m_entries.size(); }
 
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        visitor->trace(m_entries);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_entries); }
 
 private:
     // We use HeapVector here to keep the entry order.
     using Entries = HeapVector<Member<T>>;
     using IteratorType = typename Entries::const_iterator;
 
-    typename PairIterable<String, T*>::IterationSource* startIteration(ScriptState*, ExceptionState&) override
+    typename PairIterable<String, T*>::IterationSource* startIteration(
+        ScriptState*,
+        ExceptionState&) override
     {
         return new MapIterationSource(this, m_entries.begin(), m_entries.end());
     }
 
-    bool getMapEntry(ScriptState*, const String& key, T*& value, ExceptionState&) override
+    bool getMapEntry(ScriptState*,
+        const String& key,
+        T*& value,
+        ExceptionState&) override
     {
         // FIXME: This function is not O(1). Perhaps it's OK because in typical
         // cases not so many ports are connected.
@@ -51,16 +57,22 @@ private:
 
     // Note: This template class relies on the fact that m_map.m_entries will
     // never be modified once it is created.
-    class MapIterationSource final : public PairIterable<String, T*>::IterationSource {
+    class MapIterationSource final
+        : public PairIterable<String, T*>::IterationSource {
     public:
-        MapIterationSource(MIDIPortMap<T>* map, IteratorType iterator, IteratorType end)
+        MapIterationSource(MIDIPortMap<T>* map,
+            IteratorType iterator,
+            IteratorType end)
             : m_map(map)
             , m_iterator(iterator)
             , m_end(end)
         {
         }
 
-        bool next(ScriptState* scriptState, String& key, T*& value, ExceptionState&) override
+        bool next(ScriptState* scriptState,
+            String& key,
+            T*& value,
+            ExceptionState&) override
         {
             if (m_iterator == m_end)
                 return false;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base">
+      <UniqueIdentifier>{530671C4-A49E-2227-1185-B142528140EB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="base/audio_bus.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/audio_bus.h">
+      <Filter>base</Filter>
+    </None>
+    <CustomBuild Include="base/audio_latency.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/audio_latency.h">
+      <Filter>base</Filter>
+    </None>
+    <CustomBuild Include="base/audio_parameters.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/audio_parameters.h">
+      <Filter>base</Filter>
+    </None>
+    <CustomBuild Include="base/audio_point.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/audio_point.h">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base/audio_sample_types.h">
+      <Filter>base</Filter>
+    </None>
+    <CustomBuild Include="base/channel_layout.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/channel_layout.h">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base/limits.h">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base/media_export.h">
+      <Filter>base</Filter>
+    </None>
+    <CustomBuild Include="base/vector_math.cc">
+      <Filter>base</Filter>
+    </CustomBuild>
+    <None Include="base/vector_math.h">
+      <Filter>base</Filter>
+    </None>
+    <None Include="base/vector_math_testing.h">
+      <Filter>base</Filter>
+    </None>
+  </ItemGroup>
+</Project>

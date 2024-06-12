@@ -5,10 +5,10 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkColorPriv.h"
+#include "gm.h"
 
 /**
  * This GM checks that bitmap pixels are unpremultiplied before being exported
@@ -22,13 +22,15 @@ static const int SLIDE_SIZE = 256;
 static const int PIXEL_SIZE_8888 = SLIDE_SIZE / 256;
 static const int PIXEL_SIZE_4444 = SLIDE_SIZE / 16;
 
-static void init_bitmap(SkColorType ct, SkBitmap* bitmap) {
+static void init_bitmap(SkColorType ct, SkBitmap* bitmap)
+{
     bitmap->allocPixels(SkImageInfo::Make(SLIDE_SIZE, SLIDE_SIZE, ct,
-                                          kPremul_SkAlphaType));
+        kPremul_SkAlphaType));
     bitmap->eraseColor(SK_ColorWHITE);
 }
 
-static SkBitmap make_argb8888_gradient() {
+static SkBitmap make_argb8888_gradient()
+{
     SkBitmap bitmap;
     init_bitmap(kN32_SkColorType, &bitmap);
     uint8_t rowColor = 0;
@@ -36,7 +38,7 @@ static SkBitmap make_argb8888_gradient() {
         uint32_t* dst = bitmap.getAddr32(0, y);
         for (int x = 0; x < SLIDE_SIZE; x++) {
             dst[x] = SkPackARGB32(rowColor, rowColor,
-                                  rowColor, rowColor);
+                rowColor, rowColor);
         }
         if (y % PIXEL_SIZE_8888 == PIXEL_SIZE_8888 - 1) {
             rowColor++;
@@ -45,7 +47,8 @@ static SkBitmap make_argb8888_gradient() {
     return bitmap;
 }
 
-static SkBitmap make_argb4444_gradient() {
+static SkBitmap make_argb4444_gradient()
+{
     SkBitmap bitmap;
     init_bitmap(kARGB_4444_SkColorType, &bitmap);
     uint8_t rowColor = 0;
@@ -53,7 +56,7 @@ static SkBitmap make_argb4444_gradient() {
         uint16_t* dst = bitmap.getAddr16(0, y);
         for (int x = 0; x < SLIDE_SIZE; x++) {
             dst[x] = SkPackARGB4444(rowColor, rowColor,
-                                    rowColor, rowColor);
+                rowColor, rowColor);
         }
         if (y % PIXEL_SIZE_4444 == PIXEL_SIZE_4444 - 1) {
             rowColor++;
@@ -62,7 +65,8 @@ static SkBitmap make_argb4444_gradient() {
     return bitmap;
 }
 
-static SkBitmap make_argb8888_stripes() {
+static SkBitmap make_argb8888_stripes()
+{
     SkBitmap bitmap;
     init_bitmap(kN32_SkColorType, &bitmap);
     uint8_t rowColor = 0;
@@ -70,7 +74,7 @@ static SkBitmap make_argb8888_stripes() {
         uint32_t* dst = bitmap.getAddr32(0, y);
         for (int x = 0; x < SLIDE_SIZE; x++) {
             dst[x] = SkPackARGB32(rowColor, rowColor,
-                                  rowColor, rowColor);
+                rowColor, rowColor);
         }
         if (rowColor == 0) {
             rowColor = 255;
@@ -81,7 +85,8 @@ static SkBitmap make_argb8888_stripes() {
     return bitmap;
 }
 
-static SkBitmap make_argb4444_stripes() {
+static SkBitmap make_argb4444_stripes()
+{
     SkBitmap bitmap;
     init_bitmap(kARGB_4444_SkColorType, &bitmap);
     uint8_t rowColor = 0;
@@ -89,7 +94,7 @@ static SkBitmap make_argb4444_stripes() {
         uint16_t* dst = bitmap.getAddr16(0, y);
         for (int x = 0; x < SLIDE_SIZE; x++) {
             dst[x] = SkPackARGB4444(rowColor, rowColor,
-                                    rowColor, rowColor);
+                rowColor, rowColor);
         }
         if (rowColor == 0) {
             rowColor = 15;
@@ -104,20 +109,24 @@ namespace skiagm {
 
 class BitmapPremulGM : public GM {
 public:
-    BitmapPremulGM() {
+    BitmapPremulGM()
+    {
         this->setBGColor(SK_ColorWHITE);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("bitmap_premul");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(SLIDE_SIZE * 2, SLIDE_SIZE * 2);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkScalar slideSize = SkIntToScalar(SLIDE_SIZE);
         canvas->drawBitmap(make_argb8888_gradient(), 0, 0);
         canvas->drawBitmap(make_argb4444_gradient(), slideSize, 0);
@@ -129,5 +138,5 @@ private:
     typedef GM INHERITED;
 };
 
-DEF_GM( return new BitmapPremulGM; )
+DEF_GM(return new BitmapPremulGM;)
 }

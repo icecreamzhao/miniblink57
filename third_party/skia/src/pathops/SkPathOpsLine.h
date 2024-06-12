@@ -12,10 +12,19 @@
 struct SkDLine {
     SkDPoint fPts[2];
 
-    const SkDPoint& operator[](int n) const { SkASSERT(n >= 0 && n < 2); return fPts[n]; }
-    SkDPoint& operator[](int n) { SkASSERT(n >= 0 && n < 2); return fPts[n]; }
+    const SkDPoint& operator[](int n) const
+    {
+        SkASSERT(n >= 0 && n < 2);
+        return fPts[n];
+    }
+    SkDPoint& operator[](int n)
+    {
+        SkASSERT(n >= 0 && n < 2);
+        return fPts[n];
+    }
 
-    const SkDLine& set(const SkPoint pts[2]) {
+    const SkDLine& set(const SkPoint pts[2])
+    {
         fPts[0] = pts[0];
         fPts[1] = pts[1];
         return *this;
@@ -25,9 +34,6 @@ struct SkDLine {
     static double ExactPointH(const SkDPoint& xy, double left, double right, double y);
     static double ExactPointV(const SkDPoint& xy, double top, double bottom, double x);
 
-    // only used by testing
-    double isLeft(const SkDPoint& pt) const;
-
     double nearPoint(const SkDPoint& xy, bool* unequal) const;
     bool nearRay(const SkDPoint& xy) const;
     static double NearPointH(const SkDPoint& xy, double left, double right, double y);
@@ -35,7 +41,7 @@ struct SkDLine {
     SkDPoint ptAtT(double t) const;
 
     void dump() const;
-    void dumpID(int ) const;
+    void dumpID(int) const;
     void dumpInner() const;
 };
 

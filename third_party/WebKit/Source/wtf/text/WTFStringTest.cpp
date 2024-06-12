@@ -23,12 +23,11 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/text/WTFString.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/CString.h"
-#include <gtest/gtest.h>
 #include <limits>
 
 namespace WTF {
@@ -61,11 +60,11 @@ TEST(StringTest, ASCII)
 
 namespace {
 
-void testNumberToStringECMAScript(double number, const char* reference)
-{
-    CString numberString = String::numberToStringECMAScript(number).latin1();
-    EXPECT_STREQ(reference, numberString.data());
-}
+    void testNumberToStringECMAScript(double number, const char* reference)
+    {
+        CString numberString = String::numberToStringECMAScript(number).latin1();
+        EXPECT_STREQ(reference, numberString.data());
+    }
 
 } // anonymous namespace
 
@@ -117,39 +116,39 @@ TEST(StringTest, ReplaceWithLiteral)
     // Cases for 8Bit source.
     String testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-    testString.replaceWithLiteral('2', "");
+    testString.replace('2', "");
     EXPECT_STREQ("14", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-    testString.replaceWithLiteral('2', "3");
+    testString.replace('2', "3");
     EXPECT_STREQ("1334", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-    testString.replaceWithLiteral('2', "555");
+    testString.replace('2', "555");
     EXPECT_STREQ("15555554", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-    testString.replaceWithLiteral('3', "NotFound");
+    testString.replace('3', "NotFound");
     EXPECT_STREQ("1224", testString.utf8().data());
 
     // Cases for 16Bit source.
     // U+00E9 (=0xC3 0xA9 in UTF-8) is e with accent.
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-    testString.replaceWithLiteral(UChar(0x00E9), "e");
+    testString.replace(UChar(0x00E9), "e");
     EXPECT_STREQ("resume", testString.utf8().data());
 
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-    testString.replaceWithLiteral(UChar(0x00E9), "");
+    testString.replace(UChar(0x00E9), "");
     EXPECT_STREQ("rsum", testString.utf8().data());
 
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-    testString.replaceWithLiteral('3', "NotFound");
+    testString.replace('3', "NotFound");
     EXPECT_STREQ("r\xC3\xA9sum\xC3\xA9", testString.utf8().data());
 }
 
@@ -195,25 +194,83 @@ const char* turkicInput = "Isi\xC4\xB0 \xC4\xB0s\xC4\xB1I";
 const char* greekInput = "\xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\x9F\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xA3\xCE\xBF \xCE\xA3\xCE\x9F o\xCE\xA3 \xCE\x9F\xCE\xA3 \xCF\x83 \xE1\xBC\x95\xCE\xBE";
 const char* lithuanianInput = "I \xC3\x8F J J\xCC\x88 \xC4\xAE \xC4\xAE\xCC\x88 \xC3\x8C \xC3\x8D \xC4\xA8 xi\xCC\x87\xCC\x88 xj\xCC\x87\xCC\x88 x\xC4\xAF\xCC\x87\xCC\x88 xi\xCC\x87\xCC\x80 xi\xCC\x87\xCC\x81 xi\xCC\x87\xCC\x83 XI X\xC3\x8F XJ XJ\xCC\x88 X\xC4\xAE X\xC4\xAE\xCC\x88";
 
-
 const char* turkicLocales[] = {
-    "tr", "tr-TR", "tr_TR", "tr@foo=bar", "tr-US", "TR", "tr-tr", "tR",
-    "az", "az-AZ", "az_AZ", "az@foo=bar", "az-US", "Az", "AZ-AZ", };
+    "tr",
+    "tr-TR",
+    "tr_TR",
+    "tr@foo=bar",
+    "tr-US",
+    "TR",
+    "tr-tr",
+    "tR",
+    "az",
+    "az-AZ",
+    "az_AZ",
+    "az@foo=bar",
+    "az-US",
+    "Az",
+    "AZ-AZ",
+};
 const char* nonTurkicLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En",
-    "ja", "el", "fil", "fi", "lt", };
+    "en",
+    "en-US",
+    "en_US",
+    "en@foo=bar",
+    "EN",
+    "En",
+    "ja",
+    "el",
+    "fil",
+    "fi",
+    "lt",
+};
 const char* greekLocales[] = {
-    "el", "el-GR", "el_GR", "el@foo=bar", "el-US", "EL", "el-gr", "eL",
+    "el",
+    "el-GR",
+    "el_GR",
+    "el@foo=bar",
+    "el-US",
+    "EL",
+    "el-gr",
+    "eL",
 };
 const char* nonGreekLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En",
-    "ja", "tr", "az", "fil", "fi", "lt", };
+    "en",
+    "en-US",
+    "en_US",
+    "en@foo=bar",
+    "EN",
+    "En",
+    "ja",
+    "tr",
+    "az",
+    "fil",
+    "fi",
+    "lt",
+};
 const char* lithuanianLocales[] = {
-    "lt", "lt-LT", "lt_LT", "lt@foo=bar", "lt-US", "LT", "lt-lt", "lT",
+    "lt",
+    "lt-LT",
+    "lt_LT",
+    "lt@foo=bar",
+    "lt-US",
+    "LT",
+    "lt-lt",
+    "lT",
 };
 // Should not have "tr" or "az" because "lt" and 'tr/az' rules conflict with each other.
 const char* nonLithuanianLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En", "ja", "fil", "fi", "el", };
+    "en",
+    "en-US",
+    "en_US",
+    "en@foo=bar",
+    "EN",
+    "En",
+    "ja",
+    "fil",
+    "fi",
+    "el",
+};
 
 TEST(StringTest, ToUpperLocale)
 {
@@ -224,31 +281,36 @@ TEST(StringTest, ToUpperLocale)
             turkicLocales,
             sizeof(turkicLocales) / sizeof(const char*),
             "IS\xC4\xB0\xC4\xB0 \xC4\xB0SII",
-        }, {
+        },
+        {
             "Turkic input",
             turkicInput,
             nonTurkicLocales,
             sizeof(nonTurkicLocales) / sizeof(const char*),
             "ISI\xC4\xB0 \xC4\xB0SII",
-        }, {
+        },
+        {
             "Greek input",
             greekInput,
             greekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\x9F\xCE\x94\xCE\x9F\xCE\xA3 \xCE\x9F\xCE\x94\xCE\x9F\xCE\xA3 \xCE\xA3\xCE\x9F \xCE\xA3\xCE\x9F \x4F\xCE\xA3 \xCE\x9F\xCE\xA3 \xCE\xA3 \xCE\x95\xCE\x9E",
-        }, {
+        },
+        {
             "Greek input",
             greekInput,
             nonGreekLocales,
             sizeof(nonGreekLocales) / sizeof(const char*),
             "\xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\xA3\xCE\x9F \xCE\xA3\xCE\x9F \x4F\xCE\xA3 \xCE\x9F\xCE\xA3 \xCE\xA3 \xE1\xBC\x9D\xCE\x9E",
-        }, {
+        },
+        {
             "Lithuanian input",
             lithuanianInput,
             lithuanianLocales,
             sizeof(lithuanianLocales) / sizeof(const char*),
             "I \xC3\x8F J J\xCC\x88 \xC4\xAE \xC4\xAE\xCC\x88 \xC3\x8C \xC3\x8D \xC4\xA8 XI\xCC\x88 XJ\xCC\x88 X\xC4\xAE\xCC\x88 XI\xCC\x80 XI\xCC\x81 XI\xCC\x83 XI X\xC3\x8F XJ XJ\xCC\x88 X\xC4\xAE X\xC4\xAE\xCC\x88",
-        }, {
+        },
+        {
             "Lithuanian input",
             lithuanianInput,
             nonLithuanianLocales,
@@ -276,32 +338,37 @@ TEST(StringTest, ToLowerLocale)
             turkicLocales,
             sizeof(turkicLocales) / sizeof(const char*),
             "\xC4\xB1sii is\xC4\xB1\xC4\xB1",
-        }, {
+        },
+        {
             "Turkic input",
             turkicInput,
             nonTurkicLocales,
             sizeof(nonTurkicLocales) / sizeof(const char*),
             // U+0130 is lowercased to U+0069 followed by U+0307
             "isii\xCC\x87 i\xCC\x87s\xC4\xB1i",
-        }, {
+        },
+        {
             "Greek input",
             greekInput,
             greekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCF\x83\xCE\xBF \xCF\x83\xCE\xBF \x6F\xCF\x82 \xCE\xBF\xCF\x82 \xCF\x83 \xE1\xBC\x95\xCE\xBE",
-        }, {
+        },
+        {
             "Greek input",
             greekInput,
             nonGreekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCF\x83\xCE\xBF \xCF\x83\xCE\xBF \x6F\xCF\x82 \xCE\xBF\xCF\x82 \xCF\x83 \xE1\xBC\x95\xCE\xBE",
-        }, {
+        },
+        {
             "Lithuanian input",
             lithuanianInput,
             lithuanianLocales,
             sizeof(lithuanianLocales) / sizeof(const char*),
             "i \xC3\xAF j j\xCC\x87\xCC\x88 \xC4\xAF \xC4\xAF\xCC\x87\xCC\x88 i\xCC\x87\xCC\x80 i\xCC\x87\xCC\x81 i\xCC\x87\xCC\x83 xi\xCC\x87\xCC\x88 xj\xCC\x87\xCC\x88 x\xC4\xAF\xCC\x87\xCC\x88 xi\xCC\x87\xCC\x80 xi\xCC\x87\xCC\x81 xi\xCC\x87\xCC\x83 xi x\xC3\xAF xj xj\xCC\x87\xCC\x88 x\xC4\xAF x\xC4\xAF\xCC\x87\xCC\x88",
-        }, {
+        },
+        {
             "Lithuanian input",
             lithuanianInput,
             nonLithuanianLocales,
@@ -320,23 +387,78 @@ TEST(StringTest, ToLowerLocale)
     }
 }
 
-TEST(WTF, StartsWithIgnoringASCIICase)
+TEST(StringTest, StartsWithIgnoringASCIICase)
 {
     String allASCII("LINK");
     String allASCIILowerCase("link");
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, allASCIILowerCase));
+    EXPECT_TRUE(allASCII.startsWith(allASCIILowerCase, TextCaseASCIIInsensitive));
     String allASCIIMixedCase("lInK");
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, allASCIIMixedCase));
+    EXPECT_TRUE(allASCII.startsWith(allASCIIMixedCase, TextCaseASCIIInsensitive));
     String allASCIIDifferent("foo");
-    EXPECT_FALSE(startsWithIgnoringASCIICase(allASCII, allASCIIDifferent));
+    EXPECT_FALSE(allASCII.startsWith(allASCIIDifferent, TextCaseASCIIInsensitive));
     String nonASCII = String::fromUTF8("LIN\xE2\x84\xAA");
-    EXPECT_FALSE(startsWithIgnoringASCIICase(allASCII, nonASCII));
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, nonASCII.lower()));
+    EXPECT_FALSE(allASCII.startsWith(nonASCII, TextCaseASCIIInsensitive));
+    EXPECT_TRUE(allASCII.startsWith(nonASCII.lower(), TextCaseASCIIInsensitive));
 
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCII));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIILowerCase));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIIMixedCase));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIIDifferent));
+    EXPECT_FALSE(nonASCII.startsWith(allASCII, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.startsWith(allASCIILowerCase, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.startsWith(allASCIIMixedCase, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.startsWith(allASCIIDifferent, TextCaseASCIIInsensitive));
+}
+
+TEST(StringTest, EndsWithIgnoringASCIICase)
+{
+    String allASCII("LINK");
+    String allASCIILowerCase("link");
+    EXPECT_TRUE(allASCII.endsWith(allASCIILowerCase, TextCaseASCIIInsensitive));
+    String allASCIIMixedCase("lInK");
+    EXPECT_TRUE(allASCII.endsWith(allASCIIMixedCase, TextCaseASCIIInsensitive));
+    String allASCIIDifferent("foo");
+    EXPECT_FALSE(allASCII.endsWith(allASCIIDifferent, TextCaseASCIIInsensitive));
+    String nonASCII = String::fromUTF8("LIN\xE2\x84\xAA");
+    EXPECT_FALSE(allASCII.endsWith(nonASCII, TextCaseASCIIInsensitive));
+    EXPECT_TRUE(allASCII.endsWith(nonASCII.lower(), TextCaseASCIIInsensitive));
+
+    EXPECT_FALSE(nonASCII.endsWith(allASCII, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.endsWith(allASCIILowerCase, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.endsWith(allASCIIMixedCase, TextCaseASCIIInsensitive));
+    EXPECT_FALSE(nonASCII.endsWith(allASCIIDifferent, TextCaseASCIIInsensitive));
+}
+
+TEST(StringTest, EqualIgnoringASCIICase)
+{
+    String allASCII("LINK");
+    String allASCIILowerCase("link");
+    EXPECT_TRUE(equalIgnoringASCIICase(allASCII, allASCIILowerCase));
+    String allASCIIMixedCase("lInK");
+    EXPECT_TRUE(equalIgnoringASCIICase(allASCII, allASCIIMixedCase));
+    String allASCIIDifferent("foo");
+    EXPECT_FALSE(equalIgnoringASCIICase(allASCII, allASCIIDifferent));
+    String nonASCII = String::fromUTF8("LIN\xE2\x84\xAA");
+    EXPECT_FALSE(equalIgnoringASCIICase(allASCII, nonASCII));
+    EXPECT_TRUE(equalIgnoringASCIICase(allASCII, nonASCII.lower()));
+
+    EXPECT_FALSE(equalIgnoringASCIICase(nonASCII, allASCII));
+    EXPECT_FALSE(equalIgnoringASCIICase(nonASCII, allASCIILowerCase));
+    EXPECT_FALSE(equalIgnoringASCIICase(nonASCII, allASCIIMixedCase));
+    EXPECT_FALSE(equalIgnoringASCIICase(nonASCII, allASCIIDifferent));
+}
+
+TEST(StringTest, FindIgnoringASCIICase)
+{
+    String needle = String::fromUTF8("a\xCC\x88qa\xCC\x88");
+
+    // Multiple matches, non-overlapping
+    String haystack1 = String::fromUTF8("aA\xCC\x88QA\xCC\x88sA\xCC\x88qa\xCC\x88rfi\xC3\xA4q\xC3\xA4");
+    EXPECT_EQ(1u, haystack1.findIgnoringASCIICase(needle));
+    EXPECT_EQ(7u, haystack1.findIgnoringASCIICase(needle, 2));
+    EXPECT_EQ(kNotFound, haystack1.findIgnoringASCIICase(needle, 8));
+
+    // Multiple matches, overlapping
+    String haystack2 = String::fromUTF8("aA\xCC\x88QA\xCC\x88qa\xCC\x88rfi");
+    EXPECT_EQ(1u, haystack2.findIgnoringASCIICase(needle));
+    EXPECT_EQ(4u, haystack2.findIgnoringASCIICase(needle, 2));
+    EXPECT_EQ(kNotFound, haystack2.findIgnoringASCIICase(needle, 5));
 }
 
 TEST(StringTest, Lower)
@@ -345,6 +467,31 @@ TEST(StringTest, Lower)
     EXPECT_STREQ("link", String("lInk").lower().ascii().data());
     EXPECT_STREQ("lin\xE1k", String("lIn\xC1k").lower().latin1().data());
     EXPECT_STREQ("link", String::fromUTF8("LIN\xE2\x84\xAA").lower().utf8().data());
+}
+
+CString toCStringThroughPrinter(const String& string)
+{
+    std::ostringstream output;
+    output << string;
+    const std::string& result = output.str();
+    return CString(result.data(), result.length());
+}
+
+TEST(StringTest, StringPrinter)
+{
+    EXPECT_EQ(CString("\"Hello!\""), toCStringThroughPrinter("Hello!"));
+    EXPECT_EQ(CString("\"\\\"\""), toCStringThroughPrinter("\""));
+    EXPECT_EQ(CString("\"\\\\\""), toCStringThroughPrinter("\\"));
+    EXPECT_EQ(CString("\"\\u0000\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\""), toCStringThroughPrinter(String("\x00\x01\x02\x03\x04\x05\x06\x07", 8)));
+    EXPECT_EQ(CString("\"\\u0008\\t\\n\\u000B\\u000C\\r\\u000E\\u000F\""), toCStringThroughPrinter(String("\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F", 8)));
+    EXPECT_EQ(CString("\"\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\""), toCStringThroughPrinter(String("\x10\x11\x12\x13\x14\x15\x16\x17", 8)));
+    EXPECT_EQ(CString("\"\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F\""), toCStringThroughPrinter(String("\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F", 8)));
+    EXPECT_EQ(CString("\"\\u007F\\u0080\\u0081\""), toCStringThroughPrinter("\x7F\x80\x81"));
+    EXPECT_EQ(CString("\"\""), toCStringThroughPrinter(emptyString()));
+    EXPECT_EQ(CString("<null>"), toCStringThroughPrinter(String()));
+
+    static const UChar unicodeSample[] = { 0x30C6, 0x30B9, 0x30C8 }; // "Test" in Japanese.
+    EXPECT_EQ(CString("\"\\u30C6\\u30B9\\u30C8\""), toCStringThroughPrinter(String(unicodeSample, WTF_ARRAY_LENGTH(unicodeSample))));
 }
 
 } // namespace WTF

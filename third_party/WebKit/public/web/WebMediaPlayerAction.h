@@ -34,22 +34,26 @@
 namespace blink {
 
 struct WebMediaPlayerAction {
-    enum Type {
-        Unknown,
+    enum Type { Unknown,
         Play,
         Mute,
         Loop,
         Controls,
-        TypeLast = Controls
-    };
+        TypeLast = Controls };
 
     Type type;
     bool enable;
 
     WebMediaPlayerAction()
-        : type(Unknown), enable(false) { }
+        : type(Unknown)
+        , enable(false)
+    {
+    }
     WebMediaPlayerAction(Type type, bool enable)
-        : type(type), enable(enable) { }
+        : type(type)
+        , enable(enable)
+    {
+    }
 };
 
 } // namespace blink

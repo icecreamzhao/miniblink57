@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights
+ * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -32,6 +33,7 @@
 #define DocumentOrderedMap_h
 
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/AtomicString.h"
@@ -41,11 +43,13 @@
 namespace blink {
 
 class Element;
+class HTMLSlotElement;
 class TreeScope;
 
-class DocumentOrderedMap : public NoBaseWillBeGarbageCollected<DocumentOrderedMap> {
+class DocumentOrderedMap : public GarbageCollected<DocumentOrderedMap> {
 public:
-    static PassOwnPtrWillBeRawPtr<DocumentOrderedMap> create();
+    static DocumentOrderedMap* create();
+
     void add(const AtomicString&, Element*);
     void remove(const AtomicString&, Element*);
 
@@ -53,18 +57,45 @@ public:
     bool containsMultiple(const AtomicString&) const;
     // concrete instantiations of the get<>() method template
     Element* getElementById(const AtomicString&, const TreeScope*) const;
-    const WillBeHeapVector<RawPtrWillBeMember<Element>>& getAllElementsById(const AtomicString&, const TreeScope*) const;
+    const HeapVector<Member<Element>>& getAllElementsById(const AtomicString&,
+        const TreeScope*) const;
     Element* getElementByMapName(const AtomicString&, const TreeScope*) const;
-    Element* getElementByLowercasedMapName(const AtomicString&, const TreeScope*) const;
-    Element* getElementByLabelForAttribute(const AtomicString&, const TreeScope*) const;
+    HTMLSlotElement* getSlotByName(const AtomicString&, const TreeScope*) const;
+    Element* getElementByLowercasedMapName(const AtomicString&,
+        const TreeScope*) const;
 
     DECLARE_TRACE();
 
+#if DCHECK_IS_ON()
+    // While removing a ContainerNode, ID lookups won't be precise should the tree
+    // have elements with duplicate IDs contained in the element being removed.
+    // Rare trees, but ID lookups may legitimately fail across such removals;
+    // this scope object informs DocumentOrderedMaps about the transitory
+    // state of the underlying tree.
+    class RemoveScope {
+        STACK_ALLOCATED();
+
+    public:
+        RemoveScope();
+        ~RemoveScope();
+    };
+#else
+    class RemoveScope {
+        STACK_ALLOCATED();
+
+    public:
+        RemoveScope() { }
+        ~RemoveScope() { }
+    };
+#endif
+
 private:
-    template<bool keyMatches(const AtomicString&, const Element&)>
+    DocumentOrderedMap();
+
+    template <bool keyMatches(const AtomicString&, const Element&)>
     Element* get(const AtomicString&, const TreeScope*) const;
 
-    class MapEntry : public NoBaseWillBeGarbageCollected<MapEntry> {
+    class MapEntry : public GarbageCollected<MapEntry> {
     public:
         explicit MapEntry(Element* firstElement)
             : element(firstElement)
@@ -74,12 +105,12 @@ private:
 
         DECLARE_TRACE();
 
-        RawPtrWillBeMember<Element> element;
+        Member<Element> element;
         unsigned count;
-        WillBeHeapVector<RawPtrWillBeMember<Element>> orderedList;
+        HeapVector<Member<Element>> orderedList;
     };
 
-    using Map = WillBeHeapHashMap<AtomicString, OwnPtrWillBeMember<MapEntry>>;
+    using Map = HeapHashMap<AtomicString, Member<MapEntry>>;
 
     mutable Map m_map;
 };

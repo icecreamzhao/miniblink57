@@ -1,7 +1,9 @@
-{% from 'macros.tmpl' import license %}
-{{license()}}
+{ % from 'macros.tmpl' import license % } {
+    {
+        license()
+    }
+}
 
-#include "config.h"
 #include "platform/RuntimeEnabledFeatures.h"
 
 #include "wtf/Assertions.h"
@@ -9,33 +11,90 @@
 
 namespace blink {
 
-{% for feature_set in feature_sets %}
-void RuntimeEnabledFeatures::set{{feature_set|capitalize}}FeaturesEnabled(bool enable)
+RuntimeEnabledFeatures::Backup::Backup()
+    :
+{% for feature in standard_features %
+}
 {
-    {% for feature in features if feature.status == feature_set %}
-    set{{feature.name}}Enabled(enable);
-    {% endfor %}
+    % +if not loop.first %
+}
+, { % endif - % } m_ { { feature.first_lowered_name } }(RuntimeEnabledFeatures::{{feature.first_lowered_name} } Enabled()) { % endfor % }
+{
 }
 
-{% endfor %}
-
-void RuntimeEnabledFeatures::setFeatureEnabledFromString(const String& name, bool isEnabled)
+void RuntimeEnabledFeatures::Backup::restore()
 {
-    {% for feature in features if not feature.custom %}
-    {% filter enable_conditional(feature.condition) %}
-    if (equalIgnoringCase(name, "{{feature.name}}")) {
-        set{{feature.name}}Enabled(isEnabled);
+    {% for feature in standard_features %
+    }
+    RuntimeEnabledFeatures::set
+    {
+        {
+            feature.name
+        }
+    }
+    Enabled(m_ { { feature.first_lowered_name } });
+    {
+        % endfor %
+    }
+}
+
+{% for feature_set in feature_sets %
+}
+void RuntimeEnabledFeatures::set
+{
+    {
+        feature_set | capitalize
+    }
+}
+FeaturesEnabled(bool enable)
+{
+    {% for feature in features if feature.status == feature_set %
+    }
+    set
+    {
+        {
+            feature.name
+        }
+    }
+    Enabled(enable);
+    {
+        % endfor %
+    }
+}
+
+{
+    % endfor %
+}
+
+void RuntimeEnabledFeatures::setFeatureEnabledFromString(
+    const std::string& name, bool isEnabled)
+{
+    {% for feature in standard_features %
+    }
+    if (name == "{{feature.name}}") {
+        set
+        {
+            {
+                feature.name
+            }
+        }
+        Enabled(isEnabled);
         return;
     }
-    {% endfilter %}
-    {% endfor %}
-    WTF_LOG_ERROR("RuntimeEnabledFeature not recognized: %s", name.ascii().data());
+    { % endfor % } DLOG(ERROR) << "RuntimeEnabledFeature not recognized: " << name;
 }
 
-{% for feature in features if not feature.custom %}
-{% filter enable_conditional(feature.condition) %}
-bool RuntimeEnabledFeatures::is{{feature.name}}Enabled = {{'true' if feature.status == 'stable' else 'false'}};
-{% endfilter %}
-{% endfor %}
+{% for feature in standard_features %
+}
+bool RuntimeEnabledFeatures::is
+{
+    {
+        feature.name
+    }
+}
+Enabled = { { 'true' if feature.status == 'stable' else 'false' } };
+{
+    % endfor %
+}
 
 } // namespace blink

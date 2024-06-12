@@ -31,24 +31,26 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class ContextMenuItem;
-class Event;
 class FrontendMenuProvider;
 class InspectorFrontendClient;
 class LocalFrame;
 
-class CORE_EXPORT DevToolsHost : public RefCountedWillBeGarbageCollectedFinalized<DevToolsHost>, public ScriptWrappable {
+class CORE_EXPORT DevToolsHost final
+    : public GarbageCollectedFinalized<DevToolsHost>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<DevToolsHost> create(InspectorFrontendClient* client, LocalFrame* frontendFrame)
+    static DevToolsHost* create(InspectorFrontendClient* client,
+        LocalFrame* frontendFrame)
     {
-        return adoptRefWillBeNoop(new DevToolsHost(client, frontendFrame));
+        return new DevToolsHost(client, frontendFrame);
     }
 
     ~DevToolsHost();
@@ -57,15 +59,18 @@ public:
 
     float zoomFactor();
 
+    float convertLengthForEmbedder(float length);
+
     void setInjectedScriptForOrigin(const String& origin, const String& script);
 
     void copyText(const String& text);
 
-    // Called from [Custom] implementations.
-    void showContextMenu(Event*, const Vector<ContextMenuItem>& items);
-    void showContextMenu(LocalFrame* targetFrame, float x, float y, const Vector<ContextMenuItem>& items);
-    void sendMessageToBackend(const String& message);
+    void showContextMenu(LocalFrame* targetFrame,
+        float x,
+        float y,
+        const Vector<ContextMenuItem>& items);
     void sendMessageToEmbedder(const String& message);
+    void sendMessageToBackend(const String& message);
 
     String getSelectionBackgroundColor();
     String getSelectionForegroundColor();
@@ -78,11 +83,14 @@ public:
     void clearMenuProvider() { m_menuProvider = nullptr; }
 
 private:
+    friend class FrontendMenuProvider;
+
     DevToolsHost(InspectorFrontendClient*, LocalFrame* frontendFrame);
+    void evaluateScript(const String&);
 
     InspectorFrontendClient* m_client;
-    RawPtrWillBeMember<LocalFrame> m_frontendFrame;
-    RawPtrWillBeMember<FrontendMenuProvider> m_menuProvider;
+    Member<LocalFrame> m_frontendFrame;
+    Member<FrontendMenuProvider> m_menuProvider;
 };
 
 } // namespace blink

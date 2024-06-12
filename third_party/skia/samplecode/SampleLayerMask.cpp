@@ -1,26 +1,29 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+
 #include "SampleCode.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
+#include "SkPath.h"
 #include "SkView.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
 class LayerMaskView : public SampleView {
 public:
-    LayerMaskView() {
+    LayerMaskView()
+    {
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "LayerMask");
             return true;
@@ -28,7 +31,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void drawMask(SkCanvas* canvas, const SkRect& r) {
+    void drawMask(SkCanvas* canvas, const SkRect& r)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -54,10 +58,11 @@ protected:
         }
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
-        SkRect  r;
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
+        SkRect r;
         r.set(SkIntToScalar(20), SkIntToScalar(20), SkIntToScalar(120), SkIntToScalar(120));
-        canvas->saveLayer(&r, NULL);
+        canvas->saveLayer(&r, nullptr);
         canvas->drawColor(SK_ColorRED);
         drawMask(canvas, r);
         canvas->restore();

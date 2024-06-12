@@ -29,7 +29,11 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntRect.h"
+#include "public/platform/WebVector.h"
 #include "third_party/skia/include/core/SkBitmap.h"
+#include "third_party/skia/include/core/SkColorPriv.h"
+#include "third_party/skia/include/core/SkImage.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/PassRefPtr.h"
 
@@ -37,9 +41,13 @@ namespace blink {
 
 // ImageFrame represents the decoded image data.  This buffer is what all
 // decoders write a single frame into.
-class PLATFORM_EXPORT ImageFrame {
+class PLATFORM_EXPORT ImageFrame final {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    enum Status { FrameEmpty, FramePartial, FrameComplete };
+    enum Status { FrameEmpty,
+        FramePartial,
+        FrameComplete };
     enum DisposalMethod {
         // If you change the numeric values of these, make sure you audit
         // all users, as some users may cast raw values to/from these
@@ -68,6 +76,8 @@ public:
     };
     typedef uint32_t PixelData;
 
+    typedef WebVector<char> ICCProfile;
+
     ImageFrame();
 
     // The assignment operator reads m_hasAlpha (inside setStatus()) before it
@@ -75,7 +85,11 @@ public:
     // setHasAlpha() call ensures all state is set correctly, but it means we
     // need to initialize m_hasAlpha to some value before calling the operator
     // lest any tools complain about using an uninitialized value.
-    ImageFrame(const ImageFrame& other) : m_hasAlpha(false) { operator=(other); }
+    ImageFrame(const ImageFrame& other)
+        : m_hasAlpha(false)
+    {
+        operator=(other);
+    }
 
     // For backends which refcount their data, this operator doesn't need to
     // create a new copy of the image data, only increase the ref count.
@@ -90,6 +104,11 @@ public:
     // pixel data, so that modifications in one frame are not reflected in
     // the other.  Returns whether the copy succeeded.
     bool copyBitmapData(const ImageFrame&);
+
+    // Moves the bitmap data from the provided frame to this one, leaving the
+    // provided frame empty.  Operation is successful only if bitmap data is not
+    // marked as done (immutable).  Returns whether the move succeeded.
+    bool takeBitmapDataIfWritable(ImageFrame*);
 
     // Copies the pixel data at [(startX, startY), (endX, startY)) to the
     // same X-coordinates on each subsequent row up to but not including
@@ -107,51 +126,81 @@ public:
     }
 
     // Allocates space for the pixel data.  Must be called before any pixels
-    // are written.  Must only be called once.  Returns whether allocation
-    // succeeded.
-    bool setSize(int newWidth, int newHeight);
-
-    // Returns a caller-owned pointer to the underlying native image data.
-    // (Actual use: This pointer will be owned by BitmapImage and freed in
-    // FrameData::clear()).
-    const SkBitmap& bitmap() const;
+    // are written.  Must only be called once. The specified color space may
+    // be nullptr if and only if color correct rendering is enabled. Returns
+    // whether allocation succeeded.
+    bool setSizeAndColorSpace(int newWidth, int newHeight, sk_sp<SkColorSpace>);
 
     bool hasAlpha() const;
     const IntRect& originalFrameRect() const { return m_originalFrameRect; }
-    Status status() const { return m_status; }
+    Status getStatus() const { return m_status; }
     unsigned duration() const { return m_duration; }
-    DisposalMethod disposalMethod() const { return m_disposalMethod; }
-    AlphaBlendSource alphaBlendSource() const { return m_alphaBlendSource; }
+    DisposalMethod getDisposalMethod() const { return m_disposalMethod; }
+    AlphaBlendSource getAlphaBlendSource() const { return m_alphaBlendSource; }
     bool premultiplyAlpha() const { return m_premultiplyAlpha; }
     SkBitmap::Allocator* allocator() const { return m_allocator; }
-    const SkBitmap& getSkBitmap() const { return m_bitmap; }
-    // Returns true if the pixels changed, but the bitmap has not yet been notified.
+
+    // Returns the bitmap that is the output of decoding.
+    const SkBitmap& bitmap() const { return m_bitmap; }
+
+    // Create SkImage from bitmap() and return it.  This should be called only
+    // if frame is complete.  The bitmap is set immutable before creating
+    // SkImage to avoid copying bitmap in SkImage::MakeFromBitmap(m_bitmap).
+    sk_sp<SkImage> finalizePixelsAndGetImage();
+
+    // Returns true if the pixels changed, but the bitmap has not yet been
+    // notified.
     bool pixelsChanged() const { return m_pixelsChanged; }
-    size_t requiredPreviousFrameIndex() const { return m_requiredPreviousFrameIndex; }
+    size_t requiredPreviousFrameIndex() const
+    {
+        return m_requiredPreviousFrameIndex;
+    }
     void setHasAlpha(bool alpha);
     void setOriginalFrameRect(const IntRect& r) { m_originalFrameRect = r; }
     void setStatus(Status);
     void setDuration(unsigned duration) { m_duration = duration; }
-    void setDisposalMethod(DisposalMethod disposalMethod) { m_disposalMethod = disposalMethod; }
-    void setAlphaBlendSource(AlphaBlendSource alphaBlendSource) { m_alphaBlendSource = alphaBlendSource; }
-    void setPremultiplyAlpha(bool premultiplyAlpha) { m_premultiplyAlpha = premultiplyAlpha; }
-    void setMemoryAllocator(SkBitmap::Allocator* allocator) { m_allocator = allocator; }
-    // The pixelsChanged flag needs to be set when the raw pixel data was directly modified
-    // (e.g. through a pointer or setRGBA). The flag is usually set after a batch of changes was made.
-    void setPixelsChanged(bool pixelsChanged) { m_pixelsChanged = pixelsChanged; }
-    void setRequiredPreviousFrameIndex(size_t previousFrameIndex) { m_requiredPreviousFrameIndex = previousFrameIndex; }
-
-    inline PixelData* getAddr(int x, int y)
+    void setDisposalMethod(DisposalMethod disposalMethod)
     {
-        return m_bitmap.getAddr32(x, y);
+        m_disposalMethod = disposalMethod;
+    }
+    void setAlphaBlendSource(AlphaBlendSource alphaBlendSource)
+    {
+        m_alphaBlendSource = alphaBlendSource;
+    }
+    void setPremultiplyAlpha(bool premultiplyAlpha)
+    {
+        m_premultiplyAlpha = premultiplyAlpha;
+    }
+    void setMemoryAllocator(SkBitmap::Allocator* allocator)
+    {
+        m_allocator = allocator;
+    }
+    // The pixelsChanged flag needs to be set when the raw pixel data was directly
+    // modified (e.g. through a pointer or setRGBA). The flag is usually set after
+    // a batch of changes was made.
+    void setPixelsChanged(bool pixelsChanged) { m_pixelsChanged = pixelsChanged; }
+    void setRequiredPreviousFrameIndex(size_t previousFrameIndex)
+    {
+        m_requiredPreviousFrameIndex = previousFrameIndex;
     }
 
-    inline void setRGBA(int x, int y, unsigned r, unsigned g, unsigned b, unsigned a)
+    inline PixelData* getAddr(int x, int y) { return m_bitmap.getAddr32(x, y); }
+
+    inline void setRGBA(int x,
+        int y,
+        unsigned r,
+        unsigned g,
+        unsigned b,
+        unsigned a)
     {
         setRGBA(getAddr(x, y), r, g, b, a);
     }
 
-    inline void setRGBA(PixelData* dest, unsigned r, unsigned g, unsigned b, unsigned a)
+    inline void setRGBA(PixelData* dest,
+        unsigned r,
+        unsigned g,
+        unsigned b,
+        unsigned a)
     {
         if (m_premultiplyAlpha)
             setRGBAPremultiply(dest, r, g, b, a);
@@ -159,7 +208,11 @@ public:
             *dest = SkPackARGB32NoCheck(a, r, g, b);
     }
 
-    static inline void setRGBAPremultiply(PixelData* dest, unsigned r, unsigned g, unsigned b, unsigned a)
+    static inline void setRGBAPremultiply(PixelData* dest,
+        unsigned r,
+        unsigned g,
+        unsigned b,
+        unsigned a)
     {
         enum FractionControl { RoundFractionControl = 257 * 128 };
 
@@ -173,9 +226,58 @@ public:
         *dest = SkPackARGB32NoCheck(a, r, g, b);
     }
 
-    static inline void setRGBARaw(PixelData* dest, unsigned r, unsigned g, unsigned b, unsigned a)
+    static inline void setRGBARaw(PixelData* dest,
+        unsigned r,
+        unsigned g,
+        unsigned b,
+        unsigned a)
     {
         *dest = SkPackARGB32NoCheck(a, r, g, b);
+    }
+
+    // Blend the RGBA pixel provided by |red|, |green|, |blue| and |alpha| over
+    // the pixel in |dest|, without premultiplication, and overwrite |dest| with
+    // the result.
+    static void blendRGBARaw(PixelData* dest,
+        unsigned red,
+        unsigned green,
+        unsigned blue,
+        unsigned alpha);
+
+    // Blend the pixel, without premultiplication, in |src| over |dst| and
+    // overwrite |src| with the result.
+    static void blendSrcOverDstRaw(PixelData* src, PixelData dst);
+
+    // Blend the RGBA pixel provided by |r|, |g|, |b|, |a| over the pixel in
+    // |dest| and overwrite |dest| with the result. Premultiply the pixel values
+    // before blending.
+    static inline void blendRGBAPremultiplied(PixelData* dest,
+        unsigned r,
+        unsigned g,
+        unsigned b,
+        unsigned a)
+    {
+        // If the new pixel is completely transparent, no operation is necessary
+        // since |dest| contains the background pixel.
+        if (a == 0x0)
+            return;
+
+        // If the new pixel is opaque, no need for blending - just write the pixel.
+        if (a == 0xFF) {
+            setRGBAPremultiply(dest, r, g, b, a);
+            return;
+        }
+
+        PixelData src;
+        setRGBAPremultiply(&src, r, g, b, a);
+        *dest = SkPMSrcOver(src, *dest);
+    }
+
+    // Blend the pixel in |src| over |dst| and overwrite |src| with the result.
+    static inline void blendSrcOverDstPremultiplied(PixelData* src,
+        PixelData dst)
+    {
+        *src = SkPMSrcOver(*src, dst);
     }
 
     // Notifies the SkBitmap if any pixels changed and resets the flag.
@@ -187,15 +289,11 @@ public:
     }
 
 private:
-    int width() const
-    {
-        return m_bitmap.width();
-    }
+    int width() const { return m_bitmap.width(); }
 
-    int height() const
-    {
-        return m_bitmap.height();
-    }
+    int height() const { return m_bitmap.height(); }
+
+    SkAlphaType computeAlphaType() const;
 
     SkBitmap m_bitmap;
     SkBitmap::Allocator* m_allocator;

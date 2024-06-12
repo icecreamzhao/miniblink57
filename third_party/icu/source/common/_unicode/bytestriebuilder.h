@@ -20,10 +20,10 @@
 #ifndef __BYTESTRIEBUILDER_H__
 #define __BYTESTRIEBUILDER_H__
 
-#include "unicode/utypes.h"
 #include "unicode/bytestrie.h"
 #include "unicode/stringpiece.h"
 #include "unicode/stringtriebuilder.h"
+#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
@@ -43,7 +43,7 @@ public:
      * @param errorCode Standard ICU error code.
      * @stable ICU 4.8
      */
-    BytesTrieBuilder(UErrorCode &errorCode);
+    BytesTrieBuilder(UErrorCode& errorCode);
 
     /**
      * Destructor.
@@ -65,7 +65,7 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-    BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
+    BytesTrieBuilder& add(const StringPiece& s, int32_t value, UErrorCode& errorCode);
 
     /**
      * Builds a BytesTrie for the add()ed data.
@@ -85,7 +85,7 @@ public:
      * @return A new BytesTrie for the add()ed data.
      * @stable ICU 4.8
      */
-    BytesTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
+    BytesTrie* build(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
 
     /**
      * Builds a BytesTrie for the add()ed data and byte-serializes it.
@@ -109,7 +109,7 @@ public:
      * @return A StringPiece which refers to the byte-serialized BytesTrie for the add()ed data.
      * @stable ICU 4.8
      */
-    StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
+    StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
 
     /**
      * Removes all (byte sequence, value) pairs.
@@ -117,13 +117,13 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-    BytesTrieBuilder &clear();
+    BytesTrieBuilder& clear();
 
 private:
-    BytesTrieBuilder(const BytesTrieBuilder &other);  // no copy constructor
-    BytesTrieBuilder &operator=(const BytesTrieBuilder &other);  // no assignment operator
+    BytesTrieBuilder(const BytesTrieBuilder& other); // no copy constructor
+    BytesTrieBuilder& operator=(const BytesTrieBuilder& other); // no assignment operator
 
-    void buildBytes(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
+    void buildBytes(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
 
     virtual int32_t getElementStringLength(int32_t i) const;
     virtual UChar getElementUnit(int32_t i, int32_t byteIndex) const;
@@ -146,36 +146,37 @@ private:
      */
     class BTLinearMatchNode : public LinearMatchNode {
     public:
-        BTLinearMatchNode(const char *units, int32_t len, Node *nextNode);
-        virtual UBool operator==(const Node &other) const;
-        virtual void write(StringTrieBuilder &builder);
+        BTLinearMatchNode(const char* units, int32_t len, Node* nextNode);
+        virtual UBool operator==(const Node& other) const;
+        virtual void write(StringTrieBuilder& builder);
+
     private:
-        const char *s;
+        const char* s;
     };
 
-    virtual Node *createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
-                                        Node *nextNode) const;
+    virtual Node* createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
+        Node* nextNode) const;
 
     UBool ensureCapacity(int32_t length);
     virtual int32_t write(int32_t byte);
-    int32_t write(const char *b, int32_t length);
+    int32_t write(const char* b, int32_t length);
     virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length);
     virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal);
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
-    CharString *strings;  // Pointer not object so we need not #include internal charstr.h.
-    BytesTrieElement *elements;
+    CharString* strings; // Pointer not object so we need not #include internal charstr.h.
+    BytesTrieElement* elements;
     int32_t elementsCapacity;
     int32_t elementsLength;
 
     // Byte serialization of the trie.
     // Grows from the back: bytesLength measures from the end of the buffer!
-    char *bytes;
+    char* bytes;
     int32_t bytesCapacity;
     int32_t bytesLength;
 };
 
 U_NAMESPACE_END
 
-#endif  // __BYTESTRIEBUILDER_H__
+#endif // __BYTESTRIEBUILDER_H__

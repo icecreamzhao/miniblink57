@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -7,12 +6,14 @@
  */
 
 #include "SampleCode.h"
-#include "SkView.h"
-#include "SkCanvas.h"
 #include "SkAAClip.h"
+#include "SkCanvas.h"
+#include "SkPath.h"
+#include "SkView.h"
 
 static void testop(const SkIRect& r0, const SkIRect& r1, SkRegion::Op op,
-                   const SkIRect& expectedR) {
+    const SkIRect& expectedR)
+{
     SkAAClip c0, c1, c2;
     c0.setRect(r0);
     c1.setRect(r1);
@@ -28,18 +29,20 @@ static const struct {
     SkRegion::Op op;
     SkIRect expectedR;
 } gRec[] = {
-    {{ 1, 2, 9, 3 }, { -3, 2, 5, 11 }, SkRegion::kDifference_Op, { 5, 2, 9, 3 }},
-    {{ 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kDifference_Op, { 1, 11, 5, 13 }},
-    {{ 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kReverseDifference_Op, { 1, 2, 5, 10 }},
+    { { 1, 2, 9, 3 }, { -3, 2, 5, 11 }, SkRegion::kDifference_Op, { 5, 2, 9, 3 } },
+    { { 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kDifference_Op, { 1, 11, 5, 13 } },
+    { { 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kReverseDifference_Op, { 1, 2, 5, 10 } },
 };
 
-static void testop() {
+static void testop()
+{
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
         testop(gRec[i].r0, gRec[i].r1, gRec[i].op, gRec[i].expectedR);
     }
 }
 
-static void drawClip(SkCanvas* canvas, const SkAAClip& clip) {
+static void drawClip(SkCanvas* canvas, const SkAAClip& clip)
+{
     SkMask mask;
     SkBitmap bm;
 
@@ -50,20 +53,22 @@ static void drawClip(SkCanvas* canvas, const SkAAClip& clip) {
 
     SkPaint paint;
     canvas->drawBitmap(bm,
-                       SK_Scalar1 * mask.fBounds.fLeft,
-                       SK_Scalar1 * mask.fBounds.fTop,
-                       &paint);
+        SK_Scalar1 * mask.fBounds.fLeft,
+        SK_Scalar1 * mask.fBounds.fTop,
+        &paint);
 }
 
 class AAClipView : public SampleView {
 public:
-    AAClipView() {
+    AAClipView()
+    {
         testop();
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "AAClip");
             return true;
@@ -71,7 +76,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
 #if 1
         SkAAClip aaclip;
         SkPath path;
@@ -80,8 +86,8 @@ protected:
         bounds.set(0, 0, 20, 20);
         bounds.inset(SK_ScalarHalf, SK_ScalarHalf);
 
-//        path.addRect(bounds);
-//        path.addOval(bounds);
+        //        path.addRect(bounds);
+        //        path.addOval(bounds);
         path.addRoundRect(bounds, 4, 4);
         aaclip.setPath(path);
         canvas->translate(30, 30);

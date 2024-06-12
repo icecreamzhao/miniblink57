@@ -24,14 +24,11 @@
  *
  */
 
-#include "config.h"
 #include "core/dom/ClientRect.h"
 
 namespace blink {
 
-ClientRect::ClientRect()
-{
-}
+ClientRect::ClientRect() { }
 
 ClientRect::ClientRect(const IntRect& rect)
     : m_rect(rect)

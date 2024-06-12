@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/presentation/NavigatorPresentation.h"
 
 #include "core/frame/Navigator.h"
@@ -10,9 +9,7 @@
 
 namespace blink {
 
-NavigatorPresentation::NavigatorPresentation()
-{
-}
+NavigatorPresentation::NavigatorPresentation() { }
 
 // static
 const char* NavigatorPresentation::supplementName()
@@ -23,7 +20,8 @@ const char* NavigatorPresentation::supplementName()
 // static
 NavigatorPresentation& NavigatorPresentation::from(Navigator& navigator)
 {
-    NavigatorPresentation* supplement = static_cast<NavigatorPresentation*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    NavigatorPresentation* supplement = static_cast<NavigatorPresentation*>(
+        Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorPresentation();
         provideTo(navigator, supplementName(), supplement);
@@ -46,7 +44,7 @@ Presentation* NavigatorPresentation::presentation(Navigator& navigator)
 DEFINE_TRACE(NavigatorPresentation)
 {
     visitor->trace(m_presentation);
-    HeapSupplement<Navigator>::trace(visitor);
+    Supplement<Navigator>::trace(visitor);
 }
 
 } // namespace blink

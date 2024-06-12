@@ -17,24 +17,24 @@ namespace skia {
 // (1995). Single-letter variable names mirror exactly the usage in the paper to
 // ease reading and analysis.
 class RecursiveFilter {
- public:
-  enum Order {
-    FUNCTION,
-    FIRST_DERIVATIVE,
-    SECOND_DERIVATIVE
-  };
+public:
+    enum Order {
+        FUNCTION,
+        FIRST_DERIVATIVE,
+        SECOND_DERIVATIVE
+    };
 
-  static float qFromSigma(float sigma);
-  static void computeCoefficients(float q, float b[4]);
-  SK_API RecursiveFilter(float sigma, Order order);
+    static float qFromSigma(float sigma);
+    static void computeCoefficients(float q, float b[4]);
+    SK_API RecursiveFilter(float sigma, Order order);
 
-  Order order() const { return order_; }
-  const float* b() const { return b_; }
+    Order order() const { return order_; }
+    const float* b() const { return b_; }
 
- private:
-  Order order_;
-  float q_;
-  float b_[4];
+private:
+    Order order_;
+    float q_;
+    float b_[4];
 };
 
 // Applies a gaussian recursive filter given as |filter| to a single channel at
@@ -54,7 +54,7 @@ SK_API unsigned char SingleChannelRecursiveGaussianX(
     bool absolute_values);
 
 // Applies a gaussian recursive filter along Y axis.
-SK_API unsigned char  SingleChannelRecursiveGaussianY(
+SK_API unsigned char SingleChannelRecursiveGaussianY(
     const unsigned char* source_data,
     int source_byte_row_stride,
     int input_channel_index,
@@ -66,6 +66,6 @@ SK_API unsigned char  SingleChannelRecursiveGaussianY(
     int output_channel_index,
     int output_channel_count,
     bool absolute_values);
-}  // namespace skia
+} // namespace skia
 
-#endif  // SKIA_EXT_RECURSIVE_GAUSSIAN_CONVOLUTION_H_
+#endif // SKIA_EXT_RECURSIVE_GAUSSIAN_CONVOLUTION_H_

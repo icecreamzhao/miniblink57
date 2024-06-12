@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimateMaker_DEFINED
 #define SkAnimateMaker_DEFINED
 
@@ -14,17 +13,16 @@
 
 #include "SkAnimator.h"
 #include "SkBitmap.h"
-#include "SkIntArray.h"
 #include "SkDisplayEvents.h"
 #include "SkDisplayList.h"
 #include "SkDisplayScreenplay.h"
 #include "SkDisplayXMLParser.h"
+#include "SkIntArray.h"
 #include "SkScript.h"
 #include "SkString.h"
 #include "SkTDict.h"
 
 // not sure where this little helper macro should go
-
 
 class SkActive;
 class SkAnimate;
@@ -43,7 +41,7 @@ class SkAnimateMaker {
 public:
     SkAnimateMaker(SkAnimator* animator, SkCanvas* canvas, SkPaint* paint);
     ~SkAnimateMaker();
-    void appendActive(SkActive* );
+    void appendActive(SkActive*);
     void childrenAdd(SkDisplayable* child) { *fChildren.append() = child; }
     void clearExtraPropertyCallBack(SkDisplayTypes type);
     bool computeID(SkDisplayable* displayable, SkDisplayable* parent, SkString* newID);
@@ -56,58 +54,83 @@ public:
 #ifdef SK_DUMP_ENABLED
     void dump(const char* match);
 #endif
-    int dynamicProperty(SkString& nameStr, SkDisplayable**  );
-    bool find(const char* str, SkDisplayable** displayablePtr) const {
+    int dynamicProperty(SkString& nameStr, SkDisplayable**);
+    bool find(const char* str, SkDisplayable** displayablePtr) const
+    {
         return fIDs.find(str, displayablePtr);
     }
-    bool find(const char* str, size_t len, SkDisplayable** displayablePtr) const {
+    bool find(const char* str, size_t len, SkDisplayable** displayablePtr) const
+    {
         return fIDs.find(str, len, displayablePtr);
     }
-    bool findKey(SkDisplayable* displayable, const char** string) const {
+    bool findKey(SkDisplayable* displayable, const char** string) const
+    {
         return fIDs.findKey(displayable, string);
     }
-//  bool find(SkString& string, SkDisplayable** displayablePtr) {
-//      return fIDs.find(string.c_str(), displayablePtr);
-//  }
+    //  bool find(SkString& string, SkDisplayable** displayablePtr) {
+    //      return fIDs.find(string.c_str(), displayablePtr);
+    //  }
     SkAnimator* getAnimator() { return fAnimator; }
     SkMSec getAppTime() const; // call caller to get current time
 #ifdef SK_DEBUG
     SkAnimator* getRoot();
 #endif
-    SkXMLParserError::ErrorCode getErrorCode() const { return fError.getErrorCode(); }
+    SkXMLParserError::ErrorCode getErrorCode() const
+    {
+        return fError.getErrorCode();
+    }
     SkMSec getInTime() { return fDisplayList.getTime(); }
     int getNativeCode() const { return fError.getNativeCode(); }
     bool hasError() { return fError.hasError(); }
     void helperAdd(SkDisplayable* trackMe);
     void helperRemove(SkDisplayable* alreadyTracked);
-    void idsSet(const char* attrValue, size_t len, SkDisplayable* displayable) {
-        fIDs.set(attrValue, len, displayable); }
-//  void loadMovies();
+    void idsSet(const char* attrValue, size_t len, SkDisplayable* displayable)
+    {
+        fIDs.set(attrValue, len, displayable);
+    }
+    //  void loadMovies();
     void notifyInval();
     void notifyInvalTime(SkMSec time);
     void postOnEnd(SkAnimateBase* animate, SkMSec end);
-    void removeActive(SkActive* );
+    void removeActive(SkActive*);
     void reset();
     bool resolveID(SkDisplayable* displayable, SkDisplayable* original);
     void setEnableTime(SkMSec appTime, SkMSec expectedTime);
-    void setErrorCode(SkXMLParserError::ErrorCode err) { if (fError.hasError() == false) fError.INHERITED::setCode(err); }
-    void setErrorCode(SkDisplayXMLParserError::ErrorCode err) { if (fError.hasError() == false) fError.setCode(err); }
-    void setErrorNoun(const SkString& str) { if (fError.hasError() == false) fError.setNoun(str); }
+    void setErrorCode(SkXMLParserError::ErrorCode err)
+    {
+        if (fError.hasError() == false)
+            fError.INHERITED::setCode(err);
+    }
+    void setErrorCode(SkDisplayXMLParserError::ErrorCode err)
+    {
+        if (fError.hasError() == false)
+            fError.setCode(err);
+    }
+    void setErrorNoun(const SkString& str)
+    {
+        if (fError.hasError() == false)
+            fError.setNoun(str);
+    }
     void setErrorString();
-    void setExtraPropertyCallBack(SkDisplayTypes type, SkScriptEngine::_propertyCallBack , void* userStorage);
+    void setExtraPropertyCallBack(SkDisplayTypes type, SkScriptEngine::_propertyCallBack, void* userStorage);
     void setID(SkDisplayable* displayable, const SkString& newID);
     void setInnerError(SkAnimateMaker* maker, const SkString& str) { fError.setInnerError(maker, str); }
-    void setScriptError(const SkScriptEngine& );
+    void setScriptError(const SkScriptEngine&);
 #ifdef SK_DEBUG
-    void validate() { fDisplayList.validate(); }
+    void validate()
+    {
+        fDisplayList.validate();
+    }
 #else
-    void validate() {}
+    void validate()
+    {
+    }
 #endif
     SkDisplayEvent* fActiveEvent;
     SkMSec fAdjustedStart;
     SkCanvas* fCanvas;
     SkMSec fEnableTime;
-    int fEndDepth;  // passed parameter to onEndElement
+    int fEndDepth; // passed parameter to onEndElement
     SkEvents fEvents;
     SkDisplayList fDisplayList;
     SkEventSinkID fHostEventSinkID;
@@ -131,15 +154,15 @@ public:
 #endif
 private:
     void deleteMembers();
-    static bool GetStep(const char* token, size_t len, void* stepPtr, SkScriptValue* );
-    SkAnimateMaker& operator=(SkAnimateMaker& );
+    static bool GetStep(const char* token, size_t len, void* stepPtr, SkScriptValue*);
+    SkAnimateMaker& operator=(SkAnimateMaker&);
     SkTDDisplayableArray fChildren;
     SkTDDisplayableArray fDelayed; // SkApply that contain delayed enable events
     SkDisplayXMLParserError fError;
     SkString fErrorString;
     SkTDArray<SkExtras*> fExtras;
     SkString fFileName;
-    SkTDDisplayableArray fHelpers;  // helper displayables
+    SkTDDisplayableArray fHelpers; // helper displayables
     SkBool8 fLoaded;
     SkTDDisplayableArray fMovies;
     SkTDict<SkDisplayable*> fIDs;

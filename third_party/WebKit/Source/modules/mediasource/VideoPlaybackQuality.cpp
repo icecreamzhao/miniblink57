@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediasource/VideoPlaybackQuality.h"
 
 #include "core/dom/Document.h"
@@ -39,13 +38,19 @@
 namespace blink {
 
 VideoPlaybackQuality* VideoPlaybackQuality::create(
-    const Document& document, unsigned totalVideoFrames, unsigned droppedVideoFrames, unsigned corruptedVideoFrames)
+    const Document& document,
+    unsigned totalVideoFrames,
+    unsigned droppedVideoFrames,
+    unsigned corruptedVideoFrames)
 {
-    return new VideoPlaybackQuality(document, totalVideoFrames, droppedVideoFrames, corruptedVideoFrames);
+    return new VideoPlaybackQuality(document, totalVideoFrames,
+        droppedVideoFrames, corruptedVideoFrames);
 }
 
-VideoPlaybackQuality::VideoPlaybackQuality(
-    const Document& document, unsigned totalVideoFrames, unsigned droppedVideoFrames, unsigned corruptedVideoFrames)
+VideoPlaybackQuality::VideoPlaybackQuality(const Document& document,
+    unsigned totalVideoFrames,
+    unsigned droppedVideoFrames,
+    unsigned corruptedVideoFrames)
     : m_creationTime(0)
     , m_totalVideoFrames(totalVideoFrames)
     , m_droppedVideoFrames(droppedVideoFrames)
@@ -55,4 +60,4 @@ VideoPlaybackQuality::VideoPlaybackQuality(
         m_creationTime = DOMWindowPerformance::performance(*(document.domWindow()))->now();
 }
 
-}
+} // namespace blink

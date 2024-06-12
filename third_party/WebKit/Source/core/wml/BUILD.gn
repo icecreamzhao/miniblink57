@@ -1,0 +1,24 @@
+# Copyright 2017 The tencent Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//third_party/WebKit/Source/core/core.gni")
+
+blink_core_sources("wml") {
+  # Split into multiple static libraries on Windows official builds, where we
+  # run into a 2GB max size limit.
+  if (is_win && is_official_build) {
+    split_count = 5
+  } else {
+    split_count = 1
+  }
+
+  sources = [
+    "WmlAllInOne_android.cpp",
+  ]
+
+  configs += [
+    # TODO(jschuh): crbug.com/167187 fix size_t to int truncations.
+    "//build/config/compiler:no_size_t_to_int_warning",
+  ]
+}

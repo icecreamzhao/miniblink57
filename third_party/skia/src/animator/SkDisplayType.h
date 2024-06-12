@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,18 +5,19 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayType_DEFINED
 #define SkDisplayType_DEFINED
 
 #include "SkMath.h"
 #include "SkScalar.h"
 
+typedef int SkBool;
+
 #ifdef SK_DEBUG
-    #define SK_DUMP_ENABLED
-    #ifdef SK_BUILD_FOR_MAC
-        #define SK_FIND_LEAKS
-    #endif
+#define SK_DUMP_ENABLED
+#ifdef SK_BUILD_FOR_MAC
+#define SK_FIND_LEAKS
+#endif
 #endif
 
 #define SK_LITERAL_STR_EQUAL(str, token, len) (sizeof(str) - 1 == len \
@@ -30,7 +30,7 @@ struct SkMemberInfo;
 enum SkDisplayTypes {
     SkType_Unknown,
     SkType_Math, // for ecmascript compatible Math functions and constants
-    SkType_Number,  // for for ecmascript compatible Number functions and constants
+    SkType_Number, // for for ecmascript compatible Number functions and constants
     SkType_Add,
     SkType_AddCircle,
     SkType_AddGeom,
@@ -71,7 +71,7 @@ enum SkDisplayTypes {
     SkType_Drawable,
     SkType_DrawTo,
     SkType_Dump,
-    SkType_DynamicString,   // evaluate at draw time
+    SkType_DynamicString, // evaluate at draw time
     SkType_Emboss,
     SkType_Event,
     SkType_EventCode,
@@ -111,7 +111,7 @@ enum SkDisplayTypes {
     SkType_Path,
     SkType_PathDirection,
     SkType_PathEffect,
-    SkType_Point,   // used inside other structures, no vtable
+    SkType_Point, // used inside other structures, no vtable
     SkType_DrawPoint, // used to draw points, has a vtable
     SkType_PolyToPoly,
     SkType_Polygon,
@@ -141,7 +141,7 @@ enum SkDisplayTypes {
     SkType_3D_Patch,
     SkType_3D_Point,
     SkType_Snapshot,
-    SkType_String,  // pointer to SkString
+    SkType_String, // pointer to SkString
     SkType_Style,
     SkType_Text,
     SkType_TextBox,
@@ -177,28 +177,31 @@ extern const int kTypeNamesSize;
 
 class SkDisplayType {
 public:
-    static SkDisplayTypes Find(SkAnimateMaker* , const SkMemberInfo* );
-    static const SkMemberInfo* GetMember(SkAnimateMaker* , SkDisplayTypes , const char** );
-    static const SkMemberInfo* GetMembers(SkAnimateMaker* , SkDisplayTypes , int* infoCountPtr);
-    static SkDisplayTypes GetParent(SkAnimateMaker* , SkDisplayTypes );
-    static bool IsDisplayable(SkAnimateMaker* , SkDisplayTypes );
-    static bool IsEnum(SkAnimateMaker* , SkDisplayTypes );
-    static bool IsStruct(SkAnimateMaker* , SkDisplayTypes );
+    static SkDisplayTypes Find(SkAnimateMaker*, const SkMemberInfo*);
+    static const SkMemberInfo* GetMember(SkAnimateMaker*, SkDisplayTypes, const char**);
+    static const SkMemberInfo* GetMembers(SkAnimateMaker*, SkDisplayTypes, int* infoCountPtr);
+    static SkDisplayTypes GetParent(SkAnimateMaker*, SkDisplayTypes);
+    static bool IsDisplayable(SkAnimateMaker*, SkDisplayTypes);
+    static bool IsEnum(SkAnimateMaker*, SkDisplayTypes);
+    static bool IsStruct(SkAnimateMaker*, SkDisplayTypes);
     static SkDisplayTypes RegisterNewType();
-    static SkDisplayTypes Resolve(const char[] , const SkMemberInfo** );
+    static SkDisplayTypes Resolve(const char[], const SkMemberInfo**);
 #ifdef SK_DEBUG
-    static bool IsAnimate(SkDisplayTypes type ) { return type == SkType_Animate ||
-        type == SkType_Set; }
-    static const char* GetName(SkAnimateMaker* , SkDisplayTypes );
+    static bool IsAnimate(SkDisplayTypes type)
+    {
+        return type == SkType_Animate || type == SkType_Set;
+    }
+    static const char* GetName(SkAnimateMaker*, SkDisplayTypes);
 #endif
 #ifdef SK_SUPPORT_UNITTEST
     static void UnitTest();
 #endif
 #if defined SK_DEBUG || defined SK_BUILD_CONDENSED
-    static void BuildCondensedInfo(SkAnimateMaker* );
+    static void BuildCondensedInfo(SkAnimateMaker*);
 #endif
-    static SkDisplayTypes GetType(SkAnimateMaker* , const char[] , size_t len);
-    static SkDisplayable* CreateInstance(SkAnimateMaker* , SkDisplayTypes );
+    static SkDisplayTypes GetType(SkAnimateMaker*, const char[], size_t len);
+    static SkDisplayable* CreateInstance(SkAnimateMaker*, SkDisplayTypes);
+
 private:
     static SkDisplayTypes gNewTypes;
 };

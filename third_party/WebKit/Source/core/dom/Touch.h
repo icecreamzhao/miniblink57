@@ -28,28 +28,40 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
+#include "core/dom/Document.h"
+#include "core/dom/TouchInit.h"
 #include "core/events/EventTarget.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatSize.h"
 #include "platform/geometry/LayoutPoint.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class LocalFrame;
 
-class CORE_EXPORT Touch final : public RefCountedWillBeGarbageCollected<Touch>, public ScriptWrappable {
+class CORE_EXPORT Touch final : public GarbageCollectedFinalized<Touch>,
+                                public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<Touch> create(LocalFrame* frame, EventTarget* target,
-        int identifier, const FloatPoint& screenPos, const FloatPoint& pagePos,
-        const FloatSize& radius, float rotationAngle, float force)
+    static Touch* create(LocalFrame* frame,
+        EventTarget* target,
+        int identifier,
+        const FloatPoint& screenPos,
+        const FloatPoint& pagePos,
+        const FloatSize& radius,
+        float rotationAngle,
+        float force,
+        String region)
     {
-        return adoptRefWillBeNoop(
-            new Touch(frame, target, identifier, screenPos, pagePos, radius, rotationAngle, force));
+        return new Touch(frame, target, identifier, screenPos, pagePos, radius,
+            rotationAngle, force, region);
+    }
+
+    static Touch* create(const Document& document, const TouchInit& initializer)
+    {
+        return new Touch(document.frame(), initializer);
     }
 
     // DOM Touch implementation
@@ -65,24 +77,40 @@ public:
     float radiusY() const { return m_radius.height(); }
     float rotationAngle() const { return m_rotationAngle; }
     float force() const { return m_force; }
+    const String& region() const { return m_region; }
 
     // Blink-internal methods
     const LayoutPoint& absoluteLocation() const { return m_absoluteLocation; }
     const FloatPoint& screenLocation() const { return m_screenPos; }
-    PassRefPtrWillBeRawPtr<Touch> cloneWithNewTarget(EventTarget*) const;
+    Touch* cloneWithNewTarget(EventTarget*) const;
 
     DECLARE_TRACE();
 
 private:
-    Touch(LocalFrame*, EventTarget*, int identifier,
-        const FloatPoint& screenPos, const FloatPoint& pagePos,
-        const FloatSize& radius, float rotationAngle, float force);
+    Touch(LocalFrame*,
+        EventTarget*,
+        int identifier,
+        const FloatPoint& screenPos,
+        const FloatPoint& pagePos,
+        const FloatSize& radius,
+        float rotationAngle,
+        float force,
+        String region);
 
-    Touch(EventTarget*, int identifier, const FloatPoint& clientPos,
-        const FloatPoint& screenPos, const FloatPoint& pagePos,
-        const FloatSize& radius, float rotationAngle, float force, LayoutPoint absoluteLocation);
+    Touch(EventTarget*,
+        int identifier,
+        const FloatPoint& clientPos,
+        const FloatPoint& screenPos,
+        const FloatPoint& pagePos,
+        const FloatSize& radius,
+        float rotationAngle,
+        float force,
+        String region,
+        LayoutPoint absoluteLocation);
 
-    RefPtrWillBeMember<EventTarget> m_target;
+    Touch(LocalFrame*, const TouchInit&);
+
+    Member<EventTarget> m_target;
     int m_identifier;
     // Position relative to the viewport in CSS px.
     FloatPoint m_clientPos;
@@ -94,9 +122,10 @@ private:
     FloatSize m_radius;
     float m_rotationAngle;
     float m_force;
-    // FIXME(rbyers): Shouldn't we be able to migrate callers to relying on screenPos, pagePos
-    // or clientPos? absoluteLocation appears to be the same as pagePos but without browser
-    // scale applied.
+    String m_region;
+    // FIXME(rbyers): Shouldn't we be able to migrate callers to relying on
+    // screenPos, pagePos or clientPos? absoluteLocation appears to be the same as
+    // pagePos but without browser scale applied.
     LayoutPoint m_absoluteLocation;
 };
 

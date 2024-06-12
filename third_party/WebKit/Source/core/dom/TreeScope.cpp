@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/TreeScope.h"
 
 #include "core/HTMLNames.h"
@@ -35,19 +34,22 @@
 #include "core/dom/ElementTraversal.h"
 #include "core/dom/IdTargetObserverRegistry.h"
 #include "core/dom/NodeComputedStyle.h"
+#include "core/dom/StyleChangeReason.h"
 #include "core/dom/TreeScopeAdopter.h"
 #include "core/dom/shadow/ElementShadow.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/editing/DOMSelection.h"
 #include "core/events/EventPath.h"
+#include "core/frame/Deprecation.h"
+#include "core/frame/FrameConsole.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/html/HTMLAnchorElement.h"
 #include "core/html/HTMLFrameOwnerElement.h"
-#include "core/html/HTMLLabelElement.h"
 #include "core/html/HTMLMapElement.h"
+#include "core/inspector/ConsoleMessage.h"
 #include "core/layout/HitTestResult.h"
-#include "core/layout/LayoutView.h"
+#include "core/layout/api/LayoutViewItem.h"
 #include "core/page/FocusController.h"
 #include "core/page/Page.h"
 #include "wtf/Vector.h"
@@ -56,19 +58,28 @@ namespace blink {
 
 using namespace HTMLNames;
 
+namespace {
+
+    void addSingletonDeprecationMessageForImageMap(const LocalFrame* frame,
+        UseCounter::Feature feature,
+        const String& usemap,
+        const AtomicString& name)
+    {
+        if (!frame)
+            return;
+        frame->console().addSingletonMessage(ConsoleMessage::create(
+            DeprecationMessageSource, WarningMessageLevel,
+            Deprecation::deprecationMessage(feature) + " Comparing usemap=" + usemap + " and name=" + name));
+    }
+}
+
 TreeScope::TreeScope(ContainerNode& rootNode, Document& document)
     : m_rootNode(&rootNode)
     , m_document(&document)
     , m_parentTreeScope(&document)
-#if !ENABLE(OILPAN)
-    , m_guardRefCount(0)
-#endif
     , m_idTargetObserverRegistry(IdTargetObserverRegistry::create())
 {
-    ASSERT(rootNode != document);
-#if !ENABLE(OILPAN)
-    m_parentTreeScope->guardRef();
-#endif
+    DCHECK_NE(rootNode, document);
     m_rootNode->setTreeScope(this);
 }
 
@@ -76,29 +87,12 @@ TreeScope::TreeScope(Document& document)
     : m_rootNode(document)
     , m_document(&document)
     , m_parentTreeScope(nullptr)
-#if !ENABLE(OILPAN)
-    , m_guardRefCount(0)
-#endif
     , m_idTargetObserverRegistry(IdTargetObserverRegistry::create())
 {
     m_rootNode->setTreeScope(this);
 }
 
-TreeScope::~TreeScope()
-{
-#if !ENABLE(OILPAN)
-    ASSERT(!m_guardRefCount);
-    m_rootNode->setTreeScope(0);
-
-    if (m_selection) {
-        m_selection->clearTreeScope();
-        m_selection = nullptr;
-    }
-
-    if (m_parentTreeScope)
-        m_parentTreeScope->guardDeref();
-#endif
-}
+TreeScope::~TreeScope() { }
 
 TreeScope* TreeScope::olderShadowRootOrParentTreeScope() const
 {
@@ -109,39 +103,22 @@ TreeScope* TreeScope::olderShadowRootOrParentTreeScope() const
     return parentTreeScope();
 }
 
-bool TreeScope::isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(const TreeScope& scope) const
+bool TreeScope::isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(
+    const TreeScope& scope) const
 {
-    for (const TreeScope* current = &scope; current; current = current->olderShadowRootOrParentTreeScope()) {
+    for (const TreeScope* current = &scope; current;
+         current = current->olderShadowRootOrParentTreeScope()) {
         if (current == this)
             return true;
     }
     return false;
 }
 
-bool TreeScope::rootNodeHasTreeSharedParent() const
-{
-    return rootNode().hasTreeSharedParent();
-}
-
-#if !ENABLE(OILPAN)
-void TreeScope::destroyTreeScopeData()
-{
-    m_elementsById.clear();
-    m_imageMapsByName.clear();
-    m_labelsByForAttribute.clear();
-}
-#endif
-
 void TreeScope::setParentTreeScope(TreeScope& newParentScope)
 {
     // A document node cannot be re-parented.
-    ASSERT(!rootNode().isDocumentNode());
+    DCHECK(!rootNode().isDocumentNode());
 
-#if !ENABLE(OILPAN)
-    newParentScope.guardRef();
-    if (m_parentTreeScope)
-        m_parentTreeScope->guardDeref();
-#endif
     m_parentTreeScope = &newParentScope;
     setDocument(newParentScope.document());
 }
@@ -162,23 +139,26 @@ void TreeScope::clearScopedStyleResolver()
 Element* TreeScope::getElementById(const AtomicString& elementId) const
 {
     if (elementId.isEmpty())
-        return 0;
+        return nullptr;
     if (!m_elementsById)
-        return 0;
+        return nullptr;
     return m_elementsById->getElementById(elementId, this);
 }
 
-const WillBeHeapVector<RawPtrWillBeMember<Element>>& TreeScope::getAllElementsById(const AtomicString& elementId) const
+const HeapVector<Member<Element>>& TreeScope::getAllElementsById(
+    const AtomicString& elementId) const
 {
-    DEFINE_STATIC_LOCAL(OwnPtrWillBePersistent<WillBeHeapVector<RawPtrWillBeMember<Element>>>, emptyVector, (adoptPtrWillBeNoop(new WillBeHeapVector<RawPtrWillBeMember<Element>>())));
+    DEFINE_STATIC_LOCAL(HeapVector<Member<Element>>, emptyVector,
+        (new HeapVector<Member<Element>>));
     if (elementId.isEmpty())
-        return *emptyVector;
+        return emptyVector;
     if (!m_elementsById)
-        return *emptyVector;
+        return emptyVector;
     return m_elementsById->getAllElementsById(elementId, this);
 }
 
-void TreeScope::addElementById(const AtomicString& elementId, Element* element)
+void TreeScope::addElementById(const AtomicString& elementId,
+    Element* element)
 {
     if (!m_elementsById)
         m_elementsById = DocumentOrderedMap::create();
@@ -186,7 +166,8 @@ void TreeScope::addElementById(const AtomicString& elementId, Element* element)
     m_idTargetObserverRegistry->notifyObservers(elementId);
 }
 
-void TreeScope::removeElementById(const AtomicString& elementId, Element* element)
+void TreeScope::removeElementById(const AtomicString& elementId,
+    Element* element)
 {
     if (!m_elementsById)
         return;
@@ -200,12 +181,12 @@ Node* TreeScope::ancestorInThisScope(Node* node) const
         if (node->treeScope() == this)
             return node;
         if (!node->isInShadowTree())
-            return 0;
+            return nullptr;
 
-        node = node->shadowHost();
+        node = node->ownerShadowHost();
     }
 
-    return 0;
+    return nullptr;
 }
 
 void TreeScope::addImageMap(HTMLMapElement* imageMap)
@@ -231,17 +212,40 @@ void TreeScope::removeImageMap(HTMLMapElement* imageMap)
 HTMLMapElement* TreeScope::getImageMap(const String& url) const
 {
     if (url.isNull())
-        return 0;
+        return nullptr;
     if (!m_imageMapsByName)
-        return 0;
+        return nullptr;
     size_t hashPos = url.find('#');
     String name = hashPos == kNotFound ? url : url.substring(hashPos + 1);
-    if (rootNode().document().isHTMLDocument())
-        return toHTMLMapElement(m_imageMapsByName->getElementByLowercasedMapName(AtomicString(name.lower()), this));
-    return toHTMLMapElement(m_imageMapsByName->getElementByMapName(AtomicString(name), this));
+    HTMLMapElement* map = toHTMLMapElement(
+        document().isHTMLDocument()
+            ? m_imageMapsByName->getElementByLowercasedMapName(
+                AtomicString(name.lower()), this)
+            : m_imageMapsByName->getElementByMapName(AtomicString(name), this));
+    if (!map || !document().isHTMLDocument())
+        return map;
+    const AtomicString& nameValue = map->fastGetAttribute(nameAttr);
+    if (nameValue.isNull())
+        return map;
+    String strippedName = nameValue;
+    if (strippedName.startsWith('#'))
+        strippedName = strippedName.substring(1);
+    if (strippedName == name) {
+        UseCounter::count(document(), UseCounter::MapNameMatchingStrict);
+    } else if (equalIgnoringASCIICase(strippedName, name)) {
+        addSingletonDeprecationMessageForImageMap(
+            document().frame(), UseCounter::MapNameMatchingASCIICaseless, url,
+            nameValue);
+    } else {
+        addSingletonDeprecationMessageForImageMap(
+            document().frame(), UseCounter::MapNameMatchingUnicodeLower, url,
+            nameValue);
+    }
+    return map;
 }
 
-static bool pointWithScrollAndZoomIfPossible(const Document& document, IntPoint& point)
+static bool pointWithScrollAndZoomIfPossible(const Document& document,
+    IntPoint& point)
 {
     LocalFrame* frame = document.frame();
     if (!frame)
@@ -252,7 +256,7 @@ static bool pointWithScrollAndZoomIfPossible(const Document& document, IntPoint&
 
     FloatPoint pointInDocument(point);
     pointInDocument.scale(frame->pageZoomFactor(), frame->pageZoomFactor());
-    pointInDocument.moveBy(frameView->scrollPosition());
+    pointInDocument.move(frameView->getScrollOffset());
     IntPoint roundedPointInDocument = roundedIntPoint(pointInDocument);
 
     if (!frameView->visibleContentRect().contains(roundedPointInDocument))
@@ -262,14 +266,20 @@ static bool pointWithScrollAndZoomIfPossible(const Document& document, IntPoint&
     return true;
 }
 
-HitTestResult hitTestInDocument(const Document* document, int x, int y, const HitTestRequest& request)
+HitTestResult hitTestInDocument(const Document* document,
+    int x,
+    int y,
+    const HitTestRequest& request)
 {
     IntPoint hitPoint(x, y);
     if (!pointWithScrollAndZoomIfPossible(*document, hitPoint))
         return HitTestResult();
 
+    if (!document->isActive())
+        return HitTestResult();
+
     HitTestResult result(request, hitPoint);
-    document->layoutView()->hitTest(result);
+    document->layoutViewItem().hitTest(result);
     return result;
 }
 
@@ -278,33 +288,27 @@ Element* TreeScope::elementFromPoint(int x, int y) const
     return hitTestPoint(x, y, HitTestRequest::ReadOnly | HitTestRequest::Active);
 }
 
-Element* TreeScope::hitTestPoint(int x, int y, const HitTestRequest& request) const
+Element* TreeScope::hitTestPoint(int x,
+    int y,
+    const HitTestRequest& request) const
 {
     HitTestResult result = hitTestInDocument(&rootNode().document(), x, y, request);
     Node* node = result.innerNode();
     if (!node || node->isDocumentNode())
-        return 0;
+        return nullptr;
     if (node->isPseudoElement() || node->isTextNode())
         node = node->parentOrShadowHostNode();
-    ASSERT(!node || node->isElementNode() || node->isShadowRoot());
+    DCHECK(!node || node->isElementNode() || node->isShadowRoot());
     node = ancestorInThisScope(node);
     if (!node || !node->isElementNode())
-        return 0;
+        return nullptr;
     return toElement(node);
 }
 
-Vector<Element*> TreeScope::elementsFromPoint(int x, int y) const
+HeapVector<Member<Element>> TreeScope::elementsFromHitTestResult(
+    HitTestResult& result) const
 {
-    Vector<Element*> elements;
-
-    Document& document = rootNode().document();
-    IntPoint hitPoint(x, y);
-    if (!pointWithScrollAndZoomIfPossible(document, hitPoint))
-        return elements;
-
-    HitTestRequest request(HitTestRequest::ReadOnly | HitTestRequest::Active | HitTestRequest::ListBased | HitTestRequest::PenetratingList);
-    HitTestResult result(request, hitPoint);
-    document.layoutView()->hitTest(result);
+    HeapVector<Member<Element>> elements;
 
     Node* lastNode = nullptr;
     for (const auto rectBasedNode : result.listBasedTestResult()) {
@@ -322,62 +326,46 @@ Vector<Element*> TreeScope::elementsFromPoint(int x, int y) const
             continue;
 
         if (node && node->isElementNode()) {
-            elements.append(toElement(node));
+            elements.push_back(toElement(node));
             lastNode = node;
         }
     }
 
     if (rootNode().isDocumentNode()) {
         if (Element* rootElement = toDocument(rootNode()).documentElement()) {
-            if (elements.isEmpty() || elements.last() != rootElement)
-                elements.append(rootElement);
+            if (elements.isEmpty() || elements.back() != rootElement)
+                elements.push_back(rootElement);
         }
     }
 
     return elements;
 }
 
-void TreeScope::addLabel(const AtomicString& forAttributeValue, HTMLLabelElement* element)
+HeapVector<Member<Element>> TreeScope::elementsFromPoint(int x, int y) const
 {
-    ASSERT(m_labelsByForAttribute);
-    m_labelsByForAttribute->add(forAttributeValue, element);
-}
+    Document& document = rootNode().document();
+    IntPoint hitPoint(x, y);
+    if (!pointWithScrollAndZoomIfPossible(document, hitPoint))
+        return HeapVector<Member<Element>>();
 
-void TreeScope::removeLabel(const AtomicString& forAttributeValue, HTMLLabelElement* element)
-{
-    ASSERT(m_labelsByForAttribute);
-    m_labelsByForAttribute->remove(forAttributeValue, element);
-}
+    HitTestRequest request(HitTestRequest::ReadOnly | HitTestRequest::Active | HitTestRequest::ListBased | HitTestRequest::PenetratingList);
+    HitTestResult result(request, hitPoint);
+    document.layoutViewItem().hitTest(result);
 
-HTMLLabelElement* TreeScope::labelElementForId(const AtomicString& forAttributeValue)
-{
-    if (forAttributeValue.isEmpty())
-        return 0;
-
-    if (!m_labelsByForAttribute) {
-        // Populate the map on first access.
-        m_labelsByForAttribute = DocumentOrderedMap::create();
-        for (HTMLLabelElement& label : Traversal<HTMLLabelElement>::startsAfter(rootNode())) {
-            const AtomicString& forValue = label.fastGetAttribute(forAttr);
-            if (!forValue.isEmpty())
-                addLabel(forValue, &label);
-        }
-    }
-
-    return toHTMLLabelElement(m_labelsByForAttribute->getElementByLabelForAttribute(forAttributeValue, this));
+    return elementsFromHitTestResult(result);
 }
 
 DOMSelection* TreeScope::getSelection() const
 {
     if (!rootNode().document().frame())
-        return 0;
+        return nullptr;
 
     if (m_selection)
         return m_selection.get();
 
-    // FIXME: The correct selection in Shadow DOM requires that Position can have a ShadowRoot
-    // as a container.
-    // See https://bugs.webkit.org/show_bug.cgi?id=82697
+    // FIXME: The correct selection in Shadow DOM requires that Position can have
+    // a ShadowRoot as a container.  See
+    // https://bugs.webkit.org/show_bug.cgi?id=82697
     m_selection = DOMSelection::create(this);
     return m_selection.get();
 }
@@ -385,10 +373,11 @@ DOMSelection* TreeScope::getSelection() const
 Element* TreeScope::findAnchor(const String& name)
 {
     if (name.isEmpty())
-        return 0;
+        return nullptr;
     if (Element* element = getElementById(AtomicString(name)))
         return element;
-    for (HTMLAnchorElement& anchor : Traversal<HTMLAnchorElement>::startsAfter(rootNode())) {
+    for (HTMLAnchorElement& anchor :
+        Traversal<HTMLAnchorElement>::startsAfter(rootNode())) {
         if (rootNode().document().inQuirksMode()) {
             // Quirks mode, case insensitive comparison of names.
             if (equalIgnoringCase(anchor.name(), name))
@@ -399,30 +388,30 @@ Element* TreeScope::findAnchor(const String& name)
                 return &anchor;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 void TreeScope::adoptIfNeeded(Node& node)
 {
-    ASSERT(this);
-    ASSERT(!node.isDocumentNode());
-#if !ENABLE(OILPAN)
-    ASSERT_WITH_SECURITY_IMPLICATION(!node.m_deletionHasBegun);
-#endif
+    // Script is forbidden to protect against event handlers firing in the middle
+    // of rescoping in |didMoveToNewDocument| callbacks. See
+    // https://crbug.com/605766 and https://crbug.com/606651.
+    ScriptForbiddenScope forbidScript;
+    DCHECK(this);
+    DCHECK(!node.isDocumentNode());
     TreeScopeAdopter adopter(node, *this);
     if (adopter.needsScopeChange())
         adopter.execute();
 }
 
-static Element* focusedFrameOwnerElement(Frame* focusedFrame, Frame* currentFrame)
+Element* TreeScope::retarget(const Element& target) const
 {
-    for (; focusedFrame; focusedFrame = focusedFrame->tree().parent()) {
-        if (focusedFrame->tree().parent() == currentFrame) {
-            // FIXME: This won't work for OOPI.
-            return focusedFrame->deprecatedLocalOwner();
-        }
+    for (const Element* ancestor = &target; ancestor;
+         ancestor = ancestor->ownerShadowHost()) {
+        if (this == ancestor->treeScope())
+            return const_cast<Element*>(ancestor);
     }
-    return 0;
+    return nullptr;
 }
 
 Element* TreeScope::adjustedFocusedElement() const
@@ -430,41 +419,67 @@ Element* TreeScope::adjustedFocusedElement() const
     Document& document = rootNode().document();
     Element* element = document.focusedElement();
     if (!element && document.page())
-        element = focusedFrameOwnerElement(document.page()->focusController().focusedFrame(), document.frame());
+        element = document.page()->focusController().focusedFrameOwnerElement(
+            *document.frame());
     if (!element)
-        return 0;
+        return nullptr;
 
-    OwnPtrWillBeRawPtr<EventPath> eventPath = adoptPtrWillBeNoop(new EventPath(*element));
-    for (size_t i = 0; i < eventPath->size(); ++i) {
-        if (eventPath->at(i).node() == rootNode()) {
-            // eventPath->at(i).target() is one of the followings:
+    if (rootNode().isInV1ShadowTree()) {
+        if (Element* retargeted = retarget(*element)) {
+            return (this == &retargeted->treeScope()) ? retargeted : nullptr;
+        }
+        return nullptr;
+    }
+
+    EventPath* eventPath = new EventPath(*element);
+    for (const auto& context : eventPath->nodeEventContexts()) {
+        if (context.node() == rootNode()) {
+            // context.target() is one of the followings:
             // - InsertionPoint
             // - shadow host
             // - Document::focusedElement()
             // So, it's safe to do toElement().
-            return toElement(eventPath->at(i).target()->toNode());
+            return toElement(context.target()->toNode());
         }
     }
-    return 0;
+    return nullptr;
+}
+
+Element* TreeScope::adjustedElement(const Element& target) const
+{
+    const Element* adjustedTarget = &target;
+    for (const Element* ancestor = &target; ancestor;
+         ancestor = ancestor->ownerShadowHost()) {
+        // This adjustment is done only for V1 shadows, and is skipped for V0 or UA
+        // shadows, because .pointerLockElement and .(webkit)fullscreenElement is
+        // not available for non-V1 shadow roots.
+        // TODO(kochi): Once V0 code is removed, use the same logic as
+        // .activeElement for V1.
+        if (ancestor->shadowRootIfV1())
+            adjustedTarget = ancestor;
+        if (this == ancestor->treeScope())
+            return const_cast<Element*>(adjustedTarget);
+    }
+    return nullptr;
 }
 
 unsigned short TreeScope::comparePosition(const TreeScope& otherScope) const
 {
     if (otherScope == this)
-        return Node::DOCUMENT_POSITION_EQUIVALENT;
+        return Node::kDocumentPositionEquivalent;
 
-    Vector<const TreeScope*, 16> chain1;
-    Vector<const TreeScope*, 16> chain2;
+    HeapVector<Member<const TreeScope>, 16> chain1;
+    HeapVector<Member<const TreeScope>, 16> chain2;
     const TreeScope* current;
     for (current = this; current; current = current->parentTreeScope())
-        chain1.append(current);
+        chain1.push_back(current);
     for (current = &otherScope; current; current = current->parentTreeScope())
-        chain2.append(current);
+        chain2.push_back(current);
 
     unsigned index1 = chain1.size();
     unsigned index2 = chain2.size();
     if (chain1[index1 - 1] != chain2[index2 - 1])
-        return Node::DOCUMENT_POSITION_DISCONNECTED | Node::DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC;
+        return Node::kDocumentPositionDisconnected | Node::kDocumentPositionImplementationSpecific;
 
     for (unsigned i = std::min(index1, index2); i; --i) {
         const TreeScope* child1 = chain1[--index1];
@@ -473,72 +488,59 @@ unsigned short TreeScope::comparePosition(const TreeScope& otherScope) const
             Node* shadowHost1 = child1->rootNode().parentOrShadowHostNode();
             Node* shadowHost2 = child2->rootNode().parentOrShadowHostNode();
             if (shadowHost1 != shadowHost2)
-                return shadowHost1->compareDocumentPosition(shadowHost2, Node::TreatShadowTreesAsDisconnected);
+                return shadowHost1->compareDocumentPosition(
+                    shadowHost2, Node::TreatShadowTreesAsDisconnected);
 
-            for (const ShadowRoot* child = toShadowRoot(child2->rootNode()).olderShadowRoot(); child; child = child->olderShadowRoot()) {
+            for (const ShadowRoot* child = toShadowRoot(child2->rootNode()).olderShadowRoot();
+                 child; child = child->olderShadowRoot()) {
                 if (child == child1)
-                    return Node::DOCUMENT_POSITION_FOLLOWING;
+                    return Node::kDocumentPositionFollowing;
             }
 
-            return Node::DOCUMENT_POSITION_PRECEDING;
+            return Node::kDocumentPositionPreceding;
         }
     }
 
-    // There was no difference between the two parent chains, i.e., one was a subset of the other. The shorter
-    // chain is the ancestor.
-    return index1 < index2 ?
-        Node::DOCUMENT_POSITION_FOLLOWING | Node::DOCUMENT_POSITION_CONTAINED_BY :
-        Node::DOCUMENT_POSITION_PRECEDING | Node::DOCUMENT_POSITION_CONTAINS;
+    // There was no difference between the two parent chains, i.e., one was a
+    // subset of the other. The shorter chain is the ancestor.
+    return index1 < index2
+        ? Node::kDocumentPositionFollowing | Node::kDocumentPositionContainedBy
+        : Node::kDocumentPositionPreceding | Node::kDocumentPositionContains;
 }
 
-const TreeScope* TreeScope::commonAncestorTreeScope(const TreeScope& other) const
+const TreeScope* TreeScope::commonAncestorTreeScope(
+    const TreeScope& other) const
 {
-    Vector<const TreeScope*, 16> thisChain;
+    HeapVector<Member<const TreeScope>, 16> thisChain;
     for (const TreeScope* tree = this; tree; tree = tree->parentTreeScope())
-        thisChain.append(tree);
+        thisChain.push_back(tree);
 
-    Vector<const TreeScope*, 16> otherChain;
+    HeapVector<Member<const TreeScope>, 16> otherChain;
     for (const TreeScope* tree = &other; tree; tree = tree->parentTreeScope())
-        otherChain.append(tree);
+        otherChain.push_back(tree);
 
-    // Keep popping out the last elements of these chains until a mismatched pair is found. If |this| and |other|
-    // belong to different documents, null will be returned.
-    const TreeScope* lastAncestor = 0;
-    while (!thisChain.isEmpty() && !otherChain.isEmpty() && thisChain.last() == otherChain.last()) {
-        lastAncestor = thisChain.last();
-        thisChain.removeLast();
-        otherChain.removeLast();
+    // Keep popping out the last elements of these chains until a mismatched pair
+    // is found. If |this| and |other| belong to different documents, null will be
+    // returned.
+    const TreeScope* lastAncestor = nullptr;
+    while (!thisChain.isEmpty() && !otherChain.isEmpty() && thisChain.back() == otherChain.back()) {
+        lastAncestor = thisChain.back();
+        thisChain.pop_back();
+        otherChain.pop_back();
     }
     return lastAncestor;
 }
 
 TreeScope* TreeScope::commonAncestorTreeScope(TreeScope& other)
 {
-    return const_cast<TreeScope*>(static_cast<const TreeScope&>(*this).commonAncestorTreeScope(other));
+    return const_cast<TreeScope*>(
+        static_cast<const TreeScope&>(*this).commonAncestorTreeScope(other));
 }
-
-#if ENABLE(SECURITY_ASSERT) && !ENABLE(OILPAN)
-bool TreeScope::deletionHasBegun()
-{
-    return rootNode().m_deletionHasBegun;
-}
-
-void TreeScope::beginDeletion()
-{
-    rootNode().m_deletionHasBegun = true;
-}
-#endif
-
-#if !ENABLE(OILPAN)
-int TreeScope::refCount() const
-{
-    return rootNode().refCount();
-}
-#endif
 
 bool TreeScope::isInclusiveAncestorOf(const TreeScope& scope) const
 {
-    for (const TreeScope* current = &scope; current; current = current->parentTreeScope()) {
+    for (const TreeScope* current = &scope; current;
+         current = current->parentTreeScope()) {
         if (current == this)
             return true;
     }
@@ -548,13 +550,14 @@ bool TreeScope::isInclusiveAncestorOf(const TreeScope& scope) const
 Element* TreeScope::getElementByAccessKey(const String& key) const
 {
     if (key.isEmpty())
-        return 0;
-    Element* result = 0;
+        return nullptr;
+    Element* result = nullptr;
     Node& root = rootNode();
     for (Element& element : ElementTraversal::descendantsOf(root)) {
         if (equalIgnoringCase(element.fastGetAttribute(accesskeyAttr), key))
             result = &element;
-        for (ShadowRoot* shadowRoot = element.youngestShadowRoot(); shadowRoot; shadowRoot = shadowRoot->olderShadowRoot()) {
+        for (ShadowRoot* shadowRoot = element.youngestShadowRoot(); shadowRoot;
+             shadowRoot = shadowRoot->olderShadowRoot()) {
             if (Element* shadowResult = shadowRoot->getElementByAccessKey(key))
                 result = shadowResult;
         }
@@ -564,12 +567,16 @@ Element* TreeScope::getElementByAccessKey(const String& key) const
 
 void TreeScope::setNeedsStyleRecalcForViewportUnits()
 {
-    for (Element* element = ElementTraversal::firstWithin(rootNode()); element; element = ElementTraversal::nextIncludingPseudo(*element)) {
-        for (ShadowRoot* root = element->youngestShadowRoot(); root; root = root->olderShadowRoot())
+    for (Element* element = ElementTraversal::firstWithin(rootNode()); element;
+         element = ElementTraversal::nextIncludingPseudo(*element)) {
+        for (ShadowRoot* root = element->youngestShadowRoot(); root;
+             root = root->olderShadowRoot())
             root->setNeedsStyleRecalcForViewportUnits();
         const ComputedStyle* style = element->computedStyle();
         if (style && style->hasViewportUnits())
-            element->setNeedsStyleRecalc(LocalStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::ViewportUnits));
+            element->setNeedsStyleRecalc(LocalStyleChange,
+                StyleChangeReasonForTracing::create(
+                    StyleChangeReason::ViewportUnits));
     }
 }
 
@@ -582,8 +589,8 @@ DEFINE_TRACE(TreeScope)
     visitor->trace(m_selection);
     visitor->trace(m_elementsById);
     visitor->trace(m_imageMapsByName);
-    visitor->trace(m_labelsByForAttribute);
     visitor->trace(m_scopedStyleResolver);
+    visitor->trace(m_radioButtonGroupScope);
 }
 
 } // namespace blink

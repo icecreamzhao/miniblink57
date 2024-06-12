@@ -26,6 +26,7 @@
 #ifndef TextEncoding_h
 #define TextEncoding_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/WTFExport.h"
 #include "wtf/text/TextCodec.h"
@@ -33,9 +34,14 @@
 
 namespace WTF {
 
-class WTF_EXPORT TextEncoding {
+class WTF_EXPORT TextEncoding final {
+    USING_FAST_MALLOC(TextEncoding);
+
 public:
-    TextEncoding() : m_name(0) { }
+    TextEncoding()
+        : m_name(0)
+    {
+    }
     TextEncoding(const char* name);
     TextEncoding(const String& name);
 
@@ -50,28 +56,35 @@ public:
         bool ignored;
         return decode(str, length, false, ignored);
     }
-    String decode(const char*, size_t length, bool stopOnError, bool& sawError) const;
+    String decode(const char*,
+        size_t length,
+        bool stopOnError,
+        bool& sawError) const;
 
-    // Encodes the string, but does *not* normalize first.
     CString encode(const String&, UnencodableHandling) const;
 
-    // Applies Unicode NFC normalization, then encodes the normalized string.
-    CString normalizeAndEncode(const String&, UnencodableHandling) const;
+    bool isNonByteBasedEncoding() const;
 
 private:
-    bool isNonByteBasedEncoding() const;
     bool isUTF7Encoding() const;
 
     const char* m_name;
 };
 
-inline bool operator==(const TextEncoding& a, const TextEncoding& b) { return a.name() == b.name(); }
-inline bool operator!=(const TextEncoding& a, const TextEncoding& b) { return a.name() != b.name(); }
+inline bool operator==(const TextEncoding& a, const TextEncoding& b)
+{
+    return a.name() == b.name();
+}
+inline bool operator!=(const TextEncoding& a, const TextEncoding& b)
+{
+    return a.name() != b.name();
+}
 
 WTF_EXPORT const TextEncoding& ASCIIEncoding();
 WTF_EXPORT const TextEncoding& Latin1Encoding();
 WTF_EXPORT const TextEncoding& UTF16BigEndianEncoding();
 WTF_EXPORT const TextEncoding& UTF16LittleEndianEncoding();
+WTF_EXPORT const TextEncoding& UTF32Encoding();
 WTF_EXPORT const TextEncoding& UTF32BigEndianEncoding();
 WTF_EXPORT const TextEncoding& UTF32LittleEndianEncoding();
 WTF_EXPORT const TextEncoding& UTF8Encoding();
@@ -84,6 +97,7 @@ using WTF::Latin1Encoding;
 using WTF::UTF16BigEndianEncoding;
 using WTF::UTF16LittleEndianEncoding;
 using WTF::UTF32BigEndianEncoding;
+using WTF::UTF32Encoding;
 using WTF::UTF32LittleEndianEncoding;
 using WTF::UTF8Encoding;
 using WTF::WindowsLatin1Encoding;

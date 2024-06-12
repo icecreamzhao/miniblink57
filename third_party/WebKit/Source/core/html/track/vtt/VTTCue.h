@@ -32,6 +32,7 @@
 
 #include "core/html/track/TextTrackCue.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -42,6 +43,7 @@ class VTTCue;
 class VTTScanner;
 
 struct VTTDisplayParameters {
+    STACK_ALLOCATED();
     VTTDisplayParameters();
 
     FloatPoint position;
@@ -54,9 +56,9 @@ struct VTTDisplayParameters {
 
 class VTTCueBox final : public HTMLDivElement {
 public:
-    static PassRefPtrWillBeRawPtr<VTTCueBox> create(Document& document)
+    static VTTCueBox* create(Document& document)
     {
-        return adoptRefWillBeNoop(new VTTCueBox(document));
+        return new VTTCueBox(document);
     }
 
     void applyCSSProperties(const VTTDisplayParameters&);
@@ -74,10 +76,14 @@ private:
 
 class VTTCue final : public TextTrackCue {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<VTTCue> create(Document& document, double startTime, double endTime, const String& text)
+    static VTTCue* create(Document& document,
+        double startTime,
+        double endTime,
+        const String& text)
     {
-        return adoptRefWillBeNoop(new VTTCue(document, startTime, endTime, text));
+        return new VTTCue(document, startTime, endTime, text);
     }
 
     ~VTTCue() override;
@@ -108,7 +114,7 @@ public:
     // Applies CSS override style from user settings.
     void applyUserOverrideCSSProperties();
 
-    PassRefPtrWillBeRawPtr<DocumentFragment> getCueAsHTML();
+    DocumentFragment* getCueAsHTML();
 
     const String& regionId() const { return m_regionId; }
     void setRegionId(const String&);
@@ -129,17 +135,15 @@ public:
     };
     WritingDirection getWritingDirection() const { return m_writingDirection; }
 
-    enum CueAlignment {
-        Start = 0,
+    enum CueAlignment { Start = 0,
         Middle,
         End,
         Left,
         Right,
-        NumberOfAlignments
-    };
-    CueAlignment cueAlignment() const { return m_cueAlignment; }
+        NumberOfAlignments };
+    CueAlignment getCueAlignment() const { return m_cueAlignment; }
 
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override;
 
 #ifndef NDEBUG
     String toString() const override;
@@ -152,7 +156,7 @@ private:
 
     Document& document() const;
 
-    PassRefPtrWillBeRawPtr<VTTCueBox> getDisplayTree();
+    VTTCueBox* getDisplayTree();
 
     void cueDidChange() override;
 
@@ -166,15 +170,13 @@ private:
     float calculateComputedTextPosition() const;
     CueAlignment calculateComputedCueAlignment() const;
 
-    enum CueSetting {
-        None,
+    enum CueSetting { None,
         Vertical,
         Line,
         Position,
         Size,
         Align,
-        RegionId
-    };
+        RegionId };
     CueSetting settingName(VTTScanner&) const;
 
     String m_text;
@@ -185,9 +187,9 @@ private:
     CueAlignment m_cueAlignment;
     String m_regionId;
 
-    RefPtrWillBeMember<DocumentFragment> m_vttNodeTree;
-    RefPtrWillBeMember<HTMLDivElement> m_cueBackgroundBox;
-    RefPtrWillBeMember<VTTCueBox> m_displayTree;
+    Member<DocumentFragment> m_vttNodeTree;
+    Member<HTMLDivElement> m_cueBackgroundBox;
+    Member<VTTCueBox> m_displayTree;
 
     bool m_snapToLines : 1;
     bool m_displayTreeShouldChange : 1;

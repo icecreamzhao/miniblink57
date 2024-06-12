@@ -28,30 +28,10 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontData.h"
-#include "wtf/Vector.h"
+#include "platform/fonts/FontDataForRangeSet.h"
+#include "platform/fonts/SimpleFontData.h"
 
 namespace blink {
-
-class SimpleFontData;
-
-struct FontDataRange {
-    FontDataRange(UChar32 from, UChar32 to, PassRefPtr<SimpleFontData> fontData)
-        : m_from(from)
-        , m_to(to)
-        , m_fontData(fontData)
-    {
-    }
-
-    UChar32 from() const { return m_from; }
-    UChar32 to() const { return m_to; }
-    bool isEntireRange() const { return !m_from && m_to >= 0x10ffff; }
-    PassRefPtr<SimpleFontData> fontData() const { return m_fontData; }
-
-private:
-    UChar32 m_from;
-    UChar32 m_to;
-    RefPtr<SimpleFontData> m_fontData;
-};
 
 class PLATFORM_EXPORT SegmentedFontData : public FontData {
 public:
@@ -59,9 +39,9 @@ public:
 
     ~SegmentedFontData() override;
 
-    void appendRange(const FontDataRange& range) { m_ranges.append(range); }
-    unsigned numRanges() const { return m_ranges.size(); }
-    const FontDataRange& rangeAt(unsigned i) const { return m_ranges[i]; }
+    void appendFace(const PassRefPtr<FontDataForRangeSet> fontDataForRangeSet) { m_faces.append(fontDataForRangeSet); }
+    unsigned numFaces() const { return m_faces.size(); }
+    const PassRefPtr<FontDataForRangeSet> faceAt(unsigned i) const { return m_faces[i]; }
     bool containsCharacter(UChar32) const;
 
 private:
@@ -75,7 +55,7 @@ private:
     bool isSegmented() const override;
     bool shouldSkipDrawing() const override;
 
-    Vector<FontDataRange, 1> m_ranges;
+    Vector<RefPtr<FontDataForRangeSet>, 1> m_faces;
 };
 
 DEFINE_FONT_DATA_TYPE_CASTS(SegmentedFontData, true);

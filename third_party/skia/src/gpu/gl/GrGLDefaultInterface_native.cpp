@@ -7,6 +7,7 @@
 
 #include "gl/GrGLInterface.h"
 
-const GrGLInterface* GrGLDefaultInterface() {
+const GrGLInterface* GrGLDefaultInterface()
+{
     return GrGLCreateNativeInterface();
 }

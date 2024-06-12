@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkTextToPath.h"
 #include "SkAnimateMaker.h"
 #include "SkDrawPaint.h"
@@ -26,16 +25,22 @@ const SkMemberInfo SkTextToPath::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkTextToPath);
 
-SkTextToPath::SkTextToPath() : paint(NULL), path(NULL), text(NULL) {
+SkTextToPath::SkTextToPath()
+    : paint(nullptr)
+    , path(nullptr)
+    , text(nullptr)
+{
 }
 
-bool SkTextToPath::draw(SkAnimateMaker& maker) {
+bool SkTextToPath::draw(SkAnimateMaker& maker)
+{
     path->draw(maker);
     return false;
 }
 
-void SkTextToPath::onEndElement(SkAnimateMaker& maker) {
-    if (paint == NULL || path == NULL || text == NULL) {
+void SkTextToPath::onEndElement(SkAnimateMaker& maker)
+{
+    if (paint == nullptr || path == nullptr || text == nullptr) {
         // !!! add error message here
         maker.setErrorCode(SkDisplayXMLParserError::kErrorInAttributeValue);
         return;

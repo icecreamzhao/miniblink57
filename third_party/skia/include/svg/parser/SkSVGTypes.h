@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkSVGTypes_DEFINED
 #define SkSVGTypes_DEFINED
 

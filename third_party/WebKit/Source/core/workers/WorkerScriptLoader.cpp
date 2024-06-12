@@ -25,30 +25,31 @@
  *
  */
 
-#include "config.h"
 #include "core/workers/WorkerScriptLoader.h"
 
 #include "core/dom/ExecutionContext.h"
 #include "core/html/parser/TextResourceDecoder.h"
 #include "core/loader/WorkerThreadableLoader.h"
+#include "core/origin_trials/OriginTrialContext.h"
 #include "core/workers/WorkerGlobalScope.h"
+#include "platform/HTTPNames.h"
 #include "platform/network/ContentSecurityPolicyResponseHeaders.h"
+#include "platform/network/NetworkUtils.h"
 #include "platform/network/ResourceResponse.h"
+#include "platform/weborigin/SecurityOrigin.h"
+#include "public/platform/WebAddressSpace.h"
 #include "public/platform/WebURLRequest.h"
-
-#include "wtf/OwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/RefPtr.h"
+#include <memory>
 
 namespace blink {
 
 WorkerScriptLoader::WorkerScriptLoader()
     : m_responseCallback(nullptr)
     , m_finishedCallback(nullptr)
-    , m_failed(false)
-    , m_needToCancel(false)
-    , m_identifier(0)
-    , m_appCacheID(0)
     , m_requestContext(WebURLRequest::RequestContextWorker)
+    , m_responseAddressSpace(WebAddressSpacePublic)
 {
 }
 
@@ -62,15 +63,16 @@ WorkerScriptLoader::~WorkerScriptLoader()
         cancel();
 }
 
-void WorkerScriptLoader::loadSynchronously(ExecutionContext& executionContext, const KURL& url, CrossOriginRequestPolicy crossOriginRequestPolicy)
+void WorkerScriptLoader::loadSynchronously(
+    ExecutionContext& executionContext,
+    const KURL& url,
+    CrossOriginRequestPolicy crossOriginRequestPolicy,
+    WebAddressSpace creationAddressSpace)
 {
     m_url = url;
 
-    OwnPtr<ResourceRequest> request(createResourceRequest());
-    if (!request)
-        return;
-
-    ASSERT_WITH_SECURITY_IMPLICATION(executionContext.isWorkerGlobalScope());
+    ResourceRequest request(createResourceRequest(creationAddressSpace));
+    SECURITY_DCHECK(executionContext.isWorkerGlobalScope());
 
     ThreadableLoaderOptions options;
     options.crossOriginRequestPolicy = crossOriginRequestPolicy;
@@ -80,50 +82,72 @@ void WorkerScriptLoader::loadSynchronously(ExecutionContext& executionContext, c
     ResourceLoaderOptions resourceLoaderOptions;
     resourceLoaderOptions.allowCredentials = AllowStoredCredentials;
 
-    WorkerThreadableLoader::loadResourceSynchronously(toWorkerGlobalScope(executionContext), *request, *this, options, resourceLoaderOptions);
+    // TODO(yhirano): Remove this CHECK once https://crbug.com/667254 is fixed.
+    CHECK(!m_threadableLoader);
+    WorkerThreadableLoader::loadResourceSynchronously(
+        toWorkerGlobalScope(executionContext), request, *this, options,
+        resourceLoaderOptions);
 }
 
-void WorkerScriptLoader::loadAsynchronously(ExecutionContext& executionContext, const KURL& url, CrossOriginRequestPolicy crossOriginRequestPolicy, PassOwnPtr<Closure> responseCallback, PassOwnPtr<Closure> finishedCallback)
+void WorkerScriptLoader::loadAsynchronously(
+    ExecutionContext& executionContext,
+    const KURL& url,
+    CrossOriginRequestPolicy crossOriginRequestPolicy,
+    WebAddressSpace creationAddressSpace,
+    std::unique_ptr<WTF::Closure> responseCallback,
+    std::unique_ptr<WTF::Closure> finishedCallback)
 {
-    ASSERT(responseCallback || finishedCallback);
-    m_responseCallback = responseCallback;
-    m_finishedCallback = finishedCallback;
+    DCHECK(responseCallback || finishedCallback);
+    m_responseCallback = std::move(responseCallback);
+    m_finishedCallback = std::move(finishedCallback);
     m_url = url;
 
-    OwnPtr<ResourceRequest> request(createResourceRequest());
-    if (!request)
-        return;
-
+    ResourceRequest request(createResourceRequest(creationAddressSpace));
     ThreadableLoaderOptions options;
     options.crossOriginRequestPolicy = crossOriginRequestPolicy;
 
     ResourceLoaderOptions resourceLoaderOptions;
     resourceLoaderOptions.allowCredentials = AllowStoredCredentials;
 
+    // During create, callbacks may happen which could remove the last reference
+    // to this object, while some of the callchain assumes that the client and
+    // loader wouldn't be deleted within callbacks.
+    // (E.g. see crbug.com/524694 for why we can't easily remove this protect)
+    RefPtr<WorkerScriptLoader> protect(this);
     m_needToCancel = true;
-    m_threadableLoader = ThreadableLoader::create(executionContext, this, *request, options, resourceLoaderOptions);
+    // TODO(yhirano): Remove this CHECK once https://crbug.com/667254 is fixed.
+    CHECK(!m_threadableLoader);
+    m_threadableLoader = ThreadableLoader::create(
+        executionContext, this, options, resourceLoaderOptions,
+        ThreadableLoader::ClientSpec::kWorkerScriptLoader);
+    m_threadableLoader->start(request);
     if (m_failed)
         notifyFinished();
-    // Do nothing here since notifyFinished() could delete |this|.
 }
 
 const KURL& WorkerScriptLoader::responseURL() const
 {
-    ASSERT(!failed());
+    DCHECK(!failed());
     return m_responseURL;
 }
 
-PassOwnPtr<ResourceRequest> WorkerScriptLoader::createResourceRequest()
+ResourceRequest WorkerScriptLoader::createResourceRequest(
+    WebAddressSpace creationAddressSpace)
 {
-    OwnPtr<ResourceRequest> request = adoptPtr(new ResourceRequest(m_url));
-    request->setHTTPMethod("GET");
-    request->setRequestContext(m_requestContext);
-    return request.release();
+    ResourceRequest request(m_url);
+    request.setHTTPMethod(HTTPNames::GET);
+    request.setRequestContext(m_requestContext);
+    request.setExternalRequestStateFromRequestorAddressSpace(
+        creationAddressSpace);
+    return request;
 }
 
-void WorkerScriptLoader::didReceiveResponse(unsigned long identifier, const ResourceResponse& response, PassOwnPtr<WebDataConsumerHandle> handle)
+void WorkerScriptLoader::didReceiveResponse(
+    unsigned long identifier,
+    const ResourceResponse& response,
+    std::unique_ptr<WebDataConsumerHandle> handle)
 {
-    ASSERT_UNUSED(handle, !handle);
+    DCHECK(!handle);
     if (response.httpStatusCode() / 100 != 2 && response.httpStatusCode()) {
         notifyError();
         return;
@@ -132,7 +156,18 @@ void WorkerScriptLoader::didReceiveResponse(unsigned long identifier, const Reso
     m_responseURL = response.url();
     m_responseEncoding = response.textEncodingName();
     m_appCacheID = response.appCacheID();
+
+    m_referrerPolicy = response.httpHeaderField(HTTPNames::Referrer_Policy);
     processContentSecurityPolicy(response);
+    m_originTrialTokens = OriginTrialContext::parseHeaderValue(
+        response.httpHeaderField(HTTPNames::Origin_Trial));
+
+    if (NetworkUtils::isReservedIPAddress(response.remoteIPAddress())) {
+        m_responseAddressSpace = SecurityOrigin::create(m_responseURL)->isLocalhost()
+            ? WebAddressSpaceLocal
+            : WebAddressSpacePrivate;
+    }
+
     if (m_responseCallback)
         (*m_responseCallback)();
 }
@@ -157,7 +192,7 @@ void WorkerScriptLoader::didReceiveData(const char* data, unsigned len)
 
 void WorkerScriptLoader::didReceiveCachedMetadata(const char* data, int size)
 {
-    m_cachedMetadata = adoptPtr(new Vector<char>(size));
+    m_cachedMetadata = WTF::makeUnique<Vector<char>>(size);
     memcpy(m_cachedMetadata->data(), data, size);
 }
 
@@ -170,9 +205,10 @@ void WorkerScriptLoader::didFinishLoading(unsigned long identifier, double)
     notifyFinished();
 }
 
-void WorkerScriptLoader::didFail(const ResourceError&)
+void WorkerScriptLoader::didFail(const ResourceError& error)
 {
     m_needToCancel = false;
+    m_canceled = error.isCancellation();
     notifyError();
 }
 
@@ -213,11 +249,12 @@ void WorkerScriptLoader::notifyFinished()
     if (!m_finishedCallback)
         return;
 
-    OwnPtr<Closure> callback = m_finishedCallback.release();
+    std::unique_ptr<WTF::Closure> callback = std::move(m_finishedCallback);
     (*callback)();
 }
 
-void WorkerScriptLoader::processContentSecurityPolicy(const ResourceResponse& response)
+void WorkerScriptLoader::processContentSecurityPolicy(
+    const ResourceResponse& response)
 {
     // Per http://www.w3.org/TR/CSP2/#processing-model-workers, if the Worker's
     // URL is not a GUID, then it grabs its CSP from the response headers
@@ -227,7 +264,8 @@ void WorkerScriptLoader::processContentSecurityPolicy(const ResourceResponse& re
     if (!response.url().protocolIs("blob") && !response.url().protocolIs("file") && !response.url().protocolIs("filesystem")) {
         m_contentSecurityPolicy = ContentSecurityPolicy::create();
         m_contentSecurityPolicy->setOverrideURLForSelf(response.url());
-        m_contentSecurityPolicy->didReceiveHeaders(ContentSecurityPolicyResponseHeaders(response));
+        m_contentSecurityPolicy->didReceiveHeaders(
+            ContentSecurityPolicyResponseHeaders(response));
     }
 }
 

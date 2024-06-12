@@ -37,6 +37,7 @@
 #include "platform/geometry/IntRectOutsets.h"
 #include "platform/text/TextDirection.h"
 #include "platform/text/WritingMode.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -46,24 +47,41 @@ namespace blink {
 //
 // Negative lengths can be used to express insets.
 class PLATFORM_EXPORT LayoutRectOutsets {
+    DISALLOW_NEW();
+
 public:
-    LayoutRectOutsets() : m_top(0), m_right(0), m_bottom(0), m_left(0) { }
-    LayoutRectOutsets(LayoutUnit top, LayoutUnit right, LayoutUnit bottom, LayoutUnit left)
-        : m_top(top), m_right(right), m_bottom(bottom), m_left(left) { }
+    LayoutRectOutsets() { }
+    LayoutRectOutsets(LayoutUnit top,
+        LayoutUnit right,
+        LayoutUnit bottom,
+        LayoutUnit left)
+        : m_top(top)
+        , m_right(right)
+        , m_bottom(bottom)
+        , m_left(left)
+    {
+    }
+    LayoutRectOutsets(int top, int right, int bottom, int left)
+        : m_top(LayoutUnit(top))
+        , m_right(LayoutUnit(right))
+        , m_bottom(LayoutUnit(bottom))
+        , m_left(LayoutUnit(left))
+    {
+    }
 
     LayoutRectOutsets(const IntRectOutsets& outsets)
-        : m_top(outsets.top())
-        , m_right(outsets.right())
-        , m_bottom(outsets.bottom())
-        , m_left(outsets.left())
+        : m_top(LayoutUnit(outsets.top()))
+        , m_right(LayoutUnit(outsets.right()))
+        , m_bottom(LayoutUnit(outsets.bottom()))
+        , m_left(LayoutUnit(outsets.left()))
     {
     }
 
     LayoutRectOutsets(const FloatRectOutsets& outsets)
-        : m_top(outsets.top())
-        , m_right(outsets.right())
-        , m_bottom(outsets.bottom())
-        , m_left(outsets.left())
+        : m_top(LayoutUnit(outsets.top()))
+        , m_right(LayoutUnit(outsets.right()))
+        , m_bottom(LayoutUnit(outsets.bottom()))
+        , m_left(LayoutUnit(outsets.left()))
     {
     }
 
@@ -93,6 +111,8 @@ public:
     LayoutUnit after(WritingMode) const;
     LayoutUnit start(WritingMode, TextDirection) const;
     LayoutUnit end(WritingMode, TextDirection) const;
+    LayoutUnit over(WritingMode) const;
+    LayoutUnit under(WritingMode) const;
 
     void setBefore(WritingMode, LayoutUnit);
     void setAfter(WritingMode, LayoutUnit);
@@ -101,10 +121,7 @@ public:
 
     bool operator==(const LayoutRectOutsets other) const
     {
-        return top() == other.top()
-            && right() == other.right()
-            && bottom() == other.bottom()
-            && left() == other.left();
+        return top() == other.top() && right() == other.right() && bottom() == other.bottom() && left() == other.left();
     }
 
 private:

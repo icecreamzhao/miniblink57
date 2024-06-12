@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef V8CustomXPathNSResolver_h
 #define V8CustomXPathNSResolver_h
 
@@ -45,7 +44,8 @@ namespace blink {
 // must not exceed the lifetime of the passed handle.
 class V8CustomXPathNSResolver final : public XPathNSResolver {
 public:
-    static V8CustomXPathNSResolver* create(ScriptState*, v8::Local<v8::Object> resolver);
+    static V8CustomXPathNSResolver* create(ScriptState*,
+        v8::Local<v8::Object> resolver);
 
     AtomicString lookupNamespaceURI(const String& prefix) override;
 

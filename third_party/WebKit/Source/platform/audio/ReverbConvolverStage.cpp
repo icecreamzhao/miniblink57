@@ -26,24 +26,28 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
 #include "platform/audio/ReverbConvolverStage.h"
-
 #include "platform/audio/ReverbAccumulationBuffer.h"
 #include "platform/audio/ReverbConvolver.h"
 #include "platform/audio/ReverbInputBuffer.h"
 #include "platform/audio/VectorMath.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 
 namespace blink {
 
 using namespace VectorMath;
 
-ReverbConvolverStage::ReverbConvolverStage(const float* impulseResponse, size_t, size_t reverbTotalLatency, size_t stageOffset, size_t stageLength,
-                                           size_t fftSize, size_t renderPhase, size_t renderSliceSize, ReverbAccumulationBuffer* accumulationBuffer, bool directMode)
+ReverbConvolverStage::ReverbConvolverStage(
+    const float* impulseResponse,
+    size_t,
+    size_t reverbTotalLatency,
+    size_t stageOffset,
+    size_t stageLength,
+    size_t fftSize,
+    size_t renderPhase,
+    size_t renderSliceSize,
+    ReverbAccumulationBuffer* accumulationBuffer,
+    bool directMode)
     : m_accumulationBuffer(accumulationBuffer)
     , m_accumulationReadIndex(0)
     , m_inputReadIndex(0)
@@ -53,23 +57,25 @@ ReverbConvolverStage::ReverbConvolverStage(const float* impulseResponse, size_t,
     ASSERT(accumulationBuffer);
 
     if (!m_directMode) {
-        m_fftKernel = adoptPtr(new FFTFrame(fftSize));
+        m_fftKernel = WTF::makeUnique<FFTFrame>(fftSize);
         m_fftKernel->doPaddedFFT(impulseResponse + stageOffset, stageLength);
-        m_fftConvolver = adoptPtr(new FFTConvolver(fftSize));
+        m_fftConvolver = WTF::makeUnique<FFTConvolver>(fftSize);
     } else {
         ASSERT(!stageOffset);
         ASSERT(stageLength <= fftSize / 2);
 
-        m_directKernel = adoptPtr(new AudioFloatArray(fftSize / 2));
+        m_directKernel = WTF::wrapUnique(new AudioFloatArray(fftSize / 2));
         m_directKernel->copyToRange(impulseResponse, 0, stageLength);
-        m_directConvolver = adoptPtr(new DirectConvolver(renderSliceSize));
+        m_directConvolver = WTF::makeUnique<DirectConvolver>(renderSliceSize);
     }
     m_temporaryBuffer.allocate(renderSliceSize);
 
-    // The convolution stage at offset stageOffset needs to have a corresponding delay to cancel out the offset.
+    // The convolution stage at offset stageOffset needs to have a corresponding
+    // delay to cancel out the offset.
     size_t totalDelay = stageOffset + reverbTotalLatency;
 
-    // But, the FFT convolution itself incurs fftSize / 2 latency, so subtract this out...
+    // But, the FFT convolution itself incurs fftSize / 2 latency, so subtract
+    // this out...
     size_t halfSize = fftSize / 2;
     if (!m_directMode) {
         ASSERT(totalDelay >= halfSize);
@@ -77,8 +83,10 @@ ReverbConvolverStage::ReverbConvolverStage(const float* impulseResponse, size_t,
             totalDelay -= halfSize;
     }
 
-    // We divide up the total delay, into pre and post delay sections so that we can schedule at exactly the moment when the FFT will happen.
-    // This is coordinated with the other stages, so they don't all do their FFTs at the same time...
+    // We divide up the total delay, into pre and post delay sections so that we
+    // can schedule at exactly the moment when the FFT will happen.  This is
+    // coordinated with the other stages, so they don't all do their FFTs at the
+    // same time...
     int maxPreDelayLength = std::min(halfSize, totalDelay);
     m_preDelayLength = totalDelay > 0 ? renderPhase % maxPreDelayLength : 0;
     if (m_preDelayLength > totalDelay)
@@ -93,14 +101,16 @@ ReverbConvolverStage::ReverbConvolverStage(const float* impulseResponse, size_t,
     m_preDelayBuffer.allocate(delayBufferSize);
 }
 
-void ReverbConvolverStage::processInBackground(ReverbConvolver* convolver, size_t framesToProcess)
+void ReverbConvolverStage::processInBackground(ReverbConvolver* convolver,
+    size_t framesToProcess)
 {
     ReverbInputBuffer* inputBuffer = convolver->inputBuffer();
     float* source = inputBuffer->directReadFrom(&m_inputReadIndex, framesToProcess);
     process(source, framesToProcess);
 }
 
-void ReverbConvolverStage::process(const float* source, size_t framesToProcess)
+void ReverbConvolverStage::process(const float* source,
+    size_t framesToProcess)
 {
     ASSERT(source);
     if (!source)
@@ -113,7 +123,8 @@ void ReverbConvolverStage::process(const float* source, size_t framesToProcess)
     float* temporaryBuffer;
     bool isTemporaryBufferSafe = false;
     if (m_preDelayLength > 0) {
-        // Handles both the read case (call to process() ) and the write case (memcpy() )
+        // Handles both the read case (call to process() ) and the write case
+        // (memcpy() )
         bool isPreDelaySafe = m_preReadWriteIndex + framesToProcess <= m_preDelayBuffer.size();
         ASSERT(isPreDelaySafe);
         if (!isPreDelaySafe)
@@ -138,20 +149,26 @@ void ReverbConvolverStage::process(const float* source, size_t framesToProcess)
         return;
 
     if (m_framesProcessed < m_preDelayLength) {
-        // For the first m_preDelayLength frames don't process the convolver, instead simply buffer in the pre-delay.
-        // But while buffering the pre-delay, we still need to update our index.
-        m_accumulationBuffer->updateReadIndex(&m_accumulationReadIndex, framesToProcess);
+        // For the first m_preDelayLength frames don't process the convolver,
+        // instead simply buffer in the pre-delay.  But while buffering the
+        // pre-delay, we still need to update our index.
+        m_accumulationBuffer->updateReadIndex(&m_accumulationReadIndex,
+            framesToProcess);
     } else {
         // Now, run the convolution (into the delay buffer).
         // An expensive FFT will happen every fftSize / 2 frames.
         // We process in-place here...
         if (!m_directMode)
-            m_fftConvolver->process(m_fftKernel.get(), preDelayedSource, temporaryBuffer, framesToProcess);
+            m_fftConvolver->process(m_fftKernel.get(), preDelayedSource,
+                temporaryBuffer, framesToProcess);
         else
-            m_directConvolver->process(m_directKernel.get(), preDelayedSource, temporaryBuffer, framesToProcess);
+            m_directConvolver->process(m_directKernel.get(), preDelayedSource,
+                temporaryBuffer, framesToProcess);
 
         // Now accumulate into reverb's accumulation buffer.
-        m_accumulationBuffer->accumulate(temporaryBuffer, framesToProcess, &m_accumulationReadIndex, m_postDelayLength);
+        m_accumulationBuffer->accumulate(temporaryBuffer, framesToProcess,
+            &m_accumulationReadIndex,
+            m_postDelayLength);
     }
 
     // Finally copy input to pre-delay.
@@ -180,5 +197,3 @@ void ReverbConvolverStage::reset()
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

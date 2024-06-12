@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/BackgroundHTMLInputStream.h"
 
 namespace blink {
@@ -38,7 +37,7 @@ BackgroundHTMLInputStream::BackgroundHTMLInputStream()
 void BackgroundHTMLInputStream::append(const String& input)
 {
     m_current.append(SegmentedString(input));
-    m_segments.append(input);
+    m_segments.push_back(input);
 }
 
 void BackgroundHTMLInputStream::close()
@@ -46,15 +45,18 @@ void BackgroundHTMLInputStream::close()
     m_current.close();
 }
 
-HTMLInputCheckpoint BackgroundHTMLInputStream::createCheckpoint(size_t tokensExtractedSincePreviousCheckpoint)
+HTMLInputCheckpoint BackgroundHTMLInputStream::createCheckpoint(
+    size_t tokensExtractedSincePreviousCheckpoint)
 {
     HTMLInputCheckpoint checkpoint = m_checkpoints.size();
-    m_checkpoints.append(Checkpoint(m_current, m_segments.size(), tokensExtractedSincePreviousCheckpoint));
+    m_checkpoints.push_back(Checkpoint(m_current, m_segments.size(),
+        tokensExtractedSincePreviousCheckpoint));
     m_totalCheckpointTokenCount += tokensExtractedSincePreviousCheckpoint;
     return checkpoint;
 }
 
-void BackgroundHTMLInputStream::invalidateCheckpointsBefore(HTMLInputCheckpoint newFirstValidCheckpointIndex)
+void BackgroundHTMLInputStream::invalidateCheckpointsBefore(
+    HTMLInputCheckpoint newFirstValidCheckpointIndex)
 {
     ASSERT(newFirstValidCheckpointIndex < m_checkpoints.size());
     // There is nothing to do for the first valid checkpoint.
@@ -65,20 +67,24 @@ void BackgroundHTMLInputStream::invalidateCheckpointsBefore(HTMLInputCheckpoint 
     const Checkpoint& lastInvalidCheckpoint = m_checkpoints[newFirstValidCheckpointIndex - 1];
 
     ASSERT(m_firstValidSegmentIndex <= lastInvalidCheckpoint.numberOfSegmentsAlreadyAppended);
-    for (size_t i = m_firstValidSegmentIndex; i < lastInvalidCheckpoint.numberOfSegmentsAlreadyAppended; ++i)
+    for (size_t i = m_firstValidSegmentIndex;
+         i < lastInvalidCheckpoint.numberOfSegmentsAlreadyAppended; ++i)
         m_segments[i] = String();
     m_firstValidSegmentIndex = lastInvalidCheckpoint.numberOfSegmentsAlreadyAppended;
 
-    for (size_t i = m_firstValidCheckpointIndex; i < newFirstValidCheckpointIndex; ++i)
+    for (size_t i = m_firstValidCheckpointIndex; i < newFirstValidCheckpointIndex;
+         ++i)
         m_checkpoints[i].clear();
     m_firstValidCheckpointIndex = newFirstValidCheckpointIndex;
 
     updateTotalCheckpointTokenCount();
 }
 
-void BackgroundHTMLInputStream::rewindTo(HTMLInputCheckpoint checkpointIndex, const String& unparsedInput)
+void BackgroundHTMLInputStream::rewindTo(HTMLInputCheckpoint checkpointIndex,
+    const String& unparsedInput)
 {
-    ASSERT(checkpointIndex < m_checkpoints.size()); // If this ASSERT fires, checkpointIndex is invalid.
+    ASSERT(checkpointIndex < m_checkpoints
+                                 .size()); // If this ASSERT fires, checkpointIndex is invalid.
     const Checkpoint& checkpoint = m_checkpoints[checkpointIndex];
     ASSERT(!checkpoint.isNull());
 
@@ -86,13 +92,16 @@ void BackgroundHTMLInputStream::rewindTo(HTMLInputCheckpoint checkpointIndex, co
 
     m_current = checkpoint.input;
 
-    for (size_t i = checkpoint.numberOfSegmentsAlreadyAppended; i < m_segments.size(); ++i) {
+    for (size_t i = checkpoint.numberOfSegmentsAlreadyAppended;
+         i < m_segments.size(); ++i) {
         ASSERT(!m_segments[i].isNull());
         m_current.append(SegmentedString(m_segments[i]));
     }
 
-    if (!unparsedInput.isEmpty())
-        m_current.prepend(SegmentedString(unparsedInput));
+    if (!unparsedInput.isEmpty()) {
+        m_current.prepend(SegmentedString(unparsedInput),
+            SegmentedString::PrependType::NewInput);
+    }
 
     if (isClosed && !m_current.isClosed())
         m_current.close();
@@ -110,9 +119,9 @@ void BackgroundHTMLInputStream::rewindTo(HTMLInputCheckpoint checkpointIndex, co
 void BackgroundHTMLInputStream::updateTotalCheckpointTokenCount()
 {
     m_totalCheckpointTokenCount = 0;
-    size_t lastCheckpointIndex = m_checkpoints.size();
-    for (size_t i = 0; i < lastCheckpointIndex; ++i)
-        m_totalCheckpointTokenCount += m_checkpoints[i].tokensExtractedSincePreviousCheckpoint;
+    for (const auto& checkpoint : m_checkpoints) {
+        m_totalCheckpointTokenCount += checkpoint.tokensExtractedSincePreviousCheckpoint;
+    }
 }
 
-}
+} // namespace blink

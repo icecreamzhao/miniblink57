@@ -9,10 +9,10 @@
 
 #if SK_SUPPORT_GPU
 
+#include "GrContext.h"
 #include "SkCanvas.h"
 #include "SkSurface.h"
 #include "SkTextBlob.h"
-#include "GrContext.h"
 
 // This tests that we correctly regenerate textblobs after freeing all gpu resources crbug/491350
 namespace skiagm {
@@ -21,18 +21,21 @@ public:
     TextBlobUseAfterGpuFree() { }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("textblobuseaftergpufree");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         // This GM exists to test a specific feature of the GPU backend.
-        if (NULL == canvas->getGrContext()) {
-            this->drawGpuOnlyMessage(canvas);
+        if (nullptr == canvas->getGrContext()) {
+            skiagm::GM::DrawGpuOnlyMessage(canvas);
             return;
         }
 
@@ -40,6 +43,7 @@ protected:
 
         SkPaint paint;
         sk_tool_utils::set_portable_typeface(&paint);
+        paint.setAntiAlias(true);
         paint.setTextSize(20);
 
         SkTextBlobBuilder builder;
@@ -69,6 +73,6 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(TextBlobUseAfterGpuFree); )
+DEF_GM(return new TextBlobUseAfterGpuFree;)
 }
 #endif

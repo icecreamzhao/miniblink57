@@ -5,12 +5,12 @@
  * found in the LICENSE file.
  */
 
-#include "Test.h"
 #include "SkCanvas.h"
 #include "SkDebugCanvas.h"
 #include "SkPicture.h"
 #include "SkPictureFlat.h"
 #include "SkPictureRecord.h"
+#include "Test.h"
 
 // This test exercises the Matrix/Clip State collapsing system. It generates
 // example skps and the compares the actual stored operations to the expected
@@ -58,7 +58,8 @@
 //#define TEST_COLLAPSE_MATRIX_CLIP_STATE 1
 
 // Extract the command ops from the input SkPicture
-static void gets_ops(SkPicture& input, SkTDArray<DrawType>* ops) {
+static void gets_ops(SkPicture& input, SkTDArray<DrawType>* ops)
+{
     SkDebugCanvas debugCanvas(input.width(), input.height());
     debugCanvas.setBounds(input.width(), input.height());
     input.draw(&debugCanvas);
@@ -139,89 +140,92 @@ enum DrawOpType {
 static const int kNonSaveLayerDrawOpTypeCount = kLastNonSaveLayer_DrawOpType + 1;
 
 typedef void (*PFEmitMC)(SkCanvas* canvas, MatType mat, ClipType clip,
-                         DrawOpType draw, SkTDArray<DrawType>* expected,
-                         int accumulatedClips);
+    DrawOpType draw, SkTDArray<DrawType>* expected,
+    int accumulatedClips);
 typedef void (*PFEmitBody)(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                           ClipType clip, DrawOpType draw,
-                           SkTDArray<DrawType>* expected, int accumulatedClips);
+    ClipType clip, DrawOpType draw,
+    SkTDArray<DrawType>* expected, int accumulatedClips);
 typedef void (*PFEmitStruct)(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                             ClipType clip, PFEmitBody emitBody, DrawOpType draw,
-                             SkTDArray<DrawType>* expected);
+    ClipType clip, PFEmitBody emitBody, DrawOpType draw,
+    SkTDArray<DrawType>* expected);
 
 //////////////////////////////////////////////////////////////////////////////
 
 // TODO: expand the testing to include the different ops & AA types!
-static void emit_clip(SkCanvas* canvas, ClipType clip) {
+static void emit_clip(SkCanvas* canvas, ClipType clip)
+{
     switch (clip) {
-        case kNone_ClipType:
-            break;
-        case kRect_ClipType: {
-            SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
-            canvas->clipRect(r, SkRegion::kIntersect_Op, true);
-            break;
-        }
-        case kRRect_ClipType: {
-            SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
-            SkRRect rr;
-            rr.setRectXY(r, 10, 10);
-            canvas->clipRRect(rr, SkRegion::kIntersect_Op, true);
-            break;
-        }
-        case kPath_ClipType: {
-            SkPath p;
-            p.moveTo(5.0f, 5.0f);
-            p.lineTo(50.0f, 50.0f);
-            p.lineTo(100.0f, 5.0f);
-            p.close();
-            canvas->clipPath(p, SkRegion::kIntersect_Op, true);
-            break;
-        }
-        case kRegion_ClipType: {
-            SkIRect rects[2] = {
-                { 1, 1, 55, 55 },
-                { 45, 45, 99, 99 },
-            };
-            SkRegion r;
-            r.setRects(rects, 2);
-            canvas->clipRegion(r, SkRegion::kIntersect_Op);
-            break;
-        }
-        default:
-            SkASSERT(0);
+    case kNone_ClipType:
+        break;
+    case kRect_ClipType: {
+        SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
+        canvas->clipRect(r, SkRegion::kIntersect_Op, true);
+        break;
+    }
+    case kRRect_ClipType: {
+        SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
+        SkRRect rr;
+        rr.setRectXY(r, 10, 10);
+        canvas->clipRRect(rr, SkRegion::kIntersect_Op, true);
+        break;
+    }
+    case kPath_ClipType: {
+        SkPath p;
+        p.moveTo(5.0f, 5.0f);
+        p.lineTo(50.0f, 50.0f);
+        p.lineTo(100.0f, 5.0f);
+        p.close();
+        canvas->clipPath(p, SkRegion::kIntersect_Op, true);
+        break;
+    }
+    case kRegion_ClipType: {
+        SkIRect rects[2] = {
+            { 1, 1, 55, 55 },
+            { 45, 45, 99, 99 },
+        };
+        SkRegion r;
+        r.setRects(rects, 2);
+        canvas->clipRegion(r, SkRegion::kIntersect_Op);
+        break;
+    }
+    default:
+        SkASSERT(0);
     }
 }
 
-static void add_clip(ClipType clip, MatType mat, SkTDArray<DrawType>* expected) {
-    if (NULL == expected) {
-        // expected is NULL if this clip will be fused into later clips
+static void add_clip(ClipType clip, MatType mat, SkTDArray<DrawType>* expected)
+{
+    if (nullptr == expected) {
+        // expected is nullptr if this clip will be fused into later clips
         return;
     }
 
     switch (clip) {
-        case kNone_ClipType:
-            break;
-        case kRect_ClipType:
-            *expected->append() = CONCAT;
-            *expected->append() = CLIP_RECT;
-            break;
-        case kRRect_ClipType:
-            *expected->append() = CONCAT;
-            *expected->append() = CLIP_RRECT;
-            break;
-        case kPath_ClipType:
-            *expected->append() = CONCAT;
-            *expected->append() = CLIP_PATH;
-            break;
-        case kRegion_ClipType:
-            *expected->append() = CONCAT;
-            *expected->append() = CLIP_REGION;
-            break;
-        default:
-            SkASSERT(0);
+    case kNone_ClipType:
+        break;
+    case kRect_ClipType:
+        *expected->append() = CONCAT;
+        *expected->append() = CLIP_RECT;
+        break;
+    case kRRect_ClipType:
+        *expected->append() = CONCAT;
+        *expected->append() = CLIP_RRECT;
+        break;
+    case kPath_ClipType:
+        *expected->append() = CONCAT;
+        *expected->append() = CLIP_PATH;
+        break;
+    case kRegion_ClipType:
+        *expected->append() = CONCAT;
+        *expected->append() = CLIP_REGION;
+        break;
+    default:
+        SkASSERT(0);
     }
 }
 
-static void emit_mat(SkCanvas* canvas, MatType mat) {
+static void emit_mat(SkCanvas* canvas, MatType mat)
+{
     switch (mat) {
     case kNone_MatType:
         break;
@@ -254,20 +258,21 @@ static void emit_mat(SkCanvas* canvas, MatType mat) {
     }
 }
 
-static void add_mat(MatType mat, SkTDArray<DrawType>* expected) {
-    if (NULL == expected) {
-        // expected is NULL if this matrix call will be fused into later ones
+static void add_mat(MatType mat, SkTDArray<DrawType>* expected)
+{
+    if (nullptr == expected) {
+        // expected is nullptr if this matrix call will be fused into later ones
         return;
     }
 
     switch (mat) {
     case kNone_MatType:
         break;
-    case kTranslate_MatType:    // fall thru
-    case kScale_MatType:        // fall thru
-    case kSkew_MatType:         // fall thru
-    case kRotate_MatType:       // fall thru
-    case kConcat_MatType:       // fall thru
+    case kTranslate_MatType: // fall thru
+    case kScale_MatType: // fall thru
+    case kSkew_MatType: // fall thru
+    case kRotate_MatType: // fall thru
+    case kConcat_MatType: // fall thru
     case kSetMatrix_MatType:
         // TODO: this system currently converts a setMatrix to concat. If we wanted to
         // really preserve the setMatrix semantics we should keep it a setMatrix. I'm
@@ -280,39 +285,40 @@ static void add_mat(MatType mat, SkTDArray<DrawType>* expected) {
     }
 }
 
-static void emit_draw(SkCanvas* canvas, DrawOpType draw, SkTDArray<DrawType>* expected) {
+static void emit_draw(SkCanvas* canvas, DrawOpType draw, SkTDArray<DrawType>* expected)
+{
     switch (draw) {
-        case kNone_DrawOpType:
-            break;
-        case kClear_DrawOpType:
-            canvas->clear(SK_ColorRED);
-            *expected->append() = DRAW_CLEAR;
-            break;
-        case kOval_DrawOpType: {
-            SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
-            SkPaint p;
-            canvas->drawOval(r, p);
-            *expected->append() = DRAW_OVAL;
-            break;
-        }
-        case kRect_DrawOpType: {
-            SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
-            SkPaint p;
-            canvas->drawRect(r, p);
-            *expected->append() = DRAW_RECT;
-            break;
-        }
-        case kRRect_DrawOpType: {
-            SkRect r = SkRect::MakeLTRB(10.0f, 10.0f, 90.0f, 90.0f);
-            SkRRect rr;
-            rr.setRectXY(r, 5.0f, 5.0f);
-            SkPaint p;
-            canvas->drawRRect(rr, p);
-            *expected->append() = DRAW_RRECT;
-            break;
-        }
-        default:
-            SkASSERT(0);
+    case kNone_DrawOpType:
+        break;
+    case kClear_DrawOpType:
+        canvas->clear(SK_ColorRED);
+        *expected->append() = DRAW_CLEAR;
+        break;
+    case kOval_DrawOpType: {
+        SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
+        SkPaint p;
+        canvas->drawOval(r, p);
+        *expected->append() = DRAW_OVAL;
+        break;
+    }
+    case kRect_DrawOpType: {
+        SkRect r = SkRect::MakeLTRB(10, 10, 90, 90);
+        SkPaint p;
+        canvas->drawRect(r, p);
+        *expected->append() = DRAW_RECT;
+        break;
+    }
+    case kRRect_DrawOpType: {
+        SkRect r = SkRect::MakeLTRB(10.0f, 10.0f, 90.0f, 90.0f);
+        SkRRect rr;
+        rr.setRectXY(r, 5.0f, 5.0f);
+        SkPaint p;
+        canvas->drawRRect(rr, p);
+        *expected->append() = DRAW_RRECT;
+        break;
+    }
+    default:
+        SkASSERT(0);
     }
 }
 
@@ -323,8 +329,9 @@ static void emit_draw(SkCanvas* canvas, DrawOpType draw, SkTDArray<DrawType>* ex
 //  matrix
 // Simple case - the clip isn't effect by the matrix
 static void emit_clip_and_mat(SkCanvas* canvas, MatType mat, ClipType clip,
-                              DrawOpType draw, SkTDArray<DrawType>* expected,
-                              int accumulatedClips) {
+    DrawOpType draw, SkTDArray<DrawType>* expected,
+    int accumulatedClips)
+{
     emit_clip(canvas, clip);
     emit_mat(canvas, mat);
 
@@ -344,8 +351,9 @@ static void emit_clip_and_mat(SkCanvas* canvas, MatType mat, ClipType clip,
 // Emitting the matrix first is more challenging since the matrix has to be
 // pushed across (i.e., applied to) the clip.
 static void emit_mat_and_clip(SkCanvas* canvas, MatType mat, ClipType clip,
-                              DrawOpType draw, SkTDArray<DrawType>* expected,
-                              int accumulatedClips) {
+    DrawOpType draw, SkTDArray<DrawType>* expected,
+    int accumulatedClips)
+{
     emit_mat(canvas, mat);
     emit_clip(canvas, clip);
 
@@ -367,8 +375,9 @@ static void emit_mat_and_clip(SkCanvas* canvas, MatType mat, ClipType clip,
 //  clip
 // This tests that the matrices and clips coalesce when collapsed
 static void emit_double_mat_and_clip(SkCanvas* canvas, MatType mat, ClipType clip,
-                                     DrawOpType draw, SkTDArray<DrawType>* expected,
-                                     int accumulatedClips) {
+    DrawOpType draw, SkTDArray<DrawType>* expected,
+    int accumulatedClips)
+{
     emit_mat(canvas, mat);
     emit_clip(canvas, clip);
     emit_mat(canvas, mat);
@@ -392,8 +401,9 @@ static void emit_double_mat_and_clip(SkCanvas* canvas, MatType mat, ClipType cli
 // This tests accumulation of clips in same transform state. It also tests pushing
 // of the matrix across both the clips.
 static void emit_mat_clip_clip(SkCanvas* canvas, MatType mat, ClipType clip,
-                               DrawOpType draw, SkTDArray<DrawType>* expected,
-                               int accumulatedClips) {
+    DrawOpType draw, SkTDArray<DrawType>* expected,
+    int accumulatedClips)
+{
     emit_mat(canvas, mat);
     emit_clip(canvas, clip);
     emit_clip(canvas, clip);
@@ -415,15 +425,15 @@ static void emit_mat_clip_clip(SkCanvas* canvas, MatType mat, ClipType clip,
 //  matrix & clip calls
 //  draw op
 static void emit_body0(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                       ClipType clip, DrawOpType draw,
-                       SkTDArray<DrawType>* expected, int accumulatedClips) {
-    bool needsSaveRestore = kNone_DrawOpType != draw &&
-                            (kNone_MatType != mat || kNone_ClipType != clip);
+    ClipType clip, DrawOpType draw,
+    SkTDArray<DrawType>* expected, int accumulatedClips)
+{
+    bool needsSaveRestore = kNone_DrawOpType != draw && (kNone_MatType != mat || kNone_ClipType != clip);
 
     if (needsSaveRestore) {
         *expected->append() = SAVE;
     }
-    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips+1);
+    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips + 1);
     emit_draw(canvas, draw, expected);
     if (needsSaveRestore) {
         *expected->append() = RESTORE;
@@ -436,21 +446,21 @@ static void emit_body0(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
 //  matrix & clip calls
 //  draw op
 static void emit_body1(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                       ClipType clip, DrawOpType draw,
-                       SkTDArray<DrawType>* expected, int accumulatedClips) {
-    bool needsSaveRestore = kNone_DrawOpType != draw &&
-                            (kNone_MatType != mat || kNone_ClipType != clip);
+    ClipType clip, DrawOpType draw,
+    SkTDArray<DrawType>* expected, int accumulatedClips)
+{
+    bool needsSaveRestore = kNone_DrawOpType != draw && (kNone_MatType != mat || kNone_ClipType != clip);
 
     if (needsSaveRestore) {
         *expected->append() = SAVE;
     }
-    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips+1);
+    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips + 1);
     emit_draw(canvas, draw, expected);
     if (needsSaveRestore) {
         *expected->append() = RESTORE;
         *expected->append() = SAVE;
     }
-    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips+2);
+    (*emitMC)(canvas, mat, clip, draw, expected, accumulatedClips + 2);
     emit_draw(canvas, draw, expected);
     if (needsSaveRestore) {
         *expected->append() = RESTORE;
@@ -464,26 +474,26 @@ static void emit_body1(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
 //      draw op
 //  Restore
 static void emit_body2(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                       ClipType clip, DrawOpType draw,
-                       SkTDArray<DrawType>* expected, int accumulatedClips) {
-    bool needsSaveRestore = kNone_DrawOpType != draw &&
-                            (kNone_MatType != mat || kNone_ClipType != clip);
+    ClipType clip, DrawOpType draw,
+    SkTDArray<DrawType>* expected, int accumulatedClips)
+{
+    bool needsSaveRestore = kNone_DrawOpType != draw && (kNone_MatType != mat || kNone_ClipType != clip);
 
     if (kNone_MatType != mat || kNone_ClipType != clip) {
         *expected->append() = SAVE;
     }
-    (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, accumulatedClips+1);
+    (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, accumulatedClips + 1);
     *expected->append() = SAVE_LAYER;
     // TODO: widen testing to exercise saveLayer's parameters
-    canvas->saveLayer(NULL, NULL);
-        if (needsSaveRestore) {
-            *expected->append() = SAVE;
-        }
-        (*emitMC)(canvas, mat, clip, draw, expected, 1);
-        emit_draw(canvas, draw, expected);
-        if (needsSaveRestore) {
-            *expected->append() = RESTORE;
-        }
+    canvas->saveLayer(nullptr, nullptr);
+    if (needsSaveRestore) {
+        *expected->append() = SAVE;
+    }
+    (*emitMC)(canvas, mat, clip, draw, expected, 1);
+    emit_draw(canvas, draw, expected);
+    if (needsSaveRestore) {
+        *expected->append() = RESTORE;
+    }
     canvas->restore();
     *expected->append() = RESTORE;
     if (kNone_MatType != mat || kNone_ClipType != clip) {
@@ -502,38 +512,38 @@ static void emit_body2(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
 //      matrix & clip calls (will be ignored)
 //  Restore
 static void emit_body3(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
-                       ClipType clip, DrawOpType draw,
-                       SkTDArray<DrawType>* expected, int accumulatedClips) {
-    bool needsSaveRestore = kNone_DrawOpType != draw &&
-                            (kNone_MatType != mat || kNone_ClipType != clip);
+    ClipType clip, DrawOpType draw,
+    SkTDArray<DrawType>* expected, int accumulatedClips)
+{
+    bool needsSaveRestore = kNone_DrawOpType != draw && (kNone_MatType != mat || kNone_ClipType != clip);
 
     if (kNone_MatType != mat || kNone_ClipType != clip) {
         *expected->append() = SAVE;
     }
-    (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, accumulatedClips+1);
+    (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, accumulatedClips + 1);
     *expected->append() = SAVE_LAYER;
     // TODO: widen testing to exercise saveLayer's parameters
-    canvas->saveLayer(NULL, NULL);
-        (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, 1);
-        if (kNone_MatType != mat || kNone_ClipType != clip) {
-            *expected->append() = SAVE;
-        }
-        *expected->append() = SAVE_LAYER;
-        // TODO: widen testing to exercise saveLayer's parameters
-        canvas->saveLayer(NULL, NULL);
-            if (needsSaveRestore) {
-                *expected->append() = SAVE;
-            }
-            (*emitMC)(canvas, mat, clip, draw, expected, 1);
-            emit_draw(canvas, draw, expected);
-            if (needsSaveRestore) {
-                *expected->append() = RESTORE;
-            }
-        canvas->restore();             // for saveLayer
-        *expected->append() = RESTORE; // for saveLayer
-        if (kNone_MatType != mat || kNone_ClipType != clip) {
-            *expected->append() = RESTORE;
-        }
+    canvas->saveLayer(nullptr, nullptr);
+    (*emitMC)(canvas, mat, clip, kSaveLayer_DrawOpType, expected, 1);
+    if (kNone_MatType != mat || kNone_ClipType != clip) {
+        *expected->append() = SAVE;
+    }
+    *expected->append() = SAVE_LAYER;
+    // TODO: widen testing to exercise saveLayer's parameters
+    canvas->saveLayer(nullptr, nullptr);
+    if (needsSaveRestore) {
+        *expected->append() = SAVE;
+    }
+    (*emitMC)(canvas, mat, clip, draw, expected, 1);
+    emit_draw(canvas, draw, expected);
+    if (needsSaveRestore) {
+        *expected->append() = RESTORE;
+    }
+    canvas->restore(); // for saveLayer
+    *expected->append() = RESTORE; // for saveLayer
+    if (kNone_MatType != mat || kNone_ClipType != clip) {
+        *expected->append() = RESTORE;
+    }
     canvas->restore();
     // required to match forced SAVE_LAYER
     *expected->append() = RESTORE;
@@ -550,9 +560,10 @@ static void emit_body3(SkCanvas* canvas, PFEmitMC emitMC, MatType mat,
 //  Restore
 // Note: the outer save/restore are provided by beginRecording/endRecording
 static void emit_struct0(SkCanvas* canvas,
-                         PFEmitMC emitMC, MatType mat, ClipType clip,
-                         PFEmitBody emitBody, DrawOpType draw,
-                         SkTDArray<DrawType>* expected) {
+    PFEmitMC emitMC, MatType mat, ClipType clip,
+    PFEmitBody emitBody, DrawOpType draw,
+    SkTDArray<DrawType>* expected)
+{
     (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 0);
 }
 
@@ -566,14 +577,15 @@ static void emit_struct0(SkCanvas* canvas,
 //  Restore
 // Note: the outer save/restore are provided by beginRecording/endRecording
 static void emit_struct1(SkCanvas* canvas,
-                         PFEmitMC emitMC, MatType mat, ClipType clip,
-                         PFEmitBody emitBody, DrawOpType draw,
-                         SkTDArray<DrawType>* expected) {
-    (*emitMC)(canvas, mat, clip, draw, NULL, 0); // these get fused into later ops
+    PFEmitMC emitMC, MatType mat, ClipType clip,
+    PFEmitBody emitBody, DrawOpType draw,
+    SkTDArray<DrawType>* expected)
+{
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 0); // these get fused into later ops
     canvas->save();
-        (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
+    (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
     canvas->restore();
-    (*emitMC)(canvas, mat, clip, draw, NULL, 0); // these will get removed
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 0); // these will get removed
 }
 
 // Emit:
@@ -589,17 +601,18 @@ static void emit_struct1(SkCanvas* canvas,
 //  Restore
 // Note: the outer save/restore are provided by beginRecording/endRecording
 static void emit_struct2(SkCanvas* canvas,
-                         PFEmitMC emitMC, MatType mat, ClipType clip,
-                         PFEmitBody emitBody, DrawOpType draw,
-                         SkTDArray<DrawType>* expected) {
-    (*emitMC)(canvas, mat, clip, draw, NULL, 1); // these will get fused into later ops
+    PFEmitMC emitMC, MatType mat, ClipType clip,
+    PFEmitBody emitBody, DrawOpType draw,
+    SkTDArray<DrawType>* expected)
+{
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 1); // these will get fused into later ops
     canvas->save();
-        (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
+    (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
     canvas->restore();
     canvas->save();
-        (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
+    (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
     canvas->restore();
-    (*emitMC)(canvas, mat, clip, draw, NULL, 1); // these will get removed
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 1); // these will get removed
 }
 
 // Emit:
@@ -618,26 +631,28 @@ static void emit_struct2(SkCanvas* canvas,
 //  Restore
 // Note: the outer save/restore are provided by beginRecording/endRecording
 static void emit_struct3(SkCanvas* canvas,
-                         PFEmitMC emitMC, MatType mat, ClipType clip,
-                         PFEmitBody emitBody, DrawOpType draw,
-                         SkTDArray<DrawType>* expected) {
-    (*emitMC)(canvas, mat, clip, draw, NULL, 0); // these will get fused into later ops
+    PFEmitMC emitMC, MatType mat, ClipType clip,
+    PFEmitBody emitBody, DrawOpType draw,
+    SkTDArray<DrawType>* expected)
+{
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 0); // these will get fused into later ops
     canvas->save();
-        (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
+    (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 1);
     canvas->restore();
     canvas->save();
-        (*emitMC)(canvas, mat, clip, draw, NULL, 1); // these will get fused into later ops
-        canvas->save();
-            (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 2);
-        canvas->restore();
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 1); // these will get fused into later ops
+    canvas->save();
+    (*emitBody)(canvas, emitMC, mat, clip, draw, expected, 2);
     canvas->restore();
-    (*emitMC)(canvas, mat, clip, draw, NULL, 0); // these will get removed
+    canvas->restore();
+    (*emitMC)(canvas, mat, clip, draw, nullptr, 0); // these will get removed
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 #ifdef SK_COLLAPSE_MATRIX_CLIP_STATE
-static void print(const SkTDArray<DrawType>& expected, const SkTDArray<DrawType>& actual) {
+static void print(const SkTDArray<DrawType>& expected, const SkTDArray<DrawType>& actual)
+{
     SkDebugf("\n\nexpected %d --- actual %d\n", expected.count(), actual.count());
     int max = SkMax32(expected.count(), actual.count());
 
@@ -659,11 +674,12 @@ static void print(const SkTDArray<DrawType>& expected, const SkTDArray<DrawType>
 }
 #endif
 
-static void test_collapse(skiatest::Reporter* reporter) {
+static void test_collapse(skiatest::Reporter* reporter)
+{
     PFEmitStruct gStructure[] = { emit_struct0, emit_struct1, emit_struct2, emit_struct3 };
     PFEmitBody gBody[] = { emit_body0, emit_body1, emit_body2, emit_body3 };
     PFEmitMC gMCs[] = { emit_clip_and_mat, emit_mat_and_clip,
-                        emit_double_mat_and_clip, emit_mat_clip_clip };
+        emit_double_mat_and_clip, emit_mat_clip_clip };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gStructure); ++i) {
         for (size_t j = 0; j < SK_ARRAY_COUNT(gBody); ++j) {
@@ -687,12 +703,12 @@ static void test_collapse(skiatest::Reporter* reporter) {
                             // Note: beginRecording/endRecording add a save/restore pair
                             SkCanvas* canvas = picture.beginRecording(100, 100);
                             (*gStructure[i])(canvas,
-                                             gMCs[k],
-                                             (MatType) l,
-                                             (ClipType) m,
-                                             gBody[j],
-                                             (DrawOpType) n,
-                                             &expected);
+                                gMCs[k],
+                                (MatType)l,
+                                (ClipType)m,
+                                gBody[j],
+                                (DrawOpType)n,
+                                &expected);
                             picture.endRecording();
 
                             gets_ops(picture, &actual);
@@ -723,7 +739,8 @@ static void test_collapse(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(MatrixClipCollapse, reporter) {
+DEF_TEST(MatrixClipCollapse, reporter)
+{
     test_collapse(reporter);
 }
 

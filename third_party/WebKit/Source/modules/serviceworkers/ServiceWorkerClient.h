@@ -10,17 +10,26 @@
 #include "bindings/core/v8/SerializedScriptValue.h"
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
-#include "public/platform/WebServiceWorkerClientsInfo.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerClientsInfo.h"
 #include "wtf/Forward.h"
+#include <memory>
 
 namespace blink {
 
 class ExecutionContext;
-class ScriptState;
+class ScriptPromiseResolver;
 
-class MODULES_EXPORT ServiceWorkerClient : public GarbageCollectedFinalized<ServiceWorkerClient>, public ScriptWrappable {
+class MODULES_EXPORT ServiceWorkerClient
+    : public GarbageCollectedFinalized<ServiceWorkerClient>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
+    // To be used by CallbackPromiseAdapter.
+    using WebType = std::unique_ptr<WebServiceWorkerClientInfo>;
+
+    static ServiceWorkerClient* take(ScriptPromiseResolver*,
+        std::unique_ptr<WebServiceWorkerClientInfo>);
     static ServiceWorkerClient* create(const WebServiceWorkerClientInfo&);
 
     virtual ~ServiceWorkerClient();
@@ -29,7 +38,12 @@ public:
     String url() const { return m_url; }
     String frameType() const;
     String id() const { return m_uuid; }
-    void postMessage(ExecutionContext*, PassRefPtr<SerializedScriptValue> message, const MessagePortArray*, ExceptionState&);
+    void postMessage(ExecutionContext*,
+        PassRefPtr<SerializedScriptValue> message,
+        const MessagePortArray&,
+        ExceptionState&);
+
+    static bool canTransferArrayBuffersAndImageBitmaps() { return false; }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 

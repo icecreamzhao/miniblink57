@@ -2,52 +2,101 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <stdint.h>
+
 #include "skia/ext/skia_utils_base.h"
+#include "third_party/skia/include/core/SkFontLCDConfig.h"
 
 namespace skia {
 
-bool ReadSkString(const Pickle& pickle, PickleIterator* iter, SkString* str) {
-  int         reply_length;
-  const char* reply_text;
+bool ReadSkString(base::PickleIterator* iter, SkString* str)
+{
+    int reply_length;
+    const char* reply_text;
 
-  if (!pickle.ReadData(iter, &reply_text, &reply_length))
-    return false;
+    if (!iter->ReadData(&reply_text, &reply_length))
+        return false;
 
-  if (str)
-    str->set(reply_text, reply_length);
-  return true;
+    if (str)
+        str->set(reply_text, reply_length);
+    return true;
 }
 
-bool ReadSkFontIdentity(const Pickle& pickle, PickleIterator* iter,
-                        SkFontConfigInterface::FontIdentity* identity) {
-  uint32_t    reply_id;
-  uint32_t    reply_ttcIndex;
-  int         reply_length;
-  const char* reply_text;
+bool ReadSkFontIdentity(base::PickleIterator* iter,
+    SkFontConfigInterface::FontIdentity* identity)
+{
+    uint32_t reply_id;
+    uint32_t reply_ttcIndex;
+    int reply_length;
+    const char* reply_text;
 
-  if (!pickle.ReadUInt32(iter, &reply_id) ||
-      !pickle.ReadUInt32(iter, &reply_ttcIndex) ||
-      !pickle.ReadData(iter, &reply_text, &reply_length))
-    return false;
+    if (!iter->ReadUInt32(&reply_id) || !iter->ReadUInt32(&reply_ttcIndex) || !iter->ReadData(&reply_text, &reply_length))
+        return false;
 
-  if (identity) {
-    identity->fID = reply_id;
-    identity->fTTCIndex = reply_ttcIndex;
-    identity->fString.set(reply_text, reply_length);
-  }
-  return true;
+    if (identity) {
+        identity->fID = reply_id;
+        identity->fTTCIndex = reply_ttcIndex;
+        identity->fString.set(reply_text, reply_length);
+    }
+    return true;
 }
 
-bool WriteSkString(Pickle* pickle, const SkString& str) {
-  return pickle->WriteData(str.c_str(), str.size());
+bool ReadSkFontStyle(base::PickleIterator* iter, SkFontStyle* style)
+{
+    uint16_t reply_weight;
+    uint16_t reply_width;
+    uint16_t reply_slant;
+
+    if (!iter->ReadUInt16(&reply_weight) || !iter->ReadUInt16(&reply_width) || !iter->ReadUInt16(&reply_slant))
+        return false;
+
+    if (style) {
+        *style = SkFontStyle(reply_weight,
+            reply_width,
+            static_cast<SkFontStyle::Slant>(reply_slant));
+    }
+    return true;
 }
 
-bool WriteSkFontIdentity(Pickle* pickle,
-                         const SkFontConfigInterface::FontIdentity& identity) {
-  return pickle->WriteUInt32(identity.fID) &&
-         pickle->WriteUInt32(identity.fTTCIndex) &&
-         WriteSkString(pickle, identity.fString);
+bool WriteSkString(base::Pickle* pickle, const SkString& str)
+{
+    return pickle->WriteData(str.c_str(), str.size());
 }
 
-}  // namespace skia
+bool WriteSkFontIdentity(base::Pickle* pickle,
+    const SkFontConfigInterface::FontIdentity& identity)
+{
+    return pickle->WriteUInt32(identity.fID) && pickle->WriteUInt32(identity.fTTCIndex) && WriteSkString(pickle, identity.fString);
+}
 
+bool WriteSkFontStyle(base::Pickle* pickle, SkFontStyle style)
+{
+    return pickle->WriteUInt16(style.weight()) && pickle->WriteUInt16(style.width()) && pickle->WriteUInt16(style.slant());
+}
+
+SkPixelGeometry ComputeDefaultPixelGeometry()
+{
+    SkFontLCDConfig::LCDOrder order = SkFontLCDConfig::GetSubpixelOrder();
+    if (SkFontLCDConfig::kNONE_LCDOrder == order) {
+        return kUnknown_SkPixelGeometry;
+    }
+
+    // Bit0 is RGB(0), BGR(1)
+    // Bit1 is H(0), V(1)
+    const SkPixelGeometry gGeo[] = {
+        kRGB_H_SkPixelGeometry,
+        kBGR_H_SkPixelGeometry,
+        kRGB_V_SkPixelGeometry,
+        kBGR_V_SkPixelGeometry,
+    };
+    int index = 0;
+    if (SkFontLCDConfig::kBGR_LCDOrder == order) {
+        index |= 1;
+    }
+    if (SkFontLCDConfig::kVertical_LCDOrientation == SkFontLCDConfig::GetSubpixelOrientation()) {
+        index |= 2;
+    }
+    return gGeo[index];
+}
+
+} // namespace skia

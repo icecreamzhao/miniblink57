@@ -37,7 +37,6 @@
 
 #if BLINK_IMPLEMENTATION
 #include "platform/heap/Handle.h"
-namespace WTF { template <typename T> class PassRefPtr; }
 #endif
 
 namespace blink {
@@ -50,7 +49,10 @@ class WebElementCollection {
 public:
     ~WebElementCollection() { reset(); }
 
-    WebElementCollection() : m_current(0) { }
+    WebElementCollection()
+        : m_current(0)
+    {
+    }
     WebElementCollection(const WebElementCollection& n) { assign(n); }
     WebElementCollection& operator=(const WebElementCollection& n)
     {
@@ -68,8 +70,8 @@ public:
     BLINK_EXPORT WebElement firstItem() const;
 
 #if BLINK_IMPLEMENTATION
-    WebElementCollection(const PassRefPtrWillBeRawPtr<HTMLCollection>&);
-    WebElementCollection& operator=(const PassRefPtrWillBeRawPtr<HTMLCollection>&);
+    WebElementCollection(HTMLCollection*);
+    WebElementCollection& operator=(HTMLCollection*);
 #endif
 
 private:

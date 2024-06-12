@@ -12,17 +12,23 @@ namespace blink {
 
 class CSSFunctionValue : public CSSValueList {
 public:
-    static PassRefPtrWillBeRawPtr<CSSFunctionValue> create(CSSValueID id)
+    static CSSFunctionValue* create(CSSValueID id)
     {
-        return adoptRefWillBeNoop(new CSSFunctionValue(id));
+        return new CSSFunctionValue(id);
     }
 
     String customCSSText() const;
 
-    bool equals(const CSSFunctionValue& other) const { return m_valueID == other.m_valueID && CSSValueList::equals(other); }
+    bool equals(const CSSFunctionValue& other) const
+    {
+        return m_valueID == other.m_valueID && CSSValueList::equals(other);
+    }
     CSSValueID functionType() const { return m_valueID; }
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValueList::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValueList::traceAfterDispatch(visitor);
+    }
 
 private:
     CSSFunctionValue(CSSValueID id)
@@ -39,4 +45,3 @@ DEFINE_CSS_VALUE_TYPE_CASTS(CSSFunctionValue, isFunctionValue());
 } // namespace blink
 
 #endif
-

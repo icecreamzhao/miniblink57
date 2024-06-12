@@ -133,30 +133,25 @@
  *
  */
 
-
-
-#include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/utypes.h"
 #if U_SHOW_CPLUSPLUS_API
+#include "unicode/chariter.h"
 #include "unicode/localpointer.h"
 #include "unicode/rep.h"
 #include "unicode/unistr.h"
-#include "unicode/chariter.h"
 #endif
-
 
 U_CDECL_BEGIN
 
 struct UText;
 typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
 
-
 /***************************************************************************************
  *
  *   C Functions for creating UText wrappers around various kinds of text strings.
  *
  ****************************************************************************************/
-
 
 /**
   * Close function for UText instances.
@@ -178,8 +173,8 @@ typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
   *
   * @stable ICU 3.4
   */
-U_STABLE UText * U_EXPORT2
-utext_close(UText *ut);
+U_STABLE UText* U_EXPORT2
+utext_close(UText* ut);
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -221,9 +216,8 @@ U_NAMESPACE_END
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
-
+U_STABLE UText* U_EXPORT2
+utext_openUTF8(UText* ut, const char* s, int64_t length, UErrorCode* status);
 
 /**
  * Open a read-only UText for UChar * string.
@@ -239,9 +233,8 @@ utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
-
+U_STABLE UText* U_EXPORT2
+utext_openUChars(UText* ut, const UChar* s, int64_t length, UErrorCode* status);
 
 #if U_SHOW_CPLUSPLUS_API
 /**
@@ -256,9 +249,8 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
  *                 will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
-
+U_STABLE UText* U_EXPORT2
+utext_openUnicodeString(UText* ut, icu::UnicodeString* s, UErrorCode* status);
 
 /**
  * Open a UText for a const UnicodeString.   The resulting UText will not be writable.
@@ -272,9 +264,8 @@ utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode *status);
-
+U_STABLE UText* U_EXPORT2
+utext_openConstUnicodeString(UText* ut, const icu::UnicodeString* s, UErrorCode* status);
 
 /**
  * Open a writable UText implementation for an ICU Replaceable object.
@@ -288,8 +279,8 @@ utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode 
  * @see Replaceable
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
+U_STABLE UText* U_EXPORT2
+utext_openReplaceable(UText* ut, icu::Replaceable* rep, UErrorCode* status);
 
 /**
  * Open a  UText implementation over an ICU CharacterIterator.
@@ -303,11 +294,10 @@ utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
  * @see Replaceable
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *status);
+U_STABLE UText* U_EXPORT2
+utext_openCharacterIterator(UText* ut, icu::CharacterIterator* ci, UErrorCode* status);
 
 #endif
-
 
 /**
   *  Clone a UText.  This is much like opening a UText where the source text is itself
@@ -366,9 +356,8 @@ utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *s
   *  @return       The newly created clone, or NULL if the clone operation failed.
   *  @stable ICU 3.4
   */
-U_STABLE UText * U_EXPORT2
-utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status);
-
+U_STABLE UText* U_EXPORT2
+utext_clone(UText* dest, const UText* src, UBool deep, UBool readOnly, UErrorCode* status);
 
 /**
   *  Compare two UText objects for equality.
@@ -382,8 +371,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCod
   *  @stable ICU 3.6
   */
 U_STABLE UBool U_EXPORT2
-utext_equals(const UText *a, const UText *b);
-
+utext_equals(const UText* a, const UText* b);
 
 /*****************************************************************************
  *
@@ -403,7 +391,7 @@ utext_equals(const UText *a, const UText *b);
   * @stable ICU 3.4
   */
 U_STABLE int64_t U_EXPORT2
-utext_nativeLength(UText *ut);
+utext_nativeLength(UText* ut);
 
 /**
  *  Return TRUE if calculating the length of the text could be expensive.
@@ -419,7 +407,7 @@ utext_nativeLength(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
-utext_isLengthExpensive(const UText *ut);
+utext_isLengthExpensive(const UText* ut);
 
 /**
  * Returns the code point at the requested index,
@@ -447,8 +435,7 @@ utext_isLengthExpensive(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-utext_char32At(UText *ut, int64_t nativeIndex);
-
+utext_char32At(UText* ut, int64_t nativeIndex);
 
 /**
  *
@@ -461,8 +448,7 @@ utext_char32At(UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-utext_current32(UText *ut);
-
+utext_current32(UText* ut);
 
 /**
  * Get the code point at the current iteration position of the UText, and
@@ -483,8 +469,7 @@ utext_current32(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-utext_next32(UText *ut);
-
+utext_next32(UText* ut);
 
 /**
  *  Move the iterator position to the character (code point) whose
@@ -504,8 +489,7 @@ utext_next32(UText *ut);
  *  @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-utext_previous32(UText *ut);
-
+utext_previous32(UText* ut);
 
 /**
   * Set the iteration index and return the code point at that index. 
@@ -526,9 +510,7 @@ utext_previous32(UText *ut);
   * @stable ICU 3.4
   */
 U_STABLE UChar32 U_EXPORT2
-utext_next32From(UText *ut, int64_t nativeIndex);
-
-
+utext_next32From(UText* ut, int64_t nativeIndex);
 
 /**
   * Set the iteration index, and return the code point preceding the
@@ -546,7 +528,7 @@ utext_next32From(UText *ut, int64_t nativeIndex);
   * @stable ICU 3.4
   */
 U_STABLE UChar32 U_EXPORT2
-utext_previous32From(UText *ut, int64_t nativeIndex);
+utext_previous32From(UText* ut, int64_t nativeIndex);
 
 /**
   * Get the current iterator position, which can range from 0 to 
@@ -561,7 +543,7 @@ utext_previous32From(UText *ut, int64_t nativeIndex);
   * @stable ICU 3.4
   */
 U_STABLE int64_t U_EXPORT2
-utext_getNativeIndex(const UText *ut);
+utext_getNativeIndex(const UText* ut);
 
 /**
  * Set the current iteration position to the nearest code point
@@ -587,7 +569,7 @@ utext_getNativeIndex(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-utext_setNativeIndex(UText *ut, int64_t nativeIndex);
+utext_setNativeIndex(UText* ut, int64_t nativeIndex);
 
 /**
  * Move the iterator postion by delta code points.  The number of code points
@@ -606,7 +588,7 @@ utext_setNativeIndex(UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
-utext_moveIndex32(UText *ut, int32_t delta);
+utext_moveIndex32(UText* ut, int32_t delta);
 
 /**
  * Get the native index of the character preceeding the current position.
@@ -631,8 +613,7 @@ utext_moveIndex32(UText *ut, int32_t delta);
  * @stable ICU 3.6
  */
 U_STABLE int64_t U_EXPORT2
-utext_getPreviousNativeIndex(UText *ut); 
-
+utext_getPreviousNativeIndex(UText* ut);
 
 /**
  *
@@ -669,12 +650,10 @@ utext_getPreviousNativeIndex(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
-utext_extract(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             UChar *dest, int32_t destCapacity,
-             UErrorCode *status);
-
-
+utext_extract(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    UChar* dest, int32_t destCapacity,
+    UErrorCode* status);
 
 /************************************************************************************
  *
@@ -701,10 +680,9 @@ utext_extract(UText *ut,
  *
  * @internal ICU 4.4 technology preview
  */
-#define UTEXT_CURRENT32(ut)  \
-    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
-    ((ut)->chunkContents)[((ut)->chunkOffset)] : utext_current32(ut))
-#endif  /* U_HIDE_INTERNAL_API */
+#define UTEXT_CURRENT32(ut) \
+    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset] < 0xd800 ? ((ut)->chunkContents)[((ut)->chunkOffset)] : utext_current32(ut))
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * inline version of utext_next32(), for performance-critical situations.
@@ -717,9 +695,8 @@ utext_extract(UText *ut,
  *
  * @stable ICU 3.4
  */
-#define UTEXT_NEXT32(ut)  \
-    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
-    ((ut)->chunkContents)[((ut)->chunkOffset)++] : utext_next32(ut))
+#define UTEXT_NEXT32(ut) \
+    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset] < 0xd800 ? ((ut)->chunkContents)[((ut)->chunkOffset)++] : utext_next32(ut))
 
 /**
  * inline version of utext_previous32(), for performance-critical situations.
@@ -731,10 +708,8 @@ utext_extract(UText *ut,
  *
  * @stable ICU 3.4
  */
-#define UTEXT_PREVIOUS32(ut)  \
-    ((ut)->chunkOffset > 0 && \
-     (ut)->chunkContents[(ut)->chunkOffset-1] < 0xd800 ? \
-          (ut)->chunkContents[--((ut)->chunkOffset)]  :  utext_previous32(ut))
+#define UTEXT_PREVIOUS32(ut) \
+    ((ut)->chunkOffset > 0 && (ut)->chunkContents[(ut)->chunkOffset - 1] < 0xd800 ? (ut)->chunkContents[--((ut)->chunkOffset)] : utext_previous32(ut))
 
 /**
   *  inline version of utext_getNativeIndex(), for performance-critical situations.
@@ -748,10 +723,8 @@ utext_extract(UText *ut,
   *
   * @stable ICU 3.6
   */
-#define UTEXT_GETNATIVEINDEX(ut)                       \
-    ((ut)->chunkOffset <= (ut)->nativeIndexingLimit?   \
-        (ut)->chunkNativeStart+(ut)->chunkOffset :     \
-        (ut)->pFuncs->mapOffsetToNative(ut))    
+#define UTEXT_GETNATIVEINDEX(ut) \
+    ((ut)->chunkOffset <= (ut)->nativeIndexingLimit ? (ut)->chunkNativeStart + (ut)->chunkOffset : (ut)->pFuncs->mapOffsetToNative(ut))
 
 /**
   *  inline version of utext_setNativeIndex(), for performance-critical situations.
@@ -764,14 +737,15 @@ utext_extract(UText *ut,
   *
   * @stable ICU 3.8
   */
-#define UTEXT_SETNATIVEINDEX(ut, ix)                       \
-    { int64_t __offset = (ix) - (ut)->chunkNativeStart; \
-      if (__offset>=0 && __offset<=(int64_t)(ut)->nativeIndexingLimit) { \
-          (ut)->chunkOffset=(int32_t)__offset; \
-      } else { \
-          utext_setNativeIndex((ut), (ix)); } }
-
-
+#define UTEXT_SETNATIVEINDEX(ut, ix)                                           \
+    {                                                                          \
+        int64_t __offset = (ix) - (ut)->chunkNativeStart;                      \
+        if (__offset >= 0 && __offset <= (int64_t)(ut)->nativeIndexingLimit) { \
+            (ut)->chunkOffset = (int32_t)__offset;                             \
+        } else {                                                               \
+            utext_setNativeIndex((ut), (ix));                                  \
+        }                                                                      \
+    }
 
 /************************************************************************************
  *
@@ -780,7 +754,6 @@ utext_extract(UText *ut,
  *   modify a read-only UText will return an error status.
  *
  ************************************************************************************/
-
 
 /**
  *  Return TRUE if the text can be written (modified) with utext_replace() or
@@ -801,8 +774,7 @@ utext_extract(UText *ut,
  *
  */
 U_STABLE UBool U_EXPORT2
-utext_isWritable(const UText *ut);
-
+utext_isWritable(const UText* ut);
 
 /**
   * Test whether there is meta data associated with the text.
@@ -813,8 +785,7 @@ utext_isWritable(const UText *ut);
   * @stable ICU 3.4
   */
 U_STABLE UBool U_EXPORT2
-utext_hasMetaData(const UText *ut);
-
+utext_hasMetaData(const UText* ut);
 
 /**
  * Replace a range of the original text with a replacement text.
@@ -844,12 +815,10 @@ utext_hasMetaData(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
-utext_replace(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             const UChar *replacementText, int32_t replacementLength,
-             UErrorCode *status);
-
-
+utext_replace(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    const UChar* replacementText, int32_t replacementLength,
+    UErrorCode* status);
 
 /**
  *
@@ -884,12 +853,11 @@ utext_replace(UText *ut,
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-utext_copy(UText *ut,
-          int64_t nativeStart, int64_t nativeLimit,
-          int64_t destIndex,
-          UBool move,
-          UErrorCode *status);
-
+utext_copy(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    int64_t destIndex,
+    UBool move,
+    UErrorCode* status);
 
 /**
   *  <p>
@@ -913,8 +881,7 @@ utext_copy(UText *ut,
   *  @stable ICU 3.6
   */
 U_STABLE void U_EXPORT2
-utext_freeze(UText *ut);
-
+utext_freeze(UText* ut);
 
 /**
  * UText provider properties (bit field indexes).
@@ -946,7 +913,7 @@ enum {
      * There is meta data associated with the text.
      * @see Replaceable::hasMetaData()
      * @stable ICU 3.4
-     */ 
+     */
     UTEXT_PROVIDER_HAS_META_DATA = 4,
     /**
      * Text provider owns the text storage.
@@ -955,7 +922,7 @@ enum {
      *  also be closed/deleted/freed/ whatever is appropriate.
      * @stable ICU 3.6
      */
-     UTEXT_PROVIDER_OWNS_TEXT = 5
+    UTEXT_PROVIDER_OWNS_TEXT = 5
 };
 
 /**
@@ -995,9 +962,8 @@ enum {
   *
   * @stable ICU 3.4
   */
-typedef UText * U_CALLCONV
-UTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
-
+typedef UText* U_CALLCONV
+UTextClone(UText* dest, const UText* src, UBool deep, UErrorCode* status);
 
 /**
  * Function type declaration for UText.nativeLength().
@@ -1008,7 +974,7 @@ UTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
  * @stable ICU 3.4
  */
 typedef int64_t U_CALLCONV
-UTextNativeLength(UText *ut);
+UTextNativeLength(UText* ut);
 
 /**
  * Function type declaration for UText.access().  Get the description of the text chunk
@@ -1036,7 +1002,7 @@ UTextNativeLength(UText *ut);
  * @stable ICU 3.4
  */
 typedef UBool U_CALLCONV
-UTextAccess(UText *ut, int64_t nativeIndex, UBool forward);
+UTextAccess(UText* ut, int64_t nativeIndex, UBool forward);
 
 /**
  * Function type declaration for UText.extract().
@@ -1066,10 +1032,10 @@ UTextAccess(UText *ut, int64_t nativeIndex, UBool forward);
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextExtract(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             UChar *dest, int32_t destCapacity,
-             UErrorCode *status);
+UTextExtract(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    UChar* dest, int32_t destCapacity,
+    UErrorCode* status);
 
 /**
  * Function type declaration for UText.replace().
@@ -1101,10 +1067,10 @@ UTextExtract(UText *ut,
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextReplace(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             const UChar *replacementText, int32_t replacmentLength,
-             UErrorCode *status);
+UTextReplace(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    const UChar* replacementText, int32_t replacmentLength,
+    UErrorCode* status);
 
 /**
  * Function type declaration for UText.copy().
@@ -1135,11 +1101,11 @@ UTextReplace(UText *ut,
  * @stable ICU 3.4
  */
 typedef void U_CALLCONV
-UTextCopy(UText *ut,
-          int64_t nativeStart, int64_t nativeLimit,
-          int64_t nativeDest,
-          UBool move,
-          UErrorCode *status);
+UTextCopy(UText* ut,
+    int64_t nativeStart, int64_t nativeLimit,
+    int64_t nativeDest,
+    UBool move,
+    UErrorCode* status);
 
 /**
  * Function type declaration for UText.mapOffsetToNative().
@@ -1155,7 +1121,7 @@ UTextCopy(UText *ut,
  * @stable ICU 3.4
  */
 typedef int64_t U_CALLCONV
-UTextMapOffsetToNative(const UText *ut);
+UTextMapOffsetToNative(const UText* ut);
 
 /**
  * Function type declaration for UText.mapIndexToUTF16().
@@ -1173,8 +1139,7 @@ UTextMapOffsetToNative(const UText *ut);
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-UTextMapNativeIndexToUTF16(const UText *ut, int64_t nativeIndex);
-
+UTextMapNativeIndexToUTF16(const UText* ut, int64_t nativeIndex);
 
 /**
  * Function type declaration for UText.utextClose().
@@ -1194,8 +1159,7 @@ UTextMapNativeIndexToUTF16(const UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 typedef void U_CALLCONV
-UTextClose(UText *ut);
-
+UTextClose(UText* ut);
 
 /**
   *   (public)  Function dispatch table for UText.
@@ -1221,15 +1185,14 @@ struct UTextFuncs {
      *             in sequence.
      *   @stable ICU 3.6
      */
-    int32_t       tableSize;
+    int32_t tableSize;
 
     /**
       *   (private)  Alignment padding.
       *              Do not use, reserved for use by the UText framework only.
       *   @internal
       */
-    int32_t       reserved1, /** @internal */ reserved2, /** @internal */ reserved3;
-
+    int32_t reserved1, /** @internal */ reserved2, /** @internal */ reserved3;
 
     /**
      * (public) Function pointer for UTextClone
@@ -1237,7 +1200,7 @@ struct UTextFuncs {
      * @see UTextClone
      * @stable ICU 3.6
      */
-    UTextClone *clone;
+    UTextClone* clone;
 
     /**
      * (public) function pointer for UTextLength
@@ -1246,7 +1209,7 @@ struct UTextFuncs {
      * @see UTextLength
      * @stable ICU 3.6
      */
-    UTextNativeLength *nativeLength;
+    UTextNativeLength* nativeLength;
 
     /**
      * (public) Function pointer for UTextAccess.
@@ -1254,7 +1217,7 @@ struct UTextFuncs {
      * @see UTextAccess
      * @stable ICU 3.6
      */
-    UTextAccess *access;
+    UTextAccess* access;
 
     /**
      * (public) Function pointer for UTextExtract.
@@ -1262,7 +1225,7 @@ struct UTextFuncs {
      * @see UTextExtract
      * @stable ICU 3.6
      */
-    UTextExtract *extract;
+    UTextExtract* extract;
 
     /**
      * (public) Function pointer for UTextReplace.
@@ -1270,7 +1233,7 @@ struct UTextFuncs {
      * @see UTextReplace
      * @stable ICU 3.6
      */
-    UTextReplace *replace;
+    UTextReplace* replace;
 
     /**
      * (public) Function pointer for UTextCopy.
@@ -1278,7 +1241,7 @@ struct UTextFuncs {
      * @see UTextCopy
      * @stable ICU 3.6
      */
-    UTextCopy *copy;
+    UTextCopy* copy;
 
     /**
      * (public) Function pointer for UTextMapOffsetToNative.
@@ -1286,7 +1249,7 @@ struct UTextFuncs {
      * @see UTextMapOffsetToNative
      * @stable ICU 3.6
      */
-    UTextMapOffsetToNative *mapOffsetToNative;
+    UTextMapOffsetToNative* mapOffsetToNative;
 
     /**
      * (public) Function pointer for UTextMapNativeIndexToUTF16.
@@ -1294,7 +1257,7 @@ struct UTextFuncs {
      * @see UTextMapNativeIndexToUTF16
      * @stable ICU 3.6
      */
-    UTextMapNativeIndexToUTF16 *mapNativeIndexToUTF16;
+    UTextMapNativeIndexToUTF16* mapNativeIndexToUTF16;
 
     /**
      * (public) Function pointer for UTextClose.
@@ -1302,26 +1265,25 @@ struct UTextFuncs {
       * @see UTextClose
       * @stable ICU 3.6
       */
-    UTextClose  *close;
+    UTextClose* close;
 
     /**
       * (private)  Spare function pointer
       * @internal
       */
-    UTextClose  *spare1;
-    
-    /**
-      * (private)  Spare function pointer
-      * @internal
-      */
-    UTextClose  *spare2;
+    UTextClose* spare1;
 
     /**
       * (private)  Spare function pointer
       * @internal
       */
-    UTextClose  *spare3;
+    UTextClose* spare2;
 
+    /**
+      * (private)  Spare function pointer
+      * @internal
+      */
+    UTextClose* spare3;
 };
 /**
  * Function dispatch table for UText
@@ -1329,7 +1291,7 @@ struct UTextFuncs {
  */
 typedef struct UTextFuncs UTextFuncs;
 
- /**
+/**
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
   *                  text  (UTF-8, noncontiguous UTF-16, whatever.)
@@ -1353,23 +1315,21 @@ struct UText {
      *                        reuse of the UText struct.
      * @internal
      */
-    uint32_t       magic;
-
+    uint32_t magic;
 
     /**
      *     (private)  Flags for managing the allocation and freeing of
      *                memory associated with this UText.
      * @internal
      */
-    int32_t        flags;
-
+    int32_t flags;
 
     /**
       *  Text provider properties.  This set of flags is maintainted by the
       *                             text provider implementation.
       *  @stable ICU 3.4
       */
-    int32_t         providerProperties;
+    int32_t providerProperties;
 
     /**
      * (public) sizeOfStruct=sizeof(UText)
@@ -1377,23 +1337,22 @@ struct UText {
      *
      * @stable ICU 3.4
      */
-    int32_t         sizeOfStruct;
-    
+    int32_t sizeOfStruct;
+
     /* ------ 16 byte alignment boundary -----------  */
-    
 
     /**
       *  (protected) Native index of the first character position following
       *              the current chunk.
       *  @stable ICU 3.6
       */
-    int64_t         chunkNativeLimit;
+    int64_t chunkNativeLimit;
 
     /**
      *   (protected)  Size in bytes of the extra space (pExtra).
      *  @stable ICU 3.4
      */
-    int32_t        extraSize;
+    int32_t extraSize;
 
     /**
       *    (protected) The highest chunk offset where native indexing and
@@ -1402,31 +1361,30 @@ struct UText {
       *
       *    @stable ICU 3.6
       */
-    int32_t         nativeIndexingLimit;
+    int32_t nativeIndexingLimit;
 
     /* ---- 16 byte alignment boundary------ */
-    
+
     /**
      *  (protected) Native index of the first character in the text chunk.
      *  @stable ICU 3.6
      */
-    int64_t         chunkNativeStart;
+    int64_t chunkNativeStart;
 
     /**
      *  (protected) Current iteration position within the text chunk (UTF-16 buffer).
      *  This is the index to the character that will be returned by utext_next32().
      *  @stable ICU 3.6
      */
-    int32_t         chunkOffset;
+    int32_t chunkOffset;
 
     /**
      *  (protected) Length the text chunk (UTF-16 buffer), in UChars.
      *  @stable ICU 3.6
      */
-    int32_t         chunkLength;
+    int32_t chunkLength;
 
     /* ---- 16  byte alignment boundary-- */
-    
 
     /**
      *  (protected)  pointer to a chunk of text in UTF-16 format.
@@ -1434,20 +1392,20 @@ struct UText {
      *  if conversion was required, to a buffer owned by the UText.
      *  @stable ICU 3.6
      */
-    const UChar    *chunkContents;
+    const UChar* chunkContents;
 
-     /**
+    /**
       * (public)     Pointer to Dispatch table for accessing functions for this UText.
       * @stable ICU 3.6
       */
-    const UTextFuncs     *pFuncs;
+    const UTextFuncs* pFuncs;
 
     /**
      *  (protected)  Pointer to additional space requested by the
      *               text provider during the utext_open operation.
      * @stable ICU 3.4
      */
-    void          *pExtra;
+    void* pExtra;
 
     /**
      * (protected) Pointer to string or text-containin object or similar.
@@ -1455,7 +1413,7 @@ struct UText {
      *  that is known to the text provider functions.
      * @stable ICU 3.4
      */
-    const void   *context;
+    const void* context;
 
     /* --- 16 byte alignment boundary--- */
 
@@ -1464,75 +1422,71 @@ struct UText {
      * Not used by UText common code.
      * @stable ICU 3.6
      */
-    const void     *p; 
+    const void* p;
     /**
      * (protected) Pointer fields available for use by the text provider.
      * Not used by UText common code.
      * @stable ICU 3.6
      */
-    const void     *q;
-     /**
+    const void* q;
+    /**
      * (protected) Pointer fields available for use by the text provider.
      * Not used by UText common code.
      * @stable ICU 3.6
       */
-    const void     *r;
+    const void* r;
 
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-    void           *privP;
-
+    void* privP;
 
     /* --- 16 byte alignment boundary--- */
-    
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-    int64_t         a;
+    int64_t a;
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-    int32_t         b;
+    int32_t b;
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-    int32_t         c;
+    int32_t c;
 
     /*  ---- 16 byte alignment boundary---- */
 
-
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-    int64_t         privA;
+    int64_t privA;
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-    int32_t         privB;
+    int32_t privB;
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-    int32_t         privC;
+    int32_t privC;
 };
-
 
 /**
  *  Common function for use by Text Provider implementations to allocate and/or initialize
@@ -1550,8 +1504,8 @@ struct UText {
  * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
  * @stable ICU 3.4
  */
-U_STABLE UText * U_EXPORT2
-utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
+U_STABLE UText* U_EXPORT2
+utext_setup(UText* ut, int32_t extraSpace, UErrorCode* status);
 
 #ifndef U_HIDE_INTERNAL_API
 /**
@@ -1562,7 +1516,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 enum {
     UTEXT_MAGIC = 0x345ad82c
 };
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * initializer to be used with local (stack) instances of a UText
@@ -1571,30 +1525,28 @@ enum {
  *
  * @stable ICU 3.6
  */
-#define UTEXT_INITIALIZER {                                        \
-                  UTEXT_MAGIC,          /* magic                */ \
-                  0,                    /* flags                */ \
-                  0,                    /* providerProps        */ \
-                  sizeof(UText),        /* sizeOfStruct         */ \
-                  0,                    /* chunkNativeLimit     */ \
-                  0,                    /* extraSize            */ \
-                  0,                    /* nativeIndexingLimit  */ \
-                  0,                    /* chunkNativeStart     */ \
-                  0,                    /* chunkOffset          */ \
-                  0,                    /* chunkLength          */ \
-                  NULL,                 /* chunkContents        */ \
-                  NULL,                 /* pFuncs               */ \
-                  NULL,                 /* pExtra               */ \
-                  NULL,                 /* context              */ \
-                  NULL, NULL, NULL,     /* p, q, r              */ \
-                  NULL,                 /* privP                */ \
-                  0, 0, 0,              /* a, b, c              */ \
-                  0, 0, 0               /* privA,B,C,           */ \
-                  }
-
+#define UTEXT_INITIALIZER                                \
+    {                                                    \
+        UTEXT_MAGIC, /* magic                */          \
+            0, /* flags                */                \
+            0, /* providerProps        */                \
+            sizeof(UText), /* sizeOfStruct         */    \
+            0, /* chunkNativeLimit     */                \
+            0, /* extraSize            */                \
+            0, /* nativeIndexingLimit  */                \
+            0, /* chunkNativeStart     */                \
+            0, /* chunkOffset          */                \
+            0, /* chunkLength          */                \
+            NULL, /* chunkContents        */             \
+            NULL, /* pFuncs               */             \
+            NULL, /* pExtra               */             \
+            NULL, /* context              */             \
+            NULL, NULL, NULL, /* p, q, r              */ \
+            NULL, /* privP                */             \
+            0, 0, 0, /* a, b, c              */          \
+            0, 0, 0 /* privA,B,C,           */           \
+    }
 
 U_CDECL_END
-
-
 
 #endif

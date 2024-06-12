@@ -5,6 +5,9 @@
 #ifndef SKIA_EXT_ANALYSIS_CANVAS_H_
 #define SKIA_EXT_ANALYSIS_CANVAS_H_
 
+#include <stddef.h>
+#include <stdint.h>
+
 #include "base/compiler_specific.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "third_party/skia/include/core/SkPicture.h"
@@ -43,12 +46,11 @@ public:
         SkScalar left,
         SkScalar top,
         const SkPaint* paint = NULL) override;
-    void onDrawBitmapRect(
-        const SkBitmap&,
+    void onDrawBitmapRect(const SkBitmap&,
         const SkRect* src,
         const SkRect& dst,
         const SkPaint* paint,
-        DrawBitmapRectFlags) override;
+        SrcRectConstraint) override;
     void onDrawBitmapNine(const SkBitmap& bitmap,
         const SkIRect& center,
         const SkRect& dst,
@@ -60,11 +62,8 @@ public:
     void onDrawImageRect(const SkImage*,
         const SkRect* src,
         const SkRect& dst,
-        const SkPaint* paint) override;
-    void onDrawSprite(const SkBitmap&,
-        int left,
-        int top,
-        const SkPaint* paint = NULL) override;
+        const SkPaint* paint,
+        SrcRectConstraint) override;
     void onDrawVertices(VertexMode,
         int vertexCount,
         const SkPoint vertices[],
@@ -77,9 +76,7 @@ public:
 
 protected:
     void willSave() override;
-    SaveLayerStrategy willSaveLayer(const SkRect*,
-        const SkPaint*,
-        SaveFlags) override;
+    SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
     void willRestore() override;
 
     void onClipRect(const SkRect& rect,
@@ -137,7 +134,6 @@ private:
     int draw_op_count_;
 };
 
-}  // namespace skia
+} // namespace skia
 
-#endif  // SKIA_EXT_ANALYSIS_CANVAS_H_
-
+#endif // SKIA_EXT_ANALYSIS_CANVAS_H_

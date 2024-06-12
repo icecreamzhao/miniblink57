@@ -6,15 +6,14 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayPost_DEFINED
 #define SkDisplayPost_DEFINED
 
 #include "SkDisplayable.h"
 #include "SkEvent.h"
 #include "SkEventSink.h"
-#include "SkMemberInfo.h"
 #include "SkIntArray.h"
+#include "SkMemberInfo.h"
 
 class SkDataInput;
 class SkAnimateMaker;
@@ -27,21 +26,22 @@ class SkPost : public SkDisplayable {
     };
     SkPost();
     virtual ~SkPost();
-    bool addChild(SkAnimateMaker& , SkDisplayable* child) override;
+    bool addChild(SkAnimateMaker&, SkDisplayable* child) override;
     bool childrenNeedDisposing() const override;
     void dirty() override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
-    bool enable(SkAnimateMaker& ) override;
+    bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
-    void onEndElement(SkAnimateMaker& ) override;
+    void onEndElement(SkAnimateMaker&) override;
     void setChildHasID() override;
-    bool setProperty(int index, SkScriptValue& ) override;
+    bool setProperty(int index, SkScriptValue&) override;
+
 protected:
     SkMSec delay;
     SkString sink;
-//  SkBool initialized;
+    //  SkBool initialized;
     Mode mode;
     SkEvent fEvent;
     SkAnimateMaker* fMaker;
@@ -50,6 +50,7 @@ protected:
     SkAnimateMaker* fTargetMaker;
     SkBool8 fChildHasID;
     SkBool8 fDirty;
+
 private:
     void findSinkID();
     friend class SkDataInput;

@@ -12,42 +12,42 @@
 namespace v8 {
 namespace internal {
 
-class StartupSerializer;
+    class StartupSerializer;
 
-class V8_EXPORT_PRIVATE PartialSerializer : public Serializer {
- public:
-  PartialSerializer(Isolate* isolate, StartupSerializer* startup_serializer,
-                    v8::SerializeEmbedderFieldsCallback callback);
+    class V8_EXPORT_PRIVATE PartialSerializer : public Serializer {
+    public:
+        PartialSerializer(Isolate* isolate, StartupSerializer* startup_serializer,
+            v8::SerializeEmbedderFieldsCallback callback);
 
-  ~PartialSerializer() override;
+        ~PartialSerializer() override;
 
-  // Serialize the objects reachable from a single object pointer.
-  void Serialize(Context* o, bool include_global_proxy);
+        // Serialize the objects reachable from a single object pointer.
+        void Serialize(Context* o, bool include_global_proxy);
 
-  bool can_be_rehashed() const { return can_be_rehashed_; }
+        bool can_be_rehashed() const { return can_be_rehashed_; }
 
- private:
-  void SerializeObject(HeapObject o) override;
+    private:
+        void SerializeObject(HeapObject o) override;
 
-  bool ShouldBeInThePartialSnapshotCache(HeapObject o);
+        bool ShouldBeInThePartialSnapshotCache(HeapObject o);
 
-  bool SerializeJSObjectWithEmbedderFields(Object obj);
+        bool SerializeJSObjectWithEmbedderFields(Object obj);
 
-  void CheckRehashability(HeapObject obj);
+        void CheckRehashability(HeapObject obj);
 
-  StartupSerializer* startup_serializer_;
-  v8::SerializeEmbedderFieldsCallback serialize_embedder_fields_;
-  // Indicates whether we only serialized hash tables that we can rehash.
-  // TODO(yangguo): generalize rehashing, and remove this flag.
-  bool can_be_rehashed_;
-  Context context_;
+        StartupSerializer* startup_serializer_;
+        v8::SerializeEmbedderFieldsCallback serialize_embedder_fields_;
+        // Indicates whether we only serialized hash tables that we can rehash.
+        // TODO(yangguo): generalize rehashing, and remove this flag.
+        bool can_be_rehashed_;
+        Context context_;
 
-  // Used to store serialized data for embedder fields.
-  SnapshotByteSink embedder_fields_sink_;
-  DISALLOW_COPY_AND_ASSIGN(PartialSerializer);
-};
+        // Used to store serialized data for embedder fields.
+        SnapshotByteSink embedder_fields_sink_;
+        DISALLOW_COPY_AND_ASSIGN(PartialSerializer);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_SNAPSHOT_PARTIAL_SERIALIZER_H_
+#endif // V8_SNAPSHOT_PARTIAL_SERIALIZER_H_

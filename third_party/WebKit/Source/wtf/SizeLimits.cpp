@@ -28,11 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "wtf/Assertions.h"
 #include "wtf/ContainerAnnotations.h"
-#include "wtf/OwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
@@ -40,17 +37,18 @@
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace WTF {
 
-#if ENABLE(ASSERT) || ENABLE(SECURITY_ASSERT)
+#if DCHECK_IS_ON() || ENABLE(SECURITY_ASSERT)
 // The debug/assertion version may get bigger.
 struct SameSizeAsRefCounted {
     int a;
 #if ENABLE(SECURITY_ASSERT)
     bool b;
 #endif
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     bool c;
     ThreadRestrictionVerifier d;
 #endif
@@ -61,17 +59,17 @@ struct SameSizeAsRefCounted {
     // Don't add anything here because this should stay small.
 };
 #endif
-template<typename T, unsigned inlineCapacity = 0>
+template <typename T, unsigned inlineCapacity = 0>
 struct SameSizeAsVectorWithInlineCapacity;
 
-template<typename T>
+template <typename T>
 struct SameSizeAsVectorWithInlineCapacity<T, 0> {
     void* bufferPointer;
     unsigned capacity;
     unsigned size;
 };
 
-template<typename T, unsigned inlineCapacity>
+template <typename T, unsigned inlineCapacity>
 struct SameSizeAsVectorWithInlineCapacity {
     SameSizeAsVectorWithInlineCapacity<T, 0> baseCapacity;
 #if !defined(ANNOTATE_CONTIGUOUS_CONTAINER)
@@ -79,14 +77,23 @@ struct SameSizeAsVectorWithInlineCapacity {
 #endif
 };
 
-static_assert(sizeof(OwnPtr<int>) == sizeof(int*), "OwnPtr should stay small");
-static_assert(sizeof(PassRefPtr<RefCounted<int>>) == sizeof(int*), "PassRefPtr should stay small");
-static_assert(sizeof(RefCounted<int>) == sizeof(SameSizeAsRefCounted), "RefCounted should stay small");
-static_assert(sizeof(RefPtr<RefCounted<int>>) == sizeof(int*), "RefPtr should stay small");
+static_assert(sizeof(std::unique_ptr<int>) == sizeof(int*),
+    "std::unique_ptr should stay small");
+static_assert(sizeof(PassRefPtr<RefCounted<int>>) == sizeof(int*),
+    "PassRefPtr should stay small");
+static_assert(sizeof(RefCounted<int>) == sizeof(SameSizeAsRefCounted),
+    "RefCounted should stay small");
+static_assert(sizeof(RefPtr<RefCounted<int>>) == sizeof(int*),
+    "RefPtr should stay small");
 static_assert(sizeof(String) == sizeof(int*), "String should stay small");
-static_assert(sizeof(AtomicString) == sizeof(String), "AtomicString should stay small");
-static_assert(sizeof(Vector<int>) == sizeof(SameSizeAsVectorWithInlineCapacity<int>), "Vector should stay small");
-static_assert(sizeof(Vector<int, 1>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 1>), "Vector should stay small");
-static_assert(sizeof(Vector<int, 2>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 2>), "Vector should stay small");
-static_assert(sizeof(Vector<int, 3>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 3>), "Vector should stay small");
-}
+static_assert(sizeof(AtomicString) == sizeof(String),
+    "AtomicString should stay small");
+static_assert(sizeof(Vector<int>) == sizeof(SameSizeAsVectorWithInlineCapacity<int>),
+    "Vector should stay small");
+static_assert(sizeof(Vector<int, 1>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 1>),
+    "Vector should stay small");
+static_assert(sizeof(Vector<int, 2>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 2>),
+    "Vector should stay small");
+static_assert(sizeof(Vector<int, 3>) == sizeof(SameSizeAsVectorWithInlineCapacity<int, 3>),
+    "Vector should stay small");
+} // namespace WTF

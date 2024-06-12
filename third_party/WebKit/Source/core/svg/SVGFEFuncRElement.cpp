@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGFEFuncRElement.h"
 
 namespace blink {
@@ -30,5 +28,4 @@ inline SVGFEFuncRElement::SVGFEFuncRElement(Document& document)
 }
 
 DEFINE_NODE_FACTORY(SVGFEFuncRElement)
-
 }

@@ -34,10 +34,12 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontOrientation.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 class SkTypeface;
 
@@ -45,14 +47,17 @@ namespace blink {
 
 class FontPlatformData;
 class SharedBuffer;
+class FontVariationSettings;
 
 class PLATFORM_EXPORT FontCustomPlatformData {
+    USING_FAST_MALLOC(FontCustomPlatformData);
     WTF_MAKE_NONCOPYABLE(FontCustomPlatformData);
+
 public:
-    static PassOwnPtr<FontCustomPlatformData> create(SharedBuffer*, String& otsParseMessage);
+    static std::unique_ptr<FontCustomPlatformData> create(SharedBuffer*, String& otsParseMessage);
     ~FontCustomPlatformData();
 
-    FontPlatformData fontPlatformData(float size, bool bold, bool italic, FontOrientation = FontOrientation::Horizontal);
+    FontPlatformData fontPlatformData(float size, bool bold, bool italic, FontOrientation = FontOrientation::Horizontal, FontVariationSettings* fontVariationSettings = nullptr);
 
     static bool supportsFormat(const String&);
 

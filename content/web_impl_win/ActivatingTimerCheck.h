@@ -45,11 +45,11 @@ public:
     void testPrint()
     {
 #ifdef _DEBUG
-        auto it = m_activatingTimers.begin();
-        for (; it != m_activatingTimers.end(); ++it) {
-            WTF::String outstr = String::format("ActivatingTimerCheck::testPrint: %p\n", *it);
-            OutputDebugStringW(outstr.charactersWithNullTermination().data());
-        }
+//         auto it = m_activatingTimers.begin();
+//         for (; it != m_activatingTimers.end(); ++it) {
+//             WTF::String outstr = String::format("ActivatingTimerCheck::testPrint: %p\n", *it);
+//             OutputDebugStringW(outstr.charactersWithNullTermination().data());
+//         }
 #endif
     }
 

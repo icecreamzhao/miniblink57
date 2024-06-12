@@ -33,17 +33,15 @@ namespace blink {
 
 class MediaEncryptedEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     ~MediaEncryptedEvent() override;
 
-    static PassRefPtrWillBeRawPtr<MediaEncryptedEvent> create()
+    static MediaEncryptedEvent* create(
+        const AtomicString& type,
+        const MediaEncryptedEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new MediaEncryptedEvent);
-    }
-
-    static PassRefPtrWillBeRawPtr<MediaEncryptedEvent> create(const AtomicString& type, const MediaEncryptedEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new MediaEncryptedEvent(type, initializer));
+        return new MediaEncryptedEvent(type, initializer);
     }
 
     const AtomicString& interfaceName() const override;
@@ -54,11 +52,11 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    MediaEncryptedEvent();
-    MediaEncryptedEvent(const AtomicString& type, const MediaEncryptedEventInit& initializer);
+    MediaEncryptedEvent(const AtomicString& type,
+        const MediaEncryptedEventInit& initializer);
 
     String m_initDataType;
-    RefPtr<DOMArrayBuffer> m_initData;
+    Member<DOMArrayBuffer> m_initData;
 };
 
 } // namespace blink

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2014 Google Inc.
  *
@@ -15,31 +14,37 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-GrTraceMarkerSet::GrTraceMarkerSet(const GrTraceMarkerSet& other) {
-   this->addSet(other);
+GrTraceMarkerSet::GrTraceMarkerSet(const GrTraceMarkerSet& other)
+{
+    this->addSet(other);
 }
 
-void GrTraceMarkerSet::add(const GrGpuTraceMarker& marker) {
+void GrTraceMarkerSet::add(const GrGpuTraceMarker& marker)
+{
     this->fMarkerArray.push(marker);
 }
 
-void GrTraceMarkerSet::addSet(const GrTraceMarkerSet& markerSet) {
+void GrTraceMarkerSet::addSet(const GrTraceMarkerSet& markerSet)
+{
     for (Iter iter = markerSet.begin(); iter != markerSet.end(); ++iter) {
         this->add(*iter);
     }
 }
 
-void GrTraceMarkerSet::remove(const GrGpuTraceMarker& marker) {
+void GrTraceMarkerSet::remove(const GrGpuTraceMarker& marker)
+{
     SkASSERT(-1 != fMarkerArray.find(marker));
     int index = this->fMarkerArray.find(marker);
     this->fMarkerArray.remove(index);
 }
 
-int GrTraceMarkerSet::count() const {
+int GrTraceMarkerSet::count() const
+{
     return this->fMarkerArray.count();
 }
 
-SkString GrTraceMarkerSet::toStringLast() const {
+SkString GrTraceMarkerSet::toStringLast() const
+{
     const int numMarkers = this->fMarkerArray.count();
     SkString marker_string;
     if (numMarkers > 0) {
@@ -54,7 +59,8 @@ SkString GrTraceMarkerSet::toStringLast() const {
     return marker_string;
 }
 
-SkString GrTraceMarkerSet::toString() const {
+SkString GrTraceMarkerSet::toString() const
+{
     SkTQSort<GrGpuTraceMarker>(this->fMarkerArray.begin(), this->fMarkerArray.end() - 1);
     SkString marker_string;
     const char* prevMarkerName = "";
@@ -68,7 +74,7 @@ SkString GrTraceMarkerSet::toString() const {
         return marker_string;
     }
 
-    for (int i = 0; i < numMarkers; ++i ) {
+    for (int i = 0; i < numMarkers; ++i) {
         GrGpuTraceMarker& currMarker = this->fMarkerArray[i];
         const char* currCmd = currMarker.fMarker;
         if (currCmd != prevMarkerName) {
@@ -94,11 +100,12 @@ SkString GrTraceMarkerSet::toString() const {
     return marker_string;
 }
 
-GrTraceMarkerSet::Iter GrTraceMarkerSet::begin() const {
+GrTraceMarkerSet::Iter GrTraceMarkerSet::begin() const
+{
     return Iter(this, 0);
 }
 
-GrTraceMarkerSet::Iter GrTraceMarkerSet::end() const {
+GrTraceMarkerSet::Iter GrTraceMarkerSet::end() const
+{
     return Iter(this, this->fMarkerArray.count());
 }
-

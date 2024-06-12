@@ -28,7 +28,10 @@ class Element;
 class Widget;
 class IntRect;
 
-MODULES_EXPORT void getPluginOcclusions(Element*, Widget* parentWidget, const IntRect& frameRect, Vector<IntRect>& occlusions);
+MODULES_EXPORT void getPluginOcclusions(Element*,
+    Widget* parentWidget,
+    const IntRect& frameRect,
+    Vector<IntRect>& occlusions);
 
 } // namespace blink
 

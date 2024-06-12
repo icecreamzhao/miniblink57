@@ -20,7 +20,6 @@
  *
  */
 
-#include "config.h"
 #include "core/html/HTMLParagraphElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -38,20 +37,27 @@ inline HTMLParagraphElement::HTMLParagraphElement(Document& document)
 
 DEFINE_NODE_FACTORY(HTMLParagraphElement)
 
-void HTMLParagraphElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLParagraphElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == alignAttr) {
         if (equalIgnoringCase(value, "middle") || equalIgnoringCase(value, "center"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitCenter);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitCenter);
         else if (equalIgnoringCase(value, "left"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitLeft);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitLeft);
         else if (equalIgnoringCase(value, "right"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitRight);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitRight);
         else
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, value);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                value);
     } else {
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
     }
 }
 
-}
+} // namespace blink

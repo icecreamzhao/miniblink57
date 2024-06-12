@@ -23,7 +23,6 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/Region.h"
 
 #include <stdio.h>
@@ -36,9 +35,7 @@
 
 namespace blink {
 
-Region::Region()
-{
-}
+Region::Region() { }
 
 Region::Region(const IntRect& rect)
     : m_bounds(rect)
@@ -50,15 +47,19 @@ Vector<IntRect> Region::rects() const
 {
     Vector<IntRect> rects;
 
-    for (Shape::SpanIterator span = m_shape.spansBegin(), end = m_shape.spansEnd(); span != end && span + 1 != end; ++span) {
+    for (Shape::SpanIterator span = m_shape.spansBegin(),
+                             end = m_shape.spansEnd();
+         span != end && span + 1 != end; ++span) {
         int y = span->y;
         int height = (span + 1)->y - y;
 
-        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span), end = m_shape.segmentsEnd(span); segment != end && segment + 1 != end; segment += 2) {
+        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span),
+                                    end = m_shape.segmentsEnd(span);
+             segment != end && segment + 1 != end; segment += 2) {
             int x = *segment;
             int width = *(segment + 1) - x;
 
-            rects.append(IntRect(x, y, width, height));
+            rects.push_back(IntRect(x, y, width, height));
         }
     }
 
@@ -70,7 +71,8 @@ bool Region::contains(const Region& region) const
     if (!m_bounds.contains(region.m_bounds))
         return false;
 
-    return Shape::compareShapes<Shape::CompareContainsOperation>(m_shape, region.m_shape);
+    return Shape::compareShapes<Shape::CompareContainsOperation>(m_shape,
+        region.m_shape);
 }
 
 bool Region::contains(const IntPoint& point) const
@@ -78,7 +80,9 @@ bool Region::contains(const IntPoint& point) const
     if (!m_bounds.contains(point))
         return false;
 
-    for (Shape::SpanIterator span = m_shape.spansBegin(), end = m_shape.spansEnd(); span != end && span + 1 != end; ++span) {
+    for (Shape::SpanIterator span = m_shape.spansBegin(),
+                             end = m_shape.spansEnd();
+         span != end && span + 1 != end; ++span) {
         int y = span->y;
         int maxY = (span + 1)->y;
 
@@ -87,7 +91,9 @@ bool Region::contains(const IntPoint& point) const
         if (maxY <= point.y())
             continue;
 
-        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span), end = m_shape.segmentsEnd(span); segment != end && segment + 1 != end; segment += 2) {
+        for (Shape::SegmentIterator segment = m_shape.segmentsBegin(span),
+                                    end = m_shape.segmentsEnd(span);
+             segment != end && segment + 1 != end; segment += 2) {
             int x = *segment;
             int maxX = *(segment + 1);
 
@@ -106,10 +112,11 @@ bool Region::intersects(const Region& region) const
     if (!m_bounds.intersects(region.m_bounds))
         return false;
 
-    return Shape::compareShapes<Shape::CompareIntersectsOperation>(m_shape, region.m_shape);
+    return Shape::compareShapes<Shape::CompareIntersectsOperation>(
+        m_shape, region.m_shape);
 }
 
-template<typename CompareOperation>
+template <typename CompareOperation>
 bool Region::Shape::compareShapes(const Shape& aShape, const Shape& bShape)
 {
     bool result = CompareOperation::defaultResult;
@@ -132,7 +139,8 @@ bool Region::Shape::compareShapes(const Shape& aShape, const Shape& bShape)
         Shape::SegmentIterator bSegment = bShape.segmentsBegin(bSpan);
         Shape::SegmentIterator bSegmentEnd = bShape.segmentsEnd(bSpan);
 
-        // Look for a non-overlapping part of the spans. If B had a segment in its previous span, then we already tested A against B within that span.
+        // Look for a non-overlapping part of the spans. If B had a segment in its
+        // previous span, then we already tested A against B within that span.
         bool aHasSegmentInSpan = aSegment != aSegmentEnd;
         bool bHasSegmentInSpan = bSegment != bSegmentEnd;
         if (aY < bY && !bHadSegmentInPreviousSpan && aHasSegmentInSpan && CompareOperation::aOutsideB(result))
@@ -200,22 +208,30 @@ void Region::Shape::trimCapacities()
 }
 
 struct Region::Shape::CompareContainsOperation {
+    STATIC_ONLY(CompareContainsOperation);
     const static bool defaultResult = true;
     inline static bool aOutsideB(bool& /* result */) { return false; }
-    inline static bool bOutsideA(bool& result) { result = false; return true; }
+    inline static bool bOutsideA(bool& result)
+    {
+        result = false;
+        return true;
+    }
     inline static bool aOverlapsB(bool& /* result */) { return false; }
 };
 
 struct Region::Shape::CompareIntersectsOperation {
+    STATIC_ONLY(CompareIntersectsOperation);
     const static bool defaultResult = false;
     inline static bool aOutsideB(bool& /* result */) { return false; }
     inline static bool bOutsideA(bool& /* result */) { return false; }
-    inline static bool aOverlapsB(bool& result) { result = true; return true; }
+    inline static bool aOverlapsB(bool& result)
+    {
+        result = true;
+        return true;
+    }
 };
 
-Region::Shape::Shape()
-{
-}
+Region::Shape::Shape() { }
 
 Region::Shape::Shape(const IntRect& rect)
 {
@@ -233,7 +249,7 @@ Region::Shape::Shape(size_t segmentsCapacity, size_t spansCapacity)
 
 void Region::Shape::appendSpan(int y)
 {
-    m_spans.append(Span(y, m_segments.size()));
+    m_spans.push_back(Span(y, m_segments.size()));
 }
 
 bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
@@ -241,7 +257,7 @@ bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
     if (m_spans.isEmpty())
         return false;
 
-    SegmentIterator lastSpanBegin = m_segments.data() + m_spans.last().segmentIndex;
+    SegmentIterator lastSpanBegin = m_segments.data() + m_spans.back().segmentIndex;
     SegmentIterator lastSpanEnd = m_segments.data() + m_segments.size();
 
     // Check if both spans have an equal number of segments.
@@ -256,7 +272,9 @@ bool Region::Shape::canCoalesce(SegmentIterator begin, SegmentIterator end)
     return true;
 }
 
-void Region::Shape::appendSpan(int y, SegmentIterator begin, SegmentIterator end)
+void Region::Shape::appendSpan(int y,
+    SegmentIterator begin,
+    SegmentIterator end)
 {
     if (canCoalesce(begin, end))
         return;
@@ -265,7 +283,9 @@ void Region::Shape::appendSpan(int y, SegmentIterator begin, SegmentIterator end
     m_segments.appendRange(begin, end);
 }
 
-void Region::Shape::appendSpans(const Shape& shape, SpanIterator begin, SpanIterator end)
+void Region::Shape::appendSpans(const Shape& shape,
+    SpanIterator begin,
+    SpanIterator end)
 {
     for (SpanIterator it = begin; it != end; ++it)
         appendSpan(it->y, shape.segmentsBegin(it), shape.segmentsEnd(it));
@@ -273,7 +293,7 @@ void Region::Shape::appendSpans(const Shape& shape, SpanIterator begin, SpanIter
 
 void Region::Shape::appendSegment(int x)
 {
-    m_segments.append(x);
+    m_segments.push_back(x);
 }
 
 Region::Shape::SpanIterator Region::Shape::spansBegin() const
@@ -286,7 +306,8 @@ Region::Shape::SpanIterator Region::Shape::spansEnd() const
     return m_spans.data() + m_spans.size();
 }
 
-Region::Shape::SegmentIterator Region::Shape::segmentsBegin(SpanIterator it) const
+Region::Shape::SegmentIterator Region::Shape::segmentsBegin(
+    SpanIterator it) const
 {
     ASSERT(it >= m_spans.data());
     ASSERT(it < m_spans.data() + m_spans.size());
@@ -298,7 +319,8 @@ Region::Shape::SegmentIterator Region::Shape::segmentsBegin(SpanIterator it) con
     return &m_segments[it->segmentIndex];
 }
 
-Region::Shape::SegmentIterator Region::Shape::segmentsEnd(SpanIterator it) const
+Region::Shape::SegmentIterator Region::Shape::segmentsEnd(
+    SpanIterator it) const
 {
     ASSERT(it >= m_spans.data());
     ASSERT(it < m_spans.data() + m_spans.size());
@@ -310,17 +332,20 @@ Region::Shape::SegmentIterator Region::Shape::segmentsEnd(SpanIterator it) const
     ASSERT(it + 1 < m_spans.data() + m_spans.size());
     size_t segmentIndex = (it + 1)->segmentIndex;
 
-    ASSERT_WITH_SECURITY_IMPLICATION(segmentIndex <= m_segments.size());
+    SECURITY_DCHECK(segmentIndex <= m_segments.size());
     return m_segments.data() + segmentIndex;
 }
 
 #ifndef NDEBUG
 void Region::Shape::dump() const
 {
-    for (Shape::SpanIterator span = spansBegin(), end = spansEnd(); span != end; ++span) {
+    for (Shape::SpanIterator span = spansBegin(), end = spansEnd(); span != end;
+         ++span) {
         printf("%6d: (", span->y);
 
-        for (Shape::SegmentIterator segment = segmentsBegin(span), end = segmentsEnd(span); segment != end; ++segment)
+        for (Shape::SegmentIterator segment = segmentsBegin(span),
+                                    end = segmentsEnd(span);
+             segment != end; ++segment)
             printf("%d ", *segment);
         printf(")\n");
     }
@@ -385,11 +410,14 @@ enum {
     Shape2,
 };
 
-template<typename Operation>
-Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& shape2)
+template <typename Operation>
+Region::Shape Region::Shape::shapeOperation(const Shape& shape1,
+    const Shape& shape2)
 {
-    static_assert(!(!Operation::shouldAddRemainingSegmentsFromSpan1 && Operation::shouldAddRemainingSegmentsFromSpan2), "invalid segment combination");
-    static_assert(!(!Operation::shouldAddRemainingSpansFromShape1 && Operation::shouldAddRemainingSpansFromShape2), "invalid span combination");
+    static_assert(!(!Operation::shouldAddRemainingSegmentsFromSpan1 && Operation::shouldAddRemainingSegmentsFromSpan2),
+        "invalid segment combination");
+    static_assert(!(!Operation::shouldAddRemainingSpansFromShape1 && Operation::shouldAddRemainingSpansFromShape2),
+        "invalid span combination");
 
     size_t segmentsCapacity = shape1.segmentsSize() + shape2.segmentsSize();
     size_t spansCapacity = shape1.spansSize() + shape2.spansSize();
@@ -410,7 +438,8 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& sh
     SegmentIterator segments2End = 0;
 
     Vector<int, 32> segments;
-    segments.reserveCapacity(std::max(shape1.segmentsSize(), shape2.segmentsSize()));
+    segments.reserveCapacity(
+        std::max(shape1.segmentsSize(), shape2.segmentsSize()));
 
     // Iterate over all spans.
     while (spans1 != spans1End && spans2 != spans2End) {
@@ -442,7 +471,8 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& sh
         segments.resize(0);
         ASSERT(segments.capacity());
 
-        // Now iterate over the segments in each span and construct a new vector of segments.
+        // Now iterate over the segments in each span and construct a new vector of
+        // segments.
         while (s1 != segments1End && s2 != segments2End) {
             int test = *s1 - *s2;
             int x;
@@ -459,7 +489,7 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& sh
             }
 
             if (flag == Operation::opCode || oldFlag == Operation::opCode)
-                segments.append(x);
+                segments.push_back(x);
 
             oldFlag = flag;
         }
@@ -487,7 +517,10 @@ Region::Shape Region::Shape::shapeOperation(const Shape& shape1, const Shape& sh
 }
 
 struct Region::Shape::UnionOperation {
-    static bool trySimpleOperation(const Shape& shape1, const Shape& shape2, Shape& result)
+    STATIC_ONLY(UnionOperation);
+    static bool trySimpleOperation(const Shape& shape1,
+        const Shape& shape2,
+        Shape& result)
     {
         if (shape1.isEmpty()) {
             result = shape2;
@@ -505,12 +538,14 @@ struct Region::Shape::UnionOperation {
     static const bool shouldAddRemainingSpansFromShape2 = true;
 };
 
-Region::Shape Region::Shape::unionShapes(const Shape& shape1, const Shape& shape2)
+Region::Shape Region::Shape::unionShapes(const Shape& shape1,
+    const Shape& shape2)
 {
     return shapeOperation<UnionOperation>(shape1, shape2);
 }
 
 struct Region::Shape::IntersectOperation {
+    STATIC_ONLY(IntersectOperation);
     static bool trySimpleOperation(const Shape&, const Shape&, Shape&)
     {
         return false;
@@ -524,12 +559,14 @@ struct Region::Shape::IntersectOperation {
     static const bool shouldAddRemainingSpansFromShape2 = false;
 };
 
-Region::Shape Region::Shape::intersectShapes(const Shape& shape1, const Shape& shape2)
+Region::Shape Region::Shape::intersectShapes(const Shape& shape1,
+    const Shape& shape2)
 {
     return shapeOperation<IntersectOperation>(shape1, shape2);
 }
 
 struct Region::Shape::SubtractOperation {
+    STATIC_ONLY(SubtractOperation);
     static bool trySimpleOperation(const Shape&, const Shape&, Region::Shape&)
     {
         return false;
@@ -543,7 +580,8 @@ struct Region::Shape::SubtractOperation {
     static const bool shouldAddRemainingSpansFromShape2 = false;
 };
 
-Region::Shape Region::Shape::subtractShapes(const Shape& shape1, const Shape& shape2)
+Region::Shape Region::Shape::subtractShapes(const Shape& shape1,
+    const Shape& shape2)
 {
     return shapeOperation<SubtractOperation>(shape1, shape2);
 }
@@ -551,7 +589,8 @@ Region::Shape Region::Shape::subtractShapes(const Shape& shape1, const Shape& sh
 #ifndef NDEBUG
 void Region::dump() const
 {
-    printf("Bounds: (%d, %d, %d, %d)\n", m_bounds.x(), m_bounds.y(), m_bounds.width(), m_bounds.height());
+    printf("Bounds: (%d, %d, %d, %d)\n", m_bounds.x(), m_bounds.y(),
+        m_bounds.width(), m_bounds.height());
     m_shape.dump();
 }
 #endif
@@ -583,7 +622,8 @@ void Region::unite(const Region& region)
         m_bounds = region.m_bounds;
         return;
     }
-    // FIXME: We may want another way to construct a Region without doing this test when we expect it to be false.
+    // FIXME: We may want another way to construct a Region without doing this
+    // test when we expect it to be false.
     if (!isRect() && contains(region))
         return;
 

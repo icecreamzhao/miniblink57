@@ -31,7 +31,6 @@
 #include "../platform/WebGestureDevice.h"
 #include "../platform/WebPoint.h"
 #include "../platform/WebSize.h"
-#include "WebInputEvent.h"
 
 namespace blink {
 
@@ -51,7 +50,6 @@ struct WebActiveWheelFlingParameters {
     {
     }
 };
-
 }
 
 #endif

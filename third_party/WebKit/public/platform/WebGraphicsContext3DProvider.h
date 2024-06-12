@@ -31,20 +31,38 @@
 #ifndef WebGraphicsContext3DProvider_h
 #define WebGraphicsContext3DProvider_h
 
-#include "WebCommon.h"
+#include "base/callback_forward.h"
 
 class GrContext;
 
-namespace blink {
+namespace gpu {
+struct Capabilities;
 
-class WebGraphicsContext3D;
+namespace gles2 {
+    class GLES2Interface;
+}
+}
+
+namespace blink {
 
 class WebGraphicsContext3DProvider {
 public:
     virtual ~WebGraphicsContext3DProvider() { }
 
-    virtual WebGraphicsContext3D* context3d() = 0;
+    virtual gpu::gles2::GLES2Interface* contextGL() = 0;
+    virtual bool bindToCurrentThread() = 0;
     virtual GrContext* grContext() = 0;
+    virtual gpu::Capabilities getCapabilities() = 0;
+
+    // Returns true if the context is driven by software emulation of GL. In
+    // this scenario, the compositor would not be using GPU.
+    virtual bool isSoftwareRendering() const = 0;
+
+    virtual void setLostContextCallback(const base::Closure&) = 0;
+    virtual void setErrorMessageCallback(
+        const base::Callback<void(const char* msg, int32_t id)>&)
+        = 0;
+    virtual void signalQuery(uint32_t, const base::Closure&) = 0;
 };
 
 } // namespace blink

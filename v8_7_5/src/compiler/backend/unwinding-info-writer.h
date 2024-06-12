@@ -22,36 +22,42 @@
 namespace v8 {
 namespace internal {
 
-class EhFrameWriter;
+    class EhFrameWriter;
 
-namespace compiler {
+    namespace compiler {
 
-class InstructionBlock;
+        class InstructionBlock;
 
-class UnwindingInfoWriter {
- public:
-  explicit UnwindingInfoWriter(Zone* zone) {}
+        class UnwindingInfoWriter {
+        public:
+            explicit UnwindingInfoWriter(Zone* zone) { }
 
-  void SetNumberOfInstructionBlocks(int number) {
-    if (FLAG_perf_prof_unwinding_info) UNIMPLEMENTED();
-  }
+            void SetNumberOfInstructionBlocks(int number)
+            {
+                if (FLAG_perf_prof_unwinding_info)
+                    UNIMPLEMENTED();
+            }
 
-  void BeginInstructionBlock(int pc_offset, const InstructionBlock* block) {
-    if (FLAG_perf_prof_unwinding_info) UNIMPLEMENTED();
-  }
-  void EndInstructionBlock(const InstructionBlock* block) {
-    if (FLAG_perf_prof_unwinding_info) UNIMPLEMENTED();
-  }
+            void BeginInstructionBlock(int pc_offset, const InstructionBlock* block)
+            {
+                if (FLAG_perf_prof_unwinding_info)
+                    UNIMPLEMENTED();
+            }
+            void EndInstructionBlock(const InstructionBlock* block)
+            {
+                if (FLAG_perf_prof_unwinding_info)
+                    UNIMPLEMENTED();
+            }
 
-  void Finish(int code_size) {}
+            void Finish(int code_size) { }
 
-  EhFrameWriter* eh_frame_writer() { return nullptr; }
-};
+            EhFrameWriter* eh_frame_writer() { return nullptr; }
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
 #endif
 
-#endif  // V8_COMPILER_BACKEND_UNWINDING_INFO_WRITER_H_
+#endif // V8_COMPILER_BACKEND_UNWINDING_INFO_WRITER_H_

@@ -35,6 +35,9 @@
 #include "WebNonCopyable.h"
 #include "WebPrivatePtr.h"
 #include "WebVector.h"
+#if INSIDE_BLINK
+#include "platform/heap/Handle.h"
+#endif
 
 namespace blink {
 
@@ -47,7 +50,10 @@ class WebMediaStreamSource {
 public:
     class ExtraData {
     public:
-        ExtraData() : m_owner(0) { }
+        ExtraData()
+            : m_owner(0)
+        {
+        }
         virtual ~ExtraData() { }
 
         BLINK_PLATFORM_EXPORT WebMediaStreamSource owner();
@@ -57,13 +63,14 @@ public:
 #endif
 
     private:
+#if INSIDE_BLINK
+        GC_PLUGIN_IGNORE("http://crbug.com/409526")
+#endif
         MediaStreamSource* m_owner;
     };
 
-    enum Type {
-        TypeAudio,
-        TypeVideo
-    };
+    enum Type { TypeAudio,
+        TypeVideo };
 
     enum ReadyState {
         ReadyStateLive = 0,
@@ -83,36 +90,42 @@ public:
 
     BLINK_PLATFORM_EXPORT void assign(const WebMediaStreamSource&);
 
-    BLINK_PLATFORM_EXPORT void initialize(const WebString& id, Type, const WebString& name); // DEPRECATED
-    BLINK_PLATFORM_EXPORT void initialize(const WebString& id, Type, const WebString& name, bool remote, bool readonly);
+    BLINK_PLATFORM_EXPORT void initialize(const WebString& id,
+        Type,
+        const WebString& name); // DEPRECATED
+    BLINK_PLATFORM_EXPORT void initialize(const WebString& id,
+        Type,
+        const WebString& name,
+        bool remote);
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
 
     BLINK_PLATFORM_EXPORT WebString id() const;
-    BLINK_PLATFORM_EXPORT Type type() const;
+    BLINK_PLATFORM_EXPORT Type getType() const;
     BLINK_PLATFORM_EXPORT WebString name() const;
+    BLINK_PLATFORM_EXPORT bool remote() const;
 
     BLINK_PLATFORM_EXPORT void setReadyState(ReadyState);
-    BLINK_PLATFORM_EXPORT ReadyState readyState() const;
+    BLINK_PLATFORM_EXPORT ReadyState getReadyState() const;
 
     // Extra data associated with this object.
-    // If non-null, the extra data pointer will be deleted when the object is destroyed.
-    // Setting the extra data pointer will cause any existing non-null
+    // If non-null, the extra data pointer will be deleted when the object is
+    // destroyed.  Setting the extra data pointer will cause any existing non-null
     // extra data pointer to be deleted.
-    BLINK_PLATFORM_EXPORT ExtraData* extraData() const;
+    BLINK_PLATFORM_EXPORT ExtraData* getExtraData() const;
     BLINK_PLATFORM_EXPORT void setExtraData(ExtraData*);
 
     BLINK_PLATFORM_EXPORT WebMediaConstraints constraints();
 
     // Only used if if this is a WebAudio source.
-    // The WebAudioDestinationConsumer is not owned, and has to be disposed of separately
-    // after calling removeAudioConsumer.
+    // The WebAudioDestinationConsumer is not owned, and has to be disposed of
+    // separately after calling removeAudioConsumer.
     BLINK_PLATFORM_EXPORT bool requiresAudioConsumer() const;
     BLINK_PLATFORM_EXPORT void addAudioConsumer(WebAudioDestinationConsumer*);
     BLINK_PLATFORM_EXPORT bool removeAudioConsumer(WebAudioDestinationConsumer*);
 
 #if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT WebMediaStreamSource(const WTF::PassRefPtr<MediaStreamSource>&);
+    BLINK_PLATFORM_EXPORT WebMediaStreamSource(MediaStreamSource*);
     BLINK_PLATFORM_EXPORT WebMediaStreamSource& operator=(MediaStreamSource*);
     BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<MediaStreamSource>() const;
     BLINK_PLATFORM_EXPORT operator MediaStreamSource*() const;

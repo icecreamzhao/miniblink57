@@ -5,17 +5,17 @@
 #ifndef BoxDecorationData_h
 #define BoxDecorationData_h
 
-#include "core/layout/LayoutBoxModelObject.h" // For BackgroundBleedAvoidance.
+#include "core/layout/BackgroundBleedAvoidance.h"
 #include "platform/graphics/Color.h"
 
 namespace blink {
 
-class GraphicsContext;
 class LayoutBox;
 
 // Information extracted from ComputedStyle for box painting.
 struct BoxDecorationData {
     STACK_ALLOCATED();
+
 public:
     BoxDecorationData(const LayoutBox&);
 

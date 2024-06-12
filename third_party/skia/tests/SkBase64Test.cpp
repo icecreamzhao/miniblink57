@@ -9,21 +9,22 @@
 
 #include "Test.h"
 
-DEF_TEST(SkBase64, reporter) {
+DEF_TEST(SkBase64, reporter)
+{
     char all[256];
     for (int index = 0; index < 256; ++index) {
-        all[index] = (signed char) (index + 1);
+        all[index] = (signed char)(index + 1);
     }
 
     for (int offset = 0; offset < 6; ++offset) {
         size_t length = 256 - offset;
-        size_t encodeLength = SkBase64::Encode(all + offset, length, NULL);
+        size_t encodeLength = SkBase64::Encode(all + offset, length, nullptr);
         SkAutoTMalloc<char> src(encodeLength + 1);
         SkBase64::Encode(all + offset, length, src.get());
         src[SkToInt(encodeLength)] = '\0';
         SkBase64 tryMe;
         tryMe.decode(src.get(), encodeLength);
-        REPORTER_ASSERT(reporter, (strcmp((const char*) (all + offset), tryMe.getData()) == 0));
+        REPORTER_ASSERT(reporter, (strcmp((const char*)(all + offset), tryMe.getData()) == 0));
         delete[] tryMe.getData();
     }
 }

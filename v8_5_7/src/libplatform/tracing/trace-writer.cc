@@ -70,7 +70,7 @@ void JSONTraceWriter::AppendArgValue(uint8_t type,
     case TRACE_VALUE_TYPE_DOUBLE: {
       std::string real;
       double val = value.as_double;
-      if (std::isfinite(val)) {
+      if (std_isfinite(val)) {
         std::ostringstream convert_stream;
         convert_stream << val;
         real = convert_stream.str();
@@ -82,7 +82,7 @@ void JSONTraceWriter::AppendArgValue(uint8_t type,
             real.find('E') == std::string::npos) {
           real += ".0";
         }
-      } else if (std::isnan(val)) {
+      } else if (std_isnan(val)) {
         // The JSON spec doesn't allow NaN and Infinity (since these are
         // objects in EcmaScript).  Use strings instead.
         real = "\"NaN\"";

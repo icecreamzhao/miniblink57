@@ -77,47 +77,47 @@ typedef unsigned char uint8_t;
 
 #elif U_HAVE_INTTYPES_H
 
-#   include <inttypes.h>
+#include <inttypes.h>
 
 #else /* neither U_HAVE_STDINT_H nor U_HAVE_INTTYPES_H */
 
-#if ! U_HAVE_INT8_T
+#if !U_HAVE_INT8_T
 typedef signed char int8_t;
 #endif
 
-#if ! U_HAVE_UINT8_T
+#if !U_HAVE_UINT8_T
 typedef unsigned char uint8_t;
 #endif
 
-#if ! U_HAVE_INT16_T
+#if !U_HAVE_INT16_T
 typedef signed short int16_t;
 #endif
 
-#if ! U_HAVE_UINT16_T
+#if !U_HAVE_UINT16_T
 typedef unsigned short uint16_t;
 #endif
 
-#if ! U_HAVE_INT32_T
+#if !U_HAVE_INT32_T
 typedef signed int int32_t;
 #endif
 
-#if ! U_HAVE_UINT32_T
+#if !U_HAVE_UINT32_T
 typedef unsigned int uint32_t;
 #endif
 
-#if ! U_HAVE_INT64_T
+#if !U_HAVE_INT64_T
 #ifdef _MSC_VER
-    typedef signed __int64 int64_t;
+typedef signed __int64 int64_t;
 #else
-    typedef signed long long int64_t;
+typedef signed long long int64_t;
 #endif
 #endif
 
-#if ! U_HAVE_UINT64_T
+#if !U_HAVE_UINT64_T
 #ifdef _MSC_VER
-    typedef unsigned __int64 uint64_t;
+typedef unsigned __int64 uint64_t;
 #else
-    typedef unsigned long long uint64_t;
+typedef unsigned long long uint64_t;
 #endif
 #endif
 

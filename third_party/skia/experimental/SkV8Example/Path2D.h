@@ -23,15 +23,18 @@ public:
     Path2D(SkPath* path);
     virtual ~Path2D();
 
-    static void AddToGlobal(Global* global) {
+    static void AddToGlobal(Global* global)
+    {
         gGlobal = global;
     }
 
-    v8::Persistent<v8::Object>& persistent() {
+    v8::Persistent<v8::Object>& persistent()
+    {
         return handle_;
     }
 
-    SkPath* path() {
+    SkPath* path()
+    {
         return path_;
     }
 

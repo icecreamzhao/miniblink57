@@ -31,48 +31,29 @@
 #ifndef WrappedResourceResponse_h
 #define WrappedResourceResponse_h
 
-#include "platform/exported/WebURLResponsePrivate.h"
 #include "public/platform/WebURLResponse.h"
+#include "wtf/Noncopyable.h"
 
 namespace blink {
 
+// WrappedResourceResponse doesn't take ownership of given ResourceResponse,
+// but just holds a pointer to it. It is not copyable.
 class WrappedResourceResponse : public WebURLResponse {
+    WTF_MAKE_NONCOPYABLE(WrappedResourceResponse);
+
 public:
-    ~WrappedResourceResponse()
+    ~WrappedResourceResponse() { }
+
+    explicit WrappedResourceResponse(ResourceResponse& resourceResponse)
+        : WebURLResponse(resourceResponse)
     {
-        reset(); // Need to drop reference to m_handle
     }
 
-    WrappedResourceResponse() { }
-
-    WrappedResourceResponse(ResourceResponse& resourceResponse)
+    explicit WrappedResourceResponse(const ResourceResponse& resourceResponse)
+        : WrappedResourceResponse(
+            const_cast<ResourceResponse&>(resourceResponse))
     {
-        bind(resourceResponse);
     }
-
-    WrappedResourceResponse(const ResourceResponse& resourceResponse)
-    {
-        bind(resourceResponse);
-    }
-
-    void bind(ResourceResponse& resourceResponse)
-    {
-        m_handle.m_resourceResponse = &resourceResponse;
-        assign(&m_handle);
-    }
-
-    void bind(const ResourceResponse& resourceResponse)
-    {
-        bind(*const_cast<ResourceResponse*>(&resourceResponse));
-    }
-
-private:
-    class Handle : public WebURLResponsePrivate {
-    public:
-        virtual void dispose() { m_resourceResponse = 0; }
-    };
-
-    Handle m_handle;
 };
 
 } // namespace blink

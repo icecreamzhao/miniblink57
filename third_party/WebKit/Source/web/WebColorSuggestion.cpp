@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebColorSuggestion.h"
 
 #include "platform/ColorSuggestion.h"
@@ -43,7 +42,8 @@ WebColorSuggestion::WebColorSuggestion(const ColorSuggestion& suggestion)
 {
 }
 
-WebColorSuggestion& WebColorSuggestion::operator=(const ColorSuggestion& suggestion)
+WebColorSuggestion& WebColorSuggestion::operator=(
+    const ColorSuggestion& suggestion)
 {
     color = static_cast<WebColor>(suggestion.color.rgb());
     label = suggestion.label;

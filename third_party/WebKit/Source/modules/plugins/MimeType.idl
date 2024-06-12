@@ -19,7 +19,6 @@
 */
 
 [
-    GarbageCollected,
     ImplementedAs=DOMMimeType
 ] interface MimeType {
     readonly attribute DOMString type;
@@ -27,4 +26,3 @@
     readonly attribute DOMString description;
     readonly attribute Plugin enabledPlugin;
 };
-

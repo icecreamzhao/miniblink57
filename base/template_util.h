@@ -1,192 +1,207 @@
-// Copyright (c) 2014 Marshall A. Greenblatt. Portions copyright (c) 2011
-// Google Inc. All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//    * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//    * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//    * Neither the name of Google Inc. nor the name Chromium Embedded
-// Framework nor the names of its contributors may be used to endorse
-// or promote products derived from this software without specific prior
-// written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// Copyright (c) 2011 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-#ifndef CEF_INCLUDE_BASE_CEF_TEMPLATE_UTIL_H_
-#define CEF_INCLUDE_BASE_CEF_TEMPLATE_UTIL_H_
-#pragma once
+#ifndef BASE_TEMPLATE_UTIL_H_
+#define BASE_TEMPLATE_UTIL_H_
 
-#if defined(BASE_TEMPLATE_UTIL_H_)
-// Do nothing if the Chromium header has already been included.
-// This can happen in cases where Chromium code is used directly by the
-// client application. When using Chromium code directly always include
-// the Chromium header first to avoid type conflicts.
-#elif 0 // defined(BUILDING_CEF_SHARED)
-// When building CEF include the Chromium header directly.
-#include "base/template_util.h"
-#else  // !BUILDING_CEF_SHARED
-// The following is substantially similar to the Chromium implementation.
-// If the Chromium implementation diverges the below implementation should be
-// updated to match.
+#include <iosfwd>
+#include <stddef.h>
+#include <type_traits>
+#include <utility>
 
-#include <cstddef>  // For size_t.
+#include "build/build_config.h"
 
-//#include "include/base/cef_build.h"
+// This hacks around libstdc++ 4.6 missing stuff in type_traits, while we need
+// to support it.
+#define CR_GLIBCXX_4_7_0 20120322
+#define CR_GLIBCXX_4_5_4 20120702
+#define CR_GLIBCXX_4_6_4 20121127
+#if defined(__GLIBCXX__) && (__GLIBCXX__ < CR_GLIBCXX_4_7_0 || __GLIBCXX__ == CR_GLIBCXX_4_5_4 || __GLIBCXX__ == CR_GLIBCXX_4_6_4)
+#define CR_USE_FALLBACKS_FOR_OLD_GLIBCXX
+#endif
+
+// Some versions of libstdc++ have partial support for type_traits, but misses
+// a smaller subset while removing some of the older non-standard stuff. Assume
+// that all versions below 5.0 fall in this category, along with one 5.0
+// experimental release. Test for this by consulting compiler major version,
+// the only reliable option available, so theoretically this could fail should
+// you attempt to mix an earlier version of libstdc++ with >= GCC5. But
+// that's unlikely to work out, especially as GCC5 changed ABI.
+#define CR_GLIBCXX_5_0_0 20150123
+#if (defined(__GNUC__) && __GNUC__ < 5) || (defined(__GLIBCXX__) && __GLIBCXX__ == CR_GLIBCXX_5_0_0)
+#define CR_USE_FALLBACKS_FOR_OLD_EXPERIMENTAL_GLIBCXX
+#endif
+
+// This hacks around using gcc with libc++ which has some incompatibilies.
+// - is_trivially_* doesn't work: https://llvm.org/bugs/show_bug.cgi?id=27538
+// TODO(danakj): Remove this when android builders are all using a newer version
+// of gcc, or the android ndk is updated to a newer libc++ that works with older
+// gcc versions.
+#if !defined(__clang__) && defined(_LIBCPP_VERSION)
+#define CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX
+#endif
 
 namespace base {
 
-// template definitions from tr1
-
-template<class T, T v>
-struct integral_constant {
-  static const T value = v;
-  typedef T value_type;
-  typedef integral_constant<T, v> type;
+template <class T>
+struct is_non_const_reference : std::false_type {
+};
+template <class T>
+struct is_non_const_reference<T&> : std::true_type {
+};
+template <class T>
+struct is_non_const_reference<const T&> : std::false_type {
 };
 
-template <class T, T v> const T integral_constant<T, v>::value;
+// is_assignable
 
-typedef integral_constant<bool, true> true_type;
-typedef integral_constant<bool, false> false_type;
+namespace internal {
 
-template <class T> struct is_pointer : false_type {};
-template <class T> struct is_pointer<T*> : true_type {};
-
-// Member function pointer detection up to four params. Add more as needed
-// below. This is built-in to C++ 11, and we can remove this when we switch.
-template<typename T>
-struct is_member_function_pointer : false_type {};
-
-template <typename R, typename Z>
-struct is_member_function_pointer<R(Z::*)()> : true_type {};
-template <typename R, typename Z>
-struct is_member_function_pointer<R(Z::*)() const> : true_type {};
-
-template <typename R, typename Z, typename A>
-struct is_member_function_pointer<R(Z::*)(A)> : true_type {};
-template <typename R, typename Z, typename A>
-struct is_member_function_pointer<R(Z::*)(A) const> : true_type {};
-
-template <typename R, typename Z, typename A, typename B>
-struct is_member_function_pointer<R(Z::*)(A, B)> : true_type {};
-template <typename R, typename Z, typename A, typename B>
-struct is_member_function_pointer<R(Z::*)(A, B) const> : true_type {};
-
-template <typename R, typename Z, typename A, typename B, typename C>
-struct is_member_function_pointer<R(Z::*)(A, B, C)> : true_type {};
-template <typename R, typename Z, typename A, typename B, typename C>
-struct is_member_function_pointer<R(Z::*)(A, B, C) const> : true_type {};
-
-template <typename R, typename Z, typename A, typename B, typename C,
-          typename D>
-struct is_member_function_pointer<R(Z::*)(A, B, C, D)> : true_type {};
-template <typename R, typename Z, typename A, typename B, typename C,
-          typename D>
-struct is_member_function_pointer<R(Z::*)(A, B, C, D) const> : true_type {};
-
-
-template <class T, class U> struct is_same : public false_type {};
-template <class T> struct is_same<T,T> : true_type {};
-
-template<class> struct is_array : public false_type {};
-template<class T, size_t n> struct is_array<T[n]> : public true_type {};
-template<class T> struct is_array<T[]> : public true_type {};
-
-template <class T> struct is_non_const_reference : false_type {};
-template <class T> struct is_non_const_reference<T&> : true_type {};
-template <class T> struct is_non_const_reference<const T&> : false_type {};
-
-template <class T> struct is_const : false_type {};
-template <class T> struct is_const<const T> : true_type {};
-
-template <class T> struct is_void : false_type {};
-template <> struct is_void<void> : true_type {};
-
-namespace cef_internal {
-
-// Types YesType and NoType are guaranteed such that sizeof(YesType) <
-// sizeof(NoType).
-typedef char YesType;
-
-struct NoType {
-  YesType dummy[2];
+template <typename First, typename Second>
+struct SelectSecond {
+    using type = Second;
 };
 
-// This class is an implementation detail for is_convertible, and you
-// don't need to know how it works to use is_convertible. For those
-// who care: we declare two different functions, one whose argument is
-// of type To and one with a variadic argument list. We give them
-// return types of different size, so we can use sizeof to trick the
-// compiler into telling us which function it would have chosen if we
-// had called it with an argument of type From.  See Alexandrescu's
-// _Modern C++ Design_ for more details on this sort of trick.
-
-struct ConvertHelper {
-  template <typename To>
-  static YesType Test(To);
-
-  template <typename To>
-  static NoType Test(...);
-
-  template <typename From>
-  static From& Create();
+struct Any {
+    Any(...);
 };
 
-// Used to determine if a type is a struct/union/class. Inspired by Boost's
-// is_class type_trait implementation.
-struct IsClassHelper {
-  template <typename C>
-  static YesType Test(void(C::*)(void));
+// True case: If |Lvalue| can be assigned to from |Rvalue|, then the return
+// value is a true_type.
+template <class Lvalue, class Rvalue>
+typename internal::SelectSecond<
+    decltype((std::declval<Lvalue>() = std::declval<Rvalue>())),
+    std::true_type>::type
+    IsAssignableTest(Lvalue&&, Rvalue&&);
 
-  template <typename C>
-  static NoType Test(...);
+// False case: Otherwise the return value is a false_type.
+template <class Rvalue>
+std::false_type IsAssignableTest(internal::Any, Rvalue&&);
+
+// Default case: Neither Lvalue nor Rvalue is void. Uses IsAssignableTest to
+// determine the type of IsAssignableImpl.
+template <class Lvalue,
+    class Rvalue,
+    bool = std::is_void<Lvalue>::value || std::is_void<Rvalue>::value>
+    struct IsAssignableImpl
+    : public std::common_type<decltype(
+        internal::IsAssignableTest(std::declval<Lvalue>(),
+            std::declval<Rvalue>()))>::type {
 };
 
-}  // namespace cef_internal
-
-// Inherits from true_type if From is convertible to To, false_type otherwise.
-//
-// Note that if the type is convertible, this will be a true_type REGARDLESS
-// of whether or not the conversion would emit a warning.
-template <typename From, typename To>
-struct is_convertible
-    : integral_constant<bool,
-                        sizeof(cef_internal::ConvertHelper::Test<To>(
-                                   cef_internal::ConvertHelper::Create<From>())) ==
-                        sizeof(cef_internal::YesType)> {
+// Void case: Either Lvalue or Rvalue is void. Then the type of IsAssignableTest
+// is false_type.
+template <class Lvalue, class Rvalue>
+struct IsAssignableImpl<Lvalue, Rvalue, true> : public std::false_type {
 };
 
+// Uses expression SFINAE to detect whether using operator<< would work.
+template <typename T, typename = void>
+struct SupportsOstreamOperator : std::false_type {
+};
 template <typename T>
-struct is_class
-    : integral_constant<bool,
-                        sizeof(cef_internal::IsClassHelper::Test<T>(0)) ==
-                            sizeof(cef_internal::YesType)> {
+struct SupportsOstreamOperator<T,
+    decltype(void(std::declval<std::ostream&>()
+        << std::declval<T>()))>
+    : std::true_type {
 };
 
-template<bool B, class T = void>
-struct enable_if {};
+} // namespace internal
 
-template<class T>
-struct enable_if<true, T> { typedef T type; };
+  // TODO(crbug.com/554293): Remove this when all platforms have this in the std
+  // namespace.
+template <class Lvalue, class Rvalue>
+struct is_assignable : public internal::IsAssignableImpl<Lvalue, Rvalue> {
+};
 
-}  // namespace base
+// is_copy_assignable is true if a T const& is assignable to a T&.
+// TODO(crbug.com/554293): Remove this when all platforms have this in the std
+// namespace.
+template <class T>
+struct is_copy_assignable
+    : public is_assignable<typename std::add_lvalue_reference<T>::type,
+    typename std::add_lvalue_reference<
+    typename std::add_const<T>::type>::type> {
+};
 
-#endif  // !BUILDING_CEF_SHARED
+// is_move_assignable is true if a T&& is assignable to a T&.
+// TODO(crbug.com/554293): Remove this when all platforms have this in the std
+// namespace.
+template <class T>
+struct is_move_assignable
+    : public is_assignable<typename std::add_lvalue_reference<T>::type,
+    const typename std::add_rvalue_reference<T>::type> {
+};
 
-#endif  // CEF_INCLUDE_BASE_CEF_TEMPLATE_UTIL_H_
+// underlying_type produces the integer type backing an enum type.
+// TODO(crbug.com/554293): Remove this when all platforms have this in the std
+// namespace.
+#if defined(CR_USE_FALLBACKS_FOR_OLD_GLIBCXX)
+template <typename T>
+struct underlying_type {
+    using type = __underlying_type(T);
+};
+#else
+template <typename T>
+using underlying_type = std::underlying_type<T>;
+#endif
+
+// TODO(crbug.com/554293): Remove this when all platforms have this in the std
+// namespace.
+#if defined(CR_USE_FALLBACKS_FOR_OLD_GLIBCXX)
+template <class T>
+using is_trivially_destructible = std::has_trivial_destructor<T>;
+#else
+template <class T>
+using is_trivially_destructible = std::is_trivially_destructible<T>;
+#endif
+
+// is_trivially_copyable is especially hard to get right.
+// - Older versions of libstdc++ will fail to have it like they do for other
+//   type traits. In this case we should provide it based on compiler
+//   intrinsics. This is covered by the CR_USE_FALLBACKS_FOR_OLD_GLIBCXX define.
+// - An experimental release of gcc includes most of type_traits but misses
+//   is_trivially_copyable, so we still have to avoid using libstdc++ in this
+//   case, which is covered by CR_USE_FALLBACKS_FOR_OLD_EXPERIMENTAL_GLIBCXX.
+// - When compiling libc++ from before r239653, with a gcc compiler, the
+//   std::is_trivially_copyable can fail. So we need to work around that by not
+//   using the one in libc++ in this case. This is covered by the
+//   CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX define, and is discussed in
+//   https://llvm.org/bugs/show_bug.cgi?id=27538#c1 where they point out that
+//   in libc++'s commit r239653 this is fixed by libc++ checking for gcc 5.1.
+// - In both of the above cases we are using the gcc compiler. When defining
+//   this ourselves on compiler intrinsics, the __is_trivially_copyable()
+//   intrinsic is not available on gcc before version 5.1 (see the discussion in
+//   https://llvm.org/bugs/show_bug.cgi?id=27538#c1 again), so we must check for
+//   that version.
+// - When __is_trivially_copyable() is not available because we are on gcc older
+//   than 5.1, we need to fall back to something, so we use __has_trivial_copy()
+//   instead based on what was done one-off in bit_cast() previously.
+
+// TODO(crbug.com/554293): Remove this when all platforms have this in the std
+// namespace and it works with gcc as needed.
+#if defined(CR_USE_FALLBACKS_FOR_OLD_GLIBCXX) || defined(CR_USE_FALLBACKS_FOR_OLD_EXPERIMENTAL_GLIBCXX) || defined(CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX)
+template <typename T>
+struct is_trivially_copyable {
+    // TODO(danakj): Remove this when android builders are all using a newer version
+    // of gcc, or the android ndk is updated to a newer libc++ that does this for
+    // us.
+#if _GNUC_VER >= 501
+    static const/*expr*/ bool value = __is_trivially_copyable(T);
+#else
+    static const/*expr*/ bool value = __has_trivial_copy(T);
+#endif
+};
+#else
+template <class T>
+using is_trivially_copyable = std::is_trivially_copyable<T>;
+#endif
+
+} // namespace base
+
+#undef CR_USE_FALLBACKS_FOR_OLD_GLIBCXX
+#undef CR_USE_FALLBACKS_FOR_GCC_WITH_LIBCXX
+#undef CR_USE_FALLBACKS_FOR_OLD_EXPERIMENTAL_GLIBCXX
+
+#endif // BASE_TEMPLATE_UTIL_H_

@@ -10,22 +10,21 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/Region.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
@@ -38,23 +37,23 @@ namespace blink {
     EXPECT_TRUE(r.contains(IntPoint(x + w - 1, y + h / 2))); \
     EXPECT_TRUE(r.contains(IntPoint(x + w / 2, y)));         \
     EXPECT_TRUE(r.contains(IntPoint(x + w / 2, y + h - 1))); \
-    EXPECT_TRUE(r.contains(IntPoint(x + w / 2, y + h / 2))); \
+    EXPECT_TRUE(r.contains(IntPoint(x + w / 2, y + h / 2)));
 
-#define TEST_LEFT_OF_RECT(r, x, y, w, h)                     \
-    EXPECT_FALSE(r.contains(IntPoint(x - 1, y)));            \
-    EXPECT_FALSE(r.contains(IntPoint(x - 1, y + h - 1)));    \
+#define TEST_LEFT_OF_RECT(r, x, y, w, h)          \
+    EXPECT_FALSE(r.contains(IntPoint(x - 1, y))); \
+    EXPECT_FALSE(r.contains(IntPoint(x - 1, y + h - 1)));
 
-#define TEST_RIGHT_OF_RECT(r, x, y, w, h)                 \
-    EXPECT_FALSE(r.contains(IntPoint(x + w, y)));         \
-    EXPECT_FALSE(r.contains(IntPoint(x + w, y + h - 1))); \
+#define TEST_RIGHT_OF_RECT(r, x, y, w, h)         \
+    EXPECT_FALSE(r.contains(IntPoint(x + w, y))); \
+    EXPECT_FALSE(r.contains(IntPoint(x + w, y + h - 1)));
 
-#define TEST_TOP_OF_RECT(r, x, y, w, h)                   \
-    EXPECT_FALSE(r.contains(IntPoint(x, y - 1)));         \
-    EXPECT_FALSE(r.contains(IntPoint(x + w - 1, y - 1))); \
+#define TEST_TOP_OF_RECT(r, x, y, w, h)           \
+    EXPECT_FALSE(r.contains(IntPoint(x, y - 1))); \
+    EXPECT_FALSE(r.contains(IntPoint(x + w - 1, y - 1)));
 
-#define TEST_BOTTOM_OF_RECT(r, x, y, w, h)                \
-    EXPECT_FALSE(r.contains(IntPoint(x, y + h)));         \
-    EXPECT_FALSE(r.contains(IntPoint(x + w - 1, y + h))); \
+#define TEST_BOTTOM_OF_RECT(r, x, y, w, h)        \
+    EXPECT_FALSE(r.contains(IntPoint(x, y + h))); \
+    EXPECT_FALSE(r.contains(IntPoint(x + w - 1, y + h)));
 
 TEST(RegionTest, containsPoint)
 {
@@ -121,21 +120,21 @@ TEST(RegionTest, emptySpan)
         EXPECT_FALSE(rects[i].isEmpty());
 }
 
-#define TEST_NO_INTERSECT(a, b)      \
-{                                    \
-    Region ar = a;                   \
-    Region br = b;                   \
-    EXPECT_FALSE(ar.intersects(br)); \
-    EXPECT_FALSE(br.intersects(ar)); \
-}
+#define TEST_NO_INTERSECT(a, b)          \
+    {                                    \
+        Region ar = a;                   \
+        Region br = b;                   \
+        EXPECT_FALSE(ar.intersects(br)); \
+        EXPECT_FALSE(br.intersects(ar)); \
+    }
 
-#define TEST_INTERSECT(a, b)        \
-{                                   \
-    Region ar = a;                  \
-    Region br = b;                  \
-    EXPECT_TRUE(ar.intersects(br)); \
-    EXPECT_TRUE(br.intersects(ar)); \
-}
+#define TEST_INTERSECT(a, b)            \
+    {                                   \
+        Region ar = a;                  \
+        Region br = b;                  \
+        EXPECT_TRUE(ar.intersects(br)); \
+        EXPECT_TRUE(br.intersects(ar)); \
+    }
 
 TEST(RegionTest, intersectsRegion)
 {
@@ -225,19 +224,19 @@ TEST(RegionTest, ReadPastFullSpanVectorInIntersectsTest)
     TEST_NO_INTERSECT(r, IntRect(0, 2184, 1, 150));
 }
 
-#define TEST_NO_CONTAINS(a, b)     \
-{                                  \
-    Region ar = a;                 \
-    Region br = b;                 \
-    EXPECT_FALSE(ar.contains(br)); \
-}
+#define TEST_NO_CONTAINS(a, b)         \
+    {                                  \
+        Region ar = a;                 \
+        Region br = b;                 \
+        EXPECT_FALSE(ar.contains(br)); \
+    }
 
-#define TEST_CONTAINS(a, b)       \
-{                                 \
-    Region ar = a;                \
-    Region br = b;                \
-    EXPECT_TRUE(ar.contains(br)); \
-}
+#define TEST_CONTAINS(a, b)           \
+    {                                 \
+        Region ar = a;                \
+        Region br = b;                \
+        EXPECT_TRUE(ar.contains(br)); \
+    }
 
 TEST(RegionTest, containsRegion)
 {
@@ -384,7 +383,7 @@ TEST(RegionTest, unite)
     // A complex region uniting a containing rect gives back the containing rect.
     r = IntRect(0, 0, 50, 50);
     r.unite(IntRect(100, 0, 50, 50));
-    r. unite(IntRect(0, 0, 500, 500));
+    r.unite(IntRect(0, 0, 500, 500));
     EXPECT_EQ(Region(IntRect(0, 0, 500, 500)), r);
 }
 

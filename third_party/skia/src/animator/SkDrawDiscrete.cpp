@@ -6,11 +6,10 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawDiscrete.h"
 #include "SkAnimateMaker.h"
-#include "SkPaint.h"
 #include "SkDiscretePathEffect.h"
+#include "SkPaint.h"
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -23,12 +22,16 @@ const SkMemberInfo SkDiscrete::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDiscrete);
 
-SkDiscrete::SkDiscrete() : deviation(0), segLength(0) {
+SkDiscrete::SkDiscrete()
+    : deviation(0)
+    , segLength(0)
+{
 }
 
-SkPathEffect* SkDiscrete::getPathEffect() {
+SkPathEffect* SkDiscrete::getPathEffect()
+{
     if (deviation <= 0 || segLength <= 0)
-        return NULL;
+        return nullptr;
     else
-        return SkDiscretePathEffect::Create(segLength, deviation);
+        return SkDiscretePathEffect::Make(segLength, deviation).release();
 }

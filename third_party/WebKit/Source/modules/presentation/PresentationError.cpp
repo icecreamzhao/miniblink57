@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/presentation/PresentationError.h"
 
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
 #include "public/platform/modules/presentation/WebPresentationError.h"
-#include "wtf/OwnPtr.h"
 
 namespace blink {
 
@@ -22,7 +20,7 @@ DOMException* PresentationError::take(const WebPresentationError& error)
         code = NotFoundError;
         break;
     case WebPresentationError::ErrorTypeSessionRequestCancelled:
-        code = AbortError;
+        code = NotAllowedError;
         break;
     case WebPresentationError::ErrorTypeAvailabilityNotSupported:
         code = NotSupportedError;

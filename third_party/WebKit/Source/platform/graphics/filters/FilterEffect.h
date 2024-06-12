@@ -30,9 +30,7 @@
 #include "platform/graphics/ColorSpace.h"
 #include "platform/heap/Handle.h"
 #include "third_party/skia/include/core/SkImageFilter.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -41,9 +39,7 @@ class Filter;
 class FilterEffect;
 class TextStream;
 
-class SkiaImageFilterBuilder;
-
-typedef WillBeHeapVector<RefPtrWillBeMember<FilterEffect>> FilterEffectVector;
+typedef HeapVector<Member<FilterEffect>> FilterEffectVector;
 
 enum FilterEffectType {
     FilterEffectTypeUnknown,
@@ -52,15 +48,10 @@ enum FilterEffectType {
     FilterEffectTypeSourceInput
 };
 
-enum DetermineSubregionFlag {
-    DetermineSubregionNone = 0,
-    MapRectForward = 1,
-    ClipToFilterRegion = 1 << 1
-};
+class PLATFORM_EXPORT FilterEffect
+    : public GarbageCollectedFinalized<FilterEffect> {
+    WTF_MAKE_NONCOPYABLE(FilterEffect);
 
-typedef int DetermineSubregionFlags;
-
-class PLATFORM_EXPORT FilterEffect : public RefCountedWillBeGarbageCollectedFinalized<FilterEffect> {
 public:
     virtual ~FilterEffect();
     DECLARE_VIRTUAL_TRACE();
@@ -76,116 +67,104 @@ public:
         return m_imageFilters[0] || m_imageFilters[1] || m_imageFilters[2] || m_imageFilters[3];
     }
 
-    IntRect absolutePaintRect() const { return m_absolutePaintRect; }
+    // Clipped primitive subregion in the coordinate space of the target.
+    FloatRect absoluteBounds() const;
 
-    FloatRect maxEffectRect() const { return m_maxEffectRect; }
-    void setMaxEffectRect(const FloatRect& maxEffectRect) { m_maxEffectRect = maxEffectRect; }
+    // Mapping a rect forwards to determine which which destination pixels a
+    // given source rect would affect.
+    FloatRect mapRect(const FloatRect&) const;
 
-    virtual PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*);
-    virtual PassRefPtr<SkImageFilter> createImageFilterWithoutValidation(SkiaImageFilterBuilder*);
+    virtual sk_sp<SkImageFilter> createImageFilter();
+    virtual sk_sp<SkImageFilter> createImageFilterWithoutValidation();
 
-    // Mapping a rect forwards determines which which destination pixels a
-    // given source rect would affect. Mapping a rect backwards determines
-    // which pixels from the source rect would be required to fill a given
-    // destination rect. Note that these are not necessarily the inverse of
-    // each other. For example, for FEGaussianBlur, they are the same
-    // transformation.
-    virtual FloatRect mapRect(const FloatRect& rect, bool forward = true) { return rect; }
-    // A version of the above that is used for calculating paint rects. We can't
-    // use mapRect above for that, because that is also used for calculating effect
-    // regions for CSS filters and has undesirable effects for tile and
-    // displacement map.
-    virtual FloatRect mapPaintRect(const FloatRect& rect, bool forward)
+    virtual FilterEffectType getFilterEffectType() const
     {
-        return mapRect(rect, forward);
+        return FilterEffectTypeUnknown;
     }
-    FloatRect mapRectRecursive(const FloatRect&);
 
-    virtual FilterEffectType filterEffectType() const { return FilterEffectTypeUnknown; }
+    virtual TextStream& externalRepresentation(TextStream&,
+        int indention = 0) const;
 
-    virtual TextStream& externalRepresentation(TextStream&, int indention = 0) const;
+    FloatRect filterPrimitiveSubregion() const
+    {
+        return m_filterPrimitiveSubregion;
+    }
+    void setFilterPrimitiveSubregion(const FloatRect& filterPrimitiveSubregion)
+    {
+        m_filterPrimitiveSubregion = filterPrimitiveSubregion;
+    }
 
-    // The following functions are SVG specific and will move to LayoutSVGResourceFilterPrimitive.
-    // See bug https://bugs.webkit.org/show_bug.cgi?id=45614.
-    bool hasX() const { return m_hasX; }
-    void setHasX(bool value) { m_hasX = value; }
-
-    bool hasY() const { return m_hasY; }
-    void setHasY(bool value) { m_hasY = value; }
-
-    bool hasWidth() const { return m_hasWidth; }
-    void setHasWidth(bool value) { m_hasWidth = value; }
-
-    bool hasHeight() const { return m_hasHeight; }
-    void setHasHeight(bool value) { m_hasHeight = value; }
-
-    FloatRect filterPrimitiveSubregion() const { return m_filterPrimitiveSubregion; }
-    void setFilterPrimitiveSubregion(const FloatRect& filterPrimitiveSubregion) { m_filterPrimitiveSubregion = filterPrimitiveSubregion; }
-
-    FloatRect effectBoundaries() const { return m_effectBoundaries; }
-    void setEffectBoundaries(const FloatRect& effectBoundaries) { m_effectBoundaries = effectBoundaries; }
-
-    Filter* filter() { return m_filter; }
-    const Filter* filter() const { return m_filter; }
+    Filter* getFilter() { return m_filter; }
+    const Filter* getFilter() const { return m_filter; }
 
     bool clipsToBounds() const { return m_clipsToBounds; }
     void setClipsToBounds(bool value) { m_clipsToBounds = value; }
 
     ColorSpace operatingColorSpace() const { return m_operatingColorSpace; }
-    virtual void setOperatingColorSpace(ColorSpace colorSpace) { m_operatingColorSpace = colorSpace; }
+    virtual void setOperatingColorSpace(ColorSpace colorSpace)
+    {
+        m_operatingColorSpace = colorSpace;
+    }
 
-    FloatRect determineFilterPrimitiveSubregion(DetermineSubregionFlags = DetermineSubregionNone);
+    virtual bool affectsTransparentPixels() const { return false; }
 
-    virtual FloatRect determineAbsolutePaintRect(const FloatRect& requestedAbsoluteRect);
-    virtual bool affectsTransparentPixels() { return false; }
-
-    // Return false if the filter will only operate correctly on valid RGBA values, with
-    // alpha in [0,255] and each color component in [0, alpha].
+    // Return false if the filter will only operate correctly on valid RGBA
+    // values, with alpha in [0,255] and each color component in [0, alpha].
     virtual bool mayProduceInvalidPreMultipliedPixels() { return false; }
 
-    SkImageFilter* getImageFilter(ColorSpace, bool requiresPMColorValidation) const;
-    void setImageFilter(ColorSpace, bool requiresPMColorValidation, PassRefPtr<SkImageFilter>);
+    SkImageFilter* getImageFilter(ColorSpace,
+        bool requiresPMColorValidation) const;
+    void setImageFilter(ColorSpace,
+        bool requiresPMColorValidation,
+        sk_sp<SkImageFilter>);
+
+    bool originTainted() const { return m_originTainted; }
+    void setOriginTainted() { m_originTainted = true; }
+
+    bool inputsTaintOrigin() const;
 
 protected:
     FilterEffect(Filter*);
 
+    // Determine the contribution from the filter effect's inputs.
+    virtual FloatRect mapInputs(const FloatRect&) const;
+
+    // Apply the contribution from the filter effect's itself. (Like
+    // expanding with the blur radius etc.)
+    virtual FloatRect mapEffect(const FloatRect&) const;
+
+    // Apply the clip bounds and factor in the effect of
+    // affectsTransparentPixels().
+    FloatRect applyBounds(const FloatRect&) const;
+
+    sk_sp<SkImageFilter> createTransparentBlack() const;
+
     Color adaptColorToOperatingColorSpace(const Color& deviceColor);
 
-    SkImageFilter::CropRect getCropRect(const FloatSize& cropOffset) const;
-
-    void addAbsolutePaintRect(const FloatRect& absolutePaintRect);
+    SkImageFilter::CropRect getCropRect() const;
 
 private:
     FilterEffectVector m_inputEffects;
 
-    IntRect m_absolutePaintRect;
+    Member<Filter> m_filter;
 
-    // The maximum size of a filter primitive. In SVG this is the primitive subregion in absolute coordinate space.
-    // The absolute paint rect should never be bigger than m_maxEffectRect.
-    FloatRect m_maxEffectRect;
-    RawPtrWillBeMember<Filter> m_filter;
-
-    // The following member variables are SVG specific and will move to LayoutSVGResourceFilterPrimitive.
+    // The following member variables are SVG specific and will move to
+    // LayoutSVGResourceFilterPrimitive.
     // See bug https://bugs.webkit.org/show_bug.cgi?id=45614.
 
-    // The subregion of a filter primitive according to the SVG Filter specification in local coordinates.
-    // This is SVG specific and needs to move to LayoutSVGResourceFilterPrimitive.
+    // The subregion of a filter primitive according to the SVG Filter
+    // specification in local coordinates.
     FloatRect m_filterPrimitiveSubregion;
 
-    // x, y, width and height of the actual SVGFE*Element. Is needed to determine the subregion of the
-    // filter primitive on a later step.
-    FloatRect m_effectBoundaries;
-    bool m_hasX;
-    bool m_hasY;
-    bool m_hasWidth;
-    bool m_hasHeight;
-
-    // Should the effect clip to its primitive region, or expand to use the combined region of its inputs.
+    // Whether the effect should clip to its primitive region, or expand to use
+    // the combined region of its inputs.
     bool m_clipsToBounds;
+
+    bool m_originTainted;
 
     ColorSpace m_operatingColorSpace;
 
-    RefPtr<SkImageFilter> m_imageFilters[4];
+    sk_sp<SkImageFilter> m_imageFilters[4];
 };
 
 } // namespace blink

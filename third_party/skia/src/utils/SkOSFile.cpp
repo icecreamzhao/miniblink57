@@ -6,7 +6,8 @@
  */
 #include "SkOSFile.h"
 
-SkString SkOSPath::Join(const char *rootPath, const char *relativePath) {
+SkString SkOSPath::Join(const char* rootPath, const char* relativePath)
+{
     SkString result(rootPath);
     if (!result.endsWith(SkPATH_SEPARATOR) && !result.isEmpty()) {
         result.appendUnichar(SkPATH_SEPARATOR);
@@ -15,12 +16,13 @@ SkString SkOSPath::Join(const char *rootPath, const char *relativePath) {
     return result;
 }
 
-SkString SkOSPath::Basename(const char* fullPath) {
+SkString SkOSPath::Basename(const char* fullPath)
+{
     if (!fullPath) {
         return SkString();
     }
     const char* filename = strrchr(fullPath, SkPATH_SEPARATOR);
-    if (NULL == filename) {
+    if (nullptr == filename) {
         filename = fullPath;
     } else {
         ++filename;
@@ -28,12 +30,13 @@ SkString SkOSPath::Basename(const char* fullPath) {
     return SkString(filename);
 }
 
-SkString SkOSPath::Dirname(const char* fullPath) {
+SkString SkOSPath::Dirname(const char* fullPath)
+{
     if (!fullPath) {
         return SkString();
     }
     const char* end = strrchr(fullPath, SkPATH_SEPARATOR);
-    if (NULL == end) {
+    if (nullptr == end) {
         return SkString();
     }
     if (end == fullPath) {

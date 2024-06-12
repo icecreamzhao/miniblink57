@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "web/RotationViewportAnchor.h"
 
 #include "core/dom/ContainerNode.h"
@@ -10,7 +9,8 @@
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/PageScaleConstraintsSet.h"
-#include "core/frame/PinchViewport.h"
+#include "core/frame/RootFrameViewport.h"
+#include "core/frame/VisualViewport.h"
 #include "core/input/EventHandler.h"
 #include "core/layout/HitTestResult.h"
 #include "platform/geometry/DoubleRect.h"
@@ -19,73 +19,77 @@ namespace blink {
 
 namespace {
 
-static const float viewportAnchorRelativeEpsilon = 0.1f;
-static const int viewportToNodeMaxRelativeArea = 2;
+    static const float viewportAnchorRelativeEpsilon = 0.1f;
+    static const int viewportToNodeMaxRelativeArea = 2;
 
-template <typename RectType>
-int area(const RectType& rect)
-{
-    return rect.width() * rect.height();
-}
+    Node* findNonEmptyAnchorNode(const IntPoint& point,
+        const IntRect& viewRect,
+        EventHandler& eventHandler)
+    {
+        Node* node = eventHandler
+                         .hitTestResultAtPoint(
+                             point, HitTestRequest::ReadOnly | HitTestRequest::Active)
+                         .innerNode();
 
-Node* findNonEmptyAnchorNode(const IntPoint& point, const IntRect& viewRect, EventHandler& eventHandler)
-{
-    Node* node = eventHandler.hitTestResultAtPoint(point, HitTestRequest::ReadOnly | HitTestRequest::Active).innerNode();
+        // If the node bounding box is sufficiently large, make a single attempt to
+        // find a smaller node; the larger the node bounds, the greater the
+        // variability under resize.
+        const int maxNodeArea = viewRect.width() * viewRect.height() * viewportToNodeMaxRelativeArea;
+        if (node && node->boundingBox().width() * node->boundingBox().height() > maxNodeArea) {
+            IntSize pointOffset = viewRect.size();
+            pointOffset.scale(viewportAnchorRelativeEpsilon);
+            node = eventHandler
+                       .hitTestResultAtPoint(
+                           point + pointOffset,
+                           HitTestRequest::ReadOnly | HitTestRequest::Active)
+                       .innerNode();
+        }
 
-    // If the node bounding box is sufficiently large, make a single attempt to
-    // find a smaller node; the larger the node bounds, the greater the
-    // variability under resize.
-    const int maxNodeArea = area(viewRect) * viewportToNodeMaxRelativeArea;
-    if (node && area(node->boundingBox()) > maxNodeArea) {
-        IntSize pointOffset = viewRect.size();
-        pointOffset.scale(viewportAnchorRelativeEpsilon);
-        node = eventHandler.hitTestResultAtPoint(point + pointOffset, HitTestRequest::ReadOnly | HitTestRequest::Active).innerNode();
+        while (node && node->boundingBox().isEmpty())
+            node = node->parentNode();
+
+        return node;
     }
 
-    while (node && node->boundingBox().isEmpty())
-        node = node->parentNode();
+    void moveToEncloseRect(IntRect& outer, const FloatRect& inner)
+    {
+        IntPoint minimumPosition = ceiledIntPoint(inner.location() + inner.size() - FloatSize(outer.size()));
+        IntPoint maximumPosition = flooredIntPoint(inner.location());
 
-    return node;
-}
+        IntPoint outerOrigin = outer.location();
+        outerOrigin = outerOrigin.expandedTo(minimumPosition);
+        outerOrigin = outerOrigin.shrunkTo(maximumPosition);
 
-void moveToEncloseRect(IntRect& outer, const FloatRect& inner)
-{
-    IntPoint minimumPosition = ceiledIntPoint(inner.location() + inner.size() - FloatSize(outer.size()));
-    IntPoint maximumPosition = flooredIntPoint(inner.location());
+        outer.setLocation(outerOrigin);
+    }
 
-    IntPoint outerOrigin = outer.location();
-    outerOrigin = outerOrigin.expandedTo(minimumPosition);
-    outerOrigin = outerOrigin.shrunkTo(maximumPosition);
+    void moveIntoRect(FloatRect& inner, const IntRect& outer)
+    {
+        FloatPoint minimumPosition = FloatPoint(outer.location());
+        FloatPoint maximumPosition = minimumPosition + outer.size() - inner.size();
 
-    outer.setLocation(outerOrigin);
-}
+        // Adjust maximumPosition to the nearest lower integer because
+        // VisualViewport::maximumScrollPosition() does the same.
+        // The value of minumumPosition is already adjusted since it is
+        // constructed from an integer point.
+        maximumPosition = flooredIntPoint(maximumPosition);
 
-void moveIntoRect(FloatRect& inner, const IntRect& outer)
-{
-    FloatPoint minimumPosition = FloatPoint(outer.location());
-    FloatPoint maximumPosition = minimumPosition + outer.size() - inner.size();
+        FloatPoint innerOrigin = inner.location();
+        innerOrigin = innerOrigin.expandedTo(minimumPosition);
+        innerOrigin = innerOrigin.shrunkTo(maximumPosition);
 
-    // Adjust maximumPosition to the nearest lower integer because
-    // PinchViewport::maximumScrollPosition() does the same.
-    // The value of minumumPosition is already adjusted since it is
-    // constructed from an integer point.
-    maximumPosition = flooredIntPoint(maximumPosition);
-
-    FloatPoint innerOrigin = inner.location();
-    innerOrigin = innerOrigin.expandedTo(minimumPosition);
-    innerOrigin = innerOrigin.shrunkTo(maximumPosition);
-
-    inner.setLocation(innerOrigin);
-}
+        inner.setLocation(innerOrigin);
+    }
 
 } // namespace
 
 RotationViewportAnchor::RotationViewportAnchor(
     FrameView& rootFrameView,
-    PinchViewport& pinchViewport,
+    VisualViewport& visualViewport,
     const FloatSize& anchorInInnerViewCoords,
     PageScaleConstraintsSet& pageScaleConstraintsSet)
-    : ViewportAnchor(rootFrameView, pinchViewport)
+    : m_rootFrameView(&rootFrameView)
+    , m_visualViewport(&visualViewport)
     , m_anchorInInnerViewCoords(anchorInInnerViewCoords)
     , m_pageScaleConstraintsSet(pageScaleConstraintsSet)
 {
@@ -99,115 +103,141 @@ RotationViewportAnchor::~RotationViewportAnchor()
 
 void RotationViewportAnchor::setAnchor()
 {
-    // FIXME: Scroll offsets are now fractional (DoublePoint and FloatPoint for the FrameView and PinchViewport
-    //        respectively. This path should be rewritten without pixel snapping.
-    IntRect outerViewRect = m_rootFrameView->layoutViewportScrollableArea()->visibleContentRect();
-    IntRect innerViewRect = enclosedIntRect(m_rootFrameView->scrollableArea()->visibleContentRectDouble());
+    RootFrameViewport* rootFrameViewport = m_rootFrameView->getRootFrameViewport();
+    DCHECK(rootFrameViewport);
 
-    m_oldPageScaleFactor = m_pinchViewport->scale();
+    m_oldPageScaleFactor = m_visualViewport->scale();
     m_oldMinimumPageScaleFactor = m_pageScaleConstraintsSet.finalConstraints().minimumScale;
 
-    // Save the absolute location in case we won't find the anchor node, we'll fall back to that.
-    m_pinchViewportInDocument = FloatPoint(m_rootFrameView->scrollableArea()->visibleContentRectDouble().location());
+    // Save the absolute location in case we won't find the anchor node, we'll
+    // fall back to that.
+    m_visualViewportInDocument = FloatPoint(rootFrameViewport->visibleContentRect().location());
 
     m_anchorNode.clear();
     m_anchorNodeBounds = LayoutRect();
     m_anchorInNodeCoords = FloatSize();
-    m_normalizedPinchViewportOffset = FloatSize();
+    m_normalizedVisualViewportOffset = FloatSize();
 
-    if (innerViewRect.isEmpty())
+    IntRect innerViewRect = rootFrameViewport->visibleContentRect();
+
+    // Preserve origins at the absolute screen origin.
+    if (innerViewRect.location() == IntPoint::zero() || innerViewRect.isEmpty())
         return;
 
-    // Preserve origins at the absolute screen origin
-    if (innerViewRect.location() == IntPoint::zero())
-        return;
-
-    // Inner rectangle should be within the outer one.
-    ASSERT(outerViewRect.contains(innerViewRect));
-
-    // Outer rectangle is used as a scale, we need positive width and height.
-    ASSERT(!outerViewRect.isEmpty());
-
-    m_normalizedPinchViewportOffset = innerViewRect.location() - outerViewRect.location();
+    IntRect outerViewRect = layoutViewport().visibleContentRect(IncludeScrollbars);
 
     // Normalize by the size of the outer rect
-    m_normalizedPinchViewportOffset.scale(1.0 / outerViewRect.width(), 1.0 / outerViewRect.height());
+    DCHECK(!outerViewRect.isEmpty());
+    m_normalizedVisualViewportOffset = m_visualViewport->getScrollOffset();
+    m_normalizedVisualViewportOffset.scale(1.0 / outerViewRect.width(),
+        1.0 / outerViewRect.height());
 
-    FloatSize anchorOffset = innerViewRect.size();
-    anchorOffset.scale(m_anchorInInnerViewCoords.width(), m_anchorInInnerViewCoords.height());
-    const FloatPoint anchorPoint = FloatPoint(innerViewRect.location()) + anchorOffset;
+    // Note, we specifically use the unscaled visual viewport size here as the
+    // conversion into content-space below will apply the scale.
+    FloatPoint anchorOffset(m_visualViewport->size());
+    anchorOffset.scale(m_anchorInInnerViewCoords.width(),
+        m_anchorInInnerViewCoords.height());
 
-    Node* node = findNonEmptyAnchorNode(flooredIntPoint(anchorPoint), innerViewRect, m_rootFrameView->frame().eventHandler());
+    // Note, we specifically convert to the rootFrameView contents here, rather
+    // than the layout viewport. That's because hit testing works from the
+    // FrameView's content coordinates even if it's not the layout viewport.
+    const FloatPoint anchorPointInContents = m_rootFrameView->frameToContents(
+        m_visualViewport->viewportToRootFrame(anchorOffset));
+
+    Node* node = findNonEmptyAnchorNode(flooredIntPoint(anchorPointInContents),
+        innerViewRect,
+        m_rootFrameView->frame().eventHandler());
     if (!node)
         return;
 
     m_anchorNode = node;
     m_anchorNodeBounds = node->boundingBox();
-    m_anchorInNodeCoords = anchorPoint - FloatPoint(m_anchorNodeBounds.location());
-    m_anchorInNodeCoords.scale(1.f / m_anchorNodeBounds.width(), 1.f / m_anchorNodeBounds.height());
+    m_anchorInNodeCoords = anchorPointInContents - FloatPoint(m_anchorNodeBounds.location());
+    m_anchorInNodeCoords.scale(1.f / m_anchorNodeBounds.width(),
+        1.f / m_anchorNodeBounds.height());
 }
 
 void RotationViewportAnchor::restoreToAnchor()
 {
     float newPageScaleFactor = m_oldPageScaleFactor / m_oldMinimumPageScaleFactor * m_pageScaleConstraintsSet.finalConstraints().minimumScale;
-    newPageScaleFactor = m_pageScaleConstraintsSet.finalConstraints().clampToConstraints(newPageScaleFactor);
+    newPageScaleFactor = m_pageScaleConstraintsSet.finalConstraints().clampToConstraints(
+        newPageScaleFactor);
 
-    FloatSize pinchViewportSize = m_pinchViewport->size();
-    pinchViewportSize.scale(1 / newPageScaleFactor);
+    FloatSize visualViewportSize(m_visualViewport->size());
+    visualViewportSize.scale(1 / newPageScaleFactor);
 
     IntPoint mainFrameOrigin;
-    FloatPoint pinchViewportOrigin;
+    FloatPoint visualViewportOrigin;
 
-    computeOrigins(pinchViewportSize, mainFrameOrigin, pinchViewportOrigin);
+    computeOrigins(visualViewportSize, mainFrameOrigin, visualViewportOrigin);
 
-    m_rootFrameView->layoutViewportScrollableArea()->setScrollPosition(mainFrameOrigin, ProgrammaticScroll);
+    layoutViewport().setScrollOffset(toScrollOffset(mainFrameOrigin),
+        ProgrammaticScroll);
 
     // Set scale before location, since location can be clamped on setting scale.
-    m_pinchViewport->setScale(newPageScaleFactor);
-    m_pinchViewport->setLocation(pinchViewportOrigin);
+    m_visualViewport->setScale(newPageScaleFactor);
+    m_visualViewport->setLocation(visualViewportOrigin);
 }
 
-void RotationViewportAnchor::computeOrigins(const FloatSize& innerSize, IntPoint& mainFrameOffset, FloatPoint& pinchViewportOffset) const
+ScrollableArea& RotationViewportAnchor::layoutViewport() const
 {
-    IntSize outerSize = m_rootFrameView->layoutViewportScrollableArea()->visibleContentRect().size();
+    RootFrameViewport* rootFrameViewport = m_rootFrameView->getRootFrameViewport();
+    DCHECK(rootFrameViewport);
+    return rootFrameViewport->layoutViewport();
+}
+
+void RotationViewportAnchor::computeOrigins(
+    const FloatSize& innerSize,
+    IntPoint& mainFrameOffset,
+    FloatPoint& visualViewportOffset) const
+{
+    IntSize outerSize = layoutViewport().visibleContentRect().size();
 
     // Compute the viewport origins in CSS pixels relative to the document.
-    FloatSize absPinchViewportOffset = m_normalizedPinchViewportOffset;
-    absPinchViewportOffset.scale(outerSize.width(), outerSize.height());
+    FloatSize absVisualViewportOffset = m_normalizedVisualViewportOffset;
+    absVisualViewportOffset.scale(outerSize.width(), outerSize.height());
 
     FloatPoint innerOrigin = getInnerOrigin(innerSize);
-    FloatPoint outerOrigin = innerOrigin - absPinchViewportOffset;
+    FloatPoint outerOrigin = innerOrigin - absVisualViewportOffset;
 
     IntRect outerRect = IntRect(flooredIntPoint(outerOrigin), outerSize);
     FloatRect innerRect = FloatRect(innerOrigin, innerSize);
 
     moveToEncloseRect(outerRect, innerRect);
 
-    outerRect.setLocation(m_rootFrameView->layoutViewportScrollableArea()->clampScrollPosition(outerRect.location()));
+    outerRect.setLocation(IntPoint(
+        layoutViewport().clampScrollOffset(toIntSize(outerRect.location()))));
 
     moveIntoRect(innerRect, outerRect);
 
     mainFrameOffset = outerRect.location();
-    pinchViewportOffset = FloatPoint(innerRect.location() - outerRect.location());
+    visualViewportOffset = FloatPoint(innerRect.location() - outerRect.location());
 }
 
-FloatPoint RotationViewportAnchor::getInnerOrigin(const FloatSize& innerSize) const
+FloatPoint RotationViewportAnchor::getInnerOrigin(
+    const FloatSize& innerSize) const
 {
-    if (!m_anchorNode || !m_anchorNode->inDocument())
-        return m_pinchViewportInDocument;
+    if (!m_anchorNode || !m_anchorNode->isConnected())
+        return m_visualViewportInDocument;
 
     const LayoutRect currentNodeBounds = m_anchorNode->boundingBox();
     if (m_anchorNodeBounds == currentNodeBounds)
-        return m_pinchViewportInDocument;
+        return m_visualViewportInDocument;
+
+    RootFrameViewport* rootFrameViewport = m_rootFrameView->getRootFrameViewport();
+    const LayoutRect currentNodeBoundsInLayoutViewport = rootFrameViewport->rootContentsToLayoutViewportContents(
+        *m_rootFrameView.get(), currentNodeBounds);
 
     // Compute the new anchor point relative to the node position
-    FloatSize anchorOffsetFromNode(currentNodeBounds.size());
-    anchorOffsetFromNode.scale(m_anchorInNodeCoords.width(), m_anchorInNodeCoords.height());
-    FloatPoint anchorPoint = FloatPoint(currentNodeBounds.location()) + anchorOffsetFromNode;
+    FloatSize anchorOffsetFromNode(currentNodeBoundsInLayoutViewport.size());
+    anchorOffsetFromNode.scale(m_anchorInNodeCoords.width(),
+        m_anchorInNodeCoords.height());
+    FloatPoint anchorPoint = FloatPoint(currentNodeBoundsInLayoutViewport.location()) + anchorOffsetFromNode;
 
     // Compute the new origin point relative to the new anchor point
     FloatSize anchorOffsetFromOrigin = innerSize;
-    anchorOffsetFromOrigin.scale(m_anchorInInnerViewCoords.width(), m_anchorInInnerViewCoords.height());
+    anchorOffsetFromOrigin.scale(m_anchorInInnerViewCoords.width(),
+        m_anchorInInnerViewCoords.height());
     return anchorPoint - anchorOffsetFromOrigin;
 }
 

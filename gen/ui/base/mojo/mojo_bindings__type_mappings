@@ -1,0 +1,17 @@
+{
+  "c++": {
+    "ui.mojom.WindowOpenDisposition": {
+      "hashable": false, 
+      "typename": "WindowOpenDisposition", 
+      "traits_headers": [
+        "ui/base/mojo/window_open_disposition_enum_traits.h"
+      ], 
+      "copyable_pass_by_value": false, 
+      "move_only": false, 
+      "nullable_is_same_type": false, 
+      "public_headers": [
+        "ui/base/window_open_disposition.h"
+      ]
+    }
+  }
+}

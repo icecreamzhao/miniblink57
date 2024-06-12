@@ -15,50 +15,50 @@
 namespace v8 {
 namespace internal {
 
-// Forward declarations.
-enum InstanceType : uint16_t;
-class ObjectTemplateInfo;
-class TemplateInfo;
+    // Forward declarations.
+    enum InstanceType : uint16_t;
+    class ObjectTemplateInfo;
+    class TemplateInfo;
 
-class ApiNatives {
- public:
-  static const int kInitialFunctionCacheSize = 256;
+    class ApiNatives {
+    public:
+        static const int kInitialFunctionCacheSize = 256;
 
-  V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> InstantiateFunction(
-      Handle<FunctionTemplateInfo> data,
-      MaybeHandle<Name> maybe_name = MaybeHandle<Name>());
+        V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> InstantiateFunction(
+            Handle<FunctionTemplateInfo> data,
+            MaybeHandle<Name> maybe_name = MaybeHandle<Name>());
 
-  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> InstantiateObject(
-      Isolate* isolate, Handle<ObjectTemplateInfo> data,
-      Handle<JSReceiver> new_target = Handle<JSReceiver>());
+        V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> InstantiateObject(
+            Isolate* isolate, Handle<ObjectTemplateInfo> data,
+            Handle<JSReceiver> new_target = Handle<JSReceiver>());
 
-  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> InstantiateRemoteObject(
-      Handle<ObjectTemplateInfo> data);
+        V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> InstantiateRemoteObject(
+            Handle<ObjectTemplateInfo> data);
 
-  static Handle<JSFunction> CreateApiFunction(
-      Isolate* isolate, Handle<FunctionTemplateInfo> obj,
-      Handle<Object> prototype, InstanceType type,
-      MaybeHandle<Name> name = MaybeHandle<Name>());
+        static Handle<JSFunction> CreateApiFunction(
+            Isolate* isolate, Handle<FunctionTemplateInfo> obj,
+            Handle<Object> prototype, InstanceType type,
+            MaybeHandle<Name> name = MaybeHandle<Name>());
 
-  static void AddDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
-                              Handle<Name> name, Handle<Object> value,
-                              PropertyAttributes attributes);
+        static void AddDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
+            Handle<Name> name, Handle<Object> value,
+            PropertyAttributes attributes);
 
-  static void AddDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
-                              Handle<Name> name, v8::Intrinsic intrinsic,
-                              PropertyAttributes attributes);
+        static void AddDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
+            Handle<Name> name, v8::Intrinsic intrinsic,
+            PropertyAttributes attributes);
 
-  static void AddAccessorProperty(Isolate* isolate, Handle<TemplateInfo> info,
-                                  Handle<Name> name,
-                                  Handle<FunctionTemplateInfo> getter,
-                                  Handle<FunctionTemplateInfo> setter,
-                                  PropertyAttributes attributes);
+        static void AddAccessorProperty(Isolate* isolate, Handle<TemplateInfo> info,
+            Handle<Name> name,
+            Handle<FunctionTemplateInfo> getter,
+            Handle<FunctionTemplateInfo> setter,
+            PropertyAttributes attributes);
 
-  static void AddNativeDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
-                                    Handle<AccessorInfo> property);
-};
+        static void AddNativeDataProperty(Isolate* isolate, Handle<TemplateInfo> info,
+            Handle<AccessorInfo> property);
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_API_NATIVES_H_
+#endif // V8_API_NATIVES_H_

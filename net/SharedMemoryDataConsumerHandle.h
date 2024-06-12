@@ -15,8 +15,7 @@
 namespace net {
 
 // This class is a WebDataConsumerHandle that accepts RequestPeer::ReceivedData.
-class SharedMemoryDataConsumerHandle final : public blink::WebDataConsumerHandle
-{
+class SharedMemoryDataConsumerHandle final : public blink::WebDataConsumerHandle {
 private:
     class Context;
 
@@ -32,7 +31,7 @@ public:
         ~Writer();
         // Note: Writer assumes |AddData| is not called in a client's didGetReadable
         // callback. There isn't such assumption for |close| and |fail|.
-        void addData(PassOwnPtr<RequestPeer::ReceivedData> data);
+        void addData(std::unique_ptr<RequestPeer::ReceivedData> data);
         void close();
         // TODO(yhirano): Consider providing error code.
         void fail();
@@ -48,13 +47,8 @@ public:
     public:
         ReaderImpl(PassRefPtr<Context> context, Client* client);
         ~ReaderImpl() override;
-        Result read(void* data,
-            size_t size,
-            Flags flags,
-            size_t* readSize) override;
-        Result beginRead(const void** buffer,
-            Flags flags,
-            size_t* available) override;
+        Result read(void* data, size_t size, Flags flags, size_t* readSize) override;
+        Result beginRead(const void** buffer, Flags flags, size_t* available) override;
         Result endRead(size_t readSize) override;
 
     private:
@@ -71,13 +65,13 @@ public:
     // and the reader are destructed). The callback will be reset in the internal
     // context when the writer is detached, i.e. |close| or |Fail| is called,
     // and the callback will never be called.
-    SharedMemoryDataConsumerHandle(BackpressureMode mode, PassOwnPtr<WTF::Closure> on_reader_detached, Writer** writer);
+    SharedMemoryDataConsumerHandle(BackpressureMode mode, std::unique_ptr<WTF::Closure> on_reader_detached, Writer** writer);
     ~SharedMemoryDataConsumerHandle() override;
 
-    PassOwnPtr<Reader> otainReader(Client* client);
+    std::unique_ptr<Reader> otainReader(Client* client);
 
 private:
-    ReaderImpl* obtainReaderInternal(Client* client) override;
+    std::unique_ptr<Reader> obtainReader(Client* client) override;
     const char* debugName() const override;
 
     RefPtr<Context> m_context;

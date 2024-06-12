@@ -36,18 +36,27 @@
 
 namespace blink {
 
-class StorageQuotaClientImpl : public NoBaseWillBeGarbageCollectedFinalized<StorageQuotaClientImpl>, public StorageQuotaClient {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(StorageQuotaClientImpl);
+class StorageQuotaClientImpl
+    : public GarbageCollectedFinalized<StorageQuotaClientImpl>,
+      public StorageQuotaClient {
+    USING_GARBAGE_COLLECTED_MIXIN(StorageQuotaClientImpl);
+
 public:
-    static PassOwnPtrWillBeRawPtr<StorageQuotaClientImpl> create()
+    static StorageQuotaClientImpl* create()
     {
-        return adoptPtrWillBeNoop(new StorageQuotaClientImpl());
+        return new StorageQuotaClientImpl();
     }
 
     ~StorageQuotaClientImpl() override;
 
-    void requestQuota(ExecutionContext*, WebStorageQuotaType, unsigned long long newQuotaInBytes, StorageQuotaCallback*, StorageErrorCallback*) override;
-    ScriptPromise requestPersistentQuota(ScriptState*, unsigned long long newQuotaInBytes) override;
+    void requestQuota(ExecutionContext*,
+        WebStorageQuotaType,
+        unsigned long long newQuotaInBytes,
+        StorageQuotaCallback*,
+        StorageErrorCallback*) override;
+    ScriptPromise requestPersistentQuota(
+        ScriptState*,
+        unsigned long long newQuotaInBytes) override;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { StorageQuotaClient::trace(visitor); }
 

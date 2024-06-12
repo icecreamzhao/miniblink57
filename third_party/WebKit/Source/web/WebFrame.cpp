@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "public/web/WebFrame.h"
 
 #include "bindings/core/v8/WindowProxyManager.h"
+#include "core/HTMLNames.h"
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
@@ -16,33 +16,22 @@
 #include "platform/UserGestureIndicator.h"
 #include "platform/heap/Handle.h"
 #include "public/web/WebElement.h"
+#include "public/web/WebFrameOwnerProperties.h"
 #include "public/web/WebSandboxFlags.h"
 #include "web/OpenedFrameTracker.h"
-#include "web/RemoteBridgeFrameOwner.h"
+#include "web/RemoteFrameOwner.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebRemoteFrameImpl.h"
 #include <algorithm>
 
 namespace blink {
 
-Frame* toCoreFrame(const WebFrame* frame)
-{
-    if (!frame)
-        return 0;
-
-    return frame->isWebLocalFrame()
-        ? static_cast<Frame*>(toWebLocalFrameImpl(frame)->frame())
-        : toWebRemoteFrameImpl(frame)->frame();
-}
-
 bool WebFrame::swap(WebFrame* frame)
 {
     using std::swap;
-    RefPtrWillBeRawPtr<Frame> oldFrame = toCoreFrame(this);
-#if !ENABLE(OILPAN)
-    RefPtrWillBeRawPtr<WebLocalFrameImpl> protectWebLocalFrame = isWebLocalFrame() ? toWebLocalFrameImpl(this) : nullptr;
-    RefPtrWillBeRawPtr<WebRemoteFrameImpl> protectWebRemoteFrame = isWebRemoteFrame() ? toWebRemoteFrameImpl(this) : nullptr;
-#endif
+    Frame* oldFrame = toImplBase()->frame();
+    if (oldFrame->isDetaching())
+        return false;
 
     // Unload the current Document in this frame: this calls unload handlers,
     // detaches child frames, etc. Since this runs script, make sure this frame
@@ -74,43 +63,54 @@ bool WebFrame::swap(WebFrame* frame)
     }
 
     if (m_opener) {
-        m_opener->m_openedFrameTracker->remove(this);
-        m_opener->m_openedFrameTracker->add(frame);
-        swap(m_opener, frame->m_opener);
+        frame->setOpener(m_opener);
+        setOpener(nullptr);
     }
-    if (!m_openedFrameTracker->isEmpty()) {
-        m_openedFrameTracker->updateOpener(frame);
-        frame->m_openedFrameTracker.reset(m_openedFrameTracker.release());
-    }
+    m_openedFrameTracker->transferTo(frame);
 
-    // Finally, clone the state of the current Frame into one matching
-    // the type of the passed in WebFrame.
-    // FIXME: This is a bit clunky; this results in pointless decrements and
-    // increments of connected subframes.
+    FrameHost* host = oldFrame->host();
+    AtomicString name = oldFrame->tree().name();
+    AtomicString uniqueName = oldFrame->tree().uniqueName();
     FrameOwner* owner = oldFrame->owner();
-    oldFrame->disconnectOwnerElement();
-    if (frame->isWebLocalFrame()) {
-        LocalFrame& localFrame = *toWebLocalFrameImpl(frame)->frame();
-        ASSERT(owner == localFrame.owner());
-        if (owner) {
-            if (owner->isLocal()) {
-                HTMLFrameOwnerElement* ownerElement = toHTMLFrameOwnerElement(owner);
-                ownerElement->setContentFrame(localFrame);
-                ownerElement->setWidget(localFrame.view());
-            } else {
-                toRemoteBridgeFrameOwner(owner)->setContentFrame(toWebLocalFrameImpl(frame));
-            }
-        } else {
-            localFrame.page()->setMainFrame(&localFrame);
-        }
-    } else {
-        toWebRemoteFrameImpl(frame)->initializeCoreFrame(oldFrame->host(), owner, oldFrame->tree().name());
-    }
-    toCoreFrame(frame)->finishSwapFrom(oldFrame.get());
+
+    v8::HandleScope handleScope(v8::Isolate::GetCurrent());
+    HashMap<DOMWrapperWorld*, v8::Local<v8::Object>> globals;
+    oldFrame->getWindowProxyManager()->clearForNavigation();
+    oldFrame->getWindowProxyManager()->releaseGlobals(globals);
 
     // Although the Document in this frame is now unloaded, many resources
     // associated with the frame itself have not yet been freed yet.
     oldFrame->detach(FrameDetachType::Swap);
+
+    // Clone the state of the current Frame into the one being swapped in.
+    // FIXME: This is a bit clunky; this results in pointless decrements and
+    // increments of connected subframes.
+    if (frame->isWebLocalFrame()) {
+        // TODO(dcheng): in an ideal world, both branches would just use
+        // WebFrameImplBase's initializeCoreFrame() helper. However, Blink
+        // currently requires a 'provisional' local frame to serve as a
+        // placeholder for loading state when swapping to a local frame.
+        // In this case, the core LocalFrame is already initialized, so just
+        // update a bit of state.
+        LocalFrame& localFrame = *toWebLocalFrameImpl(frame)->frame();
+        DCHECK_EQ(owner, localFrame.owner());
+        if (owner) {
+            owner->setContentFrame(localFrame);
+            if (owner->isLocal())
+                toHTMLFrameOwnerElement(owner)->setWidget(localFrame.view());
+        } else {
+            localFrame.page()->setMainFrame(&localFrame);
+        }
+    } else {
+        toWebRemoteFrameImpl(frame)->initializeCoreFrame(host, owner, name,
+            uniqueName);
+    }
+
+    if (m_parent && oldFrame->hasReceivedUserGesture())
+        frame->toImplBase()->frame()->setDocumentHasReceivedUserGesture();
+
+    frame->toImplBase()->frame()->getWindowProxyManager()->setGlobals(globals);
+
     m_parent = nullptr;
 
     return true;
@@ -118,22 +118,54 @@ bool WebFrame::swap(WebFrame* frame)
 
 void WebFrame::detach()
 {
-    toCoreFrame(this)->detach(FrameDetachType::Remove);
+    toImplBase()->frame()->detach(FrameDetachType::Remove);
 }
 
-WebSecurityOrigin WebFrame::securityOrigin() const
+WebSecurityOrigin WebFrame::getSecurityOrigin() const
 {
-    return WebSecurityOrigin(toCoreFrame(this)->securityContext()->securityOrigin());
+    return WebSecurityOrigin(
+        toImplBase()->frame()->securityContext()->getSecurityOrigin());
 }
-
 
 void WebFrame::setFrameOwnerSandboxFlags(WebSandboxFlags flags)
 {
     // At the moment, this is only used to replicate sandbox flags
     // for frames with a remote owner.
-    FrameOwner* owner = toCoreFrame(this)->owner();
-    ASSERT(owner);
-    toRemoteBridgeFrameOwner(owner)->setSandboxFlags(static_cast<SandboxFlags>(flags));
+    FrameOwner* owner = toImplBase()->frame()->owner();
+    DCHECK(owner);
+    toRemoteFrameOwner(owner)->setSandboxFlags(static_cast<SandboxFlags>(flags));
+}
+
+WebInsecureRequestPolicy WebFrame::getInsecureRequestPolicy() const
+{
+    return toImplBase()->frame()->securityContext()->getInsecureRequestPolicy();
+}
+
+void WebFrame::setFrameOwnerProperties(
+    const WebFrameOwnerProperties& properties)
+{
+    // At the moment, this is only used to replicate frame owner properties
+    // for frames with a remote owner.
+    RemoteFrameOwner* owner = toRemoteFrameOwner(toImplBase()->frame()->owner());
+    DCHECK(owner);
+
+    Frame* frame = toImplBase()->frame();
+    DCHECK(frame);
+
+    if (frame->isLocalFrame()) {
+        toLocalFrame(frame)->document()->willChangeFrameOwnerProperties(
+            properties.marginWidth, properties.marginHeight,
+            static_cast<ScrollbarMode>(properties.scrollingMode));
+    }
+
+    owner->setBrowsingContextContainerName(properties.name);
+    owner->setScrollingMode(properties.scrollingMode);
+    owner->setMarginWidth(properties.marginWidth);
+    owner->setMarginHeight(properties.marginHeight);
+    owner->setAllowFullscreen(properties.allowFullscreen);
+    owner->setAllowPaymentRequest(properties.allowPaymentRequest);
+    owner->setCsp(properties.requiredCsp);
+    owner->setDelegatedpermissions(properties.delegatedPermissions);
 }
 
 WebFrame* WebFrame::opener() const
@@ -160,7 +192,7 @@ void WebFrame::insertAfter(WebFrame* newChild, WebFrame* previousSibling)
         next = m_firstChild;
         m_firstChild = newChild;
     } else {
-        ASSERT(previousSibling->m_parent == this);
+        DCHECK_EQ(previousSibling->m_parent, this);
         next = previousSibling->m_nextSibling;
         previousSibling->m_nextSibling = newChild;
         newChild->m_previousSibling = previousSibling;
@@ -173,8 +205,8 @@ void WebFrame::insertAfter(WebFrame* newChild, WebFrame* previousSibling)
         m_lastChild = newChild;
     }
 
-    toCoreFrame(this)->tree().invalidateScopedChildCount();
-    toCoreFrame(this)->host()->incrementSubframeCount();
+    toImplBase()->frame()->tree().invalidateScopedChildCount();
+    toImplBase()->frame()->host()->incrementSubframeCount();
 }
 
 void WebFrame::appendChild(WebFrame* child)
@@ -200,8 +232,8 @@ void WebFrame::removeChild(WebFrame* child)
 
     child->m_previousSibling = child->m_nextSibling = 0;
 
-    toCoreFrame(this)->tree().invalidateScopedChildCount();
-    toCoreFrame(this)->host()->decrementSubframeCount();
+    toImplBase()->frame()->tree().invalidateScopedChildCount();
+    toImplBase()->frame()->host()->decrementSubframeCount();
 }
 
 void WebFrame::setParent(WebFrame* parent)
@@ -227,52 +259,32 @@ WebFrame* WebFrame::firstChild() const
     return m_firstChild;
 }
 
-WebFrame* WebFrame::lastChild() const
-{
-    return m_lastChild;
-}
-
-WebFrame* WebFrame::previousSibling() const
-{
-    return m_previousSibling;
-}
-
 WebFrame* WebFrame::nextSibling() const
 {
     return m_nextSibling;
 }
 
-WebFrame* WebFrame::traversePrevious(bool wrap) const
+WebFrame* WebFrame::traverseNext() const
 {
-    if (Frame* frame = toCoreFrame(this))
-        return fromFrame(frame->tree().traversePreviousWithWrap(wrap));
-    return 0;
-}
-
-WebFrame* WebFrame::traverseNext(bool wrap) const
-{
-    if (Frame* frame = toCoreFrame(this))
-        return fromFrame(frame->tree().traverseNextWithWrap(wrap));
-    return 0;
-}
-
-WebFrame* WebFrame::findChildByName(const WebString& name) const
-{
-    Frame* frame = toCoreFrame(this);
-    if (!frame)
-        return 0;
-    // FIXME: It's not clear this should ever be called to find a remote frame.
-    // Perhaps just disallow that completely?
-    return fromFrame(frame->tree().child(name));
+    if (Frame* frame = toImplBase()->frame())
+        return fromFrame(frame->tree().traverseNext());
+    return nullptr;
 }
 
 WebFrame* WebFrame::fromFrameOwnerElement(const WebElement& webElement)
 {
-    Element* element = PassRefPtrWillBeRawPtr<Element>(webElement).get();
+    Element* element = webElement;
 
-    if (!isHTMLFrameElementBase(element))
+    if (!element->isFrameOwnerElement())
         return nullptr;
-    return fromFrame(toHTMLFrameElementBase(element)->contentFrame());
+    return fromFrame(toHTMLFrameOwnerElement(element)->contentFrame());
+}
+
+bool WebFrame::isLoading() const
+{
+    if (Frame* frame = toImplBase()->frame())
+        return frame->isLoading();
+    return false;
 }
 
 WebFrame* WebFrame::fromFrame(Frame* frame)
@@ -302,20 +314,9 @@ WebFrame::~WebFrame()
     m_openedFrameTracker.reset(0);
 }
 
-#if ENABLE(OILPAN)
-ALWAYS_INLINE bool WebFrame::isFrameAlive(const WebFrame* frame)
-{
-    if (!frame)
-        return true;
-
-    if (frame->isWebLocalFrame())
-        return Heap::isHeapObjectAlive(toWebLocalFrameImpl(frame));
-
-    return Heap::isHeapObjectAlive(toWebRemoteFrameImpl(frame));
-}
-
 template <typename VisitorDispatcher>
-ALWAYS_INLINE void WebFrame::traceFrameImpl(VisitorDispatcher visitor, WebFrame* frame)
+ALWAYS_INLINE void WebFrame::traceFrameImpl(VisitorDispatcher visitor,
+    WebFrame* frame)
 {
     if (!frame)
         return;
@@ -327,32 +328,45 @@ ALWAYS_INLINE void WebFrame::traceFrameImpl(VisitorDispatcher visitor, WebFrame*
 }
 
 template <typename VisitorDispatcher>
-ALWAYS_INLINE void WebFrame::traceFramesImpl(VisitorDispatcher visitor, WebFrame* frame)
+ALWAYS_INLINE void WebFrame::traceFramesImpl(VisitorDispatcher visitor,
+    WebFrame* frame)
 {
-    ASSERT(frame);
+    DCHECK(frame);
     traceFrame(visitor, frame->m_parent);
-    for (WebFrame* child = frame->firstChild(); child; child = child->nextSibling())
+    for (WebFrame* child = frame->firstChild(); child;
+         child = child->nextSibling())
         traceFrame(visitor, child);
-    // m_opener is a weak reference.
-    frame->m_openedFrameTracker->traceFrames(visitor);
 }
 
-template <typename VisitorDispatcher>
-ALWAYS_INLINE void WebFrame::clearWeakFramesImpl(VisitorDispatcher visitor)
+void WebFrame::close()
 {
-    if (!isFrameAlive(m_opener))
-        m_opener = nullptr;
+    m_openedFrameTracker->dispose();
 }
 
-#define DEFINE_VISITOR_METHOD(VisitorDispatcher)                                                                               \
-    void WebFrame::traceFrame(VisitorDispatcher visitor, WebFrame* frame) { traceFrameImpl(visitor, frame); }                  \
-    void WebFrame::traceFrames(VisitorDispatcher visitor, WebFrame* frame) { traceFramesImpl(visitor, frame); }                \
-    void WebFrame::clearWeakFrames(VisitorDispatcher visitor) { clearWeakFramesImpl(visitor); }
+// Convenience helper for frame tree helpers in FrameClient to reduce the amount
+// of null-checking boilerplate code. Since the frame tree is maintained in the
+// web/ layer, the frame tree helpers often have to deal with null WebFrames:
+// for example, a frame with no parent will return null for WebFrame::parent().
+// TODO(dcheng): Remove duplication between FrameLoaderClientImpl and
+// RemoteFrameClientImpl somehow...
+Frame* toCoreFrame(const WebFrame* frame)
+{
+    return frame ? frame->toImplBase()->frame() : nullptr;
+}
+
+#define DEFINE_VISITOR_METHOD(VisitorDispatcher)                           \
+    void WebFrame::traceFrame(VisitorDispatcher visitor, WebFrame* frame)  \
+    {                                                                      \
+        traceFrameImpl(visitor, frame);                                    \
+    }                                                                      \
+    void WebFrame::traceFrames(VisitorDispatcher visitor, WebFrame* frame) \
+    {                                                                      \
+        traceFramesImpl(visitor, frame);                                   \
+    }
 
 DEFINE_VISITOR_METHOD(Visitor*)
 DEFINE_VISITOR_METHOD(InlinedGlobalMarkingVisitor)
 
 #undef DEFINE_VISITOR_METHOD
-#endif
 
 } // namespace blink

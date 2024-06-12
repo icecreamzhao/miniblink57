@@ -6,13 +6,11 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawClip.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
-#include "SkDrawRectangle.h"
 #include "SkDrawPath.h"
-
+#include "SkDrawRectangle.h"
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -25,14 +23,18 @@ const SkMemberInfo SkDrawClip::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawClip);
 
-SkDrawClip::SkDrawClip() : rect(NULL), path(NULL) {
+SkDrawClip::SkDrawClip()
+    : rect(nullptr)
+    , path(nullptr)
+{
 }
 
-bool SkDrawClip::draw(SkAnimateMaker& maker ) {
-    if (rect != NULL)
+bool SkDrawClip::draw(SkAnimateMaker& maker)
+{
+    if (rect != nullptr)
         maker.fCanvas->clipRect(rect->fRect);
     else {
-        SkASSERT(path != NULL);
+        SkASSERT(path != nullptr);
         maker.fCanvas->clipPath(path->fPath);
     }
     return false;

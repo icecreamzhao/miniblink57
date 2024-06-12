@@ -20,32 +20,46 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/filters/FESpecularLighting.h"
 
 #include "platform/graphics/filters/LightSource.h"
 #include "platform/text/TextStream.h"
+#include "wtf/MathExtras.h"
+#include <algorithm>
 
 namespace blink {
 
-FESpecularLighting::FESpecularLighting(Filter* filter, const Color& lightingColor, float surfaceScale,
-    float specularConstant, float specularExponent, float kernelUnitLengthX,
-    float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
-    : FELighting(filter, SpecularLighting, lightingColor, surfaceScale, 0, specularConstant, specularExponent, kernelUnitLengthX, kernelUnitLengthY, lightSource)
+FESpecularLighting::FESpecularLighting(Filter* filter,
+    const Color& lightingColor,
+    float surfaceScale,
+    float specularConstant,
+    float specularExponent,
+    PassRefPtr<LightSource> lightSource)
+    : FELighting(filter,
+        SpecularLighting,
+        lightingColor,
+        surfaceScale,
+        0,
+        specularConstant,
+        specularExponent,
+        std::move(lightSource))
 {
 }
 
-PassRefPtrWillBeRawPtr<FESpecularLighting> FESpecularLighting::create(Filter* filter, const Color& lightingColor,
-    float surfaceScale, float specularConstant, float specularExponent,
-    float kernelUnitLengthX, float kernelUnitLengthY, PassRefPtr<LightSource> lightSource)
+FESpecularLighting* FESpecularLighting::create(
+    Filter* filter,
+    const Color& lightingColor,
+    float surfaceScale,
+    float specularConstant,
+    float specularExponent,
+    PassRefPtr<LightSource> lightSource)
 {
-    return adoptRefWillBeNoop(new FESpecularLighting(filter, lightingColor, surfaceScale, specularConstant, specularExponent,
-        kernelUnitLengthX, kernelUnitLengthY, lightSource));
+    return new FESpecularLighting(filter, lightingColor, surfaceScale,
+        specularConstant, specularExponent,
+        std::move(lightSource));
 }
 
-FESpecularLighting::~FESpecularLighting()
-{
-}
+FESpecularLighting::~FESpecularLighting() { }
 
 Color FESpecularLighting::lightingColor() const
 {
@@ -94,36 +108,10 @@ float FESpecularLighting::specularExponent() const
 
 bool FESpecularLighting::setSpecularExponent(float specularExponent)
 {
-    specularExponent = std::min(std::max(specularExponent, 1.0f), 128.0f);
+    specularExponent = clampTo(specularExponent, 1.0f, 128.0f);
     if (m_specularExponent == specularExponent)
         return false;
     m_specularExponent = specularExponent;
-    return true;
-}
-
-float FESpecularLighting::kernelUnitLengthX() const
-{
-    return m_kernelUnitLengthX;
-}
-
-bool FESpecularLighting::setKernelUnitLengthX(float kernelUnitLengthX)
-{
-    if (m_kernelUnitLengthX == kernelUnitLengthX)
-        return false;
-    m_kernelUnitLengthX = kernelUnitLengthX;
-    return true;
-}
-
-float FESpecularLighting::kernelUnitLengthY() const
-{
-    return m_kernelUnitLengthY;
-}
-
-bool FESpecularLighting::setKernelUnitLengthY(float kernelUnitLengthY)
-{
-    if (m_kernelUnitLengthY == kernelUnitLengthY)
-        return false;
-    m_kernelUnitLengthY = kernelUnitLengthY;
     return true;
 }
 
@@ -137,7 +125,8 @@ void FESpecularLighting::setLightSource(PassRefPtr<LightSource> lightSource)
     m_lightSource = lightSource;
 }
 
-TextStream& FESpecularLighting::externalRepresentation(TextStream& ts, int indent) const
+TextStream& FESpecularLighting::externalRepresentation(TextStream& ts,
+    int indent) const
 {
     writeIndent(ts, indent);
     ts << "[feSpecularLighting";

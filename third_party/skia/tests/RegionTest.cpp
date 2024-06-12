@@ -10,17 +10,19 @@
 #include "SkRegion.h"
 #include "Test.h"
 
-static void Union(SkRegion* rgn, const SkIRect& rect) {
+static void Union(SkRegion* rgn, const SkIRect& rect)
+{
     rgn->op(rect, SkRegion::kUnion_Op);
 }
 
-#define TEST_NO_INTERSECT(rgn, rect)    REPORTER_ASSERT(reporter, !rgn.intersects(rect))
-#define TEST_INTERSECT(rgn, rect)       REPORTER_ASSERT(reporter, rgn.intersects(rect))
-#define TEST_NO_CONTAINS(rgn, rect)     REPORTER_ASSERT(reporter, !rgn.contains(rect))
+#define TEST_NO_INTERSECT(rgn, rect) REPORTER_ASSERT(reporter, !rgn.intersects(rect))
+#define TEST_INTERSECT(rgn, rect) REPORTER_ASSERT(reporter, rgn.intersects(rect))
+#define TEST_NO_CONTAINS(rgn, rect) REPORTER_ASSERT(reporter, !rgn.contains(rect))
 
 // inspired by http://code.google.com/p/skia/issues/detail?id=958
 //
-static void test_fromchrome(skiatest::Reporter* reporter) {
+static void test_fromchrome(skiatest::Reporter* reporter)
+{
     SkRegion r;
     Union(&r, SkIRect::MakeXYWH(0, 0, 1, 1));
     TEST_NO_INTERSECT(r, SkIRect::MakeXYWH(0, 0, 0, 0));
@@ -60,7 +62,6 @@ static void test_fromchrome(skiatest::Reporter* reporter) {
     TEST_INTERSECT(r, SkIRect::MakeXYWH(0, 2, 13, 9));
     TEST_INTERSECT(r, SkIRect::MakeXYWH(0, 2, 13, 8));
 
-
     // These test SkRegion::contains(Rect) and SkRegion::contains(Region)
 
     SkRegion container;
@@ -77,7 +78,8 @@ static void test_fromchrome(skiatest::Reporter* reporter) {
     }
 }
 
-static void test_empties(skiatest::Reporter* reporter) {
+static void test_empties(skiatest::Reporter* reporter)
+{
     SkRegion valid(SkIRect::MakeWH(10, 10));
     SkRegion empty, empty2;
 
@@ -98,7 +100,7 @@ static void test_empties(skiatest::Reporter* reporter) {
     emptyPath.close();
     SkRegion openClip;
     openClip.setRect(-16000, -16000, 16000, 16000);
-    empty.setPath(emptyPath, openClip);  // should not assert
+    empty.setPath(emptyPath, openClip); // should not assert
 }
 
 enum {
@@ -106,7 +108,8 @@ enum {
     H = 256
 };
 
-static SkIRect randRect(SkRandom& rand) {
+static SkIRect randRect(SkRandom& rand)
+{
     int x = rand.nextU() % W;
     int y = rand.nextU() % H;
     int w = rand.nextU() % W;
@@ -114,31 +117,36 @@ static SkIRect randRect(SkRandom& rand) {
     return SkIRect::MakeXYWH(x, y, w >> 1, h >> 1);
 }
 
-static void randRgn(SkRandom& rand, SkRegion* rgn, int n) {
+static void randRgn(SkRandom& rand, SkRegion* rgn, int n)
+{
     rgn->setEmpty();
     for (int i = 0; i < n; ++i) {
         rgn->op(randRect(rand), SkRegion::kUnion_Op);
     }
 }
 
-static bool slow_contains(const SkRegion& outer, const SkRegion& inner) {
+static bool slow_contains(const SkRegion& outer, const SkRegion& inner)
+{
     SkRegion tmp;
     tmp.op(outer, inner, SkRegion::kUnion_Op);
     return outer == tmp;
 }
 
-static bool slow_contains(const SkRegion& outer, const SkIRect& r) {
+static bool slow_contains(const SkRegion& outer, const SkIRect& r)
+{
     SkRegion tmp;
     tmp.op(outer, SkRegion(r), SkRegion::kUnion_Op);
     return outer == tmp;
 }
 
-static bool slow_intersects(const SkRegion& outer, const SkRegion& inner) {
+static bool slow_intersects(const SkRegion& outer, const SkRegion& inner)
+{
     SkRegion tmp;
     return tmp.op(outer, inner, SkRegion::kIntersect_Op);
 }
 
-static void test_contains_iter(skiatest::Reporter* reporter, const SkRegion& rgn) {
+static void test_contains_iter(skiatest::Reporter* reporter, const SkRegion& rgn)
+{
     SkRegion::Iterator iter(rgn);
     while (!iter.done()) {
         SkIRect r = iter.rect();
@@ -150,7 +158,8 @@ static void test_contains_iter(skiatest::Reporter* reporter, const SkRegion& rgn
 }
 
 static void contains_proc(skiatest::Reporter* reporter,
-                          const SkRegion& a, const SkRegion& b) {
+    const SkRegion& a, const SkRegion& b)
+{
     // test rgn
     bool c0 = a.contains(b);
     bool c1 = slow_contains(a, b);
@@ -158,7 +167,7 @@ static void contains_proc(skiatest::Reporter* reporter,
 
     // test rect
     SkIRect r = a.getBounds();
-    r.inset(r.width()/4, r.height()/4);
+    r.inset(r.width() / 4, r.height() / 4);
     c0 = a.contains(r);
     c1 = slow_contains(a, r);
     REPORTER_ASSERT(reporter, c0 == c1);
@@ -167,7 +176,8 @@ static void contains_proc(skiatest::Reporter* reporter,
     test_contains_iter(reporter, b);
 }
 
-static void test_intersects_iter(skiatest::Reporter* reporter, const SkRegion& rgn) {
+static void test_intersects_iter(skiatest::Reporter* reporter, const SkRegion& rgn)
+{
     SkRegion::Iterator iter(rgn);
     while (!iter.done()) {
         SkIRect r = iter.rect();
@@ -179,7 +189,8 @@ static void test_intersects_iter(skiatest::Reporter* reporter, const SkRegion& r
 }
 
 static void intersects_proc(skiatest::Reporter* reporter,
-                          const SkRegion& a, const SkRegion& b) {
+    const SkRegion& a, const SkRegion& b)
+{
     bool c0 = a.intersects(b);
     bool c1 = slow_intersects(a, b);
     REPORTER_ASSERT(reporter, c0 == c1);
@@ -189,8 +200,9 @@ static void intersects_proc(skiatest::Reporter* reporter,
 }
 
 static void test_proc(skiatest::Reporter* reporter,
-                      void (*proc)(skiatest::Reporter*,
-                                   const SkRegion& a, const SkRegion&)) {
+    void (*proc)(skiatest::Reporter*,
+        const SkRegion& a, const SkRegion&))
+{
     SkRandom rand;
     for (int i = 0; i < 10000; ++i) {
         SkRegion outer;
@@ -201,15 +213,17 @@ static void test_proc(skiatest::Reporter* reporter,
     }
 }
 
-static void rand_rect(SkIRect* rect, SkRandom& rand) {
+static void rand_rect(SkIRect* rect, SkRandom& rand)
+{
     int bits = 6;
     int shift = 32 - bits;
     rect->set(rand.nextU() >> shift, rand.nextU() >> shift,
-              rand.nextU() >> shift, rand.nextU() >> shift);
+        rand.nextU() >> shift, rand.nextU() >> shift);
     rect->sort();
 }
 
-static bool test_rects(const SkIRect rect[], int count) {
+static bool test_rects(const SkIRect rect[], int count)
+{
     SkRegion rgn0, rgn1;
 
     for (int i = 0; i < count; i++) {
@@ -221,8 +235,8 @@ static bool test_rects(const SkIRect rect[], int count) {
         SkDebugf("\n");
         for (int i = 0; i < count; i++) {
             SkDebugf(" { %d, %d, %d, %d },\n",
-                     rect[i].fLeft, rect[i].fTop,
-                     rect[i].fRight, rect[i].fBottom);
+                rect[i].fLeft, rect[i].fTop,
+                rect[i].fRight, rect[i].fBottom);
         }
         SkDebugf("\n");
         return false;
@@ -230,7 +244,8 @@ static bool test_rects(const SkIRect rect[], int count) {
     return true;
 }
 
-DEF_TEST(Region, reporter) {
+DEF_TEST(Region, reporter)
+{
     const SkIRect r2[] = {
         { 0, 0, 1, 1 },
         { 2, 2, 3, 3 },
@@ -265,14 +280,16 @@ DEF_TEST(Region, reporter) {
 
 // Test that writeToMemory reports the same number of bytes whether there was a
 // buffer to write to or not.
-static void test_write(const SkRegion& region, skiatest::Reporter* r) {
-    const size_t bytesNeeded = region.writeToMemory(NULL);
+static void test_write(const SkRegion& region, skiatest::Reporter* r)
+{
+    const size_t bytesNeeded = region.writeToMemory(nullptr);
     SkAutoMalloc storage(bytesNeeded);
     const size_t bytesWritten = region.writeToMemory(storage.get());
     REPORTER_ASSERT(r, bytesWritten == bytesNeeded);
 }
 
-DEF_TEST(Region_writeToMemory, r) {
+DEF_TEST(Region_writeToMemory, r)
+{
     // Test an empty region.
     SkRegion region;
     REPORTER_ASSERT(r, region.isEmpty());

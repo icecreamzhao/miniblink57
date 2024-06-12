@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2012 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,60 +13,72 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef ScopedStyleResolver_h
 #define ScopedStyleResolver_h
 
+#include "core/css/ActiveStyleSheets.h"
 #include "core/css/ElementRuleCollector.h"
 #include "core/css/RuleSet.h"
 #include "core/dom/TreeScope.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
 class PageRuleCollector;
 class StyleSheetContents;
-class ViewportStyleResolver;
 
-// This class selects a ComputedStyle for a given element based on a collection of stylesheets.
-class ScopedStyleResolver final : public NoBaseWillBeGarbageCollected<ScopedStyleResolver> {
+// This class selects a ComputedStyle for a given element based on a collection
+// of stylesheets.
+class ScopedStyleResolver final : public GarbageCollected<ScopedStyleResolver> {
     WTF_MAKE_NONCOPYABLE(ScopedStyleResolver);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ScopedStyleResolver);
-public:
-    static PassOwnPtrWillBeRawPtr<ScopedStyleResolver> create(TreeScope& scope)
-    {
-        return adoptPtrWillBeNoop(new ScopedStyleResolver(scope));
-    }
 
-    static TreeScope* treeScopeFor(Document&, const CSSStyleSheet*);
+public:
+    static ScopedStyleResolver* create(TreeScope& scope)
+    {
+        return new ScopedStyleResolver(scope);
+    }
 
     const TreeScope& treeScope() const { return *m_scope; }
     ScopedStyleResolver* parent() const;
 
-    StyleRuleKeyframes* keyframeStylesForAnimation(const StringImpl* animationName);
+    StyleRuleKeyframes* keyframeStylesForAnimation(
+        const StringImpl* animationName);
 
-    void appendCSSStyleSheet(CSSStyleSheet&, const MediaQueryEvaluator&);
-    void collectMatchingAuthorRules(ElementRuleCollector&, bool includeEmptyRules, CascadeOrder = ignoreCascadeOrder);
-    void collectMatchingShadowHostRules(ElementRuleCollector&, bool includeEmptyRules, CascadeOrder = ignoreCascadeOrder);
-    void collectMatchingTreeBoundaryCrossingRules(ElementRuleCollector&, bool includeEmptyRules, CascadeOrder);
+    void appendActiveStyleSheets(unsigned index, const ActiveStyleSheetVector&);
+    void collectMatchingAuthorRules(ElementRuleCollector&,
+        CascadeOrder = ignoreCascadeOrder);
+    void collectMatchingShadowHostRules(ElementRuleCollector&,
+        CascadeOrder = ignoreCascadeOrder);
+    void collectMatchingTreeBoundaryCrossingRules(
+        ElementRuleCollector&,
+        CascadeOrder = ignoreCascadeOrder);
     void matchPageRules(PageRuleCollector&);
-    void collectFeaturesTo(RuleFeatureSet&, HashSet<const StyleSheetContents*>& visitedSharedStyleSheetContents) const;
+    void collectFeaturesTo(RuleFeatureSet&,
+        HeapHashSet<Member<const StyleSheetContents>>&
+            visitedSharedStyleSheetContents) const;
     void resetAuthorStyle();
-    void collectViewportRulesTo(ViewportStyleResolver*) const;
+    bool hasDeepOrShadowSelector() const { return m_hasDeepOrShadowSelector; }
+    void setHasUnresolvedKeyframesRule() { m_hasUnresolvedKeyframesRule = true; }
+    bool needsAppendAllSheets() const { return m_needsAppendAllSheets; }
+    void setNeedsAppendAllSheets() { m_needsAppendAllSheets = true; }
+    static void keyframesRulesAdded(const TreeScope&);
+    static ContainerNode& invalidationRootForTreeScope(const TreeScope&);
+    CORE_EXPORT static bool haveSameStyles(const ScopedStyleResolver*,
+        const ScopedStyleResolver*);
 
     DECLARE_TRACE();
 
@@ -75,42 +88,51 @@ private:
     {
     }
 
-    void addTreeBoundaryCrossingRules(const RuleSet&, CSSStyleSheet*, unsigned sheetIndex);
+    void addTreeBoundaryCrossingRules(const RuleSet&,
+        CSSStyleSheet*,
+        unsigned sheetIndex);
     void addKeyframeRules(const RuleSet&);
     void addFontFaceRules(const RuleSet&);
-    void addKeyframeStyle(PassRefPtrWillBeRawPtr<StyleRuleKeyframes>);
+    void addKeyframeStyle(StyleRuleKeyframes*);
 
-    RawPtrWillBeMember<TreeScope> m_scope;
+    Member<TreeScope> m_scope;
 
-    WillBeHeapVector<RawPtrWillBeMember<CSSStyleSheet>> m_authorStyleSheets;
+    HeapVector<Member<CSSStyleSheet>> m_authorStyleSheets;
+    MediaQueryResultList m_viewportDependentMediaQueryResults;
+    MediaQueryResultList m_deviceDependentMediaQueryResults;
 
-    typedef WillBeHeapHashMap<const StringImpl*, RefPtrWillBeMember<StyleRuleKeyframes>> KeyframesRuleMap;
+    using KeyframesRuleMap = HeapHashMap<const StringImpl*, Member<StyleRuleKeyframes>>;
     KeyframesRuleMap m_keyframesRuleMap;
 
-    class RuleSubSet final : public NoBaseWillBeGarbageCollected<RuleSubSet> {
+    class RuleSubSet final : public GarbageCollected<RuleSubSet> {
     public:
-        static PassOwnPtrWillBeRawPtr<RuleSubSet> create(CSSStyleSheet* sheet, unsigned index, PassOwnPtrWillBeRawPtr<RuleSet> rules)
+        static RuleSubSet* create(CSSStyleSheet* sheet,
+            unsigned index,
+            RuleSet* rules)
         {
-            return adoptPtrWillBeNoop(new RuleSubSet(sheet, index, rules));
+            return new RuleSubSet(sheet, index, rules);
         }
 
-        CSSStyleSheet* m_parentStyleSheet;
+        Member<CSSStyleSheet> m_parentStyleSheet;
         unsigned m_parentIndex;
-        OwnPtrWillBeMember<RuleSet> m_ruleSet;
+        Member<RuleSet> m_ruleSet;
 
         DECLARE_TRACE();
 
     private:
-        RuleSubSet(CSSStyleSheet* sheet, unsigned index, PassOwnPtrWillBeRawPtr<RuleSet> rules)
+        RuleSubSet(CSSStyleSheet* sheet, unsigned index, RuleSet* rules)
             : m_parentStyleSheet(sheet)
             , m_parentIndex(index)
             , m_ruleSet(rules)
         {
         }
     };
-    typedef WillBeHeapVector<OwnPtrWillBeMember<RuleSubSet>> CSSStyleSheetRuleSubSet;
+    using CSSStyleSheetRuleSubSet = HeapVector<Member<RuleSubSet>>;
 
-    OwnPtrWillBeMember<CSSStyleSheetRuleSubSet> m_treeBoundaryCrossingRuleSet;
+    Member<CSSStyleSheetRuleSubSet> m_treeBoundaryCrossingRuleSet;
+    bool m_hasDeepOrShadowSelector = false;
+    bool m_hasUnresolvedKeyframesRule = false;
+    bool m_needsAppendAllSheets = false;
 };
 
 } // namespace blink

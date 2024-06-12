@@ -26,316 +26,222 @@
 #ifndef StringConcatenate_h
 #define StringConcatenate_h
 
+#include "wtf/Allocator.h"
 #include <string.h>
 
 #ifndef WTFString_h
 #include "wtf/text/AtomicString.h"
 #endif
 
-// This macro is helpful for testing how many intermediate Strings are created while evaluating an
-// expression containing operator+.
+// This macro is helpful for testing how many intermediate Strings are created
+// while evaluating an expression containing operator+.
 #ifndef WTF_STRINGTYPEADAPTER_COPIED_WTF_STRING
 #define WTF_STRINGTYPEADAPTER_COPIED_WTF_STRING() ((void)0)
 #endif
 
 namespace WTF {
 
-template<typename StringType>
+template <typename StringType>
 class StringTypeAdapter {
+    DISALLOW_NEW();
 };
 
-template<>
+template <>
 class StringTypeAdapter<char> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<char>(char buffer)
+    explicit StringTypeAdapter<char>(char buffer)
         : m_buffer(buffer)
     {
     }
 
-    unsigned length() { return 1; }
+    unsigned length() const { return 1; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination)
-    {
-        *destination = m_buffer;
-    }
-
-    void writeTo(UChar* destination) { *destination = m_buffer; }
+    void writeTo(LChar* destination) const { *destination = m_buffer; }
+    void writeTo(UChar* destination) const { *destination = m_buffer; }
 
 private:
-    unsigned char m_buffer;
+    const unsigned char m_buffer;
 };
 
-template<>
+template <>
 class StringTypeAdapter<LChar> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<LChar>(LChar buffer)
+    explicit StringTypeAdapter<LChar>(LChar buffer)
         : m_buffer(buffer)
     {
     }
 
-    unsigned length() { return 1; }
+    unsigned length() const { return 1; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination)
-    {
-        *destination = m_buffer;
-    }
-
-    void writeTo(UChar* destination) { *destination = m_buffer; }
+    void writeTo(LChar* destination) const { *destination = m_buffer; }
+    void writeTo(UChar* destination) const { *destination = m_buffer; }
 
 private:
-    LChar m_buffer;
+    const LChar m_buffer;
 };
 
-template<>
+template <>
 class StringTypeAdapter<UChar> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<UChar>(UChar buffer)
+    explicit StringTypeAdapter<UChar>(UChar buffer)
         : m_buffer(buffer)
     {
     }
 
-    unsigned length() { return 1; }
+    unsigned length() const { return 1; }
+    bool is8Bit() const { return m_buffer <= 0xff; }
 
-    bool is8Bit() { return m_buffer <= 0xff; }
-
-    void writeTo(LChar* destination)
+    void writeTo(LChar* destination) const
     {
-        ASSERT(is8Bit());
+        DCHECK(is8Bit());
         *destination = static_cast<LChar>(m_buffer);
     }
 
-    void writeTo(UChar* destination) { *destination = m_buffer; }
+    void writeTo(UChar* destination) const { *destination = m_buffer; }
 
 private:
-    UChar m_buffer;
+    const UChar m_buffer;
 };
 
-template<>
+template <>
 class WTF_EXPORT StringTypeAdapter<char*> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<char*>(char* buffer)
+    explicit StringTypeAdapter<char*>(char* buffer)
         : m_buffer(buffer)
         , m_length(strlen(buffer))
     {
     }
 
-    unsigned length() { return m_length; }
+    unsigned length() const { return m_length; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar* destination) const;
+    void writeTo(UChar* destination) const;
 
 private:
     const char* m_buffer;
     unsigned m_length;
 };
 
-template<>
+template <>
 class WTF_EXPORT StringTypeAdapter<LChar*> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<LChar*>(LChar* buffer);
+    explicit StringTypeAdapter<LChar*>(LChar* buffer);
 
-    unsigned length() { return m_length; }
+    unsigned length() const { return m_length; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar* destination) const;
+    void writeTo(UChar* destination) const;
 
 private:
     const LChar* m_buffer;
-    unsigned m_length;
+    const unsigned m_length;
 };
 
-template<>
+template <>
 class WTF_EXPORT StringTypeAdapter<const UChar*> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter(const UChar* buffer);
+    explicit StringTypeAdapter(const UChar* buffer);
 
-    unsigned length() { return m_length; }
+    unsigned length() const { return m_length; }
+    bool is8Bit() const { return false; }
 
-    bool is8Bit() { return false; }
-
-    NO_RETURN_DUE_TO_CRASH void writeTo(LChar*)
-    {
-        RELEASE_ASSERT(false);
-    }
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar*) const { RELEASE_ASSERT(false); }
+    void writeTo(UChar* destination) const;
 
 private:
     const UChar* m_buffer;
-    unsigned m_length;
+    const unsigned m_length;
 };
 
-template<>
+template <>
 class WTF_EXPORT StringTypeAdapter<const char*> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<const char*>(const char* buffer);
+    explicit StringTypeAdapter<const char*>(const char* buffer);
 
-    unsigned length() { return m_length; }
+    unsigned length() const { return m_length; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar* destination) const;
+    void writeTo(UChar* destination) const;
 
 private:
     const char* m_buffer;
-    unsigned m_length;
+    const unsigned m_length;
 };
 
-template<>
+template <>
 class WTF_EXPORT StringTypeAdapter<const LChar*> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<const LChar*>(const LChar* buffer);
+    explicit StringTypeAdapter<const LChar*>(const LChar* buffer);
 
-    unsigned length() { return m_length; }
+    unsigned length() const { return m_length; }
+    bool is8Bit() const { return true; }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar* destination) const;
+    void writeTo(UChar* destination) const;
 
 private:
     const LChar* m_buffer;
-    unsigned m_length;
+    const unsigned m_length;
 };
 
-template<>
-class WTF_EXPORT StringTypeAdapter<Vector<char>> {
+template <>
+class WTF_EXPORT StringTypeAdapter<StringView> {
+    DISALLOW_NEW();
+
 public:
-    StringTypeAdapter<Vector<char>>(const Vector<char>& buffer)
-        : m_buffer(buffer)
+    explicit StringTypeAdapter(const StringView& view)
+        : m_view(view)
     {
     }
 
-    size_t length() { return m_buffer.size(); }
+    unsigned length() const { return m_view.length(); }
+    bool is8Bit() const { return m_view.is8Bit(); }
 
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
+    void writeTo(LChar* destination) const;
+    void writeTo(UChar* destination) const;
 
 private:
-    const Vector<char>& m_buffer;
+    const StringView m_view;
 };
 
-template<>
-class StringTypeAdapter<Vector<LChar>> {
+template <>
+class StringTypeAdapter<String> : public StringTypeAdapter<StringView> {
 public:
-    StringTypeAdapter<Vector<LChar>>(const Vector<LChar>& buffer)
-        : m_buffer(buffer)
+    explicit StringTypeAdapter(const String& string)
+        : StringTypeAdapter<StringView>(string)
     {
     }
-
-    size_t length() { return m_buffer.size(); }
-
-    bool is8Bit() { return true; }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
-
-private:
-    const Vector<LChar>& m_buffer;
 };
 
-template<>
-class WTF_EXPORT StringTypeAdapter<String> {
+template <>
+class StringTypeAdapter<AtomicString> : public StringTypeAdapter<StringView> {
 public:
-    StringTypeAdapter<String>(const String& string)
-        : m_buffer(string)
+    explicit StringTypeAdapter(const AtomicString& string)
+        : StringTypeAdapter<StringView>(string)
     {
     }
-
-    unsigned length() { return m_buffer.length(); }
-
-    bool is8Bit() { return m_buffer.isNull() || m_buffer.is8Bit(); }
-
-    void writeTo(LChar* destination);
-
-    void writeTo(UChar* destination);
-
-private:
-    const String& m_buffer;
 };
-
-template<>
-class StringTypeAdapter<AtomicString> {
-public:
-    StringTypeAdapter<AtomicString>(const AtomicString& string)
-        : m_adapter(string.string())
-    {
-    }
-
-    unsigned length() { return m_adapter.length(); }
-
-    bool is8Bit() { return m_adapter.is8Bit(); }
-
-    void writeTo(LChar* destination) { m_adapter.writeTo(destination); }
-    void writeTo(UChar* destination) { m_adapter.writeTo(destination); }
-
-private:
-    StringTypeAdapter<String> m_adapter;
-};
-
-inline void sumWithOverflow(unsigned& total, unsigned addend, bool& overflow)
-{
-    unsigned oldTotal = total;
-    total = oldTotal + addend;
-    if (total < oldTotal)
-        overflow = true;
-}
-
-template<typename StringType1, typename StringType2>
-PassRefPtr<StringImpl> makeString(StringType1 string1, StringType2 string2)
-{
-    StringTypeAdapter<StringType1> adapter1(string1);
-    StringTypeAdapter<StringType2> adapter2(string2);
-
-    bool overflow = false;
-    unsigned length = adapter1.length();
-    sumWithOverflow(length, adapter2.length(), overflow);
-    if (overflow)
-        return nullptr;
-
-    if (adapter1.is8Bit() && adapter2.is8Bit()) {
-        LChar* buffer;
-        RefPtr<StringImpl> resultImpl = StringImpl::createUninitialized(length, buffer);
-        if (!resultImpl)
-            return nullptr;
-
-        LChar* result = buffer;
-        adapter1.writeTo(result);
-        result += adapter1.length();
-        adapter2.writeTo(result);
-
-        return resultImpl.release();
-    }
-
-    UChar* buffer;
-    RefPtr<StringImpl> resultImpl = StringImpl::createUninitialized(length, buffer);
-    if (!resultImpl)
-        return nullptr;
-
-    UChar* result = buffer;
-    adapter1.writeTo(result);
-    result += adapter1.length();
-    adapter2.writeTo(result);
-
-    return resultImpl.release();
-}
 
 } // namespace WTF
 

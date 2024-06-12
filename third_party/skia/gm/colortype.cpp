@@ -5,69 +5,64 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
+#include "../src/fonts/SkGScalerContext.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
-#include "../src/fonts/SkGScalerContext.h"
+#include "gm.h"
 
 class ColorTypeGM : public skiagm::GM {
 public:
-    ColorTypeGM()
-        : fColorType(NULL) {
-    }
-
-    virtual ~ColorTypeGM() {
-        SkSafeUnref(fColorType);
-    }
+    ColorTypeGM() { }
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         const SkColor colors[] = {
             SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE,
             SK_ColorMAGENTA, SK_ColorCYAN, SK_ColorYELLOW
         };
         SkMatrix local;
         local.setRotate(180);
-        SkShader* s = SkGradientShader::CreateSweep(0,0, colors, NULL,
-                                                    SK_ARRAY_COUNT(colors), 0, &local);
-
         SkPaint paint;
         paint.setAntiAlias(true);
-        paint.setShader(s)->unref();
+        paint.setShader(SkGradientShader::MakeSweep(0, 0, colors, nullptr, SK_ARRAY_COUNT(colors),
+            0, &local));
 
-        SkTypeface* orig = sk_tool_utils::create_portable_typeface("Times",
-                                                            SkTypeface::kBold);
-        if (NULL == orig) {
-            orig = SkTypeface::RefDefault();
+        sk_sp<SkTypeface> orig(sk_tool_utils::create_portable_typeface(
+            "serif", SkFontStyle::FromOldStyle(SkTypeface::kBold)));
+        if (nullptr == orig) {
+            orig = SkTypeface::MakeDefault();
         }
-        fColorType = SkNEW_ARGS(SkGTypeface, (orig, paint));
-        orig->unref();
+        fColorType = sk_make_sp<SkGTypeface>(std::move(orig), paint);
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("colortype");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(640, 480);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTypeface(fColorType);
 
         for (SkScalar size = 10; size <= 100; size += 10) {
             paint.setTextSize(size);
-            canvas->translate(0, paint.getFontMetrics(NULL));
+            canvas->translate(0, paint.getFontMetrics(nullptr));
             canvas->drawText("Hamburgefons", 12, 10, 10, paint);
         }
     }
 
 private:
-    SkTypeface* fColorType;
+    sk_sp<SkTypeface> fColorType;
 
     typedef skiagm::GM INHERITED;
 };
 
-DEF_GM( return SkNEW(ColorTypeGM); )
+DEF_GM(return new ColorTypeGM;)

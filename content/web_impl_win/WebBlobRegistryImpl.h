@@ -41,7 +41,7 @@ public:
 
     virtual void registerBlobData(const blink::WebString& uuid, const blink::WebBlobData& data) override;
 
-    virtual Builder* createBuilder(const blink::WebString& uuid, const blink::WebString& contentType) override;
+    virtual std::unique_ptr<Builder> createBuilder(const blink::WebString& uuid, const blink::WebString& contentType) override;
 
     virtual void addBlobDataRef(const blink::WebString& uuid) override;
     virtual void removeBlobDataRef(const blink::WebString& uuid) override;
@@ -57,6 +57,7 @@ public:
     virtual void unregisterStreamURL(const blink::WebURL&) override;
 
     void check() const;
+    void derefBlobDataWrap(net::BlobDataWrap* dataWrap);
 
 private:
     HashMap<String, net::BlobDataWrap*> m_datasSet;

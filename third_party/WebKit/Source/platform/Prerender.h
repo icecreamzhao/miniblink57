@@ -33,10 +33,9 @@
 #define Prerender_h
 
 #include "platform/PlatformExport.h"
+#include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/Referrer.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
@@ -46,18 +45,28 @@ namespace blink {
 
 class PrerenderClient;
 
-class PLATFORM_EXPORT Prerender : public RefCounted<Prerender> {
+class PLATFORM_EXPORT Prerender final
+    : public GarbageCollectedFinalized<Prerender> {
     WTF_MAKE_NONCOPYABLE(Prerender);
+
 public:
     class ExtraData : public RefCounted<ExtraData> {
     public:
         virtual ~ExtraData() { }
     };
 
-    static PassRefPtr<Prerender> create(PrerenderClient*, const KURL&, unsigned relTypes, const Referrer&);
-    ~Prerender();
+    static Prerender* create(PrerenderClient* client,
+        const KURL& url,
+        unsigned relTypes,
+        const Referrer& referrer)
+    {
+        return new Prerender(client, url, relTypes, referrer);
+    }
 
-    void removeClient();
+    ~Prerender();
+    DECLARE_TRACE();
+
+    void dispose();
 
     void add();
     void cancel();
@@ -65,11 +74,14 @@ public:
 
     const KURL& url() const { return m_url; }
     unsigned relTypes() const { return m_relTypes; }
-    const String& referrer() const { return m_referrer.referrer; }
-    ReferrerPolicy referrerPolicy() const { return m_referrer.referrerPolicy; }
+    const String& getReferrer() const { return m_referrer.referrer; }
+    ReferrerPolicy getReferrerPolicy() const { return m_referrer.referrerPolicy; }
 
-    void setExtraData(PassRefPtr<ExtraData> extraData) { m_extraData = extraData; }
-    ExtraData* extraData() { return m_extraData.get(); }
+    void setExtraData(PassRefPtr<ExtraData> extraData)
+    {
+        m_extraData = extraData;
+    }
+    ExtraData* getExtraData() { return m_extraData.get(); }
 
     void didStartPrerender();
     void didStopPrerender();
@@ -79,7 +91,11 @@ public:
 private:
     Prerender(PrerenderClient*, const KURL&, unsigned relTypes, const Referrer&);
 
-    PrerenderClient* m_client;
+    // The embedder's prerendering support holds on to pending Prerender objects;
+    // those references should not keep the PrerenderClient alive -- if the client
+    // becomes otherwise unreachable it should be GCed (at which point it will
+    // abandon this Prerender object.)
+    WeakMember<PrerenderClient> m_client;
 
     const KURL m_url;
     const unsigned m_relTypes;
@@ -88,6 +104,6 @@ private:
     RefPtr<ExtraData> m_extraData;
 };
 
-}
+} // namespace blink
 
 #endif // Prerender_h

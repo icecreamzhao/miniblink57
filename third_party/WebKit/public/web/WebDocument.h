@@ -35,36 +35,36 @@
 #include "WebExceptionCode.h"
 #include "WebFrame.h"
 #include "WebNode.h"
+#include "public/platform/WebColor.h"
 #include "public/platform/WebReferrerPolicy.h"
 #include "public/platform/WebSecurityOrigin.h"
 #include "public/platform/WebVector.h"
 
-#if BLINK_IMPLEMENTATION
-namespace WTF { template <typename T> class PassRefPtr; }
-#endif
-
 namespace v8 {
 class Value;
-template <class T> class Local;
+template <class T>
+class Local;
 }
 
 namespace blink {
 
 class Document;
-class DocumentType;
 class WebAXObject;
-class WebDocumentType;
 class WebElement;
 class WebFormElement;
 class WebElementCollection;
 class WebString;
 class WebURL;
+struct WebDistillabilityFeatures;
 
 // Provides readonly access to some properties of a DOM document.
 class WebDocument : public WebNode {
 public:
     WebDocument() { }
-    WebDocument(const WebDocument& e) : WebNode(e) { }
+    WebDocument(const WebDocument& e)
+        : WebNode(e)
+    {
+    }
 
     WebDocument& operator=(const WebDocument& e)
     {
@@ -74,9 +74,9 @@ public:
     void assign(const WebDocument& e) { WebNode::assign(e); }
 
     BLINK_EXPORT WebURL url() const;
-    // Note: Security checks should use the securityOrigin(), not url().
-    BLINK_EXPORT WebSecurityOrigin securityOrigin() const;
-    BLINK_EXPORT bool isPrivilegedContext(WebString& errorMessage) const;
+    // Note: Security checks should use the getSecurityOrigin(), not url().
+    BLINK_EXPORT WebSecurityOrigin getSecurityOrigin() const;
+    BLINK_EXPORT bool isSecureContext() const;
 
     BLINK_EXPORT WebString encoding() const;
     BLINK_EXPORT WebString contentLanguage() const;
@@ -85,7 +85,8 @@ public:
     // The url of the OpenSearch Desription Document (if any).
     BLINK_EXPORT WebURL openSearchDescriptionURL() const;
 
-    // Returns the frame the document belongs to or 0 if the document is frameless.
+    // Returns the frame the document belongs to or 0 if the document is
+    // frameless.
     BLINK_EXPORT WebLocalFrame* frame() const;
     BLINK_EXPORT bool isHTMLDocument() const;
     BLINK_EXPORT bool isXHTMLDocument() const;
@@ -107,23 +108,21 @@ public:
     BLINK_EXPORT WebURL completeURL(const WebString&) const;
     BLINK_EXPORT WebElement getElementById(const WebString&) const;
     BLINK_EXPORT WebElement focusedElement() const;
-    BLINK_EXPORT WebDocumentType doctype() const;
-    BLINK_EXPORT void cancelFullScreen();
-    BLINK_EXPORT WebElement fullScreenElement() const;
-    BLINK_EXPORT WebDOMEvent createEvent(const WebString& eventType);
-    BLINK_EXPORT WebReferrerPolicy referrerPolicy() const;
-    BLINK_EXPORT WebElement createElement(const WebString& tagName);
+    BLINK_EXPORT WebReferrerPolicy getReferrerPolicy() const;
+    BLINK_EXPORT WebString outgoingReferrer();
 
     // Accessibility support. These methods should only be called on the
     // top-level document, because one accessibility cache spans all of
     // the documents on the page.
-#ifdef IMPLEMENTED_NEWEST_BLINK
-    // Gets the accessibility object for this document.
-    BLINK_EXPORT WebAXObject accessibilityObject() const;
 
-    // Gets the accessibility object for an object on this page by ID.
-    BLINK_EXPORT WebAXObject accessibilityObjectFromID(int axID) const;
-#endif // IMPLEMENTED_NEWEST_BLINK
+    //   // Gets the accessibility object for this document.
+    //   BLINK_EXPORT WebAXObject accessibilityObject() const;
+    //
+    //   // Gets the accessibility object for an object on this page by ID.
+    //   BLINK_EXPORT WebAXObject accessibilityObjectFromID(int axID) const;
+    //
+    //   // Gets the accessibility object that has focus.
+    //   BLINK_EXPORT WebAXObject focusedAccessibilityObject() const;
 
     // Inserts the given CSS source code as a stylesheet in the document.
     BLINK_EXPORT void insertStyleSheet(const WebString& sourceCode);
@@ -135,19 +134,23 @@ public:
 
     BLINK_EXPORT WebVector<WebDraggableRegion> draggableRegions() const;
 
-    BLINK_EXPORT v8::Local<v8::Value> registerEmbedderCustomElement(const WebString& name, v8::Local<v8::Value> options, WebExceptionCode&);
+    BLINK_EXPORT v8::Local<v8::Value> registerEmbedderCustomElement(
+        const WebString& name,
+        v8::Local<v8::Value> options,
+        WebExceptionCode&);
 
     BLINK_EXPORT WebURL manifestURL() const;
     BLINK_EXPORT bool manifestUseCredentials() const;
-
-    BLINK_EXPORT WebURL defaultPresentationURL() const;
+    BLINK_EXPORT WebDistillabilityFeatures distillabilityFeatures();
 
 #if BLINK_IMPLEMENTATION
-    WebDocument(const PassRefPtrWillBeRawPtr<Document>&);
-    WebDocument& operator=(const PassRefPtrWillBeRawPtr<Document>&);
-    operator PassRefPtrWillBeRawPtr<Document>() const;
+    BLINK_EXPORT WebDocument(Document*);
+    BLINK_EXPORT WebDocument& operator=(Document*);
+    BLINK_EXPORT operator Document*() const;
 #endif
 };
+
+DECLARE_WEB_NODE_TYPE_CASTS(WebDocument);
 
 } // namespace blink
 

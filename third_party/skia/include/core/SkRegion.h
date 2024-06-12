@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkRegion_DEFINED
 #define SkRegion_DEFINED
 
@@ -16,11 +15,11 @@ class SkPath;
 class SkRgnBuilder;
 
 namespace android {
-    class Region;
+class Region;
 }
 
-#define SkRegion_gEmptyRunHeadPtr   ((SkRegion::RunHead*)-1)
-#define SkRegion_gRectRunHeadPtr    0
+#define SkRegion_gEmptyRunHeadPtr ((SkRegion::RunHead*)-1)
+#define SkRegion_gRectRunHeadPtr 0
 
 /** \class SkRegion
 
@@ -50,7 +49,8 @@ public:
     /**
      *  Return true if the two regions are not equal.
      */
-    bool operator!=(const SkRegion& other) const {
+    bool operator!=(const SkRegion& other) const
+    {
         return !(*this == other);
     }
 
@@ -58,7 +58,8 @@ public:
      *  Replace this region with the specified region, and return true if the
      *  resulting region is non-empty.
      */
-    bool set(const SkRegion& src) {
+    bool set(const SkRegion& src)
+    {
         *this = src;
         return !this->isEmpty();
     }
@@ -180,7 +181,8 @@ public:
      *  a guarantee that the rectangle is not contained by this region, but
      *  return true is a guarantee that the rectangle is contained by this region.
      */
-    bool quickContains(const SkIRect& r) const {
+    bool quickContains(const SkIRect& r) const
+    {
         return this->quickContains(r.fLeft, r.fTop, r.fRight, r.fBottom);
     }
 
@@ -192,14 +194,13 @@ public:
      *  region.
      */
     bool quickContains(int32_t left, int32_t top, int32_t right,
-                       int32_t bottom) const {
+        int32_t bottom) const
+    {
         SkASSERT(this->isEmpty() == fBounds.isEmpty()); // valid region
 
-        return left < right && top < bottom &&
-               fRunHead == SkRegion_gRectRunHeadPtr &&  // this->isRect()
-               /* fBounds.contains(left, top, right, bottom); */
-               fBounds.fLeft <= left && fBounds.fTop <= top &&
-               fBounds.fRight >= right && fBounds.fBottom >= bottom;
+        return left < right && top < bottom && fRunHead == SkRegion_gRectRunHeadPtr && // this->isRect()
+            /* fBounds.contains(left, top, right, bottom); */
+            fBounds.fLeft <= left && fBounds.fTop <= top && fBounds.fRight >= right && fBounds.fBottom >= bottom;
     }
 
     /**
@@ -207,9 +208,9 @@ public:
      *  not intersect the region. Returning false is not a guarantee that they
      *  intersect, but returning true is a guarantee that they do not.
      */
-    bool quickReject(const SkIRect& rect) const {
-        return this->isEmpty() || rect.isEmpty() ||
-                !SkIRect::Intersects(fBounds, rect);
+    bool quickReject(const SkIRect& rect) const
+    {
+        return this->isEmpty() || rect.isEmpty() || !SkIRect::Intersects(fBounds, rect);
     }
 
     /**
@@ -217,9 +218,9 @@ public:
      *  intersect. Returning false is not a guarantee that they intersect, but
      *  returning true is a guarantee that they do not.
      */
-    bool quickReject(const SkRegion& rgn) const {
-        return this->isEmpty() || rgn.isEmpty() ||
-               !SkIRect::Intersects(fBounds, rgn.fBounds);
+    bool quickReject(const SkRegion& rgn) const
+    {
+        return this->isEmpty() || rgn.isEmpty() || !SkIRect::Intersects(fBounds, rgn.fBounds);
     }
 
     /** Translate the region by the specified (dx, dy) amount. */
@@ -238,12 +239,12 @@ public:
      */
     enum Op {
         kDifference_Op, //!< subtract the op region from the first region
-        kIntersect_Op,  //!< intersect the two regions
-        kUnion_Op,      //!< union (inclusive-or) the two regions
-        kXOR_Op,        //!< exclusive-or the two regions
+        kIntersect_Op, //!< intersect the two regions
+        kUnion_Op, //!< union (inclusive-or) the two regions
+        kXOR_Op, //!< exclusive-or the two regions
         /** subtract the first region from the op region */
         kReverseDifference_Op,
-        kReplace_Op,    //!< replace the dst region with the op region
+        kReplace_Op, //!< replace the dst region with the op region
 
         kLastOp = kReplace_Op
     };
@@ -262,7 +263,8 @@ public:
      *  specified rectangle: this = (this op rect).
      *  Return true if the resulting region is non-empty.
      */
-    bool op(int left, int top, int right, int bottom, Op op) {
+    bool op(int left, int top, int right, int bottom, Op op)
+    {
         SkIRect rect;
         rect.set(left, top, right, bottom);
         return this->op(*this, rect, op);
@@ -308,7 +310,11 @@ public:
      */
     class SK_API Iterator {
     public:
-        Iterator() : fRgn(NULL), fDone(true) {}
+        Iterator()
+            : fRgn(NULL)
+            , fDone(true)
+        {
+        }
         Iterator(const SkRegion&);
         // if we have a region, reset to it and return true, else return false
         bool rewind();
@@ -322,9 +328,9 @@ public:
 
     private:
         const SkRegion* fRgn;
-        const RunType*  fRuns;
-        SkIRect         fRect;
-        bool            fDone;
+        const RunType* fRuns;
+        SkIRect fRect;
+        bool fDone;
     };
 
     /**
@@ -335,14 +341,14 @@ public:
     public:
         Cliperator(const SkRegion&, const SkIRect& clip);
         bool done() { return fDone; }
-        void  next();
+        void next();
         const SkIRect& rect() const { return fRect; }
 
     private:
-        Iterator    fIter;
-        SkIRect     fClip;
-        SkIRect     fRect;
-        bool        fDone;
+        Iterator fIter;
+        SkIRect fClip;
+        SkIRect fRect;
+        bool fDone;
     };
 
     /**
@@ -356,8 +362,8 @@ public:
 
     private:
         const SkRegion::RunType* fRuns;
-        int     fLeft, fRight;
-        bool    fDone;
+        int fLeft, fRight;
+        bool fDone;
     };
 
     /**
@@ -382,16 +388,15 @@ public:
     static const SkRegion& GetEmptyRegion();
 
     SkDEBUGCODE(void dump() const;)
-    SkDEBUGCODE(void validate() const;)
-    SkDEBUGCODE(static void UnitTest();)
+        SkDEBUGCODE(void validate() const;)
+            SkDEBUGCODE(static void UnitTest();)
 
-    // expose this to allow for regression test on complex regions
-    SkDEBUGCODE(bool debugSetRuns(const RunType runs[], int count);)
+        // expose this to allow for regression test on complex regions
+        SkDEBUGCODE(bool debugSetRuns(const RunType runs[], int count);)
 
-private:
-    enum {
-        kOpCount = kReplace_Op + 1
-    };
+            private : enum {
+                kOpCount = kReplace_Op + 1
+            };
 
     enum {
         // T
@@ -400,7 +405,7 @@ private:
         kRectRegionRuns = 7
     };
 
-    friend class android::Region;    // needed for marshalling efficiently
+    friend class android::Region; // needed for marshalling efficiently
 
     struct RunHead;
 
@@ -409,8 +414,8 @@ private:
     void allocateRuns(int count, int ySpanCount, int intervalCount);
     void allocateRuns(const RunHead& src);
 
-    SkIRect     fBounds;
-    RunHead*    fRunHead;
+    SkIRect fBounds;
+    RunHead* fRunHead;
 
     void freeRuns();
 
@@ -419,7 +424,7 @@ private:
      *  is empty or a rect. In those 2 cases, we use tmpStorage to hold the
      *  run data.
      */
-    const RunType*  getRuns(RunType tmpStorage[], int* intervals) const;
+    const RunType* getRuns(RunType tmpStorage[], int* intervals) const;
 
     // This is called with runs[] that do not yet have their interval-count
     // field set on each scanline. That is computed as part of this call
@@ -429,12 +434,12 @@ private:
     int count_runtype_values(int* itop, int* ibot) const;
 
     static void BuildRectRuns(const SkIRect& bounds,
-                              RunType runs[kRectRegionRuns]);
+        RunType runs[kRectRegionRuns]);
 
     // If the runs define a simple rect, return true and set bounds to that
     // rect. If not, return false and ignore bounds.
     static bool RunsAreARect(const SkRegion::RunType runs[], int count,
-                             SkIRect* bounds);
+        SkIRect* bounds);
 
     /**
      *  If the last arg is null, just return if the result is non-empty,
@@ -448,5 +453,39 @@ private:
     friend class SkRgnBuilder;
     friend class SkFlatRegion;
 };
+
+enum class SkClipOp {
+    kDifference = 0,
+    kIntersect = 1,
+
+    // Goal: remove these, since they can grow the current clip
+
+    kUnion_deprecated = 2,
+    kXOR_deprecated = 3,
+    kReverseDifference_deprecated = 4,
+    kReplace_deprecated = 5,
+
+    kMax_EnumValue = kReplace_deprecated,
+};
+
+inline SkRegion::Op SkClipOpToSkRegionOp(SkClipOp op)
+{
+    if (SkClipOp::kDifference == op)
+        return SkRegion::kDifference_Op;
+    if (SkClipOp::kIntersect == op)
+        return SkRegion::kIntersect_Op;
+    if (SkClipOp::kUnion_deprecated == op)
+        return SkRegion::kUnion_Op;
+    if (SkClipOp::kXOR_deprecated == op)
+        return SkRegion::kXOR_Op;
+    if (SkClipOp::kReverseDifference_deprecated == op)
+        return SkRegion::kReverseDifference_Op;
+    if (SkClipOp::kReplace_deprecated == op)
+        return SkRegion::kReplace_Op;
+    if (SkClipOp::kMax_EnumValue == op)
+        return SkRegion::kLastOp;
+
+    return SkRegion::kIntersect_Op;
+}
 
 #endif

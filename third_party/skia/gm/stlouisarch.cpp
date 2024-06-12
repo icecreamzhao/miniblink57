@@ -5,26 +5,29 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
+#include "SkPath.h"
 #include "SkTArray.h"
+#include "gm.h"
 
 namespace skiagm {
 
 // this GM tests hairlines which fill nearly the entire render target
 class StLouisArchGM : public GM {
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("stlouisarch");
     }
 
     SkISize onISize() override { return SkISize::Make((int)kWidth, (int)kHeight); }
 
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         {
             SkPath* bigQuad = &fPaths.push_back();
             bigQuad->moveTo(0, 0);
-            bigQuad->quadTo(kWidth/2, kHeight, kWidth, 0);
+            bigQuad->quadTo(kWidth / 2, kHeight, kWidth, 0);
         }
 
         {
@@ -34,13 +37,12 @@ protected:
             degenBigQuad->quadTo(0, yPos, kWidth, yPos);
         }
 
-
         {
             SkPath* bigCubic = &fPaths.push_back();
             bigCubic->moveTo(0, 0);
             bigCubic->cubicTo(0, kHeight,
-                              kWidth, kHeight,
-                              kWidth, 0);
+                kWidth, kHeight,
+                kWidth, 0);
         }
 
         {
@@ -48,14 +50,14 @@ protected:
             SkScalar yPos = kHeight / 2;
             degenBigCubic->moveTo(0, yPos);
             degenBigCubic->cubicTo(0, yPos,
-                                   0, yPos,
-                                   kWidth, yPos);
+                0, yPos,
+                kWidth, yPos);
         }
 
         {
             SkPath* bigConic = &fPaths.push_back();
             bigConic->moveTo(0, 0);
-            bigConic->conicTo(kWidth/2, kHeight, kWidth, 0, .5);
+            bigConic->conicTo(kWidth / 2, kHeight, kWidth, 0, .5);
         }
 
         {
@@ -66,7 +68,8 @@ protected:
         }
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         canvas->save();
         canvas->scale(1, -1);
         canvas->translate(0, -kHeight);

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,12 +5,12 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
+#include "SkView.h"
 
 #include "SkAnimator.h"
-#include "SkStream.h"
 #include "SkDOM.h"
+#include "SkStream.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -24,9 +23,9 @@ public:
 
     SkAnimator* getAnimator() const { return fAnimator; }
 
-    bool    decodeFile(const char path[]);
-    bool    decodeMemory(const void* buffer, size_t size);
-    bool    decodeStream(SkStream* stream);
+    bool decodeFile(const char path[]);
+    bool decodeMemory(const void* buffer, size_t size);
+    bool decodeStream(SkStream* stream);
 
 protected:
     // overrides
@@ -40,29 +39,37 @@ private:
     typedef SkView INHERITED;
 };
 
-SkAnimatorView::SkAnimatorView() : fAnimator(NULL) {}
+SkAnimatorView::SkAnimatorView()
+    : fAnimator(nullptr)
+{
+}
 
-SkAnimatorView::~SkAnimatorView() {
+SkAnimatorView::~SkAnimatorView()
+{
     delete fAnimator;
 }
 
-void SkAnimatorView::setURIBase(const char dir[]) {
+void SkAnimatorView::setURIBase(const char dir[])
+{
     fBaseURI.set(dir);
 }
 
-bool SkAnimatorView::decodeFile(const char path[]) {
+bool SkAnimatorView::decodeFile(const char path[])
+{
     SkAutoTDelete<SkStream> is(SkStream::NewFromFile(path));
-    return is.get() != NULL && this->decodeStream(is);
+    return is.get() != nullptr && this->decodeStream(is);
 }
 
-bool SkAnimatorView::decodeMemory(const void* buffer, size_t size) {
+bool SkAnimatorView::decodeMemory(const void* buffer, size_t size)
+{
     SkMemoryStream is(buffer, size);
     return this->decodeStream(&is);
 }
 
 static const SkDOMNode* find_nodeID(const SkDOM& dom,
-                        const SkDOMNode* node, const char name[]) {
-    if (NULL == node) {
+    const SkDOMNode* node, const char name[])
+{
+    if (nullptr == node) {
         node = dom.getRootNode();
     }
     do {
@@ -77,18 +84,19 @@ static const SkDOMNode* find_nodeID(const SkDOM& dom,
                 return found;
             }
         }
-    } while ((node = dom.getNextSibling(node)) != NULL);
-    return NULL;
+    } while ((node = dom.getNextSibling(node)) != nullptr);
+    return nullptr;
 }
 
-bool SkAnimatorView::decodeStream(SkStream* stream) {
+bool SkAnimatorView::decodeStream(SkStream* stream)
+{
     delete fAnimator;
     fAnimator = new SkAnimator;
     fAnimator->setURIBase(fBaseURI.c_str());
 #if 0
     if (!fAnimator->decodeStream(stream)) {
         delete fAnimator;
-        fAnimator = NULL;
+        fAnimator = nullptr;
         return false;
     }
 #else
@@ -97,26 +105,28 @@ bool SkAnimatorView::decodeStream(SkStream* stream) {
     stream->read(text, len);
     SkDOM dom;
     const SkDOM::Node* root = dom.build(text, len);
-    if (NULL == root) {
+    if (nullptr == root) {
         return false;
     }
     if (!fAnimator->decodeDOM(dom, root)) {
         delete fAnimator;
-        fAnimator = NULL;
+        fAnimator = nullptr;
         return false;
     }
     for (int i = 0; i <= 10; i++) {
         SkString name("glyph");
         name.appendS32(i);
-        const SkDOM::Node* node = find_nodeID(dom, NULL, name.c_str());
+        const SkDOM::Node* node = find_nodeID(dom, nullptr, name.c_str());
         SkASSERT(node);
         SkRect r;
         dom.findScalar(node, "left", &r.fLeft);
         dom.findScalar(node, "top", &r.fTop);
-        dom.findScalar(node, "width", &r.fRight); r.fRight += r.fLeft;
-        dom.findScalar(node, "height", &r.fBottom); r.fBottom += r.fTop;
+        dom.findScalar(node, "width", &r.fRight);
+        r.fRight += r.fLeft;
+        dom.findScalar(node, "height", &r.fBottom);
+        r.fBottom += r.fTop;
         SkDebugf("--- %s [%g %g %g %g]\n", name.c_str(),
-                 r.fLeft, r.fTop, r.fRight, r.fBottom);
+            r.fLeft, r.fTop, r.fRight, r.fBottom);
     }
 #endif
     return true;
@@ -124,7 +134,8 @@ bool SkAnimatorView::decodeStream(SkStream* stream) {
 
 #include "SkTime.h"
 
-void SkAnimatorView::onDraw(SkCanvas* canvas) {
+void SkAnimatorView::onDraw(SkCanvas* canvas)
+{
     canvas->drawColor(SK_ColorWHITE);
     if (fAnimator) {
         fAnimator->draw(canvas, 0);
@@ -141,12 +152,13 @@ void SkAnimatorView::onDraw(SkCanvas* canvas) {
         fAnimator->draw(canvas, 0);
         canvas->restore();
 
-        this->inval(NULL);
+        this->inval(nullptr);
 #endif
     }
 }
 
-bool SkAnimatorView::onQuery(SkEvent* evt) {
+bool SkAnimatorView::onQuery(SkEvent* evt)
+{
     if (SampleCode::TitleQ(*evt)) {
         SampleCode::TitleR(evt, "Animator");
         return true;
@@ -156,7 +168,8 @@ bool SkAnimatorView::onQuery(SkEvent* evt) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-static SkView* MyFactory() {
+static SkView* MyFactory()
+{
     SkAnimatorView* av = new SkAnimatorView;
 //    av->decodeFile("/skimages/test.xml");
 #if 0

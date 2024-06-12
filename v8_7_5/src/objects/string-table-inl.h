@@ -15,55 +15,68 @@
 namespace v8 {
 namespace internal {
 
-CAST_ACCESSOR(StringSet)
-CAST_ACCESSOR(StringTable)
+    CAST_ACCESSOR(StringSet)
+    CAST_ACCESSOR(StringTable)
 
-StringTable::StringTable(Address ptr)
-    : HashTable<StringTable, StringTableShape>(ptr) {
-  SLOW_DCHECK(IsStringTable());
-}
+    StringTable::StringTable(Address ptr)
+        : HashTable<StringTable, StringTableShape>(ptr)
+    {
+        SLOW_DCHECK(IsStringTable());
+    }
 
-StringSet::StringSet(Address ptr) : HashTable<StringSet, StringSetShape>(ptr) {
-  SLOW_DCHECK(IsStringSet());
-}
+    StringSet::StringSet(Address ptr)
+        : HashTable<StringSet, StringSetShape>(ptr)
+    {
+        SLOW_DCHECK(IsStringSet());
+    }
 
-bool StringSetShape::IsMatch(String key, Object value) {
-  DCHECK(value->IsString());
-  return key->Equals(String::cast(value));
-}
+    bool StringSetShape::IsMatch(String key, Object value)
+    {
+        DCHECK(value->IsString());
+        return key->Equals(String::cast(value));
+    }
 
-uint32_t StringSetShape::Hash(Isolate* isolate, String key) {
-  return key->Hash();
-}
+    uint32_t StringSetShape::Hash(Isolate* isolate, String key)
+    {
+        return key->Hash();
+    }
 
-uint32_t StringSetShape::HashForObject(ReadOnlyRoots roots, Object object) {
-  return String::cast(object)->Hash();
-}
+    uint32_t StringSetShape::HashForObject(ReadOnlyRoots roots, Object object)
+    {
+        return String::cast(object)->Hash();
+    }
 
-StringTableKey::StringTableKey(uint32_t hash_field)
-    : HashTableKey(hash_field >> Name::kHashShift), hash_field_(hash_field) {}
+    StringTableKey::StringTableKey(uint32_t hash_field)
+        : HashTableKey(hash_field >> Name::kHashShift)
+        , hash_field_(hash_field)
+    {
+    }
 
-void StringTableKey::set_hash_field(uint32_t hash_field) {
-  hash_field_ = hash_field;
-  set_hash(hash_field >> Name::kHashShift);
-}
+    void StringTableKey::set_hash_field(uint32_t hash_field)
+    {
+        hash_field_ = hash_field;
+        set_hash(hash_field >> Name::kHashShift);
+    }
 
-Handle<Object> StringTableShape::AsHandle(Isolate* isolate,
-                                          StringTableKey* key) {
-  return key->AsHandle(isolate);
-}
+    Handle<Object> StringTableShape::AsHandle(Isolate* isolate,
+        StringTableKey* key)
+    {
+        return key->AsHandle(isolate);
+    }
 
-uint32_t StringTableShape::HashForObject(ReadOnlyRoots roots, Object object) {
-  return String::cast(object)->Hash();
-}
+    uint32_t StringTableShape::HashForObject(ReadOnlyRoots roots, Object object)
+    {
+        return String::cast(object)->Hash();
+    }
 
-RootIndex StringTableShape::GetMapRootIndex() {
-  return RootIndex::kStringTableMap;
-}
+    RootIndex StringTableShape::GetMapRootIndex()
+    {
+        return RootIndex::kStringTableMap;
+    }
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_STRING_TABLE_INL_H_
+#endif // V8_OBJECTS_STRING_TABLE_INL_H_

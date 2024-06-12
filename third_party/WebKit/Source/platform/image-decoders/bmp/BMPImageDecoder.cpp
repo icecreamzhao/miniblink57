@@ -28,10 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/image-decoders/bmp/BMPImageDecoder.h"
 
-#include "wtf/PassOwnPtr.h"
+#include "platform/image-decoders/FastSharedBufferReader.h"
+#include "wtf/PtrUtil.h"
 
 namespace blink {
 
@@ -40,25 +40,23 @@ namespace blink {
 // don't pack).
 static const size_t sizeOfFileHeader = 14;
 
-BMPImageDecoder::BMPImageDecoder(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption colorOptions, size_t maxDecodedBytes)
-    : ImageDecoder(alphaOption, colorOptions, maxDecodedBytes)
+BMPImageDecoder::BMPImageDecoder(AlphaOption alphaOption,
+    const ColorBehavior& colorBehavior,
+    size_t maxDecodedBytes)
+    : ImageDecoder(alphaOption, colorBehavior, maxDecodedBytes)
     , m_decodedOffset(0)
 {
 }
 
-void BMPImageDecoder::setData(SharedBuffer* data, bool allDataReceived)
+void BMPImageDecoder::onSetData(SegmentReader* data)
 {
-    if (failed())
-        return;
-
-    ImageDecoder::setData(data, allDataReceived);
     if (m_reader)
         m_reader->setData(data);
 }
 
 bool BMPImageDecoder::setFailed()
 {
-    m_reader.clear();
+    m_reader.reset();
     return ImageDecoder::setFailed();
 }
 
@@ -73,8 +71,8 @@ void BMPImageDecoder::decode(bool onlySize)
         setFailed();
     // If we're done decoding the image, we don't need the BMPImageReader
     // anymore.  (If we failed, |m_reader| has already been cleared.)
-    else if (!m_frameBufferCache.isEmpty() && (m_frameBufferCache.first().status() == ImageFrame::FrameComplete))
-        m_reader.clear();
+    else if (!m_frameBufferCache.isEmpty() && (m_frameBufferCache.front().getStatus() == ImageFrame::FrameComplete))
+        m_reader.reset();
 }
 
 bool BMPImageDecoder::decodeHelper(bool onlySize)
@@ -84,12 +82,13 @@ bool BMPImageDecoder::decodeHelper(bool onlySize)
         return false;
 
     if (!m_reader) {
-        m_reader = adoptPtr(new BMPImageReader(this, m_decodedOffset, imgDataOffset, false));
+        m_reader = WTF::wrapUnique(
+            new BMPImageReader(this, m_decodedOffset, imgDataOffset, false));
         m_reader->setData(m_data.get());
     }
 
     if (!m_frameBufferCache.isEmpty())
-        m_reader->setBuffer(&m_frameBufferCache.first());
+        m_reader->setBuffer(&m_frameBufferCache.front());
 
     return m_reader->decodeBMP(onlySize);
 }
@@ -100,13 +99,17 @@ bool BMPImageDecoder::processFileHeader(size_t& imgDataOffset)
     ASSERT(!m_decodedOffset);
     if (m_data->size() < sizeOfFileHeader)
         return false;
-    const uint16_t fileType = (m_data->data()[0] << 8) | static_cast<uint8_t>(m_data->data()[1]);
-    imgDataOffset = readUint32(10);
+
+    char buffer[sizeOfFileHeader];
+    FastSharedBufferReader fastReader(m_data);
+    const char* fileHeader = fastReader.getConsecutiveData(0, sizeOfFileHeader, buffer);
+    const uint16_t fileType = (fileHeader[0] << 8) | static_cast<uint8_t>(fileHeader[1]);
+    imgDataOffset = BMPImageReader::readUint32(&fileHeader[10]);
     m_decodedOffset = sizeOfFileHeader;
 
     // See if this is a bitmap filetype we understand.
     enum {
-        BMAP = 0x424D,  // "BM"
+        BMAP = 0x424D, // "BM"
         // The following additional OS/2 2.x header values (see
         // http://www.fileformat.info/format/os2bmp/egff.htm ) aren't widely
         // decoded, and are unlikely to be in much use.

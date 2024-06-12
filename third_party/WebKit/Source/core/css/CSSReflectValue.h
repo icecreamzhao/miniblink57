@@ -32,17 +32,19 @@
 
 namespace blink {
 
+class CSSIdentifierValue;
 class CSSPrimitiveValue;
 
 class CSSReflectValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSReflectValue> create(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> direction,
-        PassRefPtrWillBeRawPtr<CSSPrimitiveValue> offset, PassRefPtrWillBeRawPtr<CSSValue> mask)
+    static CSSReflectValue* create(CSSIdentifierValue* direction,
+        CSSPrimitiveValue* offset,
+        CSSValue* mask)
     {
-        return adoptRefWillBeNoop(new CSSReflectValue(direction, offset, mask));
+        return new CSSReflectValue(direction, offset, mask);
     }
 
-    CSSPrimitiveValue* direction() const { return m_direction.get(); }
+    CSSIdentifierValue* direction() const { return m_direction.get(); }
     CSSPrimitiveValue* offset() const { return m_offset.get(); }
     CSSValue* mask() const { return m_mask.get(); }
 
@@ -53,7 +55,9 @@ public:
     DECLARE_TRACE_AFTER_DISPATCH();
 
 private:
-    CSSReflectValue(PassRefPtrWillBeRawPtr<CSSPrimitiveValue> direction, PassRefPtrWillBeRawPtr<CSSPrimitiveValue> offset, PassRefPtrWillBeRawPtr<CSSValue> mask)
+    CSSReflectValue(CSSIdentifierValue* direction,
+        CSSPrimitiveValue* offset,
+        CSSValue* mask)
         : CSSValue(ReflectClass)
         , m_direction(direction)
         , m_offset(offset)
@@ -61,9 +65,9 @@ private:
     {
     }
 
-    RefPtrWillBeMember<CSSPrimitiveValue> m_direction;
-    RefPtrWillBeMember<CSSPrimitiveValue> m_offset;
-    RefPtrWillBeMember<CSSValue> m_mask;
+    Member<CSSIdentifierValue> m_direction;
+    Member<CSSPrimitiveValue> m_offset;
+    Member<CSSValue> m_mask;
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSReflectValue, isReflectValue());

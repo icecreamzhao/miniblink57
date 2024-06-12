@@ -8,18 +8,19 @@
  */
 #include "Global.h"
 
-#include "SkWindow.h"
 #include "SkEvent.h"
-
+#include "SkWindow.h"
 
 Global* Global::gGlobal = NULL;
 
 // Extracts a C string from a V8 Utf8Value.
-static const char* to_cstring(const v8::String::Utf8Value& value) {
+static const char* to_cstring(const v8::String::Utf8Value& value)
+{
     return *value ? *value : "<string conversion failed>";
 }
 
-int32_t Global::getNextTimerID() {
+int32_t Global::getNextTimerID()
+{
     do {
         fLastTimerID++;
         if (fLastTimerID < 0) {
@@ -30,7 +31,8 @@ int32_t Global::getNextTimerID() {
 }
 
 // Slight modification to an original function found in the V8 sample shell.cc.
-void Global::reportException(v8::TryCatch* tryCatch) {
+void Global::reportException(v8::TryCatch* tryCatch)
+{
     v8::HandleScope handleScope(fIsolate);
     v8::String::Utf8Value exception(tryCatch->Exception());
     const char* exceptionString = to_cstring(exception);
@@ -45,7 +47,7 @@ void Global::reportException(v8::TryCatch* tryCatch) {
         const char* filenameString = to_cstring(filename);
         int linenum = message->GetLineNumber();
         fprintf(stderr,
-                "%s:%i: %s\n", filenameString, linenum, exceptionString);
+            "%s:%i: %s\n", filenameString, linenum, exceptionString);
         // Print line of source code.
         v8::String::Utf8Value sourceline(message->GetSourceLine());
         const char* sourceLineString = to_cstring(sourceline);
@@ -72,7 +74,8 @@ void Global::reportException(v8::TryCatch* tryCatch) {
 // Invalidates the current window, forcing a redraw.
 //
 // JS: inval();
-void Global::Inval(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Global::Inval(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     gGlobal->getWindow()->inval(NULL);
 }
 
@@ -81,7 +84,8 @@ void Global::Inval(const v8::FunctionCallbackInfo<v8::Value>& args) {
 // spaces and ending with a newline.
 //
 // JS: print("foo", "bar");
-void Global::Print(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Global::Print(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     bool first = true;
     v8::HandleScope handleScope(args.GetIsolate());
     for (int i = 0; i < args.Length(); i++) {
@@ -101,11 +105,12 @@ void Global::Print(const v8::FunctionCallbackInfo<v8::Value>& args) {
 // function is called.
 //
 // JS: setTimeout(on_timeout, 500);
-void Global::SetTimeout(const v8::FunctionCallbackInfo<v8::Value>& args) {
+void Global::SetTimeout(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
     if (args.Length() != 2) {
         args.GetIsolate()->ThrowException(
-                v8::String::NewFromUtf8(
-                        args.GetIsolate(), "Error: 2 arguments required."));
+            v8::String::NewFromUtf8(
+                args.GetIsolate(), "Error: 2 arguments required."));
         return;
     }
 
@@ -131,7 +136,8 @@ void Global::SetTimeout(const v8::FunctionCallbackInfo<v8::Value>& args) {
 }
 
 // Callback function for SkEvents used to implement timeouts.
-bool Global::TimeOutProc(const SkEvent& evt) {
+bool Global::TimeOutProc(const SkEvent& evt)
+{
     // Create a handle scope to keep the temporary object references.
     v8::HandleScope handleScope(gGlobal->getIsolate());
 
@@ -151,8 +157,7 @@ bool Global::TimeOutProc(const SkEvent& evt) {
     }
 
     const int argc = 0;
-    v8::Local<v8::Function> onTimeout =
-            v8::Local<v8::Function>::New(gGlobal->getIsolate(), gGlobal->fTimeouts[id]);
+    v8::Local<v8::Function> onTimeout = v8::Local<v8::Function>::New(gGlobal->getIsolate(), gGlobal->fTimeouts[id]);
     v8::Handle<v8::Value> result = onTimeout->Call(context->Global(), argc, NULL);
     gGlobal->fTimeouts.erase(id);
 
@@ -175,22 +180,23 @@ bool Global::TimeOutProc(const SkEvent& evt) {
 }
 
 // Creates a new execution environment containing the built-in functions.
-v8::Handle<v8::Context> Global::createRootContext() {
-  // Create a template for the global object.
-  v8::Handle<v8::ObjectTemplate> global = v8::ObjectTemplate::New();
+v8::Handle<v8::Context> Global::createRootContext()
+{
+    // Create a template for the global object.
+    v8::Handle<v8::ObjectTemplate> global = v8::ObjectTemplate::New();
 
-  global->Set(v8::String::NewFromUtf8(fIsolate, "print"),
-              v8::FunctionTemplate::New(fIsolate, Global::Print));
-  global->Set(v8::String::NewFromUtf8(fIsolate, "setTimeout"),
-              v8::FunctionTemplate::New(fIsolate, Global::SetTimeout));
-  global->Set(v8::String::NewFromUtf8(fIsolate, "inval"),
-              v8::FunctionTemplate::New(fIsolate, Global::Inval));
+    global->Set(v8::String::NewFromUtf8(fIsolate, "print"),
+        v8::FunctionTemplate::New(fIsolate, Global::Print));
+    global->Set(v8::String::NewFromUtf8(fIsolate, "setTimeout"),
+        v8::FunctionTemplate::New(fIsolate, Global::SetTimeout));
+    global->Set(v8::String::NewFromUtf8(fIsolate, "inval"),
+        v8::FunctionTemplate::New(fIsolate, Global::Inval));
 
-
-  return v8::Context::New(fIsolate, NULL, global);
+    return v8::Context::New(fIsolate, NULL, global);
 }
 
-void Global::initialize() {
+void Global::initialize()
+{
     // Create a stack-allocated handle scope.
     v8::HandleScope handleScope(fIsolate);
 
@@ -201,13 +207,13 @@ void Global::initialize() {
     fContext.Reset(fIsolate, context);
 }
 
-
 // Creates the root context, parses the script into it, then stores the
 // context in a global.
 //
 // TODO(jcgregorio) Currently only handles one script. Need to move
 // createRootContext to another call that's only done once.
-bool Global::parseScript(const char script[]) {
+bool Global::parseScript(const char script[])
+{
 
     // Create a stack-allocated handle scope.
     v8::HandleScope handleScope(fIsolate);

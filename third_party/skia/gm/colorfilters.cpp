@@ -5,59 +5,70 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
-#include "SkColorFilter.h"
+#include "SkColorMatrixFilter.h"
 #include "SkGradientShader.h"
+#include "gm.h"
 
-static SkShader* make_shader(const SkRect& bounds) {
+static sk_sp<SkShader> make_shader(const SkRect& bounds)
+{
     const SkPoint pts[] = {
         { bounds.left(), bounds.top() },
         { bounds.right(), bounds.bottom() },
     };
     const SkColor colors[] = {
-        SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorBLACK,
-        SK_ColorCYAN, SK_ColorMAGENTA, SK_ColorYELLOW,
+        SK_ColorRED,
+        SK_ColorGREEN,
+        SK_ColorBLUE,
+        SK_ColorBLACK,
+        SK_ColorCYAN,
+        SK_ColorMAGENTA,
+        SK_ColorYELLOW,
     };
-    return SkGradientShader::CreateLinear(pts,
-                                          colors, NULL, SK_ARRAY_COUNT(colors),
-                                          SkShader::kClamp_TileMode);
+    return SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
+        SkShader::kClamp_TileMode);
 }
 
 typedef void (*InstallPaint)(SkPaint*, uint32_t, uint32_t);
 
-static void install_nothing(SkPaint* paint, uint32_t, uint32_t) {
-    paint->setColorFilter(NULL);
+static void install_nothing(SkPaint* paint, uint32_t, uint32_t)
+{
+    paint->setColorFilter(nullptr);
 }
 
-static void install_lighting(SkPaint* paint, uint32_t mul, uint32_t add) {
-    paint->setColorFilter(SkColorFilter::CreateLightingFilter(mul, add))->unref();
+static void install_lighting(SkPaint* paint, uint32_t mul, uint32_t add)
+{
+    paint->setColorFilter(SkColorMatrixFilter::MakeLightingFilter(mul, add));
 }
 
 class ColorFiltersGM : public skiagm::GM {
 public:
-    ColorFiltersGM() {
+    ColorFiltersGM()
+    {
         fName.set("lightingcolorfilter");
     }
 
 protected:
-    virtual SkString onShortName() override {
+    virtual SkString onShortName() override
+    {
         return fName;
     }
 
-    virtual SkISize onISize() override {
-        return SkISize::Make(640, 480);
+    virtual SkISize onISize() override
+    {
+        return SkISize::Make(620, 430);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         SkRect r;
         r.setWH(600, 50);
-        paint.setShader(make_shader(r))->unref();
+        paint.setShader(make_shader(r));
 
         const struct {
-            InstallPaint    fProc;
-            uint32_t        fData0, fData1;
+            InstallPaint fProc;
+            uint32_t fData0, fData1;
         } rec[] = {
             { install_nothing, 0, 0 },
             { install_lighting, 0xFF0000, 0 },
@@ -81,7 +92,6 @@ private:
     typedef GM INHERITED;
 };
 
-
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(ColorFiltersGM); )
+DEF_GM(return new ColorFiltersGM;)

@@ -17,59 +17,59 @@
 namespace v8 {
 namespace internal {
 
-// Abstraction for elements in instance-descriptor arrays.
-//
-// Each descriptor has a key, property attributes, property type,
-// property index (in the actual instance-descriptor array) and
-// optionally a piece of data.
-class Descriptor final {
- public:
-  Descriptor();
+    // Abstraction for elements in instance-descriptor arrays.
+    //
+    // Each descriptor has a key, property attributes, property type,
+    // property index (in the actual instance-descriptor array) and
+    // optionally a piece of data.
+    class V8_EXPORT_PRIVATE Descriptor final {
+    public:
+        Descriptor();
 
-  Handle<Name> GetKey() const { return key_; }
-  MaybeObjectHandle GetValue() const { return value_; }
-  PropertyDetails GetDetails() const { return details_; }
+        Handle<Name> GetKey() const { return key_; }
+        MaybeObjectHandle GetValue() const { return value_; }
+        PropertyDetails GetDetails() const { return details_; }
 
-  void SetSortedKeyIndex(int index) { details_ = details_.set_pointer(index); }
+        void SetSortedKeyIndex(int index) { details_ = details_.set_pointer(index); }
 
-  static Descriptor DataField(Isolate* isolate, Handle<Name> key,
-                              int field_index, PropertyAttributes attributes,
-                              Representation representation);
+        static Descriptor DataField(Isolate* isolate, Handle<Name> key,
+            int field_index, PropertyAttributes attributes,
+            Representation representation);
 
-  static Descriptor DataField(Handle<Name> key, int field_index,
-                              PropertyAttributes attributes,
-                              PropertyConstness constness,
-                              Representation representation,
-                              const MaybeObjectHandle& wrapped_field_type);
+        static Descriptor DataField(Handle<Name> key, int field_index,
+            PropertyAttributes attributes,
+            PropertyConstness constness,
+            Representation representation,
+            const MaybeObjectHandle& wrapped_field_type);
 
-  static Descriptor DataConstant(Handle<Name> key, Handle<Object> value,
-                                 PropertyAttributes attributes);
+        static Descriptor DataConstant(Handle<Name> key, Handle<Object> value,
+            PropertyAttributes attributes);
 
-  static Descriptor DataConstant(Isolate* isolate, Handle<Name> key,
-                                 int field_index, Handle<Object> value,
-                                 PropertyAttributes attributes);
+        static Descriptor DataConstant(Isolate* isolate, Handle<Name> key,
+            int field_index, Handle<Object> value,
+            PropertyAttributes attributes);
 
-  static Descriptor AccessorConstant(Handle<Name> key, Handle<Object> foreign,
-                                     PropertyAttributes attributes);
+        static Descriptor AccessorConstant(Handle<Name> key, Handle<Object> foreign,
+            PropertyAttributes attributes);
 
- private:
-  Handle<Name> key_;
-  MaybeObjectHandle value_;
-  PropertyDetails details_;
+    private:
+        Handle<Name> key_;
+        MaybeObjectHandle value_;
+        PropertyDetails details_;
 
- protected:
-  Descriptor(Handle<Name> key, const MaybeObjectHandle& value,
-             PropertyDetails details);
+    protected:
+        Descriptor(Handle<Name> key, const MaybeObjectHandle& value,
+            PropertyDetails details);
 
-  Descriptor(Handle<Name> key, const MaybeObjectHandle& value,
-             PropertyKind kind, PropertyAttributes attributes,
-             PropertyLocation location, PropertyConstness constness,
-             Representation representation, int field_index);
+        Descriptor(Handle<Name> key, const MaybeObjectHandle& value,
+            PropertyKind kind, PropertyAttributes attributes,
+            PropertyLocation location, PropertyConstness constness,
+            Representation representation, int field_index);
 
-  friend class MapUpdater;
-};
+        friend class MapUpdater;
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_PROPERTY_H_
+#endif // V8_PROPERTY_H_

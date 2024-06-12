@@ -30,35 +30,52 @@
 #define Reverb_h
 
 #include "platform/audio/ReverbConvolver.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
 class AudioBus;
 
-// Multi-channel convolution reverb with channel matrixing - one or more ReverbConvolver objects are used internally.
+// Multi-channel convolution reverb with channel matrixing - one or more
+// ReverbConvolver objects are used internally.
 
 class PLATFORM_EXPORT Reverb {
+    USING_FAST_MALLOC(Reverb);
     WTF_MAKE_NONCOPYABLE(Reverb);
+
 public:
     enum { MaxFrameSize = 256 };
 
-    // renderSliceSize is a rendering hint, so the FFTs can be optimized to not all occur at the same time (very bad when rendering on a real-time thread).
-    Reverb(AudioBus* impulseResponseBuffer, size_t renderSliceSize, size_t maxFFTSize, size_t numberOfChannels, bool useBackgroundThreads, bool normalize);
+    // renderSliceSize is a rendering hint, so the FFTs can be optimized to not
+    // all occur at the same time (very bad when rendering on a real-time thread).
+    Reverb(AudioBus* impulseResponseBuffer,
+        size_t renderSliceSize,
+        size_t maxFFTSize,
+        size_t numberOfChannels,
+        bool useBackgroundThreads,
+        bool normalize);
 
-    void process(const AudioBus* sourceBus, AudioBus* destinationBus, size_t framesToProcess);
+    void process(const AudioBus* sourceBus,
+        AudioBus* destinationBus,
+        size_t framesToProcess);
     void reset();
 
     size_t impulseResponseLength() const { return m_impulseResponseLength; }
     size_t latencyFrames() const;
 
 private:
-    void initialize(AudioBus* impulseResponseBuffer, size_t renderSliceSize, size_t maxFFTSize, size_t numberOfChannels, bool useBackgroundThreads);
+    void initialize(AudioBus* impulseResponseBuffer,
+        size_t renderSliceSize,
+        size_t maxFFTSize,
+        size_t numberOfChannels,
+        bool useBackgroundThreads);
 
     size_t m_impulseResponseLength;
 
-    Vector<OwnPtr<ReverbConvolver>> m_convolvers;
+    Vector<std::unique_ptr<ReverbConvolver>> m_convolvers;
 
     // For "True" stereo processing
     RefPtr<AudioBus> m_tempBuffer;

@@ -2,34 +2,35 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/cachestorage/CacheStorageError.h"
 
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
 #include "modules/cachestorage/Cache.h"
-#include "public/platform/WebServiceWorkerCacheError.h"
+#include "public/platform/modules/serviceworker/WebServiceWorkerCacheError.h"
 
 namespace blink {
 
-DOMException* CacheStorageError::take(ScriptPromiseResolver*, PassOwnPtr<WebType> webError)
-{
-    return CacheStorageError::createException(*webError);
-}
-
-DOMException* CacheStorageError::createException(WebType webError)
+DOMException* CacheStorageError::createException(
+    WebServiceWorkerCacheError webError)
 {
     switch (webError) {
     case WebServiceWorkerCacheErrorNotImplemented:
-        return DOMException::create(NotSupportedError, "Method is not implemented.");
+        return DOMException::create(NotSupportedError,
+            "Method is not implemented.");
     case WebServiceWorkerCacheErrorNotFound:
         return DOMException::create(NotFoundError, "Entry was not found.");
     case WebServiceWorkerCacheErrorExists:
         return DOMException::create(InvalidAccessError, "Entry already exists.");
-    default:
-        ASSERT_NOT_REACHED();
-        return DOMException::create(NotSupportedError, "Unknown error.");
+    case WebServiceWorkerCacheErrorQuotaExceeded:
+        return DOMException::create(QuotaExceededError, "Quota exceeded.");
+    case WebServiceWorkerCacheErrorCacheNameNotFound:
+        return DOMException::create(NotFoundError, "Cache was not found.");
+    case WebServiceWorkerCacheErrorTooLarge:
+        return DOMException::create(AbortError, "Operation too large.");
     }
+    NOTREACHED();
+    return nullptr;
 }
 
 } // namespace blink

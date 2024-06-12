@@ -28,35 +28,56 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/workers/WorkerThreadStartupData.h"
 
 #include "platform/network/ContentSecurityPolicyParsers.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-WorkerThreadStartupData::WorkerThreadStartupData(const KURL& scriptURL, const String& userAgent, const String& sourceCode, PassOwnPtr<Vector<char>> cachedMetaData, WorkerThreadStartMode startMode, const PassOwnPtr<Vector<CSPHeaderAndType>> contentSecurityPolicyHeaders, const SecurityOrigin* starterOrigin, PassOwnPtrWillBeRawPtr<WorkerClients> workerClients, V8CacheOptions v8CacheOptions)
+WorkerThreadStartupData::WorkerThreadStartupData(
+    const KURL& scriptURL,
+    const String& userAgent,
+    const String& sourceCode,
+    std::unique_ptr<Vector<char>> cachedMetaData,
+    WorkerThreadStartMode startMode,
+    const Vector<CSPHeaderAndType>* contentSecurityPolicyHeaders,
+    const String& referrerPolicy,
+    const SecurityOrigin* starterOrigin,
+    WorkerClients* workerClients,
+    WebAddressSpace addressSpace,
+    const Vector<String>* originTrialTokens,
+    std::unique_ptr<WorkerSettings> workerSettings,
+    WorkerV8Settings workerV8Settings)
     : m_scriptURL(scriptURL.copy())
     , m_userAgent(userAgent.isolatedCopy())
     , m_sourceCode(sourceCode.isolatedCopy())
-    , m_cachedMetaData(cachedMetaData)
+    , m_cachedMetaData(std::move(cachedMetaData))
     , m_startMode(startMode)
-    , m_starterOrigin(starterOrigin)
+    , m_referrerPolicy(referrerPolicy.isolatedCopy())
+    , m_starterOriginPrivilegeData(
+          starterOrigin ? starterOrigin->createPrivilegeData() : nullptr)
     , m_workerClients(workerClients)
-    , m_v8CacheOptions(v8CacheOptions)
+    , m_addressSpace(addressSpace)
+    , m_workerSettings(std::move(workerSettings))
+    , m_workerV8Settings(workerV8Settings)
 {
-    m_contentSecurityPolicyHeaders = adoptPtr(new Vector<CSPHeaderAndType>());
-    if (!contentSecurityPolicyHeaders)
-        return;
+    m_contentSecurityPolicyHeaders = WTF::makeUnique<Vector<CSPHeaderAndType>>();
+    if (contentSecurityPolicyHeaders) {
+        for (const auto& header : *contentSecurityPolicyHeaders) {
+            CSPHeaderAndType copiedHeader(header.first.isolatedCopy(), header.second);
+            m_contentSecurityPolicyHeaders->push_back(copiedHeader);
+        }
+    }
 
-    for (const auto& header : *contentSecurityPolicyHeaders) {
-        CSPHeaderAndType copiedHeader(header.first.isolatedCopy(), header.second);
-        m_contentSecurityPolicyHeaders->append(copiedHeader);
+    m_originTrialTokens = std::unique_ptr<Vector<String>>(new Vector<String>());
+    if (originTrialTokens) {
+        for (const String& token : *originTrialTokens)
+            m_originTrialTokens->push_back(token.isolatedCopy());
     }
 }
 
-WorkerThreadStartupData::~WorkerThreadStartupData()
-{
-}
+WorkerThreadStartupData::~WorkerThreadStartupData() { }
 
 } // namespace blink

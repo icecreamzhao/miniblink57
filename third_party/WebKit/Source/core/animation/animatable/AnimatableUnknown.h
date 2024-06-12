@@ -33,50 +33,48 @@
 
 #include "core/CSSValueKeywords.h"
 #include "core/animation/animatable/AnimatableValue.h"
-#include "core/css/CSSValuePool.h"
+#include "core/css/CSSIdentifierValue.h"
 
 namespace blink {
 
 class AnimatableUnknown final : public AnimatableValue {
 public:
-    virtual ~AnimatableUnknown() { }
+    ~AnimatableUnknown() override { }
 
-    static PassRefPtrWillBeRawPtr<AnimatableUnknown> create(PassRefPtrWillBeRawPtr<CSSValue> value)
+    static PassRefPtr<AnimatableUnknown> create(CSSValue* value)
     {
-        return adoptRefWillBeNoop(new AnimatableUnknown(value));
+        return adoptRef(new AnimatableUnknown(value));
     }
-    static PassRefPtrWillBeRawPtr<AnimatableUnknown> create(CSSValueID value)
+    static PassRefPtr<AnimatableUnknown> create(CSSValueID value)
     {
-        return adoptRefWillBeNoop(new AnimatableUnknown(cssValuePool().createIdentifierValue(value)));
+        return adoptRef(new AnimatableUnknown(CSSIdentifierValue::create(value)));
     }
 
-    PassRefPtrWillBeRawPtr<CSSValue> toCSSValue() const { return m_value; }
-    CSSValueID toCSSValueID() const { return toCSSPrimitiveValue(m_value.get())->getValueID(); }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
+    CSSValue* toCSSValue() const { return m_value; }
+    CSSValueID toCSSValueID() const
     {
-        visitor->trace(m_value);
-        AnimatableValue::trace(visitor);
+        return toCSSIdentifierValue(m_value.get())->getValueID();
     }
 
 protected:
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue* value, double fraction) const override
+    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue* value,
+        double fraction) const override
     {
         return defaultInterpolateTo(this, value, fraction);
     }
 
-    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override { return true; }
+    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
-    explicit AnimatableUnknown(PassRefPtrWillBeRawPtr<CSSValue> value)
+    explicit AnimatableUnknown(CSSValue* value)
         : m_value(value)
     {
-        ASSERT(m_value);
+        DCHECK(m_value);
     }
-    virtual AnimatableType type() const override { return TypeUnknown; }
-    virtual bool equalTo(const AnimatableValue*) const override;
+    AnimatableType type() const override { return TypeUnknown; }
+    bool equalTo(const AnimatableValue*) const override;
 
-    const RefPtrWillBeMember<CSSValue> m_value;
+    const Persistent<CSSValue> m_value;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableUnknown, isUnknown());
@@ -85,6 +83,13 @@ inline bool AnimatableUnknown::equalTo(const AnimatableValue* value) const
 {
     const AnimatableUnknown* unknown = toAnimatableUnknown(value);
     return m_value == unknown->m_value || m_value->equals(*unknown->m_value);
+}
+
+inline bool AnimatableUnknown::usesDefaultInterpolationWith(
+    const AnimatableValue* value) const
+{
+    const AnimatableUnknown& unknown = toAnimatableUnknown(*value);
+    return !m_value->equals(*unknown.m_value);
 }
 
 } // namespace blink

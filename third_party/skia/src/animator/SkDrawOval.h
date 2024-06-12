@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawOval_DEFINED
 #define SkDrawOval_DEFINED
 
@@ -14,7 +13,8 @@
 
 class SkOval : public SkDrawRect {
     DECLARE_MEMBER_INFO(Oval);
-    bool draw(SkAnimateMaker& ) override;
+    bool draw(SkAnimateMaker&) override;
+
 private:
     typedef SkDrawRect INHERITED;
 };

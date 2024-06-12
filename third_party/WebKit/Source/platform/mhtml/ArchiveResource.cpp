@@ -26,53 +26,34 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/mhtml/ArchiveResource.h"
 
 namespace blink {
 
-inline ArchiveResource::ArchiveResource(
-    PassRefPtr<SharedBuffer> data,
+ArchiveResource::ArchiveResource(PassRefPtr<SharedBuffer> data,
     const KURL& url,
     const String& contentID,
     const AtomicString& mimeType,
-    const AtomicString& textEncoding,
-    const String& frameName,
-    const ResourceResponse& response)
+    const AtomicString& textEncoding)
     : m_url(url)
     , m_contentID(contentID)
-    , m_response(response)
     , m_data(data)
     , m_mimeType(mimeType)
     , m_textEncoding(textEncoding)
-    , m_frameName(frameName)
 {
     ASSERT(m_data);
 }
 
-ArchiveResource::~ArchiveResource()
-{
-}
+ArchiveResource::~ArchiveResource() { }
 
-PassRefPtrWillBeRawPtr<ArchiveResource> ArchiveResource::create(
-    PassRefPtr<SharedBuffer> data,
+ArchiveResource* ArchiveResource::create(PassRefPtr<SharedBuffer> data,
     const KURL& url,
     const String& contentID,
     const AtomicString& mimeType,
-    const AtomicString& textEncoding,
-    const String& frameName,
-    const ResourceResponse& response)
+    const AtomicString& textEncoding)
 {
-    if (!data)
-        return nullptr;
-    if (response.isNull()) {
-        const ResourceResponse& resourceResponse = ResourceResponse(
-            url, mimeType, data->size(), textEncoding, String());
-        return adoptRefWillBeNoop(new ArchiveResource(
-            data, url, contentID, mimeType, textEncoding, frameName, resourceResponse));
-    }
-    return adoptRefWillBeNoop(new ArchiveResource(
-        data, url, contentID, mimeType, textEncoding, frameName, response));
+    return new ArchiveResource(std::move(data), url, contentID, mimeType,
+        textEncoding);
 }
 
-}
+} // namespace blink

@@ -10,7 +10,8 @@
 
 #include "SkSurfaceProps.h"
 
-static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* props) {
+static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* props)
+{
     if (props) {
         return *props;
     } else {
@@ -18,7 +19,8 @@ static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* p
     }
 }
 
-static inline SkPixelGeometry SkSurfacePropsDefaultPixelGeometry() {
+static inline SkPixelGeometry SkSurfacePropsDefaultPixelGeometry()
+{
     return SkSurfaceProps(SkSurfaceProps::kLegacyFontHost_InitType).pixelGeometry();
 }
 

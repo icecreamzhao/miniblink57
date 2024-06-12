@@ -59,9 +59,9 @@
 // is why EXPORT_TEMPLATE_STYLE_3 exists.)
 
 #define EXPORT_TEMPLATE_DECLARE(export) \
-  EXPORT_TEMPLATE_INVOKE(DECLARE, EXPORT_TEMPLATE_STYLE(export, ), export)
+    EXPORT_TEMPLATE_INVOKE(DECLARE, EXPORT_TEMPLATE_STYLE(export, ), export)
 #define EXPORT_TEMPLATE_DEFINE(export) \
-  EXPORT_TEMPLATE_INVOKE(DEFINE, EXPORT_TEMPLATE_STYLE(export, ), export)
+    EXPORT_TEMPLATE_INVOKE(DEFINE, EXPORT_TEMPLATE_STYLE(export, ), export)
 
 // INVOKE is an internal helper macro to perform parameter replacements
 // and token pasting to chain invoke another macro.  E.g.,
@@ -70,9 +70,9 @@
 //     EXPORT_TEMPLATE_DECLARE_DEFAULT(FOO_EXPORT, )
 // (but with FOO_EXPORT expanded too).
 #define EXPORT_TEMPLATE_INVOKE(which, style, export) \
-  EXPORT_TEMPLATE_INVOKE_2(which, style, export)
+    EXPORT_TEMPLATE_INVOKE_2(which, style, export)
 #define EXPORT_TEMPLATE_INVOKE_2(which, style, export) \
-  EXPORT_TEMPLATE_##which##_##style(export, )
+    EXPORT_TEMPLATE_##which##_##style(export, )
 
 // Default style is to apply the FOO_EXPORT macro at declaration sites.
 #define EXPORT_TEMPLATE_DECLARE_DEFAULT(export, _) export
@@ -101,8 +101,8 @@
 //     DEFAULT
 #define EXPORT_TEMPLATE_STYLE(export, _) EXPORT_TEMPLATE_STYLE_2(export, )
 #define EXPORT_TEMPLATE_STYLE_2(export, _) \
-  EXPORT_TEMPLATE_STYLE_3(                 \
-      EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA##export)
+    EXPORT_TEMPLATE_STYLE_3(               \
+        EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA##export)
 #define EXPORT_TEMPLATE_STYLE_3(style) style
 
 // Internal helper macros for EXPORT_TEMPLATE_STYLE.
@@ -114,9 +114,9 @@
 // 128-bit string, encoded in Base64) in the macro name.
 #define EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA DEFAULT
 #define EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__attribute__(...) \
-  DEFAULT
+    DEFAULT
 #define EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__declspec(arg) \
-  EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_##arg
+    EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_##arg
 
 // Internal helper macros for EXPORT_TEMPLATE_STYLE.
 #define EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllexport MSVC_HACK
@@ -144,10 +144,10 @@
 //     static_assert(true, "__declspec(dllimport)");
 //
 // When they're not working correctly, a syntax error should occur instead.
-#define EXPORT_TEMPLATE_TEST(want, export)                                 \
-  static_assert(EXPORT_TEMPLATE_INVOKE(                                    \
-                    TEST_##want, EXPORT_TEMPLATE_STYLE(export, ), export), \
-                #export)
+#define EXPORT_TEMPLATE_TEST(want, export)                                   \
+    static_assert(EXPORT_TEMPLATE_INVOKE(                                    \
+                      TEST_##want, EXPORT_TEMPLATE_STYLE(export, ), export), \
+        #export)
 #define EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT(...) true
 #define EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK(...) true
 
@@ -160,4 +160,4 @@ EXPORT_TEMPLATE_TEST(DEFAULT, __declspec(dllimport));
 #undef EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT
 #undef EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK
 
-#endif  // V8_BASE_EXPORT_TEMPLATE_H_
+#endif // V8_BASE_EXPORT_TEMPLATE_H_

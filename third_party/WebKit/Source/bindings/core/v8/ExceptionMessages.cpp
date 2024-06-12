@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/ExceptionMessages.h"
 
 #include "platform/Decimal.h"
@@ -36,67 +35,86 @@
 
 namespace blink {
 
-String ExceptionMessages::failedToConstruct(const char* type, const String& detail)
+String ExceptionMessages::failedToConstruct(const char* type,
+    const String& detail)
 {
     return "Failed to construct '" + String(type) + (!detail.isEmpty() ? String("': " + detail) : String("'"));
 }
 
-String ExceptionMessages::failedToEnumerate(const char* type, const String& detail)
+String ExceptionMessages::failedToEnumerate(const char* type,
+    const String& detail)
 {
     return "Failed to enumerate the properties of '" + String(type) + (!detail.isEmpty() ? String("': " + detail) : String("'"));
 }
 
-String ExceptionMessages::failedToExecute(const char* method, const char* type, const String& detail)
+String ExceptionMessages::failedToExecute(const char* method,
+    const char* type,
+    const String& detail)
 {
     return "Failed to execute '" + String(method) + "' on '" + String(type) + (!detail.isEmpty() ? String("': " + detail) : String("'"));
 }
 
-String ExceptionMessages::failedToGet(const char* property, const char* type, const String& detail)
+String ExceptionMessages::failedToGet(const char* property,
+    const char* type,
+    const String& detail)
 {
     return "Failed to read the '" + String(property) + "' property from '" + String(type) + "': " + detail;
 }
 
-String ExceptionMessages::failedToSet(const char* property, const char* type, const String& detail)
+String ExceptionMessages::failedToSet(const char* property,
+    const char* type,
+    const String& detail)
 {
     return "Failed to set the '" + String(property) + "' property on '" + String(type) + "': " + detail;
 }
 
-String ExceptionMessages::failedToDelete(const char* property, const char* type, const String& detail)
+String ExceptionMessages::failedToDelete(const char* property,
+    const char* type,
+    const String& detail)
 {
     return "Failed to delete the '" + String(property) + "' property from '" + String(type) + "': " + detail;
 }
 
-String ExceptionMessages::failedToGetIndexed(const char* type, const String& detail)
+String ExceptionMessages::failedToGetIndexed(const char* type,
+    const String& detail)
 {
     return "Failed to read an indexed property from '" + String(type) + "': " + detail;
 }
 
-String ExceptionMessages::failedToSetIndexed(const char* type, const String& detail)
+String ExceptionMessages::failedToSetIndexed(const char* type,
+    const String& detail)
 {
     return "Failed to set an indexed property on '" + String(type) + "': " + detail;
 }
 
-String ExceptionMessages::failedToDeleteIndexed(const char* type, const String& detail)
+String ExceptionMessages::failedToDeleteIndexed(const char* type,
+    const String& detail)
 {
     return "Failed to delete an indexed property from '" + String(type) + "': " + detail;
 }
 
 String ExceptionMessages::constructorNotCallableAsFunction(const char* type)
 {
-    return failedToConstruct(type, "Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
+    return failedToConstruct(type,
+        "Please use the 'new' operator, this DOM object "
+        "constructor cannot be called as a function.");
 }
 
-String ExceptionMessages::incorrectPropertyType(const String& property, const String& detail)
+String ExceptionMessages::incorrectPropertyType(const String& property,
+    const String& detail)
 {
     return "The '" + property + "' property " + detail;
 }
 
-String ExceptionMessages::invalidArity(const char* expected, unsigned provided)
+String ExceptionMessages::invalidArity(const char* expected,
+    unsigned provided)
 {
     return "Valid arities are: " + String(expected) + ", but " + String::number(provided) + " arguments provided.";
 }
 
-String ExceptionMessages::argumentNullOrIncorrectType(int argumentIndex, const String& expectedType)
+String ExceptionMessages::argumentNullOrIncorrectType(
+    int argumentIndex,
+    const String& expectedType)
 {
     return "The " + ordinalNumber(argumentIndex) + " argument provided is either null, or an invalid " + expectedType + " object.";
 }
@@ -116,21 +134,25 @@ String ExceptionMessages::notASequenceTypeProperty(const String& propertyName)
     return "'" + propertyName + "' property is neither an array, nor does it have indexed properties.";
 }
 
-String ExceptionMessages::notEnoughArguments(unsigned expected, unsigned provided)
+String ExceptionMessages::notEnoughArguments(unsigned expected,
+    unsigned provided)
 {
     return String::number(expected) + " argument" + (expected > 1 ? "s" : "") + " required, but only " + String::number(provided) + " present.";
 }
 
 String ExceptionMessages::notAFiniteNumber(double value, const char* name)
 {
-    ASSERT(!std::isfinite(value));
-    return String::format("The %s is %s.", name, std::isinf(value) ? "infinite" : "not a number");
+    ASSERT(!std_isfinite(value));
+    return String::format("The %s is %s.", name,
+        std_isinf(value) ? "infinite" : "not a number");
 }
 
-String ExceptionMessages::notAFiniteNumber(const Decimal& value, const char* name)
+String ExceptionMessages::notAFiniteNumber(const Decimal& value,
+    const char* name)
 {
     ASSERT(!value.isFinite());
-    return String::format("The %s is %s.", name, value.isInfinity() ? "infinite" : "not a number");
+    return String::format("The %s is %s.", name,
+        value.isInfinity() ? "infinite" : "not a number");
 }
 
 String ExceptionMessages::ordinalNumber(int number)
@@ -156,7 +178,9 @@ String ExceptionMessages::ordinalNumber(int number)
 String ExceptionMessages::readOnly(const char* detail)
 {
     DEFINE_STATIC_LOCAL(String, readOnly, ("This object is read-only."));
-    return detail ? String::format("This object is read-only, because %s.", detail) : readOnly;
+    return detail
+        ? String::format("This object is read-only, because %s.", detail)
+        : readOnly;
 }
 
 template <>

@@ -28,35 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebOptionElement.h"
 
 #include "core/HTMLNames.h"
 #include "core/html/HTMLOptionElement.h"
-#include "core/html/HTMLSelectElement.h"
 #include "public/platform/WebString.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
-
-void WebOptionElement::setValue(const WebString& newValue)
-{
-    unwrap<HTMLOptionElement>()->setValue(newValue);
-}
 
 WebString WebOptionElement::value() const
 {
     return constUnwrap<HTMLOptionElement>()->value();
 }
 
-int WebOptionElement::index() const
-{
-    return constUnwrap<HTMLOptionElement>()->index();
-}
-
 WebString WebOptionElement::text() const
 {
-    return constUnwrap<HTMLOptionElement>()->text();
+    return constUnwrap<HTMLOptionElement>()->displayLabel();
 }
 
 WebString WebOptionElement::label() const
@@ -64,23 +52,21 @@ WebString WebOptionElement::label() const
     return constUnwrap<HTMLOptionElement>()->label();
 }
 
-bool WebOptionElement::isEnabled() const
-{
-    return !(constUnwrap<HTMLOptionElement>()->isDisabledFormControl());
-}
-
-WebOptionElement::WebOptionElement(const PassRefPtrWillBeRawPtr<HTMLOptionElement>& elem)
+WebOptionElement::WebOptionElement(HTMLOptionElement* elem)
     : WebElement(elem)
 {
 }
 
-WebOptionElement& WebOptionElement::operator=(const PassRefPtrWillBeRawPtr<HTMLOptionElement>& elem)
+DEFINE_WEB_NODE_TYPE_CASTS(WebOptionElement,
+    isHTMLOptionElement(constUnwrap<Node>()));
+
+WebOptionElement& WebOptionElement::operator=(HTMLOptionElement* elem)
 {
     m_private = elem;
     return *this;
 }
 
-WebOptionElement::operator PassRefPtrWillBeRawPtr<HTMLOptionElement>() const
+WebOptionElement::operator HTMLOptionElement*() const
 {
     return toHTMLOptionElement(m_private.get());
 }

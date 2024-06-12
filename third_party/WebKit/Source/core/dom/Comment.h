@@ -29,18 +29,19 @@ namespace blink {
 
 class Comment final : public CharacterData {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<Comment> create(Document&, const String&);
+    static Comment* create(Document&, const String&);
 
 private:
     Comment(Document&, const String&);
 
     String nodeName() const override;
-    NodeType nodeType() const override;
-    PassRefPtrWillBeRawPtr<Node> cloneNode(bool deep = true) override;
+    NodeType getNodeType() const override;
+    Node* cloneNode(bool deep) override;
 };
 
-DEFINE_NODE_TYPE_CASTS(Comment, nodeType() == Node::COMMENT_NODE);
+DEFINE_NODE_TYPE_CASTS(Comment, getNodeType() == Node::kCommentNode);
 
 } // namespace blink
 

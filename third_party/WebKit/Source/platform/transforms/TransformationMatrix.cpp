@@ -25,8 +25,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/transforms/TransformationMatrix.h"
+#if HAVE(MIPS_MSA_INTRINSICS)
+#include "platform/cpu/mips/CommonMacrosMSA.h"
+#endif
 
 #include "platform/geometry/FloatBox.h"
 #include "platform/geometry/FloatQuad.h"
@@ -34,9 +36,14 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
 #include "platform/transforms/AffineTransform.h"
+#include "platform/transforms/Rotation.h"
 
 #include "wtf/Assertions.h"
 #include "wtf/MathExtras.h"
+#include "wtf/text/WTFString.h"
+
+#include <cmath>
+#include <cstdlib>
 
 #if CPU(X86_64)
 #include <emmintrin.h>
@@ -47,24 +54,29 @@ namespace blink {
 //
 // Supporting Math Functions
 //
-// This is a set of function from various places (attributed inline) to do things like
-// inversion and decomposition of a 4x4 matrix. They are used throughout the code
+// This is a set of function from various places (attributed inline) to do
+// things like inversion and decomposition of a 4x4 matrix. They are used
+// throughout the code
 //
 
 //
-// Adapted from Matrix Inversion by Richard Carling, Graphics Gems <http://tog.acm.org/GraphicsGems/index.html>.
+// Adapted from Matrix Inversion by Richard Carling, Graphics Gems
+// <http://tog.acm.org/GraphicsGems/index.html>.
 
-// EULA: The Graphics Gems code is copyright-protected. In other words, you cannot claim the text of the code
-// as your own and resell it. Using the code is permitted in any program, product, or library, non-commercial
-// or commercial. Giving credit is not required, though is a nice gesture. The code comes as-is, and if there
-// are any flaws or problems with any Gems code, nobody involved with Gems - authors, editors, publishers, or
-// webmasters - are to be held responsible. Basically, don't be a jerk, and remember that anything free comes
-// with no guarantee.
+// EULA: The Graphics Gems code is copyright-protected. In other words, you
+// cannot claim the text of the code as your own and resell it. Using the code
+// is permitted in any program, product, or library, non-commercial or
+// commercial. Giving credit is not required, though is a nice gesture. The code
+// comes as-is, and if there are any flaws or problems with any Gems code,
+// nobody involved with Gems - authors, editors, publishers, or webmasters - are
+// to be held responsible. Basically, don't be a jerk, and remember that
+// anything free comes with no guarantee.
 
 // A clarification about the storage of matrix elements
 //
-// This class uses a 2 dimensional array internally to store the elements of the matrix.  The first index into
-// the array refers to the column that the element lies in; the second index refers to the row.
+// This class uses a 2 dimensional array internally to store the elements of the
+// matrix.  The first index into the array refers to the column that the element
+// lies in; the second index refers to the row.
 //
 // In other words, this is the layout of the matrix:
 //
@@ -76,7 +88,7 @@ namespace blink {
 typedef double Vector4[4];
 typedef double Vector3[3];
 
-const double SMALL_NUMBER = 1.e-8;
+const double SmallNumber = 1.e-8;
 
 // inverse(original_matrix, inverse_matrix)
 //
@@ -104,11 +116,17 @@ static double determinant2x2(double a, double b, double c, double d)
 //      | a2,  b2,  c2 |
 //      | a3,  b3,  c3 |
 
-static double determinant3x3(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3)
+static double determinant3x3(double a1,
+    double a2,
+    double a3,
+    double b1,
+    double b2,
+    double b3,
+    double c1,
+    double c2,
+    double c3)
 {
-    return a1 * determinant2x2(b2, b3, c2, c3)
-         - b1 * determinant2x2(a2, a3, c2, c3)
-         + c1 * determinant2x2(a2, a3, b2, b3);
+    return a1 * determinant2x2(b2, b3, c2, c3) - b1 * determinant2x2(a2, a3, c2, c3) + c1 * determinant2x2(a2, a3, b2, b3);
 }
 
 //  double = determinant4x4(matrix)
@@ -140,12 +158,10 @@ static double determinant4x4(const TransformationMatrix::Matrix4& m)
     double c4 = m[3][2];
     double d4 = m[3][3];
 
-    return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4)
-         - b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4)
-         + c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4)
-         - d1 * determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4) - b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4) + c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4) - d1 * determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 }
 
+#if !CPU(ARM64)
 // adjoint( original_matrix, inverse_matrix )
 //
 //   calculate the adjoint of a 4x4 matrix
@@ -162,7 +178,8 @@ static double determinant4x4(const TransformationMatrix::Matrix4& m)
 //  The matrix B = (b  ) is the adjoint of A
 //                   ij
 
-static inline void adjoint(const TransformationMatrix::Matrix4& matrix, TransformationMatrix::Matrix4& result)
+static inline void adjoint(const TransformationMatrix::Matrix4& matrix,
+    TransformationMatrix::Matrix4& result)
 {
     // Assign to individual variable names to aid
     // selecting correct values
@@ -187,36 +204,38 @@ static inline void adjoint(const TransformationMatrix::Matrix4& matrix, Transfor
     double d4 = matrix[3][3];
 
     // Row column labeling reversed since we transpose rows & columns
-    result[0][0]  =   determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    result[1][0]  = - determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    result[2][0]  =   determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    result[3][0]  = - determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
+    result[0][0] = determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
+    result[1][0] = -determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
+    result[2][0] = determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4);
+    result[3][0] = -determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 
-    result[0][1]  = - determinant3x3(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    result[1][1]  =   determinant3x3(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    result[2][1]  = - determinant3x3(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    result[3][1]  =   determinant3x3(a1, a3, a4, b1, b3, b4, c1, c3, c4);
+    result[0][1] = -determinant3x3(b1, b3, b4, c1, c3, c4, d1, d3, d4);
+    result[1][1] = determinant3x3(a1, a3, a4, c1, c3, c4, d1, d3, d4);
+    result[2][1] = -determinant3x3(a1, a3, a4, b1, b3, b4, d1, d3, d4);
+    result[3][1] = determinant3x3(a1, a3, a4, b1, b3, b4, c1, c3, c4);
 
-    result[0][2]  =   determinant3x3(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    result[1][2]  = - determinant3x3(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    result[2][2]  =   determinant3x3(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    result[3][2]  = - determinant3x3(a1, a2, a4, b1, b2, b4, c1, c2, c4);
+    result[0][2] = determinant3x3(b1, b2, b4, c1, c2, c4, d1, d2, d4);
+    result[1][2] = -determinant3x3(a1, a2, a4, c1, c2, c4, d1, d2, d4);
+    result[2][2] = determinant3x3(a1, a2, a4, b1, b2, b4, d1, d2, d4);
+    result[3][2] = -determinant3x3(a1, a2, a4, b1, b2, b4, c1, c2, c4);
 
-    result[0][3]  = - determinant3x3(b1, b2, b3, c1, c2, c3, d1, d2, d3);
-    result[1][3]  =   determinant3x3(a1, a2, a3, c1, c2, c3, d1, d2, d3);
-    result[2][3]  = - determinant3x3(a1, a2, a3, b1, b2, b3, d1, d2, d3);
-    result[3][3]  =   determinant3x3(a1, a2, a3, b1, b2, b3, c1, c2, c3);
+    result[0][3] = -determinant3x3(b1, b2, b3, c1, c2, c3, d1, d2, d3);
+    result[1][3] = determinant3x3(a1, a2, a3, c1, c2, c3, d1, d2, d3);
+    result[2][3] = -determinant3x3(a1, a2, a3, b1, b2, b3, d1, d2, d3);
+    result[3][3] = determinant3x3(a1, a2, a3, b1, b2, b3, c1, c2, c3);
 }
+#endif
 
 // Returns false if the matrix is not invertible
-static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationMatrix::Matrix4& result)
+static bool inverse(const TransformationMatrix::Matrix4& matrix,
+    TransformationMatrix::Matrix4& result)
 {
     // Calculate the 4x4 determinant
     // If the determinant is zero,
     // then the inverse matrix is not unique.
     double det = determinant4x4(matrix);
 
-    if (fabs(det) < SMALL_NUMBER)
+    if (fabs(det) < SmallNumber)
         return false;
 
 #if CPU(ARM64)
@@ -328,19 +347,162 @@ static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationM
         "fmul v26.2d, v26.2d, v30.d[0] \n\t"
         "fmul v27.2d, v27.2d, v30.d[0] \n\t"
         "st1 {v24.2d - v27.2d}, [%[pr]] \n\t"
-        : [mat]"+r"(mat), [pr]"+r"(pr)
-        : [rdet]"r"(rdet)
-        : "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v16", "v17", "v18",
-            "v19", "v20", "v21", "v22", "v23", "24", "25", "v26", "v27", "v28", "v29", "v30"
-    );
+        : [mat] "+r"(mat), [pr] "+r"(pr)
+        : [rdet] "r"(rdet)
+        : "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v16", "v17",
+        "v18", "v19", "v20", "v21", "v22", "v23", "24", "25", "v26", "v27",
+        "v28", "v29", "v30");
+#elif HAVE(MIPS_MSA_INTRINSICS)
+    const double rDet = 1 / det;
+    const double* mat = &(matrix[0][0]);
+    v2f64 mat0, mat1, mat2, mat3, mat4, mat5, mat6, mat7;
+    v2f64 rev2, rev3, rev4, rev5, rev6, rev7;
+    v2f64 tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+    v2f64 det0, det1, det2, tmp8, tmp9, tmp10, tmp11;
+    const v2f64 rdet = COPY_DOUBLE_TO_VECTOR(rDet);
+    // mat0 mat1 --> m00 m01 m02 m03
+    // mat2 mat3 --> m10 m11 m12 m13
+    // mat4 mat5 --> m20 m21 m22 m23
+    // mat6 mat7 --> m30 m31 m32 m33
+    LD_DP8(mat, 2, mat0, mat1, mat2, mat3, mat4, mat5, mat6, mat7);
+
+    // Right half
+    rev3 = SLDI_D(mat3, mat3, 8); // m13 m12
+    rev5 = SLDI_D(mat5, mat5, 8); // m23 m22
+    rev7 = SLDI_D(mat7, mat7, 8); // m33 m32
+
+    // 2*2 Determinants
+    // for A00 & A01
+    tmp0 = mat5 * rev7;
+    tmp1 = mat3 * rev7;
+    tmp2 = mat3 * rev5;
+    // for A10 & A11
+    tmp3 = mat1 * rev7;
+    tmp4 = mat1 * rev5;
+    // for A20 & A21
+    tmp5 = mat1 * rev3;
+    // for A30 & A31
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp1, (v2i64)tmp0);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp1, (v2i64)tmp0);
+    det0 = tmp6 - tmp7;
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp3, (v2i64)tmp2);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp3, (v2i64)tmp2);
+    det1 = tmp6 - tmp7;
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp5, (v2i64)tmp4);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp5, (v2i64)tmp4);
+    det2 = tmp6 - tmp7;
+
+    // Co-factors
+    tmp0 = mat0 * (v2f64)__msa_splati_d((v2i64)det0, 0);
+    tmp1 = mat0 * (v2f64)__msa_splati_d((v2i64)det0, 1);
+    tmp2 = mat0 * (v2f64)__msa_splati_d((v2i64)det1, 0);
+    tmp3 = mat2 * (v2f64)__msa_splati_d((v2i64)det0, 0);
+    tmp4 = mat2 * (v2f64)__msa_splati_d((v2i64)det1, 1);
+    tmp5 = mat2 * (v2f64)__msa_splati_d((v2i64)det2, 0);
+    tmp6 = mat4 * (v2f64)__msa_splati_d((v2i64)det0, 1);
+    tmp7 = mat4 * (v2f64)__msa_splati_d((v2i64)det1, 1);
+    tmp8 = mat4 * (v2f64)__msa_splati_d((v2i64)det2, 1);
+    tmp9 = mat6 * (v2f64)__msa_splati_d((v2i64)det1, 0);
+    tmp10 = mat6 * (v2f64)__msa_splati_d((v2i64)det2, 0);
+    tmp11 = mat6 * (v2f64)__msa_splati_d((v2i64)det2, 1);
+
+    tmp0 -= tmp7;
+    tmp1 -= tmp4;
+    tmp2 -= tmp5;
+    tmp3 -= tmp6;
+    tmp0 += tmp10;
+    tmp1 += tmp11;
+    tmp2 += tmp8;
+    tmp3 += tmp9;
+
+    // Multiply with 1/det
+    tmp0 *= rdet;
+    tmp1 *= rdet;
+    tmp2 *= rdet;
+    tmp3 *= rdet;
+
+    // Inverse: Upper half
+    result[0][0] = tmp3[1];
+    result[0][1] = -tmp0[1];
+    result[0][2] = tmp1[1];
+    result[0][3] = -tmp2[1];
+    result[1][0] = -tmp3[0];
+    result[1][1] = tmp0[0];
+    result[1][2] = -tmp1[0];
+    result[1][3] = tmp2[0];
+    // Left half
+    rev2 = SLDI_D(mat2, mat2, 8); // m13 m12
+    rev4 = SLDI_D(mat4, mat4, 8); // m23 m22
+    rev6 = SLDI_D(mat6, mat6, 8); // m33 m32
+
+    // 2*2 Determinants
+    // for A00 & A01
+    tmp0 = mat4 * rev6;
+    tmp1 = mat2 * rev6;
+    tmp2 = mat2 * rev4;
+    // for A10 & A11
+    tmp3 = mat0 * rev6;
+    tmp4 = mat0 * rev4;
+    // for A20 & A21
+    tmp5 = mat0 * rev2;
+    // for A30 & A31
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp1, (v2i64)tmp0);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp1, (v2i64)tmp0);
+    det0 = tmp6 - tmp7;
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp3, (v2i64)tmp2);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp3, (v2i64)tmp2);
+    det1 = tmp6 - tmp7;
+    tmp6 = (v2f64)__msa_ilvr_d((v2i64)tmp5, (v2i64)tmp4);
+    tmp7 = (v2f64)__msa_ilvl_d((v2i64)tmp5, (v2i64)tmp4);
+    det2 = tmp6 - tmp7;
+
+    // Co-factors
+    tmp0 = mat3 * (v2f64)__msa_splati_d((v2i64)det0, 0);
+    tmp1 = mat1 * (v2f64)__msa_splati_d((v2i64)det0, 1);
+    tmp2 = mat1 * (v2f64)__msa_splati_d((v2i64)det0, 0);
+    tmp3 = mat1 * (v2f64)__msa_splati_d((v2i64)det1, 0);
+    tmp4 = mat3 * (v2f64)__msa_splati_d((v2i64)det1, 1);
+    tmp5 = mat3 * (v2f64)__msa_splati_d((v2i64)det2, 0);
+    tmp6 = mat5 * (v2f64)__msa_splati_d((v2i64)det0, 1);
+    tmp7 = mat5 * (v2f64)__msa_splati_d((v2i64)det1, 1);
+    tmp8 = mat5 * (v2f64)__msa_splati_d((v2i64)det2, 1);
+    tmp9 = mat7 * (v2f64)__msa_splati_d((v2i64)det1, 0);
+    tmp10 = mat7 * (v2f64)__msa_splati_d((v2i64)det2, 0);
+    tmp11 = mat7 * (v2f64)__msa_splati_d((v2i64)det2, 1);
+    tmp0 -= tmp6;
+    tmp1 -= tmp4;
+    tmp2 -= tmp7;
+    tmp3 -= tmp5;
+    tmp0 += tmp9;
+    tmp1 += tmp11;
+    tmp2 += tmp10;
+    tmp3 += tmp8;
+
+    // Multiply with 1/det
+    tmp0 *= rdet;
+    tmp1 *= rdet;
+    tmp2 *= rdet;
+    tmp3 *= rdet;
+
+    // Inverse: Lower half
+    result[2][0] = tmp0[1];
+    result[2][1] = -tmp2[1];
+    result[2][2] = tmp1[1];
+    result[2][3] = -tmp3[1];
+    result[3][0] = -tmp0[0];
+    result[3][1] = tmp2[0];
+    result[3][2] = -tmp1[0];
+    result[3][3] = tmp3[0];
 #else
     // Calculate the adjoint matrix
     adjoint(matrix, result);
 
+    double rdet = 1 / det;
+
     // Scale the adjoint matrix to get the inverse
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            result[i][j] = result[i][j] / det;
+            result[i][j] = result[i][j] * rdet;
 #endif
     return true;
 }
@@ -351,7 +513,8 @@ static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationM
 // From Graphics Gems: unmatrix.c
 
 // Transpose rotation portion of matrix a, return b
-static void transposeMatrix4(const TransformationMatrix::Matrix4& a, TransformationMatrix::Matrix4& b)
+static void transposeMatrix4(const TransformationMatrix::Matrix4& a,
+    TransformationMatrix::Matrix4& b)
 {
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
@@ -359,16 +522,14 @@ static void transposeMatrix4(const TransformationMatrix::Matrix4& a, Transformat
 }
 
 // Multiply a homogeneous point by a matrix and return the transformed point
-static void v4MulPointByMatrix(const Vector4 p, const TransformationMatrix::Matrix4& m, Vector4 result)
+static void v4MulPointByMatrix(const Vector4 p,
+    const TransformationMatrix::Matrix4& m,
+    Vector4 result)
 {
-    result[0] = (p[0] * m[0][0]) + (p[1] * m[1][0]) +
-                (p[2] * m[2][0]) + (p[3] * m[3][0]);
-    result[1] = (p[0] * m[0][1]) + (p[1] * m[1][1]) +
-                (p[2] * m[2][1]) + (p[3] * m[3][1]);
-    result[2] = (p[0] * m[0][2]) + (p[1] * m[1][2]) +
-                (p[2] * m[2][2]) + (p[3] * m[3][2]);
-    result[3] = (p[0] * m[0][3]) + (p[1] * m[1][3]) +
-                (p[2] * m[2][3]) + (p[3] * m[3][3]);
+    result[0] = (p[0] * m[0][0]) + (p[1] * m[1][0]) + (p[2] * m[2][0]) + (p[3] * m[3][0]);
+    result[1] = (p[0] * m[0][1]) + (p[1] * m[1][1]) + (p[2] * m[2][1]) + (p[3] * m[3][1]);
+    result[2] = (p[0] * m[0][2]) + (p[1] * m[1][2]) + (p[2] * m[2][2]) + (p[3] * m[3][2]);
+    result[3] = (p[0] * m[0][3]) + (p[1] * m[1][3]) + (p[2] * m[2][3]) + (p[3] * m[3][3]);
 }
 
 static double v3Length(Vector3 a)
@@ -394,7 +555,11 @@ static double v3Dot(const Vector3 a, const Vector3 b)
 
 // Make a linear combination of two vectors and return the result.
 // result = (a * ascl) + (b * bscl)
-static void v3Combine(const Vector3 a, const Vector3 b, Vector3 result, double ascl, double bscl)
+static void v3Combine(const Vector3 a,
+    const Vector3 b,
+    Vector3 result,
+    double ascl,
+    double bscl)
 {
     result[0] = (ascl * a[0]) + (bscl * b[0]);
     result[1] = (ascl * a[1]) + (bscl * b[1]);
@@ -409,7 +574,8 @@ static void v3Cross(const Vector3 a, const Vector3 b, Vector3 result)
     result[2] = (a[0] * b[1]) - (a[1] * b[0]);
 }
 
-static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMatrix::DecomposedType& result)
+static bool decompose(const TransformationMatrix::Matrix4& mat,
+    TransformationMatrix::DecomposedType& result)
 {
     TransformationMatrix::Matrix4 localMatrix;
     memcpy(localMatrix, mat, sizeof(TransformationMatrix::Matrix4));
@@ -446,13 +612,16 @@ static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMa
         // Solve the equation by inverting perspectiveMatrix and multiplying
         // rightHandSide by the inverse.  (This is the easiest way, not
         // necessarily the best.)
-        TransformationMatrix::Matrix4 inversePerspectiveMatrix, transposedInversePerspectiveMatrix;
+        TransformationMatrix::Matrix4 inversePerspectiveMatrix,
+            transposedInversePerspectiveMatrix;
         if (!inverse(perspectiveMatrix, inversePerspectiveMatrix))
             return false;
-        transposeMatrix4(inversePerspectiveMatrix, transposedInversePerspectiveMatrix);
+        transposeMatrix4(inversePerspectiveMatrix,
+            transposedInversePerspectiveMatrix);
 
         Vector4 perspectivePoint;
-        v4MulPointByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspectivePoint);
+        v4MulPointByMatrix(rightHandSide, transposedInversePerspectiveMatrix,
+            perspectivePoint);
 
         result.perspectiveX = perspectivePoint[0];
         result.perspectiveY = perspectivePoint[1];
@@ -516,7 +685,6 @@ static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMa
     // is -1, then negate the matrix and the scaling factors.
     v3Cross(row[1], row[2], pdum3);
     if (v3Dot(row[0], pdum3) < 0) {
-
         result.scaleX *= -1;
         result.scaleY *= -1;
         result.scaleZ *= -1;
@@ -592,13 +760,18 @@ static void slerp(double qa[4], const double qb[4], double t)
     double cx, cy, cz, cw;
     double product;
 
-    ax = qa[0]; ay = qa[1]; az = qa[2]; aw = qa[3];
-    bx = qb[0]; by = qb[1]; bz = qb[2]; bw = qb[3];
+    ax = qa[0];
+    ay = qa[1];
+    az = qa[2];
+    aw = qa[3];
+    bx = qb[0];
+    by = qb[1];
+    bz = qb[2];
+    bw = qb[3];
 
     product = ax * bx + ay * by + az * bz + aw * bw;
 
-    // Clamp product to -1.0 <= product <= 1.0.
-    product = std::min(std::max(product, -1.0), 1.0);
+    product = clampTo(product, -1.0, 1.0);
 
     const double epsilon = 1e-5;
     if (std::abs(product - 1.0) < epsilon) {
@@ -618,13 +791,17 @@ static void slerp(double qa[4], const double qb[4], double t)
     cz = az * scale1 + bz * scale2;
     cw = aw * scale1 + bw * scale2;
 
-    qa[0] = cx; qa[1] = cy; qa[2] = cz; qa[3] = cw;
+    qa[0] = cx;
+    qa[1] = cy;
+    qa[2] = cz;
+    qa[3] = cw;
 }
 
 // End of Supporting Math Functions
 
 TransformationMatrix::TransformationMatrix(const AffineTransform& t)
 {
+    checkAlignment();
     setMatrix(t.a(), t.b(), t.c(), t.d(), t.e(), t.f());
 }
 
@@ -633,7 +810,8 @@ TransformationMatrix& TransformationMatrix::scale(double s)
     return scaleNonUniform(s, s);
 }
 
-FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped) const
+FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p,
+    bool* clamped) const
 {
     // This is basically raytracing. We have a point in the destination
     // plane with z=0, and we cast a ray parallel to the z-axis from that
@@ -651,8 +829,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
         *clamped = false;
 
     if (m33() == 0) {
-        // In this case, the projection plane is parallel to the ray we are trying to
-        // trace, and there is no well-defined value for the projection.
+        // In this case, the projection plane is parallel to the ray we are trying
+        // to trace, and there is no well-defined value for the projection.
         return FloatPoint();
     }
 
@@ -666,8 +844,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
 
     double w = x * m14() + y * m24() + z * m34() + m44();
     if (w <= 0) {
-        // Using int max causes overflow when other code uses the projected point. To
-        // represent infinity yet reduce the risk of overflow, we use a large but
+        // Using int max causes overflow when other code uses the projected point.
+        // To represent infinity yet reduce the risk of overflow, we use a large but
         // not-too-large number here when clamping.
         const int largeNumber = 100000000 / kFixedPointDenominator;
         outX = copysign(largeNumber, outX);
@@ -682,7 +860,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
     return FloatPoint(static_cast<float>(outX), static_cast<float>(outY));
 }
 
-FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) const
+FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q,
+    bool* clamped) const
 {
     FloatQuad projectedQuad;
 
@@ -699,7 +878,8 @@ FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) c
     if (clamped)
         *clamped = clamped1 || clamped2 || clamped3 || clamped4;
 
-    // If all points on the quad had w < 0, then the entire quad would not be visible to the projected surface.
+    // If all points on the quad had w < 0, then the entire quad would not be
+    // visible to the projected surface.
     bool everythingWasClipped = clamped1 && clamped2 && clamped3 && clamped4;
     if (everythingWasClipped)
         return FloatQuad();
@@ -709,11 +889,13 @@ FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) c
 
 static float clampEdgeValue(float f)
 {
-    ASSERT(!std::isnan(f));
-    return std::min<float>(std::max<float>(f, (-LayoutUnit::max() / 2).toFloat()), (LayoutUnit::max() / 2).toFloat());
+    ASSERT(!std_isnan(f));
+    return clampTo(f, (-LayoutUnit::max() / 2).toFloat(),
+        (LayoutUnit::max() / 2).toFloat());
 }
 
-LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(const FloatQuad& q) const
+LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(
+    const FloatQuad& q) const
 {
     FloatRect mappedQuadBounds = projectQuad(q).boundingBox();
 
@@ -721,18 +903,20 @@ LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(const FloatQuad& q
     float top = clampEdgeValue(floorf(mappedQuadBounds.y()));
 
     float right;
-    if (std::isinf(mappedQuadBounds.x()) && std::isinf(mappedQuadBounds.width()))
+    if (std_isinf(mappedQuadBounds.x()) && std_isinf(mappedQuadBounds.width()))
         right = (LayoutUnit::max() / 2).toFloat();
     else
         right = clampEdgeValue(ceilf(mappedQuadBounds.maxX()));
 
     float bottom;
-    if (std::isinf(mappedQuadBounds.y()) && std::isinf(mappedQuadBounds.height()))
+    if (std_isinf(mappedQuadBounds.y()) && std_isinf(mappedQuadBounds.height()))
         bottom = (LayoutUnit::max() / 2).toFloat();
     else
         bottom = clampEdgeValue(ceilf(mappedQuadBounds.maxY()));
 
-    return LayoutRect(LayoutUnit::clamp(left), LayoutUnit::clamp(top),  LayoutUnit::clamp(right - left), LayoutUnit::clamp(bottom - top));
+    return LayoutRect(LayoutUnit::clamp(left), LayoutUnit::clamp(top),
+        LayoutUnit::clamp(right - left),
+        LayoutUnit::clamp(bottom - top));
 }
 
 void TransformationMatrix::transformBox(FloatBox& box) const
@@ -760,7 +944,8 @@ void TransformationMatrix::transformBox(FloatBox& box) const
 FloatPoint TransformationMatrix::mapPoint(const FloatPoint& p) const
 {
     if (isIdentityOrTranslation())
-        return FloatPoint(p.x() + static_cast<float>(m_matrix[3][0]), p.y() + static_cast<float>(m_matrix[3][1]));
+        return FloatPoint(p.x() + static_cast<float>(m_matrix[3][0]),
+            p.y() + static_cast<float>(m_matrix[3][1]));
 
     return internalMapPoint(p);
 }
@@ -769,13 +954,13 @@ FloatPoint3D TransformationMatrix::mapPoint(const FloatPoint3D& p) const
 {
     if (isIdentityOrTranslation())
         return FloatPoint3D(p.x() + static_cast<float>(m_matrix[3][0]),
-                            p.y() + static_cast<float>(m_matrix[3][1]),
-                            p.z() + static_cast<float>(m_matrix[3][2]));
+            p.y() + static_cast<float>(m_matrix[3][1]),
+            p.z() + static_cast<float>(m_matrix[3][2]));
 
     return internalMapPoint(p);
 }
 
-IntRect TransformationMatrix::mapRect(const IntRect &rect) const
+IntRect TransformationMatrix::mapRect(const IntRect& rect) const
 {
     return enclosingIntRect(mapRect(FloatRect(rect)));
 }
@@ -789,7 +974,8 @@ FloatRect TransformationMatrix::mapRect(const FloatRect& r) const
 {
     if (isIdentityOrTranslation()) {
         FloatRect mappedRect(r);
-        mappedRect.move(static_cast<float>(m_matrix[3][0]), static_cast<float>(m_matrix[3][1]));
+        mappedRect.move(static_cast<float>(m_matrix[3][0]),
+            static_cast<float>(m_matrix[3][1]));
         return mappedRect;
     }
 
@@ -809,7 +995,8 @@ FloatQuad TransformationMatrix::mapQuad(const FloatQuad& q) const
 {
     if (isIdentityOrTranslation()) {
         FloatQuad mappedQuad(q);
-        mappedQuad.move(static_cast<float>(m_matrix[3][0]), static_cast<float>(m_matrix[3][1]));
+        mappedQuad.move(static_cast<float>(m_matrix[3][0]),
+            static_cast<float>(m_matrix[3][1]));
         return mappedQuad;
     }
 
@@ -821,7 +1008,8 @@ FloatQuad TransformationMatrix::mapQuad(const FloatQuad& q) const
     return result;
 }
 
-TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx, double sy)
+TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx,
+    double sy)
 {
     m_matrix[0][0] *= sx;
     m_matrix[0][1] *= sx;
@@ -835,7 +1023,9 @@ TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx, double sy
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::scale3d(double sx, double sy, double sz)
+TransformationMatrix& TransformationMatrix::scale3d(double sx,
+    double sy,
+    double sz)
 {
     scaleNonUniform(sx, sy);
 
@@ -846,12 +1036,22 @@ TransformationMatrix& TransformationMatrix::scale3d(double sx, double sy, double
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double z, double angle)
+TransformationMatrix& TransformationMatrix::rotate3d(const Rotation& rotation)
+{
+    return rotate3d(rotation.axis.x(), rotation.axis.y(), rotation.axis.z(),
+        rotation.angle);
+}
+
+TransformationMatrix& TransformationMatrix::rotate3d(double x,
+    double y,
+    double z,
+    double angle)
 {
     // Normalize the axis of rotation
     double length = std::sqrt(x * x + y * y + z * z);
     if (length == 0) {
-        // A direction vector that cannot be normalized, such as [0, 0, 0], will cause the rotation to not be applied.
+        // A direction vector that cannot be normalized, such as [0, 0, 0], will
+        // cause the rotation to not be applied.
         return *this;
     } else if (length != 1) {
         x /= length;
@@ -913,7 +1113,8 @@ TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double 
         // Formula is adapted from Wikipedia article on Rotation matrix,
         // http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
         //
-        // An alternate resource with the same matrix: http://www.fastgraph.com/makegames/3drotation/
+        // An alternate resource with the same matrix:
+        // http://www.fastgraph.com/makegames/3drotation/
         //
         double oneMinusCosTheta = 1 - cosTheta;
         mat.m_matrix[0][0] = cosTheta + x * x * oneMinusCosTheta;
@@ -933,7 +1134,9 @@ TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double 
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::rotate3d(double rx, double ry, double rz)
+TransformationMatrix& TransformationMatrix::rotate3d(double rx,
+    double ry,
+    double rz)
 {
     // Angles are in degrees. Switch to radians.
     rx = deg2rad(rx);
@@ -1009,7 +1212,9 @@ TransformationMatrix& TransformationMatrix::translate(double tx, double ty)
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::translate3d(double tx, double ty, double tz)
+TransformationMatrix& TransformationMatrix::translate3d(double tx,
+    double ty,
+    double tz)
 {
     m_matrix[3][0] += tx * m_matrix[0][0] + ty * m_matrix[1][0] + tz * m_matrix[2][0];
     m_matrix[3][1] += tx * m_matrix[0][1] + ty * m_matrix[1][1] + tz * m_matrix[2][1];
@@ -1018,33 +1223,36 @@ TransformationMatrix& TransformationMatrix::translate3d(double tx, double ty, do
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::translateRight(double tx, double ty)
+TransformationMatrix& TransformationMatrix::translateRight(double tx,
+    double ty)
 {
     if (tx != 0) {
-        m_matrix[0][0] +=  m_matrix[0][3] * tx;
-        m_matrix[1][0] +=  m_matrix[1][3] * tx;
-        m_matrix[2][0] +=  m_matrix[2][3] * tx;
-        m_matrix[3][0] +=  m_matrix[3][3] * tx;
+        m_matrix[0][0] += m_matrix[0][3] * tx;
+        m_matrix[1][0] += m_matrix[1][3] * tx;
+        m_matrix[2][0] += m_matrix[2][3] * tx;
+        m_matrix[3][0] += m_matrix[3][3] * tx;
     }
 
     if (ty != 0) {
-        m_matrix[0][1] +=  m_matrix[0][3] * ty;
-        m_matrix[1][1] +=  m_matrix[1][3] * ty;
-        m_matrix[2][1] +=  m_matrix[2][3] * ty;
-        m_matrix[3][1] +=  m_matrix[3][3] * ty;
+        m_matrix[0][1] += m_matrix[0][3] * ty;
+        m_matrix[1][1] += m_matrix[1][3] * ty;
+        m_matrix[2][1] += m_matrix[2][3] * ty;
+        m_matrix[3][1] += m_matrix[3][3] * ty;
     }
 
     return *this;
 }
 
-TransformationMatrix& TransformationMatrix::translateRight3d(double tx, double ty, double tz)
+TransformationMatrix& TransformationMatrix::translateRight3d(double tx,
+    double ty,
+    double tz)
 {
     translateRight(tx, ty);
     if (tz != 0) {
-        m_matrix[0][2] +=  m_matrix[0][3] * tz;
-        m_matrix[1][2] +=  m_matrix[1][3] * tz;
-        m_matrix[2][2] +=  m_matrix[2][3] * tz;
-        m_matrix[3][2] +=  m_matrix[3][3] * tz;
+        m_matrix[0][2] += m_matrix[0][3] * tz;
+        m_matrix[1][2] += m_matrix[1][3] * tz;
+        m_matrix[2][2] += m_matrix[2][3] * tz;
+        m_matrix[3][2] += m_matrix[3][3] * tz;
     }
 
     return *this;
@@ -1068,14 +1276,43 @@ TransformationMatrix& TransformationMatrix::applyPerspective(double p)
 {
     TransformationMatrix mat;
     if (p != 0)
-        mat.m_matrix[2][3] = -1/p;
+        mat.m_matrix[2][3] = -1 / p;
 
     multiply(mat);
     return *this;
 }
 
-// this = mat * this.
-TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix& mat)
+TransformationMatrix& TransformationMatrix::applyTransformOrigin(double x,
+    double y,
+    double z)
+{
+    translateRight3d(x, y, z);
+    translate3d(-x, -y, -z);
+    return *this;
+}
+
+TransformationMatrix& TransformationMatrix::zoom(double zoomFactor)
+{
+    m_matrix[0][3] /= zoomFactor;
+    m_matrix[1][3] /= zoomFactor;
+    m_matrix[2][3] /= zoomFactor;
+    m_matrix[3][0] *= zoomFactor;
+    m_matrix[3][1] *= zoomFactor;
+    m_matrix[3][2] *= zoomFactor;
+    return *this;
+}
+
+// Calculates *this = *this * mat.
+// Note: A * B means that the transforms represented by A happen first, and
+// then the transforms represented by B. That is, the matrix A * B corresponds
+// to a CSS transform list <transform-function-A> <transform-function-B>.
+// Some branches of this function may make use of the fact that
+// transpose(A * B) == transpose(B) * transpose(A); remember that
+// m_matrix[a][b] is matrix element row b, col a.
+// FIXME: As of 2016-05-04, the ARM64 branch is NOT triggered by tests on the CQ
+// bots, see crbug.com/477892 and crbug.com/584508.
+TransformationMatrix& TransformationMatrix::multiply(
+    const TransformationMatrix& mat)
 {
 #if CPU(ARM64)
     double* rightMatrix = &(m_matrix[0][0]);
@@ -1132,116 +1369,102 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
 
         "st1 {v0.2d - v3.2d}, [x9], 64 \t\n"
         "st1 {v4.2d - v7.2d}, [x9]     \t\n"
-        : [leftMatrix]"+r"(leftMatrix), [rightMatrix]"+r"(rightMatrix)
+        : [leftMatrix] "+r"(leftMatrix), [rightMatrix] "+r"(rightMatrix)
         :
-        : "memory", "x9", "v16", "v17", "v18", "v19", "v20", "v21", "v22",
-            "v23", "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31",
-            "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7"
-    );
-#elif CPU(APPLE_ARMV7S)
-    double* leftMatrix = &(m_matrix[0][0]);
-    const double* rightMatrix = &(mat.m_matrix[0][0]);
-    asm volatile (// First row of leftMatrix.
-        "mov        r3, %[leftMatrix]\n\t"
-        "vld1.64    { d16-d19 }, [%[leftMatrix], :128]!\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vmul.f64   d4, d0, d16\n\t"
-        "vld1.64    { d20-d23 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vld1.64    { d24-d27 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vld1.64    { d28-d31 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
+        : "memory", "x9", "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23",
+        "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31", "v0", "v1",
+        "v2", "v3", "v4", "v5", "v6", "v7");
+#elif HAVE(MIPS_MSA_INTRINSICS)
+    v2f64 vleftM0, vleftM1, vleftM2, vleftM3, vleftM4, vleftM5, vleftM6, vleftM7;
+    v2f64 vRightM0, vRightM1, vRightM2, vRightM3, vRightM4, vRightM5, vRightM6,
+        vRightM7;
+    v2f64 vTmpM0, vTmpM1, vTmpM2, vTmpM3;
 
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
+    vRightM0 = LD_DP(&(m_matrix[0][0]));
+    vRightM1 = LD_DP(&(m_matrix[0][2]));
+    vRightM2 = LD_DP(&(m_matrix[1][0]));
+    vRightM3 = LD_DP(&(m_matrix[1][2]));
+    vRightM4 = LD_DP(&(m_matrix[2][0]));
+    vRightM5 = LD_DP(&(m_matrix[2][2]));
+    vRightM6 = LD_DP(&(m_matrix[3][0]));
+    vRightM7 = LD_DP(&(m_matrix[3][2]));
 
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
+    vleftM0 = LD_DP(&(mat.m_matrix[0][0]));
+    vleftM2 = LD_DP(&(mat.m_matrix[0][2]));
+    vleftM4 = LD_DP(&(mat.m_matrix[1][0]));
+    vleftM6 = LD_DP(&(mat.m_matrix[1][2]));
 
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
+    vleftM1 = (v2f64)__msa_splati_d((v2i64)vleftM0, 1);
+    vleftM0 = (v2f64)__msa_splati_d((v2i64)vleftM0, 0);
+    vleftM3 = (v2f64)__msa_splati_d((v2i64)vleftM2, 1);
+    vleftM2 = (v2f64)__msa_splati_d((v2i64)vleftM2, 0);
+    vleftM5 = (v2f64)__msa_splati_d((v2i64)vleftM4, 1);
+    vleftM4 = (v2f64)__msa_splati_d((v2i64)vleftM4, 0);
+    vleftM7 = (v2f64)__msa_splati_d((v2i64)vleftM6, 1);
+    vleftM6 = (v2f64)__msa_splati_d((v2i64)vleftM6, 0);
 
-        // Second row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
+    vTmpM0 = vleftM0 * vRightM0;
+    vTmpM1 = vleftM0 * vRightM1;
+    vTmpM0 += vleftM1 * vRightM2;
+    vTmpM1 += vleftM1 * vRightM3;
+    vTmpM0 += vleftM2 * vRightM4;
+    vTmpM1 += vleftM2 * vRightM5;
+    vTmpM0 += vleftM3 * vRightM6;
+    vTmpM1 += vleftM3 * vRightM7;
 
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
+    vTmpM2 = vleftM4 * vRightM0;
+    vTmpM3 = vleftM4 * vRightM1;
+    vTmpM2 += vleftM5 * vRightM2;
+    vTmpM3 += vleftM5 * vRightM3;
+    vTmpM2 += vleftM6 * vRightM4;
+    vTmpM3 += vleftM6 * vRightM5;
+    vTmpM2 += vleftM7 * vRightM6;
+    vTmpM3 += vleftM7 * vRightM7;
 
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
+    vleftM0 = LD_DP(&(mat.m_matrix[2][0]));
+    vleftM2 = LD_DP(&(mat.m_matrix[2][2]));
+    vleftM4 = LD_DP(&(mat.m_matrix[3][0]));
+    vleftM6 = LD_DP(&(mat.m_matrix[3][2]));
 
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
+    ST_DP(vTmpM0, &(m_matrix[0][0]));
+    ST_DP(vTmpM1, &(m_matrix[0][2]));
+    ST_DP(vTmpM2, &(m_matrix[1][0]));
+    ST_DP(vTmpM3, &(m_matrix[1][2]));
 
-        // Third row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
+    vleftM1 = (v2f64)__msa_splati_d((v2i64)vleftM0, 1);
+    vleftM0 = (v2f64)__msa_splati_d((v2i64)vleftM0, 0);
+    vleftM3 = (v2f64)__msa_splati_d((v2i64)vleftM2, 1);
+    vleftM2 = (v2f64)__msa_splati_d((v2i64)vleftM2, 0);
+    vleftM5 = (v2f64)__msa_splati_d((v2i64)vleftM4, 1);
+    vleftM4 = (v2f64)__msa_splati_d((v2i64)vleftM4, 0);
+    vleftM7 = (v2f64)__msa_splati_d((v2i64)vleftM6, 1);
+    vleftM6 = (v2f64)__msa_splati_d((v2i64)vleftM6, 0);
 
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
+    vTmpM0 = vleftM0 * vRightM0;
+    vTmpM1 = vleftM0 * vRightM1;
+    vTmpM0 += vleftM1 * vRightM2;
+    vTmpM1 += vleftM1 * vRightM3;
+    vTmpM0 += vleftM2 * vRightM4;
+    vTmpM1 += vleftM2 * vRightM5;
+    vTmpM0 += vleftM3 * vRightM6;
+    vTmpM1 += vleftM3 * vRightM7;
 
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
+    vTmpM2 = vleftM4 * vRightM0;
+    vTmpM3 = vleftM4 * vRightM1;
+    vTmpM2 += vleftM5 * vRightM2;
+    vTmpM3 += vleftM5 * vRightM3;
+    vTmpM2 += vleftM6 * vRightM4;
+    vTmpM3 += vleftM6 * vRightM5;
+    vTmpM2 += vleftM7 * vRightM6;
+    vTmpM3 += vleftM7 * vRightM7;
 
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
-
-        // Fourth and last row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
-
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
-
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
-
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]\n\t"
-        : [leftMatrix]"+r"(leftMatrix), [rightMatrix]"+r"(rightMatrix)
-        :
-        : "memory", "r3", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d16", "d17", "d18", "d19", "d20", "d21", "d22", "d23", "d24", "d25", "d26", "d27", "d28", "d29", "d30", "d31");
+    ST_DP(vTmpM0, &(m_matrix[2][0]));
+    ST_DP(vTmpM1, &(m_matrix[2][2]));
+    ST_DP(vTmpM2, &(m_matrix[3][0]));
+    ST_DP(vTmpM3, &(m_matrix[3][2]));
 #elif defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
-    // x86_64 has 16 XMM registers which is enough to do the multiplication fully in registers.
+    // x86_64 has 16 XMM registers which is enough to do the multiplication fully
+    // in registers.
     __m128d matrixBlockA = _mm_load_pd(&(m_matrix[0][0]));
     __m128d matrixBlockC = _mm_load_pd(&(m_matrix[1][0]));
     __m128d matrixBlockE = _mm_load_pd(&(m_matrix[2][0]));
@@ -1366,48 +1589,35 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
 #else
     Matrix4 tmp;
 
-    tmp[0][0] = (mat.m_matrix[0][0] * m_matrix[0][0] + mat.m_matrix[0][1] * m_matrix[1][0]
-               + mat.m_matrix[0][2] * m_matrix[2][0] + mat.m_matrix[0][3] * m_matrix[3][0]);
-    tmp[0][1] = (mat.m_matrix[0][0] * m_matrix[0][1] + mat.m_matrix[0][1] * m_matrix[1][1]
-               + mat.m_matrix[0][2] * m_matrix[2][1] + mat.m_matrix[0][3] * m_matrix[3][1]);
-    tmp[0][2] = (mat.m_matrix[0][0] * m_matrix[0][2] + mat.m_matrix[0][1] * m_matrix[1][2]
-               + mat.m_matrix[0][2] * m_matrix[2][2] + mat.m_matrix[0][3] * m_matrix[3][2]);
-    tmp[0][3] = (mat.m_matrix[0][0] * m_matrix[0][3] + mat.m_matrix[0][1] * m_matrix[1][3]
-               + mat.m_matrix[0][2] * m_matrix[2][3] + mat.m_matrix[0][3] * m_matrix[3][3]);
+    tmp[0][0] = (mat.m_matrix[0][0] * m_matrix[0][0] + mat.m_matrix[0][1] * m_matrix[1][0] + mat.m_matrix[0][2] * m_matrix[2][0] + mat.m_matrix[0][3] * m_matrix[3][0]);
+    tmp[0][1] = (mat.m_matrix[0][0] * m_matrix[0][1] + mat.m_matrix[0][1] * m_matrix[1][1] + mat.m_matrix[0][2] * m_matrix[2][1] + mat.m_matrix[0][3] * m_matrix[3][1]);
+    tmp[0][2] = (mat.m_matrix[0][0] * m_matrix[0][2] + mat.m_matrix[0][1] * m_matrix[1][2] + mat.m_matrix[0][2] * m_matrix[2][2] + mat.m_matrix[0][3] * m_matrix[3][2]);
+    tmp[0][3] = (mat.m_matrix[0][0] * m_matrix[0][3] + mat.m_matrix[0][1] * m_matrix[1][3] + mat.m_matrix[0][2] * m_matrix[2][3] + mat.m_matrix[0][3] * m_matrix[3][3]);
 
-    tmp[1][0] = (mat.m_matrix[1][0] * m_matrix[0][0] + mat.m_matrix[1][1] * m_matrix[1][0]
-               + mat.m_matrix[1][2] * m_matrix[2][0] + mat.m_matrix[1][3] * m_matrix[3][0]);
-    tmp[1][1] = (mat.m_matrix[1][0] * m_matrix[0][1] + mat.m_matrix[1][1] * m_matrix[1][1]
-               + mat.m_matrix[1][2] * m_matrix[2][1] + mat.m_matrix[1][3] * m_matrix[3][1]);
-    tmp[1][2] = (mat.m_matrix[1][0] * m_matrix[0][2] + mat.m_matrix[1][1] * m_matrix[1][2]
-               + mat.m_matrix[1][2] * m_matrix[2][2] + mat.m_matrix[1][3] * m_matrix[3][2]);
-    tmp[1][3] = (mat.m_matrix[1][0] * m_matrix[0][3] + mat.m_matrix[1][1] * m_matrix[1][3]
-               + mat.m_matrix[1][2] * m_matrix[2][3] + mat.m_matrix[1][3] * m_matrix[3][3]);
+    tmp[1][0] = (mat.m_matrix[1][0] * m_matrix[0][0] + mat.m_matrix[1][1] * m_matrix[1][0] + mat.m_matrix[1][2] * m_matrix[2][0] + mat.m_matrix[1][3] * m_matrix[3][0]);
+    tmp[1][1] = (mat.m_matrix[1][0] * m_matrix[0][1] + mat.m_matrix[1][1] * m_matrix[1][1] + mat.m_matrix[1][2] * m_matrix[2][1] + mat.m_matrix[1][3] * m_matrix[3][1]);
+    tmp[1][2] = (mat.m_matrix[1][0] * m_matrix[0][2] + mat.m_matrix[1][1] * m_matrix[1][2] + mat.m_matrix[1][2] * m_matrix[2][2] + mat.m_matrix[1][3] * m_matrix[3][2]);
+    tmp[1][3] = (mat.m_matrix[1][0] * m_matrix[0][3] + mat.m_matrix[1][1] * m_matrix[1][3] + mat.m_matrix[1][2] * m_matrix[2][3] + mat.m_matrix[1][3] * m_matrix[3][3]);
 
-    tmp[2][0] = (mat.m_matrix[2][0] * m_matrix[0][0] + mat.m_matrix[2][1] * m_matrix[1][0]
-               + mat.m_matrix[2][2] * m_matrix[2][0] + mat.m_matrix[2][3] * m_matrix[3][0]);
-    tmp[2][1] = (mat.m_matrix[2][0] * m_matrix[0][1] + mat.m_matrix[2][1] * m_matrix[1][1]
-               + mat.m_matrix[2][2] * m_matrix[2][1] + mat.m_matrix[2][3] * m_matrix[3][1]);
-    tmp[2][2] = (mat.m_matrix[2][0] * m_matrix[0][2] + mat.m_matrix[2][1] * m_matrix[1][2]
-               + mat.m_matrix[2][2] * m_matrix[2][2] + mat.m_matrix[2][3] * m_matrix[3][2]);
-    tmp[2][3] = (mat.m_matrix[2][0] * m_matrix[0][3] + mat.m_matrix[2][1] * m_matrix[1][3]
-               + mat.m_matrix[2][2] * m_matrix[2][3] + mat.m_matrix[2][3] * m_matrix[3][3]);
+    tmp[2][0] = (mat.m_matrix[2][0] * m_matrix[0][0] + mat.m_matrix[2][1] * m_matrix[1][0] + mat.m_matrix[2][2] * m_matrix[2][0] + mat.m_matrix[2][3] * m_matrix[3][0]);
+    tmp[2][1] = (mat.m_matrix[2][0] * m_matrix[0][1] + mat.m_matrix[2][1] * m_matrix[1][1] + mat.m_matrix[2][2] * m_matrix[2][1] + mat.m_matrix[2][3] * m_matrix[3][1]);
+    tmp[2][2] = (mat.m_matrix[2][0] * m_matrix[0][2] + mat.m_matrix[2][1] * m_matrix[1][2] + mat.m_matrix[2][2] * m_matrix[2][2] + mat.m_matrix[2][3] * m_matrix[3][2]);
+    tmp[2][3] = (mat.m_matrix[2][0] * m_matrix[0][3] + mat.m_matrix[2][1] * m_matrix[1][3] + mat.m_matrix[2][2] * m_matrix[2][3] + mat.m_matrix[2][3] * m_matrix[3][3]);
 
-    tmp[3][0] = (mat.m_matrix[3][0] * m_matrix[0][0] + mat.m_matrix[3][1] * m_matrix[1][0]
-               + mat.m_matrix[3][2] * m_matrix[2][0] + mat.m_matrix[3][3] * m_matrix[3][0]);
-    tmp[3][1] = (mat.m_matrix[3][0] * m_matrix[0][1] + mat.m_matrix[3][1] * m_matrix[1][1]
-               + mat.m_matrix[3][2] * m_matrix[2][1] + mat.m_matrix[3][3] * m_matrix[3][1]);
-    tmp[3][2] = (mat.m_matrix[3][0] * m_matrix[0][2] + mat.m_matrix[3][1] * m_matrix[1][2]
-               + mat.m_matrix[3][2] * m_matrix[2][2] + mat.m_matrix[3][3] * m_matrix[3][2]);
-    tmp[3][3] = (mat.m_matrix[3][0] * m_matrix[0][3] + mat.m_matrix[3][1] * m_matrix[1][3]
-               + mat.m_matrix[3][2] * m_matrix[2][3] + mat.m_matrix[3][3] * m_matrix[3][3]);
+    tmp[3][0] = (mat.m_matrix[3][0] * m_matrix[0][0] + mat.m_matrix[3][1] * m_matrix[1][0] + mat.m_matrix[3][2] * m_matrix[2][0] + mat.m_matrix[3][3] * m_matrix[3][0]);
+    tmp[3][1] = (mat.m_matrix[3][0] * m_matrix[0][1] + mat.m_matrix[3][1] * m_matrix[1][1] + mat.m_matrix[3][2] * m_matrix[2][1] + mat.m_matrix[3][3] * m_matrix[3][1]);
+    tmp[3][2] = (mat.m_matrix[3][0] * m_matrix[0][2] + mat.m_matrix[3][1] * m_matrix[1][2] + mat.m_matrix[3][2] * m_matrix[2][2] + mat.m_matrix[3][3] * m_matrix[3][2]);
+    tmp[3][3] = (mat.m_matrix[3][0] * m_matrix[0][3] + mat.m_matrix[3][1] * m_matrix[1][3] + mat.m_matrix[3][2] * m_matrix[2][3] + mat.m_matrix[3][3] * m_matrix[3][3]);
 
     setMatrix(tmp);
 #endif
     return *this;
 }
 
-void TransformationMatrix::multVecMatrix(double x, double y, double& resultX, double& resultY) const
+void TransformationMatrix::multVecMatrix(double x,
+    double y,
+    double& resultX,
+    double& resultY) const
 {
     resultX = m_matrix[3][0] + x * m_matrix[0][0] + y * m_matrix[1][0];
     resultY = m_matrix[3][1] + x * m_matrix[0][1] + y * m_matrix[1][1];
@@ -1418,7 +1628,12 @@ void TransformationMatrix::multVecMatrix(double x, double y, double& resultX, do
     }
 }
 
-void TransformationMatrix::multVecMatrix(double x, double y, double z, double& resultX, double& resultY, double& resultZ) const
+void TransformationMatrix::multVecMatrix(double x,
+    double y,
+    double z,
+    double& resultX,
+    double& resultY,
+    double& resultZ) const
 {
     resultX = m_matrix[3][0] + x * m_matrix[0][0] + y * m_matrix[1][0] + z * m_matrix[2][0];
     resultY = m_matrix[3][1] + x * m_matrix[0][1] + y * m_matrix[1][1] + z * m_matrix[2][1];
@@ -1438,7 +1653,7 @@ bool TransformationMatrix::isInvertible() const
 
     double det = blink::determinant4x4(m_matrix);
 
-    if (fabs(det) < SMALL_NUMBER)
+    if (fabs(det) < SmallNumber)
         return false;
 
     return true;
@@ -1452,10 +1667,9 @@ TransformationMatrix TransformationMatrix::inverse() const
             return TransformationMatrix();
 
         // translation
-        return TransformationMatrix(1, 0, 0, 0,
-                                    0, 1, 0, 0,
-                                    0, 0, 1, 0,
-                                    -m_matrix[3][0], -m_matrix[3][1], -m_matrix[3][2], 1);
+        return TransformationMatrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+            -m_matrix[3][0], -m_matrix[3][1],
+            -m_matrix[3][2], 1);
     }
 
     TransformationMatrix invMat;
@@ -1486,7 +1700,18 @@ void TransformationMatrix::makeAffine()
 AffineTransform TransformationMatrix::toAffineTransform() const
 {
     return AffineTransform(m_matrix[0][0], m_matrix[0][1], m_matrix[1][0],
-                           m_matrix[1][1], m_matrix[3][0], m_matrix[3][1]);
+        m_matrix[1][1], m_matrix[3][0], m_matrix[3][1]);
+}
+
+void TransformationMatrix::flattenTo2d()
+{
+    m_matrix[2][0] = 0;
+    m_matrix[2][1] = 0;
+    m_matrix[0][2] = 0;
+    m_matrix[1][2] = 0;
+    m_matrix[2][2] = 1;
+    m_matrix[3][2] = 0;
+    m_matrix[2][3] = 0;
 }
 
 static inline void blendFloat(double& from, double to, double progress)
@@ -1495,7 +1720,8 @@ static inline void blendFloat(double& from, double to, double progress)
         from = from + (to - from) * progress;
 }
 
-void TransformationMatrix::blend(const TransformationMatrix& from, double progress)
+void TransformationMatrix::blend(const TransformationMatrix& from,
+    double progress)
 {
     if (from.isIdentity() && isIdentity())
         return;
@@ -1570,10 +1796,10 @@ void TransformationMatrix::recompose(const DecomposedType& decomp)
     double zw = decomp.quaternionZ * decomp.quaternionW;
 
     // Construct a composite rotation matrix from the quaternion values
-    TransformationMatrix rotationMatrix(1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0,
-                           2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 0,
-                           2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy), 0,
-                           0, 0, 0, 1);
+    TransformationMatrix rotationMatrix(
+        1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0, 2 * (xy + zw),
+        1 - 2 * (xx + zz), 2 * (yz - xw), 0, 2 * (xz - yw), 2 * (yz + xw),
+        1 - 2 * (xx + yy), 0, 0, 0, 0, 1);
 
     multiply(rotationMatrix);
 
@@ -1642,7 +1868,8 @@ void TransformationMatrix::toColumnMajorFloatArray(FloatMatrix4& result) const
     result[15] = m44();
 }
 
-SkMatrix44 TransformationMatrix::toSkMatrix44(const TransformationMatrix& matrix)
+SkMatrix44 TransformationMatrix::toSkMatrix44(
+    const TransformationMatrix& matrix)
 {
     SkMatrix44 ret(SkMatrix44::kUninitialized_Constructor);
     ret.setDouble(0, 0, matrix.m11());
@@ -1664,4 +1891,39 @@ SkMatrix44 TransformationMatrix::toSkMatrix44(const TransformationMatrix& matrix
     return ret;
 }
 
+String TransformationMatrix::toString(bool asMatrix) const
+{
+    if (asMatrix) {
+        // Return as a matrix in row-major order.
+        return String::format(
+            "[%lg,%lg,%lg,%lg,\n%lg,%lg,%lg,%lg,\n%lg,%lg,%lg,%lg,\n%lg,%lg,%lg,%"
+            "lg]",
+            m11(), m21(), m31(), m41(), m12(), m22(), m32(), m42(), m13(), m23(),
+            m33(), m43(), m14(), m24(), m34(), m44());
+    }
+
+    TransformationMatrix::DecomposedType decomposition;
+    if (!decompose(decomposition))
+        return toString(true) + " (degenerate)";
+
+    if (isIdentityOrTranslation()) {
+        if (decomposition.translateX == 0 && decomposition.translateY == 0 && decomposition.translateZ == 0)
+            return "identity";
+        return String::format("translation(%lg,%lg,%lg)", decomposition.translateX,
+            decomposition.translateY, decomposition.translateZ);
+    }
+
+    return String::format(
+        "translation(%lg,%lg,%lg), scale(%lg,%lg,%lg), skew(%lg,%lg,%lg), "
+        "quaternion(%lg,%lg,%lg,%lg), perspective(%lg,%lg,%lg,%lg)",
+        decomposition.translateX, decomposition.translateY,
+        decomposition.translateZ, decomposition.scaleX, decomposition.scaleY,
+        decomposition.scaleZ, decomposition.skewXY, decomposition.skewXZ,
+        decomposition.skewYZ, decomposition.quaternionX,
+        decomposition.quaternionY, decomposition.quaternionZ,
+        decomposition.quaternionW, decomposition.perspectiveX,
+        decomposition.perspectiveY, decomposition.perspectiveZ,
+        decomposition.perspectiveW);
 }
+
+} // namespace blink

@@ -21,10 +21,8 @@
 #define LayoutSVGResourceMarker_h
 
 #include "core/layout/svg/LayoutSVGResourceContainer.h"
-#include "core/svg/SVGElement.h"
 #include "core/svg/SVGMarkerElement.h"
 #include "platform/geometry/FloatRect.h"
-#include "wtf/HashSet.h"
 
 namespace blink {
 
@@ -33,45 +31,53 @@ class LayoutObject;
 class LayoutSVGResourceMarker final : public LayoutSVGResourceContainer {
 public:
     explicit LayoutSVGResourceMarker(SVGMarkerElement*);
-    virtual ~LayoutSVGResourceMarker();
+    ~LayoutSVGResourceMarker() override;
 
-    virtual const char* name() const override { return "LayoutSVGResourceMarker"; }
+    const char* name() const override { return "LayoutSVGResourceMarker"; }
 
-    virtual void removeAllClientsFromCache(bool markForInvalidation = true) override;
-    virtual void removeClientFromCache(LayoutObject*, bool markForInvalidation = true) override;
+    void removeAllClientsFromCache(bool markForInvalidation = true) override;
+    void removeClientFromCache(LayoutObject*,
+        bool markForInvalidation = true) override;
 
-    // Calculates marker boundaries, mapped to the target element's coordinate space
+    // Calculates marker boundaries, mapped to the target element's coordinate
+    // space.
     FloatRect markerBoundaries(const AffineTransform& markerTransformation) const;
+    AffineTransform markerTransformation(const FloatPoint& origin,
+        float angle,
+        float strokeWidth) const;
 
-    virtual void layout() override;
-    virtual void calcViewport() override;
+    AffineTransform localToSVGParentTransform() const final
+    {
+        return m_localToParentTransform;
+    }
+    void setNeedsTransformUpdate() final;
 
-    virtual const AffineTransform& localToParentTransform() const override;
-    AffineTransform markerTransformation(const FloatPoint& origin, float angle, float strokeWidth) const;
+    // The viewport origin is (0,0) and not the reference point because each
+    // marker instance includes the reference in markerTransformation().
+    FloatRect viewport() const { return FloatRect(FloatPoint(), m_viewportSize); }
+
+    bool shouldPaint() const;
 
     FloatPoint referencePoint() const;
     float angle() const;
-    SVGMarkerUnitsType markerUnits() const { return toSVGMarkerElement(element())->markerUnits()->currentValue()->enumValue(); }
-    SVGMarkerOrientType orientType() const { return toSVGMarkerElement(element())->orientType()->currentValue()->enumValue(); }
-
-    const FloatRect& viewport() const { return m_viewport; }
+    SVGMarkerUnitsType markerUnits() const;
+    SVGMarkerOrientType orientType() const;
 
     static const LayoutSVGResourceType s_resourceType = MarkerResourceType;
-    virtual LayoutSVGResourceType resourceType() const override { return s_resourceType; }
+    LayoutSVGResourceType resourceType() const override { return s_resourceType; }
 
 private:
-    // Generates a transformation matrix usable to layout marker content. Handles scaling the marker content
-    // acording to SVGs markerUnits="strokeWidth" concept, when a strokeWidth value != -1 is passed in.
-    AffineTransform markerContentTransformation(const AffineTransform& contentTransformation, const FloatPoint& origin, float strokeWidth = -1) const;
+    void layout() override;
+    SVGTransformChange calculateLocalTransform() final;
 
-    AffineTransform viewportTransform() const;
-
-    mutable AffineTransform m_localToParentTransform;
-    FloatRect m_viewport;
+    AffineTransform m_localToParentTransform;
+    FloatSize m_viewportSize;
+    bool m_needsTransformUpdate;
 };
 
-DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(LayoutSVGResourceMarker, MarkerResourceType);
+DEFINE_LAYOUT_SVG_RESOURCE_TYPE_CASTS(LayoutSVGResourceMarker,
+    MarkerResourceType);
 
-}
+} // namespace blink
 
 #endif

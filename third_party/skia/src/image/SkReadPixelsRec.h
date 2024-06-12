@@ -20,13 +20,14 @@ struct SkReadPixelsRec {
         , fInfo(info)
         , fX(x)
         , fY(y)
-    {}
+    {
+    }
 
-    void*       fPixels;
-    size_t      fRowBytes;
+    void* fPixels;
+    size_t fRowBytes;
     SkImageInfo fInfo;
-    int         fX;
-    int         fY;
+    int fX;
+    int fY;
 
     /*
      *  On true, may have modified its fields (except fRowBytes) to make it a legal subset

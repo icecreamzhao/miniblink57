@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkScript.h"
 #include "SkMath.h"
 #include "SkParse.h"
@@ -27,33 +26,33 @@
 
 #ifdef SK_DEBUG
 static const char* errorStrings[] = {
-        "array index of out bounds", // kArrayIndexOutOfBounds
-        "could not find reference id", // kCouldNotFindReferencedID
-        "dot operator expects object", // kDotOperatorExpectsObject
-        "error in array index", // kErrorInArrrayIndex
-        "error in function parameters", // kErrorInFunctionParameters
-        "expected array", // kExpectedArray
-        "expected boolean expression", // kExpectedBooleanExpression
-        "expected field name", // kExpectedFieldName
-        "expected hex", // kExpectedHex
-        "expected int for condition operator", // kExpectedIntForConditionOperator
-        "expected number", // kExpectedNumber
-        "expected number for array index", // kExpectedNumberForArrayIndex
-        "expected operator", // kExpectedOperator
-        "expected token", // kExpectedToken
-        "expected token before dot operator", // kExpectedTokenBeforeDotOperator
-        "expected value", // kExpectedValue
-        "handle member failed", // kHandleMemberFailed
-        "handle member function failed", // kHandleMemberFunctionFailed
-        "handle unbox failed", // kHandleUnboxFailed
-        "index out of range", // kIndexOutOfRange
-        "mismatched array brace", // kMismatchedArrayBrace
-        "mismatched brackets", // kMismatchedBrackets
-        "no function handler found", // kNoFunctionHandlerFound
-        "premature end", // kPrematureEnd
-        "too many parameters", // kTooManyParameters
-        "type conversion failed", // kTypeConversionFailed
-        "unterminated string" // kUnterminatedString
+    "array index of out bounds", // kArrayIndexOutOfBounds
+    "could not find reference id", // kCouldNotFindReferencedID
+    "dot operator expects object", // kDotOperatorExpectsObject
+    "error in array index", // kErrorInArrrayIndex
+    "error in function parameters", // kErrorInFunctionParameters
+    "expected array", // kExpectedArray
+    "expected boolean expression", // kExpectedBooleanExpression
+    "expected field name", // kExpectedFieldName
+    "expected hex", // kExpectedHex
+    "expected int for condition operator", // kExpectedIntForConditionOperator
+    "expected number", // kExpectedNumber
+    "expected number for array index", // kExpectedNumberForArrayIndex
+    "expected operator", // kExpectedOperator
+    "expected token", // kExpectedToken
+    "expected token before dot operator", // kExpectedTokenBeforeDotOperator
+    "expected value", // kExpectedValue
+    "handle member failed", // kHandleMemberFailed
+    "handle member function failed", // kHandleMemberFunctionFailed
+    "handle unbox failed", // kHandleUnboxFailed
+    "index out of range", // kIndexOutOfRange
+    "mismatched array brace", // kMismatchedArrayBrace
+    "mismatched brackets", // kMismatchedBrackets
+    "no function handler found", // kNoFunctionHandlerFound
+    "premature end", // kPrematureEnd
+    "too many parameters", // kTooManyParameters
+    "type conversion failed", // kTypeConversionFailed
+    "unterminated string" // kUnterminatedString
 };
 #endif
 
@@ -61,44 +60,44 @@ const SkScriptEngine::SkOperatorAttributes SkScriptEngine::gOpAttributes[] = {
     { kNoType, kNoType, kNoBias }, //   kUnassigned,
     { SkOpType(kInt | kScalar | kString), SkOpType(kInt | kScalar | kString), kTowardsString }, // kAdd
     // kAddInt = kAdd,
-    { kNoType, kNoType, kNoBias },  // kAddScalar,
-    { kNoType, kNoType, kNoBias },  // kAddString,
-    { kNoType, kNoType, kNoBias },  // kArrayOp,
+    { kNoType, kNoType, kNoBias }, // kAddScalar,
+    { kNoType, kNoType, kNoBias }, // kAddString,
+    { kNoType, kNoType, kNoBias }, // kArrayOp,
     { kInt, kInt, kNoBias }, // kBitAnd
     { kNoType, kInt, kNoBias }, // kBitNot
     { kInt, kInt, kNoBias }, // kBitOr
     { SkOpType(kInt | kScalar), SkOpType(kInt | kScalar), kNoBias }, // kDivide
     // kDivideInt = kDivide
-    { kNoType, kNoType, kNoBias },  // kDivideScalar
-    { kNoType, kNoType, kNoBias },  // kElse
+    { kNoType, kNoType, kNoBias }, // kDivideScalar
+    { kNoType, kNoType, kNoBias }, // kElse
     { SkOpType(kInt | kScalar | kString), SkOpType(kInt | kScalar | kString), kTowardsNumber }, // kEqual
     // kEqualInt = kEqual
-    { kNoType, kNoType, kNoBias },  // kEqualScalar
-    { kNoType, kNoType, kNoBias },  // kEqualString
-    { kInt, kNoType, kNoBias },     // kFlipOps
+    { kNoType, kNoType, kNoBias }, // kEqualScalar
+    { kNoType, kNoType, kNoBias }, // kEqualString
+    { kInt, kNoType, kNoBias }, // kFlipOps
     { SkOpType(kInt | kScalar | kString), SkOpType(kInt | kScalar | kString), kTowardsNumber }, // kGreaterEqual
     // kGreaterEqualInt = kGreaterEqual
-    { kNoType, kNoType, kNoBias },  // kGreaterEqualScalar
-    { kNoType, kNoType, kNoBias },  // kGreaterEqualString
-    { kNoType, kNoType, kNoBias },  // kIf
+    { kNoType, kNoType, kNoBias }, // kGreaterEqualScalar
+    { kNoType, kNoType, kNoBias }, // kGreaterEqualString
+    { kNoType, kNoType, kNoBias }, // kIf
     { kNoType, kInt, kNoBias }, // kLogicalAnd  (really, ToBool)
     { kNoType, kInt, kNoBias }, // kLogicalNot
     { kInt, kInt, kNoBias }, // kLogicalOr
     { kNoType, SkOpType(kInt | kScalar), kNoBias }, // kMinus
     // kMinusInt = kMinus
-    { kNoType, kNoType, kNoBias },  // kMinusScalar
+    { kNoType, kNoType, kNoBias }, // kMinusScalar
     { SkOpType(kInt | kScalar), SkOpType(kInt | kScalar), kNoBias }, // kModulo
     // kModuloInt = kModulo
-    { kNoType, kNoType, kNoBias },  // kModuloScalar
+    { kNoType, kNoType, kNoBias }, // kModuloScalar
     { SkOpType(kInt | kScalar), SkOpType(kInt | kScalar), kNoBias }, // kMultiply
     // kMultiplyInt = kMultiply
-    { kNoType, kNoType, kNoBias },  // kMultiplyScalar
-    { kNoType, kNoType, kNoBias },  // kParen
+    { kNoType, kNoType, kNoBias }, // kMultiplyScalar
+    { kNoType, kNoType, kNoBias }, // kParen
     { kInt, kInt, kNoBias }, // kShiftLeft
     { kInt, kInt, kNoBias }, // kShiftRight
     { SkOpType(kInt | kScalar), SkOpType(kInt | kScalar), kNoBias }, // kSubtract
     // kSubtractInt = kSubtract
-    { kNoType, kNoType, kNoBias },  // kSubtractScalar
+    { kNoType, kNoType, kNoBias }, // kSubtractScalar
     { kInt, kInt, kNoBias } // kXor
 };
 
@@ -111,48 +110,48 @@ const SkScriptEngine::SkOperatorAttributes SkScriptEngine::gOpAttributes[] = {
 #define kIfElsePrecedence 15
 
 const signed char SkScriptEngine::gPrecedence[] = {
-        -1, //  kUnassigned,
-        6, // kAdd,
-        // kAddInt = kAdd,
-        6, // kAddScalar,
-        6, // kAddString,   // string concat
-        kBracketPrecedence, // kArrayOp,
-        10, // kBitAnd,
-        4, // kBitNot,
-        12, // kBitOr,
-        5, // kDivide,
-        // kDivideInt = kDivide,
-        5, // kDivideScalar,
-        kIfElsePrecedence, // kElse,
-        9, // kEqual,
-        // kEqualInt = kEqual,
-        9, // kEqualScalar,
-        9, // kEqualString,
-        -1, // kFlipOps,
-        8, // kGreaterEqual,
-        // kGreaterEqualInt = kGreaterEqual,
-        8, // kGreaterEqualScalar,
-        8, // kGreaterEqualString,
-        kIfElsePrecedence, // kIf,
-        13, // kLogicalAnd,
-        4, // kLogicalNot,
-        14, // kLogicalOr,
-        4, // kMinus,
-        // kMinusInt = kMinus,
-        4, // kMinusScalar,
-        5, // kModulo,
-        // kModuloInt = kModulo,
-        5, // kModuloScalar,
-        5, // kMultiply,
-        // kMultiplyInt = kMultiply,
-        5, // kMultiplyScalar,
-        kBracketPrecedence, // kParen,
-        7, // kShiftLeft,
-        7, // kShiftRight,  // signed
-        6, // kSubtract,
-        // kSubtractInt = kSubtract,
-        6, // kSubtractScalar,
-        11, // kXor
+    -1, //  kUnassigned,
+    6, // kAdd,
+    // kAddInt = kAdd,
+    6, // kAddScalar,
+    6, // kAddString,   // string concat
+    kBracketPrecedence, // kArrayOp,
+    10, // kBitAnd,
+    4, // kBitNot,
+    12, // kBitOr,
+    5, // kDivide,
+    // kDivideInt = kDivide,
+    5, // kDivideScalar,
+    kIfElsePrecedence, // kElse,
+    9, // kEqual,
+    // kEqualInt = kEqual,
+    9, // kEqualScalar,
+    9, // kEqualString,
+    -1, // kFlipOps,
+    8, // kGreaterEqual,
+    // kGreaterEqualInt = kGreaterEqual,
+    8, // kGreaterEqualScalar,
+    8, // kGreaterEqualString,
+    kIfElsePrecedence, // kIf,
+    13, // kLogicalAnd,
+    4, // kLogicalNot,
+    14, // kLogicalOr,
+    4, // kMinus,
+    // kMinusInt = kMinus,
+    4, // kMinusScalar,
+    5, // kModulo,
+    // kModuloInt = kModulo,
+    5, // kModuloScalar,
+    5, // kMultiply,
+    // kMultiplyInt = kMultiply,
+    5, // kMultiplyScalar,
+    kBracketPrecedence, // kParen,
+    7, // kShiftLeft,
+    7, // kShiftRight,  // signed
+    6, // kSubtract,
+    // kSubtractInt = kSubtract,
+    6, // kSubtractScalar,
+    11, // kXor
 };
 
 static inline bool is_between(int c, int min, int max)
@@ -165,20 +164,22 @@ static inline bool is_ws(int c)
     return is_between(c, 1, 32);
 }
 
-static int token_length(const char* start) {
+static int token_length(const char* start)
+{
     char ch = start[0];
-    if (! is_between(ch, 'a' , 'z') &&  ! is_between(ch, 'A', 'Z') && ch != '_' && ch != '$')
+    if (!is_between(ch, 'a', 'z') && !is_between(ch, 'A', 'Z') && ch != '_' && ch != '$')
         return -1;
     int length = 0;
     do
         ch = start[++length];
-    while (is_between(ch, 'a' , 'z') || is_between(ch, 'A', 'Z') || is_between(ch, '0', '9') ||
-        ch == '_' || ch == '$');
+    while (is_between(ch, 'a', 'z') || is_between(ch, 'A', 'Z') || is_between(ch, '0', '9') || ch == '_' || ch == '$');
     return length;
 }
 
-SkScriptEngine::SkScriptEngine(SkOpType returnType) :
-    fTokenLength(0), fReturnType(returnType), fError(kNoError)
+SkScriptEngine::SkScriptEngine(SkOpType returnType)
+    : fTokenLength(0)
+    , fReturnType(returnType)
+    , fError(kNoError)
 {
     SkSuppress noInitialSuppress;
     noInitialSuppress.fOperator = kUnassigned;
@@ -191,97 +192,99 @@ SkScriptEngine::SkScriptEngine(SkOpType returnType) :
     fTrackString.appendClear();
 }
 
-SkScriptEngine::~SkScriptEngine() {
+SkScriptEngine::~SkScriptEngine()
+{
     for (SkString** stringPtr = fTrackString.begin(); stringPtr < fTrackString.end(); stringPtr++)
         delete *stringPtr;
     for (SkTypedArray** arrayPtr = fTrackArray.begin(); arrayPtr < fTrackArray.end(); arrayPtr++)
         delete *arrayPtr;
 }
 
-int SkScriptEngine::arithmeticOp(char ch, char nextChar, bool lastPush) {
+int SkScriptEngine::arithmeticOp(char ch, char nextChar, bool lastPush)
+{
     SkOp op = kUnassigned;
     bool reverseOperands = false;
     bool negateResult = false;
     int advance = 1;
     switch (ch) {
-        case '+':
-            // !!! ignoring unary plus as implemented here has the side effect of
-            // suppressing errors like +"hi"
-            if (lastPush == false)  // unary plus, don't push an operator
-                goto returnAdv;
-            op = kAdd;
-            break;
-        case '-':
-            op = lastPush ? kSubtract : kMinus;
-            break;
-        case '*':
-            op = kMultiply;
-            break;
-        case '/':
-            op = kDivide;
-            break;
-        case '>':
-            if (nextChar == '>') {
-                op = kShiftRight;
-                goto twoChar;
-            }
-            op = kGreaterEqual;
-            if (nextChar == '=')
-                goto twoChar;
-            reverseOperands = negateResult = true;
-            break;
-        case '<':
-            if (nextChar == '<') {
-                op = kShiftLeft;
-                goto twoChar;
-            }
-            op = kGreaterEqual;
-            reverseOperands = nextChar == '=';
-            negateResult = ! reverseOperands;
-            advance += reverseOperands;
-            break;
-        case '=':
-            if (nextChar == '=') {
-                op = kEqual;
-                goto twoChar;
-            }
-            break;
-        case '!':
-            if (nextChar == '=') {
-                op = kEqual;
-                negateResult = true;
-twoChar:
-                advance++;
-                break;
-            }
-            op = kLogicalNot;
-            break;
-        case '?':
-            op = kIf;
-            break;
-        case ':':
-            op = kElse;
-            break;
-        case '^':
-            op = kXor;
-            break;
-        case '(':
-            *fOpStack.push() = kParen;  // push even if eval is suppressed
+    case '+':
+        // !!! ignoring unary plus as implemented here has the side effect of
+        // suppressing errors like +"hi"
+        if (lastPush == false) // unary plus, don't push an operator
             goto returnAdv;
-        case '&':
-            SkASSERT(nextChar != '&');
-            op = kBitAnd;
+        op = kAdd;
+        break;
+    case '-':
+        op = lastPush ? kSubtract : kMinus;
+        break;
+    case '*':
+        op = kMultiply;
+        break;
+    case '/':
+        op = kDivide;
+        break;
+    case '>':
+        if (nextChar == '>') {
+            op = kShiftRight;
+            goto twoChar;
+        }
+        op = kGreaterEqual;
+        if (nextChar == '=')
+            goto twoChar;
+        reverseOperands = negateResult = true;
+        break;
+    case '<':
+        if (nextChar == '<') {
+            op = kShiftLeft;
+            goto twoChar;
+        }
+        op = kGreaterEqual;
+        reverseOperands = nextChar == '=';
+        negateResult = !reverseOperands;
+        advance += reverseOperands;
+        break;
+    case '=':
+        if (nextChar == '=') {
+            op = kEqual;
+            goto twoChar;
+        }
+        break;
+    case '!':
+        if (nextChar == '=') {
+            op = kEqual;
+            negateResult = true;
+        twoChar:
+            advance++;
             break;
-        case '|':
-            SkASSERT(nextChar != '|');
-            op = kBitOr;
-            break;
-        case '%':
-            op = kModulo;
-            break;
-        case '~':
-            op = kBitNot;
-            break;
+        }
+        op = kLogicalNot;
+        break;
+    case '?':
+        op = kIf;
+        break;
+    case ':':
+        op = kElse;
+        break;
+    case '^':
+        op = kXor;
+        break;
+    case '(':
+        *fOpStack.push() = kParen; // push even if eval is suppressed
+        goto returnAdv;
+    case '&':
+        SkASSERT(nextChar != '&');
+        op = kBitAnd;
+        break;
+    case '|':
+        SkASSERT(nextChar != '|');
+        op = kBitOr;
+        break;
+    case '%':
+        op = kModulo;
+        break;
+    case '~':
+        op = kBitNot;
+        break;
     }
     if (op == kUnassigned)
         return 0;
@@ -298,54 +301,57 @@ twoChar:
             } while (true);
             signed char topPrecedence = gPrecedence[compare];
             SkASSERT(topPrecedence != -1);
-            if (topPrecedence > precedence || (topPrecedence == precedence &&
-                    gOpAttributes[op].fLeftType == kNoType)) {
+            if (topPrecedence > precedence || (topPrecedence == precedence && gOpAttributes[op].fLeftType == kNoType)) {
                 break;
             }
             if (processOp() == false)
-                return 0;   // error
+                return 0; // error
         } while (true);
         if (negateResult)
-            *fOpStack.push() = (SkOp) (kLogicalNot | kArtificialOp);
+            *fOpStack.push() = (SkOp)(kLogicalNot | kArtificialOp);
         fOpStack.push(op);
         if (reverseOperands)
-            *fOpStack.push() = (SkOp) (kFlipOps | kArtificialOp);
+            *fOpStack.push() = (SkOp)(kFlipOps | kArtificialOp);
     }
 returnAdv:
     return advance;
 }
 
-void SkScriptEngine::boxCallBack(_boxCallBack func, void* userStorage) {
+void SkScriptEngine::boxCallBack(_boxCallBack func, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fBoxCallBack = func;
     commonCallBack(kBox, callBack, userStorage);
 }
 
-void SkScriptEngine::commonCallBack(CallBackType type, UserCallBack& callBack, void* userStorage) {
+void SkScriptEngine::commonCallBack(CallBackType type, UserCallBack& callBack, void* userStorage)
+{
     callBack.fCallBackType = type;
     callBack.fUserStorage = userStorage;
     *fUserCallBacks.prepend() = callBack;
 }
 
 bool SkScriptEngine::convertParams(SkTDArray<SkScriptValue>& params,
-        const SkFunctionParamType* paramTypes, int paramCount) {
+    const SkFunctionParamType* paramTypes, int paramCount)
+{
     if (params.count() > paramCount) {
         fError = kTooManyParameters;
-        return false;   // too many parameters passed
+        return false; // too many parameters passed
     }
     for (int index = 0; index < params.count(); index++) {
-        if (convertTo((SkDisplayTypes) paramTypes[index], &params[index]) == false)
+        if (convertTo((SkDisplayTypes)paramTypes[index], &params[index]) == false)
             return false;
     }
     return true;
 }
 
-bool SkScriptEngine::convertTo(SkDisplayTypes toType, SkScriptValue* value ) {
+bool SkScriptEngine::convertTo(SkDisplayTypes toType, SkScriptValue* value)
+{
     SkDisplayTypes type = value->fType;
     if (type == toType)
         return true;
     if (ToOpType(type) == kObject) {
-#if 0   // !!! I want object->string to get string from displaystringtype, not id
+#if 0 // !!! I want object->string to get string from displaystringtype, not id
         if (ToOpType(toType) == kString) {
             bool success = handleObjectToString(value->fOperand.fObject);
             if (success == false)
@@ -366,8 +372,9 @@ bool SkScriptEngine::convertTo(SkDisplayTypes toType, SkScriptValue* value ) {
     return ConvertTo(this, toType, value);
 }
 
-bool SkScriptEngine::evaluateDot(const char*& script, bool suppressed) {
-    size_t fieldLength = token_length(++script);        // skip dot
+bool SkScriptEngine::evaluateDot(const char*& script, bool suppressed)
+{
+    size_t fieldLength = token_length(++script); // skip dot
     if (fieldLength == 0) {
         fError = kExpectedFieldName;
         return false;
@@ -383,10 +390,11 @@ bool SkScriptEngine::evaluateDot(const char*& script, bool suppressed) {
 }
 
 bool SkScriptEngine::evaluateDotParam(const char*& script, bool suppressed,
-        const char* field, size_t fieldLength) {
+    const char* field, size_t fieldLength)
+{
     void* object;
     if (suppressed)
-        object = NULL;
+        object = nullptr;
     else {
         if (fTypeStack.top() != kObject) {
             fError = kDotOperatorExpectsObject;
@@ -401,22 +409,22 @@ bool SkScriptEngine::evaluateDotParam(const char*& script, bool suppressed,
         script++;
     bool success = true;
     if (ch != '(') {
-            if (suppressed == false) {
-                if ((success = handleMember(field, fieldLength, object)) == false)
-                    fError = kHandleMemberFailed;
-            }
+        if (suppressed == false) {
+            if ((success = handleMember(field, fieldLength, object)) == false)
+                fError = kHandleMemberFailed;
+        }
     } else {
         SkTDArray<SkScriptValue> params;
         *fBraceStack.push() = kFunctionBrace;
         success = functionParams(&script, params);
-        if (success && suppressed == false &&
-                (success = handleMemberFunction(field, fieldLength, object, params)) == false)
+        if (success && suppressed == false && (success = handleMemberFunction(field, fieldLength, object, params)) == false)
             fError = kHandleMemberFunctionFailed;
     }
     return success;
 }
 
-bool SkScriptEngine::evaluateScript(const char** scriptPtr, SkScriptValue* value) {
+bool SkScriptEngine::evaluateScript(const char** scriptPtr, SkScriptValue* value)
+{
 #ifdef SK_DEBUG
     const char** original = scriptPtr;
 #endif
@@ -458,7 +466,8 @@ end:
     return success;
 }
 
-void SkScriptEngine::forget(SkTypedArray* array) {
+void SkScriptEngine::forget(SkTypedArray* array)
+{
     if (array->getType() == SkType_String) {
         for (int index = 0; index < array->count(); index++) {
             SkString* string = (*array)[index].fString;
@@ -471,7 +480,7 @@ void SkScriptEngine::forget(SkTypedArray* array) {
     if (array->getType() == SkType_Array) {
         for (int index = 0; index < array->count(); index++) {
             SkTypedArray* child = (*array)[index].fArray;
-            forget(child);  // forgets children of child
+            forget(child); // forgets children of child
             int found = fTrackArray.find(child);
             if (found >= 0)
                 fTrackArray.remove(found);
@@ -479,20 +488,22 @@ void SkScriptEngine::forget(SkTypedArray* array) {
     }
 }
 
-void SkScriptEngine::functionCallBack(_functionCallBack func, void* userStorage) {
+void SkScriptEngine::functionCallBack(_functionCallBack func, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fFunctionCallBack = func;
     commonCallBack(kFunction, callBack, userStorage);
 }
 
-bool SkScriptEngine::functionParams(const char** scriptPtr, SkTDArray<SkScriptValue>& params) {
+bool SkScriptEngine::functionParams(const char** scriptPtr, SkTDArray<SkScriptValue>& params)
+{
     (*scriptPtr)++; // skip open paren
     *fOpStack.push() = kParen;
     *fBraceStack.push() = kFunctionBrace;
     SkBool suppressed = fSuppressStack.top().fSuppress;
     do {
         SkScriptValue value;
-        bool success = innerScript(scriptPtr, suppressed ? NULL : &value);
+        bool success = innerScript(scriptPtr, suppressed ? nullptr : &value);
         if (success == false) {
             fError = kErrorInFunctionParameters;
             return false;
@@ -508,14 +519,16 @@ bool SkScriptEngine::functionParams(const char** scriptPtr, SkTDArray<SkScriptVa
 }
 
 #ifdef SK_DEBUG
-bool SkScriptEngine::getErrorString(SkString* str) const {
+bool SkScriptEngine::getErrorString(SkString* str) const
+{
     if (fError)
         str->set(errorStrings[fError - 1]);
     return fError != 0;
 }
 #endif
 
-bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
+bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value)
+{
     const char* script = *scriptPtr;
     char ch;
     bool lastPush = false;
@@ -532,7 +545,7 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
         SkOperand operand;
         const char* dotCheck;
         if (fBraceStack.count() > baseBrace) {
-#if 0   // disable support for struct brace
+#if 0 // disable support for struct brace
             if (ch == ':') {
                 SkASSERT(fTokenLength > 0);
                 SkASSERT(fBraceStack.top() == kStructBrace);
@@ -559,7 +572,7 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
                             if (convertTo(tokenInfo->getType(), &tokenValue) == false)
                                 return false;
                         }
-                        tokenInfo->writeValue(fDisplayable, NULL, 0, 0,
+                        tokenInfo->writeValue(fDisplayable, nullptr, 0, 0,
                             (void*) ((char*) fInfo->memberData(fDisplayable) + tokenInfo->fOffset + fArrayOffset),
                             tokenInfo->getType(), tokenValue);
                     }
@@ -570,7 +583,7 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
 #endif
             if (fBraceStack.top() == kArrayBrace) {
                 SkScriptValue tokenValue;
-                success = innerScript(&script, &tokenValue);    // terminate and return on comma, close brace
+                success = innerScript(&script, &tokenValue); // terminate and return on comma, close brace
                 if (success == false) {
                     fError = kErrorInArrrayIndex;
                     return false;
@@ -616,14 +629,14 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
                 continue;
             } else if (ch == '[') {
                 if (handleProperty(SkToBool(suppressed)) == false)
-                    return false;   // note: never triggered by standard animator plugins
+                    return false; // note: never triggered by standard animator plugins
                 if (handleArrayIndexer(&script, SkToBool(suppressed)) == false)
                     return false;
                 lastPush = true;
                 continue;
             } else if (ch != '.') {
                 if (handleProperty(SkToBool(suppressed)) == false)
-                    return false;   // note: never triggered by standard animator plugins
+                    return false; // note: never triggered by standard animator plugins
                 lastPush = true;
                 continue;
             }
@@ -635,7 +648,7 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
             }
             script += 2;
             script = SkParse::FindHex(script, (uint32_t*)&operand.fS32);
-            if (script == NULL) {
+            if (script == nullptr) {
                 fError = kExpectedHex;
                 return false;
             }
@@ -651,11 +664,11 @@ bool SkScriptEngine::innerScript(const char** scriptPtr, SkScriptValue* value) {
             dotCheck = SkParse::FindS32(script, &operand.fS32);
             if (dotCheck[0] != '.') {
                 script = dotCheck;
-intCommon:
+            intCommon:
                 if (suppressed == false)
                     *fTypeStack.push() = kInt;
             } else {
-scalarCommon:
+            scalarCommon:
                 script = SkParse::FindScalar(script, &operand.fScalar);
                 if (suppressed == false)
                     *fTypeStack.push() = kScalar;
@@ -706,12 +719,11 @@ scalarCommon:
             }
             lastPush = true;
             continue;
-        }
-        ;
-        if (ch ==  '.') {
+        };
+        if (ch == '.') {
             if (fTokenLength == 0) {
                 SkScriptValue scriptValue;
-                SkDEBUGCODE(scriptValue.fOperand.fObject = NULL);
+                SkDEBUGCODE(scriptValue.fOperand.fObject = nullptr);
                 int tokenLength = token_length(++script);
                 const char* token = script;
                 script += tokenLength;
@@ -747,7 +759,7 @@ scalarCommon:
                     continue;
                 operand.fArray = value->fOperand.fArray = new SkTypedArray(ToDisplayType(fReturnType));
                 track(value->fOperand.fArray);
-                *fTypeStack.push() = (SkOpType) kArray;
+                *fTypeStack.push() = (SkOpType)kArray;
                 fOperandStack.push(operand);
                 continue;
             }
@@ -793,7 +805,7 @@ scalarCommon:
         }
         char nextChar = script[1];
         int advance = logicalOp(ch, nextChar);
-        if (advance < 0)     // error
+        if (advance < 0) // error
             return false;
         if (advance == 0)
             advance = arithmeticOp(ch, nextChar, lastPush);
@@ -807,17 +819,16 @@ scalarCommon:
     if (fTokenLength > 0) {
         success = handleProperty(suppressed);
         if (success == false)
-            return false;   // note: never triggered by standard animator plugins
+            return false; // note: never triggered by standard animator plugins
     }
-    while (fOpStack.count() > opBalance) {   // leave open paren
+    while (fOpStack.count() > opBalance) { // leave open paren
         if ((fError = opError()) != kNoError)
             return false;
         if (processOp() == false)
             return false;
     }
     SkOpType topType = fTypeStack.count() > 0 ? fTypeStack.top() : kNoType;
-    if (suppressed == false && topType != fReturnType &&
-            topType == kString && fReturnType != kNoType) { // if result is a string, give handle property a chance to convert it to the property value
+    if (suppressed == false && topType != fReturnType && topType == kString && fReturnType != kNoType) { // if result is a string, give handle property a chance to convert it to the property value
         SkString* string = fOperandStack.top().fString;
         fToken = string->c_str();
         fTokenLength = string->size();
@@ -841,7 +852,7 @@ scalarCommon:
         SkOpType type;
         fTypeStack.pop(&type);
         value->fType = ToDisplayType(type);
-//      SkASSERT(value->fType != SkType_Unknown);
+        //      SkASSERT(value->fType != SkType_Unknown);
         if (topType != fReturnType && topType == kObject && fReturnType != kNoType) {
             if (convertTo(ToDisplayType(fReturnType), value) == false)
                 return false;
@@ -853,13 +864,15 @@ scalarCommon:
     return true; // no error
 }
 
-void SkScriptEngine::memberCallBack(_memberCallBack member , void* userStorage) {
+void SkScriptEngine::memberCallBack(_memberCallBack member, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fMemberCallBack = member;
     commonCallBack(kMember, callBack, userStorage);
 }
 
-void SkScriptEngine::memberFunctionCallBack(_memberFunctionCallBack func, void* userStorage) {
+void SkScriptEngine::memberFunctionCallBack(_memberFunctionCallBack func, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fMemberFunctionCallBack = func;
     commonCallBack(kMemberFunction, callBack, userStorage);
@@ -873,14 +886,15 @@ void SkScriptEngine::objectToStringCallBack(_objectToStringCallBack func, void* 
 }
 #endif
 
-bool SkScriptEngine::handleArrayIndexer(const char** scriptPtr, bool suppressed) {
+bool SkScriptEngine::handleArrayIndexer(const char** scriptPtr, bool suppressed)
+{
     SkScriptValue scriptValue;
     (*scriptPtr)++;
     *fOpStack.push() = kParen;
     *fBraceStack.push() = kArrayBrace;
     SkOpType saveType = fReturnType;
     fReturnType = kInt;
-    bool success = innerScript(scriptPtr, suppressed == false ? &scriptValue : NULL);
+    bool success = innerScript(scriptPtr, suppressed == false ? &scriptValue : nullptr);
     if (success == false)
         return false;
     fReturnType = saveType;
@@ -903,8 +917,8 @@ bool SkScriptEngine::handleArrayIndexer(const char** scriptPtr, bool suppressed)
             }
         }
         *fTypeStack.push() = scriptValue.fOperand.fArray->getOpType();
-//      SkASSERT(index >= 0);
-        if ((unsigned) index >= (unsigned) scriptValue.fOperand.fArray->count()) {
+        //      SkASSERT(index >= 0);
+        if ((unsigned)index >= (unsigned)scriptValue.fOperand.fArray->count()) {
             fError = kArrayIndexOutOfBounds;
             return false;
         }
@@ -915,7 +929,8 @@ bool SkScriptEngine::handleArrayIndexer(const char** scriptPtr, bool suppressed)
     return success;
 }
 
-bool SkScriptEngine::handleBox(SkScriptValue* scriptValue) {
+bool SkScriptEngine::handleBox(SkScriptValue* scriptValue)
+{
     bool success = true;
     for (UserCallBack* callBack = fUserCallBacks.begin(); callBack < fUserCallBacks.end(); callBack++) {
         if (callBack->fCallBackType != kBox)
@@ -931,7 +946,8 @@ done:
     return success;
 }
 
-bool SkScriptEngine::handleFunction(const char** scriptPtr, bool suppressed) {
+bool SkScriptEngine::handleFunction(const char** scriptPtr, bool suppressed)
+{
     SkScriptValue callbackResult;
     SkTDArray<SkScriptValue> params;
     SkString functionName(fToken, fTokenLength);
@@ -960,7 +976,8 @@ done:
     return success;
 }
 
-bool SkScriptEngine::handleMember(const char* field, size_t len, void* object) {
+bool SkScriptEngine::handleMember(const char* field, size_t len, void* object)
+{
     SkScriptValue callbackResult;
     bool success = true;
     for (UserCallBack* callBack = fUserCallBacks.begin(); callBack < fUserCallBacks.end(); callBack++) {
@@ -980,7 +997,8 @@ done:
     return success;
 }
 
-bool SkScriptEngine::handleMemberFunction(const char* field, size_t len, void* object, SkTDArray<SkScriptValue>& params) {
+bool SkScriptEngine::handleMemberFunction(const char* field, size_t len, void* object, SkTDArray<SkScriptValue>& params)
+{
     SkScriptValue callbackResult;
     bool success = true;
     for (UserCallBack* callBack = fUserCallBacks.begin(); callBack < fUserCallBacks.end(); callBack++) {
@@ -1024,7 +1042,8 @@ done:
 }
 #endif
 
-bool SkScriptEngine::handleProperty(bool suppressed) {
+bool SkScriptEngine::handleProperty(bool suppressed)
+{
     SkScriptValue callbackResult;
     bool success = true;
     if (suppressed)
@@ -1037,7 +1056,7 @@ bool SkScriptEngine::handleProperty(bool suppressed) {
             success = (*callBack->fPropertyCallBack)(fToken, fTokenLength,
                 callBack->fUserStorage, &callbackResult);
             if (success) {
-                if (callbackResult.fType == SkType_String && callbackResult.fOperand.fString == NULL) {
+                if (callbackResult.fType == SkType_String && callbackResult.fOperand.fString == nullptr) {
                     callbackResult.fOperand.fString = new SkString(fToken, fTokenLength);
                     track(callbackResult.fOperand.fString);
                 }
@@ -1052,7 +1071,8 @@ done:
     return success;
 }
 
-bool SkScriptEngine::handleUnbox(SkScriptValue* scriptValue) {
+bool SkScriptEngine::handleUnbox(SkScriptValue* scriptValue)
+{
     bool success = true;
     for (UserCallBack* callBack = fUserCallBacks.begin(); callBack < fUserCallBacks.end(); callBack++) {
         if (callBack->fCallBackType != kUnbox)
@@ -1072,38 +1092,39 @@ done:
 // note that entire expression is treated as if it were enclosed in parens
 // an open paren is always the first thing in the op stack
 
-int SkScriptEngine::logicalOp(char ch, char nextChar) {
+int SkScriptEngine::logicalOp(char ch, char nextChar)
+{
     int advance = 1;
     SkOp match;
     signed char precedence;
     switch (ch) {
-        case ')':
-            match = kParen;
-            break;
-        case ']':
-            match = kArrayOp;
-            break;
-        case '?':
-            match = kIf;
-            break;
-        case ':':
-            match = kElse;
-            break;
-        case '&':
-            if (nextChar != '&')
-                goto noMatch;
-            match = kLogicalAnd;
-            advance = 2;
-            break;
-        case '|':
-            if (nextChar != '|')
-                goto noMatch;
-            match = kLogicalOr;
-            advance = 2;
-            break;
-        default:
-noMatch:
-            return 0;
+    case ')':
+        match = kParen;
+        break;
+    case ']':
+        match = kArrayOp;
+        break;
+    case '?':
+        match = kIf;
+        break;
+    case ':':
+        match = kElse;
+        break;
+    case '&':
+        if (nextChar != '&')
+            goto noMatch;
+        match = kLogicalAnd;
+        advance = 2;
+        break;
+    case '|':
+        if (nextChar != '|')
+            goto noMatch;
+        match = kLogicalOr;
+        advance = 2;
+        break;
+    default:
+    noMatch:
+        return 0;
     }
     SkSuppress suppress;
     precedence = gPrecedence[match];
@@ -1140,100 +1161,100 @@ noMatch:
     if (fSuppressStack.top().fOpStackDepth > fOpStack.count())
         fSuppressStack.pop();
     switch (match) {
-        case kParen:
-        case kArrayOp:
-            if (fOpStack.count() <= 1 || fOpStack.top() != match) {
-                fError = kMismatchedBrackets;
+    case kParen:
+    case kArrayOp:
+        if (fOpStack.count() <= 1 || fOpStack.top() != match) {
+            fError = kMismatchedBrackets;
+            return -1;
+        }
+        if (match == kParen)
+            fOpStack.pop();
+        else {
+            SkOpType indexType;
+            fTypeStack.pop(&indexType);
+            if (indexType != kInt && indexType != kScalar) {
+                fError = kExpectedNumberForArrayIndex; // (although, could permit strings eventually)
                 return -1;
             }
-            if (match == kParen)
-                fOpStack.pop();
-            else {
-                SkOpType indexType;
-                fTypeStack.pop(&indexType);
-                if (indexType != kInt && indexType != kScalar) {
-                    fError = kExpectedNumberForArrayIndex; // (although, could permit strings eventually)
-                    return -1;
-                }
-                SkOperand indexOperand;
-                fOperandStack.pop(&indexOperand);
-                int index = indexType == kScalar ? SkScalarFloorToInt(indexOperand.fScalar) :
-                    indexOperand.fS32;
-                SkOpType arrayType;
-                fTypeStack.pop(&arrayType);
-                if ((unsigned)arrayType != (unsigned)kArray) {
-                    fError = kExpectedArray;
-                    return -1;
-                }
-                SkOperand arrayOperand;
-                fOperandStack.pop(&arrayOperand);
-                SkTypedArray* array = arrayOperand.fArray;
-                SkOperand operand;
-                if (array->getIndex(index, &operand) == false) {
-                    fError = kIndexOutOfRange;
-                    return -1;
-                }
-                SkOpType resultType = array->getOpType();
-                fTypeStack.push(resultType);
-                fOperandStack.push(operand);
-            }
-            break;
-        case kIf: {
-            SkScriptValue ifValue;
-            SkOpType ifType;
-            fTypeStack.pop(&ifType);
-            ifValue.fType = ToDisplayType(ifType);
-            fOperandStack.pop(&ifValue.fOperand);
-            if (convertTo(SkType_Int, &ifValue) == false)
-                return -1;
-            if (ifValue.fType != SkType_Int) {
-                fError = kExpectedIntForConditionOperator;
+            SkOperand indexOperand;
+            fOperandStack.pop(&indexOperand);
+            int index = indexType == kScalar ? SkScalarFloorToInt(indexOperand.fScalar) : indexOperand.fS32;
+            SkOpType arrayType;
+            fTypeStack.pop(&arrayType);
+            if ((unsigned)arrayType != (unsigned)kArray) {
+                fError = kExpectedArray;
                 return -1;
             }
-            suppress.fSuppress = ifValue.fOperand.fS32 == 0;
-            suppress.fOperator = kIf;
+            SkOperand arrayOperand;
+            fOperandStack.pop(&arrayOperand);
+            SkTypedArray* array = arrayOperand.fArray;
+            SkOperand operand;
+            if (array->getIndex(index, &operand) == false) {
+                fError = kIndexOutOfRange;
+                return -1;
+            }
+            SkOpType resultType = array->getOpType();
+            fTypeStack.push(resultType);
+            fOperandStack.push(operand);
+        }
+        break;
+    case kIf: {
+        SkScriptValue ifValue;
+        SkOpType ifType;
+        fTypeStack.pop(&ifType);
+        ifValue.fType = ToDisplayType(ifType);
+        fOperandStack.pop(&ifValue.fOperand);
+        if (convertTo(SkType_Int, &ifValue) == false)
+            return -1;
+        if (ifValue.fType != SkType_Int) {
+            fError = kExpectedIntForConditionOperator;
+            return -1;
+        }
+        suppress.fSuppress = ifValue.fOperand.fS32 == 0;
+        suppress.fOperator = kIf;
+        suppress.fOpStackDepth = fOpStack.count();
+        suppress.fElse = false;
+        fSuppressStack.push(suppress);
+        // if left is true, do only up to colon
+        // if left is false, do only after colon
+    } break;
+    case kElse:
+    flipSuppress:
+        if (fSuppressStack.top().fElse)
+            fSuppressStack.pop();
+        fSuppressStack.top().fElse = true;
+        fSuppressStack.top().fSuppress ^= true;
+        // flip last do / don't do consideration from last '?'
+        break;
+    case kLogicalAnd:
+    case kLogicalOr: {
+        if (fTypeStack.top() != kInt) {
+            fError = kExpectedBooleanExpression;
+            return -1;
+        }
+        int32_t topInt = fOperandStack.top().fS32;
+        if (fOpStack.top() != kLogicalAnd)
+            *fOpStack.push() = kLogicalAnd; // really means 'to bool', and is appropriate for 'or'
+        if (match == kLogicalOr ? topInt != 0 : topInt == 0) {
+            suppress.fSuppress = true;
+            suppress.fOperator = match;
             suppress.fOpStackDepth = fOpStack.count();
             suppress.fElse = false;
             fSuppressStack.push(suppress);
-            // if left is true, do only up to colon
-            // if left is false, do only after colon
-            } break;
-        case kElse:
-flipSuppress:
-            if (fSuppressStack.top().fElse)
-                fSuppressStack.pop();
-            fSuppressStack.top().fElse = true;
-            fSuppressStack.top().fSuppress ^= true;
-            // flip last do / don't do consideration from last '?'
-            break;
-        case kLogicalAnd:
-        case kLogicalOr: {
-            if (fTypeStack.top() != kInt) {
-                fError = kExpectedBooleanExpression;
-                return -1;
-            }
-            int32_t topInt = fOperandStack.top().fS32;
-            if (fOpStack.top() != kLogicalAnd)
-                *fOpStack.push() = kLogicalAnd; // really means 'to bool', and is appropriate for 'or'
-            if (match == kLogicalOr ? topInt != 0 : topInt == 0) {
-                suppress.fSuppress = true;
-                suppress.fOperator = match;
-                suppress.fOpStackDepth = fOpStack.count();
-                suppress.fElse = false;
-                fSuppressStack.push(suppress);
-            } else {
-                fTypeStack.pop();
-                fOperandStack.pop();
-            }
-        }   break;
-        default:
-            SkASSERT(0);
+        } else {
+            fTypeStack.pop();
+            fOperandStack.pop();
+        }
+    } break;
+    default:
+        SkASSERT(0);
     }
 goHome:
     return advance;
 }
 
-SkScriptEngine::Error SkScriptEngine::opError() {
+SkScriptEngine::Error SkScriptEngine::opError()
+{
     int opCount = fOpStack.count();
     int operandCount = fOperandStack.count();
     if (opCount == 0) {
@@ -1241,7 +1262,7 @@ SkScriptEngine::Error SkScriptEngine::opError() {
             return kExpectedOperator;
         return kNoError;
     }
-    SkOp op = (SkOp) (fOpStack.top() & ~kArtificialOp);
+    SkOp op = (SkOp)(fOpStack.top() & ~kArtificialOp);
     const SkOperatorAttributes* attributes = &gOpAttributes[op];
     if (attributes->fLeftType != kNoType && operandCount < 2)
         return kExpectedValue;
@@ -1250,10 +1271,11 @@ SkScriptEngine::Error SkScriptEngine::opError() {
     return kNoError;
 }
 
-bool SkScriptEngine::processOp() {
+bool SkScriptEngine::processOp()
+{
     SkOp op;
     fOpStack.pop(&op);
-    op = (SkOp) (op & ~kArtificialOp);
+    op = (SkOp)(op & ~kArtificialOp);
     const SkOperatorAttributes* attributes = &gOpAttributes[op];
     SkOpType type2;
     fTypeStack.pop(&type2);
@@ -1268,7 +1290,7 @@ bool SkScriptEngine::processOp() {
             SkTSwap(type1, type2);
             SkTSwap(operand1, operand2);
             fOpStack.pop(&op);
-            op = (SkOp) (op & ~kArtificialOp);
+            op = (SkOp)(op & ~kArtificialOp);
             attributes = &gOpAttributes[op];
         }
         if (type1 == kObject && (type1 & attributes->fLeftType) == 0) {
@@ -1310,14 +1332,14 @@ bool SkScriptEngine::processOp() {
                 }
                 if (type2 == kInt) {
                     operand2.fScalar = IntToScalar(operand2.fS32);
-                     type2 = kScalar;
+                    type2 = kScalar;
                 }
             }
         }
         if ((type1 & attributes->fLeftType) == 0 || type1 != type2) {
             if (type1 == kString) {
                 const char* result = SkParse::FindScalar(operand1.fString->c_str(), &operand1.fScalar);
-                if (result == NULL) {
+                if (result == nullptr) {
                     fError = kExpectedNumber;
                     return false;
                 }
@@ -1332,7 +1354,7 @@ bool SkScriptEngine::processOp() {
     if ((type2 & attributes->fRightType) == 0 || type1 != type2) {
         if (type2 == kString) {
             const char* result = SkParse::FindScalar(operand2.fString->c_str(), &operand2.fScalar);
-            if (result == NULL) {
+            if (result == nullptr) {
                 fError = kExpectedNumber;
                 return false;
             }
@@ -1344,150 +1366,155 @@ bool SkScriptEngine::processOp() {
         }
     }
     if (type2 == kScalar)
-        op = (SkOp) (op + 1);
+        op = (SkOp)(op + 1);
     else if (type2 == kString)
-        op = (SkOp) (op + 2);
-    switch(op) {
-        case kAddInt:
-            operand2.fS32 += operand1.fS32;
+        op = (SkOp)(op + 2);
+    switch (op) {
+    case kAddInt:
+        operand2.fS32 += operand1.fS32;
+        break;
+    case kAddScalar:
+        operand2.fScalar += operand1.fScalar;
+        break;
+    case kAddString:
+        if (fTrackString.find(operand1.fString) < 0) {
+            operand1.fString = new SkString(*operand1.fString);
+            track(operand1.fString);
+        }
+        operand1.fString->append(*operand2.fString);
+        operand2 = operand1;
+        break;
+    case kBitAnd:
+        operand2.fS32 &= operand1.fS32;
+        break;
+    case kBitNot:
+        operand2.fS32 = ~operand2.fS32;
+        break;
+    case kBitOr:
+        operand2.fS32 |= operand1.fS32;
+        break;
+    case kDivideInt:
+        if (operand2.fS32 == 0) {
+            operand2.fS32 = operand1.fS32 == 0 ? SK_NaN32 : operand1.fS32 > 0 ? SK_MaxS32 : -SK_MaxS32;
             break;
-        case kAddScalar:
-            operand2.fScalar += operand1.fScalar;
-            break;
-        case kAddString:
-            if (fTrackString.find(operand1.fString) < 0) {
-                operand1.fString = SkNEW_ARGS(SkString, (*operand1.fString));
-                track(operand1.fString);
-            }
-            operand1.fString->append(*operand2.fString);
-            operand2 = operand1;
-            break;
-        case kBitAnd:
-            operand2.fS32 &= operand1.fS32;
-            break;
-        case kBitNot:
-            operand2.fS32 = ~operand2.fS32;
-            break;
-        case kBitOr:
-            operand2.fS32 |= operand1.fS32;
-            break;
-        case kDivideInt:
-            if (operand2.fS32 == 0) {
-                operand2.fS32 = operand1.fS32 == 0 ? SK_NaN32 : operand1.fS32 > 0 ? SK_MaxS32 : -SK_MaxS32;
-                break;
-            } else {
-                int32_t original = operand2.fS32;
-                operand2.fS32 = operand1.fS32 / operand2.fS32;
-                if (original * operand2.fS32 == operand1.fS32)
-                    break;    // integer divide was good enough
-                operand2.fS32 = original;
-                type2 = kScalar;
-            }
-        case kDivideScalar:
-            if (operand2.fScalar == 0)
-                operand2.fScalar = operand1.fScalar == 0 ? SK_ScalarNaN : operand1.fScalar > 0 ? SK_ScalarMax : -SK_ScalarMax;
-            else
-                operand2.fScalar = operand1.fScalar / operand2.fScalar;
-            break;
-        case kEqualInt:
-            operand2.fS32 = operand1.fS32 == operand2.fS32;
-            break;
-        case kEqualScalar:
-            operand2.fS32 = operand1.fScalar == operand2.fScalar;
-            type2 = kInt;
-            break;
-        case kEqualString:
-            operand2.fS32 = *operand1.fString == *operand2.fString;
-            type2 = kInt;
-            break;
-        case kGreaterEqualInt:
-            operand2.fS32 = operand1.fS32 >= operand2.fS32;
-            break;
-        case kGreaterEqualScalar:
-            operand2.fS32 = operand1.fScalar >= operand2.fScalar;
-            type2 = kInt;
-            break;
-        case kGreaterEqualString:
-            operand2.fS32 = strcmp(operand1.fString->c_str(), operand2.fString->c_str()) >= 0;
-            type2 = kInt;
-            break;
-        case kLogicalAnd:
-            operand2.fS32 = !! operand2.fS32;   // really, ToBool
-            break;
-        case kLogicalNot:
-            operand2.fS32 = ! operand2.fS32;
-            break;
-        case kLogicalOr:
-            SkASSERT(0);    // should have already been processed
-            break;
-        case kMinusInt:
-            operand2.fS32 = -operand2.fS32;
-            break;
-        case kMinusScalar:
-            operand2.fScalar = -operand2.fScalar;
-            break;
-        case kModuloInt:
-            operand2.fS32 = operand1.fS32 % operand2.fS32;
-            break;
-        case kModuloScalar:
-            operand2.fScalar = SkScalarMod(operand1.fScalar, operand2.fScalar);
-            break;
-        case kMultiplyInt:
-            operand2.fS32 *= operand1.fS32;
-            break;
-        case kMultiplyScalar:
-            operand2.fScalar = SkScalarMul(operand1.fScalar, operand2.fScalar);
-            break;
-        case kShiftLeft:
-            operand2.fS32 = operand1.fS32 << operand2.fS32;
-            break;
-        case kShiftRight:
-            operand2.fS32 = operand1.fS32 >> operand2.fS32;
-            break;
-        case kSubtractInt:
-            operand2.fS32 = operand1.fS32 - operand2.fS32;
-            break;
-        case kSubtractScalar:
-            operand2.fScalar = operand1.fScalar - operand2.fScalar;
-            break;
-        case kXor:
-            operand2.fS32 ^= operand1.fS32;
-            break;
-        default:
-            SkASSERT(0);
+        } else {
+            int32_t original = operand2.fS32;
+            operand2.fS32 = operand1.fS32 / operand2.fS32;
+            if (original * operand2.fS32 == operand1.fS32)
+                break; // integer divide was good enough
+            operand2.fS32 = original;
+            type2 = kScalar;
+        }
+    case kDivideScalar:
+        if (operand2.fScalar == 0)
+            operand2.fScalar = operand1.fScalar == 0 ? SK_ScalarNaN : operand1.fScalar > 0 ? SK_ScalarMax : -SK_ScalarMax;
+        else
+            operand2.fScalar = operand1.fScalar / operand2.fScalar;
+        break;
+    case kEqualInt:
+        operand2.fS32 = operand1.fS32 == operand2.fS32;
+        break;
+    case kEqualScalar:
+        operand2.fS32 = operand1.fScalar == operand2.fScalar;
+        type2 = kInt;
+        break;
+    case kEqualString:
+        operand2.fS32 = *operand1.fString == *operand2.fString;
+        type2 = kInt;
+        break;
+    case kGreaterEqualInt:
+        operand2.fS32 = operand1.fS32 >= operand2.fS32;
+        break;
+    case kGreaterEqualScalar:
+        operand2.fS32 = operand1.fScalar >= operand2.fScalar;
+        type2 = kInt;
+        break;
+    case kGreaterEqualString:
+        operand2.fS32 = strcmp(operand1.fString->c_str(), operand2.fString->c_str()) >= 0;
+        type2 = kInt;
+        break;
+    case kLogicalAnd:
+        operand2.fS32 = !!operand2.fS32; // really, ToBool
+        break;
+    case kLogicalNot:
+        operand2.fS32 = !operand2.fS32;
+        break;
+    case kLogicalOr:
+        SkASSERT(0); // should have already been processed
+        break;
+    case kMinusInt:
+        operand2.fS32 = -operand2.fS32;
+        break;
+    case kMinusScalar:
+        operand2.fScalar = -operand2.fScalar;
+        break;
+    case kModuloInt:
+        operand2.fS32 = operand1.fS32 % operand2.fS32;
+        break;
+    case kModuloScalar:
+        operand2.fScalar = SkScalarMod(operand1.fScalar, operand2.fScalar);
+        break;
+    case kMultiplyInt:
+        operand2.fS32 *= operand1.fS32;
+        break;
+    case kMultiplyScalar:
+        operand2.fScalar = SkScalarMul(operand1.fScalar, operand2.fScalar);
+        break;
+    case kShiftLeft:
+        operand2.fS32 = operand1.fS32 << operand2.fS32;
+        break;
+    case kShiftRight:
+        operand2.fS32 = operand1.fS32 >> operand2.fS32;
+        break;
+    case kSubtractInt:
+        operand2.fS32 = operand1.fS32 - operand2.fS32;
+        break;
+    case kSubtractScalar:
+        operand2.fScalar = operand1.fScalar - operand2.fScalar;
+        break;
+    case kXor:
+        operand2.fS32 ^= operand1.fS32;
+        break;
+    default:
+        SkASSERT(0);
     }
     fTypeStack.push(type2);
     fOperandStack.push(operand2);
     return true;
 }
 
-void SkScriptEngine::propertyCallBack(_propertyCallBack prop, void* userStorage) {
+void SkScriptEngine::propertyCallBack(_propertyCallBack prop, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fPropertyCallBack = prop;
     commonCallBack(kProperty, callBack, userStorage);
 }
 
-void SkScriptEngine::track(SkTypedArray* array) {
+void SkScriptEngine::track(SkTypedArray* array)
+{
     SkASSERT(fTrackArray.find(array) < 0);
     *(fTrackArray.end() - 1) = array;
     fTrackArray.appendClear();
 }
 
-void SkScriptEngine::track(SkString* string) {
+void SkScriptEngine::track(SkString* string)
+{
     SkASSERT(fTrackString.find(string) < 0);
     *(fTrackString.end() - 1) = string;
     fTrackString.appendClear();
 }
 
-void SkScriptEngine::unboxCallBack(_unboxCallBack func, void* userStorage) {
+void SkScriptEngine::unboxCallBack(_unboxCallBack func, void* userStorage)
+{
     UserCallBack callBack;
     callBack.fUnboxCallBack = func;
     commonCallBack(kUnbox, callBack, userStorage);
 }
 
-bool SkScriptEngine::ConvertTo(SkScriptEngine* engine, SkDisplayTypes toType, SkScriptValue* value ) {
+bool SkScriptEngine::ConvertTo(SkScriptEngine* engine, SkDisplayTypes toType, SkScriptValue* value)
+{
     SkASSERT(value);
-    if (SkDisplayType::IsEnum(NULL /* fMaker */, toType))
+    if (SkDisplayType::IsEnum(nullptr /* fMaker */, toType))
         toType = SkType_Int;
     if (toType == SkType_Point || toType == SkType_3D_Point)
         toType = SkType_Float;
@@ -1499,60 +1526,60 @@ bool SkScriptEngine::ConvertTo(SkScriptEngine* engine, SkDisplayTypes toType, Sk
     SkOperand& operand = value->fOperand;
     bool success = true;
     switch (toType) {
-        case SkType_Int:
-            if (type == SkType_Boolean)
+    case SkType_Int:
+        if (type == SkType_Boolean)
+            break;
+        if (type == SkType_Float)
+            operand.fS32 = SkScalarFloorToInt(operand.fScalar);
+        else {
+            if (type != SkType_String) {
+                success = false;
+                break; // error
+            }
+            success = SkParse::FindS32(operand.fString->c_str(), &operand.fS32) != nullptr;
+        }
+        break;
+    case SkType_Float:
+        if (type == SkType_Int) {
+            if (operand.fS32 == SK_NaN32)
+                operand.fScalar = SK_ScalarNaN;
+            else if (SkAbs32(operand.fS32) == SK_MaxS32)
+                operand.fScalar = SkSign32(operand.fS32) * SK_ScalarMax;
+            else
+                operand.fScalar = SkIntToScalar(operand.fS32);
+        } else {
+            if (type != SkType_String) {
+                success = false;
+                break; // error
+            }
+            success = SkParse::FindScalar(operand.fString->c_str(), &operand.fScalar) != nullptr;
+        }
+        break;
+    case SkType_String: {
+        SkString* strPtr = new SkString();
+        SkASSERT(engine);
+        engine->track(strPtr);
+        if (type == SkType_Int) {
+            strPtr->appendS32(operand.fS32);
+        } else if (type == SkType_Displayable) {
+            SkASSERT(0); // must call through instance version instead of static version
+        } else {
+            if (type != SkType_Float) {
+                success = false;
                 break;
-            if (type == SkType_Float)
-                operand.fS32 = SkScalarFloorToInt(operand.fScalar);
-            else {
-                if (type != SkType_String) {
-                    success = false;
-                    break; // error
-                }
-                success = SkParse::FindS32(operand.fString->c_str(), &operand.fS32) != NULL;
             }
-            break;
-        case SkType_Float:
-            if (type == SkType_Int) {
-                if (operand.fS32 == SK_NaN32)
-                    operand.fScalar = SK_ScalarNaN;
-                else if (SkAbs32(operand.fS32) == SK_MaxS32)
-                    operand.fScalar = SkSign32(operand.fS32) * SK_ScalarMax;
-                else
-                    operand.fScalar = SkIntToScalar(operand.fS32);
-            } else {
-                if (type != SkType_String) {
-                    success = false;
-                    break; // error
-                }
-                success = SkParse::FindScalar(operand.fString->c_str(), &operand.fScalar) != NULL;
-            }
-            break;
-        case SkType_String: {
-            SkString* strPtr = new SkString();
-            SkASSERT(engine);
-            engine->track(strPtr);
-            if (type == SkType_Int) {
-                strPtr->appendS32(operand.fS32);
-            } else if (type == SkType_Displayable) {
-                SkASSERT(0); // must call through instance version instead of static version
-            } else {
-                if (type != SkType_Float) {
-                    success = false;
-                    break;
-                }
-                strPtr->appendScalar(operand.fScalar);
-            }
-            operand.fString = strPtr;
-            } break;
-        case SkType_Array: {
-            SkTypedArray* array = new SkTypedArray(type);
-            *array->append() = operand;
-            engine->track(array);
-            operand.fArray = array;
-            } break;
-        default:
-            SkASSERT(0);
+            strPtr->appendScalar(operand.fScalar);
+        }
+        operand.fString = strPtr;
+    } break;
+    case SkType_Array: {
+        SkTypedArray* array = new SkTypedArray(type);
+        *array->append() = operand;
+        engine->track(array);
+        operand.fArray = array;
+    } break;
+    default:
+        SkASSERT(0);
     }
     value->fType = toType;
     if (success == false)
@@ -1560,7 +1587,8 @@ bool SkScriptEngine::ConvertTo(SkScriptEngine* engine, SkDisplayTypes toType, Sk
     return success;
 }
 
-SkScalar SkScriptEngine::IntToScalar(int32_t s32) {
+SkScalar SkScriptEngine::IntToScalar(int32_t s32)
+{
     SkScalar scalar;
     if (s32 == SK_NaN32)
         scalar = SK_ScalarNaN;
@@ -1571,73 +1599,76 @@ SkScalar SkScriptEngine::IntToScalar(int32_t s32) {
     return scalar;
 }
 
-SkDisplayTypes SkScriptEngine::ToDisplayType(SkOpType type) {
+SkDisplayTypes SkScriptEngine::ToDisplayType(SkOpType type)
+{
     int val = type;
     switch (val) {
-        case kNoType:
-            return SkType_Unknown;
-        case kInt:
-            return SkType_Int;
-        case kScalar:
-            return SkType_Float;
-        case kString:
-            return SkType_String;
-        case kArray:
-            return SkType_Array;
-        case kObject:
-            return SkType_Displayable;
-//      case kStruct:
-//          return SkType_Structure;
-        default:
-            SkASSERT(0);
-            return SkType_Unknown;
+    case kNoType:
+        return SkType_Unknown;
+    case kInt:
+        return SkType_Int;
+    case kScalar:
+        return SkType_Float;
+    case kString:
+        return SkType_String;
+    case kArray:
+        return SkType_Array;
+    case kObject:
+        return SkType_Displayable;
+        //      case kStruct:
+        //          return SkType_Structure;
+    default:
+        SkASSERT(0);
+        return SkType_Unknown;
     }
 }
 
-SkScriptEngine::SkOpType SkScriptEngine::ToOpType(SkDisplayTypes type) {
-    if (SkDisplayType::IsDisplayable(NULL /* fMaker */, type))
-        return (SkOpType) kObject;
-    if (SkDisplayType::IsEnum(NULL /* fMaker */, type))
+SkScriptEngine::SkOpType SkScriptEngine::ToOpType(SkDisplayTypes type)
+{
+    if (SkDisplayType::IsDisplayable(nullptr /* fMaker */, type))
+        return (SkOpType)kObject;
+    if (SkDisplayType::IsEnum(nullptr /* fMaker */, type))
         return kInt;
     switch (type) {
-        case SkType_ARGB:
-        case SkType_MSec:
-        case SkType_Int:
-            return kInt;
-        case SkType_Float:
-        case SkType_Point:
-        case SkType_3D_Point:
-            return kScalar;
-        case SkType_Base64:
-        case SkType_DynamicString:
-        case SkType_String:
-            return kString;
-        case SkType_Array:
-            return (SkOpType) kArray;
-        case SkType_Unknown:
-            return kNoType;
-        default:
-            SkASSERT(0);
-            return kNoType;
+    case SkType_ARGB:
+    case SkType_MSec:
+    case SkType_Int:
+        return kInt;
+    case SkType_Float:
+    case SkType_Point:
+    case SkType_3D_Point:
+        return kScalar;
+    case SkType_Base64:
+    case SkType_DynamicString:
+    case SkType_String:
+        return kString;
+    case SkType_Array:
+        return (SkOpType)kArray;
+    case SkType_Unknown:
+        return kNoType;
+    default:
+        SkASSERT(0);
+        return kNoType;
     }
 }
 
-bool SkScriptEngine::ValueToString(SkScriptValue value, SkString* string) {
+bool SkScriptEngine::ValueToString(SkScriptValue value, SkString* string)
+{
     switch (value.fType) {
-        case kInt:
-            string->reset();
-            string->appendS32(value.fOperand.fS32);
-            break;
-        case kScalar:
-            string->reset();
-            string->appendScalar(value.fOperand.fScalar);
-            break;
-        case kString:
-            string->set(*value.fOperand.fString);
-            break;
-        default:
-            SkASSERT(0);
-            return false;
+    case kInt:
+        string->reset();
+        string->appendS32(value.fOperand.fS32);
+        break;
+    case kScalar:
+        string->reset();
+        string->appendScalar(value.fOperand.fScalar);
+        break;
+    case kString:
+        string->set(*value.fOperand.fString);
+        break;
+    default:
+        SkASSERT(0);
+        return false;
     }
     return true; // no error
 }
@@ -1646,224 +1677,239 @@ bool SkScriptEngine::ValueToString(SkScriptValue value, SkString* string) {
 
 #include "SkFloatingPoint.h"
 
-#define DEF_SCALAR_ANSWER   0
-#define DEF_STRING_ANSWER   NULL
+#define DEF_SCALAR_ANSWER 0
+#define DEF_STRING_ANSWER nullptr
 
-#define testInt(expression) { #expression, SkType_Int, expression, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER }
-    #define testScalar(expression) { #expression, SkType_Float, 0, (float) expression, DEF_STRING_ANSWER }
-    #define testRemainder(exp1, exp2) { #exp1 "%" #exp2, SkType_Float, 0, sk_float_mod(exp1, exp2), DEF_STRING_ANSWER }
-#define testTrue(expression) { #expression, SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER }
-#define testFalse(expression) { #expression, SkType_Int, 0, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER }
+#define testInt(expression)                                                       \
+    {                                                                             \
+#expression, SkType_Int, expression, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER \
+    }
+#define testScalar(expression)                                             \
+    {                                                                      \
+#expression, SkType_Float, 0, (float)expression, DEF_STRING_ANSWER \
+    }
+#define testRemainder(exp1, exp2)                                                     \
+    {                                                                                 \
+#exp1 "%" #exp2, SkType_Float, 0, sk_float_mod(exp1, exp2), DEF_STRING_ANSWER \
+    }
+#define testTrue(expression)                                             \
+    {                                                                    \
+#expression, SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER \
+    }
+#define testFalse(expression)                                            \
+    {                                                                    \
+#expression, SkType_Int, 0, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER \
+    }
 
-static const SkScriptNAnswer scriptTests[]  = {
-    testInt(1>1/2),
-    testInt((6+7)*8),
-    testInt(0&&1?2:3),
-    testInt(3*(4+5)),
-    testScalar(1.0+2.0),
-    testScalar(1.0+5),
-    testScalar(3.0-1.0),
-    testScalar(6-1.0),
-    testScalar(- -5.5- -1.5),
-    testScalar(2.5*6.),
-    testScalar(0.5*4),
-    testScalar(4.5/.5),
-    testScalar(9.5/19),
+static const SkScriptNAnswer scriptTests[] = {
+    testInt(1 > 1 / 2),
+    testInt((6 + 7) * 8),
+    testInt(0 && 1 ? 2 : 3),
+    testInt(3 * (4 + 5)),
+    testScalar(1.0 + 2.0),
+    testScalar(1.0 + 5),
+    testScalar(3.0 - 1.0),
+    testScalar(6 - 1.0),
+    testScalar(--5.5 - -1.5),
+    testScalar(2.5 * 6.),
+    testScalar(0.5 * 4),
+    testScalar(4.5 / .5),
+    testScalar(9.5 / 19),
     testRemainder(9.5, 0.5),
-    testRemainder(9.,2),
-    testRemainder(9,2.5),
-    testRemainder(-9,2.5),
-    testTrue(-9==-9.0),
-    testTrue(-9.==-4.0-5),
-    testTrue(-9.*1==-4-5),
-    testFalse(-9!=-9.0),
-    testFalse(-9.!=-4.0-5),
-    testFalse(-9.*1!=-4-5),
+    testRemainder(9., 2),
+    testRemainder(9, 2.5),
+    testRemainder(-9, 2.5),
+    testTrue(-9 == -9.0),
+    testTrue(-9. == -4.0 - 5),
+    testTrue(-9. * 1 == -4 - 5),
+    testFalse(-9 != -9.0),
+    testFalse(-9. != -4.0 - 5),
+    testFalse(-9. * 1 != -4 - 5),
     testInt(0x123),
     testInt(0XABC),
     testInt(0xdeadBEEF),
-    {   "'123'+\"456\"", SkType_String, 0, 0, "123456" },
-    {   "123+\"456\"", SkType_String, 0, 0, "123456" },
-    {   "'123'+456", SkType_String, 0, 0, "123456" },
-    {   "'123'|\"456\"", SkType_Int, 123|456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
-    {   "123|\"456\"", SkType_Int, 123|456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
-    {   "'123'|456", SkType_Int, 123|456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
-    {   "'2'<11", SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
-    {   "2<'11'", SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
-    {   "'2'<'11'", SkType_Int, 0, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "'123'+\"456\"", SkType_String, 0, 0, "123456" },
+    { "123+\"456\"", SkType_String, 0, 0, "123456" },
+    { "'123'+456", SkType_String, 0, 0, "123456" },
+    { "'123'|\"456\"", SkType_Int, 123 | 456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "123|\"456\"", SkType_Int, 123 | 456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "'123'|456", SkType_Int, 123 | 456, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "'2'<11", SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "2<'11'", SkType_Int, 1, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
+    { "'2'<'11'", SkType_Int, 0, DEF_SCALAR_ANSWER, DEF_STRING_ANSWER },
     testInt(123),
     testInt(-345),
     testInt(+678),
-    testInt(1+2+3),
-    testInt(3*4+5),
-    testInt(6+7*8),
-    testInt(-1-2-8/4),
-    testInt(-9%4),
-    testInt(9%-4),
-    testInt(-9%-4),
-    testInt(123|978),
-    testInt(123&978),
-    testInt(123^978),
-    testInt(2<<4),
-    testInt(99>>3),
+    testInt(1 + 2 + 3),
+    testInt(3 * 4 + 5),
+    testInt(6 + 7 * 8),
+    testInt(-1 - 2 - 8 / 4),
+    testInt(-9 % 4),
+    testInt(9 % -4),
+    testInt(-9 % -4),
+    testInt(123 | 978),
+    testInt(123 & 978),
+    testInt(123 ^ 978),
+    testInt(2 << 4),
+    testInt(99 >> 3),
     testInt(~55),
     testInt(~~55),
     testInt(!55),
     testInt(!!55),
     // both int
-    testInt(2<2),
-    testInt(2<11),
-    testInt(20<11),
-    testInt(2<=2),
-    testInt(2<=11),
-    testInt(20<=11),
-    testInt(2>2),
-    testInt(2>11),
-    testInt(20>11),
-    testInt(2>=2),
-    testInt(2>=11),
-    testInt(20>=11),
-    testInt(2==2),
-    testInt(2==11),
-    testInt(20==11),
-    testInt(2!=2),
-    testInt(2!=11),
-    testInt(20!=11),
+    testInt(2 < 2),
+    testInt(2 < 11),
+    testInt(20 < 11),
+    testInt(2 <= 2),
+    testInt(2 <= 11),
+    testInt(20 <= 11),
+    testInt(2 > 2),
+    testInt(2 > 11),
+    testInt(20 > 11),
+    testInt(2 >= 2),
+    testInt(2 >= 11),
+    testInt(20 >= 11),
+    testInt(2 == 2),
+    testInt(2 == 11),
+    testInt(20 == 11),
+    testInt(2 != 2),
+    testInt(2 != 11),
+    testInt(20 != 11),
     // left int, right scalar
-    testInt(2<2.),
-    testInt(2<11.),
-    testInt(20<11.),
-    testInt(2<=2.),
-    testInt(2<=11.),
-    testInt(20<=11.),
-    testInt(2>2.),
-    testInt(2>11.),
-    testInt(20>11.),
-    testInt(2>=2.),
-    testInt(2>=11.),
-    testInt(20>=11.),
-    testInt(2==2.),
-    testInt(2==11.),
-    testInt(20==11.),
-    testInt(2!=2.),
-    testInt(2!=11.),
-    testInt(20!=11.),
+    testInt(2 < 2.),
+    testInt(2 < 11.),
+    testInt(20 < 11.),
+    testInt(2 <= 2.),
+    testInt(2 <= 11.),
+    testInt(20 <= 11.),
+    testInt(2 > 2.),
+    testInt(2 > 11.),
+    testInt(20 > 11.),
+    testInt(2 >= 2.),
+    testInt(2 >= 11.),
+    testInt(20 >= 11.),
+    testInt(2 == 2.),
+    testInt(2 == 11.),
+    testInt(20 == 11.),
+    testInt(2 != 2.),
+    testInt(2 != 11.),
+    testInt(20 != 11.),
     // left scalar, right int
-        testInt(2.<2),
-    testInt(2.<11),
-    testInt(20.<11),
-    testInt(2.<=2),
-    testInt(2.<=11),
-    testInt(20.<=11),
-    testInt(2.>2),
-    testInt(2.>11),
-    testInt(20.>11),
-    testInt(2.>=2),
-    testInt(2.>=11),
-    testInt(20.>=11),
-    testInt(2.==2),
-    testInt(2.==11),
-    testInt(20.==11),
-    testInt(2.!=2),
-    testInt(2.!=11),
-    testInt(20.!=11),
+    testInt(2. < 2),
+    testInt(2. < 11),
+    testInt(20. < 11),
+    testInt(2. <= 2),
+    testInt(2. <= 11),
+    testInt(20. <= 11),
+    testInt(2. > 2),
+    testInt(2. > 11),
+    testInt(20. > 11),
+    testInt(2. >= 2),
+    testInt(2. >= 11),
+    testInt(20. >= 11),
+    testInt(2. == 2),
+    testInt(2. == 11),
+    testInt(20. == 11),
+    testInt(2. != 2),
+    testInt(2. != 11),
+    testInt(20. != 11),
     // both scalar
-    testInt(2.<11.),
-    testInt(20.<11.),
-    testInt(2.<=2.),
-    testInt(2.<=11.),
-    testInt(20.<=11.),
-    testInt(2.>2.),
-    testInt(2.>11.),
-    testInt(20.>11.),
-    testInt(2.>=2.),
-    testInt(2.>=11.),
-    testInt(20.>=11.),
-    testInt(2.==2.),
-    testInt(2.==11.),
-    testInt(20.==11.),
-    testInt(2.!=2.),
-    testInt(2.!=11.),
-    testInt(20.!=11.),
+    testInt(2. < 11.),
+    testInt(20. < 11.),
+    testInt(2. <= 2.),
+    testInt(2. <= 11.),
+    testInt(20. <= 11.),
+    testInt(2. > 2.),
+    testInt(2. > 11.),
+    testInt(20. > 11.),
+    testInt(2. >= 2.),
+    testInt(2. >= 11.),
+    testInt(20. >= 11.),
+    testInt(2. == 2.),
+    testInt(2. == 11.),
+    testInt(20. == 11.),
+    testInt(2. != 2.),
+    testInt(2. != 11.),
+    testInt(20. != 11.),
     // int, string (string is int)
-    testFalse(2<'2'),
-    testTrue(2<'11'),
-    testFalse(20<'11'),
-    testTrue(2<='2'),
-    testTrue(2<='11'),
-    testFalse(20<='11'),
-    testFalse(2>'2'),
-    testFalse(2>'11'),
-    testTrue(20>'11'),
-    testTrue(2>='2'),
-    testFalse(2>='11'),
-    testTrue(20>='11'),
-    testTrue(2=='2'),
-    testFalse(2=='11'),
-    testFalse(2!='2'),
-    testTrue(2!='11'),
+    testFalse(2 < '2'),
+    testTrue(2 < '11'),
+    testFalse(20 < '11'),
+    testTrue(2 <= '2'),
+    testTrue(2 <= '11'),
+    testFalse(20 <= '11'),
+    testFalse(2 > '2'),
+    testFalse(2 > '11'),
+    testTrue(20 > '11'),
+    testTrue(2 >= '2'),
+    testFalse(2 >= '11'),
+    testTrue(20 >= '11'),
+    testTrue(2 == '2'),
+    testFalse(2 == '11'),
+    testFalse(2 != '2'),
+    testTrue(2 != '11'),
     // int, string (string is scalar)
-    testFalse(2<'2.'),
-    testTrue(2<'11.'),
-    testFalse(20<'11.'),
-    testTrue(2=='2.'),
-    testFalse(2=='11.'),
+    testFalse(2 < '2.'),
+    testTrue(2 < '11.'),
+    testFalse(20 < '11.'),
+    testTrue(2 == '2.'),
+    testFalse(2 == '11.'),
     // scalar, string
-    testFalse(2.<'2.'),
-    testTrue(2.<'11.'),
-    testFalse(20.<'11.'),
-    testTrue(2.=='2.'),
-    testFalse(2.=='11.'),
+    testFalse(2. < '2.'),
+    testTrue(2. < '11.'),
+    testFalse(20. < '11.'),
+    testTrue(2. == '2.'),
+    testFalse(2. == '11.'),
     // string, int
-    testFalse('2'<2),
-    testTrue('2'<11),
-    testFalse('20'<11),
-    testTrue('2'==2),
-    testFalse('2'==11),
+    testFalse('2' < 2),
+    testTrue('2' < 11),
+    testFalse('20' < 11),
+    testTrue('2' == 2),
+    testFalse('2' == 11),
     // string, scalar
-    testFalse('2'<2.),
-    testTrue('2'<11.),
-    testFalse('20'<11.),
-    testTrue('2'==2.),
-    testFalse('2'==11.),
+    testFalse('2' < 2.),
+    testTrue('2' < 11.),
+    testFalse('20' < 11.),
+    testTrue('2' == 2.),
+    testFalse('2' == 11.),
     // string, string
-    testFalse('2'<'2'),
-    testFalse('2'<'11'),
-    testFalse('20'<'11'),
-    testTrue('2'=='2'),
-    testFalse('2'=='11'),
+    testFalse('2' < '2'),
+    testFalse('2' < '11'),
+    testFalse('20' < '11'),
+    testTrue('2' == '2'),
+    testFalse('2' == '11'),
     // logic
-    testInt(1?2:3),
-    testInt(0?2:3),
-    testInt((1&&2)||3),
-    testInt((1&&0)||3),
-    testInt((1&&0)||0),
-    testInt(1||(0&&3)),
-    testInt(0||(0&&3)),
-    testInt(0||(1&&3)),
-    testInt(1?(2?3:4):5),
-    testInt(0?(2?3:4):5),
-    testInt(1?(0?3:4):5),
-    testInt(0?(0?3:4):5),
-    testInt(1?2?3:4:5),
-    testInt(0?2?3:4:5),
-    testInt(1?0?3:4:5),
-    testInt(0?0?3:4:5),
+    testInt(1 ? 2 : 3),
+    testInt(0 ? 2 : 3),
+    testInt((1 && 2) || 3),
+    testInt((1 && 0) || 3),
+    testInt((1 && 0) || 0),
+    testInt(1 || (0 && 3)),
+    testInt(0 || (0 && 3)),
+    testInt(0 || (1 && 3)),
+    testInt(1 ? (2 ? 3 : 4) : 5),
+    testInt(0 ? (2 ? 3 : 4) : 5),
+    testInt(1 ? (0 ? 3 : 4) : 5),
+    testInt(0 ? (0 ? 3 : 4) : 5),
+    testInt(1 ? 2 ? 3 : 4 : 5),
+    testInt(0 ? 2 ? 3 : 4 : 5),
+    testInt(1 ? 0 ? 3 : 4 : 5),
+    testInt(0 ? 0 ? 3 : 4 : 5),
 
-    testInt(1?2:(3?4:5)),
-    testInt(0?2:(3?4:5)),
-    testInt(1?0:(3?4:5)),
-    testInt(0?0:(3?4:5)),
-    testInt(1?2:3?4:5),
-    testInt(0?2:3?4:5),
-    testInt(1?0:3?4:5),
-    testInt(0?0:3?4:5)
-    , { "123.5", SkType_Float, 0, SkIntToScalar(123) + SK_Scalar1/2, DEF_STRING_ANSWER }
+    testInt(1 ? 2 : (3 ? 4 : 5)),
+    testInt(0 ? 2 : (3 ? 4 : 5)),
+    testInt(1 ? 0 : (3 ? 4 : 5)),
+    testInt(0 ? 0 : (3 ? 4 : 5)),
+    testInt(1 ? 2 : 3 ? 4 : 5),
+    testInt(0 ? 2 : 3 ? 4 : 5),
+    testInt(1 ? 0 : 3 ? 4 : 5),
+    testInt(0 ? 0 : 3 ? 4 : 5), { "123.5", SkType_Float, 0, SkIntToScalar(123) + SK_Scalar1 / 2, DEF_STRING_ANSWER }
 };
 
-#define SkScriptNAnswer_testCount   SK_ARRAY_COUNT(scriptTests)
+#define SkScriptNAnswer_testCount SK_ARRAY_COUNT(scriptTests)
 
-void SkScriptEngine::UnitTest() {
+void SkScriptEngine::UnitTest()
+{
     for (unsigned index = 0; index < SkScriptNAnswer_testCount; index++) {
         SkScriptEngine engine(SkScriptEngine::ToOpType(scriptTests[index].fType));
         SkScriptValue value;
@@ -1872,18 +1918,18 @@ void SkScriptEngine::UnitTest() {
         SkASSERT(value.fType == scriptTests[index].fType);
         SkScalar error;
         switch (value.fType) {
-            case SkType_Int:
-                SkASSERT(value.fOperand.fS32 == scriptTests[index].fIntAnswer);
-                break;
-            case SkType_Float:
-                error = SkScalarAbs(value.fOperand.fScalar - scriptTests[index].fScalarAnswer);
-                SkASSERT(error < SK_Scalar1 / 10000);
-                break;
-            case SkType_String:
-                SkASSERT(strcmp(value.fOperand.fString->c_str(), scriptTests[index].fStringAnswer) == 0);
-                break;
-            default:
-                SkASSERT(0);
+        case SkType_Int:
+            SkASSERT(value.fOperand.fS32 == scriptTests[index].fIntAnswer);
+            break;
+        case SkType_Float:
+            error = SkScalarAbs(value.fOperand.fScalar - scriptTests[index].fScalarAnswer);
+            SkASSERT(error < SK_Scalar1 / 10000);
+            break;
+        case SkType_String:
+            SkASSERT(strcmp(value.fOperand.fString->c_str(), scriptTests[index].fStringAnswer) == 0);
+            break;
+        default:
+            SkASSERT(0);
         }
     }
 }

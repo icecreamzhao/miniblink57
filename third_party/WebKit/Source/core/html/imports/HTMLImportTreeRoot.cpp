@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/html/imports/HTMLImportTreeRoot.h"
 
 #include "core/dom/Document.h"
@@ -12,9 +11,9 @@
 
 namespace blink {
 
-PassOwnPtrWillBeRawPtr<HTMLImportTreeRoot> HTMLImportTreeRoot::create(Document* document)
+HTMLImportTreeRoot* HTMLImportTreeRoot::create(Document* document)
 {
-    return adoptPtrWillBeNoop(new HTMLImportTreeRoot(document));
+    return new HTMLImportTreeRoot(document);
 }
 
 HTMLImportTreeRoot::HTMLImportTreeRoot(Document* document)
@@ -25,17 +24,12 @@ HTMLImportTreeRoot::HTMLImportTreeRoot(Document* document)
     scheduleRecalcState(); // This recomputes initial state.
 }
 
-HTMLImportTreeRoot::~HTMLImportTreeRoot()
-{
-#if !ENABLE(OILPAN)
-    dispose();
-#endif
-}
+HTMLImportTreeRoot::~HTMLImportTreeRoot() { }
 
 void HTMLImportTreeRoot::dispose()
 {
-    for (size_t i = 0; i < m_imports.size(); ++i)
-        m_imports[i]->dispose();
+    for (const auto& importChild : m_imports)
+        importChild->dispose();
     m_imports.clear();
     m_document = nullptr;
     m_recalcTimer.stop();
@@ -48,7 +42,7 @@ Document* HTMLImportTreeRoot::document() const
 
 bool HTMLImportTreeRoot::hasFinishedLoading() const
 {
-    return !m_document->parsing() && m_document->styleEngine().haveStylesheetsLoaded();
+    return !m_document->parsing() && m_document->styleEngine().haveScriptBlockingStylesheetsLoaded();
 }
 
 void HTMLImportTreeRoot::stateWillChange()
@@ -68,27 +62,21 @@ void HTMLImportTreeRoot::stateDidChange()
 
 void HTMLImportTreeRoot::scheduleRecalcState()
 {
-#if ENABLE(OILPAN)
-    ASSERT(m_document);
+    DCHECK(m_document);
     if (m_recalcTimer.isActive() || !m_document->isActive())
         return;
-#else
-    if (m_recalcTimer.isActive() || !m_document)
-        return;
-#endif
-    m_recalcTimer.startOneShot(0, FROM_HERE);
+    m_recalcTimer.startOneShot(0, BLINK_FROM_HERE);
 }
 
-HTMLImportChild* HTMLImportTreeRoot::add(PassOwnPtrWillBeRawPtr<HTMLImportChild> child)
+HTMLImportChild* HTMLImportTreeRoot::add(HTMLImportChild* child)
 {
-    m_imports.append(child);
-    return m_imports.last().get();
+    m_imports.push_back(child);
+    return m_imports.back().get();
 }
 
 HTMLImportChild* HTMLImportTreeRoot::find(const KURL& url) const
 {
-    for (size_t i = 0; i < m_imports.size(); ++i) {
-        HTMLImportChild* candidate = m_imports[i].get();
+    for (const auto& candidate : m_imports) {
         if (equalIgnoringFragmentIdentifier(candidate->url(), url))
             return candidate;
     }
@@ -96,10 +84,9 @@ HTMLImportChild* HTMLImportTreeRoot::find(const KURL& url) const
     return nullptr;
 }
 
-void HTMLImportTreeRoot::recalcTimerFired(Timer<HTMLImportTreeRoot>*)
+void HTMLImportTreeRoot::recalcTimerFired(TimerBase*)
 {
-    ASSERT(m_document);
-    RefPtrWillBeRawPtr<Document> protectDocument(m_document.get());
+    DCHECK(m_document);
     HTMLImport::recalcTreeState(this);
 }
 
@@ -110,4 +97,4 @@ DEFINE_TRACE(HTMLImportTreeRoot)
     HTMLImport::trace(visitor);
 }
 
-}
+} // namespace blink

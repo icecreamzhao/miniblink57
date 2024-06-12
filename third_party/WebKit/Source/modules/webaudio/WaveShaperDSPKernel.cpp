@@ -10,27 +10,25 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
 #include "modules/webaudio/WaveShaperDSPKernel.h"
 
-#include "wtf/MainThread.h"
+#include "platform/audio/AudioUtilities.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/Threading.h"
 #include <algorithm>
-
-const unsigned RenderingQuantum = 128;
 
 namespace blink {
 
@@ -44,18 +42,25 @@ WaveShaperDSPKernel::WaveShaperDSPKernel(WaveShaperProcessor* processor)
 void WaveShaperDSPKernel::lazyInitializeOversampling()
 {
     if (!m_tempBuffer) {
-        m_tempBuffer = adoptPtr(new AudioFloatArray(RenderingQuantum * 2));
-        m_tempBuffer2 = adoptPtr(new AudioFloatArray(RenderingQuantum * 4));
-        m_upSampler = adoptPtr(new UpSampler(RenderingQuantum));
-        m_downSampler = adoptPtr(new DownSampler(RenderingQuantum * 2));
-        m_upSampler2 = adoptPtr(new UpSampler(RenderingQuantum * 2));
-        m_downSampler2 = adoptPtr(new DownSampler(RenderingQuantum * 4));
+        m_tempBuffer = WTF::wrapUnique(
+            new AudioFloatArray(AudioUtilities::kRenderQuantumFrames * 2));
+        m_tempBuffer2 = WTF::wrapUnique(
+            new AudioFloatArray(AudioUtilities::kRenderQuantumFrames * 4));
+        m_upSampler = WTF::wrapUnique(new UpSampler(AudioUtilities::kRenderQuantumFrames));
+        m_downSampler = WTF::wrapUnique(
+            new DownSampler(AudioUtilities::kRenderQuantumFrames * 2));
+        m_upSampler2 = WTF::wrapUnique(
+            new UpSampler(AudioUtilities::kRenderQuantumFrames * 2));
+        m_downSampler2 = WTF::wrapUnique(
+            new DownSampler(AudioUtilities::kRenderQuantumFrames * 4));
     }
 }
 
-void WaveShaperDSPKernel::process(const float* source, float* destination, size_t framesToProcess)
+void WaveShaperDSPKernel::process(const float* source,
+    float* destination,
+    size_t framesToProcess)
 {
-    switch (waveShaperProcessor()->oversample()) {
+    switch (getWaveShaperProcessor()->oversample()) {
     case WaveShaperProcessor::OverSampleNone:
         processCurve(source, destination, framesToProcess);
         break;
@@ -71,13 +76,15 @@ void WaveShaperDSPKernel::process(const float* source, float* destination, size_
     }
 }
 
-void WaveShaperDSPKernel::processCurve(const float* source, float* destination, size_t framesToProcess)
+void WaveShaperDSPKernel::processCurve(const float* source,
+    float* destination,
+    size_t framesToProcess)
 {
-    ASSERT(source);
-    ASSERT(destination);
-    ASSERT(waveShaperProcessor());
+    DCHECK(source);
+    DCHECK(destination);
+    DCHECK(getWaveShaperProcessor());
 
-    DOMFloat32Array* curve = waveShaperProcessor()->curve();
+    Vector<float>* curve = getWaveShaperProcessor()->curve();
     if (!curve) {
         // Act as "straight wire" pass-through if no curve is set.
         memcpy(destination, source, sizeof(float) * framesToProcess);
@@ -85,9 +92,9 @@ void WaveShaperDSPKernel::processCurve(const float* source, float* destination, 
     }
 
     float* curveData = curve->data();
-    int curveLength = curve->length();
+    int curveLength = curve->size();
 
-    ASSERT(curveData);
+    DCHECK(curveData);
 
     if (!curveData || !curveLength) {
         memcpy(destination, source, sizeof(float) * framesToProcess);
@@ -98,9 +105,9 @@ void WaveShaperDSPKernel::processCurve(const float* source, float* destination, 
     for (unsigned i = 0; i < framesToProcess; ++i) {
         const float input = source[i];
 
-        // Calculate a virtual index based on input -1 -> +1 with -1 being curve[0], +1 being
-        // curve[curveLength - 1], and 0 being at the center of the curve data. Then linearly
-        // interpolate between the two points in the curve.
+        // Calculate a virtual index based on input -1 -> +1 with -1 being curve[0],
+        // +1 being curve[curveLength - 1], and 0 being at the center of the curve
+        // data. Then linearly interpolate between the two points in the curve.
         double virtualIndex = 0.5 * (input + 1) * (curveLength - 1);
         double output;
 
@@ -111,8 +118,9 @@ void WaveShaperDSPKernel::processCurve(const float* source, float* destination, 
             // input >= 1, so use last curve value
             output = curveData[curveLength - 1];
         } else {
-            // The general case where -1 <= input < 1, where 0 <= virtualIndex < curveLength - 1,
-            // so interpolate between the nearest samples on the curve.
+            // The general case where -1 <= input < 1, where 0 <= virtualIndex <
+            // curveLength - 1, so interpolate between the nearest samples on the
+            // curve.
             unsigned index1 = static_cast<unsigned>(virtualIndex);
             unsigned index2 = index1 + 1;
             double interpolationFactor = virtualIndex - index1;
@@ -126,10 +134,12 @@ void WaveShaperDSPKernel::processCurve(const float* source, float* destination, 
     }
 }
 
-void WaveShaperDSPKernel::processCurve2x(const float* source, float* destination, size_t framesToProcess)
+void WaveShaperDSPKernel::processCurve2x(const float* source,
+    float* destination,
+    size_t framesToProcess)
 {
-    bool isSafe = framesToProcess == RenderingQuantum;
-    ASSERT(isSafe);
+    bool isSafe = framesToProcess == AudioUtilities::kRenderQuantumFrames;
+    DCHECK(isSafe);
     if (!isSafe)
         return;
 
@@ -143,10 +153,12 @@ void WaveShaperDSPKernel::processCurve2x(const float* source, float* destination
     m_downSampler->process(tempP, destination, framesToProcess * 2);
 }
 
-void WaveShaperDSPKernel::processCurve4x(const float* source, float* destination, size_t framesToProcess)
+void WaveShaperDSPKernel::processCurve4x(const float* source,
+    float* destination,
+    size_t framesToProcess)
 {
-    bool isSafe = framesToProcess == RenderingQuantum;
-    ASSERT(isSafe);
+    bool isSafe = framesToProcess == AudioUtilities::kRenderQuantumFrames;
+    DCHECK(isSafe);
     if (!isSafe)
         return;
 
@@ -178,25 +190,24 @@ double WaveShaperDSPKernel::latencyTime() const
     size_t latencyFrames = 0;
     WaveShaperDSPKernel* kernel = const_cast<WaveShaperDSPKernel*>(this);
 
-    switch (kernel->waveShaperProcessor()->oversample()) {
+    switch (kernel->getWaveShaperProcessor()->oversample()) {
     case WaveShaperProcessor::OverSampleNone:
         break;
     case WaveShaperProcessor::OverSample2x:
         latencyFrames += m_upSampler->latencyFrames();
         latencyFrames += m_downSampler->latencyFrames();
         break;
-    case WaveShaperProcessor::OverSample4x:
-        {
-            // Account for first stage upsampling.
-            latencyFrames += m_upSampler->latencyFrames();
-            latencyFrames += m_downSampler->latencyFrames();
+    case WaveShaperProcessor::OverSample4x: {
+        // Account for first stage upsampling.
+        latencyFrames += m_upSampler->latencyFrames();
+        latencyFrames += m_downSampler->latencyFrames();
 
-            // Account for second stage upsampling.
-            // and divide by 2 to get back down to the regular sample-rate.
-            size_t latencyFrames2 = (m_upSampler2->latencyFrames() + m_downSampler2->latencyFrames()) / 2;
-            latencyFrames += latencyFrames2;
-            break;
-        }
+        // Account for second stage upsampling.
+        // and divide by 2 to get back down to the regular sample-rate.
+        size_t latencyFrames2 = (m_upSampler2->latencyFrames() + m_downSampler2->latencyFrames()) / 2;
+        latencyFrames += latencyFrames2;
+        break;
+    }
     default:
         ASSERT_NOT_REACHED();
     }
@@ -205,5 +216,3 @@ double WaveShaperDSPKernel::latencyTime() const
 }
 
 } // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)

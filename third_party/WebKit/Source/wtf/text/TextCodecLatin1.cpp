@@ -23,16 +23,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/text/TextCodecLatin1.h"
 
-#include "wtf/text/TextCodecASCIIFastPath.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuffer.h"
+#include "wtf/text/TextCodecASCIIFastPath.h"
 #include "wtf/text/WTFString.h"
-
-using namespace WTF;
+#include <memory>
 
 namespace WTF {
 
@@ -68,7 +66,7 @@ static const UChar table[256] = {
     0x00E0, 0x00E1, 0x00E2, 0x00E3, 0x00E4, 0x00E5, 0x00E6, 0x00E7, // E0-E7
     0x00E8, 0x00E9, 0x00EA, 0x00EB, 0x00EC, 0x00ED, 0x00EE, 0x00EF, // E8-EF
     0x00F0, 0x00F1, 0x00F2, 0x00F3, 0x00F4, 0x00F5, 0x00F6, 0x00F7, // F0-F7
-    0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x00FD, 0x00FE, 0x00FF  // F8-FF
+    0x00F8, 0x00F9, 0x00FA, 0x00FB, 0x00FC, 0x00FD, 0x00FE, 0x00FF // F8-FF
 };
 
 void TextCodecLatin1::registerEncodingNames(EncodingNameRegistrar registrar)
@@ -93,21 +91,28 @@ void TextCodecLatin1::registerEncodingNames(EncodingNameRegistrar registrar)
     registrar("x-cp1252", "windows-1252");
 }
 
-static PassOwnPtr<TextCodec> newStreamingTextDecoderWindowsLatin1(const TextEncoding&, const void*)
+static std::unique_ptr<TextCodec> newStreamingTextDecoderWindowsLatin1(
+    const TextEncoding&,
+    const void*)
 {
-    return adoptPtr(new TextCodecLatin1);
+    return WTF::wrapUnique(new TextCodecLatin1);
 }
 
 void TextCodecLatin1::registerCodecs(TextCodecRegistrar registrar)
 {
     registrar("windows-1252", newStreamingTextDecoderWindowsLatin1, 0);
 
-    // ASCII and Latin-1 both decode as Windows Latin-1 although they retain unique identities.
+    // ASCII and Latin-1 both decode as Windows Latin-1 although they retain
+    // unique identities.
     registrar("ISO-8859-1", newStreamingTextDecoderWindowsLatin1, 0);
     registrar("US-ASCII", newStreamingTextDecoderWindowsLatin1, 0);
 }
 
-String TextCodecLatin1::decode(const char* bytes, size_t length, FlushBehavior, bool, bool&)
+String TextCodecLatin1::decode(const char* bytes,
+    size_t length,
+    FlushBehavior,
+    bool,
+    bool&)
 {
     LChar* characters;
     if (!length)
@@ -139,7 +144,7 @@ String TextCodecLatin1::decode(const char* bytes, size_t length, FlushBehavior, 
             }
             *destination = *source;
         } else {
-useLookupTable:
+        useLookupTable:
             if (table[*source] > 0xff)
                 goto upConvertTo16Bit;
 
@@ -190,7 +195,7 @@ upConvertTo16Bit:
             }
             *destination16 = *source;
         } else {
-useLookupTable16:
+        useLookupTable16:
             *destination16 = table[*source];
         }
 
@@ -201,28 +206,46 @@ useLookupTable16:
     return result16;
 }
 
-template<typename CharType>
-static CString encodeComplexWindowsLatin1(const CharType* characters, size_t length, UnencodableHandling handling)
+template <typename CharType>
+static CString encodeComplexWindowsLatin1(const CharType* characters,
+    size_t length,
+    UnencodableHandling handling)
 {
-    Vector<char> result(length);
+    size_t targetLength = length;
+    Vector<char> result(targetLength);
     char* bytes = result.data();
 
     size_t resultLength = 0;
-    for (size_t i = 0; i < length; ) {
+    for (size_t i = 0; i < length;) {
         UChar32 c;
+        // If CharType is LChar the U16_NEXT call reads a byte and increments;
+        // since the convention is that LChar is already latin1 this is safe.
         U16_NEXT(characters, i, length, c);
+        // If input was a surrogate pair (non-BMP character) then we overestimated
+        // the length.
+        if (c > 0xffff)
+            --targetLength;
         unsigned char b = static_cast<unsigned char>(c);
         // Do an efficient check to detect characters other than 00-7F and A0-FF.
         if (b != c || (c & 0xE0) == 0x80) {
             // Look for a way to encode this with Windows Latin-1.
-            for (b = 0x80; b < 0xA0; ++b)
+            for (b = 0x80; b < 0xA0; ++b) {
                 if (table[b] == c)
                     goto gotByte;
+            }
             // No way to encode this character with Windows Latin-1.
             UnencodableReplacementArray replacement;
             int replacementLength = TextCodec::getUnencodableReplacement(c, handling, replacement);
-            result.grow(resultLength + replacementLength + length - i);
-            bytes = result.data();
+            DCHECK_GT(replacementLength, 0);
+            // Only one char was initially reserved per input character, so grow if
+            // necessary. Note that the case of surrogate pairs and
+            // QuestionMarksForUnencodables the result length may be shorter than
+            // the input length.
+            targetLength += replacementLength - 1;
+            if (targetLength > result.size()) {
+                result.grow(targetLength);
+                bytes = result.data();
+            }
             memcpy(bytes + resultLength, replacement, replacementLength);
             resultLength += replacementLength;
             continue;
@@ -234,14 +257,17 @@ static CString encodeComplexWindowsLatin1(const CharType* characters, size_t len
     return CString(bytes, resultLength);
 }
 
-template<typename CharType>
-CString TextCodecLatin1::encodeCommon(const CharType* characters, size_t length, UnencodableHandling handling)
+template <typename CharType>
+CString TextCodecLatin1::encodeCommon(const CharType* characters,
+    size_t length,
+    UnencodableHandling handling)
 {
     {
         char* bytes;
-        CString string = CString::newUninitialized(length, bytes);
+        CString string = CString::createUninitialized(length, bytes);
 
-        // Convert the string a fast way and simultaneously do an efficient check to see if it's all ASCII.
+        // Convert the string a fast way and simultaneously do an efficient check to
+        // see if it's all ASCII.
         UChar ored = 0;
         for (size_t i = 0; i < length; ++i) {
             UChar c = characters[i];
@@ -257,12 +283,16 @@ CString TextCodecLatin1::encodeCommon(const CharType* characters, size_t length,
     return encodeComplexWindowsLatin1(characters, length, handling);
 }
 
-CString TextCodecLatin1::encode(const UChar* characters, size_t length, UnencodableHandling handling)
+CString TextCodecLatin1::encode(const UChar* characters,
+    size_t length,
+    UnencodableHandling handling)
 {
     return encodeCommon(characters, length, handling);
 }
 
-CString TextCodecLatin1::encode(const LChar* characters, size_t length, UnencodableHandling handling)
+CString TextCodecLatin1::encode(const LChar* characters,
+    size_t length,
+    UnencodableHandling handling)
 {
     return encodeCommon(characters, length, handling);
 }

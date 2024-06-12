@@ -1,0 +1,4 @@
+./lib_capture_unittests__library.so
+gen/media/capture/mojo/image_capture.mojom.js
+gen/ipc/ipc.mojom.js
+../../testing/test_env.py

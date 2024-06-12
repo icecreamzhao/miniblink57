@@ -23,30 +23,31 @@ using v8::String;
 
 namespace gin {
 
-TEST(RunnerTest, Run) {
-  base::MessageLoop message_loop;
-  std::string source = "this.result = 'PASS';\n";
+TEST(RunnerTest, Run)
+{
+    base::MessageLoop message_loop;
+    std::string source = "this.result = 'PASS';\n";
 
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
-  gin::V8Initializer::LoadV8Snapshot();
-  gin::V8Initializer::LoadV8Natives();
+    gin::V8Initializer::LoadV8Snapshot();
+    gin::V8Initializer::LoadV8Natives();
 #endif
 
-  gin::IsolateHolder::Initialize(gin::IsolateHolder::kStrictMode,
-                                 gin::ArrayBufferAllocator::SharedInstance());
-  gin::IsolateHolder instance;
+    gin::IsolateHolder::Initialize(gin::IsolateHolder::kStrictMode,
+        gin::ArrayBufferAllocator::SharedInstance());
+    gin::IsolateHolder instance;
 
-  ShellRunnerDelegate delegate;
-  Isolate* isolate = instance.isolate();
-  ShellRunner runner(&delegate, isolate);
-  Runner::Scope scope(&runner);
-  runner.Run(source, "test_data.js");
+    ShellRunnerDelegate delegate;
+    Isolate* isolate = instance.isolate();
+    ShellRunner runner(&delegate, isolate);
+    Runner::Scope scope(&runner);
+    runner.Run(source, "test_data.js");
 
-  std::string result;
-  EXPECT_TRUE(Converter<std::string>::FromV8(isolate,
-      runner.global()->Get(StringToV8(isolate, "result")),
-      &result));
-  EXPECT_EQ("PASS", result);
+    std::string result;
+    EXPECT_TRUE(Converter<std::string>::FromV8(isolate,
+        runner.global()->Get(StringToV8(isolate, "result")),
+        &result));
+    EXPECT_EQ("PASS", result);
 }
 
-}  // namespace gin
+} // namespace gin

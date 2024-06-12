@@ -24,13 +24,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/network/ResourceResponse.h"
 
 #include "wtf/CurrentTime.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/StdLibExtras.h"
+#include <memory>
 
 namespace blink {
+
+namespace {
+
+    template <typename Interface>
+    Vector<Interface> isolatedCopy(const Vector<Interface>& src)
+    {
+        Vector<Interface> result;
+        result.reserveCapacity(src.size());
+        for (const auto& timestamp : src) {
+            result.push_back(timestamp.isolatedCopy());
+        }
+        return result;
+    }
+
+    static const char cacheControlHeader[] = "cache-control";
+    static const char pragmaHeader[] = "pragma";
+
+} // namespace
+
+ResourceResponse::SignedCertificateTimestamp::SignedCertificateTimestamp(
+    const blink::WebURLResponse::SignedCertificateTimestamp& sct)
+    : m_status(sct.status)
+    , m_origin(sct.origin)
+    , m_logDescription(sct.logDescription)
+    , m_logId(sct.logId)
+    , m_timestamp(sct.timestamp)
+    , m_hashAlgorithm(sct.hashAlgorithm)
+    , m_signatureAlgorithm(sct.signatureAlgorithm)
+    , m_signatureData(sct.signatureData)
+{
+}
+
+ResourceResponse::SignedCertificateTimestamp
+ResourceResponse::SignedCertificateTimestamp::isolatedCopy() const
+{
+    return SignedCertificateTimestamp(
+        m_status.isolatedCopy(), m_origin.isolatedCopy(),
+        m_logDescription.isolatedCopy(), m_logId.isolatedCopy(), m_timestamp,
+        m_hashAlgorithm.isolatedCopy(), m_signatureAlgorithm.isolatedCopy(),
+        m_signatureData.isolatedCopy());
+}
 
 ResourceResponse::ResourceResponse()
     : m_expectedContentLength(0)
@@ -48,22 +90,32 @@ ResourceResponse::ResourceResponse()
     , m_date(0.0)
     , m_expires(0.0)
     , m_lastModified(0.0)
-    , m_httpVersion(Unknown)
+    , m_hasMajorCertificateErrors(false)
+    , m_securityStyle(SecurityStyleUnknown)
+    , m_httpVersion(HTTPVersionUnknown)
     , m_appCacheID(0)
-    , m_isMultipartPayload(false)
     , m_wasFetchedViaSPDY(false)
     , m_wasNpnNegotiated(false)
     , m_wasAlternateProtocolAvailable(false)
     , m_wasFetchedViaProxy(false)
     , m_wasFetchedViaServiceWorker(false)
+    , m_wasFetchedViaForeignFetch(false)
     , m_wasFallbackRequiredByServiceWorker(false)
     , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
+    , m_didServiceWorkerNavigationPreload(false)
     , m_responseTime(0)
     , m_remotePort(0)
+    , m_encodedDataLength(0)
+    , m_encodedBodyLength(0)
+    , m_decodedBodyLength(0)
 {
 }
 
-ResourceResponse::ResourceResponse(const KURL& url, const AtomicString& mimeType, long long expectedLength, const AtomicString& textEncodingName, const String& filename)
+ResourceResponse::ResourceResponse(const KURL& url,
+    const AtomicString& mimeType,
+    long long expectedLength,
+    const AtomicString& textEncodingName,
+    const String& filename)
     : m_url(url)
     , m_mimeType(mimeType)
     , m_expectedContentLength(expectedLength)
@@ -83,98 +135,150 @@ ResourceResponse::ResourceResponse(const KURL& url, const AtomicString& mimeType
     , m_date(0.0)
     , m_expires(0.0)
     , m_lastModified(0.0)
-    , m_httpVersion(Unknown)
+    , m_hasMajorCertificateErrors(false)
+    , m_securityStyle(SecurityStyleUnknown)
+    , m_httpVersion(HTTPVersionUnknown)
     , m_appCacheID(0)
-    , m_isMultipartPayload(false)
     , m_wasFetchedViaSPDY(false)
     , m_wasNpnNegotiated(false)
     , m_wasAlternateProtocolAvailable(false)
     , m_wasFetchedViaProxy(false)
     , m_wasFetchedViaServiceWorker(false)
+    , m_wasFetchedViaForeignFetch(false)
     , m_wasFallbackRequiredByServiceWorker(false)
     , m_serviceWorkerResponseType(WebServiceWorkerResponseTypeDefault)
+    , m_didServiceWorkerNavigationPreload(false)
     , m_responseTime(0)
     , m_remotePort(0)
+    , m_encodedDataLength(0)
+    , m_encodedBodyLength(0)
+    , m_decodedBodyLength(0)
 {
 }
 
-PassOwnPtr<ResourceResponse> ResourceResponse::adopt(PassOwnPtr<CrossThreadResourceResponseData> data)
+ResourceResponse::ResourceResponse(CrossThreadResourceResponseData* data)
+    : ResourceResponse()
 {
-    OwnPtr<ResourceResponse> response = adoptPtr(new ResourceResponse);
-    response->setURL(data->m_url);
-    response->setMimeType(AtomicString(data->m_mimeType));
-    response->setExpectedContentLength(data->m_expectedContentLength);
-    response->setTextEncodingName(AtomicString(data->m_textEncodingName));
-    response->setSuggestedFilename(data->m_suggestedFilename);
+    setURL(data->m_url);
+    setMimeType(AtomicString(data->m_mimeType));
+    setExpectedContentLength(data->m_expectedContentLength);
+    setTextEncodingName(AtomicString(data->m_textEncodingName));
+    setSuggestedFilename(data->m_suggestedFilename);
 
-    response->setHTTPStatusCode(data->m_httpStatusCode);
-    response->setHTTPStatusText(AtomicString(data->m_httpStatusText));
+    setHTTPStatusCode(data->m_httpStatusCode);
+    setHTTPStatusText(AtomicString(data->m_httpStatusText));
 
-    response->m_httpHeaderFields.adopt(data->m_httpHeaders.release());
-    response->setLastModifiedDate(data->m_lastModifiedDate);
-    response->setResourceLoadTiming(data->m_resourceLoadTiming.release());
-    response->m_securityInfo = data->m_securityInfo;
-    response->m_httpVersion = data->m_httpVersion;
-    response->m_appCacheID = data->m_appCacheID;
-    response->m_appCacheManifestURL = data->m_appCacheManifestURL.copy();
-    response->m_isMultipartPayload = data->m_isMultipartPayload;
-    response->m_wasFetchedViaSPDY = data->m_wasFetchedViaSPDY;
-    response->m_wasNpnNegotiated = data->m_wasNpnNegotiated;
-    response->m_wasAlternateProtocolAvailable = data->m_wasAlternateProtocolAvailable;
-    response->m_wasFetchedViaProxy = data->m_wasFetchedViaProxy;
-    response->m_wasFetchedViaServiceWorker = data->m_wasFetchedViaServiceWorker;
-    response->m_wasFallbackRequiredByServiceWorker = data->m_wasFallbackRequiredByServiceWorker;
-    response->m_serviceWorkerResponseType = data->m_serviceWorkerResponseType;
-    response->m_originalURLViaServiceWorker = data->m_originalURLViaServiceWorker;
-    response->m_responseTime = data->m_responseTime;
-    response->m_remoteIPAddress = AtomicString(data->m_remoteIPAddress);
-    response->m_remotePort = data->m_remotePort;
-    response->m_downloadedFilePath = data->m_downloadedFilePath;
-    response->m_downloadedFileHandle = data->m_downloadedFileHandle;
+    m_httpHeaderFields.adopt(std::move(data->m_httpHeaders));
+    setLastModifiedDate(data->m_lastModifiedDate);
+    setResourceLoadTiming(data->m_resourceLoadTiming.release());
+    m_hasMajorCertificateErrors = data->m_hasMajorCertificateErrors;
+    m_securityStyle = data->m_securityStyle;
+    m_securityDetails.protocol = data->m_securityDetails.protocol;
+    m_securityDetails.cipher = data->m_securityDetails.cipher;
+    m_securityDetails.keyExchange = data->m_securityDetails.keyExchange;
+    m_securityDetails.keyExchangeGroup = data->m_securityDetails.keyExchangeGroup;
+    m_securityDetails.mac = data->m_securityDetails.mac;
+    m_securityDetails.subjectName = data->m_securityDetails.subjectName;
+    m_securityDetails.sanList = data->m_securityDetails.sanList;
+    m_securityDetails.issuer = data->m_securityDetails.issuer;
+    m_securityDetails.validFrom = data->m_securityDetails.validFrom;
+    m_securityDetails.validTo = data->m_securityDetails.validTo;
+    for (auto& cert : data->m_certificate)
+        m_securityDetails.certificate.push_back(AtomicString(cert));
+    m_securityDetails.sctList = data->m_securityDetails.sctList;
+    m_httpVersion = data->m_httpVersion;
+    m_appCacheID = data->m_appCacheID;
+    m_appCacheManifestURL = data->m_appCacheManifestURL.copy();
+    m_multipartBoundary = data->m_multipartBoundary;
+    m_wasFetchedViaSPDY = data->m_wasFetchedViaSPDY;
+    m_wasNpnNegotiated = data->m_wasNpnNegotiated;
+    m_wasAlternateProtocolAvailable = data->m_wasAlternateProtocolAvailable;
+    m_wasFetchedViaProxy = data->m_wasFetchedViaProxy;
+    m_wasFetchedViaServiceWorker = data->m_wasFetchedViaServiceWorker;
+    m_wasFetchedViaForeignFetch = data->m_wasFetchedViaForeignFetch;
+    m_wasFallbackRequiredByServiceWorker = data->m_wasFallbackRequiredByServiceWorker;
+    m_serviceWorkerResponseType = data->m_serviceWorkerResponseType;
+    m_urlListViaServiceWorker = data->m_urlListViaServiceWorker;
+    m_cacheStorageCacheName = data->m_cacheStorageCacheName;
+    m_didServiceWorkerNavigationPreload = data->m_didServiceWorkerNavigationPreload;
+    m_responseTime = data->m_responseTime;
+    m_remoteIPAddress = AtomicString(data->m_remoteIPAddress);
+    m_remotePort = data->m_remotePort;
+    m_encodedDataLength = data->m_encodedDataLength;
+    m_encodedBodyLength = data->m_encodedBodyLength;
+    m_decodedBodyLength = data->m_decodedBodyLength;
+    m_downloadedFilePath = data->m_downloadedFilePath;
+    m_downloadedFileHandle = data->m_downloadedFileHandle;
 
     // Bug https://bugs.webkit.org/show_bug.cgi?id=60397 this doesn't support
     // whatever values may be present in the opaque m_extraData structure.
-
-    return response.release();
 }
 
-PassOwnPtr<CrossThreadResourceResponseData> ResourceResponse::copyData() const
+ResourceResponse::ResourceResponse(const ResourceResponse&) = default;
+ResourceResponse& ResourceResponse::operator=(const ResourceResponse&) = default;
+
+std::unique_ptr<CrossThreadResourceResponseData> ResourceResponse::copyData()
+    const
 {
-    OwnPtr<CrossThreadResourceResponseData> data = adoptPtr(new CrossThreadResourceResponseData);
+    std::unique_ptr<CrossThreadResourceResponseData> data = WTF::wrapUnique(new CrossThreadResourceResponseData);
     data->m_url = url().copy();
-    data->m_mimeType = mimeType().string().isolatedCopy();
+    data->m_mimeType = mimeType().getString().isolatedCopy();
     data->m_expectedContentLength = expectedContentLength();
-    data->m_textEncodingName = textEncodingName().string().isolatedCopy();
+    data->m_textEncodingName = textEncodingName().getString().isolatedCopy();
     data->m_suggestedFilename = suggestedFilename().isolatedCopy();
     data->m_httpStatusCode = httpStatusCode();
-    data->m_httpStatusText = httpStatusText().string().isolatedCopy();
+    data->m_httpStatusText = httpStatusText().getString().isolatedCopy();
     data->m_httpHeaders = httpHeaderFields().copyData();
     data->m_lastModifiedDate = lastModifiedDate();
     if (m_resourceLoadTiming)
         data->m_resourceLoadTiming = m_resourceLoadTiming->deepCopy();
-    data->m_securityInfo = CString(m_securityInfo.data(), m_securityInfo.length());
+    data->m_hasMajorCertificateErrors = m_hasMajorCertificateErrors;
+    data->m_securityStyle = m_securityStyle;
+    data->m_securityDetails.protocol = m_securityDetails.protocol.isolatedCopy();
+    data->m_securityDetails.cipher = m_securityDetails.cipher.isolatedCopy();
+    data->m_securityDetails.keyExchange = m_securityDetails.keyExchange.isolatedCopy();
+    data->m_securityDetails.keyExchangeGroup = m_securityDetails.keyExchangeGroup.isolatedCopy();
+    data->m_securityDetails.mac = m_securityDetails.mac.isolatedCopy();
+    data->m_securityDetails.subjectName = m_securityDetails.subjectName.isolatedCopy();
+    data->m_securityDetails.sanList = isolatedCopy(m_securityDetails.sanList);
+    data->m_securityDetails.issuer = m_securityDetails.issuer.isolatedCopy();
+    data->m_securityDetails.validFrom = m_securityDetails.validFrom;
+    data->m_securityDetails.validTo = m_securityDetails.validTo;
+    for (auto& cert : m_securityDetails.certificate)
+        data->m_certificate.push_back(cert.getString().isolatedCopy());
+    data->m_securityDetails.sctList = isolatedCopy(m_securityDetails.sctList);
     data->m_httpVersion = m_httpVersion;
     data->m_appCacheID = m_appCacheID;
     data->m_appCacheManifestURL = m_appCacheManifestURL.copy();
-    data->m_isMultipartPayload = m_isMultipartPayload;
+    data->m_multipartBoundary = m_multipartBoundary;
     data->m_wasFetchedViaSPDY = m_wasFetchedViaSPDY;
     data->m_wasNpnNegotiated = m_wasNpnNegotiated;
     data->m_wasAlternateProtocolAvailable = m_wasAlternateProtocolAvailable;
     data->m_wasFetchedViaProxy = m_wasFetchedViaProxy;
     data->m_wasFetchedViaServiceWorker = m_wasFetchedViaServiceWorker;
+    data->m_wasFetchedViaForeignFetch = m_wasFetchedViaForeignFetch;
     data->m_wasFallbackRequiredByServiceWorker = m_wasFallbackRequiredByServiceWorker;
     data->m_serviceWorkerResponseType = m_serviceWorkerResponseType;
-    data->m_originalURLViaServiceWorker = m_originalURLViaServiceWorker.copy();
+    data->m_urlListViaServiceWorker.resize(m_urlListViaServiceWorker.size());
+    std::transform(m_urlListViaServiceWorker.begin(),
+        m_urlListViaServiceWorker.end(),
+        data->m_urlListViaServiceWorker.begin(),
+        [](const KURL& url) { return url.copy(); });
+    data->m_cacheStorageCacheName = cacheStorageCacheName().isolatedCopy();
+    data->m_didServiceWorkerNavigationPreload = m_didServiceWorkerNavigationPreload;
     data->m_responseTime = m_responseTime;
-    data->m_remoteIPAddress = m_remoteIPAddress.string().isolatedCopy();
+    data->m_remoteIPAddress = m_remoteIPAddress.getString().isolatedCopy();
     data->m_remotePort = m_remotePort;
+    data->m_encodedDataLength = m_encodedDataLength;
+    data->m_encodedBodyLength = m_encodedBodyLength;
+    data->m_decodedBodyLength = m_decodedBodyLength;
     data->m_downloadedFilePath = m_downloadedFilePath.isolatedCopy();
     data->m_downloadedFileHandle = m_downloadedFileHandle;
 
     // Bug https://bugs.webkit.org/show_bug.cgi?id=60397 this doesn't support
     // whatever values may be present in the opaque m_extraData structure.
 
-    return data.release();
+    return data;
 }
 
 bool ResourceResponse::isHTTP() const
@@ -203,7 +307,8 @@ void ResourceResponse::setMimeType(const AtomicString& mimeType)
 {
     m_isNull = false;
 
-    // FIXME: MIME type is determined by HTTP Content-Type header. We should update the header, so that it doesn't disagree with m_mimeType.
+    // FIXME: MIME type is determined by HTTP Content-Type header. We should
+    // update the header, so that it doesn't disagree with m_mimeType.
     m_mimeType = mimeType;
 }
 
@@ -212,11 +317,14 @@ long long ResourceResponse::expectedContentLength() const
     return m_expectedContentLength;
 }
 
-void ResourceResponse::setExpectedContentLength(long long expectedContentLength)
+void ResourceResponse::setExpectedContentLength(
+    long long expectedContentLength)
 {
     m_isNull = false;
 
-    // FIXME: Content length is determined by HTTP Content-Length header. We should update the header, so that it doesn't disagree with m_expectedContentLength.
+    // FIXME: Content length is determined by HTTP Content-Length header. We
+    // should update the header, so that it doesn't disagree with
+    // m_expectedContentLength.
     m_expectedContentLength = expectedContentLength;
 }
 
@@ -229,7 +337,8 @@ void ResourceResponse::setTextEncodingName(const AtomicString& encodingName)
 {
     m_isNull = false;
 
-    // FIXME: Text encoding is determined by HTTP Content-Type header. We should update the header, so that it doesn't disagree with m_textEncodingName.
+    // FIXME: Text encoding is determined by HTTP Content-Type header. We should
+    // update the header, so that it doesn't disagree with m_textEncodingName.
     m_textEncodingName = encodingName;
 }
 
@@ -243,7 +352,8 @@ void ResourceResponse::setSuggestedFilename(const String& suggestedName)
 {
     m_isNull = false;
 
-    // FIXME: Suggested file name is calculated based on other headers. There should not be a setter for it.
+    // FIXME: Suggested file name is calculated based on other headers. There
+    // should not be a setter for it.
     m_suggestedFilename = suggestedName;
 }
 
@@ -267,38 +377,22 @@ void ResourceResponse::setHTTPStatusText(const AtomicString& statusText)
     m_httpStatusText = statusText;
 }
 
-const AtomicString& ResourceResponse::httpHeaderField(const AtomicString& name) const
+const AtomicString& ResourceResponse::httpHeaderField(
+    const AtomicString& name) const
 {
     return m_httpHeaderFields.get(name);
-}
-
-const AtomicString& ResourceResponse::httpHeaderField(const char* name) const
-{
-    return m_httpHeaderFields.get(name);
-}
-
-static const AtomicString& cacheControlHeaderString()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, cacheControlHeader, ("cache-control", AtomicString::ConstructFromLiteral));
-    return cacheControlHeader;
-}
-
-static const AtomicString& pragmaHeaderString()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, pragmaHeader, ("pragma", AtomicString::ConstructFromLiteral));
-    return pragmaHeader;
 }
 
 void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, ageHeader, ("age", AtomicString::ConstructFromLiteral));
-    DEFINE_STATIC_LOCAL(const AtomicString, dateHeader, ("date", AtomicString::ConstructFromLiteral));
-    DEFINE_STATIC_LOCAL(const AtomicString, expiresHeader, ("expires", AtomicString::ConstructFromLiteral));
-    DEFINE_STATIC_LOCAL(const AtomicString, lastModifiedHeader, ("last-modified", AtomicString::ConstructFromLiteral));
+    static const char ageHeader[] = "age";
+    static const char dateHeader[] = "date";
+    static const char expiresHeader[] = "expires";
+    static const char lastModifiedHeader[] = "last-modified";
 
     if (equalIgnoringCase(name, ageHeader))
         m_haveParsedAgeHeader = false;
-    else if (equalIgnoringCase(name, cacheControlHeaderString()) || equalIgnoringCase(name, pragmaHeaderString()))
+    else if (equalIgnoringCase(name, cacheControlHeader) || equalIgnoringCase(name, pragmaHeader))
         m_cacheControlHeader = CacheControlHeader();
     else if (equalIgnoringCase(name, dateHeader))
         m_haveParsedDateHeader = false;
@@ -308,14 +402,44 @@ void ResourceResponse::updateHeaderParsedState(const AtomicString& name)
         m_haveParsedLastModifiedHeader = false;
 }
 
-void ResourceResponse::setHTTPHeaderField(const AtomicString& name, const AtomicString& value)
+void ResourceResponse::setSecurityDetails(
+    const String& protocol,
+    const String& keyExchange,
+    const String& keyExchangeGroup,
+    const String& cipher,
+    const String& mac,
+    const String& subjectName,
+    const Vector<String>& sanList,
+    const String& issuer,
+    time_t validFrom,
+    time_t validTo,
+    const Vector<AtomicString>& certificate,
+    const SignedCertificateTimestampList& sctList)
+{
+    m_securityDetails.protocol = protocol;
+    m_securityDetails.keyExchange = keyExchange;
+    m_securityDetails.keyExchangeGroup = keyExchangeGroup;
+    m_securityDetails.cipher = cipher;
+    m_securityDetails.mac = mac;
+    m_securityDetails.subjectName = subjectName;
+    m_securityDetails.sanList = sanList;
+    m_securityDetails.issuer = issuer;
+    m_securityDetails.validFrom = validFrom;
+    m_securityDetails.validTo = validTo;
+    m_securityDetails.certificate = certificate;
+    m_securityDetails.sctList = sctList;
+}
+
+void ResourceResponse::setHTTPHeaderField(const AtomicString& name,
+    const AtomicString& value)
 {
     updateHeaderParsedState(name);
 
     m_httpHeaderFields.set(name, value);
 }
 
-void ResourceResponse::addHTTPHeaderField(const AtomicString& name, const AtomicString& value)
+void ResourceResponse::addHTTPHeaderField(const AtomicString& name,
+    const AtomicString& value)
 {
     updateHeaderParsedState(name);
 
@@ -334,49 +458,60 @@ const HTTPHeaderMap& ResourceResponse::httpHeaderFields() const
     return m_httpHeaderFields;
 }
 
-bool ResourceResponse::cacheControlContainsNoCache()
+bool ResourceResponse::cacheControlContainsNoCache() const
 {
-    if (!m_cacheControlHeader.parsed)
-        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    if (!m_cacheControlHeader.parsed) {
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
+            m_httpHeaderFields.get(pragmaHeader));
+    }
     return m_cacheControlHeader.containsNoCache;
 }
 
-bool ResourceResponse::cacheControlContainsNoStore()
+bool ResourceResponse::cacheControlContainsNoStore() const
 {
-    if (!m_cacheControlHeader.parsed)
-        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    if (!m_cacheControlHeader.parsed) {
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
+            m_httpHeaderFields.get(pragmaHeader));
+    }
     return m_cacheControlHeader.containsNoStore;
 }
 
-bool ResourceResponse::cacheControlContainsMustRevalidate()
+bool ResourceResponse::cacheControlContainsMustRevalidate() const
 {
-    if (!m_cacheControlHeader.parsed)
-        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    if (!m_cacheControlHeader.parsed) {
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
+            m_httpHeaderFields.get(pragmaHeader));
+    }
     return m_cacheControlHeader.containsMustRevalidate;
 }
 
 bool ResourceResponse::hasCacheValidatorFields() const
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, lastModifiedHeader, ("last-modified", AtomicString::ConstructFromLiteral));
-    DEFINE_STATIC_LOCAL(const AtomicString, eTagHeader, ("etag", AtomicString::ConstructFromLiteral));
+    static const char lastModifiedHeader[] = "last-modified";
+    static const char eTagHeader[] = "etag";
     return !m_httpHeaderFields.get(lastModifiedHeader).isEmpty() || !m_httpHeaderFields.get(eTagHeader).isEmpty();
 }
 
-double ResourceResponse::cacheControlMaxAge()
+double ResourceResponse::cacheControlMaxAge() const
 {
-    if (!m_cacheControlHeader.parsed)
-        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    if (!m_cacheControlHeader.parsed) {
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
+            m_httpHeaderFields.get(pragmaHeader));
+    }
     return m_cacheControlHeader.maxAge;
 }
 
-double ResourceResponse::cacheControlStaleWhileRevalidate()
+double ResourceResponse::cacheControlStaleWhileRevalidate() const
 {
-    if (!m_cacheControlHeader.parsed)
-        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeaderString()), m_httpHeaderFields.get(pragmaHeaderString()));
+    if (!m_cacheControlHeader.parsed) {
+        m_cacheControlHeader = parseCacheControlDirectives(m_httpHeaderFields.get(cacheControlHeader),
+            m_httpHeaderFields.get(pragmaHeader));
+    }
     return m_cacheControlHeader.staleWhileRevalidate;
 }
 
-static double parseDateValueInHeader(const HTTPHeaderMap& headers, const AtomicString& headerName)
+static double parseDateValueInHeader(const HTTPHeaderMap& headers,
+    const AtomicString& headerName)
 {
     const AtomicString& headerValue = headers.get(headerName);
     if (headerValue.isEmpty())
@@ -386,7 +521,7 @@ static double parseDateValueInHeader(const HTTPHeaderMap& headers, const AtomicS
     // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
     // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
     double dateInMilliseconds = parseDate(headerValue);
-    if (!std::isfinite(dateInMilliseconds))
+    if (!std_isfinite(dateInMilliseconds))
         return std::numeric_limits<double>::quiet_NaN();
     return dateInMilliseconds / 1000;
 }
@@ -394,7 +529,7 @@ static double parseDateValueInHeader(const HTTPHeaderMap& headers, const AtomicS
 double ResourceResponse::date() const
 {
     if (!m_haveParsedDateHeader) {
-        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("date", AtomicString::ConstructFromLiteral));
+        static const char headerName[] = "date";
         m_date = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedDateHeader = true;
     }
@@ -404,7 +539,7 @@ double ResourceResponse::date() const
 double ResourceResponse::age() const
 {
     if (!m_haveParsedAgeHeader) {
-        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("age", AtomicString::ConstructFromLiteral));
+        static const char headerName[] = "age";
         const AtomicString& headerValue = m_httpHeaderFields.get(headerName);
         bool ok;
         m_age = headerValue.toDouble(&ok);
@@ -418,7 +553,7 @@ double ResourceResponse::age() const
 double ResourceResponse::expires() const
 {
     if (!m_haveParsedExpiresHeader) {
-        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("expires", AtomicString::ConstructFromLiteral));
+        static const char headerName[] = "expires";
         m_expires = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedExpiresHeader = true;
     }
@@ -428,7 +563,7 @@ double ResourceResponse::expires() const
 double ResourceResponse::lastModified() const
 {
     if (!m_haveParsedLastModifiedHeader) {
-        DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("last-modified", AtomicString::ConstructFromLiteral));
+        static const char headerName[] = "last-modified";
         m_lastModified = parseDateValueInHeader(m_httpHeaderFields, headerName);
         m_haveParsedLastModifiedHeader = true;
     }
@@ -437,13 +572,13 @@ double ResourceResponse::lastModified() const
 
 bool ResourceResponse::isAttachment() const
 {
-    DEFINE_STATIC_LOCAL(const AtomicString, headerName, ("content-disposition", AtomicString::ConstructFromLiteral));
+    static const char headerName[] = "content-disposition";
+    static const char attachmentString[] = "attachment";
     String value = m_httpHeaderFields.get(headerName);
     size_t loc = value.find(';');
     if (loc != kNotFound)
         value = value.left(loc);
     value = value.stripWhiteSpace();
-    DEFINE_STATIC_LOCAL(const AtomicString, attachmentString, ("attachment", AtomicString::ConstructFromLiteral));
     return equalIgnoringCase(value, attachmentString);
 }
 
@@ -492,7 +627,8 @@ ResourceLoadTiming* ResourceResponse::resourceLoadTiming() const
     return m_resourceLoadTiming.get();
 }
 
-void ResourceResponse::setResourceLoadTiming(PassRefPtr<ResourceLoadTiming> resourceLoadTiming)
+void ResourceResponse::setResourceLoadTiming(
+    PassRefPtr<ResourceLoadTiming> resourceLoadTiming)
 {
     m_resourceLoadTiming = resourceLoadTiming;
 }
@@ -502,9 +638,32 @@ PassRefPtr<ResourceLoadInfo> ResourceResponse::resourceLoadInfo() const
     return m_resourceLoadInfo.get();
 }
 
-void ResourceResponse::setResourceLoadInfo(PassRefPtr<ResourceLoadInfo> loadInfo)
+void ResourceResponse::setResourceLoadInfo(
+    PassRefPtr<ResourceLoadInfo> loadInfo)
 {
     m_resourceLoadInfo = loadInfo;
+}
+
+KURL ResourceResponse::originalURLViaServiceWorker() const
+{
+    if (m_urlListViaServiceWorker.isEmpty())
+        return KURL();
+    return m_urlListViaServiceWorker.back();
+}
+
+void ResourceResponse::setEncodedDataLength(long long value)
+{
+    m_encodedDataLength = value;
+}
+
+void ResourceResponse::addToEncodedBodyLength(long long value)
+{
+    m_encodedBodyLength += value;
+}
+
+void ResourceResponse::addToDecodedBodyLength(long long value)
+{
+    m_decodedBodyLength += value;
 }
 
 void ResourceResponse::setDownloadedFilePath(const String& downloadedFilePath)
@@ -514,13 +673,20 @@ void ResourceResponse::setDownloadedFilePath(const String& downloadedFilePath)
         m_downloadedFileHandle.clear();
         return;
     }
-    OwnPtr<BlobData> blobData = BlobData::create();
-    blobData->appendFile(m_downloadedFilePath);
+    // TODO(dmurph): Investigate whether we need the mimeType on this blob.
+    std::unique_ptr<BlobData> blobData = BlobData::createForFileWithUnknownSize(m_downloadedFilePath);
     blobData->detachFromCurrentThread();
-    m_downloadedFileHandle = BlobDataHandle::create(blobData.release(), -1);
+    m_downloadedFileHandle = BlobDataHandle::create(std::move(blobData), -1);
 }
 
-bool ResourceResponse::compare(const ResourceResponse& a, const ResourceResponse& b)
+void ResourceResponse::appendRedirectResponse(
+    const ResourceResponse& response)
+{
+    m_redirectResponses.push_back(response);
+}
+
+bool ResourceResponse::compare(const ResourceResponse& a,
+    const ResourceResponse& b)
 {
     if (a.isNull() != b.isNull())
         return false;
@@ -544,7 +710,11 @@ bool ResourceResponse::compare(const ResourceResponse& a, const ResourceResponse
         return true;
     if (a.resourceLoadTiming() != b.resourceLoadTiming())
         return false;
+    if (a.encodedBodyLength() != b.encodedBodyLength())
+        return false;
+    if (a.decodedBodyLength() != b.decodedBodyLength())
+        return false;
     return true;
 }
 
-}
+} // namespace blink

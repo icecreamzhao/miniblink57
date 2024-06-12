@@ -23,8 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#speechrecognitionresult
+
 [
-    GarbageCollected,
     NoInterfaceObject
 ] interface SpeechRecognitionResult {
     readonly attribute unsigned long length;

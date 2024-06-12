@@ -6,23 +6,22 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimatorView_DEFINED
 #define SkAnimatorView_DEFINED
 
-#include "SkView.h"
 #include "SkAnimator.h"
+#include "SkView.h"
 
 class SkAnimatorView : public SkView {
 public:
-            SkAnimatorView();
+    SkAnimatorView();
     virtual ~SkAnimatorView();
 
     SkAnimator* getAnimator() const { return fAnimator; }
 
-    bool    decodeFile(const char path[]);
-    bool    decodeMemory(const void* buffer, size_t size);
-    bool    decodeStream(SkStream* stream);
+    bool decodeFile(const char path[]);
+    bool decodeMemory(const void* buffer, size_t size);
+    bool decodeStream(SkStream* stream);
 
 protected:
     // overrides

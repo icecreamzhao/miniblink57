@@ -1,8 +1,12 @@
-cevans@chromium.org
-jchaffraix@chromium.org
+erik.corry@gmail.com
+esprehn@chromium.org
+haraken@chromium.org
 jochen@chromium.org
 mikhail.pozdnyakov@intel.com
-morrita@chromium.org
+sigbjornf@opera.com
 thakis@chromium.org
 tkent@chromium.org
-erik.corry@gmail.com
+yutak@chromium.org
+
+# TEAM: platform-architecture-dev@chromium.org
+# COMPONENT: Blink>Internals>WTF

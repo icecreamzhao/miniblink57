@@ -18,16 +18,16 @@
     Boston, MA 02110-1301, USA.
 */
 
+// https://html.spec.whatwg.org/multipage/webappapis.html#plugins-2
+
 [
-    GarbageCollected,
     ImplementedAs=DOMPlugin
 ] interface Plugin {
     readonly attribute DOMString name;
     readonly attribute DOMString filename;
     readonly attribute DOMString description;
     readonly attribute unsigned long length;
-    getter MimeType item([Default=Undefined] optional unsigned long index);
-    MimeType namedItem([Default=Undefined] optional DOMString name);
+    getter MimeType? item([Default=Undefined] optional unsigned long index);
+    MimeType? namedItem([Default=Undefined] optional DOMString name);
     [NotEnumerable, ImplementedAs=namedItem] getter MimeType ([Default=Undefined] optional DOMString name);
 };
-

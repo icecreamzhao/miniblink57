@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "NavigatorContentUtilsClientMock.h"
 
 #include "modules/navigatorcontentutils/NavigatorContentUtilsClient.h"
@@ -11,8 +10,10 @@
 
 namespace blink {
 
-void NavigatorContentUtilsClientMock::registerProtocolHandler(const String& scheme,
-    const KURL& url, const String& title)
+void NavigatorContentUtilsClientMock::registerProtocolHandler(
+    const String& scheme,
+    const KURL& url,
+    const String& title)
 {
     ProtocolInfo info;
     info.scheme = scheme;
@@ -22,17 +23,22 @@ void NavigatorContentUtilsClientMock::registerProtocolHandler(const String& sche
     m_protocolMap.set(scheme, info);
 }
 
-NavigatorContentUtilsClient::CustomHandlersState NavigatorContentUtilsClientMock::isProtocolHandlerRegistered(const String& scheme,
+NavigatorContentUtilsClient::CustomHandlersState
+NavigatorContentUtilsClientMock::isProtocolHandlerRegistered(
+    const String& scheme,
     const KURL& url)
 {
-    // "declined" state is checked by NavigatorContentUtils::isProtocolHandlerRegistered() before calling this function.
+    // "declined" state is checked by
+    // NavigatorContentUtils::isProtocolHandlerRegistered() before calling this
+    // function.
     if (m_protocolMap.contains(scheme))
         return NavigatorContentUtilsClient::CustomHandlersRegistered;
 
     return NavigatorContentUtilsClient::CustomHandlersNew;
 }
 
-void NavigatorContentUtilsClientMock::unregisterProtocolHandler(const String& scheme,
+void NavigatorContentUtilsClientMock::unregisterProtocolHandler(
+    const String& scheme,
     const KURL& url)
 {
     m_protocolMap.remove(scheme);

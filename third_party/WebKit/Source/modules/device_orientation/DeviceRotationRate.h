@@ -32,10 +32,13 @@
 
 namespace blink {
 
-class DeviceRotationRate final : public GarbageCollected<DeviceRotationRate>, public ScriptWrappable {
+class DeviceRotationRate final : public GarbageCollected<DeviceRotationRate>,
+                                 public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static DeviceRotationRate* create(DeviceMotionData::RotationRate* rotationRate)
+    static DeviceRotationRate* create(
+        DeviceMotionData::RotationRate* rotationRate)
     {
         return new DeviceRotationRate(rotationRate);
     }

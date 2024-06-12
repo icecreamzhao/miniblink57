@@ -299,7 +299,7 @@ RUNTIME_FUNCTION(Runtime_GetOptimizationCount) {
   return Smi::FromInt(function->shared()->opt_count());
 }
 
-static void ReturnThis(const v8::FunctionCallbackInfo<v8::Value>& args) {
+static void V8CALL ReturnThis(const v8::FunctionCallbackInfo<v8::Value>& args) {
   args.GetReturnValue().Set(args.This());
 }
 
@@ -318,7 +318,7 @@ RUNTIME_FUNCTION(Runtime_GetUndetectable) {
   return *Utils::OpenHandle(*obj);
 }
 
-static void call_as_function(const v8::FunctionCallbackInfo<v8::Value>& args) {
+static void V8CALL call_as_function(const v8::FunctionCallbackInfo<v8::Value>& args) {
   double v1 = args[0]
                   ->NumberValue(v8::Isolate::GetCurrent()->GetCurrentContext())
                   .ToChecked();
@@ -563,10 +563,10 @@ RUNTIME_FUNCTION(Runtime_NativeScriptsCount) {
 
 // TODO(5510): remove this.
 RUNTIME_FUNCTION(Runtime_GetV8Version) {
-    HandleScope scope(isolate);
-    DCHECK_EQ(0, args.length());
-    const char* version_string = "v8.5.7"; // v8::V8::GetVersion();
-    return *isolate->factory()->NewStringFromAsciiChecked(version_string);
+  HandleScope scope(isolate);
+  DCHECK_EQ(0, args.length());
+  const char* version_string = "v8.5.7"; // v8::V8::GetVersion();
+  return *isolate->factory()->NewStringFromAsciiChecked(version_string);
 }
 
 

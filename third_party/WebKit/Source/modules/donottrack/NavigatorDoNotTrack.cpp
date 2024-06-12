@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/donottrack/NavigatorDoNotTrack.h"
 
 #include "core/frame/LocalFrame.h"
@@ -37,19 +36,14 @@
 
 namespace blink {
 
-NavigatorDoNotTrack::NavigatorDoNotTrack(LocalFrame* frame)
-    : DOMWindowProperty(frame)
-{
-}
-
-NavigatorDoNotTrack::~NavigatorDoNotTrack()
+NavigatorDoNotTrack::NavigatorDoNotTrack(Navigator& navigator)
+    : Supplement<Navigator>(navigator)
 {
 }
 
 DEFINE_TRACE(NavigatorDoNotTrack)
 {
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<Navigator>::trace(visitor);
 }
 
 const char* NavigatorDoNotTrack::supplementName()
@@ -59,9 +53,10 @@ const char* NavigatorDoNotTrack::supplementName()
 
 NavigatorDoNotTrack& NavigatorDoNotTrack::from(Navigator& navigator)
 {
-    NavigatorDoNotTrack* supplement = static_cast<NavigatorDoNotTrack*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
+    NavigatorDoNotTrack* supplement = static_cast<NavigatorDoNotTrack*>(
+        Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
-        supplement = new NavigatorDoNotTrack(navigator.frame());
+        supplement = new NavigatorDoNotTrack(navigator);
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
@@ -74,9 +69,10 @@ String NavigatorDoNotTrack::doNotTrack(Navigator& navigator)
 
 String NavigatorDoNotTrack::doNotTrack()
 {
-    if (!frame() || !frame()->loader().client())
+    LocalFrame* frame = supplementable()->frame();
+    if (!frame || !frame->loader().client())
         return String();
-    return frame()->loader().client()->doNotTrackValue();
+    return frame->loader().client()->doNotTrackValue();
 }
 
 } // namespace blink

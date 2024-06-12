@@ -12,11 +12,12 @@
 #include "SkUnPreMultiply.h"
 #include "Test.h"
 
-#define GetPackedR16As32(packed)    (SkGetPackedR16(dc) << (8 - SK_R16_BITS))
-#define GetPackedG16As32(packed)    (SkGetPackedG16(dc) << (8 - SK_G16_BITS))
-#define GetPackedB16As32(packed)    (SkGetPackedB16(dc) << (8 - SK_B16_BITS))
+#define GetPackedR16As32(packed) (SkGetPackedR16(dc) << (8 - SK_R16_BITS))
+#define GetPackedG16As32(packed) (SkGetPackedG16(dc) << (8 - SK_G16_BITS))
+#define GetPackedB16As32(packed) (SkGetPackedB16(dc) << (8 - SK_B16_BITS))
 
-static inline void test_premul(skiatest::Reporter* reporter) {
+static inline void test_premul(skiatest::Reporter* reporter)
+{
     for (int a = 0; a <= 255; a++) {
         for (int x = 0; x <= 255; x++) {
             SkColor c0 = SkColorSetARGB(a, x, x, x);
@@ -60,7 +61,8 @@ static void test_interp(skiatest::Reporter* reporter) {
 }
 */
 
-static inline void test_fast_interp(skiatest::Reporter* reporter) {
+static inline void test_fast_interp(skiatest::Reporter* reporter)
+{
     SkRandom r;
 
     U8CPU a0 = 0;
@@ -76,7 +78,8 @@ static inline void test_fast_interp(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(Color, reporter) {
+DEF_TEST(Color, reporter)
+{
     test_premul(reporter);
     //test_interp(reporter);
     test_fast_interp(reporter);

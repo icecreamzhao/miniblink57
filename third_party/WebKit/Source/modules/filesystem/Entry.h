@@ -47,14 +47,34 @@ class VoidCallback;
 
 class MODULES_EXPORT Entry : public EntryBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    DOMFileSystem* filesystem() const { return static_cast<DOMFileSystem*>(m_fileSystem.get()); }
 
-    void getMetadata(MetadataCallback* successCallback = nullptr, ErrorCallback* = nullptr);
-    void moveTo(DirectoryEntry* parent, const String& name = String(), EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void copyTo(DirectoryEntry* parent, const String& name = String(), EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void remove(VoidCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void getParent(EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
+public:
+    DOMFileSystem* filesystem() const
+    {
+        return static_cast<DOMFileSystem*>(m_fileSystem.get());
+    }
+    DOMFileSystem* filesystem(ScriptState*) const;
+
+    void getMetadata(ScriptState*,
+        MetadataCallback* successCallback = nullptr,
+        ErrorCallback* = nullptr);
+    void moveTo(ScriptState*,
+        DirectoryEntry* parent,
+        const String& name = String(),
+        EntryCallback* successCallback = nullptr,
+        ErrorCallback* = nullptr) const;
+    void copyTo(ScriptState*,
+        DirectoryEntry* parent,
+        const String& name = String(),
+        EntryCallback* successCallback = nullptr,
+        ErrorCallback* = nullptr) const;
+    void remove(ScriptState*,
+        VoidCallback* successCallback = nullptr,
+        ErrorCallback* = nullptr) const;
+    void getParent(ScriptState*,
+        EntryCallback* successCallback = nullptr,
+        ErrorCallback* = nullptr) const;
+    String toURL(ScriptState*) const;
 
     DECLARE_VIRTUAL_TRACE();
 

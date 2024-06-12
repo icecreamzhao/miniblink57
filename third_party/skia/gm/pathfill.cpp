@@ -1,17 +1,19 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+
+#include "SkPath.h"
 #include "gm.h"
 
 typedef SkScalar (*MakePathProc)(SkPath*);
 
-static SkScalar make_frame(SkPath* path) {
+static SkScalar make_frame(SkPath* path)
+{
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(630), SkIntToScalar(470) };
+        SkIntToScalar(630), SkIntToScalar(470) };
     path->addRoundRect(r, SkIntToScalar(15), SkIntToScalar(15));
 
     SkPaint paint;
@@ -21,7 +23,8 @@ static SkScalar make_frame(SkPath* path) {
     return SkIntToScalar(15);
 }
 
-static SkScalar make_triangle(SkPath* path) {
+static SkScalar make_triangle(SkPath* path)
+{
     static const int gCoord[] = {
         10, 20, 15, 5, 30, 30
     };
@@ -33,23 +36,26 @@ static SkScalar make_triangle(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-static SkScalar make_rect(SkPath* path) {
+static SkScalar make_rect(SkPath* path)
+{
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(30), SkIntToScalar(30) };
+        SkIntToScalar(30), SkIntToScalar(30) };
     path->addRect(r);
     path->offset(SkIntToScalar(10), SkIntToScalar(0));
     return SkIntToScalar(30);
 }
 
-static SkScalar make_oval(SkPath* path) {
+static SkScalar make_oval(SkPath* path)
+{
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(30), SkIntToScalar(30) };
+        SkIntToScalar(30), SkIntToScalar(30) };
     path->addOval(r);
     path->offset(SkIntToScalar(10), SkIntToScalar(0));
     return SkIntToScalar(30);
 }
 
-static SkScalar make_sawtooth(SkPath* path) {
+static SkScalar make_sawtooth(SkPath* path)
+{
     SkScalar x = SkIntToScalar(20);
     SkScalar y = SkIntToScalar(20);
     const SkScalar x0 = x;
@@ -69,7 +75,8 @@ static SkScalar make_sawtooth(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-static SkScalar make_star(SkPath* path, int n) {
+static SkScalar make_star(SkPath* path, int n)
+{
     const SkScalar c = SkIntToScalar(45);
     const SkScalar r = SkIntToScalar(20);
 
@@ -90,7 +97,8 @@ static SkScalar make_star_5(SkPath* path) { return make_star(path, 5); }
 static SkScalar make_star_13(SkPath* path) { return make_star(path, 13); }
 
 // We don't expect any output from this path.
-static SkScalar make_line(SkPath* path) {
+static SkScalar make_line(SkPath* path)
+{
     path->moveTo(SkIntToScalar(30), SkIntToScalar(30));
     path->lineTo(SkIntToScalar(120), SkIntToScalar(40));
     path->close();
@@ -112,28 +120,32 @@ static const MakePathProc gProcs[] = {
     make_line,
 };
 
-#define N   SK_ARRAY_COUNT(gProcs)
+#define N SK_ARRAY_COUNT(gProcs)
 
 class PathFillGM : public skiagm::GM {
-    SkPath  fPath[N];
+    SkPath fPath[N];
     SkScalar fDY[N];
+
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         for (size_t i = 0; i < N; i++) {
             fDY[i] = gProcs[i](&fPath[i]);
         }
     }
 
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("pathfill");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(640, 480);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -149,25 +161,30 @@ private:
 
 // test inverse-fill w/ a clip that completely excludes the geometry
 class PathInverseFillGM : public skiagm::GM {
-    SkPath  fPath[N];
+    SkPath fPath[N];
     SkScalar fDY[N];
+
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         for (size_t i = 0; i < N; i++) {
             fDY[i] = gProcs[i](&fPath[i]);
         }
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("pathinvfill");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(450, 220);
     }
 
     static void show(SkCanvas* canvas, const SkPath& path, const SkPaint& paint,
-                     const SkRect* clip, SkScalar top, const SkScalar bottom) {
+        const SkRect* clip, SkScalar top, const SkScalar bottom)
+    {
         canvas->save();
         if (clip) {
             SkRect r = *clip;
@@ -179,7 +196,8 @@ protected:
         canvas->restore();
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPath path;
 
         path.addCircle(SkIntToScalar(50), SkIntToScalar(50), SkIntToScalar(40));
@@ -197,7 +215,7 @@ protected:
                 canvas->save();
                 canvas->clipRect(clipR);
 
-                const SkRect* clipPtr = doclip ? &clipR : NULL;
+                const SkRect* clipPtr = doclip ? &clipR : nullptr;
 
                 show(canvas, path, paint, clipPtr, clipR.fTop, clipR.centerY());
                 show(canvas, path, paint, clipPtr, clipR.centerY(), clipR.fBottom);
@@ -212,10 +230,30 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
+DEF_SIMPLE_GM(rotatedcubicpath, canvas, 200, 200)
+{
+    SkPaint p;
+    p.setAntiAlias(true);
+    p.setStyle(SkPaint::kFill_Style);
+
+    canvas->translate(50, 50);
+    SkPath path;
+    path.moveTo(48, -23);
+    path.cubicTo(48, -29.5, 6, -30, 6, -30);
+    path.cubicTo(6, -30, 2, 0, 2, 0);
+    path.cubicTo(2, 0, 44, -21.5, 48, -23);
+    path.close();
+
+    p.setColor(SK_ColorBLUE);
+    canvas->drawPath(path, p);
+
+    // Rotated path, which is not antialiased on GPU
+    p.setColor(SK_ColorRED);
+    canvas->rotate(90);
+    canvas->drawPath(path, p);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
-static skiagm::GM* MyFactory(void*) { return new PathFillGM; }
-static skiagm::GMRegistry reg(MyFactory);
-
-static skiagm::GM* F1(void*) { return new PathInverseFillGM; }
-static skiagm::GMRegistry gR1(F1);
+DEF_GM(return new PathFillGM;)
+DEF_GM(return new PathInverseFillGM;)

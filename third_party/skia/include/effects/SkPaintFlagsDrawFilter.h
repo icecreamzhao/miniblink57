@@ -17,8 +17,8 @@ public:
     bool filter(SkPaint*, Type) override;
 
 private:
-    uint16_t    fClearFlags;    // user specified
-    uint16_t    fSetFlags;      // user specified
+    uint16_t fClearFlags; // user specified
+    uint16_t fSetFlags; // user specified
 };
 
 #endif

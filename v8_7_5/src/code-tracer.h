@@ -14,71 +14,80 @@
 namespace v8 {
 namespace internal {
 
-class CodeTracer final : public Malloced {
- public:
-  explicit CodeTracer(int isolate_id) : file_(nullptr), scope_depth_(0) {
-    if (!ShouldRedirect()) {
-      file_ = stdout;
-      return;
-    }
+    class CodeTracer final : public Malloced {
+    public:
+        explicit CodeTracer(int isolate_id)
+            : file_(nullptr)
+            , scope_depth_(0)
+        {
+            if (!ShouldRedirect()) {
+                file_ = stdout;
+                return;
+            }
 
-    if (FLAG_redirect_code_traces_to != nullptr) {
-      StrNCpy(filename_, FLAG_redirect_code_traces_to, filename_.length());
-    } else if (isolate_id >= 0) {
-      SNPrintF(filename_, "code-%d-%d.asm", base::OS::GetCurrentProcessId(),
-               isolate_id);
-    } else {
-      SNPrintF(filename_, "code-%d.asm", base::OS::GetCurrentProcessId());
-    }
+            if (FLAG_redirect_code_traces_to != nullptr) {
+                StrNCpy(filename_, FLAG_redirect_code_traces_to, filename_.length());
+            } else if (isolate_id >= 0) {
+                SNPrintF(filename_, "code-%d-%d.asm", base::OS::GetCurrentProcessId(),
+                    isolate_id);
+            } else {
+                SNPrintF(filename_, "code-%d.asm", base::OS::GetCurrentProcessId());
+            }
 
-    WriteChars(filename_.start(), "", 0, false);
-  }
+            WriteChars(filename_.start(), "", 0, false);
+        }
 
-  class Scope {
-   public:
-    explicit Scope(CodeTracer* tracer) : tracer_(tracer) { tracer->OpenFile(); }
-    ~Scope() { tracer_->CloseFile(); }
+        class Scope {
+        public:
+            explicit Scope(CodeTracer* tracer)
+                : tracer_(tracer)
+            {
+                tracer->OpenFile();
+            }
+            ~Scope() { tracer_->CloseFile(); }
 
-    FILE* file() const { return tracer_->file(); }
+            FILE* file() const { return tracer_->file(); }
 
-   private:
-    CodeTracer* tracer_;
-  };
+        private:
+            CodeTracer* tracer_;
+        };
 
-  void OpenFile() {
-    if (!ShouldRedirect()) {
-      return;
-    }
+        void OpenFile()
+        {
+            if (!ShouldRedirect()) {
+                return;
+            }
 
-    if (file_ == nullptr) {
-      file_ = base::OS::FOpen(filename_.start(), "ab");
-    }
+            if (file_ == nullptr) {
+                file_ = base::OS::FOpen(filename_.start(), "ab");
+            }
 
-    scope_depth_++;
-  }
+            scope_depth_++;
+        }
 
-  void CloseFile() {
-    if (!ShouldRedirect()) {
-      return;
-    }
+        void CloseFile()
+        {
+            if (!ShouldRedirect()) {
+                return;
+            }
 
-    if (--scope_depth_ == 0) {
-      fclose(file_);
-      file_ = nullptr;
-    }
-  }
+            if (--scope_depth_ == 0) {
+                fclose(file_);
+                file_ = nullptr;
+            }
+        }
 
-  FILE* file() const { return file_; }
+        FILE* file() const { return file_; }
 
- private:
-  static bool ShouldRedirect() { return FLAG_redirect_code_traces; }
+    private:
+        static bool ShouldRedirect() { return FLAG_redirect_code_traces; }
 
-  EmbeddedVector<char, 128> filename_;
-  FILE* file_;
-  int scope_depth_;
-};
+        EmbeddedVector<char, 128> filename_;
+        FILE* file_;
+        int scope_depth_;
+    };
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_CODE_TRACER_H_
+#endif // V8_CODE_TRACER_H_

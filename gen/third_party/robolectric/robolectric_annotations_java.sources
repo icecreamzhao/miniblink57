@@ -1,0 +1,10 @@
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/AccessibilityChecks.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/Config.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/HiddenApi.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/Implementation.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/Implements.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/RealObject.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/Resetter.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/internal/DoNotInstrument.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/internal/Instrument.java
+../../third_party/robolectric/robolectric/robolectric-annotations/src/main/java/org/robolectric/annotation/package-info.java

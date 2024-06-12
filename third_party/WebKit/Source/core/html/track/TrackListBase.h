@@ -5,30 +5,23 @@
 #ifndef TrackListBase_h
 #define TrackListBase_h
 
+#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/events/EventTarget.h"
-
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/track/TrackEvent.h"
 #include "core/html/track/TrackEventInit.h"
 
 namespace blink {
 
-template<class T>
-class TrackListBase : public EventTargetWithInlineData, public RefCountedWillBeNoBase<TrackListBase<T>> {
-    REFCOUNTED_EVENT_TARGET(TrackListBase);
+template <class T>
+class TrackListBase : public EventTargetWithInlineData {
 public:
     explicit TrackListBase(HTMLMediaElement* mediaElement)
         : m_mediaElement(mediaElement)
     {
     }
 
-    ~TrackListBase() override
-    {
-#if !ENABLE(OILPAN)
-        ASSERT(m_tracks.isEmpty());
-        ASSERT(!m_mediaElement);
-#endif
-    }
+    ~TrackListBase() override { }
 
     unsigned length() const { return m_tracks.size(); }
     T* anonymousIndexedGetter(unsigned index) const
@@ -40,9 +33,9 @@ public:
 
     T* getTrackById(const String& id) const
     {
-        for (unsigned i = 0; i < m_tracks.size(); ++i) {
-            if (m_tracks[i]->id() == id)
-                return m_tracks[i].get();
+        for (const auto& track : m_tracks) {
+            if (String(track->id()) == id)
+                return track.get();
         }
 
         return nullptr;
@@ -53,57 +46,46 @@ public:
     DEFINE_ATTRIBUTE_EVENT_LISTENER(removetrack);
 
     // EventTarget interface
-    ExecutionContext* executionContext() const override
+    ExecutionContext* getExecutionContext() const override
     {
         if (m_mediaElement)
-            return m_mediaElement->executionContext();
+            return m_mediaElement->getExecutionContext();
         return nullptr;
     }
 
-#if !ENABLE(OILPAN)
-    void shutdown()
+    void add(T* track)
     {
-        removeAll();
-        m_mediaElement = nullptr;
-    }
-#endif
-
-    void add(PassRefPtrWillBeRawPtr<T> prpTrack)
-    {
-        RefPtrWillBeRawPtr<T> track = prpTrack;
-
         track->setMediaElement(m_mediaElement);
-        m_tracks.append(track);
-        scheduleTrackEvent(EventTypeNames::addtrack, track.release());
+        m_tracks.push_back(TraceWrapperMember<T>(this, track));
+        scheduleEvent(TrackEvent::create(EventTypeNames::addtrack, track));
     }
 
     void remove(WebMediaPlayer::TrackId trackId)
     {
         for (unsigned i = 0; i < m_tracks.size(); ++i) {
-            if (m_tracks[i]->trackId() != trackId)
+            if (m_tracks[i]->id() != trackId)
                 continue;
 
             m_tracks[i]->setMediaElement(0);
-            scheduleTrackEvent(EventTypeNames::removetrack, m_tracks[i]);
+            scheduleEvent(
+                TrackEvent::create(EventTypeNames::removetrack, m_tracks[i].get()));
             m_tracks.remove(i);
             return;
         }
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
     }
 
     void removeAll()
     {
-        for (unsigned i = 0; i < m_tracks.size(); ++i)
-            m_tracks[i]->setMediaElement(0);
+        for (const auto& track : m_tracks)
+            track->setMediaElement(0);
 
         m_tracks.clear();
     }
 
     void scheduleChangeEvent()
     {
-        RefPtrWillBeRawPtr<Event> event = Event::create(EventTypeNames::change);
-        event->setTarget(this);
-        m_mediaElement->scheduleEvent(event);
+        scheduleEvent(Event::create(EventTypeNames::change));
     }
 
     Node* owner() const { return m_mediaElement; }
@@ -115,16 +97,23 @@ public:
         EventTargetWithInlineData::trace(visitor);
     }
 
-private:
-    void scheduleTrackEvent(const AtomicString& eventName, PassRefPtrWillBeRawPtr<T> track)
+    DECLARE_VIRTUAL_TRACE_WRAPPERS()
     {
-        RefPtrWillBeRawPtr<Event> event = TrackEvent::create(eventName, track);
+        for (auto track : m_tracks) {
+            visitor->traceWrappers(track);
+        }
+        EventTargetWithInlineData::traceWrappers(visitor);
+    }
+
+private:
+    void scheduleEvent(Event* event)
+    {
         event->setTarget(this);
         m_mediaElement->scheduleEvent(event);
     }
 
-    WillBeHeapVector<RefPtrWillBeMember<T>> m_tracks;
-    RawPtrWillBeMember<HTMLMediaElement> m_mediaElement;
+    HeapVector<TraceWrapperMember<T>> m_tracks;
+    Member<HTMLMediaElement> m_mediaElement;
 };
 
 } // namespace blink

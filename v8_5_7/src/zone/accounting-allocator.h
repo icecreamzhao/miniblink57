@@ -13,7 +13,7 @@
 #include "src/base/platform/semaphore.h"
 #include "src/base/platform/time.h"
 #include "src/zone/zone-segment.h"
-#include "testing/gtest/include/gtest/gtest_prod.h"
+//#include "testing/gtest/include/gtest/gtest_prod.h"
 
 namespace v8 {
 namespace internal {
@@ -50,7 +50,7 @@ class V8_EXPORT_PRIVATE AccountingAllocator {
   virtual void ZoneDestruction(const Zone* zone) {}
 
  private:
-  FRIEND_TEST(Zone, SegmentPoolConstraints);
+  //FRIEND_TEST(Zone, SegmentPoolConstraints);
 
   static const size_t kMinSegmentSizePower = 13;
   static const size_t kMaxSegmentSizePower = 18;

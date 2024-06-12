@@ -28,9 +28,11 @@
 
 #include "platform/PlatformExport.h"
 #include "public/platform/WebBlendMode.h"
+#include "third_party/skia/include/core/SkFilterQuality.h"
 #include "third_party/skia/include/core/SkPaint.h"
 #include "third_party/skia/include/core/SkPath.h"
 #include "wtf/Forward.h"
+#include "wtf/build_config.h"
 
 namespace blink {
 
@@ -75,18 +77,66 @@ enum OpacityMode {
     Opaque,
 };
 
-// TODO(junov): crbug.com/453113 relocate ShadowMode to CanvasRenderingContext2DState.h once
-// GraphicsContext no longer uses it.
-enum ShadowMode {
-    DrawShadowAndForeground,
-    DrawShadowOnly,
-    DrawForegroundOnly
+enum AccelerationHint {
+    PreferAcceleration,
+    // The PreferAccelerationAfterVisibilityChange hint suggests we should switch
+    // back to acceleration in the context of the canvas becoming visible again.
+    PreferAccelerationAfterVisibilityChange,
+    PreferNoAcceleration,
 };
 
-enum AntiAliasingMode {
-    NotAntiAliased,
-    AntiAliased
+enum SnapshotReason {
+    SnapshotReasonUnknown,
+    SnapshotReasonGetImageData,
+    SnapshotReasonWebGLTexImage2D,
+    SnapshotReasonWebGLTexSubImage2D,
+    SnapshotReasonWebGLTexImage3D,
+    SnapshotReasonWebGLTexSubImage3D,
+    SnapshotReasonPaint,
+    SnapshotReasonToDataURL,
+    SnapshotReasonToBlob,
+    SnapshotReasonCanvasListenerCapture,
+    SnapshotReasonDrawImage,
+    SnapshotReasonCreatePattern,
+    SnapshotReasonTransferToImageBitmap,
+    SnapshotReasonUnitTests,
+    SnapshotReasonGetCopiedImage,
+    SnapshotReasonWebGLDrawImageIntoBuffer,
+    SnapshotReasonCopyToClipboard,
+    SnapshotReasonCreateImageBitmap,
 };
+
+// Note: enum used directly for histogram, values must not change
+enum DisableDeferralReason {
+    DisableDeferralReasonUnknown = 0, // Should not appear in production histograms
+    DisableDeferralReasonExpensiveOverdrawHeuristic = 1,
+    DisableDeferralReasonUsingTextureBackedPattern = 2,
+    DisableDeferralReasonDrawImageOfVideo = 3,
+    DisableDeferralReasonDrawImageOfAnimated2dCanvas = 4,
+    DisableDeferralReasonSubPixelTextAntiAliasingSupport = 5,
+    DisableDeferralDrawImageWithTextureBackedSourceImage = 6,
+    DisableDeferralReasonCount,
+};
+
+enum FlushReason {
+    FlushReasonUnknown,
+    FlushReasonInitialClear,
+    FlushReasonDrawImageOfWebGL,
+};
+
+enum ImageInitializationMode {
+    InitializeImagePixels,
+    DoNotInitializeImagePixels,
+};
+
+// TODO(junov): crbug.com/453113 Relocate ShadowMode to
+// CanvasRenderingContext2DState.h once GraphicsContext no longer uses it.
+enum ShadowMode { DrawShadowAndForeground,
+    DrawShadowOnly,
+    DrawForegroundOnly };
+
+enum AntiAliasingMode { NotAntiAliased,
+    AntiAliased };
 
 enum GradientSpreadMethod {
     SpreadMethodPad,
@@ -106,15 +156,30 @@ enum LineJoin {
     BevelJoin = SkPaint::kBevel_Join
 };
 
-enum HorizontalAlignment { AlignLeft, AlignRight, AlignHCenter };
+enum HorizontalAlignment { AlignLeft,
+    AlignRight,
+    AlignHCenter };
 
-enum TextBaseline { AlphabeticTextBaseline, TopTextBaseline, MiddleTextBaseline, BottomTextBaseline, IdeographicTextBaseline, HangingTextBaseline };
+enum TextBaseline {
+    AlphabeticTextBaseline,
+    TopTextBaseline,
+    MiddleTextBaseline,
+    BottomTextBaseline,
+    IdeographicTextBaseline,
+    HangingTextBaseline
+};
 
-enum TextAlign { StartTextAlign, EndTextAlign, LeftTextAlign, CenterTextAlign, RightTextAlign };
+enum TextAlign {
+    StartTextAlign,
+    EndTextAlign,
+    LeftTextAlign,
+    CenterTextAlign,
+    RightTextAlign
+};
 
 enum TextDrawingMode {
-    TextModeFill      = 1 << 0,
-    TextModeStroke    = 1 << 1,
+    TextModeFill = 1 << 0,
+    TextModeStroke = 1 << 1,
 };
 typedef unsigned TextDrawingModeFlags;
 
@@ -131,7 +196,9 @@ enum WindRule {
 };
 
 PLATFORM_EXPORT String compositeOperatorName(CompositeOperator, WebBlendMode);
-PLATFORM_EXPORT bool parseCompositeAndBlendOperator(const String&, CompositeOperator&, WebBlendMode&);
+PLATFORM_EXPORT bool parseCompositeAndBlendOperator(const String&,
+    CompositeOperator&,
+    WebBlendMode&);
 
 PLATFORM_EXPORT String lineCapName(LineCap);
 PLATFORM_EXPORT bool parseLineCap(const String&, LineCap&);

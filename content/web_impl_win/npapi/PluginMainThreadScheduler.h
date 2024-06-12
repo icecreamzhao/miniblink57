@@ -30,7 +30,8 @@
 #include "third_party/WebKit/Source/wtf/HashMap.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
 #include "third_party/WebKit/Source/wtf/Noncopyable.h"
-#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/Source/wtf/allocator/PartitionAllocator.h"
+#include "third_party/npapi/bindings/npapi.h"
 
 typedef struct _NPP NPP_t;
 typedef NPP_t* NPP;
@@ -78,7 +79,7 @@ private:
 
     bool m_callPending;
     CallQueueMap m_callQueueMap;
-    WTF::Mutex m_queueMutex;
+    WTF::RecursiveMutex m_queueMutex;
 };
 
 } // namespace content

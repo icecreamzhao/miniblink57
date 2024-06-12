@@ -40,26 +40,35 @@
 
 namespace blink {
 
-struct SourceRange {
-    ALLOW_ONLY_INLINE_ALLOCATION();
+class SourceRange {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     SourceRange();
     SourceRange(unsigned start, unsigned end);
     unsigned length() const;
 
-    DEFINE_INLINE_TRACE() { }
-
     unsigned start;
     unsigned end;
 };
 
-struct CSSPropertySourceData {
-    ALLOW_ONLY_INLINE_ALLOCATION();
-public:
-    CSSPropertySourceData(const String& name, const String& value, bool important, bool disabled, bool parsedOk, const SourceRange& range);
-    CSSPropertySourceData(const CSSPropertySourceData& other);
+} // namespace blink
 
-    DEFINE_INLINE_TRACE() { visitor->trace(range); }
+WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::SourceRange);
+
+namespace blink {
+
+class CSSPropertySourceData {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
+public:
+    CSSPropertySourceData(const String& name,
+        const String& value,
+        bool important,
+        bool disabled,
+        bool parsedOk,
+        const SourceRange& range);
+    CSSPropertySourceData(const CSSPropertySourceData& other);
 
     String name;
     String value;
@@ -69,111 +78,107 @@ public:
     SourceRange range;
 };
 
-struct CSSStyleSourceData : public RefCountedWillBeGarbageCollected<CSSStyleSourceData> {
-    static PassRefPtrWillBeRawPtr<CSSStyleSourceData> create()
+} // namespace blink
+
+WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSPropertySourceData);
+
+namespace blink {
+
+class CSSStyleSourceData {
+    USING_FAST_MALLOC(CSSStyleSourceData);
+
+public:
+    static std::unique_ptr<CSSStyleSourceData> create()
     {
-        return adoptRefWillBeNoop(new CSSStyleSourceData());
+        return WTF::wrapUnique(new CSSStyleSourceData);
     }
 
-    DEFINE_INLINE_TRACE()
-    {
-#if ENABLE(OILPAN)
-        visitor->trace(propertyData);
-#endif
-    }
-
-    WillBeHeapVector<CSSPropertySourceData> propertyData;
+    Vector<CSSPropertySourceData> propertyData;
 };
 
-struct CSSMediaQueryExpSourceData {
-    ALLOW_ONLY_INLINE_ALLOCATION();
+class CSSMediaQueryExpSourceData {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     CSSMediaQueryExpSourceData(const SourceRange& valueRange)
-        : valueRange(valueRange) { }
-
-    DEFINE_INLINE_TRACE() { visitor->trace(valueRange); }
+        : valueRange(valueRange)
+    {
+    }
 
     SourceRange valueRange;
 };
 
-struct CSSMediaQuerySourceData : public RefCountedWillBeGarbageCollected<CSSMediaQuerySourceData> {
-    static PassRefPtrWillBeRawPtr<CSSMediaQuerySourceData> create()
+} // namespace blink
+
+WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSMediaQueryExpSourceData);
+
+namespace blink {
+
+class CSSMediaQuerySourceData {
+public:
+    static std::unique_ptr<CSSMediaQuerySourceData> create()
     {
-        return adoptRefWillBeNoop(new CSSMediaQuerySourceData());
+        return WTF::wrapUnique(new CSSMediaQuerySourceData);
     }
 
-    DEFINE_INLINE_TRACE()
-    {
-#if ENABLE(OILPAN)
-        visitor->trace(expData);
-#endif
-    }
-
-    WillBeHeapVector<CSSMediaQueryExpSourceData> expData;
+    Vector<CSSMediaQueryExpSourceData> expData;
 };
 
-struct CSSMediaSourceData : public RefCountedWillBeGarbageCollected<CSSMediaSourceData> {
-    static PassRefPtrWillBeRawPtr<CSSMediaSourceData> create()
+class CSSMediaSourceData {
+    USING_FAST_MALLOC(CSSMediaSourceData);
+
+public:
+    static std::unique_ptr<CSSMediaSourceData> create()
     {
-        return adoptRefWillBeNoop(new CSSMediaSourceData());
+        return WTF::wrapUnique(new CSSMediaSourceData);
     }
 
-    DEFINE_INLINE_TRACE()
-    {
-#if ENABLE(OILPAN)
-        visitor->trace(queryData);
-#endif
-    }
-
-    WillBeHeapVector<RefPtrWillBeMember<CSSMediaQuerySourceData>> queryData;
+    Vector<std::unique_ptr<CSSMediaQuerySourceData>> queryData;
 };
 
-struct CSSRuleSourceData;
-typedef WillBeHeapVector<RefPtrWillBeMember<CSSRuleSourceData>> RuleSourceDataList;
-typedef WillBeHeapVector<SourceRange> SelectorRangeList;
+class CSSRuleSourceData;
+using RuleSourceDataList = Vector<RefPtr<CSSRuleSourceData>>;
+using SelectorRangeList = Vector<SourceRange>;
 
-struct CSSRuleSourceData : public RefCountedWillBeGarbageCollected<CSSRuleSourceData> {
-    static PassRefPtrWillBeRawPtr<CSSRuleSourceData> create(StyleRule::Type type)
+class CSSRuleSourceData : public RefCounted<CSSRuleSourceData> {
+public:
+    static PassRefPtr<CSSRuleSourceData> create(StyleRule::RuleType type)
     {
-        return adoptRefWillBeNoop(new CSSRuleSourceData(type));
+        return adoptRef(new CSSRuleSourceData(type));
     }
 
-    CSSRuleSourceData(StyleRule::Type type)
-        : type(type)
-    {
-        if (type == StyleRule::Style || type == StyleRule::FontFace || type == StyleRule::Page)
-            styleSourceData = CSSStyleSourceData::create();
-        if (type == StyleRule::Media || type == StyleRule::Import)
-            mediaSourceData = CSSMediaSourceData::create();
-    }
-
-    DECLARE_TRACE();
-
-    StyleRule::Type type;
+    StyleRule::RuleType type;
 
     // Range of the selector list in the enclosing source.
     SourceRange ruleHeaderRange;
 
-    // Range of the rule body (e.g. style text for style rules) in the enclosing source.
+    // Range of the rule body (e.g. style text for style rules) in the enclosing
+    // source.
     SourceRange ruleBodyRange;
 
     // Only for CSSStyleRules.
     SelectorRangeList selectorRanges;
 
     // Only for CSSStyleRules, CSSFontFaceRules, and CSSPageRules.
-    RefPtrWillBeMember<CSSStyleSourceData> styleSourceData;
+    std::unique_ptr<CSSStyleSourceData> styleSourceData;
 
     // Only for CSSMediaRules.
     RuleSourceDataList childRules;
 
     // Only for CSSMediaRules and CSSImportRules.
-    RefPtrWillBeMember<CSSMediaSourceData> mediaSourceData;
+    std::unique_ptr<CSSMediaSourceData> mediaSourceData;
+
+private:
+    CSSRuleSourceData(StyleRule::RuleType type)
+        : type(type)
+    {
+        if (type == StyleRule::Style || type == StyleRule::FontFace || type == StyleRule::Page || type == StyleRule::Keyframe)
+            styleSourceData = CSSStyleSourceData::create();
+        if (type == StyleRule::Media || type == StyleRule::Import)
+            mediaSourceData = CSSMediaSourceData::create();
+    }
 };
 
 } // namespace blink
-
-WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::SourceRange);
-WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSPropertySourceData);
-WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::CSSMediaQueryExpSourceData);
 
 #endif // CSSPropertySourceData_h

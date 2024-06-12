@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkSVGRect.h"
 #include "SkSVGParser.h"
@@ -19,12 +17,14 @@ const SkSVGAttribute SkSVGRect::gAttributes[] = {
 
 DEFINE_SVG_INFO(Rect)
 
-SkSVGRect::SkSVGRect() {
+SkSVGRect::SkSVGRect()
+{
     f_x.set("0");
     f_y.set("0");
 }
 
-void SkSVGRect::translate(SkSVGParser& parser, bool defState) {
+void SkSVGRect::translate(SkSVGParser& parser, bool defState)
+{
     parser._startElement("rect");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE_ALIAS(left, x);

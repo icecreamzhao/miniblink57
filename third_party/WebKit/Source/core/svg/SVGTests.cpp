@@ -18,19 +18,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGTests.h"
 
 #include "core/SVGNames.h"
 #include "core/svg/SVGElement.h"
+#include "core/svg/SVGStaticStringList.h"
 #include "platform/Language.h"
 
 namespace blink {
 
 SVGTests::SVGTests(SVGElement* contextElement)
-    : m_requiredFeatures(SVGStaticStringList::create(contextElement, SVGNames::requiredFeaturesAttr))
-    , m_requiredExtensions(SVGStaticStringList::create(contextElement, SVGNames::requiredExtensionsAttr))
-    , m_systemLanguage(SVGStaticStringList::create(contextElement, SVGNames::systemLanguageAttr))
+    : m_requiredFeatures(
+        SVGStaticStringList::create(contextElement,
+            SVGNames::requiredFeaturesAttr))
+    , m_requiredExtensions(
+          SVGStaticStringList::create(contextElement,
+              SVGNames::requiredExtensionsAttr))
+    , m_systemLanguage(
+          SVGStaticStringList::create(contextElement,
+              SVGNames::systemLanguageAttr))
 {
     ASSERT(contextElement);
 
@@ -46,27 +52,33 @@ DEFINE_TRACE(SVGTests)
     visitor->trace(m_systemLanguage);
 }
 
-bool SVGTests::hasExtension(const String&)
+SVGStringListTearOff* SVGTests::requiredFeatures()
 {
-    // FIXME: Implement me!
-    return false;
+    return m_requiredFeatures->tearOff();
 }
 
-bool SVGTests::isValid(Document& document) const
+SVGStringListTearOff* SVGTests::requiredExtensions()
+{
+    return m_requiredExtensions->tearOff();
+}
+
+SVGStringListTearOff* SVGTests::systemLanguage()
+{
+    return m_systemLanguage->tearOff();
+}
+
+bool SVGTests::isValid() const
 {
     // No need to check requiredFeatures since hasFeature always returns true.
 
     if (m_systemLanguage->isSpecified()) {
         bool matchFound = false;
-
-        const Vector<String>& systemLanguage = m_systemLanguage->value()->values();
-        for (const auto& value : systemLanguage) {
-            if (value == defaultLanguage().string().substring(0, 2)) {
+        for (const auto& value : m_systemLanguage->value()->values()) {
+            if (value.length() == 2 && defaultLanguage().startsWith(value)) {
                 matchFound = true;
                 break;
             }
         }
-
         if (!matchFound)
             return false;
     }
@@ -77,38 +89,9 @@ bool SVGTests::isValid(Document& document) const
     return true;
 }
 
-bool SVGTests::parseAttribute(const QualifiedName& name, const AtomicString& value)
-{
-    // FIXME: Should handle exceptions here.
-    // This is safe as of now, as the current impl of SVGStringList::setValueAsString never fails.
-    SVGParsingError parseError = NoError;
-
-    if (name == SVGNames::requiredFeaturesAttr)
-        m_requiredFeatures->setBaseValueAsString(value, parseError);
-    else if (name == SVGNames::requiredExtensionsAttr)
-        m_requiredExtensions->setBaseValueAsString(value, parseError);
-    else if (name == SVGNames::systemLanguageAttr)
-        m_systemLanguage->setBaseValueAsString(value, parseError);
-    else
-        return false;
-
-    ASSERT(parseError == NoError);
-
-    return true;
-}
-
 bool SVGTests::isKnownAttribute(const QualifiedName& attrName)
 {
-    return attrName == SVGNames::requiredFeaturesAttr
-        || attrName == SVGNames::requiredExtensionsAttr
-        || attrName == SVGNames::systemLanguageAttr;
+    return attrName == SVGNames::requiredFeaturesAttr || attrName == SVGNames::requiredExtensionsAttr || attrName == SVGNames::systemLanguageAttr;
 }
 
-void SVGTests::addSupportedAttributes(HashSet<QualifiedName>& supportedAttributes)
-{
-    supportedAttributes.add(SVGNames::requiredFeaturesAttr);
-    supportedAttributes.add(SVGNames::requiredExtensionsAttr);
-    supportedAttributes.add(SVGNames::systemLanguageAttr);
-}
-
-}
+} // namespace blink

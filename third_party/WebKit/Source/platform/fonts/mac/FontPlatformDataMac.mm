@@ -21,19 +21,19 @@
  *
  */
 
-#import "config.h"
 #import "platform/fonts/FontPlatformData.h"
-
-#import <AppKit/NSFont.h>
-#import <AvailabilityMacros.h>
-#import <wtf/text/WTFString.h>
 
 #import "platform/LayoutTestSupport.h"
 #import "platform/fonts/Font.h"
 #import "platform/fonts/shaping/HarfBuzzFace.h"
+#import "platform/graphics/skia/SkiaUtils.h"
 #import "public/platform/Platform.h"
 #import "public/platform/mac/WebSandboxSupport.h"
 #import "third_party/skia/include/ports/SkTypeface_mac.h"
+#import "wtf/RetainPtr.h"
+#import "wtf/text/WTFString.h"
+#import <AppKit/NSFont.h>
+#import <AvailabilityMacros.h>
 
 namespace blink {
 
@@ -89,7 +89,7 @@ static PassRefPtr<SkTypeface> loadFromBrowserProcess(NSFont* nsFont, float textS
     uint32_t fontID;
     if (!sandboxSupport->loadFont(nsFont, &loadedCgFont, &fontID)) {
         // TODO crbug.com/461279: Make this appear in the inspector console?
-        WTF_LOG_ERROR("Loading user font \"%s\" from non system location failed. Corrupt or missing font file?", [[nsFont familyName] UTF8String]);
+        DLOG(ERROR) << "Loading user font \"" << [[nsFont familyName] UTF8String] << "\" from non system location failed. Corrupt or missing font file?";
         return nullptr;
     }
     RetainPtr<CGFontRef> cgFont(AdoptCF, loadedCgFont);
@@ -98,7 +98,7 @@ static PassRefPtr<SkTypeface> loadFromBrowserProcess(NSFont* nsFont, float textS
 
     if (!returnFont.get())
         // TODO crbug.com/461279: Make this appear in the inspector console?
-        WTF_LOG_ERROR("Instantiating SkTypeface from user font failed for font family \"%s\".", [[nsFont familyName] UTF8String]);
+        DLOG(ERROR) << "Instantiating SkTypeface from user font failed for font family \"" << [[nsFont familyName] UTF8String] << "\".";
     return returnFont;
 }
 
@@ -108,7 +108,7 @@ void FontPlatformData::setupPaint(SkPaint* paint, float, const Font* font) const
     bool shouldAntialias = true;
 
     if (font) {
-        switch (font->fontDescription().fontSmoothing()) {
+        switch (font->getFontDescription().fontSmoothing()) {
         case Antialiased:
             shouldSmoothFonts = false;
             break;
@@ -133,7 +133,7 @@ void FontPlatformData::setupPaint(SkPaint* paint, float, const Font* font) const
     paint->setEmbeddedBitmapText(false);
     const float ts = m_textSize >= 0 ? m_textSize : 12;
     paint->setTextSize(SkFloatToScalar(ts));
-    paint->setTypeface(typeface());
+    paint->setTypeface(toSkSp(m_typeface));
     paint->setFakeBoldText(m_syntheticBold);
     paint->setTextSkewX(m_syntheticItalic ? -SK_Scalar1 / 4 : 0);
     paint->setLCDRenderText(shouldSmoothFonts);
@@ -142,7 +142,7 @@ void FontPlatformData::setupPaint(SkPaint* paint, float, const Font* font) const
     // When rendering using CoreGraphics, disable hinting when webkit-font-smoothing:antialiased or
     // text-rendering:geometricPrecision is used.
     // See crbug.com/152304
-    if (font && (font->fontDescription().fontSmoothing() == Antialiased || font->fontDescription().textRendering() == GeometricPrecision))
+    if (font && (font->getFontDescription().fontSmoothing() == Antialiased || font->getFontDescription().textRendering() == GeometricPrecision))
         paint->setHinting(SkPaint::kNo_Hinting);
 }
 
@@ -153,7 +153,7 @@ FontPlatformData::FontPlatformData(NSFont *nsFont, float size, bool syntheticBol
     , m_orientation(orientation)
     , m_isHashTableDeletedValue(false)
 {
-    ASSERT_ARG(nsFont, nsFont);
+    DCHECK(nsFont);
     if (canLoadInProcess(nsFont)) {
         m_typeface = adoptRef(SkCreateTypefaceFromCTFont(toCTFontRef(nsFont)));
     } else {
@@ -163,11 +163,5 @@ FontPlatformData::FontPlatformData(NSFont *nsFont, float size, bool syntheticBol
         m_typeface = loadFromBrowserProcess(nsFont, size);
     }
 }
-
-bool FontPlatformData::defaultUseSubpixelPositioning()
-{
-    return FontDescription::subpixelPositioning();
-}
-
 
 } // namespace blink

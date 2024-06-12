@@ -37,13 +37,15 @@
 
 namespace blink {
 
-class ExceptionState;
 class PlatformSpeechSynthesizerClient;
 
-class MODULES_EXPORT SpeechSynthesis final : public RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesis>, public PlatformSpeechSynthesizerClient, public ContextLifecycleObserver {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(SpeechSynthesis);
+class MODULES_EXPORT SpeechSynthesis final
+    : public EventTargetWithInlineData,
+      public ContextClient,
+      public PlatformSpeechSynthesizerClient {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(SpeechSynthesis);
+
 public:
     static SpeechSynthesis* create(ExecutionContext*);
 
@@ -51,7 +53,7 @@ public:
     bool speaking() const;
     bool paused() const;
 
-    void speak(SpeechSynthesisUtterance*, ExceptionState&);
+    void speak(SpeechSynthesisUtterance*);
     void cancel();
     void pause();
     void resume();
@@ -63,7 +65,10 @@ public:
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(voiceschanged);
 
-    ExecutionContext* executionContext() const override;
+    ExecutionContext* getExecutionContext() const override
+    {
+        return ContextClient::getExecutionContext();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -77,11 +82,16 @@ private:
     void didResumeSpeaking(PlatformSpeechSynthesisUtterance*) override;
     void didFinishSpeaking(PlatformSpeechSynthesisUtterance*) override;
     void speakingErrorOccurred(PlatformSpeechSynthesisUtterance*) override;
-    void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*, SpeechBoundary, unsigned charIndex) override;
+    void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*,
+        SpeechBoundary,
+        unsigned charIndex) override;
 
     void startSpeakingImmediately();
     void handleSpeakingCompleted(SpeechSynthesisUtterance*, bool errorOccurred);
-    void fireEvent(const AtomicString& type, SpeechSynthesisUtterance*, unsigned long charIndex, const String& name);
+    void fireEvent(const AtomicString& type,
+        SpeechSynthesisUtterance*,
+        unsigned long charIndex,
+        const String& name);
 
     // Returns the utterance at the front of the queue.
     SpeechSynthesisUtterance* currentSpeechUtterance() const;
@@ -97,4 +107,4 @@ private:
 
 } // namespace blink
 
-#endif // SpeechSynthesisEvent_h
+#endif // SpeechSynthesis_h

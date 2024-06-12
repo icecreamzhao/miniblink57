@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkIntArray_DEFINED
 #define SkIntArray_DEFINED
 

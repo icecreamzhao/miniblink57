@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawEmboss_DEFINED
 #define SkDrawEmboss_DEFINED
 
@@ -16,11 +15,12 @@ class SkDrawEmboss : public SkDrawMaskFilter {
     DECLARE_DRAW_MEMBER_INFO(Emboss);
     SkDrawEmboss();
     SkMaskFilter* getMaskFilter() override;
+
 protected:
     SkTDScalarArray fDirection;
-    SkScalar        fSigma;
-    SkScalar        fAmbient;
-    SkScalar        fSpecular;
+    SkScalar fSigma;
+    SkScalar fAmbient;
+    SkScalar fSpecular;
 
     typedef SkDrawMaskFilter INHERITED;
 };

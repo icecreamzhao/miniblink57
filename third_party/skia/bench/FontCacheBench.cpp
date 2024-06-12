@@ -13,9 +13,10 @@
 #include "SkTemplates.h"
 
 #include "gUniqueGlyphIDs.h"
-#define gUniqueGlyphIDs_Sentinel    0xFFFF
+#define gUniqueGlyphIDs_Sentinel 0xFFFF
 
-static int count_glyphs(const uint16_t start[]) {
+static int count_glyphs(const uint16_t start[])
+{
     const uint16_t* curr = start;
     while (*curr != gUniqueGlyphIDs_Sentinel) {
         curr += 1;
@@ -25,14 +26,16 @@ static int count_glyphs(const uint16_t start[]) {
 
 class FontCacheBench : public Benchmark {
 public:
-    FontCacheBench()  {}
+    FontCacheBench() { }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "fontcache";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         SkPaint paint;
         this->setupPaint(&paint);
         paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
@@ -43,7 +46,7 @@ protected:
             for (int i = 0; i < loops; ++i) {
                 paint.measureText(array, count * sizeof(uint16_t));
             }
-            array += count + 1;    // skip the sentinel
+            array += count + 1; // skip the sentinel
         }
     }
 
@@ -53,30 +56,33 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static uint32_t rotr(uint32_t value, unsigned bits) {
+static uint32_t rotr(uint32_t value, unsigned bits)
+{
     return (value >> bits) | (value << (32 - bits));
 }
 
 typedef uint32_t (*HasherProc)(uint32_t);
 
-static uint32_t hasher0(uint32_t value) {
+static uint32_t hasher0(uint32_t value)
+{
     value = value ^ (value >> 16);
     return value ^ (value >> 8);
 }
 
 static const struct {
     const char* fName;
-    HasherProc  fHasher;
+    HasherProc fHasher;
 } gRec[] = {
-    { "hasher0",  hasher0 },
-    { "hasher2",  SkChecksum::Mix },
+    { "hasher0", hasher0 },
+    { "hasher2", SkChecksum::Mix },
 };
 
-#define kMaxHashBits   12
-#define kMaxHashCount  (1 << kMaxHashBits)
+#define kMaxHashBits 12
+#define kMaxHashCount (1 << kMaxHashBits)
 
 static int count_collisions(const uint16_t array[], int count, HasherProc proc,
-                            unsigned hashMask) {
+    unsigned hashMask)
+{
     char table[kMaxHashCount];
     sk_bzero(table, sizeof(table));
 
@@ -89,7 +95,8 @@ static int count_collisions(const uint16_t array[], int count, HasherProc proc,
     return collisions;
 }
 
-static void dump_array(const uint16_t array[], int count) {
+static void dump_array(const uint16_t array[], int count)
+{
     for (int i = 0; i < count; ++i) {
         SkDebugf(" %d,", array[i]);
     }
@@ -98,17 +105,22 @@ static void dump_array(const uint16_t array[], int count) {
 
 class FontCacheEfficiency : public Benchmark {
 public:
-    FontCacheEfficiency()  {
-        if (false) dump_array(NULL, 0);
-        if (false) rotr(0, 0);
+    FontCacheEfficiency()
+    {
+        if (false)
+            dump_array(nullptr, 0);
+        if (false)
+            rotr(0, 0);
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "fontefficiency";
     }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         static bool gDone;
         if (gDone) {
             return;
@@ -126,10 +138,10 @@ protected:
                         int count = SkMin32(count_glyphs(array), limit);
                         collisions += count_collisions(array, count, gRec[i].fHasher, hashMask);
                         glyphs += count;
-                        array += count + 1;    // skip the sentinel
+                        array += count + 1; // skip the sentinel
                     }
                     SkDebugf("hashBits [%d] limit [%d] collisions [%d / %d = %1.2g%%] using %s\n", hashBits, limit, collisions, glyphs,
-                             collisions * 100.0 / glyphs, gRec[i].fName);
+                        collisions * 100.0 / glyphs, gRec[i].fName);
                 }
             }
         }
@@ -141,7 +153,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new FontCacheBench(); )
+DEF_BENCH(return new FontCacheBench();)
 
 // undefine this to run the efficiency test
 //DEF_BENCH( return new FontCacheEfficiency(); )

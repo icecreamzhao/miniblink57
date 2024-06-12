@@ -12,20 +12,24 @@ namespace skiagm {
 // Draw rects with various stroke widths at 1/8 pixel increments
 class ThinStrokedRectsGM : public GM {
 public:
-    ThinStrokedRectsGM() {
+    ThinStrokedRectsGM()
+    {
         this->setBGColor(0xFF000000);
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("thinstrokedrects");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(240, 320);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
 
         SkPaint paint;
         paint.setColor(SK_ColorWHITE);
@@ -42,7 +46,7 @@ protected:
         canvas->translate(5, 5);
         for (int i = 0; i < 8; ++i) {
             canvas->save();
-            canvas->translate(i*0.125f, i*30.0f);
+            canvas->translate(i * 0.125f, i * 30.0f);
             for (size_t j = 0; j < SK_ARRAY_COUNT(gStrokeWidths); ++j) {
                 paint.setStrokeWidth(gStrokeWidths[j]);
                 canvas->drawRect(rect, paint);
@@ -56,7 +60,7 @@ protected:
         canvas->translate(0, 15);
         for (int i = 0; i < 8; ++i) {
             canvas->save();
-            canvas->translate(i*0.125f, i*30.0f);
+            canvas->translate(i * 0.125f, i * 30.0f);
             canvas->scale(0.5f, 0.5f);
             for (size_t j = 0; j < SK_ARRAY_COUNT(gStrokeWidths); ++j) {
                 paint.setStrokeWidth(2.0f * gStrokeWidths[j]);
@@ -73,6 +77,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(ThinStrokedRectsGM); )
-
+DEF_GM(return new ThinStrokedRectsGM;)
 }

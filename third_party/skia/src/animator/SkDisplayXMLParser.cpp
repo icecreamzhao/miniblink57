@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayXMLParser.h"
 #include "SkAnimateMaker.h"
 #include "SkDisplayApply.h"
@@ -47,10 +46,12 @@ static char const* const gErrorStrings[] = {
     "unexpected type "
 };
 
-SkDisplayXMLParserError::~SkDisplayXMLParserError() {
+SkDisplayXMLParserError::~SkDisplayXMLParserError()
+{
 }
 
-void SkDisplayXMLParserError::getErrorString(SkString* str) const {
+void SkDisplayXMLParserError::getErrorString(SkString* str) const
+{
     if (fCode > kUnknownError)
         str->set(gErrorStrings[fCode - kUnknownError]);
     else
@@ -58,7 +59,8 @@ void SkDisplayXMLParserError::getErrorString(SkString* str) const {
     INHERITED::getErrorString(str);
 }
 
-void SkDisplayXMLParserError::setInnerError(SkAnimateMaker* parent, const SkString& src) {
+void SkDisplayXMLParserError::setInnerError(SkAnimateMaker* parent, const SkString& src)
+{
     SkString inner;
     getErrorString(&inner);
     inner.prepend(": ");
@@ -68,14 +70,17 @@ void SkDisplayXMLParserError::setInnerError(SkAnimateMaker* parent, const SkStri
     parent->setErrorNoun(inner);
 }
 
-
 SkDisplayXMLParser::SkDisplayXMLParser(SkAnimateMaker& maker)
-    : INHERITED(&maker.fError), fMaker(maker), fInInclude(maker.fInInclude),
-        fInSkia(maker.fInInclude), fCurrDisplayable(NULL)
+    : INHERITED(&maker.fError)
+    , fMaker(maker)
+    , fInInclude(maker.fInInclude)
+    , fInSkia(maker.fInInclude)
+    , fCurrDisplayable(nullptr)
 {
 }
 
-SkDisplayXMLParser::~SkDisplayXMLParser() {
+SkDisplayXMLParser::~SkDisplayXMLParser()
+{
     if (fCurrDisplayable && fMaker.fChildren.find(fCurrDisplayable) < 0)
         delete fCurrDisplayable;
     for (Parent* parPtr = fParents.begin() + 1; parPtr < fParents.end(); parPtr++) {
@@ -88,22 +93,21 @@ SkDisplayXMLParser::~SkDisplayXMLParser() {
     }
 }
 
-
-
-bool SkDisplayXMLParser::onAddAttribute(const char name[], const char value[]) {
+bool SkDisplayXMLParser::onAddAttribute(const char name[], const char value[])
+{
     return onAddAttributeLen(name, value, strlen(value));
 }
 
 bool SkDisplayXMLParser::onAddAttributeLen(const char attrName[], const char attrValue[],
-                                        size_t attrValueLen)
+    size_t attrValueLen)
 {
-    if (fCurrDisplayable == NULL)    // this signals we should ignore attributes for this element
+    if (fCurrDisplayable == nullptr) // this signals we should ignore attributes for this element
         return strncmp(attrName, "xmlns", sizeof("xmlns") - 1) != 0;
-    SkDisplayable*  displayable = fCurrDisplayable;
-    SkDisplayTypes  type = fCurrType;
+    SkDisplayable* displayable = fCurrDisplayable;
+    SkDisplayTypes type = fCurrType;
 
     if (strcmp(attrName, "id") == 0) {
-        if (fMaker.find(attrValue, attrValueLen, NULL)) {
+        if (fMaker.find(attrValue, attrValueLen, nullptr)) {
             fError->setNoun(attrValue, attrValueLen);
             fError->setCode(SkXMLParserError::kDuplicateIDs);
             return true;
@@ -122,22 +126,22 @@ bool SkDisplayXMLParser::onAddAttributeLen(const char attrName[], const char att
     }
     const char* name = attrName;
     const SkMemberInfo* info = SkDisplayType::GetMember(&fMaker, type, &name);
-    if (info == NULL) {
+    if (info == nullptr) {
         fError->setNoun(name);
         fError->setCode(SkXMLParserError::kUnknownAttributeName);
         return true;
     }
-    if (info->setValue(fMaker, NULL, 0, info->getCount(), displayable, info->getType(), attrValue,
+    if (info->setValue(fMaker, nullptr, 0, info->getCount(), displayable, info->getType(), attrValue,
             attrValueLen))
         return false;
     if (fMaker.fError.hasError()) {
         fError->setNoun(attrValue, attrValueLen);
         return true;
     }
-    SkDisplayable* ref = NULL;
+    SkDisplayable* ref = nullptr;
     if (fMaker.find(attrValue, attrValueLen, &ref) == false) {
         ref = fMaker.createInstance(attrValue, attrValueLen);
-        if (ref == NULL) {
+        if (ref == nullptr) {
             fError->setNoun(attrValue, attrValueLen);
             fError->setCode(SkXMLParserError::kErrorInAttributeValue);
             return true;
@@ -157,11 +161,11 @@ bool SkDisplayXMLParser::onAddAttributeLen(const char attrName[], const char att
 }
 
 #if defined(SK_BUILD_FOR_WIN32)
-    #define SK_strcasecmp   _stricmp
-    #define SK_strncasecmp  _strnicmp
+#define SK_strcasecmp _stricmp
+#define SK_strncasecmp _strnicmp
 #else
-    #define SK_strcasecmp   strcasecmp
-    #define SK_strncasecmp  strncasecmp
+#define SK_strcasecmp strcasecmp
+#define SK_strncasecmp strncasecmp
 #endif
 
 bool SkDisplayXMLParser::onEndElement(const char elem[])
@@ -181,13 +185,12 @@ bool SkDisplayXMLParser::onEndElement(const char elem[])
                 return true;
             if (result == false) {
                 int infoCount;
-                const SkMemberInfo* info =
-                    SkDisplayType::GetMembers(&fMaker, fParents[parentIndex - 1].fType, &infoCount);
+                const SkMemberInfo* info = SkDisplayType::GetMembers(&fMaker, fParents[parentIndex - 1].fType, &infoCount);
                 const SkMemberInfo* foundInfo;
-                if ((foundInfo = searchContainer(info, infoCount)) != NULL) {
+                if ((foundInfo = searchContainer(info, infoCount)) != nullptr) {
                     parent->setReference(foundInfo, displayable);
-        //          if (displayable->isHelper() == false)
-                        fMaker.helperAdd(displayable);
+                    //          if (displayable->isHelper() == false)
+                    fMaker.helperAdd(displayable);
                 } else {
                     fMaker.setErrorCode(SkDisplayXMLParserError::kElementTypeNotAllowedInParent);
                     return true;
@@ -198,12 +201,12 @@ bool SkDisplayXMLParser::onEndElement(const char elem[])
         }
         fParents.remove(parentIndex);
     }
-    fCurrDisplayable = NULL;
+    fCurrDisplayable = nullptr;
     if (fInInclude == false && SK_strcasecmp(elem, "screenplay") == 0) {
         if (fMaker.fInMovie == false) {
             fMaker.fEnableTime = fMaker.getAppTime();
 #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
-            if (fMaker.fDebugTimeBase == (SkMSec) -1)
+            if (fMaker.fDebugTimeBase == (SkMSec)-1)
                 fMaker.fDebugTimeBase = fMaker.fEnableTime;
             SkString debugOut;
             SkMSec time = fMaker.getAppTime();
@@ -212,11 +215,10 @@ bool SkDisplayXMLParser::onEndElement(const char elem[])
             debugOut.appendS32(fMaker.fEnableTime - fMaker.fDebugTimeBase);
             SkDebugf("%s\n", debugOut.c_str());
 #endif
-            fMaker.fEvents.doEvent(fMaker, SkDisplayEvent::kOnload, NULL);
+            fMaker.fEvents.doEvent(fMaker, SkDisplayEvent::kOnload, nullptr);
             if (fMaker.fError.hasError())
                 return true;
-            fMaker.fEvents.removeEvent(SkDisplayEvent::kOnload, NULL);
-
+            fMaker.fEvents.removeEvent(SkDisplayEvent::kOnload, nullptr);
         }
         fInSkia = false;
     }
@@ -228,8 +230,9 @@ bool SkDisplayXMLParser::onStartElement(const char name[])
     return onStartElementLen(name, strlen(name));
 }
 
-bool SkDisplayXMLParser::onStartElementLen(const char name[], size_t len) {
-    fCurrDisplayable = NULL; // init so we'll ignore attributes if we exit early
+bool SkDisplayXMLParser::onStartElementLen(const char name[], size_t len)
+{
+    fCurrDisplayable = nullptr; // init so we'll ignore attributes if we exit early
 
     if (SK_strncasecmp(name, "screenplay", len) == 0) {
         fInSkia = true;
@@ -241,7 +244,7 @@ bool SkDisplayXMLParser::onStartElementLen(const char name[], size_t len) {
         return false;
 
     SkDisplayable* displayable = fMaker.createInstance(name, len);
-    if (displayable == NULL) {
+    if (displayable == nullptr) {
         fError->setNoun(name, len);
         fError->setCode(SkXMLParserError::kUnknownElement);
         return true;
@@ -267,25 +270,25 @@ bool SkDisplayXMLParser::onStartElementLen(const char name[], size_t len) {
 }
 
 const SkMemberInfo* SkDisplayXMLParser::searchContainer(const SkMemberInfo* infoBase,
-                                                         int infoCount) {
-    const SkMemberInfo* bestDisplayable = NULL;
-    const SkMemberInfo* lastResort = NULL;
+    int infoCount)
+{
+    const SkMemberInfo* bestDisplayable = nullptr;
+    const SkMemberInfo* lastResort = nullptr;
     for (int index = 0; index < infoCount; index++) {
         const SkMemberInfo* info = &infoBase[index];
         if (info->fType == SkType_BaseClassInfo) {
             const SkMemberInfo* inherited = info->getInherited();
             const SkMemberInfo* result = searchContainer(inherited, info->fCount);
-            if (result != NULL)
+            if (result != nullptr)
                 return result;
             continue;
         }
         Parent* container = fParents.end() - 1;
-        SkDisplayTypes type = (SkDisplayTypes) info->fType;
+        SkDisplayTypes type = (SkDisplayTypes)info->fType;
         if (type == SkType_MemberProperty)
             type = info->propertyType();
         SkDisplayTypes containerType = container->fType;
-        if (type == containerType && (type == SkType_Rect || type == SkType_Polygon ||
-            type == SkType_Array || type == SkType_Int || type == SkType_Bitmap))
+        if (type == containerType && (type == SkType_Rect || type == SkType_Polygon || type == SkType_Array || type == SkType_Int || type == SkType_Bitmap))
             goto rectNext;
         while (type != containerType) {
             if (containerType == SkType_Displayable)
@@ -295,10 +298,9 @@ const SkMemberInfo* SkDisplayXMLParser::searchContainer(const SkMemberInfo* info
                 goto next;
         }
         return info;
-next:
-        if (type == SkType_Drawable || (type == SkType_Displayable &&
-            container->fDisplayable->isDrawable())) {
-rectNext:
+    next:
+        if (type == SkType_Drawable || (type == SkType_Displayable && container->fDisplayable->isDrawable())) {
+        rectNext:
             if (fParents.count() > 1) {
                 Parent* parent = fParents.end() - 2;
                 if (info == parent->fDisplayable->preferredChild(type))
@@ -312,5 +314,5 @@ rectNext:
         return bestDisplayable;
     if (lastResort)
         return lastResort;
-    return NULL;
+    return nullptr;
 }

@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #ifndef SkSVGImage_DEFINED
 #define SkSVGImage_DEFINED
@@ -15,6 +13,7 @@
 class SkSVGImage : public SkSVGElement {
 public:
     DECLARE_SVG_INFO(Image);
+
 private:
     void translateImage(SkSVGParser& parser);
     SkString f_height;

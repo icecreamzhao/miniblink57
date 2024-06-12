@@ -26,9 +26,28 @@
 #ifndef ScrollTypes_h
 #define ScrollTypes_h
 
+#include "platform/geometry/FloatPoint.h"
+#include "public/platform/WebGestureEvent.h"
 #include "wtf/Assertions.h"
 
 namespace blink {
+
+// A ScrollOffset represents an offset from the scroll origin of a
+// ScrollableArea.  Note that "scroll origin" is not the same as the layout
+// concept of "location", nor is it necessarily coincident with the top/left of
+// the ScrollableArea's overflow rect.  See core/layout/README.md for more
+// information.
+typedef FloatSize ScrollOffset;
+
+inline ScrollOffset toScrollOffset(const FloatPoint& p)
+{
+    return ScrollOffset(p.x(), p.y());
+}
+
+enum OverlayScrollbarClipBehavior {
+    IgnoreOverlayScrollbarSize,
+    ExcludeOverlayScrollbarSizeForHitTesting
+};
 
 enum ScrollDirection {
     ScrollUpIgnoringWritingMode,
@@ -42,21 +61,29 @@ enum ScrollDirection {
     ScrollInlineDirectionForward
 };
 
-enum ScrollDirectionPhysical {
-    ScrollUp,
+enum ScrollDirectionPhysical { ScrollUp,
     ScrollDown,
     ScrollLeft,
-    ScrollRight
-};
+    ScrollRight };
 
 enum ScrollType {
     UserScroll,
     ProgrammaticScroll,
-    CompositorScroll
+    ClampingScroll,
+    CompositorScroll,
+    AnchoringScroll
 };
 
-// Convert logical scroll direction to physical. Physical scroll directions are unaffected.
-inline ScrollDirectionPhysical toPhysicalDirection(ScrollDirection direction, bool isVertical, bool isFlipped)
+inline bool scrollTypeClearsFragmentAnchor(ScrollType scrollType)
+{
+    return scrollType == UserScroll || scrollType == ProgrammaticScroll || scrollType == CompositorScroll;
+}
+
+// Convert logical scroll direction to physical. Physical scroll directions are
+// unaffected.
+inline ScrollDirectionPhysical toPhysicalDirection(ScrollDirection direction,
+    bool isVertical,
+    bool isFlipped)
 {
     switch (direction) {
     case ScrollBlockDirectionBackward: {
@@ -141,11 +168,21 @@ enum ScrollGranularity {
     ScrollByPrecisePixel
 };
 
-enum ScrollbarOrientation { HorizontalScrollbar, VerticalScrollbar };
+enum ScrollInertialPhase {
+    ScrollInertialPhaseUnknown,
+    ScrollInertialPhaseNonMomentum,
+    ScrollInertialPhaseMomentum
+};
 
-enum ScrollbarMode { ScrollbarAuto, ScrollbarAlwaysOff, ScrollbarAlwaysOn };
+enum ScrollbarOrientation { HorizontalScrollbar,
+    VerticalScrollbar };
 
-enum ScrollbarControlSize { RegularScrollbar, SmallScrollbar };
+enum ScrollbarMode { ScrollbarAuto,
+    ScrollbarAlwaysOff,
+    ScrollbarAlwaysOn };
+
+enum ScrollbarControlSize { RegularScrollbar,
+    SmallScrollbar };
 
 typedef unsigned ScrollbarControlState;
 
@@ -169,57 +206,84 @@ enum ScrollbarPart {
     AllParts = 0xffffffff
 };
 
-enum ScrollbarButtonsPlacement {
-    ScrollbarButtonsNone,
-    ScrollbarButtonsSingle,
-    ScrollbarButtonsDoubleStart,
-    ScrollbarButtonsDoubleEnd,
-    ScrollbarButtonsDoubleBoth
+enum ScrollbarOverlayColorTheme {
+    ScrollbarOverlayColorThemeDark,
+    ScrollbarOverlayColorThemeLight
 };
 
-enum ScrollbarOverlayStyle {
-    ScrollbarOverlayStyleDefault,
-    ScrollbarOverlayStyleDark,
-    ScrollbarOverlayStyleLight
+enum ScrollBehavior {
+    ScrollBehaviorAuto,
+    ScrollBehaviorInstant,
+    ScrollBehaviorSmooth,
 };
 
-// The result of an attempt to scroll. If didScroll is true, then unusedScrollDelta gives
-// the amount of the scroll delta that was not consumed by scrolling. If didScroll is false
-// then unusedScrollDelta is zero.
-struct ScrollResultOneDimensional {
-    explicit ScrollResultOneDimensional(bool didScroll)
-        : didScroll(didScroll)
-        , unusedScrollDelta(0) { }
-    ScrollResultOneDimensional(bool didScroll, float unusedScrollDelta)
-        : didScroll(didScroll)
-        , unusedScrollDelta(unusedScrollDelta) { }
-
-    bool didScroll;
-    float unusedScrollDelta;
-};
-
+// The result of an attempt to scroll. If didScroll is true, then
+// unusedScrollDelta gives the amount of the scroll delta that was not consumed
+// by scrolling.
 struct ScrollResult {
+    STACK_ALLOCATED();
     explicit ScrollResult()
         : didScrollX(false)
         , didScrollY(false)
         , unusedScrollDeltaX(0)
-        , unusedScrollDeltaY(0) { }
-    ScrollResult(bool didScrollX, bool didScrollY, float unusedScrollDeltaX, float unusedScrollDeltaY)
+        , unusedScrollDeltaY(0)
+    {
+    }
+    ScrollResult(bool didScrollX,
+        bool didScrollY,
+        float unusedScrollDeltaX,
+        float unusedScrollDeltaY)
         : didScrollX(didScrollX)
         , didScrollY(didScrollY)
         , unusedScrollDeltaX(unusedScrollDeltaX)
-        , unusedScrollDeltaY(unusedScrollDeltaY) { }
+        , unusedScrollDeltaY(unusedScrollDeltaY)
+    {
+    }
 
     bool didScroll() { return didScrollX || didScrollY; }
 
     bool didScrollX;
     bool didScrollY;
+
+    // In pixels.
     float unusedScrollDeltaX;
     float unusedScrollDeltaY;
 };
 
+inline ScrollOffset toScrollDelta(ScrollbarOrientation orientation,
+    float delta)
+{
+    return orientation == HorizontalScrollbar ? ScrollOffset(delta, 0.0f)
+                                              : ScrollOffset(0.0f, delta);
+}
+
+inline ScrollOffset toScrollDelta(ScrollDirectionPhysical dir, float delta)
+{
+    if (dir == ScrollUp || dir == ScrollLeft)
+        delta = -delta;
+
+    return (dir == ScrollLeft || dir == ScrollRight) ? ScrollOffset(delta, 0)
+                                                     : ScrollOffset(0, delta);
+}
+
+inline ScrollGranularity toPlatformScrollGranularity(
+    WebGestureEvent::ScrollUnits units)
+{
+    switch (units) {
+    case WebGestureEvent::ScrollUnits::PrecisePixels:
+        return ScrollGranularity::ScrollByPrecisePixel;
+    case WebGestureEvent::ScrollUnits::Pixels:
+        return ScrollGranularity::ScrollByPixel;
+    case WebGestureEvent::ScrollUnits::Page:
+        return ScrollGranularity::ScrollByPage;
+    default:
+        NOTREACHED();
+        return ScrollGranularity::ScrollByPrecisePixel;
+    }
+}
+
 typedef unsigned ScrollbarControlPartMask;
 
-}
+} // namespace blink
 
 #endif

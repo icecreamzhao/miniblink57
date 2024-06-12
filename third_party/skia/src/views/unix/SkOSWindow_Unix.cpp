@@ -1,16 +1,15 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <X11/XKBlib.h>
-#include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glx.h>
+#include <X11/XKBlib.h>
+#include <X11/Xatom.h>
+#include <X11/Xlib.h>
 
 #include "SkWindow.h"
 
@@ -22,44 +21,48 @@
 #include "SkWindow.h"
 #include "XkeysToSkKeys.h"
 extern "C" {
-    #include "keysym2ucs.h"
+#include "keysym2ucs.h"
 }
 
 const int WIDTH = 500;
 const int HEIGHT = 500;
 
 // Determine which events to listen for.
-const long EVENT_MASK = StructureNotifyMask|ButtonPressMask|ButtonReleaseMask
-        |ExposureMask|PointerMotionMask|KeyPressMask|KeyReleaseMask;
+const long EVENT_MASK = StructureNotifyMask | ButtonPressMask | ButtonReleaseMask
+    | ExposureMask | PointerMotionMask | KeyPressMask | KeyReleaseMask;
 
 SkOSWindow::SkOSWindow(void*)
-    : fVi(NULL)
-    , fMSAASampleCount(0) {
-    fUnixWindow.fDisplay = NULL;
-    fUnixWindow.fGLContext = NULL;
-    this->initWindow(0, NULL);
+    : fVi(nullptr)
+    , fMSAASampleCount(0)
+{
+    fUnixWindow.fDisplay = nullptr;
+    fUnixWindow.fGLContext = nullptr;
+    this->initWindow(0, nullptr);
     this->resize(WIDTH, HEIGHT);
 }
 
-SkOSWindow::~SkOSWindow() {
+SkOSWindow::~SkOSWindow()
+{
     this->internalCloseWindow();
 }
 
-void SkOSWindow::internalCloseWindow() {
+void SkOSWindow::internalCloseWindow()
+{
     if (fUnixWindow.fDisplay) {
-        this->detach();
+        this->release();
         SkASSERT(fUnixWindow.fGc);
         XFreeGC(fUnixWindow.fDisplay, fUnixWindow.fGc);
-        fUnixWindow.fGc = NULL;
+        fUnixWindow.fGc = nullptr;
         XDestroyWindow(fUnixWindow.fDisplay, fUnixWindow.fWin);
-        fVi = NULL;
+        fVi = nullptr;
         XCloseDisplay(fUnixWindow.fDisplay);
-        fUnixWindow.fDisplay = NULL;
+        fUnixWindow.fDisplay = nullptr;
         fMSAASampleCount = 0;
     }
 }
 
-void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) {
+void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info)
+{
     if (fMSAASampleCount != requestedMSAASampleCount) {
         this->internalCloseWindow();
     }
@@ -76,9 +79,9 @@ void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) 
         }
         return;
     }
-    fUnixWindow.fDisplay = XOpenDisplay(NULL);
+    fUnixWindow.fDisplay = XOpenDisplay(nullptr);
     Display* dsp = fUnixWindow.fDisplay;
-    if (NULL == dsp) {
+    if (nullptr == dsp) {
         SkDebugf("Could not open an X Display");
         return;
     }
@@ -90,7 +93,7 @@ void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) 
         GLX_STENCIL_SIZE, 8,
         None
     };
-    SkASSERT(NULL == fVi);
+    SkASSERT(nullptr == fVi);
     if (requestedMSAASampleCount > 0) {
         static const GLint kAttCount = SK_ARRAY_COUNT(att);
         GLint msaaAtt[kAttCount + 4];
@@ -104,7 +107,7 @@ void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) 
         fVi = glXChooseVisual(dsp, DefaultScreen(dsp), msaaAtt);
         fMSAASampleCount = requestedMSAASampleCount;
     }
-    if (NULL == fVi) {
+    if (nullptr == fVi) {
         fVi = glXChooseVisual(dsp, DefaultScreen(dsp), att);
         fMSAASampleCount = 0;
     }
@@ -115,22 +118,22 @@ void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) 
             glXGetConfig(dsp, fVi, GLX_STENCIL_SIZE, &info->fStencilBits);
         }
         Colormap colorMap = XCreateColormap(dsp,
-                                            RootWindow(dsp, fVi->screen),
-                                            fVi->visual,
-                                             AllocNone);
+            RootWindow(dsp, fVi->screen),
+            fVi->visual,
+            AllocNone);
         XSetWindowAttributes swa;
         swa.colormap = colorMap;
         swa.event_mask = EVENT_MASK;
         fUnixWindow.fWin = XCreateWindow(dsp,
-                                         RootWindow(dsp, fVi->screen),
-                                         0, 0, // x, y
-                                         WIDTH, HEIGHT,
-                                         0, // border width
-                                         fVi->depth,
-                                         InputOutput,
-                                         fVi->visual,
-                                         CWEventMask | CWColormap,
-                                         &swa);
+            RootWindow(dsp, fVi->screen),
+            0, 0, // x, y
+            WIDTH, HEIGHT,
+            0, // border width
+            fVi->depth,
+            InputOutput,
+            fVi->visual,
+            CWEventMask | CWColormap,
+            &swa);
     } else {
         if (info) {
             info->fSampleCount = 0;
@@ -138,26 +141,27 @@ void SkOSWindow::initWindow(int requestedMSAASampleCount, AttachmentInfo* info) 
         }
         // Create a simple window instead.  We will not be able to show GL
         fUnixWindow.fWin = XCreateSimpleWindow(dsp,
-                                               DefaultRootWindow(dsp),
-                                               0, 0,  // x, y
-                                               WIDTH, HEIGHT,
-                                               0,     // border width
-                                               0,     // border value
-                                               0);    // background value
+            DefaultRootWindow(dsp),
+            0, 0, // x, y
+            WIDTH, HEIGHT,
+            0, // border width
+            0, // border value
+            0); // background value
     }
     this->mapWindowAndWait();
-    fUnixWindow.fGc = XCreateGC(dsp, fUnixWindow.fWin, 0, NULL);
+    fUnixWindow.fGc = XCreateGC(dsp, fUnixWindow.fWin, 0, nullptr);
 }
 
-static unsigned getModi(const XEvent& evt) {
+static unsigned getModi(const XEvent& evt)
+{
     static const struct {
-        unsigned    fXMask;
-        unsigned    fSkMask;
+        unsigned fXMask;
+        unsigned fSkMask;
     } gModi[] = {
         // X values found by experiment. Is there a better way?
-        { 1,    kShift_SkModifierKey },
-        { 4,    kControl_SkModifierKey },
-        { 8,    kOption_SkModifierKey },
+        { 1, kShift_SkModifierKey },
+        { 4, kControl_SkModifierKey },
+        { 8, kOption_SkModifierKey },
     };
 
     unsigned modi = 0;
@@ -171,7 +175,8 @@ static unsigned getModi(const XEvent& evt) {
 
 static SkMSec gTimerDelay;
 
-static bool MyXNextEventWithDelay(Display* dsp, XEvent* evt) {
+static bool MyXNextEventWithDelay(Display* dsp, XEvent* evt)
+{
     // Check for pending events before entering the select loop. There might
     // be events in the in-memory queue but not processed yet.
     if (XPending(dsp)) {
@@ -187,10 +192,10 @@ static bool MyXNextEventWithDelay(Display* dsp, XEvent* evt) {
         FD_SET(x11_fd, &input_fds);
 
         timeval tv;
-        tv.tv_sec = ms / 1000;              // seconds
-        tv.tv_usec = (ms % 1000) * 1000;    // microseconds
+        tv.tv_sec = ms / 1000; // seconds
+        tv.tv_usec = (ms % 1000) * 1000; // microseconds
 
-        if (!select(x11_fd + 1, &input_fds, NULL, NULL, &tv)) {
+        if (!select(x11_fd + 1, &input_fds, nullptr, nullptr, &tv)) {
             if (!XPending(dsp)) {
                 return false;
             }
@@ -202,7 +207,8 @@ static bool MyXNextEventWithDelay(Display* dsp, XEvent* evt) {
 
 static Atom wm_delete_window_message;
 
-SkOSWindow::NextXEventResult SkOSWindow::nextXEvent() {
+SkOSWindow::NextXEventResult SkOSWindow::nextXEvent()
+{
     XEvent evt;
     Display* dsp = fUnixWindow.fDisplay;
 
@@ -211,60 +217,61 @@ SkOSWindow::NextXEventResult SkOSWindow::nextXEvent() {
     }
 
     switch (evt.type) {
-        case Expose:
-            if (0 == evt.xexpose.count) {
-                return kPaintRequest_NextXEventResult;
-            }
-            break;
-        case ConfigureNotify:
-            this->resize(evt.xconfigure.width, evt.xconfigure.height);
-            break;
-        case ButtonPress:
-            if (evt.xbutton.button == Button1)
-                this->handleClick(evt.xbutton.x, evt.xbutton.y,
-                            SkView::Click::kDown_State, NULL, getModi(evt));
-            break;
-        case ButtonRelease:
-            if (evt.xbutton.button == Button1)
-                this->handleClick(evt.xbutton.x, evt.xbutton.y,
-                              SkView::Click::kUp_State, NULL, getModi(evt));
-            break;
-        case MotionNotify:
-            this->handleClick(evt.xmotion.x, evt.xmotion.y,
-                           SkView::Click::kMoved_State, NULL, getModi(evt));
-            break;
-        case KeyPress: {
-            int shiftLevel = (evt.xkey.state & ShiftMask) ? 1 : 0;
-            KeySym keysym = XkbKeycodeToKeysym(dsp, evt.xkey.keycode,
-                                               0, shiftLevel);
-            if (keysym == XK_Escape) {
-                return kQuitRequest_NextXEventResult;
-            }
-            this->handleKey(XKeyToSkKey(keysym));
-            long uni = keysym2ucs(keysym);
-            if (uni != -1) {
-                this->handleChar((SkUnichar) uni);
-            }
-            break;
+    case Expose:
+        if (0 == evt.xexpose.count) {
+            return kPaintRequest_NextXEventResult;
         }
-        case KeyRelease:
-            this->handleKeyUp(XKeyToSkKey(XkbKeycodeToKeysym(dsp, evt.xkey.keycode, 0, 0)));
-            break;
-        case ClientMessage:
-            if ((Atom)evt.xclient.data.l[0] == wm_delete_window_message) {
-                return kQuitRequest_NextXEventResult;
-            }
-            // fallthrough
-        default:
-            // Do nothing for other events
-            break;
+        break;
+    case ConfigureNotify:
+        this->resize(evt.xconfigure.width, evt.xconfigure.height);
+        break;
+    case ButtonPress:
+        if (evt.xbutton.button == Button1)
+            this->handleClick(evt.xbutton.x, evt.xbutton.y,
+                SkView::Click::kDown_State, nullptr, getModi(evt));
+        break;
+    case ButtonRelease:
+        if (evt.xbutton.button == Button1)
+            this->handleClick(evt.xbutton.x, evt.xbutton.y,
+                SkView::Click::kUp_State, nullptr, getModi(evt));
+        break;
+    case MotionNotify:
+        this->handleClick(evt.xmotion.x, evt.xmotion.y,
+            SkView::Click::kMoved_State, nullptr, getModi(evt));
+        break;
+    case KeyPress: {
+        int shiftLevel = (evt.xkey.state & ShiftMask) ? 1 : 0;
+        KeySym keysym = XkbKeycodeToKeysym(dsp, evt.xkey.keycode,
+            0, shiftLevel);
+        if (keysym == XK_Escape) {
+            return kQuitRequest_NextXEventResult;
+        }
+        this->handleKey(XKeyToSkKey(keysym));
+        long uni = keysym2ucs(keysym);
+        if (uni != -1) {
+            this->handleChar((SkUnichar)uni);
+        }
+        break;
+    }
+    case KeyRelease:
+        this->handleKeyUp(XKeyToSkKey(XkbKeycodeToKeysym(dsp, evt.xkey.keycode, 0, 0)));
+        break;
+    case ClientMessage:
+        if ((Atom)evt.xclient.data.l[0] == wm_delete_window_message) {
+            return kQuitRequest_NextXEventResult;
+        }
+        // fallthrough
+    default:
+        // Do nothing for other events
+        break;
     }
     return kContinue_NextXEventResult;
 }
 
-void SkOSWindow::loop() {
+void SkOSWindow::loop()
+{
     Display* dsp = fUnixWindow.fDisplay;
-    if (NULL == dsp) {
+    if (nullptr == dsp) {
         return;
     }
     Window win = fUnixWindow.fWin;
@@ -293,23 +300,24 @@ void SkOSWindow::loop() {
 
         if (XPending(dsp) || !moreToDo) {
             switch (this->nextXEvent()) {
-                case kContinue_NextXEventResult:
-                    break;
-                case kPaintRequest_NextXEventResult:
-                    sentExposeEvent = false;
-                    if (this->isDirty()) {
-                        this->update(NULL);
-                    }
-                    this->doPaint();
-                    break;
-                case kQuitRequest_NextXEventResult:
-                    return;
+            case kContinue_NextXEventResult:
+                break;
+            case kPaintRequest_NextXEventResult:
+                sentExposeEvent = false;
+                if (this->isDirty()) {
+                    this->update(nullptr);
+                }
+                this->doPaint();
+                break;
+            case kQuitRequest_NextXEventResult:
+                return;
             }
         }
     }
 }
 
-void SkOSWindow::mapWindowAndWait() {
+void SkOSWindow::mapWindowAndWait()
+{
     SkASSERT(fUnixWindow.fDisplay);
     Display* dsp = fUnixWindow.fDisplay;
     Window win = fUnixWindow.fWin;
@@ -322,26 +330,26 @@ void SkOSWindow::mapWindowAndWait() {
     XEvent evt;
     do {
         XNextEvent(dsp, &evt);
-    } while(evt.type != MapNotify);
-
+    } while (evt.type != MapNotify);
 }
 
 ////////////////////////////////////////////////
 
 // Some helper code to load the correct version of glXSwapInterval
 #define GLX_GET_PROC_ADDR(name) glXGetProcAddress(reinterpret_cast<const GLubyte*>((name)))
-#define EXT_WRANGLE(name, type, ...) \
-    if (GLX_GET_PROC_ADDR(#name)) { \
-        static type k##name; \
-        if (!k##name) { \
-            k##name = (type) GLX_GET_PROC_ADDR(#name); \
-        } \
-        k##name(__VA_ARGS__); \
-        SkDebugf("using %s\n", #name); \
-        return; \
+#define EXT_WRANGLE(name, type, ...)                  \
+    if (GLX_GET_PROC_ADDR(#name)) {                   \
+        static type k##name;                          \
+        if (!k##name) {                               \
+            k##name = (type)GLX_GET_PROC_ADDR(#name); \
+        }                                             \
+        k##name(__VA_ARGS__);                         \
+        /*SkDebugf("using %s\n", #name);*/            \
+        return;                                       \
     }
 
-static void glXSwapInterval(Display* dsp, GLXDrawable drawable, int interval) {
+static void glXSwapInterval(Display* dsp, GLXDrawable drawable, int interval)
+{
     EXT_WRANGLE(glXSwapIntervalEXT, PFNGLXSWAPINTERVALEXTPROC, dsp, drawable, interval);
     EXT_WRANGLE(glXSwapIntervalMESA, PFNGLXSWAPINTERVALMESAPROC, interval);
     EXT_WRANGLE(glXSwapIntervalSGI, PFNGLXSWAPINTERVALSGIPROC, interval);
@@ -349,52 +357,57 @@ static void glXSwapInterval(Display* dsp, GLXDrawable drawable, int interval) {
 
 /////////////////////////////////////////////////////////////////////////
 
-bool SkOSWindow::attach(SkBackEndTypes, int msaaSampleCount, AttachmentInfo* info) {
+bool SkOSWindow::attach(SkBackEndTypes, int msaaSampleCount, bool deepColor,
+    AttachmentInfo* info)
+{
     this->initWindow(msaaSampleCount, info);
 
-    if (NULL == fUnixWindow.fDisplay) {
+    if (nullptr == fUnixWindow.fDisplay) {
         return false;
     }
-    if (NULL == fUnixWindow.fGLContext) {
+    if (nullptr == fUnixWindow.fGLContext) {
         SkASSERT(fVi);
 
         fUnixWindow.fGLContext = glXCreateContext(fUnixWindow.fDisplay,
-                                                  fVi,
-                                                  NULL,
-                                                  GL_TRUE);
-        if (NULL == fUnixWindow.fGLContext) {
+            fVi,
+            nullptr,
+            GL_TRUE);
+        if (nullptr == fUnixWindow.fGLContext) {
             return false;
         }
     }
     glXMakeCurrent(fUnixWindow.fDisplay,
-                   fUnixWindow.fWin,
-                   fUnixWindow.fGLContext);
+        fUnixWindow.fWin,
+        fUnixWindow.fGLContext);
     glViewport(0, 0,
-               SkScalarRoundToInt(this->width()),
-               SkScalarRoundToInt(this->height()));
+        SkScalarRoundToInt(this->width()),
+        SkScalarRoundToInt(this->height()));
     glClearColor(0, 0, 0, 0);
     glClearStencil(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     return true;
 }
 
-void SkOSWindow::detach() {
-    if (NULL == fUnixWindow.fDisplay || NULL == fUnixWindow.fGLContext) {
+void SkOSWindow::release()
+{
+    if (nullptr == fUnixWindow.fDisplay || nullptr == fUnixWindow.fGLContext) {
         return;
     }
-    glXMakeCurrent(fUnixWindow.fDisplay, None, NULL);
+    glXMakeCurrent(fUnixWindow.fDisplay, None, nullptr);
     glXDestroyContext(fUnixWindow.fDisplay, fUnixWindow.fGLContext);
-    fUnixWindow.fGLContext = NULL;
+    fUnixWindow.fGLContext = nullptr;
 }
 
-void SkOSWindow::present() {
+void SkOSWindow::present()
+{
     if (fUnixWindow.fDisplay && fUnixWindow.fGLContext) {
         glXSwapBuffers(fUnixWindow.fDisplay, fUnixWindow.fWin);
     }
 }
 
-void SkOSWindow::onSetTitle(const char title[]) {
-    if (NULL == fUnixWindow.fDisplay) {
+void SkOSWindow::onSetTitle(const char title[])
+{
+    if (nullptr == fUnixWindow.fDisplay) {
         return;
     }
     XTextProperty textProp;
@@ -405,14 +418,15 @@ void SkOSWindow::onSetTitle(const char title[]) {
     XSetWMName(fUnixWindow.fDisplay, fUnixWindow.fWin, &textProp);
 }
 
-static bool convertBitmapToXImage(XImage& image, const SkBitmap& bitmap) {
+static bool convertBitmapToXImage(XImage& image, const SkBitmap& bitmap)
+{
     sk_bzero(&image, sizeof(image));
 
     int bitsPerPixel = bitmap.bytesPerPixel() * 8;
     image.width = bitmap.width();
     image.height = bitmap.height();
     image.format = ZPixmap;
-    image.data = (char*) bitmap.getPixels();
+    image.data = (char*)bitmap.getPixels();
     image.byte_order = LSBFirst;
     image.bitmap_unit = bitsPerPixel;
     image.bitmap_bit_order = LSBFirst;
@@ -423,8 +437,9 @@ static bool convertBitmapToXImage(XImage& image, const SkBitmap& bitmap) {
     return XInitImage(&image);
 }
 
-void SkOSWindow::doPaint() {
-    if (NULL == fUnixWindow.fDisplay) {
+void SkOSWindow::doPaint()
+{
+    if (nullptr == fUnixWindow.fDisplay) {
         return;
     }
     // If we are drawing with GL, we don't need XPutImage.
@@ -442,23 +457,24 @@ void SkOSWindow::doPaint() {
     }
 
     XPutImage(fUnixWindow.fDisplay,
-              fUnixWindow.fWin,
-              fUnixWindow.fGc,
-              &image,
-              0, 0,     // src x,y
-              0, 0,     // dst x,y
-              width, height);
+        fUnixWindow.fWin,
+        fUnixWindow.fGc,
+        &image,
+        0, 0, // src x,y
+        0, 0, // dst x,y
+        width, height);
 }
 
 enum {
-    _NET_WM_STATE_REMOVE =0,
+    _NET_WM_STATE_REMOVE = 0,
     _NET_WM_STATE_ADD = 1,
-    _NET_WM_STATE_TOGGLE =2
+    _NET_WM_STATE_TOGGLE = 2
 };
 
-bool SkOSWindow::makeFullscreen() {
+bool SkOSWindow::makeFullscreen()
+{
     Display* dsp = fUnixWindow.fDisplay;
-    if (NULL == dsp) {
+    if (nullptr == dsp) {
         return false;
     }
 
@@ -477,20 +493,22 @@ bool SkOSWindow::makeFullscreen() {
     evt.xclient.data.l[2] = 0;
 
     XSendEvent(dsp, DefaultRootWindow(dsp), False,
-               SubstructureRedirectMask | SubstructureNotifyMask, &evt);
+        SubstructureRedirectMask | SubstructureNotifyMask, &evt);
     return true;
 }
 
-void SkOSWindow::setVsync(bool vsync) {
+void SkOSWindow::setVsync(bool vsync)
+{
     if (fUnixWindow.fDisplay && fUnixWindow.fGLContext && fUnixWindow.fWin) {
         int swapInterval = vsync ? 1 : 0;
         glXSwapInterval(fUnixWindow.fDisplay, fUnixWindow.fWin, swapInterval);
     }
 }
 
-void SkOSWindow::closeWindow() {
+void SkOSWindow::closeWindow()
+{
     Display* dsp = fUnixWindow.fDisplay;
-    if (NULL == dsp) {
+    if (nullptr == dsp) {
         return;
     }
 
@@ -508,11 +526,13 @@ void SkOSWindow::closeWindow() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkEvent::SignalNonEmptyQueue() {
+void SkEvent::SignalNonEmptyQueue()
+{
     // nothing to do, since we spin on our event-queue, polling for XPending
 }
 
-void SkEvent::SignalQueueTimer(SkMSec delay) {
+void SkEvent::SignalQueueTimer(SkMSec delay)
+{
     // just need to record the delay time. We handle waking up for it in
     // MyXNextEventWithDelay()
     gTimerDelay = delay;

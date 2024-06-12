@@ -28,28 +28,22 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/Threading.h"
 
-#if USE(PTHREADS)
+#if OS(POSIX)
 
+#include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/ThreadSpecific.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/WTFThreadData.h"
-#include "wtf/dtoa.h"
-#include "wtf/dtoa/cached-powers.h"
+#include "wtf/dtoa/double-conversion.h"
 #include <errno.h>
-
-#if !COMPILER(MSVC)
 #include <limits.h>
 #include <sched.h>
 #include <sys/time.h>
-#endif
 
 #if OS(MACOSX)
 #include <objc/objc-auto.h>
@@ -65,20 +59,36 @@
 
 namespace WTF {
 
+namespace internal {
+
+    ThreadIdentifier currentThreadSyscall()
+    {
+#if OS(MACOSX)
+        return pthread_mach_thread_np(pthread_self());
+#elif OS(LINUX)
+        return syscall(__NR_gettid);
+#elif OS(ANDROID)
+        return gettid();
+#else
+        return reinterpret_cast<uintptr_t>(pthread_self());
+#endif
+    }
+
+} // namespace internal
+
 static Mutex* atomicallyInitializedStaticMutex;
 
 void initializeThreading()
 {
     // This should only be called once.
-    ASSERT(!atomicallyInitializedStaticMutex);
+    DCHECK(!atomicallyInitializedStaticMutex);
 
-    // StringImpl::empty() does not construct its static string in a threadsafe fashion,
-    // so ensure it has been initialized from here.
+    // StringImpl::empty() does not construct its static string in a threadsafe
+    // fashion, so ensure it has been initialized from here.
     StringImpl::empty();
     StringImpl::empty16Bit();
     atomicallyInitializedStaticMutex = new Mutex;
     wtfThreadData();
-    s_dtoaP5Mutex = new Mutex;
     initializeDates();
     // Force initialization of static DoubleToStringConverter converter variable
     // inside EcmaScriptConverter function while we are in single thread mode.
@@ -87,7 +97,7 @@ void initializeThreading()
 
 void lockAtomicallyInitializedStaticMutex()
 {
-    ASSERT(atomicallyInitializedStaticMutex);
+    DCHECK(atomicallyInitializedStaticMutex);
     atomicallyInitializedStaticMutex->lock();
 }
 
@@ -98,15 +108,7 @@ void unlockAtomicallyInitializedStaticMutex()
 
 ThreadIdentifier currentThread()
 {
-#if OS(MACOSX)
-    return pthread_mach_thread_np(pthread_self());
-#elif OS(LINUX)
-    return syscall(__NR_gettid);
-#elif OS(ANDROID)
-    return gettid();
-#else
-    return reinterpret_cast<uintptr_t>(pthread_self());
-#endif
+    return wtfThreadData().threadId();
 }
 
 MutexBase::MutexBase(bool recursive)
@@ -116,8 +118,8 @@ MutexBase::MutexBase(bool recursive)
     pthread_mutexattr_settype(&attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
 
     int result = pthread_mutex_init(&m_mutex.m_internalMutex, &attr);
-    ASSERT_UNUSED(result, !result);
-#if ENABLE(ASSERT)
+    DCHECK_EQ(result, 0);
+#if DCHECK_IS_ON()
     m_mutex.m_recursionCount = 0;
 #endif
 
@@ -127,26 +129,26 @@ MutexBase::MutexBase(bool recursive)
 MutexBase::~MutexBase()
 {
     int result = pthread_mutex_destroy(&m_mutex.m_internalMutex);
-    ASSERT_UNUSED(result, !result);
+    DCHECK_EQ(result, 0);
 }
 
 void MutexBase::lock()
 {
     int result = pthread_mutex_lock(&m_mutex.m_internalMutex);
-    ASSERT_UNUSED(result, !result);
-#if ENABLE(ASSERT)
+    DCHECK_EQ(result, 0);
+#if DCHECK_IS_ON()
     ++m_mutex.m_recursionCount;
 #endif
 }
 
 void MutexBase::unlock()
 {
-#if ENABLE(ASSERT)
-    ASSERT(m_mutex.m_recursionCount);
+#if DCHECK_IS_ON()
+    DCHECK(m_mutex.m_recursionCount);
     --m_mutex.m_recursionCount;
 #endif
     int result = pthread_mutex_unlock(&m_mutex.m_internalMutex);
-    ASSERT_UNUSED(result, !result);
+    DCHECK_EQ(result, 0);
 }
 
 // There is a separate tryLock implementation for the Mutex and the
@@ -158,10 +160,10 @@ bool Mutex::tryLock()
 {
     int result = pthread_mutex_trylock(&m_mutex.m_internalMutex);
     if (result == 0) {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
         // The Mutex class is not recursive, so the recursionCount should be
         // zero after getting the lock.
-        ASSERT(!m_mutex.m_recursionCount);
+        DCHECK(!m_mutex.m_recursionCount);
         ++m_mutex.m_recursionCount;
 #endif
         return true;
@@ -169,7 +171,7 @@ bool Mutex::tryLock()
     if (result == EBUSY)
         return false;
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return false;
 }
 
@@ -177,7 +179,7 @@ bool RecursiveMutex::tryLock()
 {
     int result = pthread_mutex_trylock(&m_mutex.m_internalMutex);
     if (result == 0) {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
         ++m_mutex.m_recursionCount;
 #endif
         return true;
@@ -185,13 +187,13 @@ bool RecursiveMutex::tryLock()
     if (result == EBUSY)
         return false;
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return false;
 }
 
 ThreadCondition::ThreadCondition()
 {
-    pthread_cond_init(&m_condition, NULL);
+    pthread_cond_init(&m_condition, nullptr);
 }
 
 ThreadCondition::~ThreadCondition()
@@ -203,8 +205,8 @@ void ThreadCondition::wait(MutexBase& mutex)
 {
     PlatformMutex& platformMutex = mutex.impl();
     int result = pthread_cond_wait(&m_condition, &platformMutex.m_internalMutex);
-    ASSERT_UNUSED(result, !result);
-#if ENABLE(ASSERT)
+    DCHECK_EQ(result, 0);
+#if DCHECK_IS_ON()
     ++platformMutex.m_recursionCount;
 #endif
 }
@@ -227,8 +229,9 @@ bool ThreadCondition::timedWait(MutexBase& mutex, double absoluteTime)
     targetTime.tv_nsec = timeNanoseconds;
 
     PlatformMutex& platformMutex = mutex.impl();
-    int result = pthread_cond_timedwait(&m_condition, &platformMutex.m_internalMutex, &targetTime);
-#if ENABLE(ASSERT)
+    int result = pthread_cond_timedwait(
+        &m_condition, &platformMutex.m_internalMutex, &targetTime);
+#if DCHECK_IS_ON()
     ++platformMutex.m_recursionCount;
 #endif
     return result == 0;
@@ -237,16 +240,16 @@ bool ThreadCondition::timedWait(MutexBase& mutex, double absoluteTime)
 void ThreadCondition::signal()
 {
     int result = pthread_cond_signal(&m_condition);
-    ASSERT_UNUSED(result, !result);
+    DCHECK_EQ(result, 0);
 }
 
 void ThreadCondition::broadcast()
 {
     int result = pthread_cond_broadcast(&m_condition);
-    ASSERT_UNUSED(result, !result);
+    DCHECK_EQ(result, 0);
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 static bool s_threadCreated = false;
 
 bool isAtomicallyInitializedStaticMutexLockHeld()
@@ -267,4 +270,4 @@ void willCreateThread()
 
 } // namespace WTF
 
-#endif // USE(PTHREADS)
+#endif // OS(POSIX)

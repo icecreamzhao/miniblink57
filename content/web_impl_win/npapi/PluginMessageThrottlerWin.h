@@ -54,7 +54,7 @@ public:
 
 private:
     void processQueuedMessage();
-    void messageThrottleTimerFired(blink::Timer<PluginMessageThrottlerWin>*);
+    void messageThrottleTimerFired(blink::TimerBase*);
     PluginMessage* allocateMessage();
     bool isInlineMessage(PluginMessage* message);
     void freeMessage(PluginMessage* message);

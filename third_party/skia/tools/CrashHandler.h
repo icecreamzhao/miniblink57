@@ -8,4 +8,4 @@
 // On Linux, our output is garbage compared to catchsegv.  Use catchsegv if possible.
 void SetupCrashHandler();
 
-#endif//CrashHandler_DEFINED
+#endif //CrashHandler_DEFINED

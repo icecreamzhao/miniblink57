@@ -28,23 +28,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "wtf/SpinLock.h"
 
-#include "platform/Task.h"
-#include "platform/ThreadSafeFunctional.h"
+#include "platform/CrossThreadFunctional.h"
+#include "platform/WebTaskRunner.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebThread.h"
 #include "public/platform/WebTraceLocation.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 static const size_t bufferSize = 16;
 
-static int lock = 0;
+static SpinLock lock;
 
 static void fillBuffer(volatile char* buffer, char fillPattern)
 {
@@ -69,9 +68,8 @@ static void changeAndCheckBuffer(volatile char* buffer)
 static void threadMain(volatile char* buffer)
 {
     for (int i = 0; i < 500000; ++i) {
-        spinLockLock(&lock);
+        SpinLock::Guard guard(lock);
         changeAndCheckBuffer(buffer);
-        spinLockUnlock(&lock);
     }
 }
 
@@ -79,14 +77,20 @@ TEST(SpinLockTest, Torture)
 {
     char sharedBuffer[bufferSize];
 
-    OwnPtr<WebThread> thread1 = adoptPtr(Platform::current()->createThread("thread1"));
-    OwnPtr<WebThread> thread2 = adoptPtr(Platform::current()->createThread("thread2"));
+    std::unique_ptr<WebThread> thread1 = WTF::wrapUnique(Platform::current()->createThread("thread1"));
+    std::unique_ptr<WebThread> thread2 = WTF::wrapUnique(Platform::current()->createThread("thread2"));
 
-    thread1->postTask(FROM_HERE, new Task(threadSafeBind(&threadMain, AllowCrossThreadAccess(static_cast<char*>(sharedBuffer)))));
-    thread2->postTask(FROM_HERE, new Task(threadSafeBind(&threadMain, AllowCrossThreadAccess(static_cast<char*>(sharedBuffer)))));
+    thread1->getWebTaskRunner()->postTask(
+        BLINK_FROM_HERE,
+        crossThreadBind(&threadMain,
+            crossThreadUnretained(static_cast<char*>(sharedBuffer))));
+    thread2->getWebTaskRunner()->postTask(
+        BLINK_FROM_HERE,
+        crossThreadBind(&threadMain,
+            crossThreadUnretained(static_cast<char*>(sharedBuffer))));
 
-    thread1.clear();
-    thread2.clear();
+    thread1.reset();
+    thread2.reset();
 }
 
 } // namespace blink

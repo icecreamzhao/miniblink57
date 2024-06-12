@@ -8,7 +8,8 @@
 #include "SkPathMeasure.h"
 #include "Test.h"
 
-static void test_small_segment3() {
+static void test_small_segment3()
+{
     SkPath path;
     const SkPoint pts[] = {
         { 0, 0 },
@@ -25,12 +26,15 @@ static void test_small_segment3() {
     meas.getLength();
 }
 
-static void test_small_segment2() {
+static void test_small_segment2()
+{
     SkPath path;
     const SkPoint pts[] = {
         { 0, 0 },
-        { 100000000000.0f, 100000000000.0f }, { 0, 0 },
-        { 10, 10 }, { 0, 0 },
+        { 100000000000.0f, 100000000000.0f },
+        { 0, 0 },
+        { 10, 10 },
+        { 0, 0 },
     };
 
     path.moveTo(pts[0]);
@@ -41,10 +45,11 @@ static void test_small_segment2() {
     meas.getLength();
 }
 
-static void test_small_segment() {
+static void test_small_segment()
+{
     SkPath path;
     const SkPoint pts[] = {
-        { 100000, 100000},
+        { 100000, 100000 },
         // big jump between these points, makes a big segment
         { 1.0005f, 0.9999f },
         // tiny (non-zero) jump between these points
@@ -73,30 +78,31 @@ static void test_small_segment() {
     meas.getLength();
 }
 
-DEF_TEST(PathMeasure, reporter) {
-    SkPath  path;
+DEF_TEST(PathMeasure, reporter)
+{
+    SkPath path;
 
     path.moveTo(0, 0);
     path.lineTo(SK_Scalar1, 0);
     path.lineTo(SK_Scalar1, SK_Scalar1);
     path.lineTo(0, SK_Scalar1);
 
-    SkPathMeasure   meas(path, true);
-    SkScalar        length = meas.getLength();
-    SkASSERT(length == SK_Scalar1*4);
+    SkPathMeasure meas(path, true);
+    SkScalar length = meas.getLength();
+    SkASSERT(length == SK_Scalar1 * 4);
 
     path.reset();
     path.moveTo(0, 0);
-    path.lineTo(SK_Scalar1*3, SK_Scalar1*4);
+    path.lineTo(SK_Scalar1 * 3, SK_Scalar1 * 4);
     meas.setPath(&path, false);
     length = meas.getLength();
-    REPORTER_ASSERT(reporter, length == SK_Scalar1*5);
+    REPORTER_ASSERT(reporter, length == SK_Scalar1 * 5);
 
     path.reset();
     path.addCircle(0, 0, SK_Scalar1);
     meas.setPath(&path, true);
     length = meas.getLength();
-//    SkDebugf("circle arc-length = %g\n", length);
+    //    SkDebugf("circle arc-length = %g\n", length);
 
     // Test the behavior following a close not followed by a move.
     path.reset();
@@ -116,8 +122,8 @@ DEF_TEST(PathMeasure, reporter) {
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
-                            -SK_ScalarHalf,
-                            0.0001f));
+            -SK_ScalarHalf,
+            0.0001f));
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == -SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -130,19 +136,19 @@ DEF_TEST(PathMeasure, reporter) {
     path.quadTo(SK_Scalar1, 0, SK_Scalar1, 0);
     path.quadTo(SK_Scalar1, SK_Scalar1, SK_Scalar1, SK_Scalar1 * 2);
     path.cubicTo(SK_Scalar1, SK_Scalar1 * 2,
-                 SK_Scalar1, SK_Scalar1 * 2,
-                 SK_Scalar1, SK_Scalar1 * 2);
-    path.cubicTo(SK_Scalar1*2, SK_Scalar1 * 2,
-                 SK_Scalar1*3, SK_Scalar1 * 2,
-                 SK_Scalar1*4, SK_Scalar1 * 2);
+        SK_Scalar1, SK_Scalar1 * 2,
+        SK_Scalar1, SK_Scalar1 * 2);
+    path.cubicTo(SK_Scalar1 * 2, SK_Scalar1 * 2,
+        SK_Scalar1 * 3, SK_Scalar1 * 2,
+        SK_Scalar1 * 4, SK_Scalar1 * 2);
     meas.setPath(&path, false);
     length = meas.getLength();
     REPORTER_ASSERT(reporter, length == SK_Scalar1 * 6);
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
-                            SK_ScalarHalf,
-                            0.0001f));
+            SK_ScalarHalf,
+            0.0001f));
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -156,12 +162,12 @@ DEF_TEST(PathMeasure, reporter) {
     REPORTER_ASSERT(reporter, meas.getPosTan(4.5f, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
-                            2.5f,
-                            0.0001f));
+            2.5f,
+            0.0001f));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fY,
-                            2.0f,
-                            0.0001f));
+            2.0f,
+            0.0001f));
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
 
@@ -177,8 +183,8 @@ DEF_TEST(PathMeasure, reporter) {
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
-                            SK_ScalarHalf,
-                            0.0001f));
+            SK_ScalarHalf,
+            0.0001f));
     REPORTER_ASSERT(reporter, position.fY == 0);
     REPORTER_ASSERT(reporter, tangent.fX == SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
@@ -188,16 +194,33 @@ DEF_TEST(PathMeasure, reporter) {
     REPORTER_ASSERT(reporter, meas.getPosTan(SK_ScalarHalf, &position, &tangent));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fX,
-                            1.5f,
-                            0.0001f));
+            1.5f,
+            0.0001f));
     REPORTER_ASSERT(reporter,
         SkScalarNearlyEqual(position.fY,
-                            2.0f,
-                            0.0001f));
+            2.0f,
+            0.0001f));
     REPORTER_ASSERT(reporter, tangent.fX == -SK_Scalar1);
     REPORTER_ASSERT(reporter, tangent.fY == 0);
 
     test_small_segment();
     test_small_segment2();
     test_small_segment3();
+}
+
+DEF_TEST(PathMeasureConic, reporter)
+{
+    SkPoint stdP, hiP, pts[] = { { 0, 0 }, { 100, 0 }, { 100, 0 } };
+    SkPath p;
+    p.moveTo(0, 0);
+    p.conicTo(pts[1], pts[2], 1);
+    SkPathMeasure stdm(p, false);
+    REPORTER_ASSERT(reporter, stdm.getPosTan(20, &stdP, nullptr));
+    p.reset();
+    p.moveTo(0, 0);
+    p.conicTo(pts[1], pts[2], 10);
+    stdm.setPath(&p, false);
+    REPORTER_ASSERT(reporter, stdm.getPosTan(20, &hiP, nullptr));
+    REPORTER_ASSERT(reporter, 19.5f < stdP.fX && stdP.fX < 20.5f);
+    REPORTER_ASSERT(reporter, 19.5f < hiP.fX && hiP.fX < 20.5f);
 }

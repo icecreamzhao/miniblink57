@@ -10,51 +10,65 @@
 #include "platform/geometry/FloatRoundedRect.h"
 #include "platform/geometry/IntRect.h"
 #include "platform/graphics/paint/DisplayItem.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class PLATFORM_EXPORT ClipDisplayItem : public PairedBeginDisplayItem {
+class PLATFORM_EXPORT ClipDisplayItem final : public PairedBeginDisplayItem {
 public:
-    ClipDisplayItem(const DisplayItemClientWrapper& client, Type type, const IntRect& clipRect)
-        : PairedBeginDisplayItem(client, type)
+    ClipDisplayItem(const DisplayItemClient& client,
+        Type type,
+        const IntRect& clipRect)
+        : PairedBeginDisplayItem(client, type, sizeof(*this))
         , m_clipRect(clipRect)
     {
         ASSERT(isClipType(type));
     }
 
-    ClipDisplayItem(const DisplayItemClientWrapper& client, Type type, const IntRect& clipRect, Vector<FloatRoundedRect>& roundedRectClips)
+    ClipDisplayItem(const DisplayItemClient& client,
+        Type type,
+        const IntRect& clipRect,
+        Vector<FloatRoundedRect>& roundedRectClips)
         : ClipDisplayItem(client, type, clipRect)
     {
         m_roundedRectClips.swap(roundedRectClips);
     }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
 
 private:
 #ifndef NDEBUG
     void dumpPropertiesAsDebugString(WTF::StringBuilder&) const override;
 #endif
+    bool equals(const DisplayItem& other) const final
+    {
+        return DisplayItem::equals(other) && m_clipRect == static_cast<const ClipDisplayItem&>(other).m_clipRect && m_roundedRectClips == static_cast<const ClipDisplayItem&>(other).m_roundedRectClips;
+    }
+
     const IntRect m_clipRect;
     Vector<FloatRoundedRect> m_roundedRectClips;
 };
 
-class PLATFORM_EXPORT EndClipDisplayItem : public PairedEndDisplayItem {
+class PLATFORM_EXPORT EndClipDisplayItem final : public PairedEndDisplayItem {
 public:
-    EndClipDisplayItem(const DisplayItemClientWrapper& client, Type type)
-        : PairedEndDisplayItem(client, type)
+    EndClipDisplayItem(const DisplayItemClient& client, Type type)
+        : PairedEndDisplayItem(client, type, sizeof(*this))
     {
         ASSERT(isEndClipType(type));
     }
 
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
+    void replay(GraphicsContext&) const override;
+    void appendToWebDisplayItemList(const IntRect&,
+        WebDisplayItemList*) const override;
 
 private:
-#if ENABLE(ASSERT)
-    bool isEndAndPairedWith(DisplayItem::Type otherType) const final { return DisplayItem::isClipType(otherType); }
+#if DCHECK_IS_ON()
+    bool isEndAndPairedWith(DisplayItem::Type otherType) const final
+    {
+        return DisplayItem::isClipType(otherType);
+    }
 #endif
 };
 

@@ -33,6 +33,7 @@
 
 #include "core/html/imports/HTMLImportState.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/TreeNode.h"
 
 namespace blink {
@@ -49,28 +50,31 @@ class HTMLImportLoader;
 //
 // * The root of the tree is HTMLImportTreeRoot.
 //
-// * The HTMLImportTreeRoot is owned HTMLImportsController, which is owned by the master
-//   document as a DocumentSupplement.
+// * The HTMLImportTreeRoot is owned HTMLImportsController, which is owned by
+//   the master document as a DocumentSupplement.
 //
-// * The non-root nodes are HTMLImportChild. They are all owned by HTMLImporTreeRoot.
-//   LinkStyle is wired into HTMLImportChild by implementing HTMLImportChildClient interface
+// * The non-root nodes are HTMLImportChild. They are all owned by
+//   HTMLImporTreeRoot.  LinkStyle is wired into HTMLImportChild by implementing
+//   HTMLImportChildClient interface
 //
-// * Both HTMLImportTreeRoot and HTMLImportChild are derived from HTMLImport superclass
-//   that models the tree data structure using WTF::TreeNode and provides a set of
-//   virtual functions.
+// * Both HTMLImportTreeRoot and HTMLImportChild are derived from HTMLImport
+//   superclass that models the tree data structure using WTF::TreeNode and
+//   provides a set of virtual functions.
 //
-// HTMLImportsController also owns all loaders in the tree and manages their lifetime through it.
-// One assumption is that the tree is append-only and nodes are never inserted in the middle of the tree nor removed.
+// HTMLImportsController also owns all loaders in the tree and manages their
+// lifetime through it.  One assumption is that the tree is append-only and
+// nodes are never inserted in the middle of the tree nor removed.
 //
 // Full diagram is here:
 // https://docs.google.com/drawings/d/1jFQrO0IupWrlykTNzQ3Nv2SdiBiSz4UE9-V3-vDgBb0/
 //
 // # Import Sharing and HTMLImportLoader
 //
-// The HTML Imports spec calls for de-dup mechanism to share already loaded imports.
-// To implement this, the actual loading machinery is split out from HTMLImportChild to
-// HTMLImportLoader, and each loader shares HTMLImportLoader with other loader if the URL is same.
-// Check around HTMLImportsController::findLink() for more detail.
+// The HTML Imports spec calls for de-dup mechanism to share already loaded
+// imports.  To implement this, the actual loading machinery is split out from
+// HTMLImportChild to HTMLImportLoader, and each loader shares HTMLImportLoader
+// with other loader if the URL is same.  Check around
+// HTMLImportsController::findLink() for more detail.
 //
 // HTMLImportLoader can be shared by multiple imports.
 //
@@ -79,23 +83,23 @@ class HTMLImportLoader;
 //
 // # Script Blocking
 //
-// - An import blocks the HTML parser of its own imported document from running <script>
-//   until all of its children are loaded.
-//   Note that dynamically added import won't block the parser.
+// - An import blocks the HTML parser of its own imported document from running
+//   <script> until all of its children are loaded.  Note that dynamically added
+//   import won't block the parser.
 //
-// - An import under loading also blocks imported documents that follow from being created.
-//   This is because an import can include another import that has same URLs of following ones.
-//   In such case, the preceding import should be loaded and following ones should be de-duped.
+// - An import under loading also blocks imported documents that follow from
+//   being created.  This is because an import can include another import that
+//   has same URLs of following ones.  In such case, the preceding import should
+//   be loaded and following ones should be de-duped.
 //
 
 // The superclass of HTMLImportTreeRoot and HTMLImportChild
 // This represents the import tree data structure.
-class HTMLImport : public NoBaseWillBeGarbageCollectedFinalized<HTMLImport>, public TreeNode<HTMLImport> {
+class HTMLImport : public GarbageCollectedFinalized<HTMLImport>,
+                   public TreeNode<HTMLImport> {
 public:
-    enum SyncMode {
-        Sync  = 0,
-        Async = 1
-    };
+    enum SyncMode { Sync = 0,
+        Async = 1 };
 
     virtual ~HTMLImport() { }
 
@@ -122,7 +126,8 @@ protected:
     // It will be corrected through state update flow.
     explicit HTMLImport(SyncMode sync)
         : m_sync(sync)
-    { }
+    {
+    }
 
     static void recalcTreeState(HTMLImport* root);
 

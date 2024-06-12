@@ -23,12 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/DecodedDataDocumentParser.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/DocumentEncodingData.h"
 #include "core/html/parser/TextResourceDecoder.h"
+#include <memory>
 
 namespace blink {
 
@@ -38,17 +38,16 @@ DecodedDataDocumentParser::DecodedDataDocumentParser(Document& document)
 {
 }
 
-DecodedDataDocumentParser::~DecodedDataDocumentParser()
-{
-}
+DecodedDataDocumentParser::~DecodedDataDocumentParser() { }
 
-void DecodedDataDocumentParser::setDecoder(PassOwnPtr<TextResourceDecoder> decoder)
+void DecodedDataDocumentParser::setDecoder(
+    std::unique_ptr<TextResourceDecoder> decoder)
 {
     // If the decoder is explicitly unset rather than having ownership
     // transferred away by takeDecoder(), we need to make sure it's recreated
     // next time data is appended.
     m_needsDecoder = !decoder;
-    m_decoder = decoder;
+    m_decoder = std::move(decoder);
 }
 
 TextResourceDecoder* DecodedDataDocumentParser::decoder()
@@ -56,9 +55,9 @@ TextResourceDecoder* DecodedDataDocumentParser::decoder()
     return m_decoder.get();
 }
 
-PassOwnPtr<TextResourceDecoder> DecodedDataDocumentParser::takeDecoder()
+std::unique_ptr<TextResourceDecoder> DecodedDataDocumentParser::takeDecoder()
 {
-    return m_decoder.release();
+    return std::move(m_decoder);
 }
 
 void DecodedDataDocumentParser::appendBytes(const char* data, size_t length)
@@ -101,4 +100,4 @@ void DecodedDataDocumentParser::updateDocument(String& decodedData)
         append(decodedData);
 }
 
-};
+} // namespace blink

@@ -160,9 +160,7 @@
     <ClInclude Include="..\..\third_party\libcurl\src\vauth\digest.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vauth\ntlm.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vauth\vauth.h" />
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\axtls.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vtls\cyassl.h" />
-    <ClInclude Include="..\..\third_party\libcurl\src\vtls\darwinssl.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vtls\gskit.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vtls\gtls.h" />
     <ClInclude Include="..\..\third_party\libcurl\src\vtls\mbedtls.h" />
@@ -178,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\third_party\libcurl\src\amigaos.c" />
-    <ClCompile Include="..\..\third_party\libcurl\src\asyn-ares.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\asyn-thread.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\base64.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\conncache.c" />
@@ -269,7 +266,6 @@
     <ClCompile Include="..\..\third_party\libcurl\src\socks_sspi.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\speedcheck.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\splay.c" />
-    <ClCompile Include="..\..\third_party\libcurl\src\ssh.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\strcase.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\strdup.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\strerror.c" />
@@ -294,9 +290,7 @@
     <ClCompile Include="..\..\third_party\libcurl\src\vauth\spnego_sspi.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vauth\vauth.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\version.c" />
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\axtls.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\cyassl.c" />
-    <ClCompile Include="..\..\third_party\libcurl\src\vtls\darwinssl.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\gskit.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\gtls.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\mbedtls.c" />
@@ -305,6 +299,7 @@
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\polarssl_threadlock.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\schannel.c" />
+    <ClCompile Include="..\..\third_party\libcurl\src\vtls\schannel_verify.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\vtls\vtls.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\warnless.c" />
     <ClCompile Include="..\..\third_party\libcurl\src\wildcard.c" />
@@ -342,60 +337,61 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>curl</RootNamespace>
     <ProjectName>libcurl</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_vc6|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NoNode|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_vc6|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NoNode|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -430,7 +426,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_vc6|Win32'">
@@ -454,7 +450,7 @@
     <IntDir>$(SolutionDir)..\..\bin\$(Configuration)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NoNode|Win32'">
@@ -465,26 +461,27 @@
     <LibraryPath>$(SolutionDir)..\vc6\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)..\out\$(Platform)$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(Platform)$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NoNode|x64'">
     <OutDir>$(SolutionDir)..\out\$(Platform)$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(Platform)$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)..\out\$(Platform)$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(Platform)$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;_DEBUG;_LIB;HAVE_LIBZ=1;HAVE_ZLIB_H=1;USE_OPENSSL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;_DEBUG;_LIB;_WIN32_WINNT=0x0600;CURLRES_ARES=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;USE_WINSOCK=1;USE_SCHANNEL=1;USE_WINDOWS_SSPI=1;USE_WIN32_LDAP=1;USE_OPENSSL=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/wolfssl/;../../third_party/libcurl/include/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/wolfssl/;../../third_party/libcurl/include/;../../node/openssl;../../node/openssl/openssl/include;../../node/cares/include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -514,18 +511,20 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_vc6|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Custom</Optimization>
+      <Optimization>MinSpace</Optimization>
       <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;NDEBUG;_LIB;USING_VC6RT=1;USE_OPENSSL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../node/openssl/openssl/include;../../third_party/wolfssl/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../node/openssl/;../../node/openssl/openssl/include;../../third_party/wolfssl/</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -544,9 +543,9 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;NDEBUG;_LIB;USE_OPENSSL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;NDEBUG;_LIB;USE_OPENSSL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../third_party/wolfssl/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../third_party/wolfssl/;../../node/openssl/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <StringPooling>true</StringPooling>
@@ -556,6 +555,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -574,9 +574,9 @@
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;NDEBUG;_LIB;USING_VC6RT=1;HAVE_CYASSL_ERROR_SSL_H;HAVE_SNI=1;USE_CYASSL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_CYASSL;HAVE_CYASSL_OPTIONS_H;HAVE_CYASSL_ERROR_SSL_H;SIZEOF_LONG=4;SIZEOF_LONG_LONG=8;CURL_STATICLIB=1;BUILDING_LIBCURL=1;WIN32;NDEBUG;_LIB;USING_VC6RT=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../third_party/wolfssl/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../node/openssl/;../../node/openssl/openssl/include;../../third_party/wolfssl/</AdditionalIncludeDirectories>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <StringPooling>true</StringPooling>
@@ -619,12 +619,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;USE_OPENSSL=1;NDEBUG;_LIB;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB=1;BUILDING_LIBCURL=1;HAVE_LIBZ=1;HAVE_ZLIB_H=1;USE_OPENSSL=1;NDEBUG;_LIB;CURL_DISABLE_FTP=1;CURL_DISABLE_IMAP=1;CURL_DISABLE_LDAP=1;CURL_DISABLE_POP3=1;CURL_DISABLE_RTSP=1;CURL_DISABLE_SMTP=1;CURL_DISABLE_TELNET=1;CURL_DISABLE_TFTP=1;_WIN32_WINNT=0x0600;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../third_party/wolfssl/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/libcurl/;../../third_party/libcurl/src;../../third_party/libcurl/include/;../../third_party/wolfssl/;../../node/openssl/;../../node/openssl/openssl/include</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

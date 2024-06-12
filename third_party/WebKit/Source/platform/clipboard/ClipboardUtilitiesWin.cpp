@@ -24,15 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/clipboard/ClipboardUtilities.h"
 
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
-
-#if USING_VC6RT == 1
-#define PURE                    = 0
-#endif
 
 #include <shlwapi.h>
 

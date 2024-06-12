@@ -6,8 +6,8 @@
 #define FetchManager_h
 
 #include "bindings/core/v8/ScriptPromise.h"
-#include "wtf/HashSet.h"
-#include "wtf/OwnPtr.h"
+#include "core/dom/ContextLifecycleObserver.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
@@ -15,29 +15,26 @@ class ExecutionContext;
 class FetchRequestData;
 class ScriptState;
 
-class FetchManager final : public NoBaseWillBeGarbageCollectedFinalized<FetchManager> {
+class FetchManager final : public GarbageCollected<FetchManager>,
+                           public ContextLifecycleObserver {
+    USING_GARBAGE_COLLECTED_MIXIN(FetchManager);
+
 public:
-    static PassOwnPtrWillBeRawPtr<FetchManager> create(ExecutionContext* executionContext)
-    {
-        return adoptPtrWillBeNoop(new FetchManager(executionContext));
-    }
-    ~FetchManager();
+    static FetchManager* create(ExecutionContext*);
     ScriptPromise fetch(ScriptState*, FetchRequestData*);
-    void stop();
-    bool isStopped() const { return m_isStopped; }
+    void contextDestroyed(ExecutionContext*) override;
 
     DECLARE_TRACE();
 
 private:
+    explicit FetchManager(ExecutionContext*);
+
     class Loader;
 
-    explicit FetchManager(ExecutionContext*);
     // Removes loader from |m_loaders|.
     void onLoaderFinished(Loader*);
 
-    RawPtrWillBeMember<ExecutionContext> m_executionContext;
-    WillBeHeapHashSet<OwnPtrWillBeMember<Loader>> m_loaders;
-    bool m_isStopped;
+    HeapHashSet<Member<Loader>> m_loaders;
 };
 
 } // namespace blink

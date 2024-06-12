@@ -28,11 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#extendable-event-interface
+// https://w3c.github.io/ServiceWorker/#extendable-event-interface
 [
     Constructor(DOMString type, optional ExtendableEventInit eventInitDict),
     Exposed=ServiceWorker,
-    TypeChecking=Interface,
 ] interface ExtendableEvent : Event {
-    [CallWith=ScriptState, RaisesException] void waitUntil(any value);
+    [CallWith=ScriptState, RaisesException] void waitUntil(Promise<any> f);
 };

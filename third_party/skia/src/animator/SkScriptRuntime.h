@@ -28,13 +28,16 @@ public:
         kPropertyOpFailed
     };
 
-    SkScriptRuntime(SkTDScriptCallBackArray& callBackArray) : fCallBackArray(callBackArray)
-        {  }
+    SkScriptRuntime(SkTDScriptCallBackArray& callBackArray)
+        : fCallBackArray(callBackArray)
+    {
+    }
     ~SkScriptRuntime();
     bool executeTokens(unsigned char* opCode);
     bool getResult(SkOperand2* result);
     void untrack(SkOpArray* array);
     void untrack(SkString* string);
+
 private:
     void track(SkOpArray* array);
     void track(SkString* string);

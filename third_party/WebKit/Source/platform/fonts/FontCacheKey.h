@@ -32,6 +32,7 @@
 #define FontCacheKey_h
 
 #include "FontFaceCreationParams.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashTableDeletedValueType.h"
 #include "wtf/text/AtomicStringHash.h"
@@ -44,18 +45,25 @@ namespace blink {
 static const unsigned s_fontSizePrecisionMultiplier = 100;
 
 struct FontCacheKey {
-    WTF_MAKE_FAST_ALLOCATED(FontCacheKey);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     FontCacheKey()
         : m_creationParams()
         , m_fontSize(0)
-        , m_options(0) { }
+        , m_options(0)
+    {
+    }
     FontCacheKey(FontFaceCreationParams creationParams, float fontSize, unsigned options)
         : m_creationParams(creationParams)
         , m_fontSize(fontSize * s_fontSizePrecisionMultiplier)
-        , m_options(options) { }
+        , m_options(options)
+    {
+    }
     FontCacheKey(WTF::HashTableDeletedValueType)
-        : m_fontSize(hashTableDeletedSize()) { }
+        : m_fontSize(hashTableDeletedSize())
+    {
+    }
 
     unsigned hash() const
     {
@@ -84,6 +92,11 @@ public:
         return s_fontSizePrecisionMultiplier;
     }
 
+    void clearFontSize()
+    {
+        m_fontSize = 0;
+    }
+
 private:
     static unsigned hashTableDeletedSize()
     {
@@ -96,6 +109,7 @@ private:
 };
 
 struct FontCacheKeyHash {
+    STATIC_ONLY(FontCacheKeyHash);
     static unsigned hash(const FontCacheKey& key)
     {
         return key.hash();
@@ -109,7 +123,9 @@ struct FontCacheKeyHash {
     static const bool safeToCompareToEmptyOrDeleted = true;
 };
 
-struct FontCacheKeyTraits : WTF::SimpleClassHashTraits<FontCacheKey> { };
+struct FontCacheKeyTraits : WTF::SimpleClassHashTraits<FontCacheKey> {
+    STATIC_ONLY(FontCacheKeyTraits);
+};
 
 } // namespace blink
 

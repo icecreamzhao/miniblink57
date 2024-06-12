@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -6,15 +5,17 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkTypes.h"
+#if !defined(SK_BUILD_FOR_WIN32) && !defined(SK_BUILD_FOR_ANDROID)
 
 #include <stdarg.h>
 #include <stdio.h>
 
-void SkDebugf(const char format[], ...) {
+void SkDebugf(const char format[], ...)
+{
     va_list args;
     va_start(args, format);
     vfprintf(stderr, format, args);
     va_end(args);
 }
+#endif //!defined(SK_BUILD_FOR_WIN32) && !defined(SK_BUILD_FOR_ANDROID)

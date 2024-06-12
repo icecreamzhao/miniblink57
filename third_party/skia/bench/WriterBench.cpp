@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 The Android Open Source Project
  *
@@ -12,16 +11,19 @@
 
 class WriterBench : public Benchmark {
 public:
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
 protected:
-    const char* onGetName() override {
+    const char* onGetName() override
+    {
         return "writer";
     }
 
-    void onDraw(const int loops, SkCanvas*) override {
+    void onDraw(int loops, SkCanvas*) override
+    {
         static const char gStr[] = "abcdefghimjklmnopqrstuvwxyz";
         static const size_t gLen = strlen(gStr);
         SkWriter32 writer;
@@ -38,4 +40,4 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-DEF_BENCH( return new WriterBench(); )
+DEF_BENCH(return new WriterBench();)

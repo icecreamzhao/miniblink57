@@ -5,20 +5,22 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
+#include "SkPath.h"
 #include "SkRandom.h"
+#include "gm.h"
 
-#define W   400
-#define H   400
-#define N   10
+#define W 400
+#define H 400
+#define N 10
 
 static const SkScalar SH = SkIntToScalar(H);
 
-static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand) {
-    p->moveTo(rand.nextRangeScalar(0,  W), rand.nextRangeScalar(0,  H));
+static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand)
+{
+    p->moveTo(rand.nextRangeScalar(0, W), rand.nextRangeScalar(0, H));
     for (int x = 0; x < 2; ++x) {
-        p->quadTo(rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(0,  H),
-                rand.nextRangeScalar(0,  W), rand.nextRangeScalar(H / 4,  H));
+        p->quadTo(rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(0, H),
+            rand.nextRangeScalar(0, W), rand.nextRangeScalar(H / 4, H));
     }
     paint->setColor(rand.nextU());
     SkScalar width = rand.nextRangeScalar(1, 5);
@@ -27,12 +29,13 @@ static void rnd_quad(SkPath* p, SkPaint* paint, SkRandom& rand) {
     paint->setAlpha(0xFF);
 }
 
-static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand) {
-    p->moveTo(rand.nextRangeScalar(0,  W), rand.nextRangeScalar(0,  H));
+static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand)
+{
+    p->moveTo(rand.nextRangeScalar(0, W), rand.nextRangeScalar(0, H));
     for (int x = 0; x < 2; ++x) {
-        p->cubicTo(rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(0,  H),
-                rand.nextRangeScalar(0,  W), rand.nextRangeScalar(H / 4,  H),
-                rand.nextRangeScalar(W / 4,  W), rand.nextRangeScalar(H / 4,  H));
+        p->cubicTo(rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(0, H),
+            rand.nextRangeScalar(0, W), rand.nextRangeScalar(H / 4, H),
+            rand.nextRangeScalar(W / 4, W), rand.nextRangeScalar(H / 4, H));
     }
     paint->setColor(rand.nextU());
     SkScalar width = rand.nextRangeScalar(1, 5);
@@ -43,22 +46,24 @@ static void rnd_cubic(SkPath* p, SkPaint* paint, SkRandom& rand) {
 
 class BeziersGM : public skiagm::GM {
 public:
-    BeziersGM() {}
+    BeziersGM() { }
 
 protected:
-
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("beziers");
     }
 
-    SkISize onISize() override {
-        return SkISize::Make(W, H*2);
+    SkISize onISize() override
+    {
+        return SkISize::Make(W, H * 2);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
-        paint.setStrokeWidth(SkIntToScalar(9)/2);
+        paint.setStrokeWidth(SkIntToScalar(9) / 2);
         paint.setAntiAlias(true);
 
         SkRandom rand;
@@ -79,5 +84,4 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-static skiagm::GM* F0(void*) { return new BeziersGM; }
-static skiagm::GMRegistry R0(F0);
+DEF_GM(return new BeziersGM;)

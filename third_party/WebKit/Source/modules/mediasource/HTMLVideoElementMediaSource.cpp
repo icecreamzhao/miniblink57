@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediasource/HTMLVideoElementMediaSource.h"
 
 #include "core/html/HTMLVideoElement.h"
@@ -36,11 +35,8 @@
 
 namespace blink {
 
-HTMLVideoElementMediaSource::HTMLVideoElementMediaSource() { }
-
-HTMLVideoElementMediaSource::~HTMLVideoElementMediaSource() { }
-
-VideoPlaybackQuality* HTMLVideoElementMediaSource::getVideoPlaybackQuality(HTMLVideoElement& videoElement)
+VideoPlaybackQuality* HTMLVideoElementMediaSource::getVideoPlaybackQuality(
+    HTMLVideoElement& videoElement)
 {
     unsigned total = 0;
     unsigned dropped = 0;
@@ -52,7 +48,8 @@ VideoPlaybackQuality* HTMLVideoElementMediaSource::getVideoPlaybackQuality(HTMLV
         corrupted = webMediaPlayer->corruptedFrameCount();
     }
 
-    return VideoPlaybackQuality::create(videoElement.document(), total, dropped, corrupted);
+    return VideoPlaybackQuality::create(videoElement.document(), total, dropped,
+        corrupted);
 }
 
 } // namespace blink

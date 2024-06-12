@@ -188,7 +188,7 @@ Vector<PluginPackage*> PluginDatabase::plugins() const
     return result;
 }
 
-int PluginDatabase::preferredPluginCompare(const void* a, const void* b)
+int __cdecl PluginDatabase::preferredPluginCompare(const void* a, const void* b)
 {
     PluginPackage* pluginA = *static_cast<PluginPackage* const*>(a);
     PluginPackage* pluginB = *static_cast<PluginPackage* const*>(b);
@@ -288,8 +288,8 @@ String PluginDatabase::MIMETypeForExtension(const String& extension) const
 
 PluginPackage* PluginDatabase::findPlugin(const KURL& url, String& mimeType)
 {
-    if (!blink::RuntimeEnabledFeatures::npapiPluginsEnabled())
-        return nullptr;
+//     if (!blink::RuntimeEnabledFeatures::npapiPluginsEnabled())
+//         return nullptr;
 
     if (!mimeType.isEmpty())
         return pluginForMIMEType(mimeType);
@@ -342,7 +342,7 @@ void PluginDatabase::getDeletedPlugins(PluginSet& plugins) const
 
 bool PluginDatabase::add(PassRefPtr<PluginPackage> prpPackage)
 {
-    ASSERT_ARG(prpPackage, prpPackage);
+    //ASSERT_ARG(prpPackage, prpPackage);
 
     RefPtr<PluginPackage> package = prpPackage;
 

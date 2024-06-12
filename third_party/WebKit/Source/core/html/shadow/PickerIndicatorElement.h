@@ -31,7 +31,6 @@
 #ifndef PickerIndicatorElement_h
 #define PickerIndicatorElement_h
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/HTMLDivElement.h"
 #include "core/html/forms/DateTimeChooser.h"
 #include "core/html/forms/DateTimeChooserClient.h"
@@ -40,11 +39,14 @@ namespace blink {
 
 class HTMLInputElement;
 
-class PickerIndicatorElement final : public HTMLDivElement, public DateTimeChooserClient {
+class PickerIndicatorElement final : public HTMLDivElement,
+                                     public DateTimeChooserClient {
+    USING_GARBAGE_COLLECTED_MIXIN(PickerIndicatorElement);
+
 public:
     // PickerIndicatorOwner implementer must call removePickerIndicatorOwner when
     // it doesn't handle event, e.g. at destruction.
-    class PickerIndicatorOwner : public WillBeGarbageCollectedMixin {
+    class PickerIndicatorOwner : public GarbageCollectedMixin {
     public:
         virtual ~PickerIndicatorOwner() { }
         virtual bool isPickerIndicatorOwnerDisabledOrReadOnly() const = 0;
@@ -55,7 +57,7 @@ public:
         virtual bool setupDateTimeChooserParameters(DateTimeChooserParameters&) = 0;
     };
 
-    static PassRefPtrWillBeRawPtr<PickerIndicatorElement> create(Document&, PickerIndicatorOwner&);
+    static PickerIndicatorElement* create(Document&, PickerIndicatorOwner&);
     ~PickerIndicatorElement() override;
     DECLARE_VIRTUAL_TRACE();
 
@@ -75,19 +77,22 @@ private:
     PickerIndicatorElement(Document&, PickerIndicatorOwner&);
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
     void defaultEventHandler(Event*) override;
-    void detach(const AttachContext& = AttachContext()) override;
+    void detachLayoutTree(const AttachContext& = AttachContext()) override;
     bool isPickerIndicatorElement() const override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void didNotifySubtreeInsertionsToDocument() override;
 
     HTMLInputElement* hostInput();
 
-    RawPtrWillBeMember<PickerIndicatorOwner> m_pickerIndicatorOwner;
-    RefPtr<DateTimeChooser> m_chooser;
+    Member<PickerIndicatorOwner> m_pickerIndicatorOwner;
+    Member<DateTimeChooser> m_chooser;
 };
 
-DEFINE_TYPE_CASTS(PickerIndicatorElement, Element, element, element->isPickerIndicatorElement(), element.isPickerIndicatorElement());
+DEFINE_TYPE_CASTS(PickerIndicatorElement,
+    Element,
+    element,
+    element->isPickerIndicatorElement(),
+    element.isPickerIndicatorElement());
 
-}
-#endif
+} // namespace blink
 #endif

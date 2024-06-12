@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebArrayBufferView.h"
 
 #include "bindings/core/v8/V8ArrayBufferView.h"
@@ -58,7 +57,8 @@ unsigned WebArrayBufferView::byteLength() const
     return m_private->byteLength();
 }
 
-WebArrayBufferView* WebArrayBufferView::createFromV8Value(v8::Local<v8::Value> value)
+WebArrayBufferView* WebArrayBufferView::createFromV8Value(
+    v8::Local<v8::Value> value)
 {
     if (!value->IsArrayBufferView())
         return 0;
@@ -66,18 +66,18 @@ WebArrayBufferView* WebArrayBufferView::createFromV8Value(v8::Local<v8::Value> v
     return new WebArrayBufferView(view);
 }
 
-WebArrayBufferView::WebArrayBufferView(const PassRefPtr<DOMArrayBufferView>& value)
+WebArrayBufferView::WebArrayBufferView(DOMArrayBufferView* value)
     : m_private(value)
 {
 }
 
-WebArrayBufferView& WebArrayBufferView::operator=(const PassRefPtr<DOMArrayBufferView>& value)
+WebArrayBufferView& WebArrayBufferView::operator=(DOMArrayBufferView* value)
 {
     m_private = value;
     return *this;
 }
 
-WebArrayBufferView::operator PassRefPtr<DOMArrayBufferView>() const
+WebArrayBufferView::operator DOMArrayBufferView*() const
 {
     return m_private.get();
 }

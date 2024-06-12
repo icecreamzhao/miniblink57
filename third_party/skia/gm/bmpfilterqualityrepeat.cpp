@@ -17,19 +17,19 @@ public:
     BmpFilterQualityRepeat() { this->setBGColor(sk_tool_utils::color_to_565(0xFFCCBBAA)); }
 
 protected:
-
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         fBmp.allocN32Pixels(40, 40, true);
         SkCanvas canvas(fBmp);
         SkBitmap colorBmp;
         colorBmp.allocN32Pixels(20, 20, true);
         colorBmp.eraseColor(0xFFFF0000);
         canvas.drawBitmap(colorBmp, 0, 0);
-        colorBmp.eraseColor(0xFF008200);
+        colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFF008200));
         canvas.drawBitmap(colorBmp, 20, 0);
-        colorBmp.eraseColor(0xFFFF9000);
+        colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFFFF9000));
         canvas.drawBitmap(colorBmp, 0, 20);
-        colorBmp.eraseColor(0xFF2000FF);
+        colorBmp.eraseColor(sk_tool_utils::color_to_565(0xFF2000FF));
         canvas.drawBitmap(colorBmp, 20, 20);
     }
 
@@ -37,21 +37,22 @@ protected:
 
     SkISize onISize() override { return SkISize::Make(1000, 235); }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
 
-        static const struct { 
+        static const struct {
             SkFilterQuality fQuality;
             const char* fName;
         } kQualities[] = {
-            {kNone_SkFilterQuality, "none"},
-            {kLow_SkFilterQuality, "low"},
-            {kMedium_SkFilterQuality, "medium"},
-            {kHigh_SkFilterQuality, "high"},
+            { kNone_SkFilterQuality, "none" },
+            { kLow_SkFilterQuality, "low" },
+            { kMedium_SkFilterQuality, "medium" },
+            { kHigh_SkFilterQuality, "high" },
         };
 
         for (size_t q = 0; q < SK_ARRAY_COUNT(kQualities); ++q) {
             SkPaint paint;
-            sk_tool_utils::set_portable_typeface_always(&paint);
+            sk_tool_utils::set_portable_typeface(&paint);
             paint.setFilterQuality(kQualities[q].fQuality);
             SkPaint bmpPaint(paint);
             SkMatrix lm = SkMatrix::I();
@@ -60,7 +61,7 @@ protected:
             lm.setTranslateY(330);
 
             static const SkShader::TileMode kTM = SkShader::kRepeat_TileMode;
-            bmpPaint.setShader(SkShader::CreateBitmapShader(fBmp, kTM, kTM, &lm))->unref();
+            bmpPaint.setShader(SkShader::MakeBitmapShader(fBmp, kTM, kTM, &lm));
             SkRect rect = SkRect::MakeLTRB(20, 60, 220, 210);
             canvas->drawRect(rect, bmpPaint);
             paint.setAntiAlias(true);
@@ -70,11 +71,11 @@ protected:
     }
 
 private:
-    SkBitmap    fBmp;
+    SkBitmap fBmp;
 
     typedef skiagm::GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(BmpFilterQualityRepeat); )
+DEF_GM(return new BmpFilterQualityRepeat;)

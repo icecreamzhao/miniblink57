@@ -109,42 +109,42 @@ typedef struct UConverter UConverter;
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to ICU (%UXXXX) 
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_ICU       NULL
+#define UCNV_ESCAPE_ICU NULL
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to JAVA (\\uXXXX)
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_JAVA      "J"
+#define UCNV_ESCAPE_JAVA "J"
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to C (\\uXXXX \\UXXXXXXXX)
  * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\\xXXXX)
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_C         "C"
+#define UCNV_ESCAPE_C "C"
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
  * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Decimal escape \htmlonly(&amp;#DDDD;)\endhtmlonly
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_XML_DEC   "D"
+#define UCNV_ESCAPE_XML_DEC "D"
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
  * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Hex escape \htmlonly(&amp;#xXXXX;)\endhtmlonly
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_XML_HEX   "X"
+#define UCNV_ESCAPE_XML_HEX "X"
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to Unicode (U+XXXXX)
  * @stable ICU 2.0
  */
-#define UCNV_ESCAPE_UNICODE   "U"
+#define UCNV_ESCAPE_UNICODE "U"
 
 /**
  * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to CSS2 conventions (\\HH..H<space>, that is,
  * a backslash, 1..6 hex digits, and a space)
  * @stable ICU 4.0
  */
-#define UCNV_ESCAPE_CSS2   "S"
+#define UCNV_ESCAPE_CSS2 "S"
 
 /** 
  * The process condition code to be used with the callbacks.  
@@ -153,9 +153,9 @@ typedef struct UConverter UConverter;
  * @stable ICU 2.0
  */
 typedef enum {
-    UCNV_UNASSIGNED = 0,  /**< The code point is unassigned.
+    UCNV_UNASSIGNED = 0, /**< The code point is unassigned.
                              The error code U_INVALID_CHAR_FOUND will be set. */
-    UCNV_ILLEGAL = 1,     /**< The code point is illegal. For example, 
+    UCNV_ILLEGAL = 1, /**< The code point is illegal. For example, 
                              \\x81\\x2E is illegal in SJIS because \\x2E
                              is not a valid trail byte for the \\x81 
                              lead byte.
@@ -163,17 +163,17 @@ typedef enum {
                              in UTF-8 (like \\xC1\\xA1 instead of \\x61 for U+0061)
                              are also illegal, not just irregular.
                              The error code U_ILLEGAL_CHAR_FOUND will be set. */
-    UCNV_IRREGULAR = 2,   /**< The codepoint is not a regular sequence in 
+    UCNV_IRREGULAR = 2, /**< The codepoint is not a regular sequence in 
                              the encoding. For example, \\xED\\xA0\\x80..\\xED\\xBF\\xBF
                              are irregular UTF-8 byte sequences for single surrogate
                              code points.
                              The error code U_INVALID_CHAR_FOUND will be set. */
-    UCNV_RESET = 3,       /**< The callback is called with this reason when a
+    UCNV_RESET = 3, /**< The callback is called with this reason when a
                              'reset' has occured. Callback should reset all
                              state. */
-    UCNV_CLOSE = 4,        /**< Called when the converter is closed. The
+    UCNV_CLOSE = 4, /**< Called when the converter is closed. The
                              callback should release any allocated memory.*/
-    UCNV_CLONE = 5         /**< Called when ucnv_safeClone() is called on the
+    UCNV_CLONE = 5 /**< Called when ucnv_safeClone() is called on the
                               converter. the pointer available as the
                               'context' is an alias to the original converters'
                               context pointer. If the context must be owned
@@ -184,38 +184,35 @@ typedef enum {
                            */
 } UConverterCallbackReason;
 
-
 /**
  * The structure for the fromUnicode callback function parameter.
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;              /**< The size of this struct. @stable ICU 2.0 */
-    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0    */
-    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0  */
-    const UChar *source;        /**< Pointer to the source source buffer. @stable ICU 2.0    */
-    const UChar *sourceLimit;   /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
-    char *target;               /**< Pointer to the target buffer. @stable ICU 2.0    */
-    const char *targetLimit;    /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
-    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
+    uint16_t size; /**< The size of this struct. @stable ICU 2.0 */
+    UBool flush; /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0    */
+    UConverter* converter; /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0  */
+    const UChar* source; /**< Pointer to the source source buffer. @stable ICU 2.0    */
+    const UChar* sourceLimit; /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
+    char* target; /**< Pointer to the target buffer. @stable ICU 2.0    */
+    const char* targetLimit; /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
+    int32_t* offsets; /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
 } UConverterFromUnicodeArgs;
-
 
 /**
  * The structure for the toUnicode callback function parameter.
  * @stable ICU 2.0
  */
 typedef struct {
-    uint16_t size;              /**< The size of this struct   @stable ICU 2.0 */
-    UBool flush;                /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0   */
-    UConverter *converter;      /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0 */
-    const char *source;         /**< Pointer to the source source buffer. @stable ICU 2.0    */
-    const char *sourceLimit;    /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
-    UChar *target;              /**< Pointer to the target buffer. @stable ICU 2.0    */
-    const UChar *targetLimit;   /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
-    int32_t *offsets;           /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
+    uint16_t size; /**< The size of this struct   @stable ICU 2.0 */
+    UBool flush; /**< The internal state of converter will be reset and data flushed if set to TRUE. @stable ICU 2.0   */
+    UConverter* converter; /**< Pointer to the converter that is opened and to which this struct is passed as an argument. @stable ICU 2.0 */
+    const char* source; /**< Pointer to the source source buffer. @stable ICU 2.0    */
+    const char* sourceLimit; /**< Pointer to the limit (end + 1) of source buffer. @stable ICU 2.0    */
+    UChar* target; /**< Pointer to the target buffer. @stable ICU 2.0    */
+    const UChar* targetLimit; /**< Pointer to the limit (end + 1) of target buffer. @stable ICU 2.0     */
+    int32_t* offsets; /**< Pointer to the buffer that recieves the offsets. *offset = blah ; offset++;. @stable ICU 2.0  */
 } UConverterToUnicodeArgs;
-
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -231,16 +228,14 @@ typedef struct {
  * @param err This should always be set to a failure status prior to calling.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
-                  const void *context,
-                  UConverterFromUnicodeArgs *fromUArgs,
-                  const UChar* codeUnits,
-                  int32_t length,
-                  UChar32 codePoint,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
-
-
+U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP(
+    const void* context,
+    UConverterFromUnicodeArgs* fromUArgs,
+    const UChar* codeUnits,
+    int32_t length,
+    UChar32 codePoint,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -255,13 +250,13 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
  * @param err This should always be set to a failure status prior to calling.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
-                  const void *context,
-                  UConverterToUnicodeArgs *toUArgs,
-                  const char* codeUnits,
-                  int32_t length,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP(
+    const void* context,
+    UConverterToUnicodeArgs* toUArgs,
+    const char* codeUnits,
+    int32_t length,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -282,14 +277,14 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
-                  const void *context,
-                  UConverterFromUnicodeArgs *fromUArgs,
-                  const UChar* codeUnits,
-                  int32_t length,
-                  UChar32 codePoint,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP(
+    const void* context,
+    UConverterFromUnicodeArgs* fromUArgs,
+    const UChar* codeUnits,
+    int32_t length,
+    UChar32 codePoint,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -312,14 +307,14 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
  * @see ucnv_setSubstChars
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
-                  const void *context,
-                  UConverterFromUnicodeArgs *fromUArgs,
-                  const UChar* codeUnits,
-                  int32_t length,
-                  UChar32 codePoint,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE(
+    const void* context,
+    UConverterFromUnicodeArgs* fromUArgs,
+    const UChar* codeUnits,
+    int32_t length,
+    UChar32 codePoint,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -368,15 +363,14 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
-                  const void *context,
-                  UConverterFromUnicodeArgs *fromUArgs,
-                  const UChar* codeUnits,
-                  int32_t length,
-                  UChar32 codePoint,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
-
+U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE(
+    const void* context,
+    UConverterFromUnicodeArgs* fromUArgs,
+    const UChar* codeUnits,
+    int32_t length,
+    UChar32 codePoint,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -396,13 +390,13 @@ U_STABLE void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
-                  const void *context,
-                  UConverterToUnicodeArgs *toUArgs,
-                  const char* codeUnits,
-                  int32_t length,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP(
+    const void* context,
+    UConverterToUnicodeArgs* toUArgs,
+    const char* codeUnits,
+    int32_t length,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -422,13 +416,13 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
  *      otherwise this value will be set to a failure status.
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
-                  const void *context,
-                  UConverterToUnicodeArgs *toUArgs,
-                  const char* codeUnits,
-                  int32_t length,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE(
+    const void* context,
+    UConverterToUnicodeArgs* toUArgs,
+    const char* codeUnits,
+    int32_t length,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 /**
  * DO NOT CALL THIS FUNCTION DIRECTLY!
@@ -448,16 +442,16 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
  * @stable ICU 2.0
  */
 
-U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
-                  const void *context,
-                  UConverterToUnicodeArgs *toUArgs,
-                  const char* codeUnits,
-                  int32_t length,
-                  UConverterCallbackReason reason,
-                  UErrorCode * err);
+U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE(
+    const void* context,
+    UConverterToUnicodeArgs* toUArgs,
+    const char* codeUnits,
+    int32_t length,
+    UConverterCallbackReason reason,
+    UErrorCode* err);
 
 #endif
 
 #endif
 
-/*UCNV_ERR_H*/ 
+/*UCNV_ERR_H*/

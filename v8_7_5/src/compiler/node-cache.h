@@ -12,85 +12,87 @@
 namespace v8 {
 namespace internal {
 
-// Forward declarations.
-class Zone;
-template <typename>
-class ZoneVector;
+    // Forward declarations.
+    class Zone;
+    template <typename>
+    class ZoneVector;
 
+    namespace compiler {
 
-namespace compiler {
+        // Forward declarations.
+        class Node;
 
-// Forward declarations.
-class Node;
+        // A cache for nodes based on a key. Useful for implementing canonicalization of
+        // nodes such as constants, parameters, etc.
+        template <typename Key, typename Hash = base::hash<Key>,
+            typename Pred = std::equal_to<Key>>
+        class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) NodeCache final {
+        public:
+            explicit NodeCache(unsigned max = 256)
+                : entries_(nullptr)
+                , size_(0)
+                , max_(max)
+            {
+            }
+            ~NodeCache() = default;
 
+            // Search for node associated with {key} and return a pointer to a memory
+            // location in this cache that stores an entry for the key. If the location
+            // returned by this method contains a non-nullptr node, the caller can use
+            // that
+            // node. Otherwise it is the responsibility of the caller to fill the entry
+            // with a new node.
+            // Note that a previous cache entry may be overwritten if the cache becomes
+            // too full or encounters too many hash collisions.
+            Node** Find(Zone* zone, Key key);
 
-// A cache for nodes based on a key. Useful for implementing canonicalization of
-// nodes such as constants, parameters, etc.
-template <typename Key, typename Hash = base::hash<Key>,
-          typename Pred = std::equal_to<Key> >
-class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) NodeCache final {
- public:
-  explicit NodeCache(unsigned max = 256)
-      : entries_(nullptr), size_(0), max_(max) {}
-  ~NodeCache() = default;
+            // Appends all nodes from this cache to {nodes}.
+            void GetCachedNodes(ZoneVector<Node*>* nodes);
 
-  // Search for node associated with {key} and return a pointer to a memory
-  // location in this cache that stores an entry for the key. If the location
-  // returned by this method contains a non-nullptr node, the caller can use
-  // that
-  // node. Otherwise it is the responsibility of the caller to fill the entry
-  // with a new node.
-  // Note that a previous cache entry may be overwritten if the cache becomes
-  // too full or encounters too many hash collisions.
-  Node** Find(Zone* zone, Key key);
+        private:
+            struct Entry;
 
-  // Appends all nodes from this cache to {nodes}.
-  void GetCachedNodes(ZoneVector<Node*>* nodes);
+            Entry* entries_; // lazily-allocated hash entries.
+            size_t size_;
+            size_t max_;
+            Hash hash_;
+            Pred pred_;
 
- private:
-  struct Entry;
+            bool Resize(Zone* zone);
 
-  Entry* entries_;  // lazily-allocated hash entries.
-  size_t size_;
-  size_t max_;
-  Hash hash_;
-  Pred pred_;
+            DISALLOW_COPY_AND_ASSIGN(NodeCache);
+        };
 
-  bool Resize(Zone* zone);
+        // Various default cache types.
+        using Int32NodeCache = NodeCache<int32_t>;
+        using Int64NodeCache = NodeCache<int64_t>;
 
-  DISALLOW_COPY_AND_ASSIGN(NodeCache);
-};
-
-// Various default cache types.
-typedef NodeCache<int32_t> Int32NodeCache;
-typedef NodeCache<int64_t> Int64NodeCache;
-
-// All we want is the numeric value of the RelocInfo::Mode enum. We typedef
-// below to avoid pulling in assembler.h
-typedef char RelocInfoMode;
-typedef std::pair<int32_t, RelocInfoMode> RelocInt32Key;
-typedef std::pair<int64_t, RelocInfoMode> RelocInt64Key;
-typedef NodeCache<RelocInt32Key> RelocInt32NodeCache;
-typedef NodeCache<RelocInt64Key> RelocInt64NodeCache;
+        // All we want is the numeric value of the RelocInfo::Mode enum. We typedef
+        // below to avoid pulling in assembler.h
+        using RelocInfoMode = char;
+        using RelocInt32Key = std::pair<int32_t, RelocInfoMode>;
+        using RelocInt64Key = std::pair<int64_t, RelocInfoMode>;
+        using RelocInt32NodeCache = NodeCache<RelocInt32Key>;
+        using RelocInt64NodeCache = NodeCache<RelocInt64Key>;
 #if V8_HOST_ARCH_32_BIT
-typedef Int32NodeCache IntPtrNodeCache;
+        using IntPtrNodeCache = Int32NodeCache;
 #else
-typedef Int64NodeCache IntPtrNodeCache;
+        using IntPtrNodeCache = Int64NodeCache;
 #endif
 
-// Explicit instantiation declarations.
-extern template class EXPORT_TEMPLATE_DECLARE(
-    V8_EXPORT_PRIVATE) NodeCache<int32_t>;
-extern template class EXPORT_TEMPLATE_DECLARE(
-    V8_EXPORT_PRIVATE) NodeCache<int64_t>;
+        // Explicit instantiation declarations.
+        extern template class EXPORT_TEMPLATE_DECLARE(
+            V8_EXPORT_PRIVATE) NodeCache<int32_t>;
+        extern template class EXPORT_TEMPLATE_DECLARE(
+            V8_EXPORT_PRIVATE) NodeCache<int64_t>;
 
-extern template class EXPORT_TEMPLATE_DECLARE(
-    V8_EXPORT_PRIVATE) NodeCache<RelocInt32Key>;
-extern template class EXPORT_TEMPLATE_DECLARE(
-    V8_EXPORT_PRIVATE) NodeCache<RelocInt64Key>;
+        extern template class EXPORT_TEMPLATE_DECLARE(
+            V8_EXPORT_PRIVATE) NodeCache<RelocInt32Key>;
+        extern template class EXPORT_TEMPLATE_DECLARE(
+            V8_EXPORT_PRIVATE) NodeCache<RelocInt64Key>;
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_NODE_CACHE_H_
+#endif // V8_COMPILER_NODE_CACHE_H_

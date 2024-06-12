@@ -13,14 +13,12 @@
 
 class SkBoundary : public SkRefCnt {
 public:
-    
-
     // These must be 0, 1, 2, 3 for efficiency in the subclass implementations
     enum Edge {
-        kTop    = 0,
-        kRight  = 1,
+        kTop = 0,
+        kRight = 1,
         kBottom = 2,
-        kLeft   = 3
+        kLeft = 3
     };
     // Edge index goes clockwise around the boundary, beginning at the "top"
     virtual SkPoint eval(Edge, SkScalar unitInterval) = 0;

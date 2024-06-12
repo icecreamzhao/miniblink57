@@ -32,66 +32,88 @@
 #define TextAutosizer_h
 
 #include "core/CoreExport.h"
-#include "core/layout/LayoutObject.h"
-#include "core/layout/LayoutTable.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
+#include <unicode/uchar.h>
 
 namespace blink {
 
+class ComputedStyle;
 class Document;
-class LayoutListItem;
-class LayoutListMarker;
+class IntSize;
 class LayoutBlock;
+class LayoutObject;
+class LayoutTable;
+class LayoutText;
+class LocalFrame;
+class Page;
+class SubtreeLayoutScope;
 
 // Single-pass text autosizer. Documentation at:
 // http://tinyurl.com/TextAutosizer
 
-class CORE_EXPORT TextAutosizer final : public NoBaseWillBeGarbageCollectedFinalized<TextAutosizer> {
+class CORE_EXPORT TextAutosizer final
+    : public GarbageCollectedFinalized<TextAutosizer> {
     WTF_MAKE_NONCOPYABLE(TextAutosizer);
+
 public:
-    static PassOwnPtrWillBeRawPtr<TextAutosizer> create(const Document* document)
+    ~TextAutosizer();
+    static TextAutosizer* create(const Document* document)
     {
-        return adoptPtrWillBeNoop(new TextAutosizer(document));
+        return new TextAutosizer(document);
     }
     static float computeAutosizedFontSize(float specifiedSize, float multiplier);
 
     void updatePageInfoInAllFrames();
     void updatePageInfo();
-    void record(const LayoutBlock*);
-    void destroy(const LayoutBlock*);
+    void record(LayoutBlock*);
+    void record(LayoutText*);
+    void destroy(LayoutBlock*);
+
+    bool pageNeedsAutosizing() const;
+
+#ifdef TENCENT_CHANGES
+    bool checkTextAutoSizerConsistent();
+#endif
 
     DECLARE_TRACE();
 
     class LayoutScope {
+        STACK_ALLOCATED();
+
     public:
-        explicit LayoutScope(LayoutBlock*);
+        explicit LayoutScope(LayoutBlock*, SubtreeLayoutScope* = nullptr);
         ~LayoutScope();
+
     protected:
-        TextAutosizer* m_textAutosizer;
+        Member<TextAutosizer> m_textAutosizer;
         LayoutBlock* m_block;
     };
 
     class TableLayoutScope : LayoutScope {
+        STACK_ALLOCATED();
+
     public:
         explicit TableLayoutScope(LayoutTable*);
     };
 
     class CORE_EXPORT DeferUpdatePageInfo {
         STACK_ALLOCATED();
+
     public:
         explicit DeferUpdatePageInfo(Page*);
         ~DeferUpdatePageInfo();
+
     private:
-        RefPtrWillBeMember<LocalFrame> m_mainFrame;
+        Member<LocalFrame> m_mainFrame;
     };
 
 private:
-    typedef HashSet<const LayoutBlock*> BlockSet;
+    typedef HashSet<LayoutBlock*> BlockSet;
+    typedef HashSet<const LayoutBlock*> ConstBlockSet;
 
     enum HasEnoughTextToAutosize {
         UnknownAmountOfText,
@@ -104,28 +126,31 @@ private:
         LayoutNeeded // Use this if changing a multiplier outside of layout.
     };
 
-    enum BeginLayoutBehavior {
-        StopLayout,
-        ContinueLayout
-    };
+    enum BeginLayoutBehavior { StopLayout,
+        ContinueLayout };
 
-    enum InflateBehavior {
-        ThisBlockOnly,
-        DescendToInnerBlocks
-    };
+    enum InflateBehavior { ThisBlockOnly,
+        DescendToInnerBlocks };
 
     enum BlockFlag {
         // A block that is evaluated for becoming a cluster root.
         POTENTIAL_ROOT = 1 << 0,
         // A cluster root that establishes an independent multiplier.
         INDEPENDENT = 1 << 1,
-        // A cluster root with an explicit width. These are likely to be independent.
+        // A cluster root with an explicit width. These are likely to be
+        // independent.
         EXPLICIT_WIDTH = 1 << 2,
         // A cluster that is wider or narrower than its parent. These also create an
         // independent multiplier, but this state cannot be determined until layout.
         WIDER_OR_NARROWER = 1 << 3,
         // A cluster that suppresses autosizing.
         SUPPRESSING = 1 << 4
+    };
+
+    enum InheritParentMultiplier {
+        Unknown,
+        InheritMultiplier,
+        DontInheritMultiplier
     };
 
     typedef unsigned BlockFlags;
@@ -135,41 +160,44 @@ private:
     // belong to a supercluster will share a common multiplier and
     // text-length-based autosizing status.
     struct Supercluster {
+        USING_FAST_MALLOC(Supercluster);
+
+    public:
         explicit Supercluster(const BlockSet* roots)
             : m_roots(roots)
             , m_hasEnoughTextToAutosize(UnknownAmountOfText)
             , m_multiplier(0)
+            , m_inheritParentMultiplier(Unknown)
         {
         }
 
-        const BlockSet* const m_roots;
+        const BlockSet* m_roots;
         HasEnoughTextToAutosize m_hasEnoughTextToAutosize;
         float m_multiplier;
+        InheritParentMultiplier m_inheritParentMultiplier;
     };
 
     struct Cluster {
-        explicit Cluster(const LayoutBlock* root, BlockFlags flags, Cluster* parent, Supercluster* supercluster = nullptr)
-            : m_root(root)
-            , m_flags(flags)
-            , m_deepestBlockContainingAllText(nullptr)
-            , m_parent(parent)
-            , m_multiplier(0)
-            , m_hasEnoughTextToAutosize(UnknownAmountOfText)
-            , m_supercluster(supercluster)
-            , m_hasTableAncestor(root->isTableCell() || (m_parent && m_parent->m_hasTableAncestor))
-        {
-        }
+        USING_FAST_MALLOC(Cluster);
+
+    public:
+        explicit Cluster(const LayoutBlock* root,
+            BlockFlags,
+            Cluster* parent,
+            Supercluster* = nullptr);
 
         const LayoutBlock* const m_root;
         BlockFlags m_flags;
         // The deepest block containing all text is computed lazily (see:
-        // deepestBlockContainingAllText). A value of 0 indicates the value has not been computed yet.
+        // deepestBlockContainingAllText). A value of 0 indicates the value has not
+        // been computed yet.
         const LayoutBlock* m_deepestBlockContainingAllText;
         Cluster* m_parent;
-        // The multiplier is computed lazily (see: clusterMultiplier) because it must be calculated
-        // after the lowest block containing all text has entered layout (the
-        // m_blocksThatHaveBegunLayout assertions cover this). Note: the multiplier is still
-        // calculated when m_autosize is false because child clusters may depend on this multiplier.
+        // The multiplier is computed lazily (see: clusterMultiplier) because it
+        // must be calculated after the lowest block containing all text has entered
+        // layout (the m_blocksThatHaveBegunLayout assertions cover this). Note: the
+        // multiplier is still calculated when m_autosize is false because child
+        // clusters may depend on this multiplier.
         float m_multiplier;
         HasEnoughTextToAutosize m_hasEnoughTextToAutosize;
         // A set of blocks that are similar to this block.
@@ -177,12 +205,11 @@ private:
         bool m_hasTableAncestor;
     };
 
-    enum TextLeafSearch {
-        First,
-        Last
-    };
+    enum TextLeafSearch { First,
+        Last };
 
     struct FingerprintSourceData {
+        STACK_ALLOCATED();
         FingerprintSourceData()
             : m_parentHash(0)
             , m_qualifiedNameHash(0)
@@ -204,36 +231,64 @@ private:
         "sizeof(FingerprintSourceData) must be a multiple of UChar");
 
     typedef unsigned Fingerprint;
-    typedef HashMap<Fingerprint, OwnPtr<Supercluster>> SuperclusterMap;
-    typedef Vector<OwnPtr<Cluster>> ClusterStack;
+    typedef Vector<std::unique_ptr<Cluster>> ClusterStack;
 
     // Fingerprints are computed during style recalc, for (some subset of)
     // blocks that will become cluster roots.
+    // Clusters whose roots share the same fingerprint use the same multiplier
     class FingerprintMapper {
+        DISALLOW_NEW();
+
     public:
-        void add(const LayoutObject*, Fingerprint);
-        void addTentativeClusterRoot(const LayoutBlock*, Fingerprint);
+        void add(LayoutObject*, Fingerprint);
+        void addTentativeClusterRoot(LayoutBlock*, Fingerprint);
         // Returns true if any BlockSet was modified or freed by the removal.
-        bool remove(const LayoutObject*);
+        bool remove(LayoutObject*);
         Fingerprint get(const LayoutObject*);
         BlockSet* getTentativeClusterRoots(Fingerprint);
+        Supercluster* createSuperclusterIfNeeded(LayoutBlock*, bool& isNewEntry);
         bool hasFingerprints() const { return !m_fingerprints.isEmpty(); }
+#ifdef TENCENT_CHANGES
+        void addMultiplier(Fingerprint, float);
+        float getMultiplier(Fingerprint);
+#endif
+        HashSet<Supercluster*>& getPotentiallyInconsistentSuperclusters()
+        {
+            return m_potentiallyInconsistentSuperclusters;
+        }
+
     private:
         typedef HashMap<const LayoutObject*, Fingerprint> FingerprintMap;
-        typedef HashMap<Fingerprint, OwnPtr<BlockSet>> ReverseFingerprintMap;
+        typedef HashMap<Fingerprint, std::unique_ptr<BlockSet>>
+            ReverseFingerprintMap;
+        typedef HashMap<Fingerprint, std::unique_ptr<Supercluster>> SuperclusterMap;
+#ifdef TENCENT_CHANGES
+        //multipliers applied
+        typedef HashMap<Fingerprint, float> ReverseMultiplierMap;
+#endif
 
         FingerprintMap m_fingerprints;
         ReverseFingerprintMap m_blocksForFingerprint;
-#if ENABLE(ASSERT)
+        // Maps fingerprints to superclusters. Superclusters persist across layouts.
+        SuperclusterMap m_superclusters;
+        // Superclusters that need to be checked for consistency at the start of the
+        // next layout.
+        HashSet<Supercluster*> m_potentiallyInconsistentSuperclusters;
+#ifdef TENCENT_CHANGES
+        ReverseMultiplierMap m_multipliers;
+#endif
+#if DCHECK_IS_ON()
         void assertMapsAreConsistent();
 #endif
     };
 
     struct PageInfo {
+        DISALLOW_NEW();
         PageInfo()
             : m_frameWidth(0)
             , m_layoutWidth(0)
-            , m_baseMultiplier(0)
+            , m_accessibilityFontScaleFactor(1)
+            , m_deviceScaleAdjustment(1)
             , m_pageNeedsAutosizing(false)
             , m_hasAutosized(false)
             , m_settingEnabled(false)
@@ -242,7 +297,8 @@ private:
 
         int m_frameWidth; // LocalFrame width in density-independent pixels (DIPs).
         int m_layoutWidth; // Layout width in CSS pixels.
-        float m_baseMultiplier; // Includes accessibility font scale factor and device scale adjustment.
+        float m_accessibilityFontScaleFactor;
+        float m_deviceScaleAdjustment;
         bool m_pageNeedsAutosizing;
         bool m_hasAutosized;
         bool m_settingEnabled;
@@ -250,64 +306,105 @@ private:
 
     explicit TextAutosizer(const Document*);
 
-    void beginLayout(LayoutBlock*);
+    void beginLayout(LayoutBlock*, SubtreeLayoutScope*);
     void endLayout(LayoutBlock*);
     void inflateAutoTable(LayoutTable*);
-    float inflate(LayoutObject*, InflateBehavior = ThisBlockOnly, float multiplier = 0);
+    float inflate(LayoutObject*,
+        SubtreeLayoutScope*,
+        InflateBehavior = ThisBlockOnly,
+        float multiplier = 0);
     bool shouldHandleLayout() const;
     IntSize windowSize() const;
-    void setAllTextNeedsLayout();
+    void setAllTextNeedsLayout(LayoutBlock* container = nullptr);
     void resetMultipliers();
-    BeginLayoutBehavior prepareForLayout(const LayoutBlock*);
-    void prepareClusterStack(const LayoutObject*);
-    bool clusterHasEnoughTextToAutosize(Cluster*, const LayoutBlock* widthProvider = nullptr);
-    bool superclusterHasEnoughTextToAutosize(Supercluster*, const LayoutBlock* widthProvider = nullptr);
-    bool clusterWouldHaveEnoughTextToAutosize(const LayoutBlock* root, const LayoutBlock* widthProvider = nullptr);
-    Fingerprint getFingerprint(const LayoutObject*);
+    BeginLayoutBehavior prepareForLayout(LayoutBlock*);
+    void prepareClusterStack(LayoutObject*);
+    bool clusterHasEnoughTextToAutosize(
+        Cluster*,
+#ifdef TENCENT_CHANGES
+        int& definiteLinesToAdd, int& candidateLinesToAdd,
+#endif
+        const LayoutBlock* widthProvider = nullptr);
+    bool superclusterHasEnoughTextToAutosize(
+        Supercluster*,
+        const LayoutBlock* widthProvider = nullptr,
+        bool skipLayoutedNodes = false);
+    bool clusterWouldHaveEnoughTextToAutosize(
+        const LayoutBlock* root,
+#ifdef TENCENT_CHANGES
+        int& definiteLinesToAdd, int& candidateLinesToAdd,
+#endif
+        const LayoutBlock* widthProvider = nullptr);
+    Fingerprint getFingerprint(LayoutObject*);
     Fingerprint computeFingerprint(const LayoutObject*);
-    Cluster* maybeCreateCluster(const LayoutBlock*);
-    Supercluster* getSupercluster(const LayoutBlock*);
+    Cluster* maybeCreateCluster(LayoutBlock*);
     float clusterMultiplier(Cluster*);
     float superclusterMultiplier(Cluster*);
-    // A cluster's width provider is typically the deepest block containing all text.
-    // There are exceptions, such as tables and table cells which use the table itself for width.
+    // A cluster's width provider is typically the deepest block containing all
+    // text. There are exceptions, such as tables and table cells which use the
+    // table itself for width.
     const LayoutBlock* clusterWidthProvider(const LayoutBlock*) const;
-    const LayoutBlock* maxClusterWidthProvider(const Supercluster*, const LayoutBlock* currentRoot) const;
-    // Typically this returns a block's computed width. In the case of tables layout, this
-    // width is not yet known so the fixed width is used if it's available, or the containing
-    // block's width otherwise.
+    const LayoutBlock* maxClusterWidthProvider(
+        Supercluster*,
+        const LayoutBlock* currentRoot) const;
+    // Typically this returns a block's computed width. In the case of tables
+    // layout, this width is not yet known so the fixed width is used if it's
+    // available, or the containing block's width otherwise.
     float widthFromBlock(const LayoutBlock*) const;
     float multiplierFromBlock(const LayoutBlock*);
-    void applyMultiplier(LayoutObject*, float, RelayoutBehavior = AlreadyInLayout);
+    void applyMultiplier(LayoutObject*,
+        float,
+        SubtreeLayoutScope*,
+        RelayoutBehavior = AlreadyInLayout);
     bool isWiderOrNarrowerDescendant(Cluster*);
+#ifdef TENCENT_CHANGES
+    bool blockIsWiderOrNarrowerDescendant(const LayoutBlock* block, Cluster* cluster) const;
+#endif
     Cluster* currentCluster() const;
-    const LayoutBlock* deepestBlockContainingAllText(Cluster*);
+    const LayoutBlock* deepestBlockContainingAllText(Cluster*) const;
     const LayoutBlock* deepestBlockContainingAllText(const LayoutBlock*) const;
-    // Returns the first text leaf that is in the current cluster. We attempt to not include text
-    // from descendant clusters but because descendant clusters may not exist, this is only an approximation.
-    // The TraversalDirection controls whether we return the first or the last text leaf.
-    const LayoutObject* findTextLeaf(const LayoutObject*, size_t&, TextLeafSearch) const;
-    BlockFlags classifyBlock(const LayoutObject*, BlockFlags mask = UINT_MAX) const;
+    // Returns the first text leaf that is in the current cluster. We attempt to
+    // not include text from descendant clusters but because descendant clusters
+    // may not exist, this is only an approximation.  The TraversalDirection
+    // controls whether we return the first or the last text leaf.
+    const LayoutObject* findTextLeaf(const LayoutObject*,
+        size_t&,
+        TextLeafSearch) const;
+    BlockFlags classifyBlock(const LayoutObject*,
+        BlockFlags mask = UINT_MAX) const;
 #ifdef AUTOSIZING_DOM_DEBUG_INFO
     void writeClusterDebugInfo(Cluster*);
+#ifdef TENCENT_CHANGES
+    void writeClusterDebugInfo(LayoutObject* renderer, float multiplier, bool applied);
+#endif
 #endif
 
-    RawPtrWillBeMember<const Document> m_document;
+#ifdef TENCENT_CHANGES
+    void updateFingerprintMapper(Fingerprint, float);
+#endif
+    // Must be called at the start of layout.
+    void checkSuperclusterConsistency();
+    // Mark the nearest non-inheritance supercluser
+    void markSuperclusterForConsistencyCheck(LayoutObject*);
+
+    Member<const Document> m_document;
     const LayoutBlock* m_firstBlockToBeginLayout;
-#if ENABLE(ASSERT)
-    BlockSet m_blocksThatHaveBegunLayout; // Used to ensure we don't compute properties of a block before beginLayout() is called on it.
+#if DCHECK_IS_ON()
+    // Used to ensure we don't compute properties of a block before beginLayout()
+    // is called on it.
+    ConstBlockSet m_blocksThatHaveBegunLayout;
 #endif
 
-    // Clusters are created and destroyed during layout. The map key is the
-    // cluster root. Clusters whose roots share the same fingerprint use the
-    // same multiplier.
-    SuperclusterMap m_superclusters;
+    // Clusters are created and destroyed during layout
     ClusterStack m_clusterStack;
     FingerprintMapper m_fingerprintMapper;
     Vector<RefPtr<ComputedStyle>> m_stylesRetainedDuringLayout;
     // FIXME: All frames should share the same m_pageInfo instance.
     PageInfo m_pageInfo;
     bool m_updatePageInfoDeferred;
+#ifdef TENCENT_CHANGES
+    Vector<Fingerprint> m_multiplierInconsistent;
+#endif
 };
 
 } // namespace blink

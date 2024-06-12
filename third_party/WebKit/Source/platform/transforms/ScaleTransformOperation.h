@@ -29,14 +29,20 @@
 
 namespace blink {
 
-class PLATFORM_EXPORT ScaleTransformOperation : public TransformOperation {
+class PLATFORM_EXPORT ScaleTransformOperation final
+    : public TransformOperation {
 public:
-    static PassRefPtr<ScaleTransformOperation> create(double sx, double sy, OperationType type)
+    static PassRefPtr<ScaleTransformOperation> create(double sx,
+        double sy,
+        OperationType type)
     {
         return adoptRef(new ScaleTransformOperation(sx, sy, 1, type));
     }
 
-    static PassRefPtr<ScaleTransformOperation> create(double sx, double sy, double sz, OperationType type)
+    static PassRefPtr<ScaleTransformOperation> create(double sx,
+        double sy,
+        double sz,
+        OperationType type)
     {
         return adoptRef(new ScaleTransformOperation(sx, sy, sz, type));
     }
@@ -51,12 +57,18 @@ public:
     {
         transform.scale3d(m_x, m_y, m_z);
     }
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
+    PassRefPtr<TransformOperation> blend(const TransformOperation* from,
+        double progress,
+        bool blendToIdentity = false) override;
 
-    static bool isMatchingOperationType(OperationType type) { return type == Scale || type == ScaleX || type == ScaleY || type == ScaleZ || type == Scale3D; }
+    static bool isMatchingOperationType(OperationType type)
+    {
+        return type == Scale || type == ScaleX || type == ScaleY || type == ScaleZ || type == Scale3D;
+    }
 
 private:
     OperationType type() const override { return m_type; }
+    OperationType primitiveType() const final { return Scale3D; }
 
     bool operator==(const TransformOperation& o) const override
     {
@@ -65,6 +77,8 @@ private:
         const ScaleTransformOperation* s = static_cast<const ScaleTransformOperation*>(&o);
         return m_x == s->m_x && m_y == s->m_y && m_z == s->m_z;
     }
+
+    PassRefPtr<TransformOperation> zoom(double factor) final { return this; }
 
     ScaleTransformOperation(double sx, double sy, double sz, OperationType type)
         : m_x(sx)

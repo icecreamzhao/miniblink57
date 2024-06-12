@@ -27,48 +27,96 @@
 #define NetworkStateNotifier_h
 
 #include "core/CoreExport.h"
+#include "core/dom/ExecutionContext.h"
 #include "public/platform/WebConnectionType.h"
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/ThreadingPrimitives.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
-class ExecutionContext;
-
 class CORE_EXPORT NetworkStateNotifier {
-    WTF_MAKE_NONCOPYABLE(NetworkStateNotifier); WTF_MAKE_FAST_ALLOCATED(NetworkStateNotifier);
+    WTF_MAKE_NONCOPYABLE(NetworkStateNotifier);
+    USING_FAST_MALLOC(NetworkStateNotifier);
+
 public:
     class NetworkStateObserver {
     public:
         // Will be called on the thread of the context passed in addObserver.
-        virtual void connectionTypeChange(WebConnectionType) = 0;
+        virtual void connectionChange(WebConnectionType,
+            double maxBandwidthMbps)
+            = 0;
     };
 
     NetworkStateNotifier()
-        : m_isOnLine(true)
-        , m_type(ConnectionTypeOther)
-        , m_testUpdatesOnly(false)
+        : m_hasOverride(false)
     {
     }
 
+    // Can be called on any thread.
     bool onLine() const
     {
         MutexLocker locker(m_mutex);
-        return m_isOnLine;
+        const NetworkState& state = m_hasOverride ? m_override : m_state;
+        DCHECK(state.onLineInitialized);
+        return state.onLine;
     }
 
     void setOnLine(bool);
 
+    // Can be called on any thread.
     WebConnectionType connectionType() const
     {
         MutexLocker locker(m_mutex);
-        return m_type;
+        const NetworkState& state = m_hasOverride ? m_override : m_state;
+        DCHECK(state.connectionInitialized);
+        return state.type;
     }
 
-    void setWebConnectionType(WebConnectionType);
+    // Can be called on any thread.
+    bool isCellularConnectionType() const
+    {
+        switch (connectionType()) {
+        case WebConnectionTypeCellular2G:
+        case WebConnectionTypeCellular3G:
+        case WebConnectionTypeCellular4G:
+            return true;
+        case WebConnectionTypeBluetooth:
+        case WebConnectionTypeEthernet:
+        case WebConnectionTypeWifi:
+        case WebConnectionTypeWimax:
+        case WebConnectionTypeOther:
+        case WebConnectionTypeNone:
+        case WebConnectionTypeUnknown:
+            return false;
+        }
+        ASSERT_NOT_REACHED();
+        return false;
+    }
+
+    // Can be called on any thread.
+    double maxBandwidth() const
+    {
+        MutexLocker locker(m_mutex);
+        const NetworkState& state = m_hasOverride ? m_override : m_state;
+        DCHECK(state.connectionInitialized);
+        return state.maxBandwidthMbps;
+    }
+
+    void setWebConnection(WebConnectionType, double maxBandwidthMbps);
+
+    // When called, successive setWebConnectionType/setOnLine calls are stored,
+    // and supplied overridden values are used instead until clearOverride() is
+    // called.  This is used for layout tests (see crbug.com/377736) and inspector
+    // emulation.
+    //
+    // Since this class is a singleton, tests must clear override when completed
+    // to avoid indeterminate state across the test harness.
+    void setOverride(bool onLine, WebConnectionType, double maxBandwidthMbps);
+    void clearOverride();
 
     // Must be called on the context's thread. An added observer must be removed
     // before its ExecutionContext is deleted. It's possible for an observer to
@@ -76,14 +124,6 @@ public:
     // during notification.
     void addObserver(NetworkStateObserver*, ExecutionContext*);
     void removeObserver(NetworkStateObserver*, ExecutionContext*);
-
-    // The following functions are for testing purposes.
-
-    // When true, setWebConnectionType calls are ignored and only setWebConnectionTypeForTest
-    // can update the connection type. This is used for layout tests (see crbug.com/377736).
-    void setTestUpdatesOnly(bool);
-    // Tests should call this as it will change the type regardless of the value of m_testUpdatesOnly.
-    void setWebConnectionTypeForTest(WebConnectionType);
 
 private:
     struct ObserverList {
@@ -96,11 +136,39 @@ private:
         Vector<size_t> zeroedObservers; // Indices in observers that are 0.
     };
 
-    void setWebConnectionTypeImpl(WebConnectionType);
+    struct NetworkState {
+        static const int kInvalidMaxBandwidth = -1;
+        bool onLineInitialized = false;
+        bool onLine = true;
+        bool connectionInitialized = false;
+        WebConnectionType type = WebConnectionTypeOther;
+        double maxBandwidthMbps = kInvalidMaxBandwidth;
+    };
 
-    using ObserverListMap = HashMap<ExecutionContext*, OwnPtr<ObserverList>>;
+    // This helper scope issues required notifications when mutating the state if
+    // something has changed.  It's only possible to mutate the state on the main
+    // thread.  Note that ScopedNotifier must be destroyed when not holding a lock
+    // so that onLine notifications can be dispatched without a deadlock.
+    class ScopedNotifier {
+    public:
+        explicit ScopedNotifier(NetworkStateNotifier&);
+        ~ScopedNotifier();
 
-    void notifyObserversOnContext(WebConnectionType, ExecutionContext*);
+    private:
+        NetworkStateNotifier& m_notifier;
+        NetworkState m_before;
+    };
+
+    // The ObserverListMap is cross-thread accessed, adding/removing Observers
+    // running within an ExecutionContext. Kept off-heap to ease cross-thread
+    // allocation and use; the observers are (already) responsible for explicitly
+    // unregistering while finalizing.
+    using ObserverListMap = HashMap<UntracedMember<ExecutionContext>, std::unique_ptr<ObserverList>>;
+
+    void notifyObservers(WebConnectionType, double maxBandwidthMbps);
+    void notifyObserversOfConnectionChangeOnContext(WebConnectionType,
+        double maxBandwidthMbps,
+        ExecutionContext*);
 
     ObserverList* lockAndFindObserverList(ExecutionContext*);
 
@@ -110,10 +178,10 @@ private:
     void collectZeroedObservers(ObserverList*, ExecutionContext*);
 
     mutable Mutex m_mutex;
-    bool m_isOnLine;
-    WebConnectionType m_type;
+    NetworkState m_state;
+    bool m_hasOverride;
+    NetworkState m_override;
     ObserverListMap m_observers;
-    bool m_testUpdatesOnly;
 };
 
 CORE_EXPORT NetworkStateNotifier& networkStateNotifier();

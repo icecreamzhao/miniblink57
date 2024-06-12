@@ -30,96 +30,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/fonts/FontCustomPlatformData.h"
 
 #include "platform/LayoutTestSupport.h"
 #include "platform/SharedBuffer.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontPlatformData.h"
-#include "platform/fonts/opentype/OpenTypeSanitizer.h"
+#include "platform/fonts/WebFontDecoder.h"
 #include "third_party/skia/include/core/SkStream.h"
 #include "third_party/skia/include/core/SkTypeface.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 FontCustomPlatformData::FontCustomPlatformData(PassRefPtr<SkTypeface> typeface)
-    : m_typeface(typeface) { }
+    : m_typeface(typeface)
+{
+}
 
 FontCustomPlatformData::~FontCustomPlatformData()
 {
 }
 
-FontPlatformData FontCustomPlatformData::fontPlatformData(float size, bool bold, bool italic, FontOrientation orientation)
+FontPlatformData FontCustomPlatformData::fontPlatformData(float size, bool bold, bool italic, FontOrientation orientation, FontVariationSettings* fontVariationSettings)
 {
     ASSERT(m_typeface);
-#if OS(WIN)
-    if (!FontCache::useDirectWrite()) {
-        // FIXME: Skia currently renders synthetic bold and italics with
-        // hinting and without linear metrics on the windows GDI backend
-        // while the DirectWrite backend does the right thing. Using
-        // CreateFromName and specifying the bold/italics style allows
-        // for proper rendering of synthetic style. Once Skia has been
-        // updated this workaround will no longer be needed.
-        // http://crbug.com/332958
-        bool syntheticBold = bold && !m_typeface->isBold();
-        bool syntheticItalic = italic && !m_typeface->isItalic();
-        if (syntheticBold || syntheticItalic) {
-            SkString name;
-            m_typeface->getFamilyName(&name);
-
-            int style = SkTypeface::kNormal;
-            if (syntheticBold)
-                style |= SkTypeface::kBold;
-            if (syntheticItalic)
-                style |= SkTypeface::kItalic;
-
-            RefPtr<SkTypeface> typeface = adoptRef(FontCache::fontCache()->fontManager()->legacyCreateTypeface(name.c_str(), static_cast<SkTypeface::Style>(style)));
-            syntheticBold = false;
-            syntheticItalic = false;
-            return FontPlatformData(typeface.release(), "", size, syntheticBold, syntheticItalic, orientation);
-        }
-    }
-#endif
     return FontPlatformData(m_typeface.get(), "", size, bold && !m_typeface->isBold(), italic && !m_typeface->isItalic(), orientation);
 }
 
-PassOwnPtr<FontCustomPlatformData> FontCustomPlatformData::create(SharedBuffer* buffer, String& otsParseMessage)
+std::unique_ptr<FontCustomPlatformData> FontCustomPlatformData::create(SharedBuffer* buffer, String& otsParseMessage)
 {
-    ASSERT_ARG(buffer, buffer);
-#ifndef MINIBLINK_NOT_OTS
-    OpenTypeSanitizer sanitizer(buffer);
-    RefPtr<SharedBuffer> transcodeBuffer = sanitizer.sanitize();
-
-    if (!transcodeBuffer) {
-        otsParseMessage = sanitizer.getErrorString();
-        return nullptr; // validation failed.
-    }
-    buffer = transcodeBuffer.get();
-
-    SkMemoryStream* stream = new SkMemoryStream(buffer->getAsSkData().get());
-#if OS(WIN)
-    RefPtr<SkTypeface> typeface = adoptRef(FontCache::fontCache()->fontManager()->createFromStream(stream));
-#else
-    RefPtr<SkTypeface> typeface = adoptRef(SkTypeface::CreateFromStream(stream));
-#endif
-    if (!typeface)
+    DCHECK(buffer);
+    WebFontDecoder decoder;
+    RefPtr<SkTypeface> typeface = decoder.decode(buffer);
+    if (!typeface) {
+        otsParseMessage = decoder.getErrorString();
         return nullptr;
-
-    return adoptPtr(new FontCustomPlatformData(typeface.release()));
-#endif // MINIBLINK_NOT_IMPLEMENTED
-    OutputDebugStringW(L"FontCustomPlatformData not Implemented\n");
-	return nullptr;
+    }
+    return WTF::wrapUnique(new FontCustomPlatformData(typeface.release()));
 }
 
 bool FontCustomPlatformData::supportsFormat(const String& format)
 {
-    return equalIgnoringCase(format, "truetype") || equalIgnoringCase(format, "opentype") 
-#ifndef MINIBLINK_NOT_OTS
-        || OpenTypeSanitizer::supportsFormat(format)
-#endif // MINIBLINK_NOT_IMPLEMENTED
-        ;
+    return equalIgnoringCase(format, "truetype") || equalIgnoringCase(format, "opentype") || WebFontDecoder::supportsFormat(format);
 }
 
 } // namespace blink

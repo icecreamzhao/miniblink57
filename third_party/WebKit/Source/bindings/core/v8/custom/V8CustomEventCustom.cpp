@@ -28,65 +28,125 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8CustomEvent.h"
 
 #include "bindings/core/v8/Dictionary.h"
+#include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
 #include "bindings/core/v8/SerializedScriptValueFactory.h"
 #include "bindings/core/v8/V8Binding.h"
+#include "bindings/core/v8/V8CustomEventInit.h"
 #include "bindings/core/v8/V8DOMWrapper.h"
 #include "bindings/core/v8/V8Event.h"
-#include "bindings/core/v8/V8HiddenValue.h"
+#include "bindings/core/v8/V8PrivateProperty.h"
 #include "core/dom/ContextFeatures.h"
 #include "platform/RuntimeEnabledFeatures.h"
 
 namespace blink {
 
-static v8::Local<v8::Value> cacheState(v8::Isolate* isolate, v8::Local<v8::Object> customEvent, v8::Local<v8::Value> detail)
+static void storeDetail(ScriptState* scriptState,
+    CustomEvent* impl,
+    v8::Local<v8::Object> wrapper,
+    v8::Local<v8::Value> detail)
 {
-    V8HiddenValue::setHiddenValue(isolate, customEvent, V8HiddenValue::detail(isolate), detail);
-    return detail;
+    auto privateDetail = V8PrivateProperty::getCustomEventDetail(scriptState->isolate());
+    privateDetail.set(scriptState->context(), wrapper, detail);
+
+    // When a custom event is created in an isolated world, serialize
+    // |detail| and store it in |impl| so that we can clone |detail|
+    // when the getter of |detail| is called in the main world later.
+    if (scriptState->world().isIsolatedWorld())
+        impl->setSerializedDetail(
+            SerializedScriptValue::serializeAndSwallowExceptions(
+                scriptState->isolate(), detail));
 }
 
+void V8CustomEvent::constructorCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    ExceptionState exceptionState(
+        info.GetIsolate(), ExceptionState::ConstructionContext, "CustomEvent");
+    if (UNLIKELY(info.Length() < 1)) {
+        exceptionState.throwTypeError(
+            ExceptionMessages::notEnoughArguments(1, info.Length()));
+        return;
+    }
 
-void V8CustomEvent::detailAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+    V8StringResource<> type = info[0];
+    if (!type.prepare())
+        return;
+
+    CustomEventInit eventInitDict;
+    if (!isUndefinedOrNull(info[1])) {
+        if (!info[1]->IsObject()) {
+            exceptionState.throwTypeError(
+                "parameter 2 ('eventInitDict') is not an object.");
+            return;
+        }
+        V8CustomEventInit::toImpl(info.GetIsolate(), info[1], eventInitDict,
+            exceptionState);
+        if (exceptionState.hadException())
+            return;
+    }
+
+    CustomEvent* impl = CustomEvent::create(type, eventInitDict);
+    v8::Local<v8::Object> wrapper = info.Holder();
+    wrapper = impl->associateWithWrapper(
+        info.GetIsolate(), &V8CustomEvent::wrapperTypeInfo, wrapper);
+
+    // TODO(bashi): Workaround for http://crbug.com/529941. We need to store
+    // |detail| as a private property to avoid cycle references.
+    if (eventInitDict.hasDetail()) {
+        v8::Local<v8::Value> v8Detail = eventInitDict.detail().v8Value();
+        storeDetail(ScriptState::current(info.GetIsolate()), impl, wrapper,
+            v8Detail);
+    }
+    v8SetReturnValue(info, wrapper);
+}
+
+void V8CustomEvent::initCustomEventMethodEpilogueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    CustomEvent* impl)
+{
+    ASSERT(info.Length() >= 3);
+    v8::Local<v8::Value> detail = info[3];
+    if (!detail.IsEmpty())
+        storeDetail(ScriptState::current(info.GetIsolate()), impl, info.Holder(),
+            detail);
+}
+
+void V8CustomEvent::detailAttributeGetterCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     CustomEvent* event = V8CustomEvent::toImpl(info.Holder());
+    ScriptState* scriptState = ScriptState::current(info.GetIsolate());
 
-    v8::Local<v8::Value> result = V8HiddenValue::getHiddenValue(info.GetIsolate(), info.Holder(), V8HiddenValue::detail(info.GetIsolate()));
-
-    if (!result.IsEmpty()) {
-        v8SetReturnValue(info, result);
+    auto privateDetail = V8PrivateProperty::getCustomEventDetail(info.GetIsolate());
+    v8::Local<v8::Value> detail = privateDetail.get(scriptState->context(), info.Holder());
+    if (!detail.IsEmpty()) {
+        v8SetReturnValue(info, detail);
         return;
     }
 
     // Be careful not to return a V8 value which is created in different world.
-    v8::Local<v8::Value> detail;
-    if (SerializedScriptValue* serializedValue = event->serializedDetail())
+    if (SerializedScriptValue* serializedValue = event->serializedDetail()) {
         detail = serializedValue->deserialize();
-    else
-        detail = event->detail().v8ValueFor(ScriptState::current(info.GetIsolate()));
-    // |detail| should be null when it is an empty handle because its default value is null.
+    } else if (scriptState->world().isIsolatedWorld()) {
+        v8::Local<v8::Value> mainWorldDetail = privateDetail.getFromMainWorld(scriptState, event);
+        if (!mainWorldDetail.IsEmpty()) {
+            event->setSerializedDetail(
+                SerializedScriptValue::serializeAndSwallowExceptions(
+                    info.GetIsolate(), mainWorldDetail));
+            detail = event->serializedDetail()->deserialize();
+        }
+    }
+
+    // |detail| should be null when it is an empty handle because its default
+    // value is null.
     if (detail.IsEmpty())
         detail = v8::Null(info.GetIsolate());
-    v8SetReturnValue(info, cacheState(info.GetIsolate(), info.Holder(), detail));
-}
-
-void V8CustomEvent::initCustomEventMethodCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
-{
-    CustomEvent* event = V8CustomEvent::toImpl(info.Holder());
-
-    TOSTRING_VOID(V8StringResource<>, typeArg, info[0]);
-    bool canBubbleArg;
-    bool cancelableArg;
-    if (!v8Call(info[1]->BooleanValue(info.GetIsolate()->GetCurrentContext()), canBubbleArg)
-        || !v8Call(info[2]->BooleanValue(info.GetIsolate()->GetCurrentContext()), cancelableArg))
-        return;
-    v8::Local<v8::Value> detailsArg = info[3];
-
-    event->initEvent(typeArg, canBubbleArg, cancelableArg);
-    event->setDetail(ScriptValue(ScriptState::current(info.GetIsolate()), detailsArg));
+    privateDetail.set(scriptState->context(), info.Holder(), detail);
+    v8SetReturnValue(info, detail);
 }
 
 } // namespace blink

@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebURLLoadTiming.h"
 
 #include "platform/network/ResourceLoadTiming.h"
@@ -191,12 +190,33 @@ void WebURLLoadTiming::setSSLEnd(double end)
     m_private->setSslEnd(end);
 }
 
-WebURLLoadTiming::WebURLLoadTiming(const PassRefPtr<ResourceLoadTiming>& value)
+double WebURLLoadTiming::pushStart() const
+{
+    return m_private->pushStart();
+}
+
+void WebURLLoadTiming::setPushStart(double start)
+{
+    m_private->setPushStart(start);
+}
+
+double WebURLLoadTiming::pushEnd() const
+{
+    return m_private->pushEnd();
+}
+
+void WebURLLoadTiming::setPushEnd(double end)
+{
+    m_private->setPushEnd(end);
+}
+
+WebURLLoadTiming::WebURLLoadTiming(PassRefPtr<ResourceLoadTiming> value)
     : m_private(value)
 {
 }
 
-WebURLLoadTiming& WebURLLoadTiming::operator=(const PassRefPtr<ResourceLoadTiming>& value)
+WebURLLoadTiming& WebURLLoadTiming::operator=(
+    PassRefPtr<ResourceLoadTiming> value)
 {
     m_private = value;
     return *this;

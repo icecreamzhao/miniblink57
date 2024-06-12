@@ -28,32 +28,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/mac/WebScrollbarTheme.h"
 
 #import <AppKit/AppKit.h>
 
 #include "platform/mac/NSScrollerImpDetails.h"
-#include "platform/scroll/ScrollbarThemeMacCommon.h"
+#include "platform/scroll/ScrollbarThemeMac.h"
 
 using namespace blink;
 
 namespace blink {
 
-static_assert(static_cast<NSScrollerStyle>(ScrollerStyleLegacy) == NSScrollerStyleLegacy, "ScrollerStyleLegacy must match NSScrollerStyleLegacy");
-static_assert(static_cast<NSScrollerStyle>(ScrollerStyleOverlay) == NSScrollerStyleOverlay, "ScrollerStyleOverlay must match NSScrollerStyleOverlay");
+static_assert(static_cast<NSScrollerStyle>(ScrollerStyleLegacy) ==
+                  NSScrollerStyleLegacy,
+              "ScrollerStyleLegacy must match NSScrollerStyleLegacy");
+static_assert(static_cast<NSScrollerStyle>(ScrollerStyleOverlay) ==
+                  NSScrollerStyleOverlay,
+              "ScrollerStyleOverlay must match NSScrollerStyleOverlay");
 
-void WebScrollbarTheme::updateScrollbars(
-    float initialButtonDelay, float autoscrollButtonDelay,
-    ScrollerStyle preferredScrollerStyle, bool redraw)
-{
-    ScrollbarTheme* theme = ScrollbarTheme::theme();
-    if (theme->isMockTheme())
-        return;
+void WebScrollbarTheme::updateScrollbarsWithNSDefaults(
+    float initialButtonDelay,
+    float autoscrollButtonDelay,
+    ScrollerStyle preferredScrollerStyle,
+    bool redraw,
+    WebScrollbarButtonsPlacement buttonPlacement) {
+  ScrollbarTheme& theme = ScrollbarTheme::theme();
+  if (theme.isMockTheme())
+    return;
 
-    static_cast<ScrollbarThemeMacCommon*>(ScrollbarTheme::theme())->preferencesChanged(
-        initialButtonDelay, autoscrollButtonDelay,
-        static_cast<NSScrollerStyle>(preferredScrollerStyle), redraw);
+  static_cast<ScrollbarThemeMac&>(theme).preferencesChanged(
+      initialButtonDelay, autoscrollButtonDelay,
+      static_cast<NSScrollerStyle>(preferredScrollerStyle), redraw,
+      buttonPlacement);
 }
 
-} // namespace blink
+}  // namespace blink

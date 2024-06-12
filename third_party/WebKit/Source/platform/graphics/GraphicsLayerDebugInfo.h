@@ -31,49 +31,84 @@
 #ifndef GraphicsLayerDebugInfo_h
 #define GraphicsLayerDebugInfo_h
 
-#include "platform/JSONValues.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/CompositingReasons.h"
 #include "platform/graphics/PaintInvalidationReason.h"
-#include "public/platform/WebGraphicsLayerDebugInfo.h"
-
+#include "platform/graphics/SquashingDisallowedReasons.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/Vector.h"
+
+#include <memory>
+
+namespace base {
+namespace trace_event {
+    class TracedValue;
+}
+}
 
 namespace blink {
 
-class GraphicsLayerDebugInfo final : public WebGraphicsLayerDebugInfo {
+class GraphicsLayerDebugInfo final {
+    DISALLOW_NEW();
+    WTF_MAKE_NONCOPYABLE(GraphicsLayerDebugInfo);
+
 public:
     GraphicsLayerDebugInfo();
-    ~GraphicsLayerDebugInfo() override;
+    ~GraphicsLayerDebugInfo();
 
-    void appendAsTraceFormat(WebString* out) const override;
+    std::unique_ptr<base::trace_event::TracedValue> asTracedValue() const;
 
-    GraphicsLayerDebugInfo* clone() const;
+    CompositingReasons getCompositingReasons() const
+    {
+        return m_compositingReasons;
+    }
+    void setCompositingReasons(CompositingReasons reasons)
+    {
+        m_compositingReasons = reasons;
+    }
 
-    void setDebugName(const String& name) { m_debugName = name; }
-    CompositingReasons compositingReasons() const { return m_compositingReasons; }
-    void setCompositingReasons(CompositingReasons reasons) { m_compositingReasons = reasons; }
+    SquashingDisallowedReasons getSquashingDisallowedReasons() const
+    {
+        return m_squashingDisallowedReasons;
+    }
+    void setSquashingDisallowedReasons(SquashingDisallowedReasons reasons)
+    {
+        m_squashingDisallowedReasons = reasons;
+    }
     void setOwnerNodeId(int id) { m_ownerNodeId = id; }
 
     void appendAnnotatedInvalidateRect(const FloatRect&, PaintInvalidationReason);
     void clearAnnotatedInvalidateRects();
 
+    uint32_t getMainThreadScrollingReasons() const
+    {
+        return m_mainThreadScrollingReasons;
+    }
+    void setMainThreadScrollingReasons(uint32_t reasons)
+    {
+        m_mainThreadScrollingReasons = reasons;
+    }
+
 private:
-    void appendAnnotatedInvalidateRects(JSONObject*) const;
-    void appendCompositingReasons(JSONObject*) const;
-    void appendDebugName(JSONObject*) const;
-    void appendOwnerNodeId(JSONObject*) const;
+    void appendAnnotatedInvalidateRects(base::trace_event::TracedValue*) const;
+    void appendCompositingReasons(base::trace_event::TracedValue*) const;
+    void appendSquashingDisallowedReasons(base::trace_event::TracedValue*) const;
+    void appendOwnerNodeId(base::trace_event::TracedValue*) const;
+    void appendMainThreadScrollingReasons(base::trace_event::TracedValue*) const;
 
     struct AnnotatedInvalidationRect {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         FloatRect rect;
         PaintInvalidationReason reason;
     };
 
-    String m_debugName;
     CompositingReasons m_compositingReasons;
+    SquashingDisallowedReasons m_squashingDisallowedReasons;
     int m_ownerNodeId;
     Vector<AnnotatedInvalidationRect> m_invalidations;
     Vector<AnnotatedInvalidationRect> m_previousInvalidations;
+    uint32_t m_mainThreadScrollingReasons;
 };
 
 } // namespace blink

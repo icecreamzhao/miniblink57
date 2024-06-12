@@ -22,79 +22,33 @@
 #define SVGPathElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
-#include "core/svg/SVGAnimatedNumber.h"
 #include "core/svg/SVGAnimatedPath.h"
 #include "core/svg/SVGGeometryElement.h"
-#include "core/svg/SVGPathByteStream.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class SVGPathSegArcAbs;
-class SVGPathSegArcRel;
-class SVGPathSegClosePath;
-class SVGPathSegLinetoAbs;
-class SVGPathSegLinetoRel;
-class SVGPathSegMovetoAbs;
-class SVGPathSegMovetoRel;
-class SVGPathSegCurvetoCubicAbs;
-class SVGPathSegCurvetoCubicRel;
-class SVGPathSegLinetoVerticalAbs;
-class SVGPathSegLinetoVerticalRel;
-class SVGPathSegLinetoHorizontalAbs;
-class SVGPathSegLinetoHorizontalRel;
-class SVGPathSegCurvetoQuadraticAbs;
-class SVGPathSegCurvetoQuadraticRel;
-class SVGPathSegCurvetoCubicSmoothAbs;
-class SVGPathSegCurvetoCubicSmoothRel;
-class SVGPathSegCurvetoQuadraticSmoothAbs;
-class SVGPathSegCurvetoQuadraticSmoothRel;
+class StylePath;
 
 class SVGPathElement final : public SVGGeometryElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGPathElement);
 
     Path asPath() const override;
+    Path attributePath() const;
 
-    float getTotalLength();
-    PassRefPtrWillBeRawPtr<SVGPointTearOff> getPointAtLength(float distance);
+    float getTotalLength() override;
+    SVGPointTearOff* getPointAtLength(float distance) override;
     unsigned getPathSegAtLength(float distance);
 
-    SVGAnimatedNumber* pathLength() { return m_pathLength.get(); }
-
-    PassRefPtrWillBeRawPtr<SVGPathSegClosePath> createSVGPathSegClosePath();
-    PassRefPtrWillBeRawPtr<SVGPathSegMovetoAbs> createSVGPathSegMovetoAbs(float x, float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegMovetoRel> createSVGPathSegMovetoRel(float x, float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoAbs> createSVGPathSegLinetoAbs(float x, float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoRel> createSVGPathSegLinetoRel(float x, float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoCubicAbs> createSVGPathSegCurvetoCubicAbs(float x, float y, float x1, float y1, float x2, float y2);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoCubicRel> createSVGPathSegCurvetoCubicRel(float x, float y, float x1, float y1, float x2, float y2);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoQuadraticAbs> createSVGPathSegCurvetoQuadraticAbs(float x, float y, float x1, float y1);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoQuadraticRel> createSVGPathSegCurvetoQuadraticRel(float x, float y, float x1, float y1);
-    PassRefPtrWillBeRawPtr<SVGPathSegArcAbs> createSVGPathSegArcAbs(float x, float y, float r1, float r2, float angle, bool largeArcFlag, bool sweepFlag);
-    PassRefPtrWillBeRawPtr<SVGPathSegArcRel> createSVGPathSegArcRel(float x, float y, float r1, float r2, float angle, bool largeArcFlag, bool sweepFlag);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoHorizontalAbs> createSVGPathSegLinetoHorizontalAbs(float x);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoHorizontalRel> createSVGPathSegLinetoHorizontalRel(float x);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoVerticalAbs> createSVGPathSegLinetoVerticalAbs(float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegLinetoVerticalRel> createSVGPathSegLinetoVerticalRel(float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoCubicSmoothAbs> createSVGPathSegCurvetoCubicSmoothAbs(float x, float y, float x2, float y2);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoCubicSmoothRel> createSVGPathSegCurvetoCubicSmoothRel(float x, float y, float x2, float y2);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoQuadraticSmoothAbs> createSVGPathSegCurvetoQuadraticSmoothAbs(float x, float y);
-    PassRefPtrWillBeRawPtr<SVGPathSegCurvetoQuadraticSmoothRel> createSVGPathSegCurvetoQuadraticSmoothRel(float x, float y);
-
-    // Used in the bindings only.
-    SVGPathSegListTearOff* pathSegList() { return m_pathSegList->baseVal(); }
-    SVGPathSegListTearOff* animatedPathSegList() { return m_pathSegList->animVal(); }
-
-    // FIXME: https://bugs.webkit.org/show_bug.cgi?id=15412 - Implement normalized path segment lists!
-    SVGPathSegListTearOff* normalizedPathSegList() { return nullptr; }
-    SVGPathSegListTearOff* animatedNormalizedPathSegList() { return nullptr; }
-
-    const SVGPathByteStream* pathByteStream() const { return m_pathSegList->currentValue()->byteStream(); }
-
-    void pathSegListChanged(ListModification = ListModificationUnknown);
+    SVGAnimatedPath* path() const { return m_path.get(); }
+    float computePathLength() const override;
+    const SVGPathByteStream& pathByteStream() const
+    {
+        return stylePath()->byteStream();
+    }
 
     FloatRect getBBox() override;
 
@@ -103,15 +57,20 @@ public:
 private:
     explicit SVGPathElement(Document&);
 
+    const StylePath* stylePath() const;
+
     void svgAttributeChanged(const QualifiedName&) override;
+
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     Node::InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;
 
     void invalidateMPathDependencies();
 
-    RefPtrWillBeMember<SVGAnimatedNumber> m_pathLength;
-    RefPtrWillBeMember<SVGAnimatedPath> m_pathSegList;
+    Member<SVGAnimatedPath> m_path;
 };
 
 } // namespace blink

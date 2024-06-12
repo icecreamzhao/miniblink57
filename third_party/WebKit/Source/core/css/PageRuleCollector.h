@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@ class StyleRulePage;
 
 class PageRuleCollector {
     STACK_ALLOCATED();
+
 public:
     PageRuleCollector(const ComputedStyle* rootElementStyle, int pageIndex);
 
@@ -39,11 +41,18 @@ public:
 
 private:
     bool isLeftPage(const ComputedStyle* rootElementStyle, int pageIndex) const;
-    bool isRightPage(const ComputedStyle* rootElementStyle, int pageIndex) const { return !isLeftPage(rootElementStyle, pageIndex); }
+    bool isRightPage(const ComputedStyle* rootElementStyle, int pageIndex) const
+    {
+        return !isLeftPage(rootElementStyle, pageIndex);
+    }
     bool isFirstPage(int pageIndex) const;
     String pageName(int pageIndex) const;
 
-    void matchPageRulesForList(WillBeHeapVector<RawPtrWillBeMember<StyleRulePage>>& matchedRules, const WillBeHeapVector<RawPtrWillBeMember<StyleRulePage>>& rules, bool isLeftPage, bool isFirstPage, const String& pageName);
+    void matchPageRulesForList(HeapVector<Member<StyleRulePage>>& matchedRules,
+        const HeapVector<Member<StyleRulePage>>& rules,
+        bool isLeftPage,
+        bool isFirstPage,
+        const String& pageName);
 
     const bool m_isLeftPage;
     const bool m_isFirstPage;

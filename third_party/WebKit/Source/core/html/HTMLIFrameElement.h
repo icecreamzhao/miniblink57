@@ -24,27 +24,40 @@
 #ifndef HTMLIFrameElement_h
 #define HTMLIFrameElement_h
 
-#include "core/dom/DOMSettableTokenList.h"
+#include "core/CoreExport.h"
 #include "core/html/HTMLFrameElementBase.h"
+#include "core/html/HTMLIFrameElementPermissions.h"
+#include "core/html/HTMLIFrameElementSandbox.h"
+#include "platform/Supplementable.h"
+#include "public/platform/WebVector.h"
+#include "public/platform/modules/permissions/WebPermissionType.h"
 
 namespace blink {
 
-class HTMLIFrameElement final : public HTMLFrameElementBase, public DOMSettableTokenListObserver {
+class CORE_EXPORT HTMLIFrameElement final
+    : public HTMLFrameElementBase,
+      public Supplementable<HTMLIFrameElement> {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(HTMLIFrameElement);
+    USING_GARBAGE_COLLECTED_MIXIN(HTMLIFrameElement);
+
 public:
     DECLARE_NODE_FACTORY(HTMLIFrameElement);
     DECLARE_VIRTUAL_TRACE();
     ~HTMLIFrameElement() override;
-    DOMSettableTokenList* sandbox() const;
+    DOMTokenList* sandbox() const;
+    DOMTokenList* permissions() const;
+
+    void sandboxValueWasSet();
+    void permissionsValueWasSet();
 
 private:
     explicit HTMLIFrameElement(Document&);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
-    void attributeWillChange(const QualifiedName&, const AtomicString& oldValue, const AtomicString& newValue) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;
@@ -52,15 +65,37 @@ private:
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 
-    bool loadedNonEmptyDocument() const override { return m_didLoadNonEmptyDocument; }
+    bool loadedNonEmptyDocument() const override
+    {
+        return m_didLoadNonEmptyDocument;
+    }
     void didLoadNonEmptyDocument() override { m_didLoadNonEmptyDocument = true; }
     bool isInteractiveContent() const override;
 
-    void valueChanged() override;
+    ReferrerPolicy referrerPolicyAttribute() override;
+
+    // FrameOwner overrides:
+    bool allowFullscreen() const override { return m_allowFullscreen; }
+    bool allowPaymentRequest() const override { return m_allowPaymentRequest; }
+    AtomicString csp() const override { return m_csp; }
+    const WebVector<WebPermissionType>& delegatedPermissions() const override
+    {
+        return m_delegatedPermissions;
+    }
+
+    bool initializePermissionsAttribute();
 
     AtomicString m_name;
+    AtomicString m_csp;
     bool m_didLoadNonEmptyDocument;
-    RefPtrWillBeMember<DOMSettableTokenList> m_sandbox;
+    bool m_allowFullscreen;
+    bool m_allowPaymentRequest;
+    Member<HTMLIFrameElementSandbox> m_sandbox;
+    Member<HTMLIFrameElementPermissions> m_permissions;
+
+    WebVector<WebPermissionType> m_delegatedPermissions;
+
+    ReferrerPolicy m_referrerPolicy;
 };
 
 } // namespace blink

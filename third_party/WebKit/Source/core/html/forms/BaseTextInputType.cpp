@@ -21,16 +21,23 @@
  *
  */
 
-#include "config.h"
 #include "core/html/forms/BaseTextInputType.h"
 
 #include "bindings/core/v8/ScriptRegexp.h"
 #include "core/HTMLNames.h"
 #include "core/html/HTMLInputElement.h"
+#include "core/inspector/ConsoleMessage.h"
 
 namespace blink {
 
 using namespace HTMLNames;
+
+BaseTextInputType::BaseTextInputType(HTMLInputElement& element)
+    : TextFieldInputType(element)
+{
+}
+
+BaseTextInputType::~BaseTextInputType() { }
 
 int BaseTextInputType::maxLength() const
 {
@@ -42,12 +49,14 @@ int BaseTextInputType::minLength() const
     return element().minLength();
 }
 
-bool BaseTextInputType::tooLong(const String& value, HTMLTextFormControlElement::NeedsToCheckDirtyFlag check) const
+bool BaseTextInputType::tooLong(
+    const String& value,
+    TextControlElement::NeedsToCheckDirtyFlag check) const
 {
     int max = element().maxLength();
     if (max < 0)
         return false;
-    if (check == HTMLTextFormControlElement::CheckDirtyFlag) {
+    if (check == TextControlElement::CheckDirtyFlag) {
         // Return false for the default value or a value set by a script even if
         // it is longer than maxLength.
         if (!element().hasDirtyValue() || !element().lastChangeWasUserEdit())
@@ -56,12 +65,14 @@ bool BaseTextInputType::tooLong(const String& value, HTMLTextFormControlElement:
     return value.length() > static_cast<unsigned>(max);
 }
 
-bool BaseTextInputType::tooShort(const String& value, HTMLTextFormControlElement::NeedsToCheckDirtyFlag check) const
+bool BaseTextInputType::tooShort(
+    const String& value,
+    TextControlElement::NeedsToCheckDirtyFlag check) const
 {
     int min = element().minLength();
     if (min <= 0)
         return false;
-    if (check == HTMLTextFormControlElement::CheckDirtyFlag) {
+    if (check == TextControlElement::CheckDirtyFlag) {
         // Return false for the default value or a value set by a script even if
         // it is shorter than minLength.
         if (!element().hasDirtyValue() || !element().lastChangeWasUserEdit())
@@ -76,13 +87,35 @@ bool BaseTextInputType::patternMismatch(const String& value) const
 {
     const AtomicString& rawPattern = element().fastGetAttribute(patternAttr);
     // Empty values can't be mismatched
-    if (rawPattern.isNull() || value.isEmpty() || !ScriptRegexp(rawPattern, TextCaseSensitive).isValid())
+    if (rawPattern.isNull() || value.isEmpty())
         return false;
-    String pattern = "^(?:" + rawPattern + ")$";
+    if (!m_regexp || m_patternForRegexp != rawPattern) {
+        std::unique_ptr<ScriptRegexp> rawRegexp(new ScriptRegexp(
+            rawPattern, TextCaseSensitive, MultilineDisabled, ScriptRegexp::UTF16));
+        if (!rawRegexp->isValid()) {
+            element().document().addConsoleMessage(ConsoleMessage::create(
+                RenderingMessageSource, ErrorMessageLevel,
+                String::format("Pattern attribute value %s is not a valid regular "
+                               "expression: %s",
+                    rawPattern.utf8().data(),
+                    rawRegexp->exceptionMessage().utf8().data())));
+            m_regexp.reset(rawRegexp.release());
+            m_patternForRegexp = rawPattern;
+            return false;
+        }
+        String pattern = "^(?:" + rawPattern + ")$";
+        m_regexp.reset(new ScriptRegexp(pattern, TextCaseSensitive,
+            MultilineDisabled, ScriptRegexp::UTF16));
+        m_patternForRegexp = rawPattern;
+    } else if (!m_regexp->isValid()) {
+        return false;
+    }
+
     int matchLength = 0;
     int valueLength = value.length();
-    int matchOffset = ScriptRegexp(pattern, TextCaseSensitive).match(value, 0, &matchLength);
-    return matchOffset || matchLength != valueLength;
+    int matchOffset = m_regexp->match(value, 0, &matchLength);
+    bool mismatched = matchOffset != 0 || matchLength != valueLength;
+    return mismatched;
 }
 
 bool BaseTextInputType::supportsPlaceholder() const

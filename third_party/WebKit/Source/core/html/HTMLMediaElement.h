@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013 Apple Inc. All rights
+ * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,66 +27,90 @@
 #ifndef HTMLMediaElement_h
 #define HTMLMediaElement_h
 
+#include "bindings/core/v8/ActiveScriptWrappable.h"
+#include "bindings/core/v8/ScriptPromise.h"
+#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/CoreExport.h"
-#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/ExceptionCode.h"
+#include "core/dom/SuspendableObject.h"
 #include "core/events/GenericEventQueue.h"
 #include "core/html/HTMLElement.h"
 #include "core/html/track/TextTrack.h"
 #include "platform/Supplementable.h"
-#include "platform/graphics/media/MediaPlayer.h"
+#include "platform/WebTaskRunner.h"
+#include "platform/audio/AudioSourceProvider.h"
+#include "platform/network/mime/MIMETypeRegistry.h"
+#include "public/platform/WebAudioSourceProviderClient.h"
 #include "public/platform/WebMediaPlayerClient.h"
-#include "public/platform/WebMimeRegistry.h"
-
-namespace blink {
-class WebInbandTextTrack;
-class WebLayer;
-}
+#include <memory>
 
 namespace blink {
 
-#if ENABLE(WEB_AUDIO)
-class AudioSourceProvider;
 class AudioSourceProviderClient;
-#endif
+class AudioTrack;
 class AudioTrackList;
+class AutoplayUmaHelper;
 class ContentType;
 class CueTimeline;
+class ElementVisibilityObserver;
+class EnumerationHistogram;
 class Event;
 class ExceptionState;
 class HTMLSourceElement;
 class HTMLTrackElement;
 class KURL;
-class MediaController;
 class MediaControls;
 class MediaError;
+class MediaStreamDescriptor;
 class HTMLMediaSource;
+class ScriptState;
 class TextTrackContainer;
 class TextTrackList;
 class TimeRanges;
 class URLRegistry;
+class VideoTrack;
 class VideoTrackList;
+class WebAudioSourceProvider;
+class WebInbandTextTrack;
+class WebLayer;
+class WebRemotePlaybackClient;
 
-// FIXME: The inheritance from MediaPlayerClient here should be private inheritance.
-// But it can't be until the Chromium WebMediaPlayerClientImpl class is fixed so it
-// no longer depends on typecasting a MediaPlayerClient to an HTMLMediaElement.
-
-class CORE_EXPORT HTMLMediaElement : public HTMLElement, public WillBeHeapSupplementable<HTMLMediaElement>, public MediaPlayerClient, public ActiveDOMObject {
+class CORE_EXPORT HTMLMediaElement
+    : public HTMLElement,
+      public Supplementable<HTMLMediaElement>,
+      public ActiveScriptWrappable<HTMLMediaElement>,
+      public SuspendableObject,
+      private WebMediaPlayerClient {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(HTMLMediaElement);
-    WILL_BE_USING_PRE_FINALIZER(HTMLMediaElement, dispose);
+    USING_GARBAGE_COLLECTED_MIXIN(HTMLMediaElement);
+    USING_PRE_FINALIZER(HTMLMediaElement, dispose);
+
 public:
-    static WebMimeRegistry::SupportsType supportsType(const ContentType&, const String& keySystem = String());
+    static MIMETypeRegistry::SupportsType supportsType(const ContentType&);
+
+    enum class RecordMetricsBehavior { DoNotRecord,
+        DoRecord };
 
     static void setMediaStreamRegistry(URLRegistry*);
     static bool isMediaStreamURL(const String& url);
+    static bool isHLSURL(const KURL&);
+
+    // If HTMLMediaElement is using MediaTracks (either placeholder or provided
+    // by the page).
+    static bool mediaTracksEnabledInternally();
 
     DECLARE_VIRTUAL_TRACE();
-#if ENABLE(WEB_AUDIO)
-    void clearWeakMembers(Visitor*);
-#endif
-    WebMediaPlayer* webMediaPlayer() const { return m_player ? m_player->webMediaPlayer() : 0; }
 
-    virtual bool hasVideo() const { return false; }
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+
+    void clearWeakMembers(Visitor*);
+    WebMediaPlayer* webMediaPlayer() const { return m_webMediaPlayer.get(); }
+
+    // Returns true if the loaded media has a video track.
+    // Note that even an audio element can have video track in cases such as
+    // <audio src="video.webm">, in which case this function will return true.
+    bool hasVideo() const;
+    // Returns true if loaded media has an audio track.
     bool hasAudio() const;
 
     bool supportsSave() const;
@@ -94,40 +119,54 @@ public:
 
     enum DelayedActionType {
         LoadMediaResource = 1 << 0,
-        LoadTextTrackResource = 1 << 1,
-        TextTrackChangesNotification = 1 << 2
+        LoadTextTrackResource = 1 << 1
     };
-    void scheduleDelayedAction(DelayedActionType);
+    void scheduleTextTrackResourceLoad();
 
-    bool hasRemoteRoutes() const { return m_remoteRoutesAvailable; }
+    bool hasRemoteRoutes() const;
     bool isPlayingRemotely() const { return m_playingRemotely; }
 
     // error state
-    PassRefPtrWillBeRawPtr<MediaError> error() const;
+    MediaError* error() const;
 
     // network state
     void setSrc(const AtomicString&);
     const KURL& currentSrc() const { return m_currentSrc; }
+    void setSrcObject(MediaStreamDescriptor*);
+    MediaStreamDescriptor* getSrcObject() const { return m_srcObject.get(); }
 
-    enum NetworkState { NETWORK_EMPTY, NETWORK_IDLE, NETWORK_LOADING, NETWORK_NO_SOURCE };
-    NetworkState networkState() const;
+    enum NetworkState {
+        kNetworkEmpty,
+        kNetworkIdle,
+        kNetworkLoading,
+        kNetworkNoSource
+    };
+    NetworkState getNetworkState() const;
 
     String preload() const;
-    MediaPlayer::Preload effectivePreloadType() const;
     void setPreload(const AtomicString&);
+    WebMediaPlayer::Preload preloadType() const;
+    String effectivePreload() const;
+    WebMediaPlayer::Preload effectivePreloadType() const;
 
-    PassRefPtrWillBeRawPtr<TimeRanges> buffered() const;
+    TimeRanges* buffered() const;
     void load();
-    String canPlayType(const String& mimeType, const String& keySystem = String()) const;
+    String canPlayType(const String& mimeType) const;
 
     // ready state
-    enum ReadyState { HAVE_NOTHING, HAVE_METADATA, HAVE_CURRENT_DATA, HAVE_FUTURE_DATA, HAVE_ENOUGH_DATA };
-    ReadyState readyState() const;
+    enum ReadyState {
+        kHaveNothing,
+        kHaveMetadata,
+        kHaveCurrentData,
+        kHaveFutureData,
+        kHaveEnoughData
+    };
+    ReadyState getReadyState() const;
     bool seeking() const;
 
     // playback state
     double currentTime() const;
-    void setCurrentTime(double, ExceptionState&);
+    void setCurrentTime(double);
     double duration() const;
     bool paused() const;
     double defaultPlaybackRate() const;
@@ -135,16 +174,19 @@ public:
     double playbackRate() const;
     void setPlaybackRate(double);
     void updatePlaybackRate();
-    PassRefPtrWillBeRawPtr<TimeRanges> played();
-    PassRefPtrWillBeRawPtr<TimeRanges> seekable() const;
+    TimeRanges* played();
+    TimeRanges* seekable() const;
     bool ended() const;
     bool autoplay() const;
+    bool shouldAutoplay();
     bool loop() const;
     void setLoop(bool);
-    void play();
+    ScriptPromise playForBindings(ScriptState*);
+    Nullable<ExceptionCode> play();
     void pause();
     void requestRemotePlayback();
     void requestRemotePlaybackControl();
+    void requestRemotePlaybackStop();
 
     // statistics
     unsigned webkitAudioDecodedByteCount() const;
@@ -155,24 +197,25 @@ public:
     void durationChanged(double duration, bool requestSeek);
 
     // controls
-    bool shouldShowControls() const;
+    bool shouldShowControls(
+        const RecordMetricsBehavior = RecordMetricsBehavior::DoNotRecord) const;
     double volume() const;
-    void setVolume(double, ExceptionState&);
+    void setVolume(double, ExceptionState& = ASSERT_NO_EXCEPTION);
     bool muted() const;
     void setMuted(bool);
 
-    // play/pause toggling that uses the media controller if present. togglePlayStateWillPlay() is
-    // true if togglePlayState() will call play() or unpause() on the media element or controller.
-    bool togglePlayStateWillPlay() const;
     void togglePlayState();
 
     AudioTrackList& audioTracks();
-    void audioTrackChanged();
+    void audioTrackChanged(AudioTrack*);
 
     VideoTrackList& videoTracks();
-    void selectedVideoTrackChanged(WebMediaPlayer::TrackId*);
+    void selectedVideoTrackChanged(VideoTrack*);
 
-    PassRefPtrWillBeRawPtr<TextTrack> addTextTrack(const AtomicString& kind, const AtomicString& label, const AtomicString& language, ExceptionState&);
+    TextTrack* addTextTrack(const AtomicString& kind,
+        const AtomicString& label,
+        const AtomicString& language,
+        ExceptionState&);
 
     TextTrackList* textTracks();
     CueTimeline& cueTimeline();
@@ -182,21 +225,12 @@ public:
     void textTracksChanged();
     void notifyMediaPlayerOfTextTrackChanges();
 
-    // Implements the "forget the media element's media-resource-specific tracks" algorithm in the HTML5 spec.
+    // Implements the "forget the media element's media-resource-specific tracks"
+    // algorithm in the HTML5 spec.
     void forgetResourceSpecificTracks();
 
     void didAddTrackElement(HTMLTrackElement*);
     void didRemoveTrackElement(HTMLTrackElement*);
-
-    WebMediaPlayer::TrackId addAudioTrack(const String& id, WebMediaPlayerClient::AudioTrackKind, const AtomicString& label, const AtomicString& language, bool enabled);
-    void removeAudioTrack(WebMediaPlayer::TrackId);
-    WebMediaPlayer::TrackId addVideoTrack(const String& id, WebMediaPlayerClient::VideoTrackKind, const AtomicString& label, const AtomicString& language, bool selected);
-    void removeVideoTrack(WebMediaPlayer::TrackId);
-
-    void mediaPlayerDidAddTextTrack(WebInbandTextTrack*) final;
-    void mediaPlayerDidRemoveTextTrack(WebInbandTextTrack*) final;
-    // FIXME: Remove this when WebMediaPlayerClientImpl::loadInternal does not depend on it.
-    KURL mediaPlayerPosterURL() override { return KURL(); }
 
     void honorUserPreferencesForAutomaticTextTrackSelection();
 
@@ -207,30 +241,30 @@ public:
     void textTrackReadyStateChanged(TextTrack*);
 
     void textTrackModeChanged(TextTrack*);
+    void disableAutomaticTextTrackSelection();
 
     // EventTarget function.
-    // Both Node (via HTMLElement) and ActiveDOMObject define this method, which
+    // Both Node (via HTMLElement) and SuspendableObject define this method, which
     // causes an ambiguity error at compile time. This class's constructor
     // ensures that both implementations return document, so return the result
     // of one of them here.
-    using HTMLElement::executionContext;
+    using HTMLElement::getExecutionContext;
 
-    bool hasSingleSecurityOrigin() const { return !m_player || (webMediaPlayer() && webMediaPlayer()->hasSingleSecurityOrigin()); }
+    bool hasSingleSecurityOrigin() const
+    {
+        return webMediaPlayer() && webMediaPlayer()->hasSingleSecurityOrigin();
+    }
 
     bool isFullscreen() const;
-    void enterFullscreen();
-    void exitFullscreen();
+    void didEnterFullscreen();
+    void didExitFullscreen();
+    virtual bool usesOverlayFullscreenVideo() const { return false; }
 
     bool hasClosedCaptions() const;
-    bool closedCaptionsVisible() const;
-    void setClosedCaptionsVisible(bool);
+    bool textTracksVisible() const;
 
     static void setTextTrackKindUserPreferenceForAllMediaElements(Document*);
     void automaticTrackSelectionForUpdatedUserPreference();
-
-    void remoteRouteAvailabilityChanged(bool);
-    void connectedToRemoteDevice();
-    void disconnectedFromRemoteDevice();
 
     // Returns the MediaControls, or null if they have not been added yet.
     // Note that this can be non-null even if there is no controls attribute.
@@ -243,59 +277,74 @@ public:
     void sourceWasRemoved(HTMLSourceElement*);
     void sourceWasAdded(HTMLSourceElement*);
 
-    // ActiveDOMObject functions.
+    // ScriptWrappable functions.
     bool hasPendingActivity() const final;
-    void contextDestroyed() final;
 
-#if ENABLE(WEB_AUDIO)
     AudioSourceProviderClient* audioSourceNode() { return m_audioSourceNode; }
     void setAudioSourceNode(AudioSourceProviderClient*);
 
-    AudioSourceProvider* audioSourceProvider();
-#endif
+    AudioSourceProvider& getAudioSourceProvider()
+    {
+        return m_audioSourceProvider;
+    }
 
-    enum InvalidURLAction { DoNothing, Complain };
+    enum InvalidURLAction { DoNothing,
+        Complain };
     bool isSafeToLoadURL(const KURL&, InvalidURLAction);
 
     // Checks to see if current media data is CORS-same-origin as the
     // specified origin.
     bool isMediaDataCORSSameOrigin(SecurityOrigin*) const;
 
-    MediaController* controller() const;
-    void setController(PassRefPtrWillBeRawPtr<MediaController>); // Resets the MediaGroup and sets the MediaController.
+    // Returns this media element is in a cross-origin frame.
+    bool isInCrossOriginFrame() const;
 
-    void scheduleEvent(PassRefPtrWillBeRawPtr<Event>);
+    void scheduleEvent(Event*);
     void scheduleTimeupdateEvent(bool periodicEvent);
 
     // Returns the "effective media volume" value as specified in the HTML5 spec.
     double effectiveMediaVolume() const;
 
-    // Predicates also used when dispatching wrapper creation (cf. [SpecialWrapFor] IDL attribute usage.)
+    // Predicates also used when dispatching wrapper creation (cf.
+    // [SpecialWrapFor] IDL attribute usage.)
     virtual bool isHTMLAudioElement() const { return false; }
     virtual bool isHTMLVideoElement() const { return false; }
+
+    void videoWillBeDrawnToCanvas() const;
+
+    WebRemotePlaybackClient* remotePlaybackClient()
+    {
+        return m_remotePlaybackClient;
+    }
+    const WebRemotePlaybackClient* remotePlaybackClient() const
+    {
+        return m_remotePlaybackClient;
+    }
 
 protected:
     HTMLMediaElement(const QualifiedName&, Document&);
     ~HTMLMediaElement() override;
-#if ENABLE(OILPAN)
     void dispose();
-#endif
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     void finishParsingChildren() final;
     bool isURLAttribute(const Attribute&) const override;
-    void attach(const AttachContext& = AttachContext()) override;
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
 
     void didMoveToNewDocument(Document& oldDocument) override;
+    virtual KURL posterImageURL() const { return KURL(); }
 
-    enum DisplayMode { Unknown, Poster, Video };
-    DisplayMode displayMode() const { return m_displayMode; }
+    enum DisplayMode { Unknown,
+        Poster,
+        Video };
+    DisplayMode getDisplayMode() const { return m_displayMode; }
     virtual void setDisplayMode(DisplayMode mode) { m_displayMode = mode; }
 
-    void setControllerInternal(PassRefPtrWillBeRawPtr<MediaController>);
-
 private:
-    void createMediaPlayer();
+    // Friend class for testing.
+    friend class MediaElementFillingViewportTest;
+
+    void resetMediaPlayerAndMediaSource();
 
     bool alwaysCreateUserAgentShadowRoot() const final { return true; }
     bool areAuthorShadowsAllowed() const final { return false; }
@@ -311,33 +360,57 @@ private:
 
     bool canStartSelection() const override { return false; }
 
-    void didBecomeFullscreenElement() final;
-    void willStopBeingFullscreenElement() final;
     bool isInteractiveContent() const final;
-    void defaultEventHandler(Event*) final;
 
-    // ActiveDOMObject functions.
-    void stop() final;
+    // SuspendableObject functions.
+    void contextDestroyed(ExecutionContext*) final;
 
     virtual void updateDisplayState() { }
 
     void setReadyState(ReadyState);
     void setNetworkState(WebMediaPlayer::NetworkState);
 
-    void mediaPlayerNetworkStateChanged() final;
-    void mediaPlayerReadyStateChanged() final;
-    void mediaPlayerTimeChanged() final;
-    void mediaPlayerDurationChanged() final;
-    void mediaPlayerPlaybackStateChanged() final;
-    void mediaPlayerRequestSeek(double) final;
-    void mediaPlayerRepaint() final;
-    void mediaPlayerSizeChanged() final;
-    void mediaPlayerSetWebLayer(WebLayer*) final;
-    void mediaPlayerMediaSourceOpened(WebMediaSource*) final;
+    // WebMediaPlayerClient implementation.
+    void networkStateChanged() final;
+    void readyStateChanged() final;
+    void timeChanged() final;
+    void repaint() final;
+    void durationChanged() final;
+    void sizeChanged() final;
+    void playbackStateChanged() final;
 
-    void loadTimerFired(Timer<HTMLMediaElement>*);
-    void progressEventTimerFired(Timer<HTMLMediaElement>*);
-    void playbackProgressTimerFired(Timer<HTMLMediaElement>*);
+    void setWebLayer(WebLayer*) final;
+    WebMediaPlayer::TrackId addAudioTrack(const WebString&,
+        WebMediaPlayerClient::AudioTrackKind,
+        const WebString&,
+        const WebString&,
+        bool) final;
+    void removeAudioTrack(WebMediaPlayer::TrackId) final;
+    WebMediaPlayer::TrackId addVideoTrack(const WebString&,
+        WebMediaPlayerClient::VideoTrackKind,
+        const WebString&,
+        const WebString&,
+        bool) final;
+    void removeVideoTrack(WebMediaPlayer::TrackId) final;
+    void addTextTrack(WebInbandTextTrack*) final;
+    void removeTextTrack(WebInbandTextTrack*) final;
+    void mediaSourceOpened(WebMediaSource*) final;
+    void requestSeek(double) final;
+    void remoteRouteAvailabilityChanged(WebRemotePlaybackAvailability) final;
+    void connectedToRemoteDevice() final;
+    void disconnectedFromRemoteDevice() final;
+    void cancelledRemotePlaybackRequest() final;
+    void remotePlaybackStarted() final;
+    bool hasSelectedVideoTrack() final;
+    WebMediaPlayer::TrackId getSelectedVideoTrackId() final;
+    bool isAutoplayingMuted() final;
+    void requestReload(const WebURL&) final;
+    void activateViewportIntersectionMonitoring(bool) final;
+
+    void loadTimerFired(TimerBase*);
+    void progressEventTimerFired(TimerBase*);
+    void playbackProgressTimerFired(TimerBase*);
+    void checkViewportIntersectionTimerFired(TimerBase*);
     void startPlaybackProgressTimer();
     void startProgressEventTimer();
     void stopPeriodicTimers();
@@ -347,29 +420,32 @@ private:
     void checkIfSeekNeeded();
     void addPlayedRange(double start, double end);
 
-    void scheduleEvent(const AtomicString& eventName); // FIXME: Rename to scheduleNamedEvent for clarity.
+    // FIXME: Rename to scheduleNamedEvent for clarity.
+    void scheduleEvent(const AtomicString& eventName);
 
     // loading
-    void prepareForLoad();
+    void invokeLoadAlgorithm();
+    void invokeResourceSelectionAlgorithm();
     void loadInternal();
     void selectMediaResource();
-    void loadResource(const KURL&, ContentType&, const String& keySystem);
-    void startPlayerLoad();
+    void loadResource(const WebMediaPlayerSource&, const ContentType&);
+    void startPlayerLoad(const KURL& playerProvidedUrl = KURL());
     void setPlayerPreload();
     WebMediaPlayer::LoadType loadType() const;
     void scheduleNextSourceChild();
+    void loadSourceFromObject();
+    void loadSourceFromAttribute();
     void loadNextSourceChild();
-    void userCancelledLoad();
-    void clearMediaPlayer(int flags);
+    void clearMediaPlayer();
     void clearMediaPlayerAndAudioSourceProviderClientWithoutLocking();
     bool havePotentialSourceChild();
     void noneSupported();
-    void mediaEngineError(PassRefPtrWillBeRawPtr<MediaError>);
+    void mediaEngineError(MediaError*);
     void cancelPendingEventsAndCallbacks();
     void waitForSourceChange();
-    void prepareToPlay();
+    void setIgnorePreloadNone();
 
-    KURL selectNextSourceChild(ContentType*, String* keySystem, InvalidURLAction);
+    KURL selectNextSourceChild(ContentType*, InvalidURLAction);
 
     void mediaLoadingFailed(WebMediaPlayer::NetworkState);
 
@@ -379,17 +455,16 @@ private:
     void cancelDeferredLoad();
     void startDeferredLoad();
     void executeDeferredLoad();
-    void deferredLoadTimerFired(Timer<HTMLMediaElement>*);
-
-    HTMLTrackElement* showingTrackWithSameKind(HTMLTrackElement*) const;
+    void deferredLoadTimerFired(TimerBase*);
 
     void markCaptionAndSubtitleTracksAsUnconfigured();
 
     // This does not check user gesture restrictions.
     void playInternal();
 
-    void gesturelessInitialPlayHalted();
-    void autoplayMediaEncountered();
+    // This does not change the buffering strategy.
+    void pauseInternal();
+
     void allowVideoRendering();
 
     void updateVolume();
@@ -398,59 +473,103 @@ private:
     bool stoppedDueToErrors() const;
     bool couldPlayIfEnoughData() const;
 
-    // Generally the presence of the loop attribute should be considered to mean playback
-    // has not "ended", as "ended" and "looping" are mutually exclusive. See
+    // Generally the presence of the loop attribute should be considered to mean
+    // playback has not "ended", as "ended" and "looping" are mutually exclusive.
+    // See
     // https://html.spec.whatwg.org/multipage/embedded-content.html#ended-playback
-    enum class LoopCondition { Included, Ignored };
+    enum class LoopCondition { Included,
+        Ignored };
     bool endedPlayback(LoopCondition = LoopCondition::Included) const;
 
     void setShouldDelayLoadEvent(bool);
-    void invalidateCachedTime();
-    void refreshCachedTime() const;
+
+    double earliestPossiblePosition() const;
+    double currentPlaybackPosition() const;
+    double officialPlaybackPosition() const;
+    void setOfficialPlaybackPosition(double) const;
+    void requireOfficialPlaybackPositionUpdate() const;
 
     void ensureMediaControls();
-    void configureMediaControls();
+    void updateControlsVisibility();
 
     TextTrackContainer& ensureTextTrackContainer();
 
-    void* preDispatchEventHandler(Event*) final;
-
     void changeNetworkStateFromLoadingToIdle();
 
-    const AtomicString& mediaGroup() const;
-    void setMediaGroup(const AtomicString&);
-    void updateMediaController();
-    bool isBlocked() const;
-    bool isBlockedOnMediaController() const;
     bool isAutoplaying() const { return m_autoplaying; }
 
     WebMediaPlayer::CORSMode corsMode() const;
 
     // Returns the "direction of playback" value as specified in the HTML5 spec.
-    enum DirectionOfPlayback { Backward, Forward };
-    DirectionOfPlayback directionOfPlayback() const;
+    enum DirectionOfPlayback { Backward,
+        Forward };
+    DirectionOfPlayback getDirectionOfPlayback() const;
 
-    // Returns the "effective playback rate" value as specified in the HTML5 spec.
-    double effectivePlaybackRate() const;
-
-    // Creates placeholder AudioTrack and/or VideoTrack objects when WebMemediaPlayer objects
-    // advertise they have audio and/or video, but don't explicitly signal them via
-    // addAudioTrack() and addVideoTrack().
-    // FIXME: Remove this once all WebMediaPlayer implementations properly report their track info.
+    // Creates placeholder AudioTrack and/or VideoTrack objects when
+    // WebMemediaPlayer objects advertise they have audio and/or video, but don't
+    // explicitly signal them via addAudioTrack() and addVideoTrack().
+    // FIXME: Remove this once all WebMediaPlayer implementations properly report
+    // their track info.
     void createPlaceholderTracksIfNecessary();
 
     // Sets the selected/enabled tracks if they aren't set before we initially
-    // transition to HAVE_METADATA.
+    // transition to kHaveMetadata.
     void selectInitialTracksIfNecessary();
 
-    void audioTracksTimerFired(Timer<HTMLMediaElement>*);
+    // Return true if and only if a user gesture is required to unlock this
+    // media element for unrestricted autoplay / script control.  Don't confuse
+    // this with isGestureNeededForPlayback().  The latter is usually what one
+    // should use, if checking to see if an action is allowed.
+    bool isLockedPendingUserGesture() const;
 
-    Timer<HTMLMediaElement> m_loadTimer;
-    Timer<HTMLMediaElement> m_progressEventTimer;
-    Timer<HTMLMediaElement> m_playbackProgressTimer;
-    Timer<HTMLMediaElement> m_audioTracksTimer;
-    RefPtrWillBeMember<TimeRanges> m_playedTimeRanges;
-    OwnPtrWillBeMember<GenericEventQueue> m_asyncEventQueue;
+    bool isLockedPendingUserGestureIfCrossOriginExperimentEnabled() const;
+
+    // If the user gesture is required, then this will remove it.  Note that
+    // one should not generally call this method directly; use the one on
+    // m_helper and give it a reason.
+    void unlockUserGesture();
+
+    // Return true if and only if a user gesture is requried for playback.  Even
+    // if isLockedPendingUserGesture() return true, this might return false if
+    // the requirement is currently overridden.  This does not check if a user
+    // gesture is currently being processed.
+    bool isGestureNeededForPlayback() const;
+
+    bool isGestureNeededForPlaybackIfCrossOriginExperimentEnabled() const;
+
+    bool isGestureNeededForPlaybackIfPendingUserGestureIsLocked() const;
+
+    // Return true if and only if the settings allow autoplay of media on this
+    // frame.
+    bool isAutoplayAllowedPerSettings() const;
+
+    void setNetworkState(NetworkState);
+
+    void audioTracksTimerFired(TimerBase*);
+
+    void scheduleResolvePlayPromises();
+    void scheduleRejectPlayPromises(ExceptionCode);
+    void scheduleNotifyPlaying();
+    void resolveScheduledPlayPromises();
+    void rejectScheduledPlayPromises();
+    void rejectPlayPromises(ExceptionCode, const String&);
+    void rejectPlayPromisesInternal(ExceptionCode, const String&);
+
+    EnumerationHistogram& showControlsHistogram() const;
+
+    void onVisibilityChangedForAutoplay(bool isVisible);
+
+    void viewportFillDebouncerTimerFired(TimerBase*);
+
+    TaskRunnerTimer<HTMLMediaElement> m_loadTimer;
+    TaskRunnerTimer<HTMLMediaElement> m_progressEventTimer;
+    TaskRunnerTimer<HTMLMediaElement> m_playbackProgressTimer;
+    TaskRunnerTimer<HTMLMediaElement> m_audioTracksTimer;
+    TaskRunnerTimer<HTMLMediaElement> m_viewportFillDebouncerTimer;
+    TaskRunnerTimer<HTMLMediaElement> m_checkViewportIntersectionTimer;
+
+    Member<TimeRanges> m_playedTimeRanges;
+    Member<GenericEventQueue> m_asyncEventQueue;
 
     double m_playbackRate;
     double m_defaultPlaybackRate;
@@ -458,8 +577,9 @@ private:
     ReadyState m_readyState;
     ReadyState m_readyStateMaximum;
     KURL m_currentSrc;
+    Member<MediaStreamDescriptor> m_srcObject;
 
-    RefPtrWillBeMember<MediaError> m_error;
+    Member<MediaError> m_error;
 
     double m_volume;
     double m_lastSeekTime;
@@ -473,16 +593,21 @@ private:
     double m_lastTimeUpdateEventWallTime;
 
     // The last time a timeupdate event was sent in movie time.
-    double m_lastTimeUpdateEventMovieTime;
+    double m_lastTimeUpdateEventMediaTime;
 
     // The default playback start position.
     double m_defaultPlaybackStartPosition;
 
     // Loading state.
-    enum LoadState { WaitingForSource, LoadingFromSrcAttr, LoadingFromSourceElement };
+    enum LoadState {
+        WaitingForSource,
+        LoadingFromSrcObject,
+        LoadingFromSrcAttr,
+        LoadingFromSourceElement
+    };
     LoadState m_loadState;
-    RefPtrWillBeMember<HTMLSourceElement> m_currentSourceNode;
-    RefPtrWillBeMember<Node> m_nextChildNodeToConsider;
+    Member<HTMLSourceElement> m_currentSourceNode;
+    Member<Node> m_nextChildNodeToConsider;
 
     // "Deferred loading" state (for preload=none).
     enum DeferredLoadState {
@@ -500,26 +625,27 @@ private:
     DeferredLoadState m_deferredLoadState;
     Timer<HTMLMediaElement> m_deferredLoadTimer;
 
-    OwnPtr<MediaPlayer> m_player;
+    std::unique_ptr<WebMediaPlayer> m_webMediaPlayer;
     WebLayer* m_webLayer;
-
-    MediaPlayer::Preload m_preload;
 
     DisplayMode m_displayMode;
 
-    RefPtrWillBeMember<HTMLMediaSource> m_mediaSource;
+    Member<HTMLMediaSource> m_mediaSource;
 
-    // Cached time value. Only valid when ready state is HAVE_METADATA or
-    // higher, otherwise the current time is assumed to be zero.
-    mutable double m_cachedTime;
+    // Stores "official playback position", updated periodically from "current
+    // playback position". Official playback position should not change while
+    // scripts are running. See setOfficialPlaybackPosition().
+    mutable double m_officialPlaybackPosition;
+    mutable bool m_officialPlaybackPositionNeedsUpdate;
 
     double m_fragmentEndTime;
 
     typedef unsigned PendingActionFlags;
     PendingActionFlags m_pendingActionFlags;
 
-    // FIXME: MediaElement has way too many state bits.
-    bool m_userGestureRequiredForPlay : 1;
+    // FIXME: HTMLMediaElement has way too many state bits.
+    bool m_lockedPendingUserGesture : 1;
+    bool m_lockedPendingUserGestureIfCrossOriginExperimentEnabled : 1;
     bool m_playing : 1;
     bool m_shouldDelayLoadEvent : 1;
     bool m_haveFiredLoadedData : 1;
@@ -531,43 +657,110 @@ private:
     // data has not been loaded since sending a "stalled" event
     bool m_sentStalledEvent : 1;
 
-    // time has not changed since sending an "ended" event
-    bool m_sentEndEvent : 1;
+    bool m_ignorePreloadNone : 1;
 
-    bool m_closedCaptionsVisible : 1;
-
-    bool m_completelyLoaded : 1;
-    bool m_havePreparedToPlay : 1;
-    bool m_delayingLoadForPreloadNone : 1;
+    bool m_textTracksVisible : 1;
+    bool m_shouldPerformAutomaticTrackSelection : 1;
 
     bool m_tracksAreReady : 1;
-    bool m_haveVisibleTextTrack : 1;
     bool m_processingPreferenceChange : 1;
-    bool m_remoteRoutesAvailable : 1;
     bool m_playingRemotely : 1;
-    bool m_isFinalizing : 1;
-    bool m_initialPlayWithoutUserGestures : 1;
-    bool m_autoplayMediaCounted : 1;
+    // Whether this element is in overlay fullscreen mode.
+    bool m_inOverlayFullscreenVideo : 1;
 
-    RefPtrWillBeMember<AudioTrackList> m_audioTracks;
-    RefPtrWillBeMember<VideoTrackList> m_videoTracks;
-    RefPtrWillBeMember<TextTrackList> m_textTracks;
-    WillBeHeapVector<RefPtrWillBeMember<TextTrack>> m_textTracksWhenResourceSelectionBegan;
+    bool m_mostlyFillingViewport : 1;
 
-    OwnPtrWillBeMember<CueTimeline> m_cueTimeline;
+    TraceWrapperMember<AudioTrackList> m_audioTracks;
+    TraceWrapperMember<VideoTrackList> m_videoTracks;
+    TraceWrapperMember<TextTrackList> m_textTracks;
+    HeapVector<Member<TextTrack>> m_textTracksWhenResourceSelectionBegan;
 
-#if ENABLE(WEB_AUDIO)
+    Member<CueTimeline> m_cueTimeline;
+
+    HeapVector<Member<ScriptPromiseResolver>> m_playPromiseResolvers;
+    TaskHandle m_playPromiseResolveTaskHandle;
+    TaskHandle m_playPromiseRejectTaskHandle;
+    HeapVector<Member<ScriptPromiseResolver>> m_playPromiseResolveList;
+    HeapVector<Member<ScriptPromiseResolver>> m_playPromiseRejectList;
+    ExceptionCode m_playPromiseErrorCode;
+
     // This is a weak reference, since m_audioSourceNode holds a reference to us.
-    // FIXME: Oilpan: Consider making this a strongly traced pointer with oilpan where strong cycles are not a problem.
+    // TODO(Oilpan): Consider making this a strongly traced pointer with oilpan
+    // where strong cycles are not a problem.
     GC_PLUGIN_IGNORE("http://crbug.com/404577")
-    RawPtrWillBeWeakMember<AudioSourceProviderClient> m_audioSourceNode;
-#endif
+    WeakMember<AudioSourceProviderClient> m_audioSourceNode;
 
-    friend class MediaController;
-    RefPtrWillBeMember<MediaController> m_mediaController;
+    // AudioClientImpl wraps an AudioSourceProviderClient.
+    // When the audio format is known, Chromium calls setFormat().
+    class AudioClientImpl final
+        : public GarbageCollectedFinalized<AudioClientImpl>,
+          public WebAudioSourceProviderClient {
+    public:
+        explicit AudioClientImpl(AudioSourceProviderClient* client)
+            : m_client(client)
+        {
+        }
 
+        ~AudioClientImpl() override { }
+
+        // WebAudioSourceProviderClient
+        void setFormat(size_t numberOfChannels, float sampleRate) override;
+
+        DECLARE_TRACE();
+
+    private:
+        Member<AudioSourceProviderClient> m_client;
+    };
+
+    // AudioSourceProviderImpl wraps a WebAudioSourceProvider.
+    // provideInput() calls into Chromium to get a rendered audio stream.
+    class AudioSourceProviderImpl final : public AudioSourceProvider {
+        DISALLOW_NEW();
+
+    public:
+        AudioSourceProviderImpl()
+            : m_webAudioSourceProvider(nullptr)
+        {
+        }
+
+        ~AudioSourceProviderImpl() override { }
+
+        // Wraps the given WebAudioSourceProvider.
+        void wrap(WebAudioSourceProvider*);
+
+        // AudioSourceProvider
+        void setClient(AudioSourceProviderClient*) override;
+        void provideInput(AudioBus*, size_t framesToProcess) override;
+
+        DECLARE_TRACE();
+
+    private:
+        WebAudioSourceProvider* m_webAudioSourceProvider;
+        Member<AudioClientImpl> m_client;
+        Mutex provideInputLock;
+    };
+
+    AudioSourceProviderImpl m_audioSourceProvider;
+
+    friend class AutoplayUmaHelper; // for isAutoplayAllowedPerSettings
+    friend class AutoplayUmaHelperTest;
     friend class Internals;
     friend class TrackDisplayUpdateScope;
+    friend class MediaControlsTest;
+    friend class HTMLMediaElementTest;
+    friend class HTMLVideoElementTest;
+    friend class MediaControlsOrientationLockDelegateTest;
+
+    Member<AutoplayUmaHelper> m_autoplayUmaHelper;
+
+    WebRemotePlaybackClient* m_remotePlaybackClient;
+
+    // class AutoplayVisibilityObserver;
+    Member<ElementVisibilityObserver> m_autoplayVisibilityObserver;
+
+    IntRect m_currentIntersectRect;
+
+    Member<MediaControls> m_mediaControls;
 
     static URLRegistry* s_mediaStreamRegistry;
 };

@@ -30,57 +30,70 @@
 #include "platform/heap/Handle.h"
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
-enum SpeechBoundary {
-    SpeechWordBoundary,
-    SpeechSentenceBoundary
-};
+enum SpeechBoundary { SpeechWordBoundary,
+    SpeechSentenceBoundary };
 
 class PlatformSpeechSynthesisUtterance;
 class WebSpeechSynthesizer;
 class WebSpeechSynthesizerClientImpl;
 
-class PLATFORM_EXPORT PlatformSpeechSynthesizerClient : public GarbageCollectedMixin {
+class PLATFORM_EXPORT PlatformSpeechSynthesizerClient
+    : public GarbageCollectedMixin {
 public:
     virtual void didStartSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didFinishSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didPauseSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didResumeSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void speakingErrorOccurred(PlatformSpeechSynthesisUtterance*) = 0;
-    virtual void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*, SpeechBoundary, unsigned charIndex) = 0;
+    virtual void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*,
+        SpeechBoundary,
+        unsigned charIndex)
+        = 0;
     virtual void voicesDidChange() = 0;
 
 protected:
     virtual ~PlatformSpeechSynthesizerClient() { }
 };
 
-class PLATFORM_EXPORT PlatformSpeechSynthesizer : public GarbageCollectedFinalized<PlatformSpeechSynthesizer> {
+class PLATFORM_EXPORT PlatformSpeechSynthesizer
+    : public GarbageCollectedFinalized<PlatformSpeechSynthesizer> {
     WTF_MAKE_NONCOPYABLE(PlatformSpeechSynthesizer);
+
 public:
     static PlatformSpeechSynthesizer* create(PlatformSpeechSynthesizerClient*);
 
     virtual ~PlatformSpeechSynthesizer();
 
-    const HeapVector<Member<PlatformSpeechSynthesisVoice>>& voiceList() const { return m_voiceList; }
+    const Vector<RefPtr<PlatformSpeechSynthesisVoice>>& voiceList() const
+    {
+        return m_voiceList;
+    }
     virtual void speak(PlatformSpeechSynthesisUtterance*);
     virtual void pause();
     virtual void resume();
     virtual void cancel();
 
-    PlatformSpeechSynthesizerClient* client() const { return m_speechSynthesizerClient; }
+    PlatformSpeechSynthesizerClient* client() const
+    {
+        return m_speechSynthesizerClient;
+    }
 
-    void setVoiceList(HeapVector<Member<PlatformSpeechSynthesisVoice>>&);
+    void setVoiceList(Vector<RefPtr<PlatformSpeechSynthesisVoice>>&);
 
-    // Eager finalization is required to promptly release the owned WebSpeechSynthesizer.
+    // Eager finalization is required to promptly release the owned
+    // WebSpeechSynthesizer.
     //
-    // If not and delayed until lazily swept, m_webSpeechSynthesizerClient may end up
-    // being lazily swept first (i.e., before this PlatformSpeechSynthesizer), leaving
-    // m_webSpeechSynthesizer with a dangling pointer to a finalized object --
-    // WebSpeechSynthesizer embedder implementations calling notification methods in the
-    // other directions by way of m_webSpeechSynthesizerClient. Eagerly releasing
-    // WebSpeechSynthesizer prevents such unsafe accesses.
+    // If not and delayed until lazily swept, m_webSpeechSynthesizerClient may end
+    // up being lazily swept first (i.e., before this PlatformSpeechSynthesizer),
+    // leaving m_webSpeechSynthesizer with a dangling pointer to a finalized
+    // object -- WebSpeechSynthesizer embedder implementations calling
+    // notification methods in the other directions by way of
+    // m_webSpeechSynthesizerClient. Eagerly releasing WebSpeechSynthesizer
+    // prevents such unsafe accesses.
     EAGERLY_FINALIZE();
     DECLARE_VIRTUAL_TRACE();
 
@@ -89,12 +102,12 @@ protected:
 
     virtual void initializeVoiceList();
 
-    HeapVector<Member<PlatformSpeechSynthesisVoice>> m_voiceList;
+    Vector<RefPtr<PlatformSpeechSynthesisVoice>> m_voiceList;
 
 private:
     Member<PlatformSpeechSynthesizerClient> m_speechSynthesizerClient;
 
-    OwnPtr<WebSpeechSynthesizer> m_webSpeechSynthesizer;
+    std::unique_ptr<WebSpeechSynthesizer> m_webSpeechSynthesizer;
     Member<WebSpeechSynthesizerClientImpl> m_webSpeechSynthesizerClient;
 };
 

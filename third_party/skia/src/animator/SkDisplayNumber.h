@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayNumber_DEFINED
 #define SkDisplayNumber_DEFINED
 
@@ -16,6 +15,7 @@
 class SkDisplayNumber : public SkDisplayable {
     DECLARE_DISPLAY_MEMBER_INFO(Number);
     bool getProperty(int index, SkScriptValue* value) const override;
+
 private:
 };
 

@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2015 Google Inc.
  *
@@ -44,13 +43,19 @@ public:
     /**
      * Does the resource count against the resource budget?
      */
-    bool isBudgeted() const {
-        bool ret = GrGpuResource::kCached_LifeCycle == fResource->fLifeCycle;
+    SkBudgeted isBudgeted() const
+    {
+        bool ret = SkBudgeted::kYes == fResource->fBudgeted;
         SkASSERT(ret || !fResource->getUniqueKey().isValid());
-        return ret;
+        return SkBudgeted(ret);
     }
 
-    /** 
+    /**
+     * Is the resource object wrapping an externally allocated GPU resource?
+     */
+    bool refsWrappedObjects() const { return fResource->fRefsWrappedObjects; }
+
+    /**
      * If this resource can be used as a scratch resource this returns a valid scratch key.
      * Otherwise it returns a key for which isNullScratch is true. The resource may currently be
      * used as a uniquely keyed resource rather than scratch. Check isScratch().
@@ -61,11 +66,17 @@ public:
      * If the resource has a scratch key, the key will be removed. Since scratch keys are installed
      * at resource creation time, this means the resource will never again be used as scratch.
      */
-    void removeScratchKey() const { fResource->removeScratchKey();  }
+    void removeScratchKey() const { fResource->removeScratchKey(); }
 
 protected:
-    ResourcePriv(GrGpuResource* resource) : fResource(resource) {   }
-    ResourcePriv(const ResourcePriv& that) : fResource(that.fResource) {}
+    ResourcePriv(GrGpuResource* resource)
+        : fResource(resource)
+    {
+    }
+    ResourcePriv(const ResourcePriv& that)
+        : fResource(that.fResource)
+    {
+    }
     ResourcePriv& operator=(const CacheAccess&); // unimpl
 
     // No taking addresses of this type.
@@ -79,7 +90,8 @@ protected:
 
 inline GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() { return ResourcePriv(this); }
 
-inline const GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() const {
+inline const GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() const
+{
     return ResourcePriv(const_cast<GrGpuResource*>(this));
 }
 

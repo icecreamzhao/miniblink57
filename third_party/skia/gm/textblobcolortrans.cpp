@@ -23,7 +23,8 @@ public:
     TextBlobColorTrans() { }
 
 protected:
-    void onOnceBeforeDraw() override {
+    void onOnceBeforeDraw() override
+    {
         SkTextBlobBuilder builder;
 
         // make textblob
@@ -51,17 +52,20 @@ protected:
         fBlob.reset(builder.build());
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("textblobcolortrans");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
 
-        canvas->drawColor(SK_ColorGRAY);
+        canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
 
         SkPaint paint;
         canvas->translate(10, 40);
@@ -71,7 +75,8 @@ protected:
         // Colors were chosen to map to pairs of canonical colors.  The GPU Backend will cache A8
         // Texture Blobs based on the canonical color they map to.  Canonical colors are used to
         // create masks.  For A8 there are 8 of them.
-        SkColor colors[] = {SK_ColorCYAN, SK_ColorLTGRAY, SK_ColorYELLOW, SK_ColorWHITE};
+        SkColor colors[] = { SK_ColorCYAN, sk_tool_utils::color_to_565(SK_ColorLTGRAY),
+            SK_ColorYELLOW, SK_ColorWHITE };
 
         size_t count = SK_ARRAY_COUNT(colors);
         size_t colorIndex = 0;
@@ -96,5 +101,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-DEF_GM( return SkNEW(TextBlobColorTrans); )
+DEF_GM(return new TextBlobColorTrans;)
 }

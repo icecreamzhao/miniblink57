@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -6,9 +5,10 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
+#include "SkPath.h"
+#include "gm.h"
 
 namespace skiagm {
 
@@ -18,20 +18,24 @@ namespace skiagm {
 // middle.
 class BigBlursGM : public GM {
 public:
-    BigBlursGM() {
+    BigBlursGM()
+    {
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("bigblurs");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(kWidth, kHeight);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         static const int kBig = 65536;
         static const SkScalar kSigma = SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(4));
 
@@ -46,16 +50,16 @@ protected:
 
         // The blur extends 3*kSigma out from the big rect.
         // Offset the close-up windows so we get the entire blur
-        static const SkScalar kLeftTopPad  = 3*kSigma;   // use on left & up of big rect
-        static const SkScalar kRightBotPad = kCloseUpSize-3*kSigma; // use on right and bot sides
+        static const SkScalar kLeftTopPad = 3 * kSigma; // use on left & up of big rect
+        static const SkScalar kRightBotPad = kCloseUpSize - 3 * kSigma; // use on right and bot sides
 
         // UL hand corners of the rendered closeups
         const SkPoint origins[] = {
-            { -kLeftTopPad,          -kLeftTopPad           }, // UL
-            {  kBig-kRightBotPad,    -kLeftTopPad           }, // UR
-            {  kBig-kRightBotPad,     kBig-kRightBotPad     }, // LR
-            { -kLeftTopPad,           kBig-kRightBotPad     }, // LL
-            {  kBig/2-kCloseUpSize/2, kBig/2-kCloseUpSize/2 }, // center
+            { -kLeftTopPad, -kLeftTopPad }, // UL
+            { kBig - kRightBotPad, -kLeftTopPad }, // UR
+            { kBig - kRightBotPad, kBig - kRightBotPad }, // LR
+            { -kLeftTopPad, kBig - kRightBotPad }, // LL
+            { kBig / 2 - kCloseUpSize / 2, kBig / 2 - kCloseUpSize / 2 }, // center
         };
 
         SkPaint outlinePaint;
@@ -70,21 +74,20 @@ protected:
 
         for (int i = 0; i < 2; ++i) {
             for (int j = 0; j <= kLastEnum_SkBlurStyle; ++j) {
-                SkMaskFilter* mf = SkBlurMaskFilter::Create((SkBlurStyle)j, kSigma);
-                blurPaint.setMaskFilter(mf)->unref();
+                blurPaint.setMaskFilter(SkBlurMaskFilter::Make((SkBlurStyle)j, kSigma));
 
                 for (int k = 0; k < (int)SK_ARRAY_COUNT(origins); ++k) {
                     canvas->save();
 
                     SkRect clipRect = SkRect::MakeXYWH(SkIntToScalar(desiredX),
-                                                       SkIntToScalar(desiredY),
-                                                       SkIntToScalar(kCloseUpSize),
-                                                       SkIntToScalar(kCloseUpSize));
+                        SkIntToScalar(desiredY),
+                        SkIntToScalar(kCloseUpSize),
+                        SkIntToScalar(kCloseUpSize));
 
                     canvas->clipRect(clipRect, SkRegion::kReplace_Op, false);
 
-                    canvas->translate(desiredX-origins[k].fX,
-                                      desiredY-origins[k].fY);
+                    canvas->translate(desiredX - origins[k].fX,
+                        desiredY - origins[k].fY);
 
                     if (0 == i) {
                         canvas->drawRect(bigRect, blurPaint);
@@ -111,6 +114,5 @@ private:
     typedef GM INHERITED;
 };
 
-DEF_GM( return SkNEW(BigBlursGM); )
-
+DEF_GM(return new BigBlursGM;)
 }

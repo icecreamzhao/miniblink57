@@ -32,7 +32,6 @@
 #include "core/html/parser/HTMLParserOptions.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
@@ -47,16 +46,30 @@ class Element;
 class HTMLDocument;
 class HTMLDocumentParser;
 
-class HTMLTreeBuilder final : public NoBaseWillBeGarbageCollectedFinalized<HTMLTreeBuilder> {
-    WTF_MAKE_NONCOPYABLE(HTMLTreeBuilder); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(HTMLTreeBuilder);
+class HTMLTreeBuilder final
+    : public GarbageCollectedFinalized<HTMLTreeBuilder> {
+    WTF_MAKE_NONCOPYABLE(HTMLTreeBuilder);
+
 public:
-    static PassOwnPtrWillBeRawPtr<HTMLTreeBuilder> create(HTMLDocumentParser* parser, HTMLDocument* document, ParserContentPolicy parserContentPolicy, bool reportErrors, const HTMLParserOptions& options)
+    // HTMLTreeBuilder can be created for non-HTMLDocument (XHTMLDocument) from
+    // editing code.
+    // TODO(kouhei): Fix editing code to always invoke HTML parser on
+    // HTMLDocument.
+    static HTMLTreeBuilder* create(HTMLDocumentParser* parser,
+        Document& document,
+        ParserContentPolicy parserContentPolicy,
+        const HTMLParserOptions& options)
     {
-        return adoptPtrWillBeNoop(new HTMLTreeBuilder(parser, document, parserContentPolicy, reportErrors, options));
+        return new HTMLTreeBuilder(parser, document, parserContentPolicy, options);
     }
-    static PassOwnPtrWillBeRawPtr<HTMLTreeBuilder> create(HTMLDocumentParser* parser, DocumentFragment* fragment, Element* contextElement, ParserContentPolicy parserContentPolicy, const HTMLParserOptions& options)
+    static HTMLTreeBuilder* create(HTMLDocumentParser* parser,
+        DocumentFragment* fragment,
+        Element* contextElement,
+        ParserContentPolicy parserContentPolicy,
+        const HTMLParserOptions& options)
     {
-        return adoptPtrWillBeNoop(new HTMLTreeBuilder(parser, fragment, contextElement, parserContentPolicy, options));
+        return new HTMLTreeBuilder(parser, fragment, contextElement,
+            parserContentPolicy, options);
     }
     ~HTMLTreeBuilder();
     DECLARE_TRACE();
@@ -64,25 +77,35 @@ public:
     const HTMLElementStack* openElements() const { return m_tree.openElements(); }
 
     bool isParsingFragment() const { return !!m_fragmentContext.fragment(); }
-    bool isParsingTemplateContents() const { return m_tree.openElements()->hasTemplateInHTMLScope(); }
-    bool isParsingFragmentOrTemplateContents() const { return isParsingFragment() || isParsingTemplateContents(); }
+    bool isParsingTemplateContents() const
+    {
+        return m_tree.openElements()->hasTemplateInHTMLScope();
+    }
+    bool isParsingFragmentOrTemplateContents() const
+    {
+        return isParsingFragment() || isParsingTemplateContents();
+    }
 
     void detach();
 
     void constructTree(AtomicHTMLToken*);
 
     bool hasParserBlockingScript() const { return !!m_scriptToProcess; }
-    // Must be called to take the parser-blocking script before calling the parser again.
-    PassRefPtrWillBeRawPtr<Element> takeScriptToProcess(TextPosition& scriptStartPosition);
+    // Must be called to take the parser-blocking script before calling the parser
+    // again.
+    Element* takeScriptToProcess(TextPosition& scriptStartPosition);
 
     // Done, close any open tags, etc.
     void finished();
 
-    // Synchronously flush pending text and queued tasks, possibly creating more DOM nodes.
-    // Flushing pending text depends on |mode|.
+    // Synchronously flush pending text and queued tasks, possibly creating more
+    // DOM nodes. Flushing pending text depends on |mode|.
     void flush(FlushMode mode) { m_tree.flush(mode); }
 
-    void setShouldSkipLeadingNewline(bool shouldSkip) { m_shouldSkipLeadingNewline = shouldSkip; }
+    void setShouldSkipLeadingNewline(bool shouldSkip)
+    {
+        m_shouldSkipLeadingNewline = shouldSkip;
+    }
 
 private:
     class CharacterTokenBuffer;
@@ -113,9 +136,19 @@ private:
         AfterAfterBodyMode,
         AfterAfterFramesetMode,
     };
+#ifndef DEBUG
+    static const char* toString(InsertionMode);
+#endif
 
-    HTMLTreeBuilder(HTMLDocumentParser*, HTMLDocument*, ParserContentPolicy, bool reportErrors, const HTMLParserOptions&);
-    HTMLTreeBuilder(HTMLDocumentParser*, DocumentFragment*, Element* contextElement, ParserContentPolicy, const HTMLParserOptions&);
+    HTMLTreeBuilder(HTMLDocumentParser*,
+        Document&,
+        ParserContentPolicy,
+        const HTMLParserOptions&);
+    HTMLTreeBuilder(HTMLDocumentParser*,
+        DocumentFragment*,
+        Element* contextElement,
+        ParserContentPolicy,
+        const HTMLParserOptions&);
 
     void processToken(AtomicHTMLToken*);
 
@@ -135,7 +168,6 @@ private:
     void processEndTagForInRow(AtomicHTMLToken*);
     void processEndTagForInCell(AtomicHTMLToken*);
 
-    void processIsindexStartTagForInBody(AtomicHTMLToken*);
     void processHtmlStartTagForInBody(AtomicHTMLToken*);
     bool processBodyEndTagForInBody(AtomicHTMLToken*);
     bool processTableEndTagForInTable();
@@ -149,7 +181,9 @@ private:
     void processCharacterBuffer(CharacterTokenBuffer&);
     inline void processCharacterBufferForInBody(CharacterTokenBuffer&);
 
-    void processFakeStartTag(const QualifiedName&, const Vector<Attribute>& attributes = Vector<Attribute>());
+    void processFakeStartTag(
+        const QualifiedName&,
+        const Vector<Attribute>& attributes = Vector<Attribute>());
     void processFakeEndTag(const QualifiedName&);
     void processFakeEndTag(const AtomicString&);
     void processFakePEndTagIfPInButtonScope();
@@ -171,8 +205,6 @@ private:
     inline bool shouldProcessTokenInForeignContent(AtomicHTMLToken*);
     void processTokenInForeignContent(AtomicHTMLToken*);
 
-    Vector<Attribute> attributesForIsindexInput(AtomicHTMLToken*);
-
     void callTheAdoptionAgency(AtomicHTMLToken*);
 
     void closeTheCell();
@@ -182,7 +214,7 @@ private:
 
     void parseError(AtomicHTMLToken*);
 
-    InsertionMode insertionMode() const { return m_insertionMode; }
+    InsertionMode getInsertionMode() const { return m_insertionMode; }
     void setInsertionMode(InsertionMode mode) { m_insertionMode = mode; }
 
     void resetInsertionModeAppropriately();
@@ -193,26 +225,35 @@ private:
 
     class FragmentParsingContext {
         WTF_MAKE_NONCOPYABLE(FragmentParsingContext);
-        DISALLOW_ALLOCATION();
+        DISALLOW_NEW();
+
     public:
-        FragmentParsingContext();
-        FragmentParsingContext(DocumentFragment*, Element* contextElement);
-        ~FragmentParsingContext();
+        FragmentParsingContext() = default;
+        void init(DocumentFragment*, Element* contextElement);
 
         DocumentFragment* fragment() const { return m_fragment; }
-        Element* contextElement() const { ASSERT(m_fragment); return m_contextElementStackItem->element(); }
-        HTMLStackItem* contextElementStackItem() const { ASSERT(m_fragment); return m_contextElementStackItem.get(); }
+        Element* contextElement() const
+        {
+            ASSERT(m_fragment);
+            return m_contextElementStackItem->element();
+        }
+        HTMLStackItem* contextElementStackItem() const
+        {
+            ASSERT(m_fragment);
+            return m_contextElementStackItem.get();
+        }
 
         DECLARE_TRACE();
 
     private:
-        RawPtrWillBeMember<DocumentFragment> m_fragment;
-        RefPtrWillBeMember<HTMLStackItem> m_contextElementStackItem;
+        Member<DocumentFragment> m_fragment;
+        Member<HTMLStackItem> m_contextElementStackItem;
     };
 
+    // https://html.spec.whatwg.org/#frameset-ok-flag
     bool m_framesetOk;
-#if ENABLE(ASSERT)
-    bool m_isAttached;
+#if DCHECK_IS_ON()
+    bool m_isAttached = true;
 #endif
     FragmentParsingContext m_fragmentContext;
     HTMLConstructionSite m_tree;
@@ -230,16 +271,20 @@ private:
 
     bool m_shouldSkipLeadingNewline;
 
-    // We access parser because HTML5 spec requires that we be able to change the state of the tokenizer
-    // from within parser actions. We also need it to track the current position.
-    RawPtrWillBeMember<HTMLDocumentParser> m_parser;
+    // We access parser because HTML5 spec requires that we be able to change the
+    // state of the tokenizer from within parser actions. We also need it to track
+    // the current position.
+    Member<HTMLDocumentParser> m_parser;
 
-    RefPtrWillBeMember<Element> m_scriptToProcess; // <script> tag which needs processing before resuming the parser.
-    TextPosition m_scriptToProcessStartPosition; // Starting line number of the script tag needing processing.
+    // <script> tag which needs processing before resuming the parser.
+    Member<Element> m_scriptToProcess;
+
+    // Starting line number of the script tag needing processing.
+    TextPosition m_scriptToProcessStartPosition;
 
     HTMLParserOptions m_options;
 };
 
-}
+} // namespace blink
 
 #endif

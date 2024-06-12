@@ -28,29 +28,11 @@
 
 #import <AvailabilityMacros.h>
 
-// This file forward-declares APIs for NSScroller that are only present on
-// build SDKs newer than are currently supported.
-
-#if !defined(MAC_OS_X_VERSION_10_7) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
-enum {
-    NSScrollerStyleLegacy       = 0,
-    NSScrollerStyleOverlay      = 1
-};
-typedef NSInteger NSScrollerStyle;
-
-enum {
-    NSScrollerKnobStyleDefault = 0,
-    NSScrollerKnobStyleDark = 1,
-    NSScrollerKnobStyleLight = 2
-};
-typedef NSInteger NSScrollerKnobStyle;
-@interface NSScroller(NSObject)
-+ (NSScrollerStyle)preferredScrollerStyle;
-@end
-#endif // !10.7
-
 @interface NSObject (ScrollbarPainter)
-+ (id)scrollerImpWithStyle:(NSScrollerStyle)newScrollerStyle controlSize:(NSControlSize)newControlSize horizontal:(BOOL)horizontal replacingScrollerImp:(id)previous;
++ (id)scrollerImpWithStyle:(NSScrollerStyle)newScrollerStyle
+               controlSize:(NSControlSize)newControlSize
+                horizontal:(BOOL)horizontal
+      replacingScrollerImp:(id)previous;
 - (CGFloat)knobAlpha;
 - (void)setKnobAlpha:(CGFloat)knobAlpha;
 - (CGFloat)trackAlpha;
@@ -76,7 +58,9 @@ typedef NSInteger NSScrollerKnobStyle;
 - (CGFloat)uiStateTransitionProgress;
 - (CGFloat)expansionTransitionProgress;
 - (NSRect)rectForPart:(NSScrollerPart)partCode;
-- (void)drawKnobSlotInRect:(NSRect)slotRect highlight:(BOOL)flag alpha:(CGFloat)alpha;
+- (void)drawKnobSlotInRect:(NSRect)slotRect
+                 highlight:(BOOL)flag
+                     alpha:(CGFloat)alpha;
 - (void)drawKnob;
 - (void)mouseEnteredScroller;
 - (void)mouseExitedScroller;

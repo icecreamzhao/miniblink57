@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/screen_orientation/ScreenScreenOrientation.h"
 
 #include "bindings/core/v8/ScriptState.h"
@@ -14,7 +13,8 @@ namespace blink {
 // static
 ScreenScreenOrientation& ScreenScreenOrientation::from(Screen& screen)
 {
-    ScreenScreenOrientation* supplement = static_cast<ScreenScreenOrientation*>(HeapSupplement<Screen>::from(screen, supplementName()));
+    ScreenScreenOrientation* supplement = static_cast<ScreenScreenOrientation*>(
+        Supplement<Screen>::from(screen, supplementName()));
     if (!supplement) {
         supplement = new ScreenScreenOrientation();
         provideTo(screen, supplementName(), supplement);
@@ -23,7 +23,8 @@ ScreenScreenOrientation& ScreenScreenOrientation::from(Screen& screen)
 }
 
 // static
-ScreenOrientation* ScreenScreenOrientation::orientation(ScriptState* state, Screen& screen)
+ScreenOrientation* ScreenScreenOrientation::orientation(ScriptState* state,
+    Screen& screen)
 {
     ScreenScreenOrientation& self = ScreenScreenOrientation::from(screen);
     if (!screen.frame())
@@ -43,7 +44,7 @@ const char* ScreenScreenOrientation::supplementName()
 DEFINE_TRACE(ScreenScreenOrientation)
 {
     visitor->trace(m_orientation);
-    HeapSupplement<Screen>::trace(visitor);
+    Supplement<Screen>::trace(visitor);
 }
 
 } // namespace blink

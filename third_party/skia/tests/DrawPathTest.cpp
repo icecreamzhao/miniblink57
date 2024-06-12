@@ -8,16 +8,18 @@
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkDashPathEffect.h"
+#include "SkStrokeRec.h"
 #include "SkSurface.h"
 #include "Test.h"
 
 // test that we can draw an aa-rect at coordinates > 32K (bigger than fixedpoint)
-static void test_big_aa_rect(skiatest::Reporter* reporter) {
+static void test_big_aa_rect(skiatest::Reporter* reporter)
+{
     SkBitmap output;
     SkPMColor pixel[1];
     output.installPixels(SkImageInfo::MakeN32Premul(1, 1), pixel, 4);
 
-    SkSurface* surf = SkSurface::NewRasterN32Premul(300, 33300);
+    auto surf = SkSurface::MakeRasterN32Premul(300, 33300);
     SkCanvas* canvas = surf->getCanvas();
 
     SkRect r = { 0, 33000, 300, 33300 };
@@ -45,17 +47,18 @@ static void test_big_aa_rect(skiatest::Reporter* reporter) {
     } else {
         REPORTER_ASSERT_MESSAGE(reporter, false, "readPixels failed");
     }
-    surf->unref();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void moveToH(SkPath* path, const uint32_t raw[]) {
+static void moveToH(SkPath* path, const uint32_t raw[])
+{
     const float* fptr = (const float*)raw;
     path->moveTo(fptr[0], fptr[1]);
 }
 
-static void cubicToH(SkPath* path, const uint32_t raw[]) {
+static void cubicToH(SkPath* path, const uint32_t raw[])
+{
     const float* fptr = (const float*)raw;
     path->cubicTo(fptr[0], fptr[1], fptr[2], fptr[3], fptr[4], fptr[5]);
 }
@@ -71,7 +74,8 @@ static void cubicToH(SkPath* path, const uint32_t raw[]) {
 
 // we're not calling this test anymore; is that for a reason?
 
-static void test_crbug131181() {
+static void test_crbug131181()
+{
     /*
      fX = 18.8943768,
      fY = 129.121277
@@ -94,7 +98,7 @@ static void test_crbug131181() {
     moveToH(&path, &data[0]);
     cubicToH(&path, &data[2]);
 
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(640, 480));
+    auto surface(SkSurface::MakeRasterN32Premul(640, 480));
 
     SkPaint paint;
     paint.setAntiAlias(true);
@@ -104,9 +108,10 @@ static void test_crbug131181() {
 // This used to assert in debug builds (and crash writing bad memory in release)
 // because we overflowed an intermediate value (B coefficient) setting up our
 // stepper for the quadratic. Now we bias that value by 1/2 so we don't overflow
-static void test_crbug_140803() {
+static void test_crbug_140803()
+{
     SkBitmap bm;
-    bm.allocN32Pixels(2700, 30*1024);
+    bm.allocN32Pixels(2700, 30 * 1024);
     SkCanvas canvas(bm);
 
     SkPath path;
@@ -122,7 +127,8 @@ static void test_crbug_140803() {
 // of its bounds).
 // In the debug build, we used to assert in this case, until it was fixed.
 //
-static void test_inversepathwithclip() {
+static void test_inversepathwithclip()
+{
     SkPath path;
 
     path.moveTo(0, 20);
@@ -131,7 +137,7 @@ static void test_inversepathwithclip() {
 
     SkPaint paint;
 
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(640, 480));
+    auto surface(SkSurface::MakeRasterN32Premul(640, 480));
     SkCanvas* canvas = surface->getCanvas();
     canvas->save();
     canvas->clipRect(SkRect::MakeWH(19, 11));
@@ -146,7 +152,7 @@ static void test_inversepathwithclip() {
     // Now do the test again, with the path flipped, so we only draw in the
     // top half of our bounds, and have the clip intersect our bounds at the
     // bottom.
-    path.reset();   // preserves our filltype
+    path.reset(); // preserves our filltype
     path.moveTo(0, 10);
     path.quadTo(10, 20, 20, 10);
     canvas->clipRect(SkRect::MakeXYWH(0, 19, 19, 11));
@@ -157,7 +163,8 @@ static void test_inversepathwithclip() {
     canvas->drawPath(path, paint);
 }
 
-static void test_bug533() {
+static void test_bug533()
+{
     /*
         http://code.google.com/p/skia/issues/detail?id=533
         This particular test/bug only applies to the float case, where the
@@ -170,11 +177,12 @@ static void test_bug533() {
     SkPaint paint;
     paint.setAntiAlias(true);
 
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(640, 480));
+    auto surface(SkSurface::MakeRasterN32Premul(640, 480));
     surface->getCanvas()->drawPath(path, paint);
 }
 
-static void test_crbug_140642() {
+static void test_crbug_140642()
+{
     /*
      *  We used to see this construct, and due to rounding as we accumulated
      *  our length, the loop where we apply the phase would run off the end of
@@ -191,20 +199,22 @@ static void test_crbug_140642() {
      */
 
     const SkScalar vals[] = { 27734, 35660, 2157846850.0f, 247 };
-    SkAutoTUnref<SkDashPathEffect> dontAssert(SkDashPathEffect::Create(vals, 4, -248.135982067f));
+    auto dontAssert = SkDashPathEffect::Make(vals, 4, -248.135982067f);
 }
 
-static void test_crbug_124652() {
+static void test_crbug_124652()
+{
     /*
         http://code.google.com/p/chromium/issues/detail?id=124652
         This particular test/bug only applies to the float case, where
         large values can "swamp" small ones.
      */
-    SkScalar intervals[2] = {837099584, 33450};
-    SkAutoTUnref<SkDashPathEffect> dash(SkDashPathEffect::Create(intervals, 2, -10));
+    SkScalar intervals[2] = { 837099584, 33450 };
+    auto dontAssert = SkDashPathEffect::Make(intervals, 2, -10);
 }
 
-static void test_bigcubic() {
+static void test_bigcubic()
+{
     SkPath path;
     path.moveTo(64, 3);
     path.cubicTo(-329936, -100000000, -329936, 100000000, 1153, 330003);
@@ -212,17 +222,58 @@ static void test_bigcubic() {
     SkPaint paint;
     paint.setAntiAlias(true);
 
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(640, 480));
+    auto surface(SkSurface::MakeRasterN32Premul(640, 480));
     surface->getCanvas()->drawPath(path, paint);
+}
+
+// asserts if halfway case is not handled
+static void test_halfway()
+{
+    SkPaint paint;
+    SkPath path;
+    path.moveTo(16365.5f, 1394);
+    path.lineTo(16365.5f, 1387.5f);
+    path.quadTo(16365.5f, 1385.43f, 16367, 1383.96f);
+    path.quadTo(16368.4f, 1382.5f, 16370.5f, 1382.5f);
+    path.lineTo(16465.5f, 1382.5f);
+    path.quadTo(16467.6f, 1382.5f, 16469, 1383.96f);
+    path.quadTo(16470.5f, 1385.43f, 16470.5f, 1387.5f);
+    path.lineTo(16470.5f, 1394);
+    path.quadTo(16470.5f, 1396.07f, 16469, 1397.54f);
+    path.quadTo(16467.6f, 1399, 16465.5f, 1399);
+    path.lineTo(16370.5f, 1399);
+    path.quadTo(16368.4f, 1399, 16367, 1397.54f);
+    path.quadTo(16365.5f, 1396.07f, 16365.5f, 1394);
+    path.close();
+    SkPath p2;
+    SkMatrix m;
+    m.reset();
+    m.postTranslate(0.001f, 0.001f);
+    path.transform(m, &p2);
+
+    auto surface(SkSurface::MakeRasterN32Premul(640, 480));
+    SkCanvas* canvas = surface->getCanvas();
+    canvas->translate(-16366, -1383);
+    canvas->drawPath(p2, paint);
+
+    m.reset();
+    m.postTranslate(-0.001f, -0.001f);
+    path.transform(m, &p2);
+    canvas->drawPath(p2, paint);
+
+    m.reset();
+    path.transform(m, &p2);
+    canvas->drawPath(p2, paint);
 }
 
 // we used to assert if the bounds of the device (clip) was larger than 32K
 // even when the path itself was smaller. We just draw and hope in the debug
 // version to not assert.
-static void test_giantaa() {
+static void test_giantaa()
+{
     const int W = 400;
     const int H = 400;
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(33000, 10));
+    auto surface(SkSurface::MakeRasterN32Premul(33000, 10));
 
     SkPaint paint;
     paint.setAntiAlias(true);
@@ -235,13 +286,14 @@ static void test_giantaa() {
 // in SkDashPathEffect::filterPath() due to single precision rounding.
 // The test is quite expensive, but it should get much faster after the fix
 // for http://crbug.com/165432 goes in.
-static void test_infinite_dash(skiatest::Reporter* reporter) {
+static void test_infinite_dash(skiatest::Reporter* reporter)
+{
     SkPath path;
     path.moveTo(0, 0);
     path.lineTo(5000000, 0);
 
     SkScalar intervals[] = { 0.2f, 0.2f };
-    SkAutoTUnref<SkDashPathEffect> dash(SkDashPathEffect::Create(intervals, 2, 0));
+    sk_sp<SkPathEffect> dash(SkDashPathEffect::Make(intervals, 2, 0));
 
     SkPath filteredPath;
     SkPaint paint;
@@ -255,13 +307,14 @@ static void test_infinite_dash(skiatest::Reporter* reporter) {
 
 // http://crbug.com/165432
 // Limit extreme dash path effects to avoid exhausting the system memory.
-static void test_crbug_165432(skiatest::Reporter* reporter) {
+static void test_crbug_165432(skiatest::Reporter* reporter)
+{
     SkPath path;
     path.moveTo(0, 0);
     path.lineTo(10000000, 0);
 
     SkScalar intervals[] = { 0.5f, 0.5f };
-    SkAutoTUnref<SkDashPathEffect> dash(SkDashPathEffect::Create(intervals, 2, 0));
+    sk_sp<SkPathEffect> dash(SkDashPathEffect::Make(intervals, 2, 0));
 
     SkPaint paint;
     paint.setStyle(SkPaint::kStroke_Style);
@@ -269,11 +322,47 @@ static void test_crbug_165432(skiatest::Reporter* reporter) {
 
     SkPath filteredPath;
     SkStrokeRec rec(paint);
-    REPORTER_ASSERT(reporter, !dash->filterPath(&filteredPath, path, &rec, NULL));
+    REPORTER_ASSERT(reporter, !dash->filterPath(&filteredPath, path, &rec, nullptr));
     REPORTER_ASSERT(reporter, filteredPath.isEmpty());
 }
 
-DEF_TEST(DrawPath, reporter) {
+// http://crbug.com/472147
+// This is a simplified version from the bug. RRect radii not properly scaled.
+static void test_crbug_472147_simple(skiatest::Reporter* reporter)
+{
+    auto surface(SkSurface::MakeRasterN32Premul(1000, 1000));
+    SkCanvas* canvas = surface->getCanvas();
+    SkPaint p;
+    SkRect r = SkRect::MakeLTRB(-246.0f, 33.0f, 848.0f, 33554464.0f);
+    SkVector radii[4] = {
+        { 13.0f, 8.0f }, { 170.0f, 2.0 }, { 256.0f, 33554430.0f }, { 120.0f, 5.0f }
+    };
+    SkRRect rr;
+    rr.setRectRadii(r, radii);
+    canvas->drawRRect(rr, p);
+}
+
+// http://crbug.com/472147
+// RRect radii not properly scaled.
+static void test_crbug_472147_actual(skiatest::Reporter* reporter)
+{
+    auto surface(SkSurface::MakeRasterN32Premul(1000, 1000));
+    SkCanvas* canvas = surface->getCanvas();
+    SkPaint p;
+    SkRect r = SkRect::MakeLTRB(-246.0f, 33.0f, 848.0f, 33554464.0f);
+    SkVector radii[4] = {
+        { 13.0f, 8.0f }, { 170.0f, 2.0 }, { 256.0f, 33554430.0f }, { 120.0f, 5.0f }
+    };
+    SkRRect rr;
+    rr.setRectRadii(r, radii);
+    canvas->clipRRect(rr, SkRegion::kIntersect_Op, false);
+
+    SkRect r2 = SkRect::MakeLTRB(0, 33, 1102, 33554464);
+    canvas->drawRect(r2, p);
+}
+
+DEF_TEST(DrawPath, reporter)
+{
     test_giantaa();
     test_bug533();
     test_bigcubic();
@@ -282,8 +371,12 @@ DEF_TEST(DrawPath, reporter) {
     test_crbug_140803();
     test_inversepathwithclip();
     // why?
-    if (false) test_crbug131181();
+    if (false)
+        test_crbug131181();
     test_infinite_dash(reporter);
     test_crbug_165432(reporter);
+    test_crbug_472147_simple(reporter);
+    test_crbug_472147_actual(reporter);
     test_big_aa_rect(reporter);
+    test_halfway();
 }

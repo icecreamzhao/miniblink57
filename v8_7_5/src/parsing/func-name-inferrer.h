@@ -13,118 +13,129 @@
 namespace v8 {
 namespace internal {
 
-class AstConsString;
-class AstRawString;
-class AstValueFactory;
-class FunctionLiteral;
+    class AstConsString;
+    class AstRawString;
+    class AstValueFactory;
+    class FunctionLiteral;
 
-enum class InferName { kYes, kNo };
+    enum class InferName { kYes,
+        kNo };
 
-template <>
-struct PointerWithPayloadTraits<AstRawString> {
-  static constexpr int value = 2;
-};
+    template <>
+    struct PointerWithPayloadTraits<AstRawString> {
+        static constexpr int value = 2;
+    };
 
-// FuncNameInferrer is a stateful class that is used to perform name
-// inference for anonymous functions during static analysis of source code.
-// Inference is performed in cases when an anonymous function is assigned
-// to a variable or a property (see test-func-name-inference.cc for examples.)
-//
-// The basic idea is that during parsing of LHSs of certain expressions
-// (assignments, declarations, object literals) we collect name strings,
-// and during parsing of the RHS, a function literal can be collected. After
-// parsing the RHS we can infer a name for function literals that do not have
-// a name.
-class FuncNameInferrer {
- public:
-  explicit FuncNameInferrer(AstValueFactory* ast_value_factory);
+    // FuncNameInferrer is a stateful class that is used to perform name
+    // inference for anonymous functions during static analysis of source code.
+    // Inference is performed in cases when an anonymous function is assigned
+    // to a variable or a property (see test-func-name-inference.cc for examples.)
+    //
+    // The basic idea is that during parsing of LHSs of certain expressions
+    // (assignments, declarations, object literals) we collect name strings,
+    // and during parsing of the RHS, a function literal can be collected. After
+    // parsing the RHS we can infer a name for function literals that do not have
+    // a name.
+    class FuncNameInferrer {
+    public:
+        explicit FuncNameInferrer(AstValueFactory* ast_value_factory);
 
-  // To enter function name inference state, put a FuncNameInferrer::State
-  // on the stack.
-  class State {
-   public:
-    explicit State(FuncNameInferrer* fni)
-        : fni_(fni), top_(fni->names_stack_.size()) {
-      ++fni_->scope_depth_;
-    }
-    ~State() {
-      DCHECK(fni_->IsOpen());
-      fni_->names_stack_.resize(top_);
-      --fni_->scope_depth_;
-    }
+        // To enter function name inference state, put a FuncNameInferrer::State
+        // on the stack.
+        class State {
+        public:
+            explicit State(FuncNameInferrer* fni)
+                : fni_(fni)
+                , top_(fni->names_stack_.size())
+            {
+                ++fni_->scope_depth_;
+            }
+            ~State()
+            {
+                DCHECK(fni_->IsOpen());
+                fni_->names_stack_.resize(top_);
+                --fni_->scope_depth_;
+            }
 
-   private:
-    FuncNameInferrer* fni_;
-    size_t top_;
+        private:
+            FuncNameInferrer* fni_;
+            size_t top_;
 
-    DISALLOW_COPY_AND_ASSIGN(State);
-  };
+            DISALLOW_COPY_AND_ASSIGN(State);
+        };
 
-  // Returns whether we have entered name collection state.
-  bool IsOpen() const { return scope_depth_ > 0; }
+        // Returns whether we have entered name collection state.
+        bool IsOpen() const { return scope_depth_ > 0; }
 
-  // Pushes an enclosing the name of enclosing function onto names stack.
-  void PushEnclosingName(const AstRawString* name);
+        // Pushes an enclosing the name of enclosing function onto names stack.
+        void PushEnclosingName(const AstRawString* name);
 
-  // Pushes an encountered name onto names stack when in collection state.
-  void PushLiteralName(const AstRawString* name);
+        // Pushes an encountered name onto names stack when in collection state.
+        void PushLiteralName(const AstRawString* name);
 
-  void PushVariableName(const AstRawString* name);
+        void PushVariableName(const AstRawString* name);
 
-  // Adds a function to infer name for.
-  void AddFunction(FunctionLiteral* func_to_infer) {
-    if (IsOpen()) {
-      funcs_to_infer_.push_back(func_to_infer);
-    }
-  }
+        // Adds a function to infer name for.
+        void AddFunction(FunctionLiteral* func_to_infer)
+        {
+            if (IsOpen()) {
+                funcs_to_infer_.push_back(func_to_infer);
+            }
+        }
 
-  void RemoveLastFunction() {
-    if (IsOpen() && !funcs_to_infer_.empty()) funcs_to_infer_.pop_back();
-  }
+        void RemoveLastFunction()
+        {
+            if (IsOpen() && !funcs_to_infer_.empty())
+                funcs_to_infer_.pop_back();
+        }
 
-  void RemoveAsyncKeywordFromEnd();
+        void RemoveAsyncKeywordFromEnd();
 
-  // Infers a function name and leaves names collection state.
-  void Infer() {
-    DCHECK(IsOpen());
-    if (!funcs_to_infer_.empty()) InferFunctionsNames();
-  }
+        // Infers a function name and leaves names collection state.
+        void Infer()
+        {
+            DCHECK(IsOpen());
+            if (!funcs_to_infer_.empty())
+                InferFunctionsNames();
+        }
 
- private:
-  enum NameType : uint8_t {
-    kEnclosingConstructorName,
-    kLiteralName,
-    kVariableName
-  };
-  struct Name {
-    // Needed for names_stack_.resize()
-    Name() { UNREACHABLE(); }
-    Name(const AstRawString* name, NameType type)
-        : name_and_type_(name, type) {}
+    private:
+        enum NameType : uint8_t {
+            kEnclosingConstructorName,
+            kLiteralName,
+            kVariableName
+        };
+        struct Name {
+            // Needed for names_stack_.resize()
+            Name() { UNREACHABLE(); }
+            Name(const AstRawString* name, NameType type)
+                : name_and_type_(name, type)
+            {
+            }
 
-    PointerWithPayload<const AstRawString, NameType, 2> name_and_type_;
-    inline const AstRawString* name() const {
-      return name_and_type_.GetPointer();
-    }
-    inline NameType type() const { return name_and_type_.GetPayload(); }
-  };
+            PointerWithPayload<const AstRawString, NameType, 2> name_and_type_;
+            inline const AstRawString* name() const
+            {
+                return name_and_type_.GetPointer();
+            }
+            inline NameType type() const { return name_and_type_.GetPayload(); }
+        };
 
-  // Constructs a full name in dotted notation from gathered names.
-  const AstConsString* MakeNameFromStack();
+        // Constructs a full name in dotted notation from gathered names.
+        const AstConsString* MakeNameFromStack();
 
-  // Performs name inferring for added functions.
-  void InferFunctionsNames();
+        // Performs name inferring for added functions.
+        void InferFunctionsNames();
 
-  AstValueFactory* ast_value_factory_;
-  std::vector<Name> names_stack_;
-  std::vector<FunctionLiteral*> funcs_to_infer_;
-  size_t scope_depth_ = 0;
+        AstValueFactory* ast_value_factory_;
+        std::vector<Name> names_stack_;
+        std::vector<FunctionLiteral*> funcs_to_infer_;
+        size_t scope_depth_ = 0;
 
-  DISALLOW_COPY_AND_ASSIGN(FuncNameInferrer);
-};
+        DISALLOW_COPY_AND_ASSIGN(FuncNameInferrer);
+    };
 
+} // namespace internal
+} // namespace v8
 
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_PARSING_FUNC_NAME_INFERRER_H_
+#endif // V8_PARSING_FUNC_NAME_INFERRER_H_

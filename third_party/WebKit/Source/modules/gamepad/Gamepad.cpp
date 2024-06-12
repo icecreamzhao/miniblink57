@@ -23,7 +23,6 @@
  * DAMAGE.
  */
 
-#include "config.h"
 #include "modules/gamepad/Gamepad.h"
 
 namespace blink {
@@ -31,12 +30,11 @@ namespace blink {
 Gamepad::Gamepad()
     : m_index(0)
     , m_timestamp(0)
+    , m_displayId(0)
 {
 }
 
-Gamepad::~Gamepad()
-{
-}
+Gamepad::~Gamepad() { }
 
 void Gamepad::setAxes(unsigned count, const double* data)
 {
@@ -55,12 +53,45 @@ void Gamepad::setButtons(unsigned count, const WebGamepadButton* data)
     for (unsigned i = 0; i < count; ++i) {
         m_buttons[i]->setValue(data[i].value);
         m_buttons[i]->setPressed(data[i].pressed);
+        m_buttons[i]->setTouched(data[i].touched || data[i].pressed || (data[i].value > 0.0f));
+    }
+}
+
+void Gamepad::setPose(const WebGamepadPose& pose)
+{
+    if (!pose.notNull) {
+        if (m_pose)
+            m_pose = nullptr;
+        return;
+    }
+
+    if (!m_pose)
+        m_pose = GamepadPose::create();
+
+    m_pose->setPose(pose);
+}
+
+void Gamepad::setHand(const WebGamepadHand& hand)
+{
+    switch (hand) {
+    case GamepadHandNone:
+        m_hand = "";
+        break;
+    case GamepadHandLeft:
+        m_hand = "left";
+        break;
+    case GamepadHandRight:
+        m_hand = "right";
+        break;
+    default:
+        NOTREACHED();
     }
 }
 
 DEFINE_TRACE(Gamepad)
 {
     visitor->trace(m_buttons);
+    visitor->trace(m_pose);
 }
 
 } // namespace blink

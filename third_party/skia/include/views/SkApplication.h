@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkApplication_DEFINED
 #define SkApplication_DEFINED
 
@@ -23,8 +22,8 @@ enum IOS_launch_type {
     kApplication__iOSLaunchType = 1
 };
 
-extern IOS_launch_type set_cmd_line_args(int argc, char *argv[],
-                                         const char* resourceDir);
+extern IOS_launch_type set_cmd_line_args(int argc, char* argv[],
+    const char* resourceDir);
 #endif
 
 #endif // SkApplication_DEFINED

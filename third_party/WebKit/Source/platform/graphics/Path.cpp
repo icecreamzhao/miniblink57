@@ -27,10 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/graphics/Path.h"
 
-#include <math.h>
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/GraphicsContext.h"
@@ -38,6 +36,7 @@
 #include "platform/transforms/AffineTransform.h"
 #include "third_party/skia/include/pathops/SkPathOps.h"
 #include "wtf/MathExtras.h"
+#include <math.h>
 
 namespace blink {
 
@@ -51,9 +50,12 @@ Path::Path(const Path& other)
     m_path = SkPath(other.m_path);
 }
 
-Path::~Path()
+Path::Path(const SkPath& other)
 {
+    m_path = other;
 }
+
+Path::~Path() { }
 
 Path& Path::operator=(const Path& other)
 {
@@ -72,12 +74,27 @@ bool Path::operator==(const Path& other) const
     return m_path == other.m_path;
 }
 
-bool Path::contains(const FloatPoint& point, WindRule rule) const
+bool Path::contains(const FloatPoint& point) const
 {
-    return SkPathContainsPoint(m_path, point, static_cast<SkPath::FillType>(rule));
+    return m_path.contains(WebCoreFloatToSkScalar(point.x()),
+        WebCoreFloatToSkScalar(point.y()));
 }
 
-// FIXME: this method ignores the CTM and may yield inaccurate results for large scales.
+bool Path::contains(const FloatPoint& point, WindRule rule) const
+{
+    SkScalar x = WebCoreFloatToSkScalar(point.x());
+    SkScalar y = WebCoreFloatToSkScalar(point.y());
+    SkPath::FillType fillType = WebCoreWindRuleToSkFillType(rule);
+    if (m_path.getFillType() != fillType) {
+        SkPath tmp(m_path);
+        tmp.setFillType(fillType);
+        return tmp.contains(x, y);
+    }
+    return m_path.contains(x, y);
+}
+
+// FIXME: this method ignores the CTM and may yield inaccurate results for large
+// scales.
 SkPath Path::strokePath(const StrokeData& strokeData) const
 {
     SkPaint paint;
@@ -93,22 +110,44 @@ SkPath Path::strokePath(const StrokeData& strokeData) const
     return strokePath;
 }
 
-bool Path::strokeContains(const FloatPoint& point, const StrokeData& strokeData) const
+bool Path::strokeContains(const FloatPoint& point,
+    const StrokeData& strokeData) const
 {
-    return SkPathContainsPoint(strokePath(strokeData), point, SkPath::kWinding_FillType);
+    return strokePath(strokeData)
+        .contains(WebCoreFloatToSkScalar(point.x()),
+            WebCoreFloatToSkScalar(point.y()));
 }
 
-FloatRect Path::boundingRect() const
+namespace {
+
+    FloatRect pathBounds(const SkPath& path, Path::BoundsType boundsType)
+    {
+        SkRect bounds;
+        if (boundsType == Path::BoundsType::Conservative || !TightBounds(path, &bounds)) {
+            return path.getBounds();
+        }
+
+        DCHECK_EQ(boundsType, Path::BoundsType::Exact);
+        return bounds;
+    }
+
+} // anonymous ns
+
+// TODO(fmalita): evaluate returning exact bounds in all cases.
+FloatRect Path::boundingRect(BoundsType boundsType) const
 {
-    return m_path.getBounds();
+    return pathBounds(m_path, boundsType);
 }
 
-FloatRect Path::strokeBoundingRect(const StrokeData& strokeData) const
+FloatRect Path::strokeBoundingRect(const StrokeData& strokeData,
+    BoundsType boundsType) const
 {
-    return strokePath(strokeData).getBounds();
+    return pathBounds(strokePath(strokeData), boundsType);
 }
 
-static FloatPoint* convertPathPoints(FloatPoint dst[], const SkPoint src[], int count)
+static FloatPoint* convertPathPoints(FloatPoint dst[],
+    const SkPoint src[],
+    int count)
 {
     for (int i = 0; i < count; i++) {
         dst[i].setX(SkScalarToFloat(src[i].fX));
@@ -142,14 +181,28 @@ void Path::apply(void* info, PathApplierFunction function) const
             pathElement.type = PathElementAddCurveToPoint;
             pathElement.points = convertPathPoints(pathPoints, &pts[1], 3);
             break;
+        case SkPath::kConic_Verb: {
+            // Approximate with quads.  Use two for now, increase if more precision
+            // is needed.
+            const int kPow2 = 1;
+            const unsigned quadCount = 1 << kPow2;
+            SkPoint quads[1 + 2 * quadCount];
+            SkPath::ConvertConicToQuads(pts[0], pts[1], pts[2], iter.conicWeight(),
+                quads, kPow2);
+
+            pathElement.type = PathElementAddQuadCurveToPoint;
+            for (unsigned i = 0; i < quadCount; ++i) {
+                pathElement.points = convertPathPoints(pathPoints, &quads[1 + 2 * i], 2);
+                function(info, &pathElement);
+            }
+            continue;
+        }
         case SkPath::kClose_Verb:
             pathElement.type = PathElementCloseSubpath;
             pathElement.points = convertPathPoints(pathPoints, 0, 0);
             break;
         case SkPath::kDone_Verb:
             return;
-        default: // place-holder for kConic_Verb, when that lands from skia
-            break;
         }
         function(info, &pathElement);
     }
@@ -172,15 +225,19 @@ float Path::length() const
     return SkScalarToFloat(length);
 }
 
-FloatPoint Path::pointAtLength(float length, bool& ok) const
+FloatPoint Path::pointAtLength(float length) const
 {
     FloatPoint point;
     float normal;
-    ok = pointAndNormalAtLength(length, point, normal);
+    pointAndNormalAtLength(length, point, normal);
     return point;
 }
 
-static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar length, FloatPoint& point, float& normalAngle, SkScalar* accumulatedLength = 0)
+static bool calculatePointAndNormalOnPath(SkPathMeasure& measure,
+    SkScalar length,
+    FloatPoint& point,
+    float& normalAngle,
+    SkScalar* accumulatedLength = 0)
 {
     do {
         SkScalar contourLength = measure.getLength();
@@ -190,7 +247,8 @@ static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar lengt
 
             if (measure.getPosTan(length, &position, &tangent)) {
                 normalAngle = rad2deg(SkScalarToFloat(SkScalarATan2(tangent.fY, tangent.fX)));
-                point = FloatPoint(SkScalarToFloat(position.fX), SkScalarToFloat(position.fY));
+                point = FloatPoint(SkScalarToFloat(position.fX),
+                    SkScalarToFloat(position.fY));
                 return true;
             }
         }
@@ -201,26 +259,30 @@ static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar lengt
     return false;
 }
 
-bool Path::pointAndNormalAtLength(float length, FloatPoint& point, float& normal) const
+void Path::pointAndNormalAtLength(float length,
+    FloatPoint& point,
+    float& normal) const
 {
     SkPathMeasure measure(m_path, false);
+    if (calculatePointAndNormalOnPath(measure, WebCoreFloatToSkScalar(length),
+            point, normal))
+        return;
 
-    if (calculatePointAndNormalOnPath(measure, WebCoreFloatToSkScalar(length), point, normal))
-        return true;
-
+    SkPoint position = m_path.getPoint(0);
+    point = FloatPoint(SkScalarToFloat(position.fX), SkScalarToFloat(position.fY));
     normal = 0;
-    point = FloatPoint(0, 0);
-    return false;
 }
 
 Path::PositionCalculator::PositionCalculator(const Path& path)
-    : m_path(path.skPath())
-    , m_pathMeasure(path.skPath(), false)
+    : m_path(path.getSkPath())
+    , m_pathMeasure(path.getSkPath(), false)
     , m_accumulatedLength(0)
 {
 }
 
-bool Path::PositionCalculator::pointAndNormalAtLength(float length, FloatPoint& point, float& normalAngle)
+void Path::PositionCalculator::pointAndNormalAtLength(float length,
+    FloatPoint& point,
+    float& normalAngle)
 {
     SkScalar skLength = WebCoreFloatToSkScalar(length);
     if (skLength >= 0) {
@@ -232,13 +294,15 @@ bool Path::PositionCalculator::pointAndNormalAtLength(float length, FloatPoint& 
             skLength -= m_accumulatedLength;
         }
 
-        if (calculatePointAndNormalOnPath(m_pathMeasure, skLength, point, normalAngle, &m_accumulatedLength))
-            return true;
+        if (calculatePointAndNormalOnPath(m_pathMeasure, skLength, point,
+                normalAngle, &m_accumulatedLength))
+            return;
     }
 
+    SkPoint position = m_path.getPoint(0);
+    point = FloatPoint(SkScalarToFloat(position.fX), SkScalarToFloat(position.fY));
     normalAngle = 0;
-    point = FloatPoint(0, 0);
-    return false;
+    return;
 }
 
 void Path::clear()
@@ -249,6 +313,11 @@ void Path::clear()
 bool Path::isEmpty() const
 {
     return m_path.isEmpty();
+}
+
+bool Path::isClosed() const
+{
+    return m_path.isLastContourClosed();
 }
 
 void Path::setIsVolatile(bool isVolatile)
@@ -297,7 +366,9 @@ void Path::addQuadCurveTo(const FloatPoint& cp, const FloatPoint& ep)
     m_path.quadTo(cp.data(), ep.data());
 }
 
-void Path::addBezierCurveTo(const FloatPoint& p1, const FloatPoint& p2, const FloatPoint& ep)
+void Path::addBezierCurveTo(const FloatPoint& p1,
+    const FloatPoint& p2,
+    const FloatPoint& ep)
 {
     m_path.cubicTo(p1.data(), p2.data(), ep.data());
 }
@@ -307,12 +378,31 @@ void Path::addArcTo(const FloatPoint& p1, const FloatPoint& p2, float radius)
     m_path.arcTo(p1.data(), p2.data(), WebCoreFloatToSkScalar(radius));
 }
 
+void Path::addArcTo(const FloatPoint& p,
+    const FloatSize& r,
+    float xRotate,
+    bool largeArc,
+    bool sweep)
+{
+    m_path.arcTo(WebCoreFloatToSkScalar(r.width()),
+        WebCoreFloatToSkScalar(r.height()),
+        WebCoreFloatToSkScalar(xRotate),
+        largeArc ? SkPath::kLarge_ArcSize : SkPath::kSmall_ArcSize,
+        sweep ? SkPath::kCW_Direction : SkPath::kCCW_Direction,
+        WebCoreFloatToSkScalar(p.x()), WebCoreFloatToSkScalar(p.y()));
+}
+
 void Path::closeSubpath()
 {
     m_path.close();
 }
 
-void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float startAngle, float endAngle, bool anticlockwise)
+void Path::addEllipse(const FloatPoint& p,
+    float radiusX,
+    float radiusY,
+    float startAngle,
+    float endAngle,
+    bool anticlockwise)
 {
     ASSERT(ellipseIsRenderable(startAngle, endAngle));
     ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
@@ -324,19 +414,23 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float s
     SkScalar radiusYScalar = WebCoreFloatToSkScalar(radiusY);
 
     SkRect oval;
-    oval.set(cx - radiusXScalar, cy - radiusYScalar, cx + radiusXScalar, cy + radiusYScalar);
+    oval.set(cx - radiusXScalar, cy - radiusYScalar, cx + radiusXScalar,
+        cy + radiusYScalar);
 
     float sweep = endAngle - startAngle;
     SkScalar startDegrees = WebCoreFloatToSkScalar(startAngle * 180 / piFloat);
     SkScalar sweepDegrees = WebCoreFloatToSkScalar(sweep * 180 / piFloat);
     SkScalar s360 = SkIntToScalar(360);
 
-    // We can't use SkPath::addOval(), because addOval() makes new sub-path. addOval() calls moveTo() and close() internally.
+    // We can't use SkPath::addOval(), because addOval() makes a new sub-path.
+    // addOval() calls moveTo() and close() internally.
 
-    // Use s180, not s360, because SkPath::arcTo(oval, angle, s360, false) draws nothing.
+    // Use s180, not s360, because SkPath::arcTo(oval, angle, s360, false) draws
+    // nothing.
     SkScalar s180 = SkIntToScalar(180);
     if (SkScalarNearlyEqual(sweepDegrees, s360)) {
-        // SkPath::arcTo can't handle the sweepAngle that is equal to or greater than 2Pi.
+        // SkPath::arcTo can't handle the sweepAngle that is equal to or greater
+        // than 2Pi.
         m_path.arcTo(oval, startDegrees, s180, false);
         m_path.arcTo(oval, startDegrees + s180, s180, false);
         return;
@@ -350,24 +444,36 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float s
     m_path.arcTo(oval, startDegrees, sweepDegrees, false);
 }
 
-void Path::addArc(const FloatPoint& p, float radius, float startAngle, float endAngle, bool anticlockwise)
+void Path::addArc(const FloatPoint& p,
+    float radius,
+    float startAngle,
+    float endAngle,
+    bool anticlockwise)
 {
     addEllipse(p, radius, radius, startAngle, endAngle, anticlockwise);
 }
 
 void Path::addRect(const FloatRect& rect)
 {
-    m_path.addRect(rect);
+    // Start at upper-left, add clock-wise.
+    m_path.addRect(rect, SkPath::kCW_Direction, 0);
 }
 
-void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise)
+void Path::addEllipse(const FloatPoint& p,
+    float radiusX,
+    float radiusY,
+    float rotation,
+    float startAngle,
+    float endAngle,
+    bool anticlockwise)
 {
     ASSERT(ellipseIsRenderable(startAngle, endAngle));
     ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
     ASSERT((anticlockwise && (startAngle - endAngle) >= 0) || (!anticlockwise && (endAngle - startAngle) >= 0));
 
     if (!rotation) {
-        addEllipse(FloatPoint(p.x(), p.y()), radiusX, radiusY, startAngle, endAngle, anticlockwise);
+        addEllipse(FloatPoint(p.x(), p.y()), radiusX, radiusY, startAngle, endAngle,
+            anticlockwise);
         return;
     }
 
@@ -376,21 +482,25 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float r
     ASSERT(ellipseTransform.isInvertible());
     AffineTransform inverseEllipseTransform = ellipseTransform.inverse();
     transform(inverseEllipseTransform);
-    addEllipse(FloatPoint::zero(), radiusX, radiusY, startAngle, endAngle, anticlockwise);
+    addEllipse(FloatPoint::zero(), radiusX, radiusY, startAngle, endAngle,
+        anticlockwise);
     transform(ellipseTransform);
 }
 
 void Path::addEllipse(const FloatRect& rect)
 {
-    m_path.addOval(rect);
+    // Start at 3 o'clock, add clock-wise.
+    m_path.addOval(rect, SkPath::kCW_Direction, 1);
 }
 
 void Path::addRoundedRect(const FloatRoundedRect& r)
 {
-    addRoundedRect(r.rect(), r.radii().topLeft(), r.radii().topRight(), r.radii().bottomLeft(), r.radii().bottomRight());
+    addRoundedRect(r.rect(), r.getRadii().topLeft(), r.getRadii().topRight(),
+        r.getRadii().bottomLeft(), r.getRadii().bottomRight());
 }
 
-void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
+void Path::addRoundedRect(const FloatRect& rect,
+    const FloatSize& roundingRadii)
 {
     if (rect.isEmpty())
         return;
@@ -398,10 +508,11 @@ void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
     FloatSize radius(roundingRadii);
     FloatSize halfSize(rect.width() / 2, rect.height() / 2);
 
-    // Apply the SVG corner radius constraints, per the rect section of the SVG shapes spec: if
-    // one of rx,ry is negative, then the other corner radius value is used. If both values are
-    // negative then rx = ry = 0. If rx is greater than half of the width of the rectangle
-    // then set rx to half of the width; ry is handled similarly.
+    // Apply the SVG corner radius constraints, per the rect section of the SVG
+    // shapes spec: if one of rx,ry is negative, then the other corner radius
+    // value is used. If both values are negative then rx = ry = 0. If rx is
+    // greater than half of the width of the rectangle then set rx to half of the
+    // width; ry is handled similarly.
 
     if (radius.width() < 0)
         radius.setWidth((radius.height() < 0) ? 0 : radius.height());
@@ -418,72 +529,51 @@ void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
     addPathForRoundedRect(rect, radius, radius, radius, radius);
 }
 
-void Path::addRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
+void Path::addRoundedRect(const FloatRect& rect,
+    const FloatSize& topLeftRadius,
+    const FloatSize& topRightRadius,
+    const FloatSize& bottomLeftRadius,
+    const FloatSize& bottomRightRadius)
 {
     if (rect.isEmpty())
         return;
 
-    if (rect.width() < topLeftRadius.width() + topRightRadius.width()
-            || rect.width() < bottomLeftRadius.width() + bottomRightRadius.width()
-            || rect.height() < topLeftRadius.height() + bottomLeftRadius.height()
-            || rect.height() < topRightRadius.height() + bottomRightRadius.height()) {
+    if (rect.width() < topLeftRadius.width() + topRightRadius.width() || rect.width() < bottomLeftRadius.width() + bottomRightRadius.width() || rect.height() < topLeftRadius.height() + bottomLeftRadius.height() || rect.height() < topRightRadius.height() + bottomRightRadius.height()) {
         // If all the radii cannot be accommodated, return a rect.
-        // FIXME: is this an error scenario, given that it appears the code in FloatRoundedRect::constrainRadii()
-        // should be always called first? Should we assert that this code is not reached?
-        // This fallback is very bad, since it means that radii that are just barely too big due to rounding or snapping
-        // will get completely ignored.
+        // FIXME: Is this an error scenario, given that it appears the code in
+        // FloatRoundedRect::constrainRadii() should be always called first? Should
+        // we assert that this code is not reached? This fallback is very bad, since
+        // it means that radii that are just barely too big due to rounding or
+        // snapping will get completely ignored.
         addRect(rect);
         return;
     }
 
-    addPathForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
+    addPathForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius,
+        bottomRightRadius);
 }
 
-void Path::addPathForRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
+void Path::addPathForRoundedRect(const FloatRect& rect,
+    const FloatSize& topLeftRadius,
+    const FloatSize& topRightRadius,
+    const FloatSize& bottomLeftRadius,
+    const FloatSize& bottomRightRadius)
 {
-    addBeziersForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
-}
-
-// Approximation of control point positions on a bezier to simulate a quarter of a circle.
-// This is 1-kappa, where kappa = 4 * (sqrt(2) - 1) / 3
-static const float gCircleControlPoint = 0.447715f;
-
-void Path::addBeziersForRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
-{
-    moveTo(FloatPoint(rect.x() + topLeftRadius.width(), rect.y()));
-
-    addLineTo(FloatPoint(rect.maxX() - topRightRadius.width(), rect.y()));
-    if (topRightRadius.width() > 0 || topRightRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.maxX() - topRightRadius.width() * gCircleControlPoint, rect.y()),
-            FloatPoint(rect.maxX(), rect.y() + topRightRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.maxX(), rect.y() + topRightRadius.height()));
-    addLineTo(FloatPoint(rect.maxX(), rect.maxY() - bottomRightRadius.height()));
-    if (bottomRightRadius.width() > 0 || bottomRightRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.maxX(), rect.maxY() - bottomRightRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.maxX() - bottomRightRadius.width() * gCircleControlPoint, rect.maxY()),
-            FloatPoint(rect.maxX() - bottomRightRadius.width(), rect.maxY()));
-    addLineTo(FloatPoint(rect.x() + bottomLeftRadius.width(), rect.maxY()));
-    if (bottomLeftRadius.width() > 0 || bottomLeftRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.x() + bottomLeftRadius.width() * gCircleControlPoint, rect.maxY()),
-            FloatPoint(rect.x(), rect.maxY() - bottomLeftRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.x(), rect.maxY() - bottomLeftRadius.height()));
-    addLineTo(FloatPoint(rect.x(), rect.y() + topLeftRadius.height()));
-    if (topLeftRadius.width() > 0 || topLeftRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.x(), rect.y() + topLeftRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.x() + topLeftRadius.width() * gCircleControlPoint, rect.y()),
-            FloatPoint(rect.x() + topLeftRadius.width(), rect.y()));
-
-    closeSubpath();
+    // Start at upper-left (after corner radii), add clock-wise.
+    m_path.addRRect(FloatRoundedRect(rect, topLeftRadius, topRightRadius,
+                        bottomLeftRadius, bottomRightRadius),
+        SkPath::kCW_Direction, 0);
 }
 
 void Path::addPath(const Path& src, const AffineTransform& transform)
 {
-    m_path.addPath(src.skPath(), affineTransformToSkMatrix(transform));
+    m_path.addPath(src.getSkPath(), affineTransformToSkMatrix(transform));
 }
 
 void Path::translate(const FloatSize& size)
 {
-    m_path.offset(WebCoreFloatToSkScalar(size.width()), WebCoreFloatToSkScalar(size.height()));
+    m_path.offset(WebCoreFloatToSkScalar(size.width()),
+        WebCoreFloatToSkScalar(size.height()));
 }
 
 bool Path::subtractPath(const Path& other)
@@ -496,11 +586,15 @@ bool Path::unionPath(const Path& other)
     return Op(m_path, other.m_path, kUnion_SkPathOp, &m_path);
 }
 
-#if ENABLE(ASSERT)
+bool Path::intersectPath(const Path& other)
+{
+    return Op(m_path, other.m_path, kIntersect_SkPathOp, &m_path);
+}
+
+#if DCHECK_IS_ON()
 bool ellipseIsRenderable(float startAngle, float endAngle)
 {
-    return (std::abs(endAngle - startAngle) < twoPiFloat)
-        || WebCoreFloatNearlyEqual(std::abs(endAngle - startAngle), twoPiFloat);
+    return (std::abs(endAngle - startAngle) < twoPiFloat) || WebCoreFloatNearlyEqual(std::abs(endAngle - startAngle), twoPiFloat);
 }
 #endif
 

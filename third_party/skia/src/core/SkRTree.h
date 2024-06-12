@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 Google Inc.
  *
@@ -31,18 +30,16 @@
  */
 class SkRTree : public SkBBoxHierarchy {
 public:
-    
-
     /**
      * If you have some prior information about the distribution of bounds you're expecting, you
      * can provide an optional aspect ratio parameter. This allows the bulk-load algorithm to
      * create better proportioned tiles of rectangles.
      */
     explicit SkRTree(SkScalar aspectRatio = 1);
-    virtual ~SkRTree() {}
+    virtual ~SkRTree() { }
 
     void insert(const SkRect[], int N) override;
-    void search(const SkRect& query, SkTDArray<unsigned>* results) const override;
+    void search(const SkRect& query, SkTDArray<int>* results) const override;
     size_t bytesUsed() const override;
 
     // Methods and constants below here are only public for tests.
@@ -65,7 +62,7 @@ private:
     struct Branch {
         union {
             Node* fSubtree;
-            unsigned fOpIndex;
+            int fOpIndex;
         };
         SkRect fBounds;
     };
@@ -76,7 +73,7 @@ private:
         Branch fChildren[kMaxChildren];
     };
 
-    void search(Node* root, const SkRect& query, SkTDArray<unsigned>* results) const;
+    void search(Node* root, const SkRect& query, SkTDArray<int>* results) const;
 
     // Consumes the input array.
     Branch bulkLoad(SkTDArray<Branch>* branches, int level = 0);

@@ -2,32 +2,35 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/notifications/NotificationEvent.h"
+
+#include "modules/notifications/NotificationEventInit.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
-NotificationEvent::NotificationEvent()
-{
-}
-
-NotificationEvent::NotificationEvent(const AtomicString& type, const NotificationEventInit& initializer)
+NotificationEvent::NotificationEvent(const AtomicString& type,
+    const NotificationEventInit& initializer)
     : ExtendableEvent(type, initializer)
+    , m_action(initializer.action())
+    , m_reply(initializer.reply())
 {
     if (initializer.hasNotification())
         m_notification = initializer.notification();
 }
 
-NotificationEvent::NotificationEvent(const AtomicString& type, const NotificationEventInit& initializer, WaitUntilObserver* observer)
+NotificationEvent::NotificationEvent(const AtomicString& type,
+    const NotificationEventInit& initializer,
+    WaitUntilObserver* observer)
     : ExtendableEvent(type, initializer, observer)
+    , m_action(initializer.action())
+    , m_reply(initializer.reply())
 {
     if (initializer.hasNotification())
         m_notification = initializer.notification();
 }
 
-NotificationEvent::~NotificationEvent()
-{
-}
+NotificationEvent::~NotificationEvent() { }
 
 const AtomicString& NotificationEvent::interfaceName() const
 {

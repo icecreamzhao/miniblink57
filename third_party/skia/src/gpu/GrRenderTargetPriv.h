@@ -8,7 +8,10 @@
 #ifndef GrRenderTargetPriv_DEFINED
 #define GrRenderTargetPriv_DEFINED
 
+#include "GrGpu.h"
 #include "GrRenderTarget.h"
+
+class GrStencilSettings;
 
 /** Class that adds methods to GrRenderTarget that are only intended for use internal to Skia.
     This class is purely a privileged window into GrRenderTarget. It should never have additional
@@ -21,16 +24,24 @@ public:
     GrStencilAttachment* getStencilAttachment() const { return fRenderTarget->fStencilAttachment; }
 
     /**
-     * If this render target already has a stencil buffer, return it. Otherwise attempt to attach
-     * one.
+     * Attaches the GrStencilAttachment onto the render target. If stencil is a nullptr then the
+     * currently attached GrStencilAttachment will be removed if one was previously attached. This
+     * function returns false if there were any failure in attaching the GrStencilAttachment.
      */
-    GrStencilAttachment* attachStencilAttachment() const;
+    bool attachStencilAttachment(GrStencilAttachment* stencil);
 
-    void didAttachStencilAttachment(GrStencilAttachment*);
+    int numStencilBits() const;
+
+    const GrGpu::MultisampleSpecs& getMultisampleSpecs(const GrStencilSettings& stencil) const;
+
+    GrRenderTarget::SampleConfig sampleConfig() const { return fRenderTarget->fSampleConfig; }
 
 private:
-    explicit GrRenderTargetPriv(GrRenderTarget* renderTarget) : fRenderTarget(renderTarget) {}
-    GrRenderTargetPriv(const GrRenderTargetPriv&) {} // unimpl
+    explicit GrRenderTargetPriv(GrRenderTarget* renderTarget)
+        : fRenderTarget(renderTarget)
+    {
+    }
+    GrRenderTargetPriv(const GrRenderTargetPriv&) { } // unimpl
     GrRenderTargetPriv& operator=(const GrRenderTargetPriv&); // unimpl
 
     // No taking addresses of this type.
@@ -38,13 +49,14 @@ private:
     GrRenderTargetPriv* operator&();
 
     GrRenderTarget* fRenderTarget;
-        
+
     friend class GrRenderTarget; // to construct/copy this type.
 };
 
 inline GrRenderTargetPriv GrRenderTarget::renderTargetPriv() { return GrRenderTargetPriv(this); }
 
-inline const GrRenderTargetPriv GrRenderTarget::renderTargetPriv () const {
+inline const GrRenderTargetPriv GrRenderTarget::renderTargetPriv() const
+{
     return GrRenderTargetPriv(const_cast<GrRenderTarget*>(this));
 }
 

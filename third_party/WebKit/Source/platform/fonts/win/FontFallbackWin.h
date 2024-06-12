@@ -33,10 +33,10 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontDescription.h"
-#include <unicode/uscript.h>
-#if USING_VC6RT != 1
+#include "platform/fonts/FontFallbackPriority.h"
+// #include <unicode/locid.h>
+// #include <unicode/uscript.h>
 #include <usp10.h>
-#endif
 #include <wchar.h>
 #include <windows.h>
 
@@ -50,7 +50,10 @@ namespace blink {
 // the family is returned.
 PLATFORM_EXPORT const UChar* getFallbackFamily(UChar32 character,
     FontDescription::GenericFamilyType,
+    UScriptCode contentScript,
+    const AtomicString& contentLocale,
     UScriptCode* scriptChecked,
+    FontFallbackPriority,
     SkFontMgr* fontManager);
 
 } // namespace blink

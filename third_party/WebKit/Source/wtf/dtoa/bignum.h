@@ -72,29 +72,36 @@ namespace double_conversion {
         bool ToHexString(char* buffer, int buffer_size) const;
 
         static int Compare(const Bignum& a, const Bignum& b);
-        static bool Equal(const Bignum& a, const Bignum& b) {
+        static bool Equal(const Bignum& a, const Bignum& b)
+        {
             return Compare(a, b) == 0;
         }
-        static bool LessEqual(const Bignum& a, const Bignum& b) {
+        static bool LessEqual(const Bignum& a, const Bignum& b)
+        {
             return Compare(a, b) <= 0;
         }
-        static bool Less(const Bignum& a, const Bignum& b) {
+        static bool Less(const Bignum& a, const Bignum& b)
+        {
             return Compare(a, b) < 0;
         }
         // Returns Compare(a + b, c);
         static int PlusCompare(const Bignum& a, const Bignum& b, const Bignum& c);
         // Returns a + b == c
-        static bool PlusEqual(const Bignum& a, const Bignum& b, const Bignum& c) {
+        static bool PlusEqual(const Bignum& a, const Bignum& b, const Bignum& c)
+        {
             return PlusCompare(a, b, c) == 0;
         }
         // Returns a + b <= c
-        static bool PlusLessEqual(const Bignum& a, const Bignum& b, const Bignum& c) {
+        static bool PlusLessEqual(const Bignum& a, const Bignum& b, const Bignum& c)
+        {
             return PlusCompare(a, b, c) <= 0;
         }
         // Returns a + b < c
-        static bool PlusLess(const Bignum& a, const Bignum& b, const Bignum& c) {
+        static bool PlusLess(const Bignum& a, const Bignum& b, const Bignum& c)
+        {
             return PlusCompare(a, b, c) < 0;
         }
+
     private:
         typedef uint32_t Chunk;
         typedef uint64_t DoubleChunk;
@@ -109,7 +116,8 @@ namespace double_conversion {
         // grow. There are no checks if the stack-allocated space is sufficient.
         static const int kBigitCapacity = kMaxSignificantBits / kBigitSize;
 
-        void EnsureCapacity(int size) {
+        void EnsureCapacity(int size)
+        {
             if (size > kBigitCapacity) {
                 UNREACHABLE();
             }
@@ -138,8 +146,8 @@ namespace double_conversion {
         DISALLOW_COPY_AND_ASSIGN(Bignum);
     };
 
-}  // namespace double_conversion
+} // namespace double_conversion
 
 } // namespace WTF
 
-#endif  // DOUBLE_CONVERSION_BIGNUM_H_
+#endif // DOUBLE_CONVERSION_BIGNUM_H_

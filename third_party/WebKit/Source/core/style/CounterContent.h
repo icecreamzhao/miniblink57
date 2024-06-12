@@ -31,9 +31,12 @@
 namespace blink {
 
 class CounterContent {
-    WTF_MAKE_FAST_ALLOCATED(CounterContent);
+    USING_FAST_MALLOC(CounterContent);
+
 public:
-    CounterContent(const AtomicString& identifier, EListStyleType style, const AtomicString& separator)
+    CounterContent(const AtomicString& identifier,
+        EListStyleType style,
+        const AtomicString& separator)
         : m_identifier(identifier)
         , m_listStyle(style)
         , m_separator(separator)
@@ -50,13 +53,11 @@ private:
     AtomicString m_separator;
 };
 
-static inline bool operator==(const CounterContent& a, const CounterContent& b)
+static inline bool operator==(const CounterContent& a,
+    const CounterContent& b)
 {
-    return a.identifier() == b.identifier()
-        && a.listStyle() == b.listStyle()
-        && a.separator() == b.separator();
+    return a.identifier() == b.identifier() && a.listStyle() == b.listStyle() && a.separator() == b.separator();
 }
-
 
 } // namespace blink
 

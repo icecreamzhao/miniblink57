@@ -6,14 +6,13 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDrawLooper_DEFINED
 #define SkDrawLooper_DEFINED
 
 #include "SkBlurTypes.h"
+#include "SkColor.h"
 #include "SkFlattenable.h"
 #include "SkPoint.h"
-#include "SkColor.h"
 
 class SkCanvas;
 class SkPaint;
@@ -38,8 +37,8 @@ public:
      */
     class SK_API Context : ::SkNoncopyable {
     public:
-        Context() {}
-        virtual ~Context() {}
+        Context() { }
+        virtual ~Context() { }
 
         /**
          *  Called in a loop on objects returned by SkDrawLooper::createContext().
@@ -74,7 +73,6 @@ public:
       */
     virtual size_t contextSize() const = 0;
 
-
     /**
      * The fast bounds functions are used to enable the paint to be culled early
      * in the drawing pipeline. If a subclass can support this feature it must
@@ -89,11 +87,11 @@ public:
     void computeFastBounds(const SkPaint& paint, const SkRect& src, SkRect* dst) const;
 
     struct BlurShadowRec {
-        SkScalar        fSigma;
-        SkVector        fOffset;
-        SkColor         fColor;
-        SkBlurStyle     fStyle;
-        SkBlurQuality   fQuality;
+        SkScalar fSigma;
+        SkVector fOffset;
+        SkColor fColor;
+        SkBlurStyle fStyle;
+        SkBlurQuality fQuality;
     };
     /**
      *  If this looper can be interpreted as having two layers, such that
@@ -110,7 +108,7 @@ public:
     SK_DEFINE_FLATTENABLE_TYPE(SkDrawLooper)
 
 protected:
-    SkDrawLooper() {}
+    SkDrawLooper() { }
 
 private:
     typedef SkFlattenable INHERITED;

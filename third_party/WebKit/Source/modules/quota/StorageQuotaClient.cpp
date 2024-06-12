@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "StorageQuotaClient.h"
 
 #include "core/dom/Document.h"
@@ -46,10 +45,11 @@ StorageQuotaClient* StorageQuotaClient::from(ExecutionContext* context)
 {
     if (!context->isDocument())
         return 0;
-    return static_cast<StorageQuotaClient*>(WillBeHeapSupplement<Page>::from(toDocument(context)->page(), supplementName()));
+    return static_cast<StorageQuotaClient*>(
+        Supplement<Page>::from(toDocument(context)->page(), supplementName()));
 }
 
-void provideStorageQuotaClientTo(Page& page, PassOwnPtrWillBeRawPtr<StorageQuotaClient> client)
+void provideStorageQuotaClientTo(Page& page, StorageQuotaClient* client)
 {
     page.provideSupplement(StorageQuotaClient::supplementName(), client);
 }

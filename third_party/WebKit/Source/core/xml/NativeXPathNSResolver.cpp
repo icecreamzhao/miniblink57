@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/NativeXPathNSResolver.h"
 
 #include "core/XMLNames.h"
@@ -32,7 +31,7 @@
 
 namespace blink {
 
-NativeXPathNSResolver::NativeXPathNSResolver(PassRefPtrWillBeRawPtr<Node> node)
+NativeXPathNSResolver::NativeXPathNSResolver(Node* node)
     : m_node(node)
 {
 }

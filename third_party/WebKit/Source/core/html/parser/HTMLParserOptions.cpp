@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/HTMLParserOptions.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -40,5 +39,4 @@ HTMLParserOptions::HTMLParserOptions(Document* document)
     scriptEnabled = frame && frame->script().canExecuteScripts(NotAboutToExecuteScript);
     pluginsEnabled = frame && frame->loader().allowPlugins(NotAboutToInstantiatePlugin);
 }
-
 }

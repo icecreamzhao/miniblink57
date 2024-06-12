@@ -35,35 +35,44 @@
 #include "core/page/Page.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/heap/Handle.h"
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class Document;
 class LocalFrame;
 class FrameView;
+class InterfaceProvider;
 class IntSize;
+class Settings;
+
+typedef void (*FrameSettingOverrideFunction)(Settings&);
 
 // Creates a dummy Page, LocalFrame, and FrameView whose clients are all no-op.
 //
-// This class can be used when you write unit tests for components which do not work correctly without layoutObjects.
-// To make sure the layoutObjects are created, you need to call |frameView().layout()| after you add nodes into
+// This class can be used when you write unit tests for components which do not
+// work correctly without layoutObjects.  To make sure the layoutObjects are
+// created, you need to call |frameView().layout()| after you add nodes into
 // |document()|.
 //
-// Since DummyPageHolder stores empty clients in it, it must outlive the Page, LocalFrame, FrameView and any other objects
-// created by it. DummyPageHolder's destructor ensures this condition by checking remaining references to the LocalFrame.
+// Since DummyPageHolder stores empty clients in it, it must outlive the Page,
+// LocalFrame, FrameView and any other objects created by it. DummyPageHolder's
+// destructor ensures this condition by checking remaining references to the
+// LocalFrame.
 
 class DummyPageHolder {
     WTF_MAKE_NONCOPYABLE(DummyPageHolder);
-    WTF_MAKE_FAST_ALLOCATED(DummyPageHolder);
+    USING_FAST_MALLOC(DummyPageHolder);
+
 public:
-    static PassOwnPtr<DummyPageHolder> create(
+    static std::unique_ptr<DummyPageHolder> create(
         const IntSize& initialViewSize = IntSize(),
         Page::PageClients* = 0,
-        PassOwnPtr<FrameLoaderClient> = PassOwnPtr<FrameLoaderClient>());
+        FrameLoaderClient* = nullptr,
+        FrameSettingOverrideFunction = nullptr,
+        InterfaceProvider* = nullptr);
     ~DummyPageHolder();
 
     Page& page() const;
@@ -72,13 +81,16 @@ public:
     Document& document() const;
 
 private:
-    DummyPageHolder(const IntSize& initialViewSize, Page::PageClients*, PassOwnPtr<FrameLoaderClient>);
+    DummyPageHolder(const IntSize& initialViewSize,
+        Page::PageClients*,
+        FrameLoaderClient*,
+        FrameSettingOverrideFunction settingOverrider,
+        InterfaceProvider* = nullptr);
 
-    OwnPtrWillBePersistent<Page> m_page;
-    RefPtrWillBePersistent<LocalFrame> m_frame;
+    Persistent<Page> m_page;
+    Persistent<LocalFrame> m_frame;
 
-    Page::PageClients m_pageClients;
-    OwnPtr<FrameLoaderClient> m_frameLoaderClient;
+    Persistent<FrameLoaderClient> m_frameLoaderClient;
 };
 
 } // namespace blink

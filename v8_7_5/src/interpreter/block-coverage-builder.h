@@ -12,70 +12,79 @@
 
 namespace v8 {
 namespace internal {
-namespace interpreter {
+    namespace interpreter {
 
-// Used to generate IncBlockCounter bytecodes and the {source range, slot}
-// mapping for block coverage.
-class BlockCoverageBuilder final : public ZoneObject {
- public:
-  BlockCoverageBuilder(Zone* zone, BytecodeArrayBuilder* builder,
-                       SourceRangeMap* source_range_map)
-      : slots_(0, zone),
-        builder_(builder),
-        source_range_map_(source_range_map) {
-    DCHECK_NOT_NULL(builder);
-    DCHECK_NOT_NULL(source_range_map);
-  }
+        // Used to generate IncBlockCounter bytecodes and the {source range, slot}
+        // mapping for block coverage.
+        class BlockCoverageBuilder final : public ZoneObject {
+        public:
+            BlockCoverageBuilder(Zone* zone, BytecodeArrayBuilder* builder,
+                SourceRangeMap* source_range_map)
+                : slots_(0, zone)
+                , builder_(builder)
+                , source_range_map_(source_range_map)
+            {
+                DCHECK_NOT_NULL(builder);
+                DCHECK_NOT_NULL(source_range_map);
+            }
 
-  static constexpr int kNoCoverageArraySlot = -1;
+            static constexpr int kNoCoverageArraySlot = -1;
 
-  int AllocateBlockCoverageSlot(ZoneObject* node, SourceRangeKind kind) {
-    AstNodeSourceRanges* ranges = source_range_map_->Find(node);
-    if (ranges == nullptr) return kNoCoverageArraySlot;
+            int AllocateBlockCoverageSlot(ZoneObject* node, SourceRangeKind kind)
+            {
+                AstNodeSourceRanges* ranges = source_range_map_->Find(node);
+                if (ranges == nullptr)
+                    return kNoCoverageArraySlot;
 
-    SourceRange range = ranges->GetRange(kind);
-    if (range.IsEmpty()) return kNoCoverageArraySlot;
+                SourceRange range = ranges->GetRange(kind);
+                if (range.IsEmpty())
+                    return kNoCoverageArraySlot;
 
-    const int slot = static_cast<int>(slots_.size());
-    slots_.emplace_back(range);
-    return slot;
-  }
+                const int slot = static_cast<int>(slots_.size());
+                slots_.emplace_back(range);
+                return slot;
+            }
 
-  int AllocateNaryBlockCoverageSlot(NaryOperation* node, size_t index) {
-    NaryOperationSourceRanges* ranges =
-        static_cast<NaryOperationSourceRanges*>(source_range_map_->Find(node));
-    if (ranges == nullptr) return kNoCoverageArraySlot;
+            int AllocateNaryBlockCoverageSlot(NaryOperation* node, size_t index)
+            {
+                NaryOperationSourceRanges* ranges = static_cast<NaryOperationSourceRanges*>(source_range_map_->Find(node));
+                if (ranges == nullptr)
+                    return kNoCoverageArraySlot;
 
-    SourceRange range = ranges->GetRangeAtIndex(index);
-    if (range.IsEmpty()) return kNoCoverageArraySlot;
+                SourceRange range = ranges->GetRangeAtIndex(index);
+                if (range.IsEmpty())
+                    return kNoCoverageArraySlot;
 
-    const int slot = static_cast<int>(slots_.size());
-    slots_.emplace_back(range);
-    return slot;
-  }
+                const int slot = static_cast<int>(slots_.size());
+                slots_.emplace_back(range);
+                return slot;
+            }
 
-  void IncrementBlockCounter(int coverage_array_slot) {
-    if (coverage_array_slot == kNoCoverageArraySlot) return;
-    builder_->IncBlockCounter(coverage_array_slot);
-  }
+            void IncrementBlockCounter(int coverage_array_slot)
+            {
+                if (coverage_array_slot == kNoCoverageArraySlot)
+                    return;
+                builder_->IncBlockCounter(coverage_array_slot);
+            }
 
-  void IncrementBlockCounter(ZoneObject* node, SourceRangeKind kind) {
-    int slot = AllocateBlockCoverageSlot(node, kind);
-    IncrementBlockCounter(slot);
-  }
+            void IncrementBlockCounter(ZoneObject* node, SourceRangeKind kind)
+            {
+                int slot = AllocateBlockCoverageSlot(node, kind);
+                IncrementBlockCounter(slot);
+            }
 
-  const ZoneVector<SourceRange>& slots() const { return slots_; }
+            const ZoneVector<SourceRange>& slots() const { return slots_; }
 
- private:
-  // Contains source range information for allocated block coverage counter
-  // slots. Slot i covers range slots_[i].
-  ZoneVector<SourceRange> slots_;
-  BytecodeArrayBuilder* builder_;
-  SourceRangeMap* source_range_map_;
-};
+        private:
+            // Contains source range information for allocated block coverage counter
+            // slots. Slot i covers range slots_[i].
+            ZoneVector<SourceRange> slots_;
+            BytecodeArrayBuilder* builder_;
+            SourceRangeMap* source_range_map_;
+        };
 
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
+    } // namespace interpreter
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_INTERPRETER_BLOCK_COVERAGE_BUILDER_H_
+#endif // V8_INTERPRETER_BLOCK_COVERAGE_BUILDER_H_

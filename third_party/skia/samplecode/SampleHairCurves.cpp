@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,19 +5,21 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkRandom.h"
+#include "SkView.h"
 
 class HairCurvesView : public SampleView {
 public:
-    HairCurvesView() {
+    HairCurvesView()
+    {
     }
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "HairCurves");
             return true;
@@ -26,8 +27,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -48,8 +49,8 @@ protected:
             };
             curves.moveTo(pts[0], pts[1]);
             curves.cubicTo(pts[2], pts[3],
-                         pts[4], pts[5],
-                         pts[6], pts[7]);
+                pts[4], pts[5],
+                pts[6], pts[7]);
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -63,13 +64,16 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
-                rand.nextUScalar1(), rand.nextUScalar1(),
-                rand.nextUScalar1(), rand.nextUScalar1(),
-                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
             };
             curves.moveTo(pts[0], pts[1]);
             curves.quadTo(pts[2], pts[3],
-                          pts[4], pts[5]);
+                pts[4], pts[5]);
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -81,16 +85,19 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
-                rand.nextUScalar1(), rand.nextUScalar1(),
-                rand.nextUScalar1(), rand.nextUScalar1(),
-                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
             };
             SkScalar weight = randW.nextUScalar1() * 2.0f;
 
             curves.moveTo(pts[0], pts[1]);
             curves.conicTo(pts[2], pts[3],
-                          pts[4], pts[5],
-                          weight);
+                pts[4], pts[5],
+                weight);
 
             hulls.moveTo(pts[0], pts[1]);
             hulls.lineTo(pts[2], pts[3]);
@@ -102,8 +109,10 @@ protected:
         }
         for (int i = 0; i < 100; ++i) {
             SkScalar pts[] = {
-                rand.nextUScalar1(), rand.nextUScalar1(),
-                rand.nextUScalar1(), rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
+                rand.nextUScalar1(),
             };
             curves.moveTo(pts[0], pts[1]);
             curves.lineTo(pts[2], pts[3]);

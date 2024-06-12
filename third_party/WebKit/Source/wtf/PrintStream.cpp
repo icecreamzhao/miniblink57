@@ -23,12 +23,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "PrintStream.h"
+#include "wtf/PrintStream.h"
 
-#include <stdio.h>
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
+#include <stdio.h>
 
 namespace WTF {
 
@@ -43,9 +42,7 @@ void PrintStream::printf(const char* format, ...)
     va_end(argList);
 }
 
-void PrintStream::flush()
-{
-}
+void PrintStream::flush() { }
 
 void printInternal(PrintStream& out, const char* string)
 {
@@ -116,4 +113,3 @@ void dumpCharacter(PrintStream& out, char value)
 }
 
 } // namespace WTF
-

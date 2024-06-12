@@ -55,7 +55,10 @@ class WebRTCSessionDescriptionPrivate;
 class WebRTCSessionDescription {
 public:
     WebRTCSessionDescription() { }
-    WebRTCSessionDescription(const WebRTCSessionDescription& other) { assign(other); }
+    WebRTCSessionDescription(const WebRTCSessionDescription& other)
+    {
+        assign(other);
+    }
     ~WebRTCSessionDescription() { reset(); }
 
     WebRTCSessionDescription& operator=(const WebRTCSessionDescription& other)
@@ -66,7 +69,8 @@ public:
 
     BLINK_PLATFORM_EXPORT void assign(const WebRTCSessionDescription&);
 
-    BLINK_PLATFORM_EXPORT void initialize(const WebString& type, const WebString& sdp);
+    BLINK_PLATFORM_EXPORT void initialize(const WebString& type,
+        const WebString& sdp);
     BLINK_PLATFORM_EXPORT void reset();
     bool isNull() const { return m_private.isNull(); }
 

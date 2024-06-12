@@ -14,11 +14,11 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(PropertyDescriptorObject, FixedArray)
-CAST_ACCESSOR(PropertyDescriptorObject)
+    OBJECT_CONSTRUCTORS_IMPL(PropertyDescriptorObject, FixedArray)
+    CAST_ACCESSOR(PropertyDescriptorObject)
 }
-}  // namespace v8
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_PROPERTY_DESCRIPTOR_OBJECT_INL_H_
+#endif // V8_OBJECTS_PROPERTY_DESCRIPTOR_OBJECT_INL_H_

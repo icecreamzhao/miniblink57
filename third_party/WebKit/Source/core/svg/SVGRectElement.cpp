@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGRectElement.h"
 
+#include "core/dom/StyleChangeReason.h"
 #include "core/layout/svg/LayoutSVGRect.h"
 #include "core/svg/SVGLength.h"
 
@@ -28,12 +28,31 @@ namespace blink {
 
 inline SVGRectElement::SVGRectElement(Document& document)
     : SVGGeometryElement(SVGNames::rectTag, document)
-    , m_x(SVGAnimatedLength::create(this, SVGNames::xAttr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
-    , m_y(SVGAnimatedLength::create(this, SVGNames::yAttr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
-    , m_width(SVGAnimatedLength::create(this, SVGNames::widthAttr, SVGLength::create(SVGLengthMode::Width), ForbidNegativeLengths))
-    , m_height(SVGAnimatedLength::create(this, SVGNames::heightAttr, SVGLength::create(SVGLengthMode::Height), ForbidNegativeLengths))
-    , m_rx(SVGAnimatedLength::create(this, SVGNames::rxAttr, SVGLength::create(SVGLengthMode::Width), ForbidNegativeLengths))
-    , m_ry(SVGAnimatedLength::create(this, SVGNames::ryAttr, SVGLength::create(SVGLengthMode::Height), ForbidNegativeLengths))
+    , m_x(SVGAnimatedLength::create(this,
+          SVGNames::xAttr,
+          SVGLength::create(SVGLengthMode::Width),
+          CSSPropertyX))
+    , m_y(SVGAnimatedLength::create(this,
+          SVGNames::yAttr,
+          SVGLength::create(SVGLengthMode::Height),
+          CSSPropertyY))
+    , m_width(SVGAnimatedLength::create(this,
+          SVGNames::widthAttr,
+          SVGLength::create(SVGLengthMode::Width),
+          CSSPropertyWidth))
+    , m_height(
+          SVGAnimatedLength::create(this,
+              SVGNames::heightAttr,
+              SVGLength::create(SVGLengthMode::Height),
+              CSSPropertyHeight))
+    , m_rx(SVGAnimatedLength::create(this,
+          SVGNames::rxAttr,
+          SVGLength::create(SVGLengthMode::Width),
+          CSSPropertyRx))
+    , m_ry(SVGAnimatedLength::create(this,
+          SVGNames::ryAttr,
+          SVGLength::create(SVGLengthMode::Height),
+          CSSPropertyRy))
 {
     addToPropertyMap(m_x);
     addToPropertyMap(m_y);
@@ -68,7 +87,8 @@ Path SVGRectElement::asPath() const
     float width = lengthContext.valueForLength(style.width(), style, SVGLengthMode::Width);
     if (width < 0)
         return path;
-    float height = lengthContext.valueForLength(style.height(), style, SVGLengthMode::Height);
+    float height = lengthContext.valueForLength(style.height(), style,
+        SVGLengthMode::Height);
     if (height < 0)
         return path;
     if (!width && !height)
@@ -81,9 +101,9 @@ Path SVGRectElement::asPath() const
     bool hasRx = rx > 0;
     bool hasRy = ry > 0;
     if (hasRx || hasRy) {
-        if (!hasRx)
+        if (svgStyle.rx().isAuto())
             rx = ry;
-        else if (!hasRy)
+        else if (svgStyle.ry().isAuto())
             ry = rx;
 
         path.addRoundedRect(FloatRect(x, y, width, height), FloatSize(rx, ry));
@@ -94,48 +114,39 @@ Path SVGRectElement::asPath() const
     return path;
 }
 
-bool SVGRectElement::isPresentationAttribute(const QualifiedName& attrName) const
+void SVGRectElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
-    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr
-        || attrName == SVGNames::rxAttr || attrName == SVGNames::ryAttr)
-        return true;
-    return SVGGeometryElement::isPresentationAttribute(attrName);
-}
-
-bool SVGRectElement::isPresentationAttributeWithSVGDOM(const QualifiedName& attrName) const
-{
-    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr
-        || attrName == SVGNames::rxAttr || attrName == SVGNames::ryAttr)
-        return true;
-    return SVGGeometryElement::isPresentationAttributeWithSVGDOM(attrName);
-}
-
-void SVGRectElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
-{
-    RefPtrWillBeRawPtr<SVGAnimatedPropertyBase> property = propertyFromAttribute(name);
-    if (property == m_x)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyX, *m_x->currentValue());
-    else if (property == m_y)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyY, *m_y->currentValue());
-    else if (property == m_width)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyWidth, *m_width->currentValue());
-    else if (property == m_height)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyHeight, *m_height->currentValue());
-    else if (property == m_rx)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyRx, *m_rx->currentValue());
-    else if (property == m_ry)
-        addSVGLengthPropertyToPresentationAttributeStyle(style, CSSPropertyRy, *m_ry->currentValue());
-    else
-        SVGGeometryElement::collectStyleForPresentationAttribute(name, value, style);
+    SVGAnimatedPropertyBase* property = propertyFromAttribute(name);
+    if (property == m_x) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyX,
+            m_x->cssValue());
+    } else if (property == m_y) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyY,
+            m_y->cssValue());
+    } else if (property == m_width) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyWidth,
+            m_width->cssValue());
+    } else if (property == m_height) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyHeight,
+            m_height->cssValue());
+    } else if (property == m_rx) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyRx,
+            m_rx->cssValue());
+    } else if (property == m_ry) {
+        addPropertyToPresentationAttributeStyle(style, CSSPropertyRy,
+            m_ry->cssValue());
+    } else {
+        SVGGeometryElement::collectStyleForPresentationAttribute(name, value,
+            style);
+    }
 }
 
 void SVGRectElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr
-        || attrName == SVGNames::rxAttr || attrName == SVGNames::ryAttr) {
+    if (attrName == SVGNames::xAttr || attrName == SVGNames::yAttr || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr || attrName == SVGNames::rxAttr || attrName == SVGNames::ryAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
 
         invalidateSVGPresentationAttributeStyle();
@@ -158,12 +169,7 @@ void SVGRectElement::svgAttributeChanged(const QualifiedName& attrName)
 
 bool SVGRectElement::selfHasRelativeLengths() const
 {
-    return m_x->currentValue()->isRelative()
-        || m_y->currentValue()->isRelative()
-        || m_width->currentValue()->isRelative()
-        || m_height->currentValue()->isRelative()
-        || m_rx->currentValue()->isRelative()
-        || m_ry->currentValue()->isRelative();
+    return m_x->currentValue()->isRelative() || m_y->currentValue()->isRelative() || m_width->currentValue()->isRelative() || m_height->currentValue()->isRelative() || m_rx->currentValue()->isRelative() || m_ry->currentValue()->isRelative();
 }
 
 LayoutObject* SVGRectElement::createLayoutObject(const ComputedStyle&)

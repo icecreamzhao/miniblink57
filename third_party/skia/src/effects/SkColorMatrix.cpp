@@ -16,7 +16,8 @@
 // Then the maximum value will be for R=255 if x>0 or R=0 if x<0, and the
 // minimum value will be for R=0 if x>0 or R=255 if x<0.
 // Same goes for all components.
-static bool component_needs_clamping(const SkScalar row[5]) {
+static bool component_needs_clamping(const SkScalar row[5])
+{
     SkScalar maxValue = row[4] / 255;
     SkScalar minValue = row[4] / 255;
     for (int i = 0; i < 4; ++i) {
@@ -28,20 +29,22 @@ static bool component_needs_clamping(const SkScalar row[5]) {
     return (maxValue > 1) || (minValue < 0);
 }
 
-bool SkColorMatrix::NeedsClamping(const SkScalar matrix[20]) {
+bool SkColorMatrix::NeedsClamping(const SkScalar matrix[20])
+{
     return component_needs_clamping(matrix)
-        || component_needs_clamping(matrix+5)
-        || component_needs_clamping(matrix+10)
-        || component_needs_clamping(matrix+15);
+        || component_needs_clamping(matrix + 5)
+        || component_needs_clamping(matrix + 10)
+        || component_needs_clamping(matrix + 15);
 }
 
 void SkColorMatrix::SetConcat(SkScalar result[20],
-                              const SkScalar outer[20], const SkScalar inner[20]) {
-    SkScalar    tmp[20];
-    SkScalar*   target;
+    const SkScalar outer[20], const SkScalar inner[20])
+{
+    SkScalar tmp[20];
+    SkScalar* target;
 
     if (outer == result || inner == result) {
-        target = tmp;   // will memcpy answer when we're done into result
+        target = tmp; // will memcpy answer when we're done into result
     } else {
         target = result;
     }
@@ -49,16 +52,9 @@ void SkColorMatrix::SetConcat(SkScalar result[20],
     int index = 0;
     for (int j = 0; j < 20; j += 5) {
         for (int i = 0; i < 4; i++) {
-            target[index++] =   outer[j + 0] * inner[i + 0] +
-                                outer[j + 1] * inner[i + 5] +
-                                outer[j + 2] * inner[i + 10] +
-                                outer[j + 3] * inner[i + 15];
+            target[index++] = outer[j + 0] * inner[i + 0] + outer[j + 1] * inner[i + 5] + outer[j + 2] * inner[i + 10] + outer[j + 3] * inner[i + 15];
         }
-        target[index++] =   outer[j + 0] * inner[4] +
-                            outer[j + 1] * inner[9] +
-                            outer[j + 2] * inner[14] +
-                            outer[j + 3] * inner[19] +
-                            outer[j + 4];
+        target[index++] = outer[j + 0] * inner[4] + outer[j + 1] * inner[9] + outer[j + 2] * inner[14] + outer[j + 3] * inner[19] + outer[j + 4];
     }
 
     if (target != result) {
@@ -68,13 +64,15 @@ void SkColorMatrix::SetConcat(SkScalar result[20],
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkColorMatrix::setIdentity() {
+void SkColorMatrix::setIdentity()
+{
     memset(fMat, 0, sizeof(fMat));
     fMat[kR_Scale] = fMat[kG_Scale] = fMat[kB_Scale] = fMat[kA_Scale] = 1;
 }
 
 void SkColorMatrix::setScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
-                             SkScalar aScale) {
+    SkScalar aScale)
+{
     memset(fMat, 0, sizeof(fMat));
     fMat[kR_Scale] = rScale;
     fMat[kG_Scale] = gScale;
@@ -83,7 +81,8 @@ void SkColorMatrix::setScale(SkScalar rScale, SkScalar gScale, SkScalar bScale,
 }
 
 void SkColorMatrix::postTranslate(SkScalar dr, SkScalar dg, SkScalar db,
-                                  SkScalar da) {
+    SkScalar da)
+{
     fMat[kR_Trans] += dr;
     fMat[kG_Trans] += dg;
     fMat[kB_Trans] += db;
@@ -92,7 +91,8 @@ void SkColorMatrix::postTranslate(SkScalar dr, SkScalar dg, SkScalar db,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SkColorMatrix::setRotate(Axis axis, SkScalar degrees) {
+void SkColorMatrix::setRotate(Axis axis, SkScalar degrees)
+{
     SkScalar S, C;
 
     S = SkScalarSinCos(SkDegreesToRadians(degrees), &C);
@@ -100,13 +100,23 @@ void SkColorMatrix::setRotate(Axis axis, SkScalar degrees) {
     this->setSinCos(axis, S, C);
 }
 
-void SkColorMatrix::setSinCos(Axis axis, SkScalar sine, SkScalar cosine) {
+void SkColorMatrix::setSinCos(Axis axis, SkScalar sine, SkScalar cosine)
+{
     SkASSERT((unsigned)axis < 3);
 
     static const uint8_t gRotateIndex[] = {
-        6, 7, 11, 12,
-        0, 10, 2, 12,
-        0, 1,  5,  6,
+        6,
+        7,
+        11,
+        12,
+        0,
+        10,
+        2,
+        12,
+        0,
+        1,
+        5,
+        6,
     };
     const uint8_t* index = gRotateIndex + axis * 4;
 
@@ -117,25 +127,29 @@ void SkColorMatrix::setSinCos(Axis axis, SkScalar sine, SkScalar cosine) {
     fMat[index[3]] = cosine;
 }
 
-void SkColorMatrix::preRotate(Axis axis, SkScalar degrees) {
+void SkColorMatrix::preRotate(Axis axis, SkScalar degrees)
+{
     SkColorMatrix tmp;
     tmp.setRotate(axis, degrees);
     this->preConcat(tmp);
 }
 
-void SkColorMatrix::postRotate(Axis axis, SkScalar degrees) {
+void SkColorMatrix::postRotate(Axis axis, SkScalar degrees)
+{
     SkColorMatrix tmp;
     tmp.setRotate(axis, degrees);
     this->postConcat(tmp);
 }
 
-void SkColorMatrix::setConcat(const SkColorMatrix& matA, const SkColorMatrix& matB) {
+void SkColorMatrix::setConcat(const SkColorMatrix& matA, const SkColorMatrix& matB)
+{
     SetConcat(fMat, matA.fMat, matB.fMat);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-static void setrow(SkScalar row[], SkScalar r, SkScalar g, SkScalar b) {
+static void setrow(SkScalar row[], SkScalar r, SkScalar g, SkScalar b)
+{
     row[0] = r;
     row[1] = g;
     row[2] = b;
@@ -145,15 +159,16 @@ static const SkScalar kHueR = 0.213f;
 static const SkScalar kHueG = 0.715f;
 static const SkScalar kHueB = 0.072f;
 
-void SkColorMatrix::setSaturation(SkScalar sat) {
+void SkColorMatrix::setSaturation(SkScalar sat)
+{
     memset(fMat, 0, sizeof(fMat));
 
     const SkScalar R = kHueR * (1 - sat);
     const SkScalar G = kHueG * (1 - sat);
     const SkScalar B = kHueB * (1 - sat);
 
-    setrow(fMat +  0, R + sat, G, B);
-    setrow(fMat +  5, R, G + sat, B);
+    setrow(fMat + 0, R + sat, G, B);
+    setrow(fMat + 5, R, G + sat, B);
     setrow(fMat + 10, R, G, B + sat);
     fMat[kA_Scale] = 1;
 }
@@ -170,11 +185,12 @@ static const SkScalar kR2V = 0.5f;
 static const SkScalar kG2V = -0.41869f;
 static const SkScalar kB2V = -0.08131f;
 
-void SkColorMatrix::setRGB2YUV() {
+void SkColorMatrix::setRGB2YUV()
+{
     memset(fMat, 0, sizeof(fMat));
 
-    setrow(fMat +  0, kR2Y, kG2Y, kB2Y);
-    setrow(fMat +  5, kR2U, kG2U, kB2U);
+    setrow(fMat + 0, kR2Y, kG2Y, kB2Y);
+    setrow(fMat + 5, kR2U, kG2U, kB2U);
     setrow(fMat + 10, kR2V, kG2V, kB2V);
     fMat[kA_Scale] = 1;
 }
@@ -184,12 +200,12 @@ static const SkScalar kU2G = -0.34414f;
 static const SkScalar kV2G = -0.71414f;
 static const SkScalar kU2B = 1.772f;
 
-void SkColorMatrix::setYUV2RGB() {
+void SkColorMatrix::setYUV2RGB()
+{
     memset(fMat, 0, sizeof(fMat));
 
-    setrow(fMat +  0, 1, 0, kV2R);
-    setrow(fMat +  5, 1, kU2G, kV2G);
+    setrow(fMat + 0, 1, 0, kV2R);
+    setrow(fMat + 5, 1, kU2G, kV2G);
     setrow(fMat + 10, 1, kU2B, 0);
     fMat[kA_Scale] = 1;
 }
-

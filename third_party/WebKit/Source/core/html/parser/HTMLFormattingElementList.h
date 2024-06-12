@@ -38,19 +38,21 @@ class Element;
 // This may end up merged into HTMLElementStack.
 class HTMLFormattingElementList {
     WTF_MAKE_NONCOPYABLE(HTMLFormattingElementList);
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     HTMLFormattingElementList();
     ~HTMLFormattingElementList();
 
     // Ideally Entry would be private, but HTMLTreeBuilder has to coordinate
-    // between the HTMLFormattingElementList and HTMLElementStack and needs
-    // access to Entry::isMarker() and Entry::replaceElement() to do so.
+    // between the HTMLFormattingElementList and HTMLElementStack and needs access
+    // to Entry::isMarker() and Entry::replaceElement() to do so.
     class Entry {
-        ALLOW_ONLY_INLINE_ALLOCATION();
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
     public:
         // Inline because they're hot and Vector<T> uses them.
-        explicit Entry(PassRefPtrWillBeRawPtr<HTMLStackItem> item)
+        explicit Entry(HTMLStackItem* item)
             : m_item(item)
         {
         }
@@ -59,31 +61,39 @@ public:
             : m_item(nullptr)
         {
         }
-        ~Entry() {}
+        ~Entry() { }
 
         bool isMarker() const { return !m_item; }
 
-        PassRefPtrWillBeRawPtr<HTMLStackItem> stackItem() const { return m_item; }
+        HTMLStackItem* stackItem() const { return m_item; }
         Element* element() const
         {
-            // The fact that !m_item == isMarker() is an implementation detail
-            // callers should check isMarker() before calling element().
+            // The fact that !m_item == isMarker() is an implementation detail callers
+            // should check isMarker() before calling element().
             ASSERT(m_item);
             return m_item->element();
         }
-        void replaceElement(PassRefPtrWillBeRawPtr<HTMLStackItem> item) { m_item = item; }
+        void replaceElement(HTMLStackItem* item) { m_item = item; }
 
         // Needed for use with Vector.  These are super-hot and must be inline.
-        bool operator==(Element* element) const { return !m_item ? !element : m_item->element() == element; }
-        bool operator!=(Element* element) const { return !m_item ? !!element : m_item->element() != element; }
+        bool operator==(Element* element) const
+        {
+            return !m_item ? !element : m_item->element() == element;
+        }
+        bool operator!=(Element* element) const
+        {
+            return !m_item ? !!element : m_item->element() != element;
+        }
 
         DEFINE_INLINE_TRACE() { visitor->trace(m_item); }
 
     private:
-        RefPtrWillBeMember<HTMLStackItem> m_item;
+        Member<HTMLStackItem> m_item;
     };
 
     class Bookmark {
+        STACK_ALLOCATED();
+
     public:
         explicit Bookmark(Entry* entry)
             : m_hasBeenMoved(false)
@@ -112,11 +122,11 @@ public:
 
     Entry* find(Element*);
     bool contains(Element*);
-    void append(PassRefPtrWillBeRawPtr<HTMLStackItem>);
+    void append(HTMLStackItem*);
     void remove(Element*);
 
     Bookmark bookmarkFor(Element*);
-    void swapTo(Element* oldElement, PassRefPtrWillBeRawPtr<HTMLStackItem> newItem, const Bookmark&);
+    void swapTo(Element* oldElement, HTMLStackItem* newItem, const Bookmark&);
 
     void appendMarker();
     // clearToLastMarker also clears the marker (per the HTML5 spec).
@@ -125,12 +135,7 @@ public:
     const Entry& at(size_t i) const { return m_entries[i]; }
     Entry& at(size_t i) { return m_entries[i]; }
 
-    DEFINE_INLINE_TRACE()
-    {
-#if ENABLE(OILPAN)
-        visitor->trace(m_entries);
-#endif
-    }
+    DEFINE_INLINE_TRACE() { visitor->trace(m_entries); }
 
 #ifndef NDEBUG
     void show();
@@ -140,15 +145,19 @@ private:
     Entry* first() { return &at(0); }
 
     // http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html#list-of-active-formatting-elements
-    // These functions enforce the "Noah's Ark" condition, which removes redundant mis-nested elements.
-    void tryToEnsureNoahsArkConditionQuickly(HTMLStackItem*, WillBeHeapVector<RawPtrWillBeMember<HTMLStackItem>>& remainingCandiates);
+    // These functions enforce the "Noah's Ark" condition, which removes redundant
+    // mis-nested elements.
+    void tryToEnsureNoahsArkConditionQuickly(
+        HTMLStackItem*,
+        HeapVector<Member<HTMLStackItem>>& remainingCandiates);
     void ensureNoahsArkCondition(HTMLStackItem*);
 
-    WillBeHeapVector<Entry> m_entries;
+    HeapVector<Entry> m_entries;
 };
 
 } // namespace blink
 
-WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::HTMLFormattingElementList::Entry);
+WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(
+    blink::HTMLFormattingElementList::Entry);
 
 #endif // HTMLFormattingElementList_h

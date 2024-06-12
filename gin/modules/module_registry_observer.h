@@ -14,18 +14,18 @@ namespace gin {
 
 // Notified of interesting events from ModuleRegistry.
 class GIN_EXPORT ModuleRegistryObserver {
- public:
-  // Called from AddPendingModule(). |id| is the id/name of the module and
-  // |dependencies| this list of modules |id| depends upon.
-  virtual void OnDidAddPendingModule(
-      const std::string& id,
-      const std::vector<std::string>& dependencies) = 0;
+public:
+    // Called from AddPendingModule(). |id| is the id/name of the module and
+    // |dependencies| this list of modules |id| depends upon.
+    virtual void OnDidAddPendingModule(
+        const std::string& id,
+        const std::vector<std::string>& dependencies)
+        = 0;
 
- protected:
-  virtual ~ModuleRegistryObserver() {}
+protected:
+    virtual ~ModuleRegistryObserver() { }
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_MODULES_MODULE_REGISTRY_OBSERVER_H_
-
+#endif // GIN_MODULES_MODULE_REGISTRY_OBSERVER_H_

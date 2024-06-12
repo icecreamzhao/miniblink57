@@ -23,12 +23,12 @@ public:
 protected:
     const char* onGetName() override;
     bool isSuitableFor(Backend backend) override;
-    void onDraw(const int loops, SkCanvas* canvas) override;
+    void onDraw(int loops, SkCanvas* canvas) override;
     SkIPoint onGetSize() override;
 
 private:
     skiagm::GM* fGM;
-    SkString    fName;
+    SkString fName;
     typedef Benchmark INHERITED;
 };
 

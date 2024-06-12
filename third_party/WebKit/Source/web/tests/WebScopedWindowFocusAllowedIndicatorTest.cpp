@@ -28,18 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/web/WebScopedWindowFocusAllowedIndicator.h"
 
 #include "core/dom/Document.h"
 #include "public/web/WebDocument.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
 TEST(WebScopedWindowFocusAllowedIndicatorTest, Basic)
 {
-    RefPtrWillBePersistent<Document> document = Document::create();
+    Persistent<Document> document = Document::create();
     WebDocument webDocument(document);
 
     EXPECT_FALSE(document->isWindowInteractionAllowed());

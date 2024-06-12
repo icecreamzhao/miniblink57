@@ -33,6 +33,7 @@
 
 #include "core/frame/PlatformEventDispatcher.h"
 #include "platform/heap/Handle.h"
+#include "public/platform/WebPlatformEventType.h"
 #include "public/platform/modules/device_orientation/WebDeviceOrientationListener.h"
 #include "wtf/RefPtr.h"
 
@@ -41,11 +42,16 @@ namespace blink {
 class DeviceOrientationData;
 class WebDeviceOrientationData;
 
-// This class listens to device orientation data and notifies all registered controllers.
-class DeviceOrientationDispatcher final : public GarbageCollectedFinalized<DeviceOrientationDispatcher>, public PlatformEventDispatcher, public WebDeviceOrientationListener {
+// This class listens to device orientation data and notifies all registered
+// controllers.
+class DeviceOrientationDispatcher final
+    : public GarbageCollectedFinalized<DeviceOrientationDispatcher>,
+      public PlatformEventDispatcher,
+      public WebDeviceOrientationListener {
     USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationDispatcher);
+
 public:
-    static DeviceOrientationDispatcher& instance();
+    static DeviceOrientationDispatcher& instance(bool absolute);
     ~DeviceOrientationDispatcher() override;
 
     // Note that the returned object is owned by this class.
@@ -58,12 +64,15 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    DeviceOrientationDispatcher();
+    explicit DeviceOrientationDispatcher(bool absolute);
 
     // Inherited from PlatformEventDispatcher.
     void startListening() override;
     void stopListening() override;
 
+    WebPlatformEventType getWebPlatformEventType() const;
+
+    const bool m_absolute;
     Member<DeviceOrientationData> m_lastDeviceOrientationData;
 };
 

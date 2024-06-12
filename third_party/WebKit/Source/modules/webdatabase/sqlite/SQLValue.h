@@ -29,20 +29,38 @@
 #ifndef SQLValue_h
 #define SQLValue_h
 
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class SQLValue {
-public:
-    enum Type { NullValue, NumberValue, StringValue };
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-    SQLValue() : m_type(NullValue), m_number(0.0) { }
-    SQLValue(double number) : m_type(NumberValue), m_number(number) { }
-    SQLValue(const String& s) : m_type(StringValue), m_number(0.0), m_string(s) { }
+public:
+    enum Type { NullValue,
+        NumberValue,
+        StringValue };
+
+    SQLValue()
+        : m_type(NullValue)
+        , m_number(0.0)
+    {
+    }
+    SQLValue(double number)
+        : m_type(NumberValue)
+        , m_number(number)
+    {
+    }
+    SQLValue(const String& s)
+        : m_type(StringValue)
+        , m_number(0.0)
+        , m_string(s)
+    {
+    }
     SQLValue(const SQLValue&);
 
-    Type type() const { return m_type; }
+    Type getType() const { return m_type; }
 
     String string() const;
     double number() const;

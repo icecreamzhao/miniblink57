@@ -16,8 +16,8 @@ public:
     ~SkAutoCanvasMatrixPaint();
 
 private:
-    SkCanvas*   fCanvas;
-    int         fSaveCount;
+    SkCanvas* fCanvas;
+    int fSaveCount;
 };
 
 #endif

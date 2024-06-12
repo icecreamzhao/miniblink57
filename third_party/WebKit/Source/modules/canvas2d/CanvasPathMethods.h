@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2006, 2007, 2009, 2010, 2011, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2006, 2007, 2009, 2010, 2011, 2012 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2012, 2013 Adobe Systems Incorporated. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,22 +45,47 @@ public:
     void moveTo(float x, float y);
     void lineTo(float x, float y);
     void quadraticCurveTo(float cpx, float cpy, float x, float y);
-    void bezierCurveTo(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y);
-    void arcTo(float x0, float y0, float x1, float y1, float radius, ExceptionState&);
-    void arc(float x, float y, float radius, float startAngle, float endAngle, bool anticlockwise, ExceptionState&);
-    void ellipse(float x, float y, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise, ExceptionState&);
+    void bezierCurveTo(float cp1x,
+        float cp1y,
+        float cp2x,
+        float cp2y,
+        float x,
+        float y);
+    void arcTo(float x0,
+        float y0,
+        float x1,
+        float y1,
+        float radius,
+        ExceptionState&);
+    void arc(float x,
+        float y,
+        float radius,
+        float startAngle,
+        float endAngle,
+        bool anticlockwise,
+        ExceptionState&);
+    void ellipse(float x,
+        float y,
+        float radiusX,
+        float radiusY,
+        float rotation,
+        float startAngle,
+        float endAngle,
+        bool anticlockwise,
+        ExceptionState&);
     void rect(float x, float y, float width, float height);
 
     virtual bool isTransformInvertible() const { return true; }
 
 protected:
     CanvasPathMethods() { m_path.setIsVolatile(true); }
-    CanvasPathMethods(const Path& path) : m_path(path)
+    CanvasPathMethods(const Path& path)
+        : m_path(path)
     {
         m_path.setIsVolatile(true);
     }
     Path m_path;
 };
-}
+} // namespace blink
 
 #endif

@@ -23,14 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/IntPoint.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
-IntPoint::IntPoint(const CGPoint& p) : m_x(static_cast<int>(p.x)), m_y(static_cast<int>(p.y))
+IntPoint::IntPoint(const CGPoint& p)
+    : m_x(static_cast<int>(p.x))
+    , m_y(static_cast<int>(p.y))
 {
 }
 
@@ -39,4 +40,4 @@ IntPoint::operator CGPoint() const
     return CGPointMake(m_x, m_y);
 }
 
-}
+} // namespace blink

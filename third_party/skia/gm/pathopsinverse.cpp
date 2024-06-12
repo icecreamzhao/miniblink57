@@ -5,68 +5,75 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SkBitmap.h"
 #include "SkPath.h"
 #include "SkPathOps.h"
 #include "SkRect.h"
+#include "gm.h"
 
 namespace skiagm {
 
 class PathOpsInverseGM : public GM {
 public:
-    PathOpsInverseGM() {
+    PathOpsInverseGM()
+    {
     }
 
 protected:
-    void onOnceBeforeDraw() override {
-        const unsigned oneColor = 0xFF8080FF;
+    void onOnceBeforeDraw() override
+    {
+        const unsigned oneColor = sk_tool_utils::color_to_565(0xFF8080FF);
         const unsigned twoColor = 0x807F1f1f;
         SkColor blendColor = blend(oneColor, twoColor);
         makePaint(&fOnePaint, oneColor);
         makePaint(&fTwoPaint, twoColor);
         makePaint(&fOpPaint[kDifference_SkPathOp], oneColor);
         makePaint(&fOpPaint[kIntersect_SkPathOp], blendColor);
-        makePaint(&fOpPaint[kUnion_SkPathOp], 0xFFc0FFc0);
+        makePaint(&fOpPaint[kUnion_SkPathOp], sk_tool_utils::color_to_565(0xFFc0FFc0));
         makePaint(&fOpPaint[kReverseDifference_SkPathOp], twoColor);
-        makePaint(&fOpPaint[kXOR_SkPathOp], 0xFFa0FFe0);
+        makePaint(&fOpPaint[kXOR_SkPathOp], sk_tool_utils::color_to_565(0xFFa0FFe0));
         makePaint(&fOutlinePaint, 0xFF000000);
         fOutlinePaint.setStyle(SkPaint::kStroke_Style);
     }
 
-    SkColor blend(SkColor one, SkColor two) {
+    SkColor blend(SkColor one, SkColor two)
+    {
         SkBitmap temp;
         temp.allocN32Pixels(1, 1);
         SkCanvas canvas(temp);
         canvas.drawColor(one);
         canvas.drawColor(two);
         void* pixels = temp.getPixels();
-        return *(SkColor*) pixels;
+        return *(SkColor*)pixels;
     }
 
-    void makePaint(SkPaint* paint, SkColor color) {
+    void makePaint(SkPaint* paint, SkColor color)
+    {
         paint->setAntiAlias(true);
         paint->setStyle(SkPaint::kFill_Style);
         paint->setColor(color);
     }
 
-    SkString onShortName() override {
+    SkString onShortName() override
+    {
         return SkString("pathopsinverse");
     }
 
-    SkISize onISize() override {
+    SkISize onISize() override
+    {
         return SkISize::Make(1200, 900);
     }
 
-    void onDraw(SkCanvas* canvas) override {
+    void onDraw(SkCanvas* canvas) override
+    {
         SkPath one, two;
         int yPos = 0;
         for (int oneFill = 0; oneFill <= 1; ++oneFill) {
             SkPath::FillType oneF = oneFill ? SkPath::kInverseEvenOdd_FillType
-                    : SkPath::kEvenOdd_FillType;
+                                            : SkPath::kEvenOdd_FillType;
             for (int twoFill = 0; twoFill <= 1; ++twoFill) {
                 SkPath::FillType twoF = twoFill ? SkPath::kInverseEvenOdd_FillType
-                        : SkPath::kEvenOdd_FillType;
+                                                : SkPath::kEvenOdd_FillType;
                 one.reset();
                 one.setFillType(oneF);
                 one.addRect(10, 10, 70, 70);
@@ -84,7 +91,7 @@ protected:
                 int xPos = 150;
                 for (int op = kDifference_SkPathOp; op <= kReverseDifference_SkPathOp; ++op) {
                     SkPath result;
-                    Op(one, two, (SkPathOp) op, &result);
+                    Op(one, two, (SkPathOp)op, &result);
                     canvas->save();
                     canvas->translate(SkIntToScalar(xPos), SkIntToScalar(yPos));
                     canvas->clipRect(SkRect::MakeWH(110, 110), SkRegion::kIntersect_Op, true);

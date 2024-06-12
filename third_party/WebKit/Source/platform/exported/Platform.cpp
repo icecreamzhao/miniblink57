@@ -28,38 +28,122 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
+#include "base/threading/thread_task_runner_handle.h"
+#include "base/trace_event/memory_dump_manager.h"
+#include "platform/Histogram.h"
+#include "platform/MemoryCoordinator.h"
 #include "platform/PartitionAllocMemoryDumpProvider.h"
+#include "platform/fonts/FontCacheMemoryDumpProvider.h"
+#include "platform/heap/BlinkGCMemoryDumpProvider.h"
+#include "platform/heap/GCTaskRunner.h"
+#include "platform/instrumentation/tracing/MemoryCacheDumpProvider.h"
+//#include "public/platform/InterfaceProvider.h"
 #include "public/platform/Platform.h"
+#include "public/platform/WebPrerenderingSupport.h"
+#include "wtf/HashMap.h"
 
 namespace blink {
 
-static Platform* s_platform = 0;
+static Platform* s_platform = nullptr;
+
+static GCTaskRunner* s_gcTaskRunner = nullptr;
+
+static void maxObservedSizeFunction(size_t sizeInMB)
+{
+    const size_t supportedMaxSizeInMB = 4 * 1024;
+    if (sizeInMB >= supportedMaxSizeInMB)
+        sizeInMB = supportedMaxSizeInMB - 1;
+
+    // Send a UseCounter only when we see the highest memory usage
+    // we've ever seen.
+    DEFINE_STATIC_LOCAL(EnumerationHistogram, committedSizeHistogram,
+        ("PartitionAlloc.CommittedSize", supportedMaxSizeInMB));
+    committedSizeHistogram.count(sizeInMB);
+}
+
+static void callOnMainThreadFunction(WTF::MainThreadFunction function,
+    void* context)
+{
+    Platform::current()->mainThread()->getWebTaskRunner()->postTask(
+        BLINK_FROM_HERE,
+        crossThreadBind(function, crossThreadUnretained(context)));
+}
 
 Platform::Platform()
     : m_mainThread(0)
 {
+    WTF::Partitions::initialize(maxObservedSizeFunction);
 }
 
 void Platform::initialize(Platform* platform)
 {
+    ASSERT(!s_platform);
+    ASSERT(platform);
     s_platform = platform;
-    if (s_platform)
-        s_platform->m_mainThread = platform->currentThread();
+    s_platform->m_mainThread = platform->currentThread();
+
+    WTF::initialize(callOnMainThreadFunction);
+
+    ProcessHeap::init();
+    MemoryCoordinator::initialize();
+    if (base::ThreadTaskRunnerHandle::IsSet())
+        base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
+            BlinkGCMemoryDumpProvider::instance(), "BlinkGC",
+            base::ThreadTaskRunnerHandle::Get());
+
+    ThreadState::attachMainThread();
 
     // TODO(ssid): remove this check after fixing crbug.com/486782.
-    if (s_platform && s_platform->m_mainThread)
-        s_platform->registerMemoryDumpProvider(PartitionAllocMemoryDumpProvider::instance());
+    if (s_platform->m_mainThread) {
+        ASSERT(!s_gcTaskRunner);
+        s_gcTaskRunner = new GCTaskRunner(s_platform->m_mainThread);
+        base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
+            PartitionAllocMemoryDumpProvider::instance(), "PartitionAlloc",
+            base::ThreadTaskRunnerHandle::Get());
+        base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
+            FontCacheMemoryDumpProvider::instance(), "FontCaches",
+            base::ThreadTaskRunnerHandle::Get());
+        base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
+            MemoryCacheDumpProvider::instance(), "MemoryCache",
+            base::ThreadTaskRunnerHandle::Get());
+    }
 }
 
 void Platform::shutdown()
 {
-    if (s_platform->m_mainThread)
-        s_platform->unregisterMemoryDumpProvider(PartitionAllocMemoryDumpProvider::instance());
+    ASSERT(isMainThread());
+    if (s_platform->m_mainThread) {
+        base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
+            FontCacheMemoryDumpProvider::instance());
+        base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
+            PartitionAllocMemoryDumpProvider::instance());
+        base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
+            BlinkGCMemoryDumpProvider::instance());
+        base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
+            MemoryCacheDumpProvider::instance());
 
-    if (s_platform)
-        s_platform->m_mainThread = 0;
-    s_platform = 0;
+        ASSERT(s_gcTaskRunner);
+        delete s_gcTaskRunner;
+        s_gcTaskRunner = nullptr;
+    }
+
+    // Detach the main thread before starting the shutdown sequence
+    // so that the main thread won't get involved in a GC during the shutdown.
+    ThreadState::detachMainThread();
+
+    ProcessHeap::shutdown();
+
+    WTF::shutdown();
+
+    s_platform->m_mainThread = nullptr;
+    s_platform = nullptr;
+}
+
+void Platform::setCurrentPlatformForTesting(Platform* platform)
+{
+    ASSERT(platform);
+    s_platform = platform;
+    s_platform->m_mainThread = platform->currentThread();
 }
 
 Platform* Platform::current()
@@ -72,4 +156,14 @@ WebThread* Platform::mainThread() const
     return m_mainThread;
 }
 
+// InterfaceProvider* Platform::interfaceProvider() {
+//   return InterfaceProvider::getEmptyInterfaceProvider();
+// }
+
+#ifdef MINIBLINK_NOT_IMPLEMENTED
+void Platform::bindServiceConnector(
+    mojo::ScopedMessagePipeHandle remoteHandle)
+{
+}
+#endif
 } // namespace blink

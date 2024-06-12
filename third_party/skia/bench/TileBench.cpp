@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -12,7 +11,8 @@
 #include "SkShader.h"
 #include "SkString.h"
 
-static void create_gradient(SkBitmap* bm) {
+static void create_gradient(SkBitmap* bm)
+{
     SkASSERT(1 == bm->width());
     const int height = bm->height();
 
@@ -21,7 +21,7 @@ static void create_gradient(SkBitmap* bm) {
 
     SkAutoLockPixels lock(*bm);
     for (int y = 0; y < height; y++) {
-        *bm->getAddr32(0, y) = SkColorSetRGB(0, 0, (U8CPU) blue);
+        *bm->getAddr32(0, y) = SkColorSetRGB(0, 0, (U8CPU)blue);
         blue -= deltaB;
     }
 }
@@ -29,23 +29,24 @@ static void create_gradient(SkBitmap* bm) {
 // Test out the special case of a tiled 1xN texture. Test out opacity,
 // filtering and the different tiling modes
 class ConstXTileBench : public Benchmark {
-    SkPaint             fPaint;
-    SkString            fName;
-    bool                fDoFilter;
-    bool                fDoTrans;
-    bool                fDoScale;
+    SkPaint fPaint;
+    SkString fName;
+    bool fDoFilter;
+    bool fDoTrans;
+    bool fDoScale;
     static const int kWidth = 1;
     static const int kHeight = 300;
 
 public:
     ConstXTileBench(SkShader::TileMode xTile,
-                    SkShader::TileMode yTile,
-                    bool doFilter,
-                    bool doTrans,
-                    bool doScale)
+        SkShader::TileMode yTile,
+        bool doFilter,
+        bool doTrans,
+        bool doScale)
         : fDoFilter(doFilter)
         , fDoTrans(doTrans)
-        , fDoScale(doScale) {
+        , fDoScale(doScale)
+    {
         SkBitmap bm;
 
         bm.allocN32Pixels(kWidth, kHeight, true);
@@ -53,8 +54,7 @@ public:
 
         create_gradient(&bm);
 
-        SkShader* s = SkShader::CreateBitmapShader(bm, xTile, yTile);
-        fPaint.setShader(s)->unref();
+        fPaint.setShader(SkShader::MakeBitmapShader(bm, xTile, yTile));
 
         fName.printf("constXTile_");
 
@@ -76,11 +76,13 @@ public:
     }
 
 protected:
-    virtual const char* onGetName() {
+    virtual const char* onGetName()
+    {
         return fName.c_str();
     }
 
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
+    virtual void onDraw(int loops, SkCanvas* canvas)
+    {
         SkPaint paint(fPaint);
         this->setupPaint(&paint);
         paint.setFilterQuality(fDoFilter ? kLow_SkFilterQuality

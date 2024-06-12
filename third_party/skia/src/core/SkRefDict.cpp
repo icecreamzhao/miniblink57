@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,25 +5,29 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkRefDict.h"
 #include "SkString.h"
 
 struct SkRefDict::Impl {
-    Impl*       fNext;
-    SkString    fName;
-    SkRefCnt*   fData;
+    Impl* fNext;
+    SkString fName;
+    SkRefCnt* fData;
 };
 
-SkRefDict::SkRefDict() : fImpl(NULL) {}
+SkRefDict::SkRefDict()
+    : fImpl(nullptr)
+{
+}
 
-SkRefDict::~SkRefDict() {
+SkRefDict::~SkRefDict()
+{
     this->removeAll();
 }
 
-SkRefCnt* SkRefDict::find(const char name[]) const {
-    if (NULL == name) {
-        return NULL;
+SkRefCnt* SkRefDict::find(const char name[]) const
+{
+    if (nullptr == name) {
+        return nullptr;
     }
 
     Impl* rec = fImpl;
@@ -34,16 +37,17 @@ SkRefCnt* SkRefDict::find(const char name[]) const {
         }
         rec = rec->fNext;
     }
-    return NULL;
+    return nullptr;
 }
 
-void SkRefDict::set(const char name[], SkRefCnt* data) {
-    if (NULL == name) {
+void SkRefDict::set(const char name[], SkRefCnt* data)
+{
+    if (nullptr == name) {
         return;
     }
 
     Impl* rec = fImpl;
-    Impl* prev = NULL;
+    Impl* prev = nullptr;
     while (rec) {
         if (rec->fName.equals(name)) {
             if (data) {
@@ -77,7 +81,8 @@ void SkRefDict::set(const char name[], SkRefCnt* data) {
     fImpl = rec;
 }
 
-void SkRefDict::removeAll() {
+void SkRefDict::removeAll()
+{
     Impl* rec = fImpl;
     while (rec) {
         Impl* next = rec->fNext;
@@ -85,5 +90,5 @@ void SkRefDict::removeAll() {
         delete rec;
         rec = next;
     }
-    fImpl = NULL;
+    fImpl = nullptr;
 }

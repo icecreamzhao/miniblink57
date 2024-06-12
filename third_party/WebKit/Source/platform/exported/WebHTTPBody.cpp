@@ -28,20 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "public/platform/WebHTTPBody.h"
 
 #include "platform/FileMetadata.h"
-#include "platform/network/FormData.h"
+#include "platform/network/EncodedFormData.h"
 
 namespace blink {
 
-class WebHTTPBodyPrivate : public FormData {
+class WebHTTPBodyPrivate : public EncodedFormData {
 };
 
 void WebHTTPBody::initialize()
 {
-    assign(static_cast<WebHTTPBodyPrivate*>(FormData::create().leakRef()));
+    assign(static_cast<WebHTTPBodyPrivate*>(EncodedFormData::create().leakRef()));
 }
 
 void WebHTTPBody::reset()
@@ -124,13 +123,19 @@ void WebHTTPBody::appendFile(const WebString& filePath)
     m_private->appendFile(filePath);
 }
 
-void WebHTTPBody::appendFileRange(const WebString& filePath, long long fileStart, long long fileLength, double modificationTime)
+void WebHTTPBody::appendFileRange(const WebString& filePath,
+    long long fileStart,
+    long long fileLength,
+    double modificationTime)
 {
     ensureMutable();
     m_private->appendFileRange(filePath, fileStart, fileLength, modificationTime);
 }
 
-void WebHTTPBody::appendFileSystemURLRange(const WebURL& url, long long start, long long length, double modificationTime)
+void WebHTTPBody::appendFileSystemURLRange(const WebURL& url,
+    long long start,
+    long long length,
+    double modificationTime)
 {
     // Currently we only support filesystem URL.
     ASSERT(KURL(url).protocolIs("filesystem"));
@@ -166,18 +171,18 @@ void WebHTTPBody::setContainsPasswordData(bool containsPasswordData)
     m_private->setContainsPasswordData(containsPasswordData);
 }
 
-WebHTTPBody::WebHTTPBody(const PassRefPtr<FormData>& data)
+WebHTTPBody::WebHTTPBody(PassRefPtr<EncodedFormData> data)
     : m_private(static_cast<WebHTTPBodyPrivate*>(data.leakRef()))
 {
 }
 
-WebHTTPBody& WebHTTPBody::operator=(const PassRefPtr<FormData>& data)
+WebHTTPBody& WebHTTPBody::operator=(PassRefPtr<EncodedFormData> data)
 {
     assign(static_cast<WebHTTPBodyPrivate*>(data.leakRef()));
     return *this;
 }
 
-WebHTTPBody::operator PassRefPtr<FormData>() const
+WebHTTPBody::operator PassRefPtr<EncodedFormData>() const
 {
     return m_private;
 }

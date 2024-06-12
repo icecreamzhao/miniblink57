@@ -20,9 +20,10 @@ class Global;
 class DrawingMethods {
 public:
     DrawingMethods(Global* global)
-            : fGlobal(global)
-    {}
-    virtual ~DrawingMethods() {}
+        : fGlobal(global)
+    {
+    }
+    virtual ~DrawingMethods() { }
 
     // Retrieve the SkCanvas to draw on. May return NULL.
     virtual SkCanvas* getCanvas() = 0;
@@ -40,9 +41,9 @@ protected:
 private:
     // JS Attributes
     static void GetWidth(v8::Local<v8::String> name,
-                         const v8::PropertyCallbackInfo<v8::Value>& info);
+        const v8::PropertyCallbackInfo<v8::Value>& info);
     static void GetHeight(v8::Local<v8::String> name,
-                          const v8::PropertyCallbackInfo<v8::Value>& info);
+        const v8::PropertyCallbackInfo<v8::Value>& info);
 
     // JS Methods
     static void Save(const v8::FunctionCallbackInfo<v8::Value>& args);

@@ -5,8 +5,8 @@
 #ifndef BASE_PORT_H_
 #define BASE_PORT_H_
 
-#include <stdarg.h>
 #include "build/build_config.h"
+#include <stdarg.h>
 
 // DEPRECATED: Use ...LL and ...ULL suffixes.
 // TODO(viettrungluu): Delete these. These are only here until |GG_(U)INT64_C|
@@ -23,8 +23,8 @@
 // DEPRECATED: In Chromium, we force-define __STDC_CONSTANT_MACROS, so you can
 // just use the regular (U)INTn_C macros from <stdint.h>.
 // TODO(viettrungluu): Remove the remaining GG_(U)INTn_C macros.
-#define GG_INT64_C(x)   GG_LONGLONG(x)
-#define GG_UINT64_C(x)  GG_ULONGLONG(x)
+#define GG_INT64_C(x) GG_LONGLONG(x)
+#define GG_UINT64_C(x) GG_ULONGLONG(x)
 
 // It's possible for functions that use a va_list, such as StringPrintf, to
 // invalidate the data in it upon use.  The fix is to make a copy of the
@@ -45,4 +45,4 @@
 #define API_CALL
 #endif
 
-#endif  // BASE_PORT_H_
+#endif // BASE_PORT_H_

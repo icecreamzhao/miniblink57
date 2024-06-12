@@ -29,43 +29,40 @@
 #include "platform/PlatformExport.h"
 #include "public/platform/WebRect.h"
 #include "public/platform/WebScrollbarThemeGeometry.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
+#include "wtf/Noncopyable.h"
+#include <memory>
 
 namespace blink {
 
 class ScrollbarTheme;
 class WebScrollbar;
 
-class PLATFORM_EXPORT WebScrollbarThemeGeometryNative : public WebScrollbarThemeGeometry {
-public:
-    static PassOwnPtr<WebScrollbarThemeGeometryNative> create(ScrollbarTheme*);
+class PLATFORM_EXPORT WebScrollbarThemeGeometryNative
+    : public WebScrollbarThemeGeometry {
+    USING_FAST_MALLOC(WebScrollbarThemeGeometryNative);
+    WTF_MAKE_NONCOPYABLE(WebScrollbarThemeGeometryNative);
 
-    // WebScrollbarThemeGeometry overrides
-    WebScrollbarThemeGeometryNative* clone() const override;
-    int thumbPosition(WebScrollbar*) override;
-    int thumbLength(WebScrollbar*) override;
-    int trackPosition(WebScrollbar*) override;
-    int trackLength(WebScrollbar*) override;
+public:
+    static std::unique_ptr<WebScrollbarThemeGeometryNative> create(
+        ScrollbarTheme&);
+
     bool hasButtons(WebScrollbar*) override;
     bool hasThumb(WebScrollbar*) override;
     WebRect trackRect(WebScrollbar*) override;
     WebRect thumbRect(WebScrollbar*) override;
-    int minimumThumbLength(WebScrollbar*) override;
-    int scrollbarThickness(WebScrollbar*) override;
     WebRect backButtonStartRect(WebScrollbar*) override;
     WebRect backButtonEndRect(WebScrollbar*) override;
     WebRect forwardButtonStartRect(WebScrollbar*) override;
     WebRect forwardButtonEndRect(WebScrollbar*) override;
-    WebRect constrainTrackRectToTrackPieces(WebScrollbar*, const WebRect&) override;
-    void splitTrack(WebScrollbar*, const WebRect& track, WebRect& startTrack, WebRect& thumb, WebRect& endTrack) override;
 
 private:
-    explicit WebScrollbarThemeGeometryNative(ScrollbarTheme*);
+    explicit WebScrollbarThemeGeometryNative(ScrollbarTheme&);
 
     // The theme is not owned by this class. It is assumed that the theme is a
     // static pointer and its lifetime is essentially infinite. Only thread-safe
     // functions on the theme can be called by this theme.
-    ScrollbarTheme* m_theme;
+    ScrollbarTheme& m_theme;
 };
 
 } // namespace blink

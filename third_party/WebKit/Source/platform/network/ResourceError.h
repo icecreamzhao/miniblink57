@@ -27,17 +27,40 @@
 #ifndef ResourceError_h
 #define ResourceError_h
 
+//#include "net/base/net_errors.h"
 #include "platform/PlatformExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
+#include <iosfwd>
 
 namespace blink {
 
-PLATFORM_EXPORT extern const char errorDomainBlinkInternal[]; // Used for errors that won't be exposed to clients.
+enum class ResourceRequestBlockedReason;
 
-class PLATFORM_EXPORT ResourceError {
+// Used for errors that won't be exposed to clients.
+PLATFORM_EXPORT extern const char errorDomainBlinkInternal[];
+
+class PLATFORM_EXPORT ResourceError final {
+    DISALLOW_NEW();
+
 public:
+    enum Error {
+
+        // Permission to access a resource, other than the network, was denied.
+        ACCESS_DENIED = -10, // net::ERR_ACCESS_DENIED,
+
+        // The request failed after the response was received, based on client-side
+        // heuristics that point to the possiblility of a cross-site scripting attack.
+        BLOCKED_BY_XSS_AUDITOR = -28, // net::ERR_BLOCKED_BY_XSS_AUDITOR
+    };
+
     static ResourceError cancelledError(const String& failingURL);
-    static ResourceError cancelledDueToAccessCheckError(const String& failingURL);
+    static ResourceError cancelledDueToAccessCheckError(
+        const String& failingURL,
+        ResourceRequestBlockedReason);
+
+    // Only for Blink internal usage.
+    static ResourceError cacheMissError(const String& failingURL);
 
     ResourceError()
         : m_errorCode(0)
@@ -47,10 +70,15 @@ public:
         , m_isTimeout(false)
         , m_staleCopyInCache(false)
         , m_wasIgnoredByHandler(false)
+        , m_isCacheMiss(false)
+        , m_shouldCollapseInitiator(false)
     {
     }
 
-    ResourceError(const String& domain, int errorCode, const String& failingURL, const String& localizedDescription)
+    ResourceError(const String& domain,
+        int errorCode,
+        const String& failingURL,
+        const String& localizedDescription)
         : m_domain(domain)
         , m_errorCode(errorCode)
         , m_failingURL(failingURL)
@@ -61,10 +89,13 @@ public:
         , m_isTimeout(false)
         , m_staleCopyInCache(false)
         , m_wasIgnoredByHandler(false)
+        , m_isCacheMiss(false)
+        , m_shouldCollapseInitiator(false)
     {
     }
 
-    // Makes a deep copy. Useful for when you need to use a ResourceError on another thread.
+    // Makes a deep copy. Useful for when you need to use a ResourceError on
+    // another thread.
     ResourceError copy() const;
 
     bool isNull() const { return m_isNull; }
@@ -74,7 +105,10 @@ public:
     const String& failingURL() const { return m_failingURL; }
     const String& localizedDescription() const { return m_localizedDescription; }
 
-    void setIsCancellation(bool isCancellation) { m_isCancellation = isCancellation; }
+    void setIsCancellation(bool isCancellation)
+    {
+        m_isCancellation = isCancellation;
+    }
     bool isCancellation() const { return m_isCancellation; }
 
     void setIsAccessCheck(bool isAccessCheck) { m_isAccessCheck = isAccessCheck; }
@@ -82,11 +116,33 @@ public:
 
     void setIsTimeout(bool isTimeout) { m_isTimeout = isTimeout; }
     bool isTimeout() const { return m_isTimeout; }
-    void setStaleCopyInCache(bool staleCopyInCache) { m_staleCopyInCache = staleCopyInCache; }
+    void setStaleCopyInCache(bool staleCopyInCache)
+    {
+        m_staleCopyInCache = staleCopyInCache;
+    }
     bool staleCopyInCache() const { return m_staleCopyInCache; }
 
-    void setWasIgnoredByHandler(bool ignoredByHandler) { m_wasIgnoredByHandler = ignoredByHandler; }
+    void setWasIgnoredByHandler(bool ignoredByHandler)
+    {
+        m_wasIgnoredByHandler = ignoredByHandler;
+    }
     bool wasIgnoredByHandler() const { return m_wasIgnoredByHandler; }
+
+    void setIsCacheMiss(bool isCacheMiss) { m_isCacheMiss = isCacheMiss; }
+    bool isCacheMiss() const { return m_isCacheMiss; }
+    bool wasBlockedByResponse() const
+    {
+        // The request failed because the response was delivered along with requirements
+        // which are not met ('X-Frame-Options' and 'Content-Security-Policy' ancestor
+        // checks, for instance).
+        return m_errorCode == -27; // net::ERR_BLOCKED_BY_RESPONSE;
+    }
+
+    void setShouldCollapseInitiator(bool shouldCollapseInitiator)
+    {
+        m_shouldCollapseInitiator = shouldCollapseInitiator;
+    }
+    bool shouldCollapseInitiator() const { return m_shouldCollapseInitiator; }
 
     static bool compare(const ResourceError&, const ResourceError&);
 
@@ -101,10 +157,21 @@ private:
     bool m_isTimeout;
     bool m_staleCopyInCache;
     bool m_wasIgnoredByHandler;
+    bool m_isCacheMiss;
+    bool m_shouldCollapseInitiator;
 };
 
-inline bool operator==(const ResourceError& a, const ResourceError& b) { return ResourceError::compare(a, b); }
-inline bool operator!=(const ResourceError& a, const ResourceError& b) { return !(a == b); }
+inline bool operator==(const ResourceError& a, const ResourceError& b)
+{
+    return ResourceError::compare(a, b);
+}
+inline bool operator!=(const ResourceError& a, const ResourceError& b)
+{
+    return !(a == b);
+}
+
+// Pretty printer for gtest. Declared here to avoid ODR violations.
+std::ostream& operator<<(std::ostream&, const ResourceError&);
 
 } // namespace blink
 

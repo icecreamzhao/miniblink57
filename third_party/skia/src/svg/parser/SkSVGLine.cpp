@@ -1,11 +1,9 @@
-
 /*
  * Copyright 2006 The Android Open Source Project
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
 
 #include "SkSVGLine.h"
 #include "SkSVGParser.h"
@@ -19,7 +17,8 @@ const SkSVGAttribute SkSVGLine::gAttributes[] = {
 
 DEFINE_SVG_INFO(Line)
 
-void SkSVGLine::translate(SkSVGParser& parser, bool defState) {
+void SkSVGLine::translate(SkSVGParser& parser, bool defState)
+{
     parser._startElement("line");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE(x1);

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkInterpolator_DEFINED
 #define SkInterpolator_DEFINED
 
@@ -19,11 +18,13 @@ public:
         kFreezeStart_Result,
         kFreezeEnd_Result
     };
+
 protected:
     SkInterpolatorBase();
     ~SkInterpolatorBase();
+
 public:
-    void    reset(int elemCount, int frameCount);
+    void reset(int elemCount, int frameCount);
 
     /** Return the start and end time for this interpolator.
         If there are no key frames, return false.
@@ -35,31 +36,32 @@ public:
                        is ignored (left unchanged).
         @return True if there are key frames, or false if there are none.
     */
-    bool    getDuration(SkMSec* startTime, SkMSec* endTime) const;
-
+    bool getDuration(SkMSec* startTime, SkMSec* endTime) const;
 
     /** Set the whether the repeat is mirrored.
         @param mirror If true, the odd repeats interpolate from the last key
                       frame and the first.
     */
-    void setMirror(bool mirror) {
+    void setMirror(bool mirror)
+    {
         fFlags = SkToU8((fFlags & ~kMirror) | (int)mirror);
     }
 
     /** Set the repeat count. The repeat count may be fractional.
         @param repeatCount Multiplies the total time by this scalar.
     */
-    void    setRepeatCount(SkScalar repeatCount) { fRepeat = repeatCount; }
+    void setRepeatCount(SkScalar repeatCount) { fRepeat = repeatCount; }
 
     /** Set the whether the repeat is mirrored.
         @param reset If true, the odd repeats interpolate from the last key
                      frame and the first.
     */
-    void setReset(bool reset) {
+    void setReset(bool reset)
+    {
         fFlags = SkToU8((fFlags & ~kReset) | (int)reset);
     }
 
-    Result  timeToT(SkMSec time, SkScalar* T, int* index, SkBool* exact) const;
+    Result timeToT(SkMSec time, SkScalar* T, int* index, bool* exact) const;
 
 protected:
     enum Flags {
@@ -68,19 +70,19 @@ protected:
         kHasBlend = 4
     };
     static SkScalar ComputeRelativeT(SkMSec time, SkMSec prevTime,
-                             SkMSec nextTime, const SkScalar blend[4] = NULL);
+        SkMSec nextTime, const SkScalar blend[4] = NULL);
     int16_t fFrameCount;
     uint8_t fElemCount;
     uint8_t fFlags;
     SkScalar fRepeat;
     struct SkTimeCode {
-        SkMSec  fTime;
+        SkMSec fTime;
         SkScalar fBlend[4];
     };
-    SkTimeCode* fTimes;     // pointer into fStorage
+    SkTimeCode* fTimes; // pointer into fStorage
     void* fStorage;
 #ifdef SK_DEBUG
-    SkTimeCode(* fTimesArray)[10];
+    SkTimeCode (*fTimesArray)[10];
 #endif
 };
 
@@ -88,7 +90,7 @@ class SkInterpolator : public SkInterpolatorBase {
 public:
     SkInterpolator();
     SkInterpolator(int elemCount, int frameCount);
-    void    reset(int elemCount, int frameCount);
+    void reset(int elemCount, int frameCount);
 
     /** Add or replace a key frame, copying the values[] data into the
         interpolator.
@@ -102,7 +104,7 @@ public:
                         1 is a linear blend (default)
     */
     bool setKeyFrame(int index, SkMSec time, const SkScalar values[],
-                     const SkScalar blend[4] = NULL);
+        const SkScalar blend[4] = NULL);
 
     /** Return the computed values given the specified time. Return whether
         those values are the result of pinning to either the first
@@ -114,17 +116,24 @@ public:
     Result timeToValues(SkMSec time, SkScalar values[] = NULL) const;
 
 private:
-    SkScalar* fValues;  // pointer into fStorage
+    SkScalar* fValues; // pointer into fStorage
 #ifdef SK_DEBUG
-    SkScalar(* fScalarsArray)[10];
+    SkScalar (*fScalarsArray)[10];
 #endif
     typedef SkInterpolatorBase INHERITED;
 };
 
-/** Given all the parameters are [0...1], apply the cubic specified by (0,0)
-    (bx,by) (cx,cy) (1,1) to value, returning the answer, also [0...1].
+/** Interpolate a cubic curve, typically to provide an ease-in ease-out transition.
+    All the parameters are in the range of [0...1].
+    The input value is treated as the x-coordinate of the cubic.
+    The output value is the y-coordinate on the cubic at the x-coordinate.
+
+    @param value        The x-coordinate pinned between [0..1].
+    @param bx,by,cx,cy  The cubic control points where the cubic is specified
+                        as (0,0) (bx,by) (cx,cy) (1,1)
+    @return             the corresponding y-coordinate value, from [0..1].
 */
 SkScalar SkUnitCubicInterp(SkScalar value, SkScalar bx, SkScalar by,
-                           SkScalar cx, SkScalar cy);
+    SkScalar cx, SkScalar cy);
 
 #endif

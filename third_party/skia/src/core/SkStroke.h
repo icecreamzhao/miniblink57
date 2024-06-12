@@ -8,9 +8,9 @@
 #ifndef SkStroke_DEFINED
 #define SkStroke_DEFINED
 
+#include "SkPaint.h"
 #include "SkPath.h"
 #include "SkPoint.h"
-#include "SkPaint.h"
 #include "SkStrokerPriv.h"
 
 #ifdef SK_DEBUG
@@ -29,19 +29,19 @@ class SkStroke {
 public:
     SkStroke();
     SkStroke(const SkPaint&);
-    SkStroke(const SkPaint&, SkScalar width);   // width overrides paint.getStrokeWidth()
+    SkStroke(const SkPaint&, SkScalar width); // width overrides paint.getStrokeWidth()
 
-    SkPaint::Cap    getCap() const { return (SkPaint::Cap)fCap; }
-    void        setCap(SkPaint::Cap);
+    SkPaint::Cap getCap() const { return (SkPaint::Cap)fCap; }
+    void setCap(SkPaint::Cap);
 
-    SkPaint::Join   getJoin() const { return (SkPaint::Join)fJoin; }
-    void        setJoin(SkPaint::Join);
+    SkPaint::Join getJoin() const { return (SkPaint::Join)fJoin; }
+    void setJoin(SkPaint::Join);
 
-    void    setMiterLimit(SkScalar);
-    void    setWidth(SkScalar);
+    void setMiterLimit(SkScalar);
+    void setWidth(SkScalar);
 
-    bool    getDoFill() const { return SkToBool(fDoFill); }
-    void    setDoFill(bool doFill) { fDoFill = SkToU8(doFill); }
+    bool getDoFill() const { return SkToBool(fDoFill); }
+    void setDoFill(bool doFill) { fDoFill = SkToU8(doFill); }
 
     /**
      *  ResScale is the "intended" resolution for the output.
@@ -52,7 +52,8 @@ public:
      *          be zoomed down, and small errors may be invisible.
      */
     SkScalar getResScale() const { return fResScale; }
-    void setResScale(SkScalar rs) {
+    void setResScale(SkScalar rs)
+    {
         SkASSERT(rs > 0 && SkScalarIsFinite(rs));
         fResScale = rs;
     }
@@ -60,17 +61,17 @@ public:
     /**
      *  Stroke the specified rect, winding it in the specified direction..
      */
-    void    strokeRect(const SkRect& rect, SkPath* result,
-                       SkPath::Direction = SkPath::kCW_Direction) const;
-    void    strokePath(const SkPath& path, SkPath*) const;
+    void strokeRect(const SkRect& rect, SkPath* result,
+        SkPath::Direction = SkPath::kCW_Direction) const;
+    void strokePath(const SkPath& path, SkPath*) const;
 
     ////////////////////////////////////////////////////////////////
 
 private:
-    SkScalar    fWidth, fMiterLimit;
-    SkScalar    fResScale;
-    uint8_t     fCap, fJoin;
-    SkBool8     fDoFill;
+    SkScalar fWidth, fMiterLimit;
+    SkScalar fResScale;
+    uint8_t fCap, fJoin;
+    SkBool8 fDoFill;
 
     friend class SkPaint;
 };

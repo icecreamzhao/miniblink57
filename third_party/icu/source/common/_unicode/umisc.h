@@ -30,21 +30,21 @@ U_CDECL_BEGIN
  *  @stable ICU 2.0
  */
 typedef struct UFieldPosition {
-  /**
+    /**
    * The field 
    * @stable ICU 2.0
    */
-  int32_t field;
-  /**
+    int32_t field;
+    /**
    * The start of the text range containing field 
    * @stable ICU 2.0
    */
-  int32_t beginIndex;
-  /** 
+    int32_t beginIndex;
+    /** 
    * The limit of the text range containing field 
    * @stable ICU 2.0
    */
-  int32_t endIndex;
+    int32_t endIndex;
 } UFieldPosition;
 
 #if !UCONFIG_NO_SERVICE

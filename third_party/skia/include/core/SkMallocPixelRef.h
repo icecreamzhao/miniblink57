@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkMallocPixelRef_DEFINED
 #define SkMallocPixelRef_DEFINED
 
@@ -27,7 +26,7 @@ public:
      *  Returns NULL on failure.
      */
     static SkMallocPixelRef* NewDirect(const SkImageInfo&, void* addr,
-                                       size_t rowBytes, SkColorTable*);
+        size_t rowBytes, SkColorTable*);
 
     /**
      *  Return a new SkMallocPixelRef, automatically allocating storage for the
@@ -40,7 +39,13 @@ public:
      *  Returns NULL on failure.
      */
     static SkMallocPixelRef* NewAllocate(const SkImageInfo& info,
-                                         size_t rowBytes, SkColorTable*);
+        size_t rowBytes, SkColorTable*);
+
+    /**
+     *  Identical to NewAllocate, except all pixel bytes are zeroed.
+     */
+    static SkMallocPixelRef* NewZeroed(const SkImageInfo& info,
+        size_t rowBytes, SkColorTable*);
 
     /**
      *  Return a new SkMallocPixelRef with the provided pixel storage,
@@ -58,9 +63,9 @@ public:
      */
     typedef void (*ReleaseProc)(void* addr, void* context);
     static SkMallocPixelRef* NewWithProc(const SkImageInfo& info,
-                                         size_t rowBytes, SkColorTable*,
-                                         void* addr, ReleaseProc proc,
-                                         void* context);
+        size_t rowBytes, SkColorTable*,
+        void* addr, ReleaseProc proc,
+        void* context);
 
     /**
      *  Return a new SkMallocPixelRef that will use the provided
@@ -73,23 +78,26 @@ public:
      *  Returns NULL on failure.
      */
     static SkMallocPixelRef* NewWithData(const SkImageInfo& info,
-                                         size_t rowBytes,
-                                         SkColorTable* ctable,
-                                         SkData* data);
+        size_t rowBytes,
+        SkColorTable* ctable,
+        SkData* data);
 
     void* getAddr() const { return fStorage; }
 
     class PRFactory : public SkPixelRefFactory {
     public:
-        virtual SkPixelRef* create(const SkImageInfo&,
-                                   size_t rowBytes,
-                                   SkColorTable*) override;
+        SkPixelRef* create(const SkImageInfo&, size_t rowBytes, SkColorTable*) override;
+    };
+
+    class ZeroedPRFactory : public SkPixelRefFactory {
+    public:
+        SkPixelRef* create(const SkImageInfo&, size_t rowBytes, SkColorTable*) override;
     };
 
 protected:
     // The ownPixels version of this constructor is deprecated.
     SkMallocPixelRef(const SkImageInfo&, void* addr, size_t rb, SkColorTable*,
-                     bool ownPixels);
+        bool ownPixels);
     virtual ~SkMallocPixelRef();
 
     bool onNewLockPixels(LockRec*) override;
@@ -97,17 +105,22 @@ protected:
     size_t getAllocatedSizeInBytes() const override;
 
 private:
-    void*           fStorage;
-    SkColorTable*   fCTable;
-    size_t          fRB;
-    ReleaseProc     fReleaseProc;
-    void*           fReleaseProcContext;
+    // Uses alloc to implement NewAllocate or NewZeroed.
+    static SkMallocPixelRef* NewUsing(void* (*alloc)(size_t),
+        const SkImageInfo&,
+        size_t rowBytes,
+        SkColorTable*);
+
+    void* fStorage;
+    SkColorTable* fCTable;
+    size_t fRB;
+    ReleaseProc fReleaseProc;
+    void* fReleaseProcContext;
 
     SkMallocPixelRef(const SkImageInfo&, void* addr, size_t rb, SkColorTable*,
-                     ReleaseProc proc, void* context);
+        ReleaseProc proc, void* context);
 
     typedef SkPixelRef INHERITED;
 };
-
 
 #endif

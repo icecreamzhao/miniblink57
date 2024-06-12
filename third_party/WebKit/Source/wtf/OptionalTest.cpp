@@ -2,62 +2,68 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "wtf/Optional.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace WTF {
 namespace {
 
-struct IntBox {
-    IntBox(int n) : number(n) { }
-    int number;
-};
+    struct IntBox {
+        IntBox(int n)
+            : number(n)
+        {
+        }
+        int number;
+    };
 
-class DestructionNotifier {
-public:
-    DestructionNotifier(bool& flag) : m_flag(flag) { }
-    ~DestructionNotifier() { m_flag = true; }
-private:
-    bool& m_flag;
-};
+    class DestructionNotifier {
+    public:
+        DestructionNotifier(bool& flag)
+            : m_flag(flag)
+        {
+        }
+        ~DestructionNotifier() { m_flag = true; }
 
-TEST(OptionalTest, BooleanTest)
-{
-    Optional<int> optional;
-    EXPECT_FALSE(optional);
-    optional.emplace(0);
-    EXPECT_TRUE(optional);
-}
+    private:
+        bool& m_flag;
+    };
 
-TEST(OptionalTest, Dereference)
-{
-    Optional<int> optional;
-    optional.emplace(1);
-    EXPECT_EQ(1, *optional);
-
-    Optional<IntBox> optionalIntbox;
-    optionalIntbox.emplace(42);
-    EXPECT_EQ(42, optionalIntbox->number);
-}
-
-TEST(OptionalTest, DestructorCalled)
-{
-    // Destroying a disengaged optional shouldn't do anything.
+    TEST(OptionalTest, BooleanTest)
     {
-        Optional<DestructionNotifier> optional;
+        Optional<int> optional;
+        EXPECT_FALSE(optional);
+        optional.emplace(0);
+        EXPECT_TRUE(optional);
     }
 
-    // Destroying an engaged optional should call the destructor.
-    bool isDestroyed = false;
+    TEST(OptionalTest, Dereference)
     {
-        Optional<DestructionNotifier> optional;
-        optional.emplace(isDestroyed);
-        EXPECT_FALSE(isDestroyed);
+        Optional<int> optional;
+        optional.emplace(1);
+        EXPECT_EQ(1, *optional);
+
+        Optional<IntBox> optionalIntbox;
+        optionalIntbox.emplace(42);
+        EXPECT_EQ(42, optionalIntbox->number);
     }
-    EXPECT_TRUE(isDestroyed);
-}
+
+    TEST(OptionalTest, DestructorCalled)
+    {
+        // Destroying a disengaged optional shouldn't do anything.
+        {
+            Optional<DestructionNotifier> optional;
+        }
+
+        // Destroying an engaged optional should call the destructor.
+        bool isDestroyed = false;
+        {
+            Optional<DestructionNotifier> optional;
+            optional.emplace(isDestroyed);
+            EXPECT_FALSE(isDestroyed);
+        }
+        EXPECT_TRUE(isDestroyed);
+    }
 
 } // namespace
 } // namespace WTF

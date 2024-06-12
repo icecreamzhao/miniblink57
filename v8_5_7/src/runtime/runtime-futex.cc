@@ -27,7 +27,7 @@ RUNTIME_FUNCTION(Runtime_AtomicsWait) {
   CHECK(sta->GetBuffer()->is_shared());
   CHECK_LT(index, NumberToSize(sta->length()));
   CHECK_EQ(sta->type(), kExternalInt32Array);
-  CHECK(timeout == V8_INFINITY || !std::isnan(timeout));
+  CHECK(timeout == V8_INFINITY || !std_isnan(timeout));
 
   Handle<JSArrayBuffer> array_buffer = sta->GetBuffer();
   size_t addr = (index << 2) + NumberToSize(sta->byte_offset());

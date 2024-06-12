@@ -26,10 +26,10 @@
 #ifndef DateTimeEditElement_h
 #define DateTimeEditElement_h
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/forms/StepRange.h"
 #include "core/html/shadow/DateTimeFieldElement.h"
 #include "platform/DateComponents.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -41,20 +41,22 @@ class StepRange;
 // representing date and time, such as
 //  - Year, Month, Day Of Month
 //  - Hour, Minute, Second, Millisecond, AM/PM
-class DateTimeEditElement final : public HTMLDivElement, public DateTimeFieldElement::FieldOwner {
+class DateTimeEditElement final : public HTMLDivElement,
+                                  public DateTimeFieldElement::FieldOwner {
     WTF_MAKE_NONCOPYABLE(DateTimeEditElement);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DateTimeEditElement);
+    USING_GARBAGE_COLLECTED_MIXIN(DateTimeEditElement);
 
 public:
     // EditControlOwner implementer must call removeEditControlOwner when
     // it doesn't handle event, e.g. at destruction.
-    class EditControlOwner : public WillBeGarbageCollectedMixin {
+    class EditControlOwner : public GarbageCollectedMixin {
     public:
         virtual ~EditControlOwner();
         virtual void didBlurFromControl() = 0;
         virtual void didFocusOnControl() = 0;
         virtual void editControlValueChanged() = 0;
-        virtual String formatDateTimeFieldsState(const DateTimeFieldsState&) const = 0;
+        virtual String formatDateTimeFieldsState(
+            const DateTimeFieldsState&) const = 0;
         virtual bool isEditControlOwnerDisabled() const = 0;
         virtual bool isEditControlOwnerReadOnly() const = 0;
         virtual AtomicString localeIdentifier() const = 0;
@@ -62,6 +64,7 @@ public:
     };
 
     struct LayoutParameters {
+        STACK_ALLOCATED();
         String dateTimeFormat;
         String fallbackDateTimeFormat;
         Locale& locale;
@@ -79,12 +82,12 @@ public:
         }
     };
 
-    static PassRefPtrWillBeRawPtr<DateTimeEditElement> create(Document&, EditControlOwner&);
+    static DateTimeEditElement* create(Document&, EditControlOwner&);
 
     ~DateTimeEditElement() override;
     DECLARE_VIRTUAL_TRACE();
 
-    void addField(PassRefPtrWillBeRawPtr<DateTimeFieldElement>);
+    void addField(DateTimeFieldElement*);
     bool anyEditableFieldsHaveValues() const;
     void blurByOwner();
     void defaultEventHandler(Event*) override;
@@ -98,7 +101,8 @@ public:
     void readOnlyStateChanged();
     void removeEditControlOwner() { m_editControlOwner = nullptr; }
     void resetFields();
-    void setEmptyValue(const LayoutParameters&, const DateComponents& dateForReadOnlyField);
+    void setEmptyValue(const LayoutParameters&,
+        const DateComponents& dateForReadOnlyField);
     void setValueAsDate(const LayoutParameters&, const DateComponents&);
     void setValueAsDateTimeFieldsState(const DateTimeFieldsState&);
     void setOnlyYearMonthDay(const DateComponents&);
@@ -148,13 +152,16 @@ private:
     AtomicString localeIdentifier() const override;
     void fieldDidChangeValueByKeyboard() override;
 
-    WillBeHeapVector<RawPtrWillBeMember<DateTimeFieldElement>, maximumNumberOfFields> m_fields;
-    RawPtrWillBeMember<EditControlOwner> m_editControlOwner;
+    HeapVector<Member<DateTimeFieldElement>, maximumNumberOfFields> m_fields;
+    Member<EditControlOwner> m_editControlOwner;
 };
 
-DEFINE_TYPE_CASTS(DateTimeEditElement, Element, element, element->isDateTimeEditElement(), element.isDateTimeEditElement());
+DEFINE_TYPE_CASTS(DateTimeEditElement,
+    Element,
+    element,
+    element->isDateTimeEditElement(),
+    element.isDateTimeEditElement());
 
 } // namespace blink
 
-#endif
 #endif

@@ -27,16 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/geometry/FloatRoundedRect.h"
 
 #include "platform/geometry/FloatQuad.h"
-
+#include "wtf/text/WTFString.h"
 #include <algorithm>
-
-#ifndef NDEBUG
-#include <stdio.h>
-#endif
 
 namespace blink {
 
@@ -51,7 +46,11 @@ FloatRoundedRect::FloatRoundedRect(const FloatRect& rect, const Radii& radii)
 {
 }
 
-FloatRoundedRect::FloatRoundedRect(const FloatRect& rect, const FloatSize& topLeft, const FloatSize& topRight, const FloatSize& bottomLeft, const FloatSize& bottomRight)
+FloatRoundedRect::FloatRoundedRect(const FloatRect& rect,
+    const FloatSize& topLeft,
+    const FloatSize& topRight,
+    const FloatSize& bottomLeft,
+    const FloatSize& bottomRight)
     : m_rect(rect)
     , m_radii(topLeft, topRight, bottomLeft, bottomRight)
 {
@@ -102,8 +101,10 @@ void FloatRoundedRect::Radii::scaleAndFloor(float factor)
         m_bottomRight = FloatSize();
 }
 
-
-void FloatRoundedRect::Radii::shrink(float topWidth, float bottomWidth, float leftWidth, float rightWidth)
+void FloatRoundedRect::Radii::shrink(float topWidth,
+    float bottomWidth,
+    float leftWidth,
+    float rightWidth)
 {
     ASSERT(topWidth >= 0 && bottomWidth >= 0 && leftWidth >= 0 && rightWidth >= 0);
 
@@ -114,13 +115,19 @@ void FloatRoundedRect::Radii::shrink(float topWidth, float bottomWidth, float le
     m_topRight.setHeight(std::max<float>(0, m_topRight.height() - topWidth));
 
     m_bottomLeft.setWidth(std::max<float>(0, m_bottomLeft.width() - leftWidth));
-    m_bottomLeft.setHeight(std::max<float>(0, m_bottomLeft.height() - bottomWidth));
+    m_bottomLeft.setHeight(
+        std::max<float>(0, m_bottomLeft.height() - bottomWidth));
 
-    m_bottomRight.setWidth(std::max<float>(0, m_bottomRight.width() - rightWidth));
-    m_bottomRight.setHeight(std::max<float>(0, m_bottomRight.height() - bottomWidth));
+    m_bottomRight.setWidth(
+        std::max<float>(0, m_bottomRight.width() - rightWidth));
+    m_bottomRight.setHeight(
+        std::max<float>(0, m_bottomRight.height() - bottomWidth));
 }
 
-void FloatRoundedRect::Radii::expand(float topWidth, float bottomWidth, float leftWidth, float rightWidth)
+void FloatRoundedRect::Radii::expand(float topWidth,
+    float bottomWidth,
+    float leftWidth,
+    float rightWidth)
 {
     ASSERT(topWidth >= 0 && bottomWidth >= 0 && leftWidth >= 0 && rightWidth >= 0);
     if (m_topLeft.width() > 0 && m_topLeft.height() > 0) {
@@ -141,15 +148,6 @@ void FloatRoundedRect::Radii::expand(float topWidth, float bottomWidth, float le
     }
 }
 
-#ifndef NDEBUG
-void FloatRoundedRect::Radii::show()
-{
-    fprintf(stderr, "topLeft=[%f,%f], topRight=[%f,%f], bottomLeft=[%f,%f], bottomRight=[%f,%f]\n",
-        topLeft().width(), topLeft().height(), topRight().width(), topRight().height(),
-        bottomLeft().width(), bottomLeft().height(), bottomRight().width(), bottomRight().height());
-}
-#endif
-
 static inline float cornerRectIntercept(float y, const FloatRect& cornerRect)
 {
     ASSERT(cornerRect.height() > 0);
@@ -168,9 +166,11 @@ FloatRect FloatRoundedRect::radiusCenterRect() const
     return centerRect;
 }
 
-bool FloatRoundedRect::xInterceptsAtY(float y, float& minXIntercept, float& maxXIntercept) const
+bool FloatRoundedRect::xInterceptsAtY(float y,
+    float& minXIntercept,
+    float& maxXIntercept) const
 {
-    if (y < rect().y() || y >  rect().maxY())
+    if (y < rect().y() || y > rect().maxY())
         return false;
 
     if (!isRounded()) {
@@ -185,7 +185,7 @@ bool FloatRoundedRect::xInterceptsAtY(float y, float& minXIntercept, float& maxX
     if (!topLeftRect.isEmpty() && y >= topLeftRect.y() && y < topLeftRect.maxY())
         minXIntercept = topLeftRect.maxX() - cornerRectIntercept(topLeftRect.maxY() - y, topLeftRect);
     else if (!bottomLeftRect.isEmpty() && y >= bottomLeftRect.y() && y <= bottomLeftRect.maxY())
-        minXIntercept =  bottomLeftRect.maxX() - cornerRectIntercept(y - bottomLeftRect.y(), bottomLeftRect);
+        minXIntercept = bottomLeftRect.maxX() - cornerRectIntercept(y - bottomLeftRect.y(), bottomLeftRect);
     else
         minXIntercept = m_rect.x();
 
@@ -207,7 +207,8 @@ void FloatRoundedRect::inflateWithRadii(int size)
     FloatRect old = m_rect;
 
     m_rect.inflate(size);
-    // Considering the inflation factor of shorter size to scale the radii seems appropriate here
+    // Considering the inflation factor of shorter size to scale the radii seems
+    // appropriate here
     float factor;
     if (m_rect.width() < m_rect.height())
         factor = old.width() ? (float)m_rect.width() / old.width() : int(0);
@@ -226,7 +227,8 @@ bool FloatRoundedRect::intersectsQuad(const FloatQuad& quad) const
     if (!topLeft.isEmpty()) {
         FloatRect rect(m_rect.x(), m_rect.y(), topLeft.width(), topLeft.height());
         if (quad.intersectsRect(rect)) {
-            FloatPoint center(m_rect.x() + topLeft.width(), m_rect.y() + topLeft.height());
+            FloatPoint center(m_rect.x() + topLeft.width(),
+                m_rect.y() + topLeft.height());
             FloatSize size(topLeft.width(), topLeft.height());
             if (!quad.intersectsEllipse(center, size))
                 return false;
@@ -235,9 +237,11 @@ bool FloatRoundedRect::intersectsQuad(const FloatQuad& quad) const
 
     const FloatSize& topRight = m_radii.topRight();
     if (!topRight.isEmpty()) {
-        FloatRect rect(m_rect.maxX() - topRight.width(), m_rect.y(), topRight.width(), topRight.height());
+        FloatRect rect(m_rect.maxX() - topRight.width(), m_rect.y(),
+            topRight.width(), topRight.height());
         if (quad.intersectsRect(rect)) {
-            FloatPoint center(m_rect.maxX() - topRight.width(), m_rect.y() + topRight.height());
+            FloatPoint center(m_rect.maxX() - topRight.width(),
+                m_rect.y() + topRight.height());
             FloatSize size(topRight.width(), topRight.height());
             if (!quad.intersectsEllipse(center, size))
                 return false;
@@ -246,9 +250,11 @@ bool FloatRoundedRect::intersectsQuad(const FloatQuad& quad) const
 
     const FloatSize& bottomLeft = m_radii.bottomLeft();
     if (!bottomLeft.isEmpty()) {
-        FloatRect rect(m_rect.x(), m_rect.maxY() - bottomLeft.height(), bottomLeft.width(), bottomLeft.height());
+        FloatRect rect(m_rect.x(), m_rect.maxY() - bottomLeft.height(),
+            bottomLeft.width(), bottomLeft.height());
         if (quad.intersectsRect(rect)) {
-            FloatPoint center(m_rect.x() + bottomLeft.width(), m_rect.maxY() - bottomLeft.height());
+            FloatPoint center(m_rect.x() + bottomLeft.width(),
+                m_rect.maxY() - bottomLeft.height());
             FloatSize size(bottomLeft.width(), bottomLeft.height());
             if (!quad.intersectsEllipse(center, size))
                 return false;
@@ -257,9 +263,12 @@ bool FloatRoundedRect::intersectsQuad(const FloatQuad& quad) const
 
     const FloatSize& bottomRight = m_radii.bottomRight();
     if (!bottomRight.isEmpty()) {
-        FloatRect rect(m_rect.maxX() - bottomRight.width(), m_rect.maxY() - bottomRight.height(), bottomRight.width(), bottomRight.height());
+        FloatRect rect(m_rect.maxX() - bottomRight.width(),
+            m_rect.maxY() - bottomRight.height(), bottomRight.width(),
+            bottomRight.height());
         if (quad.intersectsRect(rect)) {
-            FloatPoint center(m_rect.maxX() - bottomRight.width(), m_rect.maxY() - bottomRight.height());
+            FloatPoint center(m_rect.maxX() - bottomRight.width(),
+                m_rect.maxY() - bottomRight.height());
             FloatSize size(bottomRight.width(), bottomRight.height());
             if (!quad.intersectsEllipse(center, size))
                 return false;
@@ -269,7 +278,11 @@ bool FloatRoundedRect::intersectsQuad(const FloatQuad& quad) const
     return true;
 }
 
-void FloatRoundedRect::Radii::includeLogicalEdges(const FloatRoundedRect::Radii& edges, bool isHorizontal, bool includeLogicalLeftEdge, bool includeLogicalRightEdge)
+void FloatRoundedRect::Radii::includeLogicalEdges(
+    const FloatRoundedRect::Radii& edges,
+    bool isHorizontal,
+    bool includeLogicalLeftEdge,
+    bool includeLogicalRightEdge)
 {
     if (includeLogicalLeftEdge) {
         if (isHorizontal)
@@ -288,7 +301,8 @@ void FloatRoundedRect::Radii::includeLogicalEdges(const FloatRoundedRect::Radii&
     }
 }
 
-float calcBorderRadiiConstraintScaleFor(const FloatRect& rect, const FloatRoundedRect::Radii& radii)
+float calcBorderRadiiConstraintScaleFor(const FloatRect& rect,
+    const FloatRoundedRect::Radii& radii)
 {
     float factor = 1;
     float radiiSum;
@@ -319,27 +333,30 @@ float calcBorderRadiiConstraintScaleFor(const FloatRect& rect, const FloatRounde
 
 void FloatRoundedRect::constrainRadii()
 {
-    m_radii.scaleAndFloor(calcBorderRadiiConstraintScaleFor(rect(), radii()));
+    m_radii.scaleAndFloor(calcBorderRadiiConstraintScaleFor(rect(), getRadii()));
 }
 
-void FloatRoundedRect::includeLogicalEdges(const Radii& edges, bool isHorizontal, bool includeLogicalLeftEdge, bool includeLogicalRightEdge)
+void FloatRoundedRect::includeLogicalEdges(const Radii& edges,
+    bool isHorizontal,
+    bool includeLogicalLeftEdge,
+    bool includeLogicalRightEdge)
 {
-    m_radii.includeLogicalEdges(edges, isHorizontal, includeLogicalLeftEdge, includeLogicalRightEdge);
+    m_radii.includeLogicalEdges(edges, isHorizontal, includeLogicalLeftEdge,
+        includeLogicalRightEdge);
 }
 
 bool FloatRoundedRect::isRenderable() const
 {
     // FIXME: remove the 0.0001 slop once this class is converted to layout units.
-    return m_radii.topLeft().width() + m_radii.topRight().width() <= m_rect.width() + 0.0001
-        && m_radii.bottomLeft().width() + m_radii.bottomRight().width() <= m_rect.width() + 0.0001
-        && m_radii.topLeft().height() + m_radii.bottomLeft().height() <= m_rect.height() + 0.0001
-        && m_radii.topRight().height() + m_radii.bottomRight().height() <= m_rect.height() + 0.0001;
+    return m_radii.topLeft().width() + m_radii.topRight().width() <= m_rect.width() + 0.0001 && m_radii.bottomLeft().width() + m_radii.bottomRight().width() <= m_rect.width() + 0.0001 && m_radii.topLeft().height() + m_radii.bottomLeft().height() <= m_rect.height() + 0.0001 && m_radii.topRight().height() + m_radii.bottomRight().height() <= m_rect.height() + 0.0001;
 }
 
 void FloatRoundedRect::adjustRadii()
 {
-    float maxRadiusWidth = std::max(m_radii.topLeft().width() + m_radii.topRight().width(), m_radii.bottomLeft().width() + m_radii.bottomRight().width());
-    float maxRadiusHeight = std::max(m_radii.topLeft().height() + m_radii.bottomLeft().height(), m_radii.topRight().height() + m_radii.bottomRight().height());
+    float maxRadiusWidth = std::max(m_radii.topLeft().width() + m_radii.topRight().width(),
+        m_radii.bottomLeft().width() + m_radii.bottomRight().width());
+    float maxRadiusHeight = std::max(m_radii.topLeft().height() + m_radii.bottomLeft().height(),
+        m_radii.topRight().height() + m_radii.bottomRight().height());
 
     if (maxRadiusWidth <= 0 || maxRadiusHeight <= 0) {
         m_radii.scale(0.0f);
@@ -350,14 +367,19 @@ void FloatRoundedRect::adjustRadii()
     m_radii.scale(widthRatio < heightRatio ? widthRatio : heightRatio);
 }
 
-#ifndef NDEBUG
-void FloatRoundedRect::show()
+String FloatRoundedRect::Radii::toString() const
 {
-    fprintf(stderr, "FloatRoundedRect:\n rect: ");
-    m_rect.show();
-    fprintf(stderr, " radii: ");
-    m_radii.show();
+    return String::format("tl:%s; tr:%s; bl:%s; br:%s",
+        topLeft().toString().ascii().data(),
+        topRight().toString().ascii().data(),
+        bottomLeft().toString().ascii().data(),
+        bottomRight().toString().ascii().data());
 }
-#endif
+
+String FloatRoundedRect::toString() const
+{
+    return String::format("%s radii:(%s)", rect().toString().ascii().data(),
+        getRadii().toString().ascii().data());
+}
 
 } // namespace blink

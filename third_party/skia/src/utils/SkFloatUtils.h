@@ -9,8 +9,8 @@
 #define SkFloatUtils_DEFINED
 
 #include "SkTypes.h"
-#include <limits.h>
 #include <float.h>
+#include <limits.h>
 
 template <size_t size>
 class SkTypeWithSize {
@@ -70,8 +70,7 @@ public:
     static const Bits kSignBitMask = static_cast<Bits>(1) << (kBitCount - 1);
 
     /** The mask for the fraction bits. */
-    static const Bits kFractionBitMask =
-        ~static_cast<Bits>(0) >> (kExponentBitCount + 1);
+    static const Bits kFractionBitMask = ~static_cast<Bits>(0) >> (kExponentBitCount + 1);
 
     /** The mask for the exponent bits. */
     static const Bits kExponentBitMask = ~(kSignBitMask | kFractionBitMask);
@@ -96,7 +95,8 @@ public:
     Bits fraction_bits() const { return kFractionBitMask & fU.bits; }
 
     /** Returns true iff this is NAN (not a number). */
-    bool is_nan() const {
+    bool is_nan() const
+    {
         // It's a NAN if both of the folloowing are true:
         // * the exponent bits are all ones
         // * the fraction bits are not all zero.
@@ -110,12 +110,14 @@ public:
      *   - treats really large numbers as almost equal to infinity.
      *   - thinks +0.0 and -0.0 are 0 DLP's apart.
      */
-    bool AlmostEquals(const SkFloatingPoint& rhs) const {
+    bool AlmostEquals(const SkFloatingPoint& rhs) const
+    {
         // Any comparison operation involving a NAN must return false.
-        if (is_nan() || rhs.is_nan()) return false;
+        if (is_nan() || rhs.is_nan())
+            return false;
 
         const Bits dist = DistanceBetweenSignAndMagnitudeNumbers(fU.bits,
-                                                                 rhs.fU.bits);
+            rhs.fU.bits);
         //SkDEBUGF(("(%f, %f, %d) ", u_.value_, rhs.u_.value_, dist));
         return dist <= kMaxUlps;
     }
@@ -146,7 +148,8 @@ private:
      *  Read http://en.wikipedia.org/wiki/Signed_number_representations
      *  for more details on signed number representations.
      */
-    static Bits SignAndMagnitudeToBiased(const Bits &sam) {
+    static Bits SignAndMagnitudeToBiased(const Bits& sam)
+    {
         if (kSignBitMask & sam) {
             // sam represents a negative number.
             return ~sam + 1;
@@ -160,8 +163,9 @@ private:
      *  Given two numbers in the sign-and-magnitude representation,
      *  returns the distance between them as an unsigned number.
      */
-    static Bits DistanceBetweenSignAndMagnitudeNumbers(const Bits &sam1,
-                                                       const Bits &sam2) {
+    static Bits DistanceBetweenSignAndMagnitudeNumbers(const Bits& sam1,
+        const Bits& sam2)
+    {
         const Bits biased1 = SignAndMagnitudeToBiased(sam1);
         const Bits biased2 = SignAndMagnitudeToBiased(sam2);
         return (biased1 >= biased2) ? (biased1 - biased2) : (biased2 - biased1);

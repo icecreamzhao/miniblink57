@@ -28,14 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/quota/StorageQuota.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
-#include "core/dom/DOMError.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
+#include "modules/quota/DOMError.h"
 #include "modules/quota/StorageQuotaCallbacksImpl.h"
 #include "modules/quota/StorageQuotaClient.h"
 #include "platform/weborigin/KURL.h"
@@ -48,46 +47,44 @@ namespace blink {
 
 namespace {
 
-struct StorageTypeMapping {
-    WebStorageQuotaType type;
-    const char* const name;
-};
+    struct StorageTypeMapping {
+        WebStorageQuotaType type;
+        const char* const name;
+    };
 
-const StorageTypeMapping storageTypeMappings[] = {
-    { WebStorageQuotaTypeTemporary, "temporary" },
-    { WebStorageQuotaTypePersistent, "persistent" },
-};
+    const StorageTypeMapping storageTypeMappings[] = {
+        { WebStorageQuotaTypeTemporary, "temporary" },
+        { WebStorageQuotaTypePersistent, "persistent" },
+    };
 
-WebStorageQuotaType stringToStorageQuotaType(const String& type)
-{
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(storageTypeMappings); ++i) {
-        if (storageTypeMappings[i].name == type)
-            return storageTypeMappings[i].type;
+    WebStorageQuotaType stringToStorageQuotaType(const String& type)
+    {
+        for (size_t i = 0; i < WTF_ARRAY_LENGTH(storageTypeMappings); ++i) {
+            if (storageTypeMappings[i].name == type)
+                return storageTypeMappings[i].type;
+        }
+        ASSERT_NOT_REACHED();
+        return WebStorageQuotaTypeTemporary;
     }
-    ASSERT_NOT_REACHED();
-    return WebStorageQuotaTypeTemporary;
-}
 
 } // namespace
 
-StorageQuota::StorageQuota()
-{
-}
+StorageQuota::StorageQuota() { }
 
 Vector<String> StorageQuota::supportedTypes() const
 {
     Vector<String> types;
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(storageTypeMappings); ++i)
-        types.append(storageTypeMappings[i].name);
+        types.push_back(storageTypeMappings[i].name);
     return types;
 }
 
 ScriptPromise StorageQuota::queryInfo(ScriptState* scriptState, String type)
 {
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
+    ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
-    SecurityOrigin* securityOrigin = scriptState->executionContext()->securityOrigin();
+    SecurityOrigin* securityOrigin = scriptState->getExecutionContext()->getSecurityOrigin();
     if (securityOrigin->isUnique()) {
         resolver->reject(DOMError::create(NotSupportedError));
         return promise;
@@ -95,15 +92,18 @@ ScriptPromise StorageQuota::queryInfo(ScriptState* scriptState, String type)
 
     KURL storagePartition = KURL(KURL(), securityOrigin->toString());
     StorageQuotaCallbacks* callbacks = StorageQuotaCallbacksImpl::create(resolver);
-    Platform::current()->queryStorageUsageAndQuota(storagePartition, stringToStorageQuotaType(type), callbacks);
+    Platform::current()->queryStorageUsageAndQuota(
+        storagePartition, stringToStorageQuotaType(type), callbacks);
     return promise;
 }
 
-ScriptPromise StorageQuota::requestPersistentQuota(ScriptState* scriptState, unsigned long long newQuota)
+ScriptPromise StorageQuota::requestPersistentQuota(
+    ScriptState* scriptState,
+    unsigned long long newQuota)
 {
-    StorageQuotaClient* client = StorageQuotaClient::from(scriptState->executionContext());
+    StorageQuotaClient* client = StorageQuotaClient::from(scriptState->getExecutionContext());
     if (!client) {
-        RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
+        ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
         ScriptPromise promise = resolver->promise();
         resolver->reject(DOMError::create(NotSupportedError));
         return promise;

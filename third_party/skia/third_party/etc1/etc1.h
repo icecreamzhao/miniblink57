@@ -73,7 +73,7 @@ etc1_uint32 etc1_get_encoded_data_size(etc1_uint32 width, etc1_uint32 height);
 // returns non-zero if there is an error.
 
 int etc1_encode_image(const etc1_byte* pIn, etc1_uint32 width, etc1_uint32 height,
-        etc1_uint32 pixelSize, etc1_uint32 stride, etc1_byte* pOut);
+    etc1_uint32 pixelSize, etc1_uint32 stride, etc1_byte* pOut);
 
 // Decode an entire image.
 // pIn - pointer to encoded data.
@@ -84,8 +84,8 @@ int etc1_encode_image(const etc1_byte* pIn, etc1_uint32 width, etc1_uint32 heigh
 // returns non-zero if there is an error.
 
 int etc1_decode_image(const etc1_byte* pIn, etc1_byte* pOut,
-        etc1_uint32 width, etc1_uint32 height,
-        etc1_uint32 pixelSize, etc1_uint32 stride);
+    etc1_uint32 width, etc1_uint32 height,
+    etc1_uint32 pixelSize, etc1_uint32 stride);
 
 // Size of a PKM header, in bytes.
 

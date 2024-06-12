@@ -37,19 +37,19 @@ namespace blink {
 
 class ClientRect;
 
-class CORE_EXPORT ClientRectList final : public GarbageCollected<ClientRectList>, public ScriptWrappable {
+class CORE_EXPORT ClientRectList final
+    : public GarbageCollected<ClientRectList>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static ClientRectList* create()
-    {
-        return new ClientRectList;
-    }
+    static ClientRectList* create() { return new ClientRectList; }
     static ClientRectList* create(const Vector<FloatQuad>& quads)
     {
         return new ClientRectList(quads);
     }
 
-    template<typename Rects>
+    template <typename Rects>
     static ClientRectList* create(const Rects& rects)
     {
         return new ClientRectList(rects);
@@ -64,12 +64,12 @@ public:
 private:
     ClientRectList();
 
-    template<typename Rects>
+    template <typename Rects>
     explicit ClientRectList(const Rects& rects)
     {
         m_list.reserveInitialCapacity(rects.size());
         for (const auto& r : rects)
-            m_list.append(ClientRect::create(FloatRect(r)));
+            m_list.push_back(ClientRect::create(FloatRect(r)));
     }
 
     explicit ClientRectList(const Vector<FloatQuad>&);

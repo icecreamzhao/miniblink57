@@ -2,104 +2,74 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/frame/PlatformEventDispatcher.h"
 
 #include "core/frame/PlatformEventController.h"
-#include "wtf/TemporaryChange.h"
+#include "wtf/AutoReset.h"
 
 namespace blink {
 
 PlatformEventDispatcher::PlatformEventDispatcher()
-    : m_needsPurge(false)
-    , m_isDispatching(false)
+    : m_isDispatching(false)
+    , m_isListening(false)
 {
 }
 
-void PlatformEventDispatcher::addController(PlatformEventController* controller)
+void PlatformEventDispatcher::addController(
+    PlatformEventController* controller)
 {
-    bool wasEmpty = m_controllers.isEmpty();
-    if (!m_controllers.contains(controller))
-        m_controllers.append(controller);
-    if (wasEmpty)
-        startListening();
-}
-
-void PlatformEventDispatcher::removeController(PlatformEventController* controller)
-{
-    // Do not actually remove the controller from the vector, instead zero them out.
-    // The zeros are removed in these two cases:
-    // 1. either immediately if we are not dispatching any events,
-    // 2. or after events to all controllers have dispatched (see notifyControllers()).
-    // This is to correctly handle the re-entrancy case when a controller is destroyed
-    // while the events are still being dispatched.
-    size_t index = m_controllers.find(controller);
-    if (index == kNotFound)
+    ASSERT(controller);
+    // TODO: If we can avoid to register a same controller twice, we can change
+    // this 'if' to ASSERT.
+    if (m_controllers.contains(controller))
         return;
 
-    m_controllers[index] = nullptr;
-    m_needsPurge = true;
+    m_controllers.add(controller);
 
-    if (!m_isDispatching)
-        purgeControllers();
+    if (!m_isListening) {
+        startListening();
+        m_isListening = true;
+    }
 }
 
-void PlatformEventDispatcher::purgeControllers()
+void PlatformEventDispatcher::removeController(
+    PlatformEventController* controller)
 {
-    ASSERT(m_needsPurge);
+    ASSERT(m_controllers.contains(controller));
 
-    size_t i = 0;
-    while (i < m_controllers.size()) {
-        if (!m_controllers[i]) {
-            m_controllers[i] = m_controllers.last();
-            m_controllers.removeLast();
-        } else {
-            ++i;
-        }
-    }
-
-    m_needsPurge = false;
-
-    if (m_controllers.isEmpty())
+    m_controllers.remove(controller);
+    if (!m_isDispatching && m_controllers.isEmpty()) {
         stopListening();
+        m_isListening = false;
+    }
 }
 
 void PlatformEventDispatcher::notifyControllers()
 {
+    if (m_controllers.isEmpty())
+        return;
+
     {
-        TemporaryChange<bool> changeIsDispatching(m_isDispatching, true);
-        // Don't notify controllers removed or added during event dispatch.
-        size_t size = m_controllers.size();
-        for (size_t i = 0; i < size; ++i) {
-            if (m_controllers[i])
-                m_controllers[i]->didUpdateData();
+        AutoReset<bool> changeIsDispatching(&m_isDispatching, true);
+        // HashSet m_controllers can be updated during an iteration, and it stops
+        // the iteration.  Thus we store it into a Vector to access all elements.
+        HeapVector<Member<PlatformEventController>> snapshotVector;
+        copyToVector(m_controllers, snapshotVector);
+        for (PlatformEventController* controller : snapshotVector) {
+            if (m_controllers.contains(controller))
+                controller->didUpdateData();
         }
     }
 
-    if (m_needsPurge)
-        purgeControllers();
+    if (m_controllers.isEmpty()) {
+        stopListening();
+        m_isListening = false;
+    }
 }
 
 DEFINE_TRACE(PlatformEventDispatcher)
 {
-#if ENABLE(OILPAN)
-    // Trace the backing store, the weak(&bare) element references won't be.
     visitor->trace(m_controllers);
-    visitor->template registerWeakMembers<PlatformEventDispatcher, &PlatformEventDispatcher::clearWeakMembers>(this);
-#endif
 }
-
-#if ENABLE(OILPAN)
-void PlatformEventDispatcher::clearWeakMembers(Visitor* visitor)
-{
-    for (size_t i = 0; i < m_controllers.size(); ++i) {
-        if (!Heap::isHeapObjectAlive(m_controllers[i])) {
-            m_controllers[i] = nullptr;
-            m_needsPurge = true;
-        }
-    }
-    // Next notification will purge the empty slots.
-}
-#endif
 
 } // namespace blink

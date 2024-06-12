@@ -5,15 +5,18 @@
  * found in the LICENSE file.
  */
 
+#include "SkAutoPixmapStorage.h"
 #include "SkDeviceLooper.h"
 #include "SkRasterClip.h"
 #include "Test.h"
 
-static void make_pm(SkAutoPixmapStorage* pixmap, int w, int h) {
+static void make_pm(SkAutoPixmapStorage* pixmap, int w, int h)
+{
     pixmap->alloc(SkImageInfo::Make(w, h, kAlpha_8_SkColorType, kPremul_SkAlphaType));
 }
 
-static bool equal(const SkRasterClip& a, const SkRasterClip& b) {
+static bool equal(const SkRasterClip& a, const SkRasterClip& b)
+{
     if (a.isBW()) {
         return b.isBW() && a.bwRgn() == b.bwRgn();
     } else {
@@ -36,7 +39,8 @@ static const struct {
     { { 10, 32000 }, { 0, 0, 10, 4000 }, { 0, 0, 32000, 32000 } },
 };
 
-static void test_simple(skiatest::Reporter* reporter) {
+static void test_simple(skiatest::Reporter* reporter)
+{
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
         SkAutoPixmapStorage pmap;
@@ -71,7 +75,8 @@ static void test_simple(skiatest::Reporter* reporter) {
 //  [ 0x01  0x02 ]
 //  [ 0x04  0x08 ]
 //
-static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask) {
+static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask)
+{
     SkASSERT(SkAlign2(w));
     SkASSERT(SkAlign2(h));
     w >>= 1;
@@ -91,17 +96,18 @@ static void make_rgn(SkRegion* rgn, int w, int h, unsigned mask) {
     }
 }
 
-static void test_complex(skiatest::Reporter* reporter) {
+static void test_complex(skiatest::Reporter* reporter)
+{
     // choose size values that will result in 4 quadrants, given fAA setting
     const int BW_SIZE = 17 * 1000;
     const int AA_SIZE = 7 * 1000;
 
     struct {
         SkISize fSize;
-        bool    fAA;
+        bool fAA;
     } const gRec[] = {
         { { BW_SIZE, BW_SIZE }, false },
-        { {  AA_SIZE, AA_SIZE }, true },
+        { { AA_SIZE, AA_SIZE }, true },
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
@@ -132,7 +138,8 @@ static void test_complex(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(DeviceLooper, reporter) {
+DEF_TEST(DeviceLooper, reporter)
+{
     test_simple(reporter);
     test_complex(reporter);
 }

@@ -23,21 +23,21 @@
 #include "core/CoreExport.h"
 #include "core/css/MediaQueryList.h"
 #include "platform/heap/Handle.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
 // See http://dev.w3.org/csswg/cssom-view/#the-mediaquerylist-interface
-class CORE_EXPORT MediaQueryListListener : public RefCountedWillBeGarbageCollected<MediaQueryListListener> {
-    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(MediaQueryListListener);
+class CORE_EXPORT MediaQueryListListener
+    : public GarbageCollected<MediaQueryListListener> {
 public:
     virtual void notifyMediaQueryChanged() = 0;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
+
 protected:
     MediaQueryListListener();
 };
 
-}
+} // namespace blink
 
 #endif // MediaQueryListListener_h

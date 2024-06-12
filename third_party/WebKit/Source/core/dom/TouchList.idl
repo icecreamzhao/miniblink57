@@ -23,11 +23,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/touch-events/#touchlist-interface
+// https://w3c.github.io/touch-events/#touchlist-interface
 
-[
-    WillBeGarbageCollected,
-] interface TouchList {
+interface TouchList {
     readonly attribute unsigned long length;
     getter Touch? item(unsigned long index);
 };

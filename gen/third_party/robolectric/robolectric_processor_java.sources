@@ -1,0 +1,14 @@
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/RobolectricModel.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/RobolectricProcessor.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/generator/Generator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/generator/ServiceLoaderGenerator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/generator/ShadowProviderGenerator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/generator/package-info.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/package-info.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/FoundOnImplementsValidator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/ImplementationValidator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/ImplementsValidator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/RealObjectValidator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/ResetterValidator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/Validator.java
+../../third_party/robolectric/robolectric/robolectric-processor/src/main/java/org/robolectric/annotation/processing/validator/package-info.java

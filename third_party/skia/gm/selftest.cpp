@@ -10,25 +10,30 @@
  * output images across platforms for gm/tests/run.sh
  */
 
-#include "gm.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
+#include "gm.h"
 
 class SelfTestGM : public skiagm::GM {
 public:
-    SelfTestGM(const char name[], SkColor color) :
-        fName(name), fColor(color) {}
+    SelfTestGM(const char name[], SkColor color)
+        : fName(name)
+        , fColor(color)
+    {
+    }
     const static int kWidth = 300;
     const static int kHeight = 200;
 
 protected:
-    SkString onShortName() {
+    SkString onShortName()
+    {
         return fName;
     }
 
     SkISize onISize() { return SkISize::Make(kWidth, kHeight); }
 
-    virtual void onDraw(SkCanvas* canvas) {
+    virtual void onDraw(SkCanvas* canvas)
+    {
         SkPaint paint;
         paint.setStyle(SkPaint::kFill_Style);
         paint.setColor(fColor);
@@ -46,14 +51,7 @@ private:
 // those which caused https://code.google.com/p/skia/issues/detail?id=1079
 // ('gm generating spurious pixel_error messages as of r7258')
 static SkColor kTranslucentGreen = 0x7700EE00;
-static SkColor kTranslucentBlue  = 0x770000DD;
+static SkColor kTranslucentBlue = 0x770000DD;
 
-static skiagm::GM* F1(void*) {
-    return new SelfTestGM("selftest1", kTranslucentGreen);
-}
-static skiagm::GM* F2(void*) {
-    return new SelfTestGM("selftest2", kTranslucentBlue);
-}
-
-static skiagm::GMRegistry gR1(F1);
-static skiagm::GMRegistry gR2(F2);
+DEF_GM(return new SelfTestGM("selftest1", kTranslucentGreen);)
+DEF_GM(return new SelfTestGM("selftest2", kTranslucentBlue);)

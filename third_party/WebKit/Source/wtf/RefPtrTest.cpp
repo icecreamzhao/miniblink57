@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "wtf/RefPtr.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
+#include "wtf/RefCounted.h"
 #include "wtf/text/StringImpl.h"
-#include <gtest/gtest.h>
 
 namespace WTF {
 
@@ -24,11 +24,19 @@ TEST(RefPtrTest, MoveAssignmentOperator)
 {
     RefPtr<StringImpl> a = StringImpl::create("a");
     RefPtr<StringImpl> b = StringImpl::create("b");
-    // FIXME: Instead of explicitly casting to RefPtr<StringImpl>&& here, we should use std::move, but that
-    // requires us to have a standard library that supports move semantics.
-    b = static_cast<RefPtr<StringImpl>&&>(a);
+    b = std::move(a);
     EXPECT_TRUE(!!b);
     EXPECT_TRUE(!a);
+}
+
+class RefCountedClass : public RefCounted<RefCountedClass> {
+};
+
+TEST(RefPtrTest, ConstObject)
+{
+    // This test is only to ensure we force the compilation of a const RefCounted
+    // object to ensure the generated code compiles.
+    RefPtr<const RefCountedClass> ptrToConst = adoptRef(new RefCountedClass());
 }
 
 } // namespace WTF

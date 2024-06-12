@@ -5,14 +5,13 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
 #include "SampleCode.h"
 #include "SkRandom.h"
 #include "SkUtils.h"
+#include "gm.h"
 #if SK_SUPPORT_GPU
 #include "GrRectanizer_pow2.h"
 #include "GrRectanizer_skyline.h"
-
 
 // This slide visualizes the various GrRectanizer-derived classes behavior
 // for various input sets
@@ -26,19 +25,20 @@
 class RectanizerView : public SampleView {
 public:
     RectanizerView()
-        : fCurRandRect(0) {
+        : fCurRandRect(0)
+    {
         for (int i = 0; i < 3; ++i) {
-           fRects[i].setReserve(kNumRandRects);
+            fRects[i].setReserve(kNumRandRects);
         }
         fRectLocations.setReserve(kNumRandRects);
 
         SkRandom random;
         for (int i = 0; i < kNumRandRects; ++i) {
             *fRects[0].append() = SkISize::Make(random.nextRangeU(kMinRectSize, kMaxRectSize),
-                                                random.nextRangeU(kMinRectSize, kMaxRectSize));
+                random.nextRangeU(kMinRectSize, kMaxRectSize));
             *fRects[1].append() = SkISize::Make(
-                        GrNextPow2(random.nextRangeU(kMinRectSize, kMaxRectSize)),
-                        GrNextPow2(random.nextRangeU(kMinRectSize, kMaxRectSize)));
+                GrNextPow2(random.nextRangeU(kMinRectSize, kMaxRectSize)),
+                GrNextPow2(random.nextRangeU(kMinRectSize, kMaxRectSize)));
             *fRects[2].append() = SkISize::Make(128, 128);
             *fRectLocations.append() = SkIPoint16::Make(0, 0);
         }
@@ -51,7 +51,8 @@ public:
     }
 
 protected:
-    bool onQuery(SkEvent* evt) override {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Rectanizer");
             return true;
@@ -77,11 +78,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) override {
+    void onDrawContent(SkCanvas* canvas) override
+    {
         if (fCurRandRect < kNumRandRects) {
             if (fCurRectanizer->addRect((*fCurRects)[fCurRandRect].fWidth,
-                                        (*fCurRects)[fCurRandRect].fHeight,
-                                        &fRectLocations[fCurRandRect])) {
+                    (*fCurRects)[fCurRandRect].fHeight,
+                    &fRectLocations[fCurRandRect])) {
                 ++fCurRandRect;
             }
         }
@@ -100,10 +102,10 @@ protected:
 
         long totArea = 0;
         for (int i = 0; i < fCurRandRect; ++i) {
-            r = SkRect::MakeXYWH(SkIntToScalar(fRectLocations[i].fX), 
-                                 SkIntToScalar(fRectLocations[i].fY),
-                                 SkIntToScalar((*fCurRects)[i].fWidth),
-                                 SkIntToScalar((*fCurRects)[i].fHeight));
+            r = SkRect::MakeXYWH(SkIntToScalar(fRectLocations[i].fX),
+                SkIntToScalar(fRectLocations[i].fY),
+                SkIntToScalar((*fCurRects)[i].fWidth),
+                SkIntToScalar((*fCurRects)[i].fHeight));
             canvas->drawRect(r, redFill);
             canvas->drawRect(r, blackStroke);
             totArea += (*fCurRects)[i].fWidth * (*fCurRects)[i].fHeight;
@@ -112,13 +114,13 @@ protected:
         SkString str;
 
         str.printf("%s-%s: tot Area: %ld %%full: %.2f (%.2f) numTextures: %d/%d",
-                   this->getRectanizerName(),
-                   this->getRectsName(),
-                   totArea,
-                   100.0f * fCurRectanizer->percentFull(),
-                   100.0f * totArea / ((float)kWidth*kHeight),
-                   fCurRandRect,
-                   kNumRandRects);
+            this->getRectanizerName(),
+            this->getRectsName(),
+            totArea,
+            100.0f * fCurRectanizer->percentFull(),
+            100.0f * totArea / ((float)kWidth * kHeight),
+            fCurRandRect,
+            kNumRandRects);
         canvas->drawText(str.c_str(), str.size(), 50, kHeight + 50, blackBigFont);
 
         str.printf("Press \'j\' to toggle rectanizer");
@@ -127,7 +129,7 @@ protected:
         str.printf("Press \'h\' to toggle rects");
         canvas->drawText(str.c_str(), str.size(), 50, kHeight + 150, blackBigFont);
 
-        this->inval(NULL);
+        this->inval(nullptr);
     }
 
 private:
@@ -139,14 +141,15 @@ private:
     static const int kMinRectSize = 2;
     static const int kMaxRectSize = 256;
 
-    int                   fCurRandRect;
-    SkTDArray<SkISize>    fRects[3];
-    SkTDArray<SkISize>*   fCurRects;
+    int fCurRandRect;
+    SkTDArray<SkISize> fRects[3];
+    SkTDArray<SkISize>* fCurRects;
     SkTDArray<SkIPoint16> fRectLocations;
-    GrRectanizer*         fRectanizers[2];
-    GrRectanizer*         fCurRectanizer;
+    GrRectanizer* fRectanizers[2];
+    GrRectanizer* fCurRectanizer;
 
-    const char* getRectanizerName() const {
+    const char* getRectanizerName() const
+    {
         if (fCurRectanizer == fRectanizers[0]) {
             return "Pow2";
         } else {
@@ -154,7 +157,8 @@ private:
         }
     }
 
-    void cycleRectanizer() {
+    void cycleRectanizer()
+    {
         if (fCurRectanizer == fRectanizers[0]) {
             fCurRectanizer = fRectanizers[1];
         } else {
@@ -165,7 +169,8 @@ private:
         fCurRandRect = 0;
     }
 
-    const char* getRectsName() const {
+    const char* getRectsName() const
+    {
         if (fCurRects == &fRects[0]) {
             return "Rand";
         } else if (fCurRects == &fRects[1]) {
@@ -175,7 +180,8 @@ private:
         }
     }
 
-    void cycleRects() {
+    void cycleRects()
+    {
         if (fCurRects == &fRects[0]) {
             fCurRects = &fRects[1];
         } else if (fCurRects == &fRects[1]) {

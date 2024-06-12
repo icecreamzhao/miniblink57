@@ -1,6 +1,7 @@
 /**
  * Copyright (C) 2006, 2007, 2010 Apple Inc. All rights reserved.
- *           (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ *           (C) 2008 Torch Mobile Inc. All rights reserved.
+ *               (http://www.torchmobile.com/)
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -21,7 +22,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutSearchField.h"
 
 #include "core/InputTypeNames.h"
@@ -41,55 +41,40 @@ LayoutSearchField::LayoutSearchField(HTMLInputElement* element)
     ASSERT(element->type() == InputTypeNames::search);
 }
 
-LayoutSearchField::~LayoutSearchField()
-{
-}
+LayoutSearchField::~LayoutSearchField() { }
 
 inline Element* LayoutSearchField::searchDecorationElement() const
 {
-    return inputElement()->userAgentShadowRoot()->getElementById(ShadowElementNames::searchDecoration());
+    return inputElement()->userAgentShadowRoot()->getElementById(
+        ShadowElementNames::searchDecoration());
 }
 
 inline Element* LayoutSearchField::cancelButtonElement() const
 {
-    return inputElement()->userAgentShadowRoot()->getElementById(ShadowElementNames::clearButton());
+    return inputElement()->userAgentShadowRoot()->getElementById(
+        ShadowElementNames::clearButton());
 }
 
-LayoutUnit LayoutSearchField::computeControlLogicalHeight(LayoutUnit lineHeight, LayoutUnit nonContentHeight) const
+LayoutUnit LayoutSearchField::computeControlLogicalHeight(
+    LayoutUnit lineHeight,
+    LayoutUnit nonContentHeight) const
 {
     Element* searchDecoration = searchDecorationElement();
     if (LayoutBox* decorationLayoutObject = searchDecoration ? searchDecoration->layoutBox() : 0) {
         decorationLayoutObject->updateLogicalHeight();
-        nonContentHeight = max(nonContentHeight, decorationLayoutObject->borderAndPaddingLogicalHeight() + decorationLayoutObject->marginLogicalHeight());
+        nonContentHeight = max(nonContentHeight,
+            decorationLayoutObject->borderAndPaddingLogicalHeight() + decorationLayoutObject->marginLogicalHeight());
         lineHeight = max(lineHeight, decorationLayoutObject->logicalHeight());
     }
     Element* cancelButton = cancelButtonElement();
     if (LayoutBox* cancelLayoutObject = cancelButton ? cancelButton->layoutBox() : 0) {
         cancelLayoutObject->updateLogicalHeight();
-        nonContentHeight = max(nonContentHeight, cancelLayoutObject->borderAndPaddingLogicalHeight() + cancelLayoutObject->marginLogicalHeight());
+        nonContentHeight = max(nonContentHeight,
+            cancelLayoutObject->borderAndPaddingLogicalHeight() + cancelLayoutObject->marginLogicalHeight());
         lineHeight = max(lineHeight, cancelLayoutObject->logicalHeight());
     }
 
     return lineHeight + nonContentHeight;
 }
 
-LayoutUnit LayoutSearchField::computeLogicalHeightLimit() const
-{
-    return logicalHeight();
-}
-
-void LayoutSearchField::centerContainerIfNeeded(LayoutBox* containerLayoutObject) const
-{
-    if (!containerLayoutObject)
-        return;
-
-    if (containerLayoutObject->logicalHeight() <= contentLogicalHeight())
-        return;
-
-    // A quirk for find-in-page box on Safari Windows.
-    // http://webkit.org/b/63157
-    LayoutUnit logicalHeightDiff = containerLayoutObject->logicalHeight() - contentLogicalHeight();
-    containerLayoutObject->setLogicalTop(containerLayoutObject->logicalTop() - (logicalHeightDiff / 2 + layoutMod(logicalHeightDiff, 2)));
-}
-
-}
+} // namespace blink

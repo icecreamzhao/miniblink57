@@ -9,31 +9,31 @@
 
 namespace v8 {
 namespace internal {
-namespace compiler {
+    namespace compiler {
 
-// Determine which instruction blocks need a frame and where frames must be
-// constructed/deconstructed.
-class FrameElider {
- public:
-  explicit FrameElider(InstructionSequence* code);
-  void Run();
+        // Determine which instruction blocks need a frame and where frames must be
+        // constructed/deconstructed.
+        class FrameElider {
+        public:
+            explicit FrameElider(InstructionSequence* code);
+            void Run();
 
- private:
-  void MarkBlocks();
-  void PropagateMarks();
-  void MarkDeConstruction();
-  bool PropagateInOrder();
-  bool PropagateReversed();
-  bool PropagateIntoBlock(InstructionBlock* block);
-  const InstructionBlocks& instruction_blocks() const;
-  InstructionBlock* InstructionBlockAt(RpoNumber rpo_number) const;
-  Instruction* InstructionAt(int index) const;
+        private:
+            void MarkBlocks();
+            void PropagateMarks();
+            void MarkDeConstruction();
+            bool PropagateInOrder();
+            bool PropagateReversed();
+            bool PropagateIntoBlock(InstructionBlock* block);
+            const InstructionBlocks& instruction_blocks() const;
+            InstructionBlock* InstructionBlockAt(RpoNumber rpo_number) const;
+            Instruction* InstructionAt(int index) const;
 
-  InstructionSequence* const code_;
-};
+            InstructionSequence* const code_;
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_BACKEND_FRAME_ELIDER_H_
+#endif // V8_COMPILER_BACKEND_FRAME_ELIDER_H_

@@ -27,7 +27,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/shapes/BoxShape.h"
 
 #include "wtf/MathExtras.h"
@@ -52,7 +51,8 @@ FloatRoundedRect BoxShape::shapeMarginBounds() const
     return marginBounds;
 }
 
-LineSegment BoxShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const
+LineSegment BoxShape::getExcludedInterval(LayoutUnit logicalTop,
+    LayoutUnit logicalHeight) const
 {
     const FloatRoundedRect& marginBounds = shapeMarginBounds();
     if (marginBounds.isEmpty() || !lineOverlapsShapeMarginBounds(logicalTop, logicalHeight))
@@ -65,8 +65,10 @@ LineSegment BoxShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logi
     if (!marginBounds.isRounded())
         return LineSegment(marginBounds.rect().x(), marginBounds.rect().maxX());
 
-    float topCornerMaxY = std::max<float>(marginBounds.topLeftCorner().maxY(), marginBounds.topRightCorner().maxY());
-    float bottomCornerMinY = std::min<float>(marginBounds.bottomLeftCorner().y(), marginBounds.bottomRightCorner().y());
+    float topCornerMaxY = std::max<float>(marginBounds.topLeftCorner().maxY(),
+        marginBounds.topRightCorner().maxY());
+    float bottomCornerMinY = std::min<float>(marginBounds.bottomLeftCorner().y(),
+        marginBounds.bottomRightCorner().y());
 
     if (topCornerMaxY <= bottomCornerMinY && y1 <= topCornerMaxY && y2 >= bottomCornerMinY)
         return LineSegment(rect.x(), rect.maxX());
@@ -98,9 +100,16 @@ LineSegment BoxShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logi
 
 void BoxShape::buildDisplayPaths(DisplayPaths& paths) const
 {
-    paths.shape.addRoundedRect(m_bounds.rect(), m_bounds.radii().topLeft(), m_bounds.radii().topRight(), m_bounds.radii().bottomLeft(), m_bounds.radii().bottomRight());
+    paths.shape.addRoundedRect(m_bounds.rect(), m_bounds.getRadii().topLeft(),
+        m_bounds.getRadii().topRight(),
+        m_bounds.getRadii().bottomLeft(),
+        m_bounds.getRadii().bottomRight());
     if (shapeMargin())
-        paths.marginShape.addRoundedRect(shapeMarginBounds().rect(), shapeMarginBounds().radii().topLeft(), shapeMarginBounds().radii().topRight(), shapeMarginBounds().radii().bottomLeft(), shapeMarginBounds().radii().bottomRight());
+        paths.marginShape.addRoundedRect(
+            shapeMarginBounds().rect(), shapeMarginBounds().getRadii().topLeft(),
+            shapeMarginBounds().getRadii().topRight(),
+            shapeMarginBounds().getRadii().bottomLeft(),
+            shapeMarginBounds().getRadii().bottomRight());
 }
 
 } // namespace blink

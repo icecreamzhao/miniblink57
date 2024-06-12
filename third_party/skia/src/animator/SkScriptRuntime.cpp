@@ -6,12 +6,12 @@
  * found in the LICENSE file.
  */
 #include "SkScriptRuntime.h"
-#include "SkScript2.h"
 #include "SkMath.h"
+#include "SkOpArray.h"
 #include "SkParse.h"
+#include "SkScript2.h"
 #include "SkScriptCallBack.h"
 #include "SkString.h"
-#include "SkOpArray.h"
 
 // script tokenizer
 
@@ -27,51 +27,53 @@
 // replace script string with script tokens preceeded by special value
 
 // need second version of script plugins that return private index of found value?
-    // then would need in script index of plugin, private index
+// then would need in script index of plugin, private index
 
 // encode brace stack push/pop as opcodes
 
 // should token script enocde type where possible?
 
 // current flow:
-    // strip whitespace
-    // if in array brace [ recurse, continue
-    // if token, handle function, or array, or property (continue)
-    // parse number, continue
-    // parse token, continue
-    // parse string literal, continue
-    // if dot operator, handle dot, continue
-    // if [ , handle array literal or accessor, continue
-    // if ), pop (if function, break)
-    // if ], pop ; if ',' break
-    // handle logical ops
-    // or, handle arithmetic ops
-    // loop
+// strip whitespace
+// if in array brace [ recurse, continue
+// if token, handle function, or array, or property (continue)
+// parse number, continue
+// parse token, continue
+// parse string literal, continue
+// if dot operator, handle dot, continue
+// if [ , handle array literal or accessor, continue
+// if ), pop (if function, break)
+// if ], pop ; if ',' break
+// handle logical ops
+// or, handle arithmetic ops
+// loop
 
 // !!! things to do
-    // add separate processing loop to advance while suppressed
-    // or, include jump offset to skip suppressed code?
+// add separate processing loop to advance while suppressed
+// or, include jump offset to skip suppressed code?
 
-SkScriptRuntime::~SkScriptRuntime() {
+SkScriptRuntime::~SkScriptRuntime()
+{
     for (SkString** stringPtr = fTrackString.begin(); stringPtr < fTrackString.end(); stringPtr++)
         delete *stringPtr;
     for (SkOpArray** arrayPtr = fTrackArray.begin(); arrayPtr < fTrackArray.end(); arrayPtr++)
         delete *arrayPtr;
 }
 
-bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
-    SkOperand2 operand[2];    // 1=accumulator and 2=operand
+bool SkScriptRuntime::executeTokens(unsigned char* opCode)
+{
+    SkOperand2 operand[2]; // 1=accumulator and 2=operand
     SkScriptEngine2::TypeOp op;
     size_t ref;
     int index, size;
     int registerLoad;
     SkScriptCallBack* callBack SK_INIT_TO_AVOID_WARNING;
     do {
-    switch ((op = (SkScriptEngine2::TypeOp) *opCode++)) {
-        case SkScriptEngine2::kArrayToken:    // create an array
+        switch ((op = (SkScriptEngine2::TypeOp)*opCode++)) {
+        case SkScriptEngine2::kArrayToken: // create an array
             operand[0].fArray = new SkOpArray(SkOperand2::kNoType /*fReturnType*/);
             break;
-        case SkScriptEngine2::kArrayIndex:    // array accessor
+        case SkScriptEngine2::kArrayIndex: // array accessor
             index = operand[1].fS32;
             if (index >= operand[0].fArray->count()) {
                 fError = kArrayIndexOutOfBounds;
@@ -79,7 +81,7 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             }
             operand[0] = operand[0].fArray->begin()[index];
             break;
-        case SkScriptEngine2::kArrayParam:    // array initializer, or function param
+        case SkScriptEngine2::kArrayParam: // array initializer, or function param
             *operand[0].fArray->append() = operand[1];
             break;
         case SkScriptEngine2::kCallback:
@@ -90,31 +92,32 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
         case SkScriptEngine2::kFunctionCall: {
             memcpy(&ref, opCode, sizeof(ref));
             opCode += sizeof(ref);
-            SkScriptCallBackFunction* callBackFunction = (SkScriptCallBackFunction*) callBack;
+            SkScriptCallBackFunction* callBackFunction = (SkScriptCallBackFunction*)callBack;
             if (callBackFunction->invoke(ref, operand[0].fArray, /* params */
-                    &operand[0] /* result */) == false) {
+                    &operand[0] /* result */)
+                == false) {
                 fError = kFunctionCallFailed;
                 return false;
             }
-            } break;
+        } break;
         case SkScriptEngine2::kMemberOp: {
             memcpy(&ref, opCode, sizeof(ref));
             opCode += sizeof(ref);
-            SkScriptCallBackMember* callBackMember = (SkScriptCallBackMember*) callBack;
+            SkScriptCallBackMember* callBackMember = (SkScriptCallBackMember*)callBack;
             if (callBackMember->invoke(ref, operand[0].fObject, &operand[0]) == false) {
                 fError = kMemberOpFailed;
                 return false;
             }
-            } break;
+        } break;
         case SkScriptEngine2::kPropertyOp: {
             memcpy(&ref, opCode, sizeof(ref));
             opCode += sizeof(ref);
-            SkScriptCallBackProperty* callBackProperty = (SkScriptCallBackProperty*) callBack;
-            if (callBackProperty->getResult(ref, &operand[0])== false) {
+            SkScriptCallBackProperty* callBackProperty = (SkScriptCallBackProperty*)callBack;
+            if (callBackProperty->getResult(ref, &operand[0]) == false) {
                 fError = kPropertyOpFailed;
                 return false;
             }
-            } break;
+        } break;
         case SkScriptEngine2::kAccumulatorPop:
             fRunStack.pop(&operand[0]);
             break;
@@ -140,10 +143,10 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             registerLoad = op - SkScriptEngine2::kStringAccumulator;
             memcpy(&size, opCode, sizeof(size));
             opCode += sizeof(size);
-            strPtr->set((char*) opCode, size);
+            strPtr->set((char*)opCode, size);
             opCode += size;
             operand[registerLoad].fString = strPtr;
-            } break;
+        } break;
         case SkScriptEngine2::kStringTrack: // call after kObjectToValue
             track(operand[0].fString);
             break;
@@ -151,16 +154,16 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             SkOperand2::OpType type;
             memcpy(&type, opCode, sizeof(type));
             opCode += sizeof(type);
-            SkScriptCallBackConvert* callBackBox = (SkScriptCallBackConvert*) callBack;
+            SkScriptCallBackConvert* callBackBox = (SkScriptCallBackConvert*)callBack;
             if (callBackBox->convert(type, &operand[0]) == false)
                 return false;
-            } break;
+        } break;
         case SkScriptEngine2::kUnboxToken:
         case SkScriptEngine2::kUnboxToken2: {
-            SkScriptCallBackConvert* callBackUnbox = (SkScriptCallBackConvert*) callBack;
+            SkScriptCallBackConvert* callBackUnbox = (SkScriptCallBackConvert*)callBack;
             if (callBackUnbox->convert(SkOperand2::kObject, &operand[0]) == false)
                 return false;
-            } break;
+        } break;
         case SkScriptEngine2::kIfOp:
         case SkScriptEngine2::kLogicalAndInt:
             memcpy(&size, opCode, sizeof(size));
@@ -186,7 +189,7 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
         case SkScriptEngine2::kIntToString:
         case SkScriptEngine2::kIntToString2:
         case SkScriptEngine2::kScalarToString:
-        case SkScriptEngine2::kScalarToString2:{
+        case SkScriptEngine2::kScalarToString2: {
             SkString* strPtr = new SkString();
             track(strPtr);
             if (op == SkScriptEngine2::kIntToString || op == SkScriptEngine2::kIntToString2)
@@ -194,19 +197,20 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             else
                 strPtr->appendScalar(operand[op - SkScriptEngine2::kScalarToString].fScalar);
             operand[0].fString = strPtr;
-            } break;
+        } break;
         case SkScriptEngine2::kIntToScalar:
         case SkScriptEngine2::kIntToScalar2:
             operand[0].fScalar = SkScriptEngine2::IntToScalar(operand[op - SkScriptEngine2::kIntToScalar].fS32);
             break;
         case SkScriptEngine2::kStringToInt:
-            if (SkParse::FindS32(operand[0].fString->c_str(), &operand[0].fS32) == NULL)
+            if (SkParse::FindS32(operand[0].fString->c_str(), &operand[0].fS32) == nullptr)
                 return false;
             break;
         case SkScriptEngine2::kStringToScalar:
         case SkScriptEngine2::kStringToScalar2:
             if (SkParse::FindScalar(operand[0].fString->c_str(),
-                    &operand[op - SkScriptEngine2::kStringToScalar].fScalar) == NULL)
+                    &operand[op - SkScriptEngine2::kStringToScalar].fScalar)
+                == nullptr)
                 return false;
             break;
         case SkScriptEngine2::kScalarToInt:
@@ -220,10 +224,10 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             operand[0].fScalar += operand[1].fScalar;
             break;
         case SkScriptEngine2::kAddString:
-//            if (fTrackString.find(operand[1].fString) < 0) {
-//                operand[1].fString = SkNEW_ARGS(SkString, (*operand[1].fString));
-//                track(operand[1].fString);
-//            }
+            //            if (fTrackString.find(operand[1].fString) < 0) {
+            //                operand[1].fString = new SkString  (*operand[1].fString);
+            //                track(operand[1].fString);
+            //            }
             operand[0].fString->append(*operand[1].fString);
             break;
         case SkScriptEngine2::kBitAndInt:
@@ -238,16 +242,13 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
         case SkScriptEngine2::kDivideInt:
             SkASSERT(operand[1].fS32 != 0);
             if (operand[1].fS32 == 0)
-                operand[0].fS32 = operand[0].fS32 == 0 ? SK_NaN32 :
-                    operand[0].fS32 > 0 ? SK_MaxS32 : -SK_MaxS32;
-            else
-            if (operand[1].fS32 != 0) // throw error on divide by zero?
+                operand[0].fS32 = operand[0].fS32 == 0 ? SK_NaN32 : operand[0].fS32 > 0 ? SK_MaxS32 : -SK_MaxS32;
+            else if (operand[1].fS32 != 0) // throw error on divide by zero?
                 operand[0].fS32 /= operand[1].fS32;
             break;
         case SkScriptEngine2::kDivideScalar:
             if (operand[1].fScalar == 0)
-                operand[0].fScalar = operand[0].fScalar == 0 ? SK_ScalarNaN :
-                    operand[0].fScalar > 0 ? SK_ScalarMax : -SK_ScalarMax;
+                operand[0].fScalar = operand[0].fScalar == 0 ? SK_ScalarNaN : operand[0].fScalar > 0 ? SK_ScalarMax : -SK_ScalarMax;
             else
                 operand[0].fScalar = operand[0].fScalar / operand[1].fScalar;
             break;
@@ -270,10 +271,10 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
             operand[0].fS32 = strcmp(operand[0].fString->c_str(), operand[1].fString->c_str()) >= 0;
             break;
         case SkScriptEngine2::kToBool:
-            operand[0].fS32 = !! operand[0].fS32;
+            operand[0].fS32 = !!operand[0].fS32;
             break;
         case SkScriptEngine2::kLogicalNotInt:
-            operand[0].fS32 = ! operand[0].fS32;
+            operand[0].fS32 = !operand[0].fS32;
             break;
         case SkScriptEngine2::kMinusInt:
             operand[0].fS32 = -operand[0].fS32;
@@ -311,41 +312,46 @@ bool SkScriptRuntime::executeTokens(unsigned char* opCode) {
         case SkScriptEngine2::kEnd:
             goto done;
         case SkScriptEngine2::kNop:
-                SkASSERT(0);
-    default:
-        break;
-    }
+            SkASSERT(0);
+        default:
+            break;
+        }
     } while (true);
 done:
     fRunStack.push(operand[0]);
     return true;
 }
 
-bool SkScriptRuntime::getResult(SkOperand2* result) {
+bool SkScriptRuntime::getResult(SkOperand2* result)
+{
     if (fRunStack.count() == 0)
         return false;
     fRunStack.pop(result);
     return true;
 }
 
-void SkScriptRuntime::track(SkOpArray* array) {
+void SkScriptRuntime::track(SkOpArray* array)
+{
     SkASSERT(fTrackArray.find(array) < 0);
     *fTrackArray.append() = array;
 }
 
-void SkScriptRuntime::track(SkString* string) {
+void SkScriptRuntime::track(SkString* string)
+{
     SkASSERT(fTrackString.find(string) < 0);
     *fTrackString.append() = string;
 }
 
-void SkScriptRuntime::untrack(SkOpArray* array) {
+void SkScriptRuntime::untrack(SkOpArray* array)
+{
     int index = fTrackArray.find(array);
     SkASSERT(index >= 0);
-    fTrackArray.begin()[index] = NULL;
+    fTrackArray.begin()[index] = nullptr;
 }
 
-void SkScriptRuntime::untrack(SkString* string) {
+void SkScriptRuntime::untrack(SkString* string)
+{
     int index = fTrackString.find(string);
     SkASSERT(index >= 0);
-    fTrackString.begin()[index] = NULL;
+    fTrackString.begin()[index] = nullptr;
 }

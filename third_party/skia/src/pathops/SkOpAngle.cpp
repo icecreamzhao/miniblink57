@@ -13,19 +13,20 @@
    positive y. The largest angle has a positive x and a zero y. */
 
 #if DEBUG_ANGLE
-    static bool CompareResult(const char* func, SkString* bugOut, SkString* bugPart, int append,
-             bool compare) {
-        SkDebugf("%s %c %d\n", bugOut->c_str(), compare ? 'T' : 'F', append);
-        SkDebugf("%sPart %s\n", func, bugPart[0].c_str());
-        SkDebugf("%sPart %s\n", func, bugPart[1].c_str());
-        SkDebugf("%sPart %s\n", func, bugPart[2].c_str());
-        return compare;
-    }
+static bool CompareResult(const char* func, SkString* bugOut, SkString* bugPart, int append,
+    bool compare)
+{
+    SkDebugf("%s %c %d\n", bugOut->c_str(), compare ? 'T' : 'F', append);
+    SkDebugf("%sPart %s\n", func, bugPart[0].c_str());
+    SkDebugf("%sPart %s\n", func, bugPart[1].c_str());
+    SkDebugf("%sPart %s\n", func, bugPart[2].c_str());
+    return compare;
+}
 
-    #define COMPARE_RESULT(append, compare) CompareResult(__FUNCTION__, &bugOut, bugPart, append, \
-            compare)
+#define COMPARE_RESULT(append, compare) CompareResult(__FUNCTION__, &bugOut, bugPart, append, \
+    compare)
 #else
-    #define COMPARE_RESULT(append, compare) compare
+#define COMPARE_RESULT(append, compare) compare
 #endif
 
 /*             quarter angle values for sector
@@ -58,7 +59,8 @@
 */
 
 // return true if lh < this < rh
-bool SkOpAngle::after(SkOpAngle* test) {
+bool SkOpAngle::after(SkOpAngle* test)
+{
     SkOpAngle* lh = test;
     SkOpAngle* rh = lh->fNext;
     SkASSERT(lh != rh);
@@ -66,12 +68,13 @@ bool SkOpAngle::after(SkOpAngle* test) {
     SkString bugOut;
     bugOut.printf("%s [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g"
                   " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g"
-                  " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g ", __FUNCTION__,
-            lh->segment()->debugID(), lh->debugID(), lh->fSectorStart, lh->fSectorEnd,
-            lh->fStart->t(), lh->fEnd->t(),
-            segment()->debugID(), debugID(), fSectorStart, fSectorEnd, fStart->t(), fEnd->t(),
-            rh->segment()->debugID(), rh->debugID(), rh->fSectorStart, rh->fSectorEnd,
-            rh->fStart->t(), rh->fEnd->t());
+                  " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g ",
+        __FUNCTION__,
+        lh->segment()->debugID(), lh->debugID(), lh->fSectorStart, lh->fSectorEnd,
+        lh->fStart->t(), lh->fEnd->t(),
+        segment()->debugID(), debugID(), fSectorStart, fSectorEnd, fStart->t(), fEnd->t(),
+        rh->segment()->debugID(), rh->debugID(), rh->fSectorStart, rh->fSectorEnd,
+        rh->fStart->t(), rh->fEnd->t());
     SkString bugPart[3] = { lh->debugPart(), this->debugPart(), rh->debugPart() };
 #endif
     if (lh->fComputeSector && !lh->computeSector()) {
@@ -83,23 +86,23 @@ bool SkOpAngle::after(SkOpAngle* test) {
     if (rh->fComputeSector && !rh->computeSector()) {
         return COMPARE_RESULT(3, true);
     }
-#if DEBUG_ANGLE  // reset bugOut with computed sectors
+#if DEBUG_ANGLE // reset bugOut with computed sectors
     bugOut.printf("%s [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g"
                   " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g"
-                  " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g ", __FUNCTION__,
-            lh->segment()->debugID(), lh->debugID(), lh->fSectorStart, lh->fSectorEnd,
-            lh->fStart->t(), lh->fEnd->t(),
-            segment()->debugID(), debugID(), fSectorStart, fSectorEnd, fStart->t(), fEnd->t(),
-            rh->segment()->debugID(), rh->debugID(), rh->fSectorStart, rh->fSectorEnd,
-            rh->fStart->t(), rh->fEnd->t());
+                  " < [%d/%d] %d/%d tStart=%1.9g tEnd=%1.9g ",
+        __FUNCTION__,
+        lh->segment()->debugID(), lh->debugID(), lh->fSectorStart, lh->fSectorEnd,
+        lh->fStart->t(), lh->fEnd->t(),
+        segment()->debugID(), debugID(), fSectorStart, fSectorEnd, fStart->t(), fEnd->t(),
+        rh->segment()->debugID(), rh->debugID(), rh->fSectorStart, rh->fSectorEnd,
+        rh->fStart->t(), rh->fEnd->t());
 #endif
     bool ltrOverlap = (lh->fSectorMask | rh->fSectorMask) & fSectorMask;
     bool lrOverlap = lh->fSectorMask & rh->fSectorMask;
-    int lrOrder;  // set to -1 if either order works
-    if (!lrOverlap) {  // no lh/rh sector overlap
-        if (!ltrOverlap) {  // no lh/this/rh sector overlap
-            return COMPARE_RESULT(4,  (lh->fSectorEnd > rh->fSectorStart)
-                    ^ (fSectorStart > lh->fSectorEnd) ^ (fSectorStart > rh->fSectorStart));
+    int lrOrder; // set to -1 if either order works
+    if (!lrOverlap) { // no lh/rh sector overlap
+        if (!ltrOverlap) { // no lh/this/rh sector overlap
+            return COMPARE_RESULT(4, (lh->fSectorEnd > rh->fSectorStart) ^ (fSectorStart > lh->fSectorEnd) ^ (fSectorStart > rh->fSectorStart));
         }
         int lrGap = (rh->fSectorStart - lh->fSectorStart + 32) & 0x1f;
         /* A tiny change can move the start +/- 4. The order can only be determined if
@@ -114,7 +117,7 @@ bool SkOpAngle::after(SkOpAngle* test) {
          */
         lrOrder = lrGap > 20 ? 0 : lrGap > 11 ? -1 : 1;
     } else {
-        lrOrder = (int) lh->orderable(rh);
+        lrOrder = (int)lh->orderable(rh);
         if (!ltrOverlap) {
             return COMPARE_RESULT(5, !lrOrder);
         }
@@ -122,14 +125,14 @@ bool SkOpAngle::after(SkOpAngle* test) {
     int ltOrder;
     SkASSERT((lh->fSectorMask & fSectorMask) || (rh->fSectorMask & fSectorMask));
     if (lh->fSectorMask & fSectorMask) {
-        ltOrder = (int) lh->orderable(this);
+        ltOrder = (int)lh->orderable(this);
     } else {
         int ltGap = (fSectorStart - lh->fSectorStart + 32) & 0x1f;
         ltOrder = ltGap > 20 ? 0 : ltGap > 11 ? -1 : 1;
     }
     int trOrder;
     if (rh->fSectorMask & fSectorMask) {
-        trOrder = (int) orderable(rh);
+        trOrder = (int)orderable(rh);
     } else {
         int trGap = (rh->fSectorStart - fSectorStart + 32) & 0x1f;
         trOrder = trGap > 20 ? 0 : trGap > 11 ? -1 : 1;
@@ -138,8 +141,8 @@ bool SkOpAngle::after(SkOpAngle* test) {
         return COMPARE_RESULT(7, lrOrder ? (ltOrder & trOrder) : (ltOrder | trOrder));
     }
     SkASSERT(lrOrder >= 0 || ltOrder >= 0 || trOrder >= 0);
-// There's not enough information to sort. Get the pairs of angles in opposite planes.
-// If an order is < 0, the pair is already in an opposite plane. Check the remaining pairs.
+    // There's not enough information to sort. Get the pairs of angles in opposite planes.
+    // If an order is < 0, the pair is already in an opposite plane. Check the remaining pairs.
     // FIXME : once all variants are understood, rewrite this more simply
     if (ltOrder == 0 && lrOrder == 0) {
         SkASSERT(trOrder < 0);
@@ -172,7 +175,8 @@ bool SkOpAngle::after(SkOpAngle* test) {
 
 // given a line, see if the opposite curve's convex hull is all on one side
 // returns -1=not on one side    0=this CW of test   1=this CCW of test
-int SkOpAngle::allOnOneSide(const SkOpAngle* test) {
+int SkOpAngle::allOnOneSide(const SkOpAngle* test)
+{
     SkASSERT(!fIsCurve);
     SkASSERT(test->fIsCurve);
     const SkDPoint& origin = test->fCurvePart[0];
@@ -187,11 +191,11 @@ int SkOpAngle::allOnOneSide(const SkOpAngle* test) {
     float crosses[3];
     SkPath::Verb testVerb = test->segment()->verb();
     int iMax = SkPathOpsVerbToPoints(testVerb);
-//    SkASSERT(origin == test.fCurveHalf[0]);
+    //    SkASSERT(origin == test.fCurveHalf[0]);
     const SkDCurve& testCurve = test->fCurvePart;
     for (int index = 1; index <= iMax; ++index) {
-        float xy1 = (float) (line.fX * (testCurve[index].fY - origin.fY));
-        float xy2 = (float) (line.fY * (testCurve[index].fX - origin.fX));
+        float xy1 = (float)(line.fX * (testCurve[index].fY - origin.fY));
+        float xy2 = (float)(line.fY * (testCurve[index].fX - origin.fX));
         crosses[index - 1] = AlmostEqualUlps(xy1, xy2) ? 0 : xy1 - xy2;
     }
     if (crosses[0] * crosses[1] < 0) {
@@ -215,63 +219,18 @@ int SkOpAngle::allOnOneSide(const SkOpAngle* test) {
     return -1;
 }
 
-bool SkOpAngle::checkCrossesZero() const {
+bool SkOpAngle::checkCrossesZero() const
+{
     int start = SkTMin(fSectorStart, fSectorEnd);
     int end = SkTMax(fSectorStart, fSectorEnd);
     bool crossesZero = end - start > 16;
     return crossesZero;
 }
 
-// loop looking for a pair of angle parts that are too close to be sorted
-/* This is called after other more simple intersection and angle sorting tests have been exhausted.
-   This should be rarely called -- the test below is thorough and time consuming.
-   This checks the distance between start points; the distance between 
-*/
-void SkOpAngle::checkNearCoincidence() {
-    SkOpAngle* test = this;
-    do {
-        SkOpSegment* testSegment = test->segment();
-        double testStartT = test->start()->t();
-        SkDPoint testStartPt = testSegment->dPtAtT(testStartT);
-        double testEndT = test->end()->t();
-        SkDPoint testEndPt = testSegment->dPtAtT(testEndT);
-        double testLenSq = testStartPt.distanceSquared(testEndPt);
-        if (0) {
-            SkDebugf("%s testLenSq=%1.9g id=%d\n", __FUNCTION__, testLenSq, testSegment->debugID());
-        }
-        double testMidT = (testStartT + testEndT) / 2;
-        SkOpAngle* next = test;
-        while ((next = next->fNext) != this) {
-            SkOpSegment* nextSegment = next->segment();
-            double testMidDistSq = testSegment->distSq(testMidT, next);
-            double testEndDistSq = testSegment->distSq(testEndT, next);
-            double nextStartT = next->start()->t();
-            SkDPoint nextStartPt = nextSegment->dPtAtT(nextStartT);
-            double distSq = testStartPt.distanceSquared(nextStartPt);
-            double nextEndT = next->end()->t();
-            double nextMidT = (nextStartT + nextEndT) / 2;
-            double nextMidDistSq = nextSegment->distSq(nextMidT, test);
-            double nextEndDistSq = nextSegment->distSq(nextEndT, test);
-            if (0) {
-                SkDebugf("%s distSq=%1.9g testId=%d nextId=%d\n", __FUNCTION__, distSq,
-                        testSegment->debugID(), nextSegment->debugID());
-                SkDebugf("%s testMidDistSq=%1.9g\n", __FUNCTION__, testMidDistSq);
-                SkDebugf("%s testEndDistSq=%1.9g\n", __FUNCTION__, testEndDistSq);
-                SkDebugf("%s nextMidDistSq=%1.9g\n", __FUNCTION__, nextMidDistSq);
-                SkDebugf("%s nextEndDistSq=%1.9g\n", __FUNCTION__, nextEndDistSq);
-                SkDPoint nextEndPt = nextSegment->dPtAtT(nextEndT);
-                double nextLenSq = nextStartPt.distanceSquared(nextEndPt);
-                SkDebugf("%s nextLenSq=%1.9g\n", __FUNCTION__, nextLenSq);
-                SkDebugf("\n");
-            }
-        }
-        test = test->fNext;
-    } while (test->fNext != this); 
-}
-
-bool SkOpAngle::checkParallel(SkOpAngle* rh) {
+bool SkOpAngle::checkParallel(SkOpAngle* rh)
+{
     SkDVector scratch[2];
-    const SkDVector* sweep, * tweep;
+    const SkDVector *sweep, *tweep;
     if (!this->fUnorderedSweep) {
         sweep = this->fSweep;
     } else {
@@ -321,7 +280,8 @@ bool SkOpAngle::checkParallel(SkOpAngle* rh) {
 // the original angle is too short to get meaningful sector information
 // lengthen it until it is long enough to be meaningful or leave it unset if lengthening it
 // would cause it to intersect one of the adjacent angles
-bool SkOpAngle::computeSector() {
+bool SkOpAngle::computeSector()
+{
     if (fComputedSector) {
         return !fUnorderable;
     }
@@ -333,7 +293,7 @@ bool SkOpAngle::computeSector() {
         return false;
     }
     do {
-// advance end
+        // advance end
         const SkOpSegment* other = checkEnd->segment();
         const SkOpSpanBase* oSpan = other->head();
         do {
@@ -349,12 +309,13 @@ bool SkOpAngle::computeSector() {
             goto recomputeSector;
         } while (!oSpan->final() && (oSpan = oSpan->upCast()->next()));
         checkEnd = stepUp ? !checkEnd->final()
-                ? checkEnd->upCast()->next() : NULL
-                : checkEnd->prev();
+                ? checkEnd->upCast()->next()
+                : nullptr
+                          : checkEnd->prev();
     } while (checkEnd);
 recomputeSector:
-    SkOpSpanBase* computedEnd = stepUp ? checkEnd ? checkEnd->prev() : fEnd->segment()->head() 
-            : checkEnd ? checkEnd->upCast()->next() : fEnd->segment()->tail();
+    SkOpSpanBase* computedEnd = stepUp ? checkEnd ? checkEnd->prev() : fEnd->segment()->head()
+                                       : checkEnd ? checkEnd->upCast()->next() : fEnd->segment()->tail();
     if (checkEnd == fEnd || computedEnd == fEnd || computedEnd == fStart) {
         fUnorderable = true;
         return false;
@@ -371,7 +332,8 @@ recomputeSector:
     return !fUnorderable;
 }
 
-int SkOpAngle::convexHullOverlaps(const SkOpAngle* rh) const {
+int SkOpAngle::convexHullOverlaps(const SkOpAngle* rh) const
+{
     const SkDVector* sweep = this->fSweep;
     const SkDVector* tweep = rh->fSweep;
     double s0xs1 = sweep[0].crossCheck(sweep[1]);
@@ -385,7 +347,7 @@ int SkOpAngle::convexHullOverlaps(const SkOpAngle* rh) const {
     if (tBetweenS) {
         return -1;
     }
-    if ((s0xt0 == 0 && s1xt1 == 0) || (s1xt0 == 0 && s0xt1 == 0)) {  // s0 to s1 equals t0 to t1
+    if ((s0xt0 == 0 && s1xt1 == 0) || (s1xt0 == 0 && s0xt1 == 0)) { // s0 to s1 equals t0 to t1
         return -1;
     }
     bool sBetweenT = t0xt1 > 0 ? s0xt0 < 0 && s0xt1 > 0 : s0xt0 > 0 && s0xt1 < 0;
@@ -401,8 +363,8 @@ int SkOpAngle::convexHullOverlaps(const SkOpAngle* rh) const {
         return 1;
     }
     // if the outside sweeps are greater than 180 degress:
-        // first assume the inital tangents are the ordering
-        // if the midpoint direction matches the inital order, that is enough
+    // first assume the inital tangents are the ordering
+    // if the midpoint direction matches the inital order, that is enough
     SkDVector m0 = this->segment()->dPtAtT(this->midT()) - this->fCurvePart[0];
     SkDVector m1 = rh->segment()->dPtAtT(rh->midT()) - rh->fCurvePart[0];
     double m0xm1 = m0.crossCheck(m1);
@@ -419,7 +381,8 @@ int SkOpAngle::convexHullOverlaps(const SkOpAngle* rh) const {
 }
 
 // OPTIMIZATION: longest can all be either lazily computed here or precomputed in setup
-double SkOpAngle::distEndRatio(double dist) const {
+double SkOpAngle::distEndRatio(double dist) const
+{
     double longest = 0;
     const SkOpSegment& segment = *this->segment();
     int ptCount = SkPathOpsVerbToPoints(segment.verb());
@@ -438,18 +401,19 @@ double SkOpAngle::distEndRatio(double dist) const {
     return sqrt(longest) / dist;
 }
 
-bool SkOpAngle::endsIntersect(SkOpAngle* rh) {
+bool SkOpAngle::endsIntersect(SkOpAngle* rh)
+{
     SkPath::Verb lVerb = this->segment()->verb();
     SkPath::Verb rVerb = rh->segment()->verb();
     int lPts = SkPathOpsVerbToPoints(lVerb);
     int rPts = SkPathOpsVerbToPoints(rVerb);
-    SkDLine rays[] = {{{this->fCurvePart[0], rh->fCurvePart[rPts]}},
-            {{this->fCurvePart[0], this->fCurvePart[lPts]}}};
+    SkDLine rays[] = { { { this->fCurvePart[0], rh->fCurvePart[rPts] } },
+        { { this->fCurvePart[0], this->fCurvePart[lPts] } } };
     if (rays[0][1] == rays[1][1]) {
         return checkParallel(rh);
     }
-    double smallTs[2] = {-1, -1};
-    bool limited[2] = {false, false};
+    double smallTs[2] = { -1, -1 };
+    bool limited[2] = { false, false };
     for (int index = 0; index < 2; ++index) {
         SkPath::Verb cVerb = index ? rVerb : lVerb;
         // if the curve is a line, then the line and the ray intersect only at their crossing
@@ -476,7 +440,7 @@ bool SkOpAngle::endsIntersect(SkOpAngle* rh) {
         }
     }
     bool sRayLonger = false;
-    SkDVector sCept = {0, 0};
+    SkDVector sCept = { 0, 0 };
     double sCeptT = -1;
     int sIndex = -1;
     bool useIntersect = false;
@@ -525,7 +489,7 @@ bool SkOpAngle::endsIntersect(SkOpAngle* rh) {
         }
         double maxWidth = SkTMax(maxX - minX, maxY - minY);
         delta /= maxWidth;
-        if (delta > 1e-3 && (useIntersect ^= true)) {  // FIXME: move this magic number
+        if (delta > 1e-3 && (useIntersect ^= true)) { // FIXME: move this magic number
             sRayLonger = rayLonger;
             sCept = cept;
             sCeptT = smallTs[index];
@@ -547,14 +511,15 @@ bool SkOpAngle::endsIntersect(SkOpAngle* rh) {
     }
 }
 
-bool SkOpAngle::endToSide(const SkOpAngle* rh, bool* inside) const {
+bool SkOpAngle::endToSide(const SkOpAngle* rh, bool* inside) const
+{
     const SkOpSegment* segment = this->segment();
     SkPath::Verb verb = segment->verb();
     SkDLine rayEnd;
     rayEnd[0].set(this->fEnd->pt());
     rayEnd[1] = rayEnd[0];
     SkDVector slopeAtEnd = (*CurveDSlopeAtT[verb])(segment->pts(), segment->weight(),
-            this->fEnd->t());
+        this->fEnd->t());
     rayEnd[1].fX += slopeAtEnd.fY;
     rayEnd[1].fY -= slopeAtEnd.fX;
     SkIntersections iEnd;
@@ -585,7 +550,7 @@ bool SkOpAngle::endToSide(const SkOpAngle* rh, bool* inside) const {
     }
     double maxWidth = SkTMax(maxX - minX, maxY - minY);
     endDist /= maxWidth;
-    if (endDist < 5e-11) {  // empirically found
+    if (endDist < 5e-11) { // empirically found
         return false;
     }
     const SkDPoint* endPt = &rayEnd[0];
@@ -618,33 +583,35 @@ bool SkOpAngle::endToSide(const SkOpAngle* rh, bool* inside) const {
     14            x             x               x
     15        x                 x               x
 */
-int SkOpAngle::findSector(SkPath::Verb verb, double x, double y) const {
+int SkOpAngle::findSector(SkPath::Verb verb, double x, double y) const
+{
     double absX = fabs(x);
     double absY = fabs(y);
     double xy = SkPath::kLine_Verb == verb || !AlmostEqualUlps(absX, absY) ? absX - absY : 0;
     // If there are four quadrants and eight octants, and since the Latin for sixteen is sedecim,
     // one could coin the term sedecimant for a space divided into 16 sections.
-   // http://english.stackexchange.com/questions/133688/word-for-something-partitioned-into-16-parts
+    // http://english.stackexchange.com/questions/133688/word-for-something-partitioned-into-16-parts
     static const int sedecimant[3][3][3] = {
-    //       y<0           y==0           y>0
-    //   x<0 x==0 x>0  x<0 x==0 x>0  x<0 x==0 x>0
-        {{ 4,  3,  2}, { 7, -1, 15}, {10, 11, 12}},  // abs(x) <  abs(y)
-        {{ 5, -1,  1}, {-1, -1, -1}, { 9, -1, 13}},  // abs(x) == abs(y)
-        {{ 6,  3,  0}, { 7, -1, 15}, { 8, 11, 14}},  // abs(x) >  abs(y)
+        //       y<0           y==0           y>0
+        //   x<0 x==0 x>0  x<0 x==0 x>0  x<0 x==0 x>0
+        { { 4, 3, 2 }, { 7, -1, 15 }, { 10, 11, 12 } }, // abs(x) <  abs(y)
+        { { 5, -1, 1 }, { -1, -1, -1 }, { 9, -1, 13 } }, // abs(x) == abs(y)
+        { { 6, 3, 0 }, { 7, -1, 15 }, { 8, 11, 14 } }, // abs(x) >  abs(y)
     };
     int sector = sedecimant[(xy >= 0) + (xy > 0)][(y >= 0) + (y > 0)][(x >= 0) + (x > 0)] * 2 + 1;
-//    SkASSERT(SkPath::kLine_Verb == verb || sector >= 0);
+    //    SkASSERT(SkPath::kLine_Verb == verb || sector >= 0);
     return sector;
 }
 
-SkOpGlobalState* SkOpAngle::globalState() const {
+SkOpGlobalState* SkOpAngle::globalState() const
+{
     return this->segment()->globalState();
 }
 
-
 // OPTIMIZE: if this loops to only one other angle, after first compare fails, insert on other side
 // OPTIMIZE: return where insertion succeeded. Then, start next insertion on opposite side
-void SkOpAngle::insert(SkOpAngle* angle) {
+void SkOpAngle::insert(SkOpAngle* angle)
+{
     if (angle->fNext) {
         if (loopCount() >= angle->loopCount()) {
             if (!merge(angle)) {
@@ -659,7 +626,7 @@ void SkOpAngle::insert(SkOpAngle* angle) {
         }
         return;
     }
-    bool singleton = NULL == fNext;
+    bool singleton = nullptr == fNext;
     if (singleton) {
         fNext = this;
     }
@@ -700,17 +667,19 @@ void SkOpAngle::insert(SkOpAngle* angle) {
     } while (true);
 }
 
-SkOpSpanBase* SkOpAngle::lastMarked() const {
+SkOpSpanBase* SkOpAngle::lastMarked() const
+{
     if (fLastMarked) {
         if (fLastMarked->chased()) {
-            return NULL;
+            return nullptr;
         }
         fLastMarked->setChased(true);
     }
     return fLastMarked;
 }
 
-bool SkOpAngle::loopContains(const SkOpAngle* angle) const {
+bool SkOpAngle::loopContains(const SkOpAngle* angle) const
+{
     if (!fNext) {
         return false;
     }
@@ -736,7 +705,8 @@ bool SkOpAngle::loopContains(const SkOpAngle* angle) const {
     return false;
 }
 
-int SkOpAngle::loopCount() const {
+int SkOpAngle::loopCount() const
+{
     int count = 0;
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
@@ -747,7 +717,8 @@ int SkOpAngle::loopCount() const {
     return count;
 }
 
-bool SkOpAngle::merge(SkOpAngle* angle) {
+bool SkOpAngle::merge(SkOpAngle* angle)
+{
     SkASSERT(fNext);
     SkASSERT(angle->fNext);
     SkOpAngle* working = angle;
@@ -759,7 +730,7 @@ bool SkOpAngle::merge(SkOpAngle* angle) {
     } while (working != angle);
     do {
         SkOpAngle* next = working->fNext;
-        working->fNext = NULL;
+        working->fNext = nullptr;
         insert(working);
         working = next;
     } while (working != angle);
@@ -768,11 +739,13 @@ bool SkOpAngle::merge(SkOpAngle* angle) {
     return true;
 }
 
-double SkOpAngle::midT() const {
+double SkOpAngle::midT() const
+{
     return (fStart->t() + fEnd->t()) / 2;
 }
 
-bool SkOpAngle::midToSide(const SkOpAngle* rh, bool* inside) const {
+bool SkOpAngle::midToSide(const SkOpAngle* rh, bool* inside) const
+{
     const SkOpSegment* segment = this->segment();
     SkPath::Verb verb = segment->verb();
     const SkPoint& startPt = this->fStart->pt();
@@ -808,12 +781,14 @@ bool SkOpAngle::midToSide(const SkOpAngle* rh, bool* inside) const {
     return true;
 }
 
-bool SkOpAngle::oppositePlanes(const SkOpAngle* rh) const {
-    int startSpan = abs(rh->fSectorStart - fSectorStart);
+bool SkOpAngle::oppositePlanes(const SkOpAngle* rh) const
+{
+    int startSpan = SkTAbs(rh->fSectorStart - fSectorStart);
     return startSpan >= 8;
 }
 
-bool SkOpAngle::orderable(SkOpAngle* rh) {
+bool SkOpAngle::orderable(SkOpAngle* rh)
+{
     int result;
     if (!fIsCurve) {
         if (!rh->fIsCurve) {
@@ -825,7 +800,7 @@ bool SkOpAngle::orderable(SkOpAngle* rh) {
             double rx_y = rightX * leftY;
             if (x_ry == rx_y) {
                 if (leftX * rightX < 0 || leftY * rightY < 0) {
-                    return true;  // exactly 180 degrees apart
+                    return true; // exactly 180 degrees apart
                 }
                 goto unorderable;
             }
@@ -858,7 +833,8 @@ unorderable:
 
 // OPTIMIZE: if this shows up in a profile, add a previous pointer
 // as is, this should be rarely called
-SkOpAngle* SkOpAngle::previous() const {
+SkOpAngle* SkOpAngle::previous() const
+{
     SkOpAngle* last = fNext;
     do {
         SkOpAngle* next = last->fNext;
@@ -869,22 +845,25 @@ SkOpAngle* SkOpAngle::previous() const {
     } while (true);
 }
 
-SkOpSegment* SkOpAngle::segment() const {
+SkOpSegment* SkOpAngle::segment() const
+{
     return fStart->segment();
 }
 
-void SkOpAngle::set(SkOpSpanBase* start, SkOpSpanBase* end) {
+void SkOpAngle::set(SkOpSpanBase* start, SkOpSpanBase* end)
+{
     fStart = start;
     fComputedEnd = fEnd = end;
     SkASSERT(start != end);
-    fNext = NULL;
+    fNext = nullptr;
     fComputeSector = fComputedSector = fCheckCoincidence = false;
     setSpans();
     setSector();
     SkDEBUGCODE(fID = start ? start->globalState()->nextAngleID() : -1);
 }
 
-void SkOpAngle::setCurveHullSweep() {
+void SkOpAngle::setCurveHullSweep()
+{
     fUnorderedSweep = false;
     fSweep[0] = fCurvePart[1] - fCurvePart[0];
     const SkOpSegment* segment = fStart->segment();
@@ -912,7 +891,7 @@ void SkOpAngle::setCurveHullSweep() {
     }
     double s1x3 = fSweep[0].crossCheck(thirdSweep);
     double s3x2 = thirdSweep.crossCheck(fSweep[1]);
-    if (s1x3 * s3x2 >= 0) {  // if third vector is on or between first two vectors
+    if (s1x3 * s3x2 >= 0) { // if third vector is on or between first two vectors
         return;
     }
     double s2x1 = fSweep[1].crossCheck(fSweep[0]);
@@ -927,9 +906,10 @@ void SkOpAngle::setCurveHullSweep() {
     fSweep[1] = thirdSweep;
 }
 
-void SkOpAngle::setSpans() {
+void SkOpAngle::setSpans()
+{
     fUnorderable = false;
-    fLastMarked = NULL;
+    fLastMarked = nullptr;
     if (!fStart) {
         fUnorderable = true;
         return;
@@ -938,13 +918,13 @@ void SkOpAngle::setSpans() {
     const SkPoint* pts = segment->pts();
     SkDEBUGCODE(fCurvePart.fVerb = SkPath::kCubic_Verb);
     SkDEBUGCODE(fCurvePart[2].fX = fCurvePart[2].fY = fCurvePart[3].fX = fCurvePart[3].fY
-            = SK_ScalarNaN);
+        = SK_ScalarNaN);
     SkDEBUGCODE(fCurvePart.fVerb = segment->verb());
     segment->subDivide(fStart, fEnd, &fCurvePart);
     setCurveHullSweep();
     const SkPath::Verb verb = segment->verb();
     if (verb != SkPath::kLine_Verb
-            && !(fIsCurve = fSweep[0].crossCheck(fSweep[1]) != 0)) {
+        && !(fIsCurve = fSweep[0].crossCheck(fSweep[1]) != 0)) {
         SkDLine lineHalf;
         lineHalf[0].set(fCurvePart[0].asSkPoint());
         lineHalf[1].set(fCurvePart[SkPathOpsVerbToPoints(verb)].asSkPoint());
@@ -961,16 +941,17 @@ void SkOpAngle::setSpans() {
         fTangentHalf.lineEndPoints(lineHalf);
         fSide = 0;
         fIsCurve = false;
-        } return;
+    }
+        return;
     case SkPath::kQuad_Verb:
     case SkPath::kConic_Verb: {
         SkLineParameters tangentPart;
-        (void) tangentPart.quadEndPoints(fCurvePart.fQuad);
-        fSide = -tangentPart.pointDistance(fCurvePart[2]);  // not normalized -- compare sign only
-        } break;
+        (void)tangentPart.quadEndPoints(fCurvePart.fQuad);
+        fSide = -tangentPart.pointDistance(fCurvePart[2]); // not normalized -- compare sign only
+    } break;
     case SkPath::kCubic_Verb: {
         SkLineParameters tangentPart;
-        (void) tangentPart.cubicPart(fCurvePart.fCubic);
+        (void)tangentPart.cubicPart(fCurvePart.fCubic);
         fSide = -tangentPart.pointDistance(fCurvePart[3]);
         double testTs[4];
         // OPTIMIZATION: keep inflections precomputed with cubic segment?
@@ -1009,14 +990,15 @@ void SkOpAngle::setSpans() {
                 bestSide = testSide;
             }
         }
-        fSide = -bestSide;  // compare sign only
-        } break;
+        fSide = -bestSide; // compare sign only
+    } break;
     default:
         SkASSERT(0);
     }
 }
 
-void SkOpAngle::setSector() {
+void SkOpAngle::setSector()
+{
     if (!fStart) {
         fUnorderable = true;
         return;
@@ -1027,7 +1009,7 @@ void SkOpAngle::setSector() {
     if (fSectorStart < 0) {
         goto deferTilLater;
     }
-    if (!fIsCurve) {  // if it's a line or line-like, note that both sectors are the same
+    if (!fIsCurve) { // if it's a line or line-like, note that both sectors are the same
         SkASSERT(fSectorStart >= 0);
         fSectorEnd = fSectorStart;
         fSectorMask = 1 << fSectorStart;
@@ -1036,14 +1018,14 @@ void SkOpAngle::setSector() {
     SkASSERT(SkPath::kLine_Verb != verb);
     fSectorEnd = this->findSector(verb, fSweep[1].fX, fSweep[1].fY);
     if (fSectorEnd < 0) {
-deferTilLater:
+    deferTilLater:
         fSectorStart = fSectorEnd = -1;
         fSectorMask = 0;
-        fComputeSector = true;  // can't determine sector until segment length can be found
+        fComputeSector = true; // can't determine sector until segment length can be found
         return;
     }
     if (fSectorEnd == fSectorStart
-            && (fSectorStart & 3) != 3) { // if the sector has no span, it can't be an exact angle
+        && (fSectorStart & 3) != 3) { // if the sector has no span, it can't be an exact angle
         fSectorMask = 1 << fSectorStart;
         return;
     }
@@ -1061,17 +1043,19 @@ deferTilLater:
     start = SkTMin(fSectorStart, fSectorEnd);
     int end = SkTMax(fSectorStart, fSectorEnd);
     if (!crossesZero) {
-        fSectorMask = (unsigned) -1 >> (31 - end + start) << start;
+        fSectorMask = (unsigned)-1 >> (31 - end + start) << start;
     } else {
-        fSectorMask = (unsigned) -1 >> (31 - start) | (-1 << end);
+        fSectorMask = (unsigned)-1 >> (31 - start) | ((unsigned)-1 << end);
     }
 }
 
-SkOpSpan* SkOpAngle::starter() {
+SkOpSpan* SkOpAngle::starter()
+{
     return fStart->starter(fEnd);
 }
 
-bool SkOpAngle::tangentsDiverge(const SkOpAngle* rh, double s0xt0) const {
+bool SkOpAngle::tangentsDiverge(const SkOpAngle* rh, double s0xt0) const
+{
     if (s0xt0 == 0) {
         return false;
     }
@@ -1096,5 +1080,5 @@ bool SkOpAngle::tangentsDiverge(const SkOpAngle* rh, double s0xt0) const {
     double tDist = tweep[0].length() * m;
     bool useS = fabs(sDist) < fabs(tDist);
     double mFactor = fabs(useS ? this->distEndRatio(sDist) : rh->distEndRatio(tDist));
-    return mFactor < 2400;  // empirically found limit
+    return mFactor < 2400; // empirically found limit
 }

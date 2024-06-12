@@ -2,39 +2,38 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/push_messaging/PushPermissionStatusCallbacks.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "modules/push_messaging/PushError.h"
+#include "wtf/Assertions.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-PushPermissionStatusCallbacks::PushPermissionStatusCallbacks(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
+PushPermissionStatusCallbacks::PushPermissionStatusCallbacks(
+    ScriptPromiseResolver* resolver)
     : m_resolver(resolver)
 {
 }
 
-PushPermissionStatusCallbacks::~PushPermissionStatusCallbacks()
+PushPermissionStatusCallbacks::~PushPermissionStatusCallbacks() { }
+
+void PushPermissionStatusCallbacks::onSuccess(WebPushPermissionStatus status)
 {
+    m_resolver->resolve(permissionString(status));
 }
 
-void PushPermissionStatusCallbacks::onSuccess(WebPushPermissionStatus* status)
+void PushPermissionStatusCallbacks::onError(const WebPushError& error)
 {
-    m_resolver->resolve(permissionString(*status));
-}
-
-void PushPermissionStatusCallbacks::onError(WebPushError* error)
-{
-    OwnPtr<WebPushError> ownError = adoptPtr(error);
-    if (!m_resolver->executionContext() || m_resolver->executionContext()->activeDOMObjectsAreStopped())
+    if (!m_resolver->getExecutionContext() || m_resolver->getExecutionContext()->isContextDestroyed())
         return;
-    m_resolver->reject(PushError::take(m_resolver.get(), ownError.release()));
+    m_resolver->reject(PushError::take(m_resolver.get(), error));
 }
 
 // static
-String PushPermissionStatusCallbacks::permissionString(WebPushPermissionStatus status)
+String PushPermissionStatusCallbacks::permissionString(
+    WebPushPermissionStatus status)
 {
     switch (status) {
     case WebPushPermissionStatusGranted:
@@ -45,7 +44,7 @@ String PushPermissionStatusCallbacks::permissionString(WebPushPermissionStatus s
         return "prompt";
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return "denied";
 }
 

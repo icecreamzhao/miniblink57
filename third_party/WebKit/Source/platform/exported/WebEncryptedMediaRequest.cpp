@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-
 #include "public/platform/WebEncryptedMediaRequest.h"
 
 #include "platform/EncryptedMediaRequest.h"
@@ -15,12 +13,14 @@
 
 namespace blink {
 
-WebEncryptedMediaRequest::WebEncryptedMediaRequest(const WebEncryptedMediaRequest& request)
+WebEncryptedMediaRequest::WebEncryptedMediaRequest(
+    const WebEncryptedMediaRequest& request)
 {
     assign(request);
 }
 
-WebEncryptedMediaRequest::WebEncryptedMediaRequest(EncryptedMediaRequest* request)
+WebEncryptedMediaRequest::WebEncryptedMediaRequest(
+    EncryptedMediaRequest* request)
     : m_private(request)
 {
 }
@@ -35,22 +35,25 @@ WebString WebEncryptedMediaRequest::keySystem() const
     return m_private->keySystem();
 }
 
-const WebVector<WebMediaKeySystemConfiguration>& WebEncryptedMediaRequest::supportedConfigurations() const
+const WebVector<WebMediaKeySystemConfiguration>&
+WebEncryptedMediaRequest::supportedConfigurations() const
 {
     return m_private->supportedConfigurations();
 }
 
-WebSecurityOrigin WebEncryptedMediaRequest::securityOrigin() const
+WebSecurityOrigin WebEncryptedMediaRequest::getSecurityOrigin() const
 {
-    return WebSecurityOrigin(m_private->securityOrigin());
+    return WebSecurityOrigin(m_private->getSecurityOrigin());
 }
 
-void WebEncryptedMediaRequest::requestSucceeded(WebContentDecryptionModuleAccess* access)
+void WebEncryptedMediaRequest::requestSucceeded(
+    WebContentDecryptionModuleAccess* access)
 {
     m_private->requestSucceeded(access);
 }
 
-void WebEncryptedMediaRequest::requestNotSupported(const WebString& errorMessage)
+void WebEncryptedMediaRequest::requestNotSupported(
+    const WebString& errorMessage)
 {
     m_private->requestNotSupported(errorMessage);
 }

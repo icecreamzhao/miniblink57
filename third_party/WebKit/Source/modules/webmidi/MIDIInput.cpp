@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webmidi/MIDIInput.h"
 
 #include "modules/webmidi/MIDIAccess.h"
@@ -37,17 +36,25 @@
 
 namespace blink {
 
-using PortState = MIDIAccessor::MIDIPortState;
+using midi::mojom::PortState;
 
-MIDIInput* MIDIInput::create(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
+MIDIInput* MIDIInput::create(MIDIAccess* access,
+    const String& id,
+    const String& manufacturer,
+    const String& name,
+    const String& version,
+    PortState state)
 {
-    ASSERT(access);
-    MIDIInput* input = new MIDIInput(access, id, manufacturer, name, version, state);
-    input->suspendIfNeeded();
-    return input;
+    DCHECK(access);
+    return new MIDIInput(access, id, manufacturer, name, version, state);
 }
 
-MIDIInput::MIDIInput(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
+MIDIInput::MIDIInput(MIDIAccess* access,
+    const String& id,
+    const String& manufacturer,
+    const String& name,
+    const String& version,
+    PortState state)
     : MIDIPort(access, id, manufacturer, name, TypeInput, version, state)
 {
 }
@@ -57,7 +64,7 @@ EventListener* MIDIInput::onmidimessage()
     return getAttributeEventListener(EventTypeNames::midimessage);
 }
 
-void MIDIInput::setOnmidimessage(PassRefPtr<EventListener> listener)
+void MIDIInput::setOnmidimessage(EventListener* listener)
 {
     // Implicit open. It does nothing if the port is already opened.
     // See http://www.w3.org/TR/webmidi/#widl-MIDIPort-open-Promise-MIDIPort
@@ -66,9 +73,23 @@ void MIDIInput::setOnmidimessage(PassRefPtr<EventListener> listener)
     setAttributeEventListener(EventTypeNames::midimessage, listener);
 }
 
-void MIDIInput::didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
+void MIDIInput::addedEventListener(
+    const AtomicString& eventType,
+    RegisteredEventListener& registeredListener)
 {
-    ASSERT(isMainThread());
+    MIDIPort::addedEventListener(eventType, registeredListener);
+    if (eventType == EventTypeNames::midimessage) {
+        // Implicit open. See setOnmidimessage().
+        open();
+    }
+}
+
+void MIDIInput::didReceiveMIDIData(unsigned portIndex,
+    const unsigned char* data,
+    size_t length,
+    double timeStamp)
+{
+    DCHECK(isMainThread());
 
     if (!length)
         return;
@@ -76,12 +97,13 @@ void MIDIInput::didReceiveMIDIData(unsigned portIndex, const unsigned char* data
     if (getConnection() != ConnectionStateOpen)
         return;
 
-    // Drop sysex message here when the client does not request it. Note that this is not a security check but an
-    // automatic filtering for clients that do not want sysex message. Also note that sysex message will never be sent
-    // unless the current process has an explicit permission to handle sysex message.
+    // Drop sysex message here when the client does not request it. Note that this
+    // is not a security check but an automatic filtering for clients that do not
+    // want sysex message. Also note that sysex message will never be sent unless
+    // the current process has an explicit permission to handle sysex message.
     if (data[0] == 0xf0 && !midiAccess()->sysexEnabled())
         return;
-    RefPtr<DOMUint8Array> array = DOMUint8Array::create(data, length);
+    DOMUint8Array* array = DOMUint8Array::create(data, length);
     dispatchEvent(MIDIMessageEvent::create(timeStamp, array));
 }
 

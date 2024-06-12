@@ -2,7 +2,8 @@
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
  *           (C) 2000 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2013 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,17 +31,28 @@
 #include "core/style/StyleImage.h"
 #include "platform/LayoutUnit.h"
 #include "platform/LengthBox.h"
+#include "wtf/Allocator.h"
+#include "wtf/RefCounted.h"
 
 namespace blink {
 
 enum ENinePieceImageRule {
-    StretchImageRule, RoundImageRule, SpaceImageRule, RepeatImageRule
+    StretchImageRule,
+    RoundImageRule,
+    SpaceImageRule,
+    RepeatImageRule
 };
 
 class CORE_EXPORT NinePieceImageData : public RefCounted<NinePieceImageData> {
 public:
-    static PassRefPtr<NinePieceImageData> create() { return adoptRef(new NinePieceImageData); }
-    PassRefPtr<NinePieceImageData> copy() const { return adoptRef(new NinePieceImageData(*this)); }
+    static PassRefPtr<NinePieceImageData> create()
+    {
+        return adoptRef(new NinePieceImageData);
+    }
+    PassRefPtr<NinePieceImageData> copy() const
+    {
+        return adoptRef(new NinePieceImageData(*this));
+    }
 
     bool operator==(const NinePieceImageData&) const;
     bool operator!=(const NinePieceImageData& o) const { return !(*this == o); }
@@ -48,7 +60,7 @@ public:
     unsigned fill : 1;
     unsigned horizontalRule : 2; // ENinePieceImageRule
     unsigned verticalRule : 2; // ENinePieceImageRule
-    RefPtr<StyleImage> image;
+    Persistent<StyleImage> image;
     LengthBox imageSlices;
     BorderImageLengthBox borderSlices;
     BorderImageLengthBox outset;
@@ -59,35 +71,72 @@ private:
 };
 
 class CORE_EXPORT NinePieceImage {
+    DISALLOW_NEW();
+
 public:
     NinePieceImage();
-    NinePieceImage(PassRefPtr<StyleImage>, LengthBox imageSlices, bool fill, const BorderImageLengthBox& borderSlices,
-        const BorderImageLengthBox& outset, ENinePieceImageRule horizontalRule, ENinePieceImageRule verticalRule);
+    NinePieceImage(StyleImage*,
+        LengthBox imageSlices,
+        bool fill,
+        const BorderImageLengthBox& borderSlices,
+        const BorderImageLengthBox& outset,
+        ENinePieceImageRule horizontalRule,
+        ENinePieceImageRule verticalRule);
 
-    bool operator==(const NinePieceImage& other) const { return m_data == other.m_data; }
-    bool operator!=(const NinePieceImage& other) const { return m_data != other.m_data; }
+    bool operator==(const NinePieceImage& other) const
+    {
+        return m_data == other.m_data;
+    }
+    bool operator!=(const NinePieceImage& other) const
+    {
+        return m_data != other.m_data;
+    }
 
     bool hasImage() const { return m_data->image; }
     StyleImage* image() const { return m_data->image.get(); }
-    void setImage(PassRefPtr<StyleImage> image) { m_data.access()->image = image; }
+    void setImage(StyleImage* image) { m_data.access()->image = image; }
 
     const LengthBox& imageSlices() const { return m_data->imageSlices; }
-    void setImageSlices(const LengthBox& slices) { m_data.access()->imageSlices = slices; }
+    void setImageSlices(const LengthBox& slices)
+    {
+        m_data.access()->imageSlices = slices;
+    }
 
     bool fill() const { return m_data->fill; }
     void setFill(bool fill) { m_data.access()->fill = fill; }
 
-    const BorderImageLengthBox& borderSlices() const { return m_data->borderSlices; }
-    void setBorderSlices(const BorderImageLengthBox& slices) { m_data.access()->borderSlices = slices; }
+    const BorderImageLengthBox& borderSlices() const
+    {
+        return m_data->borderSlices;
+    }
+    void setBorderSlices(const BorderImageLengthBox& slices)
+    {
+        m_data.access()->borderSlices = slices;
+    }
 
     const BorderImageLengthBox& outset() const { return m_data->outset; }
-    void setOutset(const BorderImageLengthBox& outset) { m_data.access()->outset = outset; }
+    void setOutset(const BorderImageLengthBox& outset)
+    {
+        m_data.access()->outset = outset;
+    }
 
-    ENinePieceImageRule horizontalRule() const { return static_cast<ENinePieceImageRule>(m_data->horizontalRule); }
-    void setHorizontalRule(ENinePieceImageRule rule) { m_data.access()->horizontalRule = rule; }
+    ENinePieceImageRule horizontalRule() const
+    {
+        return static_cast<ENinePieceImageRule>(m_data->horizontalRule);
+    }
+    void setHorizontalRule(ENinePieceImageRule rule)
+    {
+        m_data.access()->horizontalRule = rule;
+    }
 
-    ENinePieceImageRule verticalRule() const { return static_cast<ENinePieceImageRule>(m_data->verticalRule); }
-    void setVerticalRule(ENinePieceImageRule rule) { m_data.access()->verticalRule = rule; }
+    ENinePieceImageRule verticalRule() const
+    {
+        return static_cast<ENinePieceImageRule>(m_data->verticalRule);
+    }
+    void setVerticalRule(ENinePieceImageRule rule)
+    {
+        m_data.access()->verticalRule = rule;
+    }
 
     void copyImageSlicesFrom(const NinePieceImage& other)
     {
@@ -118,11 +167,12 @@ public:
         m_data.access()->borderSlices = BorderImageLengthBox(Length(Auto));
     }
 
-    static LayoutUnit computeOutset(const BorderImageLength& outsetSide, LayoutUnit borderSide)
+    static LayoutUnit computeOutset(const BorderImageLength& outsetSide,
+        int borderSide)
     {
         if (outsetSide.isNumber())
-            return outsetSide.number() * borderSide;
-        return outsetSide.length().value();
+            return LayoutUnit(outsetSide.number() * borderSide);
+        return LayoutUnit(outsetSide.length().value());
     }
 
 private:

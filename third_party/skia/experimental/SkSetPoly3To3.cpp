@@ -11,8 +11,9 @@
 bool SkSetPoly3To3(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3]);
 
 static void computeOuterProduct(SkScalar op[4],
-                                const SkPoint pts0[3], const SkPoint& ave0,
-                                const SkPoint pts1[3], const SkPoint& ave1) {
+    const SkPoint pts0[3], const SkPoint& ave0,
+    const SkPoint pts1[3], const SkPoint& ave1)
+{
     sk_bzero(op, 4 * sizeof(op[0]));
     for (int i = 0; i < 3; i++) {
         SkScalar x0 = pts0[i].fX - ave0.fX;
@@ -26,11 +27,13 @@ static void computeOuterProduct(SkScalar op[4],
     }
 }
 
-static SkScalar dot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by) {
+static SkScalar dot(SkScalar ax, SkScalar ay, SkScalar bx, SkScalar by)
+{
     return SkScalarMul(ax, bx) + SkScalarMul(ay, by);
 }
 
-bool SkSetPoly3To3(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3]) {
+bool SkSetPoly3To3(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3])
+{
     const SkPoint& srcAve = src[0];
     const SkPoint& dstAve = dst[0];
 
@@ -51,19 +54,17 @@ bool SkSetPoly3To3(SkMatrix* matrix, const SkPoint src[3], const SkPoint dst[3])
     // now compute invDet * [srcOP]T * [dstOP]
 
     // scale and transpose
-    const SkScalar srcOP0 = SkScalarMul( srcOP[3], invDet);
+    const SkScalar srcOP0 = SkScalarMul(srcOP[3], invDet);
     const SkScalar srcOP1 = SkScalarMul(-srcOP[1], invDet);
     const SkScalar srcOP2 = SkScalarMul(-srcOP[2], invDet);
-    const SkScalar srcOP3 = SkScalarMul( srcOP[0], invDet);
+    const SkScalar srcOP3 = SkScalarMul(srcOP[0], invDet);
 
     matrix->reset();
     matrix->setScaleX(dot(srcOP0, srcOP1, dstOP[0], dstOP[2]));
-    matrix->setSkewX( dot(srcOP2, srcOP3, dstOP[0], dstOP[2]));
-    matrix->setSkewY (dot(srcOP0, srcOP1, dstOP[1], dstOP[3]));
+    matrix->setSkewX(dot(srcOP2, srcOP3, dstOP[0], dstOP[2]));
+    matrix->setSkewY(dot(srcOP0, srcOP1, dstOP[1], dstOP[3]));
     matrix->setScaleY(dot(srcOP2, srcOP3, dstOP[1], dstOP[3]));
-    matrix->setTranslateX(dstAve.fX - dot(srcAve.fX, srcAve.fY,
-                                    matrix->getScaleX(), matrix->getSkewX()));
-    matrix->setTranslateY(dstAve.fY - dot(srcAve.fX, srcAve.fY,
-                                    matrix->getSkewY(), matrix->getScaleY()));
+    matrix->setTranslateX(dstAve.fX - dot(srcAve.fX, srcAve.fY, matrix->getScaleX(), matrix->getSkewX()));
+    matrix->setTranslateY(dstAve.fY - dot(srcAve.fX, srcAve.fY, matrix->getSkewY(), matrix->getScaleY()));
     return true;
 }

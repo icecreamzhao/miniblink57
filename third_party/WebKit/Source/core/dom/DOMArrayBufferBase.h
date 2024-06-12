@@ -7,12 +7,14 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "wtf/ArrayBuffer.h"
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
+#include "wtf/typed_arrays/ArrayBuffer.h"
 
 namespace blink {
 
-class CORE_EXPORT DOMArrayBufferBase : public RefCounted<DOMArrayBufferBase>, public ScriptWrappable {
+class CORE_EXPORT DOMArrayBufferBase
+    : public GarbageCollectedFinalized<DOMArrayBufferBase>,
+      public ScriptWrappable {
 public:
     virtual ~DOMArrayBufferBase() { }
 
@@ -22,21 +24,31 @@ public:
     const void* data() const { return buffer()->data(); }
     void* data() { return buffer()->data(); }
     unsigned byteLength() const { return buffer()->byteLength(); }
-    bool transfer(WTF::ArrayBufferContents& result) { return buffer()->transfer(result); }
+    bool transfer(WTF::ArrayBufferContents& result)
+    {
+        return buffer()->transfer(result);
+    }
+    bool shareContentsWith(WTF::ArrayBufferContents& result)
+    {
+        return buffer()->shareContentsWith(result);
+    }
     bool isNeutered() const { return buffer()->isNeutered(); }
     bool isShared() const { return buffer()->isShared(); }
 
-    v8::Local<v8::Object> wrap(v8::Isolate*, v8::Local<v8::Object> creationContext) override
+    v8::Local<v8::Object> wrap(v8::Isolate*,
+        v8::Local<v8::Object> creationContext) override
     {
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
         return v8::Local<v8::Object>();
     }
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 
 protected:
     explicit DOMArrayBufferBase(PassRefPtr<WTF::ArrayBuffer> buffer)
         : m_buffer(buffer)
     {
-        ASSERT(m_buffer);
+        DCHECK(m_buffer);
     }
 
     RefPtr<WTF::ArrayBuffer> m_buffer;
@@ -44,4 +56,4 @@ protected:
 
 } // namespace blink
 
-#endif // DOMArrayBuffer_h
+#endif // DOMArrayBufferBase_h

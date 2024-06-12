@@ -28,36 +28,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediasource/MediaSourceRegistry.h"
 
 #include "modules/mediasource/MediaSource.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
 MediaSourceRegistry& MediaSourceRegistry::registry()
 {
-    ASSERT(isMainThread());
+    DCHECK(isMainThread());
     DEFINE_STATIC_LOCAL(MediaSourceRegistry, instance, ());
     return instance;
 }
 
-void MediaSourceRegistry::registerURL(SecurityOrigin*, const KURL& url, URLRegistrable* registrable)
+void MediaSourceRegistry::registerURL(SecurityOrigin*,
+    const KURL& url,
+    URLRegistrable* registrable)
 {
-    ASSERT(&registrable->registry() == this);
-    ASSERT(isMainThread());
+    DCHECK_EQ(&registrable->registry(), this);
+    DCHECK(isMainThread());
 
     MediaSource* source = static_cast<MediaSource*>(registrable);
     source->addedToRegistry();
-    m_mediaSources.set(url.string(), source);
+    m_mediaSources.set(url.getString(), source);
 }
 
 void MediaSourceRegistry::unregisterURL(const KURL& url)
 {
-    ASSERT(isMainThread());
-    PersistentHeapHashMap<String, Member<MediaSource>>::iterator iter = m_mediaSources.find(url.string());
+    DCHECK(isMainThread());
+    PersistentHeapHashMap<String, Member<MediaSource>>::iterator iter = m_mediaSources.find(url.getString());
     if (iter == m_mediaSources.end())
         return;
 
@@ -68,8 +68,8 @@ void MediaSourceRegistry::unregisterURL(const KURL& url)
 
 URLRegistrable* MediaSourceRegistry::lookup(const String& url)
 {
-    ASSERT(isMainThread());
-    return m_mediaSources.get(url);
+    DCHECK(isMainThread());
+    return url.isNull() ? nullptr : m_mediaSources.get(url);
 }
 
 MediaSourceRegistry::MediaSourceRegistry()

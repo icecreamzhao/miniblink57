@@ -35,23 +35,23 @@ namespace blink {
 
 class PerformanceMeasure final : public PerformanceEntry {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PerformanceMeasure* create(const String& name, double startTime, double endTime)
+    static PerformanceMeasure* create(const String& name,
+        double startTime,
+        double endTime)
     {
         return new PerformanceMeasure(name, startTime, endTime);
     }
 
-    virtual bool isMeasure() override { return true; }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        PerformanceEntry::trace(visitor);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { PerformanceEntry::trace(visitor); }
 
 private:
     PerformanceMeasure(const String& name, double startTime, double endTime)
-        : PerformanceEntry(name, "measure", startTime, endTime) { }
-    virtual ~PerformanceMeasure() { }
+        : PerformanceEntry(name, "measure", startTime, endTime)
+    {
+    }
+    ~PerformanceMeasure() override { }
 };
 
 } // namespace blink

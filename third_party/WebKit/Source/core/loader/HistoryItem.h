@@ -33,24 +33,22 @@
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/IntPoint.h"
 #include "platform/heap/Handle.h"
+#include "platform/scroll/ScrollTypes.h"
 #include "platform/weborigin/Referrer.h"
-#include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class Document;
 class DocumentState;
-class FormData;
+class EncodedFormData;
 class KURL;
 class ResourceRequest;
 
-class CORE_EXPORT HistoryItem final : public RefCountedWillBeGarbageCollectedFinalized<HistoryItem> {
+class CORE_EXPORT HistoryItem final
+    : public GarbageCollectedFinalized<HistoryItem> {
 public:
-    static PassRefPtrWillBeRawPtr<HistoryItem> create()
-    {
-        return adoptRefWillBeNoop(new HistoryItem);
-    }
+    static HistoryItem* create() { return new HistoryItem; }
     ~HistoryItem();
 
     const String& urlString() const;
@@ -59,19 +57,19 @@ public:
     const Referrer& referrer() const;
     const String& target() const;
 
-    FormData* formData();
+    EncodedFormData* formData();
     const AtomicString& formContentType() const;
 
-    const FloatPoint& pinchViewportScrollPoint() const;
-    void setPinchViewportScrollPoint(const FloatPoint&);
-    const IntPoint& scrollPoint() const;
-    void setScrollPoint(const IntPoint&);
+    const ScrollOffset& visualViewportScrollOffset() const;
+    void setVisualViewportScrollOffset(const ScrollOffset&);
+    const ScrollOffset& getScrollOffset() const;
+    void setScrollOffset(const ScrollOffset&);
 
     float pageScaleFactor() const;
     void setPageScaleFactor(float);
 
     Vector<String> getReferencedFilePaths();
-    const Vector<String>& documentState();
+    const Vector<String>& getDocumentState();
     void setDocumentState(const Vector<String>&);
     void setDocumentState(DocumentState*);
     void clearDocumentState();
@@ -84,17 +82,29 @@ public:
     void setStateObject(PassRefPtr<SerializedScriptValue>);
     SerializedScriptValue* stateObject() const { return m_stateObject.get(); }
 
-    void setItemSequenceNumber(long long number) { m_itemSequenceNumber = number; }
+    void setItemSequenceNumber(long long number)
+    {
+        m_itemSequenceNumber = number;
+    }
     long long itemSequenceNumber() const { return m_itemSequenceNumber; }
 
-    void setDocumentSequenceNumber(long long number) { m_documentSequenceNumber = number; }
+    void setDocumentSequenceNumber(long long number)
+    {
+        m_documentSequenceNumber = number;
+    }
     long long documentSequenceNumber() const { return m_documentSequenceNumber; }
 
-    void setScrollRestorationType(HistoryScrollRestorationType  type) { m_scrollRestorationType = type; }
-    HistoryScrollRestorationType scrollRestorationType() { return m_scrollRestorationType; }
+    void setScrollRestorationType(HistoryScrollRestorationType type)
+    {
+        m_scrollRestorationType = type;
+    }
+    HistoryScrollRestorationType scrollRestorationType()
+    {
+        return m_scrollRestorationType;
+    }
 
     void setFormInfoFromRequest(const ResourceRequest&);
-    void setFormData(PassRefPtr<FormData>);
+    void setFormData(PassRefPtr<EncodedFormData>);
     void setFormContentType(const AtomicString&);
 
     bool isCurrentDocument(Document*) const;
@@ -108,11 +118,11 @@ private:
     Referrer m_referrer;
     String m_target;
 
-    FloatPoint m_pinchViewportScrollPoint;
-    IntPoint m_scrollPoint;
+    ScrollOffset m_visualViewportScrollOffset;
+    ScrollOffset m_scrollOffset;
     float m_pageScaleFactor;
     Vector<String> m_documentStateVector;
-    RefPtrWillBeMember<DocumentState> m_documentState;
+    Member<DocumentState> m_documentState;
 
     // If two HistoryItems have the same item sequence number, then they are
     // clones of one another. Traversing history from one such HistoryItem to
@@ -133,7 +143,7 @@ private:
     RefPtr<SerializedScriptValue> m_stateObject;
 
     // info used to repost form data
-    RefPtr<FormData> m_formData;
+    RefPtr<EncodedFormData> m_formData;
     AtomicString m_formContentType;
 
 }; // class HistoryItem

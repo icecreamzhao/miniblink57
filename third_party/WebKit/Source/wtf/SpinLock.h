@@ -31,79 +31,47 @@
 #ifndef WTF_SpinLock_h
 #define WTF_SpinLock_h
 
-// DESCRIPTION
-// spinLockLock() and spinLockUnlock() are simple spinlock primitives based on
-// the standard CPU primitive of atomic increment and decrement of an int at
-// a given memory address.
+#include "wtf/Compiler.h"
+#include "wtf/WTFExport.h"
+#include <atomic>
+#include <memory>
+#include <mutex>
 
-#include "wtf/Atomics.h"
+// DESCRIPTION
+// Spinlock is a simple spinlock class based on the standard CPU primitive of
+// atomic increment and decrement of an int at a given memory address. These are
+// intended only for very short duration locks and assume a system with multiple
+// cores. For any potentially longer wait you should be using a real lock.
 
 namespace WTF {
 
-ALWAYS_INLINE void spinLockLock(int volatile* lock)
-{
-    while (UNLIKELY(atomicTestAndSetToOne(lock))) {
-        while (*lock) { } // Spin without spamming locked instructions.
-    }
-}
-
-ALWAYS_INLINE void spinLockUnlock(int volatile* lock)
-{
-    atomicSetOneToZero(lock);
-}
-
 class SpinLock {
 public:
-    SpinLock()
+    using Guard = std::lock_guard<SpinLock>;
+
+    ALWAYS_INLINE void lock()
     {
-        m_refCount = 0;
-        m_owner = 0;
+        static_assert(sizeof(m_lock) == sizeof(int), "int and m_lock are different sizes");
+        if (LIKELY(!m_lock.exchange(true, std::memory_order_acquire)))
+            return;
+        lockSlow();
     }
 
-    class Guard {
-    public:
-        explicit Guard(SpinLock& mutex)
-            : m_mutex(mutex)
-        {
-            m_mutex.lock();
-        }
-
-        ~Guard()
-        {	
-            m_mutex.unlock();
-        }
-    private:
-        SpinLock& m_mutex;
-    };
-
-    void lock()
+    ALWAYS_INLINE void unlock()
     {
-        //static_assert(sizeof(m_lock) == sizeof(int), "int and m_lock are different sizes");
-        DWORD owner = ::GetCurrentThreadId();
-
-        do {
-            InterlockedCompareExchange((volatile long *)&m_owner, (long)owner, 0);
-        } while (m_owner != owner);
-
-        InterlockedIncrement(reinterpret_cast<long volatile*>(&m_refCount));
-    }
-
-    void unlock()
-    {
-        ASSERT(m_owner && ::GetCurrentThreadId() == m_owner);
-        InterlockedDecrement(reinterpret_cast<long volatile*>(&m_refCount));
-        if (0 == m_refCount)
-            InterlockedExchange(reinterpret_cast<long volatile*>(&m_owner), 0);
+        m_lock.store(false, std::memory_order_release);
     }
 
 private:
-    long m_refCount;
-    DWORD m_owner;
+    // This is called if the initial attempt to acquire the lock fails. It's
+    // slower, but has a much better scheduling and power consumption behavior.
+    WTF_EXPORT void lockSlow();
+
+    std::atomic_int m_lock;
 };
 
 } // namespace WTF
 
-using WTF::spinLockLock;
-using WTF::spinLockUnlock;
+using WTF::SpinLock;
 
 #endif // WTF_SpinLock_h

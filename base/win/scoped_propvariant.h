@@ -13,46 +13,50 @@
 namespace base {
 namespace win {
 
-// A PROPVARIANT that is automatically initialized and cleared upon respective
-// construction and destruction of this class.
-class ScopedPropVariant {
- public:
-  ScopedPropVariant() {
-    PropVariantInit(&pv_);
-  }
+    // A PROPVARIANT that is automatically initialized and cleared upon respective
+    // construction and destruction of this class.
+    class ScopedPropVariant {
+    public:
+        ScopedPropVariant()
+        {
+            PropVariantInit(&pv_);
+        }
 
-  ~ScopedPropVariant() {
-    Reset();
-  }
+        ~ScopedPropVariant()
+        {
+            Reset();
+        }
 
-  // Returns a pointer to the underlying PROPVARIANT for use as an out param in
-  // a function call.
-  PROPVARIANT* Receive() {
-    DCHECK(pv_.vt == VT_EMPTY);
-    return &pv_;
-  }
+        // Returns a pointer to the underlying PROPVARIANT for use as an out param in
+        // a function call.
+        PROPVARIANT* Receive()
+        {
+            DCHECK_EQ(pv_.vt, VT_EMPTY);
+            return &pv_;
+        }
 
-  // Clears the instance to prepare it for re-use (e.g., via Receive).
-  void Reset() {
-    if (pv_.vt != VT_EMPTY) {
-      HRESULT result = PropVariantClear(&pv_);
-      DCHECK(result == S_OK);
-    }
-  }
+        // Clears the instance to prepare it for re-use (e.g., via Receive).
+        void Reset()
+        {
+            if (pv_.vt != VT_EMPTY) {
+                HRESULT result = PropVariantClear(&pv_);
+                DCHECK_EQ(result, S_OK);
+            }
+        }
 
-  const PROPVARIANT& get() const { return pv_; }
-  const PROPVARIANT* ptr() const { return &pv_; }
+        const PROPVARIANT& get() const { return pv_; }
+        const PROPVARIANT* ptr() const { return &pv_; }
 
- private:
-  PROPVARIANT pv_;
+    private:
+        PROPVARIANT pv_;
 
-  // Comparison operators for ScopedPropVariant are not supported at this point.
-  bool operator==(const ScopedPropVariant&) const;
-  bool operator!=(const ScopedPropVariant&) const;
-  DISALLOW_COPY_AND_ASSIGN(ScopedPropVariant);
-};
+        // Comparison operators for ScopedPropVariant are not supported at this point.
+        bool operator==(const ScopedPropVariant&) const;
+        bool operator!=(const ScopedPropVariant&) const;
+        DISALLOW_COPY_AND_ASSIGN(ScopedPropVariant);
+    };
 
-}  // namespace win
-}  // namespace base
+} // namespace win
+} // namespace base
 
-#endif  // BASE_WIN_SCOPED_PROPVARIANT_H_
+#endif // BASE_WIN_SCOPED_PROPVARIANT_H_

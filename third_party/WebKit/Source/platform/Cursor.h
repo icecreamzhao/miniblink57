@@ -35,7 +35,8 @@
 namespace blink {
 
 class PLATFORM_EXPORT Cursor {
-    WTF_MAKE_FAST_ALLOCATED(Cursor);
+    USING_FAST_MALLOC(Cursor);
+
 public:
     enum Type {
         Pointer = 0,
@@ -84,8 +85,6 @@ public:
         Custom
     };
 
-    static const Cursor& fromType(Cursor::Type);
-
     Cursor()
         // This is an invalid Cursor and should never actually get used.
         : m_type(static_cast<Type>(-1))
@@ -95,19 +94,22 @@ public:
     Cursor(Image*, bool hotSpotSpecified, const IntPoint& hotSpot);
 
     // Hot spot is in image pixels.
-    Cursor(Image*, bool hotSpotSpecified, const IntPoint& hotSpot, float imageScaleFactor);
+    Cursor(Image*,
+        bool hotSpotSpecified,
+        const IntPoint& hotSpot,
+        float imageScaleFactor);
 
     Cursor(const Cursor&);
     ~Cursor();
     Cursor& operator=(const Cursor&);
 
     explicit Cursor(Type);
-    Type type() const
+    Type getType() const
     {
         ASSERT(m_type >= 0 && m_type <= Custom);
         return m_type;
     }
-    Image* image() const { return m_image.get(); }
+    Image* getImage() const { return m_image.get(); }
     const IntPoint& hotSpot() const { return m_hotSpot; }
     // Image scale in image pixels per logical (UI) pixel.
     float imageScaleFactor() const { return m_imageScaleFactor; }
@@ -119,7 +121,9 @@ private:
     float m_imageScaleFactor;
 };
 
-PLATFORM_EXPORT IntPoint determineHotSpot(Image*, bool hotSpotSpecified, const IntPoint& specifiedHotSpot);
+PLATFORM_EXPORT IntPoint determineHotSpot(Image*,
+    bool hotSpotSpecified,
+    const IntPoint& specifiedHotSpot);
 
 PLATFORM_EXPORT const Cursor& pointerCursor();
 PLATFORM_EXPORT const Cursor& crossCursor();

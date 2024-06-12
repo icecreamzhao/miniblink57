@@ -5,12 +5,11 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkBlurDrawLooper_DEFINED
 #define SkBlurDrawLooper_DEFINED
 
-#include "SkDrawLooper.h"
 #include "SkColor.h"
+#include "SkDrawLooper.h"
 
 class SkMaskFilter;
 class SkColorFilter;
@@ -28,19 +27,25 @@ public:
             The blur layer's dx/dy/radius aren't affected by the canvas
             transform.
         */
-        kIgnoreTransform_BlurFlag   = 0x01,
-        kOverrideColor_BlurFlag     = 0x02,
-        kHighQuality_BlurFlag       = 0x04,
+        kIgnoreTransform_BlurFlag = 0x01,
+        kOverrideColor_BlurFlag = 0x02,
+        kHighQuality_BlurFlag = 0x04,
         /** mask for all blur flags */
-        kAll_BlurFlag               = 0x07
+        kAll_BlurFlag = 0x07
     };
 
-    static SkBlurDrawLooper* Create(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
-                                    uint32_t flags = kNone_BlurFlag) {
-        return SkNEW_ARGS(SkBlurDrawLooper, (color, sigma, dx, dy, flags));
+    static sk_sp<SkDrawLooper> Make(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
+        uint32_t flags = kNone_BlurFlag)
+    {
+        return sk_sp<SkDrawLooper>(new SkBlurDrawLooper(color, sigma, dx, dy, flags));
     }
-
-    virtual ~SkBlurDrawLooper();
+#ifdef SK_SUPPORT_LEGACY_MINOR_EFFECT_PTR
+    static SkDrawLooper* Create(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
+        uint32_t flags = kNone_BlurFlag)
+    {
+        return Make(color, sigma, dx, dy, flags).release();
+    }
+#endif
 
     SkDrawLooper::Context* createContext(SkCanvas*, void* storage) const override;
 
@@ -51,18 +56,18 @@ public:
 
 protected:
     SkBlurDrawLooper(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
-                     uint32_t flags);
+        uint32_t flags);
 
     void flatten(SkWriteBuffer&) const override;
 
     bool asABlurShadow(BlurShadowRec*) const override;
 
 private:
-    SkMaskFilter*   fBlur;
-    SkColorFilter*  fColorFilter;
-    SkScalar        fDx, fDy, fSigma;
-    SkColor         fBlurColor;
-    uint32_t        fBlurFlags;
+    sk_sp<SkMaskFilter> fBlur;
+    sk_sp<SkColorFilter> fColorFilter;
+    SkScalar fDx, fDy, fSigma;
+    SkColor fBlurColor;
+    uint32_t fBlurFlags;
 
     enum State {
         kBeforeEdge,

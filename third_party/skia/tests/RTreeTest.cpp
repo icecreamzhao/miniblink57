@@ -13,20 +13,22 @@ static const int NUM_RECTS = 200;
 static const size_t NUM_ITERATIONS = 100;
 static const size_t NUM_QUERIES = 50;
 
-static SkRect random_rect(SkRandom& rand) {
-    SkRect rect = {0,0,0,0};
+static SkRect random_rect(SkRandom& rand)
+{
+    SkRect rect = { 0, 0, 0, 0 };
     while (rect.isEmpty()) {
-        rect.fLeft   = rand.nextRangeF(0, 1000);
-        rect.fRight  = rand.nextRangeF(0, 1000);
-        rect.fTop    = rand.nextRangeF(0, 1000);
+        rect.fLeft = rand.nextRangeF(0, 1000);
+        rect.fRight = rand.nextRangeF(0, 1000);
+        rect.fTop = rand.nextRangeF(0, 1000);
         rect.fBottom = rand.nextRangeF(0, 1000);
         rect.sort();
     }
     return rect;
 }
 
-static bool verify_query(SkRect query, SkRect rects[], SkTDArray<unsigned>& found) {
-    SkTDArray<unsigned> expected;
+static bool verify_query(SkRect query, SkRect rects[], SkTDArray<int>& found)
+{
+    SkTDArray<int> expected;
     // manually intersect with every rectangle
     for (int i = 0; i < NUM_RECTS; ++i) {
         if (SkRect::Intersects(query, rects[i])) {
@@ -44,21 +46,23 @@ static bool verify_query(SkRect query, SkRect rects[], SkTDArray<unsigned>& foun
 }
 
 static void run_queries(skiatest::Reporter* reporter, SkRandom& rand, SkRect rects[],
-                        const SkRTree& tree) {
+    const SkRTree& tree)
+{
     for (size_t i = 0; i < NUM_QUERIES; ++i) {
-        SkTDArray<unsigned> hits;
+        SkTDArray<int> hits;
         SkRect query = random_rect(rand);
         tree.search(query, &hits);
         REPORTER_ASSERT(reporter, verify_query(query, rects, hits));
     }
 }
 
-DEF_TEST(RTree, reporter) {
+DEF_TEST(RTree, reporter)
+{
     int expectedDepthMin = -1;
     int tmp = NUM_RECTS;
     while (tmp > 0) {
         tmp -= static_cast<int>(pow(static_cast<double>(SkRTree::kMaxChildren),
-                                    static_cast<double>(expectedDepthMin + 1)));
+            static_cast<double>(expectedDepthMin + 1)));
         ++expectedDepthMin;
     }
 
@@ -66,7 +70,7 @@ DEF_TEST(RTree, reporter) {
     tmp = NUM_RECTS;
     while (tmp > 0) {
         tmp -= static_cast<int>(pow(static_cast<double>(SkRTree::kMinChildren),
-                                    static_cast<double>(expectedDepthMax + 1)));
+            static_cast<double>(expectedDepthMax + 1)));
         ++expectedDepthMax;
     }
 
@@ -81,11 +85,10 @@ DEF_TEST(RTree, reporter) {
         }
 
         rtree.insert(rects.get(), NUM_RECTS);
-        SkASSERT(rects);  // SkRTree doesn't take ownership of rects.
+        SkASSERT(rects); // SkRTree doesn't take ownership of rects.
 
         run_queries(reporter, rand, rects, rtree);
         REPORTER_ASSERT(reporter, NUM_RECTS == rtree.getCount());
-        REPORTER_ASSERT(reporter, expectedDepthMin <= rtree.getDepth() &&
-                                  expectedDepthMax >= rtree.getDepth());
+        REPORTER_ASSERT(reporter, expectedDepthMin <= rtree.getDepth() && expectedDepthMax >= rtree.getDepth());
     }
 }

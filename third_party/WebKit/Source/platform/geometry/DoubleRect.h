@@ -7,6 +7,8 @@
 
 #include "platform/geometry/DoublePoint.h"
 #include "platform/geometry/DoubleSize.h"
+#include "wtf/Allocator.h"
+#include "wtf/Forward.h"
 
 namespace blink {
 
@@ -15,12 +17,20 @@ class IntRect;
 class LayoutRect;
 
 class PLATFORM_EXPORT DoubleRect {
+    STACK_ALLOCATED();
+
 public:
     DoubleRect() { }
     DoubleRect(const DoublePoint& location, const DoubleSize& size)
-        : m_location(location), m_size(size) { }
+        : m_location(location)
+        , m_size(size)
+    {
+    }
     DoubleRect(double x, double y, double width, double height)
-        : m_location(DoublePoint(x, y)), m_size(DoubleSize(width, height)) { }
+        : m_location(DoublePoint(x, y))
+        , m_size(DoubleSize(width, height))
+    {
+    }
     DoubleRect(const IntRect&);
     DoubleRect(const FloatRect&);
     DoubleRect(const LayoutRect&);
@@ -48,15 +58,34 @@ public:
 
     void move(const DoubleSize& delta) { m_location += delta; }
     void move(double dx, double dy) { m_location.move(dx, dy); }
-    void moveBy(const DoublePoint& delta) { m_location.move(delta.x(), delta.y()); }
+    void moveBy(const DoublePoint& delta)
+    {
+        m_location.move(delta.x(), delta.y());
+    }
 
-    DoublePoint minXMinYCorner() const { return m_location; } // typically topLeft
-    DoublePoint maxXMinYCorner() const { return DoublePoint(m_location.x() + m_size.width(), m_location.y()); } // typically topRight
-    DoublePoint minXMaxYCorner() const { return DoublePoint(m_location.x(), m_location.y() + m_size.height()); } // typically bottomLeft
-    DoublePoint maxXMaxYCorner() const { return DoublePoint(m_location.x() + m_size.width(), m_location.y() + m_size.height()); } // typically bottomRight
+    DoublePoint minXMinYCorner() const
+    {
+        return m_location;
+    } // typically topLeft
+    DoublePoint maxXMinYCorner() const
+    {
+        return DoublePoint(m_location.x() + m_size.width(), m_location.y());
+    } // typically topRight
+    DoublePoint minXMaxYCorner() const
+    {
+        return DoublePoint(m_location.x(), m_location.y() + m_size.height());
+    } // typically bottomLeft
+    DoublePoint maxXMaxYCorner() const
+    {
+        return DoublePoint(m_location.x() + m_size.width(),
+            m_location.y() + m_size.height());
+    } // typically bottomRight
 
     void scale(float s) { scale(s, s); }
     void scale(float sx, float sy);
+
+    String toString() const;
+
 private:
     DoublePoint m_location;
     DoubleSize m_size;
@@ -69,6 +98,10 @@ PLATFORM_EXPORT IntRect enclosedIntRect(const DoubleRect&);
 
 PLATFORM_EXPORT IntRect roundedIntRect(const DoubleRect&);
 
-}
+// Redeclared here to avoid ODR issues.
+// See platform/testing/GeometryPrinters.h.
+void PrintTo(const DoubleRect&, std::ostream*);
+
+} // namespace blink
 
 #endif

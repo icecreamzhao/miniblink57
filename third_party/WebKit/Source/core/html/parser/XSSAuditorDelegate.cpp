@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/XSSAuditorDelegate.h"
 
 #include "core/dom/Document.h"
@@ -32,9 +31,11 @@
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
+#include "core/loader/NavigationScheduler.h"
 #include "core/loader/PingLoader.h"
-#include "platform/JSONValues.h"
-#include "platform/network/FormData.h"
+#include "platform/json/JSONValues.h"
+#include "platform/network/EncodedFormData.h"
+#include "platform/network/ResourceError.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/text/StringBuilder.h"
 
@@ -43,20 +44,24 @@ namespace blink {
 String XSSInfo::buildConsoleError() const
 {
     StringBuilder message;
-    message.appendLiteral("The XSS Auditor ");
-    message.append(m_didBlockEntirePage ? "blocked access to" : "refused to execute a script in");
-    message.appendLiteral(" '");
+    message.append("The XSS Auditor ");
+    message.append(m_didBlockEntirePage ? "blocked access to"
+                                        : "refused to execute a script in");
+    message.append(" '");
     message.append(m_originalURL);
-    message.appendLiteral("' because ");
-    message.append(m_didBlockEntirePage ? "the source code of a script" : "its source code");
-    message.appendLiteral(" was found within the request.");
+    message.append("' because ");
+    message.append(m_didBlockEntirePage ? "the source code of a script"
+                                        : "its source code");
+    message.append(" was found within the request.");
 
-    if (m_didSendCSPHeader)
-        message.appendLiteral(" The server sent a 'Content-Security-Policy' header requesting this behavior.");
-    else if (m_didSendXSSProtectionHeader)
-        message.appendLiteral(" The server sent an 'X-XSS-Protection' header requesting this behavior.");
+    if (m_didSendXSSProtectionHeader)
+        message.append(
+            " The server sent an 'X-XSS-Protection' header requesting this "
+            "behavior.");
     else
-        message.appendLiteral(" The auditor was enabled as the server sent neither an 'X-XSS-Protection' nor 'Content-Security-Policy' header.");
+        message.append(
+            " The auditor was enabled as the server did not send an "
+            "'X-XSS-Protection' header.");
 
     return message.toString();
 }
@@ -79,50 +84,57 @@ DEFINE_TRACE(XSSAuditorDelegate)
     visitor->trace(m_document);
 }
 
-PassRefPtr<FormData> XSSAuditorDelegate::generateViolationReport(const XSSInfo& xssInfo)
+PassRefPtr<EncodedFormData> XSSAuditorDelegate::generateViolationReport(
+    const XSSInfo& xssInfo)
 {
     ASSERT(isMainThread());
 
     FrameLoader& frameLoader = m_document->frame()->loader();
     String httpBody;
     if (frameLoader.documentLoader()) {
-        if (FormData* formData = frameLoader.documentLoader()->originalRequest().httpBody())
+        if (EncodedFormData* formData = frameLoader.documentLoader()->originalRequest().httpBody())
             httpBody = formData->flattenToString();
     }
 
-    RefPtr<JSONObject> reportDetails = JSONObject::create();
+    std::unique_ptr<JSONObject> reportDetails = JSONObject::create();
     reportDetails->setString("request-url", xssInfo.m_originalURL);
     reportDetails->setString("request-body", httpBody);
 
-    RefPtr<JSONObject> reportObject = JSONObject::create();
-    reportObject->setObject("xss-report", reportDetails.release());
+    std::unique_ptr<JSONObject> reportObject = JSONObject::create();
+    reportObject->setObject("xss-report", std::move(reportDetails));
 
-    return FormData::create(reportObject->toJSONString().utf8().data());
+    return EncodedFormData::create(reportObject->toJSONString().utf8().data());
 }
 
 void XSSAuditorDelegate::didBlockScript(const XSSInfo& xssInfo)
 {
     ASSERT(isMainThread());
 
-    m_document->addConsoleMessage(ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, xssInfo.buildConsoleError()));
+    UseCounter::count(m_document, xssInfo.m_didBlockEntirePage ? UseCounter::XSSAuditorBlockedEntirePage : UseCounter::XSSAuditorBlockedScript);
 
-    // stopAllLoaders can detach the LocalFrame, so protect it.
-    RefPtrWillBeRawPtr<LocalFrame> protect(m_document->frame());
+    m_document->addConsoleMessage(ConsoleMessage::create(
+        JSMessageSource, ErrorMessageLevel, xssInfo.buildConsoleError()));
+
     FrameLoader& frameLoader = m_document->frame()->loader();
     if (xssInfo.m_didBlockEntirePage)
         frameLoader.stopAllLoaders();
 
-    if (!m_didSendNotifications) {
+    if (!m_didSendNotifications && frameLoader.client()) {
         m_didSendNotifications = true;
 
-        frameLoader.client()->didDetectXSS(m_document->url(), xssInfo.m_didBlockEntirePage);
+        frameLoader.client()->didDetectXSS(m_document->url(),
+            xssInfo.m_didBlockEntirePage);
 
         if (!m_reportURL.isEmpty())
-            PingLoader::sendViolationReport(m_document->frame(), m_reportURL, generateViolationReport(xssInfo), PingLoader::XSSAuditorViolationReport);
+            PingLoader::sendViolationReport(m_document->frame(), m_reportURL,
+                generateViolationReport(xssInfo),
+                PingLoader::XSSAuditorViolationReport);
     }
 
-    if (xssInfo.m_didBlockEntirePage)
-        m_document->frame()->navigationScheduler().schedulePageBlock(m_document);
+    if (xssInfo.m_didBlockEntirePage) {
+        m_document->frame()->navigationScheduler().schedulePageBlock(
+            m_document, ResourceError::BLOCKED_BY_XSS_AUDITOR);
+    }
 }
 
 } // namespace blink

@@ -12,7 +12,7 @@
 #define GLES2_C_LIB_EXPORT __declspec(dllexport)
 #else
 #define GLES2_C_LIB_EXPORT __declspec(dllimport)
-#endif  // defined(GLES2_C_LIB_IMPLEMENTATION)
+#endif // defined(GLES2_C_LIB_IMPLEMENTATION)
 
 #else // defined(WIN32)
 #if defined(GLES2_C_LIB_IMPLEMENTATION)
@@ -26,4 +26,4 @@
 #define GLES2_C_LIB_EXPORT
 #endif
 
-#endif  // GPU_COMMAND_BUFFER_CLIENT_GLES2_C_LIB_EXPORT_H_
+#endif // GPU_COMMAND_BUFFER_CLIENT_GLES2_C_LIB_EXPORT_H_

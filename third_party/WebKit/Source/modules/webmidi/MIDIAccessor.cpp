@@ -28,31 +28,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webmidi/MIDIAccessor.h"
 
 #include "modules/webmidi/MIDIAccessorClient.h"
 #include "public/platform/Platform.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 using blink::WebString;
+using midi::mojom::PortState;
+using midi::mojom::Result;
 
 namespace blink {
 
 // Factory method
-PassOwnPtr<MIDIAccessor> MIDIAccessor::create(MIDIAccessorClient* client)
+std::unique_ptr<MIDIAccessor> MIDIAccessor::create(MIDIAccessorClient* client)
 {
-    return adoptPtr(new MIDIAccessor(client));
+    return WTF::wrapUnique(new MIDIAccessor(client));
 }
 
 MIDIAccessor::MIDIAccessor(MIDIAccessorClient* client)
     : m_client(client)
 {
-    ASSERT(client);
+    DCHECK(client);
 
-    m_accessor = adoptPtr(Platform::current()->createMIDIAccessor(this));
+    m_accessor = WTF::wrapUnique(Platform::current()->createMIDIAccessor(this));
 
-    ASSERT(m_accessor);
+    DCHECK(m_accessor);
 }
 
 void MIDIAccessor::startSession()
@@ -60,37 +63,51 @@ void MIDIAccessor::startSession()
     m_accessor->startSession();
 }
 
-void MIDIAccessor::sendMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
+void MIDIAccessor::sendMIDIData(unsigned portIndex,
+    const unsigned char* data,
+    size_t length,
+    double timeStamp)
 {
     m_accessor->sendMIDIData(portIndex, data, length, timeStamp);
 }
 
-void MIDIAccessor::didAddInputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState state)
+void MIDIAccessor::didAddInputPort(const WebString& id,
+    const WebString& manufacturer,
+    const WebString& name,
+    const WebString& version,
+    PortState state)
 {
     m_client->didAddInputPort(id, manufacturer, name, version, state);
 }
 
-void MIDIAccessor::didAddOutputPort(const WebString& id, const WebString& manufacturer, const WebString& name, const WebString& version, MIDIPortState state)
+void MIDIAccessor::didAddOutputPort(const WebString& id,
+    const WebString& manufacturer,
+    const WebString& name,
+    const WebString& version,
+    PortState state)
 {
     m_client->didAddOutputPort(id, manufacturer, name, version, state);
 }
 
-void MIDIAccessor::didSetInputPortState(unsigned portIndex, MIDIPortState state)
+void MIDIAccessor::didSetInputPortState(unsigned portIndex, PortState state)
 {
     m_client->didSetInputPortState(portIndex, state);
 }
 
-void MIDIAccessor::didSetOutputPortState(unsigned portIndex, MIDIPortState state)
+void MIDIAccessor::didSetOutputPortState(unsigned portIndex, PortState state)
 {
     m_client->didSetOutputPortState(portIndex, state);
 }
 
-void MIDIAccessor::didStartSession(bool success, const WebString& error, const WebString& message)
+void MIDIAccessor::didStartSession(Result result)
 {
-    m_client->didStartSession(success, error, message);
+    m_client->didStartSession(result);
 }
 
-void MIDIAccessor::didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
+void MIDIAccessor::didReceiveMIDIData(unsigned portIndex,
+    const unsigned char* data,
+    size_t length,
+    double timeStamp)
 {
     m_client->didReceiveMIDIData(portIndex, data, length, timeStamp);
 }

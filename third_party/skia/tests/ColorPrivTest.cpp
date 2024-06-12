@@ -4,7 +4,8 @@
 
 #define ASSERT(expr) REPORTER_ASSERT(r, expr)
 
-DEF_TEST(Splay, r) {
+DEF_TEST(Splay, r)
+{
     const SkPMColor color = 0xA1B2C3D4;
 
     uint32_t ag, rb;
@@ -15,10 +16,11 @@ DEF_TEST(Splay, r) {
 
     const uint64_t agrb = SkSplay(color);
     ASSERT(agrb == 0x00A100C300B200D4ULL);
-    ASSERT(SkUnsplay(agrb<<8) == color);
+    ASSERT(SkUnsplay(agrb << 8) == color);
 }
 
-DEF_TEST(FourByteInterp, r) {
+DEF_TEST(FourByteInterp, r)
+{
     const SkPMColor src = 0xAB998877, dst = 0x66334455;
     for (unsigned scale = 0; scale <= 256; scale++) {
         ASSERT(SkFourByteInterp256(src, dst, scale) == SkFastFourByteInterp256(src, dst, scale));

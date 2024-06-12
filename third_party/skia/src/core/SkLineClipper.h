@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -8,8 +7,8 @@
 #ifndef SkLineClipper_DEFINED
 #define SkLineClipper_DEFINED
 
-#include "SkRect.h"
 #include "SkPoint.h"
+#include "SkRect.h"
 
 class SkLineClipper {
 public:
@@ -30,7 +29,7 @@ public:
             3rd segment: lines[2]..lines[3]
      */
     static int ClipLine(const SkPoint pts[2], const SkRect& clip,
-                        SkPoint lines[kMaxPoints], bool canCullToTheRight);
+        SkPoint lines[kMaxPoints], bool canCullToTheRight);
 
     /*  Intersect the line segment against the rect. If there is a non-empty
         resulting segment, return true and set dst[] to that segment. If not,

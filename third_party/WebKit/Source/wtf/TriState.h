@@ -28,17 +28,14 @@
 
 namespace WTF {
 
-enum TriState {
-    FalseTriState,
+enum TriState { FalseTriState,
     TrueTriState,
-    MixedTriState
-};
-
+    MixedTriState };
 }
 
-using WTF::TriState;
 using WTF::FalseTriState;
-using WTF::TrueTriState;
 using WTF::MixedTriState;
+using WTF::TriState;
+using WTF::TrueTriState;
 
 #endif // TriState_h

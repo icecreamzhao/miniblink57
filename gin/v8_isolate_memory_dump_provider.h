@@ -18,23 +18,23 @@ class IsolateHolder;
 // summarized memory stats about the V8 Isolate.
 class V8IsolateMemoryDumpProvider
     : public base::trace_event::MemoryDumpProvider {
- public:
-  explicit V8IsolateMemoryDumpProvider(IsolateHolder* isolate_holder);
-  ~V8IsolateMemoryDumpProvider() override;
+public:
+    explicit V8IsolateMemoryDumpProvider(IsolateHolder* isolate_holder);
+    ~V8IsolateMemoryDumpProvider() override;
 
-  // MemoryDumpProvider implementation.
-  bool OnMemoryDump(
-      base::trace_event::ProcessMemoryDump* process_memory_dump) override;
+    // MemoryDumpProvider implementation.
+    bool OnMemoryDump(
+        base::trace_event::ProcessMemoryDump* process_memory_dump) override;
 
- private:
-  void DumpHeapStatistics(
-      base::trace_event::ProcessMemoryDump* process_memory_dump);
+private:
+    void DumpHeapStatistics(
+        base::trace_event::ProcessMemoryDump* process_memory_dump);
 
-  IsolateHolder* isolate_holder_;  // Not owned.
+    IsolateHolder* isolate_holder_; // Not owned.
 
-  DISALLOW_COPY_AND_ASSIGN(V8IsolateMemoryDumpProvider);
+    DISALLOW_COPY_AND_ASSIGN(V8IsolateMemoryDumpProvider);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_V8_ISOLATE_MEMORY_DUMP_PROVIDER_H_
+#endif // GIN_V8_ISOLATE_MEMORY_DUMP_PROVIDER_H_

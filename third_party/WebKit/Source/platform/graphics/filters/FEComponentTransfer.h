@@ -29,15 +29,16 @@
 namespace blink {
 
 enum ComponentTransferType {
-    FECOMPONENTTRANSFER_TYPE_UNKNOWN  = 0,
+    FECOMPONENTTRANSFER_TYPE_UNKNOWN = 0,
     FECOMPONENTTRANSFER_TYPE_IDENTITY = 1,
-    FECOMPONENTTRANSFER_TYPE_TABLE    = 2,
+    FECOMPONENTTRANSFER_TYPE_TABLE = 2,
     FECOMPONENTTRANSFER_TYPE_DISCRETE = 3,
-    FECOMPONENTTRANSFER_TYPE_LINEAR   = 4,
-    FECOMPONENTTRANSFER_TYPE_GAMMA    = 5
+    FECOMPONENTTRANSFER_TYPE_LINEAR = 4,
+    FECOMPONENTTRANSFER_TYPE_GAMMA = 5
 };
 
 struct ComponentTransferFunction {
+    DISALLOW_NEW();
     ComponentTransferFunction()
         : type(FECOMPONENTTRANSFER_TYPE_UNKNOWN)
         , slope(0)
@@ -59,22 +60,32 @@ struct ComponentTransferFunction {
     Vector<float> tableValues;
 };
 
-class PLATFORM_EXPORT FEComponentTransfer : public FilterEffect {
+class PLATFORM_EXPORT FEComponentTransfer final : public FilterEffect {
 public:
-    static PassRefPtrWillBeRawPtr<FEComponentTransfer> create(Filter*, const ComponentTransferFunction& redFunc, const ComponentTransferFunction& greenFunc,
-        const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc);
-
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
+    static FEComponentTransfer* create(
+        Filter*,
+        const ComponentTransferFunction& redFunc,
+        const ComponentTransferFunction& greenFunc,
+        const ComponentTransferFunction& blueFunc,
+        const ComponentTransferFunction& alphaFunc);
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
-    FEComponentTransfer(Filter*, const ComponentTransferFunction& redFunc, const ComponentTransferFunction& greenFunc,
-        const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc);
+    FEComponentTransfer(Filter*,
+        const ComponentTransferFunction& redFunc,
+        const ComponentTransferFunction& greenFunc,
+        const ComponentTransferFunction& blueFunc,
+        const ComponentTransferFunction& alphaFunc);
 
-    bool affectsTransparentPixels() override;
+    sk_sp<SkImageFilter> createImageFilter() override;
 
-    void getValues(unsigned char rValues[256], unsigned char gValues[256], unsigned char bValues[256], unsigned char aValues[256]);
+    bool affectsTransparentPixels() const override;
+
+    void getValues(unsigned char rValues[256],
+        unsigned char gValues[256],
+        unsigned char bValues[256],
+        unsigned char aValues[256]);
 
     ComponentTransferFunction m_redFunc;
     ComponentTransferFunction m_greenFunc;

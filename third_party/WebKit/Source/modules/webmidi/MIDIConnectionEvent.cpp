@@ -28,13 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webmidi/MIDIConnectionEvent.h"
+
 #include "modules/webmidi/MIDIConnectionEventInit.h"
 
 namespace blink {
 
-MIDIConnectionEvent::MIDIConnectionEvent(const AtomicString& type, const MIDIConnectionEventInit& initializer)
+MIDIConnectionEvent::MIDIConnectionEvent(
+    const AtomicString& type,
+    const MIDIConnectionEventInit& initializer)
     : Event(type, initializer)
     , m_port(nullptr)
 {

@@ -36,7 +36,7 @@
 #include "WebURL.h"
 
 #ifdef WIN32
-typedef void *HANDLE;
+typedef void* HANDLE;
 #endif
 
 namespace blink {
@@ -50,11 +50,14 @@ public:
 #else
     typedef int FileHandle;
 #endif
-    virtual bool getFileInfo(const WebString& path, WebFileInfo& result) { return false; }
-    virtual WebString directoryName(const WebString& path)  { return WebString(); }
-    virtual WebString baseName(const WebString& path)  { return WebString(); }
+    virtual bool getFileInfo(const WebString& path, WebFileInfo& result)
+    {
+        return false;
+    }
+    virtual WebString directoryName(const WebString& path) { return WebString(); }
+    virtual WebString baseName(const WebString& path) { return WebString(); }
     virtual bool isDirectory(const WebString& path) { return false; }
-    virtual WebURL filePathToURL(const WebString& path)  { return WebURL(); }
+    virtual WebURL filePathToURL(const WebString& path) { return WebURL(); }
 
 protected:
     ~WebFileUtilities() { }

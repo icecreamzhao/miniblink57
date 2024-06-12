@@ -26,12 +26,11 @@
 #ifndef XSLTExtensions_h
 #define XSLTExtensions_h
 
-#include "third_party/libxslt/libxslt/xsltInternals.h"
+#include <third_party/libxslt/libxslt/xsltInternals.h>
 
 namespace blink {
 
 void registerXSLTExtensions(xsltTransformContextPtr ctxt);
-
 }
 
 #endif

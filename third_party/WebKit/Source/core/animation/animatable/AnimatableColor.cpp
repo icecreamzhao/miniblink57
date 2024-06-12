@@ -28,14 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableColor.h"
 
 #include "platform/animation/AnimationUtilities.h"
 
 namespace blink {
 
-AnimatableColorImpl::AnimatableColorImpl(float red, float green, float blue, float alpha)
+AnimatableColorImpl::AnimatableColorImpl(float red,
+    float green,
+    float blue,
+    float alpha)
     : m_alpha(clampTo(alpha, 0.0f, 1.0f))
     , m_red(clampTo(red, 0.0f, 1.0f))
     , m_green(clampTo(green, 0.0f, 1.0f))
@@ -58,31 +60,34 @@ Color AnimatableColorImpl::toColor() const
     return Color(m_red / m_alpha, m_green / m_alpha, m_blue / m_alpha, m_alpha);
 }
 
-AnimatableColorImpl AnimatableColorImpl::interpolateTo(const AnimatableColorImpl& to, double fraction) const
+AnimatableColorImpl AnimatableColorImpl::interpolateTo(
+    const AnimatableColorImpl& to,
+    double fraction) const
 {
-    return AnimatableColorImpl(blend(m_red, to.m_red, fraction),
-        blend(m_green, to.m_green, fraction),
-        blend(m_blue, to.m_blue, fraction),
-        blend(m_alpha, to.m_alpha, fraction));
+    return AnimatableColorImpl(
+        blend(m_red, to.m_red, fraction), blend(m_green, to.m_green, fraction),
+        blend(m_blue, to.m_blue, fraction), blend(m_alpha, to.m_alpha, fraction));
 }
 
 bool AnimatableColorImpl::operator==(const AnimatableColorImpl& other) const
 {
-    return m_red == other.m_red
-        && m_green == other.m_green
-        && m_blue == other.m_blue
-        && m_alpha == other.m_alpha;
+    return m_red == other.m_red && m_green == other.m_green && m_blue == other.m_blue && m_alpha == other.m_alpha;
 }
 
-PassRefPtrWillBeRawPtr<AnimatableColor> AnimatableColor::create(const AnimatableColorImpl& color, const AnimatableColorImpl& visitedLinkColor)
+PassRefPtr<AnimatableColor> AnimatableColor::create(
+    const AnimatableColorImpl& color,
+    const AnimatableColorImpl& visitedLinkColor)
 {
-    return adoptRefWillBeNoop(new AnimatableColor(color, visitedLinkColor));
+    return adoptRef(new AnimatableColor(color, visitedLinkColor));
 }
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableColor::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableColor::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     const AnimatableColor* color = toAnimatableColor(value);
-    return create(m_color.interpolateTo(color->m_color, fraction),
+    return create(
+        m_color.interpolateTo(color->m_color, fraction),
         m_visitedLinkColor.interpolateTo(color->m_visitedLinkColor, fraction));
 }
 

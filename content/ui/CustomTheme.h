@@ -7,10 +7,13 @@
 #endif
 
 #include "platform/geometry/win/IntRectWin.h"
+#include "public/platform/WebRect.h"
 #include "skia/ext/skia_utils_win.h"
 #include "skia/ext/platform_canvas.h"
+#include "skia/ext/refptr.h"
 #include "third_party/skia/include/effects/SkGradientShader.h"
-#include "public/platform/WebRect.h"
+#include "third_party/skia/include/private/SkFixed.h"
+#include "third_party/skia/include/core/SkPath.h"
 
 namespace color_utils {
 
@@ -793,9 +796,7 @@ public:
         else /* kNormal */
             startEndColors = kCheckboxGradientColors;
         SkColor colors[3] = { startEndColors[0], startEndColors[0], startEndColors[1] };
-        skia::RefPtr<SkShader> shader = skia::AdoptRef(
-            SkGradientShader::CreateLinear(
-            gradientBounds, colors, NULL, 3, SkShader::kClamp_TileMode));
+        skia::RefPtr<SkShader> shader = skia::AdoptRef(SkGradientShader::CreateLinear(gradientBounds, colors, NULL, 3, SkShader::kClamp_TileMode));
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setShader(shader.get());

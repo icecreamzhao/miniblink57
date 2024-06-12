@@ -36,13 +36,14 @@
 #include "platform/geometry/LayoutRect.h"
 #include "platform/graphics/Path.h"
 #include "platform/text/WritingMode.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class FloatRoundedRect;
 
 struct LineSegment {
+    STACK_ALLOCATED();
     LineSegment()
         : logicalLeft(0)
         , logicalRight(0)
@@ -62,36 +63,59 @@ struct LineSegment {
     bool isValid;
 };
 
-// A representation of a BasicShape that enables layout code to determine how to break a line up into segments
-// that will fit within or around a shape. The line is defined by a pair of logical Y coordinates and the
-// computed segments are returned as pairs of logical X coordinates. The BasicShape itself is defined in
-// physical coordinates.
+// A representation of a BasicShape that enables layout code to determine how to
+// break a line up into segments that will fit within or around a shape. The
+// line is defined by a pair of logical Y coordinates and the computed segments
+// are returned as pairs of logical X coordinates. The BasicShape itself is
+// defined in physical coordinates.
 
 class CORE_EXPORT Shape {
+    USING_FAST_MALLOC(Shape);
+
 public:
     struct DisplayPaths {
+        STACK_ALLOCATED();
         Path shape;
         Path marginShape;
     };
-    static PassOwnPtr<Shape> createShape(const BasicShape*, const LayoutSize& logicalBoxSize, WritingMode, float margin);
-    static PassOwnPtr<Shape> createRasterShape(Image*, float threshold, const LayoutRect& imageRect, const LayoutRect& marginRect, WritingMode, float margin);
-    static PassOwnPtr<Shape> createEmptyRasterShape(WritingMode, float margin);
-    static PassOwnPtr<Shape> createLayoutBoxShape(const FloatRoundedRect&, WritingMode, float margin);
+    static std::unique_ptr<Shape> createShape(const BasicShape*,
+        const LayoutSize& logicalBoxSize,
+        WritingMode,
+        float margin);
+    static std::unique_ptr<Shape> createRasterShape(Image*,
+        float threshold,
+        const LayoutRect& imageRect,
+        const LayoutRect& marginRect,
+        WritingMode,
+        float margin);
+    static std::unique_ptr<Shape> createEmptyRasterShape(WritingMode,
+        float margin);
+    static std::unique_ptr<Shape> createLayoutBoxShape(const FloatRoundedRect&,
+        WritingMode,
+        float margin);
 
     virtual ~Shape() { }
 
     virtual LayoutRect shapeMarginLogicalBoundingBox() const = 0;
     virtual bool isEmpty() const = 0;
-    virtual LineSegment getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const = 0;
+    virtual LineSegment getExcludedInterval(LayoutUnit logicalTop,
+        LayoutUnit logicalHeight) const = 0;
 
-    bool lineOverlapsShapeMarginBounds(LayoutUnit lineTop, LayoutUnit lineHeight) const { return lineOverlapsBoundingBox(lineTop, lineHeight, shapeMarginLogicalBoundingBox()); }
+    bool lineOverlapsShapeMarginBounds(LayoutUnit lineTop,
+        LayoutUnit lineHeight) const
+    {
+        return lineOverlapsBoundingBox(lineTop, lineHeight,
+            shapeMarginLogicalBoundingBox());
+    }
     virtual void buildDisplayPaths(DisplayPaths&) const = 0;
 
 protected:
     float shapeMargin() const { return m_margin; }
 
 private:
-    bool lineOverlapsBoundingBox(LayoutUnit lineTop, LayoutUnit lineHeight, const LayoutRect& rect) const
+    bool lineOverlapsBoundingBox(LayoutUnit lineTop,
+        LayoutUnit lineHeight,
+        const LayoutRect& rect) const
     {
         if (rect.isEmpty())
             return false;

@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@ class ExceptionState;
 
 class CORE_EXPORT CharacterData : public Node {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     void atomize();
     const String& data() const { return m_data; }
@@ -40,11 +42,13 @@ public:
     unsigned length() const { return m_data.length(); }
     String substringData(unsigned offset, unsigned count, ExceptionState&);
     void appendData(const String&);
-    void replaceData(unsigned offset, unsigned count, const String&, ExceptionState&);
+    void replaceData(unsigned offset,
+        unsigned count,
+        const String&,
+        ExceptionState&);
 
-    enum RecalcStyleBehavior { DoNotRecalcStyle, DeprecatedRecalcStyleImmediatlelyForEditing };
-    void insertData(unsigned offset, const String&, ExceptionState&, RecalcStyleBehavior = DoNotRecalcStyle);
-    void deleteData(unsigned offset, unsigned count, ExceptionState&, RecalcStyleBehavior = DoNotRecalcStyle);
+    void insertData(unsigned offset, const String&, ExceptionState&);
+    void deleteData(unsigned offset, unsigned count, ExceptionState&);
 
     bool containsOnlyWhitespace() const;
 
@@ -57,12 +61,12 @@ protected:
         : Node(&treeScope, type)
         , m_data(!text.isNull() ? text : emptyString())
     {
-        ASSERT(type == CreateOther || type == CreateText || type == CreateEditingText);
+        DCHECK(type == CreateOther || type == CreateText || type == CreateEditingText);
     }
 
     void setDataWithoutUpdate(const String& data)
     {
-        ASSERT(!data.isNull());
+        DCHECK(!data.isNull());
         m_data = data;
     }
     enum UpdateSource {
@@ -78,7 +82,11 @@ private:
     void setNodeValue(const String&) final;
     bool isCharacterDataNode() const final { return true; }
     int maxCharacterOffset() const final;
-    void setDataAndUpdate(const String&, unsigned offsetOfReplacedData, unsigned oldLength, unsigned newLength, UpdateSource = UpdateFromNonParser, RecalcStyleBehavior = DoNotRecalcStyle);
+    void setDataAndUpdate(const String&,
+        unsigned offsetOfReplacedData,
+        unsigned oldLength,
+        unsigned newLength,
+        UpdateSource = UpdateFromNonParser);
 
     bool isContainerNode() const = delete; // This will catch anyone doing an unnecessary check.
     bool isElementNode() const = delete; // This will catch anyone doing an unnecessary check.

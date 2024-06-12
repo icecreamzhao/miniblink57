@@ -5,7 +5,8 @@
 #ifndef NavigatorNetworkInformation_h
 #define NavigatorNetworkInformation_h
 
-#include "core/frame/DOMWindowProperty.h"
+#include "core/dom/ContextLifecycleObserver.h"
+#include "core/frame/Navigator.h"
 #include "platform/Supplementable.h"
 
 namespace blink {
@@ -13,14 +14,15 @@ namespace blink {
 class Navigator;
 class NetworkInformation;
 
-class NavigatorNetworkInformation final : public GarbageCollectedFinalized<NavigatorNetworkInformation>, public HeapSupplement<Navigator>, public DOMWindowProperty {
+class NavigatorNetworkInformation final
+    : public GarbageCollected<NavigatorNetworkInformation>,
+      public Supplement<Navigator>,
+      public ContextClient {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorNetworkInformation);
+
 public:
     static NavigatorNetworkInformation& from(Navigator&);
     static NavigatorNetworkInformation* toNavigatorNetworkInformation(Navigator&);
-
-    virtual ~NavigatorNetworkInformation();
-
     static NetworkInformation* connection(Navigator&);
 
     DECLARE_VIRTUAL_TRACE();

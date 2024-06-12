@@ -5,21 +5,19 @@
  * found in the LICENSE file.
  */
 
-#include "gm.h"
-#include "SkColorMatrixFilter.h"
 #include "SkColorFilterImageFilter.h"
+#include "SkColorMatrixFilter.h"
+#include "gm.h"
 
 // This GM renders correctly in 8888, but fails in PDF
-DEF_SIMPLE_GM(fadefilter, canvas, 256, 256) {
+DEF_SIMPLE_GM(fadefilter, canvas, 256, 256)
+{
     SkScalar matrix[20] = { 1, 0, 0, 0, 128.0f,
-                            0, 1, 0, 0, 128.0f,
-                            0, 0, 1, 0, 128.0f,
-                            0, 0, 0, 1, 0 };
-    SkAutoTUnref<SkColorFilter> colorFilter(
-            SkColorMatrixFilter::Create(matrix));
-    SkAutoTUnref<SkImageFilter> filter(
-            SkColorFilterImageFilter::Create(colorFilter));
+        0, 1, 0, 0, 128.0f,
+        0, 0, 1, 0, 128.0f,
+        0, 0, 0, 1, 0 };
+    sk_sp<SkColorFilter> colorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(matrix));
     SkPaint layerPaint;
-    layerPaint.setImageFilter(filter);
+    layerPaint.setImageFilter(SkColorFilterImageFilter::Make(std::move(colorFilter), nullptr));
     canvas->drawRect(SkRect::MakeLTRB(64, 64, 192, 192), layerPaint);
 }

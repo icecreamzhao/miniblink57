@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/storage/StorageArea.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -34,7 +33,7 @@
 #include "core/frame/LocalFrame.h"
 #include "core/page/Page.h"
 #include "modules/storage/DOMWindowStorage.h"
-#include "modules/storage/InspectorDOMStorageAgent.h"
+//#include "modules/storage/InspectorDOMStorageAgent.h"
 #include "modules/storage/Storage.h"
 #include "modules/storage/StorageClient.h"
 #include "modules/storage/StorageEvent.h"
@@ -44,32 +43,34 @@
 #include "public/platform/WebStorageArea.h"
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
+#include <memory>
 
 namespace blink {
 
-StorageArea* StorageArea::create(PassOwnPtr<WebStorageArea> storageArea, StorageType storageType)
+StorageArea* StorageArea::create(std::unique_ptr<WebStorageArea> storageArea,
+    StorageType storageType)
 {
-    return new StorageArea(storageArea, storageType);
+    return new StorageArea(std::move(storageArea), storageType);
 }
 
-StorageArea::StorageArea(PassOwnPtr<WebStorageArea> storageArea, StorageType storageType)
-    : LocalFrameLifecycleObserver(nullptr)
-    , m_storageArea(storageArea)
+StorageArea::StorageArea(std::unique_ptr<WebStorageArea> storageArea,
+    StorageType storageType)
+    : m_storageArea(std::move(storageArea))
     , m_storageType(storageType)
+    , m_frameUsedForCanAccessStorage(nullptr)
     , m_canAccessStorageCachedResult(false)
 {
 }
 
-StorageArea::~StorageArea()
-{
-}
+StorageArea::~StorageArea() { }
 
 DEFINE_TRACE(StorageArea)
 {
-    LocalFrameLifecycleObserver::trace(visitor);
+    visitor->trace(m_frameUsedForCanAccessStorage);
 }
 
-unsigned StorageArea::length(ExceptionState& exceptionState, LocalFrame* frame)
+unsigned StorageArea::length(ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -78,7 +79,9 @@ unsigned StorageArea::length(ExceptionState& exceptionState, LocalFrame* frame)
     return m_storageArea->length();
 }
 
-String StorageArea::key(unsigned index, ExceptionState& exceptionState, LocalFrame* frame)
+String StorageArea::key(unsigned index,
+    ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -87,7 +90,9 @@ String StorageArea::key(unsigned index, ExceptionState& exceptionState, LocalFra
     return m_storageArea->key(index);
 }
 
-String StorageArea::getItem(const String& key, ExceptionState& exceptionState, LocalFrame* frame)
+String StorageArea::getItem(const String& key,
+    ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -96,7 +101,10 @@ String StorageArea::getItem(const String& key, ExceptionState& exceptionState, L
     return m_storageArea->getItem(key);
 }
 
-void StorageArea::setItem(const String& key, const String& value, ExceptionState& exceptionState, LocalFrame* frame)
+void StorageArea::setItem(const String& key,
+    const String& value,
+    ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -105,10 +113,14 @@ void StorageArea::setItem(const String& key, const String& value, ExceptionState
     WebStorageArea::Result result = WebStorageArea::ResultOK;
     m_storageArea->setItem(key, value, frame->document()->url(), result);
     if (result != WebStorageArea::ResultOK)
-        exceptionState.throwDOMException(QuotaExceededError, "Setting the value of '" + key + "' exceeded the quota.");
+        exceptionState.throwDOMException(
+            QuotaExceededError,
+            "Setting the value of '" + key + "' exceeded the quota.");
 }
 
-void StorageArea::removeItem(const String& key, ExceptionState& exceptionState, LocalFrame* frame)
+void StorageArea::removeItem(const String& key,
+    ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -126,7 +138,9 @@ void StorageArea::clear(ExceptionState& exceptionState, LocalFrame* frame)
     m_storageArea->clear(frame->document()->url());
 }
 
-bool StorageArea::contains(const String& key, ExceptionState& exceptionState, LocalFrame* frame)
+bool StorageArea::contains(const String& key,
+    ExceptionState& exceptionState,
+    LocalFrame* frame)
 {
     if (!canAccessStorage(frame)) {
         exceptionState.throwSecurityError("access is denied for this document.");
@@ -140,84 +154,103 @@ bool StorageArea::canAccessStorage(LocalFrame* frame)
     if (!frame || !frame->page())
         return false;
 
-    // LocalFrameLifecycleObserver is used to safely keep the cached
-    // reference to the LocalFrame. Should the LocalFrame die before
-    // this StorageArea does, that cached reference will be cleared.
-    if (this->frame() == frame)
+    // Should the LocalFrame die before this StorageArea does,
+    // that cached reference will be cleared.
+    if (m_frameUsedForCanAccessStorage == frame)
         return m_canAccessStorageCachedResult;
     StorageNamespaceController* controller = StorageNamespaceController::from(frame->page());
     if (!controller)
         return false;
-    bool result = controller->storageClient()->canAccessStorage(frame, m_storageType);
+    bool result = controller->getStorageClient()->canAccessStorage(frame, m_storageType);
     // Move attention to the new LocalFrame.
-    LocalFrameLifecycleObserver::setContext(frame);
+    m_frameUsedForCanAccessStorage = frame;
     m_canAccessStorageCachedResult = result;
     return result;
 }
 
-size_t StorageArea::memoryBytesUsedByCache()
+void StorageArea::dispatchLocalStorageEvent(
+    const String& key,
+    const String& oldValue,
+    const String& newValue,
+    SecurityOrigin* securityOrigin,
+    const KURL& pageURL,
+    WebStorageArea* sourceAreaInstance)
 {
-    return m_storageArea->memoryBytesUsedByCache();
-}
-
-void StorageArea::dispatchLocalStorageEvent(const String& key, const String& oldValue, const String& newValue, SecurityOrigin* securityOrigin, const KURL& pageURL, WebStorageArea* sourceAreaInstance, bool originatedInProcess)
-{
-    // FIXME: This looks suspicious. Why doesn't this use allPages instead?
-    const HashSet<Page*>& pages = Page::ordinaryPages();
-    for (Page* page : pages) {
-        for (Frame* frame = page->mainFrame(); frame; frame = frame->tree().traverseNext()) {
-            // FIXME: We do not yet have a way to dispatch events to out-of-process frames.
+    // Iterate over all pages that have a StorageNamespaceController supplement.
+    for (Page* page : Page::ordinaryPages()) {
+        for (Frame* frame = page->mainFrame(); frame;
+             frame = frame->tree().traverseNext()) {
+            // FIXME: We do not yet have a way to dispatch events to out-of-process
+            // frames.
             if (!frame->isLocalFrame())
                 continue;
             LocalFrame* localFrame = toLocalFrame(frame);
-            LocalDOMWindow* localWindow = localFrame->localDOMWindow();
+            LocalDOMWindow* localWindow = localFrame->domWindow();
             Storage* storage = DOMWindowStorage::from(*localWindow).optionalLocalStorage();
-            if (storage && localFrame->document()->securityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
-                localFrame->localDOMWindow()->enqueueWindowEvent(StorageEvent::create(EventTypeNames::storage, key, oldValue, newValue, pageURL, storage));
+            if (storage && localFrame->document()->getSecurityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
+                localFrame->domWindow()->enqueueWindowEvent(
+                    StorageEvent::create(EventTypeNames::storage, key, oldValue,
+                        newValue, pageURL, storage));
         }
-        if (InspectorDOMStorageAgent* agent = StorageNamespaceController::from(page)->inspectorAgent())
-            agent->didDispatchDOMStorageEvent(key, oldValue, newValue, LocalStorage, securityOrigin);
+        //     if (InspectorDOMStorageAgent* agent =
+        //             StorageNamespaceController::from(page)->inspectorAgent())
+        //       agent->didDispatchDOMStorageEvent(key, oldValue, newValue, LocalStorage,
+        //                                         securityOrigin);
     }
 }
 
-static Page* findPageWithSessionStorageNamespace(const WebStorageNamespace& sessionNamespace)
+static Page* findPageWithSessionStorageNamespace(
+    const WebStorageNamespace& sessionNamespace)
 {
-    // FIXME: This looks suspicious. Why doesn't this use allPages instead?
-    const HashSet<Page*>& pages = Page::ordinaryPages();
-    for (Page* page : pages) {
+    // Iterate over all pages that have a StorageNamespaceController supplement.
+    for (Page* page : Page::ordinaryPages()) {
         const bool dontCreateIfMissing = false;
-        StorageNamespace* storageNamespace = StorageNamespaceController::from(page)->sessionStorage(dontCreateIfMissing);
+        StorageNamespace* storageNamespace = StorageNamespaceController::from(page)->sessionStorage(
+            dontCreateIfMissing);
         if (storageNamespace && storageNamespace->isSameNamespace(sessionNamespace))
             return page;
     }
     return nullptr;
 }
 
-void StorageArea::dispatchSessionStorageEvent(const String& key, const String& oldValue, const String& newValue, SecurityOrigin* securityOrigin, const KURL& pageURL, const WebStorageNamespace& sessionNamespace, WebStorageArea* sourceAreaInstance, bool originatedInProcess)
+void StorageArea::dispatchSessionStorageEvent(
+    const String& key,
+    const String& oldValue,
+    const String& newValue,
+    SecurityOrigin* securityOrigin,
+    const KURL& pageURL,
+    const WebStorageNamespace& sessionNamespace,
+    WebStorageArea* sourceAreaInstance)
 {
     Page* page = findPageWithSessionStorageNamespace(sessionNamespace);
     if (!page)
         return;
 
-    for (Frame* frame = page->mainFrame(); frame; frame = frame->tree().traverseNext()) {
-        // FIXME: We do not yet have a way to dispatch events to out-of-process frames.
+    for (Frame* frame = page->mainFrame(); frame;
+         frame = frame->tree().traverseNext()) {
+        // FIXME: We do not yet have a way to dispatch events to out-of-process
+        // frames.
         if (!frame->isLocalFrame())
             continue;
         LocalFrame* localFrame = toLocalFrame(frame);
-        LocalDOMWindow* localWindow = localFrame->localDOMWindow();
+        LocalDOMWindow* localWindow = localFrame->domWindow();
         Storage* storage = DOMWindowStorage::from(*localWindow).optionalSessionStorage();
-        if (storage && localFrame->document()->securityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
-            localFrame->localDOMWindow()->enqueueWindowEvent(StorageEvent::create(EventTypeNames::storage, key, oldValue, newValue, pageURL, storage));
+        if (storage && localFrame->document()->getSecurityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
+            localFrame->domWindow()->enqueueWindowEvent(StorageEvent::create(
+                EventTypeNames::storage, key, oldValue, newValue, pageURL, storage));
     }
-    if (InspectorDOMStorageAgent* agent = StorageNamespaceController::from(page)->inspectorAgent())
-        agent->didDispatchDOMStorageEvent(key, oldValue, newValue, SessionStorage, securityOrigin);
+    //   if (InspectorDOMStorageAgent* agent =
+    //           StorageNamespaceController::from(page)->inspectorAgent())
+    //     agent->didDispatchDOMStorageEvent(key, oldValue, newValue, SessionStorage,
+    //                                       securityOrigin);
 }
 
-bool StorageArea::isEventSource(Storage* storage, WebStorageArea* sourceAreaInstance)
+bool StorageArea::isEventSource(Storage* storage,
+    WebStorageArea* sourceAreaInstance)
 {
     ASSERT(storage);
     StorageArea* area = storage->area();
-    return area->m_storageArea == sourceAreaInstance;
+    return area->m_storageArea.get() == sourceAreaInstance;
 }
 
 } // namespace blink

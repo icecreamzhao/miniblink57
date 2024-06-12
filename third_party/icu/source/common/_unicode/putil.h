@@ -25,7 +25,7 @@
 #define PUTIL_H
 
 #include "unicode/utypes.h"
- /**
+/**
   * \file
   * \brief C API: Platform Utilities
   */
@@ -66,7 +66,6 @@
  */
 U_STABLE const char* U_EXPORT2 u_getDataDirectory(void);
 
-
 /** 
  * Set the ICU data directory. 
  * The data directory is where common format ICU data files (.dat files)
@@ -86,7 +85,7 @@ U_STABLE const char* U_EXPORT2 u_getDataDirectory(void);
  * @see u_init
  * @stable ICU 2.0
  */
-U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
+U_STABLE void U_EXPORT2 u_setDataDirectory(const char* directory);
 
 #ifndef U_HIDE_INTERNAL_API
 /**
@@ -96,8 +95,8 @@ U_STABLE void U_EXPORT2 u_setDataDirectory(const char *directory);
   *
   * @return the time zone data override directory.
   * @internal
-  */ 
-U_INTERNAL const char * U_EXPORT2 u_getTimeZoneFilesDirectory(UErrorCode *status);
+  */
+U_INTERNAL const char* U_EXPORT2 u_getTimeZoneFilesDirectory(UErrorCode* status);
 
 /**
   * Set the time zone files override directory.
@@ -107,9 +106,8 @@ U_INTERNAL const char * U_EXPORT2 u_getTimeZoneFilesDirectory(UErrorCode *status
   *   will access the time zone data.
   * @internal
   */
-U_INTERNAL void U_EXPORT2 u_setTimeZoneFilesDirectory(const char *path, UErrorCode *status);
-#endif  /* U_HIDE_INTERNAL_API */
-
+U_INTERNAL void U_EXPORT2 u_setTimeZoneFilesDirectory(const char* path, UErrorCode* status);
+#endif /* U_HIDE_INTERNAL_API */
 
 /**
  * @{
@@ -118,19 +116,19 @@ U_INTERNAL void U_EXPORT2 u_setTimeZoneFilesDirectory(const char *path, UErrorCo
  * @stable ICU 2.0
  */
 #if U_PLATFORM_USES_ONLY_WIN32_API
-#   define U_FILE_SEP_CHAR '\\'
-#   define U_FILE_ALT_SEP_CHAR '/'
-#   define U_PATH_SEP_CHAR ';'
-#   define U_FILE_SEP_STRING "\\"
-#   define U_FILE_ALT_SEP_STRING "/"
-#   define U_PATH_SEP_STRING ";"
+#define U_FILE_SEP_CHAR '\\'
+#define U_FILE_ALT_SEP_CHAR '/'
+#define U_PATH_SEP_CHAR ';'
+#define U_FILE_SEP_STRING "\\"
+#define U_FILE_ALT_SEP_STRING "/"
+#define U_PATH_SEP_STRING ";"
 #else
-#   define U_FILE_SEP_CHAR '/'
-#   define U_FILE_ALT_SEP_CHAR '/'
-#   define U_PATH_SEP_CHAR ':'
-#   define U_FILE_SEP_STRING "/"
-#   define U_FILE_ALT_SEP_STRING "/"
-#   define U_PATH_SEP_STRING ":"
+#define U_FILE_SEP_CHAR '/'
+#define U_FILE_ALT_SEP_CHAR '/'
+#define U_PATH_SEP_CHAR ':'
+#define U_FILE_SEP_STRING "/"
+#define U_FILE_ALT_SEP_STRING "/"
+#define U_PATH_SEP_STRING ":"
 #endif
 
 /** @} */
@@ -154,7 +152,7 @@ U_INTERNAL void U_EXPORT2 u_setTimeZoneFilesDirectory(const char *path, UErrorCo
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
-u_charsToUChars(const char *cs, UChar *us, int32_t length);
+u_charsToUChars(const char* cs, UChar* us, int32_t length);
 
 /**
  * Convert UChar characters to char characters.
@@ -176,6 +174,6 @@ u_charsToUChars(const char *cs, UChar *us, int32_t length);
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
-u_UCharsToChars(const UChar *us, char *cs, int32_t length);
+u_UCharsToChars(const UChar* us, char* cs, int32_t length);
 
 #endif

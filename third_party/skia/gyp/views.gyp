@@ -20,13 +20,14 @@
         'xml.gyp:xml',
       ],
       'include_dirs': [
+        '../include/private',
         '../include/views',
         '../include/views/unix',
+        '../src/core',
         '../src/gpu',
       ],
       'sources': [
         '../include/views/SkApplication.h',
-        '../include/views/SkBGViewArtist.h',
         '../include/views/SkEvent.h',
         '../include/views/SkEventSink.h',
         '../include/views/SkKey.h',
@@ -35,30 +36,26 @@
         '../include/views/SkOSWindow_SDL.h',
         '../include/views/SkOSWindow_Unix.h',
         '../include/views/SkOSWindow_Win.h',
-        '../include/views/SkStackViewLayout.h',
         '../include/views/SkSystemEventTypes.h',
         '../include/views/SkTouchGesture.h',
         '../include/views/SkView.h',
-        '../include/views/SkViewInflate.h',
-        '../include/views/SkWidget.h',
         '../include/views/SkWindow.h',
 
-        '../src/views/SkBGViewArtist.cpp',
         '../src/views/SkEvent.cpp',
         '../src/views/SkEventSink.cpp',
         '../src/views/SkOSMenu.cpp',
-        '../src/views/SkParsePaint.cpp',
-        '../src/views/SkProgressView.cpp',
-        '../src/views/SkStackViewLayout.cpp',
         '../src/views/SkTagList.cpp',
         '../src/views/SkTagList.h',
         '../src/views/SkTouchGesture.cpp',
         '../src/views/SkView.cpp',
-        '../src/views/SkViewInflate.cpp',
         '../src/views/SkViewPriv.cpp',
         '../src/views/SkViewPriv.h',
-        '../src/views/SkWidgets.cpp',
         '../src/views/SkWindow.cpp',
+            
+        # Unix
+        '../src/views/unix/SkOSWindow_Unix.cpp',
+        '../src/views/unix/keysym2ucs.c',
+        '../src/views/unix/skia_unix.cpp',
 
         # Mac
         '../src/views/mac/SkEventNotifier.h',
@@ -70,21 +67,9 @@
         '../src/views/mac/SkOSWindow_Mac.mm',
         '../src/views/mac/skia_mac.mm',
 
-        # SDL
-        '../src/views/sdl/SkOSWindow_SDL.cpp',
-
-        # *nix
-        '../src/views/unix/SkOSWindow_Unix.cpp',
-        '../src/views/unix/keysym2ucs.c',
-        '../src/views/unix/skia_unix.cpp',
-
         # Windows
         '../src/views/win/SkOSWindow_win.cpp',
         '../src/views/win/skia_win.cpp',
-
-      ],
-      'sources!' : [
-        '../src/views/sdl/SkOSWindow_SDL.cpp',
       ],
       'conditions': [
         [ 'skia_gpu == 1', {
@@ -92,7 +77,7 @@
             '../src/gpu',
           ],
         }],
-        [ 'skia_os == "mac"', {
+        [ 'skia_os == "mac" and skia_use_sdl == 0', {
           'link_settings': {
             'libraries': [
               '$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
@@ -113,7 +98,7 @@
           '../src/views/mac/skia_mac.mm',
           ],
         }],
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
+        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris"] and skia_use_sdl == 0', {
           'link_settings': {
             'libraries': [
               '-lGL',
@@ -138,6 +123,57 @@
         [ 'skia_gpu == 1', {
           'include_dirs': [
             '../include/gpu',
+          ],
+        }],
+        [ 'skia_angle', {
+          'dependencies': [
+            'angle.gyp:*',
+          ],
+        }],
+        [ 'skia_use_sdl == 1', {
+          'defines': [
+            'SK_USE_SDL',
+          ],
+          'dependencies': [
+            'sdl.gyp:sdl',
+          ],
+          'sources!': [
+             # linux sources
+             '../src/views/unix/SkOSWindow_Unix.cpp',
+             '../src/views/unix/keysym2ucs.c',
+             '../src/views/unix/skia_unix.cpp',
+
+             # mac sources
+             '../src/views/mac/SkEventNotifier.h',
+             '../src/views/mac/SkEventNotifier.mm',
+             '../src/views/mac/SkTextFieldCell.h',
+             '../src/views/mac/SkTextFieldCell.m',
+             '../src/views/mac/SkNSView.h',
+             '../src/views/mac/SkNSView.mm',
+             '../src/views/mac/SkOSWindow_Mac.mm',
+             '../src/views/mac/skia_mac.mm',
+
+             # win sources
+             '../src/views/win/SkOSWindow_win.cpp',
+             '../src/views/win/skia_win.cpp',
+          ],
+          'sources': [
+            '../src/views/sdl/SkOSWindow_SDL.cpp',
+          ],
+          'export_dependent_settings': [
+            'sdl.gyp:sdl',
+          ],
+          'conditions': [
+            [ 'skia_os == "mac"', {
+              'include_dirs': [
+                  '$(SDKROOT)/System/Library/Frameworks/OpenGL.framework/Headers',
+              ],
+              'link_settings': {
+                'libraries': [
+                  '$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
+                ],
+              }
+            }],
           ],
         }],
       ],

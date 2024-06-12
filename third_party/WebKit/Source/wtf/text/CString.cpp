@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2003, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights
+ * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,87 +24,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "wtf/text/CString.h"
 
-#include "config.h"
-#include "CString.h"
-
-#include "wtf/PartitionAlloc.h"
-#include "wtf/Partitions.h"
+#include "wtf/ASCIICType.h"
+#include "wtf/allocator/Partitions.h"
 #include <string.h>
 
 using namespace std;
 
 namespace WTF {
 
-PassRefPtr<CStringBuffer> CStringBuffer::createUninitialized(size_t length)
+PassRefPtr<CStringImpl> CStringImpl::createUninitialized(size_t length,
+    char*& data)
 {
-    RELEASE_ASSERT(length < (numeric_limits<unsigned>::max() - sizeof(CStringBuffer)));
+    // TODO(esprehn): This doesn't account for the NUL.
+    RELEASE_ASSERT(length < (numeric_limits<unsigned>::max() - sizeof(CStringImpl)));
 
     // The +1 is for the terminating NUL character.
-    size_t size = sizeof(CStringBuffer) + length + 1;
-    CStringBuffer* stringBuffer = static_cast<CStringBuffer*>(partitionAllocGeneric(Partitions::bufferPartition(), size, "CStringBuffer::createUninitialized"));
-    return adoptRef(new (stringBuffer) CStringBuffer(length));
+    size_t size = sizeof(CStringImpl) + length + 1;
+    CStringImpl* buffer = static_cast<CStringImpl*>(
+        Partitions::bufferMalloc(size, WTF_HEAP_PROFILER_TYPE_NAME(CStringImpl)));
+    data = reinterpret_cast<char*>(buffer + 1);
+    data[length] = '\0';
+    return adoptRef(new (buffer) CStringImpl(length));
 }
 
-void CStringBuffer::operator delete(void* ptr)
+void CStringImpl::operator delete(void* ptr)
 {
-    partitionFreeGeneric(Partitions::bufferPartition(), ptr);
+    Partitions::bufferFree(ptr);
 }
 
-CString::CString(const char* str)
+CString::CString(const char* chars, size_t length)
 {
-    if (!str)
-        return;
-
-    init(str, strlen(str));
-}
-
-CString::CString(const char* str, size_t length)
-{
-    if (!str) {
-        ASSERT(!length);
+    if (!chars) {
+        DCHECK_EQ(length, 0u);
         return;
     }
-
-    init(str, length);
-}
-
-void CString::init(const char* str, size_t length)
-{
-    ASSERT(str);
-
-    m_buffer = CStringBuffer::createUninitialized(length);
-    memcpy(m_buffer->mutableData(), str, length);
-    m_buffer->mutableData()[length] = '\0';
-}
-
-char* CString::mutableData()
-{
-    copyBufferIfNeeded();
-    if (!m_buffer)
-        return 0;
-    return m_buffer->mutableData();
-}
-
-CString CString::newUninitialized(size_t length, char*& characterBuffer)
-{
-    CString result;
-    result.m_buffer = CStringBuffer::createUninitialized(length);
-    char* bytes = result.m_buffer->mutableData();
-    bytes[length] = '\0';
-    characterBuffer = bytes;
-    return result;
-}
-
-void CString::copyBufferIfNeeded()
-{
-    if (!m_buffer || m_buffer->hasOneRef())
-        return;
-
-    RefPtr<CStringBuffer> buffer = m_buffer.release();
-    size_t length = buffer->length();
-    m_buffer = CStringBuffer::createUninitialized(length);
-    memcpy(m_buffer->mutableData(), buffer->data(), length + 1);
+    char* data;
+    m_buffer = CStringImpl::createUninitialized(length, data);
+    memcpy(data, chars, length);
 }
 
 bool CString::isSafeToSendToAnotherThread() const
@@ -127,6 +86,49 @@ bool operator==(const CString& a, const char* b)
     if (!b)
         return true;
     return !strcmp(a.data(), b);
+}
+
+std::ostream& operator<<(std::ostream& ostream, const CString& string)
+{
+    if (string.isNull())
+        return ostream << "<null>";
+
+    ostream << '"';
+    for (size_t index = 0; index < string.length(); ++index) {
+        // Print shorthands for select cases.
+        char character = string.data()[index];
+        switch (character) {
+        case '\t':
+            ostream << "\\t";
+            break;
+        case '\n':
+            ostream << "\\n";
+            break;
+        case '\r':
+            ostream << "\\r";
+            break;
+        case '"':
+            ostream << "\\\"";
+            break;
+        case '\\':
+            ostream << "\\\\";
+            break;
+        default:
+            if (isASCIIPrintable(character)) {
+                ostream << character;
+            } else {
+                // Print "\xHH" for control or non-ASCII characters.
+                ostream << "\\x";
+                if (character >= 0 && character < 0x10)
+                    ostream << "0";
+                ostream.setf(std::ios_base::hex, std::ios_base::basefield);
+                ostream.setf(std::ios::uppercase);
+                ostream << (character & 0xff);
+            }
+            break;
+        }
+    }
+    return ostream << '"';
 }
 
 } // namespace WTF

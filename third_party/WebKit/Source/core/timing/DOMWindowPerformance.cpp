@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/timing/DOMWindowPerformance.h"
 
 #include "core/frame/LocalDOMWindow.h"
@@ -12,19 +11,14 @@
 namespace blink {
 
 DOMWindowPerformance::DOMWindowPerformance(LocalDOMWindow& window)
-    : DOMWindowProperty(window.frame())
-    , m_window(&window)
+    : Supplement<LocalDOMWindow>(window)
 {
 }
 
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowPerformance);
-
 DEFINE_TRACE(DOMWindowPerformance)
 {
-    visitor->trace(m_window);
     visitor->trace(m_performance);
-    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<LocalDOMWindow>::trace(visitor);
 }
 
 // static
@@ -36,10 +30,11 @@ const char* DOMWindowPerformance::supplementName()
 // static
 DOMWindowPerformance& DOMWindowPerformance::from(LocalDOMWindow& window)
 {
-    DOMWindowPerformance* supplement = static_cast<DOMWindowPerformance*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    DOMWindowPerformance* supplement = static_cast<DOMWindowPerformance*>(
+        Supplement<LocalDOMWindow>::from(window, supplementName()));
     if (!supplement) {
         supplement = new DOMWindowPerformance(window);
-        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+        provideTo(window, supplementName(), supplement);
     }
     return *supplement;
 }
@@ -53,7 +48,7 @@ Performance* DOMWindowPerformance::performance(DOMWindow& window)
 Performance* DOMWindowPerformance::performance()
 {
     if (!m_performance)
-        m_performance = Performance::create(m_window->frame());
+        m_performance = Performance::create(supplementable()->frame());
     return m_performance.get();
 }
 

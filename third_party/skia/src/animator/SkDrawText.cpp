@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDrawText.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -29,27 +28,34 @@ const SkMemberInfo SkText::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkText);
 
-SkText::SkText() : x(0), y(0) {
+SkText::SkText()
+    : x(0)
+    , y(0)
+{
 }
 
-SkText::~SkText() {
+SkText::~SkText()
+{
 }
 
-bool SkText::draw(SkAnimateMaker& maker) {
+bool SkText::draw(SkAnimateMaker& maker)
+{
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawText(text.c_str(), text.size(), x, y, *maker.fPaint);
     return false;
 }
 
 #ifdef SK_DUMP_ENABLED
-void SkText::dump(SkAnimateMaker* maker) {
+void SkText::dump(SkAnimateMaker* maker)
+{
     INHERITED::dump(maker);
 }
 #endif
 
-bool SkText::getProperty(int index, SkScriptValue* value) const {
+bool SkText::getProperty(int index, SkScriptValue* value) const
+{
     SkASSERT(index == SK_PROPERTY(length));
     value->fType = SkType_Int;
-    value->fOperand.fS32 = (int32_t) text.size();
+    value->fOperand.fS32 = (int32_t)text.size();
     return true;
 }

@@ -70,7 +70,7 @@ private:
     DevToolsProtocolDispatcher* m_devToolsProtocolDispatcher;
     WebPage* m_page;
     int m_id;
-    Vector<blink::LocalFrame*> m_defersLoadingframes;
+    //Vector<blink::LocalFrame*> m_defersLoadingframes;
 };
 
 }  // namespace content

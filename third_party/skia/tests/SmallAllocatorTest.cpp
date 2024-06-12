@@ -11,11 +11,13 @@
 
 class CountingClass {
 public:
-    CountingClass() {
+    CountingClass()
+    {
         kCount++;
     }
 
-    ~CountingClass() {
+    ~CountingClass()
+    {
         kCount--;
     }
 
@@ -27,13 +29,15 @@ private:
 
 int CountingClass::kCount;
 
-template<uint32_t kMaxObjects, size_t kBytes> void test_allocator(skiatest::Reporter* reporter) {
+template <uint32_t kMaxObjects, size_t kBytes>
+void test_allocator(skiatest::Reporter* reporter)
+{
     {
         SkSmallAllocator<kMaxObjects, kBytes> alloc;
         for (uint32_t i = 0; i < kMaxObjects; ++i) {
             CountingClass* c = alloc.template createT<CountingClass>();
-            REPORTER_ASSERT(reporter, c != NULL);
-            REPORTER_ASSERT(reporter, CountingClass::GetCount() == static_cast<int>(i+1));
+            REPORTER_ASSERT(reporter, c != nullptr);
+            REPORTER_ASSERT(reporter, CountingClass::GetCount() == static_cast<int>(i + 1));
         }
     }
     REPORTER_ASSERT(reporter, CountingClass::GetCount() == 0);
@@ -41,7 +45,8 @@ template<uint32_t kMaxObjects, size_t kBytes> void test_allocator(skiatest::Repo
 
 // Tests that ensure that the destructor is called, whether the objects
 // were created in fStorage or on the heap.
-DEF_TEST(SmallAllocator_destructor, reporter) {
+DEF_TEST(SmallAllocator_destructor, reporter)
+{
     // Four times as many bytes as objects will never require any heap
     // allocations (since SkAlign4(sizeof(CountingClass)) == 4 and the allocator
     // will stop once it reaches kMaxObjects).
@@ -63,8 +68,9 @@ class Dummy {
 class DummyContainer {
 public:
     explicit DummyContainer(Dummy* d)
-        :fDummy(d)
-    {}
+        : fDummy(d)
+    {
+    }
 
     Dummy* getDummy() const { return fDummy; }
 
@@ -74,10 +80,11 @@ private:
 
 // Test that using a createT with a constructor taking a pointer as a
 // parameter works as expected.
-DEF_TEST(SmallAllocator_pointer, reporter) {
+DEF_TEST(SmallAllocator_pointer, reporter)
+{
     SkSmallAllocator<1, 8> alloc;
     Dummy d;
     DummyContainer* container = alloc.createT<DummyContainer>(&d);
-    REPORTER_ASSERT(reporter, container != NULL);
+    REPORTER_ASSERT(reporter, container != nullptr);
     REPORTER_ASSERT(reporter, container->getDummy() == &d);
 }

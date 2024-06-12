@@ -15,41 +15,44 @@
 namespace v8 {
 namespace base {
 
-// Internal adapter class for implementing base::Reversed.
-template <typename T>
-class ReversedAdapter {
- public:
-  using Iterator =
-      std::reverse_iterator<decltype(std::begin(std::declval<T>()))>;
+    // Internal adapter class for implementing base::Reversed.
+    template <typename T>
+    class ReversedAdapter {
+    public:
+        using Iterator = std::reverse_iterator<decltype(std::begin(std::declval<T>()))>;
 
-  explicit ReversedAdapter(T& t) : t_(t) {}
-  ReversedAdapter(const ReversedAdapter& ra) V8_NOEXCEPT = default;
+        explicit ReversedAdapter(T& t)
+            : t_(t)
+        {
+        }
+        ReversedAdapter(const ReversedAdapter& ra) V8_NOEXCEPT = default;
 
-  // TODO(clemensh): Use std::rbegin/std::rend once we have C++14 support.
-  Iterator begin() const { return Iterator(std::end(t_)); }
-  Iterator end() const { return Iterator(std::begin(t_)); }
+        // TODO(clemensh): Use std::rbegin/std::rend once we have C++14 support.
+        Iterator begin() const { return Iterator(std::end(t_)); }
+        Iterator end() const { return Iterator(std::begin(t_)); }
 
- private:
-  T& t_;
+    private:
+        T& t_;
 
-  DISALLOW_ASSIGN(ReversedAdapter);
-};
+        DISALLOW_ASSIGN(ReversedAdapter);
+    };
 
-// Reversed returns a container adapter usable in a range-based "for" statement
-// for iterating a reversible container in reverse order.
-//
-// Example:
-//
-//   std::vector<int> v = ...;
-//   for (int i : base::Reversed(v)) {
-//     // iterates through v from back to front
-//   }
-template <typename T>
-ReversedAdapter<T> Reversed(T& t) {
-  return ReversedAdapter<T>(t);
-}
+    // Reversed returns a container adapter usable in a range-based "for" statement
+    // for iterating a reversible container in reverse order.
+    //
+    // Example:
+    //
+    //   std::vector<int> v = ...;
+    //   for (int i : base::Reversed(v)) {
+    //     // iterates through v from back to front
+    //   }
+    template <typename T>
+    ReversedAdapter<T> Reversed(T& t)
+    {
+        return ReversedAdapter<T>(t);
+    }
 
-}  // namespace base
-}  // namespace v8
+} // namespace base
+} // namespace v8
 
-#endif  // V8_BASE_ADAPTERS_H_
+#endif // V8_BASE_ADAPTERS_H_

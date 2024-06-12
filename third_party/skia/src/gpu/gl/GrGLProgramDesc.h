@@ -9,8 +9,8 @@
 #define GrGLProgramDesc_DEFINED
 
 #include "GrColor.h"
-#include "GrProgramDesc.h"
 #include "GrGpu.h"
+#include "GrProgramDesc.h"
 #include "GrTypesPriv.h"
 
 class GrGLGpu;
@@ -52,15 +52,13 @@ public:
      *                        general draw information, as well as the specific color, geometry,
      *                        and coverage stages which will be used to generate the GL Program for
      *                        this optstate.
-     * @param GrGLGpu  A GL Gpu, the caps and Gpu object are used to output processor specific
-     *                 parts of the descriptor.
+     * @param GrGLSLCaps     Capabilities of the GLSL backend.
      * @param GrProgramDesc  The built and finalized descriptor
      **/
     static bool Build(GrProgramDesc*,
-                      const GrPrimitiveProcessor&,
-                      const GrPipeline&,
-                      const GrGLGpu*,
-                      const GrBatchTracker&);
+        const GrPrimitiveProcessor&,
+        const GrPipeline&,
+        const GrGLSLCaps&);
 };
 
 #endif

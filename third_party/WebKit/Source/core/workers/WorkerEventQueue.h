@@ -28,41 +28,35 @@
 #define WorkerEventQueue_h
 
 #include "core/events/EventQueue.h"
-#include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
 class Event;
-class ExecutionContext;
+class WorkerGlobalScope;
 
 class WorkerEventQueue final : public EventQueue {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(WorkerEventQueue);
 public:
-
-    static PassOwnPtrWillBeRawPtr<WorkerEventQueue> create(ExecutionContext*);
-    virtual ~WorkerEventQueue();
+    static WorkerEventQueue* create(WorkerGlobalScope*);
+    ~WorkerEventQueue() override;
     DECLARE_TRACE();
 
     // EventQueue
-    virtual bool enqueueEvent(PassRefPtrWillBeRawPtr<Event>) override;
-    virtual bool cancelEvent(Event*) override;
-    virtual void close() override;
+    bool enqueueEvent(Event*) override;
+    bool cancelEvent(Event*) override;
+    void close() override;
 
 private:
-    explicit WorkerEventQueue(ExecutionContext*);
-    void removeEvent(Event*);
+    explicit WorkerEventQueue(WorkerGlobalScope*);
+    bool removeEvent(Event*);
+    void dispatchEvent(Event*);
 
-    RawPtrWillBeMember<ExecutionContext> m_executionContext;
+    Member<WorkerGlobalScope> m_workerGlobalScope;
     bool m_isClosed;
 
-    class EventDispatcherTask;
-    using EventTaskMap = WillBeHeapHashMap<RefPtrWillBeMember<Event>, EventDispatcherTask*>;
-    EventTaskMap m_eventTaskMap;
+    HeapHashSet<Member<Event>> m_pendingEvents;
 };
 
-}
+} // namespace blink
 
 #endif // WorkerEventQueue_h

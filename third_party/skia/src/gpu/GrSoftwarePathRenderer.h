@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2012 Google Inc.
  *
@@ -11,7 +10,7 @@
 
 #include "GrPathRenderer.h"
 
-class GrContext;
+class GrTextureProvider;
 
 /**
  * This class uses the software side to render a path to an SkBitmap and
@@ -19,32 +18,40 @@ class GrContext;
  */
 class GrSoftwarePathRenderer : public GrPathRenderer {
 public:
-    GrSoftwarePathRenderer(GrContext* context)
-        : fContext(context) {
+    GrSoftwarePathRenderer(GrTextureProvider* texProvider)
+        : fTexProvider(texProvider)
+    {
     }
 
-    virtual bool canDrawPath(const GrDrawTarget*,
-                             const GrPipelineBuilder*,
-                             const SkMatrix& viewMatrix,
-                             const SkPath&,
-                             const GrStrokeInfo&,
-                             bool antiAlias) const override;
-protected:
-    virtual StencilSupport onGetStencilSupport(const GrDrawTarget*,
-                                               const GrPipelineBuilder*,
-                                               const SkPath&,
-                                               const GrStrokeInfo&) const override;
+private:
+    static void DrawNonAARect(GrDrawContext* drawContext,
+        const GrPaint* paint,
+        const GrUserStencilSettings* userStencilSettings,
+        const GrClip& clip,
+        GrColor color,
+        const SkMatrix& viewMatrix,
+        const SkRect& rect,
+        const SkMatrix& localMatrix);
+    static void DrawAroundInvPath(GrDrawContext* drawContext,
+        const GrPaint* paint,
+        const GrUserStencilSettings* userStencilSettings,
+        const GrClip& clip,
+        GrColor color,
+        const SkMatrix& viewMatrix,
+        const SkIRect& devClipBounds,
+        const SkIRect& devPathBounds);
 
-    virtual bool onDrawPath(GrDrawTarget*,
-                            GrPipelineBuilder*,
-                            GrColor,
-                            const SkMatrix& viewMatrix,
-                            const SkPath&,
-                            const GrStrokeInfo&,
-                            bool antiAlias) override;
+    StencilSupport onGetStencilSupport(const GrShape&) const override
+    {
+        return GrPathRenderer::kNoSupport_StencilSupport;
+    }
+
+    bool onCanDrawPath(const CanDrawPathArgs&) const override;
+
+    bool onDrawPath(const DrawPathArgs&) override;
 
 private:
-    GrContext*     fContext;
+    GrTextureProvider* fTexProvider;
 
     typedef GrPathRenderer INHERITED;
 };

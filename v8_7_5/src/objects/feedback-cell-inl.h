@@ -17,15 +17,25 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(FeedbackCell, Struct)
+    OBJECT_CONSTRUCTORS_IMPL(FeedbackCell, Struct)
 
-CAST_ACCESSOR(FeedbackCell)
+    CAST_ACCESSOR(FeedbackCell)
 
-ACCESSORS(FeedbackCell, value, HeapObject, kValueOffset)
+    ACCESSORS(FeedbackCell, value, HeapObject, kValueOffset)
+    INT32_ACCESSORS(FeedbackCell, interrupt_budget, kInterruptBudgetOffset)
 
-}  // namespace internal
-}  // namespace v8
+    void FeedbackCell::clear_padding()
+    {
+        if (FeedbackCell::kSize == FeedbackCell::kUnalignedSize)
+            return;
+        DCHECK_GE(FeedbackCell::kSize, FeedbackCell::kUnalignedSize);
+        memset(reinterpret_cast<byte*>(address() + FeedbackCell::kUnalignedSize), 0,
+            FeedbackCell::kSize - FeedbackCell::kUnalignedSize);
+    }
+
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_FEEDBACK_CELL_INL_H_
+#endif // V8_OBJECTS_FEEDBACK_CELL_INL_H_

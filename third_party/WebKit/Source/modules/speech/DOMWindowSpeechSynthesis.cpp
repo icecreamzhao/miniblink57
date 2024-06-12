@@ -28,9 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/speech/DOMWindowSpeechSynthesis.h"
 
+#include "bindings/core/v8/ScriptState.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/LocalFrame.h"
 #include "wtf/PassRefPtr.h"
@@ -38,11 +38,9 @@
 namespace blink {
 
 DOMWindowSpeechSynthesis::DOMWindowSpeechSynthesis(LocalDOMWindow& window)
-    : DOMWindowProperty(window.frame())
+    : Supplement<LocalDOMWindow>(window)
 {
 }
-
-DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowSpeechSynthesis);
 
 const char* DOMWindowSpeechSynthesis::supplementName()
 {
@@ -50,34 +48,40 @@ const char* DOMWindowSpeechSynthesis::supplementName()
 }
 
 // static
-DOMWindowSpeechSynthesis& DOMWindowSpeechSynthesis::from(LocalDOMWindow& window)
+DOMWindowSpeechSynthesis& DOMWindowSpeechSynthesis::from(
+    LocalDOMWindow& window)
 {
-    DOMWindowSpeechSynthesis* supplement = static_cast<DOMWindowSpeechSynthesis*>(WillBeHeapSupplement<LocalDOMWindow>::from(window, supplementName()));
+    DOMWindowSpeechSynthesis* supplement = static_cast<DOMWindowSpeechSynthesis*>(
+        Supplement<LocalDOMWindow>::from(window, supplementName()));
     if (!supplement) {
         supplement = new DOMWindowSpeechSynthesis(window);
-        provideTo(window, supplementName(), adoptPtrWillBeNoop(supplement));
+        provideTo(window, supplementName(), supplement);
     }
     return *supplement;
 }
 
 // static
-SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(DOMWindow& window)
+SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(
+    ScriptState* scriptState,
+    DOMWindow& window)
 {
-    return DOMWindowSpeechSynthesis::from(toLocalDOMWindow(window)).speechSynthesis();
+    return DOMWindowSpeechSynthesis::from(toLocalDOMWindow(window))
+        .speechSynthesis(scriptState);
 }
 
-SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis()
+SpeechSynthesis* DOMWindowSpeechSynthesis::speechSynthesis(
+    ScriptState* scriptState)
 {
-    if (!m_speechSynthesis && frame())
-        m_speechSynthesis = SpeechSynthesis::create(frame()->domWindow()->executionContext());
+    if (!m_speechSynthesis) {
+        m_speechSynthesis = SpeechSynthesis::create(scriptState->getExecutionContext());
+    }
     return m_speechSynthesis;
 }
 
 DEFINE_TRACE(DOMWindowSpeechSynthesis)
 {
     visitor->trace(m_speechSynthesis);
-    WillBeHeapSupplement<LocalDOMWindow>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    Supplement<LocalDOMWindow>::trace(visitor);
 }
 
 } // namespace blink

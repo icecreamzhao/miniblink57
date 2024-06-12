@@ -31,6 +31,7 @@
 #define CSSTestHelper_h
 
 #include "core/css/RuleSet.h"
+#include "wtf/Allocator.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
@@ -46,16 +47,19 @@ class CSSStyleSheet;
 // ... examine RuleSet to find the rule and test properties on it.
 
 class CSSTestHelper {
+    STACK_ALLOCATED();
+
 public:
     CSSTestHelper();
     ~CSSTestHelper();
 
     void addCSSRules(const char* ruleText);
     RuleSet& ruleSet();
+    CSSRuleList* cssRules();
 
 private:
-    RefPtrWillBePersistent<Document> m_document;
-    RefPtrWillBePersistent<CSSStyleSheet> m_styleSheet;
+    Persistent<Document> m_document;
+    Persistent<CSSStyleSheet> m_styleSheet;
 };
 
 } // namespace blink

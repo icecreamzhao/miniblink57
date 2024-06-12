@@ -27,14 +27,10 @@
  *
  */
 
-#include "config.h"
-
 #include "platform/graphics/filters/LightSource.h"
 
 namespace blink {
 
-LightSource::~LightSource()
-{
-}
+LightSource::~LightSource() { }
 
 } // namespace blink

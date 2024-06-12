@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkAnimate_DEFINED
 #define SkAnimate_DEFINED
 
@@ -21,12 +20,14 @@ class SkAnimate : public SkAnimateBase {
     virtual ~SkAnimate();
     int components() override;
 #ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
+    void dump(SkAnimateMaker*) override;
 #endif
     void onEndElement(SkAnimateMaker& maker) override;
+
 protected:
-    bool resolveCommon(SkAnimateMaker& );
+    bool resolveCommon(SkAnimateMaker&);
     int fComponents;
+
 private:
     typedef SkAnimateBase INHERITED;
 };

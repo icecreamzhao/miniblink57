@@ -5,26 +5,28 @@
  * found in the LICENSE file.
  */
 
+#include "DecodeFile.h"
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
-#include "SkView.h"
-#include "SkCanvas.h"
 #include "SkCamera.h"
+#include "SkCanvas.h"
 #include "SkEmbossMaskFilter.h"
 #include "SkGradientShader.h"
 #include "SkPath.h"
+#include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
 #include "SkUtils.h"
-#include "SkRandom.h"
-#include "SkImageDecoder.h"
+#include "SkView.h"
 
 class CameraView : public SampleView {
-    SkTDArray<SkShader*> fShaders;
-    int     fShaderIndex;
-    bool    fFrontFace;
+    SkTArray<sk_sp<SkShader>> fShaders;
+    int fShaderIndex;
+    bool fFrontFace;
+
 public:
-    CameraView() {
+    CameraView()
+    {
         fRX = fRY = fRZ = 0;
         fShaderIndex = 0;
         fFrontFace = false;
@@ -33,17 +35,16 @@ public:
             SkString str;
             str.printf("/skimages/elephant%d.jpeg", i);
             SkBitmap bm;
-            if (SkImageDecoder::DecodeFile(str.c_str(), &bm)) {
+            if (decode_file(str.c_str(), &bm)) {
                 SkRect src = { 0, 0, SkIntToScalar(bm.width()), SkIntToScalar(bm.height()) };
                 SkRect dst = { -150, -150, 150, 150 };
                 SkMatrix matrix;
                 matrix.setRectToRect(src, dst, SkMatrix::kFill_ScaleToFit);
 
-                SkShader* s = SkShader::CreateBitmapShader(bm,
-                                                           SkShader::kClamp_TileMode,
-                                                           SkShader::kClamp_TileMode,
-                                                           &matrix);
-                *fShaders.append() = s;
+                fShaders.push_back(SkShader::MakeBitmapShader(bm,
+                    SkShader::kClamp_TileMode,
+                    SkShader::kClamp_TileMode,
+                    &matrix));
             } else {
                 break;
             }
@@ -51,13 +52,10 @@ public:
         this->setBGColor(0xFFDDDDDD);
     }
 
-    virtual ~CameraView() {
-        fShaders.unrefAll();
-    }
-
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    bool onQuery(SkEvent* evt) override
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Camera");
             return true;
@@ -65,10 +63,11 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
-        canvas->translate(this->width()/2, this->height()/2);
+    void onDrawContent(SkCanvas* canvas) override
+    {
+        canvas->translate(this->width() / 2, this->height() / 2);
 
-        Sk3DView    view;
+        Sk3DView view;
         view.rotateX(fRX);
         view.rotateY(fRY);
         view.applyToCanvas(canvas);
@@ -89,7 +88,8 @@ protected:
         }
     }
 
-    bool onAnimate(const SkAnimTimer& timer) override {
+    bool onAnimate(const SkAnimTimer& timer) override
+    {
         if (timer.isStopped()) {
             fRY = 0;
         } else {

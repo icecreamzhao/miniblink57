@@ -1,0 +1,7 @@
+./lib_skia_unittests__library.so
+../../testing/test_env.py
+gen/ipc/ipc.mojom.js
+gen/skia/public/interfaces/test/traits_test_service.mojom.js
+gen/skia/public/interfaces/bitmap.mojom.js
+gen/skia/public/interfaces/image_filter.mojom.js
+gen/skia/public/interfaces/bitmap_array.mojom.js

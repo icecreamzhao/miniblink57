@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "public/platform/WebRTCSessionDescription.h"
 
 #include "public/platform/WebString.h"
@@ -38,9 +36,12 @@
 
 namespace blink {
 
-class WebRTCSessionDescriptionPrivate final : public RefCounted<WebRTCSessionDescriptionPrivate> {
+class WebRTCSessionDescriptionPrivate final
+    : public RefCounted<WebRTCSessionDescriptionPrivate> {
 public:
-    static PassRefPtr<WebRTCSessionDescriptionPrivate> create(const WebString& type, const WebString& sdp);
+    static PassRefPtr<WebRTCSessionDescriptionPrivate> create(
+        const WebString& type,
+        const WebString& sdp);
 
     WebString type() { return m_type; }
     void setType(const WebString& type) { m_type = type; }
@@ -55,12 +56,16 @@ private:
     WebString m_sdp;
 };
 
-PassRefPtr<WebRTCSessionDescriptionPrivate> WebRTCSessionDescriptionPrivate::create(const WebString& type, const WebString& sdp)
+PassRefPtr<WebRTCSessionDescriptionPrivate>
+WebRTCSessionDescriptionPrivate::create(const WebString& type,
+    const WebString& sdp)
 {
     return adoptRef(new WebRTCSessionDescriptionPrivate(type, sdp));
 }
 
-WebRTCSessionDescriptionPrivate::WebRTCSessionDescriptionPrivate(const WebString& type, const WebString& sdp)
+WebRTCSessionDescriptionPrivate::WebRTCSessionDescriptionPrivate(
+    const WebString& type,
+    const WebString& sdp)
     : m_type(type)
     , m_sdp(sdp)
 {
@@ -76,7 +81,8 @@ void WebRTCSessionDescription::reset()
     m_private.reset();
 }
 
-void WebRTCSessionDescription::initialize(const WebString& type, const WebString& sdp)
+void WebRTCSessionDescription::initialize(const WebString& type,
+    const WebString& sdp)
 {
     m_private = WebRTCSessionDescriptionPrivate::create(type, sdp);
 }
@@ -106,4 +112,3 @@ void WebRTCSessionDescription::setSDP(const WebString& sdp)
 }
 
 } // namespace blink
-

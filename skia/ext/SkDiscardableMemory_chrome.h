@@ -5,27 +5,41 @@
 #ifndef SKIA_EXT_SK_DISCARDABLE_MEMORY_CHROME_H_
 #define SKIA_EXT_SK_DISCARDABLE_MEMORY_CHROME_H_
 
-#include "base/memory/discardable_memory.h"
-#include "base/memory/scoped_ptr.h"
+#include <memory>
+
 #include "third_party/skia/src/core/SkDiscardableMemory.h"
+
+namespace base {
+class DiscardableMemory;
+
+namespace trace_event {
+    class MemoryAllocatorDump;
+    class ProcessMemoryDump;
+}
+
+} // namespace base
 
 // This class implements the SkDiscardableMemory interface using
 // base::DiscardableMemory.
 class SK_API SkDiscardableMemoryChrome : public SkDiscardableMemory {
 public:
-  virtual ~SkDiscardableMemoryChrome();
+    ~SkDiscardableMemoryChrome() override;
 
-  // SkDiscardableMemory:
-  virtual bool lock() OVERRIDE;
-  virtual void* data() OVERRIDE;
-  virtual void unlock() OVERRIDE;
+    // SkDiscardableMemory:
+    bool lock() override;
+    void* data() override;
+    void unlock() override;
+
+    base::trace_event::MemoryAllocatorDump* CreateMemoryAllocatorDump(
+        const char* name,
+        base::trace_event::ProcessMemoryDump* pmd) const;
 
 private:
-  friend class SkDiscardableMemory;
+    friend class SkDiscardableMemory;
 
-  SkDiscardableMemoryChrome(scoped_ptr<base::DiscardableMemory> memory);
+    SkDiscardableMemoryChrome(std::unique_ptr<base::DiscardableMemory> memory);
 
-  scoped_ptr<base::DiscardableMemory> discardable_;
+    std::unique_ptr<base::DiscardableMemory> discardable_;
 };
 
-#endif  // SKIA_EXT_SK_DISCARDABLE_MEMORY_CHROME_H_
+#endif // SKIA_EXT_SK_DISCARDABLE_MEMORY_CHROME_H_

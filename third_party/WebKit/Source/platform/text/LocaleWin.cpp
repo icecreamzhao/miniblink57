@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2012 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -28,10 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/text/LocaleWin.h"
 
-#include <limits>
 #include "platform/DateComponents.h"
 #include "platform/Language.h"
 #include "platform/LayoutTestSupport.h"
@@ -39,24 +37,17 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/StringHash.h"
+#include <limits>
+#include <memory>
 
 namespace blink {
 
-typedef LCID (WINAPI* LocaleNameToLCIDPtr)(LPCWSTR, DWORD);
+typedef LCID(WINAPI* LocaleNameToLCIDPtr)(LPCWSTR, DWORD);
 typedef HashMap<String, LCID> NameToLCIDMap;
-
-static String extractLanguageCode(const String& locale)
-{
-    size_t dashPosition = locale.find('-');
-    if (dashPosition == kNotFound)
-        return locale;
-    return locale.left(dashPosition);
-}
 
 static String removeLastComponent(const String& name)
 {
@@ -103,6 +94,7 @@ static void ensureNameToLCIDMap(NameToLCIDMap& map)
 // Windows XP support.
 static LCID WINAPI convertLocaleNameToLCID(LPCWSTR name, DWORD)
 {
+#if defined(OS_WIN)
     if (!name || !name[0])
         return LOCALE_USER_DEFAULT;
     DEFINE_STATIC_LOCAL(NameToLCIDMap, map, ());
@@ -115,41 +107,77 @@ static LCID WINAPI convertLocaleNameToLCID(LPCWSTR name, DWORD)
             return iterator->value;
         localeName = removeLastComponent(localeName);
     } while (!localeName.isEmpty());
+#endif
     return LOCALE_USER_DEFAULT;
 }
 
-static LCID LCIDFromLocaleInternal(LCID userDefaultLCID, const String& userDefaultLanguageCode, LocaleNameToLCIDPtr localeNameToLCID, const String& locale)
+static String extractLanguageCode(const String& locale)
 {
+    size_t dashPosition = locale.find('-');
+    if (dashPosition == kNotFound)
+        return locale;
+    return locale.left(dashPosition);
+}
+
+static LCID LCIDFromLocaleInternal(LCID userDefaultLCID,
+    const String& userDefaultLanguageCode,
+    const String& locale)
+{
+#if defined(OS_WIN)
     String localeLanguageCode = extractLanguageCode(locale);
     if (equalIgnoringCase(localeLanguageCode, userDefaultLanguageCode))
         return userDefaultLCID;
-    return localeNameToLCID(locale.charactersWithNullTermination().data(), 0);
+    if (locale.length() >= LOCALE_NAME_MAX_LENGTH)
+        return 0;
+    UChar buffer[LOCALE_NAME_MAX_LENGTH];
+    if (locale.is8Bit())
+        StringImpl::copyChars(buffer, locale.characters8(), locale.length());
+    else
+        StringImpl::copyChars(buffer, locale.characters16(), locale.length());
+    buffer[locale.length()] = '\0';
+
+    static LocaleNameToLCIDPtr localeNameToLCID = nullptr;
+    if (!localeNameToLCID)
+        localeNameToLCID = reinterpret_cast<LocaleNameToLCIDPtr>(::GetProcAddress(::GetModuleHandleW(L"kernel32"), "LocaleNameToLCID"));
+    if (!localeNameToLCID)
+      localeNameToLCID = convertLocaleNameToLCID;
+
+    return localeNameToLCID(buffer, 0);
+#else
+    return 0;
+#endif
 }
 
 static LCID LCIDFromLocale(const String& locale, bool defaultsForLocale)
 {
-    // LocaleNameToLCID() is available since Windows Vista.
-    LocaleNameToLCIDPtr localeNameToLCID = reinterpret_cast<LocaleNameToLCIDPtr>(::GetProcAddress(::GetModuleHandle(L"kernel32"), "LocaleNameToLCID"));
-    if (!localeNameToLCID)
-        localeNameToLCID = convertLocaleNameToLCID;
-
+#if defined(OS_WIN)
     // According to MSDN, 9 is enough for LOCALE_SISO639LANGNAME.
     const size_t languageCodeBufferSize = 9;
     WCHAR lowercaseLanguageCode[languageCodeBufferSize];
-    ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME | (defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), lowercaseLanguageCode, languageCodeBufferSize);
+    ::GetLocaleInfoW(
+        LOCALE_USER_DEFAULT,
+        LOCALE_SISO639LANGNAME | (defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0),
+        lowercaseLanguageCode, languageCodeBufferSize);
     String userDefaultLanguageCode = String(lowercaseLanguageCode);
 
-    LCID lcid = LCIDFromLocaleInternal(LOCALE_USER_DEFAULT, userDefaultLanguageCode, localeNameToLCID, locale);
+    LCID lcid = LCIDFromLocaleInternal(LOCALE_USER_DEFAULT,
+        userDefaultLanguageCode, locale);
     if (!lcid)
-        lcid = LCIDFromLocaleInternal(LOCALE_USER_DEFAULT, userDefaultLanguageCode, localeNameToLCID, defaultLanguage());
+        lcid = LCIDFromLocaleInternal(LOCALE_USER_DEFAULT, userDefaultLanguageCode,
+            defaultLanguage());
     return lcid;
+#else
+    return 0;
+#endif
 }
 
-PassOwnPtr<Locale> Locale::create(const String& locale)
+std::unique_ptr<Locale> Locale::create(const String& locale)
 {
-    // Whether the default settings for the locale should be used, ignoring user overrides.
+    // Whether the default settings for the locale should be used, ignoring user
+    // overrides.
     bool defaultsForLocale = LayoutTestSupport::isRunningLayoutTest();
-    return LocaleWin::create(LCIDFromLocale(locale, defaultsForLocale), defaultsForLocale);
+    return LocaleWin::create(LCIDFromLocale(locale, defaultsForLocale),
+        defaultsForLocale);
 }
 
 inline LocaleWin::LocaleWin(LCID lcid, bool defaultsForLocale)
@@ -158,35 +186,96 @@ inline LocaleWin::LocaleWin(LCID lcid, bool defaultsForLocale)
     , m_defaultsForLocale(defaultsForLocale)
 {
     DWORD value = 0;
-    getLocaleInfo(LOCALE_IFIRSTDAYOFWEEK | (defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), value);
+    getLocaleInfo(
+        LOCALE_IFIRSTDAYOFWEEK | (defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0),
+        value);
     // 0:Monday, ..., 6:Sunday.
     // We need 1 for Monday, 0 for Sunday.
     m_firstDayOfWeek = (value + 1) % 7;
 }
 
-PassOwnPtr<LocaleWin> LocaleWin::create(LCID lcid, bool defaultsForLocale)
+std::unique_ptr<LocaleWin> LocaleWin::create(LCID lcid,
+    bool defaultsForLocale)
 {
-    return adoptPtr(new LocaleWin(lcid, defaultsForLocale));
+    return WTF::wrapUnique(new LocaleWin(lcid, defaultsForLocale));
 }
 
-LocaleWin::~LocaleWin()
-{
-}
+LocaleWin::~LocaleWin() { }
 
 String LocaleWin::getLocaleInfoString(LCTYPE type)
 {
-    int bufferSizeWithNUL = ::GetLocaleInfo(m_lcid, type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), 0, 0);
+#if defined(OS_WIN)
+    int bufferSizeWithNUL = ::GetLocaleInfoW(
+        m_lcid, type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), 0, 0);
     if (bufferSizeWithNUL <= 0)
         return String();
     StringBuffer<UChar> buffer(bufferSizeWithNUL);
-    ::GetLocaleInfo(m_lcid, type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0), buffer.characters(), bufferSizeWithNUL);
+    ::GetLocaleInfoW(m_lcid,
+        type | (m_defaultsForLocale ? LOCALE_NOUSEROVERRIDE : 0),
+        buffer.characters(), bufferSizeWithNUL);
     buffer.shrink(bufferSizeWithNUL - 1);
     return String::adopt(buffer);
+#else
+    struct StrLocal {
+        LCTYPE type;
+        const WCHAR* name;
+    };
+    StrLocal strLocals[] = {
+        { LOCALE_SABBREVMONTHNAME1, u16("1月")},
+        { LOCALE_SABBREVMONTHNAME2, u16("2月")},
+        { LOCALE_SABBREVMONTHNAME3, u16("3月")},
+        { LOCALE_SABBREVMONTHNAME4, u16("4月")},
+        { LOCALE_SABBREVMONTHNAME5, u16("5月")},
+        { LOCALE_SABBREVMONTHNAME6, u16("6月")},
+        { LOCALE_SABBREVMONTHNAME7, u16("7月")},
+        { LOCALE_SABBREVMONTHNAME8, u16("8月")},
+        { LOCALE_SABBREVMONTHNAME9, u16("9月")},
+        { LOCALE_SABBREVMONTHNAME10, u16("10月")},
+        { LOCALE_SABBREVMONTHNAME11, u16("11月")},
+        { LOCALE_SABBREVMONTHNAME12, u16("12月")},
+        { LOCALE_SMONTHNAME1, u16("一月")},
+        { LOCALE_SMONTHNAME2, u16("二月")},
+        { LOCALE_SMONTHNAME3, u16("三月")},
+        { LOCALE_SMONTHNAME4, u16("四月")},
+        { LOCALE_SMONTHNAME5, u16("五月")},
+        { LOCALE_SMONTHNAME6, u16("六月")},
+        { LOCALE_SMONTHNAME7, u16("七月")},
+        { LOCALE_SMONTHNAME8, u16("八月")},
+        { LOCALE_SMONTHNAME9, u16("九月")},
+        { LOCALE_SMONTHNAME10, u16("十月")},
+        { LOCALE_SMONTHNAME11, u16("十一月")},
+        { LOCALE_SMONTHNAME12, u16("十二月")},
+        { LOCALE_SSHORTDATE, u16("yyyy/M/d")},
+        { LOCALE_SYEARMONTH, u16("yyyy'年'M'月'")},
+        { LOCALE_STIMEFORMAT, u16("H:mm:ss")},
+        { LOCALE_SSHORTTIME, u16("H:mm")},
+        { LOCALE_STIME, u16(":")},
+        { LOCALE_S1159, u16("上午")},
+        { LOCALE_S2359, u16("下午")},
+        { LOCALE_SNATIVEDIGITS, u16("0123456789")},
+        { LOCALE_SDECIMAL, u16(".")},
+        { LOCALE_STHOUSAND, u16(",")},
+        { LOCALE_SNEGATIVESIGN, u16("-")},
+        { 0, nullptr }
+    };
+    for (size_t i = 0; nullptr != strLocals[i].name; ++i) {
+        if (type == strLocals[i].type)
+            return strLocals[i].name;
+    }
+    __debugbreak();
+    return "";
+#endif
 }
 
 void LocaleWin::getLocaleInfo(LCTYPE type, DWORD& result)
 {
-    ::GetLocaleInfo(m_lcid, type | LOCALE_RETURN_NUMBER, reinterpret_cast<LPWSTR>(&result), sizeof(DWORD) / sizeof(TCHAR));
+#if defined(OS_WIN)
+    ::GetLocaleInfoW(m_lcid, type | LOCALE_RETURN_NUMBER,
+        reinterpret_cast<LPWSTR>(&result),
+        sizeof(DWORD) / sizeof(WCHAR));
+#else
+
+#endif
 }
 
 void LocaleWin::ensureShortMonthLabels()
@@ -210,7 +299,7 @@ void LocaleWin::ensureShortMonthLabels()
     m_shortMonthLabels.reserveCapacity(WTF_ARRAY_LENGTH(types));
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(types); ++i) {
         m_shortMonthLabels.append(getLocaleInfoString(types[i]));
-        if (m_shortMonthLabels.last().isEmpty()) {
+        if (m_shortMonthLabels.back().isEmpty()) {
             m_shortMonthLabels.shrink(0);
             m_shortMonthLabels.reserveCapacity(WTF_ARRAY_LENGTH(WTF::monthName));
             for (unsigned m = 0; m < WTF_ARRAY_LENGTH(WTF::monthName); ++m)
@@ -234,11 +323,12 @@ static unsigned countContinuousLetters(const String& format, unsigned index)
     return count;
 }
 
-static void commitLiteralToken(StringBuilder& literalBuffer, StringBuilder& converted)
+static void commitLiteralToken(StringBuilder& literalBuffer,
+    StringBuilder& converted)
 {
     if (literalBuffer.length() <= 0)
         return;
-    DateTimeFormat::quoteAndAppendLiteral(literalBuffer.toString(), converted);
+    DateTimeFormat::quoteAndappend(literalBuffer.toString(), converted);
     literalBuffer.clear();
 }
 
@@ -302,9 +392,9 @@ static String convertWindowsDateTimeFormat(const String& format)
                 if (count <= 2)
                     converted.append(format, symbolStart, count);
                 else if (count == 3)
-                    converted.appendLiteral("EEE");
+                    converted.append("EEE");
                 else
-                    converted.appendLiteral("EEEE");
+                    converted.append("EEEE");
             } else if (ch == 'g') {
                 if (count == 1) {
                     converted.append('G');
@@ -346,7 +436,7 @@ void LocaleWin::ensureMonthLabels()
     m_monthLabels.reserveCapacity(WTF_ARRAY_LENGTH(types));
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(types); ++i) {
         m_monthLabels.append(getLocaleInfoString(types[i]));
-        if (m_monthLabels.last().isEmpty()) {
+        if (m_monthLabels.back().isEmpty()) {
             m_monthLabels.shrink(0);
             m_monthLabels.reserveCapacity(WTF_ARRAY_LENGTH(WTF::monthFullName));
             for (unsigned m = 0; m < WTF_ARRAY_LENGTH(WTF::monthFullName); ++m)
@@ -360,19 +450,18 @@ void LocaleWin::ensureWeekDayShortLabels()
 {
     if (!m_weekDayShortLabels.isEmpty())
         return;
-    const LCTYPE types[7] = {
+    const LCTYPE types[7] = { 
         LOCALE_SABBREVDAYNAME7, // Sunday
         LOCALE_SABBREVDAYNAME1, // Monday
         LOCALE_SABBREVDAYNAME2,
         LOCALE_SABBREVDAYNAME3,
         LOCALE_SABBREVDAYNAME4,
         LOCALE_SABBREVDAYNAME5,
-        LOCALE_SABBREVDAYNAME6
-    };
+        LOCALE_SABBREVDAYNAME6 };
     m_weekDayShortLabels.reserveCapacity(WTF_ARRAY_LENGTH(types));
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(types); ++i) {
         m_weekDayShortLabels.append(getLocaleInfoString(types[i]));
-        if (m_weekDayShortLabels.last().isEmpty()) {
+        if (m_weekDayShortLabels.back().isEmpty()) {
             m_weekDayShortLabels.shrink(0);
             m_weekDayShortLabels.reserveCapacity(WTF_ARRAY_LENGTH(WTF::weekdayName));
             for (unsigned w = 0; w < WTF_ARRAY_LENGTH(WTF::weekdayName); ++w) {
@@ -403,7 +492,7 @@ unsigned LocaleWin::firstDayOfWeek()
 
 bool LocaleWin::isRTL()
 {
-    WTF::Unicode::Direction dir = WTF::Unicode::direction(monthLabels()[0][0]);
+    WTF::Unicode::CharDirection dir = WTF::Unicode::direction(monthLabels()[0][0]);
     return dir == WTF::Unicode::RightToLeft || dir == WTF::Unicode::RightToLeftArabic;
 }
 
@@ -429,7 +518,8 @@ String LocaleWin::monthFormat()
 String LocaleWin::shortMonthFormat()
 {
     if (m_shortMonthFormat.isNull())
-        m_shortMonthFormat = convertWindowsDateTimeFormat(getLocaleInfoString(LOCALE_SYEARMONTH)).replace("MMMM", "MMM");
+        m_shortMonthFormat = convertWindowsDateTimeFormat(getLocaleInfoString(LOCALE_SYEARMONTH))
+                                 .replace("MMMM", "MMM");
     return m_shortMonthFormat;
 }
 
@@ -450,7 +540,7 @@ String LocaleWin::shortTimeFormat()
         format = getLocaleInfoString(LOCALE_STIMEFORMAT);
         StringBuilder builder;
         builder.append(getLocaleInfoString(LOCALE_STIME));
-        builder.appendLiteral("ss");
+        builder.append("ss");
         size_t pos = format.reverseFind(builder.toString());
         if (pos != kNotFound)
             format.remove(pos, builder.length());
@@ -578,7 +668,7 @@ void LocaleWin::initializeLocaleData()
         break;
     }
     m_didInitializeNumberData = true;
-    setLocaleData(symbols, emptyString(), emptyString(), negativePrefix, negativeSuffix);
+    setLocaleData(symbols, emptyString(), emptyString(), negativePrefix,
+        negativeSuffix);
 }
-
 }

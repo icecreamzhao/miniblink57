@@ -7,10 +7,10 @@
 #ifndef SkNetIO_DEFINED
 #define SkNetIO_DEFINED
 
+#include "SkStream.h"
+#include "SkTypes.h"
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include "SkTypes.h"
-#include "SkStream.h"
 
 /* PACKET and HEADER Format */
 #define PACKET_SIZE 1024
@@ -71,7 +71,8 @@ public:
      * packet
      */
     int readPacket(void (*onRead)(int cid, const void* data, size_t size,
-                                  DataType type, void*), void* context);
+                       DataType type, void*),
+        void* context);
 
     /**
      * Suspend network transfers until resume() is called. Leaves all
@@ -87,14 +88,14 @@ public:
      */
     void suspendRead() { fReadSuspended = true; }
     void resumeRead() { fReadSuspended = false; }
-    void suspendWrite()  { fWriteSuspended = true; }
-    void resumeWrite()  { fWriteSuspended = false; }
+    void suspendWrite() { fWriteSuspended = true; }
+    void resumeWrite() { fWriteSuspended = false; }
 
 protected:
     struct header {
-        bool        done;
-        int         bytes;
-        DataType    type;
+        bool done;
+        int bytes;
+        DataType type;
     };
 
     /**
@@ -127,13 +128,13 @@ protected:
      */
     void addToMasterSet(int sockfd);
 
-    bool    fConnected;
-    bool    fReady;
-    bool    fReadSuspended;
-    bool    fWriteSuspended;
-    int     fMaxfd;
-    int     fPort;
-    int     fSockfd;
+    bool fConnected;
+    bool fReady;
+    bool fReadSuspended;
+    bool fWriteSuspended;
+    int fMaxfd;
+    int fPort;
+    int fSockfd;
 
     /**
      * fMasterSet contains all the file descriptors to be used for read/write.
@@ -141,7 +142,7 @@ protected:
      * contains all the file descriptors associated with established connections
      * to clients
      */
-    fd_set  fMasterSet;
+    fd_set fMasterSet;
 };
 
 /*
@@ -165,6 +166,7 @@ public:
      * Disconnect all connections to clients. Returns -1 on error
      */
     int disconnectAll();
+
 private:
     typedef SkSocket INHERITED;
 };
@@ -184,12 +186,14 @@ public:
      * until the connection is accepted by the server.
      */
     int connectToServer();
+
 protected:
     /**
      * Client needs to recreate the socket when a connection is broken because
      * connect can only be called successfully once.
      */
     virtual void onFailedConnection(int sockfd);
+
 private:
     sockaddr_in fServerAddr;
     typedef SkSocket INHERITED;

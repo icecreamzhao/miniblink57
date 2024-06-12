@@ -21,13 +21,14 @@
 #define PluginData_h
 
 #include "platform/PlatformExport.h"
+#include "platform/weborigin/SecurityOrigin.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class Page;
 struct PluginInfo;
 
 struct MimeClassInfo {
@@ -49,32 +50,39 @@ struct PluginInfo {
 };
 
 class PLATFORM_EXPORT PluginData : public RefCounted<PluginData> {
+    WTF_MAKE_NONCOPYABLE(PluginData);
+
 public:
-    static PassRefPtr<PluginData> create(const Page* page) { return adoptRef(new PluginData(page)); }
+    static PassRefPtr<PluginData> create(SecurityOrigin* mainFrameOrigin)
+    {
+        return adoptRef(new PluginData(mainFrameOrigin));
+    }
 
     const Vector<PluginInfo>& plugins() const { return m_plugins; }
     const Vector<MimeClassInfo>& mimes() const { return m_mimes; }
-    const Vector<size_t>& mimePluginIndices() const { return m_mimePluginIndices; }
+    const Vector<size_t>& mimePluginIndices() const
+    {
+        return m_mimePluginIndices;
+    }
+    const SecurityOrigin* origin() const { return m_mainFrameOrigin.get(); }
 
     bool supportsMimeType(const String& mimeType) const;
     String pluginNameForMimeType(const String& mimeType) const;
 
-    static void refresh();
+    // refreshBrowserSidePluginCache doesn't update existent instances of
+    // PluginData.
+    static void refreshBrowserSidePluginCache();
 
 private:
-    explicit PluginData(const Page*);
-    void initPlugins(const Page*);
+    explicit PluginData(SecurityOrigin* mainFrameOrigin);
     const PluginInfo* pluginInfoForMimeType(const String& mimeType) const;
 
     Vector<PluginInfo> m_plugins;
     Vector<MimeClassInfo> m_mimes;
     Vector<size_t> m_mimePluginIndices;
+    RefPtr<SecurityOrigin> m_mainFrameOrigin;
 };
 
-// Checks if any of the plugins handle this extension, and if so returns the
-// plugin's mime type for this extension. Otherwise returns an empty string.
-PLATFORM_EXPORT String getPluginMimeTypeFromExtension(const String& extension);
-
-}
+} // namespace blink
 
 #endif

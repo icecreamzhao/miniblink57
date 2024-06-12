@@ -31,40 +31,45 @@
 #ifndef DateTimeLocalInputType_h
 #define DateTimeLocalInputType_h
 
-#include "core/html/forms/BaseChooserOnlyDateAndTimeInputType.h"
-#include "core/html/forms/BaseMultipleFieldsDateAndTimeInputType.h"
+#include "core/html/forms/BaseTemporalInputType.h"
 
 namespace blink {
 
 class ExceptionState;
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-using BaseDateTimeLocalInputType = BaseMultipleFieldsDateAndTimeInputType;
-#else
-using BaseDateTimeLocalInputType = BaseChooserOnlyDateAndTimeInputType;
-#endif
-
-class DateTimeLocalInputType final : public BaseDateTimeLocalInputType {
+class DateTimeLocalInputType final : public BaseTemporalInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
 
 private:
-    DateTimeLocalInputType(HTMLInputElement& element) : BaseDateTimeLocalInputType(element) { }
+    explicit DateTimeLocalInputType(HTMLInputElement& element)
+        : BaseTemporalInputType(element)
+    {
+    }
+
     void countUsage() override;
     const AtomicString& formControlType() const override;
     double valueAsDate() const override;
     void setValueAsDate(double, ExceptionState&) const override;
     StepRange createStepRange(AnyStepHandling) const override;
-    bool parseToDateComponentsInternal(const String&, DateComponents*) const override;
+    bool parseToDateComponentsInternal(const String&,
+        DateComponents*) const override;
     bool setMillisecondToDateComponents(double, DateComponents*) const override;
     String localizeValue(const String&) const override;
+    void warnIfValueIsInvalid(const String&) const override;
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-    // BaseMultipleFieldsDateAndTimeInputType functions
+    // BaseTemporalInputType functions
     String formatDateTimeFieldsState(const DateTimeFieldsState&) const final;
-    void setupLayoutParameters(DateTimeEditElement::LayoutParameters&, const DateComponents&) const final;
-    bool isValidFormat(bool hasYear, bool hasMonth, bool hasWeek, bool hasDay, bool hasAMPM, bool hasHour, bool hasMinute, bool hasSecond) const override;
-#endif
+    void setupLayoutParameters(DateTimeEditElement::LayoutParameters&,
+        const DateComponents&) const final;
+    bool isValidFormat(bool hasYear,
+        bool hasMonth,
+        bool hasWeek,
+        bool hasDay,
+        bool hasAMPM,
+        bool hasHour,
+        bool hasMinute,
+        bool hasSecond) const override;
 };
 
 } // namespace blink

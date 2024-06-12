@@ -24,35 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutObjectChildList.h"
 
 #include "core/dom/AXObjectCache.h"
 #include "core/layout/LayoutCounter.h"
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutView.h"
-#include "core/paint/DeprecatedPaintLayer.h"
-#include "core/style/ComputedStyle.h"
+#include "core/paint/ObjectPaintInvalidator.h"
 
 namespace blink {
 
 void LayoutObjectChildList::destroyLeftoverChildren()
 {
     while (firstChild()) {
-        // List markers are owned by their enclosing list and so don't get destroyed by this container.
+        // List markers are owned by their enclosing list and so don't get destroyed
+        // by this container.
         if (firstChild()->isListMarker()) {
             firstChild()->remove();
             continue;
         }
 
-        // Destroy any anonymous children remaining in the layout tree, as well as implicit (shadow) DOM elements like those used in the engine-based text fields.
+        // Destroy any anonymous children remaining in the layout tree, as well as
+        // implicit (shadow) DOM elements like those used in the engine-based text
+        // fields.
         if (firstChild()->node())
             firstChild()->node()->setLayoutObject(nullptr);
         firstChild()->destroy();
     }
 }
 
-LayoutObject* LayoutObjectChildList::removeChildNode(LayoutObject* owner, LayoutObject* oldChild, bool notifyLayoutObject)
+LayoutObject* LayoutObjectChildList::removeChildNode(LayoutObject* owner,
+    LayoutObject* oldChild,
+    bool notifyLayoutObject)
 {
     ASSERT(oldChild->parent() == owner);
     ASSERT(this == owner->virtualChildren());
@@ -60,38 +63,44 @@ LayoutObject* LayoutObjectChildList::removeChildNode(LayoutObject* owner, Layout
     if (oldChild->isFloatingOrOutOfFlowPositioned())
         toLayoutBox(oldChild)->removeFloatingOrPositionedChildFromBlockLists();
 
-    {
-        // So that we'll get the appropriate dirty bit set (either that a normal flow child got yanked or
-        // that a positioned child got yanked). We also issue paint invalidations, so that the area exposed when the child
+    if (!owner->documentBeingDestroyed()) {
+        // So that we'll get the appropriate dirty bit set (either that a normal
+        // flow child got yanked or that a positioned child got yanked). We also
+        // issue paint invalidations, so that the area exposed when the child
         // disappears gets paint invalidated properly.
-        if (!owner->documentBeingDestroyed() && notifyLayoutObject && oldChild->everHadLayout()) {
-            oldChild->setNeedsLayoutAndPrefWidthsRecalc(LayoutInvalidationReason::RemovedFromLayout);
-            invalidatePaintOnRemoval(*oldChild);
-        }
+        if (notifyLayoutObject && oldChild->everHadLayout())
+            oldChild->setNeedsLayoutAndPrefWidthsRecalc(
+                LayoutInvalidationReason::RemovedFromLayout);
+        invalidatePaintOnRemoval(*oldChild);
     }
 
     // If we have a line box wrapper, delete it.
     if (oldChild->isBox())
         toLayoutBox(oldChild)->deleteLineBoxWrapper();
 
-    // If oldChild is the start or end of the selection, then clear the selection to
-    // avoid problems of invalid pointers.
-    // FIXME: The FrameSelection should be responsible for this when it
-    // is notified of DOM mutations.
-    if (!owner->documentBeingDestroyed() && oldChild->isSelectionBorder())
-        owner->view()->clearSelection();
+    if (!owner->documentBeingDestroyed()) {
+        // If oldChild is the start or end of the selection, then clear the
+        // selection to avoid problems of invalid pointers.
+        // FIXME: The FrameSelection should be responsible for this when it
+        // is notified of DOM mutations.
+        if (oldChild->isSelectionBorder())
+            owner->view()->clearSelection();
 
-    if (!owner->documentBeingDestroyed())
         owner->notifyOfSubtreeChange();
 
-    if (!owner->documentBeingDestroyed() && notifyLayoutObject) {
-        LayoutCounter::layoutObjectSubtreeWillBeDetached(oldChild);
-        oldChild->willBeRemovedFromTree();
+        if (notifyLayoutObject) {
+            LayoutCounter::layoutObjectSubtreeWillBeDetached(oldChild);
+            oldChild->willBeRemovedFromTree();
+        } else if (oldChild->isBox() && toLayoutBox(oldChild)->isOrthogonalWritingModeRoot()) {
+            toLayoutBox(oldChild)->unmarkOrthogonalWritingModeRoot();
+        }
     }
 
-    // WARNING: There should be no code running between willBeRemovedFromTree and the actual removal below.
-    // This is needed to avoid race conditions where willBeRemovedFromTree would dirty the tree's structure
-    // and the code running here would force an untimely rebuilding, leaving |oldChild| dangling.
+    // WARNING: There should be no code running between willBeRemovedFromTree and
+    // the actual removal below.
+    // This is needed to avoid race conditions where willBeRemovedFromTree would
+    // dirty the tree's structure and the code running here would force an
+    // untimely rebuilding, leaving |oldChild| dangling.
 
     if (oldChild->previousSibling())
         oldChild->previousSibling()->setNextSibling(oldChild->nextSibling());
@@ -99,15 +108,16 @@ LayoutObject* LayoutObjectChildList::removeChildNode(LayoutObject* owner, Layout
         oldChild->nextSibling()->setPreviousSibling(oldChild->previousSibling());
 
     if (firstChild() == oldChild)
-        setFirstChild(oldChild->nextSibling());
+        m_firstChild = oldChild->nextSibling();
     if (lastChild() == oldChild)
-        setLastChild(oldChild->previousSibling());
+        m_lastChild = oldChild->previousSibling();
 
     oldChild->setPreviousSibling(nullptr);
     oldChild->setNextSibling(nullptr);
     oldChild->setParent(nullptr);
 
-    oldChild->registerSubtreeChangeListenerOnDescendants(oldChild->consumesSubtreeChangeNotification());
+    oldChild->registerSubtreeChangeListenerOnDescendants(
+        oldChild->consumesSubtreeChangeNotification());
 
     if (AXObjectCache* cache = owner->document().existingAXObjectCache())
         cache->childrenChanged(owner);
@@ -115,7 +125,11 @@ LayoutObject* LayoutObjectChildList::removeChildNode(LayoutObject* owner, Layout
     return oldChild;
 }
 
-void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* newChild, LayoutObject* beforeChild, bool notifyLayoutObject)
+DISABLE_CFI_PERF
+void LayoutObjectChildList::insertChildNode(LayoutObject* owner,
+    LayoutObject* newChild,
+    LayoutObject* beforeChild,
+    bool notifyLayoutObject)
 {
     ASSERT(!newChild->parent());
     ASSERT(this == owner->virtualChildren());
@@ -125,8 +139,8 @@ void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* n
         beforeChild = beforeChild->parent();
 
     // This should never happen, but if it does prevent layout tree corruption
-    // where child->parent() ends up being owner but child->nextSibling()->parent()
-    // is not owner.
+    // where child->parent() ends up being owner but
+    // child->nextSibling()->parent() is not owner.
     if (beforeChild && beforeChild->parent() != owner) {
         ASSERT_NOT_REACHED();
         return;
@@ -135,7 +149,7 @@ void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* n
     newChild->setParent(owner);
 
     if (firstChild() == beforeChild)
-        setFirstChild(newChild);
+        m_firstChild = newChild;
 
     if (beforeChild) {
         LayoutObject* previousSibling = beforeChild->previousSibling();
@@ -148,7 +162,7 @@ void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* n
         if (lastChild())
             lastChild()->setNextSibling(newChild);
         newChild->setPreviousSibling(lastChild());
-        setLastChild(newChild);
+        m_lastChild = newChild;
     }
 
     if (!owner->documentBeingDestroyed() && notifyLayoutObject) {
@@ -166,10 +180,14 @@ void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* n
     if (newChild->wasNotifiedOfSubtreeChange())
         owner->notifyAncestorsOfSubtreeChange();
 
-    newChild->setNeedsLayoutAndPrefWidthsRecalc(LayoutInvalidationReason::AddedToLayout);
-    newChild->setShouldDoFullPaintInvalidation(PaintInvalidationLayoutObjectInsertion);
+    newChild->setNeedsLayoutAndPrefWidthsRecalc(
+        LayoutInvalidationReason::AddedToLayout);
+    newChild->setShouldDoFullPaintInvalidation(
+        PaintInvalidationLayoutObjectInsertion);
+    newChild->setSubtreeNeedsPaintPropertyUpdate();
     if (!owner->normalChildNeedsLayout())
-        owner->setChildNeedsLayout(); // We may supply the static position for an absolute positioned child.
+        owner->setChildNeedsLayout(); // We may supply the static position for an
+            // absolute positioned child.
 
     if (!owner->documentBeingDestroyed())
         owner->notifyOfSubtreeChange();
@@ -178,22 +196,17 @@ void LayoutObjectChildList::insertChildNode(LayoutObject* owner, LayoutObject* n
         cache->childrenChanged(owner);
 }
 
-void LayoutObjectChildList::invalidatePaintOnRemoval(const LayoutObject& oldChild)
+void LayoutObjectChildList::invalidatePaintOnRemoval(LayoutObject& oldChild)
 {
     if (!oldChild.isRooted())
         return;
-    if (oldChild.isBody()) {
+    if (oldChild.isBody())
         oldChild.view()->setShouldDoFullPaintInvalidation();
-        return;
-    }
-
-    DisableCompositingQueryAsserts disabler;
-    // FIXME: We should not allow paint invalidation out of paint invalidation state. crbug.com/457415
-    DisablePaintInvalidationStateAsserts paintInvalidationAssertDisabler;
-    const LayoutBoxModelObject& paintInvalidationContainer = *oldChild.containerForPaintInvalidation();
-    oldChild.invalidatePaintUsingContainer(paintInvalidationContainer, oldChild.previousPaintInvalidationRect(), PaintInvalidationLayoutObjectRemoval);
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled())
-        oldChild.invalidateDisplayItemClients(paintInvalidationContainer);
+    ObjectPaintInvalidator paintInvalidator(oldChild);
+    paintInvalidator.slowSetPaintingLayerNeedsRepaint();
+    paintInvalidator.invalidatePaintOfPreviousVisualRect(
+        oldChild.containerForPaintInvalidation(),
+        PaintInvalidationLayoutObjectRemoval);
 }
 
 } // namespace blink

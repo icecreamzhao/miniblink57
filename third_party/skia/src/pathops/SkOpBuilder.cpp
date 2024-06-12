@@ -7,16 +7,17 @@
 
 #include "SkMatrix.h"
 #include "SkOpEdgeBuilder.h"
-#include "SkPathPriv.h"
 #include "SkPathOps.h"
 #include "SkPathOpsCommon.h"
+#include "SkPathPriv.h"
 
-static bool one_contour(const SkPath& path) {
+static bool one_contour(const SkPath& path)
+{
     SkChunkAlloc allocator(256);
     int verbCount = path.countVerbs();
-    uint8_t* verbs = (uint8_t*) allocator.alloc(sizeof(uint8_t) * verbCount,
-            SkChunkAlloc::kThrow_AllocFailType);
-    (void) path.getVerbs(verbs, verbCount);
+    uint8_t* verbs = (uint8_t*)allocator.alloc(sizeof(uint8_t) * verbCount,
+        SkChunkAlloc::kThrow_AllocFailType);
+    (void)path.getVerbs(verbs, verbCount);
     for (int index = 1; index < verbCount; ++index) {
         if (verbs[index] == SkPath::kMove_Verb) {
             return false;
@@ -25,7 +26,8 @@ static bool one_contour(const SkPath& path) {
     return true;
 }
 
-void FixWinding(SkPath* path) {
+bool FixWinding(SkPath* path)
+{
     SkPath::FillType fillType = path->getFillType();
     if (fillType == SkPath::kInverseEvenOdd_FillType) {
         fillType = SkPath::kInverseWinding_FillType;
@@ -40,14 +42,16 @@ void FixWinding(SkPath* path) {
             *path = temp;
         }
         path->setFillType(fillType);
-        return;
+        return true;
     }
     SkChunkAlloc allocator(4096);
     SkOpContourHead contourHead;
-    SkOpGlobalState globalState(NULL, &contourHead);
+    SkOpGlobalState globalState(nullptr, &contourHead SkDEBUGPARAMS(false) SkDEBUGPARAMS(nullptr));
     SkOpEdgeBuilder builder(*path, &contourHead, &allocator, &globalState);
     builder.finish(&allocator);
-    SkASSERT(contourHead.next());
+    if (!contourHead.next()) {
+        return false;
+    }
     contourHead.resetReverse();
     bool writePath = false;
     SkOpSpan* topSpan;
@@ -57,8 +61,8 @@ void FixWinding(SkPath* path) {
         SkOpContour* topContour = topSegment->contour();
         SkASSERT(topContour->isCcw() >= 0);
 #if DEBUG_WINDING
-        SkDebugf("%s id=%d nested=%d ccw=%d\n",  __FUNCTION__,
-                topSegment->debugID(), globalState.nested(), topContour->isCcw());
+        SkDebugf("%s id=%d nested=%d ccw=%d\n", __FUNCTION__,
+            topSegment->debugID(), globalState.nested(), topContour->isCcw());
 #endif
         if ((globalState.nested() & 1) != SkToBool(topContour->isCcw())) {
             topContour->setReverse();
@@ -69,7 +73,7 @@ void FixWinding(SkPath* path) {
     }
     if (!writePath) {
         path->setFillType(fillType);
-        return;
+        return true;
     }
     SkPath empty;
     SkPathWriter woundPath(empty);
@@ -83,9 +87,11 @@ void FixWinding(SkPath* path) {
     } while ((test = test->next()));
     *path = *woundPath.nativePath();
     path->setFillType(fillType);
+    return true;
 }
 
-void SkOpBuilder::add(const SkPath& path, SkPathOp op) {
+void SkOpBuilder::add(const SkPath& path, SkPathOp op)
+{
     if (0 == fOps.count() && op != kUnion_SkPathOp) {
         fPathRefs.push_back() = SkPath();
         *fOps.append() = kUnion_SkPathOp;
@@ -94,7 +100,8 @@ void SkOpBuilder::add(const SkPath& path, SkPathOp op) {
     *fOps.append() = op;
 }
 
-void SkOpBuilder::reset() {
+void SkOpBuilder::reset()
+{
     fPathRefs.reset();
     fOps.reset();
 }
@@ -102,7 +109,8 @@ void SkOpBuilder::reset() {
 /* OPTIMIZATION: Union doesn't need to be all-or-nothing. A run of three or more convex
    paths with union ops could be locally resolved and still improve over doing the
    ops one at a time. */
-bool SkOpBuilder::resolve(SkPath* result) {
+bool SkOpBuilder::resolve(SkPath* result)
+{
     SkPath original = *result;
     int count = fOps.count();
     bool allUnion = true;
@@ -160,7 +168,10 @@ bool SkOpBuilder::resolve(SkPath* result) {
         }
         if (!fPathRefs[index].isEmpty()) {
             // convert the even odd result back to winding form before accumulating it
-            FixWinding(&fPathRefs[index]);
+            if (!FixWinding(&fPathRefs[index])) {
+                *result = original;
+                return false;
+            }
             sum.addPath(fPathRefs[index]);
         }
     }

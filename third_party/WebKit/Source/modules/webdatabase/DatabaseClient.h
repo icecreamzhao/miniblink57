@@ -44,15 +44,25 @@ class ExecutionContext;
 class InspectorDatabaseAgent;
 class Page;
 
-class MODULES_EXPORT DatabaseClient : public WillBeHeapSupplement<Page> {
+class MODULES_EXPORT DatabaseClient : public Supplement<Page> {
     WTF_MAKE_NONCOPYABLE(DatabaseClient);
+
 public:
     DatabaseClient();
     virtual ~DatabaseClient() { }
 
-    virtual bool allowDatabase(ExecutionContext*, const String& name, const String& displayName, unsigned long estimatedSize) = 0;
+    DECLARE_VIRTUAL_TRACE();
 
-    void didOpenDatabase(Database*, const String& domain, const String& name, const String& version);
+    virtual bool allowDatabase(ExecutionContext*,
+        const String& name,
+        const String& displayName,
+        unsigned estimatedSize)
+        = 0;
+
+    void didOpenDatabase(Database*,
+        const String& domain,
+        const String& name,
+        const String& version);
 
     static DatabaseClient* fromPage(Page*);
     static DatabaseClient* from(ExecutionContext*);
@@ -61,10 +71,10 @@ public:
     void setInspectorAgent(InspectorDatabaseAgent*);
 
 private:
-    InspectorDatabaseAgent* m_inspectorAgent;
+    Member<InspectorDatabaseAgent> m_inspectorAgent;
 };
 
-MODULES_EXPORT void provideDatabaseClientTo(Page&, PassOwnPtrWillBeRawPtr<DatabaseClient>);
+MODULES_EXPORT void provideDatabaseClientTo(Page&, DatabaseClient*);
 
 } // namespace blink
 

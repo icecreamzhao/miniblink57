@@ -23,16 +23,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/mediastream/MediaDeviceInfo.h"
 
+#include "bindings/core/v8/ScriptState.h"
+#include "bindings/core/v8/ScriptValue.h"
+#include "bindings/core/v8/V8ObjectBuilder.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-MediaDeviceInfo* MediaDeviceInfo::create(const WebMediaDeviceInfo& webMediaDeviceInfo)
+MediaDeviceInfo* MediaDeviceInfo::create(
+    const WebMediaDeviceInfo& webMediaDeviceInfo)
 {
-    ASSERT(!webMediaDeviceInfo.isNull());
+    DCHECK(!webMediaDeviceInfo.isNull());
     return new MediaDeviceInfo(webMediaDeviceInfo);
 }
 
@@ -57,7 +60,7 @@ String MediaDeviceInfo::kind() const
         return "videoinput";
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return String();
 }
 
@@ -69,6 +72,16 @@ String MediaDeviceInfo::label() const
 String MediaDeviceInfo::groupId() const
 {
     return m_webMediaDeviceInfo.groupId();
+}
+
+ScriptValue MediaDeviceInfo::toJSONForBinding(ScriptState* scriptState)
+{
+    V8ObjectBuilder result(scriptState);
+    result.addString("deviceId", deviceId());
+    result.addString("kind", kind());
+    result.addString("label", label());
+    result.addString("groupId", groupId());
+    return result.scriptValue();
 }
 
 } // namespace blink

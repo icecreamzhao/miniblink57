@@ -5,7 +5,7 @@ Skia correctness testing is primarily served by a tool named DM.
 This is a quickstart to building and running DM.
 
 ~~~
-$ ./gyp_skia
+$ python bin/sync-and-gyp
 $ ninja -C out/Debug dm
 $ out/Debug/dm -v -w dm_output
 ~~~
@@ -48,6 +48,10 @@ Don't worry about the "Skipping something: Here's why." lines at startup.  DM
 supports many test configurations, which are not all appropriate for all
 machines.  These lines are a sort of FYI, mostly in case DM can't run some
 configuration you might be expecting it to run.
+
+Don't worry about the "skps: Couldn't read skps." messages either, you won't
+have those by default and can do without them. If you wish to test with them
+too, you can [download them separately](https://skia.org/dev/testing/skps).
 
 The next line is an overview of the work DM is about to do.
 ~~~
@@ -142,13 +146,13 @@ These failures are also included in the dm.json file.
 
 DM has a simple facility to compare against the results of a previous run:
 ~~~
-$ ./gyp_skia
+$ python bin/sync-and-gyp
 $ ninja -C out/Debug dm
 $ out/Debug/dm -w good
 
-   (do some work)
+  # do some work
 
-$ ./gyp_skia
+$ python bin/sync-and-gyp
 $ ninja -C out/Debug dm
 $ out/Debug/dm -r good -w bad
 ~~~
@@ -157,13 +161,13 @@ same image as the `good` run.
 
 For anything fancier, I suggest using skdiff:
 ~~~
-$ ./gyp_skia
+$ python bin/sync-and-gyp
 $ ninja -C out/Debug dm
 $ out/Debug/dm -w good
 
-   (do some work)
+  # do some work
 
-$ ./gyp_skia
+$ python bin/sync-and-gyp
 $ ninja -C out/Debug dm
 $ out/Debug/dm -w bad
 
@@ -171,7 +175,7 @@ $ ninja -C out/Debug skdiff
 $ mkdir diff
 $ out/Debug/skdiff good bad diff
 
-  (open diff/index.html in your web browser)
+  # open diff/index.html in your web browser
 ~~~
 
 That's the basics of DM.  DM supports many other modes and flags.  Here are a

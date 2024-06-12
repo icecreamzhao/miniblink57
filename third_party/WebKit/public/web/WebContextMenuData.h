@@ -39,7 +39,6 @@
 #include "../platform/WebVector.h"
 #include "WebHistoryItem.h"
 #include "WebMenuItemInfo.h"
-#include "WebNode.h"
 
 #define WEBCONTEXT_MEDIATYPEFILE_DEFINED
 
@@ -122,7 +121,8 @@ struct WebContextMenuData {
     // The raw text of the selection in context.
     WebString selectedText;
 
-    // Title attribute or alt attribute (if title is not available) of the selection in context.
+    // Title attribute or alt attribute (if title is not available) of the
+    // selection in context.
     WebString titleText;
 
     // Whether spell checking is enabled.
@@ -185,21 +185,15 @@ struct WebContextMenuData {
     // Which edit operations are available in the context.
     int editFlags;
 
-    // Security information for the context.
-    WebCString securityInfo;
-
     // The referrer policy applicable to this context.
     WebReferrerPolicy referrerPolicy;
 
     // Custom context menu items provided by the WebCore internals.
     WebVector<WebMenuItemInfo> customItems;
 
-    // The node that was clicked.
-    WebNode node;
-
     WebContextMenuData()
         : mediaType(MediaTypeNone)
-        , hasImageContents(false)
+        , hasImageContents(true)
         , mediaFlags(MediaNone)
         , isSpellCheckingEnabled(false)
         , misspellingHash(0)
@@ -207,7 +201,9 @@ struct WebContextMenuData {
         , writingDirectionDefault(CheckableMenuItemDisabled)
         , writingDirectionLeftToRight(CheckableMenuItemEnabled)
         , writingDirectionRightToLeft(CheckableMenuItemEnabled)
-        , editFlags(0) { }
+        , editFlags(0)
+    {
+    }
 };
 
 } // namespace blink

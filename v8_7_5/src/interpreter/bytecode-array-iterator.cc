@@ -8,20 +8,24 @@
 
 namespace v8 {
 namespace internal {
-namespace interpreter {
+    namespace interpreter {
 
-BytecodeArrayIterator::BytecodeArrayIterator(
-    Handle<BytecodeArray> bytecode_array)
-    : BytecodeArrayAccessor(bytecode_array, 0) {}
+        BytecodeArrayIterator::BytecodeArrayIterator(
+            Handle<BytecodeArray> bytecode_array)
+            : BytecodeArrayAccessor(bytecode_array, 0)
+        {
+        }
 
-void BytecodeArrayIterator::Advance() {
-  SetOffset(current_offset() + current_bytecode_size());
-}
+        void BytecodeArrayIterator::Advance()
+        {
+            SetOffset(current_offset() + current_bytecode_size());
+        }
 
-bool BytecodeArrayIterator::done() const {
-  return current_offset() >= bytecode_array()->length();
-}
+        bool BytecodeArrayIterator::done() const
+        {
+            return current_offset() >= bytecode_array()->length();
+        }
 
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
+    } // namespace interpreter
+} // namespace internal
+} // namespace v8

@@ -12,27 +12,45 @@
     'conditions': [
       [ 'skia_arch_type == "arm" and arm_version != 7', {
         'android_arch%': "armeabi",
+        'android_variant%': "arm",
       }],
       [ 'skia_arch_type == "arm" and arm_version == 7', {
         'android_arch%': "armeabi-v7a",
+        'android_variant%': "arm",
       }],
       [ 'skia_arch_type == "arm64"', {
         'android_arch%': "arm64-v8a",
+        'android_variant%': "arm64",
       }],
       [ 'skia_arch_type == "x86"', {
         'android_arch%': "x86",
+        'android_variant%': "x86",
       }],
       [ 'skia_arch_type == "x86_64"', {
         'android_arch%': "x86_64",
+        'android_variant%': "x86_64",
       }],
-      [ 'skia_arch_type == "mips" and skia_arch_width == 32', {
+      [ 'skia_arch_type == "mips32"', {
         'android_arch%': "mips",
+        'android_variant%': "mips",
       }],
-      [ 'skia_arch_type == "mips" and skia_arch_width == 64', {
+      [ 'skia_arch_type == "mips64"', {
         'android_arch%': "mips64",
+        'android_variant%': "mips64",
+      }],
+      [ 'android_buildtype == "Debug"', {
+        'android_apk_suffix': "debug.apk",
+      }, {
+        # This also accounts for Release_Developer BUILDTYPE
+        'android_buildtype': "Release", 
+        'android_apk_suffix': "release.apk",
       }],
     ],
   },
+  'includes' : [
+      'canvasproof.gypi',
+      'viewer.gypi',
+  ],
   'targets': [
     {
       'target_name': 'CopySampleAppDeps',
@@ -48,7 +66,7 @@
         # libraries to copy, this will cause an error in Make, but the app will
         # still build.
         {
-          'destination': '<(PRODUCT_DIR)/android/SampleApp/libs/<(android_arch)',
+          'destination': '<(android_base)/apps/sample_app/src/main/libs/<(android_arch)',
           'conditions': [
             [ 'skia_shared_lib', {
               'files': [
@@ -69,110 +87,33 @@
       'dependencies': [
         'CopySampleAppDeps',
       ],
-      'variables': {
-         'ANDROID_SDK_ROOT': '<!(echo $ANDROID_SDK_ROOT)',
-         # the ninja generator treats PRODUCT_DIR as a relative path to the
-         # gyp directory but android ant build wants a path relative to the
-         # build.xml file so we do that adjustment here.
-         'ANDROID_OUT': '../../<(PRODUCT_DIR)/android/SampleApp'
-       },
       'actions': [
         {
           'action_name': 'SampleApp_apk',
           'inputs': [
-            '<(android_base)/app/AndroidManifest.xml',
-            '<(android_base)/app/build.xml',
-            '<(android_base)/app/project.properties',
-            '<(android_base)/app/jni/com_skia_SkiaSampleRenderer.h',
-            '<(android_base)/app/jni/com_skia_SkiaSampleRenderer.cpp',
-            '<(android_base)/app/src/com/skia/SkiaSampleActivity.java',
-            '<(android_base)/app/src/com/skia/SkiaSampleRenderer.java',
-            '<(android_base)/app/src/com/skia/SkiaSampleView.java',
+            '<(android_base)/apps/sample_app/src/main/AndroidManifest.xml',
+            '<(android_base)/apps/sample_app/src/main/jni/com_skia_SkiaSampleRenderer.h',
+            '<(android_base)/apps/sample_app/src/main/jni/com_skia_SkiaSampleRenderer.cpp',
+            '<(android_base)/apps/sample_app/src/main/java/com/skia/SkiaSampleActivity.java',
+            '<(android_base)/apps/sample_app/src/main/java/com/skia/SkiaSampleRenderer.java',
+            '<(android_base)/apps/sample_app/src/main/java/com/skia/SkiaSampleView.java',
+            '<(android_base)/apps/sample_app/src/main/libs/<(android_arch)/libSampleApp.so',
           ],
-          'outputs': [
-            '<(PRODUCT_DIR)/../android/SampleApp/bin/SampleApp.apk',
-          ],
-          'action': [
-            'ant',
-            '-quiet',
-            '-f',
-            '<(android_base)/app/build.xml',
-            '-Dout.dir=<(ANDROID_OUT)/bin',
-            '-Dgen.absolute.dir=<(ANDROID_OUT)/gen',
-            '-Dnative.libs.absolute.dir=<(ANDROID_OUT)/libs',
-            '-Dout.final.file=<(ANDROID_OUT)/bin/SampleApp.apk',
-            '-Dsdk.dir=<(ANDROID_SDK_ROOT)',
-            'debug',
-          ],
-        },
-      ],
-    },
-    {
-      'target_name': 'CopyVisualBenchDeps',
-      'type': 'none',
-      'dependencies': [
-        'skia_lib.gyp:skia_lib',
-        'visualbench.gyp:visualbench',
-      ],
-
-      'copies': [
-        # Copy all shared libraries into the Android app's libs folder.  Note
-        # that this copy requires us to build SkiaAndroidApp after those
-        # libraries, so that they exist by the time it occurs.  If there are no
-        # libraries to copy, this will cause an error in Make, but the app will
-        # still build.
-        {
-          'destination': '<(PRODUCT_DIR)/android/VisualBench/libs/<(android_arch)',
           'conditions': [
             [ 'skia_shared_lib', {
-              'files': [
-                '<(SHARED_LIB_DIR)/libskia_android.so',
-                '<(SHARED_LIB_DIR)/libvisualbench.so',
-              ]}, {
-              'files': [
-                '<(SHARED_LIB_DIR)/libvisualbench.so',
-             ]}
-           ],
-          ],
-        },
-      ],
-    },
-    {
-      'target_name': 'VisualBench_APK',
-      'type': 'none',
-      'dependencies': [
-        'CopyVisualBenchDeps',
-      ],
-      'variables': {
-         'ANDROID_SDK_ROOT': '<!(echo $ANDROID_SDK_ROOT)',
-         # the ninja generator treats PRODUCT_DIR as a relative path to the
-         # gyp directory but android ant build wants a path relative to the
-         # build.xml file so we do that adjustment here.
-         'ANDROID_OUT': '../../<(PRODUCT_DIR)/android/VisualBench/'
-       },
-      'actions': [
-        {
-          'action_name': 'SkiaVisualBench_apk',
-          'inputs': [
-            '<(android_base)/visualbench/AndroidManifest.xml',
-            '<(android_base)/visualbench/build.xml',
-            '<(android_base)/visualbench/project.properties',
-            '<(android_base)/visualbench/src/com/skia/VisualBenchActivity.java',
+              'inputs': [
+                '<(android_base)/apps/sample_app/src/main/libs/<(android_arch)/libskia_android.so',
+              ],
+            }],
           ],
           'outputs': [
-            '<(PRODUCT_DIR)/../android/VisualBench/bin/VisualBench.apk',
+            '<(android_base)/apps/sample_app/build/outputs/apk/sample_app-<(android_variant)-<(android_apk_suffix)',
           ],
           'action': [
-            'ant',
-            '-quiet',
-            '-f',
-            '<(android_base)/visualbench/build.xml',
-            '-Dout.dir=<(ANDROID_OUT)/bin',
-            '-Dgen.absolute.dir=<(ANDROID_OUT)/gen',
-            '-Dnative.libs.absolute.dir=<(ANDROID_OUT)/libs',
-            '-Dout.final.file=<(ANDROID_OUT)/bin/VisualBench.apk',
-            '-Dsdk.dir=<(ANDROID_SDK_ROOT)',
-            'debug',
+            '<(android_base)/apps/gradlew',
+            ':sample_app:assemble<(android_variant)<(android_buildtype)',
+            '-p<(android_base)/apps/sample_app',
+            '-PsuppressNativeBuild',
           ],
         },
       ],

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/parser/SizesAttributeParser.h"
 
 #include "core/MediaTypeNames.h"
@@ -12,12 +11,14 @@
 
 namespace blink {
 
-SizesAttributeParser::SizesAttributeParser(PassRefPtr<MediaValues> mediaValues, const String& attribute)
+SizesAttributeParser::SizesAttributeParser(MediaValues* mediaValues,
+    const String& attribute)
     : m_mediaValues(mediaValues)
     , m_length(0)
     , m_lengthWasSet(false)
 {
-    m_isValid = parse(CSSTokenizer::Scope(attribute).tokenRange());
+    ASSERT(m_mediaValues.get());
+    m_isValid = parse(CSSTokenizer(attribute).tokenRange());
 }
 
 float SizesAttributeParser::length()
@@ -27,7 +28,8 @@ float SizesAttributeParser::length()
     return effectiveSizeDefaultValue();
 }
 
-bool SizesAttributeParser::calculateLengthInPixels(CSSParserTokenRange range, float& result)
+bool SizesAttributeParser::calculateLengthInPixels(CSSParserTokenRange range,
+    float& result)
 {
     const CSSParserToken& startToken = range.peek();
     CSSParserTokenType type = startToken.type();
@@ -35,7 +37,9 @@ bool SizesAttributeParser::calculateLengthInPixels(CSSParserTokenRange range, fl
         double length;
         if (!CSSPrimitiveValue::isLength(startToken.unitType()))
             return false;
-        if ((m_mediaValues->computeLength(startToken.numericValue(), startToken.unitType(), length)) && (length >= 0)) {
+        if ((m_mediaValues->computeLength(startToken.numericValue(),
+                startToken.unitType(), length))
+            && (length >= 0)) {
             result = clampTo<float>(length);
             return true;
         }
@@ -53,19 +57,22 @@ bool SizesAttributeParser::calculateLengthInPixels(CSSParserTokenRange range, fl
     return false;
 }
 
-bool SizesAttributeParser::mediaConditionMatches(PassRefPtrWillBeRawPtr<MediaQuerySet> mediaCondition)
+bool SizesAttributeParser::mediaConditionMatches(
+    MediaQuerySet* mediaCondition)
 {
     // A Media Condition cannot have a media type other then screen.
     MediaQueryEvaluator mediaQueryEvaluator(*m_mediaValues);
-    return mediaQueryEvaluator.eval(mediaCondition.get());
+    return mediaQueryEvaluator.eval(mediaCondition);
 }
 
 bool SizesAttributeParser::parse(CSSParserTokenRange range)
 {
-    // Split on a comma token and parse the result tokens as (media-condition, length) pairs
+    // Split on a comma token and parse the result tokens as (media-condition,
+    // length) pairs
     while (!range.atEnd()) {
         const CSSParserToken* mediaConditionStart = &range.peek();
-        // The length is the last component value before the comma which isn't whitespace or a comment
+        // The length is the last component value before the comma which isn't
+        // whitespace or a comment
         const CSSParserToken* lengthTokenStart = &range.peek();
         const CSSParserToken* lengthTokenEnd = &range.peek();
         while (!range.atEnd() && range.peek().type() != CommaToken) {
@@ -77,9 +84,11 @@ bool SizesAttributeParser::parse(CSSParserTokenRange range)
         range.consume();
 
         float length;
-        if (!calculateLengthInPixels(range.makeSubRange(lengthTokenStart, lengthTokenEnd), length))
+        if (!calculateLengthInPixels(
+                range.makeSubRange(lengthTokenStart, lengthTokenEnd), length))
             continue;
-        RefPtrWillBeRawPtr<MediaQuerySet> mediaCondition = MediaQueryParser::parseMediaCondition(range.makeSubRange(mediaConditionStart, lengthTokenStart));
+        MediaQuerySet* mediaCondition = MediaQueryParser::parseMediaCondition(
+            range.makeSubRange(mediaConditionStart, lengthTokenStart));
         if (!mediaCondition || !mediaConditionMatches(mediaCondition))
             continue;
         m_length = length;
@@ -96,10 +105,10 @@ float SizesAttributeParser::effectiveSize()
     return effectiveSizeDefaultValue();
 }
 
-unsigned SizesAttributeParser::effectiveSizeDefaultValue()
+float SizesAttributeParser::effectiveSizeDefaultValue()
 {
     // Returning the equivalent of "100vw"
-    return m_mediaValues->viewportWidth();
+    return clampTo<float>(m_mediaValues->viewportWidth());
 }
 
-} // namespace
+} // namespace blink

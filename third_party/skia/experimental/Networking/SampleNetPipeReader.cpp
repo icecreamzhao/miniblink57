@@ -1,10 +1,10 @@
 #include "SampleCode.h"
-#include "SkView.h"
 #include "SkCanvas.h"
-#include "SkGradientShader.h"
 #include "SkGPipe.h"
-#include "SkSockets.h"
+#include "SkGradientShader.h"
 #include "SkOSMenu.h"
+#include "SkSockets.h"
+#include "SkView.h"
 
 /**
  * A simple networked pipe reader
@@ -23,37 +23,43 @@
 
 class NetPipeReaderView : public SampleView {
 public:
-    NetPipeReaderView() {
+    NetPipeReaderView()
+    {
         fSocket = NULL;
         fSync = true;
     }
 
-    ~NetPipeReaderView() {
+    ~NetPipeReaderView()
+    {
         if (fSocket) {
             delete fSocket;
         }
         fDataArray.reset();
     }
-    virtual void requestMenu(SkOSMenu* menu) {
+    virtual void requestMenu(SkOSMenu* menu)
+    {
         menu->setTitle("Net Pipe Reader");
         menu->appendTextField("Server IP", "Server IP", this->getSinkID(),
-                              "IP address");
+            "IP address");
         menu->appendSwitch("Sync", "Sync", this->getSinkID(), fSync);
     }
 
 protected:
     static void readData(int cid, const void* data, size_t size,
-                         SkSocket::DataType type, void* context) {
+        SkSocket::DataType type, void* context)
+    {
         NetPipeReaderView* view = (NetPipeReaderView*)context;
         view->onRead(data, size);
     }
 
-    void onRead(const void* data, size_t size) {
+    void onRead(const void* data, size_t size)
+    {
         if (size > 0)
             fDataArray.append(size, (const char*)data);
     }
 
-    bool onQuery(SkEvent* evt) {
+    bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Net Pipe Reader");
             return true;
@@ -61,7 +67,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    bool onEvent(const SkEvent& evt) {
+    bool onEvent(const SkEvent& evt)
+    {
         SkString s;
         if (SkOSMenu::FindText(evt, "Server IP", &s)) {
             if (NULL != fSocket) {
@@ -77,7 +84,8 @@ protected:
         return this->INHERITED::onEvent(evt);
     }
 
-    void onDrawContent(SkCanvas* canvas) {
+    void onDrawContent(SkCanvas* canvas)
+    {
         if (NULL == fSocket)
             return;
 
@@ -85,8 +93,7 @@ protected:
             int dataToRemove = fDataArray.count();
             if (fSync) {
                 int numreads = 0;
-                while (fSocket->readPacket(readData, this) > 0 &&
-                       numreads < MAX_READS_PER_FRAME) {
+                while (fSocket->readPacket(readData, this) > 0 && numreads < MAX_READS_PER_FRAME) {
                     // at this point, new data has been read and stored, discard
                     // old data since it's not needed anymore
                     SkASSERT(fDataArray.count() > dataToRemove);
@@ -95,23 +102,20 @@ protected:
                     ++numreads;
                 }
                 // clean up if max reads reached
-                if (numreads == MAX_READS_PER_FRAME &&
-                    fDataArray.count() > dataToRemove)
+                if (numreads == MAX_READS_PER_FRAME && fDataArray.count() > dataToRemove)
                     fDataArray.remove(0, dataToRemove);
-            }
-            else {
+            } else {
                 if (fSocket->readPacket(readData, this) > 0)
                     fDataArray.remove(0, dataToRemove);
             }
-        }
-        else
+        } else
             fSocket->connectToServer();
 
         SkGPipeReader reader(canvas);
         size_t bytesRead;
         SkGPipeReader::Status fStatus = reader.playback(fDataArray.begin(),
-                                                        fDataArray.count(),
-                                                        &bytesRead);
+            fDataArray.count(),
+            &bytesRead);
         SkASSERT(SkGPipeReader::kError_Status != fStatus);
         this->inval(NULL);
     }

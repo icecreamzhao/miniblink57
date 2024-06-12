@@ -23,10 +23,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/ColorChooserPopupUIController.h"
 
 #include "core/frame/FrameView.h"
+#include "core/frame/LocalFrame.h"
 #include "core/html/forms/ColorChooserClient.h"
 #include "core/page/PagePopup.h"
 #include "platform/geometry/IntRect.h"
@@ -44,18 +44,30 @@ enum ColorPickerPopupAction {
     ColorPickerPopupActionSetValue = 0
 };
 
-ColorChooserPopupUIController::ColorChooserPopupUIController(LocalFrame* frame, ChromeClientImpl* chromeClient, ColorChooserClient* client)
+ColorChooserPopupUIController::ColorChooserPopupUIController(
+    LocalFrame* frame,
+    ChromeClientImpl* chromeClient,
+    ColorChooserClient* client)
     : ColorChooserUIController(frame, client)
     , m_chromeClient(chromeClient)
-    , m_popup(0)
+    , m_popup(nullptr)
     , m_locale(Locale::defaultLocale())
 {
 }
 
-ColorChooserPopupUIController::~ColorChooserPopupUIController()
+ColorChooserPopupUIController::~ColorChooserPopupUIController() { }
+
+void ColorChooserPopupUIController::dispose()
 {
+    // Finalized earlier so as to access m_chromeClient while alive.
     closePopup();
-    // ~ColorChooserUIController ends the ColorChooser.
+    // ~ColorChooserUIController calls endChooser().
+}
+
+DEFINE_TRACE(ColorChooserPopupUIController)
+{
+    visitor->trace(m_chromeClient);
+    ColorChooserUIController::trace(visitor);
 }
 
 void ColorChooserPopupUIController::openUI()
@@ -76,12 +88,9 @@ void ColorChooserPopupUIController::endChooser()
 
 AXObject* ColorChooserPopupUIController::rootAXObject()
 {
-    return m_popup ? m_popup->rootAXObject() : 0;
-}
-
-IntSize ColorChooserPopupUIController::contentSize()
-{
-    return IntSize(0, 0);
+    //return m_popup ? m_popup->rootAXObject() : nullptr;
+    DebugBreak();
+    return nullptr;
 }
 
 void ColorChooserPopupUIController::writeDocument(SharedBuffer* data)
@@ -89,17 +98,24 @@ void ColorChooserPopupUIController::writeDocument(SharedBuffer* data)
     Vector<ColorSuggestion> suggestions = m_client->suggestions();
     Vector<String> suggestionValues;
     for (unsigned i = 0; i < suggestions.size(); i++)
-        suggestionValues.append(suggestions[i].color.serialized());
-    IntRect anchorRectInScreen = m_chromeClient->viewportToScreen(m_client->elementRectRelativeToViewport());
+        suggestionValues.push_back(suggestions[i].color.serialized());
+    IntRect anchorRectInScreen = m_chromeClient->viewportToScreen(
+        m_client->elementRectRelativeToViewport(), m_frame->view());
 
-    PagePopupClient::addString("<!DOCTYPE html><head><meta charset='UTF-8'><style>\n", data);
+    PagePopupClient::addString(
+        "<!DOCTYPE html><head><meta charset='UTF-8'><style>\n", data);
     data->append(Platform::current()->loadResource("pickerCommon.css"));
     data->append(Platform::current()->loadResource("colorSuggestionPicker.css"));
-    PagePopupClient::addString("</style></head><body><div id=main>Loading...</div><script>\n"
-        "window.dialogArguments = {\n", data);
+    PagePopupClient::addString(
+        "</style></head><body><div id=main>Loading...</div><script>\n"
+        "window.dialogArguments = {\n",
+        data);
     PagePopupClient::addProperty("values", suggestionValues, data);
-    PagePopupClient::addProperty("otherColorLabel", locale().queryString(WebLocalizedString::OtherColorLabel), data);
+    PagePopupClient::addProperty(
+        "otherColorLabel",
+        locale().queryString(WebLocalizedString::OtherColorLabel), data);
     addProperty("anchorRectInScreen", anchorRectInScreen, data);
+    addProperty("zoomFactor", zoomFactor(), data);
     PagePopupClient::addString("};\n", data);
     data->append(Platform::current()->loadResource("pickerCommon.js"));
     data->append(Platform::current()->loadResource("colorSuggestionPicker.js"));
@@ -111,10 +127,12 @@ Locale& ColorChooserPopupUIController::locale()
     return m_locale;
 }
 
-void ColorChooserPopupUIController::setValueAndClosePopup(int numValue, const String& stringValue)
+void ColorChooserPopupUIController::setValueAndClosePopup(
+    int numValue,
+    const String& stringValue)
 {
-    ASSERT(m_popup);
-    ASSERT(m_client);
+    DCHECK(m_popup);
+    DCHECK(m_client);
     if (numValue == ColorPickerPopupActionSetValue)
         setValue(stringValue);
     if (numValue == ColorPickerPopupActionChooseOtherColor)
@@ -124,16 +142,16 @@ void ColorChooserPopupUIController::setValueAndClosePopup(int numValue, const St
 
 void ColorChooserPopupUIController::setValue(const String& value)
 {
-    ASSERT(m_client);
+    DCHECK(m_client);
     Color color;
     bool success = color.setFromString(value);
-    ASSERT_UNUSED(success, success);
+    DCHECK(success);
     m_client->didChooseColor(color);
 }
 
 void ColorChooserPopupUIController::didClosePopup()
 {
-    m_popup = 0;
+    m_popup = nullptr;
 
     if (!m_chooser)
         didEndChooser();
@@ -146,7 +164,7 @@ Element& ColorChooserPopupUIController::ownerElement()
 
 void ColorChooserPopupUIController::openPopup()
 {
-    ASSERT(!m_popup);
+    DCHECK(!m_popup);
     m_popup = m_chromeClient->openPagePopup(this);
 }
 

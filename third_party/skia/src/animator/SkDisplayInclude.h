@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #ifndef SkDisplayInclude_DEFINED
 #define SkDisplayInclude_DEFINED
 
@@ -15,9 +14,10 @@
 
 class SkInclude : public SkDisplayable {
     DECLARE_MEMBER_INFO(Include);
-    void onEndElement(SkAnimateMaker & ) override;
-    bool enable(SkAnimateMaker & ) override;
+    void onEndElement(SkAnimateMaker&) override;
+    bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
+
 protected:
     SkString src;
 };

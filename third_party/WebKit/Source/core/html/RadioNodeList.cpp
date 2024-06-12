@@ -11,19 +11,18 @@
  *    documentation and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY MOTOROLA MOBILITY, INC. AND ITS CONTRIBUTORS
- * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL MOTOROLA MOBILITY, INC. OR ITS
  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE.
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/RadioNodeList.h"
 
 #include "core/HTMLNames.h"
@@ -39,18 +38,19 @@ namespace blink {
 
 using namespace HTMLNames;
 
-RadioNodeList::RadioNodeList(ContainerNode& rootNode, const AtomicString& name, CollectionType type)
-    : LiveNodeList(rootNode, type, InvalidateForFormControls, isHTMLFormElement(rootNode) ? NodeListIsRootedAtDocument : NodeListIsRootedAtNode)
+RadioNodeList::RadioNodeList(ContainerNode& rootNode,
+    const AtomicString& name,
+    CollectionType type)
+    : LiveNodeList(rootNode,
+        type,
+        InvalidateForFormControls,
+        isHTMLFormElement(rootNode) ? NodeListRootType::TreeScope
+                                    : NodeListRootType::Node)
     , m_name(name)
 {
 }
 
-RadioNodeList::~RadioNodeList()
-{
-#if !ENABLE(OILPAN)
-    ownerNode().nodeLists()->removeCache(this, type(), m_name);
-#endif
-}
+RadioNodeList::~RadioNodeList() { }
 
 static inline HTMLInputElement* toRadioButtonInputElement(Element& element)
 {
@@ -95,10 +95,11 @@ bool RadioNodeList::matchesByIdOrName(const Element& testElement) const
     return testElement.getIdAttribute() == m_name || testElement.getNameAttribute() == m_name;
 }
 
-bool RadioNodeList::checkElementMatchesRadioNodeListFilter(const Element& testElement) const
+bool RadioNodeList::checkElementMatchesRadioNodeListFilter(
+    const Element& testElement) const
 {
-    ASSERT(!shouldOnlyMatchImgElements());
-    ASSERT(isHTMLObjectElement(testElement) || testElement.isFormControlElement());
+    DCHECK(!shouldOnlyMatchImgElements());
+    DCHECK(isHTMLObjectElement(testElement) || testElement.isFormControlElement());
     if (isHTMLFormElement(ownerNode())) {
         HTMLFormElement* formElement = toHTMLElement(testElement).formOwner();
         if (!formElement || formElement != ownerNode())
@@ -129,4 +130,4 @@ bool RadioNodeList::elementMatches(const Element& element) const
     return checkElementMatchesRadioNodeListFilter(element);
 }
 
-} // namespace
+} // namespace blink

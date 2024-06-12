@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="content">
+      <UniqueIdentifier>{A9D4FE42-E93B-D185-8B1E-57B26E07FF60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video">
+      <UniqueIdentifier>{DFFDFF99-C119-15B3-BAA0-B802B19184B0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="video\win">
+      <UniqueIdentifier>{4EC99281-0E68-FD13-0696-ED9B8C2D2BCE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="capture_export.h" />
+    <CustomBuild Include="content/animated_content_sampler.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/animated_content_sampler.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="content/capture_resolution_chooser.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/capture_resolution_chooser.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="content/screen_capture_device_core.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/screen_capture_device_core.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="content/smooth_event_sampler.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/smooth_event_sampler.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="content/thread_safe_capture_oracle.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/thread_safe_capture_oracle.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="content/video_capture_oracle.cc">
+      <Filter>content</Filter>
+    </CustomBuild>
+    <None Include="content/video_capture_oracle.h">
+      <Filter>content</Filter>
+    </None>
+    <CustomBuild Include="video/fake_video_capture_device.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/fake_video_capture_device.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/fake_video_capture_device_factory.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/fake_video_capture_device_factory.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/file_video_capture_device.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/file_video_capture_device.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/file_video_capture_device_factory.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/file_video_capture_device_factory.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/scoped_result_callback.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/shared_memory_buffer_tracker.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/shared_memory_buffer_tracker.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_capture_buffer_handle.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_capture_buffer_pool.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_buffer_pool_impl.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_buffer_pool_impl.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_capture_buffer_tracker.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_capture_buffer_tracker_factory.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_buffer_tracker_factory_impl.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_buffer_tracker_factory_impl.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_device.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_device.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_device_client.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_device_client.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_device_descriptor.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_device_descriptor.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/video_capture_device_factory.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/video_capture_device_factory.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_capture_jpeg_decoder.h">
+      <Filter>video</Filter>
+    </None>
+    <None Include="video/video_frame_receiver.h">
+      <Filter>video</Filter>
+    </None>
+    <CustomBuild Include="video/win/capability_list_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/capability_list_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/filter_base_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/filter_base_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/pin_base_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/pin_base_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <None Include="video/win/sink_filter_observer_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/sink_filter_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/sink_filter_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/sink_input_pin_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/sink_input_pin_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/video_capture_device_factory_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_factory_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/video_capture_device_mf_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_mf_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video/win/video_capture_device_win.cc">
+      <Filter>video\win</Filter>
+    </CustomBuild>
+    <None Include="video/win/video_capture_device_win.h">
+      <Filter>video\win</Filter>
+    </None>
+    <CustomBuild Include="video_capture_types.cc" />
+    <None Include="video_capture_types.h" />
+    <CustomBuild Include="video_capturer_source.cc" />
+    <None Include="video_capturer_source.h" />
+    <CustomBuild Include="video/blob_utils.cc">
+      <Filter>video</Filter>
+    </CustomBuild>
+    <None Include="video/blob_utils.h">
+      <Filter>video</Filter>
+    </None>
+  </ItemGroup>
+</Project>

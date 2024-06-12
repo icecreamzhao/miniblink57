@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2013 Google Inc.
  *
@@ -7,6 +6,7 @@
  */
 
 #include "Benchmark.h"
+#include "SkArithmeticMode.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
 #include "SkRandom.h"
@@ -16,16 +16,17 @@
 // Benchmark that draws non-AA rects or AA text with an SkXfermode::Mode.
 class XfermodeBench : public Benchmark {
 public:
-    XfermodeBench(SkXfermode::Mode mode, bool aa) {
-        fXfermode.reset(SkXfermode::Create(mode));
+    XfermodeBench(SkXfermode::Mode mode, bool aa)
+    {
+        fXfermode = SkXfermode::Make(mode);
         fAA = aa;
         SkASSERT(fXfermode.get() || SkXfermode::kSrcOver_Mode == mode);
         fName.printf("Xfermode_%s%s", SkXfermode::ModeName(mode), aa ? "_aa" : "");
     }
 
-    XfermodeBench(SkXfermode* xferMode, const char* name, bool aa) {
-        SkASSERT(xferMode);
-        fXfermode.reset(xferMode);
+    XfermodeBench(sk_sp<SkXfermode> xferMode, const char* name, bool aa)
+    {
+        fXfermode = xferMode;
         fAA = aa;
         fName.printf("Xfermode_%s%s", name, aa ? "_aa" : "");
     }
@@ -33,14 +34,15 @@ public:
 protected:
     const char* onGetName() override { return fName.c_str(); }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         const char* text = "Hamburgefons";
         size_t len = strlen(text);
         SkISize size = canvas->getDeviceSize();
         SkRandom random;
         for (int i = 0; i < loops; ++i) {
             SkPaint paint;
-            paint.setXfermode(fXfermode.get());
+            paint.setXfermode(fXfermode);
             paint.setColor(random.nextU());
             if (fAA) {
                 // Draw text to exercise AA code paths.
@@ -59,8 +61,7 @@ protected:
                     random.nextUScalar1() * (size.fWidth - w),
                     random.nextUScalar1() * (size.fHeight - h),
                     w,
-                    h
-                );
+                    h);
                 for (int j = 0; j < 1000; ++j) {
                     canvas->drawRect(rect, paint);
                 }
@@ -69,7 +70,7 @@ protected:
     }
 
 private:
-    SkAutoTUnref<SkXfermode> fXfermode;
+    sk_sp<SkXfermode> fXfermode;
     SkString fName;
     bool fAA;
 
@@ -78,18 +79,19 @@ private:
 
 class XferCreateBench : public Benchmark {
 public:
-    bool isSuitableFor(Backend backend) override {
+    bool isSuitableFor(Backend backend) override
+    {
         return backend == kNonRendering_Backend;
     }
 
 protected:
     const char* onGetName() override { return "xfermode_create"; }
 
-    void onDraw(const int loops, SkCanvas* canvas) override {
+    void onDraw(int loops, SkCanvas* canvas) override
+    {
         for (int outer = 0; outer < loops * 10; ++outer) {
             for (int i = 0; i <= SkXfermode::kLastMode; ++i) {
-                SkXfermode* xfer = SkXfermode::Create(SkXfermode::Mode(i));
-                SkSafeUnref(xfer);
+                (void)SkXfermode::Make(SkXfermode::Mode(i));
             }
         }
     }
@@ -100,9 +102,9 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define BENCH(...)                                             \
-    DEF_BENCH( return new XfermodeBench(__VA_ARGS__, true); )  \
-    DEF_BENCH( return new XfermodeBench(__VA_ARGS__, false); )
+#define BENCH(...)                                          \
+    DEF_BENCH(return new XfermodeBench(__VA_ARGS__, true);) \
+    DEF_BENCH(return new XfermodeBench(__VA_ARGS__, false);)
 
 BENCH(SkXfermode::kClear_Mode)
 BENCH(SkXfermode::kSrc_Mode)
@@ -136,5 +138,14 @@ BENCH(SkXfermode::kHue_Mode)
 BENCH(SkXfermode::kSaturation_Mode)
 BENCH(SkXfermode::kColor_Mode)
 BENCH(SkXfermode::kLuminosity_Mode)
+
+DEF_BENCH(return new XfermodeBench(SkArithmeticMode::Make(0.2f, -0.3f, 1.5f, -0.7f, false),
+    "arithmetic", false);)
+DEF_BENCH(return new XfermodeBench(SkArithmeticMode::Make(0.2f, -0.3f, 1.5f, -0.7f, true),
+    "arithmetic_enforce_pm", false);)
+DEF_BENCH(return new XfermodeBench(SkArithmeticMode::Make(0.2f, -0.3f, 1.5f, -0.7f, false),
+    "arithmetic", true);)
+DEF_BENCH(return new XfermodeBench(SkArithmeticMode::Make(0.2f, -0.3f, 1.5f, -0.7f, true),
+    "arithmetic_enforce_pm", true);)
 
 DEF_BENCH(return new XferCreateBench;)

@@ -11,58 +11,58 @@
 
 namespace v8 {
 namespace internal {
-namespace compiler {
+    namespace compiler {
 
-class V8_EXPORT_PRIVATE MoveOptimizer final {
- public:
-  MoveOptimizer(Zone* local_zone, InstructionSequence* code);
-  void Run();
+        class V8_EXPORT_PRIVATE MoveOptimizer final {
+        public:
+            MoveOptimizer(Zone* local_zone, InstructionSequence* code);
+            void Run();
 
- private:
-  typedef ZoneVector<MoveOperands*> MoveOpVector;
-  typedef ZoneVector<Instruction*> Instructions;
+        private:
+            using MoveOpVector = ZoneVector<MoveOperands*>;
+            using Instructions = ZoneVector<Instruction*>;
 
-  InstructionSequence* code() const { return code_; }
-  Zone* local_zone() const { return local_zone_; }
-  Zone* code_zone() const { return code()->zone(); }
-  MoveOpVector& local_vector() { return local_vector_; }
+            InstructionSequence* code() const { return code_; }
+            Zone* local_zone() const { return local_zone_; }
+            Zone* code_zone() const { return code()->zone(); }
+            MoveOpVector& local_vector() { return local_vector_; }
 
-  // Consolidate moves into the first gap.
-  void CompressGaps(Instruction* instr);
+            // Consolidate moves into the first gap.
+            void CompressGaps(Instruction* instr);
 
-  // Attempt to push down to the last instruction those moves that can.
-  void CompressBlock(InstructionBlock* block);
+            // Attempt to push down to the last instruction those moves that can.
+            void CompressBlock(InstructionBlock* block);
 
-  // Consolidate moves into the first gap.
-  void CompressMoves(ParallelMove* left, MoveOpVector* right);
+            // Consolidate moves into the first gap.
+            void CompressMoves(ParallelMove* left, MoveOpVector* right);
 
-  // Push down those moves in the gap of from that do not change the
-  // semantics of the from instruction, nor the semantics of the moves
-  // that remain behind.
-  void MigrateMoves(Instruction* to, Instruction* from);
+            // Push down those moves in the gap of from that do not change the
+            // semantics of the from instruction, nor the semantics of the moves
+            // that remain behind.
+            void MigrateMoves(Instruction* to, Instruction* from);
 
-  void RemoveClobberedDestinations(Instruction* instruction);
+            void RemoveClobberedDestinations(Instruction* instruction);
 
-  const Instruction* LastInstruction(const InstructionBlock* block) const;
+            const Instruction* LastInstruction(const InstructionBlock* block) const;
 
-  // Consolidate common moves appearing across all predecessors of a block.
-  void OptimizeMerge(InstructionBlock* block);
-  void FinalizeMoves(Instruction* instr);
+            // Consolidate common moves appearing across all predecessors of a block.
+            void OptimizeMerge(InstructionBlock* block);
+            void FinalizeMoves(Instruction* instr);
 
-  Zone* const local_zone_;
-  InstructionSequence* const code_;
-  MoveOpVector local_vector_;
+            Zone* const local_zone_;
+            InstructionSequence* const code_;
+            MoveOpVector local_vector_;
 
-  // Reusable buffers for storing operand sets. We need at most two sets
-  // at any given time, so we create two buffers.
-  ZoneVector<InstructionOperand> operand_buffer1;
-  ZoneVector<InstructionOperand> operand_buffer2;
+            // Reusable buffers for storing operand sets. We need at most two sets
+            // at any given time, so we create two buffers.
+            ZoneVector<InstructionOperand> operand_buffer1;
+            ZoneVector<InstructionOperand> operand_buffer2;
 
-  DISALLOW_COPY_AND_ASSIGN(MoveOptimizer);
-};
+            DISALLOW_COPY_AND_ASSIGN(MoveOptimizer);
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_BACKEND_MOVE_OPTIMIZER_H_
+#endif // V8_COMPILER_BACKEND_MOVE_OPTIMIZER_H_

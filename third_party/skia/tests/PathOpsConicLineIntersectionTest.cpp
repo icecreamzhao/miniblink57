@@ -18,18 +18,17 @@ static struct lineConic {
     int result;
     SkDPoint expected[2];
 } lineConicTests[] = {
-    {
-     {{{{30.6499996,25.6499996}, {30.6499996,20.6499996}, {25.6499996,20.6499996}}}, 0.707107008f},
-      {{{25.6499996,20.6499996}, {45.6500015,20.6499996}}},
-          1, 
-       {{25.6499996,20.6499996}, {0,0}}
-    },
+    { { { { { 30.6499996, 25.6499996 }, { 30.6499996, 20.6499996 }, { 25.6499996, 20.6499996 } } }, 0.707107008f },
+        { { { 25.6499996, 20.6499996 }, { 45.6500015, 20.6499996 } } },
+        1,
+        { { 25.6499996, 20.6499996 }, { 0, 0 } } },
 };
 
 static size_t lineConicTests_count = SK_ARRAY_COUNT(lineConicTests);
 
 static int doIntersect(SkIntersections& intersections, const SkDConic& conic, const SkDLine& line,
-                       bool& flipped) {
+    bool& flipped)
+{
     int result;
     flipped = false;
     if (line[0].fX == line[1].fX) {
@@ -59,13 +58,14 @@ static struct oneLineConic {
     SkDConic conic;
     SkDLine line;
 } oneOffs[] = {
-    {{{{{30.6499996,25.6499996}, {30.6499996,20.6499996}, {25.6499996,20.6499996}}}, 0.707107008f},
-      {{{25.6499996,20.6499996}, {45.6500015,20.6499996}}}}
+    { { { { { 30.6499996, 25.6499996 }, { 30.6499996, 20.6499996 }, { 25.6499996, 20.6499996 } } }, 0.707107008f },
+        { { { 25.6499996, 20.6499996 }, { 45.6500015, 20.6499996 } } } }
 };
 
 static size_t oneOffs_count = SK_ARRAY_COUNT(oneOffs);
 
-static void testOneOffs(skiatest::Reporter* reporter) {
+static void testOneOffs(skiatest::Reporter* reporter)
+{
     bool flipped = false;
     for (size_t index = 0; index < oneOffs_count; ++index) {
         const SkDConic& conic = oneOffs[index].conic;
@@ -88,11 +88,13 @@ static void testOneOffs(skiatest::Reporter* reporter) {
     }
 }
 
-DEF_TEST(PathOpsConicLineIntersectionOneOff, reporter) {
+DEF_TEST(PathOpsConicLineIntersectionOneOff, reporter)
+{
     testOneOffs(reporter);
 }
 
-DEF_TEST(PathOpsConicLineIntersection, reporter) {
+DEF_TEST(PathOpsConicLineIntersection, reporter)
+{
     for (size_t index = 0; index < lineConicTests_count; ++index) {
         int iIndex = static_cast<int>(index);
         const SkDConic& conic = lineConicTests[index].conic;
@@ -100,7 +102,7 @@ DEF_TEST(PathOpsConicLineIntersection, reporter) {
         const SkDLine& line = lineConicTests[index].line;
         SkASSERT(ValidLine(line));
         SkReduceOrder reducer;
-        SkPoint pts[3] = { conic.fPts.fPts[0].asSkPoint(), conic.fPts.fPts[1].asSkPoint(), 
+        SkPoint pts[3] = { conic.fPts.fPts[0].asSkPoint(), conic.fPts.fPts[1].asSkPoint(),
             conic.fPts.fPts[2].asSkPoint() };
         SkPoint reduced[3];
         SkPath::Verb order1 = SkReduceOrder::Conic(pts, conic.fWeight, reduced);
@@ -133,7 +135,7 @@ DEF_TEST(PathOpsConicLineIntersection, reporter) {
                 REPORTER_ASSERT(reporter, 0);
             }
             if (!t1.approximatelyEqual(lineConicTests[index].expected[0])
-                    && (lineConicTests[index].result == 1
+                && (lineConicTests[index].result == 1
                     || !t1.approximatelyEqual(lineConicTests[index].expected[1]))) {
                 SkDebugf("%s t1=(%1.9g,%1.9g)\n", __FUNCTION__, t1.fX, t1.fY);
                 REPORTER_ASSERT(reporter, 0);

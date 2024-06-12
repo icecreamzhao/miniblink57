@@ -28,31 +28,24 @@ namespace blink {
 
 class CSSInitialValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSInitialValue> createExplicit()
-    {
-        return adoptRefWillBeNoop(new CSSInitialValue(/* implicit */ false));
-    }
-    static PassRefPtrWillBeRawPtr<CSSInitialValue> createImplicit()
-    {
-        return adoptRefWillBeNoop(new CSSInitialValue(/* implicit */ true));
-    }
+    static CSSInitialValue* create();
 
     String customCSSText() const;
 
-    bool isImplicit() const { return m_isImplicit; }
-
     bool equals(const CSSInitialValue&) const { return true; }
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
-
-private:
-    explicit CSSInitialValue(bool implicit)
-        : CSSValue(InitialClass)
-        , m_isImplicit(implicit)
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
     {
+        CSSValue::traceAfterDispatch(visitor);
     }
 
-    bool m_isImplicit;
+private:
+    friend class CSSValuePool;
+
+    CSSInitialValue()
+        : CSSValue(InitialClass)
+    {
+    }
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSInitialValue, isInitialValue());

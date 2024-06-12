@@ -28,11 +28,14 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntRect.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT Region {
+    DISALLOW_NEW();
+
 public:
     Region();
     Region(const IntRect&);
@@ -63,8 +66,10 @@ public:
 
 private:
     struct Span {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         Span(int y, size_t segmentIndex)
-            : y(y), segmentIndex(segmentIndex)
+            : y(y)
+            , segmentIndex(segmentIndex)
         {
         }
 
@@ -73,6 +78,8 @@ private:
     };
 
     class Shape {
+        DISALLOW_NEW();
+
     public:
         Shape();
         Shape(const IntRect&);
@@ -80,7 +87,10 @@ private:
 
         IntRect bounds() const;
         bool isEmpty() const { return m_spans.isEmpty(); }
-        bool isRect() const { return m_spans.size() <= 2 && m_segments.size() <= 2; }
+        bool isRect() const
+        {
+            return m_spans.size() <= 2 && m_segments.size() <= 2;
+        }
 
         typedef const Span* SpanIterator;
         SpanIterator spansBegin() const;
@@ -102,7 +112,7 @@ private:
         struct CompareContainsOperation;
         struct CompareIntersectsOperation;
 
-        template<typename CompareOperation>
+        template <typename CompareOperation>
         static bool compareShapes(const Shape& shape1, const Shape& shape2);
         void trimCapacities();
 
@@ -115,7 +125,7 @@ private:
         struct IntersectOperation;
         struct SubtractOperation;
 
-        template<typename Operation>
+        template <typename Operation>
         static Shape shapeOperation(const Shape& shape1, const Shape& shape2);
 
         void appendSegment(int x);

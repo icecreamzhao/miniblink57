@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/timing/SharedWorkerPerformance.h"
 
+#include "bindings/core/v8/ScriptState.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/loader/DocumentLoadTiming.h"
@@ -48,22 +48,27 @@ const char* SharedWorkerPerformance::supplementName()
     return "SharedWorkerPerformance";
 }
 
-SharedWorkerPerformance& SharedWorkerPerformance::from(SharedWorker& sharedWorker)
+SharedWorkerPerformance& SharedWorkerPerformance::from(
+    SharedWorker& sharedWorker)
 {
-    SharedWorkerPerformance* supplement = static_cast<SharedWorkerPerformance*>(WillBeHeapSupplement<SharedWorker>::from(sharedWorker, supplementName()));
+    SharedWorkerPerformance* supplement = static_cast<SharedWorkerPerformance*>(
+        Supplement<SharedWorker>::from(sharedWorker, supplementName()));
     if (!supplement) {
         supplement = new SharedWorkerPerformance();
-        provideTo(sharedWorker, supplementName(), adoptPtrWillBeNoop(supplement));
+        provideTo(sharedWorker, supplementName(), supplement);
     }
     return *supplement;
 }
 
-double SharedWorkerPerformance::workerStart(ExecutionContext* context, SharedWorker& sharedWorker)
+double SharedWorkerPerformance::workerStart(ScriptState* scriptState,
+    SharedWorker& sharedWorker)
 {
-    return SharedWorkerPerformance::from(sharedWorker).getWorkerStart(context, sharedWorker);
+    return SharedWorkerPerformance::from(sharedWorker)
+        .getWorkerStart(scriptState->getExecutionContext(), sharedWorker);
 }
 
-double SharedWorkerPerformance::getWorkerStart(ExecutionContext* context, SharedWorker&) const
+double SharedWorkerPerformance::getWorkerStart(ExecutionContext* context,
+    SharedWorker&) const
 {
     ASSERT(context);
     ASSERT(context->isDocument());
@@ -76,4 +81,3 @@ double SharedWorkerPerformance::getWorkerStart(ExecutionContext* context, Shared
 }
 
 } // namespace blink
-

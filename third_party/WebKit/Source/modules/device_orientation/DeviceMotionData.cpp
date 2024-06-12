@@ -23,19 +23,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/device_orientation/DeviceMotionData.h"
 #include "public/platform/modules/device_orientation/WebDeviceMotionData.h"
 
 namespace blink {
 
 DeviceMotionData::Acceleration* DeviceMotionData::Acceleration::create(
-    bool canProvideX, double x, bool canProvideY, double y, bool canProvideZ, double z)
+    bool canProvideX,
+    double x,
+    bool canProvideY,
+    double y,
+    bool canProvideZ,
+    double z)
 {
-    return new DeviceMotionData::Acceleration(canProvideX, x, canProvideY, y, canProvideZ, z);
+    return new DeviceMotionData::Acceleration(canProvideX, x, canProvideY, y,
+        canProvideZ, z);
 }
 
-DeviceMotionData::Acceleration::Acceleration(bool canProvideX, double x, bool canProvideY, double y, bool canProvideZ, double z)
+DeviceMotionData::Acceleration::Acceleration(bool canProvideX,
+    double x,
+    bool canProvideY,
+    double y,
+    bool canProvideZ,
+    double z)
     : m_x(x)
     , m_y(y)
     , m_z(z)
@@ -47,12 +57,23 @@ DeviceMotionData::Acceleration::Acceleration(bool canProvideX, double x, bool ca
 }
 
 DeviceMotionData::RotationRate* DeviceMotionData::RotationRate::create(
-    bool canProvideAlpha, double alpha, bool canProvideBeta, double beta, bool canProvideGamma, double gamma)
+    bool canProvideAlpha,
+    double alpha,
+    bool canProvideBeta,
+    double beta,
+    bool canProvideGamma,
+    double gamma)
 {
-    return new DeviceMotionData::RotationRate(canProvideAlpha, alpha, canProvideBeta, beta, canProvideGamma, gamma);
+    return new DeviceMotionData::RotationRate(
+        canProvideAlpha, alpha, canProvideBeta, beta, canProvideGamma, gamma);
 }
 
-DeviceMotionData::RotationRate::RotationRate(bool canProvideAlpha, double alpha, bool canProvideBeta, double beta, bool canProvideGamma, double gamma)
+DeviceMotionData::RotationRate::RotationRate(bool canProvideAlpha,
+    double alpha,
+    bool canProvideBeta,
+    double beta,
+    bool canProvideGamma,
+    double gamma)
     : m_alpha(alpha)
     , m_beta(beta)
     , m_gamma(gamma)
@@ -74,20 +95,23 @@ DeviceMotionData* DeviceMotionData::create(
     bool canProvideInterval,
     double interval)
 {
-    return new DeviceMotionData(acceleration, accelerationIncludingGravity, rotationRate, canProvideInterval, interval);
+    return new DeviceMotionData(acceleration, accelerationIncludingGravity,
+        rotationRate, canProvideInterval, interval);
 }
 
 DeviceMotionData* DeviceMotionData::create(const WebDeviceMotionData& data)
 {
     return DeviceMotionData::create(
         DeviceMotionData::Acceleration::create(
-            data.hasAccelerationX, data.accelerationX,
-            data.hasAccelerationY, data.accelerationY,
-            data.hasAccelerationZ, data.accelerationZ),
+            data.hasAccelerationX, data.accelerationX, data.hasAccelerationY,
+            data.accelerationY, data.hasAccelerationZ, data.accelerationZ),
         DeviceMotionData::Acceleration::create(
-            data.hasAccelerationIncludingGravityX, data.accelerationIncludingGravityX,
-            data.hasAccelerationIncludingGravityY, data.accelerationIncludingGravityY,
-            data.hasAccelerationIncludingGravityZ, data.accelerationIncludingGravityZ),
+            data.hasAccelerationIncludingGravityX,
+            data.accelerationIncludingGravityX,
+            data.hasAccelerationIncludingGravityY,
+            data.accelerationIncludingGravityY,
+            data.hasAccelerationIncludingGravityZ,
+            data.accelerationIncludingGravityZ),
         DeviceMotionData::RotationRate::create(
             data.hasRotationRateAlpha, data.rotationRateAlpha,
             data.hasRotationRateBeta, data.rotationRateBeta,
@@ -101,8 +125,7 @@ DeviceMotionData::DeviceMotionData()
 {
 }
 
-DeviceMotionData::DeviceMotionData(
-    Acceleration* acceleration,
+DeviceMotionData::DeviceMotionData(Acceleration* acceleration,
     Acceleration* accelerationIncludingGravity,
     RotationRate* rotationRate,
     bool canProvideInterval,

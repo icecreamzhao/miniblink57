@@ -28,15 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSToLengthConversionData.h"
 
-#include "core/layout/LayoutView.h"
+#include "core/css/CSSHelper.h"
+#include "core/layout/api/LayoutViewItem.h"
 #include "core/style/ComputedStyle.h"
 
 namespace blink {
 
-CSSToLengthConversionData::FontSizes::FontSizes(float em, float rem, const Font* font)
+CSSToLengthConversionData::FontSizes::FontSizes(float em,
+    float rem,
+    const Font* font)
     : m_em(em)
     , m_rem(rem)
     , m_font(font)
@@ -45,45 +47,65 @@ CSSToLengthConversionData::FontSizes::FontSizes(float em, float rem, const Font*
     ASSERT(m_font);
 }
 
-CSSToLengthConversionData::FontSizes::FontSizes(const ComputedStyle* style, const ComputedStyle* rootStyle)
-    : FontSizes(style->computedFontSize(), rootStyle ? rootStyle->computedFontSize() : 1.0f, &style->font())
+CSSToLengthConversionData::FontSizes::FontSizes(const ComputedStyle* style,
+    const ComputedStyle* rootStyle)
+    : FontSizes(style->computedFontSize(),
+        rootStyle ? rootStyle->computedFontSize() : 1.0f,
+        &style->font())
 {
 }
 
 float CSSToLengthConversionData::FontSizes::ex() const
 {
     ASSERT(m_font);
-    // FIXME: We have a bug right now where the zoom will be applied twice to EX units.
-    // We really need to compute EX using fontMetrics for the original specifiedSize and not use
-    // our actual constructed layoutObject font.
-    if (!m_font->fontMetrics().hasXHeight())
+    const SimpleFontData* fontData = m_font->primaryFont();
+    DCHECK(fontData);
+
+    // FIXME: We have a bug right now where the zoom will be applied twice to EX
+    // units. We really need to compute EX using fontMetrics for the original
+    // specifiedSize and not use our actual constructed layoutObject font.
+    if (!fontData || !fontData->getFontMetrics().hasXHeight())
         return m_em / 2.0f;
-    return m_font->fontMetrics().xHeight();
+    return fontData->getFontMetrics().xHeight();
 }
 
 float CSSToLengthConversionData::FontSizes::ch() const
 {
-    ASSERT(m_font);
-    return m_font->fontMetrics().zeroWidth();
+    DCHECK(m_font);
+    const SimpleFontData* fontData = m_font->primaryFont();
+    DCHECK(fontData);
+    return fontData ? fontData->getFontMetrics().zeroWidth() : 0;
 }
 
-CSSToLengthConversionData::ViewportSize::ViewportSize(const LayoutView* layoutView)
-    : m_width(layoutView ? layoutView->layoutViewportWidth() : 0)
-    , m_height(layoutView ? layoutView->layoutViewportHeight() : 0)
+CSSToLengthConversionData::ViewportSize::ViewportSize(
+    const LayoutViewItem& layoutViewItem)
+    : m_size(!layoutViewItem.isNull()
+            ? layoutViewItem.viewportSizeForViewportUnits()
+            : DoubleSize())
 {
 }
 
-CSSToLengthConversionData::CSSToLengthConversionData(const ComputedStyle* style, const FontSizes& fontSizes, const ViewportSize& viewportSize, float zoom)
+CSSToLengthConversionData::CSSToLengthConversionData(
+    const ComputedStyle* style,
+    const FontSizes& fontSizes,
+    const ViewportSize& viewportSize,
+    float zoom)
     : m_style(style)
     , m_fontSizes(fontSizes)
     , m_viewportSize(viewportSize)
     , m_zoom(clampTo<float>(zoom, std::numeric_limits<float>::denorm_min()))
 {
-    ASSERT(m_style);
 }
 
-CSSToLengthConversionData::CSSToLengthConversionData(const ComputedStyle* style, const ComputedStyle* rootStyle, const LayoutView* layoutView, float zoom)
-    : CSSToLengthConversionData(style, FontSizes(style, rootStyle), ViewportSize(layoutView), zoom)
+CSSToLengthConversionData::CSSToLengthConversionData(
+    const ComputedStyle* style,
+    const ComputedStyle* rootStyle,
+    const LayoutViewItem& layoutViewItem,
+    float zoom)
+    : CSSToLengthConversionData(style,
+        FontSizes(style, rootStyle),
+        ViewportSize(layoutViewItem),
+        zoom)
 {
 }
 
@@ -106,6 +128,75 @@ double CSSToLengthConversionData::viewportMaxPercent() const
 {
     m_style->setHasViewportUnits();
     return std::max(m_viewportSize.width(), m_viewportSize.height()) / 100;
+}
+
+float CSSToLengthConversionData::remFontSize() const
+{
+    m_style->setHasRemUnits();
+    return m_fontSizes.rem();
+}
+
+double CSSToLengthConversionData::zoomedComputedPixels(
+    double value,
+    CSSPrimitiveValue::UnitType type) const
+{
+    // The logic in this function is duplicated in MediaValues::computeLength()
+    // because MediaValues::computeLength() needs nearly identical logic, but we
+    // haven't found a way to make zoomedComputedPixels() more generic (to solve
+    // both cases) without hurting performance.
+    switch (type) {
+    case CSSPrimitiveValue::UnitType::Pixels:
+    case CSSPrimitiveValue::UnitType::UserUnits:
+        return value * zoom();
+
+    case CSSPrimitiveValue::UnitType::Centimeters:
+        return value * cssPixelsPerCentimeter * zoom();
+
+    case CSSPrimitiveValue::UnitType::Millimeters:
+        return value * cssPixelsPerMillimeter * zoom();
+
+    case CSSPrimitiveValue::UnitType::Inches:
+        return value * cssPixelsPerInch * zoom();
+
+    case CSSPrimitiveValue::UnitType::Points:
+        return value * cssPixelsPerPoint * zoom();
+
+    case CSSPrimitiveValue::UnitType::Picas:
+        return value * cssPixelsPerPica * zoom();
+
+    case CSSPrimitiveValue::UnitType::ViewportWidth:
+        return value * viewportWidthPercent() * zoom();
+
+    case CSSPrimitiveValue::UnitType::ViewportHeight:
+        return value * viewportHeightPercent() * zoom();
+
+    case CSSPrimitiveValue::UnitType::ViewportMin:
+        return value * viewportMinPercent() * zoom();
+
+    case CSSPrimitiveValue::UnitType::ViewportMax:
+        return value * viewportMaxPercent() * zoom();
+
+    // We do not apply the zoom factor when we are computing the value of the
+    // font-size property. The zooming for font sizes is much more complicated,
+    // since we have to worry about enforcing the minimum font size preference
+    // as well as enforcing the implicit "smart minimum."
+    case CSSPrimitiveValue::UnitType::Ems:
+    case CSSPrimitiveValue::UnitType::QuirkyEms:
+        return value * emFontSize();
+
+    case CSSPrimitiveValue::UnitType::Exs:
+        return value * exFontSize();
+
+    case CSSPrimitiveValue::UnitType::Rems:
+        return value * remFontSize();
+
+    case CSSPrimitiveValue::UnitType::Chs:
+        return value * chFontSize();
+
+    default:
+        ASSERT_NOT_REACHED();
+        return 0;
+    }
 }
 
 } // namespace blink

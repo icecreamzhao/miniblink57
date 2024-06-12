@@ -23,29 +23,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/fileapi/File.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/fileapi/FilePropertyBag.h"
+#include "core/frame/UseCounter.h"
 #include "platform/FileMetadata.h"
-#include "platform/MIMETypeRegistry.h"
+#include "platform/blob/BlobData.h"
+#include "platform/network/mime/MIMETypeRegistry.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebFileUtilities.h"
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
+#include <memory>
 
 namespace blink {
 
-static String getContentTypeFromFileName(const String& name, File::ContentTypeLookupPolicy policy)
+static String getContentTypeFromFileName(const String& name,
+    File::ContentTypeLookupPolicy policy)
 {
     String type;
     int index = name.reverseFind('.');
     if (index != -1) {
-        if (policy == File::WellKnownContentTypes)
-            type = MIMETypeRegistry::getWellKnownMIMETypeForExtension(name.substring(index + 1));
-        else {
+        if (policy == File::WellKnownContentTypes) {
+            type = MIMETypeRegistry::getWellKnownMIMETypeForExtension(
+                name.substring(index + 1));
+        } else {
             ASSERT(policy == File::AllContentTypes);
             type = MIMETypeRegistry::getMIMETypeForExtension(name.substring(index + 1));
         }
@@ -53,46 +57,68 @@ static String getContentTypeFromFileName(const String& name, File::ContentTypeLo
     return type;
 }
 
-static PassOwnPtr<BlobData> createBlobDataForFileWithType(const String& path, const String& contentType)
+static std::unique_ptr<BlobData> createBlobDataForFileWithType(
+    const String& path,
+    const String& contentType)
 {
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::createForFileWithUnknownSize(path);
     blobData->setContentType(contentType);
-    blobData->appendFile(path);
-    return blobData.release();
+    return blobData;
 }
 
-static PassOwnPtr<BlobData> createBlobDataForFile(const String& path, File::ContentTypeLookupPolicy policy)
+static std::unique_ptr<BlobData> createBlobDataForFile(
+    const String& path,
+    File::ContentTypeLookupPolicy policy)
 {
-    return createBlobDataForFileWithType(path, getContentTypeFromFileName(path, policy));
+    return createBlobDataForFileWithType(
+        path, getContentTypeFromFileName(path, policy));
 }
 
-static PassOwnPtr<BlobData> createBlobDataForFileWithName(const String& path, const String& fileSystemName, File::ContentTypeLookupPolicy policy)
+static std::unique_ptr<BlobData> createBlobDataForFileWithName(
+    const String& path,
+    const String& fileSystemName,
+    File::ContentTypeLookupPolicy policy)
 {
-    return createBlobDataForFileWithType(path, getContentTypeFromFileName(fileSystemName, policy));
+    return createBlobDataForFileWithType(
+        path, getContentTypeFromFileName(fileSystemName, policy));
 }
 
-static PassOwnPtr<BlobData> createBlobDataForFileWithMetadata(const String& fileSystemName, const FileMetadata& metadata)
+static std::unique_ptr<BlobData> createBlobDataForFileWithMetadata(
+    const String& fileSystemName,
+    const FileMetadata& metadata)
 {
-    OwnPtr<BlobData> blobData = BlobData::create();
-    blobData->setContentType(getContentTypeFromFileName(fileSystemName, File::WellKnownContentTypes));
-    blobData->appendFile(metadata.platformPath, 0, metadata.length, metadata.modificationTime / msPerSecond);
-    return blobData.release();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
+    blobData->setContentType(
+        getContentTypeFromFileName(fileSystemName, File::WellKnownContentTypes));
+    blobData->appendFile(metadata.platformPath, 0, metadata.length,
+        metadata.modificationTime / msPerSecond);
+    return blobData;
 }
 
-static PassOwnPtr<BlobData> createBlobDataForFileSystemURL(const KURL& fileSystemURL, const FileMetadata& metadata)
+static std::unique_ptr<BlobData> createBlobDataForFileSystemURL(
+    const KURL& fileSystemURL,
+    const FileMetadata& metadata)
 {
-    OwnPtr<BlobData> blobData = BlobData::create();
-    blobData->setContentType(getContentTypeFromFileName(fileSystemURL.path(), File::WellKnownContentTypes));
-    blobData->appendFileSystemURL(fileSystemURL, 0, metadata.length, metadata.modificationTime / msPerSecond);
-    return blobData.release();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
+    blobData->setContentType(getContentTypeFromFileName(
+        fileSystemURL.path(), File::WellKnownContentTypes));
+    blobData->appendFileSystemURL(fileSystemURL, 0, metadata.length,
+        metadata.modificationTime / msPerSecond);
+    return blobData;
 }
 
 // static
-File* File::create(const HeapVector<BlobOrStringOrArrayBufferViewOrArrayBuffer>& fileBits, const String& fileName, const FilePropertyBag& options, ExceptionState& exceptionState)
+File* File::create(
+    ExecutionContext* context,
+    const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>& fileBits,
+    const String& fileName,
+    const FilePropertyBag& options,
+    ExceptionState& exceptionState)
 {
     ASSERT(options.hasType());
     if (!options.type().containsOnlyASCII()) {
-        exceptionState.throwDOMException(SyntaxError, "The 'type' property must consist of ASCII characters.");
+        exceptionState.throwDOMException(
+            SyntaxError, "The 'type' property must consist of ASCII characters.");
         return nullptr;
     }
 
@@ -101,26 +127,31 @@ File* File::create(const HeapVector<BlobOrStringOrArrayBufferViewOrArrayBuffer>&
         lastModified = static_cast<double>(options.lastModified());
     else
         lastModified = currentTimeMS();
-
     ASSERT(options.hasEndings());
     bool normalizeLineEndingsToNative = options.endings() == "native";
+    if (normalizeLineEndingsToNative)
+        UseCounter::count(context, UseCounter::FileAPINativeLineEndings);
 
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->setContentType(options.type().lower());
     populateBlobData(blobData.get(), fileBits, normalizeLineEndingsToNative);
 
     long long fileSize = blobData->length();
-    return File::create(fileName, lastModified, BlobDataHandle::create(blobData.release(), fileSize));
+    return File::create(fileName, lastModified,
+        BlobDataHandle::create(std::move(blobData), fileSize));
 }
 
-File* File::createWithRelativePath(const String& path, const String& relativePath)
+File* File::createWithRelativePath(const String& path,
+    const String& relativePath)
 {
     File* file = new File(path, File::AllContentTypes, File::IsUserVisible);
     file->m_relativePath = relativePath;
     return file;
 }
 
-File::File(const String& path, ContentTypeLookupPolicy policy, UserVisibility userVisibility)
+File::File(const String& path,
+    ContentTypeLookupPolicy policy,
+    UserVisibility userVisibility)
     : Blob(BlobDataHandle::create(createBlobDataForFile(path, policy), -1))
     , m_hasBackingFile(true)
     , m_userVisibility(userVisibility)
@@ -131,8 +162,13 @@ File::File(const String& path, ContentTypeLookupPolicy policy, UserVisibility us
 {
 }
 
-File::File(const String& path, const String& name, ContentTypeLookupPolicy policy, UserVisibility userVisibility)
-    : Blob(BlobDataHandle::create(createBlobDataForFileWithName(path, name, policy), -1))
+File::File(const String& path,
+    const String& name,
+    ContentTypeLookupPolicy policy,
+    UserVisibility userVisibility)
+    : Blob(BlobDataHandle::create(
+        createBlobDataForFileWithName(path, name, policy),
+        -1))
     , m_hasBackingFile(true)
     , m_userVisibility(userVisibility)
     , m_path(path)
@@ -142,20 +178,30 @@ File::File(const String& path, const String& name, ContentTypeLookupPolicy polic
 {
 }
 
-File::File(const String& path, const String& name, const String& relativePath, UserVisibility userVisibility, bool hasSnaphotData, uint64_t size, double lastModified, PassRefPtr<BlobDataHandle> blobDataHandle)
-    : Blob(blobDataHandle)
+File::File(const String& path,
+    const String& name,
+    const String& relativePath,
+    UserVisibility userVisibility,
+    bool hasSnapshotData,
+    uint64_t size,
+    double lastModified,
+    PassRefPtr<BlobDataHandle> blobDataHandle)
+    : Blob(std::move(blobDataHandle))
     , m_hasBackingFile(!path.isEmpty() || !relativePath.isEmpty())
     , m_userVisibility(userVisibility)
     , m_path(path)
     , m_name(name)
-    , m_snapshotSize(hasSnaphotData ? static_cast<long long>(size) : -1)
-    , m_snapshotModificationTimeMS(hasSnaphotData ? lastModified : invalidFileTime())
+    , m_snapshotSize(hasSnapshotData ? static_cast<long long>(size) : -1)
+    , m_snapshotModificationTimeMS(hasSnapshotData ? lastModified
+                                                   : invalidFileTime())
     , m_relativePath(relativePath)
 {
 }
 
-File::File(const String& name, double modificationTimeMS, PassRefPtr<BlobDataHandle> blobDataHandle)
-    : Blob(blobDataHandle)
+File::File(const String& name,
+    double modificationTimeMS,
+    PassRefPtr<BlobDataHandle> blobDataHandle)
+    : Blob(std::move(blobDataHandle))
     , m_hasBackingFile(false)
     , m_userVisibility(File::IsNotUserVisible)
     , m_name(name)
@@ -164,8 +210,12 @@ File::File(const String& name, double modificationTimeMS, PassRefPtr<BlobDataHan
 {
 }
 
-File::File(const String& name, const FileMetadata& metadata, UserVisibility userVisibility)
-    : Blob(BlobDataHandle::create(createBlobDataForFileWithMetadata(name, metadata), metadata.length))
+File::File(const String& name,
+    const FileMetadata& metadata,
+    UserVisibility userVisibility)
+    : Blob(BlobDataHandle::create(
+        createBlobDataForFileWithMetadata(name, metadata),
+        metadata.length))
     , m_hasBackingFile(true)
     , m_userVisibility(userVisibility)
     , m_path(metadata.platformPath)
@@ -175,8 +225,12 @@ File::File(const String& name, const FileMetadata& metadata, UserVisibility user
 {
 }
 
-File::File(const KURL& fileSystemURL, const FileMetadata& metadata, UserVisibility userVisibility)
-    : Blob(BlobDataHandle::create(createBlobDataForFileSystemURL(fileSystemURL, metadata), metadata.length))
+File::File(const KURL& fileSystemURL,
+    const FileMetadata& metadata,
+    UserVisibility userVisibility)
+    : Blob(BlobDataHandle::create(
+        createBlobDataForFileSystemURL(fileSystemURL, metadata),
+        metadata.length))
     , m_hasBackingFile(false)
     , m_userVisibility(userVisibility)
     , m_name(decodeURLEscapeSequences(fileSystemURL.lastPathComponent()))
@@ -223,7 +277,8 @@ long long File::lastModified() const
 {
     double modifiedDate = lastModifiedMS();
 
-    // The getter should return the current time when the last modification time isn't known.
+    // The getter should return the current time when the last modification time
+    // isn't known.
     if (!isValidFileTime(modifiedDate))
         modifiedDate = currentTimeMS();
 
@@ -236,7 +291,8 @@ double File::lastModifiedDate() const
 {
     double modifiedDate = lastModifiedMS();
 
-    // The getter should return the current time when the last modification time isn't known.
+    // The getter should return the current time when the last modification time
+    // isn't known.
     if (!isValidFileTime(modifiedDate))
         modifiedDate = currentTimeMS();
 
@@ -250,43 +306,52 @@ unsigned long long File::size() const
     if (hasValidSnapshotMetadata())
         return m_snapshotSize;
 
-    // FIXME: JavaScript cannot represent sizes as large as unsigned long long, we need to
-    // come up with an exception to throw if file size is not representable.
+    // FIXME: JavaScript cannot represent sizes as large as unsigned long long, we
+    // need to come up with an exception to throw if file size is not
+    // representable.
     long long size;
     if (!hasBackingFile() || !getFileSize(m_path, size))
         return 0;
     return static_cast<unsigned long long>(size);
 }
 
-Blob* File::slice(long long start, long long end, const String& contentType, ExceptionState& exceptionState) const
+Blob* File::slice(long long start,
+    long long end,
+    const String& contentType,
+    ExceptionState& exceptionState) const
 {
-    if (hasBeenClosed()) {
-        exceptionState.throwDOMException(InvalidStateError, "File has been closed.");
+    if (isClosed()) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "File has been closed.");
         return nullptr;
     }
 
     if (!m_hasBackingFile)
         return Blob::slice(start, end, contentType, exceptionState);
 
-    // FIXME: This involves synchronous file operation. We need to figure out how to make it asynchronous.
+    // FIXME: This involves synchronous file operation. We need to figure out how
+    // to make it asynchronous.
     long long size;
     double modificationTimeMS;
     captureSnapshot(size, modificationTimeMS);
     clampSliceOffsets(size, start, end);
 
     long long length = end - start;
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->setContentType(contentType);
     if (!m_fileSystemURL.isEmpty()) {
-        blobData->appendFileSystemURL(m_fileSystemURL, start, length, modificationTimeMS / msPerSecond);
+        blobData->appendFileSystemURL(m_fileSystemURL, start, length,
+            modificationTimeMS / msPerSecond);
     } else {
         ASSERT(!m_path.isEmpty());
-        blobData->appendFile(m_path, start, length, modificationTimeMS / msPerSecond);
+        blobData->appendFile(m_path, start, length,
+            modificationTimeMS / msPerSecond);
     }
-    return Blob::create(BlobDataHandle::create(blobData.release(), length));
+    return Blob::create(BlobDataHandle::create(std::move(blobData), length));
 }
 
-void File::captureSnapshot(long long& snapshotSize, double& snapshotModificationTimeMS) const
+void File::captureSnapshot(long long& snapshotSize,
+    double& snapshotModificationTimeMS) const
 {
     if (hasValidSnapshotMetadata()) {
         snapshotSize = m_snapshotSize;
@@ -294,8 +359,10 @@ void File::captureSnapshot(long long& snapshotSize, double& snapshotModification
         return;
     }
 
-    // Obtains a snapshot of the file by capturing its current size and modification time. This is used when we slice a file for the first time.
-    // If we fail to retrieve the size or modification time, probably due to that the file has been deleted, 0 size is returned.
+    // Obtains a snapshot of the file by capturing its current size and
+    // modification time. This is used when we slice a file for the first time.
+    // If we fail to retrieve the size or modification time, probably due to that
+    // the file has been deleted, 0 size is returned.
     FileMetadata metadata;
     if (!hasBackingFile() || !getFileMetadata(m_path, metadata)) {
         snapshotSize = 0;
@@ -307,10 +374,12 @@ void File::captureSnapshot(long long& snapshotSize, double& snapshotModification
     snapshotModificationTimeMS = metadata.modificationTime;
 }
 
-void File::close(ExecutionContext* executionContext, ExceptionState& exceptionState)
+void File::close(ExecutionContext* executionContext,
+    ExceptionState& exceptionState)
 {
-    if (hasBeenClosed()) {
-        exceptionState.throwDOMException(InvalidStateError, "Blob has been closed.");
+    if (isClosed()) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "Blob has been closed.");
         return;
     }
 
@@ -332,12 +401,14 @@ void File::appendTo(BlobData& blobData) const
         return;
     }
 
-    // FIXME: This involves synchronous file operation. We need to figure out how to make it asynchronous.
+    // FIXME: This involves synchronous file operation. We need to figure out how
+    // to make it asynchronous.
     long long size;
     double modificationTimeMS;
     captureSnapshot(size, modificationTimeMS);
     if (!m_fileSystemURL.isEmpty()) {
-        blobData.appendFileSystemURL(m_fileSystemURL, 0, size, modificationTimeMS / msPerSecond);
+        blobData.appendFileSystemURL(m_fileSystemURL, 0, size,
+            modificationTimeMS / msPerSecond);
         return;
     }
     ASSERT(!m_path.isEmpty());

@@ -8,8 +8,8 @@
 #ifndef SkColor_opts_neon_DEFINED
 #define SkColor_opts_neon_DEFINED
 
-#include "SkTypes.h"
 #include "SkColorPriv.h"
+#include "SkTypes.h"
 
 #include <arm_neon.h>
 
@@ -18,15 +18,18 @@
 #define NEON_G (SK_G32_SHIFT / 8)
 #define NEON_B (SK_B32_SHIFT / 8)
 
-static inline uint16x8_t SkAlpha255To256_neon8(uint8x8_t alpha) {
+static inline uint16x8_t SkAlpha255To256_neon8(uint8x8_t alpha)
+{
     return vaddw_u8(vdupq_n_u16(1), alpha);
 }
 
-static inline uint8x8_t SkAlphaMul_neon8(uint8x8_t color, uint16x8_t scale) {
+static inline uint8x8_t SkAlphaMul_neon8(uint8x8_t color, uint16x8_t scale)
+{
     return vshrn_n_u16(vmovl_u8(color) * scale, 8);
 }
 
-static inline uint8x8x4_t SkAlphaMulQ_neon8(uint8x8x4_t color, uint16x8_t scale) {
+static inline uint8x8x4_t SkAlphaMulQ_neon8(uint8x8x4_t color, uint16x8_t scale)
+{
     uint8x8x4_t ret;
 
     ret.val[NEON_A] = SkAlphaMul_neon8(color.val[NEON_A], scale);
@@ -41,7 +44,8 @@ static inline uint8x8x4_t SkAlphaMulQ_neon8(uint8x8x4_t color, uint16x8_t scale)
  * SkPMColor (all possible configurations supported) in the exact same way as
  * SkPixel16ToPixel32.
  */
-static inline uint8x8x4_t SkPixel16ToPixel32_neon8(uint16x8_t vsrc) {
+static inline uint8x8x4_t SkPixel16ToPixel32_neon8(uint16x8_t vsrc)
+{
 
     uint8x8x4_t ret;
     uint8x8_t vr, vg, vb;
@@ -62,7 +66,8 @@ static inline uint8x8x4_t SkPixel16ToPixel32_neon8(uint16x8_t vsrc) {
  * supported) to RGB565 (R, G, B from high to low) in the exact same way as
  * SkPixel32ToPixel16.
  */
-static inline uint16x8_t SkPixel32ToPixel16_neon8(uint8x8x4_t vsrc) {
+static inline uint16x8_t SkPixel32ToPixel16_neon8(uint8x8x4_t vsrc)
+{
 
     uint16x8_t ret;
 
@@ -76,7 +81,8 @@ static inline uint16x8_t SkPixel32ToPixel16_neon8(uint8x8x4_t vsrc) {
 /* This function blends 8 pixels of the same channel in the exact same way as
  * SkBlend32.
  */
-static inline uint8x8_t SkBlend32_neon8(uint8x8_t src, uint8x8_t dst, uint16x8_t scale) {
+static inline uint8x8_t SkBlend32_neon8(uint8x8_t src, uint8x8_t dst, uint16x8_t scale)
+{
     int16x8_t src_wide, dst_wide;
 
     src_wide = vreinterpretq_s16_u16(vmovl_u8(src));
@@ -90,7 +96,8 @@ static inline uint8x8_t SkBlend32_neon8(uint8x8_t src, uint8x8_t dst, uint16x8_t
 }
 
 static inline SkPMColor SkFourByteInterp256_neon(SkPMColor src, SkPMColor dst,
-                                                 unsigned srcScale) {
+    unsigned srcScale)
+{
     SkASSERT(srcScale <= 256);
     int16x8_t vscale = vdupq_n_s16(srcScale);
     int16x8_t vsrc_wide, vdst_wide, vdiff;
@@ -112,7 +119,8 @@ static inline SkPMColor SkFourByteInterp256_neon(SkPMColor src, SkPMColor dst,
 }
 
 static inline SkPMColor SkFourByteInterp_neon(SkPMColor src, SkPMColor dst,
-                                              U8CPU srcWeight) {
+    U8CPU srcWeight)
+{
     SkASSERT(srcWeight <= 255);
     unsigned scale = SkAlpha255To256(srcWeight);
     return SkFourByteInterp256_neon(src, dst, scale);

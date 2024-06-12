@@ -31,34 +31,32 @@
 #ifndef InspectorInstrumentationCustom_inl_h
 #define InspectorInstrumentationCustom_inl_h
 
-#include "bindings/core/v8/ScriptSourceCode.h"
 #include "core/CoreExport.h"
 
 namespace blink {
 
 namespace InspectorInstrumentation {
 
-bool isDebuggerPausedImpl(InstrumentingAgents*);
-bool collectingHTMLParseErrorsImpl(InstrumentingAgents*);
-CORE_EXPORT void appendAsyncCallStack(ExecutionContext*, ScriptCallStack*);
-
-CORE_EXPORT bool consoleAgentEnabled(ExecutionContext*);
-
-inline bool isDebuggerPaused(LocalFrame* frame)
-{
-    FAST_RETURN_IF_NO_FRONTENDS(false);
-    if (InstrumentingAgents* instrumentingAgents = instrumentingAgentsFor(frame))
-        return isDebuggerPausedImpl(instrumentingAgents);
-    return false;
-}
-
-inline bool collectingHTMLParseErrors(Document* document)
-{
-    FAST_RETURN_IF_NO_FRONTENDS(false);
-    if (InstrumentingAgents* instrumentingAgents = instrumentingAgentsFor(document))
-        return collectingHTMLParseErrorsImpl(instrumentingAgents);
-    return false;
-}
+    CORE_EXPORT bool isDebuggerPaused(LocalFrame*);
+    CORE_EXPORT void asyncTaskScheduled(ExecutionContext*,
+        const String& name,
+        void*);
+    CORE_EXPORT void asyncTaskScheduled(ExecutionContext*,
+        const String& name,
+        void*,
+        bool recurring);
+    CORE_EXPORT void asyncTaskCanceled(ExecutionContext*, void*);
+    CORE_EXPORT void allAsyncTasksCanceled(ExecutionContext*);
+    CORE_EXPORT void canceledAfterReceivedResourceResponse(LocalFrame*,
+        DocumentLoader*,
+        unsigned long identifier,
+        const ResourceResponse&,
+        Resource*);
+    CORE_EXPORT void continueWithPolicyIgnore(LocalFrame*,
+        DocumentLoader*,
+        unsigned long identifier,
+        const ResourceResponse&,
+        Resource*);
 
 } // namespace InspectorInstrumentation
 

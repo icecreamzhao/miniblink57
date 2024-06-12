@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2011 Google Inc.
  *
@@ -6,31 +5,32 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-#include "SkView.h"
+#include "Sk1DPathEffect.h"
 #include "SkCanvas.h"
+#include "SkColorFilter.h"
+#include "SkColorPriv.h"
+#include "SkCornerPathEffect.h"
+#include "SkDither.h"
 #include "SkGradientShader.h"
 #include "SkPath.h"
+#include "SkPathMeasure.h"
+#include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
 #include "SkUtils.h"
-#include "Sk1DPathEffect.h"
-#include "SkCornerPathEffect.h"
-#include "SkPathMeasure.h"
-#include "SkRandom.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkDither.h"
+#include "SkView.h"
 #include "sk_tool_utils.h"
 
-static void make_bm(SkBitmap* bm) {
+static void make_bm(SkBitmap* bm)
+{
     const SkPMColor colors[] = {
         SkPreMultiplyColor(SK_ColorRED), SkPreMultiplyColor(SK_ColorGREEN),
         SkPreMultiplyColor(SK_ColorBLUE), SkPreMultiplyColor(SK_ColorWHITE)
     };
     SkColorTable* ctable = new SkColorTable(colors, 4);
     bm->allocPixels(SkImageInfo::Make(2, 2, kIndex_8_SkColorType,
-                                      kOpaque_SkAlphaType),
-                    NULL, ctable);
+                        kOpaque_SkAlphaType),
+        nullptr, ctable);
     ctable->unref();
 
     *bm->getAddr8(0, 0) = 0;
@@ -40,12 +40,14 @@ static void make_bm(SkBitmap* bm) {
 }
 
 static SkScalar draw_bm(SkCanvas* canvas, const SkBitmap& bm,
-                        SkScalar x, SkScalar y, SkPaint* paint) {
+    SkScalar x, SkScalar y, SkPaint* paint)
+{
     canvas->drawBitmap(bm, x, y, paint);
-    return SkIntToScalar(bm.width()) * 5/4;
+    return SkIntToScalar(bm.width()) * 5 / 4;
 }
 
-static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p) {
+static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p)
+{
     x += draw_bm(c, bm, x, 0, p);
     p->setFilterQuality(kLow_SkFilterQuality);
     x += draw_bm(c, bm, x, 0, p);
@@ -53,7 +55,8 @@ static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x, SkPaint* p
     return x + draw_bm(c, bm, x, 0, p);
 }
 
-static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
+static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm)
+{
     SkAutoCanvasRestore acr(canvas, true);
 
     SkPaint paint;
@@ -62,8 +65,8 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
 
     paint.setAntiAlias(true);
     const char* name = sk_tool_utils::colortype_name(bm.colorType());
-    canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height())*scale*5/8,
-                     paint);
+    canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height()) * scale * 5 / 8,
+        paint);
     canvas->translate(SkIntToScalar(48), 0);
 
     canvas->scale(SkIntToScalar(scale), SkIntToScalar(scale));
@@ -77,9 +80,10 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
 
 class FilterView : public SampleView {
 public:
-    SkBitmap    fBM8, fBM4444, fBM16, fBM32;
+    SkBitmap fBM8, fBM4444, fBM16, fBM32;
 
-    FilterView() {
+    FilterView()
+    {
         make_bm(&fBM8);
         fBM8.copyTo(&fBM4444, kARGB_4444_SkColorType);
         fBM8.copyTo(&fBM16, kRGB_565_SkColorType);
@@ -90,7 +94,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
+    virtual bool onQuery(SkEvent* evt)
+    {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Filter");
             return true;
@@ -98,7 +103,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-    virtual void onDrawContent(SkCanvas* canvas) {
+    virtual void onDrawContent(SkCanvas* canvas)
+    {
         SkScalar x = SkIntToScalar(10);
         SkScalar y = SkIntToScalar(10);
 

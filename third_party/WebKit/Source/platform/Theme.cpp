@@ -23,36 +23,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "platform/Theme.h"
 
 namespace blink {
 
-LengthBox Theme::controlBorder(ControlPart part, const FontDescription&, const LengthBox& zoomedBox, float) const
+LengthBox Theme::controlBorder(ControlPart part,
+    const FontDescription&,
+    const LengthBox& zoomedBox,
+    float) const
 {
     switch (part) {
-        case PushButtonPart:
-        case MenulistPart:
-        case SearchFieldPart:
-        case CheckboxPart:
-        case RadioPart:
-            return LengthBox(0);
-        default:
-            return zoomedBox;
+    case PushButtonPart:
+    case MenulistPart:
+    case SearchFieldPart:
+    case CheckboxPart:
+    case RadioPart:
+        return LengthBox(0);
+    default:
+        return zoomedBox;
     }
 }
 
-LengthBox Theme::controlPadding(ControlPart part, const FontDescription&, const LengthBox& zoomedBox, float) const
+LengthBox Theme::controlPadding(ControlPart part,
+    const FontDescription&,
+    const LengthBox& zoomedBox,
+    float) const
 {
     switch (part) {
-        case MenulistPart:
-        case MenulistButtonPart:
-        case CheckboxPart:
-        case RadioPart:
-            return LengthBox(0);
-        default:
-            return zoomedBox;
+    case MenulistPart:
+    case MenulistButtonPart:
+    case CheckboxPart:
+    case RadioPart:
+        return LengthBox(0);
+    default:
+        return zoomedBox;
     }
 }
 
-}
+} // namespace blink

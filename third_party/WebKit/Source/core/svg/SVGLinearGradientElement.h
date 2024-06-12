@@ -32,6 +32,7 @@ struct LinearGradientAttributes;
 
 class SVGLinearGradientElement final : public SVGGradientElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGLinearGradientElement);
 
@@ -53,10 +54,10 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_x1;
-    RefPtrWillBeMember<SVGAnimatedLength> m_y1;
-    RefPtrWillBeMember<SVGAnimatedLength> m_x2;
-    RefPtrWillBeMember<SVGAnimatedLength> m_y2;
+    Member<SVGAnimatedLength> m_x1;
+    Member<SVGAnimatedLength> m_y1;
+    Member<SVGAnimatedLength> m_x2;
+    Member<SVGAnimatedLength> m_y2;
 };
 
 } // namespace blink

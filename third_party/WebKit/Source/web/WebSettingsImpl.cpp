@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/WebSettingsImpl.h"
 
 #include "core/frame/Settings.h"
@@ -37,11 +36,12 @@
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 #include "web/DevToolsEmulator.h"
-#include "web/WebDevToolsAgentImpl.h"
+// #include "web/WebDevToolsAgentImpl.h"
 
 namespace blink {
 
-WebSettingsImpl::WebSettingsImpl(Settings* settings, DevToolsEmulator* devToolsEmulator)
+WebSettingsImpl::WebSettingsImpl(Settings* settings,
+    DevToolsEmulator* devToolsEmulator)
     : m_settings(settings)
     , m_devToolsEmulator(devToolsEmulator)
     , m_showFPSCounter(false)
@@ -53,31 +53,37 @@ WebSettingsImpl::WebSettingsImpl(Settings* settings, DevToolsEmulator* devToolsE
     , m_viewportMetaLayoutSizeQuirk(false)
     , m_viewportMetaNonUserScalableQuirk(false)
     , m_clobberUserAgentInitialScaleQuirk(false)
-    , m_mainFrameResizesAreOrientationChanges(false)
+    , m_expensiveBackgroundThrottlingCPUBudget(-1)
+    , m_expensiveBackgroundThrottlingInitialBudget(-1)
+    , m_expensiveBackgroundThrottlingMaxBudget(-1)
+    , m_expensiveBackgroundThrottlingMaxDelay(-1)
 {
-    ASSERT(settings);
+    DCHECK(settings);
 }
 
-void WebSettingsImpl::setFromStrings(const WebString& name, const WebString& value)
+void WebSettingsImpl::setFromStrings(const WebString& name,
+    const WebString& value)
 {
     m_settings->setFromStrings(name, value);
 }
 
-void WebSettingsImpl::setStandardFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setStandardFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateStandard(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setFixedFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setFixedFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateFixed(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setReportWheelOverscroll(bool enabled)
+void WebSettingsImpl::setForcePreloadNoneForMediaElements(bool enabled)
 {
-    m_settings->setReportWheelOverscroll(enabled);
+    m_settings->setForcePreloadNoneForMediaElements(enabled);
 }
 
 void WebSettingsImpl::setForceZeroLayoutHeight(bool enabled)
@@ -90,31 +96,36 @@ void WebSettingsImpl::setFullscreenSupported(bool enabled)
     m_settings->setFullscreenSupported(enabled);
 }
 
-void WebSettingsImpl::setSerifFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setSerifFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateSerif(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setSansSerifFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setSansSerifFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateSansSerif(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setCursiveFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setCursiveFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateCursive(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setFantasyFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setFantasyFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updateFantasy(font, script))
         m_settings->notifyGenericFontFamilyChange();
 }
 
-void WebSettingsImpl::setPictographFontFamily(const WebString& font, UScriptCode script)
+void WebSettingsImpl::setPictographFontFamily(const WebString& font,
+    UScriptCode script)
 {
     if (m_settings->genericFontFamilySettings().updatePictograph(font, script))
         m_settings->notifyGenericFontFamilyChange();
@@ -150,14 +161,15 @@ void WebSettingsImpl::setDeviceSupportsTouch(bool deviceSupportsTouch)
     m_settings->setDeviceSupportsTouch(deviceSupportsTouch);
 }
 
-void WebSettingsImpl::setDeviceSupportsMouse(bool deviceSupportsMouse)
-{
-    m_settings->setDeviceSupportsMouse(deviceSupportsMouse);
-}
-
-void WebSettingsImpl::setAutoZoomFocusedNodeToLegibleScale(bool autoZoomFocusedNodeToLegibleScale)
+void WebSettingsImpl::setAutoZoomFocusedNodeToLegibleScale(
+    bool autoZoomFocusedNodeToLegibleScale)
 {
     m_autoZoomFocusedNodeToLegibleScale = autoZoomFocusedNodeToLegibleScale;
+}
+
+void WebSettingsImpl::setBrowserSideNavigationEnabled(bool enabled)
+{
+    m_settings->setBrowserSideNavigationEnabled(enabled);
 }
 
 void WebSettingsImpl::setTextAutosizingEnabled(bool enabled)
@@ -185,9 +197,9 @@ void WebSettingsImpl::setInlineTextBoxAccessibilityEnabled(bool enabled)
     m_settings->setInlineTextBoxAccessibilityEnabled(enabled);
 }
 
-void WebSettingsImpl::setInvertViewportScrollOrder(bool enabled)
+void WebSettingsImpl::setInertVisualViewport(bool enabled)
 {
-    m_settings->setInvertViewportScrollOrder(enabled);
+    m_settings->setInertVisualViewport(enabled);
 }
 
 void WebSettingsImpl::setDeviceScaleAdjustment(float deviceScaleAdjustment)
@@ -210,56 +222,61 @@ void WebSettingsImpl::setWebSecurityEnabled(bool enabled)
     m_settings->setWebSecurityEnabled(enabled);
 }
 
-void WebSettingsImpl::setJavaScriptCanOpenWindowsAutomatically(bool canOpenWindows)
+void WebSettingsImpl::setJavaScriptCanOpenWindowsAutomatically(
+    bool canOpenWindows)
 {
     m_settings->setJavaScriptCanOpenWindowsAutomatically(canOpenWindows);
 }
 
-void WebSettingsImpl::setSupportDeprecatedTargetDensityDPI(bool supportDeprecatedTargetDensityDPI)
+void WebSettingsImpl::setSupportDeprecatedTargetDensityDPI(
+    bool supportDeprecatedTargetDensityDPI)
 {
     m_supportDeprecatedTargetDensityDPI = supportDeprecatedTargetDensityDPI;
 }
 
-void WebSettingsImpl::setViewportMetaLayoutSizeQuirk(bool viewportMetaLayoutSizeQuirk)
+void WebSettingsImpl::setViewportMetaLayoutSizeQuirk(
+    bool viewportMetaLayoutSizeQuirk)
 {
     m_viewportMetaLayoutSizeQuirk = viewportMetaLayoutSizeQuirk;
 }
 
-void WebSettingsImpl::setViewportMetaMergeContentQuirk(bool viewportMetaMergeContentQuirk)
+void WebSettingsImpl::setViewportMetaMergeContentQuirk(
+    bool viewportMetaMergeContentQuirk)
 {
     m_settings->setViewportMetaMergeContentQuirk(viewportMetaMergeContentQuirk);
 }
 
-void WebSettingsImpl::setViewportMetaNonUserScalableQuirk(bool viewportMetaNonUserScalableQuirk)
+void WebSettingsImpl::setViewportMetaNonUserScalableQuirk(
+    bool viewportMetaNonUserScalableQuirk)
 {
     m_viewportMetaNonUserScalableQuirk = viewportMetaNonUserScalableQuirk;
 }
 
-void WebSettingsImpl::setViewportMetaZeroValuesQuirk(bool viewportMetaZeroValuesQuirk)
+void WebSettingsImpl::setViewportMetaZeroValuesQuirk(
+    bool viewportMetaZeroValuesQuirk)
 {
     m_settings->setViewportMetaZeroValuesQuirk(viewportMetaZeroValuesQuirk);
 }
 
-void WebSettingsImpl::setIgnoreMainFrameOverflowHiddenQuirk(bool ignoreMainFrameOverflowHiddenQuirk)
+void WebSettingsImpl::setIgnoreMainFrameOverflowHiddenQuirk(
+    bool ignoreMainFrameOverflowHiddenQuirk)
 {
-    m_settings->setIgnoreMainFrameOverflowHiddenQuirk(ignoreMainFrameOverflowHiddenQuirk);
+    m_settings->setIgnoreMainFrameOverflowHiddenQuirk(
+        ignoreMainFrameOverflowHiddenQuirk);
 }
 
-void WebSettingsImpl::setReportScreenSizeInPhysicalPixelsQuirk(bool reportScreenSizeInPhysicalPixelsQuirk)
+void WebSettingsImpl::setReportScreenSizeInPhysicalPixelsQuirk(
+    bool reportScreenSizeInPhysicalPixelsQuirk)
 {
-    m_settings->setReportScreenSizeInPhysicalPixelsQuirk(reportScreenSizeInPhysicalPixelsQuirk);
+    m_settings->setReportScreenSizeInPhysicalPixelsQuirk(
+        reportScreenSizeInPhysicalPixelsQuirk);
 }
 
-void WebSettingsImpl::setRootLayerScrolls(bool rootLayerScrolls)
-{
-    m_settings->setRootLayerScrolls(rootLayerScrolls);
-}
+void WebSettingsImpl::setRubberBandingOnCompositorThread(
+    bool rubberBandingOnCompositorThread) { }
 
-void WebSettingsImpl::setRubberBandingOnCompositorThread(bool rubberBandingOnCompositorThread)
-{
-}
-
-void WebSettingsImpl::setClobberUserAgentInitialScaleQuirk(bool clobberUserAgentInitialScaleQuirk)
+void WebSettingsImpl::setClobberUserAgentInitialScaleQuirk(
+    bool clobberUserAgentInitialScaleQuirk)
 {
     m_clobberUserAgentInitialScaleQuirk = clobberUserAgentInitialScaleQuirk;
 }
@@ -269,14 +286,16 @@ void WebSettingsImpl::setSupportsMultipleWindows(bool supportsMultipleWindows)
     m_settings->setSupportsMultipleWindows(supportsMultipleWindows);
 }
 
-void WebSettingsImpl::setLoadsImagesAutomatically(bool loadsImagesAutomatically)
+void WebSettingsImpl::setLoadsImagesAutomatically(
+    bool loadsImagesAutomatically)
 {
     m_settings->setLoadsImagesAutomatically(loadsImagesAutomatically);
 }
 
 void WebSettingsImpl::setImageAnimationPolicy(ImageAnimationPolicy policy)
 {
-    m_settings->setImageAnimationPolicy(static_cast<blink::ImageAnimationPolicy>(policy));
+    m_settings->setImageAnimationPolicy(
+        static_cast<blink::ImageAnimationPolicy>(policy));
 }
 
 void WebSettingsImpl::setImagesEnabled(bool enabled)
@@ -289,29 +308,52 @@ void WebSettingsImpl::setLoadWithOverviewMode(bool enabled)
     m_settings->setLoadWithOverviewMode(enabled);
 }
 
+void WebSettingsImpl::setShouldReuseGlobalForUnownedMainFrame(bool enabled)
+{
+    m_settings->setShouldReuseGlobalForUnownedMainFrame(enabled);
+}
+
+void WebSettingsImpl::setProgressBarCompletion(
+    ProgressBarCompletion progressBarCompletion)
+{
+    m_settings->setProgressBarCompletion(
+        static_cast<blink::ProgressBarCompletion>(progressBarCompletion));
+}
+
 void WebSettingsImpl::setPluginsEnabled(bool enabled)
 {
     m_devToolsEmulator->setPluginsEnabled(enabled);
 }
 
+void WebSettingsImpl::setEncryptedMediaEnabled(bool enabled)
+{
+    m_settings->setEncryptedMediaEnabled(enabled);
+}
+
 void WebSettingsImpl::setAvailablePointerTypes(int pointers)
 {
-    m_settings->setAvailablePointerTypes(pointers);
+    m_devToolsEmulator->setAvailablePointerTypes(pointers);
 }
 
 void WebSettingsImpl::setPrimaryPointerType(PointerType pointer)
 {
-    m_settings->setPrimaryPointerType(static_cast<blink::PointerType>(pointer));
+    m_devToolsEmulator->setPrimaryPointerType(
+        static_cast<blink::PointerType>(pointer));
 }
 
 void WebSettingsImpl::setAvailableHoverTypes(int types)
 {
-    m_settings->setAvailableHoverTypes(types);
+    m_devToolsEmulator->setAvailableHoverTypes(types);
 }
 
 void WebSettingsImpl::setPrimaryHoverType(HoverType type)
 {
-    m_settings->setPrimaryHoverType(static_cast<blink::HoverType>(type));
+    m_devToolsEmulator->setPrimaryHoverType(static_cast<blink::HoverType>(type));
+}
+
+void WebSettingsImpl::setPreferHiddenVolumeControls(bool enabled)
+{
+    m_settings->setPreferHiddenVolumeControls(enabled);
 }
 
 void WebSettingsImpl::setDOMPasteAllowed(bool enabled)
@@ -319,7 +361,8 @@ void WebSettingsImpl::setDOMPasteAllowed(bool enabled)
     m_settings->setDOMPasteAllowed(enabled);
 }
 
-void WebSettingsImpl::setShrinksViewportContentToFit(bool shrinkViewportContent)
+void WebSettingsImpl::setShrinksViewportContentToFit(
+    bool shrinkViewportContent)
 {
     m_shrinksViewportContentToFit = shrinkViewportContent;
 }
@@ -329,9 +372,9 @@ void WebSettingsImpl::setSpatialNavigationEnabled(bool enabled)
     m_settings->setSpatialNavigationEnabled(enabled);
 }
 
-void WebSettingsImpl::setUsesEncodingDetector(bool usesDetector)
+void WebSettingsImpl::setSpellCheckEnabledByDefault(bool enabled)
 {
-    m_settings->setUsesEncodingDetector(usesDetector);
+    m_settings->setSpellCheckEnabledByDefault(enabled);
 }
 
 void WebSettingsImpl::setTextAreasAreResizable(bool areResizable)
@@ -339,22 +382,20 @@ void WebSettingsImpl::setTextAreasAreResizable(bool areResizable)
     m_settings->setTextAreasAreResizable(areResizable);
 }
 
-void WebSettingsImpl::setJavaEnabled(bool enabled)
-{
-    m_settings->setJavaEnabled(enabled);
-}
-
 void WebSettingsImpl::setAllowScriptsToCloseWindows(bool allow)
 {
     m_settings->setAllowScriptsToCloseWindows(allow);
 }
 
-void WebSettingsImpl::setUseLegacyBackgroundSizeShorthandBehavior(bool useLegacyBackgroundSizeShorthandBehavior)
+void WebSettingsImpl::setUseLegacyBackgroundSizeShorthandBehavior(
+    bool useLegacyBackgroundSizeShorthandBehavior)
 {
-    m_settings->setUseLegacyBackgroundSizeShorthandBehavior(useLegacyBackgroundSizeShorthandBehavior);
+    m_settings->setUseLegacyBackgroundSizeShorthandBehavior(
+        useLegacyBackgroundSizeShorthandBehavior);
 }
 
-void WebSettingsImpl::setWideViewportQuirkEnabled(bool wideViewportQuirkEnabled)
+void WebSettingsImpl::setWideViewportQuirkEnabled(
+    bool wideViewportQuirkEnabled)
 {
     m_settings->setWideViewportQuirkEnabled(wideViewportQuirkEnabled);
 }
@@ -384,9 +425,11 @@ void WebSettingsImpl::setXSSAuditorEnabled(bool enabled)
     m_settings->setXSSAuditorEnabled(enabled);
 }
 
-void WebSettingsImpl::setTextTrackKindUserPreference(TextTrackKindUserPreference preference)
+void WebSettingsImpl::setTextTrackKindUserPreference(
+    TextTrackKindUserPreference preference)
 {
-    m_settings->setTextTrackKindUserPreference(static_cast<blink::TextTrackKindUserPreference>(preference));
+    m_settings->setTextTrackKindUserPreference(
+        static_cast<blink::TextTrackKindUserPreference>(preference));
 }
 
 void WebSettingsImpl::setTextTrackBackgroundColor(const WebString& color)
@@ -409,6 +452,11 @@ void WebSettingsImpl::setTextTrackFontVariant(const WebString& fontVariant)
     m_settings->setTextTrackFontVariant(fontVariant);
 }
 
+void WebSettingsImpl::setTextTrackMarginPercentage(float percentage)
+{
+    m_settings->setTextTrackMarginPercentage(percentage);
+}
+
 void WebSettingsImpl::setTextTrackTextColor(const WebString& color)
 {
     m_settings->setTextTrackTextColor(color);
@@ -424,14 +472,14 @@ void WebSettingsImpl::setTextTrackTextSize(const WebString& size)
     m_settings->setTextTrackTextSize(size);
 }
 
-void WebSettingsImpl::setUnsafePluginPastingEnabled(bool enabled)
-{
-    m_settings->setUnsafePluginPastingEnabled(enabled);
-}
-
 void WebSettingsImpl::setDNSPrefetchingEnabled(bool enabled)
 {
     m_settings->setDNSPrefetchingEnabled(enabled);
+}
+
+void WebSettingsImpl::setDataSaverEnabled(bool enabled)
+{
+    m_settings->setDataSaverEnabled(enabled);
 }
 
 void WebSettingsImpl::setLocalStorageEnabled(bool enabled)
@@ -459,6 +507,11 @@ void WebSettingsImpl::setAllowFileAccessFromFileURLs(bool allow)
     m_settings->setAllowFileAccessFromFileURLs(allow);
 }
 
+void WebSettingsImpl::setAllowGeolocationOnInsecureOrigins(bool allow)
+{
+    m_settings->setAllowGeolocationOnInsecureOrigins(allow);
+}
+
 void WebSettingsImpl::setThreadedScrollingEnabled(bool enabled)
 {
     m_settings->setThreadedScrollingEnabled(enabled);
@@ -469,29 +522,14 @@ void WebSettingsImpl::setTouchDragDropEnabled(bool enabled)
     m_settings->setTouchDragDropEnabled(enabled);
 }
 
-void WebSettingsImpl::setTouchEditingEnabled(bool enabled)
-{
-    m_settings->setTouchEditingEnabled(enabled);
-}
-
 void WebSettingsImpl::setOfflineWebApplicationCacheEnabled(bool enabled)
 {
     m_settings->setOfflineWebApplicationCacheEnabled(enabled);
 }
 
-void WebSettingsImpl::setWebAudioEnabled(bool enabled)
-{
-    m_settings->setWebAudioEnabled(enabled);
-}
-
 void WebSettingsImpl::setExperimentalWebGLEnabled(bool enabled)
 {
     m_settings->setWebGLEnabled(enabled);
-}
-
-void WebSettingsImpl::setOpenGLMultisamplingEnabled(bool enabled)
-{
-    m_settings->setOpenGLMultisamplingEnabled(enabled);
 }
 
 void WebSettingsImpl::setRenderVSyncNotificationEnabled(bool enabled)
@@ -502,6 +540,11 @@ void WebSettingsImpl::setRenderVSyncNotificationEnabled(bool enabled)
 void WebSettingsImpl::setWebGLErrorsToConsoleEnabled(bool enabled)
 {
     m_settings->setWebGLErrorsToConsoleEnabled(enabled);
+}
+
+void WebSettingsImpl::setAlwaysShowContextMenuOnTouch(bool enabled)
+{
+    m_settings->setAlwaysShowContextMenuOnTouch(enabled);
 }
 
 void WebSettingsImpl::setShowContextMenuOnMouseUp(bool enabled)
@@ -521,7 +564,8 @@ void WebSettingsImpl::setShowPaintRects(bool show)
 
 void WebSettingsImpl::setEditingBehavior(EditingBehavior behavior)
 {
-    m_settings->setEditingBehaviorType(static_cast<EditingBehaviorType>(behavior));
+    m_settings->setEditingBehaviorType(
+        static_cast<EditingBehaviorType>(behavior));
 }
 
 void WebSettingsImpl::setAcceleratedCompositingEnabled(bool enabled)
@@ -534,14 +578,14 @@ void WebSettingsImpl::setMockScrollbarsEnabled(bool enabled)
     m_settings->setMockScrollbarsEnabled(enabled);
 }
 
+void WebSettingsImpl::setHideScrollbars(bool enabled)
+{
+    m_settings->setHideScrollbars(enabled);
+}
+
 void WebSettingsImpl::setMockGestureTapHighlightsEnabled(bool enabled)
 {
     m_settings->setMockGestureTapHighlightsEnabled(enabled);
-}
-
-void WebSettingsImpl::setAccelerated2dCanvasEnabled(bool enabled)
-{
-    m_settings->setAccelerated2dCanvasEnabled(enabled);
 }
 
 void WebSettingsImpl::setAccelerated2dCanvasMSAASampleCount(int count)
@@ -569,34 +613,29 @@ void WebSettingsImpl::setMinimumAccelerated2dCanvasSize(int numPixels)
     m_settings->setMinimumAccelerated2dCanvasSize(numPixels);
 }
 
+void WebSettingsImpl::setHideDownloadUI(bool hide)
+{
+    m_settings->setHideDownloadUI(hide);
+}
+
+void WebSettingsImpl::setPresentationReceiver(bool enabled)
+{
+    m_settings->setPresentationReceiver(enabled);
+}
+
+void WebSettingsImpl::setHistoryEntryRequiresUserGesture(bool enabled)
+{
+    m_settings->setHistoryEntryRequiresUserGesture(enabled);
+}
+
 void WebSettingsImpl::setHyperlinkAuditingEnabled(bool enabled)
 {
     m_settings->setHyperlinkAuditingEnabled(enabled);
 }
 
-void WebSettingsImpl::setAsynchronousSpellCheckingEnabled(bool enabled)
-{
-    m_settings->setAsynchronousSpellCheckingEnabled(enabled);
-}
-
-void WebSettingsImpl::setUnifiedTextCheckerEnabled(bool enabled)
-{
-    m_settings->setUnifiedTextCheckerEnabled(enabled);
-}
-
-void WebSettingsImpl::setCaretBrowsingEnabled(bool enabled)
-{
-    m_settings->setCaretBrowsingEnabled(enabled);
-}
-
 void WebSettingsImpl::setValidationMessageTimerMagnification(int newValue)
 {
     m_settings->setValidationMessageTimerMagnification(newValue);
-}
-
-void WebSettingsImpl::setAllowDisplayOfInsecureContent(bool enabled)
-{
-    m_settings->setAllowDisplayOfInsecureContent(enabled);
 }
 
 void WebSettingsImpl::setAllowRunningOfInsecureContent(bool enabled)
@@ -614,9 +653,26 @@ void WebSettingsImpl::setStrictMixedContentChecking(bool enabled)
     m_settings->setStrictMixedContentChecking(enabled);
 }
 
+void WebSettingsImpl::setStrictMixedContentCheckingForPlugin(bool enabled)
+{
+    m_settings->setStrictMixedContentCheckingForPlugin(enabled);
+}
+
 void WebSettingsImpl::setStrictPowerfulFeatureRestrictions(bool enabled)
 {
     m_settings->setStrictPowerfulFeatureRestrictions(enabled);
+}
+
+void WebSettingsImpl::setStrictlyBlockBlockableMixedContent(bool enabled)
+{
+    m_settings->setStrictlyBlockBlockableMixedContent(enabled);
+}
+
+void WebSettingsImpl::setPassiveEventListenerDefault(
+    PassiveEventListenerDefault defaultValue)
+{
+    m_settings->setPassiveListenerDefault(
+        static_cast<PassiveListenerDefault>(defaultValue));
 }
 
 void WebSettingsImpl::setPasswordEchoEnabled(bool flag)
@@ -624,7 +680,8 @@ void WebSettingsImpl::setPasswordEchoEnabled(bool flag)
     m_settings->setPasswordEchoEnabled(flag);
 }
 
-void WebSettingsImpl::setPasswordEchoDurationInSeconds(double durationInSeconds)
+void WebSettingsImpl::setPasswordEchoDurationInSeconds(
+    double durationInSeconds)
 {
     m_settings->setPasswordEchoDurationInSeconds(durationInSeconds);
 }
@@ -656,7 +713,7 @@ void WebSettingsImpl::setEnableTouchAdjustment(bool enabled)
 
 bool WebSettingsImpl::multiTargetTapNotificationEnabled()
 {
-    return m_settings->multiTargetTapNotificationEnabled();
+    return m_settings->getMultiTargetTapNotificationEnabled();
 }
 
 void WebSettingsImpl::setMultiTargetTapNotificationEnabled(bool enabled)
@@ -664,34 +721,14 @@ void WebSettingsImpl::setMultiTargetTapNotificationEnabled(bool enabled)
     m_settings->setMultiTargetTapNotificationEnabled(enabled);
 }
 
-int WebSettingsImpl::availablePointerTypes() const
-{
-    return m_settings->availablePointerTypes();
-}
-
-WebSettings::PointerType WebSettingsImpl::primaryPointerType() const
-{
-    return static_cast<PointerType>(m_settings->primaryPointerType());
-}
-
-int WebSettingsImpl::availableHoverTypes() const
-{
-    return m_settings->availableHoverTypes();
-}
-
-WebSettings::HoverType WebSettingsImpl::primaryHoverType() const
-{
-    return static_cast<HoverType>(m_settings->primaryHoverType());
-}
-
 bool WebSettingsImpl::viewportEnabled() const
 {
-    return m_settings->viewportEnabled();
+    return m_settings->getViewportEnabled();
 }
 
 bool WebSettingsImpl::viewportMetaEnabled() const
 {
-    return m_settings->viewportMetaEnabled();
+    return m_settings->getViewportMetaEnabled();
 }
 
 bool WebSettingsImpl::doubleTapToZoomEnabled() const
@@ -701,12 +738,7 @@ bool WebSettingsImpl::doubleTapToZoomEnabled() const
 
 bool WebSettingsImpl::mockGestureTapHighlightsEnabled() const
 {
-    return m_settings->mockGestureTapHighlightsEnabled();
-}
-
-bool WebSettingsImpl::mainFrameResizesAreOrientationChanges() const
-{
-    return m_mainFrameResizesAreOrientationChanges;
+    return m_settings->getMockGestureTapHighlightsEnabled();
 }
 
 bool WebSettingsImpl::shrinksViewportContentToFit() const
@@ -729,6 +761,11 @@ void WebSettingsImpl::setMediaPlaybackRequiresUserGesture(bool required)
     m_settings->setMediaPlaybackRequiresUserGesture(required);
 }
 
+void WebSettingsImpl::setPresentationRequiresUserGesture(bool required)
+{
+    m_settings->setPresentationRequiresUserGesture(required);
+}
+
 void WebSettingsImpl::setViewportEnabled(bool enabled)
 {
     m_settings->setViewportEnabled(enabled);
@@ -747,6 +784,12 @@ void WebSettingsImpl::setSyncXHRInDocumentsEnabled(bool enabled)
 void WebSettingsImpl::setCookieEnabled(bool enabled)
 {
     m_settings->setCookieEnabled(enabled);
+}
+
+void WebSettingsImpl::setCrossOriginMediaPlaybackRequiresUserGesture(
+    bool required)
+{
+    m_settings->setCrossOriginMediaPlaybackRequiresUserGesture(required);
 }
 
 void WebSettingsImpl::setNavigateOnDragDrop(bool enabled)
@@ -774,15 +817,9 @@ void WebSettingsImpl::setSelectionStrategy(SelectionStrategyType strategy)
     m_settings->setSelectionStrategy(static_cast<SelectionStrategy>(strategy));
 }
 
-
 void WebSettingsImpl::setSmartInsertDeleteEnabled(bool enabled)
 {
     m_settings->setSmartInsertDeleteEnabled(enabled);
-}
-
-void WebSettingsImpl::setPinchOverlayScrollbarThickness(int thickness)
-{
-    m_settings->setPinchOverlayScrollbarThickness(thickness);
 }
 
 void WebSettingsImpl::setUseSolidColorScrollbars(bool enabled)
@@ -792,7 +829,7 @@ void WebSettingsImpl::setUseSolidColorScrollbars(bool enabled)
 
 void WebSettingsImpl::setMainFrameResizesAreOrientationChanges(bool enabled)
 {
-    m_mainFrameResizesAreOrientationChanges = enabled;
+    m_devToolsEmulator->setMainFrameResizesAreOrientationChanges(enabled);
 }
 
 void WebSettingsImpl::setV8CacheOptions(V8CacheOptions options)
@@ -800,9 +837,51 @@ void WebSettingsImpl::setV8CacheOptions(V8CacheOptions options)
     m_settings->setV8CacheOptions(static_cast<blink::V8CacheOptions>(options));
 }
 
-void WebSettingsImpl::setUseMobileViewportStyle(bool enabled)
+void WebSettingsImpl::setV8CacheStrategiesForCacheStorage(
+    V8CacheStrategiesForCacheStorage strategies)
 {
-    m_devToolsEmulator->setUseMobileViewportStyle(enabled);
+    m_settings->setV8CacheStrategiesForCacheStorage(
+        static_cast<blink::V8CacheStrategiesForCacheStorage>(strategies));
 }
+
+void WebSettingsImpl::setViewportStyle(WebViewportStyle style)
+{
+    m_devToolsEmulator->setViewportStyle(style);
+}
+
+void WebSettingsImpl::setExpensiveBackgroundThrottlingCPUBudget(
+    float cpuBudget)
+{
+    m_expensiveBackgroundThrottlingCPUBudget = cpuBudget;
+}
+
+void WebSettingsImpl::setExpensiveBackgroundThrottlingInitialBudget(
+    float initialBudget)
+{
+    m_expensiveBackgroundThrottlingInitialBudget = initialBudget;
+}
+
+void WebSettingsImpl::setExpensiveBackgroundThrottlingMaxBudget(
+    float maxBudget)
+{
+    m_expensiveBackgroundThrottlingMaxBudget = maxBudget;
+}
+
+void WebSettingsImpl::setExpensiveBackgroundThrottlingMaxDelay(float maxDelay)
+{
+    m_expensiveBackgroundThrottlingMaxDelay = maxDelay;
+}
+
+#ifdef TENCENT_FITSCREEN
+void WebSettingsImpl::setFitScreenEnabled(bool enabled)
+{
+    m_settings->setFitScreenEnabled(enabled);
+}
+
+bool WebSettingsImpl::getFitScreenEnabled() const
+{
+    return m_settings->getFitScreenEnabled();
+}
+#endif
 
 } // namespace blink

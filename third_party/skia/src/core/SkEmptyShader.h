@@ -14,27 +14,30 @@
 
 /**
  *  \class SkEmptyShader
- *  A Shader that always draws nothing. Its createContext always returns NULL.
+ *  A Shader that always draws nothing. Its createContext always returns nullptr.
  */
 class SK_API SkEmptyShader : public SkShader {
 public:
-    SkEmptyShader() {}
-
-    size_t contextSize() const override {
-        // Even though createContext returns NULL we have to return a value of at least
-        // sizeof(SkShader::Context) to satisfy SkSmallAllocator.
-        return sizeof(SkShader::Context);
-    }
+    SkEmptyShader() { }
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkEmptyShader)
 
 protected:
-    SkShader::Context* onCreateContext(const ContextRec&, void*) const override {
-        return NULL;
+    size_t onContextSize(const ContextRec&) const override
+    {
+        // Even though createContext returns nullptr we have to return a value of at least
+        // sizeof(SkShader::Context) to satisfy SkSmallAllocator.
+        return sizeof(SkShader::Context);
     }
 
-    void flatten(SkWriteBuffer& buffer) const override {
+    SkShader::Context* onCreateContext(const ContextRec&, void*) const override
+    {
+        return nullptr;
+    }
+
+    void flatten(SkWriteBuffer& buffer) const override
+    {
         // Do nothing.
         // We just don't want to fall through to SkShader::flatten(),
         // which will write data we don't care to serialize or decode.

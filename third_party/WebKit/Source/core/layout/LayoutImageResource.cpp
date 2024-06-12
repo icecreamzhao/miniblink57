@@ -4,7 +4,8 @@
  * Copyright (C) 2000 Dirk Mueller <mueller@kde.org>
  * Copyright (C) 2006 Allan Sandfeld Jensen <kde@carewolf.com>
  * Copyright (C) 2006 Samuel Weinig <sam.weinig@gmail.com>
- * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2009, 2010 Apple Inc.
+ *               All rights reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2010 Patrick Gansterer <paroga@paroga.com>
  *
@@ -25,10 +26,11 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutImageResource.h"
 
+#include "core/dom/Element.h"
 #include "core/layout/LayoutImage.h"
+#include "core/svg/graphics/SVGImageForContainer.h"
 
 namespace blink {
 
@@ -38,9 +40,7 @@ LayoutImageResource::LayoutImageResource()
 {
 }
 
-LayoutImageResource::~LayoutImageResource()
-{
-}
+LayoutImageResource::~LayoutImageResource() { }
 
 void LayoutImageResource::initialize(LayoutObject* layoutObject)
 {
@@ -53,22 +53,24 @@ void LayoutImageResource::shutdown()
 {
     ASSERT(m_layoutObject);
 
-    if (m_cachedImage)
-        m_cachedImage->removeClient(m_layoutObject);
+    if (!m_cachedImage)
+        return;
+    m_cachedImage->removeObserver(m_layoutObject);
 }
 
-void LayoutImageResource::setImageResource(ImageResource* newImage)
+void LayoutImageResource::setImageResource(ImageResourceContent* newImage)
 {
     ASSERT(m_layoutObject);
 
     if (m_cachedImage == newImage)
         return;
 
-    if (m_cachedImage)
-        m_cachedImage->removeClient(m_layoutObject);
+    if (m_cachedImage) {
+        m_cachedImage->removeObserver(m_layoutObject);
+    }
     m_cachedImage = newImage;
     if (m_cachedImage) {
-        m_cachedImage->addClient(m_layoutObject);
+        m_cachedImage->addObserver(m_layoutObject);
         if (m_cachedImage->errorOccurred())
             m_layoutObject->imageChanged(m_cachedImage.get());
     } else {
@@ -83,26 +85,45 @@ void LayoutImageResource::resetAnimation()
     if (!m_cachedImage)
         return;
 
-    image()->resetAnimation();
+    m_cachedImage->getImage()->resetAnimation();
 
     m_layoutObject->setShouldDoFullPaintInvalidation();
 }
 
-void LayoutImageResource::setContainerSizeForLayoutObject(const IntSize& imageContainerSize)
-{
-    ASSERT(m_layoutObject);
-    if (m_cachedImage)
-        m_cachedImage->setContainerSizeForLayoutObject(m_layoutObject, imageContainerSize, m_layoutObject->style()->effectiveZoom());
-}
-
-LayoutSize LayoutImageResource::getImageSize(float multiplier, ImageResource::SizeType type) const
+LayoutSize LayoutImageResource::imageSize(float multiplier) const
 {
     if (!m_cachedImage)
         return LayoutSize();
-    LayoutSize size = m_cachedImage->imageSizeForLayoutObject(m_layoutObject, multiplier, type);
-    if (m_layoutObject && m_layoutObject->isLayoutImage())
+    LayoutSize size = m_cachedImage->imageSize(
+        LayoutObject::shouldRespectImageOrientation(m_layoutObject), multiplier);
+    if (m_layoutObject && m_layoutObject->isLayoutImage() && size.width() && size.height())
         size.scale(toLayoutImage(m_layoutObject)->imageDevicePixelRatio());
     return size;
+}
+
+PassRefPtr<Image> LayoutImageResource::image(const IntSize& containerSize,
+    float zoom) const
+{
+    if (!m_cachedImage)
+        return Image::nullImage();
+
+    if (!m_cachedImage->getImage()->isSVGImage())
+        return m_cachedImage->getImage();
+
+    KURL url;
+    SVGImage* svgImage = toSVGImage(m_cachedImage->getImage());
+    Node* node = m_layoutObject->node();
+    if (node && node->isElementNode()) {
+        const AtomicString& urlString = toElement(node)->imageSourceURL();
+        url = node->document().completeURL(urlString);
+    }
+    return SVGImageForContainer::create(svgImage, containerSize, zoom, url);
+}
+
+bool LayoutImageResource::maybeAnimated() const
+{
+    Image* image = m_cachedImage ? m_cachedImage->getImage() : Image::nullImage();
+    return image->maybeAnimated();
 }
 
 } // namespace blink

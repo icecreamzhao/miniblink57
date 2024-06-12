@@ -10,10 +10,12 @@
 #include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/ToV8.h"
 #include "core/CoreExport.h"
-#include "core/dom/ActiveDOMObject.h"
 #include "core/dom/ExecutionContext.h"
+#include "core/dom/SuspendableObject.h"
+#include "platform/ScriptForbiddenScope.h"
 #include "platform/Timer.h"
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
+#include "platform/heap/SelfKeepAlive.h"
 #include <v8.h>
 
 namespace blink {
@@ -22,23 +24,26 @@ namespace blink {
 // functionalities.
 //  - A ScriptPromiseResolver retains a ScriptState. A caller
 //    can call resolve or reject from outside of a V8 context.
-//  - This class is an ActiveDOMObject and keeps track of the associated
+//  - This class is an SuspendableObject and keeps track of the associated
 //    ExecutionContext state. When the ExecutionContext is suspended,
 //    resolve or reject will be delayed. When it is stopped, resolve or reject
 //    will be ignored.
-class CORE_EXPORT ScriptPromiseResolver : public RefCountedWillBeRefCountedGarbageCollected<ScriptPromiseResolver>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ScriptPromiseResolver);
+class CORE_EXPORT ScriptPromiseResolver
+    : public GarbageCollectedFinalized<ScriptPromiseResolver>,
+      public SuspendableObject {
+    USING_GARBAGE_COLLECTED_MIXIN(ScriptPromiseResolver);
     WTF_MAKE_NONCOPYABLE(ScriptPromiseResolver);
+
 public:
-    static PassRefPtrWillBeRawPtr<ScriptPromiseResolver> create(ScriptState* scriptState)
+    static ScriptPromiseResolver* create(ScriptState* scriptState)
     {
-        RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = adoptRefWillBeNoop(new ScriptPromiseResolver(scriptState));
+        ScriptPromiseResolver* resolver = new ScriptPromiseResolver(scriptState);
         resolver->suspendIfNeeded();
-        return resolver.release();
+        return resolver;
     }
 
-#if ENABLE(ASSERT)
-    // Eagerly finalized so as to ensure valid access to executionContext()
+#if DCHECK_IS_ON()
+    // Eagerly finalized so as to ensure valid access to getExecutionContext()
     // from the destructor's assert.
     EAGERLY_FINALIZE();
 
@@ -46,21 +51,22 @@ public:
     {
         // This assertion fails if:
         //  - promise() is called at least once and
-        //  - this resolver is destructed before it is resolved, rejected or
-        //    the associated ExecutionContext is stopped.
-        ASSERT(m_state == ResolvedOrRejected || !m_isPromiseCalled || !executionContext() || executionContext()->activeDOMObjectsAreStopped());
+        //  - this resolver is destructed before it is resolved, rejected,
+        //    detached, the V8 isolate is terminated or the associated
+        //    ExecutionContext is stopped.
+        ASSERT(m_state == Detached || !m_isPromiseCalled || !getScriptState()->contextIsValid() || !getExecutionContext() || getExecutionContext()->isContextDestroyed());
     }
 #endif
 
     // Anything that can be passed to toV8 can be passed to this function.
-    template<typename T>
+    template <typename T>
     void resolve(T value)
     {
         resolveOrReject(value, Resolving);
     }
 
     // Anything that can be passed to toV8 can be passed to this function.
-    template<typename T>
+    template <typename T>
     void reject(T value)
     {
         resolveOrReject(value, Rejecting);
@@ -69,24 +75,30 @@ public:
     void resolve() { resolve(ToV8UndefinedGenerator()); }
     void reject() { reject(ToV8UndefinedGenerator()); }
 
-    ScriptState* scriptState() { return m_scriptState.get(); }
+    ScriptState* getScriptState() { return m_scriptState.get(); }
 
     // Note that an empty ScriptPromise will be returned after resolve or
     // reject is called.
     ScriptPromise promise()
     {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
         m_isPromiseCalled = true;
 #endif
         return m_resolver.promise();
     }
 
-    ScriptState* scriptState() const { return m_scriptState.get(); }
+    ScriptState* getScriptState() const { return m_scriptState.get(); }
 
-    // ActiveDOMObject implementation.
+    // SuspendableObject implementation.
     void suspend() override;
     void resume() override;
-    void stop() override;
+    void contextDestroyed(ExecutionContext*) override { detach(); }
+
+    // Calling this function makes the resolver release its internal resources.
+    // That means the associated promise will never be resolved or rejected
+    // unless it's already been resolved or rejected.
+    // Do not call this function unless you truly need the behavior.
+    void detach();
 
     // Once this function is called this resolver stays alive while the
     // promise is pending and the associated ExecutionContext isn't stopped.
@@ -96,7 +108,7 @@ public:
 
 protected:
     // You need to call suspendIfNeeded after the construction because
-    // this is an ActiveDOMObject.
+    // this is an SuspendableObject.
     explicit ScriptPromiseResolver(ScriptState*);
 
 private:
@@ -105,45 +117,56 @@ private:
         Pending,
         Resolving,
         Rejecting,
-        ResolvedOrRejected,
-    };
-    enum LifetimeMode {
-        Default,
-        KeepAliveWhilePending,
+        Detached,
     };
 
-    template<typename T>
+    template <typename T>
     void resolveOrReject(T value, ResolutionState newState)
     {
-        if (m_state != Pending || !executionContext() || executionContext()->activeDOMObjectsAreStopped())
+        if (m_state != Pending || !getScriptState()->contextIsValid() || !getExecutionContext() || getExecutionContext()->isContextDestroyed())
             return;
         ASSERT(newState == Resolving || newState == Rejecting);
         m_state = newState;
-        // Retain this object until it is actually resolved or rejected.
-        // |deref| will be called in |clear|.
-        ref();
 
         ScriptState::Scope scope(m_scriptState.get());
-        m_value.set(
-            m_scriptState->isolate(),
-            toV8(value, m_scriptState->context()->Global(), m_scriptState->isolate()));
-        if (!executionContext()->activeDOMObjectsAreSuspended())
-            resolveOrRejectImmediately();
+        m_value.set(m_scriptState->isolate(),
+            ToV8(value, m_scriptState->context()->Global(),
+                m_scriptState->isolate()));
+
+        if (getExecutionContext()->isContextSuspended()) {
+            // Retain this object until it is actually resolved or rejected.
+            keepAliveWhilePending();
+            return;
+        }
+        // TODO(esprehn): This is a hack, instead we should RELEASE_ASSERT that
+        // script is allowed, and v8 should be running the entry hooks below and
+        // crashing if script is forbidden. We should then audit all users of
+        // ScriptPromiseResolver and the related specs and switch to an async
+        // resolve.
+        // See: http://crbug.com/663476
+        if (ScriptForbiddenScope::isScriptForbidden()) {
+            m_timer.startOneShot(0, BLINK_FROM_HERE);
+            return;
+        }
+        resolveOrRejectImmediately();
     }
 
     void resolveOrRejectImmediately();
-    void onTimerFired(Timer<ScriptPromiseResolver>*);
-    void clear();
+    void onTimerFired(TimerBase*);
 
     ResolutionState m_state;
     const RefPtr<ScriptState> m_scriptState;
-    LifetimeMode m_mode;
-    Timer<ScriptPromiseResolver> m_timer;
+    TaskRunnerTimer<ScriptPromiseResolver> m_timer;
     Resolver m_resolver;
     ScopedPersistent<v8::Value> m_value;
-#if ENABLE(ASSERT)
+
+    // To support keepAliveWhilePending(), this object needs to keep itself
+    // alive while in that state.
+    SelfKeepAlive<ScriptPromiseResolver> m_keepAlive;
+
+#if DCHECK_IS_ON()
     // True if promise() is called.
-    bool m_isPromiseCalled;
+    bool m_isPromiseCalled = false;
 #endif
 };
 

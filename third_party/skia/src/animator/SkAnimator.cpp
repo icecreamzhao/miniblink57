@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkAnimator.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -14,9 +13,9 @@
 #include "SkDisplayMovie.h"
 #include "SkDisplayTypes.h"
 #include "SkDisplayXMLParser.h"
-#include "SkStream.h"
 #include "SkScript.h"
 #include "SkScript2.h" //   compiled script experiment
+#include "SkStream.h"
 #include "SkSystemEventTypes.h"
 #include "SkTypedArray.h"
 #ifdef SK_BUILD_FOR_ANDROID
@@ -27,34 +26,35 @@
 #endif
 
 #if defined SK_BUILD_FOR_WIN32 && defined SK_DEBUG
-    #define _static
-    extern const char gMathPrimerText[];
-    extern const char gMathPrimerBinary[];
+#define _static
+extern const char gMathPrimerText[];
+extern const char gMathPrimerBinary[];
 #else
-    #define _static static
+#define _static static
 #endif
 
-_static const char gMathPrimerText[] =
-"<screenplay>"
-    "<Math id=\"Math\"/>"
-    "<Number id=\"Number\"/>"
-"</screenplay>";
+_static const char gMathPrimerText[] = "<screenplay>"
+                                       "<Math id=\"Math\"/>"
+                                       "<Number id=\"Number\"/>"
+                                       "</screenplay>";
 
 #define gMathPrimer gMathPrimerText
 
-SkAnimator::SkAnimator() : fMaker(NULL) {
+SkAnimator::SkAnimator()
+    : fMaker(nullptr)
+{
     initialize();
 }
 
-SkAnimator::~SkAnimator() {
-    SkDELETE(fMaker);
-}
+SkAnimator::~SkAnimator() { delete fMaker; }
 
-void SkAnimator::addExtras(SkExtras* extras) {
+void SkAnimator::addExtras(SkExtras* extras)
+{
     *fMaker->fExtras.append() = extras;
 }
 
-bool SkAnimator::appendStream(SkStream* stream) {
+bool SkAnimator::appendStream(SkStream* stream)
+{
     return decodeStream(stream);
 }
 
@@ -80,10 +80,11 @@ bool SkAnimator::decodeDOM(const SkDOM& dom, const SkDOMNode* node)
     return parser.parse(dom, node);
 }
 
-bool SkAnimator::decodeURI(const char uri[]) {
-//  SkDebugf("animator decode %s\n", uri);
+bool SkAnimator::decodeURI(const char uri[])
+{
+    //  SkDebugf("animator decode %s\n", uri);
 
-//    SkStream* stream = SkStream::GetURIStream(fMaker->fPrefix.c_str(), uri);
+    //    SkStream* stream = SkStream::GetURIStream(fMaker->fPrefix.c_str(), uri);
     SkAutoTDelete<SkStream> stream(SkStream::NewFromFile(uri));
     if (stream.get()) {
         this->setURIBase(uri);
@@ -93,7 +94,8 @@ bool SkAnimator::decodeURI(const char uri[]) {
     }
 }
 
-bool SkAnimator::doCharEvent(SkUnichar code) {
+bool SkAnimator::doCharEvent(SkUnichar code)
+{
     if (code == 0)
         return false;
     struct SkEventState state;
@@ -104,21 +106,21 @@ bool SkAnimator::doCharEvent(SkUnichar code) {
     return result;
 }
 
-bool SkAnimator::doClickEvent(int clickState, SkScalar x, SkScalar y) {
+bool SkAnimator::doClickEvent(int clickState, SkScalar x, SkScalar y)
+{
     SkASSERT(clickState >= 0 && clickState <= 2);
     struct SkEventState state;
     state.fX = x;
     state.fY = y;
     fMaker->fEnableTime = fMaker->getAppTime();
     bool result = fMaker->fEvents.doEvent(*fMaker,
-        clickState == 0 ? SkDisplayEvent::kMouseDown :
-        clickState == 1 ? SkDisplayEvent::kMouseDrag :
-        SkDisplayEvent::kMouseUp, &state);
+        clickState == 0 ? SkDisplayEvent::kMouseDown : clickState == 1 ? SkDisplayEvent::kMouseDrag : SkDisplayEvent::kMouseUp, &state);
     fMaker->notifyInval();
     return result;
 }
 
-bool SkAnimator::doKeyEvent(SkKey code) {
+bool SkAnimator::doKeyEvent(SkKey code)
+{
     if (code == 0)
         return false;
     struct SkEventState state;
@@ -129,7 +131,8 @@ bool SkAnimator::doKeyEvent(SkKey code) {
     return result;
 }
 
-bool SkAnimator::doKeyUpEvent(SkKey code) {
+bool SkAnimator::doKeyUpEvent(SkKey code)
+{
     if (code == 0)
         return false;
     struct SkEventState state;
@@ -140,13 +143,15 @@ bool SkAnimator::doKeyUpEvent(SkKey code) {
     return result;
 }
 
-bool SkAnimator::doUserEvent(const SkEvent& evt) {
+bool SkAnimator::doUserEvent(const SkEvent& evt)
+{
     fMaker->fEnableTime = fMaker->getAppTime();
     return onEvent(evt);
 }
 
-SkAnimator::DifferenceType SkAnimator::draw(SkCanvas* canvas, SkPaint* paint, SkMSec time) {
-    if (paint == NULL)
+SkAnimator::DifferenceType SkAnimator::draw(SkCanvas* canvas, SkPaint* paint, SkMSec time)
+{
+    if (paint == nullptr)
         return draw(canvas, time);
     fMaker->fScreenplay.time = time;
     fMaker->fCanvas = canvas;
@@ -155,20 +160,23 @@ SkAnimator::DifferenceType SkAnimator::draw(SkCanvas* canvas, SkPaint* paint, Sk
     int result = fMaker->fDisplayList.draw(*fMaker, time);
     if (result)
         result += fMaker->fDisplayList.fHasUnion;
-    return (DifferenceType) result;
+    return (DifferenceType)result;
 }
 
-SkAnimator::DifferenceType SkAnimator::draw(SkCanvas* canvas, SkMSec time) {
+SkAnimator::DifferenceType SkAnimator::draw(SkCanvas* canvas, SkMSec time)
+{
     SkPaint paint;
     return draw(canvas, &paint, time);
 }
 
 #ifdef SK_DEBUG
-void SkAnimator::eventDone(const SkEvent& ) {
+void SkAnimator::eventDone(const SkEvent&)
+{
 }
 #endif
 
-bool SkAnimator::findClickEvent(SkScalar x, SkScalar y) {
+bool SkAnimator::findClickEvent(SkScalar x, SkScalar y)
+{
     struct SkEventState state;
     state.fDisable = true;
     state.fX = x;
@@ -179,116 +187,133 @@ bool SkAnimator::findClickEvent(SkScalar x, SkScalar y) {
     return result;
 }
 
-const SkAnimator* SkAnimator::getAnimator(const SkDisplayable* displayable) const {
+const SkAnimator* SkAnimator::getAnimator(const SkDisplayable* displayable) const
+{
     if (displayable->getType() != SkType_Movie)
-        return NULL;
-    const SkDisplayMovie* movie = (const SkDisplayMovie*) displayable;
+        return nullptr;
+    const SkDisplayMovie* movie = (const SkDisplayMovie*)displayable;
     return movie->getAnimator();
 }
 
-const SkDisplayable* SkAnimator::getElement(const char* id) {
+const SkDisplayable* SkAnimator::getElement(const char* id)
+{
     SkDisplayable* element;
     if (fMaker->find(id, &element) == false)
-        return NULL;
-    return (const SkDisplayable*) element;
+        return nullptr;
+    return (const SkDisplayable*)element;
 }
 
-SkElementType SkAnimator::getElementType(const SkDisplayable* ae) {
-    SkDisplayable* element = (SkDisplayable*) ae;
-    const SkMemberInfo* info = SkDisplayType::GetMembers(fMaker, element->getType(), NULL);
-    return (SkElementType) SkDisplayType::Find(fMaker, info);
+SkElementType SkAnimator::getElementType(const SkDisplayable* ae)
+{
+    SkDisplayable* element = (SkDisplayable*)ae;
+    const SkMemberInfo* info = SkDisplayType::GetMembers(fMaker, element->getType(), nullptr);
+    return (SkElementType)SkDisplayType::Find(fMaker, info);
 }
 
-SkElementType SkAnimator::getElementType(const char* id) {
+SkElementType SkAnimator::getElementType(const char* id)
+{
     const SkDisplayable* element = getElement(id);
     return getElementType(element);
 }
 
-const SkMemberInfo* SkAnimator::getField(const SkDisplayable* ae, const char* field) {
-    SkDisplayable* element = (SkDisplayable*) ae;
+const SkMemberInfo* SkAnimator::getField(const SkDisplayable* ae, const char* field)
+{
+    SkDisplayable* element = (SkDisplayable*)ae;
     const SkMemberInfo* info = element->getMember(field);
-    return (const SkMemberInfo*) info;
+    return (const SkMemberInfo*)info;
 }
 
-const SkMemberInfo* SkAnimator::getField(const char* elementID, const char* field) {
+const SkMemberInfo* SkAnimator::getField(const char* elementID, const char* field)
+{
     const SkDisplayable* element = getElement(elementID);
     return getField(element, field);
 }
 
-SkFieldType SkAnimator::getFieldType(const SkMemberInfo* ai) {
-    const SkMemberInfo* info = (const SkMemberInfo*) ai;
-    return (SkFieldType) info->getType();
+SkFieldType SkAnimator::getFieldType(const SkMemberInfo* ai)
+{
+    const SkMemberInfo* info = (const SkMemberInfo*)ai;
+    return (SkFieldType)info->getType();
 }
 
-SkFieldType SkAnimator::getFieldType(const char* id, const char* fieldID) {
+SkFieldType SkAnimator::getFieldType(const char* id, const char* fieldID)
+{
     const SkMemberInfo* field = getField(id, fieldID);
     return getFieldType(field);
 }
 
 static bool getArrayCommon(const SkDisplayable* ae, const SkMemberInfo* ai,
-                           int index, SkOperand* operand) {
-    const SkDisplayable* element = (const SkDisplayable*) ae;
-    const SkMemberInfo* info = (const SkMemberInfo*) ai;
+    int index, SkOperand* operand)
+{
+    const SkDisplayable* element = (const SkDisplayable*)ae;
+    const SkMemberInfo* info = (const SkMemberInfo*)ai;
     SkASSERT(info->fType == SkType_Array);
     return info->getArrayValue(element, index, operand);
 }
 
 int32_t SkAnimator::getArrayInt(const SkDisplayable* ae,
-        const SkMemberInfo* ai, int index) {
+    const SkMemberInfo* ai, int index)
+{
     SkOperand operand;
     bool result = getArrayCommon(ae, ai, index, &operand);
     return result ? operand.fS32 : SK_NaN32;
 }
 
-int32_t SkAnimator::getArrayInt(const char* id, const char* fieldID, int index) {
+int32_t SkAnimator::getArrayInt(const char* id, const char* fieldID, int index)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
+    if (element == nullptr)
         return SK_NaN32;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return SK_NaN32;
     return getArrayInt(element, field, index);
 }
 
 SkScalar SkAnimator::getArrayScalar(const SkDisplayable* ae,
-        const SkMemberInfo* ai, int index) {
+    const SkMemberInfo* ai, int index)
+{
     SkOperand operand;
     bool result = getArrayCommon(ae, ai, index, &operand);
     return result ? operand.fScalar : SK_ScalarNaN;
 }
 
-SkScalar SkAnimator::getArrayScalar(const char* id, const char* fieldID, int index) {
+SkScalar SkAnimator::getArrayScalar(const char* id, const char* fieldID, int index)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
+    if (element == nullptr)
         return SK_ScalarNaN;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return SK_ScalarNaN;
     return getArrayScalar(element, field, index);
 }
 
 const char* SkAnimator::getArrayString(const SkDisplayable* ae,
-        const SkMemberInfo* ai, int index) {
+    const SkMemberInfo* ai, int index)
+{
     SkOperand operand;
     bool result = getArrayCommon(ae, ai, index, &operand);
-    return result ? operand.fString->c_str() : NULL;
+    return result ? operand.fString->c_str() : nullptr;
 }
 
-const char* SkAnimator::getArrayString(const char* id, const char* fieldID, int index) {
+const char* SkAnimator::getArrayString(const char* id, const char* fieldID, int index)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
-        return NULL;
+    if (element == nullptr)
+        return nullptr;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
-        return NULL;
+    if (field == nullptr)
+        return nullptr;
     return getArrayString(element, field, index);
 }
 
-SkMSec SkAnimator::getInterval() {
-    return fMaker->fMinimumInterval == (SkMSec) -1 ? 0 : fMaker->fMinimumInterval;
+SkMSec SkAnimator::getInterval()
+{
+    return fMaker->fMinimumInterval == (SkMSec)-1 ? 0 : fMaker->fMinimumInterval;
 }
 
-void SkAnimator::getInvalBounds(SkRect* inval) {
+void SkAnimator::getInvalBounds(SkRect* inval)
+{
     if (fMaker->fDisplayList.fHasUnion) {
         inval->fLeft = SkIntToScalar(fMaker->fDisplayList.fInvalBounds.fLeft);
         inval->fTop = SkIntToScalar(fMaker->fDisplayList.fInvalBounds.fTop);
@@ -300,17 +325,20 @@ void SkAnimator::getInvalBounds(SkRect* inval) {
     }
 }
 
-const SkXMLParserError* SkAnimator::getParserError() {
+const SkXMLParserError* SkAnimator::getParserError()
+{
     return &fMaker->fError;
 }
 
-const char* SkAnimator::getParserErrorString() {
+const char* SkAnimator::getParserErrorString()
+{
     if (fMaker->fErrorString.size() == 0 && fMaker->fError.hasError())
         fMaker->setErrorString();
     return fMaker->fErrorString.c_str();
 }
 
-int32_t SkAnimator::getInt(const SkDisplayable* element, const SkMemberInfo* info) {
+int32_t SkAnimator::getInt(const SkDisplayable* element, const SkMemberInfo* info)
+{
     if (info->fType != SkType_MemberProperty) {
         SkOperand operand;
         if (info->getType() == SkType_Int) {
@@ -326,17 +354,19 @@ int32_t SkAnimator::getInt(const SkDisplayable* element, const SkMemberInfo* inf
     return SK_NaN32;
 }
 
-int32_t SkAnimator::getInt(const char* id, const char* fieldID) {
+int32_t SkAnimator::getInt(const char* id, const char* fieldID)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
+    if (element == nullptr)
         return SK_NaN32;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return SK_NaN32;
     return getInt(element, field);
 }
 
-SkScalar SkAnimator::getScalar(const SkDisplayable* element, const SkMemberInfo* info) {
+SkScalar SkAnimator::getScalar(const SkDisplayable* element, const SkMemberInfo* info)
+{
     if (info->fType != SkType_MemberProperty) {
         SkOperand operand;
         if (info->getType() == SkType_Float) {
@@ -352,68 +382,74 @@ SkScalar SkAnimator::getScalar(const SkDisplayable* element, const SkMemberInfo*
     return SK_ScalarNaN;
 }
 
-SkScalar SkAnimator::getScalar(const char* id, const char* fieldID) {
+SkScalar SkAnimator::getScalar(const char* id, const char* fieldID)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
+    if (element == nullptr)
         return SK_ScalarNaN;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return SK_ScalarNaN;
     return getScalar(element, field);
 }
 
 const char* SkAnimator::getString(const SkDisplayable* ae,
-        const SkMemberInfo* ai) {
-    const SkDisplayable* element = (const SkDisplayable*) ae;
-    const SkMemberInfo* info = (const SkMemberInfo*) ai;
+    const SkMemberInfo* ai)
+{
+    const SkDisplayable* element = (const SkDisplayable*)ae;
+    const SkMemberInfo* info = (const SkMemberInfo*)ai;
     SkString* temp;
     info->getString(element, &temp);
     return temp->c_str();
 }
 
-const char* SkAnimator::getString(const char* id, const char* fieldID) {
+const char* SkAnimator::getString(const char* id, const char* fieldID)
+{
     const SkDisplayable* element = getElement(id);
-    if (element == NULL)
-        return NULL;
+    if (element == nullptr)
+        return nullptr;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
-        return NULL;
+    if (field == nullptr)
+        return nullptr;
     return getString(element, field);
 }
 
-const char* SkAnimator::getURIBase() {
+const char* SkAnimator::getURIBase()
+{
     return fMaker->fPrefix.c_str();
 }
 
-void SkAnimator::initialize() {
-    SkDELETE(fMaker);
-    fMaker = SkNEW_ARGS(SkAnimateMaker, (this, NULL, NULL));
-    decodeMemory(gMathPrimer, sizeof(gMathPrimer)-1);
+void SkAnimator::initialize()
+{
+    delete fMaker;
+    fMaker = new SkAnimateMaker(this, nullptr, nullptr);
+    decodeMemory(gMathPrimer, sizeof(gMathPrimer) - 1);
 #ifdef SK_BUILD_FOR_ANDROID
     InitializeSkExtraPathEffects(this);
 #endif
 }
 
-
 #ifdef SK_DEBUG
-bool SkAnimator::isTrackingEvents() {
+bool SkAnimator::isTrackingEvents()
+{
     return false;
 }
 #endif
 
-bool SkAnimator::onEvent(const SkEvent& evt) {
+bool SkAnimator::onEvent(const SkEvent& evt)
+{
 #ifdef SK_DEBUG
     SkAnimator* root = fMaker->getRoot();
-    if (root == NULL)
+    if (root == nullptr)
         root = this;
     if (root->isTrackingEvents())
         root->eventDone(evt);
 #endif
     if (evt.isType(SK_EventType_OnEnd)) {
         SkEventState eventState;
-        SkDEBUGCODE(bool success =) evt.findPtr("anim", (void**) &eventState.fDisplayable);
+        SkDEBUGCODE(bool success =) evt.findPtr("anim", (void**)&eventState.fDisplayable);
         SkASSERT(success);
-        SkDEBUGCODE(success =) evt.findS32("time", (int32_t*) &fMaker->fEnableTime);
+        SkDEBUGCODE(success =) evt.findS32("time", (int32_t*)&fMaker->fEnableTime);
         SkASSERT(success);
         fMaker->fAdjustedStart = fMaker->getAppTime() - fMaker->fEnableTime;
         fMaker->fEvents.doEvent(*fMaker, SkDisplayEvent::kOnEnd, &eventState);
@@ -426,41 +462,41 @@ bool SkAnimator::onEvent(const SkEvent& evt) {
     }
     {
         const char* id = evt.findString("id");
-        if (id == NULL)
+        if (id == nullptr)
             return false;
         SkDisplayable** firstMovie = fMaker->fMovies.begin();
         SkDisplayable** endMovie = fMaker->fMovies.end();
         for (SkDisplayable** ptr = firstMovie; ptr < endMovie; ptr++) {
-            SkDisplayMovie* movie = (SkDisplayMovie*) *ptr;
+            SkDisplayMovie* movie = (SkDisplayMovie*)*ptr;
             movie->doEvent(evt);
         }
         {
             SkDisplayable* event;
             if (fMaker->find(id, &event) == false)
                 return false;
-    #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
+#if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
             SkString debugOut;
             SkMSec realTime = fMaker->getAppTime();
             debugOut.appendS32(realTime - fMaker->fDebugTimeBase);
             debugOut.append(" onEvent id=");
             debugOut.append(id);
-    #endif
+#endif
             SkMSec time = evt.getFast32();
             if (time != 0) {
-                SkMSec app  = fMaker->getAppTime();
+                SkMSec app = fMaker->getAppTime();
                 fMaker->setEnableTime(app, time);
-    #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
+#if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
                 debugOut.append(" time=");
                 debugOut.appendS32(time - fMaker->fDebugTimeBase);
                 debugOut.append(" adjust=");
                 debugOut.appendS32(fMaker->fAdjustedStart);
-    #endif
+#endif
             }
-    #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
+#if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
             SkDebugf("%s\n", debugOut.c_str());
-    #endif
+#endif
             SkASSERT(event->isEvent());
-            SkDisplayEvent* displayEvent = (SkDisplayEvent*) event;
+            SkDisplayEvent* displayEvent = (SkDisplayEvent*)event;
             displayEvent->populateInput(*fMaker, evt);
             displayEvent->enableEvent(*fMaker);
         }
@@ -498,22 +534,27 @@ void SkAnimator::onEventPostTime(SkEvent* evt, SkEventSinkID sinkID, SkMSec time
     evt->setTargetID(sinkID)->postTime(time);
 }
 
-void SkAnimator::reset() {
+void SkAnimator::reset()
+{
     fMaker->fDisplayList.reset();
 }
 
-SkEventSinkID SkAnimator::getHostEventSinkID() const {
+SkEventSinkID SkAnimator::getHostEventSinkID() const
+{
     return fMaker->fHostEventSinkID;
 }
 
-void SkAnimator::setHostEventSinkID(SkEventSinkID target) {
+void SkAnimator::setHostEventSinkID(SkEventSinkID target)
+{
     fMaker->fHostEventSinkID = target;
 }
 
-void SkAnimator::onSetHostHandler(Handler ) {
+void SkAnimator::onSetHostHandler(Handler)
+{
 }
 
-void SkAnimator::setJavaOwner(Handler ) {
+void SkAnimator::setJavaOwner(Handler)
+{
 }
 
 bool SkAnimator::setArrayString(const char* id, const char* fieldID, const char** array, int num)
@@ -539,34 +580,36 @@ bool SkAnimator::setArrayInt(const char* id, const char* fieldID, const int* arr
     return setArray(id, fieldID, tArray);
 }
 
-bool SkAnimator::setArray(SkDisplayable* element, const SkMemberInfo* info, SkTypedArray array) {
+bool SkAnimator::setArray(SkDisplayable* element, const SkMemberInfo* info, SkTypedArray array)
+{
     if (info->fType != SkType_Array)
-        return false;   //the field is not an array
+        return false; //the field is not an array
     //i think we can handle the case where the displayable itself is an array differently from the
     //case where it has an array - for one thing, if it is an array, i think we can change its type
     //if it's not, we cannot
     SkDisplayTypes type = element->getType();
     if (type == SkType_Array) {
-        SkDisplayArray* dispArray = (SkDisplayArray*) element;
+        SkDisplayArray* dispArray = (SkDisplayArray*)element;
         dispArray->values = array;
         return true;
-    }
-    else
-        return false;   //currently i don't care about this case
+    } else
+        return false; //currently i don't care about this case
 }
 
-bool SkAnimator::setArray(const char* id, const char* fieldID, SkTypedArray array) {
-    SkDisplayable* element = (SkDisplayable*) getElement(id);
-    //should I go ahead and change all 'NULL's to 'NULL'?
-    if (element == NULL)
+bool SkAnimator::setArray(const char* id, const char* fieldID, SkTypedArray array)
+{
+    SkDisplayable* element = (SkDisplayable*)getElement(id);
+    //should I go ahead and change all 'nullptr's to 'nullptr'?
+    if (element == nullptr)
         return false;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return false;
     return setArray(element, field, array);
 }
 
-bool SkAnimator::setInt(SkDisplayable* element, const SkMemberInfo* info, int32_t s32) {
+bool SkAnimator::setInt(SkDisplayable* element, const SkMemberInfo* info, int32_t s32)
+{
     if (info->fType != SkType_MemberProperty) {
         SkOperand operand;
         operand.fS32 = s32;
@@ -581,17 +624,19 @@ bool SkAnimator::setInt(SkDisplayable* element, const SkMemberInfo* info, int32_
     return true;
 }
 
-bool SkAnimator::setInt(const char* id, const char* fieldID, int32_t s32) {
-    SkDisplayable* element = (SkDisplayable*) getElement(id);
-    if (element == NULL)
+bool SkAnimator::setInt(const char* id, const char* fieldID, int32_t s32)
+{
+    SkDisplayable* element = (SkDisplayable*)getElement(id);
+    if (element == nullptr)
         return false;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return false;
     return setInt(element, field, s32);
 }
 
-bool SkAnimator::setScalar(SkDisplayable* element, const SkMemberInfo* info, SkScalar scalar) {
+bool SkAnimator::setScalar(SkDisplayable* element, const SkMemberInfo* info, SkScalar scalar)
+{
     if (info->fType != SkType_MemberProperty) {
         SkOperand operand;
         operand.fScalar = scalar;
@@ -606,40 +651,44 @@ bool SkAnimator::setScalar(SkDisplayable* element, const SkMemberInfo* info, SkS
     return true;
 }
 
-bool SkAnimator::setScalar(const char* id, const char* fieldID, SkScalar scalar) {
-    SkDisplayable* element = (SkDisplayable*) getElement(id);
-    if (element == NULL)
+bool SkAnimator::setScalar(const char* id, const char* fieldID, SkScalar scalar)
+{
+    SkDisplayable* element = (SkDisplayable*)getElement(id);
+    if (element == nullptr)
         return false;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return false;
     return setScalar(element, field, scalar);
 }
 
 bool SkAnimator::setString(SkDisplayable* element,
-        const SkMemberInfo* info, const char* str) {
+    const SkMemberInfo* info, const char* str)
+{
     // !!! until this is fixed, can't call script with global references from here
-    info->setValue(*fMaker, NULL, 0, info->fCount, element, info->getType(), str, strlen(str));
+    info->setValue(*fMaker, nullptr, 0, info->fCount, element, info->getType(), str, strlen(str));
     return true;
 }
 
-bool SkAnimator::setString(const char* id, const char* fieldID, const char* str) {
-    SkDisplayable* element = (SkDisplayable*) getElement(id);
-    if (element == NULL)
+bool SkAnimator::setString(const char* id, const char* fieldID, const char* str)
+{
+    SkDisplayable* element = (SkDisplayable*)getElement(id);
+    if (element == nullptr)
         return false;
     const SkMemberInfo* field = getField(element, fieldID);
-    if (field == NULL)
+    if (field == nullptr)
         return false;
     return setString(element, field, str);
 }
 
-void SkAnimator::setTimeline(const Timeline& timeline) {
+void SkAnimator::setTimeline(const Timeline& timeline)
+{
     fMaker->fTimeline = &timeline;
 }
 
-void SkAnimator::setURIBase(const char* uri) {
-    if (uri)
-    {
+void SkAnimator::setURIBase(const char* uri)
+{
+    if (uri) {
         const char* tail = strrchr(uri, '/');
         if (tail) {
             SkString prefix(uri, tail - uri + 1);
@@ -653,11 +702,12 @@ void SkAnimator::setURIBase(const char* uri) {
 }
 
 #ifdef SK_DEBUG
-bool SkAnimator::NoLeaks() {
+bool SkAnimator::NoLeaks()
+{
 #ifdef SK_BUILD_FOR_MAC
     if (SkDisplayable::fAllocations.count() == 0)
         return true;
-//  return SkDisplayable::fAllocationCount == 0;
+    //  return SkDisplayable::fAllocationCount == 0;
     SkDebugf("!!! leaked %d displayables:\n", SkDisplayable::fAllocations.count());
     for (SkDisplayable** leak = SkDisplayable::fAllocations.begin(); leak < SkDisplayable::fAllocations.end(); leak++)
         SkDebugf("%08x %s\n", *leak, (*leak)->id);
@@ -669,38 +719,43 @@ bool SkAnimator::NoLeaks() {
 #ifdef SK_SUPPORT_UNITTEST
 #include "SkAnimatorScript.h"
 #include "SkBase64.h"
-#include "SkParse.h"
 #include "SkMemberInfo.h"
+#include "SkParse.h"
 
-#define unittestline(type)  { #type , type::UnitTest }
+#define unittestline(type)    \
+    {                         \
+#type, type::UnitTest \
+    }
 #endif
 
-
 #ifdef SK_SUPPORT_UNITTEST
-void SkAnimator::Init(bool runUnitTests) {
+void SkAnimator::Init(bool runUnitTests)
+{
     if (runUnitTests == false)
         return;
     static const struct {
         const char* fTypeName;
-        void (*fUnitTest)( );
+        void (*fUnitTest)();
     } gUnitTests[] = {
         unittestline(SkBase64),
         unittestline(SkDisplayType),
         unittestline(SkParse),
         unittestline(SkScriptEngine),
-//      unittestline(SkScriptEngine2),  // compiled script experiment
+        //      unittestline(SkScriptEngine2),  // compiled script experiment
         unittestline(SkAnimatorScript)
     };
-    for (int i = 0; i < (int)SK_ARRAY_COUNT(gUnitTests); i++)
-    {
+    for (int i = 0; i < (int)SK_ARRAY_COUNT(gUnitTests); i++) {
         SkDebugf("SkAnimator: Running UnitTest for %s\n", gUnitTests[i].fTypeName);
         gUnitTests[i].fUnitTest();
         SkDebugf("SkAnimator: End UnitTest for %s\n", gUnitTests[i].fTypeName);
     }
 }
 #else
-void SkAnimator::Init(bool) {}
+void SkAnimator::Init(bool)
+{
+}
 #endif
 
-void SkAnimator::Term() {
+void SkAnimator::Term()
+{
 }

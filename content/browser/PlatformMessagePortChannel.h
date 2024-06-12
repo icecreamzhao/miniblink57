@@ -40,6 +40,8 @@
 #include "third_party/WebKit/Source/wtf/Threading.h"
 #include "third_party/WebKit/Source/wtf/ThreadSafeRefCounted.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
+#include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
+#include "third_party/WebKit/Source/wtf/OwnPtr.h"
 
 namespace content {
 
@@ -48,10 +50,11 @@ class MessagePort;
 // PlatformMessagePortChannel is a platform-dependent interface to the remote side of a message channel.
 // This default implementation supports multiple threads running within a single process. Implementations for multi-process platforms should define these public APIs in their own platform-specific PlatformMessagePortChannel file.
 // The goal of this implementation is to eliminate contention except when cloning or closing the port, so each side of the channel has its own separate mutex.
-class PlatformMessagePortChannel : public NoBaseWillBeGarbageCollectedFinalized<PlatformMessagePortChannel> {
+class PlatformMessagePortChannel : public blink::GarbageCollectedFinalized<PlatformMessagePortChannel> {
 public:
     class EventData {
-        WTF_MAKE_NONCOPYABLE(EventData); WTF_MAKE_FAST_ALLOCATED(EventData);
+        WTF_MAKE_NONCOPYABLE(EventData);
+        //WTF_MAKE_FAST_ALLOCATED(EventData);
     public:
         EventData(const blink::WebSerializedScriptValue& message, WTF::PassOwnPtr<blink::WebMessagePortChannelArray>);
 
@@ -64,7 +67,7 @@ public:
     };
 
     // Wrapper for MessageQueue that allows us to do thread safe sharing by two proxies.
-    class MessagePortQueue : public NoBaseWillBeGarbageCollectedFinalized<MessagePortQueue> {
+    class MessagePortQueue : public blink::GarbageCollectedFinalized<MessagePortQueue> {
     public:
         static MessagePortQueue* create() { return new MessagePortQueue(); }
 
@@ -114,7 +117,7 @@ public:
     void closeInternal();
 
     // Lock used to ensure exclusive access to the object internals.
-    WTF::Mutex m_mutex;
+    WTF::RecursiveMutex m_mutex;
 
     // Pointer to our entangled pair - cleared when close() is called.
     //RefPtr<PlatformMessagePortChannel> m_entangledChannel;

@@ -27,9 +27,7 @@
 // FFTFrame implementation using Intel IPP's DFT algorithm,
 // suitable for use on Linux.
 
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
+#include "wtf/build_config.h"
 
 #if USE(WEBAUDIO_IPP)
 
@@ -53,7 +51,8 @@ FFTFrame::FFTFrame(unsigned fftSize)
     ASSERT(1UL << m_log2FFTSize == m_FFTSize);
     ASSERT(m_log2FFTSize <= maximumFFTPower2Size);
 
-    ippsDFTInitAlloc_R_32f(&m_DFTSpec, m_FFTSize, IPP_FFT_NODIV_BY_ANY, ippAlgHintFast);
+    ippsDFTInitAlloc_R_32f(&m_DFTSpec, m_FFTSize, IPP_FFT_NODIV_BY_ANY,
+        ippAlgHintFast);
     int bufferSize = 0;
     ippsDFTGetBufSize_R_32f(m_DFTSpec, &bufferSize);
     m_buffer = ippsMalloc_8u(bufferSize);
@@ -74,7 +73,8 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     , m_imagData(frame.m_FFTSize / 2)
     , m_complexData(frame.m_FFTSize)
 {
-    ippsDFTInitAlloc_R_32f(&m_DFTSpec, m_FFTSize, IPP_FFT_NODIV_BY_ANY, ippAlgHintFast);
+    ippsDFTInitAlloc_R_32f(&m_DFTSpec, m_FFTSize, IPP_FFT_NODIV_BY_ANY,
+        ippAlgHintFast);
     int bufferSize = 0;
     ippsDFTGetBufSize_R_32f(m_DFTSpec, &bufferSize);
     m_buffer = ippsMalloc_8u(bufferSize);
@@ -85,13 +85,9 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     memcpy(imagData(), frame.imagData(), numberOfBytes);
 }
 
-void FFTFrame::initialize()
-{
-}
+void FFTFrame::initialize() { }
 
-void FFTFrame::cleanup()
-{
-}
+void FFTFrame::cleanup() { }
 
 FFTFrame::~FFTFrame()
 {
@@ -104,11 +100,13 @@ void FFTFrame::doFFT(const float* data)
     Ipp32f* complexP = m_complexData.data();
 
     // Compute Forward transform to perm format.
-    ippsDFTFwd_RToPerm_32f(reinterpret_cast<Ipp32f*>(const_cast<float*>(data)), complexP, m_DFTSpec, m_buffer);
+    ippsDFTFwd_RToPerm_32f(reinterpret_cast<Ipp32f*>(const_cast<float*>(data)),
+        complexP, m_DFTSpec, m_buffer);
 
     Ipp32f* realP = m_realData.data();
     Ipp32f* imagP = m_imagData.data();
-    ippsCplxToReal_32fc(reinterpret_cast<Ipp32fc*>(complexP), realP, imagP, m_FFTSize >> 1);
+    ippsCplxToReal_32fc(reinterpret_cast<Ipp32fc*>(complexP), realP, imagP,
+        m_FFTSize >> 1);
 }
 
 void FFTFrame::doInverseFFT(float* data)
@@ -116,7 +114,8 @@ void FFTFrame::doInverseFFT(float* data)
     Ipp32f* complexP = getUpToDateComplexData();
 
     // Compute inverse transform.
-    ippsDFTInv_PermToR_32f(complexP, reinterpret_cast<Ipp32f*>(data), m_DFTSpec, m_buffer);
+    ippsDFTInv_PermToR_32f(complexP, reinterpret_cast<Ipp32f*>(data), m_DFTSpec,
+        m_buffer);
 
     // Scale so that a forward then inverse FFT yields exactly the original data.
     const float scale = 1.0 / m_FFTSize;
@@ -139,5 +138,3 @@ float* FFTFrame::getUpToDateComplexData()
 } // namespace blink
 
 #endif // USE(WEBAUDIO_IPP)
-
-#endif // ENABLE(WEB_AUDIO)

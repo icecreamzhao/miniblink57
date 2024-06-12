@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "platform/graphics/PaintInvalidationReason.h"
 
 #include "wtf/Assertions.h"
@@ -46,14 +45,20 @@ const char* paintInvalidationReasonToString(PaintInvalidationReason reason)
         return "scroll";
     case PaintInvalidationSelection:
         return "selection";
-    case PaintInvalidationFocusRing:
-        return "focus ring";
-    case PaintInvalidationLayer:
-        return "layer";
+    case PaintInvalidationOutline:
+        return "outline";
+    case PaintInvalidationSubtree:
+        return "subtree";
     case PaintInvalidationLayoutObjectInsertion:
         return "layoutObject insertion";
     case PaintInvalidationLayoutObjectRemoval:
         return "layoutObject removal";
+    case PaintInvalidationSVGResourceChange:
+        return "SVG resource change";
+    case PaintInvalidationBackgroundOnScrollingContentsLayer:
+        return "background on scrolling contents layer";
+    case PaintInvalidationForTesting:
+        return "for testing";
     case PaintInvalidationDelayedFull:
         return "delayed full";
     }
@@ -61,4 +66,4 @@ const char* paintInvalidationReasonToString(PaintInvalidationReason reason)
     return "";
 }
 
-}
+} // namespace blink

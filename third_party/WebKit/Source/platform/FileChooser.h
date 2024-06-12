@@ -33,6 +33,7 @@
 #include "platform/FileMetadata.h"
 #include "platform/PlatformExport.h"
 #include "platform/weborigin/KURL.h"
+#include "wtf/Allocator.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
@@ -42,13 +43,16 @@ namespace blink {
 class FileChooser;
 
 struct FileChooserFileInfo {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     FileChooserFileInfo(const String& path, const String& displayName = String())
         : path(path)
         , displayName(displayName)
     {
     }
 
-    FileChooserFileInfo(const KURL& fileSystemURL, const FileMetadata metadata) : fileSystemURL(fileSystemURL), metadata(metadata)
+    FileChooserFileInfo(const KURL& fileSystemURL, const FileMetadata metadata)
+        : fileSystemURL(fileSystemURL)
+        , metadata(metadata)
     {
     }
 
@@ -62,6 +66,7 @@ struct FileChooserFileInfo {
 };
 
 struct FileChooserSettings {
+    DISALLOW_NEW();
     bool allowsMultipleFiles;
     bool allowsDirectoryUpload;
     Vector<String> acceptMIMETypes;
@@ -89,12 +94,14 @@ private:
 
 class PLATFORM_EXPORT FileChooser : public RefCounted<FileChooser> {
 public:
-    static PassRefPtr<FileChooser> create(FileChooserClient*, const FileChooserSettings&);
+    static PassRefPtr<FileChooser> create(FileChooserClient*,
+        const FileChooserSettings&);
     ~FileChooser();
 
     void disconnectClient() { m_client = 0; }
 
-    // FIXME: We should probably just pass file paths that could be virtual paths with proper display names rather than passing structs.
+    // FIXME: We should probably just pass file paths that could be virtual paths
+    // with proper display names rather than passing structs.
     void chooseFiles(const Vector<FileChooserFileInfo>& files);
 
     const FileChooserSettings& settings() const { return m_settings; }

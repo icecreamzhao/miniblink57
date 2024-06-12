@@ -13,75 +13,73 @@
 namespace v8 {
 namespace internal {
 
-// Forward declarations.
-class Callable;
+    // Forward declarations.
+    class Callable;
 
+    namespace compiler {
 
-namespace compiler {
+        // Forward declarations.
+        class CommonOperatorBuilder;
+        struct FieldAccess;
+        class JSOperatorBuilder;
+        class JSGraph;
+        class SimplifiedOperatorBuilder;
 
-// Forward declarations.
-class CommonOperatorBuilder;
-struct FieldAccess;
-class JSOperatorBuilder;
-class JSGraph;
-class SimplifiedOperatorBuilder;
+        // Lowers certain JS-level runtime calls.
+        class V8_EXPORT_PRIVATE JSIntrinsicLowering final
+            : public NON_EXPORTED_BASE(AdvancedReducer) {
+        public:
+            JSIntrinsicLowering(Editor* editor, JSGraph* jsgraph);
+            ~JSIntrinsicLowering() final = default;
 
+            const char* reducer_name() const override { return "JSIntrinsicLowering"; }
 
-// Lowers certain JS-level runtime calls.
-class V8_EXPORT_PRIVATE JSIntrinsicLowering final
-    : public NON_EXPORTED_BASE(AdvancedReducer) {
- public:
-  JSIntrinsicLowering(Editor* editor, JSGraph* jsgraph);
-  ~JSIntrinsicLowering() final = default;
+            Reduction Reduce(Node* node) final;
 
-  const char* reducer_name() const override { return "JSIntrinsicLowering"; }
+        private:
+            Reduction ReduceCreateIterResultObject(Node* node);
+            Reduction ReduceDeoptimizeNow(Node* node);
+            Reduction ReduceCreateJSGeneratorObject(Node* node);
+            Reduction ReduceGeneratorClose(Node* node);
+            Reduction ReduceAsyncFunctionAwaitCaught(Node* node);
+            Reduction ReduceAsyncFunctionAwaitUncaught(Node* node);
+            Reduction ReduceAsyncFunctionEnter(Node* node);
+            Reduction ReduceAsyncFunctionReject(Node* node);
+            Reduction ReduceAsyncFunctionResolve(Node* node);
+            Reduction ReduceAsyncGeneratorAwaitCaught(Node* node);
+            Reduction ReduceAsyncGeneratorAwaitUncaught(Node* node);
+            Reduction ReduceAsyncGeneratorReject(Node* node);
+            Reduction ReduceAsyncGeneratorResolve(Node* node);
+            Reduction ReduceAsyncGeneratorYield(Node* node);
+            Reduction ReduceGeneratorGetResumeMode(Node* node);
+            Reduction ReduceIsInstanceType(Node* node, InstanceType instance_type);
+            Reduction ReduceIsJSReceiver(Node* node);
+            Reduction ReduceIsSmi(Node* node);
+            Reduction ReduceToLength(Node* node);
+            Reduction ReduceToObject(Node* node);
+            Reduction ReduceToString(Node* node);
+            Reduction ReduceCall(Node* node);
 
-  Reduction Reduce(Node* node) final;
+            Reduction Change(Node* node, const Operator* op);
+            Reduction Change(Node* node, const Operator* op, Node* a, Node* b);
+            Reduction Change(Node* node, const Operator* op, Node* a, Node* b, Node* c);
+            Reduction Change(Node* node, const Operator* op, Node* a, Node* b, Node* c,
+                Node* d);
+            Reduction Change(Node* node, Callable const& callable,
+                int stack_parameter_count);
 
- private:
-  Reduction ReduceCreateIterResultObject(Node* node);
-  Reduction ReduceDeoptimizeNow(Node* node);
-  Reduction ReduceCreateJSGeneratorObject(Node* node);
-  Reduction ReduceGeneratorClose(Node* node);
-  Reduction ReduceAsyncFunctionAwaitCaught(Node* node);
-  Reduction ReduceAsyncFunctionAwaitUncaught(Node* node);
-  Reduction ReduceAsyncFunctionEnter(Node* node);
-  Reduction ReduceAsyncFunctionReject(Node* node);
-  Reduction ReduceAsyncFunctionResolve(Node* node);
-  Reduction ReduceAsyncGeneratorAwaitCaught(Node* node);
-  Reduction ReduceAsyncGeneratorAwaitUncaught(Node* node);
-  Reduction ReduceAsyncGeneratorReject(Node* node);
-  Reduction ReduceAsyncGeneratorResolve(Node* node);
-  Reduction ReduceAsyncGeneratorYield(Node* node);
-  Reduction ReduceGeneratorGetResumeMode(Node* node);
-  Reduction ReduceIsInstanceType(Node* node, InstanceType instance_type);
-  Reduction ReduceIsJSReceiver(Node* node);
-  Reduction ReduceIsSmi(Node* node);
-  Reduction ReduceToLength(Node* node);
-  Reduction ReduceToObject(Node* node);
-  Reduction ReduceToString(Node* node);
-  Reduction ReduceCall(Node* node);
+            Graph* graph() const;
+            JSGraph* jsgraph() const { return jsgraph_; }
+            Isolate* isolate() const;
+            CommonOperatorBuilder* common() const;
+            JSOperatorBuilder* javascript() const;
+            SimplifiedOperatorBuilder* simplified() const;
 
-  Reduction Change(Node* node, const Operator* op);
-  Reduction Change(Node* node, const Operator* op, Node* a, Node* b);
-  Reduction Change(Node* node, const Operator* op, Node* a, Node* b, Node* c);
-  Reduction Change(Node* node, const Operator* op, Node* a, Node* b, Node* c,
-                   Node* d);
-  Reduction Change(Node* node, Callable const& callable,
-                   int stack_parameter_count);
+            JSGraph* const jsgraph_;
+        };
 
-  Graph* graph() const;
-  JSGraph* jsgraph() const { return jsgraph_; }
-  Isolate* isolate() const;
-  CommonOperatorBuilder* common() const;
-  JSOperatorBuilder* javascript() const;
-  SimplifiedOperatorBuilder* simplified() const;
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-  JSGraph* const jsgraph_;
-};
-
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_COMPILER_JS_INTRINSIC_LOWERING_H_
+#endif // V8_COMPILER_JS_INTRINSIC_LOWERING_H_

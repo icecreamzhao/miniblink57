@@ -23,8 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "modules/speech/SpeechRecognitionError.h"
 
 namespace blink {
@@ -56,29 +54,30 @@ static String ErrorCodeToString(SpeechRecognitionError::ErrorCode code)
     return String();
 }
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create(ErrorCode code, const String& message)
+SpeechRecognitionError* SpeechRecognitionError::create(ErrorCode code,
+    const String& message)
 {
-    return adoptRefWillBeNoop(new SpeechRecognitionError(ErrorCodeToString(code), message));
+    return new SpeechRecognitionError(ErrorCodeToString(code), message);
 }
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create()
+SpeechRecognitionError* SpeechRecognitionError::create(
+    const AtomicString& eventName,
+    const SpeechRecognitionErrorInit& initializer)
 {
-    return adoptRefWillBeNoop(new SpeechRecognitionError(emptyString(), emptyString()));
+    return new SpeechRecognitionError(eventName, initializer);
 }
 
-PassRefPtrWillBeRawPtr<SpeechRecognitionError> SpeechRecognitionError::create(const AtomicString& eventName, const SpeechRecognitionErrorInit& initializer)
-{
-    return adoptRefWillBeNoop(new SpeechRecognitionError(eventName, initializer));
-}
-
-SpeechRecognitionError::SpeechRecognitionError(const String& error, const String& message)
+SpeechRecognitionError::SpeechRecognitionError(const String& error,
+    const String& message)
     : Event(EventTypeNames::error, /*canBubble=*/false, /*cancelable=*/false)
     , m_error(error)
     , m_message(message)
 {
 }
 
-SpeechRecognitionError::SpeechRecognitionError(const AtomicString& eventName, const SpeechRecognitionErrorInit& initializer)
+SpeechRecognitionError::SpeechRecognitionError(
+    const AtomicString& eventName,
+    const SpeechRecognitionErrorInit& initializer)
     : Event(eventName, initializer)
 {
     if (initializer.hasError())

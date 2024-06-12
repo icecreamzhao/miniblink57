@@ -12,10 +12,8 @@
 
 class SkDeviceProfile : public SkRefCnt {
 public:
-    
-
     enum LCDConfig {
-        kNone_LCDConfig,   // disables LCD text rendering, uses A8 instead
+        kNone_LCDConfig, // disables LCD text rendering, uses A8 instead
         kRGB_Horizontal_LCDConfig,
         kBGR_Horizontal_LCDConfig,
         kRGB_Vertical_LCDConfig,
@@ -46,13 +44,13 @@ public:
      *                  respected.
      */
     static SkDeviceProfile* Create(float gammaExp,
-                                   float contrastScale,
-                                   LCDConfig,
-                                   FontHintLevel);
+        float contrastScale,
+        LCDConfig,
+        FontHintLevel);
 
     /**
      *  Returns the global default profile, that is used if no global profile is
-     *  specified with SetGlobal(), or if NULL is specified to SetGlobal().
+     *  specified with SetGlobal(), or if nullptr is specified to SetGlobal().
      *  The references count is *not* incremented, and the caller should not
      *  call unref().
      */
@@ -69,7 +67,7 @@ public:
      *  Make the specified profile be the global value for all subsequently
      *  instantiated devices. Does not affect any existing devices.
      *  Increments the reference count on the profile.
-     *  Specify NULL for the "identity" profile (where there is no gamma or
+     *  Specify nullptr for the "identity" profile (where there is no gamma or
      *  contrast correction).
      */
     static void SetGlobal(SkDeviceProfile*);
@@ -85,12 +83,12 @@ public:
 
 private:
     SkDeviceProfile(float gammaExp, float contrastScale, LCDConfig,
-                    FontHintLevel);
+        FontHintLevel);
 
-    float           fGammaExponent;
-    float           fContrastScale;
-    LCDConfig       fLCDConfig;
-    FontHintLevel   fFontHintLevel;
+    float fGammaExponent;
+    float fContrastScale;
+    LCDConfig fLCDConfig;
+    FontHintLevel fFontHintLevel;
 
     typedef SkRefCnt INHERITED;
 };

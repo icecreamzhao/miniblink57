@@ -28,10 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "AtomicString.h"
+#include "wtf/text/AtomicString.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace WTF {
 
@@ -54,7 +53,8 @@ TEST(AtomicStringTest, Number)
     longlongValue = -9223372036854775807;
     EXPECT_EQ("-9223372036854775807", AtomicString::number(longlongValue));
     unsigned long long unsignedLongLongValue = 18446744073709551615u;
-    EXPECT_EQ("18446744073709551615", AtomicString::number(unsignedLongLongValue));
+    EXPECT_EQ("18446744073709551615",
+        AtomicString::number(unsignedLongLongValue));
     double doubleValue = 1234.56;
     EXPECT_EQ("1234.56", AtomicString::number(doubleValue));
     doubleValue = 1234.56789;

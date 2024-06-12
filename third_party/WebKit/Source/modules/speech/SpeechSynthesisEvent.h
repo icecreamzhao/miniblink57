@@ -33,24 +33,36 @@ namespace blink {
 
 class SpeechSynthesisEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> create();
-    static PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> create(const AtomicString& type, SpeechSynthesisUtterance*, unsigned charIndex, float elapsedTime, const String& name);
+    static SpeechSynthesisEvent* create();
+    static SpeechSynthesisEvent* create(const AtomicString& type,
+        SpeechSynthesisUtterance*,
+        unsigned charIndex,
+        float elapsedTime,
+        const String& name);
 
     SpeechSynthesisUtterance* utterance() const { return m_utterance; }
     unsigned charIndex() const { return m_charIndex; }
     float elapsedTime() const { return m_elapsedTime; }
     const String& name() const { return m_name; }
 
-    const AtomicString& interfaceName() const override { return EventNames::SpeechSynthesisEvent; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventNames::SpeechSynthesisEvent;
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     SpeechSynthesisEvent();
-    SpeechSynthesisEvent(const AtomicString& type, SpeechSynthesisUtterance*, unsigned charIndex, float elapsedTime, const String& name);
+    SpeechSynthesisEvent(const AtomicString& type,
+        SpeechSynthesisUtterance*,
+        unsigned charIndex,
+        float elapsedTime,
+        const String& name);
 
-    PersistentWillBeMember<SpeechSynthesisUtterance> m_utterance;
+    Member<SpeechSynthesisUtterance> m_utterance;
     unsigned m_charIndex;
     float m_elapsedTime;
     String m_name;

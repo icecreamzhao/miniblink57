@@ -31,12 +31,13 @@
 #ifndef VDMXParser_h
 #define VDMXParser_h
 
+#include <cstddef>
 #include <stdint.h>
 
 namespace blink {
-    bool parseVDMX(int* ymax, int* ymin,
-                   const uint8_t* vdmx, size_t vdmxLength,
-                   unsigned targetPixelSize);
-}  // namespace blink
+bool parseVDMX(int* ymax, int* ymin,
+    const uint8_t* vdmx, size_t vdmxLength,
+    unsigned targetPixelSize);
+} // namespace blink
 
 #endif

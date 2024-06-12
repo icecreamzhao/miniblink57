@@ -21,14 +21,16 @@ enum CachedState {
 };
 
 static void check_data(skiatest::Reporter* reporter, SkCachedData* data,
-                       int refcnt, CachedState cacheState, LockedState lockedState) {
+    int refcnt, CachedState cacheState, LockedState lockedState)
+{
     REPORTER_ASSERT(reporter, data->testing_only_getRefCnt() == refcnt);
     REPORTER_ASSERT(reporter, data->testing_only_isInCache() == (kInCache == cacheState));
-    bool isLocked = (data->data() != NULL);
+    bool isLocked = (data->data() != nullptr);
     REPORTER_ASSERT(reporter, isLocked == (lockedState == kLocked));
 }
 
-DEF_TEST(RRectMaskCache, reporter) {
+DEF_TEST(RRectMaskCache, reporter)
+{
     SkResourceCache cache(1024);
 
     SkScalar sigma = 0.8f;
@@ -40,7 +42,7 @@ DEF_TEST(RRectMaskCache, reporter) {
     SkMask mask;
 
     SkCachedData* data = SkMaskCache::FindAndRef(sigma, style, quality, rrect, &mask, &cache);
-    REPORTER_ASSERT(reporter, NULL == data);
+    REPORTER_ASSERT(reporter, nullptr == data);
 
     size_t size = 256;
     data = cache.newCachedData(size);
@@ -67,18 +69,19 @@ DEF_TEST(RRectMaskCache, reporter) {
     data->unref();
 }
 
-DEF_TEST(RectsMaskCache, reporter) {
+DEF_TEST(RectsMaskCache, reporter)
+{
     SkResourceCache cache(1024);
 
     SkScalar sigma = 0.8f;
     SkRect rect = SkRect::MakeWH(100, 100);
-    SkRect rects[2] = {rect};
+    SkRect rects[2] = { rect };
     SkBlurStyle style = kNormal_SkBlurStyle;
     SkBlurQuality quality = kLow_SkBlurQuality;
     SkMask mask;
 
     SkCachedData* data = SkMaskCache::FindAndRef(sigma, style, quality, rects, 1, &mask, &cache);
-    REPORTER_ASSERT(reporter, NULL == data);
+    REPORTER_ASSERT(reporter, nullptr == data);
 
     size_t size = 256;
     data = cache.newCachedData(size);

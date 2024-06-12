@@ -11,22 +11,22 @@
 namespace v8 {
 namespace internal {
 
-class OptimizedCompilationInfo;
+    class OptimizedCompilationInfo;
 
-namespace compiler {
+    namespace compiler {
 
-class Graph;
-class Schedule;
+        class Graph;
+        class Schedule;
 
-class BasicBlockInstrumentor : public AllStatic {
- public:
-  static BasicBlockProfiler::Data* Instrument(OptimizedCompilationInfo* info,
-                                              Graph* graph, Schedule* schedule,
-                                              Isolate* isolate);
-};
+        class BasicBlockInstrumentor : public AllStatic {
+        public:
+            static BasicBlockProfiler::Data* Instrument(OptimizedCompilationInfo* info,
+                Graph* graph, Schedule* schedule,
+                Isolate* isolate);
+        };
 
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
+    } // namespace compiler
+} // namespace internal
+} // namespace v8
 
-#endif  // V8_COMPILER_BASIC_BLOCK_INSTRUMENTOR_H_
+#endif // V8_COMPILER_BASIC_BLOCK_INSTRUMENTOR_H_

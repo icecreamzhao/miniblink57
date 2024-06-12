@@ -19,10 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGZoomAndPan.h"
 
-#include "core/svg/SVGParserUtilities.h"
+#include "wtf/text/ParsingUtilities.h"
 
 namespace blink {
 
@@ -41,22 +40,16 @@ bool SVGZoomAndPan::isKnownAttribute(const QualifiedName& attrName)
     return attrName == SVGNames::zoomAndPanAttr;
 }
 
-void SVGZoomAndPan::addSupportedAttributes(HashSet<QualifiedName>& supportedAttributes)
+template <typename CharType>
+static bool parseZoomAndPanInternal(const CharType*& start,
+    const CharType* end,
+    SVGZoomAndPanType& zoomAndPan)
 {
-    supportedAttributes.add(SVGNames::zoomAndPanAttr);
-}
-
-static const LChar disable[] =  {'d', 'i', 's', 'a', 'b', 'l', 'e'};
-static const LChar magnify[] =  {'m', 'a', 'g', 'n', 'i', 'f', 'y'};
-
-template<typename CharType>
-static bool parseZoomAndPanInternal(const CharType*& start, const CharType* end, SVGZoomAndPanType& zoomAndPan)
-{
-    if (skipString(start, end, disable, WTF_ARRAY_LENGTH(disable))) {
+    if (skipToken(start, end, "disable")) {
         zoomAndPan = SVGZoomAndPanDisable;
         return true;
     }
-    if (skipString(start, end, magnify, WTF_ARRAY_LENGTH(magnify))) {
+    if (skipToken(start, end, "magnify")) {
         zoomAndPan = SVGZoomAndPanMagnify;
         return true;
     }
@@ -73,4 +66,4 @@ bool SVGZoomAndPan::parseZoomAndPan(const UChar*& start, const UChar* end)
     return parseZoomAndPanInternal(start, end, m_zoomAndPan);
 }
 
-}
+} // namespace blink

@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-
 #include "SkDisplayNumber.h"
 
 enum SkDisplayNumber_Properties {
@@ -32,33 +31,34 @@ const SkMemberInfo SkDisplayNumber::fInfo[] = {
 DEFINE_GET_MEMBER(SkDisplayNumber);
 
 #if defined _WIN32
-#pragma warning ( push )
+#pragma warning(push)
 // we are intentionally causing an overflow here
 //      (warning C4756: overflow in constant arithmetic)
-#pragma warning ( disable : 4756 )
+#pragma warning(disable : 4756)
 #endif
 
-bool SkDisplayNumber::getProperty(int index, SkScriptValue* value) const {
+bool SkDisplayNumber::getProperty(int index, SkScriptValue* value) const
+{
     SkScalar constant;
     switch (index) {
-        case SK_PROPERTY(MAX_VALUE):
-            constant = SK_ScalarMax;
+    case SK_PROPERTY(MAX_VALUE):
+        constant = SK_ScalarMax;
         break;
-        case SK_PROPERTY(MIN_VALUE):
-            constant = SK_ScalarMin;
+    case SK_PROPERTY(MIN_VALUE):
+        constant = SK_ScalarMin;
         break;
-        case SK_PROPERTY(NEGATIVE_INFINITY):
-            constant = -SK_ScalarInfinity;
+    case SK_PROPERTY(NEGATIVE_INFINITY):
+        constant = -SK_ScalarInfinity;
         break;
-        case SK_PROPERTY(NaN):
-            constant = SK_ScalarNaN;
+    case SK_PROPERTY(NaN):
+        constant = SK_ScalarNaN;
         break;
-        case SK_PROPERTY(POSITIVE_INFINITY):
-            constant = SK_ScalarInfinity;
+    case SK_PROPERTY(POSITIVE_INFINITY):
+        constant = SK_ScalarInfinity;
         break;
-        default:
-            SkASSERT(0);
-            return false;
+    default:
+        SkASSERT(0);
+        return false;
     }
     value->fOperand.fScalar = constant;
     value->fType = SkType_Float;
@@ -66,5 +66,5 @@ bool SkDisplayNumber::getProperty(int index, SkScriptValue* value) const {
 }
 
 #if defined _WIN32
-#pragma warning ( pop )
+#pragma warning(pop)
 #endif

@@ -31,8 +31,9 @@
 
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/FFTFrame.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
+#include <memory>
 
 namespace blink {
 
@@ -41,16 +42,31 @@ class ReverbConvolver;
 class FFTConvolver;
 class DirectConvolver;
 
-// A ReverbConvolverStage represents the convolution associated with a sub-section of a large impulse response.
-// It incorporates a delay line to account for the offset of the sub-section within the larger impulse response.
+// A ReverbConvolverStage represents the convolution associated with a
+// sub-section of a large impulse response.  It incorporates a delay line to
+// account for the offset of the sub-section within the larger impulse
+// response.
 class PLATFORM_EXPORT ReverbConvolverStage {
+    USING_FAST_MALLOC(ReverbConvolverStage);
     WTF_MAKE_NONCOPYABLE(ReverbConvolverStage);
-public:
-    // renderPhase is useful to know so that we can manipulate the pre versus post delay so that stages will perform
-    // their heavy work (FFT processing) on different slices to balance the load in a real-time thread.
-    ReverbConvolverStage(const float* impulseResponse, size_t responseLength, size_t reverbTotalLatency, size_t stageOffset, size_t stageLength, size_t fftSize, size_t renderPhase, size_t renderSliceSize, ReverbAccumulationBuffer*, bool directMode = false);
 
-    // WARNING: framesToProcess must be such that it evenly divides the delay buffer size (stage_offset).
+public:
+    // renderPhase is useful to know so that we can manipulate the pre versus post
+    // delay so that stages will perform their heavy work (FFT processing) on
+    // different slices to balance the load in a real-time thread.
+    ReverbConvolverStage(const float* impulseResponse,
+        size_t responseLength,
+        size_t reverbTotalLatency,
+        size_t stageOffset,
+        size_t stageLength,
+        size_t fftSize,
+        size_t renderPhase,
+        size_t renderSliceSize,
+        ReverbAccumulationBuffer*,
+        bool directMode = false);
+
+    // WARNING: framesToProcess must be such that it evenly divides the delay
+    // buffer size (stage_offset).
     void process(const float* source, size_t framesToProcess);
 
     void processInBackground(ReverbConvolver* convolver, size_t framesToProcess);
@@ -61,8 +77,8 @@ public:
     int inputReadIndex() const { return m_inputReadIndex; }
 
 private:
-    OwnPtr<FFTFrame> m_fftKernel;
-    OwnPtr<FFTConvolver> m_fftConvolver;
+    std::unique_ptr<FFTFrame> m_fftKernel;
+    std::unique_ptr<FFTConvolver> m_fftConvolver;
 
     AudioFloatArray m_preDelayBuffer;
 
@@ -78,8 +94,8 @@ private:
     AudioFloatArray m_temporaryBuffer;
 
     bool m_directMode;
-    OwnPtr<AudioFloatArray> m_directKernel;
-    OwnPtr<DirectConvolver> m_directConvolver;
+    std::unique_ptr<AudioFloatArray> m_directKernel;
+    std::unique_ptr<DirectConvolver> m_directConvolver;
 };
 
 } // namespace blink

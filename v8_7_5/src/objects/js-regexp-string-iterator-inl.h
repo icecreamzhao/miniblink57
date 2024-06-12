@@ -7,7 +7,7 @@
 
 #include "src/objects/js-regexp-string-iterator.h"
 
-#include "src/objects-inl.h"  // Needed for write barriers
+#include "src/objects-inl.h" // Needed for write barriers
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -15,23 +15,23 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(JSRegExpStringIterator, JSObject)
+    OBJECT_CONSTRUCTORS_IMPL(JSRegExpStringIterator, JSObject)
 
-ACCESSORS(JSRegExpStringIterator, iterating_regexp, Object,
-          kIteratingRegExpOffset)
-ACCESSORS(JSRegExpStringIterator, iterating_string, String,
-          kIteratedStringOffset)
+    ACCESSORS(JSRegExpStringIterator, iterating_regexp, Object,
+        kIteratingRegExpOffset)
+    ACCESSORS(JSRegExpStringIterator, iterating_string, String,
+        kIteratedStringOffset)
 
-SMI_ACCESSORS(JSRegExpStringIterator, flags, kFlagsOffset)
-BOOL_ACCESSORS(JSRegExpStringIterator, flags, done, kDoneBit)
-BOOL_ACCESSORS(JSRegExpStringIterator, flags, global, kGlobalBit)
-BOOL_ACCESSORS(JSRegExpStringIterator, flags, unicode, kUnicodeBit)
+    SMI_ACCESSORS(JSRegExpStringIterator, flags, kFlagsOffset)
+    BOOL_ACCESSORS(JSRegExpStringIterator, flags, done, kDoneBit)
+    BOOL_ACCESSORS(JSRegExpStringIterator, flags, global, kGlobalBit)
+    BOOL_ACCESSORS(JSRegExpStringIterator, flags, unicode, kUnicodeBit)
 
-CAST_ACCESSOR(JSRegExpStringIterator)
+    CAST_ACCESSOR(JSRegExpStringIterator)
 
-}  // namespace internal
-}  // namespace v8
+} // namespace internal
+} // namespace v8
 
 #include "src/objects/object-macros-undef.h"
 
-#endif  // V8_OBJECTS_JS_REGEXP_STRING_ITERATOR_INL_H_
+#endif // V8_OBJECTS_JS_REGEXP_STRING_ITERATOR_INL_H_

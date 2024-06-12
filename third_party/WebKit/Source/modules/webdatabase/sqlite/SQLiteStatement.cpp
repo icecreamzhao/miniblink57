@@ -23,18 +23,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "modules/webdatabase/sqlite/SQLiteStatement.h"
 
+#include "modules/webdatabase/sqlite/SQLLog.h"
 #include "modules/webdatabase/sqlite/SQLValue.h"
-#include "platform/Logging.h"
 #include "platform/heap/SafePoint.h"
+#include "third_party/sqlite/sqlite3.h"
 #include "wtf/Assertions.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/text/CString.h"
-#include <sqlite3.h>
+#include <memory>
 
-// SQLite 3.6.16 makes sqlite3_prepare_v2 automatically retry preparing the statement
-// once if the database scheme has changed. We rely on this behavior.
+// SQLite 3.6.16 makes sqlite3_prepare_v2 automatically retry preparing the
+// statement once if the database scheme has changed. We rely on this behavior.
 #if SQLITE_VERSION_NUMBER < 3006016
 #error SQLite version 3.6.16 or newer is required
 #endif
@@ -74,7 +75,7 @@ int restrictError(int error)
     }
 }
 
-}
+} // namespace
 
 namespace blink {
 
@@ -82,9 +83,6 @@ SQLiteStatement::SQLiteStatement(SQLiteDatabase& db, const String& sql)
     : m_database(db)
     , m_query(sql)
     , m_statement(0)
-#if ENABLE(ASSERT)
-    , m_isPrepared(false)
-#endif
 {
 }
 
@@ -101,30 +99,34 @@ int SQLiteStatement::prepare()
 
     // Need to pass non-stack |const char*| and |sqlite3_stmt*| to avoid race
     // with Oilpan stack scanning.
-    OwnPtr<const char*> tail = adoptPtr(new const char*);
-    OwnPtr<sqlite3_stmt*> statement = adoptPtr(new sqlite3_stmt*);
+    std::unique_ptr<const char*> tail = WTF::wrapUnique(new const char*);
+    std::unique_ptr<sqlite3_stmt*> statement = WTF::wrapUnique(new sqlite3_stmt*);
     *tail = nullptr;
     *statement = nullptr;
     int error;
     {
-        SafePointScope scope(ThreadState::HeapPointersOnStack);
+        SafePointScope scope(BlinkGC::HeapPointersOnStack);
 
-        WTF_LOG(SQLDatabase, "SQL - prepare - %s", query.data());
+        SQL_DVLOG(1) << "SQL - prepare - " << query.data();
 
-        // Pass the length of the string including the null character to sqlite3_prepare_v2;
-        // this lets SQLite avoid an extra string copy.
+        // Pass the length of the string including the null character to
+        // sqlite3_prepare_v2; this lets SQLite avoid an extra string copy.
         size_t lengthIncludingNullCharacter = query.length() + 1;
 
-        error = sqlite3_prepare_v2(m_database.sqlite3Handle(), query.data(), lengthIncludingNullCharacter, statement.get(), tail.get());
+        error = sqlite3_prepare_v2(m_database.sqlite3Handle(), query.data(),
+            lengthIncludingNullCharacter, statement.get(),
+            tail.get());
     }
     m_statement = *statement;
 
     if (error != SQLITE_OK)
-        WTF_LOG(SQLDatabase, "sqlite3_prepare16 failed (%i)\n%s\n%s", error, query.data(), sqlite3_errmsg(m_database.sqlite3Handle()));
+        SQL_DVLOG(1) << "sqlite3_prepare16 failed (" << error << ")\n"
+                     << query.data() << "\n"
+                     << sqlite3_errmsg(m_database.sqlite3Handle());
     else if (*tail && **tail)
         error = SQLITE_ERROR;
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     m_isPrepared = error == SQLITE_OK;
 #endif
     return restrictError(error);
@@ -132,8 +134,8 @@ int SQLiteStatement::prepare()
 
 int SQLiteStatement::step()
 {
-    SafePointScope scope(ThreadState::HeapPointersOnStack);
-    //ASSERT(m_isPrepared);
+    SafePointScope scope(BlinkGC::HeapPointersOnStack);
+    // ASSERT(m_isPrepared);
 
     if (!m_statement)
         return SQLITE_OK;
@@ -142,11 +144,12 @@ int SQLiteStatement::step()
     // in order to compute properly the lastChanges() return value.
     m_database.updateLastChangesCount();
 
-    WTF_LOG(SQLDatabase, "SQL - step - %s", m_query.ascii().data());
+    SQL_DVLOG(1) << "SQL - step - " << m_query;
     int error = sqlite3_step(m_statement);
     if (error != SQLITE_DONE && error != SQLITE_ROW) {
-        WTF_LOG(SQLDatabase, "sqlite3_step failed (%i)\nQuery - %s\nError - %s",
-            error, m_query.ascii().data(), sqlite3_errmsg(m_database.sqlite3Handle()));
+        SQL_DVLOG(1) << "sqlite3_step failed (" << error << " )\nQuery - "
+                     << m_query << "\nError - "
+                     << sqlite3_errmsg(m_database.sqlite3Handle());
     }
 
     return restrictError(error);
@@ -154,12 +157,12 @@ int SQLiteStatement::step()
 
 int SQLiteStatement::finalize()
 {
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     m_isPrepared = false;
 #endif
     if (!m_statement)
         return SQLITE_OK;
-    WTF_LOG(SQLDatabase, "SQL - finalize - %s", m_query.ascii().data());
+    SQL_DVLOG(1) << "SQL - finalize - " << m_query;
     int result = sqlite3_finalize(m_statement);
     m_statement = 0;
     return restrictError(result);
@@ -184,9 +187,11 @@ int SQLiteStatement::bindText(int index, const String& text)
     ASSERT(index > 0);
     ASSERT(static_cast<unsigned>(index) <= bindParameterCount());
 
-    // SQLite treats uses zero pointers to represent null strings, which means we need to make sure to map null WTFStrings to zero pointers.
-    ASSERT(!String().charactersWithNullTermination().data());
-    return restrictError(sqlite3_bind_text16(m_statement, index, text.charactersWithNullTermination().data(), sizeof(UChar) * text.length(), SQLITE_TRANSIENT));
+    String text16(text);
+    text16.ensure16Bit();
+    return restrictError(
+        sqlite3_bind_text16(m_statement, index, text16.characters16(),
+            sizeof(UChar) * text16.length(), SQLITE_TRANSIENT));
 }
 
 int SQLiteStatement::bindDouble(int index, double number)
@@ -209,13 +214,13 @@ int SQLiteStatement::bindNull(int index)
 
 int SQLiteStatement::bindValue(int index, const SQLValue& value)
 {
-    switch (value.type()) {
-        case SQLValue::StringValue:
-            return bindText(index, value.string());
-        case SQLValue::NumberValue:
-            return bindDouble(index, value.number());
-        case SQLValue::NullValue:
-            return bindNull(index);
+    switch (value.getType()) {
+    case SQLValue::StringValue:
+        return bindText(index, value.string());
+    case SQLValue::NumberValue:
+        return bindDouble(index, value.number());
+    case SQLValue::NullValue:
+        return bindNull(index);
     }
 
     ASSERT_NOT_REACHED();
@@ -246,7 +251,8 @@ String SQLiteStatement::getColumnName(int col)
             return String();
     if (columnCount() <= col)
         return String();
-    return String(reinterpret_cast<const UChar*>(sqlite3_column_name16(m_statement, col)));
+    return String(
+        reinterpret_cast<const UChar*>(sqlite3_column_name16(m_statement, col)));
 }
 
 SQLValue SQLiteStatement::getColumnValue(int col)
@@ -262,19 +268,21 @@ SQLValue SQLiteStatement::getColumnValue(int col)
     // "(mostly) ignored"
     sqlite3_value* value = sqlite3_column_value(m_statement, col);
     switch (sqlite3_value_type(value)) {
-        case SQLITE_INTEGER:    // SQLValue and JS don't represent integers, so use FLOAT -case
-        case SQLITE_FLOAT:
-            return SQLValue(sqlite3_value_double(value));
-        case SQLITE_BLOB:       // SQLValue and JS don't represent blobs, so use TEXT -case
-        case SQLITE_TEXT: {
-            const UChar* string = reinterpret_cast<const UChar*>(sqlite3_value_text16(value));
-            unsigned length = WTF::lengthOfNullTerminatedString(string);
-            return SQLValue(StringImpl::create8BitIfPossible(string, length));
-        }
-        case SQLITE_NULL:
-            return SQLValue();
-        default:
-            break;
+    case SQLITE_INTEGER: // SQLValue and JS don't represent integers, so use
+        // FLOAT -case
+    case SQLITE_FLOAT:
+        return SQLValue(sqlite3_value_double(value));
+    case SQLITE_BLOB: // SQLValue and JS don't represent blobs, so use TEXT
+        // -case
+    case SQLITE_TEXT: {
+        const UChar* string = reinterpret_cast<const UChar*>(sqlite3_value_text16(value));
+        unsigned length = sqlite3_value_bytes16(value) / sizeof(UChar);
+        return SQLValue(StringImpl::create8BitIfPossible(string, length));
+    }
+    case SQLITE_NULL:
+        return SQLValue();
+    default:
+        break;
     }
     ASSERT_NOT_REACHED();
     return SQLValue();
@@ -289,7 +297,8 @@ String SQLiteStatement::getColumnText(int col)
     if (columnCount() <= col)
         return String();
     const UChar* string = reinterpret_cast<const UChar*>(sqlite3_column_text16(m_statement, col));
-    return StringImpl::create8BitIfPossible(string, sqlite3_column_bytes16(m_statement, col) / sizeof(UChar));
+    return StringImpl::create8BitIfPossible(
+        string, sqlite3_column_bytes16(m_statement, col) / sizeof(UChar));
 }
 
 int SQLiteStatement::getColumnInt(int col)

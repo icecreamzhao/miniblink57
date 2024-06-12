@@ -10,20 +10,24 @@
 namespace v8 {
 namespace platform {
 
-WorkerThread::WorkerThread(TaskQueue* queue)
-    : Thread(Options("V8 WorkerThread")), queue_(queue) {
-  Start();
-}
+    WorkerThread::WorkerThread(TaskQueue* queue)
+        : Thread(Options("V8 WorkerThread"))
+        , queue_(queue)
+    {
+        Start();
+    }
 
-WorkerThread::~WorkerThread() {
-  Join();
-}
+    WorkerThread::~WorkerThread()
+    {
+        Join();
+    }
 
-void WorkerThread::Run() {
-  while (std::unique_ptr<Task> task = queue_->GetNext()) {
-    task->Run();
-  }
-}
+    void WorkerThread::Run()
+    {
+        while (std::unique_ptr<Task> task = queue_->GetNext()) {
+            task->Run();
+        }
+    }
 
-}  // namespace platform
-}  // namespace v8
+} // namespace platform
+} // namespace v8

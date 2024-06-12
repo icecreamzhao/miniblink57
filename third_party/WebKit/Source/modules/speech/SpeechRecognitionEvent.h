@@ -38,18 +38,22 @@ class Document;
 
 class SpeechRecognitionEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> create();
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> create(const AtomicString&, const SpeechRecognitionEventInit&);
+    static SpeechRecognitionEvent* create(const AtomicString&,
+        const SpeechRecognitionEventInit&);
     ~SpeechRecognitionEvent() override;
 
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> createResult(unsigned long resultIndex, const HeapVector<Member<SpeechRecognitionResult>>& results);
-    static PassRefPtrWillBeRawPtr<SpeechRecognitionEvent> createNoMatch(SpeechRecognitionResult*);
+    static SpeechRecognitionEvent* createResult(
+        unsigned long resultIndex,
+        const HeapVector<Member<SpeechRecognitionResult>>& results);
+    static SpeechRecognitionEvent* createNoMatch(SpeechRecognitionResult*);
 
     unsigned long resultIndex() const { return m_resultIndex; }
     SpeechRecognitionResultList* results() const { return m_results; }
 
-    // These two methods are here to satisfy the specification which requires these attributes to exist.
+    // These two methods are here to satisfy the specification which requires
+    // these attributes to exist.
     Document* interpretation() { return nullptr; }
     Document* emma() { return nullptr; }
 
@@ -59,12 +63,14 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    SpeechRecognitionEvent();
-    SpeechRecognitionEvent(const AtomicString&, const SpeechRecognitionEventInit&);
-    SpeechRecognitionEvent(const AtomicString& eventName, unsigned long resultIndex, SpeechRecognitionResultList* results);
+    SpeechRecognitionEvent(const AtomicString&,
+        const SpeechRecognitionEventInit&);
+    SpeechRecognitionEvent(const AtomicString& eventName,
+        unsigned long resultIndex,
+        SpeechRecognitionResultList* results);
 
     unsigned long m_resultIndex;
-    PersistentWillBeMember<SpeechRecognitionResultList> m_results;
+    Member<SpeechRecognitionResultList> m_results;
 };
 
 } // namespace blink

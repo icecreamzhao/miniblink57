@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "platform/graphics/PathTraversalState.h"
 
 #include "wtf/MathExtras.h"
@@ -25,17 +24,21 @@
 
 namespace blink {
 
-static inline FloatPoint midPoint(const FloatPoint& first, const FloatPoint& second)
+static inline FloatPoint midPoint(const FloatPoint& first,
+    const FloatPoint& second)
 {
-    return FloatPoint((first.x() + second.x()) / 2.0f, (first.y() + second.y()) / 2.0f);
+    return FloatPoint((first.x() + second.x()) / 2.0f,
+        (first.y() + second.y()) / 2.0f);
 }
 
-static inline float distanceLine(const FloatPoint& start, const FloatPoint& end)
+static inline float distanceLine(const FloatPoint& start,
+    const FloatPoint& end)
 {
     return sqrtf((end.x() - start.x()) * (end.x() - start.x()) + (end.y() - start.y()) * (end.y() - start.y()));
 }
 
 struct QuadraticBezier {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     QuadraticBezier() { }
     QuadraticBezier(const FloatPoint& s, const FloatPoint& c, const FloatPoint& e)
         : start(s)
@@ -77,8 +80,12 @@ struct QuadraticBezier {
 };
 
 struct CubicBezier {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     CubicBezier() { }
-    CubicBezier(const FloatPoint& s, const FloatPoint& c1, const FloatPoint& c2, const FloatPoint& e)
+    CubicBezier(const FloatPoint& s,
+        const FloatPoint& c1,
+        const FloatPoint& c2,
+        const FloatPoint& e)
         : start(s)
         , control1(c1)
         , control2(c2)
@@ -123,7 +130,7 @@ struct CubicBezier {
     unsigned short splitDepth;
 };
 
-template<class CurveType>
+template <class CurveType>
 static float curveLength(PathTraversalState& traversalState, CurveType curve)
 {
     static const unsigned short curveSplitDepthLimit = 20;
@@ -134,7 +141,7 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
         return 0;
 
     Vector<CurveType> curveStack;
-    curveStack.append(curve);
+    curveStack.push_back(curve);
 
     float totalLength = 0;
     do {
@@ -145,7 +152,7 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
             CurveType rightCurve;
             curve.split(leftCurve, rightCurve);
             curve = leftCurve;
-            curveStack.append(rightCurve);
+            curveStack.push_back(rightCurve);
         } else {
             totalLength += length;
             if (traversalState.m_action == PathTraversalState::TraversalPointAtLength || traversalState.m_action == PathTraversalState::TraversalNormalAngleAtLength) {
@@ -154,8 +161,8 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
                 if (traversalState.m_totalLength + totalLength > traversalState.m_desiredLength)
                     return totalLength;
             }
-            curve = curveStack.last();
-            curveStack.removeLast();
+            curve = curveStack.back();
+            curveStack.pop_back();
         }
     } while (!curveStack.isEmpty());
 
@@ -191,9 +198,12 @@ float PathTraversalState::lineTo(const FloatPoint& point)
     return distance;
 }
 
-float PathTraversalState::cubicBezierTo(const FloatPoint& newControl1, const FloatPoint& newControl2, const FloatPoint& newEnd)
+float PathTraversalState::cubicBezierTo(const FloatPoint& newControl1,
+    const FloatPoint& newControl2,
+    const FloatPoint& newEnd)
 {
-    float distance = curveLength<CubicBezier>(*this, CubicBezier(m_current, newControl1, newControl2, newEnd));
+    float distance = curveLength<CubicBezier>(
+        *this, CubicBezier(m_current, newControl1, newControl2, newEnd));
 
     if (m_action != TraversalPointAtLength && m_action != TraversalNormalAngleAtLength)
         m_current = newEnd;
@@ -220,4 +230,3 @@ void PathTraversalState::processSegment()
 }
 
 } // namespace blink
-

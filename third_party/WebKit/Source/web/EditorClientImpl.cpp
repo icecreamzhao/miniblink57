@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "web/EditorClientImpl.h"
 
 #include "core/editing/SelectionType.h"
@@ -41,11 +40,10 @@ EditorClientImpl::EditorClientImpl(WebViewImpl* webview)
 {
 }
 
-EditorClientImpl::~EditorClientImpl()
-{
-}
+EditorClientImpl::~EditorClientImpl() { }
 
-void EditorClientImpl::respondToChangedSelection(LocalFrame* frame, SelectionType selectionType)
+void EditorClientImpl::respondToChangedSelection(LocalFrame* frame,
+    SelectionType selectionType)
 {
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     if (webFrame->client())
@@ -71,12 +69,14 @@ bool EditorClientImpl::canPaste(LocalFrame* frame, bool defaultValue) const
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
     if (!webFrame->contentSettingsClient())
         return defaultValue;
-    return webFrame->contentSettingsClient()->allowReadFromClipboard(defaultValue);
+    return webFrame->contentSettingsClient()->allowReadFromClipboard(
+        defaultValue);
 }
 
-bool EditorClientImpl::handleKeyboardEvent()
+bool EditorClientImpl::handleKeyboardEvent(LocalFrame* frame)
 {
-    return m_webView->client() && m_webView->client()->handleCurrentKeyboardEvent();
+    WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(frame);
+    return webFrame->client()->handleCurrentKeyboardEvent();
 }
 
 } // namespace blink

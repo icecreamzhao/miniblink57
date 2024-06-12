@@ -26,7 +26,6 @@
 #ifndef ExternalDateTimeChooser_h
 #define ExternalDateTimeChooser_h
 
-#if !ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/forms/DateTimeChooser.h"
 
 namespace blink {
@@ -38,8 +37,12 @@ class WebViewClient;
 
 class ExternalDateTimeChooser final : public DateTimeChooser {
 public:
-    static PassRefPtr<ExternalDateTimeChooser> create(ChromeClientImpl*, WebViewClient*, DateTimeChooserClient*, const DateTimeChooserParameters&);
+    static ExternalDateTimeChooser* create(ChromeClientImpl*,
+        WebViewClient*,
+        DateTimeChooserClient*,
+        const DateTimeChooserParameters&);
     ~ExternalDateTimeChooser() override;
+    DECLARE_VIRTUAL_TRACE();
 
     // The following functions are for DateTimeChooserCompletion.
     void didChooseValue(const WebString&);
@@ -48,16 +51,15 @@ public:
 
 private:
     ExternalDateTimeChooser(DateTimeChooserClient*);
-    bool openDateTimeChooser(ChromeClientImpl*, WebViewClient*, const DateTimeChooserParameters&);
+    bool openDateTimeChooser(ChromeClientImpl*,
+        WebViewClient*,
+        const DateTimeChooserParameters&);
 
     // DateTimeChooser function:
     void endChooser() override;
     AXObject* rootAXObject() override;
 
-    DateTimeChooserClient* m_client;
+    Member<DateTimeChooserClient> m_client;
 };
-
 }
-#endif
-
 #endif

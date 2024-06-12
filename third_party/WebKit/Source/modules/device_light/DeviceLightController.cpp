@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "modules/device_light/DeviceLightController.h"
 
 #include "core/dom/Document.h"
@@ -15,15 +14,11 @@ namespace blink {
 
 DeviceLightController::DeviceLightController(Document& document)
     : DeviceSingleWindowEventController(document)
+    , Supplement<Document>(document)
 {
 }
 
-DeviceLightController::~DeviceLightController()
-{
-#if !ENABLE(OILPAN)
-    stopUpdating();
-#endif
-}
+DeviceLightController::~DeviceLightController() { }
 
 const char* DeviceLightController::supplementName()
 {
@@ -32,10 +27,11 @@ const char* DeviceLightController::supplementName()
 
 DeviceLightController& DeviceLightController::from(Document& document)
 {
-    DeviceLightController* controller = static_cast<DeviceLightController*>(WillBeHeapSupplement<Document>::from(document, supplementName()));
+    DeviceLightController* controller = static_cast<DeviceLightController*>(
+        Supplement<Document>::from(document, supplementName()));
     if (!controller) {
         controller = new DeviceLightController(document);
-        WillBeHeapSupplement<Document>::provideTo(document, supplementName(), adoptPtrWillBeNoop(controller));
+        Supplement<Document>::provideTo(document, supplementName(), controller);
     }
     return *controller;
 }
@@ -55,9 +51,10 @@ void DeviceLightController::unregisterWithDispatcher()
     DeviceLightDispatcher::instance().removeController(this);
 }
 
-PassRefPtrWillBeRawPtr<Event> DeviceLightController::lastEvent() const
+Event* DeviceLightController::lastEvent() const
 {
-    return DeviceLightEvent::create(EventTypeNames::devicelight,
+    return DeviceLightEvent::create(
+        EventTypeNames::devicelight,
         DeviceLightDispatcher::instance().latestDeviceLightData());
 }
 
@@ -75,8 +72,7 @@ const AtomicString& DeviceLightController::eventTypeName() const
 DEFINE_TRACE(DeviceLightController)
 {
     DeviceSingleWindowEventController::trace(visitor);
-    WillBeHeapSupplement<Document>::trace(visitor);
+    Supplement<Document>::trace(visitor);
 }
-
 
 } // namespace blink

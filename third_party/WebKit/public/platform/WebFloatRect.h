@@ -85,10 +85,7 @@ struct WebFloatRect {
         return *this;
     }
 
-    operator FloatRect() const
-    {
-        return FloatRect(x, y, width, height);
-    }
+    operator FloatRect() const { return FloatRect(x, y, width, height); }
 #else
     WebFloatRect(const gfx::RectF& r)
         : x(r.x())

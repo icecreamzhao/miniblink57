@@ -8,18 +8,20 @@
 #ifndef SkFontMgr_indirect_DEFINED
 #define SkFontMgr_indirect_DEFINED
 
+#include "../private/SkMutex.h"
+#include "../private/SkOnce.h"
+#include "../private/SkTArray.h"
 #include "SkDataTable.h"
 #include "SkFontMgr.h"
-#include "SkFontStyle.h"
-#include "SkMutex.h"
+#include "SkRefCnt.h"
 #include "SkRemotableFontMgr.h"
-#include "SkTArray.h"
 #include "SkTypeface.h"
+#include "SkTypes.h"
 
 class SkData;
-class SkStream;
+class SkFontStyle;
+class SkStreamAsset;
 class SkString;
-class SkTypeface;
 
 class SK_API SkFontMgr_Indirect : public SkFontMgr {
 public:
@@ -27,8 +29,10 @@ public:
     // In the future these calls should be broken out into their own interface
     // with a name like SkFontRenderer.
     SkFontMgr_Indirect(SkFontMgr* impl, SkRemotableFontMgr* proxy)
-        : fImpl(SkRef(impl)), fProxy(SkRef(proxy)), fFamilyNamesInited(false)
-    { }
+        : fImpl(SkRef(impl))
+        , fProxy(SkRef(proxy))
+    {
+    }
 
 protected:
     int onCountFamilies() const override;
@@ -37,24 +41,23 @@ protected:
 
     SkFontStyleSet* onMatchFamily(const char familyName[]) const override;
 
-    virtual SkTypeface* onMatchFamilyStyle(const char familyName[],
-                                           const SkFontStyle& fontStyle) const override;
+    SkTypeface* onMatchFamilyStyle(const char familyName[],
+        const SkFontStyle& fontStyle) const override;
 
-    virtual SkTypeface* onMatchFamilyStyleCharacter(const char familyName[],
-                                                    const SkFontStyle&,
-                                                    const char* bcp47[],
-                                                    int bcp47Count,
-                                                    SkUnichar character) const override;
+    SkTypeface* onMatchFamilyStyleCharacter(const char familyName[],
+        const SkFontStyle&,
+        const char* bcp47[],
+        int bcp47Count,
+        SkUnichar character) const override;
 
-    virtual SkTypeface* onMatchFaceStyle(const SkTypeface* familyMember,
-                                         const SkFontStyle& fontStyle) const override;
+    SkTypeface* onMatchFaceStyle(const SkTypeface* familyMember,
+        const SkFontStyle& fontStyle) const override;
 
     SkTypeface* onCreateFromStream(SkStreamAsset* stream, int ttcIndex) const override;
     SkTypeface* onCreateFromFile(const char path[], int ttcIndex) const override;
     SkTypeface* onCreateFromData(SkData* data, int ttcIndex) const override;
 
-    virtual SkTypeface* onLegacyCreateTypeface(const char familyName[],
-                                               unsigned styleBits) const override;
+    SkTypeface* onLegacyCreateTypeface(const char familyName[], SkFontStyle) const override;
 
 private:
     SkTypeface* createTypefaceFromFontId(const SkFontIdentity& fontId) const;
@@ -63,24 +66,25 @@ private:
     SkAutoTUnref<SkRemotableFontMgr> fProxy;
 
     struct DataEntry {
-        uint32_t fDataId;  // key1
-        uint32_t fTtcIndex;  // key2
-        SkTypeface* fTypeface;  // value: weak ref to typeface
+        uint32_t fDataId; // key1
+        uint32_t fTtcIndex; // key2
+        SkTypeface* fTypeface; // value: weak ref to typeface
 
         DataEntry() { }
 
-        // This is a move!!!
-        DataEntry(DataEntry& that)
+        DataEntry(DataEntry&& that)
             : fDataId(that.fDataId)
             , fTtcIndex(that.fTtcIndex)
             , fTypeface(that.fTypeface)
         {
             SkDEBUGCODE(that.fDataId = SkFontIdentity::kInvalidDataId;)
-            SkDEBUGCODE(that.fTtcIndex = 0xbbadbeef;)
-            that.fTypeface = NULL;
+                SkDEBUGCODE(that.fTtcIndex = 0xbbadbeef;)
+                    that.fTypeface
+                = NULL;
         }
 
-        ~DataEntry() {
+        ~DataEntry()
+        {
             if (fTypeface) {
                 fTypeface->weak_unref();
             }
@@ -96,8 +100,7 @@ private:
     mutable SkMutex fDataCacheMutex;
 
     mutable SkAutoTUnref<SkDataTable> fFamilyNames;
-    mutable bool fFamilyNamesInited;
-    mutable SkMutex fFamilyNamesMutex;
+    mutable SkOnce fFamilyNamesInitOnce;
     static void set_up_family_names(const SkFontMgr_Indirect* self);
 
     friend class SkStyleSet_Indirect;

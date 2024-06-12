@@ -27,7 +27,6 @@
  */
 
 #include "bindings/core/v8/ScriptRegexp.h"
-#include "config.h"
 
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8PerIsolateData.h"
@@ -36,7 +35,10 @@
 
 namespace blink {
 
-ScriptRegexp::ScriptRegexp(const String& pattern, TextCaseSensitivity caseSensitivity, MultilineMode multilineMode)
+ScriptRegexp::ScriptRegexp(const String& pattern,
+    TextCaseSensitivity caseSensitivity,
+    MultilineMode multilineMode,
+    CharacterMode charMode)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     v8::HandleScope handleScope(isolate);
@@ -45,17 +47,25 @@ ScriptRegexp::ScriptRegexp(const String& pattern, TextCaseSensitivity caseSensit
     v8::TryCatch tryCatch(isolate);
 
     unsigned flags = v8::RegExp::kNone;
-    if (caseSensitivity == TextCaseInsensitive)
+    if (caseSensitivity != TextCaseSensitive)
         flags |= v8::RegExp::kIgnoreCase;
     if (multilineMode == MultilineEnabled)
         flags |= v8::RegExp::kMultiline;
+    if (charMode == UTF16)
+        flags |= v8::RegExp::kUnicode;
 
     v8::Local<v8::RegExp> regex;
-    if (v8::RegExp::New(context, v8String(isolate, pattern), static_cast<v8::RegExp::Flags>(flags)).ToLocal(&regex))
+    if (v8::RegExp::New(context, v8String(isolate, pattern),
+            static_cast<v8::RegExp::Flags>(flags))
+            .ToLocal(&regex))
         m_regex.set(isolate, regex);
+    if (tryCatch.HasCaught() && !tryCatch.Message().IsEmpty())
+        m_exceptionMessage = toCoreStringWithUndefinedOrNullCheck(tryCatch.Message()->Get());
 }
 
-int ScriptRegexp::match(const String& string, int startFrom, int* matchLength) const
+int ScriptRegexp::match(const String& string,
+    int startFrom,
+    int* matchLength) const
 {
     if (matchLength)
         *matchLength = 0;
@@ -79,9 +89,14 @@ int ScriptRegexp::match(const String& string, int startFrom, int* matchLength) c
     v8::Local<v8::Value> exec;
     if (!regex->Get(context, v8AtomicString(isolate, "exec")).ToLocal(&exec))
         return -1;
-    v8::Local<v8::Value> argv[] = { v8String(isolate, string.substring(startFrom)) };
+    v8::Local<v8::Value> argv[] = {
+        v8String(isolate, string.substring(startFrom))
+    };
     v8::Local<v8::Value> returnValue;
-    if (!V8ScriptRunner::callInternalFunction(exec.As<v8::Function>(), regex, WTF_ARRAY_LENGTH(argv), argv, isolate).ToLocal(&returnValue))
+    if (!V8ScriptRunner::callInternalFunction(exec.As<v8::Function>(), regex,
+            WTF_ARRAY_LENGTH(argv), argv,
+            isolate)
+             .ToLocal(&returnValue))
         return -1;
 
     // RegExp#exec returns null if there's no match, otherwise it returns an
@@ -97,7 +112,8 @@ int ScriptRegexp::match(const String& string, int startFrom, int* matchLength) c
 
     v8::Local<v8::Array> result = returnValue.As<v8::Array>();
     v8::Local<v8::Value> matchOffset;
-    if (!result->Get(context, v8AtomicString(isolate, "index")).ToLocal(&matchOffset))
+    if (!result->Get(context, v8AtomicString(isolate, "index"))
+             .ToLocal(&matchOffset))
         return -1;
     if (matchLength) {
         v8::Local<v8::Value> match;
